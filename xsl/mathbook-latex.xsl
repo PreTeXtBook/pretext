@@ -8,6 +8,31 @@
 <!-- Intend output for rendering by pdflatex -->
 <xsl:output method="text" />
 
+<!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
+<!-- Or make a thin customization layer and use 'select' to provide overrides -->
+<!--  -->
+<!-- Fontsize: 10pt, 11pt, or 12pt -->
+<!-- extsizes, memoir class offer more sizes -->
+<xsl:param name="latex.font.size" select="'10pt'" />
+<!--  -->
+<!-- Geometry: page shape, margins, etc            -->
+<!-- Pass a string with any of geometry's options  -->
+<xsl:param name="latex.geometry" select="'letterpaper,total={5.0in,9.0in}'"/>
+<!--  -->
+<!-- PDF Watermarking                    -->
+<!-- Non-empty string makes it happen    -->
+<!-- Scale works well for "CONFIDENTIAL" -->
+<!-- or  for "DRAFT YYYY/MM/DD"          -->
+<xsl:param name="latex.watermark" select="''"/>
+<xsl:param name="latex.watermark.scale" select="2.0"/>
+<!--  -->
+<!-- Draft Copies                                  -->
+<!-- Various options for working copies            -->
+<!-- (1) LaTeX's draft mode                        -->
+<!-- (2) Crop marks on letter paper, centered      -->
+<!--     presuming geometry sets smaller page size -->
+<xsl:param name="latex.draft" select="'no'"/>
+
 
 <!-- Strip whitespace text nodes from container elements -->
 <xsl:strip-space elements="article chapter section subsection" />
@@ -22,7 +47,13 @@
 
 <!-- An article, LaTeX structure -->
 <xsl:template match="article">
-    <xsl:text>\documentclass{article}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\documentclass[</xsl:text>
+    <xsl:value-of select="$latex.font.size" />
+    <xsl:text>,</xsl:text>
+    <xsl:if test="$latex.draft='yes'" >
+        <xsl:text>draft,</xsl:text>
+    </xsl:if>
+    <xsl:text>]{article}&#xa;%&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
     <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
     <xsl:text>\maketitle&#xa;%&#xa;</xsl:text>
@@ -32,7 +63,13 @@
 
 <!-- A book, LaTeX structure -->
 <xsl:template match="book">
-    <xsl:text>\documentclass{book}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\documentclass[</xsl:text>
+    <xsl:value-of select="$latex.font.size" />
+    <xsl:text>,</xsl:text>
+    <xsl:if test="$latex.draft='yes'" >
+        <xsl:text>draft,</xsl:text>
+    </xsl:if>
+    <xsl:text>]{book}&#xa;%&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
     <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
     <xsl:text>\frontmatter&#xa;%&#xa;</xsl:text>
@@ -50,9 +87,11 @@
 <!-- LaTeX preamble is common for both books and articles-->
 <xsl:template name="latex-preamble">
 <xsl:text>%% Page layout
-\usepackage{geometry}
-\geometry{letterpaper,total={5.0in,9.0in}}
-%% Symbols, align environment, bracket-matrix
+\usepackage{geometry}&#xa;</xsl:text>
+<xsl:text>\geometry{</xsl:text>
+<xsl:value-of select="$latex.geometry" />
+<xsl:text>}&#xa;</xsl:text>
+<xsl:text>%% Symbols, align environment, bracket-matrix
 \usepackage{amsmath}
 \usepackage{amssymb}
 %% Theorem-like environments
@@ -70,13 +109,25 @@
 \usepackage{mdframed}
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 %% Raster graphics inclusion, wapped figures in paragraphs
-\usepackage{graphicx}
-%% Hyperlinking in PDFs, all links solid and blue
-\usepackage{hyperref}
+\usepackage{graphicx}&#xa;</xsl:text>
+<xsl:text>%% Hyperlinking in PDFs, all links solid and blue
+\usepackage[pdftex]{hyperref}
 \hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
 <xsl:text>\hypersetup{pdftitle={</xsl:text>
 <xsl:apply-templates select="title/node()" />
-<xsl:text>}}</xsl:text>
+<xsl:text>}}&#xa;</xsl:text>
+<xsl:if test="$latex.watermark">
+    <xsl:text>\usepackage{draftwatermark}&#xa;</xsl:text>
+    <xsl:text>\SetWatermarkText{</xsl:text>
+    <xsl:value-of select="$latex.watermark" />
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\SetWatermarkScale{</xsl:text>
+    <xsl:value-of select="$latex.watermark.scale" />
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:if>
+<xsl:if test="$latex.draft='yes'" >
+    <xsl:text>\usepackage[letter,cam,center,pdflatex]{crop}&#xa;</xsl:text>
+</xsl:if>
 <!--  -->
 <xsl:text>%%
 %% Convenience macros
