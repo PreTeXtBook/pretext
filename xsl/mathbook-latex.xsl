@@ -36,6 +36,7 @@
     <xsl:call-template name="latex-preamble" />
     <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
     <xsl:text>\frontmatter&#xa;%&#xa;</xsl:text>
+    <xsl:call-template name="half-title" />
     <xsl:text>\maketitle&#xa;%&#xa;</xsl:text>
     <xsl:text>\tableofcontents&#xa;%&#xa;</xsl:text>
     <xsl:apply-templates select="preface" />
@@ -74,9 +75,8 @@
 \usepackage{hyperref}
 \hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
 <xsl:text>\hypersetup{pdftitle={</xsl:text>
-<xsl:value-of select="docinfo/title" />
+<xsl:apply-templates select="title/node()" />
 <xsl:text>}}</xsl:text>
-
 <!--  -->
 <xsl:text>%%
 %% Convenience macros
@@ -84,10 +84,27 @@
 <xsl:value-of select="docinfo/macros" /><xsl:text>&#xa;</xsl:text>
 <!--  -->
 <xsl:text>%% Title information&#xa;</xsl:text>
-<xsl:text>\title{</xsl:text><xsl:value-of select="docinfo/title" /><xsl:text>}&#xa;</xsl:text>
+<xsl:text>\title{</xsl:text><xsl:apply-templates select="title/node()" /><xsl:text>}&#xa;</xsl:text>
 <xsl:text>\author{</xsl:text><xsl:apply-templates select="docinfo/author" /><xsl:text>}&#xa;</xsl:text>
 <xsl:text>\date{</xsl:text><xsl:apply-templates select="docinfo/date" /><xsl:text>}&#xa;</xsl:text>
 </xsl:template>
+
+<!-- "half-title is leading page with title only          -->
+<!-- at about 1:2 split, presumes in a book               -->
+<!-- Series information could go on obverse               -->
+<!-- and then do "thispagestyle" on both                  -->
+<!-- These two pages contribute to frontmatter page count -->
+<xsl:template name="half-title" >
+    <xsl:text>% half-title&#xa;</xsl:text>
+    <xsl:text>\pagestyle{empty}&#xa;</xsl:text>
+    <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
+    <xsl:text>\begin{center}\Huge&#xa;</xsl:text>
+    <xsl:apply-templates select="/book/title/node()" />
+    <xsl:text>\end{center}\par&#xa;</xsl:text>
+    <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
+    <xsl:text>\cleardoublepage&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- Author, one at titlepage -->
 <!-- http://stackoverflow.com/questions/2817664/xsl-how-to-tell-if-element-is-last-in-series -->
