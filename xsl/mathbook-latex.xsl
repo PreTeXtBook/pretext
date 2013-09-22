@@ -185,51 +185,25 @@
 <!-- When needed, get content with XPath title/node() -->
 <xsl:template match="title">
 </xsl:template>
-    
-<!-- Chapters -->
-<xsl:template match="chapter">
+
+<!-- Sectioning -->
+<!-- Subdivisions, Chapters down to SubSubSections -->
+<!-- Relies on element names echoing latex names   -->
+<xsl:template match="chapter|section|subsection|subsubsection">
+    <xsl:variable name="level" select="local-name(.)" />
     <xsl:text>\typeout{************************************************}&#xa;</xsl:text>
     <xsl:text>\typeout{</xsl:text>
     <xsl:apply-templates select="." mode="long-name" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\typeout{************************************************}&#xa;</xsl:text>
-    <xsl:text>\chapter{</xsl:text>
+    <xsl:text>\typeout{************************************************}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\</xsl:text>
+    <xsl:value-of select="$level" />
+    <xsl:text>{</xsl:text>
     <xsl:apply-templates select="title/node()" />
     <xsl:text>}&#xa;%&#xa;</xsl:text>
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- Sections -->
-<xsl:template match="section">
-    <xsl:text>\typeout{++++++++++++++++++++++++++++++++++++++++++++++++}&#xa;</xsl:text>
-    <xsl:text>\typeout{</xsl:text>
-    <xsl:apply-templates select="." mode="basename" />
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\typeout{</xsl:text>
-    <xsl:apply-templates select="." mode="long-name" />
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\typeout{++++++++++++++++++++++++++++++++++++++++++++++++}&#xa;</xsl:text>
-    <xsl:text>\section{</xsl:text>
-    <xsl:apply-templates select="title/node()" />
-    <xsl:text>}&#xa;%&#xa;</xsl:text>
-    <xsl:apply-templates  />
-</xsl:template>
-
-<!-- Subsections -->
-<xsl:template match="subsection">
-    <xsl:text>\typeout{------------------------------------------------}&#xa;</xsl:text>
-    <xsl:text>\typeout{</xsl:text>
-    <xsl:apply-templates select="." mode="basename" />
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\typeout{</xsl:text>
-    <xsl:apply-templates select="." mode="long-name" />
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\typeout{------------------------------------------------}&#xa;</xsl:text>
-    <xsl:text>\subsection{</xsl:text>
-    <xsl:apply-templates select="title/node()" />
-    <xsl:text>}&#xa;%&#xa;</xsl:text>
-    <xsl:apply-templates />
-</xsl:template>
 
 
 <!-- Theorems, Proofs, Definitions, Examples -->
