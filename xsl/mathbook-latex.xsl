@@ -42,8 +42,13 @@
 <!-- Avoiding extra whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
 
 <xsl:template match="/" >
-    <xsl:apply-templates />
+    <xsl:apply-templates select="mathbook"/>
 </xsl:template>
+
+<!-- docinfo is handled specially                     -->
+<!-- so gets killed via apply-templates                -->
+<xsl:template match="docinfo"></xsl:template>
+
 
 <!-- An article, LaTeX structure -->
 <xsl:template match="article">
@@ -74,7 +79,9 @@
     <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
     <xsl:text>\frontmatter&#xa;%&#xa;</xsl:text>
     <xsl:call-template name="half-title" />
-    <xsl:text>\maketitle&#xa;%&#xa;</xsl:text>
+    <xsl:text>\maketitle&#xa;</xsl:text>
+    <xsl:text>\clearpage&#xa;%&#xa;</xsl:text>
+    <xsl:call-template name="copyright-page" />
     <xsl:text>\tableofcontents&#xa;%&#xa;</xsl:text>
     <xsl:apply-templates select="preface" />
     <xsl:text>\mainmatter&#xa;%&#xa;</xsl:text>
@@ -132,15 +139,15 @@
 <xsl:text>%%
 %% Convenience macros
 </xsl:text>
-<xsl:value-of select="docinfo/macros" /><xsl:text>&#xa;</xsl:text>
+<xsl:value-of select="/mathbook/docinfo/macros" /><xsl:text>&#xa;</xsl:text>
 <!--  -->
 <xsl:text>%% Title information&#xa;</xsl:text>
 <xsl:text>\title{</xsl:text><xsl:apply-templates select="title/node()" /><xsl:text>}&#xa;</xsl:text>
-<xsl:text>\author{</xsl:text><xsl:apply-templates select="docinfo/author" /><xsl:text>}&#xa;</xsl:text>
-<xsl:text>\date{</xsl:text><xsl:apply-templates select="docinfo/date" /><xsl:text>}&#xa;</xsl:text>
+<xsl:text>\author{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/author" /><xsl:text>}&#xa;</xsl:text>
+<xsl:text>\date{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/date" /><xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- "half-title is leading page with title only          -->
+<!-- "half-title" is leading page with title only          -->
 <!-- at about 1:2 split, presumes in a book               -->
 <!-- Series information could go on obverse               -->
 <!-- and then do "thispagestyle" on both                  -->
@@ -150,10 +157,44 @@
     <xsl:text>\pagestyle{empty}&#xa;</xsl:text>
     <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
     <xsl:text>\begin{center}\Huge&#xa;</xsl:text>
-    <xsl:apply-templates select="/book/title/node()" />
+    <xsl:apply-templates select="/mathbook/book/title/node()" />
     <xsl:text>\end{center}\par&#xa;</xsl:text>
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
     <xsl:text>\cleardoublepage&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Copyright page is obverse of title page          -->
+<!-- Lots of stuff here, much of it optional               -->
+<xsl:template name="copyright-page" >
+    <xsl:if test="/mathbook/docinfo/author/biography" >
+        <xsl:text>{\setlength{\parindent}{0pt}\setlength{\parskip}{4pt}</xsl:text>
+        <xsl:apply-templates select="/mathbook/docinfo/author/biography" />}
+        <xsl:text>\par\vspace*{\stretch{2}}</xsl:text>
+    </xsl:if>
+    <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
+    <xsl:if test="/mathbook/docinfo/edition" >
+        <xsl:text>\noindent{\bf Edition}: </xsl:text>
+        <xsl:apply-templates select="/mathbook/docinfo/edition" />}
+        <xsl:text>\par&#xa;</xsl:text>
+    </xsl:if>
+
+    <!-- TODO: split out copyright section as template -->
+    <xsl:if test="/mathbook/docinfo/copyright" >
+        <xsl:text>\noindent\copyright\ </xsl:text>
+        <xsl:apply-templates select="/mathbook/docinfo/copyright/year" />
+        <xsl:text>\quad </xsl:text>
+        <xsl:apply-templates select="/mathbook/docinfo/copyright/holder" />
+        <xsl:if test="/mathbook/docinfo/copyright/shortlicense">
+            <xsl:text>\\[0.5\baselineskip]&#xa;</xsl:text>
+            <xsl:apply-templates select="/mathbook/docinfo/copyright/shortlicense" />
+        </xsl:if>
+        <xsl:text>\par&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
+    <xsl:text>\clearpage&#xa;</xsl:text>
+
+    <!--ISBN, Cover Design, Publisher, canonicalsite -->
+
 </xsl:template>
 
 
