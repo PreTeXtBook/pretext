@@ -1,0 +1,179 @@
+/* Main body margin, etc */
+html body {
+        margin: 1em 8% 1em 10%;
+        line-height: 1.2;
+        font-family: sans-serif;
+}
+
+.headerblock .title,
+.headerblock .author-name, 
+.preface .title,
+.chapter .heading,
+.section .heading, 
+.bibliography .title {
+        font-weight: bold;
+        line-height: 1.3;
+        margin-top: 1em;
+        margin-left: 0;
+        color: #990000;
+}
+
+
+.headerblock .author-email {
+    font-family: "monospace";
+    }
+
+.book .headerblock .title {
+        text-align: center;
+        margin: .8em 0 0 -5%;
+        font-weight: bolder;
+        font-size: x-large;
+}
+.article .headerblock .title,
+.preface .title {
+        margin: .8em 0 0 -4%;
+        font-weight: bolder;
+        font-size: large;
+}
+
+/* Some common with above */
+.chapter .heading {
+        margin: .8em 0 0 -4%;
+        font-weight: bolder;
+        font-size: large;
+}    
+
+.chapter .heading .number:before {
+        content: "Chapter ";
+}
+
+.section .heading,
+.bibliography .title {
+        margin: .8em 0 0 -3%;
+}
+
+.section .heading .number,
+.section .heading .title {
+    display: inline;
+}
+
+/* dupe this for subsections */
+.section .heading .number:before {
+        content: "Section ";
+}
+
+
+.subsection .title {
+        margin: .8em 0 0 -2%;
+}
+
+.subsubsection .title {
+        margin: .8em 0 0 -1%;
+}
+
+.theorem-header,
+.corollary-header,
+.lemma-header,
+.definition-header,
+.proof-header {
+    font-weight: bold;
+    }
+
+/* See issue #374 in Sage cell github site */
+
+.sagecell .CodeMirror-scroll {
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+.sagecell .CodeMirror {
+  height: auto;
+}
+
+/* Markup */
+.booktitle {
+    font-style:oblique;
+    }
+
+.articletitle:before, .articletitle:after {
+    content:'"';
+    }
+
+.blockquote {
+    margin-bottom:3em;
+    margin-right:5em;
+    margin-left:5em;
+    }
+.blockquote .attribution {
+    float:right;
+    }
+
+/* TODO: unicode for mdash */
+.attribution:before{
+    content:"- "
+    }
+    
+/* Figures */
+
+.figure {
+    text-align: center;
+    }
+
+/*     Bibliography */
+.bibliography .article .title {
+        font-weight: normal;
+        line-height: 1.3;
+        margin-top: 1em;
+        margin-left: 0;
+        color: black;
+}
+
+.bibliography .book .title {
+        font-weight: normal;
+        font-style: oblique;
+        line-height: 1.3;
+        margin-top: 1em;
+        margin-left: 0;
+        color: black;
+}
+
+/* Internationalization */
+/* Put any strings here */
+
+
+/* Navigation bar */
+
+.page-nav-bar {
+    width:100%;
+    }
+
+.page-nav-bar td {
+    width:33%;
+    }
+
+.page-nav-bar td.previous {
+    text-align:left;
+    }
+
+.page-nav-bar td.previous:before {
+    content:"Prev: ";
+    }
+
+.page-nav-bar td.up {
+    text-align:center;
+    }
+
+.page-nav-bar td.up:before {
+    content:"Up: ";
+    }
+
+.page-nav-bar td.next {
+    text-align:right;
+    }
+
+.page-nav-bar td.next:before {
+    content:"Next: ";
+    }
+
+
+
+
