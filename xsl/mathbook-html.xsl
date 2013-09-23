@@ -12,15 +12,22 @@
 <!-- Intend output for rendering by a web browser -->
 <xsl:output method="html" indent="yes"/>
 
-
 <xsl:template match="/">
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- Kill docinfo, handle pieces on ad-hoc basis -->
+<xsl:template match="/mathbook/docinfo"></xsl:template>
+
+
+<xsl:template match="/mathbook">
 <!-- doctype as text, normally in xsl:output above -->
 <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html></xsl:text>
 <html>
     <head>
         <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title><xsl:apply-templates select="//docinfo/title/node()" /></title>
+        <title><xsl:apply-templates select="book/title/node()|article/title/node()" /></title>
         <xsl:call-template name="mathjax" />
         <xsl:call-template name="sagecell" />
         <xsl:call-template name="knowl" />
@@ -32,31 +39,29 @@
 
 <xsl:template match="article">
     <body class="article">
-        \(<xsl:value-of select="docinfo/macros" />\)
+        \(<xsl:value-of select="/mathbook/docinfo/macros" />\)
         <div class="headerblock">
-            <div class="title"><xsl:apply-templates select="docinfo/title/node()" /></div>
-            <div class="authorgroup"><xsl:apply-templates select="docinfo/author" /></div>
-            <div class="date"><xsl:apply-templates select="docinfo/date" /></div>
+            <div class="title"><xsl:apply-templates select="title/node()" /></div>
+            <div class="authorgroup"><xsl:apply-templates select="/mathbook/docinfo/author" /></div>
+            <div class="date"><xsl:apply-templates select="/mathbook/docinfo/date" /></div>
         </div>
+        <!-- TODO: an abstract here, from docinfo, or like preface? -->
         <xsl:apply-templates select="section|bibliography|p|sage|theorem|corollary|lemma|definition|figure" />
     </body>
 </xsl:template>
 
 <xsl:template match="book">
     <body class="book">
-        \(<xsl:value-of select="docinfo/macros" />\)
+        \(<xsl:value-of select="/mathbook/docinfo/macros" />\)
         <div class="headerblock">
-            <div class="title"><xsl:apply-templates select="docinfo/title/node()" /></div>
-            <div class="authorgroup"><xsl:apply-templates select="docinfo/author" /></div>
-            <div class="date"><xsl:apply-templates select="docinfo/date" /></div>
+            <div class="title"><xsl:apply-templates select="title/node()" /></div>
+            <div class="authorgroup"><xsl:apply-templates select="/mathbook/docinfo/author" /></div>
+            <div class="date"><xsl:apply-templates select="/mathbook/docinfo/date" /></div>
         </div>
         <xsl:call-template name="toc" />
         <xsl:apply-templates />
     </body>
 </xsl:template>
-
-<!-- Kill docinfo, so not done twice -->
-<xsl:template match="docinfo"></xsl:template>
 
 
 <!-- Author, single one at titlepage -->
@@ -119,7 +124,7 @@
         <head>
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <title><xsl:apply-templates select="//docinfo/title/node()" /></title>
+            <title><xsl:apply-templates select="/mathbook/book/title/node()|/mathbook/article/title/node()" /></title>
             <xsl:call-template name="mathjax" />
             <xsl:call-template name="sagecell" />
             <xsl:call-template name="knowl" />
@@ -140,7 +145,7 @@
                     <xsl:apply-templates select="title/node()" />
                 </xsl:element>
             </xsl:element>
-            \(<xsl:value-of select="//docinfo/macros" />\)
+            \(<xsl:value-of select="/mathbook/docinfo/macros" />\)
             <xsl:apply-templates />
         </xsl:element>
         <xsl:call-template name="page-navigation-bar" />
