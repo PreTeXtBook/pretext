@@ -38,7 +38,7 @@
 </xsl:template>
 
 <xsl:template match="article">
-    <body class="article">
+    <body>
         \(<xsl:value-of select="/mathbook/docinfo/macros" />\)
         <div class="headerblock">
             <div class="title"><xsl:apply-templates select="title/node()" /></div>
@@ -51,7 +51,7 @@
 </xsl:template>
 
 <xsl:template match="book">
-    <body class="book">
+    <body>
         \(<xsl:value-of select="/mathbook/docinfo/macros" />\)
         <div class="headerblock">
             <div class="title"><xsl:apply-templates select="title/node()" /></div>
@@ -108,12 +108,6 @@
 <!-- When needed, get content with XPath title/node() -->
 <xsl:template match="title"></xsl:template>
 
-<!-- Titles are handled specially                     -->
-<!-- so get killed via apply-templates                -->
-<!-- When needed, get content with XPath title/node() -->
-<xsl:template match="title">
-</xsl:template>
-
 
 <!-- Chapters, numbered, with title         -->
 <!-- TODO: adjust for appendices -->
@@ -136,11 +130,11 @@
             <xsl:attribute name="class">chapter</xsl:attribute>
             <xsl:element name="div">
                 <xsl:attribute name="class">heading</xsl:attribute>
-                <xsl:element name="div">
+                <xsl:element name="span">
                     <xsl:attribute name="class">number</xsl:attribute>
                     <xsl:apply-templates select="." mode="number" />
                 </xsl:element>
-                <xsl:element name="div">
+                <xsl:element name="span">
                     <xsl:attribute name="class">title</xsl:attribute>
                     <xsl:apply-templates select="title/node()" />
                 </xsl:element>
@@ -180,40 +174,20 @@
     </table>
 </xsl:template>
 
-<!-- Sections, with titles and numbers         -->
-<xsl:template match="section">
-    <xsl:element name="div">
-        <xsl:attribute name="class">section</xsl:attribute>
-        <xsl:element name="div">
-            <xsl:attribute name="class">heading</xsl:attribute>
-            <xsl:element name="div">
-                <xsl:attribute name="class">number</xsl:attribute>
-                <xsl:apply-templates select="." mode="number" />
-            </xsl:element>
-            <xsl:element name="div">
-                <xsl:attribute name="class">title</xsl:attribute>
-                <xsl:apply-templates select="title/node()" />
-            </xsl:element>
-        </xsl:element>
-        <xsl:apply-templates />
-    </xsl:element>
-</xsl:template>
-
-<!-- Subsections, with titles and numbers         -->
-<xsl:template match="subsection">
-    <div class="subsection">
-        <div class="title">
-            <xsl:apply-templates select="." mode="number" />
+<!-- Sectioning -->
+<!-- Sections, subsections, subsbsections          -->
+<!-- TODO: meld in chapters, configurable chunking -->
+<xsl:template match="section|subsection|subsubsection">
+    <xsl:variable name="level" select="local-name(.)" />
+    <div class="{$level}">
+        <div class="heading">
+            <span class="number"><xsl:apply-templates select="." mode="number" /></span>
             <xsl:text> </xsl:text>
-            <xsl:apply-templates select="title/node()" />
+            <span class="title"><xsl:apply-templates select="title/node()" /></span>
         </div>
         <xsl:apply-templates />
     </div>
 </xsl:template>
-
-
-
-
 
 
 <!-- Theorem-Like and Proofs                                             -->
