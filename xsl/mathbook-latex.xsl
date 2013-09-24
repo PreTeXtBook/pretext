@@ -241,7 +241,9 @@
     <xsl:value-of select="$level" />
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="title/node()" />
-    <xsl:text>}&#xa;%&#xa;</xsl:text>
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>&#xa;%&#xa;</xsl:text>
     <xsl:apply-templates />
 </xsl:template>
 
@@ -299,7 +301,7 @@
 
 <xsl:template match="example">
     <xsl:text>\begin{example}</xsl:text>
-    <xsl:apply-templates select=".." mode="label"/>
+    <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="p|figure"/>
     <xsl:text>\end{example}&#xa;%&#xa;</xsl:text>
@@ -651,7 +653,29 @@
     <xsl:text>\cite{</xsl:text><xsl:value-of select="@label" /><xsl:text>}</xsl:text>
 </xsl:template>
 
-<xsl:template match="xref">\ref{<xsl:value-of select="@label" />}</xsl:template>
+<!-- A cross-reference can be "provisional"   -->
+<!-- as a tool for drafts, otherwise "ref" to -->
+<!-- an xml:id elsewhere                      -->
+<xsl:template match="xref">
+    <xsl:choose>
+        <xsl:when test="@ref">
+            <xsl:text>\ref{</xsl:text>
+            <xsl:value-of select="@ref" />
+            <xsl:text>}</xsl:text>
+        </xsl:when>
+        <xsl:when test="@provisional">
+            <xsl:text>\(\langle\)</xsl:text>
+            <xsl:value-of select="@provisional" />
+            <xsl:text>\(\rangle\)</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message terminate="yes">
+            <xsl:text>Cross-reference (xref) with no ref or provisional attribute</xsl:text>
+            </xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <xsl:template match="*" mode="label">
     <xsl:if test="@xml:id">
