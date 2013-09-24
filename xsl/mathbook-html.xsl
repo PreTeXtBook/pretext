@@ -390,21 +390,40 @@ preferably with CSS so can adjust style, language-->
 <!-- Point to any numbered item with link, content is number only -->
 <!-- Displayed equations have targets manufactured by MathJax,    -->
 <!-- which we ensure are consistent with our scheme here          -->
-<!-- TODO: need to take into account chunking for href manufacture, need filebase for targetnode's file -->
+<!-- A cross-reference can be "provisional"   -->
+<!-- as a tool for drafts, otherwise "ref" to -->
+<!-- an xml:id elsewhere                      -->
+<!-- TODO: need to take into account chunking for href manufacture -->
+<!-- need to use basename for targetnode's file        -->
+<!-- or knowl these references, with "in context link" -->
 <xsl:template match="xref">
-    <xsl:variable name="target-node" select="id(@label)" />
-    <xsl:element name ="a">
-        <!-- http://stackoverflow.com/questions/585261/is-there-an-xslt-name-of-element -->
-        <!-- Sans namespace (would be name(.)) -->
-        <xsl:attribute name="class">
-            <xsl:value-of select="local-name($target-node)" />
-        </xsl:attribute>
-        <xsl:attribute name="href">
-            <xsl:text>#</xsl:text>
-            <xsl:value-of select="@label" />
-        </xsl:attribute>
-    <xsl:apply-templates select="$target-node" mode="number" />
-    </xsl:element>
+    <xsl:choose>
+        <xsl:when test="@ref">
+            <xsl:variable name="target-node" select="id(@ref)" />
+            <xsl:element name ="a">
+                <!-- http://stackoverflow.com/questions/585261/is-there-an-xslt-name-of-element -->
+                <!-- Sans namespace (would be name(.)) -->
+                <xsl:attribute name="class">
+                    <xsl:value-of select="local-name($target-node)" />
+                </xsl:attribute>
+                <xsl:attribute name="href">
+                    <xsl:text>#</xsl:text>
+                    <xsl:value-of select="@ref" />
+                </xsl:attribute>
+            <xsl:apply-templates select="$target-node" mode="number" />
+            </xsl:element>
+        </xsl:when>
+        <xsl:when test="@provisional">
+            <xsl:text>\(\langle\)</xsl:text>
+            <xsl:value-of select="@provisional" />
+            <xsl:text>\(\rangle\)</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message terminate="yes">
+            <xsl:text>Cross-reference (xref) with no ref or provisional attribute</xsl:text>
+            </xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Point to a "random" mark, with generic "this point" link -->
