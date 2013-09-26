@@ -22,19 +22,28 @@
 
 <xsl:template match="/mathbook">
 <!-- doctype as text, normally in xsl:output above -->
-<xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html></xsl:text>
-<html>
-    <head>
-        <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title><xsl:apply-templates select="book/title/node()|article/title/node()" /></title>
-        <xsl:call-template name="mathjax" />
-        <xsl:call-template name="sagecell" />
-        <xsl:call-template name="knowl" />
-        <link rel="stylesheet" type="text/css" href="mathbook.css" />
-    </head>
-    <xsl:apply-templates />
-</html>
+<xsl:variable name="rootfile">
+    <xsl:choose>
+        <xsl:when test="article"><xsl:value-of select="article/@filebase" /></xsl:when>
+        <xsl:when test="book"><xsl:value-of select="book/@filebase" /></xsl:when>
+    </xsl:choose>
+</xsl:variable>
+<xsl:value-of select="$rootfile" />
+<exsl:document href="{$rootfile}.html" method="html">
+    <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html></xsl:text>
+    <html>
+        <head>
+            <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title><xsl:apply-templates select="book/title/node()|article/title/node()" /></title>
+            <xsl:call-template name="mathjax" />
+            <xsl:call-template name="sagecell" />
+            <xsl:call-template name="knowl" />
+            <link rel="stylesheet" type="text/css" href="mathbook.css" />
+        </head>
+        <xsl:apply-templates />
+    </html>
+</exsl:document>
 </xsl:template>
 
 <xsl:template match="article">
