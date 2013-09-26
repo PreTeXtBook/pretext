@@ -141,6 +141,15 @@
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 
+<xsl:template match="*" mode="long-name">
+    <xsl:message terminate="no">Warning: node with no long-name (likely sectioning)</xsl:message>
+</xsl:template>
+
+<xsl:template match="preface" mode="long-name">
+    <xsl:text>Preface: </xsl:text>
+    <xsl:apply-templates select="title/node()"/>
+</xsl:template>
+
 <xsl:template match="chapter" mode="long-name">
     <xsl:text>Chapter </xsl:text>
     <xsl:apply-templates select="." mode="number" />
