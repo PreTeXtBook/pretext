@@ -61,7 +61,9 @@
 
 <xsl:template match="book">
     <body>
+        <div style="display:none;">
         \(<xsl:value-of select="/mathbook/docinfo/macros" />\)
+        </div>
         <div class="headerblock">
             <div class="title"><xsl:apply-templates select="title/node()" /></div>
             <div class="authorgroup"><xsl:apply-templates select="/mathbook/docinfo/author" /></div>
@@ -148,7 +150,9 @@
                     <xsl:apply-templates select="title/node()" />
                 </xsl:element>
             </xsl:element>
+            <div style="display:none;">
             \(<xsl:value-of select="/mathbook/docinfo/macros" />\)
+            </div>
             <xsl:apply-templates />
         </xsl:element>
         <xsl:call-template name="page-navigation-bar" />
