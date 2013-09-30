@@ -53,15 +53,6 @@
     font-weight: bold;
     }
 
-/* See issue #374 in Sage cell github site */
-
-.sagecell .CodeMirror-scroll {
-  overflow-y: hidden;
-  overflow-x: auto;
-}
-.sagecell .CodeMirror {
-  height: auto;
-}
 
 /* Markup */
 .booktitle {
@@ -205,5 +196,18 @@ html body {
     }
 
 
+/* Sage Cell appearance */
+/* See issue #374 in Sage Cell github site */
 
+.sagecell .CodeMirror-scroll {
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+.sagecell .CodeMirror {
+    height: auto;
+}
 
+/* Inline code from "c" tags */
+tt.code {
+    font-size:large;
+}
