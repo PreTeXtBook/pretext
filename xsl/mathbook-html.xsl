@@ -55,7 +55,7 @@
             <div class="date"><xsl:apply-templates select="/mathbook/docinfo/date" /></div>
         </div>
         <!-- TODO: an abstract here, from docinfo, or like preface? -->
-        <xsl:apply-templates select="section|bibliography|p|sage|theorem|corollary|lemma|definition|figure" />
+        <xsl:apply-templates select="section|bibliography|p|sage|theorem|corollary|lemma|definition|example|figure" />
     </body>
 </xsl:template>
 
@@ -233,10 +233,17 @@
 </xsl:template>
 
 
+<xsl:template match="example">
+    <div class="example">
+        <xsl:apply-templates select="." mode="label" />
+        <xsl:apply-templates />
+    </div>
+</xsl:template>
+
+
 <!--Decide how to handle "Theorem 4.3 (A result of Beezer)"
 as a lead-in to paragraph one, or a title div
 preferably with CSS so can adjust style, language-->
-
 <!-- And consolidate numbering -->
 <!-- CSS: div for title, span for paragraph lead-in?  visible, invisible -->
 
@@ -277,8 +284,18 @@ preferably with CSS so can adjust style, language-->
 
 <!-- TODO:  Sync, or adjust, the following -->
 
+
 <xsl:template match="definition/statement/p[1]">
 <p><span class="definition-header">Definition <xsl:apply-templates select="../.." mode="number" /><xsl:text> </xsl:text></span><xsl:apply-templates /></p>
+</xsl:template>
+
+<xsl:template match="example/p[1]">
+    <p>
+    <span class="example-header">Example <xsl:apply-templates select=".." mode="number" />
+    <xsl:text> </xsl:text>
+    </span>
+    <xsl:apply-templates />
+    </p>
 </xsl:template>
 
 <xsl:template match="notation">
@@ -361,6 +378,11 @@ preferably with CSS so can adjust style, language-->
 <!-- Definitions:  x -->
 <xsl:template match="definition" mode="number">
     <xsl:number level="any" count="definition" />
+</xsl:template>
+
+<!-- Examples:  x -->
+<xsl:template match="example" mode="number">
+    <xsl:number level="any" count="example" />
 </xsl:template>
 
 <!-- Equations:  chapter.x -->

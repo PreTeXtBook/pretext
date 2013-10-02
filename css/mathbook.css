@@ -49,6 +49,7 @@
 .corollary-header,
 .lemma-header,
 .definition-header,
+.example-header,
 .proof-header {
     font-weight: bold;
     }
