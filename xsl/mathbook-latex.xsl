@@ -121,6 +121,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:text>%% Symbols, align environment, bracket-matrix
 \usepackage{amsmath}
 \usepackage{amssymb}
+%% Two nonstandard macros that MathJax supports automatically
+%% so we define them in order to allow their use and
+%% maintain source level compatibility
+%% This avoids using two XML entities in source mathematics&#xa;</xsl:text>
+<!-- Need CDATA here to protect inequalities as part of an XML file -->
+<xsl:text><![CDATA[\newcommand{\lt}{<}]]>
+<![CDATA[\newcommand{\gt}{>}]]>
 %% Theorem-like environments
 \usepackage{amsthm}
 % theorem-like, italicized text
