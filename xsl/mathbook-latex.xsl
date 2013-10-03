@@ -241,11 +241,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- Titles are handled specially                     -->
-<!-- so get killed via apply-templates                -->
-<!-- When needed, get content with XPath title/node() -->
-<xsl:template match="title">
-</xsl:template>
+<!-- Titles, captions are handled specially               -->
+<!-- so get killed via apply-templates                    -->
+<!-- When needed, get content with XPath, eg title/node() -->
+<xsl:template match="title"></xsl:template>
+<xsl:template match="caption"></xsl:template>
 
 <!-- Sectioning -->
 <!-- Subdivisions, Chapters down to SubSubSections -->
@@ -638,17 +638,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="figure">
     <xsl:text>\begin{figure}[!htbp]&#xa;</xsl:text>
     <xsl:text>\begin{center}&#xa;</xsl:text>
-    <xsl:apply-templates select="p|image"/><xsl:text>&#xa;</xsl:text>
-    <xsl:text>\end{center}&#xa;</xsl:text>
-    <xsl:apply-templates select="caption" /><xsl:text>&#xa;</xsl:text>
-    <xsl:text>\end{figure}&#xa;%&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="caption">
-    <xsl:text>\caption{</xsl:text>
     <xsl:apply-templates />
+    <xsl:text>\end{center}&#xa;</xsl:text>
+    <xsl:text>\caption{</xsl:text>
+    <xsl:apply-templates select="caption/node()" />
     <xsl:apply-templates select=".." mode="label"/>
-    <xsl:text>}</xsl:text>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\end{figure}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
 
