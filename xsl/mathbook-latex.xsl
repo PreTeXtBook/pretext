@@ -55,7 +55,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- Strip whitespace text nodes from container elements -->
-<xsl:strip-space elements="article chapter section subsection" />
+<xsl:strip-space elements="mathbook book article chapter section subsection subsubsection paragraph" />
+<xsl:strip-space elements="docinfo author figure ul ol dl md mdn" />
+<xsl:strip-space elements="theorem corollary lemma example statement proof" />
 
 <!-- Whitespace control in text output mode-->
 <!-- Forcing newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
@@ -342,7 +344,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="proof">
     <xsl:text>\begin{proof}&#xa;</xsl:text>
-    <xsl:apply-templates select="p"/>
+    <xsl:apply-templates />
     <xsl:text>\end{proof}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
@@ -382,7 +384,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
 <!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
 <xsl:template match="md|mdn">
-    <xsl:text>&#xa;%&#xa;\begin{align}</xsl:text>
+    <xsl:text>\begin{align}</xsl:text>
     <xsl:apply-templates select="mrow" />
     <xsl:text>\end{align}&#xa;%&#xa;</xsl:text>
 </xsl:template>
@@ -418,35 +420,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Lists -->
 <xsl:template match="ol">
-    <xsl:text>&#xa;\begin{enumerate}&#xa;</xsl:text>
+    <xsl:text>\begin{enumerate}&#xa;</xsl:text>
     <xsl:apply-templates select="li" />
     <xsl:text>\end{enumerate}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="ul">
-    <xsl:text>&#xa;\begin{itemize}&#xa;</xsl:text>
+    <xsl:text>\begin{itemize}&#xa;</xsl:text>
     <xsl:apply-templates select="li" />
     <xsl:text>\end{itemize}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="dl">
-    <xsl:text>&#xa;\begin{description}&#xa;</xsl:text>
+    <xsl:text>\begin{description}&#xa;</xsl:text>
     <xsl:apply-templates select="li" />
     <xsl:text>\end{description}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Sometimes a nested list ends as part of an item  -->
+<!-- We output a % with each carriage return to avoid -->
+<!-- getting extraneous blank lines in the source     -->
 <xsl:template match="li">
     <xsl:text>\item </xsl:text>
     <xsl:apply-templates />
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="dl/li">
     <xsl:text>\item</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
-    
+
 <!-- Description lists have titled elements -->
 <!-- so no space after \item above          -->
 <!-- and title must be first inside li      -->

@@ -647,6 +647,8 @@ preferably with CSS so can adjust style, language-->
 
 <!-- Dashes, Hyphen -->
 <!-- http://www.cs.tut.fi/~jkorpela/dashes.html -->
+<!-- HTML Tidy does not like these characters, but they seem to be OK -->
+<!-- Could do this in CSS, perhaps? -->
 <xsl:template match="mdash">
     <xsl:text>&#8212;</xsl:text>
 </xsl:template>

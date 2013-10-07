@@ -228,9 +228,10 @@ html body {
 /*   U+220E 'END OF PROOF', small black box for me                */
 /*   U+2B1C 'WHITE LARGE SQUARE' is too big                       */
 /*   U+25A1 is 'WHITE SQUARE' which seems to render bigger for me */
-.tombstone:after {
+/*          Invisible until can get positiong correct after MathJax */
+/*.tombstone:after {
     content: "\0025A1"
-}
+}*/
 
 /* This behaves poorly after a MathJax display (\align) */
 .tombstone {
