@@ -31,7 +31,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 
-.headerblock .author-email {
+.author-email {
     font-family: "monospace";
     }
 
@@ -41,7 +41,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         font-weight: bolder;
         font-size: x-large;
 }
-.article .headerblock .title,
+
 .preface .title {
         margin: .8em 0 0 -4%;
         font-weight: bolder;
@@ -96,7 +96,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 .attribution:before{
     content:"- "
     }
-    
+
 /* Figures */
 
 .figure {
@@ -138,46 +138,55 @@ html body {
         font-size: normal;
 }
 
-/* Chapters */
-/* Override spans to get LaTeX style */
-
-.chapter .heading {
+/* Top level (article, book) */
+/* http://css-tricks.com/child-and-sibling-selectors/ */
+.article > .heading > .title {
         margin: .8em 0 0 -4%;
         font-weight: bolder;
         font-size: large;
         color: #990000;
 }
 
-.chapter .heading .number {
+/* Chapters */
+/* Override spans to get LaTeX style */
+
+.chapter > .heading {
+        margin: .8em 0 0 -4%;
+        font-weight: bolder;
+        font-size: large;
+        color: #990000;
+}
+
+.chapter > .heading > .number {
         display: block;
 }
 
-.chapter .heading .title {
+.chapter > .heading > .title {
         display: block;
 }
 
-.chapter .heading .number:before {
+.chapter > .heading > .number:before {
         content: "Chapter ";
 }
 
 /* Sections */
 /* No "Section" and keep spans, to get LaTeX style */
 
-.section .heading {
+.section > .heading {
         margin: .8em 0 0 -3%;
         font-weight: bolder;
         font-size: large;
         color: #990000;
 }
 
-.section .heading .number {
+.section > .heading > .number {
         display: inline;
 }
 
-.section .heading .title {
+.section > .heading > .title {
         display: inline;
 }
-.section .heading .number:before {
+.section > .heading > .number:before {
         content: "";
 }
 

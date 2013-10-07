@@ -69,13 +69,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="article">
     <body>
         \(<xsl:value-of select="/mathbook/docinfo/macros" />\)
-        <div class="headerblock">
-            <div class="title"><xsl:apply-templates select="title/node()" /></div>
-            <div class="authorgroup"><xsl:apply-templates select="/mathbook/docinfo/author" /></div>
-            <div class="date"><xsl:apply-templates select="/mathbook/docinfo/date" /></div>
-        </div>
+        <div class="article">
+            <div class="heading">
+                <div class="title"><xsl:apply-templates select="title/node()" /></div>
+                <div class="authorgroup"><xsl:apply-templates select="/mathbook/docinfo/author" /></div>
+                <div class="date"><xsl:apply-templates select="/mathbook/docinfo/date" /></div>
+            </div>
         <!-- TODO: an abstract here, from docinfo, or like preface? -->
         <xsl:apply-templates select="section|bibliography|p|sage|theorem|corollary|lemma|definition|example|figure" />
+        </div>
     </body>
 </xsl:template>
 
