@@ -35,13 +35,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     font-family: "monospace";
     }
 
-.book .headerblock .title {
-        text-align: center;
-        margin: .8em 0 0 -5%;
-        font-weight: bolder;
-        font-size: x-large;
-}
-
 .preface .title {
         margin: .8em 0 0 -4%;
         font-weight: bolder;
@@ -140,11 +133,41 @@ html body {
 
 /* Top level (article, book) */
 /* http://css-tricks.com/child-and-sibling-selectors/ */
+.book > .heading > .title {
+        text-align: center;
+        margin: .8em 0 0 -5%;
+        padding: 2em;
+        font-weight: bolder;
+        font-size: x-large;
+        color: #990000;
+}
+
 .article > .heading > .title {
         margin: .8em 0 0 -4%;
         font-weight: bolder;
         font-size: large;
         color: #990000;
+}
+
+.author-info {
+        padding-bottom:1em;
+}
+
+.toc {
+        padding-bottom:1em
+}
+
+/* put Preface here also? */
+.toc > .heading {
+        margin: .8em 0 0 -4%;
+        padding-bottom: 1em;
+        font-weight: bolder;
+        font-size: large;
+        color: #990000;
+}
+
+.toc-entry {
+        padding-bottom: 0.5em
 }
 
 /* Chapters */

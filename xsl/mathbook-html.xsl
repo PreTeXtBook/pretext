@@ -85,10 +85,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <div style="display:none;">
         \(<xsl:value-of select="/mathbook/docinfo/macros" />\)
         </div>
-        <div class="headerblock">
-            <div class="title"><xsl:apply-templates select="title/node()" /></div>
-            <div class="authorgroup"><xsl:apply-templates select="/mathbook/docinfo/author" /></div>
-            <div class="date"><xsl:apply-templates select="/mathbook/docinfo/date" /></div>
+        <div class="book" >
+            <div class="heading">
+                <div class="title"><xsl:apply-templates select="title/node()" /></div>
+                <div class="authorgroup"><xsl:apply-templates select="/mathbook/docinfo/author" /></div>
+                <div class="date"><xsl:apply-templates select="/mathbook/docinfo/date" /></div>
+            </div>
         </div>
         <xsl:call-template name="toc" />
         <xsl:apply-templates />
@@ -98,23 +100,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Author, single one at titlepage -->
 <xsl:template match="author">
-    <div class="author-name"><xsl:apply-templates select="personname" /></div>
-    <div class="author-department"><xsl:apply-templates select="department" /></div>
-    <div class="author-institution"><xsl:apply-templates select="institution" /></div>
-    <div class="author-email"><xsl:apply-templates select="email" /></div>
+    <div class="author-info">
+        <div class="author-name"><xsl:apply-templates select="personname" /></div>
+        <div class="author-department"><xsl:apply-templates select="department" /></div>
+        <div class="author-institution"><xsl:apply-templates select="institution" /></div>
+        <div class="author-email"><xsl:apply-templates select="email" /></div>
+    </div>
 </xsl:template>
 
 <!-- Table of contents for front page -->
 <!-- TODO: Appendices -->
 <xsl:template name="toc">
-    <xsl:for-each select="//chapter">
-    <!-- Move class into a with display block attribute? -->
-        <div class="toc-entry">
-            <a href="{@filebase}.html">
-            Chapter <xsl:apply-templates select="." mode="number" /> <xsl:apply-templates select="title/node()" />
-            </a><br />
-        </div>
-    </xsl:for-each>
+    <div class="toc">
+        <div class="heading">Table of Contents</div>
+        <xsl:for-each select="//chapter">
+            <!-- Move div/class into "a" element with display block attribute? -->
+            <!-- TODO: move "Chapter" string into CSS -->
+            <div class="toc-entry">
+                <a href="{@filebase}.html">
+                <xsl:text>Chapter </xsl:text>
+                <xsl:apply-templates select="." mode="number" />
+                <xsl:text> </xsl:text>
+                <xsl:apply-templates select="title/node()" />
+                </a>
+            </div>
+        </xsl:for-each>
+    </div>
 </xsl:template>
 
 <!-- Preface, automatic title, no subsections, etc         -->
