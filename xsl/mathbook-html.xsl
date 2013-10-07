@@ -407,10 +407,14 @@ preferably with CSS so can adjust style, language-->
     <xsl:number level="any" count="example" />
 </xsl:template>
 
-<!-- Equations:  chapter.x -->
+<!-- Equations:           -->
+<!--   chapter.x in books -->
+<!--   x in articles      -->
 <xsl:template match="mrow|men" mode="number">
-    <xsl:apply-templates select="ancestor::chapter" mode="number" />
-    <xsl:text>.</xsl:text>
+    <xsl:if test="ancestor::chapter">
+        <xsl:apply-templates select="ancestor::chapter" mode="number" />
+        <xsl:text>.</xsl:text>
+    </xsl:if>
     <xsl:number from="chapter" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]" />
 </xsl:template>
 
