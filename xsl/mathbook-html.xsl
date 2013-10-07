@@ -101,15 +101,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <div class="author-name"><xsl:apply-templates select="personname" /></div>
     <div class="author-department"><xsl:apply-templates select="department" /></div>
     <div class="author-institution"><xsl:apply-templates select="institution" /></div>
-    <div class="author-email">
-    <!-- TODO: Replace and test generic email template, but keep enclosing div -->
-        <xsl:element name="a">
-            <xsl:attribute name="href">
-                mailto:<xsl:apply-templates select="email" />
-            </xsl:attribute>
-            <xsl:apply-templates select="email" />
-        </xsl:element>
-    </div>
+    <div class="author-email"><xsl:apply-templates select="email" /></div>
 </xsl:template>
 
 <!-- Table of contents for front page -->
