@@ -221,8 +221,21 @@ html body {
     }
 
 .page-nav-bar td.next:before {
-    content:"Next: ";
+    content: "Next: ";
     }
+
+/* Theorems and Proofs */
+/*   U+220E 'END OF PROOF', small black box for me                */
+/*   U+2B1C 'WHITE LARGE SQUARE' is too big                       */
+/*   U+25A1 is 'WHITE SQUARE' which seems to render bigger for me */
+.tombstone:after {
+    content: "\0025A1"
+}
+
+/* This behaves poorly after a MathJax display (\align) */
+.tombstone {
+    float:right;
+}
 
 
 /* Sage Cell appearance */

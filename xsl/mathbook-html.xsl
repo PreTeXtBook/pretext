@@ -48,7 +48,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="book"><xsl:value-of select="book/@filebase" /></xsl:when>
     </xsl:choose>
 </xsl:variable>
-<xsl:value-of select="$rootfile" />
 <exsl:document href="{$rootfile}.html" method="html">
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html></xsl:text>
     <html>
@@ -324,9 +323,21 @@ preferably with CSS so can adjust style, language-->
 <p>Sample notation (in a master list eventually): \(<xsl:value-of select="." />\)</p>
 </xsl:template>
 
+<!-- First paragraph gets a leader -->
 <xsl:template match="proof/p[1]">
 <p><span class="proof-header">Proof<xsl:text> </xsl:text></span><xsl:apply-templates /></p>
 </xsl:template>
+
+<!-- Tombstone, or halmos, to end proof (implement in CSS) -->
+<xsl:template match="proof/p[last()]">
+<p><xsl:apply-templates /><span class="tombstone" /></p>
+</xsl:template>
+
+<!-- Maybe only one paragraph in proof -->
+<xsl:template match="proof/p[1 and last()]">
+<p><span class="proof-header">Proof<xsl:text> </xsl:text></span><xsl:apply-templates /><span class="tombstone" /></p>
+</xsl:template>
+
 
 
 <!-- Wrap generic paragraphs in p tag -->
