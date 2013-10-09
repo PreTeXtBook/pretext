@@ -183,18 +183,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These two pages contribute to frontmatter page count -->
 <xsl:template name="half-title" >
     <xsl:text>% half-title&#xa;</xsl:text>
-    <xsl:text>\pagestyle{empty}&#xa;</xsl:text>
+    <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
     <xsl:text>\begin{center}\Huge&#xa;</xsl:text>
     <xsl:apply-templates select="/mathbook/book/title/node()" />
     <xsl:text>\end{center}\par&#xa;</xsl:text>
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
-    <xsl:text>\cleardoublepage&#xa;</xsl:text>
+    <xsl:text>\clearpage&#xa;</xsl:text>
+    <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
+    <xsl:text>\clearpage&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Copyright page is obverse of title page          -->
-<!-- Lots of stuff here, much of it optional               -->
+<!-- Copyright page is obverse of title page  -->
+<!-- Lots of stuff here, much of it optional  -->
 <xsl:template name="copyright-page" >
+    <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:if test="/mathbook/docinfo/author/biography" >
         <xsl:text>{\setlength{\parindent}{0pt}\setlength{\parskip}{4pt}</xsl:text>
         <xsl:apply-templates select="/mathbook/docinfo/author/biography" />}
