@@ -146,6 +146,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 %% Raster graphics inclusion, wapped figures in paragraphs
 \usepackage{graphicx}&#xa;</xsl:text>
+<xsl:if test="//tikz">
+    <xsl:text>%% Tikz graphics&#xa;</xsl:text>
+    <xsl:text>\usepackage{tikz}&#xa;</xsl:text>
+    <xsl:text>\usetikzlibrary{backgrounds}&#xa;</xsl:text>
+    <xsl:text>\usetikzlibrary{arrows,matrix}&#xa;</xsl:text>
+</xsl:if>
 <xsl:text>%% Hyperlinking in PDFs, all links solid and blue
 \usepackage[pdftex]{hyperref}
 \hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
@@ -674,6 +680,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
     <xsl:text>]</xsl:text>
     <xsl:text>{</xsl:text><xsl:value-of select="@source" /><xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- tikz graphics language -->
+<!-- preliminary (cursory) support -->
+<!-- http://tex.stackexchange.com/questions/4338/correctly-scaling-a-tikzpicture -->
+<xsl:template match="tikz">
+    <xsl:text>\resizebox{0.75\textwidth}{!}{&#xa;</xsl:text>
+    <xsl:text>\begin{tikzpicture}&#xa;</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>\end{tikzpicture}&#xa;</xsl:text>
+    <xsl:text>} % end box resizing&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
 
