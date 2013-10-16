@@ -122,6 +122,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:text>}&#xa;</xsl:text>
 <xsl:text>%% Symbols, align environment, bracket-matrix
 \usepackage{amsmath}
+%% allow more columns to a matrix
+%% can make this even bigger by overiding with preamble addition
+\setcounter{MaxMatrixCols}{30}
 \usepackage{amssymb}
 %% Two nonstandard macros that MathJax supports automatically
 %% so we define them in order to allow their use and
