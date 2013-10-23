@@ -39,66 +39,120 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- http://stackoverflow.com/questions/1134318/xslt-xslstrip-space-does-not-work -->
 <xsl:variable name="whitespace"><xsl:text>&#x20;&#x9;&#xD;&#xA;</xsl:text></xsl:variable>
 
-<!-- Trim all whitespace at beginning of string -->
-<xsl:template name="trim-start">
-   <xsl:param name="text"/>
-<!--     <xsl:text>In trim-start</xsl:text> -->
-   <xsl:variable name="first-char" select="substring($text, 1, 1)" />
-<!--    <xsl:text>fc:</xsl:text><xsl:value-of select="$first-char" /> -->
-   <xsl:choose>
-        <xsl:when test="$first-char=''">
-            <xsl:text></xsl:text>
-        </xsl:when>
-        <xsl:when test="contains($whitespace, $first-char)">
-<!--         <xsl:when test="matches($whitespace, $first-char)"> -->
-            <xsl:call-template name="trim-start">
-                <xsl:with-param name="text" select="substring($text, 2)" />
-            </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$text" />
-        </xsl:otherwise>
-   </xsl:choose>
-<!--     <xsl:text>Out trim-start</xsl:text> -->
-</xsl:template>
-
-<!-- Trim all whitespace at end of string -->
+<!-- Trim all whitespace at end of code hunk -->
+<!-- Append carriage return to mark last line, remove later -->
 <xsl:template name="trim-end">
    <xsl:param name="text"/>
-<!--     <xsl:text>In trim-end</xsl:text> -->
    <xsl:variable name="last-char" select="substring($text, string-length($text), 1)" />
-<!--    <xsl:text>lc:</xsl:text><xsl:value-of select="$last-char" /> -->
    <xsl:choose>
         <xsl:when test="$last-char=''">
-            <xsl:text></xsl:text>
+            <xsl:text>&#xA;</xsl:text>
         </xsl:when>
         <xsl:when test="contains($whitespace, $last-char)">
-<!--         <xsl:when test="matches($last-char, '\s')"> -->
-<!--             <xsl:text>White</xsl:text> -->
             <xsl:call-template name="trim-end">
                 <xsl:with-param name="text" select="substring($text, 1, string-length($text) - 1)" />
             </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-<!--             <xsl:text>Otherwise</xsl:text> -->
             <xsl:value-of select="$text" />
+            <xsl:text>&#xA;</xsl:text>
         </xsl:otherwise>
    </xsl:choose>
-<!--     <xsl:text>Out trim-end</xsl:text> -->
 </xsl:template>
 
-<!-- Put it together, call this on Sage hunks -->
-<xsl:template name="trim-sage">
-    <xsl:param name="sagecode" />
-<!--     <xsl:text>In trim-sage</xsl:text> -->
-    <xsl:call-template name="trim-start">
-        <xsl:with-param name="text">
-            <xsl:call-template name="trim-end">
-                <xsl:with-param name="text" select="$sagecode" />
+<!-- Trim all totally whitespace lines from beginning of code hunk -->
+<xsl:template name="trim-start-lines">
+   <xsl:param name="text"/>
+   <xsl:param name="pad" default="''"/>
+   <xsl:variable name="first-char" select="substring($text, 1, 1)" />
+   <xsl:choose>
+        <xsl:when test="$first-char='&#xA;'">
+            <xsl:call-template name="trim-start-lines">
+                <xsl:with-param name="text" select="substring($text, 2)" />
             </xsl:call-template>
-        </xsl:with-param>
-    </xsl:call-template>
-<!--     <xsl:text>Out trim-sage</xsl:text> -->
+        </xsl:when>
+        <xsl:when test="contains($whitespace, $first-char)">
+            <xsl:call-template name="trim-start-lines">
+                <xsl:with-param name="text" select="substring($text, 2)" />
+                <xsl:with-param name="pad"  select="concat($pad, $first-char)" />
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="concat($pad, $text)" />
+        </xsl:otherwise>
+   </xsl:choose>
+</xsl:template>
+
+<!-- Compute length of indentation of first line                   -->
+<!-- Assumes no leading blank lines                                -->
+<!-- Assumes each line, including last, ends in a carriage return  -->
+<xsl:template name="count-pad-length">
+   <xsl:param name="text"/>
+   <xsl:param name="pad" default=''/>
+   <xsl:variable name="first-char" select="substring($text, 1, 1)" />
+   <xsl:choose>
+        <xsl:when test="$first-char='&#xA;'">
+            <xsl:value-of select="string-length($pad)" />
+        </xsl:when>
+        <xsl:when test="contains($whitespace, $first-char)">
+            <xsl:call-template name="count-pad-length">
+                <xsl:with-param name="text" select="substring($text, 2)" />
+                <xsl:with-param name="pad"  select="concat($pad, $first-char)" />
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="string-length($pad)" />
+        </xsl:otherwise>
+   </xsl:choose>
+</xsl:template>
+
+<!-- An "out-dented" line is assumed to be intermediate blank line -->
+<xsl:template name="strip-indentation">
+    <xsl:param name="text" />
+    <xsl:param name="indent" />
+    <xsl:if test="$text != ''">
+        <xsl:variable name="first-line" select="substring-before($text, '&#xA;')" />
+        <xsl:if test="string-length($first-line) > $indent" >
+            <xsl:value-of select="substring($first-line, $indent + 1)" />
+        </xsl:if>
+        <xsl:text>&#xA;</xsl:text>
+        <xsl:call-template name="strip-indentation">
+            <xsl:with-param name="text" select="substring-after($text, '&#xA;')" />
+            <xsl:with-param name="indent" select="$indent" />
+        </xsl:call-template>
+    </xsl:if>
+</xsl:template>
+
+<!--1)  Trim all trailing whitespace, add carriage return marker to last line
+2)  Strip all totally blank leading lines
+3)  Determine indentation of first line
+4a) Strip indentation from all lines
+4b) Allow intermediate blank lines
+5)  Remove final carriage return-->
+
+<xsl:template name="sanitize-sage">
+    <xsl:param name="raw-sage-code" />
+    <xsl:variable name="trimmed-sage-code">
+        <xsl:call-template name="trim-start-lines">
+            <xsl:with-param name="text">
+                <xsl:call-template name="trim-end">
+                    <xsl:with-param name="text" select="$raw-sage-code" />
+                </xsl:call-template>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="pad-length">
+        <xsl:call-template name="count-pad-length">
+            <xsl:with-param name="text" select="$trimmed-sage-code" />
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="unindented">
+        <xsl:call-template name="strip-indentation" >
+            <xsl:with-param name="text" select="$trimmed-sage-code" />
+            <xsl:with-param name="indent" select="$pad-length" />
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="substring($unindented, 1, string-length($unindented) - 1)" />
 </xsl:template>
 
 <!-- Date and Time Functions -->
