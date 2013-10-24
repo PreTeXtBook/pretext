@@ -106,7 +106,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
    </xsl:choose>
 </xsl:template>
 
-<!-- An "out-dented" line is assumed to be intermediate blank line -->
+<!-- An "out-dented" line is assumed to be intermediate blank line     -->
+<!-- indent parameter is a number giving number of characters to strip -->
 <xsl:template name="strip-indentation">
     <xsl:param name="text" />
     <xsl:param name="indent" />
@@ -123,13 +124,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!--1)  Trim all trailing whitespace, add carriage return marker to last line
-2)  Strip all totally blank leading lines
-3)  Determine indentation of first line
-4a) Strip indentation from all lines
-4b) Allow intermediate blank lines
-5)  Remove final carriage return-->
+<!-- Add a common string in front of every line of a block -->
+<!-- Typically spaces to format output block for doctest   -->
+<!-- indent parameter is a string                          -->
+<!-- Assumes last character is xA                          -->
+<!-- Result has trailing xA                                -->
+<xsl:template name="add-indentation">
+    <xsl:param name="text" />
+    <xsl:param name="indent" />
+    <xsl:if test="$text != ''">
+        <xsl:value-of select="concat($indent,substring-before($text, '&#xA;'))" />
+        <xsl:text>&#xA;</xsl:text>
+        <xsl:call-template name="add-indentation">
+            <xsl:with-param name="text" select="substring-after($text, '&#xA;')" />
+            <xsl:with-param name="indent" select="$indent" />
+        </xsl:call-template>
+    </xsl:if>
+</xsl:template>
 
+<!--
+1) Trim all trailing whitespace, add carriage return marker to last line
+2) Strip all totally blank leading lines
+3) Determine indentation of first line
+4) Strip indentation from all lines
+5) Allow intermediate blank lines
+-->
 <xsl:template name="sanitize-sage">
     <xsl:param name="raw-sage-code" />
     <xsl:variable name="trimmed-sage-code">
@@ -146,13 +165,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="text" select="$trimmed-sage-code" />
         </xsl:call-template>
     </xsl:variable>
-    <xsl:variable name="unindented">
-        <xsl:call-template name="strip-indentation" >
-            <xsl:with-param name="text" select="$trimmed-sage-code" />
-            <xsl:with-param name="indent" select="$pad-length" />
-        </xsl:call-template>
-    </xsl:variable>
-    <xsl:value-of select="substring($unindented, 1, string-length($unindented) - 1)" />
+    <xsl:call-template name="strip-indentation" >
+        <xsl:with-param name="text" select="$trimmed-sage-code" />
+        <xsl:with-param name="indent" select="$pad-length" />
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Date and Time Functions -->

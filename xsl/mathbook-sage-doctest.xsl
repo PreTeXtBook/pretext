@@ -6,14 +6,17 @@
 
 <xsl:import href="./mathbook-common.xsl" />
 
-<!-- Intend output for rendering by pdflatex -->
+<!-- Intend output for Python docstring -->
 <xsl:output method="text" />
 
 <!-- Whitespace control in text output mode-->
 <!-- Forcing newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
 <!-- Avoiding extra whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
 
-<xsl:template match="/" >
+<!-- Make a single docstring for Sage doctest framework -->
+<!-- TODO: Investigate just when random-number seed is reinitialized, -->
+<!-- per docstring or per verbatim marker -->
+<xsl:template match="/mathbook" >
     <xsl:text>r"""&#xa;</xsl:text>
     <xsl:apply-templates select="article|worksheet|book" />
     <xsl:text>"""&#xa;</xsl:text>
@@ -46,13 +49,15 @@
 </xsl:template>
 
 <!-- TODO: will subsubsections have titles? -->
+<!-- TODO: planning one level deeper as "paragraph", but perhaps at any level -->
 <xsl:template match="subsubsection" >
     <xsl:text># Begin Subsubsection: </xsl:text><xsl:value-of select="title" /><xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="sage" />
     <xsl:text># End Subsubsection: </xsl:text><xsl:value-of select="title" /><xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-
+<!-- Form doctring/ReST verbatim block -->
+<!-- for one input/output pair         -->
 <xsl:template match="sage">
 <xsl:text>~~~~~~~~~~~~~~~~~~~~~~ ::&#xA;&#xA;</xsl:text>
 <xsl:apply-templates select="input" />
@@ -60,63 +65,63 @@
 <xsl:text>&#xA;</xsl:text>
 </xsl:template>
 
+<!-- Sanitize intput block      -->
+<!-- Add in 4-space indentation -->
+<!-- and Sage prompts           -->
 <xsl:template match="input">
-    <xsl:call-template name="prependPrompt">
-        <xsl:with-param name="pText">
-            <xsl:call-template name="trim-sage" >
-                <xsl:with-param name="sagecode" select="." />
+    <xsl:call-template name="prepend-prompt">
+        <xsl:with-param name="text">
+            <xsl:call-template name="sanitize-sage" >
+                <xsl:with-param name="raw-sage-code" select="." />
             </xsl:call-template>
-            <xsl:text>&#xA;</xsl:text>
         </xsl:with-param>
     </xsl:call-template>
 </xsl:template>
 
+<!-- Sanitize output block      -->
+<!-- Add in 4-space indentation -->
 <xsl:template match="output">
-    <xsl:call-template name="prependTab" />
+    <xsl:call-template name="add-indentation">
+        <xsl:with-param name="text">
+            <xsl:call-template name="sanitize-sage" >
+                <xsl:with-param name="raw-sage-code" select="." />
+            </xsl:call-template>
+        </xsl:with-param>
+        <xsl:with-param name="indent" select="'    '" />
+    </xsl:call-template>
 </xsl:template>
 
-<xsl:template name="prependPrompt">
-    <xsl:param name="pText" select="."/>
-    <!-- Bail if the string becomes empty -->
-    <xsl:if test="string-length($pText)">
+<!-- Doctest specific template, others are in common XSL file -->
+
+<xsl:template name="prepend-prompt">
+    <xsl:param name="text" />
+    <!-- Just quit when string becomes empty -->
+    <xsl:if test="string-length($text)">
+        <xsl:variable name="first-line" select="substring-before($text, '&#xA;')" />
         <xsl:choose>
-            <!-- prepend if first char is blank or not, indentation is continuation -->
-            <xsl:when test="substring($pText,1,1)=' '">
+            <!-- blank lines are treated as continuation -->
+            <!-- could be important content of triply-quoted strings? -->
+            <!-- no harm if really just spacing at totally out-dented level? -->
+            <xsl:when test="not(string-length($first-line))">
                 <xsl:text>    ...   </xsl:text>
             </xsl:when>
+            <!-- leading blank indicates continuation -->
+            <xsl:when test="substring($first-line,1,1)=' '">
+                <xsl:text>    ...   </xsl:text>
+            </xsl:when>
+            <!-- otherwise, totally outdented, needs sage prompt -->
             <xsl:otherwise>
                 <xsl:text>    sage: </xsl:text>
             </xsl:otherwise>
         </xsl:choose>
-        <!-- output up to carriage return, and dup the return -->
-        <!-- but do not output a blank line                   -->
-        <xsl:if test="string-length(substring-before($pText, '&#xA;'))">
-            <xsl:value-of select="substring-before($pText, '&#xA;')"/>
-            <xsl:text>&#xA;</xsl:text>
-        </xsl:if>
+        <xsl:value-of select="$first-line"/>
+        <xsl:text>&#xA;</xsl:text>
         <!-- recursive call on remainder of string -->
-        <xsl:call-template name="prependPrompt">
-            <xsl:with-param name="pText" select="substring-after($pText, '&#xA;')"/>
+        <xsl:call-template name="prepend-prompt">
+            <xsl:with-param name="text" select="substring-after($text, '&#xA;')"/>
         </xsl:call-template>
     </xsl:if>
 </xsl:template>
-
-<xsl:template name="prependTab">
-  <xsl:param name="pText" select="."/>
-
-  <xsl:if test="string-length($pText)">
-   <xsl:text>    </xsl:text>
-   <xsl:value-of select="substring-before($pText, '&#xA;')"/>
-   <xsl:text>&#xA;</xsl:text>
-
-   <xsl:call-template name="prependTab">
-    <xsl:with-param name="pText"
-      select="substring-after($pText, '&#xA;')"/>
-   </xsl:call-template>
-  </xsl:if>
-</xsl:template>
-
-
 
 
 </xsl:stylesheet>
