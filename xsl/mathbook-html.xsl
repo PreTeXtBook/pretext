@@ -889,8 +889,8 @@ preferably with CSS so can adjust style, language-->
 <xsl:template match="sage">
     <div class="sage-compute">
     <script type="text/x-sage">
-    <xsl:call-template name="trim-sage">
-        <xsl:with-param name="sagecode" select="input" />
+    <xsl:call-template name="sanitize-sage">
+        <xsl:with-param name="raw-sage-code" select="input" />
     </xsl:call-template>
     </script>
     </div>

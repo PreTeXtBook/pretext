@@ -639,8 +639,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="input">
     <xsl:text>\begin{mdframed}[backgroundcolor=blue!10,skipabove=2ex,skipbelow=2ex]&#xa;</xsl:text>
     <xsl:text>\begin{verbatim}</xsl:text>
-    <xsl:call-template name="trim-sage">
-        <xsl:with-param name="sagecode" select="." />
+    <xsl:call-template name="sanitize-sage">
+        <xsl:with-param name="raw-sage-code" select="." />
     </xsl:call-template>
     <xsl:text>\end{verbatim}&#xa;</xsl:text>
     <xsl:text>\end{mdframed}&#xa;%&#xa;</xsl:text>
@@ -649,8 +649,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="output">
     <xsl:text>\begin{mdframed}[linecolor=white,leftmargin=4ex,skipbelow=2ex]&#xa;</xsl:text>
     <xsl:text>\begin{verbatim}</xsl:text>
-    <xsl:call-template name="trim-sage">
-        <xsl:with-param name="sagecode" select="." />
+    <xsl:call-template name="sanitize-sage">
+        <xsl:with-param name="raw-sage-code" select="." />
     </xsl:call-template>
     <xsl:text>\end{verbatim}&#xa;</xsl:text>
     <xsl:text>\end{mdframed}&#xa;%&#xa;</xsl:text>
