@@ -90,6 +90,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="title"><xsl:apply-templates select="title/node()" /></div>
                 <div class="authorgroup"><xsl:apply-templates select="/mathbook/docinfo/author" /></div>
                 <div class="date"><xsl:apply-templates select="/mathbook/docinfo/date" /></div>
+                <xsl:if test="/mathbook/docinfo/copyright">
+                    <div class="copyright"><xsl:text>&#169; </xsl:text>
+                        <xsl:apply-templates select="/mathbook/docinfo/copyright/year" />
+                        <xsl:text> </xsl:text>
+                        <xsl:apply-templates select="/mathbook/docinfo/copyright/holder" />
+                            <xsl:if test="/mathbook/docinfo/copyright/shortlicense">
+                                <br />
+                                <xsl:apply-templates select="/mathbook/docinfo/copyright/shortlicense" />
+                            </xsl:if>
+                    </div>
+                </xsl:if>
             </div>
         </div>
         <xsl:call-template name="toc" />
@@ -113,7 +124,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="toc">
     <div class="toc">
         <div class="heading">Table of Contents</div>
-        <xsl:for-each select="//chapter">
+        <xsl:for-each select="//chapter|//appendix">
             <!-- Move div/class into "a" element with display block attribute? -->
             <!-- TODO: move "Chapter" string into CSS -->
             <div class="toc-entry">
@@ -543,6 +554,7 @@ preferably with CSS so can adjust style, language-->
 <!-- Markup, typically within paragraphs -->
 
 <!-- Quotes, regular or block -->
+<!-- &#8220;, &#8221; are another option here -->
 <xsl:template match="q">
     <q><xsl:apply-templates /></q>
 </xsl:template>
@@ -565,6 +577,11 @@ preferably with CSS so can adjust style, language-->
 <!-- Emphasis -->
 <xsl:template match="em">
     <em><xsl:apply-templates /></em>
+</xsl:template>
+
+<!-- Copyright symbol -->
+<xsl:template match="copyright">
+    <xsl:text>&#169;</xsl:text>
 </xsl:template>
 
 <!-- for example -->

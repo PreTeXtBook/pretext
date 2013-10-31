@@ -247,6 +247,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="title/node()"/>
 </xsl:template>
 
+<xsl:template match="appendix" mode="long-name">
+    <xsl:text>Chapter </xsl:text>
+    <xsl:apply-templates select="." mode="number" />
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="title/node()"/>
+</xsl:template>
+
 <xsl:template match="section" mode="long-name">
     <xsl:text>Section </xsl:text>
     <xsl:apply-templates select="." mode="number" />
@@ -269,6 +276,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Chapters: x -->
 <xsl:template match="chapter" mode="number">
     <xsl:number level="single" count="chapter" />
+</xsl:template>
+
+<!-- Appendices: A -->
+<xsl:template match="appendix" mode="number">
+    <xsl:number level="single" count="appendix" format="A"/>
 </xsl:template>
 
 <!-- Sections: chapter.x -->

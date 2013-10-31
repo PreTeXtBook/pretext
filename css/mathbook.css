@@ -149,7 +149,7 @@ html body {
         color: #990000;
 }
 
-.author-info {
+.author-info, .date, .copyright {
         padding-bottom:1em;
 }
 

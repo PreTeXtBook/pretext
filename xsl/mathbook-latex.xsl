@@ -55,7 +55,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- Strip whitespace text nodes from container elements -->
-<xsl:strip-space elements="mathbook book article chapter section subsection subsubsection paragraph" />
+<xsl:strip-space elements="mathbook book article chapter appendix section subsection subsubsection paragraph" />
 <xsl:strip-space elements="docinfo author figure ul ol dl md mdn" />
 <xsl:strip-space elements="theorem corollary lemma example statement proof" />
 
@@ -108,6 +108,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="preface" />
     <xsl:text>\mainmatter&#xa;%&#xa;</xsl:text>
     <xsl:apply-templates select="chapter" />
+    <xsl:text>\appendix&#xa;%&#xa;</xsl:text>
+    <xsl:apply-templates select="appendix" />
     <xsl:text>\backmatter&#xa;%&#xa;</xsl:text>
     <xsl:apply-templates select="bibliography" />
     <xsl:text>\end{document}&#xa;</xsl:text>
@@ -271,8 +273,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Sectioning -->
 <!-- Subdivisions, Chapters down to SubSubSections -->
 <!-- Relies on element names echoing latex names   -->
-<xsl:template match="chapter|section|subsection|subsubsection">
-    <xsl:variable name="level" select="local-name(.)" />
+<!-- But appendices are just chapters after \appendix macro -->
+<xsl:template match="chapter|appendix|section|subsection|subsubsection">
+    <xsl:variable name="level">
+        <xsl:choose>
+            <xsl:when test="local-name(.)='appendix'">
+                <xsl:text>chapter</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="local-name(.)" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:text>\typeout{************************************************}&#xa;</xsl:text>
     <xsl:text>\typeout{</xsl:text>
     <xsl:apply-templates select="." mode="long-name" />
@@ -571,6 +583,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="eg">
     <xsl:text>e.g.\ </xsl:text>
 </xsl:template>
+
+<!-- Copyright symbol -->
+<xsl:template match="copyright">
+    <xsl:text>\copyright{}</xsl:text>
+</xsl:template>
+
 
 <!-- in other words -->
 <xsl:template match="ie">
