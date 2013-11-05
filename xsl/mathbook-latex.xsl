@@ -56,7 +56,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Strip whitespace text nodes from container elements -->
 <xsl:strip-space elements="mathbook book article chapter appendix section subsection subsubsection paragraph" />
-<xsl:strip-space elements="docinfo author figure ul ol dl md mdn" />
+<xsl:strip-space elements="docinfo author abstract figure ul ol dl md mdn" />
 <xsl:strip-space elements="theorem corollary lemma example statement proof" />
 
 <!-- Whitespace control in text output mode-->
@@ -84,6 +84,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="latex-preamble" />
     <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
     <xsl:text>\maketitle&#xa;%&#xa;</xsl:text>
+    <xsl:apply-templates select="/mathbook/docinfo/abstract" />
     <xsl:apply-templates />
     <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
@@ -262,6 +263,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="preface">
     <xsl:text>\chapter{Preface}&#xa;%&#xa;</xsl:text>
     <xsl:apply-templates />
+</xsl:template>
+
+<!-- Articles may have an abstract in the docinfo -->
+<xsl:template match="abstract">
+    <xsl:text>\begin{abstract}&#xa;</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>\end{abstract}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Titles, captions are handled specially               -->
