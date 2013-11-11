@@ -147,6 +147,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}
 \newtheorem{example}{Example}
+\newtheorem{exercise}{Exercise}
 %% Sage input: boxed, colored
 \usepackage{mdframed}
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
@@ -310,11 +311,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
-<!-- Theorems, Proofs, Definitions, Examples -->
+<!-- Theorems, Proofs, Definitions, Examples, Exercises -->
 
 <!-- Theorems have statement/proof structure               -->
 <!-- Definitions have notation, which is handled elsewhere -->
 <!-- Examples have no additional structure                 -->
+<!-- Exercises have solutions                              -->
 <!-- TODO: consider optional titles -->
 
 <xsl:template match="theorem|corollary|lemma">
@@ -325,8 +327,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="statement" />
 </xsl:template>
 
+<!-- Ignore solutions to exercises -->
+<xsl:template match="exercise">
+    <xsl:apply-templates select="statement" />
+</xsl:template>
+<xsl:template match="exercise/solution"></xsl:template>
 
-<!-- Reorg?, consolidate following with local-namr() -->
+<!-- Reorg?, consolidate following with local-name() -->
 
 <xsl:template match="theorem/statement">
     <xsl:text>\begin{theorem}</xsl:text>
@@ -367,6 +374,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="p|figure"/>
     <xsl:text>\end{example}&#xa;%&#xa;</xsl:text>
 </xsl:template>
+
+<xsl:template match="exercise/statement">
+    <xsl:text>\begin{exercise}</xsl:text>
+    <xsl:apply-templates select=".." mode="label"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="p"/>
+    <xsl:text>\end{exercise}&#xa;%&#xa;</xsl:text>
+</xsl:template>
+
 
 <xsl:template match="notation">
     <xsl:text>Sample notation (in a master list eventually): \(</xsl:text>

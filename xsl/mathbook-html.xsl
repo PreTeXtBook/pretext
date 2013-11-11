@@ -275,6 +275,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
+<!-- Ignore solutions for now, could be knowls -->
+<xsl:template match="exercise">
+    <div class="exercise">
+        <xsl:apply-templates select="." mode="label" />
+        <xsl:apply-templates />
+    </div>
+</xsl:template>
+<xsl:template match="exercise/solution"></xsl:template>
 
 <!--Decide how to handle "Theorem 4.3 (A result of Beezer)"
 as a lead-in to paragraph one, or a title div
@@ -332,6 +340,18 @@ preferably with CSS so can adjust style, language-->
     <xsl:apply-templates />
     </p>
 </xsl:template>
+
+<xsl:template match="exercise/statement/p[1]">
+    <p>
+        <span class="exercise-header">
+        <xsl:text>Exercise </xsl:text>
+        <xsl:apply-templates select="../.." mode="number" />
+        <xsl:text> </xsl:text>
+        </span>
+        <xsl:apply-templates />
+    </p>
+</xsl:template>
+
 
 <xsl:template match="notation">
 <p>Sample notation (in a master list eventually): \(<xsl:value-of select="." />\)</p>
@@ -430,6 +450,11 @@ preferably with CSS so can adjust style, language-->
 <!-- Examples:  x -->
 <xsl:template match="example" mode="number">
     <xsl:number level="any" count="example" />
+</xsl:template>
+
+<!-- Exercises  x -->
+<xsl:template match="exercise" mode="number">
+    <xsl:number level="any" count="exercise" />
 </xsl:template>
 
 <!-- Equations:           -->

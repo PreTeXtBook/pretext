@@ -62,6 +62,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 .lemma-header,
 .definition-header,
 .example-header,
+.exercise-header,
 .proof-header {
     font-weight: bold;
     }
