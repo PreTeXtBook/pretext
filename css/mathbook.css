@@ -32,7 +32,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 .author-email {
-    font-family: "monospace";
+    font-family: "Source Code Pro", Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
     }
 
 .preface .title {
@@ -112,9 +112,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 /* Main body margin, etc */
 html body {
+        font-family: "Istok Web", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
         margin: 1em 8% 1em 10%;
         line-height: 1.2;
-        font-family: sans-serif;
         color: black;
         font-size: normal;
 }
@@ -307,5 +307,5 @@ html body {
 
 /* Inline code from "c" tags */
 tt.code {
-    font-size:large;
+    font-family: "Source Code Pro", Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace
 }

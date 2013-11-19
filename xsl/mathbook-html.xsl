@@ -58,6 +58,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="mathjax" />
             <xsl:call-template name="sagecell" />
             <xsl:call-template name="knowl" />
+            <xsl:call-template name="fonts" />
             <link rel="stylesheet" type="text/css" href="mathbook.css" />
         </head>
         <xsl:apply-templates />
@@ -168,6 +169,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="mathjax" />
             <xsl:call-template name="sagecell" />
             <xsl:call-template name="knowl" />
+            <xsl:call-template name="fonts" />
             <link rel="stylesheet" type="text/css" href="mathbook.css" />
         </head>
         <body>
@@ -989,6 +991,17 @@ $(function () {
 <link href="http://aimath.org/knowlstyle.css" rel="stylesheet" type="text/css" /> 
 <script type="text/javascript" src="http://aimath.org/knowl.js"></script>
 </xsl:template>
+
+<!-- Font header -->
+<!-- Google Fonts -->
+<!-- Text: Istok Web font, regular and italic (400), bold (700) -->
+<!-- Code: Source Code Pro, regular (400) -->
+<xsl:template name="fonts">
+    <link href='http://fonts.googleapis.com/css?family=Istok+Web:400,400italic,700|Source+Code+Pro:400' rel='stylesheet' type='text/css' />
+</xsl:template>
+
+
+
 
 <!-- Miscellaneous -->
 
