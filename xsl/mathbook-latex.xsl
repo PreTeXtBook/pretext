@@ -58,6 +58,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="mathbook book article chapter appendix section subsection subsubsection paragraph" />
 <xsl:strip-space elements="docinfo author abstract figure ul ol dl md mdn" />
 <xsl:strip-space elements="theorem corollary lemma example statement proof" />
+<xsl:strip-space elements="table thead tr td" />
 
 <!-- Whitespace control in text output mode-->
 <!-- Forcing newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
@@ -736,6 +737,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
     <xsl:text>\end{tikzpicture}&#xa;</xsl:text>
     <xsl:text>} % end box resizing&#xa;%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- TODO: Implement tables -->
+<!-- for openers, see http://stackoverflow.com/questions/19716449/converting-xhtml-table-to-latex-using-xslt -->
+<!-- Tables -->
+<!-- Replicate HTML5 model, but burrow into content for formatted entries -->
+<xsl:template match="table">
+    <xsl:text>\centerline{\textbf{A table belongs here, but conversion is not yet implemented}}&#xa;</xsl:text>
 </xsl:template>
 
 

@@ -49,23 +49,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
-.subsection .title {
-        margin: .8em 0 0 -2%;
-}
 
 .subsubsection .title {
         margin: .8em 0 0 -1%;
 }
-
-.theorem-header,
-.corollary-header,
-.lemma-header,
-.definition-header,
-.example-header,
-.exercise-header,
-.proof-header {
-    font-weight: bold;
-    }
 
 
 /* Markup */
@@ -214,6 +201,36 @@ html body {
         content: "";
 }
 
+/* Subsections */
+/* Similar to sections, but less so */
+
+.subsection > .heading {
+        margin: .8em 0 0 -2%;
+        font-weight: bold;
+        font-size: large;
+        color: black;
+}
+
+.subsection > .heading > .number {
+        display: inline;
+}
+
+.subsection > .heading > .title {
+        display: inline;
+}
+
+/* Generic Tables */
+.plain-table {
+    margin: auto;
+}
+
+.plain-table td {
+    padding: 2px;
+    border: 1px solid black;
+}
+
+
+
 /* Navigation bar */
 
 .page-nav-bar {
@@ -261,6 +278,20 @@ html body {
 .tombstone {
     float:right;
 }
+
+/* Small units */
+
+.theorem-header,
+.corollary-header,
+.lemma-header,
+.definition-header,
+.example-header,
+.exercise-header,
+.proof-header {
+    font-weight: bold;
+    }
+
+
 
 
 /* Sage Cell appearance */

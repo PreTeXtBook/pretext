@@ -393,7 +393,7 @@ preferably with CSS so can adjust style, language-->
 <!-- Figures and Captions -->
 <xsl:template match="figure">
     <div class="figure">
-        <xsl:apply-templates select="image|p" />
+        <xsl:apply-templates select="image|table|p" />
         <xsl:apply-templates select="caption" />
     </div>
 </xsl:template>
@@ -419,6 +419,15 @@ preferably with CSS so can adjust style, language-->
     <xsl:attribute name="src"><xsl:value-of select="@source" /></xsl:attribute>
 </xsl:element>
 </xsl:template>
+
+<!-- Tables -->
+<!-- Replicate HTML5 model, but burrow into content for formatted entries -->
+<xsl:template match="table"><table class="plain-table"><xsl:apply-templates /></table></xsl:template>
+<xsl:template match="thead"><thead><xsl:apply-templates /></thead></xsl:template>
+<xsl:template match="tr"><tr><xsl:apply-templates /></tr></xsl:template>
+<xsl:template match="td"><td><xsl:apply-templates /></td></xsl:template>
+
+
 
 <!-- Numbering  -->
 
