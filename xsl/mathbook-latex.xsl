@@ -75,6 +75,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- An article, LaTeX structure -->
 <xsl:template match="article">
+    <xsl:call-template name="converter-info" />
     <xsl:text>\documentclass[</xsl:text>
     <xsl:value-of select="$latex.font.size" />
     <xsl:text>,</xsl:text>
@@ -92,6 +93,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- A book, LaTeX structure -->
 <xsl:template match="book">
+    <xsl:call-template name="converter-info" />
     <xsl:text>\documentclass[</xsl:text>
     <xsl:value-of select="$latex.font.size" />
     <xsl:text>,</xsl:text>
@@ -883,6 +885,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO's get killed for finished work            -->
 <!-- Highlight in a draft mode, or just grep source -->
 <xsl:template match="todo"></xsl:template>
+
+<!-- Converter information for header -->
+<!-- TODO: add date, URL -->
+<xsl:template name="converter-info">
+    <xsl:text>%%                                    %%&#xa;</xsl:text>
+    <xsl:text>%% Generated from MathBook XML source %%&#xa;</xsl:text>
+    <xsl:text>%%                                    %%&#xa;</xsl:text>
+</xsl:template>
 
 
 </xsl:stylesheet>

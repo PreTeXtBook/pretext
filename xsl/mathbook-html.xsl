@@ -52,6 +52,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html></xsl:text>
     <html>
         <head>
+            <xsl:call-template name="converter-info" />
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <title><xsl:apply-templates select="book/title/node()|article/title/node()" /></title>
@@ -163,6 +164,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html></xsl:text>
     <html>
         <head>
+            <xsl:call-template name="converter-info" />
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <title><xsl:apply-templates select="/mathbook/book/title/node()|/mathbook/article/title/node()" /></title>
@@ -758,6 +760,7 @@ preferably with CSS so can adjust style, language-->
         <xsl:text>.</xsl:text>
     </li>
     <exsl:document href="{@xml:id}.knowl" method="html">
+        <xsl:call-template name="converter-info" />
         <span class="article">
             <xsl:apply-templates select="author" />
             <xsl:apply-templates select="title" />
@@ -777,6 +780,7 @@ preferably with CSS so can adjust style, language-->
         <xsl:text>.</xsl:text>
     </li>
     <exsl:document href="{@xml:id}.knowl" method="html">
+        <xsl:call-template name="converter-info" />
         <span class="book">
             <xsl:apply-templates select="author" />
             <xsl:apply-templates select="title" />
@@ -948,6 +952,15 @@ preferably with CSS so can adjust style, language-->
     </script>
     </div>
 </xsl:template>
+
+<!-- Converter information for header -->
+<!-- TODO: add date, URL -->
+<xsl:template name="converter-info">
+    <xsl:comment>*                                    *</xsl:comment><xsl:text>&#xa;</xsl:text>
+    <xsl:comment>* Generated from MathBook XML source *</xsl:comment><xsl:text>&#xa;</xsl:text>
+    <xsl:comment>*                                    *</xsl:comment><xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- MathJax header                                     -->
 <!-- XML manages equation numbers                       -->
