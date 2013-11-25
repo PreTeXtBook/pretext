@@ -654,10 +654,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Dashes -->
 <!-- http://www.public.asu.edu/~arrows/tidbits/dashes.html -->
 <xsl:template match="mdash">
-    <xsl:text>---</xsl:text>
+    <xsl:text>\textemdash{}</xsl:text>
 </xsl:template>
 <xsl:template match="ndash">
-    <xsl:text>--</xsl:text>
+    <xsl:text>\textendash{}</xsl:text>
 </xsl:template>
 <xsl:template match="hyphen">
     <xsl:text>-</xsl:text>
