@@ -639,6 +639,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\TeX{}</xsl:text>
 </xsl:template>
 
+<!-- Number Sign, Hash, Octothorpe -->
+<xsl:template match="hash">
+    <xsl:text>\#</xsl:text>
+</xsl:template>
 
 <!-- Line Breaks -->
 <!-- use sparingly, e.g. for poetry, not in math environments-->

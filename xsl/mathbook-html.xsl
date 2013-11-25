@@ -710,6 +710,11 @@ preferably with CSS so can adjust style, language-->
     <xsl:text>&amp;</xsl:text>
 </xsl:template>
 
+<!-- Number Sign, Hash, Octothorpe -->
+<xsl:template match="hash">
+    <xsl:text>&#x23;</xsl:text>
+</xsl:template>
+
 
 <!-- Dashes, Hyphen -->
 <!-- http://www.cs.tut.fi/~jkorpela/dashes.html -->
