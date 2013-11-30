@@ -30,7 +30,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:import href="./mathbook-common.xsl" />
 
 <!-- Intend output for rendering by a web browser -->
-<xsl:output method="html" indent="yes"/>
+<xsl:output method="html" encoding="utf-8" indent="yes"/>
 
 <xsl:template match="/">
     <xsl:apply-templates />
@@ -49,8 +49,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 <exsl:document href="{$rootfile}.html" method="html">
-    <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html></xsl:text>
-    <html>
+    <!-- Need to be careful for format of this initial string     -->
+    <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
+    <html> <!-- lang="", and/or dir="rtl" here -->
         <head>
             <xsl:call-template name="converter-info" />
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
@@ -161,8 +162,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: adjust for appendices -->
 <xsl:template match="chapter|appendix">
     <exsl:document href="{@filebase}.html" method="html">
-    <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html></xsl:text>
-    <html>
+    <!-- Need to be careful for format of this initial string     -->
+    <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
+    <html> <!-- lang="", and/or dir="rtl" here -->
         <head>
             <xsl:call-template name="converter-info" />
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
