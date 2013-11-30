@@ -219,6 +219,24 @@ html body {
         display: inline;
 }
 
+/* Subsubsections */
+/* Similar to sections, but less so */
+
+.subsubsection > .heading {
+        margin: .8em 0 0 -1%;
+        font-weight: normal;
+        font-size: normal;
+        color: black;
+}
+
+.subsubsection > .heading > .number {
+        display: inline;
+}
+
+.subsubsection > .heading > .title {
+        display: inline;
+}
+
 /* Generic Tables */
 .plain-table {
     margin: auto;

@@ -182,6 +182,25 @@
                 </proof>
             </corollary>
 
+            <!--
+            Articles can be sectioned further, into subsections
+            and subsubsections.  Books have a large subdivision,
+            chapters, which can be collections of sections.  A
+            further subdivision is a paragraph, which mimics
+            the structure of the same name in LaTeX.
+            -->
+
+            <subsection>
+                <title>A Pedagogical Note</title>
+                
+                <p>The Fundamental Theorem explains why we use the same notation for a definite integral, which is a numerical calculation, and an antiderivative, which is a symbolic expression.</p>
+                
+                <subsubsection>
+                    <title>Advice</title>
+                    
+                    <p>Using an <q>integral sign</q> for an antiderivative (aka indefinite integral) would seem to make the Fundamental Theorem a <foreign>fait accompli</foreign>.  So I would suggest not conflating the notation for two very different things until the Fundamental Theorem exposes them as being highly related.</p>
+                </subsubsection>
+            </subsection>
         </section>
 
         <!--
@@ -190,8 +209,8 @@
         Basic raster images are supported, inside of figures.
         Note that the caption is rendered below the graphic,
         even though it is given first in the source.
-        Support for Tikz graphics is planned, and perhaps
-        automated generation from Sage code.
+        Support for Tikz graphics is available for LaTeX output, 
+        and perhaps figures will be automatically generated from Sage code.
         The scale for graphics is points in LaTeX, pixels
         in HTML, which are similar, but not identical.
         -->

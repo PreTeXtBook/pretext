@@ -78,7 +78,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="date"><xsl:apply-templates select="/mathbook/docinfo/date" /></div>
             </div>
         <!-- TODO: an abstract here, from docinfo, or like preface? -->
-        <xsl:apply-templates select="section|bibliography|p|sage|theorem|corollary|lemma|definition|example|figure" />
+        <xsl:apply-templates select="section|subsection|subsubsection|paragraph|bibliography|p|sage|theorem|corollary|lemma|definition|example|figure|ol|ul|dl" />
         </div>
     </body>
 </xsl:template>
@@ -229,9 +229,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Sectioning -->
-<!-- Sections, subsections, subsbsections          -->
+<!-- Sections, subsections, subsubsections          -->
 <!-- TODO: meld in chapters, configurable chunking -->
-<xsl:template match="section|subsection|subsubsection">
+<xsl:template match="section|subsection|subsubsection|paragraph">
     <xsl:variable name="level" select="local-name(.)" />
     <div class="{$level}">
         <div class="heading">

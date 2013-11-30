@@ -283,10 +283,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="caption"></xsl:template>
 
 <!-- Sectioning -->
-<!-- Subdivisions, Chapters down to SubSubSections -->
+<!-- Subdivisions, Chapters down to Paragraphs -->
 <!-- Relies on element names echoing latex names   -->
 <!-- But appendices are just chapters after \appendix macro -->
-<xsl:template match="chapter|appendix|section|subsection|subsubsection">
+<xsl:template match="chapter|appendix|section|subsection|subsubsection|paragraph">
     <xsl:variable name="level">
         <xsl:choose>
             <xsl:when test="local-name(.)='appendix'">

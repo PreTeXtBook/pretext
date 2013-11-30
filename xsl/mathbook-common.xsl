@@ -231,6 +231,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 
+<xsl:template match="subsubsection" mode="short-name">
+    <xsl:text>subsubsec-</xsl:text>
+    <xsl:apply-templates select="." mode="number" />
+</xsl:template>
+
+<xsl:template match="paragraph" mode="short-name">
+    <xsl:text>para-</xsl:text>
+    <xsl:apply-templates select="." mode="number" />
+</xsl:template>
+
 <xsl:template match="*" mode="long-name">
     <xsl:message terminate="no">Warning: node with no long-name (likely sectioning)</xsl:message>
 </xsl:template>
@@ -268,9 +278,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="title/node()"/>
 </xsl:template>
 
+<xsl:template match="subsubsection" mode="long-name">
+    <xsl:text>Subsubsection </xsl:text>
+    <xsl:apply-templates select="." mode="number" />
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="title/node()"/>
+</xsl:template>
+
+<xsl:template match="paragraph" mode="long-name">
+    <xsl:text>Paragraph </xsl:text>
+    <xsl:apply-templates select="." mode="number" />
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="title/node()"/>
+</xsl:template>
+
 <!-- Numbering  -->
 <!-- Nodes "know" how to number themselves, -->
-<!-- which is helful in a vaiety of places -->
+<!-- which is helful in a variety of places -->
 <!-- Default is LaTeX's numbering scheme -->
 
 <!-- Chapters: x -->
@@ -293,8 +317,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:number level="multiple" count="chapter|section|subsection" />
 </xsl:template>
 
+<!-- Subsubsections: chapter.section.subsection.x -->
+<xsl:template match="subsubsection" mode="number">
+    <xsl:number level="multiple" count="chapter|section|subsection|subsubsection" />
+</xsl:template>
 
-
+<!-- Paragraphs: chapter.section.subsection.subsubsection.x -->
+<xsl:template match="paragraph" mode="number">
+    <xsl:number level="multiple" count="chapter|section|subsection|subsubsection|paragraph" />
+</xsl:template>
 
 
 </xsl:stylesheet>
