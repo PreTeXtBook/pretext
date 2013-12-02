@@ -608,7 +608,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- for example -->
 <xsl:template match="eg">
-    <xsl:text>e.g.\ </xsl:text>
+    <xsl:text>e.g.{}</xsl:text>
 </xsl:template>
 
 <!-- Copyright symbol -->
@@ -619,7 +619,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- in other words -->
 <xsl:template match="ie">
-    <xsl:text>i.e.\ </xsl:text>
+    <xsl:text>i.e.{}</xsl:text>
 </xsl:template>
 
 <!-- Implication Symbols -->

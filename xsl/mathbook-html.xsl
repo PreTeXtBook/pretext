@@ -626,12 +626,12 @@ preferably with CSS so can adjust style, language-->
 
 <!-- for example -->
 <xsl:template match="eg">
-    <xsl:text>e.g. </xsl:text>
+    <xsl:text>e.g.</xsl:text>
 </xsl:template>
 
 <!-- in other words -->
 <xsl:template match="ie">
-    <xsl:text>i.e. </xsl:text>
+    <xsl:text>i.e.</xsl:text>
 </xsl:template>
 
 <!-- Implication Symbols -->
