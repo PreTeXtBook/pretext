@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- Overall element for a Mathbook XML document; mandatory, always-->
+<mathbook>
+
+    <!--
+    "docinfo" is like metadata, it mostly migrates
+    various places, or gets used multiple times
+    -->
+    <docinfo>
+        <!-- There can be several authors here -->
+        <author>
+            <personname>Robert Beezer</personname>
+            <department>Department of Mathematics and Computer Science</department>
+            <!-- Use "break" tag anywhere for forced line break -->
+            <institution>University of Puget Sound<br />Tacoma, Washington, USA</institution>
+            <email>beezer@pugetsound.edu</email>
+        </author>
+        <!-- Could set date manually or use the "today" element -->
+        <date><today /></date>
+        <!--
+        TeX/LaTeX macros can be written in the usual way.
+        Whitespace and line breaks are irrelevant here.
+        -->
+        <macros>
+        \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4}
+        \newcommand{\indefiniteintegral}[2]{\int#1\,d#2}
+        </macros>
+    </docinfo>
+
+    <!--
+    The article element is top-level for anything short of a book.
+    There is a book element, which is not demonstrated here.
+    The "filebase" attribute is used for the filename of the
+    HTML output, s part of a chunking scheme that is not complete.
+    -->
+    <article filebase="derivatives">
+        <title>Derivatives and Integrals</title>
+        <!--
+        Articles have sections, which have subsections,
+        which have subsubsections.  A titled-paragraph
+        subdivision is planned.  These are all "containers"
+        and so line breaks and extraneous whitespace gets
+        scrubbed.  Use indentation and line breaks liberally
+        within containers to make the structure of your 
+        source readable.
+        -->
+        <todo>Titled paragraph subdivisions</todo>
+
+        <section>
+            <title>Introduction</title>
+
+            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me></p>
+
+        </section>
+
+        <!--
+        Note above: Subdivisions always have titles, and these
+        are not containers.  Line breaks and whitespace will
+        bleed into output, which is especially a problem for TeX,
+        since it may render as a blank line.  So keep the title
+        element "tight" around the content.
+
+        The "p" element is a paragraph, and also not a container,
+        so keep it wrapped tight.  Lots can go on in a paragraph.
+        -->
+
+        <section>
+            <title>The Fundamental Theorem</title>
+            <p>There is a remarkable theorem:</p>
+            <!--
+            Mathematics:  Wrap inline mathematics in the "m"
+            element (short for "math").  You may use TeX, LaTeX,
+            and/or AMSmath here.  You may also use any macro
+            defined in docinfo/macros.
+            If the "m" tag bothers you, you may use \(...\).
+            Purposely, dollar signs will not function properly.
+            The "me" element will create a displayed "math
+            equation", which is unnumbered.
+            -->
+            <theorem xml:id="theorem-FTC">
+                <statement>
+                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me></p>
+                </statement>
+                <proof>
+                    <p>Left to the reader.</p>
+                </proof>
+            </theorem>
+            <!--
+            Note above:  The "xml:id" attribute is like a LaTeX label.
+            It is a target for cross-reference, an alias for the theorem
+            so we can reference it later.  The "theorem" part of the alias
+            is not necessary, but is a good habit.
+            -->
+
+            <!--
+            Next paragraph has two citations.  These reference
+            aliases given by "xml:id"'s in the bibliography.
+            WARNING: the "label" attribute will change to
+            "ref" to match the cross-reference use.
+            Citations render as knowls on web pages.
+            -->
+            <p>You will find almost nothing about all this in the article <cite label="bib-fundamental" />, nor in the book <cite label="bib-fcla" />, since they belong in some other article, but we can cite them out-of-order for practice anyway.</p>
+
+        </section>
+
+        <!--
+        Sage Code: Next section has Sage code examples.
+        For HTML it renders as Sage Cells, with no sample output.
+        For LaTeX it renders as input/output with input in a blue box.
+        A separate XSL transform will isolate code and produce a file
+        for doctesting.  This is "working" but not released yet.
+
+        Note: These small examples are wrapped "tight" in the
+        input and output elements.  You can preserve indentation for
+        several lines if you move the code all the way left.
+        This looks ugly and will be rectified.
+        -->
+
+        <section>
+            <title>Computing Integrals</title>
+
+            <p>Sage can compute definite integrals.  The output contains the approximate numerical value of the definite integral, followed by an upper bound  of the error in the approximation.</p>
+
+            <sage>
+                <input>numerical_integral(sin(x)^2, (0, 2))</input>
+                <!-- need to use wildcard matching to make this doctestable -->
+                <output>(1.189200623826982, 1.320277913471315e-14)</output>
+            </sage>
+
+            <p>Given the Fundamental Theorem, we would find the antiderivative useful.</p>
+
+            <sage>
+                <input>integral(sin(x)^2, x)</input>
+                <output>1/2*x - 1/4*sin(2*x)</output>
+            </sage>
+
+            <p>The same command can be used to employ the antiderivative in the application of the Fundamental Theorem.  Notice that the answer is <em>exact</em> and any further manipulation is likely to be simply producing a numerical approximation.</p>
+
+            <sage>
+                <input>integral(sin(x)^2, (x, 0, 2))</input>
+                <output>-1/4*sin(4) + 1</output>
+            </sage>
+
+        </section>
+
+        <!--
+        Next section illustrates more involved presentation of
+        mathematics.  The "mdn" element is shorthand for
+        "mathematics display, numbered".  There is a "men"
+        element for "math equation, numbered" and a "md" for
+        "math display" (with no numbers).  Numbering may be
+        selectively suppressed or enabled, per line (shown
+        here once).  An "xml:id" alias may be used on any
+        numbered line.
+
+        Multi-line displays ("md", "mdn") require that lines
+        be delimited as "math rows" with the "mrow" element.
+        These displays are implemented with the AMSMath align
+        environment, which uses ampersands (&) for formatting
+        control.  This is an evil situation, but the (easy) way
+        around it is to use "&amp;" in this situation.
+        -->
+
+        <section>
+            <title>An Interesting Corollary</title>
+
+            <p>The Fundamental Theorem comes in two flavors, where usually one is a corollary of the other.</p>
+
+            <corollary xml:id="corollary-FTC-derivative">
+                <statement>
+                    <p>Suppose <m>f(x)</m> is a continuous function.  Then <me>\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</me></p>
+                </statement>
+                <todo>Should equation references come with parentheses?</todo>
+                <proof>
+                    <p>We simply take the indicated derivative, applying Theorem <xref ref="theorem-FTC" /> at (<xref ref="equation-use-FTC" />).</p>
+                    <mdn>
+                        <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
+                        <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
+                        <mrow>&amp;=f(x)-0 = f(x)</mrow>
+                    </mdn>
+                </proof>
+            </corollary>
+
+        </section>
+
+        <!--
+        The section below illustrates ordered and unordered lists,
+        with the same syntax as HTML.  They can be nested.
+        Basic raster images are supported, inside of figures.
+        Note that the caption is rendered below the graphic,
+        even though it is given first in the source.
+        Support for Tikz graphics is planned, and perhaps
+        automated generation from Sage code.
+        The scale for graphics is points in LaTeX, pixels
+        in HTML, which are similar, but not identical.
+        -->
+
+        <section>
+            <title>Some Facts and Figures</title>
+
+            <p>Because of the Fundamental Theorem, for every derivative we know, there is an antiderivative we might find useful.  Because of the Fundamental Theorem of Calculus, we recycle the <q><m>\int</m></q> symbol as notation for an antiderivative.</p>
+            <ul>
+                <li>Derivatives<ol>
+                    <li><m>\frac{d}{dx}x^n = nx^{n-1}</m></li>
+                    <li><m>\frac{d}{dx}e^x = e^x</m></li>
+                    <li><m>\frac{d}{dx}\cos(x) = -\sin(x)</m></li>
+                </ol></li>
+                <li>Antiderivatives<ol>
+                    <li><m>\indefiniteintegral{x^n}{x} = \displaystyle\frac{x^{n-1}}{n+1}\text{ if }n\neq -1</m></li>
+                    <li><m>\indefiniteintegral{e^x}{x} = e^x</m></li>
+                    <li><m>\indefiniteintegral{\sin(x)}{x} = -\cos(x)</m></li>
+                </ol></li>
+            </ul>
+
+            <p>You can gain a greater undestanding of derivatives by studying the graphs of functions with their derivatives.  Can you discern the derivative<ndash />antiderivative relationship in the plot below?</p>
+
+            <!--
+            Sage Source;
+            f(x)=(x-3)*(x-1)*(x+2)
+            orig = plot( f(x), (x,-3,4), color='blue', thickness=3)
+            diff = f.derivative()
+            slope = plot(diff, (x,-3,4), color='red', thickness=3)
+            orig+slope
+            -->
+
+            <figure>
+                <caption>A function and its derivative</caption>
+                <image width="350" source="cubic-function.png" />
+            </figure>
+
+        </section>
+
+        <!--
+        Various author tools are planned.  Note the embedded "todo"
+        elements above.  An XSL transform in-testing will extract them
+        for a report, and they are hidden in actual output.
+        For a cross-reference, instead of a "ref" atrribute,
+        you can use a "provisional" attribute while writing, which is
+        especially useful for unknown forward references.  This is
+        included in the author report also.
+        A "preview" XSL transform to HTML could be especially useful.
+        -->
+
+    <!-- WARNING: Bibliographies are only minimally
+    functional now and subject to change. -->
+
+        <bibliography>
+
+            <book xml:id="bib-fcla">
+                <author>Robert A. Beezer</author>
+                <title>A First Course in Linear Algebra</title>
+                <edition>3rd Edition</edition>
+                <publisher>Congruent Press</publisher>
+                <year>2012</year>
+                <isbn>978-0984417551</isbn>
+                <!-- <url>linear.pugetsound.edu</url> -->
+            </book>
+
+            <book xml:id="bib-lay-book">
+                <author>David C. Lay</author>
+                <title>Linear Algebra and Its Applications</title>
+                <edition>4th Edition</edition>
+                <publisher>Pearson</publisher>
+                <year>2011</year>
+                <isbn>978-0321385178</isbn>
+            </book>
+
+            <article xml:id="bib-lay-article">
+                <author>David C. Lay</author>
+                <title>Subspaces and Echelon Forms</title>
+                <journal>The College Mathematics Journal</journal>
+                <year>1993</year>
+                <month>January</month>
+                <volume>24</volume>
+                <number>1</number>
+                <pages>57-62</pages>
+            </article>
+
+            <article xml:id="bib-fundamental">
+                <author>Gilbert Strang</author>
+                <title>The Fundamental Theorem of Linear Algebra</title>
+                <journal>The American Mathematical Monthly</journal>
+                <year>1993</year>
+                <month>November</month>
+                <volume>100</volume>
+                <number>9</number>
+                <pages>848-855</pages>
+            </article>
+
+        </bibliography>
+
+    </article>
+
+</mathbook>
