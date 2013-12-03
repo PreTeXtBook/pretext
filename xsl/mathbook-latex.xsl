@@ -150,12 +150,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}
 \newtheorem{example}{Example}
-\newtheorem{exercise}{Exercise}
-%% Sage input: boxed, colored
-\usepackage{mdframed}
-\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
-%% Raster graphics inclusion, wapped figures in paragraphs
-\usepackage{graphicx}&#xa;</xsl:text>
+\newtheorem{exercise}{Exercise}&#xa;</xsl:text>
+<xsl:text>%% Raster graphics inclusion, wrapped figures in paragraphs&#xa;</xsl:text>
+<xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
+<xsl:if test="//sage">
+    <xsl:text>%% Sage input: boxed, colored&#xa;</xsl:text>
+    <xsl:text>\usepackage{mdframed}&#xa;</xsl:text>
+    <xsl:text>\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}&#xa;</xsl:text>
+    <xsl:text>\mdfdefinestyle{sageinput}{backgroundcolor=blue!10,skipabove=2ex,skipbelow=2ex}&#xa;</xsl:text>
+    <xsl:text>\mdfdefinestyle{sageoutput}{linecolor=white,leftmargin=4ex,skipbelow=2ex}&#xa;</xsl:text>
+</xsl:if>
 <xsl:if test="//tikz">
     <xsl:text>%% Tikz graphics&#xa;</xsl:text>
     <xsl:text>\usepackage{tikz}&#xa;</xsl:text>
@@ -694,7 +698,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="input">
-    <xsl:text>\begin{mdframed}[backgroundcolor=blue!10,skipabove=2ex,skipbelow=2ex]&#xa;</xsl:text>
+    <xsl:text>\begin{mdframed}[style=sageinput]&#xa;</xsl:text>
     <xsl:text>\begin{verbatim}</xsl:text>
     <xsl:call-template name="sanitize-sage">
         <xsl:with-param name="raw-sage-code" select="." />
@@ -704,7 +708,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="output">
-    <xsl:text>\begin{mdframed}[linecolor=white,leftmargin=4ex,skipbelow=2ex]&#xa;</xsl:text>
+    <xsl:text>\begin{mdframed}[style=sageoutput]&#xa;</xsl:text>
     <xsl:text>\begin{verbatim}</xsl:text>
     <xsl:call-template name="sanitize-sage">
         <xsl:with-param name="raw-sage-code" select="." />
