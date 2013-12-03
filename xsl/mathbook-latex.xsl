@@ -644,6 +644,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\#</xsl:text>
 </xsl:template>
 
+<!-- Foreign words/idioms        -->
+<!-- Matches HTML5 specification -->
+<xsl:template match="foreign">
+    <xsl:text>\textit{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
 <!-- Line Breaks -->
 <!-- use sparingly, e.g. for poetry, not in math environments-->
 <xsl:template match="br">

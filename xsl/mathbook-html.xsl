@@ -717,6 +717,12 @@ preferably with CSS so can adjust style, language-->
     <xsl:text>&#x23;</xsl:text>
 </xsl:template>
 
+<!-- Foreign words/idioms        -->
+<!-- Matches HTML5 specification -->
+<xsl:template match="foreign">
+    <i class="foreign"><xsl:apply-templates /></i>
+</xsl:template>
+
 
 <!-- Dashes, Hyphen -->
 <!-- http://www.cs.tut.fi/~jkorpela/dashes.html -->
