@@ -591,23 +591,27 @@ preferably with CSS so can adjust style, language-->
 </xsl:template>
 
 
-<!-- Markup, typically within paragraphs -->
-
-<!-- Quotes, regular or block -->
-<!-- &#8220;, &#8221; are another option here -->
+<!-- Markup, typically within paragraphs            -->
+<!-- Quotes, double or single, see quotations below -->
+<!-- HTML5 wants actual characters here -->
 <xsl:template match="q">
-    <q><xsl:apply-templates /></q>
+    <xsl:text>&#x201c;</xsl:text><xsl:apply-templates /><xsl:text>&#x201d;</xsl:text>
 </xsl:template>
 
+<xsl:template match="sq">
+    <xsl:text>&#x2018;</xsl:text><xsl:apply-templates /><xsl:text>&#x2019;</xsl:text>
+</xsl:template>
+
+<!-- Actual Quotations                -->
+<!-- TODO: <quote> element for inline to be <q> in HTML-->
 <xsl:template match="blockquote">
-    <div class="blockquote"><xsl:apply-templates /></div>
+    <blockquote><xsl:apply-templates /></blockquote>
 </xsl:template>
 
 <!-- Use at the end of a blockquote -->
 <xsl:template match="blockquote/attribution">
     <br /><span class="attribution"><xsl:apply-templates /></span>
 </xsl:template>
-
 
 <!-- Defined terms (bold) -->
 <xsl:template match="term">

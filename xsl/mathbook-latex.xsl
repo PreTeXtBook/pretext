@@ -516,14 +516,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>] </xsl:text>
 </xsl:template>
 
-<!-- Markup, typically within paragraphs -->
-<!-- Quotes, regular or block -->
+<!-- Markup, typically within paragraphs            -->
+<!-- Quotes, double or single, see quotations below -->
 <xsl:template match="q">
     <xsl:text>``</xsl:text>
     <xsl:apply-templates />
     <xsl:text>''</xsl:text>
 </xsl:template>
 
+<xsl:template match="sq">
+    <xsl:text>`</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>'</xsl:text>
+</xsl:template>
+
+<!-- Actual Quotations                -->
+<!-- TODO: <quote> element for inline -->
 <xsl:template match="blockquote">
     <xsl:text>\begin{quote}</xsl:text>
     <xsl:apply-templates />
@@ -532,7 +540,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Use at the end of a blockquote -->
 <xsl:template match="blockquote/attribution">
-    <xsl:text>\\\hspace*{\stretch{1}}{}---\ </xsl:text>
+    <xsl:text>\\\hspace*{\stretch{1}}\textemdash\space{}</xsl:text>
     <xsl:apply-templates />
 </xsl:template>
 
