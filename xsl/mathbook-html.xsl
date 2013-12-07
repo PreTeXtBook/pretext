@@ -503,19 +503,15 @@ preferably with CSS so can adjust style, language-->
 <xsl:template match="cite">
     <xsl:choose>
         <xsl:when test="@ref">
-            <xsl:variable name="target-node" select="id(@ref)" />
-            <!-- Could check local-name() against 'bibitem'     -->
-            <xsl:element name ="a">
-                <!-- http://stackoverflow.com/questions/585261/is-there-an-xslt-name-of-element -->
-                <!-- Sans namespace (would be name(.)) -->
-                <xsl:attribute name="class">
-                    <xsl:value-of select="'cite'" />
-                </xsl:attribute>
-                <xsl:attribute name="knowl">
-                    <xsl:value-of select="@ref" /><xsl:text>.knowl</xsl:text>
-                </xsl:attribute>
-            [<xsl:apply-templates select="$target-node" mode="number" />]
-            </xsl:element>
+            <xsl:call-template name="knowl-link-factory">
+                <xsl:with-param name="css-class">cite</xsl:with-param>
+                <xsl:with-param name="identifier"><xsl:value-of select="@ref" /></xsl:with-param>
+                <xsl:with-param name="content">
+                    <xsl:text>[</xsl:text>
+                    <xsl:apply-templates select="id(@ref)" mode="number" />
+                    <xsl:text>]</xsl:text>
+                </xsl:with-param>
+            </xsl:call-template>
         </xsl:when>
         <xsl:when test="@provisional">
             <xsl:text>&lt;</xsl:text>
@@ -786,7 +782,7 @@ preferably with CSS so can adjust style, language-->
 </xsl:template>
 
 
-
+<!-- TODO: deduplicate actual entry and knowl content -->
 <xsl:template match="bibliography//article">
     <li id="{@xmlid}" class="article">
         <xsl:apply-templates select="author" />
@@ -796,17 +792,20 @@ preferably with CSS so can adjust style, language-->
         <xsl:apply-templates select="pages" />
         <xsl:text>.</xsl:text>
     </li>
-    <exsl:document href="{@xml:id}.knowl" method="html">
-        <xsl:call-template name="converter-info" />
-        <span class="article">
-            <xsl:apply-templates select="author" />
-            <xsl:apply-templates select="title" />
-            <xsl:apply-templates select="journal" />
-            <xsl:apply-templates select="volume" />
-            <xsl:apply-templates select="pages" />
-            <xsl:text>.</xsl:text>
-        </span>
-    </exsl:document>
+    <xsl:call-template name="knowl-factory">
+        <xsl:with-param name="identifier"><xsl:value-of select="@xml:id" /></xsl:with-param>
+        <xsl:with-param name="content">
+            <xsl:call-template name="converter-info" />
+            <span class="article">
+                <xsl:apply-templates select="author" />
+                <xsl:apply-templates select="title" />
+                <xsl:apply-templates select="journal" />
+                <xsl:apply-templates select="volume" />
+                <xsl:apply-templates select="pages" />
+                <xsl:text>.</xsl:text>
+            </span>
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="bibliography//book">
@@ -816,15 +815,18 @@ preferably with CSS so can adjust style, language-->
         <xsl:apply-templates select="publisher" />
         <xsl:text>.</xsl:text>
     </li>
-    <exsl:document href="{@xml:id}.knowl" method="html">
-        <xsl:call-template name="converter-info" />
-        <span class="book">
-            <xsl:apply-templates select="author" />
-            <xsl:apply-templates select="title" />
-            <xsl:apply-templates select="publisher" />
-            <xsl:text>.</xsl:text>
-        </span>
-    </exsl:document>
+    <xsl:call-template name="knowl-factory">
+        <xsl:with-param name="identifier"><xsl:value-of select="@xml:id" /></xsl:with-param>
+        <xsl:with-param name="content">
+            <xsl:call-template name="converter-info" />
+            <span class="book">
+                <xsl:apply-templates select="author" />
+                <xsl:apply-templates select="title" />
+                <xsl:apply-templates select="publisher" />
+                <xsl:text>.</xsl:text>
+            </span>
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="bibliography//author">
@@ -977,6 +979,33 @@ preferably with CSS so can adjust style, language-->
     <xsl:text>\\</xsl:text>
 </xsl:template>-->
 
+<!-- Manufacturing Knowls              -->
+<!-- "knowl" subdirectory is hardcoded -->
+<!-- First, make actual content in predictable location -->
+<xsl:template name="knowl-factory">
+    <xsl:param name="identifier"/>
+    <xsl:param name="content"/>
+    <exsl:document href="./knowl/{$identifier}.knowl" method="html">
+        <xsl:value-of select="$content" />
+    </exsl:document>
+</xsl:template>
+<!-- Second, make a clickable knowl link -->
+<xsl:template name="knowl-link-factory">
+    <xsl:param name="css-class"/>
+    <xsl:param name="identifier"/>
+    <xsl:param name="content"/>
+    <xsl:element name ="a">
+        <xsl:attribute name="class">
+            <xsl:value-of select="$css-class" />
+        </xsl:attribute>
+        <xsl:attribute name="knowl">
+            <xsl:text>./knowl/</xsl:text>
+            <xsl:value-of select="$identifier" />
+            <xsl:text>.knowl</xsl:text>
+        </xsl:attribute>
+        <xsl:value-of select="$content" />
+    </xsl:element>
+</xsl:template>
 
 
 <!-- Sage -->
