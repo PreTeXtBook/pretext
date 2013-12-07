@@ -496,22 +496,42 @@ preferably with CSS so can adjust style, language-->
 
 <!-- Bring up bibliographic entries as knowls with cite -->
 <!-- Style the bare number with CSS, eg [6]             -->
+<!-- A citation can be "provisional"   -->
+<!-- as a tool for drafts, otherwise "ref" to -->
+<!-- an xml:id in bibliography                     -->
 <!-- TODO: tokenize a list of labels? -->
 <xsl:template match="cite">
-    <xsl:variable name="target-node" select="id(@ref)" />
-    <!-- Could check local-name() against 'bibitem'     -->
-    <xsl:element name ="a">
-        <!-- http://stackoverflow.com/questions/585261/is-there-an-xslt-name-of-element -->
-        <!-- Sans namespace (would be name(.)) -->
-        <xsl:attribute name="class">
-            <xsl:value-of select="'cite'" />
-        </xsl:attribute>
-        <xsl:attribute name="knowl">
-            <xsl:value-of select="@ref" /><xsl:text>.knowl</xsl:text>
-        </xsl:attribute>
-    [<xsl:apply-templates select="$target-node" mode="number" />]
-    </xsl:element>
+    <xsl:choose>
+        <xsl:when test="@ref">
+            <xsl:variable name="target-node" select="id(@ref)" />
+            <!-- Could check local-name() against 'bibitem'     -->
+            <xsl:element name ="a">
+                <!-- http://stackoverflow.com/questions/585261/is-there-an-xslt-name-of-element -->
+                <!-- Sans namespace (would be name(.)) -->
+                <xsl:attribute name="class">
+                    <xsl:value-of select="'cite'" />
+                </xsl:attribute>
+                <xsl:attribute name="knowl">
+                    <xsl:value-of select="@ref" /><xsl:text>.knowl</xsl:text>
+                </xsl:attribute>
+            [<xsl:apply-templates select="$target-node" mode="number" />]
+            </xsl:element>
+        </xsl:when>
+        <xsl:when test="@provisional">
+            <xsl:text>&lt;</xsl:text>
+            <xsl:value-of select="@provisional" />
+            <xsl:text>&gt;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message terminate="yes">
+            <xsl:text>Citation (cite) with no ref or provisional attribute</xsl:text>
+            </xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
+
+
+
 
 <!-- Point to any numbered item with link, content is number only -->
 <!-- Displayed equations have targets manufactured by MathJax,    -->
@@ -540,9 +560,9 @@ preferably with CSS so can adjust style, language-->
             </xsl:element>
         </xsl:when>
         <xsl:when test="@provisional">
-            <xsl:text>\(\langle\)</xsl:text>
+            <xsl:text>&lt;</xsl:text>
             <xsl:value-of select="@provisional" />
-            <xsl:text>\(\rangle\)</xsl:text>
+            <xsl:text>&gt;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:message terminate="yes">

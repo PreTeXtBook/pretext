@@ -775,10 +775,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- Cross-References -->
+
 <!-- Point to bibliographic entries with cite -->
+<!-- A citation can be "provisional"          -->
+<!-- as a tool for drafts, otherwise "ref" to -->
+<!-- an xml:id elsewhere                      -->
 <!-- TODO: make citation references blue (not green box) in hyperref -->
 <xsl:template match="cite">
-    <xsl:text>\cite{</xsl:text><xsl:value-of select="@ref" /><xsl:text>}</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@ref">
+            <xsl:text>\cite{</xsl:text>
+            <xsl:value-of select="@ref" />
+            <xsl:text>}</xsl:text>
+        </xsl:when>
+        <xsl:when test="@provisional">
+            <xsl:text>\(\langle\)</xsl:text>
+            <xsl:value-of select="@provisional" />
+            <xsl:text>\(\rangle\)</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message terminate="yes">
+            <xsl:text>Citation (cite) with no ref or provisional attribute</xsl:text>
+            </xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- A cross-reference can be "provisional"   -->
