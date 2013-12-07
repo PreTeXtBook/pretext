@@ -472,6 +472,11 @@ preferably with CSS so can adjust style, language-->
     <xsl:number level="any" count="exercise" />
 </xsl:template>
 
+<!-- Footnotes  x -->
+<xsl:template match="fn" mode="number">
+    <xsl:number level="any" count="fn" />
+</xsl:template>
+
 <!-- Equations:           -->
 <!--   chapter.x in books -->
 <!--   x in articles      -->
@@ -566,6 +571,35 @@ preferably with CSS so can adjust style, language-->
             </xsl:message>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- Footnotes                                             -->
+<!-- Mimicking basic LaTeX, but as knowls                  -->
+<!-- Put content into knowl, then make a knowl link for it -->
+<!-- The knowl link gets placed into a superscript         -->
+<xsl:template match="fn">
+    <xsl:variable name="ident">
+        <xsl:text>footnote-</xsl:text>
+        <xsl:apply-templates select="." mode="number" />
+    </xsl:variable>
+    <!-- -->
+    <xsl:call-template name="knowl-factory">
+        <xsl:with-param name="identifier" select="$ident" />
+        <xsl:with-param name="content">
+            <xsl:call-template name="converter-info" />
+            <xsl:apply-templates />
+        </xsl:with-param>
+    </xsl:call-template>
+    <!-- -->
+    <sup>
+    <xsl:call-template name="knowl-link-factory">
+        <xsl:with-param name="css-class">footnote</xsl:with-param>
+        <xsl:with-param name="identifier" select="$ident" />
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="." mode="number" />
+        </xsl:with-param>
+    </xsl:call-template>
+    </sup>
 </xsl:template>
 
 <!-- Point to a "random" mark, with generic "this point" link -->

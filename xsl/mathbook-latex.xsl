@@ -833,6 +833,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- Footnotes               -->
+<!--   with no customization -->
+<xsl:template match="fn">
+    <xsl:text>\footnote{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
 
 <!-- Bibliography -->
 

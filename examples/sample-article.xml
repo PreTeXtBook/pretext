@@ -67,7 +67,7 @@
 
         <section>
             <title>The Fundamental Theorem</title>
-            <p>There is a remarkable theorem:</p>
+            <p>There is a remarkable theorem:<fn>And fortunately we do not need to try to write it in the margin!</fn></p>
             <!--
             Mathematics:  Wrap inline mathematics in the "m"
             element (short for "math").  You may use TeX, LaTeX,
@@ -205,7 +205,7 @@
             <subsection>
                 <title>A Pedagogical Note</title>
                 
-                <p>The Fundamental Theorem explains why we use the same notation for a definite integral, which is a numerical calculation, and an antiderivative, which is a symbolic expression.</p>
+                <p>The Fundamental Theorem explains why we use the same notation for a definite integral, which is a numerical calculation,<fn>Which I think sometimes students lose sight of.</fn> and an antiderivative, which is a symbolic expression.</p>
                 
                 <subsubsection>
                     <title>Advice</title>
