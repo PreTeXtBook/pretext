@@ -53,7 +53,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
     <html> <!-- lang="", and/or dir="rtl" here -->
         <head>
-            <xsl:call-template name="converter-info" />
+            <xsl:call-template name="converter-blurb" />
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <title><xsl:apply-templates select="book/title/node()|article/title/node()" /></title>
@@ -166,7 +166,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
     <html> <!-- lang="", and/or dir="rtl" here -->
         <head>
-            <xsl:call-template name="converter-info" />
+            <xsl:call-template name="converter-blurb" />
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <title><xsl:apply-templates select="/mathbook/book/title/node()|/mathbook/article/title/node()" /></title>
@@ -586,7 +586,6 @@ preferably with CSS so can adjust style, language-->
     <xsl:call-template name="knowl-factory">
         <xsl:with-param name="identifier" select="$ident" />
         <xsl:with-param name="content">
-            <xsl:call-template name="converter-info" />
             <xsl:apply-templates />
         </xsl:with-param>
     </xsl:call-template>
@@ -829,7 +828,6 @@ preferably with CSS so can adjust style, language-->
     <xsl:call-template name="knowl-factory">
         <xsl:with-param name="identifier"><xsl:value-of select="@xml:id" /></xsl:with-param>
         <xsl:with-param name="content">
-            <xsl:call-template name="converter-info" />
             <span class="article">
                 <xsl:apply-templates select="author" />
                 <xsl:apply-templates select="title" />
@@ -852,7 +850,6 @@ preferably with CSS so can adjust style, language-->
     <xsl:call-template name="knowl-factory">
         <xsl:with-param name="identifier"><xsl:value-of select="@xml:id" /></xsl:with-param>
         <xsl:with-param name="content">
-            <xsl:call-template name="converter-info" />
             <span class="book">
                 <xsl:apply-templates select="author" />
                 <xsl:apply-templates select="title" />
@@ -1020,6 +1017,7 @@ preferably with CSS so can adjust style, language-->
     <xsl:param name="identifier"/>
     <xsl:param name="content"/>
     <exsl:document href="./knowl/{$identifier}.knowl" method="html">
+        <xsl:call-template name="converter-blurb" />
         <xsl:value-of select="$content" />
     </exsl:document>
 </xsl:template>
@@ -1055,7 +1053,7 @@ preferably with CSS so can adjust style, language-->
 
 <!-- Converter information for header -->
 <!-- TODO: add date, URL -->
-<xsl:template name="converter-info">
+<xsl:template name="converter-blurb">
     <xsl:comment>*                                    *</xsl:comment><xsl:text>&#xa;</xsl:text>
     <xsl:comment>* Generated from MathBook XML source *</xsl:comment><xsl:text>&#xa;</xsl:text>
     <xsl:comment>*                                    *</xsl:comment><xsl:text>&#xa;</xsl:text>
