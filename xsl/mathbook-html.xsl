@@ -498,7 +498,7 @@ preferably with CSS so can adjust style, language-->
 <!-- Style the bare number with CSS, eg [6]             -->
 <!-- TODO: tokenize a list of labels? -->
 <xsl:template match="cite">
-    <xsl:variable name="target-node" select="id(@label)" />
+    <xsl:variable name="target-node" select="id(@ref)" />
     <!-- Could check local-name() against 'bibitem'     -->
     <xsl:element name ="a">
         <!-- http://stackoverflow.com/questions/585261/is-there-an-xslt-name-of-element -->
@@ -507,7 +507,7 @@ preferably with CSS so can adjust style, language-->
             <xsl:value-of select="'cite'" />
         </xsl:attribute>
         <xsl:attribute name="knowl">
-            <xsl:value-of select="@label" /><xsl:text>.knowl</xsl:text>
+            <xsl:value-of select="@ref" /><xsl:text>.knowl</xsl:text>
         </xsl:attribute>
     [<xsl:apply-templates select="$target-node" mode="number" />]
     </xsl:element>

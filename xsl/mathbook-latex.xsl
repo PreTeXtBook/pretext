@@ -778,7 +778,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Point to bibliographic entries with cite -->
 <!-- TODO: make citation references blue (not green box) in hyperref -->
 <xsl:template match="cite">
-    <xsl:text>\cite{</xsl:text><xsl:value-of select="@label" /><xsl:text>}</xsl:text>
+    <xsl:text>\cite{</xsl:text><xsl:value-of select="@ref" /><xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- A cross-reference can be "provisional"   -->

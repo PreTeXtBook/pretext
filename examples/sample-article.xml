@@ -100,7 +100,7 @@
             "ref" to match the cross-reference use.
             Citations render as knowls on web pages.
             -->
-            <p>You will find almost nothing about all this in the article <cite label="bib-fundamental" />, nor in the book <cite label="bib-fcla" />, since they belong in some other article, but we can cite them out-of-order for practice anyway.</p>
+            <p>You will find almost nothing about all this in the article <cite ref="bib-fundamental" />, nor in the book <cite ref="bib-fcla" />, since they belong in some other article, but we can cite them out-of-order for practice anyway.</p>
 
         </section>
 
