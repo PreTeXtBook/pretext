@@ -932,15 +932,17 @@ preferably with CSS so can adjust style, language-->
 </xsl:template>
 
 <!-- Unnumbered, single displayed equation -->
+<!-- Output follows source line breaks     -->
 <xsl:template match="me">
-    <xsl:text>&#xa;\[</xsl:text>
+    <xsl:text>\[</xsl:text>
     <xsl:value-of select="." />
-    <xsl:text>\]&#xa;</xsl:text>
+    <xsl:text>\]</xsl:text>
 </xsl:template>
 
 <!-- Numbered, single displayed equation -->
+<!-- Output follows source line breaks   -->
 <xsl:template match="men">
-    <xsl:text>&#xa;\[</xsl:text>
+    <xsl:text>\[</xsl:text>
     <xsl:value-of select="." />
     <xsl:text>\tag{</xsl:text>
     <xsl:apply-templates select="." mode="number" />
@@ -950,15 +952,16 @@ preferably with CSS so can adjust style, language-->
         <xsl:value-of select="@xml:id" />
         <xsl:text>}</xsl:text>
     </xsl:if>
-    <xsl:text>\]&#xa;</xsl:text>
+    <xsl:text>\]</xsl:text>
 </xsl:template>
 
 <!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
 <!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
+<!-- Output follows source line breaks                                           -->
 <xsl:template match="md|mdn">
-    <xsl:text>&#xa;\[\begin{align}</xsl:text>
+    <xsl:text>\[\begin{align}</xsl:text>
     <xsl:apply-templates select="mrow" />
-    <xsl:text>\end{align}\]&#xa;</xsl:text>
+    <xsl:text>\end{align}\]</xsl:text>
 </xsl:template>
 
 <!-- Rows of a multi-line math display                 -->

@@ -421,6 +421,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Unnumbered, single displayed equation -->
+<!-- Output follows source line breaks     -->
 <xsl:template match="me">
     <xsl:text>\begin{displaymath}</xsl:text>
     <xsl:value-of select="." />
@@ -429,6 +430,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Numbered, single displayed equation -->
 <!-- Possibly given a label              -->
+<!-- Output follows source line breaks   -->
 <xsl:template match="men">
     <xsl:text>\begin{equation}</xsl:text>
     <xsl:value-of select="." />
@@ -438,10 +440,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
 <!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
+<!-- Output follows source line breaks                                           -->
 <xsl:template match="md|mdn">
     <xsl:text>\begin{align}</xsl:text>
     <xsl:apply-templates select="mrow" />
-    <xsl:text>\end{align}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{align}</xsl:text>
 </xsl:template>
 
 <!-- Rows of a multi-line math display                         -->
