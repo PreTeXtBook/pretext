@@ -350,7 +350,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Figures:  chapter.x -->
 <xsl:template match="caption" mode="number">
-    <xsl:number level="single" count="chapter" />.<xsl:number level="any" from="chapter" />
+    <xsl:number level="multiple" count="chapter|figure" />
 </xsl:template>
 
 <!-- Theorems:  x -->
