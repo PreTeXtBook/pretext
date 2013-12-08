@@ -79,6 +79,7 @@
             equation", which is unnumbered.
             -->
             <theorem xml:id="theorem-FTC">
+                <title>The Fundamental Theorem of Calculus</title>
                 <statement>
                     <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me></p>
                 </statement>
