@@ -33,6 +33,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- So outpt methods here are just text -->
 <xsl:output method="text" />
 
+<!-- Mathematics (LaTeX/MathJax)                                                 -->
+<!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
+<!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
+<!-- align if there are ampersands, gather otherwise                             -->
+<!-- Output follows source line breaks                                           -->
+<!-- Individual mrows are handled differently for HTML versus MathJax            -->
+<xsl:template match="md|mdn">
+    <xsl:choose>
+        <xsl:when test="contains(., '&amp;')">
+            <xsl:text>\begin{align}</xsl:text>
+            <xsl:apply-templates select="mrow" />
+            <xsl:text>\end{align}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\begin{gather}</xsl:text>
+            <xsl:apply-templates select="mrow" />
+            <xsl:text>\end{gather}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- Sanitize Sage code                 -->
 <!-- No leading whitespace, no trailing -->

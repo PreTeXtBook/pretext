@@ -955,14 +955,7 @@ preferably with CSS so can adjust style, language-->
     <xsl:text>\]</xsl:text>
 </xsl:template>
 
-<!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
-<!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
-<!-- Output follows source line breaks                                           -->
-<xsl:template match="md|mdn">
-    <xsl:text>\[\begin{align}</xsl:text>
-    <xsl:apply-templates select="mrow" />
-    <xsl:text>\end{align}\]</xsl:text>
-</xsl:template>
+<!-- md, mdn containers are generic gather/align environments, so in common xsl -->
 
 <!-- Rows of a multi-line math display                 -->
 <!-- (1) MathJax config turns off all numbering        -->

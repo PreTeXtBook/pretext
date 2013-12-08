@@ -438,14 +438,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{equation}</xsl:text>
 </xsl:template>
 
-<!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
-<!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
-<!-- Output follows source line breaks                                           -->
-<xsl:template match="md|mdn">
-    <xsl:text>\begin{align}</xsl:text>
-    <xsl:apply-templates select="mrow" />
-    <xsl:text>\end{align}</xsl:text>
-</xsl:template>
+<!-- md, mdn containers are generic gather/align environments, so in common xsl -->
 
 <!-- Rows of a multi-line math display                         -->
 <!-- (1) Numbered by align environment, supress as appropriate -->

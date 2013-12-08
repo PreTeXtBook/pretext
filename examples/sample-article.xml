@@ -262,6 +262,15 @@
 
         </section>
 
+    <section>
+        <title>Some Advanced Ideas</title>
+
+        <p>The multi-row displayed mathematics in the proof of the Fundamental Theorem had equations aligned on the equals signs via the <ampersand /> character.  Sometimes you don't want that.  Here is an example with some differential equations, with each equation centered and unnumbered,
+        <md>
+            <mrow>{\mathcal L}(y')(s) = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
+            <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
+        </md></p>
+    </section>
         <!--
         Various author tools are planned.  Note the embedded "todo"
         elements above.  An XSL transform in-testing will extract them
