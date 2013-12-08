@@ -221,6 +221,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>    
 
+<!-- Identifiers                          -->
+<!-- A unique identifier for any element  -->
+<!-- Useful for internal cross-references -->
+<!-- in HTML or latex cross-references    -->
+<xsl:template match="*" mode="unique-id">
+    <xsl:value-of select="local-name(.)" />
+    <xsl:text>-</xsl:text>
+    <xsl:number level="any" />
+</xsl:template>
+
+
 <!-- Filenames -->
 <!-- Automatically generated basenames for -->
 <!-- filenames, when chunking, especially  -->
