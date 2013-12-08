@@ -393,9 +393,6 @@ preferably with CSS so can adjust style, language-->
     </xsl:copy>
 </xsl:template>
 
-
-
-
 <!-- Figures and Captions -->
 <xsl:template match="figure">
     <div class="figure">
@@ -432,68 +429,6 @@ preferably with CSS so can adjust style, language-->
 <xsl:template match="thead"><thead><xsl:apply-templates /></thead></xsl:template>
 <xsl:template match="tr"><tr><xsl:apply-templates /></tr></xsl:template>
 <xsl:template match="td"><td><xsl:apply-templates /></td></xsl:template>
-
-
-
-<!-- Numbering  -->
-
-<!-- Figures:  chapter.x -->
-<xsl:template match="caption" mode="number">
-    <xsl:number level="single" count="chapter" />.<xsl:number level="any" from="chapter" />
-</xsl:template>
-
-<!-- Theorems:  x -->
-<xsl:template match="theorem" mode="number">
-    <xsl:number level="any" count="theorem" />
-</xsl:template>
-
-<!-- Lemmas:  x -->
-<xsl:template match="lemma" mode="number">
-    <xsl:number level="any" count="lemma" />
-</xsl:template>
-
-<!-- Corollaries:  x -->
-<xsl:template match="corollary" mode="number">
-    <xsl:number level="any" count="corollary" />
-</xsl:template>
-
-<!-- Definitions:  x -->
-<xsl:template match="definition" mode="number">
-    <xsl:number level="any" count="definition" />
-</xsl:template>
-
-<!-- Examples:  x -->
-<xsl:template match="example" mode="number">
-    <xsl:number level="any" count="example" />
-</xsl:template>
-
-<!-- Exercises  x -->
-<xsl:template match="exercise" mode="number">
-    <xsl:number level="any" count="exercise" />
-</xsl:template>
-
-<!-- Footnotes  x -->
-<xsl:template match="fn" mode="number">
-    <xsl:number level="any" count="fn" />
-</xsl:template>
-
-<!-- Equations:           -->
-<!--   chapter.x in books -->
-<!--   x in articles      -->
-<xsl:template match="mrow|men" mode="number">
-    <xsl:if test="ancestor::chapter">
-        <xsl:apply-templates select="ancestor::chapter" mode="number" />
-        <xsl:text>.</xsl:text>
-    </xsl:if>
-    <xsl:number from="chapter" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]" />
-</xsl:template>
-
-<!-- Bibliography items: x -->
-<xsl:template match="bibliography//article|bibliography//book" mode="number">
-    <xsl:number from="bibliography" level="single" count="article|book" />
-</xsl:template>
-
-
 
 
 <!-- Cross-References -->
