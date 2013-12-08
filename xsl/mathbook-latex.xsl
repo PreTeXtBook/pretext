@@ -75,7 +75,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- An article, LaTeX structure -->
 <xsl:template match="article">
-    <xsl:call-template name="converter-info" />
+    <xsl:call-template name="converter-blurb" />
     <xsl:text>\documentclass[</xsl:text>
     <xsl:value-of select="$latex.font.size" />
     <xsl:text>,</xsl:text>
@@ -935,7 +935,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Converter information for header -->
 <!-- TODO: add date, URL -->
-<xsl:template name="converter-info">
+<xsl:template name="converter-blurb">
     <xsl:text>%%                                    %%&#xa;</xsl:text>
     <xsl:text>%% Generated from MathBook XML source %%&#xa;</xsl:text>
     <xsl:text>%%                                    %%&#xa;</xsl:text>
