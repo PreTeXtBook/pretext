@@ -392,9 +392,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <xsl:template match="notation">
-    <xsl:text>Sample notation (in a master list eventually): \(</xsl:text>
+    <xsl:text>Sample notation (in a master list eventually): $</xsl:text>
     <xsl:value-of select="." />
-    <xsl:text>\)\par&#xa;%&#xa;</xsl:text>
+    <xsl:text>$\par&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="proof">
@@ -414,10 +414,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--       -->
 
 <!-- Inline snippets -->
+<!-- It would be nice to produce source          -->
+<!-- with \( and \) as delimiters, ala amsmath   -->
+<!-- But these break section titles moving to    -->
+<!-- the table of contents, for example.         -->
+<!-- So we have $ instead.                       -->
+<!-- The  fixltx2e  package could be a solution. -->
 <xsl:template match= "m">
-    <xsl:text>\(</xsl:text>
+    <xsl:text>$</xsl:text>
     <xsl:value-of select="." />
-    <xsl:text>\)</xsl:text>
+    <xsl:text>$</xsl:text>
 </xsl:template>
 
 <!-- Unnumbered, single displayed equation -->
@@ -633,10 +639,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Implication Symbols -->
 <!-- TODO: better names! -->
 <xsl:template match="imply">
-    <xsl:text>\(\Rightarrow\)</xsl:text>
+    <xsl:text>$\Rightarrow$</xsl:text>
 </xsl:template>
 <xsl:template match="implyreverse">
-    <xsl:text>\(\Leftarrow\)</xsl:text>
+    <xsl:text>$\Leftarrow$</xsl:text>
 </xsl:template>
 
 <!-- TeX, LaTeX -->
@@ -785,9 +791,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}</xsl:text>
         </xsl:when>
         <xsl:when test="@provisional">
-            <xsl:text>\(\langle\)</xsl:text>
+            <xsl:text>$\langle$</xsl:text>
             <xsl:value-of select="@provisional" />
-            <xsl:text>\(\rangle\)</xsl:text>
+            <xsl:text>$\rangle$</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:message terminate="yes">
@@ -808,9 +814,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}</xsl:text>
         </xsl:when>
         <xsl:when test="@provisional">
-            <xsl:text>\(\langle\)</xsl:text>
+            <xsl:text>$\langle$</xsl:text>
             <xsl:value-of select="@provisional" />
-            <xsl:text>\(\rangle\)</xsl:text>
+            <xsl:text>$\rangle$</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:message terminate="yes">
