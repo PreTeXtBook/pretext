@@ -93,7 +93,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- A book, LaTeX structure -->
 <xsl:template match="book">
-    <xsl:call-template name="converter-info" />
+    <xsl:call-template name="converter-blurb" />
     <xsl:text>\documentclass[</xsl:text>
     <xsl:value-of select="$latex.font.size" />
     <xsl:text>,</xsl:text>
