@@ -205,12 +205,12 @@
 
             <subsection>
                 <title>A Pedagogical Note</title>
-                
+
                 <p>The Fundamental Theorem explains why we use the same notation for a definite integral, which is a numerical calculation,<fn>Which I think sometimes students lose sight of.</fn> and an antiderivative, which is a symbolic expression.</p>
-                
+
                 <subsubsection>
                     <title>Advice</title>
-                    
+
                     <p>Using an <q>integral sign</q> for an antiderivative (aka indefinite integral) would seem to make the Fundamental Theorem a <foreign>fait accompli</foreign>.  So I would suggest not conflating the notation for two very different things until the Fundamental Theorem exposes them as being highly related.</p>
                 </subsubsection>
             </subsection>
@@ -260,18 +260,50 @@
                 <caption>A function and its derivative</caption>
                 <image width="350" source="cubic-function.png" />
             </figure>
+        </section>
+
+        <!--
+        Displayed rows of equations format with
+        alignment or not.  The employment of the
+        amsmath align or gather environments depends
+        on the presence of ampersands, or not, respectively.
+        -->
+
+        <section>
+            <title>Some Advanced Ideas</title>
+
+            <p>The multi-row displayed mathematics in the proof of the Fundamental Theorem had equations aligned on the equals signs via the <ampersand /> character.  Sometimes you don't want that.  Here is an example with some differential equations, with each equation centered and unnumbered,
+            <md>
+                <mrow>{\mathcal L}(y')(s) = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
+                <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
+            </md></p>
+        </section>
+
+        <section>
+            <title>Exercises</title>
+
+            <exercise>
+                <statement>
+                    <p>Compute the definite integral <m>\definiteintegral{2}{4}{x^2}{x}</m>, not as an approximate value from a Riemann sum, but as an exact value based of the limit by using the Fundamental Theorem.</p>
+                </statement>
+                <solution>
+                    <p>An antiderivative of <m>x^2</m> is <m>F(x)=x^3/3</m>, so by the FTC,<me>\definiteintegral{2}{4}{x^2}{x}=F(4)-F(2)=\frac{1}{3}\left(4^3-2^3\right)=\frac{56}{3}.</me></p>
+                </solution>
+            </exercise>
+
+            <exercise>
+                <statement>
+                    <p>Can you prove Corollary <xref ref="corollary-FTC-derivative" /> directly?</p>
+                </statement>
+                <hint>
+                    <p>Consider the definite integral as an area function and employ the Mean Value Theorem.</p>
+                </hint>
+            </exercise>
 
         </section>
 
-    <section>
-        <title>Some Advanced Ideas</title>
-
-        <p>The multi-row displayed mathematics in the proof of the Fundamental Theorem had equations aligned on the equals signs via the <ampersand /> character.  Sometimes you don't want that.  Here is an example with some differential equations, with each equation centered and unnumbered,
-        <md>
-            <mrow>{\mathcal L}(y')(s) = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
-            <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
-        </md></p>
-    </section>
+        
+        
         <!--
         Various author tools are planned.  Note the embedded "todo"
         elements above.  An XSL transform in-testing will extract them
