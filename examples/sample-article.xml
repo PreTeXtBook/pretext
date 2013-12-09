@@ -245,7 +245,7 @@
                 </ol></li>
             </ul>
 
-            <p>You can gain a greater undestanding of derivatives by studying the graphs of functions with their derivatives.  Can you discern the derivative<ndash />antiderivative relationship in the plot below?</p>
+            <p>You can gain a greater undestanding of derivatives by studying the graphs of functions with their derivatives.  Can you discern the derivative<ndash />antiderivative relationship in Figure <xref ref="figure-function-derivative" />?</p>
 
             <!--
             Sage Source;
@@ -256,7 +256,7 @@
             orig+slope
             -->
 
-            <figure>
+            <figure xml:id="figure-function-derivative">
                 <caption>A function and its derivative</caption>
                 <image width="350" source="cubic-function.png" />
             </figure>

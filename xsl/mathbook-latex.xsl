@@ -731,7 +731,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{center}&#xa;</xsl:text>
     <xsl:text>\caption{</xsl:text>
     <xsl:apply-templates select="caption/node()" />
-    <xsl:apply-templates select=".." mode="label"/>
+    <xsl:apply-templates select="." mode="label"/>
     <xsl:text>}&#xa;</xsl:text>
     <xsl:text>\end{figure}&#xa;%&#xa;</xsl:text>
 </xsl:template>
