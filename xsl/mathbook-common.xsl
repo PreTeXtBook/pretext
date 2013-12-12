@@ -26,6 +26,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="date"
 >
 
+<xsl:import href="./languages/mathbook-language-en.xsl" />
 
 <!-- MathBook XML common templates                        -->
 <!-- Text creation/manipulation common to HTML, TeX, Sage -->
