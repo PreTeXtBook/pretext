@@ -30,8 +30,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- MathBook XML common templates                        -->
 <!-- Text creation/manipulation common to HTML, TeX, Sage -->
 
-<!-- So outpt methods here are just text -->
+<!-- So output methods here are just text -->
 <xsl:output method="text" />
+
+<!-- Strip whitespace text nodes from container elements                    -->
+<!-- Improve source readability with whitespace control in text output mode -->
+<!-- Newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
+<!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
+<xsl:strip-space elements="mathbook book article chapter appendix section subsection subsubsection paragraph subparagraph" />
+<xsl:strip-space elements="docinfo author abstract preface" />
+<xsl:strip-space elements="theorem corollary lemma proposition claim fact conjecture proof" />
+<xsl:strip-space elements="definition axiom" />
+<xsl:strip-space elements="statement" />
+<xsl:strip-space elements="example exercise hint solution" />
+<xsl:strip-space elements="ul ol dl" />
+<xsl:strip-space elements="md mdn" />
+<xsl:strip-space elements="sage figure" />
+<xsl:strip-space elements="table thead tr td" />
 
 <!-- Mathematics (LaTeX/MathJax)                                                 -->
 <!-- Multi-line displayed equations container, globally unnumbered or numbered   -->

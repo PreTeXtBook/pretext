@@ -53,17 +53,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     presuming geometry sets smaller page size -->
 <xsl:param name="latex.draft" select="'no'"/>
 
-
-<!-- Strip whitespace text nodes from container elements -->
-<xsl:strip-space elements="mathbook book article chapter appendix section subsection subsubsection paragraph" />
-<xsl:strip-space elements="docinfo author abstract figure ul ol dl md mdn" />
-<xsl:strip-space elements="theorem corollary lemma example statement proof" />
-<xsl:strip-space elements="table thead tr td" />
-
-<!-- Whitespace control in text output mode-->
-<!-- Forcing newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
-<!-- Avoiding extra whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
-
 <xsl:template match="/" >
     <xsl:apply-templates select="mathbook"/>
 </xsl:template>
