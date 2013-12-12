@@ -26,100 +26,87 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:exsl="http://exslt.org/common"
     extension-element-prefixes="exsl"
 >
-    
+
 <xsl:import href="./mathbook-common.xsl" />
 
 <!-- Intend output for rendering by a web browser -->
 <xsl:output method="html" encoding="utf-8" indent="yes"/>
 
-<xsl:template match="/">
+<xsl:template match="/mathbook">
     <xsl:apply-templates />
 </xsl:template>
 
 <!-- Kill docinfo, handle pieces on ad-hoc basis -->
 <xsl:template match="/mathbook/docinfo"></xsl:template>
 
+<!-- Titles are handled specially                     -->
+<!-- so get killed via apply-templates                -->
+<!-- When needed, get content with XPath title/node() -->
+<xsl:template match="title"></xsl:template>
 
-<xsl:template match="/mathbook">
-<!-- doctype as text, normally in xsl:output above -->
-<xsl:variable name="rootfile">
-    <xsl:choose>
-        <xsl:when test="article"><xsl:value-of select="article/@filebase" /></xsl:when>
-        <xsl:when test="book"><xsl:value-of select="book/@filebase" /></xsl:when>
-    </xsl:choose>
-</xsl:variable>
-<exsl:document href="{$rootfile}.html" method="html">
-    <!-- Need to be careful for format of this initial string     -->
-    <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
-    <html> <!-- lang="", and/or dir="rtl" here -->
-        <head>
-            <xsl:call-template name="converter-blurb" />
-            <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <title><xsl:apply-templates select="book/title/node()|article/title/node()" /></title>
-            <xsl:call-template name="mathjax" />
-            <xsl:call-template name="sagecell" />
-            <xsl:call-template name="knowl" />
-            <xsl:call-template name="fonts" />
-            <link rel="stylesheet" type="text/css" href="mathbook.css" />
-        </head>
-        <xsl:apply-templates />
-    </html>
-</exsl:document>
-</xsl:template>
-
-<xsl:template match="article">
-    <body>
-        \(<xsl:value-of select="/mathbook/docinfo/macros" />\)
-        <div class="article">
-            <div class="heading">
-                <div class="title"><xsl:apply-templates select="title/node()" /></div>
-                <div class="authorgroup"><xsl:apply-templates select="/mathbook/docinfo/author" /></div>
-                <div class="date"><xsl:apply-templates select="/mathbook/docinfo/date" /></div>
+<!-- Article                                                    -->
+<!--     One page, full of sections (with abstract, references) -->
+<xsl:template match="mathbook/article">
+    <xsl:call-template name="page-wrapper">
+        <xsl:with-param name="filebase">
+            <xsl:value-of select="@filebase" />
+        </xsl:with-param>
+        <xsl:with-param name="title">
+            <xsl:value-of select="title/node()" />
+        </xsl:with-param>
+        <xsl:with-param name="content">
+            <div style="display:none;">
+            \(<xsl:value-of select="/mathbook/docinfo/macros" />\)
             </div>
-        <!-- TODO: an abstract here, from docinfo, or like preface? -->
-        <xsl:apply-templates select="section|subsection|subsubsection|paragraph|bibliography|p|sage|theorem|corollary|lemma|definition|example|figure|ol|ul|dl" />
-        </div>
-    </body>
-</xsl:template>
-
-<xsl:template match="book">
-    <body>
-        <div style="display:none;">
-        \(<xsl:value-of select="/mathbook/docinfo/macros" />\)
-        </div>
-        <div class="book" >
-            <div class="heading">
-                <div class="title"><xsl:apply-templates select="title/node()" /></div>
-                <div class="authorgroup"><xsl:apply-templates select="/mathbook/docinfo/author" /></div>
-                <div class="date"><xsl:apply-templates select="/mathbook/docinfo/date" /></div>
-                <xsl:if test="/mathbook/docinfo/copyright">
-                    <div class="copyright"><xsl:text>&#169; </xsl:text>
-                        <xsl:apply-templates select="/mathbook/docinfo/copyright/year" />
-                        <xsl:text> </xsl:text>
-                        <xsl:apply-templates select="/mathbook/docinfo/copyright/holder" />
-                            <xsl:if test="/mathbook/docinfo/copyright/shortlicense">
-                                <br />
-                                <xsl:apply-templates select="/mathbook/docinfo/copyright/shortlicense" />
-                            </xsl:if>
-                    </div>
-                </xsl:if>
+            <div class="article">
+                <div class="heading">
+                    <div class="title"><xsl:apply-templates select="title/node()" /></div>
+                    <div class="authorgroup"><xsl:apply-templates select="/mathbook/docinfo/author" /></div>
+                    <div class="date"><xsl:apply-templates select="/mathbook/docinfo/date" /></div>
+                </div>
+            <!-- TODO: an abstract here, from docinfo, or like preface? -->
+            <xsl:apply-templates />
             </div>
-        </div>
-        <xsl:call-template name="toc" />
-        <xsl:apply-templates />
-    </body>
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
-
-<!-- Author, single one at titlepage -->
-<xsl:template match="author">
-    <div class="author-info">
-        <div class="author-name"><xsl:apply-templates select="personname" /></div>
-        <div class="author-department"><xsl:apply-templates select="department" /></div>
-        <div class="author-institution"><xsl:apply-templates select="institution" /></div>
-        <div class="author-email"><xsl:apply-templates select="email" /></div>
-    </div>
+<!-- Book                                                                           -->
+<!--     A sequence of chapters and appendices (with table of contents, index, etc) -->
+<xsl:template match="mathbook/book">
+    <xsl:call-template name="page-wrapper">
+        <xsl:with-param name="filebase">
+            <xsl:value-of select="@filebase" />
+        </xsl:with-param>
+        <xsl:with-param name="title">
+            <xsl:value-of select="title/node()" />
+        </xsl:with-param>
+        <xsl:with-param name="content">
+            <div style="display:none;">
+            \(<xsl:value-of select="/mathbook/docinfo/macros" />\)
+            </div>
+            <div class="book" >
+                <div class="heading">
+                    <div class="title"><xsl:apply-templates select="title/node()" /></div>
+                    <div class="authorgroup"><xsl:apply-templates select="/mathbook/docinfo/author" /></div>
+                    <div class="date"><xsl:apply-templates select="/mathbook/docinfo/date" /></div>
+                    <xsl:if test="/mathbook/docinfo/copyright">
+                        <div class="copyright"><xsl:text>&#169; </xsl:text>
+                            <xsl:apply-templates select="/mathbook/docinfo/copyright/year" />
+                            <xsl:text> </xsl:text>
+                            <xsl:apply-templates select="/mathbook/docinfo/copyright/holder" />
+                                <xsl:if test="/mathbook/docinfo/copyright/shortlicense">
+                                    <br />
+                                    <xsl:apply-templates select="/mathbook/docinfo/copyright/shortlicense" />
+                                </xsl:if>
+                        </div>
+                    </xsl:if>
+                </div>
+            </div>
+            <xsl:call-template name="toc" />
+            <xsl:apply-templates />
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Table of contents for front page -->
@@ -142,6 +129,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
+<!-- Author, single one at titlepage -->
+<xsl:template match="author">
+    <div class="author-info">
+        <div class="author-name"><xsl:apply-templates select="personname" /></div>
+        <div class="author-department"><xsl:apply-templates select="department" /></div>
+        <div class="author-institution"><xsl:apply-templates select="institution" /></div>
+        <div class="author-email"><xsl:apply-templates select="email" /></div>
+    </div>
+</xsl:template>
+
 <!-- Preface, automatic title, no subsections, etc         -->
 <xsl:template match="preface">
     <div class="preface">
@@ -152,54 +149,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
-<!-- Titles are handled specially                     -->
-<!-- so get killed via apply-templates                -->
-<!-- When needed, get content with XPath title/node() -->
-<xsl:template match="title"></xsl:template>
-
-
-<!-- Chapters, numbered, with title         -->
-<!-- TODO: adjust for appendices -->
+<!-- Chapters, Appendices                                    -->
+<!--     Primary subdivision of a book, each to its own page -->
+<!-- TODO: adjust for appendices            -->
 <xsl:template match="chapter|appendix">
-    <exsl:document href="{@filebase}.html" method="html">
-    <!-- Need to be careful for format of this initial string     -->
-    <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
-    <html> <!-- lang="", and/or dir="rtl" here -->
-        <head>
-            <xsl:call-template name="converter-blurb" />
-            <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <title><xsl:apply-templates select="/mathbook/book/title/node()|/mathbook/article/title/node()" /></title>
-            <xsl:call-template name="mathjax" />
-            <xsl:call-template name="sagecell" />
-            <xsl:call-template name="knowl" />
-            <xsl:call-template name="fonts" />
-            <link rel="stylesheet" type="text/css" href="mathbook.css" />
-        </head>
-        <body>
-        <xsl:call-template name="page-navigation-bar" />    
-        <xsl:element name="div">
-            <xsl:attribute name="class">chapter</xsl:attribute>
-            <xsl:element name="div">
-                <xsl:attribute name="class">heading</xsl:attribute>
-                <xsl:element name="span">
-                    <xsl:attribute name="class">number</xsl:attribute>
-                    <xsl:apply-templates select="." mode="number" />
-                </xsl:element>
-                <xsl:element name="span">
-                    <xsl:attribute name="class">title</xsl:attribute>
-                    <xsl:apply-templates select="title/node()" />
-                </xsl:element>
-            </xsl:element>
+    <xsl:call-template name="page-wrapper">
+        <xsl:with-param name="filebase">
+            <xsl:value-of select="@filebase" />
+        </xsl:with-param>
+        <xsl:with-param name="title">
+            <xsl:value-of select="title/node()" />
+        </xsl:with-param>
+        <xsl:with-param name="content">
             <div style="display:none;">
             \(<xsl:value-of select="/mathbook/docinfo/macros" />\)
             </div>
-            <xsl:apply-templates />
-        </xsl:element>
-        <xsl:call-template name="page-navigation-bar" />
-        </body>
-    </html>
-    </exsl:document>
+            <xsl:call-template name="page-navigation-bar" />
+            <xsl:element name="div">
+                <xsl:attribute name="class">chapter</xsl:attribute>
+                <xsl:element name="div">
+                    <xsl:attribute name="class">heading</xsl:attribute>
+                    <xsl:element name="span">
+                        <xsl:attribute name="class">number</xsl:attribute>
+                        <xsl:apply-templates select="." mode="number" />
+                    </xsl:element>
+                    <xsl:element name="span">
+                        <xsl:attribute name="class">title</xsl:attribute>
+                        <xsl:apply-templates select="title/node()" />
+                    </xsl:element>
+                </xsl:element>
+                <xsl:apply-templates />
+            </xsl:element>
+            <xsl:call-template name="page-navigation-bar" />
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Page Navigation Bar -->
@@ -970,7 +953,6 @@ preferably with CSS so can adjust style, language-->
     </xsl:element>
 </xsl:template>
 
-
 <!-- Sage -->
 <xsl:template match="sage">
     <div class="sage-compute">
@@ -982,6 +964,41 @@ preferably with CSS so can adjust style, language-->
     </div>
 </xsl:template>
 
+<!--                         -->
+<!-- Web Page Infrastructure -->
+<!--                         -->
+
+<!-- An individual page:                       -->
+<!-- Inputs:                                   -->
+<!--     * basename for file name              -->
+<!--     * string for page title               -->
+<!--     * content (exclusive of banners, etc) -->
+<xsl:template name="page-wrapper">
+    <xsl:param name="filebase" />
+    <xsl:param name="title" />
+    <xsl:param name="content" />
+    <exsl:document href="{$filebase}.html" method="html">
+    <!-- Need to be careful for format of this initial string     -->
+    <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
+    <html> <!-- lang="", and/or dir="rtl" here -->
+        <head>
+            <xsl:call-template name="converter-blurb" />
+            <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title><xsl:value-of select="$title" /></title>
+            <xsl:call-template name="mathjax" />
+            <xsl:call-template name="sagecell" />
+            <xsl:call-template name="knowl" />
+            <xsl:call-template name="fonts" />
+            <link rel="stylesheet" type="text/css" href="mathbook.css" />
+        </head>
+        <body>
+        <xsl:copy-of select="$content" />
+        </body>
+    </html>
+    </exsl:document>
+</xsl:template>
+
 <!-- Converter information for header -->
 <!-- TODO: add date, URL -->
 <xsl:template name="converter-blurb">
@@ -989,7 +1006,6 @@ preferably with CSS so can adjust style, language-->
     <xsl:comment>* Generated from MathBook XML source *</xsl:comment><xsl:text>&#xa;</xsl:text>
     <xsl:comment>*                                    *</xsl:comment><xsl:text>&#xa;</xsl:text>
 </xsl:template>
-
 
 <!-- MathJax header                                     -->
 <!-- XML manages equation numbers                       -->
@@ -1011,7 +1027,6 @@ MathJax.Hub.Config({
 </script>
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full" />
 </xsl:template>
-
 
 <!-- Sage Cell header -->
 <xsl:template name="sagecell">
@@ -1041,9 +1056,6 @@ $(function () {
 <xsl:template name="fonts">
     <link href='http://fonts.googleapis.com/css?family=Istok+Web:400,400italic,700|Source+Code+Pro:400' rel='stylesheet' type='text/css' />
 </xsl:template>
-
-
-
 
 <!-- Miscellaneous -->
 
