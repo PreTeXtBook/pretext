@@ -126,16 +126,59 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 %% maintain source level compatibility
 %% This avoids using two XML entities in source mathematics&#xa;</xsl:text>
 <!-- Need CDATA here to protect inequalities as part of an XML file -->
-<xsl:text><![CDATA[\newcommand{\lt}{<}]]>
-<![CDATA[\newcommand{\gt}{>}]]>
-%% Theorem-like environments
-\usepackage{amsthm}
-% theorem-like, italicized text
-\theoremstyle{plain}
-\newtheorem{theorem}{Theorem}
-\newtheorem{corollary}{Corollary}
-\newtheorem{lemma}{Lemma}
-% definition-like, normal text
+<xsl:text><![CDATA[\newcommand{\lt}{<}]]>&#xa;</xsl:text>
+<xsl:text><![CDATA[\newcommand{\gt}{>}]]>&#xa;</xsl:text>
+<xsl:text>%% Environments with amsthm package&#xa;</xsl:text>
+<xsl:text>\usepackage{amsthm}&#xa;</xsl:text>
+<xsl:text>% Theorem-like enviroments, italicized statement, proof, etc&#xa;</xsl:text>
+<xsl:text>% Numbering: X.Y numbering scheme&#xa;</xsl:text>
+<xsl:text>%   i.e. Corollary 4.3 is third item in Chapter 4 of a book&#xa;</xsl:text>
+<xsl:text>%   i.e. Lemma 5.6 is sixth item in Section 5 of an article&#xa;</xsl:text>
+<xsl:text>\theoremstyle{plain}&#xa;</xsl:text>
+<xsl:if test="//theorem">
+    <xsl:text>\newtheorem{theorem}{</xsl:text>
+    <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'theorem'" /></xsl:call-template>
+    <xsl:text>}</xsl:text>
+    <xsl:choose>
+        <xsl:when test="/mathbook/article"><xsl:text>[section]</xsl:text></xsl:when>
+        <xsl:when test="/mathbook/book"><xsl:text>[chapter]</xsl:text></xsl:when>
+    </xsl:choose>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:if>
+<xsl:text>% Only variants actually used in document appear here&#xa;</xsl:text>
+<xsl:text>% Numbering: all theorem-like numbered consecutively&#xa;</xsl:text>
+<xsl:text>%   i.e. Corollary 4.3 follows Theorem 4.2&#xa;</xsl:text>
+<xsl:if test="//corollary">
+    <xsl:text>\newtheorem{corollary}[theorem]{</xsl:text>
+    <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'corollary'" /></xsl:call-template>
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:if>
+<xsl:if test="//lemma">
+    <xsl:text>\newtheorem{lemma}[theorem]{</xsl:text>
+    <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'lemma'" /></xsl:call-template>
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:if>
+<xsl:if test="//proposition">
+    <xsl:text>\newtheorem{proposition}[theorem]{</xsl:text>
+    <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'proposition'" /></xsl:call-template>
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:if>
+<xsl:if test="//claim">
+    <xsl:text>\newtheorem{claim}[theorem]{</xsl:text>
+    <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'claim'" /></xsl:call-template>
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:if>
+<xsl:if test="//fact">
+    <xsl:text>\newtheorem{fact}[theorem]{</xsl:text>
+    <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'fact'" /></xsl:call-template>
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:if>
+<xsl:if test="//conjecture">
+    <xsl:text>\newtheorem{conjecture}[theorem]{</xsl:text>
+    <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'conjecture'" /></xsl:call-template>
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:if>
+<xsl:text>% definition-like, normal text
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}
 \newtheorem{example}{Example}
