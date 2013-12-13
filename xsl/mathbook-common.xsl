@@ -235,18 +235,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="substring($datetime, 9, 2)" />
         </xsl:when>
     </xsl:choose>
-</xsl:template>    
+</xsl:template>
 
 <!-- Identifiers                          -->
 <!-- A unique identifier for any element  -->
 <!-- Useful for internal cross-references -->
 <!-- in HTML or latex cross-references    -->
-<xsl:template match="*" mode="unique-id">
+<!-- Format: element_name-serial_number   -->
+<!-- Ineffective: <xsl:number level="multiple" count="chapter|section|subsection" format="1-1-1-1-1-1-1"/> -->
+<xsl:template match="*" mode="xref-identifier">
     <xsl:value-of select="local-name(.)" />
     <xsl:text>-</xsl:text>
     <xsl:number level="any" />
 </xsl:template>
-
 
 <!-- Filenames -->
 <!-- Automatically generated basenames for -->
