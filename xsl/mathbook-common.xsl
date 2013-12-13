@@ -391,30 +391,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:number level="multiple" count="chapter|figure" />
 </xsl:template>
 
-<!-- Theorems:  x -->
-<xsl:template match="theorem" mode="number">
-    <xsl:number level="any" count="theorem" />
+<!-- Two-level numbering for book with chapters and theorem-like environments, plus -->
+<!-- Condition on articles, and then articles with sections -->
+<xsl:template match="theorem|corollary|lemma|proposition|claim|fact|conjecture|definition|example" mode="number">
+    <xsl:number from="book" level="any" count="chapter" />
+    <xsl:text>.</xsl:text>
+    <xsl:number from="chapter" level="any" count="theorem|corollary|lemma|definition|example" />
 </xsl:template>
 
-<!-- Lemmas:  x -->
-<xsl:template match="lemma" mode="number">
-    <xsl:number level="any" count="lemma" />
-</xsl:template>
-
-<!-- Corollaries:  x -->
-<xsl:template match="corollary" mode="number">
-    <xsl:number level="any" count="corollary" />
-</xsl:template>
-
-<!-- Definitions:  x -->
-<xsl:template match="definition" mode="number">
-    <xsl:number level="any" count="definition" />
-</xsl:template>
-
-<!-- Examples:  x -->
-<xsl:template match="example" mode="number">
-    <xsl:number level="any" count="example" />
-</xsl:template>
 
 <!-- Exercises  x -->
 <xsl:template match="exercise" mode="number">
