@@ -356,53 +356,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- which is helful in a variety of places -->
 <!-- Default is LaTeX's numbering scheme -->
 
-<!-- Chapters: x -->
-<xsl:template match="chapter" mode="number">
-    <xsl:number level="single" count="chapter" />
+<!-- Sectioning -->
+<xsl:template match="chapter|section|subsection|subsubsection|paragraph|subparagraph" mode="number">
+    <xsl:number level="multiple" count="chapter|section|subsection|subsubsection|paragraph|subparagraph" />
 </xsl:template>
 
 <!-- Appendices: A -->
+<!-- TODO: integrate appendices with chapters -->
 <xsl:template match="appendix" mode="number">
     <xsl:number level="single" count="appendix" format="A"/>
 </xsl:template>
 
-<!-- Sections: chapter.x -->
-<xsl:template match="section" mode="number">
-    <xsl:number level="multiple" count="chapter|section" />
-</xsl:template>
-
-<!-- Subsections: chapter.section.x -->
-<xsl:template match="subsection" mode="number">
-    <xsl:number level="multiple" count="chapter|section|subsection" />
-</xsl:template>
-
-<!-- Subsubsections: chapter.section.subsection.x -->
-<xsl:template match="subsubsection" mode="number">
-    <xsl:number level="multiple" count="chapter|section|subsection|subsubsection" />
-</xsl:template>
-
-<!-- Paragraphs: chapter.section.subsection.subsubsection.x -->
-<xsl:template match="paragraph" mode="number">
-    <xsl:number level="multiple" count="chapter|section|subsection|subsubsection|paragraph" />
-</xsl:template>
-
-<!-- Figures:  chapter.x -->
+<!-- Figures:  chapter.x                   -->
+<!-- These float, so number independently? -->
 <xsl:template match="caption" mode="number">
     <xsl:number level="multiple" count="chapter|figure" />
 </xsl:template>
 
 <!-- Two-level numbering for book with chapters and theorem-like environments, plus -->
 <!-- Condition on articles, and then articles with sections -->
-<xsl:template match="theorem|corollary|lemma|proposition|claim|fact|conjecture|definition|example" mode="number">
+<!-- TODO: Number exercises in an exercise section properly, these are sporadic in text -->
+<xsl:template match="theorem|corollary|lemma|proposition|claim|fact|conjecture|definition|example|exercise" mode="number">
     <xsl:number from="book" level="any" count="chapter" />
     <xsl:text>.</xsl:text>
-    <xsl:number from="chapter" level="any" count="theorem|corollary|lemma|definition|example" />
-</xsl:template>
-
-
-<!-- Exercises  x -->
-<xsl:template match="exercise" mode="number">
-    <xsl:number level="any" count="exercise" />
+    <xsl:number from="chapter" level="any" count="theorem|corollary|lemma|definition|example|exercise" />
 </xsl:template>
 
 <!-- Footnotes  x -->
