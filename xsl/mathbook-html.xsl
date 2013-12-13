@@ -354,18 +354,6 @@ preferably with CSS so can adjust style, language-->
 <p><span class="proof-header">Proof<xsl:text> </xsl:text></span><xsl:apply-templates /></p>
 </xsl:template>
 
-<!-- Tombstone, or halmos, to end proof (implement in CSS) -->
-<xsl:template match="proof/p[last()]">
-<p><xsl:apply-templates /><span class="tombstone" /></p>
-</xsl:template>
-
-<!-- Maybe only one paragraph in proof -->
-<xsl:template match="proof/p[1 and last()]">
-<p><span class="proof-header">Proof<xsl:text> </xsl:text></span><xsl:apply-templates /><span class="tombstone" /></p>
-</xsl:template>
-
-
-
 <!-- Wrap generic paragraphs in p tag -->
 <xsl:template match="p">
 <p><xsl:apply-templates /></p>
