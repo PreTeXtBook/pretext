@@ -842,7 +842,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="@ref">
             <xsl:text>\ref{</xsl:text>
-            <xsl:value-of select="@ref" />
+            <xsl:apply-templates select="id(@ref)" mode="xref-identifier" />
             <xsl:text>}</xsl:text>
         </xsl:when>
         <xsl:when test="@provisional">
@@ -858,13 +858,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-
+<!-- Insert a xref identifier as a LaTeX label on anything   -->
+<!-- Calls to this template need come from where LaTeX likes -->
+<!-- a \label, generally someplace that can be numbered      -->
+<!-- Could do optionally: <xsl:value-of select="@xml:id" />  -->
 <xsl:template match="*" mode="label">
-    <xsl:if test="@xml:id">
-        <xsl:text>\label{</xsl:text>
-        <xsl:value-of select="@xml:id" />
-        <xsl:text>}</xsl:text>
-    </xsl:if>
+    <xsl:text>\label{</xsl:text>
+    <xsl:apply-templates select="." mode="xref-identifier" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- Footnotes               -->
