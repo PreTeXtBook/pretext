@@ -237,6 +237,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Names                                          -->
+<!-- Relies on translations in language files       -->
+<!-- which provides the named template, type-name   -->
+<!-- This template allows a node to report its name -->
+<xsl:template match="*" mode="type-name">
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="generic" select="local-name(.)" />
+    </xsl:call-template>
+</xsl:template>
+
 <!-- Identifiers                          -->
 <!-- A unique identifier for any element  -->
 <!-- Useful for internal cross-references -->

@@ -284,7 +284,8 @@ preferably with CSS so can adjust style, language-->
 <xsl:template match="theorem/statement/p[1]">
     <p>
         <span class="theorem-header">
-        <xsl:text>Theorem </xsl:text>
+        <xsl:apply-templates select="../.." mode="type-name" />
+        <xsl:text> </xsl:text>
         <xsl:apply-templates select="../.." mode="number" />
         <xsl:text> </xsl:text>
         </span>
@@ -295,7 +296,8 @@ preferably with CSS so can adjust style, language-->
 <xsl:template match="lemma/statement/p[1]">
     <p>
         <span class="lemma-header">
-        <xsl:text>Lemma </xsl:text>
+        <xsl:apply-templates select="../.." mode="type-name" />
+        <xsl:text> </xsl:text>
         <xsl:apply-templates select="../.." mode="number" />
         <xsl:text> </xsl:text>
         </span>
@@ -306,7 +308,8 @@ preferably with CSS so can adjust style, language-->
 <xsl:template match="corollary/statement/p[1]">
     <p>
         <span class="corollary-header">
-        <xsl:text>Corollary </xsl:text>
+        <xsl:apply-templates select="../.." mode="type-name" />
+        <xsl:text> </xsl:text>
         <xsl:apply-templates select="../.." mode="number" />
         <xsl:text> </xsl:text>
         </span>
