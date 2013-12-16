@@ -37,7 +37,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Kill docinfo, handle pieces on ad-hoc basis -->
+<!-- Save in a global variable for easy access   -->
 <xsl:template match="/mathbook/docinfo"></xsl:template>
+<xsl:variable name="docinfo" select="/mathbook/docinfo" />
 
 <!-- Titles are handled specially                     -->
 <!-- so get killed via apply-templates                -->
@@ -985,6 +987,7 @@ preferably with CSS so can adjust style, language-->
         </head>
         <body>
         <xsl:copy-of select="$content" />
+        <xsl:apply-templates select="$docinfo/analytics" />
         </body>
     </html>
     </exsl:document>
@@ -1047,6 +1050,55 @@ $(function () {
 <xsl:template name="fonts">
     <link href='http://fonts.googleapis.com/css?family=Istok+Web:400,400italic,700|Source+Code+Pro:400' rel='stylesheet' type='text/css' />
 </xsl:template>
+
+<!-- Analytics Footers -->
+
+<!-- Google Analytics                     -->
+<!-- "Classic", not compared to Universal -->
+<xsl:template match="google">
+<xsl:comment>Start: Google code</xsl:comment>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', '<xsl:value-of select="./tracking" />']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+<xsl:comment>End: Google code</xsl:comment>
+</xsl:template>
+
+<!-- StatCounter                                -->
+<!-- Set sc_invisible to 1                      -->
+<!-- In noscript URL, final 1 is an edit from 0 -->
+<xsl:template match="statcounter">
+<xsl:comment>Start: StatCounter code</xsl:comment>
+<script type="text/javascript">
+var sc_project=<xsl:value-of select="./project" />;
+var sc_invisible=1;
+var sc_security="<xsl:value-of select="./security" />";
+var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "http://www.");
+<![CDATA[document.write("<sc"+"ript type='text/javascript' src='" + scJsHost+ "statcounter.com/counter/counter.js'></"+"script>");]]>
+</script>
+<xsl:variable name="noscript_url">
+    <xsl:text>http://c.statcounter.com/</xsl:text>
+    <xsl:value-of select="./project" />
+    <xsl:text>/0/</xsl:text>
+    <xsl:value-of select="./security" />
+    <xsl:text>/1/</xsl:text>
+</xsl:variable>
+<noscript>
+<div class="statcounter">
+<a title="web analytics" href="http://statcounter.com/" target="_blank">
+<img class="statcounter" src="{$noscript_url}" alt="web analytics" /></a>
+</div>
+</noscript>
+<xsl:comment>End: StatCounter code</xsl:comment>
+</xsl:template>
+
 
 <!-- Miscellaneous -->
 
