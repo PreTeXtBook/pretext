@@ -305,18 +305,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Author, one at titlepage -->
 <!-- http://stackoverflow.com/questions/2817664/xsl-how-to-tell-if-element-is-last-in-series -->
 <xsl:template match="author">
-    <xsl:apply-templates select="personname" /><xsl:text>\\&#xa;</xsl:text>
-    <xsl:apply-templates select="department" /><xsl:text>\\&#xa;</xsl:text>
-    <xsl:apply-templates select="institution" /><xsl:text>\\&#xa;</xsl:text>
-    <!-- TODO: Replace and test generic email template -->
-    <xsl:text>\href{mailto:</xsl:text>
-    <xsl:value-of select="email" />
-    <xsl:text>}{\nolinkurl{</xsl:text>
-    <xsl:value-of select="email" />
-    <xsl:text>}}&#xa;</xsl:text>
-    <xsl:if test="position() != last()" >
-        <xsl:text>\and&#xa;</xsl:text>
+    <xsl:apply-templates select="personname" />
+    <xsl:if test = "department">
+        <xsl:text>\\&#xa;</xsl:text>
+        <xsl:apply-templates select="department" />
     </xsl:if>
+    <xsl:if test = "institution">
+        <xsl:text>\\&#xa;</xsl:text>
+        <xsl:apply-templates select="institution" />
+    </xsl:if>
+    <xsl:if test = "email">
+        <xsl:text>\\&#xa;</xsl:text>
+        <xsl:apply-templates select="email" />
+    </xsl:if>
+    <xsl:if test="position() != last()" >
+        <xsl:text>&#xa;\and</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Preface, within \frontmatter is handled correctly by LaTeX-->
