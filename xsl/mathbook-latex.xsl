@@ -398,7 +398,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{theorem}</xsl:text>
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="p"/>
+    <xsl:apply-templates />
     <xsl:text>\end{theorem}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
@@ -406,7 +406,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{corollary}</xsl:text>
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="p"/>
+    <xsl:apply-templates />
     <xsl:text>\end{corollary}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
@@ -414,7 +414,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{lemma}</xsl:text>
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="p"/>
+    <xsl:apply-templates />
     <xsl:text>\end{lemma}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
@@ -422,7 +422,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{definition}</xsl:text>
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="p"/>
+    <xsl:apply-templates />
     <xsl:text>\end{definition}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
@@ -430,7 +430,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{example}</xsl:text>
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="p|figure"/>
+    <xsl:apply-templates />
     <xsl:text>\end{example}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
@@ -438,7 +438,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{exercise}</xsl:text>
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="p"/>
+    <xsl:apply-templates />
     <xsl:text>\end{exercise}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
