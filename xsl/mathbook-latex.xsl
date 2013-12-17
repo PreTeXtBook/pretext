@@ -73,6 +73,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>]{article}&#xa;%&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
+    <xsl:call-template name="title-page-info-article" />
     <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
     <xsl:text>\maketitle&#xa;%&#xa;</xsl:text>
     <xsl:apply-templates select="/mathbook/docinfo/abstract" />
@@ -91,6 +92,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>]{book}&#xa;%&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
+    <xsl:call-template name="title-page-info-book" />
     <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
     <xsl:text>\frontmatter&#xa;%&#xa;</xsl:text>
     <xsl:call-template name="half-title" />
@@ -108,7 +110,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- LaTeX preamble is common for both books and articles-->
+<!-- LaTeX preamble is common for both books and articles               -->
+<!-- Except: title info allows an "event" for an article (presentation) -->
 <xsl:template name="latex-preamble">
 <xsl:text>%% Page layout
 \usepackage{geometry}&#xa;</xsl:text>
@@ -216,17 +219,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:if test="$latex.draft='yes'" >
     <xsl:text>\usepackage[letter,cam,center,pdflatex]{crop}&#xa;</xsl:text>
 </xsl:if>
-<!--  -->
-<xsl:text>%%
-%% Convenience macros
-</xsl:text>
+<xsl:text>%%&#xa;</xsl:text>
+<xsl:text>%% Convenience macros&#xa;</xsl:text>
 <xsl:value-of select="/mathbook/docinfo/macros" /><xsl:text>&#xa;</xsl:text>
-<!--  -->
-<xsl:text>%% Title information&#xa;</xsl:text>
-<xsl:text>\title{</xsl:text><xsl:apply-templates select="title/node()" /><xsl:text>}&#xa;</xsl:text>
-<xsl:text>\author{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/author" /><xsl:text>}&#xa;</xsl:text>
-<xsl:text>\date{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/date" /><xsl:text>}&#xa;</xsl:text>
 </xsl:template>
+
+<xsl:template name="title-page-info-book">
+    <xsl:text>%% Title page information for book&#xa;</xsl:text>
+    <xsl:text>\title{</xsl:text><xsl:apply-templates select="title/node()" /><xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\author{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/author" /><xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\date{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/date" /><xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Includes an "event" for presentations -->
+<xsl:template name="title-page-info-article">
+    <xsl:text>%% Title page information for article&#xa;</xsl:text>
+    <xsl:text>\title{</xsl:text>
+    <xsl:apply-templates select="title/node()" />
+    <xsl:if test="/mathbook/docinfo/event">
+        <xsl:if test="title">
+            <xsl:text>\\</xsl:text>
+        </xsl:if>
+        <xsl:apply-templates select="/mathbook/docinfo/event" />
+    </xsl:if>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\author{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/author" /><xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\date{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/date" /><xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- "half-title" is leading page with title only          -->
 <!-- at about 1:2 split, presumes in a book               -->

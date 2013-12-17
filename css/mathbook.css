@@ -20,6 +20,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 /* Like chapter, section headings */
 .headerblock .title,
+.headerblock .event,
 .headerblock .author-name, 
 .preface .title,
 .bibliography .title {
@@ -130,7 +131,8 @@ html body {
         color: #990000;
 }
 
-.article > .heading > .title {
+.article > .heading > .title,
+.article > .heading > .event {
         margin: .8em 0 0 -4%;
         font-weight: bolder;
         font-size: large;

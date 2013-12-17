@@ -63,6 +63,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <div class="article">
                 <div class="heading">
                     <div class="title"><xsl:apply-templates select="title/node()" /></div>
+                    <div class="event"><xsl:apply-templates select="/mathbook/docinfo/event" /></div>
                     <div class="authorgroup"><xsl:apply-templates select="/mathbook/docinfo/author" /></div>
                     <div class="date"><xsl:apply-templates select="/mathbook/docinfo/date" /></div>
                 </div>
