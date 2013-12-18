@@ -460,10 +460,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{proof}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Paragraphs  -->
-<xsl:template match="p">
+<!-- Paragraphs                              -->
+<!-- \par marks the start of a new paragraph -->
+<xsl:template match="p[1]">
     <xsl:apply-templates />
-    <xsl:text>\par&#xa;%&#xa;</xsl:text>
+    <xsl:text>&#xa;%&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="p">
+    <xsl:text>\par </xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
 
