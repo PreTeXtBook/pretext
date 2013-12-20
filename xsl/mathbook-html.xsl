@@ -31,7 +31,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:import href="./mathbook-common.xsl" />
 
 <!-- Intend output for rendering by a web browser -->
-<xsl:output method="html" encoding="utf-8" indent="yes"/>
+<xsl:output method="html" encoding="utf-8"/>
 
 <xsl:template match="/mathbook">
     <xsl:apply-templates />
@@ -54,22 +54,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="filebase">
             <xsl:value-of select="@filebase" />
         </xsl:with-param>
+        <xsl:with-param name="toc">
+            <xsl:value-of select="'no'" />
+        </xsl:with-param>
         <xsl:with-param name="title">
             <xsl:value-of select="title/node()" />
         </xsl:with-param>
+        <xsl:with-param name="subtitle">
+            <xsl:apply-templates select="/mathbook/docinfo/event" />
+            <xsl:apply-templates select="/mathbook/docinfo/date" />
+        </xsl:with-param>
+        <xsl:with-param name="authors">
+            <xsl:apply-templates select="/mathbook/docinfo/author/personname" />
+        </xsl:with-param>
         <xsl:with-param name="content">
-            <div style="display:none;">
-            \(<xsl:value-of select="/mathbook/docinfo/macros" />\)
-            </div>
             <div class="article">
-                <div class="heading">
-                    <div class="title"><xsl:apply-templates select="title/node()" /></div>
-                    <div class="event"><xsl:apply-templates select="/mathbook/docinfo/event" /></div>
-                    <div class="authorgroup"><xsl:apply-templates select="/mathbook/docinfo/author" /></div>
-                    <div class="date"><xsl:apply-templates select="/mathbook/docinfo/date" /></div>
-                </div>
-            <!-- TODO: an abstract here, from docinfo, or like preface? -->
-            <xsl:apply-templates />
+                <!-- TODO: an abstract here, from docinfo, or like preface? -->
+                <xsl:apply-templates />
             </div>
         </xsl:with-param>
     </xsl:call-template>
@@ -82,38 +83,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="filebase">
             <xsl:value-of select="@filebase" />
         </xsl:with-param>
+        <xsl:with-param name="toc">
+            <xsl:value-of select="'yes'" />
+        </xsl:with-param>
         <xsl:with-param name="title">
             <xsl:value-of select="title/node()" />
         </xsl:with-param>
+        <xsl:with-param name="subtitle"></xsl:with-param>
+        <xsl:with-param name="authors">
+            <xsl:apply-templates select="/mathbook/docinfo/author/personname" />
+        </xsl:with-param>
         <xsl:with-param name="content">
-            <div style="display:none;">
-            \(<xsl:value-of select="/mathbook/docinfo/macros" />\)
-            </div>
-            <div class="book" >
-                <div class="heading">
-                    <div class="title"><xsl:apply-templates select="title/node()" /></div>
-                    <div class="authorgroup"><xsl:apply-templates select="/mathbook/docinfo/author" /></div>
-                    <div class="date"><xsl:apply-templates select="/mathbook/docinfo/date" /></div>
-                    <xsl:if test="/mathbook/docinfo/copyright">
-                        <div class="copyright"><xsl:text>&#169; </xsl:text>
-                            <xsl:apply-templates select="/mathbook/docinfo/copyright/year" />
-                            <xsl:text> </xsl:text>
-                            <xsl:apply-templates select="/mathbook/docinfo/copyright/holder" />
-                                <xsl:if test="/mathbook/docinfo/copyright/shortlicense">
-                                    <br />
-                                    <xsl:apply-templates select="/mathbook/docinfo/copyright/shortlicense" />
-                                </xsl:if>
-                        </div>
-                    </xsl:if>
-                </div>
-            </div>
-            <xsl:call-template name="toc" />
+            <!-- Now actual content -->
             <xsl:apply-templates />
         </xsl:with-param>
     </xsl:call-template>
 </xsl:template>
 
 <!-- Table of contents for front page -->
+<!-- TODO: obsolete on better CSS, with side bar navigation> -->
 <!-- TODO: Appendices -->
 <xsl:template name="toc">
     <div class="toc">
@@ -133,6 +121,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
+<!-- TODO: remove this? -->
+<xsl:variable name="toc-list">
+    <h2 class="link"><a href="http://aimath.org/~farmer/htmlbooks/Dec2013/farmer/index.html">Abstract</a></h2>
+    <h2 class="link"><a href="http://aimath.org/~farmer/htmlbooks/Dec2013/farmer/section1.html">Introduction</a></h2>
+</xsl:variable>
 <!-- Author, single one at titlepage -->
 <xsl:template match="author">
     <div class="author-info">
@@ -161,35 +154,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="filebase">
             <xsl:value-of select="@filebase" />
         </xsl:with-param>
+        <xsl:with-param name="toc">
+            <xsl:value-of select="'yes'" />
+        </xsl:with-param>
         <xsl:with-param name="title">
-            <xsl:value-of select="title/node()" />
+            <xsl:value-of select="/mathbook/book/title/node()" />
+        </xsl:with-param>
+        <xsl:with-param name="subtitle"></xsl:with-param>
+        <xsl:with-param name="authors">
+            <xsl:apply-templates select="/mathbook/docinfo/author/personname" />
         </xsl:with-param>
         <xsl:with-param name="content">
-            <div style="display:none;">
-            \(<xsl:value-of select="/mathbook/docinfo/macros" />\)
-            </div>
-            <xsl:call-template name="page-navigation-bar" />
-            <xsl:element name="div">
-                <xsl:attribute name="class">chapter</xsl:attribute>
-                <xsl:element name="div">
-                    <xsl:attribute name="class">heading</xsl:attribute>
-                    <xsl:element name="span">
-                        <xsl:attribute name="class">number</xsl:attribute>
-                        <xsl:apply-templates select="." mode="number" />
-                    </xsl:element>
-                    <xsl:element name="span">
-                        <xsl:attribute name="class">title</xsl:attribute>
-                        <xsl:apply-templates select="title/node()" />
-                    </xsl:element>
-                </xsl:element>
+            <!-- Chapter heading to top of page (not banner) -->
+            <section class="{local-name(.)}">
+                <h1 class="heading">
+                    <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+                    <xsl:text> </xsl:text>
+                    <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+                    <xsl:text> </xsl:text>
+                    <span class="title"><xsl:apply-templates select="title/node()" /></span>
+                </h1>
+                <!-- Now the real content of sections,subsections -->
                 <xsl:apply-templates />
-            </xsl:element>
-            <xsl:call-template name="page-navigation-bar" />
-        </xsl:with-param>
+            </section>
+         </xsl:with-param>
     </xsl:call-template>
 </xsl:template>
 
 <!-- Page Navigation Bar -->
+<!-- OBSOLETE: but useful example -->
 <!-- TODO: General enough for subsections? -->
 <!-- http://stackoverflow.com/questions/12347412/concept-xml-xlst-preceding-sibling-and-ancestor -->
 <!-- http://stackoverflow.com/questions/10367387/are-there-css-alternatives-to-the-deprecated-html-attributes-align-and-valign -->
@@ -218,144 +211,122 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Sectioning -->
 <!-- Sections, subsections, subsubsections          -->
 <!-- TODO: meld in chapters, configurable chunking -->
-<xsl:template match="section|subsection|subsubsection|paragraph">
-    <xsl:variable name="level" select="local-name(.)" />
-    <div class="{$level}">
-        <div class="heading">
-            <span class="number"><xsl:apply-templates select="." mode="number" /></span>
+<xsl:template match="section|subsection|subsubsection|paragraph|subparagraph">
+    <xsl:variable name="xref">
+        <xsl:apply-templates select="." mode="xref-identifier" />
+    </xsl:variable>
+    <section class="{local-name(.)}" id="{$xref}">
+        <h4 class="heading">
+            <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+            <xsl:text> </xsl:text>
+            <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+            <xsl:if test="title">
+                <xsl:text> </xsl:text>
+                <span class="title"><xsl:apply-templates select="title/node()" /></span>
+            </xsl:if>
+        </h4>
+        <xsl:apply-templates />
+    </section>
+</xsl:template>
+
+
+<!-- Theorem-Like, plus associated Proofs                                   -->
+<!-- <statement>s and <proof>s are sequences of paragraphs and other blocks -->
+<xsl:template match="theorem|corollary|lemma|proposition|claim|fact|conjecture|definition">
+    <xsl:variable name="xref">
+        <xsl:apply-templates select="." mode="xref-identifier" />
+    </xsl:variable>
+    <article class="theorem-like" id="{$xref}">
+        <h5>
+        <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+        <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+        <xsl:if test="title">
+            <xsl:text> (</xsl:text>
+            <span class="title"><xsl:apply-templates select="title/node()" /></span>
+            <xsl:text>)</xsl:text>
+        </xsl:if>
+        </h5>
+        <xsl:apply-templates select="statement" />
+    </article>
+    <xsl:apply-templates select="proof" />
+</xsl:template>
+
+<!-- TODO: Does a proof have a title ever? -->
+<xsl:template match="proof">
+    <article class="proof">
+        <h5><xsl:apply-templates select="." mode="type-name" /></h5>
+        <xsl:apply-templates />
+    </article>
+</xsl:template>
+
+<!-- Definitions, Axioms -->
+<!-- Statement, just like a proof, to separate from notation perhaps -->
+<xsl:template match="definition|axiom">
+    <xsl:variable name="xref">
+        <xsl:apply-templates select="." mode="xref-identifier" />
+    </xsl:variable>
+    <article class="theorem-like" id="{$xref}">
+        <h5>
+        <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+        <xsl:text> </xsl:text>
+        <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+        <xsl:if test="title">
             <xsl:text> </xsl:text>
             <span class="title"><xsl:apply-templates select="title/node()" /></span>
-        </div>
-        <xsl:apply-templates />
-    </div>
-</xsl:template>
-
-
-<!-- Theorem-Like and Proofs                                             -->
-<!-- <statement>s and <proof>s are sequences of paragraphs               -->
-<!-- First paragreph includes header of sorts                            -->
-<!-- Text should be moved to CSS as "content-before" and be overideable  -->
-<!-- Theorems are numbered within sections, could be configurable        -->
-
-<!-- Theorems, Proofs, Definitions, Examples -->
-
-<!-- Theorems have statement/proof structure               -->
-<!-- Definitions have notation, which is handled elsewhere -->
-<!-- Examples have no additional structure                 -->
-<!-- TODO: consider optional titles -->
-
-<!-- Break this out into three and add enclosing divs? -->
-<!-- Or use a type? -->
-<xsl:template match="theorem|corollary|lemma|definition">
-    <div class="{local-name()}"> 
-        <xsl:apply-templates select="." mode="label" />
-        <div class="statement">
-            <xsl:apply-templates select="statement" />
-        </div>
-        <xsl:if test="proof">
-            <div class="proof">
-                <xsl:apply-templates select="proof" />
-            </div>
         </xsl:if>
-    </div>
+        </h5>
+        <xsl:apply-templates select="statement" />
+    </article>
 </xsl:template>
 
-
-<xsl:template match="example">
-    <div class="example">
-        <xsl:apply-templates select="." mode="label" />
-        <xsl:apply-templates />
-    </div>
-</xsl:template>
-
-<!-- Ignore solutions for now, could be knowls -->
-<xsl:template match="exercise">
-    <div class="exercise">
-        <xsl:apply-templates select="." mode="label" />
-        <xsl:apply-templates />
-    </div>
-</xsl:template>
-<xsl:template match="exercise/solution"></xsl:template>
-
-<!--Decide how to handle "Theorem 4.3 (A result of Beezer)"
-as a lead-in to paragraph one, or a title div
-preferably with CSS so can adjust style, language-->
-<!-- And consolidate numbering -->
-<!-- CSS: div for title, span for paragraph lead-in?  visible, invisible -->
-
-
-
-<xsl:template match="theorem/statement/p[1]">
-    <p>
-        <span class="theorem-header">
-        <xsl:apply-templates select="../.." mode="type-name" />
-        <xsl:text> </xsl:text>
-        <xsl:apply-templates select="../.." mode="number" />
-        <xsl:text> </xsl:text>
-        </span>
-        <xsl:apply-templates />
-    </p>
-</xsl:template>
-
-<xsl:template match="lemma/statement/p[1]">
-    <p>
-        <span class="lemma-header">
-        <xsl:apply-templates select="../.." mode="type-name" />
-        <xsl:text> </xsl:text>
-        <xsl:apply-templates select="../.." mode="number" />
-        <xsl:text> </xsl:text>
-        </span>
-        <xsl:apply-templates />
-    </p>
-</xsl:template>
-
-<xsl:template match="corollary/statement/p[1]">
-    <p>
-        <span class="corollary-header">
-        <xsl:apply-templates select="../.." mode="type-name" />
-        <xsl:text> </xsl:text>
-        <xsl:apply-templates select="../.." mode="number" />
-        <xsl:text> </xsl:text>
-        </span>
-        <xsl:apply-templates />
-    </p>
-</xsl:template>
-
-<!-- TODO:  Sync, or adjust, the following -->
-
-
-<xsl:template match="definition/statement/p[1]">
-<p><span class="definition-header">Definition <xsl:apply-templates select="../.." mode="number" /><xsl:text> </xsl:text></span><xsl:apply-templates /></p>
-</xsl:template>
-
-<xsl:template match="example/p[1]">
-    <p>
-    <span class="example-header">Example <xsl:apply-templates select=".." mode="number" />
-    <xsl:text> </xsl:text>
-    </span>
+<!-- Examples, Remarks -->
+<!-- Just a sequence of paragraphs, etc -->
+<xsl:template match="example|remark">
+    <xsl:variable name="xref">
+        <xsl:apply-templates select="." mode="xref-identifier" />
+    </xsl:variable>
+    <article class="example-like" id="{$xref}">
+        <xsl:element name="h5">
+            <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+            <xsl:text> </xsl:text>
+            <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+            <xsl:if test="title">
+                <xsl:text> </xsl:text>
+                <span class="title"><xsl:apply-templates select="title/node()" /></span>
+            </xsl:if>
+        </xsl:element>
     <xsl:apply-templates />
-    </p>
+    </article>
 </xsl:template>
 
-<xsl:template match="exercise/statement/p[1]">
-    <p>
-        <span class="exercise-header">
-        <xsl:text>Exercise </xsl:text>
-        <xsl:apply-templates select="../.." mode="number" />
+<!-- Solutions are include by default switch, could be knowls -->
+<xsl:template match="exercise">
+    <xsl:variable name="xref">
+        <xsl:apply-templates select="." mode="xref-identifier" />
+    </xsl:variable>
+    <article class="exercise-like" id="{$xref}">
+        <h5>
+        <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
         <xsl:text> </xsl:text>
-        </span>
-        <xsl:apply-templates />
-    </p>
+        <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+        <xsl:if test="title">
+            <xsl:text> </xsl:text>
+            <span class="title"><xsl:apply-templates select="title/node()" /></span>
+        </xsl:if>
+        </h5>
+        <xsl:apply-templates select="statement" />
+    </article>
+    <xsl:apply-templates select="solution" />
 </xsl:template>
 
+<xsl:template match="exercise/solution">
+    <xsl:apply-templates select="." mode="type-name" />
+    <xsl:text>. </xsl:text>
+    <xsl:apply-templates />
+</xsl:template>
 
 <xsl:template match="notation">
 <p>Sample notation (in a master list eventually): \(<xsl:value-of select="." />\)</p>
-</xsl:template>
-
-<!-- First paragraph gets a leader -->
-<xsl:template match="proof/p[1]">
-<p><span class="proof-header">Proof<xsl:text> </xsl:text></span><xsl:apply-templates /></p>
 </xsl:template>
 
 <!-- Wrap generic paragraphs in p tag -->
@@ -1067,7 +1038,10 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!--     * content (exclusive of banners, etc) -->
 <xsl:template name="page-wrapper">
     <xsl:param name="filebase" />
+    <xsl:param name="toc" />
     <xsl:param name="title" />
+    <xsl:param name="subtitle" />
+    <xsl:param name="authors" />
     <xsl:param name="content" />
     <exsl:document href="{$filebase}.html" method="html">
     <!-- Need to be careful for format of this initial string     -->
@@ -1076,18 +1050,62 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <head>
             <xsl:call-template name="converter-blurb" />
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <title><xsl:value-of select="$title" /></title>
+            <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
             <xsl:call-template name="mathjax" />
             <xsl:call-template name="sagecell" />
             <xsl:call-template name="knowl" />
+            <xsl:call-template name="mathbook-js" />
             <xsl:call-template name="fonts" />
-            <link rel="stylesheet" type="text/css" href="mathbook.css" />
+            <xsl:call-template name="css" />
         </head>
-        <body>
-        <xsl:copy-of select="$content" />
+        <xsl:element name="body">
+            <xsl:if test="$toc='yes'">
+                <xsl:attribute name="class">has-toc</xsl:attribute>
+            </xsl:if>
+            <!-- Put MathJax macros onto page -->
+            <!-- TOD: make this a named template -->
+            <xsl:if test="/mathbook/docinfo/macros">
+                <div style="display:none;">
+                <xsl:text>\(</xsl:text>
+                <xsl:value-of select="/mathbook/docinfo/macros" />
+                <xsl:text>\)</xsl:text>
+                </div>
+            </xsl:if>
+            <header id="masthead">
+                <div class="banner">
+                        <div class="container">
+                            <!-- TODO: configure this in docinfo -->
+                            <a id="logo-link" href="/path/to/front/page">
+                                <img src="cover-84x120.png" />
+                            </a>
+                            <div class="title-container">
+                                <h1 id="title">
+                                    <span class="title"><xsl:value-of select="$title" /></span>
+                                    <xsl:if test="normalize-space($subtitle)">
+                                        <p id="subtitle">
+                                            <span class="subtitle">
+                                                <xsl:value-of select="$subtitle" />
+                                            </span>
+                                        </p>
+                                    </xsl:if>
+                                </h1>
+                                <p id="byline"><span class="byline"><xsl:value-of select="$authors" /></span></p>
+                            </div>
+                        </div>
+                </div>
+                <xsl:if test="$toc='yes'">
+                    <xsl:call-template name="navbar" />
+                </xsl:if>
+            </header>
+            <div class="page">
+                <main class="main">
+                    <div id="content">
+                        <xsl:copy-of select="$content" />
+                    </div>
+                </main>
+            </div>
         <xsl:apply-templates select="$docinfo/analytics" />
-        </body>
+        </xsl:element>
     </html>
     </exsl:document>
 </xsl:template>
@@ -1105,13 +1123,46 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <xsl:comment>*                                    *</xsl:comment><xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Table of Contents infrastructure, per page -->
+<xsl:template name="navbar">
+    <div id="navbar">
+        <div class="container">
+            <div id="toc-navbar-item" class="navbar-item">
+                <h2 class="navbar-item-text icon-navicon-round ">Table of Contents</h2>
+                <nav id="toc">
+                <xsl:for-each select="/mathbook/book/chapter|/mathbook/book/appendix">
+                    <xsl:variable name="fn">
+                        <xsl:value-of select="@filebase" />
+                        <xsl:text>.html</xsl:text>
+                    </xsl:variable>
+                    <h2 class="link"><a href="{$fn}">
+                    <xsl:apply-templates select="title/node()" /></a></h2>
+                    <ul>
+                    <xsl:for-each select="section">
+                        <xsl:variable name="xref">
+                            <xsl:apply-templates select="." mode="xref-identifier" />
+                        </xsl:variable>
+                        <li><a href="{$fn}#{$xref}" data-scroll="{$xref}">
+                        <xsl:apply-templates select="title/node()" /></a></li>
+                    </xsl:for-each>
+                    </ul>
+                </xsl:for-each>
+                </nav>
+            </div>
+        </div>
+    </div>
+</xsl:template>
+
+
 <!-- MathJax header                                     -->
 <!-- XML manages equation numbers                       -->
 <!-- Config MathJax to make link targets we can predict -->
 <xsl:template name="mathjax">
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-    tex2jax: {inlineMath: [['\\(','\\)']]},
+    tex2jax: {
+        inlineMath: [['\\(','\\)']]
+    },
     TeX: {
         extensions: ["AMSmath.js", "AMSsymbols.js"],
         equationNumbers: { autoNumber: "none",
@@ -1119,7 +1170,10 @@ MathJax.Hub.Config({
                            formatID: function (n) {return String(n).replace(/[:'"&lt;&gt;&amp;]/g,"")},
                          },
         TagSide: "right",
-        TagIndent: ".8em"
+        TagIndent: ".8em",
+    },
+    "HTML-CSS": {
+        scale: 88,
     },
 });
 </script>
@@ -1147,12 +1201,26 @@ $(function () {
 <script type="text/javascript" src="http://aimath.org/knowl.js"></script>
 </xsl:template>
 
+<!-- Mathbook Javasript header -->
+<xsl:template name="mathbook-js">
+    <script src="http://mathbook.staging.michaelxdubois.com/master/js/ScrollingNav.js"></script>
+    <script src="http://mathbook.staging.michaelxdubois.com/master/js/Mathbook.js"></script>
+</xsl:template>
+
 <!-- Font header -->
 <!-- Google Fonts -->
-<!-- Text: Istok Web font, regular and italic (400), bold (700) -->
+<!-- Text: Open Sans by default (was: Istok Web font, regular and italic (400), bold (700)) -->
 <!-- Code: Source Code Pro, regular (400) -->
 <xsl:template name="fonts">
-    <link href='http://fonts.googleapis.com/css?family=Istok+Web:400,400italic,700|Source+Code+Pro:400' rel='stylesheet' type='text/css' />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic|Source+Code+Pro:400' rel='stylesheet' type='text/css' />
+</xsl:template>
+
+<!-- CSS header -->
+<xsl:template name="css">
+    <!-- #1 to #5 for different color schemes -->
+    <link href="http://mathbook.staging.michaelxdubois.com/master/stylesheets/mathbook-modern-3.css" rel="stylesheet" type="text/css" />
+    <link href="http://mathbook.staging.michaelxdubois.com/master/stylesheets/icons.css" rel="stylesheet" type="text/css" />
+    <link href="http://aimath.org/jmm2014/q1judson/add-on.css" rel="stylesheet" type="text/css" />
 </xsl:template>
 
 <!-- Analytics Footers -->
