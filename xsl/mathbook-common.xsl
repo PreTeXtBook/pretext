@@ -377,9 +377,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Condition on articles, and then articles with sections -->
 <!-- TODO: Number exercises in an exercise section properly, these are sporadic in text -->
 <xsl:template match="theorem|corollary|lemma|proposition|claim|fact|conjecture|definition|example|exercise" mode="number">
-    <xsl:number from="book" level="any" count="chapter" />
-    <xsl:text>.</xsl:text>
-    <xsl:number from="chapter" level="any" count="theorem|corollary|lemma|definition|example|exercise" />
+    <xsl:choose>
+        <xsl:when test="/mathbook/book">
+            <xsl:if test="/mathbook/book/chapter">
+                <xsl:number from="book" level="any" count="chapter" />
+                <xsl:text>.</xsl:text>
+            </xsl:if>
+                <xsl:number from="chapter" level="any" count="theorem|corollary|lemma|proposition|claim|fact|conjecture|definition|example|exercise" />
+        </xsl:when>
+        <xsl:when test="/mathbook/article">
+            <xsl:if test="/mathbook/article/section">
+                <xsl:number from="article" level="any" count="section" />
+                <xsl:text>.</xsl:text>
+            </xsl:if>
+                <xsl:number from="section" level="any" count="theorem|corollary|lemma|proposition|claim|fact|conjecture|definition|example|exercise" />
+        </xsl:when>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Footnotes  x -->
