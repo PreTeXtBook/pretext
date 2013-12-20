@@ -32,19 +32,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- So output methods here are just text -->
 <xsl:output method="text" />
 
+<!-- This template translates an element name to an upper-case language-equivalent               -->
+<!-- Sometimes must call this, but it is usually better to apply template to the node            -->
+<!-- with mode="type-name", which exercises this routine, for whatever language file is imported -->
 <xsl:template name="type-name">
     <xsl:param name="generic" />
     <xsl:choose>
-        <xsl:when test="$generic='theorem'">     <xsl:text>Theorem</xsl:text></xsl:when>
-        <xsl:when test="$generic='corollary'">   <xsl:text>Corollary</xsl:text></xsl:when>
-        <xsl:when test="$generic='lemma'">       <xsl:text>Lemma</xsl:text></xsl:when>
-        <xsl:when test="$generic='proposition'"> <xsl:text>Proposition</xsl:text></xsl:when>
-        <xsl:when test="$generic='claim'">       <xsl:text>Claim</xsl:text></xsl:when>
-        <xsl:when test="$generic='fact'">        <xsl:text>Fact</xsl:text></xsl:when>
-        <xsl:when test="$generic='conjecture'">  <xsl:text>Conjecture</xsl:text></xsl:when>
+        <xsl:when test="$generic='theorem'">       <xsl:text>Theorem</xsl:text></xsl:when>
+        <xsl:when test="$generic='corollary'">     <xsl:text>Corollary</xsl:text></xsl:when>
+        <xsl:when test="$generic='lemma'">         <xsl:text>Lemma</xsl:text></xsl:when>
+        <xsl:when test="$generic='proposition'">   <xsl:text>Proposition</xsl:text></xsl:when>
+        <xsl:when test="$generic='claim'">         <xsl:text>Claim</xsl:text></xsl:when>
+        <xsl:when test="$generic='fact'">          <xsl:text>Fact</xsl:text></xsl:when>
+        <xsl:when test="$generic='conjecture'">    <xsl:text>Conjecture</xsl:text></xsl:when>
+        <xsl:when test="$generic='proof'">         <xsl:text>Proof</xsl:text></xsl:when>
         <!-- -->
-        <xsl:when test="$generic='definition'">  <xsl:text>Definition</xsl:text></xsl:when>
-        <xsl:when test="$generic='section'">     <xsl:text>Section</xsl:text></xsl:when>
+        <xsl:when test="$generic='chapter'">       <xsl:text>Chapter</xsl:text></xsl:when>
+        <xsl:when test="$generic='appendix'">      <xsl:text>Appendix</xsl:text></xsl:when>
+        <xsl:when test="$generic='section'">       <xsl:text>Section</xsl:text></xsl:when>
+        <xsl:when test="$generic='subsection'">    <xsl:text>Subsection</xsl:text></xsl:when>
+        <xsl:when test="$generic='subsubsection'"> <xsl:text>Subsubsection</xsl:text></xsl:when>
+        <xsl:when test="$generic='paragraph'">     <xsl:text>Paragraph</xsl:text></xsl:when>
+        <xsl:when test="$generic='subparagraph'">  <xsl:text>Subparagraph</xsl:text></xsl:when>
+        <!-- -->
+        <xsl:when test="$generic='definition'">    <xsl:text>Definition</xsl:text></xsl:when>
+        <xsl:when test="$generic='axiom'">         <xsl:text>Axiom</xsl:text></xsl:when>
         <xsl:otherwise>
             <xsl:message terminate="no">Warning: Unable to translate <xsl:value-of select="$generic" />.&#xa;</xsl:message>
         </xsl:otherwise>
@@ -52,10 +64,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!--
-<xsl:strip-space elements="chapter appendix subsection subsubsection paragraph subparagraph" />
 <xsl:strip-space elements="abstract preface" />
-<xsl:strip-space elements="proof" />
-<xsl:strip-space elements="axiom" />
 <xsl:strip-space elements="remark example exercise hint solution" />
 <xsl:strip-space elements="figure" />
 <xsl:strip-space elements="table" />
