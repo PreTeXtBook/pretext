@@ -831,12 +831,66 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>} % end box resizing&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
-<!-- TODO: Implement tables -->
-<!-- for openers, see http://stackoverflow.com/questions/19716449/converting-xhtml-table-to-latex-using-xslt -->
-<!-- Tables -->
-<!-- Replicate HTML5 model, but burrow into content for formatted entries -->
-<xsl:template match="table">
+<!--<xsl:template match="table">
     <xsl:text>\centerline{\textbf{A table belongs here, but conversion is not yet implemented}}&#xa;</xsl:text>
+</xsl:template>-->
+<!-- Tables -->
+<!-- Follow XML Exchange Table Model" which is a subset of the failed "CALS Table Model" -->
+<!-- Should be able to replace this by extant XSLT for this conversion -->
+<!-- See http://stackoverflow.com/questions/19716449/converting-xhtml-table-to-latex-using-xslt -->
+<xsl:template match="table">
+    <xsl:text>\begin{table}[thb]\begin{center}&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:apply-templates />
+    <xsl:text>\end{center}\end{table}&#xa;</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="table/caption">
+    <xsl:text>\caption{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Unclear how to handle *multiple* tgroups in latex -->
+<xsl:template match="tgroup">
+    <xsl:text>\begin{tabular}</xsl:text>
+    <xsl:text>{*{</xsl:text>
+    <xsl:value-of select="@cols" />
+    <xsl:text>}{</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@align='left'">  <xsl:text>l</xsl:text></xsl:when>
+        <xsl:when test="@align='center'"><xsl:text>c</xsl:text></xsl:when>
+        <xsl:when test="@align='right'"> <xsl:text>r</xsl:text></xsl:when>
+        <xsl:otherwise>                  <xsl:text>c</xsl:text></xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>}}&#xa;</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>\end{tabular}&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="thead">
+    <xsl:text>\hline\hline{}</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>\hline\hline{}</xsl:text>
+</xsl:template>
+
+<xsl:template match="tbody">
+    <xsl:apply-templates />
+</xsl:template>
+
+<xsl:template match="row">
+    <xsl:apply-templates />
+    <xsl:text>\\&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="entry[1]">
+    <xsl:apply-templates />
+</xsl:template>
+
+<xsl:template match="entry">
+    <xsl:text>&amp;</xsl:text>
+    <xsl:apply-templates />
 </xsl:template>
 
 

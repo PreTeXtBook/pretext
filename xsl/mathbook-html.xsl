@@ -370,7 +370,7 @@ preferably with CSS so can adjust style, language-->
     </xsl:copy>
 </xsl:template>
 
-<!-- Figures and Captions -->
+<!-- Figures and their captions -->
 <xsl:template match="figure">
     <div class="figure">
         <xsl:apply-templates select="image|table|p" />
@@ -378,13 +378,17 @@ preferably with CSS so can adjust style, language-->
     </div>
 </xsl:template>
 
-<xsl:template match="caption">
-    <div class="caption">
-        <xsl:text>Figure </xsl:text>
-        <xsl:apply-templates select="." mode="number"/>
-        <xsl:text>: </xsl:text><xsl:apply-templates />
+<!-- Caption of a figure                           -->
+<!-- All the relevant information is in the parent -->
+<xsl:template match="figure/caption">
+    <figcaption>
+        <xsl:apply-templates select=".." mode="type-name"/>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select=".." mode="number"/>
+        <xsl:text>: </xsl:text>
+        <xsl:apply-templates />
         <xsl:apply-templates select=".." mode="label" />
-    </div>
+    </figcaption>
 </xsl:template>
 
 <!-- Images -->
@@ -401,11 +405,30 @@ preferably with CSS so can adjust style, language-->
 </xsl:template>
 
 <!-- Tables -->
-<!-- Replicate HTML5 model, but burrow into content for formatted entries -->
+<!-- Follow XML Exchange Table Model" which is a subset of the failed "CALS Table Model" -->
+<!-- Should be able to replace this by extant XSLT for this conversion -->
 <xsl:template match="table"><table class="plain-table"><xsl:apply-templates /></table></xsl:template>
+<xsl:template match="tgroup"><xsl:apply-templates /></xsl:template>
 <xsl:template match="thead"><thead><xsl:apply-templates /></thead></xsl:template>
-<xsl:template match="tr"><tr><xsl:apply-templates /></tr></xsl:template>
-<xsl:template match="td"><td><xsl:apply-templates /></td></xsl:template>
+<xsl:template match="tbody"><tbody><xsl:apply-templates /></tbody></xsl:template>
+<xsl:template match="row"><tr><xsl:apply-templates /></tr></xsl:template>
+<!-- With a parent axis, get overrides easily? -->
+<xsl:template match="thead/row/entry"><th align="{../../../@align}"><xsl:apply-templates /></th></xsl:template>
+<xsl:template match="tbody/row/entry"><td align="{../../../@align}"><xsl:apply-templates /></td></xsl:template>
+
+<!-- Caption of a table                            -->
+<!-- All the relevant information is in the parent -->
+<xsl:template match="table/caption">
+    <caption>
+        <xsl:apply-templates select=".." mode="type-name"/>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select=".." mode="number"/>
+        <xsl:text>: </xsl:text>
+        <xsl:apply-templates />
+        <xsl:apply-templates select=".." mode="label" />
+    </caption>
+</xsl:template>
+
 
 
 <!-- Cross-References -->

@@ -47,7 +47,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="ul ol dl" />
 <xsl:strip-space elements="md mdn" />
 <xsl:strip-space elements="sage figure" />
-<xsl:strip-space elements="table thead tr td" />
+<xsl:strip-space elements="table tgroup thead tbody row" />
 
 <!-- Mathematics (LaTeX/MathJax)                                                 -->
 <!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
@@ -367,10 +367,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:number level="single" count="appendix" format="A"/>
 </xsl:template>
 
-<!-- Figures:  chapter.x                   -->
-<!-- These float, so number independently? -->
-<xsl:template match="caption" mode="number">
+<!-- Figures & Tables:  chapter.x                       -->
+<!-- These float, so number independent of theorems (?) -->
+<!-- But separate from each other -->
+<xsl:template match="figure" mode="number">
     <xsl:number level="multiple" count="chapter|figure" />
+</xsl:template>
+<xsl:template match="table" mode="number">
+    <xsl:number level="multiple" count="chapter|table" />
 </xsl:template>
 
 <!-- Two-level numbering for book with chapters and theorem-like environments, plus -->

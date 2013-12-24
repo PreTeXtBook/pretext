@@ -57,6 +57,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- -->
         <xsl:when test="$generic='definition'">    <xsl:text>Definition</xsl:text></xsl:when>
         <xsl:when test="$generic='axiom'">         <xsl:text>Axiom</xsl:text></xsl:when>
+        <!-- -->
+        <xsl:when test="$generic='figure'">        <xsl:text>Figure</xsl:text></xsl:when>
+        <xsl:when test="$generic='table'">         <xsl:text>Table</xsl:text></xsl:when>
         <xsl:otherwise>
             <xsl:message terminate="no">Warning: Unable to translate <xsl:value-of select="$generic" />.&#xa;</xsl:message>
         </xsl:otherwise>
@@ -66,8 +69,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--
 <xsl:strip-space elements="abstract preface" />
 <xsl:strip-space elements="remark example exercise hint solution" />
-<xsl:strip-space elements="figure" />
-<xsl:strip-space elements="table" />
 -->
 
 </xsl:stylesheet>
