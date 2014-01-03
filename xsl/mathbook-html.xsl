@@ -980,6 +980,12 @@ preferably with CSS so can adjust style, language-->
     </script>
     </div>
 </xsl:template>
+<!-- Bare sage element means an empty cell to scribble in -->
+<xsl:template match="sage[not(input) and not(output)]">
+    <div class="sage-compute"><script type="text/x-sage">
+    <xsl:text>&#xa;</xsl:text>
+    </script></div>
+</xsl:template>
 
 <!--                         -->
 <!-- Web Page Infrastructure -->

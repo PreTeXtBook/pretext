@@ -103,6 +103,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
    <xsl:param name="pad" default="''"/>
    <xsl:variable name="first-char" select="substring($text, 1, 1)" />
    <xsl:choose>
+        <!-- Possibly nothing, return just final carriage return -->
+        <xsl:when test="$first-char=''">
+            <xsl:text>&#xA;</xsl:text>
+        </xsl:when>
         <xsl:when test="$first-char='&#xA;'">
             <xsl:call-template name="trim-start-lines">
                 <xsl:with-param name="text" select="substring($text, 2)" />
