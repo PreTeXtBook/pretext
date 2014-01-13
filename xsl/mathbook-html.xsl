@@ -599,7 +599,7 @@ preferably with CSS so can adjust style, language-->
 
 <!-- Defined terms (bold) -->
 <xsl:template match="term">
-    <b class="term"><xsl:apply-templates /></b>
+    <em class="terminology"><xsl:apply-templates /></em>
 </xsl:template>
 
 <!-- Emphasis -->
