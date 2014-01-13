@@ -391,11 +391,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="statement" />
 </xsl:template>
 
-<!-- Ignore solutions to exercises -->
+<!-- Include solutions to exercises by default value of switch-->
 <xsl:template match="exercise">
-    <xsl:apply-templates select="statement" />
+    <xsl:text>\begin{exercise}</xsl:text>
+    <xsl:apply-templates select=".." mode="label"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="statement"/>
+    <xsl:apply-templates select="solution"/>
+    <xsl:text>\end{exercise}&#xa;%&#xa;</xsl:text>
 </xsl:template>
-<xsl:template match="exercise/solution"></xsl:template>
+
+<xsl:template match="exercise/solution">
+    <xsl:if test="$solutions.included='yes'">
+        <xsl:text>\par\smallskip\noindent{}\textbf{</xsl:text>
+        <xsl:apply-templates select="." mode="type-name" />
+        <xsl:text>.}\ \ {}</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:apply-templates />
+    </xsl:if>
+</xsl:template>
 
 <!-- Reorg?, consolidate following with local-name() -->
 
@@ -438,15 +452,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
     <xsl:text>\end{example}&#xa;%&#xa;</xsl:text>
 </xsl:template>
-
-<xsl:template match="exercise/statement">
-    <xsl:text>\begin{exercise}</xsl:text>
-    <xsl:apply-templates select=".." mode="label"/>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\end{exercise}&#xa;%&#xa;</xsl:text>
-</xsl:template>
-
 
 <xsl:template match="notation">
     <xsl:text>Sample notation (in a master list eventually): $</xsl:text>

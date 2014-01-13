@@ -34,6 +34,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- So output methods here are just text -->
 <xsl:output method="text" />
 
+<!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
+<!-- Or make a thin customization layer and use 'select' to provide overrides -->
+<!-- These here are independent of the output format as well                  -->
+<!--  -->
+<!-- Solutions to exercises is configurable, eg text versus solution manual -->
+<!-- Default is to show them, a production version can switch them off      -->
+<xsl:param name="solutions.included" select="'yes'" />
+
 <!-- Strip whitespace text nodes from container elements                    -->
 <!-- Improve source readability with whitespace control in text output mode -->
 <!-- Newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
