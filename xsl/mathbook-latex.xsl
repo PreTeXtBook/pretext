@@ -938,6 +938,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{lstlisting}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Geogebra                                     -->
+<!-- Stock warning, or possible figure processing -->
+<xsl:template match="geogebra-applet[not(ggbBase64)]">
+    <xsl:text>\par\smallskip\centerline{Blank GeoGebra canvas is here in Web version.}\smallskip</xsl:text>
+</xsl:template>
+
+<xsl:template match="geogebra-applet[ggbBase64]">
+    <xsl:choose>
+        <xsl:when test="figure">
+            <xsl:apply-templates select="figure" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\par\smallskip\centerline{A GeoGebra demonstration is here in Web version.}\smallskip</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
 
 <!-- Figures and Captions -->
 <!-- http://tex.stackexchange.com/questions/2275/keeping-tables-figures-close-to-where-they-are-mentioned -->
