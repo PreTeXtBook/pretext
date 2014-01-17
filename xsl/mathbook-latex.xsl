@@ -877,7 +877,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="thead">
     <xsl:text>\hline\hline{}</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\hline\hline{}</xsl:text>
+    <xsl:text>\\\hline\hline{}</xsl:text>
 </xsl:template>
 
 <xsl:template match="tbody">
