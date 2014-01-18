@@ -430,6 +430,18 @@
 
 
         <section>
+            <title>Video</title>
+
+            <p>Embedded videos can make sense for a web version of your document. This is a video promoting the University of Puget Sound to potential new students.</p>
+
+            <figure>
+                <video href="images/ups-visitor-guide.mp4" />
+                <caption>University of Puget Sound Promotional Video</caption>
+            </figure>
+
+        </section>
+
+        <section>
             <title>Exercises</title>
 
             <exercise>

@@ -338,8 +338,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Figures and their captions -->
 <xsl:template match="figure">
     <div class="figure">
-        <xsl:apply-templates select="image|table|p" />
-        <xsl:apply-templates select="caption" />
+        <xsl:apply-templates />
     </div>
 </xsl:template>
 
@@ -375,6 +374,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <p style="margin:auto">&lt;Asymptote graphics migration to HTML not implemented, but is planned&gt;</p>
 </xsl:template>
 
+<!-- Video -->
+<!-- Embed FlowPlayer to play mp4 format                                    -->
+<!-- 2014/03/07:  http://flowplayer.org/docs/setup.html                     -->
+<!-- TODO: use for-each and extension matching to preferentially use WebM format -->
+<!-- <source type="video/mp4" src="http://mydomain.com/path/to/intro.webm">     -->
+<xsl:template match="video">
+    <div class="flowplayer" style="width:200px">
+        <xsl:text disable-output-escaping='yes'>&lt;video controls>&#xa;</xsl:text>
+        <source type="video/webm" src="{@source}" />
+        <xsl:text disable-output-escaping='yes'>&lt;/video>&#xa;</xsl:text>
+    </div>
+</xsl:template>
 
 <!-- Tables -->
 <!-- Follow "XML Exchange Table Model"           -->
@@ -1106,6 +1117,10 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:call-template name="mathbook-js" />
             <xsl:call-template name="fonts" />
             <xsl:call-template name="css" />
+            <xsl:if test="//video">
+                <xsl:call-template name="video" />
+            </xsl:if>
+            <link rel="stylesheet" type="text/css" href="mathbook.css" />
         </head>
         <xsl:element name="body">
             <xsl:if test="$toc='yes'">
@@ -1274,6 +1289,7 @@ $(function () {
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script> 
 <link href="http://aimath.org/knowlstyle.css" rel="stylesheet" type="text/css" /> 
 <script type="text/javascript" src="http://aimath.org/knowl.js"></script>
+
 </xsl:template>
 
 <!-- Mathbook Javasript header -->
@@ -1298,6 +1314,18 @@ $(function () {
     <link href="http://aimath.org/mathbook/add-on.css" rel="stylesheet" type="text/css" />
 </xsl:template>
 
+<!-- Video header                    -->
+<!-- Flowplayer setup                -->
+<!-- assumes JQuery loaded elsewhere -->
+<!-- 2014/03/07: http://flowplayer.org/docs/setup.html#global-configuration -->
+<xsl:template name="video">
+    <link rel="stylesheet" href="//releases.flowplayer.org/5.4.6/skin/minimalist.css" />
+    <script src="//releases.flowplayer.org/5.4.6/flowplayer.min.js"></script>
+    <script>flowplayer.conf = {
+    };</script>
+
+</xsl:template>
+
 <!-- LaTeX Macros -->
 <!-- In a hidden div, for near the top of the page -->
 <xsl:template name="latex-macros">
@@ -1319,9 +1347,6 @@ $(function () {
         </a>
     </xsl:if>
 </xsl:template>
-
-
-
 
 <!-- Analytics Footers -->
 
