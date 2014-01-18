@@ -201,6 +201,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\usetikzlibrary{backgrounds}&#xa;</xsl:text>
     <xsl:text>\usetikzlibrary{arrows,matrix}&#xa;</xsl:text>
 </xsl:if>
+<xsl:if test="//asymptote">
+    <xsl:text>%% Asymptote graphics&#xa;</xsl:text>
+    <xsl:text>\usepackage[inline]{asymptote}&#xa;</xsl:text>
+</xsl:if>
 <xsl:text>%% Hyperlinking in PDFs, all links solid and blue
 \usepackage[pdftex]{hyperref}
 \hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
@@ -834,6 +838,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
     <xsl:text>\end{tikzpicture}&#xa;</xsl:text>
     <xsl:text>} % end box resizing&#xa;%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Asymptote graphics language -->
+<!-- preliminary (cursory) support -->
+<!-- http://asymptote.sourceforge.net/doc/LaTeX-usage.html -->
+<xsl:template match="asymptote">
+    <xsl:text>\begin{asy}&#xa;</xsl:text>
+    <xsl:call-template name="sanitize-sage">
+        <xsl:with-param name="raw-sage-code" select="." />
+    </xsl:call-template>
+    <xsl:text>\end{asy}&#xa;</xsl:text>
 </xsl:template>
 
 <!--<xsl:template match="table">

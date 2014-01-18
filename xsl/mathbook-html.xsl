@@ -404,6 +404,13 @@ preferably with CSS so can adjust style, language-->
 </xsl:element>
 </xsl:template>
 
+<!-- Asymptote graphics language -->
+<!-- unimplemented               -->
+<xsl:template match="asymptote">
+    <p style="margin:auto">&lt;Asymptote graphics migration to HTML not implemented, but is planned&gt;</p>
+</xsl:template>
+
+
 <!-- Tables -->
 <!-- Follow XML Exchange Table Model" which is a subset of the failed "CALS Table Model" -->
 <!-- Should be able to replace this by extant XSLT for this conversion -->
