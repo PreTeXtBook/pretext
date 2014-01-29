@@ -988,9 +988,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: Get number of last bibitem node for width parameter -->
 <xsl:template match="bibliography">
     <xsl:text>\begin{thebibliography}{99}&#xa;%&#xa;</xsl:text>
-    <xsl:apply-templates select="book|article" />
+    <xsl:apply-templates select="book|article|biblio" />
     <xsl:text>\end{thebibliography}&#xa;%&#xa;</xsl:text>
 </xsl:template>
+
+<xsl:template match="biblio[@type='raw']">
+    <xsl:text>\bibitem{</xsl:text>
+    <xsl:value-of select="@xml:id" />
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>&#xa;%&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="biblio[@type='raw']/title">
+    <xsl:text>\textit{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- Trash eventually, but here allows next to have precedence -->
+<xsl:template match="bibliography//volume">
+    <xsl:text>, </xsl:text>
+    <xsl:text> (</xsl:text>
+    <xsl:value-of select="." />
+    <xsl:text>)</xsl:text>
+    <xsl:if test="../number">
+        <xsl:text> no. </xsl:text>
+        <xsl:value-of select="../number" />
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="biblio[@type='raw']/volume">
+    <xsl:text>\textbf{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+
 
 <!-- Individual bibliography entry leader-->
 <xsl:template name="bibleader">
@@ -1056,16 +1090,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>)</xsl:text>
 </xsl:template>
 
-<xsl:template match="bibliography//volume">
-    <xsl:text>, </xsl:text>
-    <xsl:text> (</xsl:text>
-    <xsl:value-of select="." />
-    <xsl:text>)</xsl:text>
-    <xsl:if test="../number">
-        <xsl:text> no. </xsl:text>
-        <xsl:value-of select="../number" />
-    </xsl:if>
-</xsl:template>
 
 <xsl:template match="bibliography//pages">
     <xsl:text>, </xsl:text>

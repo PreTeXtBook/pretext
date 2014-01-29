@@ -399,6 +399,8 @@
 
         <bibliography>
 
+<biblio type="raw" xml:id="bib-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>, <volume>55</volume></biblio>
+
             <book xml:id="bib-fcla">
                 <author>Robert A. Beezer</author>
                 <title>A First Course in Linear Algebra</title>
