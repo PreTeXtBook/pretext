@@ -743,7 +743,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- use sparingly, e.g. for poetry, not in math environments-->
 <xsl:template match="br">
     <xsl:text>\\</xsl:text>
-</xsl:template>    
+</xsl:template>
+
+<!-- Non-breaking space, which "joins" two words as a unit -->
+<xsl:template match="nbsp">
+    <xsl:text>~</xsl:text>
+</xsl:template>
 
 
 <!-- Dashes -->
