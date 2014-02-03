@@ -52,6 +52,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (2) Crop marks on letter paper, centered      -->
 <!--     presuming geometry sets smaller page size -->
 <xsl:param name="latex.draft" select="'no'"/>
+<!--  -->
+<!-- Preamble insertions                    -->
+<!-- Insert packages, options into preamble -->
+<!-- early or late                          -->
+<xsl:param name="latex.preamble.early" select="''" />
+<xsl:param name="latex.preamble.late" select="''" />
 
 <xsl:template match="/" >
     <xsl:apply-templates select="mathbook"/>
@@ -113,6 +119,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX preamble is common for both books and articles               -->
 <!-- Except: title info allows an "event" for an article (presentation) -->
 <xsl:template name="latex-preamble">
+    <xsl:text>%% Custom entries to preamble, early&#xa;</xsl:text>
+    <xsl:value-of select="$latex.preamble.early" />
+    <xsl:text>&#xa;</xsl:text>
 <xsl:text>%% Page layout
 \usepackage{geometry}&#xa;</xsl:text>
 <xsl:text>\geometry{</xsl:text>
@@ -224,8 +233,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\usepackage[letter,cam,center,pdflatex]{crop}&#xa;</xsl:text>
 </xsl:if>
 <xsl:text>%%&#xa;</xsl:text>
-<xsl:text>%% Convenience macros&#xa;</xsl:text>
-<xsl:value-of select="/mathbook/docinfo/macros" /><xsl:text>&#xa;</xsl:text>
+    <xsl:text>%% Custom entries to preamble, late&#xa;</xsl:text>
+    <xsl:value-of select="$latex.preamble.late" />
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>%% Convenience macros&#xa;</xsl:text>
+    <xsl:value-of select="/mathbook/docinfo/macros" /><xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template name="title-page-info-book">
