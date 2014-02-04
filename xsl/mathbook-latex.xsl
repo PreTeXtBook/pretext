@@ -81,7 +81,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="latex-preamble" />
     <xsl:call-template name="title-page-info-article" />
     <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
-    <xsl:text>\maketitle&#xa;%&#xa;</xsl:text>
+    <xsl:if test="/mathbook/article/title or /mathbook/docinfo/event or /mathbook/docinfo/author or /mathbook/docinfo/date">
+        <xsl:text>\maketitle&#xa;%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="/mathbook/docinfo/abstract" />
     <xsl:apply-templates />
     <xsl:text>\end{document}&#xa;</xsl:text>
