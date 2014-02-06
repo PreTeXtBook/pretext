@@ -41,6 +41,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Solutions to exercises is configurable, eg text versus solution manual -->
 <!-- Default is to show them, a production version can switch them off      -->
 <xsl:param name="solutions.included" select="'yes'" />
+<!-- Author tools are for drafts, mostly "todo" items                 -->
+<!-- and "provisional" citations and cross-references                 -->
+<!-- Default is to hide todo's, inline provisionals                   -->
+<!-- Otherwise ('yes'), todo's in red paragraphs, provisionals in red -->
+<xsl:param name="author-tools" select="'no'" />
 
 <!-- Strip whitespace text nodes from container elements                    -->
 <!-- Improve source readability with whitespace control in text output mode -->
@@ -431,5 +436,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="bibliography//article|bibliography//book" mode="number">
     <xsl:number from="bibliography" level="single" count="article|book" />
 </xsl:template>
+
+<!-- Warnings for high-frequency mistakes -->
+<xsl:template match="cite">
+    <xsl:message terminate="no">
+    <xsl:text>WARNING: Citation (cite) with no ref or provisional attribute</xsl:text>
+    </xsl:message>
+</xsl:template>
+
+<xsl:template match="xref">
+    <xsl:message terminate="no">
+    <xsl:text>WARNING: Cross-reference (xref) with no ref or provisional attribute</xsl:text>
+    </xsl:message>
+</xsl:template>
+
+
+
 
 </xsl:stylesheet>

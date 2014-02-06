@@ -438,8 +438,9 @@ preferably with CSS so can adjust style, language-->
 
 
 
-<!-- Cross-References -->
+<!-- Citations, Cross-References -->
 <!-- Each a bit different in style of link (eg knowl), or content of link (eg "here") -->
+<!-- Warnings at command-line for mess-ups are in common file -->
 
 <!-- Bring up bibliographic entries as knowls with cite -->
 <!-- Style the bare number with CSS, eg [6]             -->
@@ -447,34 +448,6 @@ preferably with CSS so can adjust style, language-->
 <!-- as a tool for drafts, otherwise "ref" to -->
 <!-- an xml:id in bibliography                     -->
 <!-- TODO: tokenize a list of labels? -->
-<xsl:template match="cite">
-    <xsl:choose>
-        <xsl:when test="@ref">
-            <xsl:call-template name="knowl-link-factory">
-                <xsl:with-param name="css-class">cite</xsl:with-param>
-                <xsl:with-param name="identifier"><xsl:value-of select="@ref" /></xsl:with-param>
-                <xsl:with-param name="content">
-                    <xsl:text>[</xsl:text>
-                    <xsl:apply-templates select="id(@ref)" mode="number" />
-                    <xsl:text>]</xsl:text>
-                </xsl:with-param>
-            </xsl:call-template>
-        </xsl:when>
-        <xsl:when test="@provisional">
-            <xsl:text>&lt;</xsl:text>
-            <xsl:value-of select="@provisional" />
-            <xsl:text>&gt;</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message terminate="yes">
-            <xsl:text>Citation (cite) with no ref or provisional attribute</xsl:text>
-            </xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-
-
 
 <!-- Point to any numbered item with link, content is number only -->
 <!-- Displayed equations have targets manufactured by MathJax,    -->
@@ -485,35 +458,45 @@ preferably with CSS so can adjust style, language-->
 <!-- TODO: need to take into account chunking for href manufacture -->
 <!-- need to use basename for targetnode's file        -->
 <!-- or knowl these references, with "in context link" -->
-<xsl:template match="xref">
-    <xsl:choose>
-        <xsl:when test="@ref">
-            <xsl:variable name="target-node" select="id(@ref)" />
-            <xsl:element name ="a">
-                <!-- http://stackoverflow.com/questions/585261/is-there-an-xslt-name-of-element -->
-                <!-- Sans namespace (would be name(.)) -->
-                <xsl:attribute name="class">
-                    <xsl:value-of select="local-name($target-node)" />
-                </xsl:attribute>
-                <xsl:attribute name="href">
-                    <xsl:text>#</xsl:text>
-                    <xsl:value-of select="@ref" />
-                </xsl:attribute>
-            <xsl:apply-templates select="$target-node" mode="number" />
-            </xsl:element>
-        </xsl:when>
-        <xsl:when test="@provisional">
-            <xsl:text>&lt;</xsl:text>
-            <xsl:value-of select="@provisional" />
-            <xsl:text>&gt;</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message terminate="yes">
-            <xsl:text>Cross-reference (xref) with no ref or provisional attribute</xsl:text>
-            </xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
+<xsl:template match="cite[@ref]">
+    <xsl:call-template name="knowl-link-factory">
+        <xsl:with-param name="css-class">cite</xsl:with-param>
+        <xsl:with-param name="identifier"><xsl:value-of select="@ref" /></xsl:with-param>
+        <xsl:with-param name="content">
+            <xsl:text>[</xsl:text>
+            <xsl:apply-templates select="id(@ref)" mode="number" />
+            <xsl:text>]</xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
+
+<xsl:template match="xref[@ref]">
+    <xsl:variable name="target-node" select="id(@ref)" />
+    <xsl:element name ="a">
+        <!-- http://stackoverflow.com/questions/585261/is-there-an-xslt-name-of-element -->
+        <!-- Sans namespace (would be name(.)) -->
+        <xsl:attribute name="class">
+            <xsl:value-of select="local-name($target-node)" />
+        </xsl:attribute>
+        <xsl:attribute name="href">
+            <xsl:text>#</xsl:text>
+            <xsl:value-of select="@ref" />
+        </xsl:attribute>
+    <xsl:apply-templates select="$target-node" mode="number" />
+    </xsl:element>
+</xsl:template>
+
+<xsl:template match="cite[@provisional]|xref[@provisional]">
+    <xsl:element name="span">
+        <xsl:if test="$author-tools='yes'" >
+            <xsl:attribute name="style">color:red</xsl:attribute>
+        </xsl:if>
+        <xsl:text>&lt;&lt;</xsl:text>
+        <xsl:value-of select="@provisional" />
+        <xsl:text>&gt;&gt;</xsl:text>
+    </xsl:element>
+</xsl:template>
+
 
 <!-- Footnotes                                             -->
 <!-- Mimicking basic LaTeX, but as knowls                  -->
@@ -1139,9 +1122,18 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
 
 <!-- Miscellaneous -->
 
-<!-- TODO's get killed for finished work            -->
-<!-- Highlight in a draft mode, or just grep source -->
-<xsl:template match="todo"></xsl:template>
 
+<!-- ToDo's are silent unless asked for -->
+<!-- Can also grep across the source    -->
+<xsl:template match="todo">
+    <xsl:if test="$author-tools='yes'" >
+        <xsl:element name="p">
+            <xsl:attribute name="style">color:red</xsl:attribute>
+            <xsl:apply-templates select="." mode="type-name" />
+            <xsl:text>: </xsl:text>
+            <xsl:apply-templates />
+        </xsl:element>
+    </xsl:if>
+</xsl:template>
 
 </xsl:stylesheet>

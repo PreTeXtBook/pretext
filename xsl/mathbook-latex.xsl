@@ -199,10 +199,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 \newtheorem{exercise}{Exercise}&#xa;</xsl:text>
 <xsl:text>%% Raster graphics inclusion, wrapped figures in paragraphs&#xa;</xsl:text>
 <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
+<xsl:text>%% Colors for Sage boxes and author tools (red hilites)&#xa;</xsl:text>
+<xsl:text>\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}&#xa;</xsl:text>
 <xsl:if test="//sage">
     <xsl:text>%% Sage input: boxed, colored&#xa;</xsl:text>
     <xsl:text>\usepackage{mdframed}&#xa;</xsl:text>
-    <xsl:text>\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}&#xa;</xsl:text>
     <xsl:text>\mdfdefinestyle{sageinput}{backgroundcolor=blue!10,skipabove=2ex,skipbelow=2ex}&#xa;</xsl:text>
     <xsl:text>\mdfdefinestyle{sageoutput}{linecolor=white,leftmargin=4ex,skipbelow=2ex}&#xa;</xsl:text>
 </xsl:if>
@@ -933,55 +934,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Cross-References -->
+<!-- Cross-References, Citations -->
 
 <!-- Point to bibliographic entries with cite -->
-<!-- A citation can be "provisional"          -->
+<!-- Point to other items with xref           -->
+<!-- These can be "provisional"          -->
 <!-- as a tool for drafts, otherwise "ref" to -->
 <!-- an xml:id elsewhere                      -->
+<!-- Warnings at command-line for mess-ups are in common file -->
 <!-- TODO: make citation references blue (not green box) in hyperref -->
-<xsl:template match="cite">
-    <xsl:choose>
-        <xsl:when test="@ref">
-            <xsl:text>\cite{</xsl:text>
-            <xsl:value-of select="@ref" />
-            <xsl:text>}</xsl:text>
-        </xsl:when>
-        <xsl:when test="@provisional">
-            <xsl:text>$\langle$</xsl:text>
-            <xsl:value-of select="@provisional" />
-            <xsl:text>$\rangle$</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message terminate="yes">
-            <xsl:text>Citation (cite) with no ref or provisional attribute</xsl:text>
-            </xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
+<!-- TODO: make citations work like xrefs                            -->
+<xsl:template match="cite[@ref]">
+    <xsl:text>\cite{</xsl:text>
+    <xsl:value-of select="@ref" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- A cross-reference can be "provisional"   -->
-<!-- as a tool for drafts, otherwise "ref" to -->
-<!-- an xml:id elsewhere                      -->
-<xsl:template match="xref">
-    <xsl:choose>
-        <xsl:when test="@ref">
-            <xsl:text>\ref{</xsl:text>
-            <xsl:apply-templates select="id(@ref)" mode="xref-identifier" />
-            <xsl:text>}</xsl:text>
-        </xsl:when>
-        <xsl:when test="@provisional">
-            <xsl:text>$\langle$</xsl:text>
-            <xsl:value-of select="@provisional" />
-            <xsl:text>$\rangle$</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message terminate="yes">
-            <xsl:text>Cross-reference (xref) with no ref or provisional attribute</xsl:text>
-            </xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
+<xsl:template match="xref[@ref]">
+    <xsl:text>\ref{</xsl:text>
+    <xsl:apply-templates select="id(@ref)" mode="xref-identifier" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
+
+<xsl:template match="cite[@provisional]|xref[@provisional]">
+    <xsl:if test="$author-tools='yes'" >
+        <xsl:text>\textcolor{red}{</xsl:text>
+    </xsl:if>
+    <xsl:text>$\langle\langle$</xsl:text>
+    <xsl:value-of select="@provisional" />
+    <xsl:text>$\rangle\rangle$</xsl:text>
+    <xsl:if test="$author-tools='yes'" >
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- Insert a xref identifier as a LaTeX label on anything   -->
 <!-- Calls to this template need come from where LaTeX likes -->
@@ -1117,9 +1103,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Miscellaneous -->
 
-<!-- TODO's get killed for finished work            -->
-<!-- Highlight in a draft mode, or just grep source -->
-<xsl:template match="todo"></xsl:template>
+<!-- ToDo's are silent unless asked for -->
+<!-- Can also grep across the source    -->
+<xsl:template match="todo">
+    <xsl:if test="$author-tools='yes'" >
+        <xsl:text>\par\noindent\textcolor{red}{</xsl:text>
+        <xsl:apply-templates select="." mode="type-name" />
+        <xsl:text>: </xsl:text>
+        <xsl:apply-templates />
+        <xsl:text>}\par</xsl:text>
+    </xsl:if>
+</xsl:template>
 
 <!-- Converter information for header -->
 <!-- TODO: add date, URL -->
