@@ -1103,15 +1103,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Miscellaneous -->
 
-<!-- ToDo's are silent unless asked for -->
-<!-- Can also grep across the source    -->
+<!-- ToDo's are silent unless asked for                   -->
+<!-- Can also grep across the source                      -->
+<!-- Marginpar's from http://www.f.kth.se/~ante/latex.php -->
 <xsl:template match="todo">
     <xsl:if test="$author-tools='yes'" >
-        <xsl:text>\par\noindent\textcolor{red}{</xsl:text>
+        <xsl:text>\marginpar[\raggedleft\footnotesize\textcolor{red}{</xsl:text>
         <xsl:apply-templates select="." mode="type-name" />
         <xsl:text>: </xsl:text>
         <xsl:apply-templates />
-        <xsl:text>}\par</xsl:text>
+        <xsl:text>}]{\raggedright\footnotesize\textcolor{red}{</xsl:text>
+        <xsl:apply-templates select="." mode="type-name" />
+        <xsl:text>: </xsl:text>
+        <xsl:apply-templates />
+        <xsl:text>}}</xsl:text>
     </xsl:if>
 </xsl:template>
 
