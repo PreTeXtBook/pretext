@@ -254,6 +254,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Could use a format to suppress/manipulate time zone -->
+<xsl:template match="timeofday">
+    <xsl:value-of select="substring(date:date-time(),12,8)" />
+    <xsl:text> (</xsl:text>
+    <xsl:value-of select="substring(date:date-time(),20)" />
+    <xsl:text>)</xsl:text>
+</xsl:template>
+
+
 <!-- Names                                          -->
 <!-- Relies on translations in language files       -->
 <!-- which provides the named template, type-name   -->

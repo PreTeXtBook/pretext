@@ -379,6 +379,8 @@
                 </hint>
             </exercise>
 
+        <p>Generated: <today />, <timeofday /></p>
+
         </section>
 
         
