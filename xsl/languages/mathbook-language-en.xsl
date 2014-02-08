@@ -19,6 +19,8 @@ You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
+<!-- English (en) language translation template -->
+
 <!-- Identify as a stylesheet -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace" 
@@ -58,22 +60,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$generic='definition'">    <xsl:text>Definition</xsl:text></xsl:when>
         <xsl:when test="$generic='axiom'">         <xsl:text>Axiom</xsl:text></xsl:when>
         <!-- -->
+        <xsl:when test="$generic='example'">       <xsl:text>Example</xsl:text></xsl:when>
+        <xsl:when test="$generic='remark'">        <xsl:text>Remark</xsl:text></xsl:when>
+        <!-- -->
         <xsl:when test="$generic='exercise'">      <xsl:text>Exercise</xsl:text></xsl:when>
         <xsl:when test="$generic='solution'">      <xsl:text>Solution</xsl:text></xsl:when>
+        <xsl:when test="$generic='hint'">          <xsl:text>Hint</xsl:text></xsl:when>
         <!-- -->
         <xsl:when test="$generic='figure'">        <xsl:text>Figure</xsl:text></xsl:when>
         <xsl:when test="$generic='table'">         <xsl:text>Table</xsl:text></xsl:when>
+        <xsl:when test="$generic='abstract'">      <xsl:text>Abstract</xsl:text></xsl:when>
+        <xsl:when test="$generic='preface'">       <xsl:text>Preface</xsl:text></xsl:when>
         <!-- -->
-        <xsl:when test="$generic='todo'">         <xsl:text>To Do</xsl:text></xsl:when>
+        <xsl:when test="$generic='todo'">          <xsl:text>To Do</xsl:text></xsl:when>
         <xsl:otherwise>
             <xsl:message terminate="no">Warning: Unable to translate <xsl:value-of select="$generic" />.&#xa;</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
-
-<!--
-<xsl:strip-space elements="abstract preface" />
-<xsl:strip-space elements="remark example  hint" />
--->
 
 </xsl:stylesheet>
