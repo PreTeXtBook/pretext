@@ -21,7 +21,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Identify as a stylesheet -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
-    xmlns:xml="http://www.w3.org/XML/1998/namespace" >
+    xmlns:xml="http://www.w3.org/XML/1998/namespace" 
+    xmlns:date="http://exslt.org/dates-and-times"
+    extension-element-prefixes="date"
+>
 
 <xsl:import href="./mathbook-common.xsl" />
 
@@ -1125,6 +1128,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="converter-blurb">
     <xsl:text>%%                                    %%&#xa;</xsl:text>
     <xsl:text>%% Generated from MathBook XML source %%&#xa;</xsl:text>
+    <xsl:text>%%    on </xsl:text>
+    <xsl:value-of select="date:date-time()" />
+    <xsl:text>    %%&#xa;</xsl:text>
     <xsl:text>%%                                    %%&#xa;</xsl:text>
 </xsl:template>
 

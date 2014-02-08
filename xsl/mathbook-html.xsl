@@ -24,7 +24,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
-    extension-element-prefixes="exsl"
+    xmlns:date="http://exslt.org/dates-and-times"
+    extension-element-prefixes="exsl date"
 >
 
 <xsl:import href="./mathbook-common.xsl" />
@@ -1018,6 +1019,11 @@ preferably with CSS so can adjust style, language-->
 <xsl:template name="converter-blurb">
     <xsl:comment>*                                    *</xsl:comment><xsl:text>&#xa;</xsl:text>
     <xsl:comment>* Generated from MathBook XML source *</xsl:comment><xsl:text>&#xa;</xsl:text>
+    <xsl:comment>
+        <xsl:text>*    on </xsl:text>
+        <xsl:value-of select="date:date-time()" />
+        <xsl:text>    *</xsl:text>
+    </xsl:comment><xsl:text>&#xa;</xsl:text>
     <xsl:comment>*                                    *</xsl:comment><xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
