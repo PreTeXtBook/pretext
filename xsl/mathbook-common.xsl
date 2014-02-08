@@ -56,7 +56,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="theorem corollary lemma proposition claim fact conjecture proof" />
 <xsl:strip-space elements="definition axiom" />
 <xsl:strip-space elements="statement" />
-<xsl:strip-space elements="example exercise hint solution" />
+<xsl:strip-space elements="example remark exercise hint solution" />
 <xsl:strip-space elements="ul ol dl" />
 <xsl:strip-space elements="md mdn" />
 <xsl:strip-space elements="sage figure" />
