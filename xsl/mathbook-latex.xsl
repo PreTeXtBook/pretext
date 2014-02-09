@@ -87,6 +87,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="/mathbook/article/title or /mathbook/docinfo/event or /mathbook/docinfo/author or /mathbook/docinfo/date">
         <xsl:text>\maketitle&#xa;%&#xa;</xsl:text>
     </xsl:if>
+    <xsl:text>\thispagestyle{empty}&#xa;%&#xa;</xsl:text>
     <xsl:apply-templates select="/mathbook/docinfo/abstract" />
     <xsl:apply-templates />
     <xsl:text>\end{document}&#xa;</xsl:text>
