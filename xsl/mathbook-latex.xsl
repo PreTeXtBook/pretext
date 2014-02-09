@@ -875,11 +875,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{asy}&#xa;</xsl:text>
 </xsl:template>
 
-<!--<xsl:template match="table">
-    <xsl:text>\centerline{\textbf{A table belongs here, but conversion is not yet implemented}}&#xa;</xsl:text>
-</xsl:template>-->
 <!-- Tables -->
-<!-- Follow XML Exchange Table Model" which is a subset of the failed "CALS Table Model" -->
+<!-- Follow "XML Exchange Table Model"           -->
+<!-- A subset of the (failed) "CALS Table Model" -->
 <!-- Should be able to replace this by extant XSLT for this conversion -->
 <!-- See http://stackoverflow.com/questions/19716449/converting-xhtml-table-to-latex-using-xslt -->
 <xsl:template match="table">

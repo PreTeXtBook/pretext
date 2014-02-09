@@ -413,7 +413,8 @@ preferably with CSS so can adjust style, language-->
 
 
 <!-- Tables -->
-<!-- Follow XML Exchange Table Model" which is a subset of the failed "CALS Table Model" -->
+<!-- Follow "XML Exchange Table Model"           -->
+<!-- A subset of the (failed) "CALS Table Model" -->
 <!-- Should be able to replace this by extant XSLT for this conversion -->
 <xsl:template match="table"><table class="plain-table"><xsl:apply-templates /></table></xsl:template>
 <xsl:template match="tgroup"><xsl:apply-templates /></xsl:template>
