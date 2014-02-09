@@ -702,6 +702,11 @@ preferably with CSS so can adjust style, language-->
     <i class="foreign"><xsl:apply-templates /></i>
 </xsl:template>
 
+<!-- Non-breaking space, which "joins" two words as a unit -->
+<!-- http://stackoverflow.com/questions/31870/using-a-html-entity-in-xslt-e-g-nbsp -->
+<xsl:template match="nbsp">
+    <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
+</xsl:template>
 
 <!-- Dashes, Hyphen -->
 <!-- http://www.cs.tut.fi/~jkorpela/dashes.html -->
