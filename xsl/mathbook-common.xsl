@@ -297,10 +297,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Reporting Templates -->
-<!--   conveniences for annotating derivative products,     -->
-<!--   such as Sage doc tests, LaTeX source                 -->
-<!--   long form for content, short form for filenames, ids -->
+<!-- Textual Representations of structural elements  -->
+<!--   conveniences for annotating derivative products -->
+<!--   such as Sage doc tests, LaTeX source            -->
+<!--   Short names for filenames, ids                  -->
+<!--   Long names (below) for content                  -->
+
 <xsl:template match="chapter" mode="short-name">
     <xsl:text>chap-</xsl:text>
     <xsl:apply-templates select="." mode="number" />
@@ -326,55 +328,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 
+<!-- Long Names -->
+<!-- Simple text representations of structural elements        -->
+<!-- Type, number, title typically                             -->
+<!-- Used for author's report, LaTeX typeout during processing -->
 <xsl:template match="*" mode="long-name">
-    <xsl:message terminate="no">Warning: node with no long-name (likely sectioning)</xsl:message>
+    <xsl:apply-templates select="." mode="type-name" />
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="number" />
+    <xsl:if test="title">
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="title/node()"/>
+    </xsl:if>
 </xsl:template>
 
+<!-- Some units don't have titles or numbers -->
+<!-- TODO: bibliography, abstract(?), others -->
 <xsl:template match="preface" mode="long-name">
-    <xsl:text>Preface: </xsl:text>
-    <xsl:apply-templates select="title/node()"/>
-</xsl:template>
-
-<xsl:template match="chapter" mode="long-name">
-    <xsl:text>Chapter </xsl:text>
-    <xsl:apply-templates select="." mode="number" />
+    <xsl:apply-templates select="." mode="type-name" />
     <xsl:text> </xsl:text>
-    <xsl:apply-templates select="title/node()"/>
-</xsl:template>
-
-<xsl:template match="appendix" mode="long-name">
-    <xsl:text>Chapter </xsl:text>
-    <xsl:apply-templates select="." mode="number" />
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="title/node()"/>
-</xsl:template>
-
-<xsl:template match="section" mode="long-name">
-    <xsl:text>Section </xsl:text>
-    <xsl:apply-templates select="." mode="number" />
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="title/node()"/>
-</xsl:template>
-
-<xsl:template match="subsection" mode="long-name">
-    <xsl:text>Subsection </xsl:text>
-    <xsl:apply-templates select="." mode="number" />
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="title/node()"/>
-</xsl:template>
-
-<xsl:template match="subsubsection" mode="long-name">
-    <xsl:text>Subsubsection </xsl:text>
-    <xsl:apply-templates select="." mode="number" />
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="title/node()"/>
-</xsl:template>
-
-<xsl:template match="paragraph" mode="long-name">
-    <xsl:text>Paragraph </xsl:text>
-    <xsl:apply-templates select="." mode="number" />
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="title/node()"/>
 </xsl:template>
 
 <!-- Numbering  -->
@@ -385,6 +357,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Sectioning -->
 <xsl:template match="chapter|section|subsection|subsubsection|paragraph|subparagraph" mode="number">
     <xsl:number level="multiple" count="chapter|section|subsection|subsubsection|paragraph|subparagraph" />
+</xsl:template>
+
+<!-- We presume only one book or article -->
+<xsl:template match="book|article" mode="number"></xsl:template>
+
+<xsl:template match="*" mode="number">
+    <xsl:message terminate="no">
+        <xsl:text>WARNING: </xsl:text>
+        <xsl:apply-templates select="." mode="type-name" />
+        <xsl:text> without a number</xsl:text>
+    </xsl:message>
 </xsl:template>
 
 <!-- Appendices: A -->
