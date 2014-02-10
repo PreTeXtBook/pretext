@@ -221,6 +221,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Asymptote graphics&#xa;</xsl:text>
     <xsl:text>\usepackage[inline]{asymptote}&#xa;</xsl:text>
 </xsl:if>
+<xsl:if test="//logo">
+    <xsl:text>%% Precise image placement (for logos on pages)&#xa;</xsl:text>
+    <xsl:text>\usepackage{eso-pic}&#xa;</xsl:text>
+</xsl:if>
 <xsl:text>%% Hyperlinking in PDFs, all links solid and blue
 \usepackage[pdftex]{hyperref}
 \hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
@@ -365,6 +369,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- When needed, get content with XPath, eg title/node() -->
 <xsl:template match="title"></xsl:template>
 <xsl:template match="caption"></xsl:template>
+
+<!-- Logos (images) -->
+<!-- Fine-grained placement of graphics files on pages      -->
+<!-- May be placed anywhere on current page                 -->
+<!-- Page coordinates are measured in points                -->
+<!-- (0,0) is the lower left corner of the page             -->
+<!-- llx, lly: places lower-left corner of graphic          -->
+<!-- at the specified coordinates of the page               -->
+<!-- Use width, in fixed units (eg cm), to optionally scale -->
+<!-- everypage='yes' will place image on every page         -->
+<xsl:template match="logo" >
+    <xsl:text>\AddToShipoutPicture</xsl:text>
+    <xsl:if test="not(@everypage='yes')">
+        <xsl:text>*</xsl:text>
+    </xsl:if>
+    <xsl:text>{\put(</xsl:text>
+    <xsl:value-of select="@llx" />
+    <xsl:text>,</xsl:text>
+    <xsl:value-of select="@lly" />
+    <xsl:text>){\includegraphics</xsl:text>
+    <xsl:if test="@width">
+        <xsl:text>[width=</xsl:text>
+        <xsl:value-of select="@width" />
+        <xsl:text>]</xsl:text>
+    </xsl:if>
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="@source" />
+    <xsl:text>}}}&#xa;</xsl:text>
+</xsl:template>
 
 <!-- Sectioning -->
 <!-- Subdivisions, Chapters down to Paragraphs -->
