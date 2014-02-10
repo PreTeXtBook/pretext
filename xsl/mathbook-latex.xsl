@@ -122,7 +122,87 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- LaTeX preamble is common for both books and articles               -->
+<!-- A letter, LaTeX structure -->
+<xsl:template match="letter">
+    <xsl:call-template name="converter-blurb" />
+    <xsl:text>\documentclass[</xsl:text>
+    <xsl:value-of select="$latex.font.size" />
+    <xsl:text>,</xsl:text>
+    <xsl:if test="$latex.draft='yes'" >
+        <xsl:text>draft,</xsl:text>
+    </xsl:if>
+    <xsl:text>]{article}&#xa;%&#xa;</xsl:text>
+    <xsl:call-template name="latex-preamble" />
+    <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\vspace*{\stretch{1}}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\thispagestyle{empty}&#xa;%&#xa;</xsl:text>
+    <!-- Logos (letterhead images) to first page -->
+    <xsl:apply-templates select="/mathbook/docinfo/logo" />
+    <!-- Sender's address, sans name typically -->
+    <!-- and if not already on letterhead -->
+    <!-- http://tex.stackexchange.com/questions/13542/flush-a-left-flushed-box-right -->
+    <xsl:if test="/mathbook/docinfo/from or /mathbook/docinfo/date">
+        <xsl:text>\hfill\begin{tabular}{l@{}}&#xa;</xsl:text>
+        <xsl:if test="/mathbook/docinfo/from">
+            <xsl:apply-templates select="/mathbook/docinfo/from" />
+            <xsl:if test="/mathbook/docinfo/date">
+                <xsl:text>\\\ &#xa;</xsl:text>
+                <xsl:text>\\&#xa;</xsl:text>
+            </xsl:if>
+        </xsl:if>
+        <!-- Date -->
+        <xsl:if test="/mathbook/docinfo/date">
+            <xsl:apply-templates select="/mathbook/docinfo/date" />
+        </xsl:if>
+        <xsl:text>&#xa;\end{tabular}\\\par&#xa;%&#xa;</xsl:text>
+    </xsl:if>
+    <!-- Destination address, flush left -->
+    <xsl:if test="/mathbook/docinfo/to">
+        <xsl:text>\noindent{}</xsl:text>
+        <xsl:apply-templates select="/mathbook/docinfo/to" />
+        <xsl:text>\\\par</xsl:text>
+        <xsl:text>&#xa;%&#xa;</xsl:text>
+    </xsl:if>
+    <!-- Salutation, flush left -->
+    <xsl:if test="/mathbook/docinfo/salutation">
+        <xsl:text>\noindent{}</xsl:text>
+        <xsl:apply-templates select="/mathbook/docinfo/salutation" />
+        <xsl:text>,\\\par</xsl:text>
+        <xsl:text>&#xa;%&#xa;</xsl:text>
+    </xsl:if>
+    <!-- process the body -->
+    <xsl:apply-templates />
+    <!-- Closing block -->
+    <xsl:text>\par\vspace*{1.5\baselineskip}\noindent&#xa;</xsl:text>
+    <xsl:text>\hspace{\stretch{2}}\begin{tabular}{l@{}}&#xa;</xsl:text>
+        <xsl:apply-templates select="/mathbook/docinfo/closing" />
+        <xsl:text>,</xsl:text>
+        <xsl:choose>
+            <xsl:when test="/mathbook/docinfo/graphic-signature">
+                <xsl:text>\\[1ex]&#xa;</xsl:text>
+                <xsl:text>\includegraphics[height=</xsl:text>
+                <xsl:choose>
+                    <xsl:when test="/mathbook/docinfo/graphic-signature/@scale">
+                        <xsl:value-of select="/mathbook/docinfo/graphic-signature/@scale" />
+                    </xsl:when>
+                    <xsl:otherwise>4</xsl:otherwise>
+                </xsl:choose>
+                <xsl:text>ex]{</xsl:text>
+                <xsl:value-of select="/mathbook/docinfo/graphic-signature/@source" />
+                <xsl:text>}\\[0.5ex]&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- About two blank lines for written signature -->
+                <xsl:text>\\[5.5ex]&#xa;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:apply-templates select="/mathbook/docinfo/signature" />
+    <xsl:text>&#xa;\end{tabular}\hspace{\stretch{1}}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\par\vspace*{\stretch{2}}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{document}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- LaTeX preamble is common for both books, articles and letters      -->
 <!-- Except: title info allows an "event" for an article (presentation) -->
 <xsl:template name="latex-preamble">
     <xsl:text>%% Custom entries to preamble, early&#xa;</xsl:text>

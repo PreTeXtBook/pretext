@@ -51,7 +51,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Improve source readability with whitespace control in text output mode -->
 <!-- Newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
 <!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
-<xsl:strip-space elements="mathbook book article chapter appendix section subsection subsubsection paragraph subparagraph" />
+<xsl:strip-space elements="mathbook book article letter" />
+<xsl:strip-space elements="chapter appendix section subsection subsubsection paragraph subparagraph" />
 <xsl:strip-space elements="docinfo author abstract preface" />
 <xsl:strip-space elements="theorem corollary lemma proposition claim fact conjecture proof" />
 <xsl:strip-space elements="definition axiom" />
