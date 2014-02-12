@@ -685,6 +685,11 @@ preferably with CSS so can adjust style, language-->
     <xsl:text>&#x2026;</xsl:text>
 </xsl:template>
 
+<!-- text underscore -->
+<xsl:template match="underscore">
+    <xsl:text>_</xsl:text>
+</xsl:template>
+
 
 <!-- Ampersand -->
 <!-- Not for formatting control, but to see actual character -->
