@@ -824,6 +824,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\dots{}</xsl:text>
 </xsl:template>
 
+<!-- text underscore -->
+<xsl:template match="underscore">
+    <xsl:text>\_</xsl:text>
+</xsl:template>
+
+
 
 <!-- for example -->
 <xsl:template match="eg">
