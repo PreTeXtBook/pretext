@@ -285,11 +285,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
 <xsl:text>%% Colors for Sage boxes and author tools (red hilites)&#xa;</xsl:text>
 <xsl:text>\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}&#xa;</xsl:text>
+<!-- TODO: incorporate global listing options here -->
 <xsl:if test="//sage">
-    <xsl:text>%% Sage input: boxed, colored&#xa;</xsl:text>
-    <xsl:text>\usepackage{mdframed}&#xa;</xsl:text>
-    <xsl:text>\mdfdefinestyle{sageinput}{backgroundcolor=blue!10,skipabove=2ex,skipbelow=2ex}&#xa;</xsl:text>
-    <xsl:text>\mdfdefinestyle{sageoutput}{linecolor=white,leftmargin=4ex,skipbelow=2ex}&#xa;</xsl:text>
+    <xsl:text>%% Sage input, listings package: boxed, colored, line breaking&#xa;</xsl:text>
+    <xsl:text>\usepackage{listings}&#xa;</xsl:text>
 </xsl:if>
 <xsl:if test="//tikz">
     <xsl:text>%% Tikz graphics&#xa;</xsl:text>
@@ -924,23 +923,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="input">
-    <xsl:text>\begin{mdframed}[style=sageinput]&#xa;</xsl:text>
-    <xsl:text>\begin{verbatim}</xsl:text>
+    <xsl:text>\begin{lstlisting}[language=Python,breaklines=true,breakatwhitespace=true,basicstyle=\small\ttfamily,columns=fixed,frame=single,frameround=tttt,backgroundcolor=\color{blue!10},xleftmargin=4ex,xrightmargin=4ex]&#xa;</xsl:text>
     <xsl:call-template name="sanitize-sage">
         <xsl:with-param name="raw-sage-code" select="." />
     </xsl:call-template>
-    <xsl:text>\end{verbatim}&#xa;</xsl:text>
-    <xsl:text>\end{mdframed}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{lstlisting}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="output">
-    <xsl:text>\begin{mdframed}[style=sageoutput]&#xa;</xsl:text>
-    <xsl:text>\begin{verbatim}</xsl:text>
+    <xsl:text>\begin{lstlisting}[language=Python,breaklines=true,breakatwhitespace=true,basicstyle=\small\ttfamily,columns=fixed,xleftmargin=8ex,xrightmargin=4ex]&#xa;</xsl:text>
     <xsl:call-template name="sanitize-sage">
         <xsl:with-param name="raw-sage-code" select="." />
     </xsl:call-template>
-    <xsl:text>\end{verbatim}&#xa;</xsl:text>
-    <xsl:text>\end{mdframed}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{lstlisting}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
 
