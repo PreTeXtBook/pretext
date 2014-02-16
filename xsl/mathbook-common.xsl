@@ -290,13 +290,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Automatically generated basenames for -->
 <!-- filenames, when chunking, especially  -->
 <xsl:template match="*" mode="basename">
-    <xsl:if test="local-name(.) != 'chapter'" >
-        <xsl:apply-templates select="parent::*" mode="basename" />
-        <xsl:text>-</xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="." mode="short-name" />
+    <xsl:choose>
+        <!-- Articles all one page, before chunking support -->
+        <xsl:when test="//mathbook/article"></xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="ancestor::chapter/@filebase" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
-
 
 <!-- Textual Representations of structural elements  -->
 <!--   conveniences for annotating derivative products -->
