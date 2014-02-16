@@ -1074,10 +1074,11 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <header id="masthead">
                 <div class="banner">
                         <div class="container">
-                            <!-- TODO: configure this in docinfo -->
-                            <a id="logo-link" href="/path/to/front/page">
-                                <img src="cover-84x120.png" />
-                            </a>
+                            <xsl:if test="/mathbook/docinfo/brandlogo">
+                                <a id="logo-link" href="{/mathbook/docinfo/brandlogo/@url}" target="_blank" >
+                                    <img src="{/mathbook/docinfo/brandlogo/@source}" />
+                                </a>
+                            </xsl:if>
                             <div class="title-container">
                                 <h1 id="title">
                                     <span class="title"><xsl:value-of select="$title" /></span>
