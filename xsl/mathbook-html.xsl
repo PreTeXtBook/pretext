@@ -481,8 +481,10 @@ preferably with CSS so can adjust style, language-->
             <xsl:value-of select="local-name($target-node)" />
         </xsl:attribute>
         <xsl:attribute name="href">
+            <xsl:apply-templates select="$target-node" mode="basename" />
+            <xsl:text>.html</xsl:text>
             <xsl:text>#</xsl:text>
-            <xsl:value-of select="@ref" />
+            <xsl:apply-templates select="$target-node" mode="xref-identifier" />
         </xsl:attribute>
     <xsl:apply-templates select="$target-node" mode="number" />
     </xsl:element>
