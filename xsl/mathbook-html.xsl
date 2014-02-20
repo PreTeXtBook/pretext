@@ -1204,8 +1204,8 @@ $(function () {
 
 <!-- Mathbook Javasript header -->
 <xsl:template name="mathbook-js">
-    <script src="http://mathbook.staging.michaelxdubois.com/master/js/ScrollingNav.js"></script>
-    <script src="http://mathbook.staging.michaelxdubois.com/master/js/Mathbook.js"></script>
+    <script src="http://aimath.org/mathbook/ScrollingNav.js"></script>
+    <script src="http://aimath.org/mathbook/Mathbook.js"></script>
 </xsl:template>
 
 <!-- Font header -->
@@ -1219,8 +1219,8 @@ $(function () {
 <!-- CSS header -->
 <xsl:template name="css">
     <!-- #1 to #5 for different color schemes -->
-    <link href="http://mathbook.staging.michaelxdubois.com/master/stylesheets/mathbook-modern-3.css" rel="stylesheet" type="text/css" />
-    <link href="http://mathbook.staging.michaelxdubois.com/master/stylesheets/icons.css" rel="stylesheet" type="text/css" />
+    <link href="http://aimath.org/mathbook/mathbook-modern-3.css" rel="stylesheet" type="text/css" />
+    <link href="http://aimath.org/mathbook/icons.css" rel="stylesheet" type="text/css" />
     <link href="http://aimath.org/jmm2014/q1judson/add-on.css" rel="stylesheet" type="text/css" />
 </xsl:template>
 
