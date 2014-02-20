@@ -918,11 +918,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Manufacturing Knowls              -->
 <!-- "knowl" subdirectory is hardcoded -->
-<!-- First, make actual content in predictable location -->
+<!-- Name knowls as *.html so a known filetype for servers -->
+<!-- First, make actual content in predictable location    -->
 <xsl:template name="knowl-factory">
     <xsl:param name="identifier"/>
     <xsl:param name="content"/>
-    <exsl:document href="./knowl/{$identifier}.knowl" method="html">
+    <exsl:document href="./knowl/{$identifier}.html" method="html">
         <xsl:call-template name="converter-blurb" />
         <xsl:value-of select="$content" />
     </exsl:document>
@@ -939,7 +940,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="knowl">
             <xsl:text>./knowl/</xsl:text>
             <xsl:value-of select="$identifier" />
-            <xsl:text>.knowl</xsl:text>
+            <xsl:text>.html</xsl:text>
         </xsl:attribute>
         <xsl:value-of select="$content" />
     </xsl:element>
