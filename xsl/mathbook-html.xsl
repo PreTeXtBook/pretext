@@ -1074,7 +1074,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                         </div>
                 </div>
                 <xsl:if test="$toc='yes'">
-                    <xsl:call-template name="navbar" />
+                    <xsl:apply-templates select="." mode="nav-sidebar" />
                 </xsl:if>
             </header>
             <div class="page">
@@ -1104,31 +1104,65 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 </xsl:template>
 
 <!-- Table of Contents infrastructure, per page -->
-<xsl:template name="navbar">
+<!-- First global, fixed links for sidebar -->
+<!-- TODO Add chapter numbers -->
+<xsl:template name="toc-items">
+    <div id="toc-navbar-item" class="navbar-item">
+        <h2 class="navbar-item-text icon-navicon-round ">Table of Contents</h2>
+        <nav id="toc">
+        <xsl:for-each select="/mathbook/book/chapter|/mathbook/book/appendix">
+            <xsl:variable name="fn">
+                <xsl:value-of select="@filebase" />
+                <xsl:text>.html</xsl:text>
+            </xsl:variable>
+            <h2 class="link"><a href="{$fn}">
+            <xsl:apply-templates select="." mode="number" />
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="title/node()" /></a></h2>
+            <ul>
+            <xsl:for-each select="section">
+                <xsl:variable name="xref">
+                    <xsl:apply-templates select="." mode="xref-identifier" />
+                </xsl:variable>
+                <li><a href="{$fn}#{$xref}" data-scroll="{$xref}">
+                <xsl:apply-templates select="title/node()" /></a></li>
+            </xsl:for-each>
+            </ul>
+        </xsl:for-each>
+        </nav>
+    </div>
+</xsl:template>
+
+<!-- Second, construct navigation section, with sideways links -->
+<!-- http://stackoverflow.com/questions/12347412/concept-xml-xlst-preceding-sibling-and-ancestor -->
+<xsl:template match="*" mode="nav-sidebar">
     <div id="navbar">
         <div class="container">
-            <div id="toc-navbar-item" class="navbar-item">
-                <h2 class="navbar-item-text icon-navicon-round ">Table of Contents</h2>
-                <nav id="toc">
-                <xsl:for-each select="/mathbook/book/chapter|/mathbook/book/appendix">
-                    <xsl:variable name="fn">
-                        <xsl:value-of select="@filebase" />
-                        <xsl:text>.html</xsl:text>
-                    </xsl:variable>
-                    <h2 class="link"><a href="{$fn}">
-                    <xsl:apply-templates select="title/node()" /></a></h2>
-                    <ul>
-                    <xsl:for-each select="section">
-                        <xsl:variable name="xref">
-                            <xsl:apply-templates select="." mode="xref-identifier" />
-                        </xsl:variable>
-                        <li><a href="{$fn}#{$xref}" data-scroll="{$xref}">
-                        <xsl:apply-templates select="title/node()" /></a></li>
-                    </xsl:for-each>
-                    </ul>
-                </xsl:for-each>
-                </nav>
-            </div>
+            <xsl:call-template name="toc-items" />
+            <nav id="prevnext">
+                <!-- Previous -->
+                <xsl:if test="preceding-sibling::*[1]/@filebase">
+                    <a href="{preceding-sibling::*[1]/@filebase}.html">
+                        <svg height="50" width="60" viewBox="-10 50 110 100" xmlns="http://www.w3.org/2000/svg">
+                            <polygon points="-10,100 25,75 100,75 100,125 25,125"
+                            style="fill:blanchedalmond;stroke:burlywood;stroke-width:1" />
+                            <text x="28" y="108" fill="maroon" font-size="32">Prev</text>
+                        </svg>
+                    </a>
+                </xsl:if>
+                <!-- TODO: test if both buttons before making space -->
+                <xsl:text> </xsl:text>
+                <!-- Next -->
+                <xsl:if test="following-sibling::*[1]/@filebase">
+                    <a href="{following-sibling::*[1]/@filebase}.html">
+                        <svg height="50" width="60" viewBox="0 50 110 100" xmlns="http://www.w3.org/2000/svg">
+                            <polygon points="110,100 75,75 0,75 0,125 75,125"
+                            style="fill:darkred;stroke:maroon;stroke-width:1"/>
+                            <text x="13" y="108" fill="blanchedalmond" font-size="32">Next</text>
+                        </svg>
+                    </a>
+                </xsl:if>
+            </nav>
         </div>
     </div>
 </xsl:template>
@@ -1200,7 +1234,7 @@ $(function () {
     <!-- #1 to #5 for different color schemes -->
     <link href="http://aimath.org/mathbook/mathbook-modern-3.css" rel="stylesheet" type="text/css" />
     <link href="http://aimath.org/mathbook/icons.css" rel="stylesheet" type="text/css" />
-    <link href="http://aimath.org/jmm2014/q1judson/add-on.css" rel="stylesheet" type="text/css" />
+    <link href="http://aimath.org/mathbook/add-on.css" rel="stylesheet" type="text/css" />
 </xsl:template>
 
 <!-- LaTeX Macros -->
