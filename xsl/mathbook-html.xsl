@@ -1063,23 +1063,11 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:if test="$toc='yes'">
                 <xsl:attribute name="class">has-toc</xsl:attribute>
             </xsl:if>
-            <!-- Put MathJax macros onto page -->
-            <!-- TOD: make this a named template -->
-            <xsl:if test="/mathbook/docinfo/macros">
-                <div style="display:none;">
-                <xsl:text>\(</xsl:text>
-                <xsl:value-of select="/mathbook/docinfo/macros" />
-                <xsl:text>\)</xsl:text>
-                </div>
-            </xsl:if>
-            <header id="masthead">
+            <xsl:call-template name="latex-macros" />
+             <header id="masthead">
                 <div class="banner">
                         <div class="container">
-                            <xsl:if test="/mathbook/docinfo/brandlogo">
-                                <a id="logo-link" href="{/mathbook/docinfo/brandlogo/@url}" target="_blank" >
-                                    <img src="{/mathbook/docinfo/brandlogo/@source}" />
-                                </a>
-                            </xsl:if>
+                            <xsl:call-template name="brand-logo" />
                             <div class="title-container">
                                 <h1 id="title">
                                     <span class="title"><xsl:value-of select="$title" /></span>
@@ -1224,6 +1212,31 @@ $(function () {
     <link href="http://aimath.org/mathbook/icons.css" rel="stylesheet" type="text/css" />
     <link href="http://aimath.org/jmm2014/q1judson/add-on.css" rel="stylesheet" type="text/css" />
 </xsl:template>
+
+<!-- LaTeX Macros -->
+<!-- In a hidden div, for near the top of the page -->
+<xsl:template name="latex-macros">
+    <xsl:if test="/mathbook/docinfo/macros">
+        <div style="display:none;">
+        <xsl:text>\(</xsl:text>
+        <xsl:value-of select="/mathbook/docinfo/macros" />
+        <xsl:text>\)</xsl:text>
+        </div>
+    </xsl:if>
+</xsl:template>
+
+<!-- Brand Logo -->
+<!-- Place image in masthead -->
+<xsl:template name="brand-logo">
+    <xsl:if test="/mathbook/docinfo/brandlogo">
+        <a id="logo-link" href="{/mathbook/docinfo/brandlogo/@url}" target="_blank" >
+            <img src="{/mathbook/docinfo/brandlogo/@source}" />
+        </a>
+    </xsl:if>
+</xsl:template>
+
+
+
 
 <!-- Analytics Footers -->
 
