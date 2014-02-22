@@ -50,7 +50,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Article                                                    -->
 <!--     One page, full of sections (with abstract, references) -->
 <xsl:template match="mathbook/article">
-    <xsl:call-template name="page-wrapper">
+    <xsl:apply-templates select="." mode="page-wrap">
         <xsl:with-param name="filebase">
             <xsl:value-of select="@filebase" />
         </xsl:with-param>
@@ -73,13 +73,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates />
             </div>
         </xsl:with-param>
-    </xsl:call-template>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Book                                                                           -->
 <!--     A sequence of chapters and appendices (with table of contents, index, etc) -->
 <xsl:template match="mathbook/book">
-    <xsl:call-template name="page-wrapper">
+    <xsl:apply-templates select="." mode="page-wrap">
         <xsl:with-param name="filebase">
             <xsl:value-of select="@filebase" />
         </xsl:with-param>
@@ -97,7 +97,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Now actual content -->
             <xsl:apply-templates />
         </xsl:with-param>
-    </xsl:call-template>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Table of contents for front page -->
@@ -150,7 +150,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     Primary subdivision of a book, each to its own page -->
 <!-- TODO: adjust for appendices            -->
 <xsl:template match="chapter|appendix">
-    <xsl:call-template name="page-wrapper">
+    <xsl:apply-templates select="." mode="page-wrap">
         <xsl:with-param name="filebase">
             <xsl:value-of select="@filebase" />
         </xsl:with-param>
@@ -178,7 +178,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates />
             </section>
          </xsl:with-param>
-    </xsl:call-template>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Page Navigation Bar -->
@@ -1037,7 +1037,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!--     * basename for file name              -->
 <!--     * string for page title               -->
 <!--     * content (exclusive of banners, etc) -->
-<xsl:template name="page-wrapper">
+<xsl:template match="*" mode="page-wrap">
     <xsl:param name="filebase" />
     <xsl:param name="toc" />
     <xsl:param name="title" />
