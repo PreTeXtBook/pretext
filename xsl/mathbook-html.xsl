@@ -51,9 +51,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     One page, full of sections (with abstract, references) -->
 <xsl:template match="mathbook/article">
     <xsl:apply-templates select="." mode="page-wrap">
-        <xsl:with-param name="filebase">
-            <xsl:value-of select="@filebase" />
-        </xsl:with-param>
         <xsl:with-param name="toc">
             <xsl:value-of select="'no'" />
         </xsl:with-param>
@@ -80,9 +77,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     A sequence of chapters and appendices (with table of contents, index, etc) -->
 <xsl:template match="mathbook/book">
     <xsl:apply-templates select="." mode="page-wrap">
-        <xsl:with-param name="filebase">
-            <xsl:value-of select="@filebase" />
-        </xsl:with-param>
         <xsl:with-param name="toc">
             <xsl:value-of select="'yes'" />
         </xsl:with-param>
@@ -151,9 +145,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: adjust for appendices            -->
 <xsl:template match="chapter|appendix">
     <xsl:apply-templates select="." mode="page-wrap">
-        <xsl:with-param name="filebase">
-            <xsl:value-of select="@filebase" />
-        </xsl:with-param>
         <xsl:with-param name="toc">
             <xsl:value-of select="'yes'" />
         </xsl:with-param>
@@ -1038,13 +1029,12 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!--     * string for page title               -->
 <!--     * content (exclusive of banners, etc) -->
 <xsl:template match="*" mode="page-wrap">
-    <xsl:param name="filebase" />
     <xsl:param name="toc" />
     <xsl:param name="title" />
     <xsl:param name="subtitle" />
     <xsl:param name="authors" />
     <xsl:param name="content" />
-    <exsl:document href="{$filebase}.html" method="html">
+    <exsl:document href="{@filebase}.html" method="html">
     <!-- Need to be careful for format of this initial string     -->
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
     <html> <!-- lang="", and/or dir="rtl" here -->
