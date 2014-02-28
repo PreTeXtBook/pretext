@@ -142,13 +142,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]{article}&#xa;%&#xa;</xsl:text>
     <xsl:text>% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
     <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
-    <xsl:text>\geometry{letterpaper,total={5.0in,9.0in}}&#xa;</xsl:text>
+    <xsl:text>\geometry{letterpaper,total={6.0in,9.0in}}&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
     <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
     <xsl:text>\vspace*{\stretch{1}}&#xa;%&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;%&#xa;</xsl:text>
     <!-- Logos (letterhead images) to first page -->
     <xsl:apply-templates select="/mathbook/docinfo/logo" />
+    <xsl:text>\vspace*{0.75in}&#xa;</xsl:text>
     <!-- Sender's address, sans name typically -->
     <!-- and if not already on letterhead -->
     <!-- http://tex.stackexchange.com/questions/13542/flush-a-left-flushed-box-right -->
