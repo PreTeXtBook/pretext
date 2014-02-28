@@ -40,7 +40,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--  -->
 <!-- Geometry: page shape, margins, etc            -->
 <!-- Pass a string with any of geometry's options  -->
-<xsl:param name="latex.geometry" select="'letterpaper,total={5.0in,9.0in}'"/>
+<!-- Default is empty and thus ineffective         -->
+<!-- Otherwise, happens early in preamble template -->
+<xsl:param name="latex.geometry" select="''"/>
 <!--  -->
 <!-- PDF Watermarking                    -->
 <!-- Non-empty string makes it happen    -->
@@ -81,6 +83,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>draft,</xsl:text>
     </xsl:if>
     <xsl:text>]{article}&#xa;%&#xa;</xsl:text>
+    <xsl:text>% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
+    <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
+    <xsl:text>\geometry{letterpaper,total={5.0in,9.0in}}&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
     <xsl:call-template name="title-page-info-article" />
     <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
@@ -103,6 +108,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>draft,</xsl:text>
     </xsl:if>
     <xsl:text>]{book}&#xa;%&#xa;</xsl:text>
+    <xsl:text>% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
+    <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
+    <xsl:text>\geometry{letterpaper,total={5.0in,9.0in}}&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
     <xsl:call-template name="title-page-info-book" />
     <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
@@ -132,6 +140,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>draft,</xsl:text>
     </xsl:if>
     <xsl:text>]{article}&#xa;%&#xa;</xsl:text>
+    <xsl:text>% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
+    <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
+    <xsl:text>\geometry{letterpaper,total={5.0in,9.0in}}&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
     <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
     <xsl:text>\vspace*{\stretch{1}}&#xa;%&#xa;</xsl:text>
@@ -208,11 +219,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Custom entries to preamble, early&#xa;</xsl:text>
     <xsl:value-of select="$latex.preamble.early" />
     <xsl:text>&#xa;</xsl:text>
-<xsl:text>%% Page layout
-\usepackage{geometry}&#xa;</xsl:text>
-<xsl:text>\geometry{</xsl:text>
-<xsl:value-of select="$latex.geometry" />
-<xsl:text>}&#xa;</xsl:text>
+    <!-- Override any page margins set per style, default is empty -->
+    <xsl:text>%% Page layout adjustment&#xa;</xsl:text>
+    <xsl:text>\geometry{</xsl:text>
+    <xsl:value-of select="$latex.geometry" />
+    <xsl:text>}&#xa;</xsl:text>
 <xsl:text>%% Symbols, align environment, bracket-matrix
 \usepackage{amsmath}
 %% allow more columns to a matrix
