@@ -184,31 +184,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- process the body -->
     <xsl:apply-templates />
     <!-- Closing block -->
-    <xsl:text>\par\vspace*{1.5\baselineskip}\noindent&#xa;</xsl:text>
-    <xsl:text>\hspace{\stretch{2}}\begin{tabular}{l@{}}&#xa;</xsl:text>
-        <xsl:apply-templates select="/mathbook/docinfo/closing" />
-        <xsl:text>,</xsl:text>
-        <xsl:choose>
-            <xsl:when test="/mathbook/docinfo/graphic-signature">
-                <xsl:text>\\[1ex]&#xa;</xsl:text>
-                <xsl:text>\includegraphics[height=</xsl:text>
-                <xsl:choose>
-                    <xsl:when test="/mathbook/docinfo/graphic-signature/@scale">
-                        <xsl:value-of select="/mathbook/docinfo/graphic-signature/@scale" />
-                    </xsl:when>
-                    <xsl:otherwise>4</xsl:otherwise>
-                </xsl:choose>
-                <xsl:text>ex]{</xsl:text>
-                <xsl:value-of select="/mathbook/docinfo/graphic-signature/@source" />
-                <xsl:text>}\\[0.5ex]&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <!-- About two blank lines for written signature -->
-                <xsl:text>\\[5.5ex]&#xa;</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:apply-templates select="/mathbook/docinfo/signature" />
-    <xsl:text>&#xa;\end{tabular}\hspace{\stretch{1}}&#xa;%&#xa;</xsl:text>
+    <xsl:if test="/mathbook/docinfo/closing">
+        <xsl:text>\par\vspace*{1.5\baselineskip}\noindent&#xa;</xsl:text>
+        <xsl:text>\hspace{\stretch{2}}\begin{tabular}{l@{}}&#xa;</xsl:text>
+            <xsl:apply-templates select="/mathbook/docinfo/closing" />
+            <!-- TODO: no comma if closing is empty, or make closing a block -->
+            <xsl:text>,</xsl:text>
+            <xsl:choose>
+                <xsl:when test="/mathbook/docinfo/graphic-signature">
+                    <xsl:text>\\[1ex]&#xa;</xsl:text>
+                    <xsl:text>\includegraphics[height=</xsl:text>
+                    <xsl:choose>
+                        <xsl:when test="/mathbook/docinfo/graphic-signature/@scale">
+                            <xsl:value-of select="/mathbook/docinfo/graphic-signature/@scale" />
+                        </xsl:when>
+                        <xsl:otherwise>4</xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:text>ex]{</xsl:text>
+                    <xsl:value-of select="/mathbook/docinfo/graphic-signature/@source" />
+                    <xsl:text>}\\[0.5ex]&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <!-- About two blank lines for written signature -->
+                    <xsl:text>\\[5.5ex]&#xa;</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:apply-templates select="/mathbook/docinfo/signature" />
+        <xsl:text>&#xa;\end{tabular}\hspace{\stretch{1}}&#xa;%&#xa;</xsl:text>
+    </xsl:if>
+    <!-- Stretchy vertical space, useful if still on page 1 -->
     <xsl:text>\par\vspace*{\stretch{2}}&#xa;%&#xa;</xsl:text>
     <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
