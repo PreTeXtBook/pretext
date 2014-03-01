@@ -558,7 +558,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Include solutions to exercises by default value of switch-->
 <xsl:template match="exercise">
     <xsl:text>\begin{exercise}</xsl:text>
-    <xsl:apply-templates select=".." mode="label"/>
+    <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="statement"/>
     <xsl:apply-templates select="solution"/>
