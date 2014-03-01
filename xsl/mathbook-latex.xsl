@@ -831,7 +831,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}}</xsl:text>
 </xsl:template>    
 
+<!-- Special Characters from TeX -->
+<!--    # $ % ^ & _ { } ~ \      -->
+<!-- These need special treatment, elements     -->
+<!-- here are for text mode, and are not for    -->
+<!-- use inside mathematics elements, e.g. <m>. -->
 
+<!-- Number Sign, Hash, Octothorpe -->
+<xsl:template match="hash">
+    <xsl:text>\#</xsl:text>
+</xsl:template>
 
 <!-- Dollar sign -->
 <xsl:template match="dollar">
@@ -843,20 +852,53 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\%</xsl:text>
 </xsl:template>
 
+<!-- Circumflex  -->
+<xsl:template match="circum">
+    <xsl:text>\textasciicircum </xsl:text>
+</xsl:template>
+
 <!-- Ampersand -->
-<!-- Not for formatting control, but to see actual character -->
+<!-- Not for controlling mathematics -->
+<!-- or table formatting             -->
 <xsl:template match="ampersand">
     <xsl:text>\&amp;</xsl:text>
 </xsl:template>
 
+<!-- Text underscore -->
+<xsl:template match="underscore">
+    <xsl:text>\_</xsl:text>
+</xsl:template>
+
+<!-- Braces -->
+<!-- Individually, or matched -->
+<xsl:template match="lbrace">
+    <xsl:text>\{</xsl:text>
+</xsl:template>
+<xsl:template match="rbrace">
+    <xsl:text>\}</xsl:text>
+</xsl:template>
+<xsl:template match="braces">
+    <xsl:text>\{</xsl:text>
+    <xsl:apply-templates />>
+    <xsl:text>\}</xsl:text>
+</xsl:template>
+
+<!-- Tilde -->
+<xsl:template match="tilde">
+    <xsl:text>\textasciitilde </xsl:text>
+</xsl:template>
+
+<!-- Backslash -->
+<!-- See url element for comprehensive approach -->
+<xsl:template match="backslash">
+    <xsl:text>\textbackslash </xsl:text>
+</xsl:template>
+
+<!-- Other Miscellaneous Symbols, Constructions -->
+
 <!-- Ellipsis (dots), for text, not math -->
 <xsl:template match="ellipsis">
     <xsl:text>\dots </xsl:text>
-</xsl:template>
-
-<!-- text underscore -->
-<xsl:template match="underscore">
-    <xsl:text>\_</xsl:text>
 </xsl:template>
 
 <!-- \@ following a period makes it an abbreviation, not the end of a sentence -->
@@ -895,11 +937,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 <xsl:template match="tex">
     <xsl:text>\TeX </xsl:text>
-</xsl:template>
-
-<!-- Number Sign, Hash, Octothorpe -->
-<xsl:template match="hash">
-    <xsl:text>\#</xsl:text>
 </xsl:template>
 
 <!-- Foreign words/idioms        -->
