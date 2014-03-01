@@ -899,9 +899,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Line Breaks -->
-<!-- use sparingly, e.g. for poetry, not in math environments-->
+<!-- \newline works best in table cells in paragraph mode       -->
+<!-- so as to not be confused with \\ at the end of a table row -->
+<!-- use sparingly, e.g. for poetry, *not* in math environments -->
+<!-- Must be in TeX's paragraph mode                            -->
 <xsl:template match="br">
-    <xsl:text>\\</xsl:text>
+    <xsl:text>\newline </xsl:text>
 </xsl:template>
 
 <!-- Non-breaking space, which "joins" two words as a unit -->
