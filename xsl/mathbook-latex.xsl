@@ -765,7 +765,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Use at the end of a blockquote -->
 <xsl:template match="blockquote/attribution">
-    <xsl:text>\\\hspace*{\stretch{1}}\textemdash\space{}</xsl:text>
+    <xsl:text>\\\hspace*{\stretch{1}}\textemdash\space </xsl:text>
     <xsl:apply-templates />
 </xsl:template>
 
@@ -839,7 +839,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Ellipsis (dots), for text, not math -->
 <xsl:template match="ellipsis">
-    <xsl:text>\dots{}</xsl:text>
+    <xsl:text>\dots </xsl:text>
 </xsl:template>
 
 <!-- text underscore -->
@@ -847,22 +847,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\_</xsl:text>
 </xsl:template>
 
-
+<!-- \@ following a period makes it an abbreviation, not the end of a sentence -->
+<!-- So use it for abbreviations which will not end a sentence                 -->
+<!-- Best: \makeatletter\newcommand\etc{etc\@ifnextchar.{}{.\@}}\makeatother   -->
+<!-- http://latex-alive.tumblr.com/post/827168808/correct-punctuation-spaces   -->
 
 <!-- for example -->
 <xsl:template match="eg">
-    <xsl:text>e.g.{}</xsl:text>
+    <xsl:text>e.g.\@</xsl:text>
 </xsl:template>
 
 <!-- Copyright symbol -->
 <xsl:template match="copyright">
-    <xsl:text>\copyright{}</xsl:text>
+    <xsl:text>\copyright </xsl:text>
 </xsl:template>
 
 
 <!-- in other words -->
 <xsl:template match="ie">
-    <xsl:text>i.e.{}</xsl:text>
+    <xsl:text>i.e.\@</xsl:text>
 </xsl:template>
 
 <!-- Implication Symbols -->
@@ -876,10 +879,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- TeX, LaTeX -->
 <xsl:template match="latex">
-    <xsl:text>\LaTeX{}</xsl:text>
+    <xsl:text>\LaTeX </xsl:text>
 </xsl:template>
 <xsl:template match="tex">
-    <xsl:text>\TeX{}</xsl:text>
+    <xsl:text>\TeX </xsl:text>
 </xsl:template>
 
 <!-- Number Sign, Hash, Octothorpe -->
@@ -910,10 +913,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Dashes -->
 <!-- http://www.public.asu.edu/~arrows/tidbits/dashes.html -->
 <xsl:template match="mdash">
-    <xsl:text>\textemdash{}</xsl:text>
+    <xsl:text>\textemdash </xsl:text>
 </xsl:template>
 <xsl:template match="ndash">
-    <xsl:text>\textendash{}</xsl:text>
+    <xsl:text>\textendash </xsl:text>
 </xsl:template>
 <xsl:template match="hyphen">
     <xsl:text>-</xsl:text>
@@ -1065,9 +1068,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="thead">
-    <xsl:text>\hline\hline{}</xsl:text>
+    <xsl:text>\hline\hline </xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\\\hline\hline{}</xsl:text>
+    <xsl:text>\\\hline\hline </xsl:text>
 </xsl:template>
 
 <xsl:template match="tbody">
