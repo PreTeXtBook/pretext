@@ -567,10 +567,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="exercise/solution">
     <xsl:if test="$solutions.included='yes'">
-        <xsl:text>\par\smallskip\noindent{}\textbf{</xsl:text>
+        <xsl:text>\par\smallskip\noindent\textbf{</xsl:text>
         <xsl:apply-templates select="." mode="type-name" />
-        <xsl:text>.}\ \ {}</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>.}\quad&#xa;</xsl:text>
         <xsl:apply-templates />
     </xsl:if>
 </xsl:template>
