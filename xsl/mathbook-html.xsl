@@ -435,20 +435,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="xref[@ref]">
-    <xsl:variable name="target-node" select="id(@ref)" />
+    <!-- Save what the reference points to -->
+    <xsl:variable name="target" select="id(@ref)" />
+    <!-- Create what the reader sees, equation references get parentheses -->
+    <xsl:variable name="visual">
+        <xsl:choose>
+            <xsl:when test="$target/self::mrow or $target/self::me or $target/self::men">
+                <xsl:text>(</xsl:text>
+                <xsl:apply-templates select="$target" mode="number" />
+                <xsl:text>)</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="$target" mode="number" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Build the anchor -->
     <xsl:element name ="a">
         <!-- http://stackoverflow.com/questions/585261/is-there-an-xslt-name-of-element -->
         <!-- Sans namespace (would be name(.)) -->
         <xsl:attribute name="class">
-            <xsl:value-of select="local-name($target-node)" />
+            <xsl:value-of select="local-name($target)" />
         </xsl:attribute>
         <xsl:attribute name="href">
-            <xsl:apply-templates select="$target-node" mode="basename" />
+            <xsl:apply-templates select="$target" mode="basename" />
             <xsl:text>.html</xsl:text>
             <xsl:text>#</xsl:text>
-            <xsl:apply-templates select="$target-node" mode="xref-identifier" />
+            <xsl:apply-templates select="$target" mode="xref-identifier" />
         </xsl:attribute>
-    <xsl:apply-templates select="$target-node" mode="number" />
+    <xsl:value-of select="$visual" />
     </xsl:element>
 </xsl:template>
 
@@ -826,6 +841,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Math  -->
 <!-- Inline snippets -->
+<!-- Any numbered equation needs a TeX \label set                    -->
+<!-- with the xml:id of the equation, so equation references workout -->
+<!-- Note: we could set \label with something different              -->
 <xsl:template match= "m">
     <xsl:text>\(</xsl:text>
     <xsl:value-of select="." />
@@ -1168,9 +1186,12 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 </xsl:template>
 
 
-<!-- MathJax header                                     -->
-<!-- XML manages equation numbers                       -->
-<!-- Config MathJax to make link targets we can predict -->
+<!-- MathJax header                                             -->
+<!-- XML manages equation numbers                               -->
+<!-- Config MathJax to make anchor names on equations           -->
+<!--   these are just the contents of the \label on an equation -->
+<!--   which we provide as the xml:id of the equation           -->
+<!-- Note: we could set \label with something different         -->
 <xsl:template name="mathjax">
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({

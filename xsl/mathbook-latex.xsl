@@ -1111,9 +1111,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
+<!-- LaTeX references equations differently than theorems, etc -->
 <xsl:template match="xref[@ref]">
-    <xsl:text>\ref{</xsl:text>
-    <xsl:apply-templates select="id(@ref)" mode="xref-identifier" />
+    <xsl:variable name="target" select="id(@ref)" />
+    <xsl:choose>
+        <xsl:when test="$target/self::mrow or $target/self::me or $target/self::men">
+            <xsl:text>\eqref{</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\ref{</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:apply-templates select="$target" mode="xref-identifier" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 

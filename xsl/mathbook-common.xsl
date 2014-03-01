@@ -286,6 +286,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:number level="any" />
 </xsl:template>
 
+<!-- MathJax can make anchors for equations                -->
+<!-- We configure MathJax to use TeX \label contents       -->
+<!-- (which we provide with the xml:id of the equation)    -->
+<!-- as the anchor name, so we just return the xml:id here -->
+<!-- Note: we could set \label with something different    -->
+<xsl:template match="me|men|mrow" mode="xref-identifier">
+    <xsl:value-of select="@xml:id" />
+</xsl:template>
+
 <!-- Filenames -->
 <!-- Automatically generated basenames for -->
 <!-- filenames, when chunking, especially  -->
