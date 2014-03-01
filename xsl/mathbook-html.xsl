@@ -199,6 +199,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:message>
 </xsl:template>
 
+<xsl:template match="memo" mode="chunk">
+    <xsl:message terminate="yes">
+        <xsl:text>MBX:ERROR:  HTML conversion does not support the "memo" document type.  Quitting...</xsl:text>
+    </xsl:message>
+</xsl:template>
+
 
 
 

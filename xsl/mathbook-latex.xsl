@@ -240,11 +240,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- the body -->
     <xsl:copy-of select="$content" />
     <xsl:call-template name="latex-postamble" />
+    <xsl:text>\end{document}</xsl:text>
+</xsl:template>
+
+<!-- A memo, LaTeX structure -->
+<xsl:template match="memo" mode="content-wrap">
+    <xsl:param name="content" />
+    <xsl:call-template name="converter-blurb-latex" />
+    <xsl:text>\documentclass[</xsl:text>
+    <xsl:value-of select="$latex.font.size" />
+    <xsl:text>,</xsl:text>
+    <xsl:if test="$latex.draft='yes'" >
+        <xsl:text>draft,</xsl:text>
+    </xsl:if>
+    <xsl:text>]{article}&#xa;%&#xa;</xsl:text>
+    <xsl:text>% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
+    <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
+    <xsl:text>\geometry{letterpaper,total={6.0in,9.0in}}&#xa;</xsl:text>
+    <xsl:call-template name="latex-preamble" />
+    <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
+    <!-- process the body -->
+    <xsl:copy-of select="$content" />
+    <xsl:call-template name="latex-postamble" />
     <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- LaTeX preamble is common for books, articles and letters           -->
-<!-- Except: title info allows an "event" for an article (presentation) -->
+<!-- LaTeX preamble is common for both books, articles, memos and letters -->
+<!-- Except: title info allows an "event" for an article (presentation)   -->
 <xsl:template name="latex-preamble">
     <xsl:text>%% Custom Preamble Entries, early (use latex.preamble.early)&#xa;</xsl:text>
     <xsl:if test="$latex.preamble.early != ''">
@@ -915,7 +937,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% End: Author-provided macros&#xa;</xsl:text>
 </xsl:template>
 
-<!-- LaTeX postamble is common for books, articles and letters      -->
+<!-- LaTeX postamble is common for books, articles, memos and letters -->
 <!-- No index if in draft mode                                      -->
 <!-- Maybe make this elective as a backmatter item (HTML effect?)   -->
 <xsl:template name="latex-postamble">
@@ -936,6 +958,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:text>\printindex&#xa;</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<!-- Tack in a graphic with initials                   -->
+<!-- Height is just enough to not disrupt line spacing -->
+<!-- Place inline, no carriage returns                 -->
+<xsl:template match="initial">
+  <xsl:text>\hspace*{-0.75ex}{}</xsl:text>
+  <xsl:text>\raisebox{0.2\baselineskip}{\includegraphics[height=0.55\baselineskip]{</xsl:text>
+  <xsl:apply-templates select="@source" />
+  <xsl:text></xsl:text>
+  <xsl:text>}}\hspace*{-0.75ex}{}</xsl:text>
 </xsl:template>
 
 <xsl:template name="title-page-info-book">
@@ -1393,6 +1426,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- ################### -->
+<!-- Front Matter, Memos -->
+<!-- ################### -->
+
+<xsl:template match="memo/frontmatter" mode="content-wrap">
+    <xsl:param name="content" />
+    <xsl:text>\thispagestyle{empty}&#xa;%&#xa;</xsl:text>
+    <!-- Logos (letterhead images) to first page -->
+    <xsl:apply-templates select="/mathbook/docinfo/logo" />
+    <!-- Get width of widest out-dented text -->
+    <xsl:text>\newlength{\subjectwidth}&#xa;</xsl:text>
+    <xsl:text>\settowidth{\subjectwidth}{\textsf{Subject:}}&#xa;</xsl:text>
+    <!-- Push down some on first page to accomodate letterhead -->
+    <xsl:text>\vspace*{0.75in}&#xa;</xsl:text>
+    <!-- Outdent experimentally, scales well at 10pt, 11pt, 12pt -->
+    <!-- Control separation                                      -->
+    <xsl:text>\hspace*{-1.87\subjectwidth}%&#xa;</xsl:text>
+    <xsl:text>{\setlength{\tabcolsep}{1ex}%&#xa;</xsl:text>
+    <!-- Second column at textwidth is slightly too much -->
+    <xsl:text>\begin{tabular}{rp{0.97\textwidth}}&#xa;</xsl:text>
+    <xsl:text>\textsf{To:}&amp;</xsl:text>
+    <xsl:apply-templates select="to" /><xsl:text>\\&#xa;</xsl:text>
+    <xsl:text>\textsf{From:}&amp;</xsl:text>
+    <xsl:apply-templates select="from" /><xsl:text>\\&#xa;</xsl:text>
+    <xsl:text>\textsf{Date:}&amp;</xsl:text>
+    <xsl:apply-templates select="date" /><xsl:text>\\&#xa;</xsl:text>
+    <xsl:text>\textsf{Subject:}&amp;</xsl:text>
+    <xsl:apply-templates select="subject" /><xsl:text>&#xa;</xsl:text>
+    <xsl:text>\end{tabular}%&#xa;</xsl:text>
+    <xsl:text>}%&#xa;</xsl:text>
+    <!-- And drop a bit -->
+    <xsl:text>\par\bigskip&#xa;</xsl:text>
+</xsl:template>
+
 <!-- ############ -->
 <!-- Back Matter -->
 <!-- ############ -->
@@ -1516,6 +1583,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Stretchy vertical space, useful if still on page 1 -->
     <xsl:text>\par\vspace*{\stretch{2}}&#xa;%&#xa;</xsl:text>
 </xsl:template>
+
+<!-- ################## -->
+<!-- Back Matter, Memos -->
+<!-- ################## -->
+
+<!-- TODO: add "cc" block like to/from -->
+<xsl:template match="memo/backmatter" mode="content-wrap">
+    <xsl:param name="content" />
+</xsl:template>
+
+
 
 <!-- ####################### -->
 <!-- Logos (image placements) -->
@@ -1970,6 +2048,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="p">
     <xsl:text>\par&#xa;</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- For a memo, not indenting the first paragraph helps -->
+<!-- with alignment and the to/from/subject/date block   -->
+<xsl:template match="memo/p[1]">
+    <xsl:text>\noindent{}</xsl:text>
     <xsl:apply-templates />
     <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
