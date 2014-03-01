@@ -229,27 +229,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\geometry{</xsl:text>
     <xsl:value-of select="$latex.geometry" />
     <xsl:text>}&#xa;</xsl:text>
-<xsl:text>%% Symbols, align environment, bracket-matrix
-\usepackage{amsmath}
-%% allow more columns to a matrix
-%% can make this even bigger by overiding with preamble addition
-\setcounter{MaxMatrixCols}{30}
-\usepackage{amssymb}
-%% Two nonstandard macros that MathJax supports automatically
-%% so we define them in order to allow their use and
-%% maintain source level compatibility
-%% This avoids using two XML entities in source mathematics&#xa;</xsl:text>
-<!-- Need CDATA here to protect inequalities as part of an XML file -->
-<xsl:text><![CDATA[\newcommand{\lt}{<}]]>&#xa;</xsl:text>
-<xsl:text><![CDATA[\newcommand{\gt}{>}]]>&#xa;</xsl:text>
-<xsl:text>%% Environments with amsthm package&#xa;</xsl:text>
-<xsl:text>\usepackage{amsthm}&#xa;</xsl:text>
-<xsl:text>% Theorem-like enviroments, italicized statement, proof, etc&#xa;</xsl:text>
-<xsl:text>% Numbering: X.Y numbering scheme&#xa;</xsl:text>
-<xsl:text>%   i.e. Corollary 4.3 is third item in Chapter 4 of a book&#xa;</xsl:text>
-<xsl:text>%   i.e. Lemma 5.6 is sixth item in Section 5 of an article&#xa;</xsl:text>
-<xsl:text>\theoremstyle{plain}&#xa;</xsl:text>
-<xsl:if test="//theorem">
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% Symbols, align environment, bracket-matrix&#xa;</xsl:text>
+    <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
+    <xsl:text>%% allow more columns to a matrix&#xa;</xsl:text>
+    <xsl:text>%% can make this even bigger by overiding with preamble addition&#xa;</xsl:text>
+    <xsl:text>\setcounter{MaxMatrixCols}{30}&#xa;</xsl:text>
+    <xsl:text>\usepackage{amssymb}&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% XML, MathJax Conflict Macros&#xa;</xsl:text>
+    <xsl:text>%% Two nonstandard macros that MathJax supports automatically&#xa;</xsl:text>
+    <xsl:text>%% so we always define them in order to allow their use and&#xa;</xsl:text>
+    <xsl:text>%% maintain source level compatibility&#xa;</xsl:text>
+    <xsl:text>%% This avoids using two XML entities in source mathematics&#xa;</xsl:text>
+    <!-- Need CDATA here to protect inequalities as part of an XML file -->
+    <xsl:text><![CDATA[\newcommand{\lt}{<}]]>&#xa;</xsl:text>
+    <xsl:text><![CDATA[\newcommand{\gt}{>}]]>&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% Semantic Macros&#xa;</xsl:text>
+    <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
+    <xsl:text>%% Only defined here if required in this document&#xa;</xsl:text>
+    <xsl:if test="/mathbook//term">
+        <xsl:text>\newcommand{\terminology}[1]{\textbf{#1}}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>%% Environments with amsthm package&#xa;</xsl:text>
+    <xsl:text>\usepackage{amsthm}&#xa;</xsl:text>
+    <xsl:text>% Theorem-like enviroments, italicized statement, proof, etc&#xa;</xsl:text>
+    <xsl:text>% Numbering: X.Y numbering scheme&#xa;</xsl:text>
+    <xsl:text>%   i.e. Corollary 4.3 is third item in Chapter 4 of a book&#xa;</xsl:text>
+    <xsl:text>%   i.e. Lemma 5.6 is sixth item in Section 5 of an article&#xa;</xsl:text>
+    <xsl:text>\theoremstyle{plain}&#xa;</xsl:text>
+    <xsl:if test="//theorem">
     <xsl:text>\newtheorem{theorem}{</xsl:text>
     <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'theorem'" /></xsl:call-template>
     <xsl:text>}</xsl:text>
@@ -777,8 +787,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Defined terms (bold) -->
+<!-- Need to write definition of \terminology -->
+<!-- into preamble as semantic macro          -->
 <xsl:template match="term">
-    <xsl:text>\textbf{</xsl:text>
+    <xsl:text>\terminology{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>
