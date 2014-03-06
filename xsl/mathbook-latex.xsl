@@ -93,8 +93,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\maketitle&#xa;%&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\thispagestyle{empty}&#xa;%&#xa;</xsl:text>
-    <xsl:apply-templates select="/mathbook/docinfo/abstract" />
-    <xsl:apply-templates />
+    <xsl:apply-templates select="abstract" />
+    <xsl:apply-templates select="section" />
+    <xsl:apply-templates select="bibliography" />
     <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
 
@@ -465,7 +466,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- Articles may have an abstract in the docinfo -->
+<!-- Articles may have an abstract at the top level -->
 <xsl:template match="abstract">
     <xsl:text>\begin{abstract}&#xa;</xsl:text>
     <xsl:apply-templates />

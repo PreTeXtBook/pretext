@@ -370,8 +370,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:number level="multiple" count="chapter|section|subsection|subsubsection|paragraph|subparagraph" />
 </xsl:template>
 
-<!-- We presume only one book or article -->
-<xsl:template match="book|article" mode="number"></xsl:template>
+<!-- We presume only one of these, hence no number -->
+<!--   book, article, abstract, bibliography       -->
+<xsl:template match="book|article|abstract|bibliography" mode="number"></xsl:template>
 
 <xsl:template match="*" mode="number">
     <xsl:message terminate="no">

@@ -44,8 +44,16 @@
         scrubbed.  Use indentation and line breaks liberally
         within containers to make the structure of your 
         source readable.
+
+        An abstract and a bibliography are like special sections,
+        they belong at the same level in the hierarchy as a
+        section.
         -->
         <todo>Titled paragraph subdivisions</todo>
+
+        <abstract>
+            <p>This is a sample of many of the things you can do with MathBook XML.  Sometimes the math makes sense, sometimes it seems to be written in the fist person, sort of like this Abstract.</p>
+        </abstract>
 
         <section>
             <title>Introduction</title>

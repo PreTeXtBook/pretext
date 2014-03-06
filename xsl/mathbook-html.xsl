@@ -66,8 +66,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:with-param>
         <xsl:with-param name="content">
             <div class="article">
-                <!-- TODO: an abstract here, from docinfo, or like preface? -->
-                <xsl:apply-templates />
+                <xsl:apply-templates select="abstract"/>
+                <xsl:apply-templates select="section"/>
+                <xsl:apply-templates select="bibliography"/>
             </div>
         </xsl:with-param>
     </xsl:apply-templates>
@@ -202,7 +203,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Sectioning -->
 <!-- Sections, subsections, subsubsections          -->
 <!-- TODO: meld in chapters, configurable chunking -->
-<xsl:template match="section|subsection|subsubsection|paragraph|subparagraph">
+<!-- An abstract and bibliography are treated like sections of an article here -->
+<xsl:template match="section|subsection|subsubsection|paragraph|subparagraph|article/abstract|article/bibliography">
     <xsl:variable name="xref">
         <xsl:apply-templates select="." mode="xref-identifier" />
     </xsl:variable>
