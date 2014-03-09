@@ -266,7 +266,7 @@
 
             <figure xml:id="figure-function-derivative">
                 <caption>A function and its derivative</caption>
-                <image width="350" source="cubic-function.png" />
+                <image width="350" source="images/cubic-function.png" />
             </figure>
         </section>
 
@@ -432,10 +432,10 @@
         <section>
             <title>Video</title>
 
-            <p>Embedded videos can make sense for a web version of your document. This is a video promoting the University of Puget Sound to potential new students.</p>
+            <p>Embedded videos can make sense for a web version of your document. This is a video promoting the University of Puget Sound to potential new students.  Support is limited to WebM format initially, mp4 support will be easy to add.  This may require an HTML5 capable browser, such as Chrome, to render properly.</p>
 
             <figure>
-                <video href="images/ups-visitor-guide.mp4" />
+                <video source="images/ups-visitor-guide-360.mp4" />
                 <caption>University of Puget Sound Promotional Video</caption>
             </figure>
 
