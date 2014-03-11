@@ -707,6 +707,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Intertext -->
+<!-- A LaTeX construct really, so we just do the right thing -->
+<xsl:template match="md/intertext|mdn/intertext">
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>\intertext{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
 
 <!-- Lists -->
 <xsl:template match="ol">

@@ -69,11 +69,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- align if there are ampersands, gather otherwise                             -->
 <!-- Output follows source line breaks                                           -->
 <!-- Individual mrows are handled differently for HTML versus MathJax            -->
+<!-- The intertext element assumes an align environment for HTML output          -->
 <xsl:template match="md|mdn">
     <xsl:choose>
         <xsl:when test="contains(., '&amp;')">
             <xsl:text>\begin{align}</xsl:text>
-            <xsl:apply-templates select="mrow" />
+            <xsl:apply-templates select="mrow|intertext" />
             <xsl:text>\end{align}</xsl:text>
         </xsl:when>
         <xsl:otherwise>

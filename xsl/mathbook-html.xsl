@@ -964,8 +964,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Intertext -->
+<!-- A LaTeX construct really, we just jump in/out of the align environment   -->
+<!-- And package the text in an HTML paragraph, assuming it is just a snippet -->
+<xsl:template match="md/intertext|mdn/intertext">
+    <xsl:text>\end{align}&#xa;</xsl:text>
+    <p>
+    <xsl:apply-templates />
+    </p>
+    <xsl:text>\begin{align}&#xa;</xsl:text>
+</xsl:template>
 
-    
+
 <!--Manual numbering example
 <xsl:template match="mrow">
     <xsl:text>&#xa;</xsl:text>
