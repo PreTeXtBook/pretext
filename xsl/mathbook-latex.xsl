@@ -74,6 +74,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- An article, LaTeX structure -->
+<!--     One page, full of sections (with abstract, references)                    -->
+<!--     Or, one page, totally unstructured, just lots of paragraphs, widgets, etc -->
 <xsl:template match="article">
     <xsl:call-template name="converter-blurb" />
     <xsl:text>\documentclass[</xsl:text>
@@ -93,10 +95,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\maketitle&#xa;%&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\thispagestyle{empty}&#xa;%&#xa;</xsl:text>
-    <xsl:apply-templates select="abstract" />
-    <xsl:apply-templates select="section" />
-    <xsl:apply-templates select="bibliography" />
-    <xsl:text>\end{document}&#xa;</xsl:text>
+    <xsl:apply-templates select="abstract"/>
+    <xsl:apply-templates select="*[not(self::abstract or self::bibliography)]"/>
+    <xsl:apply-templates select="bibliography"/>
+   <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- A book, LaTeX structure -->

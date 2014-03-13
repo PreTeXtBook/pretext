@@ -67,7 +67,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="content">
             <div class="article">
                 <xsl:apply-templates select="abstract"/>
-                <xsl:apply-templates select="section"/>
+                <xsl:apply-templates select="*[not(self::abstract or self::bibliography)]"/>
                 <xsl:apply-templates select="bibliography"/>
             </div>
         </xsl:with-param>
