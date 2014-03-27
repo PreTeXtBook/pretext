@@ -1130,7 +1130,6 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:if test="//video">
                 <xsl:call-template name="video" />
             </xsl:if>
-            <link rel="stylesheet" type="text/css" href="mathbook.css" />
         </head>
         <xsl:element name="body">
             <xsl:if test="$toc='yes'">
