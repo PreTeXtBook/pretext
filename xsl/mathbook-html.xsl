@@ -61,8 +61,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="/mathbook/docinfo/event" />
             <xsl:apply-templates select="/mathbook/docinfo/date" />
         </xsl:with-param>
-        <xsl:with-param name="authors">
-            <xsl:apply-templates select="/mathbook/docinfo/author/personname" />
+        <!-- Serial list of authors names only -->
+        <xsl:with-param name="credits">
+            <xsl:apply-templates select="/mathbook/docinfo/author" mode="name-list"/>
         </xsl:with-param>
         <xsl:with-param name="content">
             <div class="article">
@@ -85,8 +86,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="title/node()" />
         </xsl:with-param>
         <xsl:with-param name="subtitle"></xsl:with-param>
-        <xsl:with-param name="authors">
-            <xsl:apply-templates select="/mathbook/docinfo/author/personname" />
+        <!-- Serial list of authors, names only -->
+        <xsl:with-param name="credits">
+            <xsl:apply-templates select="/mathbook/docinfo/author" mode="name-list"/>
         </xsl:with-param>
         <xsl:with-param name="content">
             <!-- Now actual content -->
@@ -121,14 +123,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <h2 class="link"><a href="http://aimath.org/~farmer/htmlbooks/Dec2013/farmer/index.html">Abstract</a></h2>
     <h2 class="link"><a href="http://aimath.org/~farmer/htmlbooks/Dec2013/farmer/section1.html">Introduction</a></h2>
 </xsl:variable>
-<!-- Author, single one at titlepage -->
-<xsl:template match="author">
-    <div class="author-info">
-        <div class="author-name"><xsl:apply-templates select="personname" /></div>
-        <div class="author-department"><xsl:apply-templates select="department" /></div>
-        <div class="author-institution"><xsl:apply-templates select="institution" /></div>
-        <div class="author-email"><xsl:apply-templates select="email" /></div>
-    </div>
+
+<!-- Authors in serial lists for headers -->
+<xsl:template match="author[1]" mode="name-list" >
+    <xsl:apply-templates select="personname" />
+</xsl:template>
+<xsl:template match="author" mode="name-list" >
+    <xsl:text>, </xsl:text>
+    <xsl:apply-templates select="personname" />
 </xsl:template>
 
 <!-- Preface, automatic title, no subsections, etc         -->
@@ -153,8 +155,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="/mathbook/book/title/node()" />
         </xsl:with-param>
         <xsl:with-param name="subtitle"></xsl:with-param>
-        <xsl:with-param name="authors">
-            <xsl:apply-templates select="/mathbook/docinfo/author/personname" />
+        <xsl:with-param name="credits">
+            <xsl:apply-templates select="/mathbook/docinfo/author" mode="name-list"/>
         </xsl:with-param>
         <xsl:with-param name="content">
             <!-- Chapter heading to top of page (not banner) -->
@@ -1102,16 +1104,16 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- Web Page Infrastructure -->
 <!--                         -->
 
-<!-- An individual page:                       -->
-<!-- Inputs:                                   -->
-<!--     * basename for file name              -->
-<!--     * string for page title               -->
-<!--     * content (exclusive of banners, etc) -->
+<!-- An individual page:                                     -->
+<!-- Inputs:                                                 -->
+<!--     * basename for file name                            -->
+<!--     * strings for page title, subtitle, authors/editors -->
+<!--     * content (exclusive of banners, etc)               -->
 <xsl:template match="*" mode="page-wrap">
     <xsl:param name="toc" />
     <xsl:param name="title" />
     <xsl:param name="subtitle" />
-    <xsl:param name="authors" />
+    <xsl:param name="credits" />
     <xsl:param name="content" />
     <exsl:document href="{@filebase}.html" method="html">
     <!-- Need to be careful for format of this initial string     -->
@@ -1151,7 +1153,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                                         </p>
                                     </xsl:if>
                                 </h1>
-                                <p id="byline"><span class="byline"><xsl:value-of select="$authors" /></span></p>
+                                <p id="byline"><span class="byline"><xsl:value-of select="$credits" /></span></p>
                             </div>
                         </div>
                 </div>
