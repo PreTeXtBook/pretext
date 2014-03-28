@@ -91,7 +91,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="latex-preamble" />
     <xsl:call-template name="title-page-info-article" />
     <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
-    <xsl:if test="/mathbook/article/title or /mathbook/docinfo/event or /mathbook/docinfo/author or /mathbook/docinfo/date">
+    <xsl:if test="/mathbook/article/title or /mathbook/docinfo/event or /mathbook/docinfo/author or/mathbook/docinfo/editor or /mathbook/docinfo/date">
         <xsl:text>\maketitle&#xa;%&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\thispagestyle{empty}&#xa;%&#xa;</xsl:text>
@@ -365,7 +365,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="title-page-info-book">
     <xsl:text>%% Title page information for book&#xa;</xsl:text>
     <xsl:text>\title{</xsl:text><xsl:apply-templates select="title/node()" /><xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\author{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/author" /><xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\author{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/author" /><xsl:apply-templates select="/mathbook/docinfo/editor" /><xsl:text>}&#xa;</xsl:text>
     <xsl:text>\date{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/date" /><xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
@@ -381,7 +381,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="/mathbook/docinfo/event" />
     </xsl:if>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\author{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/author" /><xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\author{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/author" /><xsl:apply-templates select="/mathbook/docinfo/editor" /><xsl:text>}&#xa;</xsl:text>
     <xsl:text>\date{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/date" /><xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
@@ -440,10 +440,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Author, full info for titlepage -->
+<!-- Authors, editors, full info for titlepage -->
 <!-- http://stackoverflow.com/questions/2817664/xsl-how-to-tell-if-element-is-last-in-series -->
 <xsl:template match="author">
     <xsl:apply-templates select="personname" />
+    <xsl:if test = "department">
+        <xsl:text>\\&#xa;</xsl:text>
+        <xsl:apply-templates select="department" />
+    </xsl:if>
+    <xsl:if test = "institution">
+        <xsl:text>\\&#xa;</xsl:text>
+        <xsl:apply-templates select="institution" />
+    </xsl:if>
+    <xsl:if test = "email">
+        <xsl:text>\\&#xa;</xsl:text>
+        <xsl:apply-templates select="email" />
+    </xsl:if>
+    <xsl:if test="position() != last()" >
+        <xsl:text>&#xa;\and</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+<xsl:template match="editor">
+    <xsl:apply-templates select="personname" />
+    <xsl:text>, </xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="generic" select="'editor'" />
+    </xsl:call-template>
     <xsl:if test = "department">
         <xsl:text>\\&#xa;</xsl:text>
         <xsl:apply-templates select="department" />

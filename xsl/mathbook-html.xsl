@@ -61,9 +61,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="/mathbook/docinfo/event" />
             <xsl:apply-templates select="/mathbook/docinfo/date" />
         </xsl:with-param>
-        <!-- Serial list of authors names only -->
+        <!-- Serial list of authors, then editors, as names only -->
         <xsl:with-param name="credits">
             <xsl:apply-templates select="/mathbook/docinfo/author" mode="name-list"/>
+            <xsl:apply-templates select="/mathbook/docinfo/editor" mode="name-list"/>
         </xsl:with-param>
         <xsl:with-param name="content">
             <div class="article">
@@ -86,9 +87,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="title/node()" />
         </xsl:with-param>
         <xsl:with-param name="subtitle"></xsl:with-param>
-        <!-- Serial list of authors, names only -->
+        <!-- Serial list of authors, then editors, as names only -->
         <xsl:with-param name="credits">
             <xsl:apply-templates select="/mathbook/docinfo/author" mode="name-list"/>
+            <xsl:apply-templates select="/mathbook/docinfo/editor" mode="name-list"/>
         </xsl:with-param>
         <xsl:with-param name="content">
             <!-- Now actual content -->
@@ -124,13 +126,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <h2 class="link"><a href="http://aimath.org/~farmer/htmlbooks/Dec2013/farmer/section1.html">Introduction</a></h2>
 </xsl:variable>
 
-<!-- Authors in serial lists for headers -->
+<!-- Authors, editors in serial lists for headers           -->
+<!-- Presumes authors get selected first, so editors follow -->
 <xsl:template match="author[1]" mode="name-list" >
     <xsl:apply-templates select="personname" />
 </xsl:template>
 <xsl:template match="author" mode="name-list" >
     <xsl:text>, </xsl:text>
     <xsl:apply-templates select="personname" />
+</xsl:template>
+<xsl:template match="editor[1]" mode="name-list" >
+    <xsl:if test="/mathbook/docinfo/author" >
+        <xsl:text>, </xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="personname" />
+    <xsl:text> (</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="generic" select="'editor'" />
+    </xsl:call-template>
+    <xsl:text>)</xsl:text>
+</xsl:template>
+<xsl:template match="editor" mode="name-list" >
+    <xsl:text>, </xsl:text>
+    <xsl:apply-templates select="personname" />
+    <xsl:text> (</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="generic" select="'editor'" />
+    </xsl:call-template>
+    <xsl:text>)</xsl:text>
 </xsl:template>
 
 <!-- Preface, automatic title, no subsections, etc         -->
@@ -155,8 +178,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="/mathbook/book/title/node()" />
         </xsl:with-param>
         <xsl:with-param name="subtitle"></xsl:with-param>
+        <!-- Serial list of authors, then editors, as names only -->
         <xsl:with-param name="credits">
             <xsl:apply-templates select="/mathbook/docinfo/author" mode="name-list"/>
+            <xsl:apply-templates select="/mathbook/docinfo/editor" mode="name-list"/>
         </xsl:with-param>
         <xsl:with-param name="content">
             <!-- Chapter heading to top of page (not banner) -->
