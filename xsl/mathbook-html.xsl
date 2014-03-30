@@ -188,8 +188,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text> </xsl:text>
                     <span class="title"><xsl:apply-templates select="title" /></span>
                 </h1>
-                <!-- Now the real content of sections,subsections -->
-                <xsl:apply-templates select="*[not(self::title)]"/>
+                <!-- Need some CSS for authors at chapter level in collected works -->
+                <xsl:if test="author">
+                    <p id="byline"><span class="byline"><xsl:apply-templates select="author" mode="name-list"/></span></p>
+                </xsl:if>
+               <!-- Now the real content of sections,subsections -->
+                <xsl:apply-templates select="*[not(self::title or self::author)]"/>
             </section>
          </xsl:with-param>
     </xsl:apply-templates>

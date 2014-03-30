@@ -559,7 +559,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>&#xa;%&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::title)]"/>
+    <xsl:if test="author">
+        <xsl:text>\noindent\Large{\textbf{</xsl:text>
+        <xsl:apply-templates select="author" mode="name-list"/>
+        <xsl:text>}\par\bigskip&#xa;%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="*[not(self::title or self::author)]"/>
 </xsl:template>
 
 
