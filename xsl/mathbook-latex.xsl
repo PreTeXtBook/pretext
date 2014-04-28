@@ -570,7 +570,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Definitions have notation, which is handled elsewhere -->
 <!-- Examples have no additional structure                 -->
 <!-- Exercises have solutions                              -->
-<!-- TODO: consider optional titles -->
+
+<!-- Titles are passed as options to environments -->
+<xsl:template match="title" mode="environment-option">
+    <xsl:text>[</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>]</xsl:text>
+</xsl:template>
 
 <xsl:template match="theorem|corollary|lemma">
     <xsl:apply-templates select="statement|proof" />
@@ -583,6 +589,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Include solutions to exercises by default value of switch-->
 <xsl:template match="exercise">
     <xsl:text>\begin{exercise}</xsl:text>
+    <xsl:apply-templates select="title" mode="environment-option" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="statement"/>
@@ -603,6 +610,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="theorem/statement">
     <xsl:text>\begin{theorem}</xsl:text>
+    <xsl:apply-templates select="../title" mode="environment-option" />
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
@@ -611,6 +619,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="corollary/statement">
     <xsl:text>\begin{corollary}</xsl:text>
+    <xsl:apply-templates select="../title" mode="environment-option" />
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
@@ -619,6 +628,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="lemma/statement">
     <xsl:text>\begin{lemma}</xsl:text>
+    <xsl:apply-templates select="../title" mode="environment-option" />
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
@@ -627,6 +637,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="definition/statement">
     <xsl:text>\begin{definition}</xsl:text>
+    <xsl:apply-templates select="../title" mode="environment-option" />
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
@@ -635,6 +646,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="example">
     <xsl:text>\begin{example}</xsl:text>
+    <xsl:apply-templates select="title" mode="environment-option" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
