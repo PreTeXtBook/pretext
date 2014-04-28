@@ -42,11 +42,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="/mathbook/docinfo"></xsl:template>
 <xsl:variable name="docinfo" select="/mathbook/docinfo" />
 
-<!-- Titles are handled specially                     -->
-<!-- so get killed via apply-templates                -->
-<!-- When needed, get content with XPath title/node() -->
-<xsl:template match="title"></xsl:template>
-
 <!-- Article                                                    -->
 <!--     One page, full of sections (with abstract, references) -->
 <xsl:template match="mathbook/article">
@@ -55,7 +50,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="'no'" />
         </xsl:with-param>
         <xsl:with-param name="title">
-            <xsl:value-of select="title/node()" />
+            <xsl:apply-templates select="title" />
         </xsl:with-param>
         <xsl:with-param name="subtitle">
             <xsl:apply-templates select="/mathbook/docinfo/event" />
@@ -69,7 +64,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="content">
             <div class="article">
                 <xsl:apply-templates select="abstract"/>
-                <xsl:apply-templates select="*[not(self::abstract or self::bibliography)]"/>
+                <xsl:apply-templates select="*[not(self::abstract or self::bibliography or self::title)]"/>
                 <xsl:apply-templates select="bibliography"/>
             </div>
         </xsl:with-param>
@@ -84,7 +79,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="'yes'" />
         </xsl:with-param>
         <xsl:with-param name="title">
-            <xsl:value-of select="title/node()" />
+            <xsl:value-of select="title" />
         </xsl:with-param>
         <xsl:with-param name="subtitle"></xsl:with-param>
         <!-- Serial list of authors, then editors, as names only -->
@@ -94,7 +89,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:with-param>
         <xsl:with-param name="content">
             <!-- Now actual content -->
-            <xsl:apply-templates />
+            <xsl:apply-templates select="*[not(self::title)]"/>
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
@@ -113,7 +108,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>Chapter </xsl:text>
                 <xsl:apply-templates select="." mode="number" />
                 <xsl:text> </xsl:text>
-                <xsl:apply-templates select="title/node()" />
+                <xsl:apply-templates select="title" />
                 </a>
             </div>
         </xsl:for-each>
@@ -175,7 +170,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="'yes'" />
         </xsl:with-param>
         <xsl:with-param name="title">
-            <xsl:value-of select="/mathbook/book/title/node()" />
+            <xsl:apply-templates select="/mathbook/book/title" />
         </xsl:with-param>
         <xsl:with-param name="subtitle"></xsl:with-param>
         <!-- Serial list of authors, then editors, as names only -->
@@ -191,10 +186,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text> </xsl:text>
                     <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
                     <xsl:text> </xsl:text>
-                    <span class="title"><xsl:apply-templates select="title/node()" /></span>
+                    <span class="title"><xsl:apply-templates select="title" /></span>
                 </h1>
                 <!-- Now the real content of sections,subsections -->
-                <xsl:apply-templates />
+                <xsl:apply-templates select="*[not(self::title)]"/>
             </section>
          </xsl:with-param>
     </xsl:apply-templates>
@@ -242,10 +237,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
             <xsl:if test="title">
                 <xsl:text> </xsl:text>
-                <span class="title"><xsl:apply-templates select="title/node()" /></span>
+                <span class="title"><xsl:apply-templates select="title" /></span>
             </xsl:if>
         </h4>
-        <xsl:apply-templates />
+        <xsl:apply-templates select="*[not(self::title)]"/>
     </section>
 </xsl:template>
 
@@ -262,7 +257,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
         <xsl:if test="title">
             <xsl:text> (</xsl:text>
-            <span class="title"><xsl:apply-templates select="title/node()" /></span>
+            <span class="title"><xsl:apply-templates select="title" /></span>
             <xsl:text>)</xsl:text>
         </xsl:if>
         </h5>
@@ -292,7 +287,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
         <xsl:if test="title">
             <xsl:text> </xsl:text>
-            <span class="title"><xsl:apply-templates select="title/node()" /></span>
+            <span class="title"><xsl:apply-templates select="title" /></span>
         </xsl:if>
         </h5>
         <xsl:apply-templates select="statement" />
@@ -312,10 +307,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
             <xsl:if test="title">
                 <xsl:text> </xsl:text>
-                <span class="title"><xsl:apply-templates select="title/node()" /></span>
+                <span class="title"><xsl:apply-templates select="title" /></span>
             </xsl:if>
         </xsl:element>
-    <xsl:apply-templates />
+        <xsl:apply-templates select="*[not(self::title)]"/>
     </article>
 </xsl:template>
 
@@ -331,7 +326,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
         <xsl:if test="title">
             <xsl:text> </xsl:text>
-            <span class="title"><xsl:apply-templates select="title/node()" /></span>
+            <span class="title"><xsl:apply-templates select="title" /></span>
         </xsl:if>
         </h5>
         <xsl:apply-templates select="statement" />
@@ -1214,7 +1209,6 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 
 <!-- Table of Contents infrastructure, per page -->
 <!-- First global, fixed links for sidebar -->
-<!-- TODO Add chapter numbers -->
 <xsl:template name="toc-items">
     <div id="toc-navbar-item" class="navbar-item">
         <h2 class="navbar-item-text icon-navicon-round ">Table of Contents</h2>
@@ -1227,14 +1221,14 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <h2 class="link"><a href="{$fn}">
             <xsl:apply-templates select="." mode="number" />
             <xsl:text> </xsl:text>
-            <xsl:apply-templates select="title/node()" /></a></h2>
+            <xsl:apply-templates select="title" /></a></h2>
             <ul>
             <xsl:for-each select="section">
                 <xsl:variable name="xref">
                     <xsl:apply-templates select="." mode="xref-identifier" />
                 </xsl:variable>
                 <li><a href="{$fn}#{$xref}" data-scroll="{$xref}">
-                <xsl:apply-templates select="title/node()" /></a></li>
+                <xsl:apply-templates select="title" /></a></li>
             </xsl:for-each>
             </ul>
         </xsl:for-each>

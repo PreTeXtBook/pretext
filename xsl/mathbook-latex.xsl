@@ -340,7 +340,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 \usepackage[pdftex]{hyperref}
 \hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
 <xsl:text>\hypersetup{pdftitle={</xsl:text>
-<xsl:apply-templates select="title/node()" />
+<xsl:apply-templates select="title" />
 <xsl:text>}}&#xa;</xsl:text>
 <xsl:if test="$latex.watermark">
     <xsl:text>\usepackage{draftwatermark}&#xa;</xsl:text>
@@ -364,7 +364,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template name="title-page-info-book">
     <xsl:text>%% Title page information for book&#xa;</xsl:text>
-    <xsl:text>\title{</xsl:text><xsl:apply-templates select="title/node()" /><xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\title{</xsl:text><xsl:apply-templates select="title" /><xsl:text>}&#xa;</xsl:text>
     <xsl:text>\author{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/author" /><xsl:apply-templates select="/mathbook/docinfo/editor" /><xsl:text>}&#xa;</xsl:text>
     <xsl:text>\date{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/date" /><xsl:text>}&#xa;</xsl:text>
 </xsl:template>
@@ -373,7 +373,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="title-page-info-article">
     <xsl:text>%% Title page information for article&#xa;</xsl:text>
     <xsl:text>\title{</xsl:text>
-    <xsl:apply-templates select="title/node()" />
+    <xsl:apply-templates select="title" />
     <xsl:if test="/mathbook/docinfo/event">
         <xsl:if test="title">
             <xsl:text>\\</xsl:text>
@@ -396,7 +396,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
     <xsl:text>\begin{center}\Huge&#xa;</xsl:text>
-    <xsl:apply-templates select="/mathbook/book/title/node()" />
+    <xsl:apply-templates select="/mathbook/book/title" />
     <xsl:text>\end{center}\par&#xa;</xsl:text>
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
     <xsl:text>\clearpage&#xa;</xsl:text>
@@ -498,10 +498,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{abstract}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Titles, captions are handled specially               -->
-<!-- so get killed via apply-templates                    -->
-<!-- When needed, get content with XPath, eg title/node() -->
-<xsl:template match="title"></xsl:template>
+<!-- Captions are handled specially                         -->
+<!-- so get killed via apply-templates                      -->
+<!-- When needed, get content with XPath, eg caption/node() -->
 <xsl:template match="caption"></xsl:template>
 
 <!-- Logos (images) -->
@@ -556,11 +555,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\</xsl:text>
     <xsl:value-of select="$level" />
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="title/node()" />
+    <xsl:apply-templates select="title" />
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>&#xa;%&#xa;</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates select="*[not(self::title)]"/>
 </xsl:template>
 
 
