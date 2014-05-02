@@ -1220,7 +1220,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\ref{</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates select="$target" mode="xref-identifier" />
+    <xsl:apply-templates select="$target" mode="internal-id" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -1243,7 +1243,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Could do optionally: <xsl:value-of select="@xml:id" />  -->
 <xsl:template match="*" mode="label">
     <xsl:text>\label{</xsl:text>
-    <xsl:apply-templates select="." mode="xref-identifier" />
+    <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 

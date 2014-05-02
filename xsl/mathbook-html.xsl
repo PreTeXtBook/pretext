@@ -232,7 +232,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An abstract and bibliography are treated like sections of an article here -->
 <xsl:template match="section|subsection|subsubsection|paragraph|subparagraph|article/abstract|article/bibliography">
     <xsl:variable name="xref">
-        <xsl:apply-templates select="." mode="xref-identifier" />
+        <xsl:apply-templates select="." mode="internal-id" />
     </xsl:variable>
     <section class="{local-name(.)}" id="{$xref}">
         <h4 class="heading">
@@ -253,7 +253,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- <statement>s and <proof>s are sequences of paragraphs and other blocks -->
 <xsl:template match="theorem|corollary|lemma|proposition|claim|fact|conjecture|definition">
     <xsl:variable name="xref">
-        <xsl:apply-templates select="." mode="xref-identifier" />
+        <xsl:apply-templates select="." mode="internal-id" />
     </xsl:variable>
     <article class="theorem-like" id="{$xref}">
         <h5>
@@ -282,7 +282,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Statement, just like a proof, to separate from notation perhaps -->
 <xsl:template match="definition|axiom">
     <xsl:variable name="xref">
-        <xsl:apply-templates select="." mode="xref-identifier" />
+        <xsl:apply-templates select="." mode="internal-id" />
     </xsl:variable>
     <article class="theorem-like" id="{$xref}">
         <h5>
@@ -302,7 +302,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Just a sequence of paragraphs, etc -->
 <xsl:template match="example|remark">
     <xsl:variable name="xref">
-        <xsl:apply-templates select="." mode="xref-identifier" />
+        <xsl:apply-templates select="." mode="internal-id" />
     </xsl:variable>
     <article class="example-like" id="{$xref}">
         <xsl:element name="h5">
@@ -321,7 +321,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Solutions are include by default switch, could be knowls -->
 <xsl:template match="exercise">
     <xsl:variable name="xref">
-        <xsl:apply-templates select="." mode="xref-identifier" />
+        <xsl:apply-templates select="." mode="internal-id" />
     </xsl:variable>
     <article class="exercise-like" id="{$xref}">
         <h5>
@@ -500,7 +500,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="$target" mode="basename" />
             <xsl:text>.html</xsl:text>
             <xsl:text>#</xsl:text>
-            <xsl:apply-templates select="$target" mode="xref-identifier" />
+            <xsl:apply-templates select="$target" mode="internal-id" />
         </xsl:attribute>
     <xsl:value-of select="$visual" />
     </xsl:element>
@@ -1229,7 +1229,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <ul>
             <xsl:for-each select="section">
                 <xsl:variable name="xref">
-                    <xsl:apply-templates select="." mode="xref-identifier" />
+                    <xsl:apply-templates select="." mode="internal-id" />
                 </xsl:variable>
                 <li><a href="{$fn}#{$xref}" data-scroll="{$xref}">
                 <xsl:apply-templates select="title" /></a></li>

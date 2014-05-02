@@ -275,25 +275,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
-<!-- Identifiers                          -->
-<!-- A unique identifier for any element  -->
-<!-- Useful for internal cross-references -->
-<!-- in HTML or latex cross-references    -->
-<!-- Format: element_name-serial_number   -->
-<!-- Ineffective: <xsl:number level="multiple" count="chapter|section|subsection" format="1-1-1-1-1-1-1"/> -->
-<xsl:template match="*" mode="xref-identifier">
-    <xsl:value-of select="local-name(.)" />
-    <xsl:text>-</xsl:text>
-    <xsl:number level="any" />
-</xsl:template>
+<!-- ################## -->
+<!-- Identifiers        -->
+<!-- ################## -->
 
-<!-- MathJax can make anchors for equations                -->
-<!-- We configure MathJax to use TeX \label contents       -->
-<!-- (which we provide with the xml:id of the equation)    -->
-<!-- as the anchor name, so we just return the xml:id here -->
-<!-- Note: we could set \label with something different    -->
-<xsl:template match="me|men|mrow" mode="xref-identifier">
-    <xsl:value-of select="@xml:id" />
+<!-- Internal Identifier                                 -->
+<!-- A unique text identifier for any element   -->
+<!-- Uses:                                      -->
+<!--   HTML: filenames (pages and knowls)       -->
+<!--   HTML: anchors for references into pages  -->
+<!--   LaTeX: labels, ie cross-references       -->
+<!-- Format:                                            -->
+<!--   the content (text) of an xml:id if provided      -->
+<!--   otherwise, element_name-serial_number (doc-wide) -->
+<!-- MathJax:                                                   -->
+<!--   Can manufacture an HTML id= for equations, so            -->
+<!--   we configure MathJax to use the TeX \label contents      -->
+<!--   which we must be sure to provide via this routine here   -->
+<!--   Then our URL/anchor scheme will point to the right place -->
+<!--   So this is applied to men and (numbered) mrow elements    -->
+<xsl:template match="*" mode="internal-id">
+    <xsl:choose>
+        <xsl:when test="@xml:id">
+            <xsl:value-of select="@xml:id" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="local-name(.)" />
+            <xsl:text>-</xsl:text>
+            <xsl:number level="any" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Filenames -->
