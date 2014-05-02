@@ -264,6 +264,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>)</xsl:text>
 </xsl:template>
 
+<!-- Levels -->
+<!-- root is -2, mathbook is -1    -->
+<!-- book, article, etc is 0       -->
+<!-- sectioning works its way down -->
+<!-- http://bytes.com/topic/net/answers/572365-how-compute-nodes-depth-xslt -->
+<xsl:template match="*" mode="level">
+    <xsl:value-of select="count(ancestor::node())-2" />
+</xsl:template>
+
+<!-- Structural Nodes -->
+<!-- Some elements of the XML tree -->
+<!-- are part of the document tree -->
+<xsl:template match="*" mode="is-structural">
+    <xsl:value-of select="self::book or self::article or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection" />
+</xsl:template>
+
+<!-- Structural Leaves -->
+<!-- Some elements of the document tree -->
+<!-- are the leaves of that tree        -->
+<xsl:template match="*" mode="is-leaf">
+    <xsl:variable name="structural"><xsl:apply-templates select="." mode="is-structural" /></xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$structural='true'">
+            <xsl:value-of select="not(child::book or child::article or child::chapter or child::appendix or child::section or child::subsection or child::subsubsection)" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$structural" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- Names                                          -->
 <!-- Relies on translations in language files       -->
