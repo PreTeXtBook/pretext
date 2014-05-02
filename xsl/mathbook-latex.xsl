@@ -654,7 +654,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="title" mode="environment-option" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates select="*[not(self::title)]"/>
     <xsl:text>\end{example}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
