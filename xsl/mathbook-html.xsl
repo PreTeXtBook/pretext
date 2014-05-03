@@ -33,6 +33,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Intend output for rendering by a web browser -->
 <xsl:output method="html" encoding="utf-8"/>
 
+<xsl:variable name="chunk-level">2</xsl:variable>
+
 <xsl:template match="/mathbook">
     <xsl:apply-templates />
 </xsl:template>
@@ -1268,6 +1270,54 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     </div>
 </xsl:template>
 
+<!-- ######## -->
+<!-- Chunking -->
+<!-- ######## -->
+
+<!-- Web Page Determination -->
+<!-- Two types of web pages, content and summary                                   -->
+<!-- See definition of document structure nodes in mathbook-common file            -->
+<!-- Summary: structural node, not a document leaf, smaller level than chunk level -->
+<!-- Content: structural node, at chunk-level or a document leaf at smaller level  -->
+<xsl:template match="*" mode="is-summary">
+    <xsl:variable name="structural">
+        <xsl:apply-templates select="." mode="is-structural" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$structural='true'">
+            <xsl:variable name="current-level">
+                <xsl:apply-templates select="." mode="level" />
+            </xsl:variable>
+            <xsl:variable name="leaf">
+                <xsl:apply-templates select="." mode="is-leaf" />
+            </xsl:variable>
+            <xsl:value-of select="($leaf='false') and ($chunk-level > $current-level)" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$structural" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="*" mode="is-content">
+    <xsl:variable name="structural">
+        <xsl:apply-templates select="." mode="is-structural" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$structural='true'">
+            <xsl:variable name="current-level">
+                <xsl:apply-templates select="." mode="level" />
+            </xsl:variable>
+            <xsl:variable name="leaf">
+                <xsl:apply-templates select="." mode="is-leaf" />
+            </xsl:variable>
+            <xsl:value-of select="($chunk-level = $current-level) or ( ($leaf='true') and ($chunk-level > $current-level) )" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$structural" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- MathJax header                                             -->
 <!-- XML manages equation numbers                               -->
