@@ -1319,6 +1319,43 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     </xsl:choose>
 </xsl:template>
 
+
+<!-- Files -->
+<!-- Every web page has a file name,                       -->
+<!-- and every node is subsidiary to some web page.        -->
+<!-- With a web page objects will be referenced by anchors -->
+<!-- formed from their internal identifier to make a URL   -->
+<xsl:template name="filename">
+    <xsl:param name="a-node" />
+    <xsl:variable name="summary"><xsl:apply-templates select="$a-node" mode="is-summary" /></xsl:variable>
+    <xsl:variable name="content"><xsl:apply-templates select="$a-node" mode="is-content" /></xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$summary='true' or $content='true'">
+            <xsl:apply-templates select="$a-node" mode="internal-id" />
+            <xsl:text>.html</xsl:text>
+            <!-- Warn of deprecated filebase here -->
+            <!-- <xsl:value-of select="$a-node/@xml:id" /> -->
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="filename">
+                <xsl:with-param name="a-node" select="$a-node/.." />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match ="*" mode="url">
+    <xsl:variable name="summary"><xsl:apply-templates select="." mode="is-summary" /></xsl:variable>
+    <xsl:variable name="content"><xsl:apply-templates select="." mode="is-content" /></xsl:variable>
+    <xsl:call-template name="filename">
+        <xsl:with-param name="a-node" select="." />
+    </xsl:call-template>
+    <xsl:if test="$summary='false' and $content='false'">
+        <xsl:text>#</xsl:text>
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:if>
+</xsl:template>
+
 <!-- MathJax header                                             -->
 <!-- XML manages equation numbers                               -->
 <!-- Config MathJax to make anchor names on equations           -->
