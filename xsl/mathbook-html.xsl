@@ -1207,8 +1207,22 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <xsl:comment>*                                    *</xsl:comment><xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Table of Contents infrastructure, per page -->
-<!-- First global, fixed links for sidebar -->
+<!-- ################# -->
+<!-- Navigational Aids -->
+<!-- ################# -->
+
+<!-- Navigation Section -->
+<xsl:template match="*" mode="nav-sidebar">
+    <div id="navbar">
+        <div class="container">
+            <xsl:call-template name="toc-items" />
+            <xsl:apply-templates select="." mode="nav-arrows" />
+        </div>
+    </div>
+</xsl:template>
+
+<!-- Table of Contents SideBar -->
+<!-- Identical on each page    -->
 <xsl:template name="toc-items">
     <div id="toc-navbar-item" class="navbar-item">
         <h2 class="navbar-item-text icon-navicon-round ">Table of Contents</h2>
@@ -1236,38 +1250,75 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     </div>
 </xsl:template>
 
-<!-- Second, construct navigation section, with sideways links -->
-<!-- http://stackoverflow.com/questions/12347412/concept-xml-xlst-preceding-sibling-and-ancestor -->
-<xsl:template match="*" mode="nav-sidebar">
-    <div id="navbar">
-        <div class="container">
-            <xsl:call-template name="toc-items" />
-            <nav id="prevnext">
-                <!-- Previous -->
-                <xsl:if test="preceding-sibling::*[1]/@filebase">
-                    <a href="{preceding-sibling::*[1]/@filebase}.html">
-                        <svg height="50" width="60" viewBox="-10 50 110 100" xmlns="http://www.w3.org/2000/svg">
-                            <polygon points="-10,100 25,75 100,75 100,125 25,125"
-                            style="fill:blanchedalmond;stroke:burlywood;stroke-width:1" />
-                            <text x="28" y="108" fill="maroon" font-size="32">Prev</text>
-                        </svg>
-                    </a>
-                </xsl:if>
-                <!-- TODO: test if both buttons before making space -->
-                <xsl:text> </xsl:text>
-                <!-- Next -->
-                <xsl:if test="following-sibling::*[1]/@filebase">
-                    <a href="{following-sibling::*[1]/@filebase}.html">
-                        <svg height="50" width="60" viewBox="0 50 110 100" xmlns="http://www.w3.org/2000/svg">
-                            <polygon points="110,100 75,75 0,75 0,125 75,125"
-                            style="fill:darkred;stroke:maroon;stroke-width:1"/>
-                            <text x="13" y="108" fill="blanchedalmond" font-size="32">Next</text>
-                        </svg>
-                    </a>
-                </xsl:if>
-            </nav>
-        </div>
-    </div>
+<!-- Navigational Arrows -->
+<!-- Page-specific       -->
+<xsl:template match="*" mode="nav-arrows">
+    <nav id="prevnext">
+        <!-- Previous -->
+        <xsl:if test="preceding-sibling::*">
+            <xsl:variable name="preceding" select="preceding-sibling::*[1]" />
+            <xsl:variable name="structural">
+                <xsl:apply-templates select="$preceding" mode="is-structural" />
+            </xsl:variable>
+            <xsl:if test="$structural='true'">
+                <xsl:variable name="url">
+                    <xsl:apply-templates select="$preceding" mode="url" />
+                </xsl:variable>
+                <a href="{$url}">
+                    <svg height="50" width="60" viewBox="-10 50 110 100" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="-10,100 25,75 100,75 100,125 25,125"
+                        style="fill:darkred;stroke:maroon;stroke-width:1" />
+                        <text x="28" y="108" fill="blanchedalmond" font-size="32">Prev</text>
+                    </svg>
+                </a>
+            </xsl:if>
+        </xsl:if>
+        <!-- End Previous -->
+        <!-- TODO: be more careful about adding space -->
+        <!-- Maybe compute preceding, up, following at outer level of template -->
+        <xsl:text> </xsl:text>
+        <!-- Above -->
+        <xsl:if test="parent::*">
+            <xsl:variable name="parent" select="parent::*[1]" />
+            <xsl:variable name="structural">
+                <xsl:apply-templates select="$parent" mode="is-structural" />
+            </xsl:variable>
+            <xsl:if test="$structural='true'">
+                <xsl:variable name="url">
+                    <xsl:apply-templates select="$parent" mode="url" />
+                </xsl:variable>
+                <a href="{$url}">
+                    <svg height="50" width="60" viewBox="0 50 80 100" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="75,75 37,65 0,75 0,125 75,125"
+                        style="fill:darkred;stroke:maroon;stroke-width:1"/>
+                        <text x="13" y="108" fill="blanchedalmond" font-size="32">Up</text>
+                    </svg>
+                </a>
+            </xsl:if>
+        </xsl:if>
+        <!-- End: Above -->
+        <xsl:text> </xsl:text>
+        <!-- Next -->
+        <xsl:if test="following-sibling::*">
+            <xsl:variable name="following" select="following-sibling::*[1]" />
+            <xsl:variable name="structural">
+                <xsl:apply-templates select="$following" mode="is-structural" />
+            </xsl:variable>
+            <xsl:if test="$structural='true'">
+                <xsl:variable name="url">
+                    <xsl:apply-templates select="$following" mode="url" />
+                </xsl:variable>
+                <a href="{$url}">
+                    <svg height="50" width="60" viewBox="0 50 110 100" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="110,100 75,75 0,75 0,125 75,125"
+                        style="fill:darkred;stroke:maroon;stroke-width:1"/>
+                        <text x="13" y="108" fill="blanchedalmond" font-size="32">Next</text>
+                    </svg>
+                </a>
+            </xsl:if>
+        </xsl:if>
+        <!-- End: Next -->
+    </nav>
 </xsl:template>
 
 <!-- ######## -->
