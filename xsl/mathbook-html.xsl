@@ -96,32 +96,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Table of contents for front page -->
-<!-- TODO: obsolete on better CSS, with side bar navigation> -->
-<!-- TODO: Appendices -->
-<xsl:template name="toc">
-    <div class="toc">
-        <div class="heading">Table of Contents</div>
-        <xsl:for-each select="//chapter|//appendix">
-            <!-- Move div/class into "a" element with display block attribute? -->
-            <!-- TODO: move "Chapter" string into CSS -->
-            <div class="toc-entry">
-                <a href="{@filebase}.html">
-                <xsl:text>Chapter </xsl:text>
-                <xsl:apply-templates select="." mode="number" />
-                <xsl:text> </xsl:text>
-                <xsl:apply-templates select="title" />
-                </a>
-            </div>
-        </xsl:for-each>
-    </div>
-</xsl:template>
-
-<!-- TODO: remove this? -->
-<xsl:variable name="toc-list">
-    <h2 class="link"><a href="http://aimath.org/~farmer/htmlbooks/Dec2013/farmer/index.html">Abstract</a></h2>
-    <h2 class="link"><a href="http://aimath.org/~farmer/htmlbooks/Dec2013/farmer/section1.html">Introduction</a></h2>
-</xsl:variable>
 
 <!-- Authors, editors in serial lists for headers           -->
 <!-- Presumes authors get selected first, so editors follow -->
@@ -1227,21 +1201,23 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <div id="toc-navbar-item" class="navbar-item">
         <h2 class="navbar-item-text icon-navicon-round ">Table of Contents</h2>
         <nav id="toc">
-        <xsl:for-each select="/mathbook/book/chapter|/mathbook/book/appendix">
-            <xsl:variable name="fn">
-                <xsl:value-of select="@filebase" />
-                <xsl:text>.html</xsl:text>
-            </xsl:variable>
-            <h2 class="link"><a href="{$fn}">
+        <xsl:for-each select="/mathbook/book/chapter|/mathbook/book/appendix|/mathbook/article/section">
+            <xsl:variable name="outer-url">
+                <xsl:apply-templates select="." mode="url"/>
+           </xsl:variable>
+            <h2 class="link"><a href="{$outer-url}">
             <xsl:apply-templates select="." mode="number" />
             <xsl:text> </xsl:text>
             <xsl:apply-templates select="title" /></a></h2>
             <ul>
-            <xsl:for-each select="section">
-                <xsl:variable name="xref">
+            <xsl:for-each select="./section|./subsection">
+                <xsl:variable name="inner-url">
+                    <xsl:apply-templates select="." mode="url" />
+                </xsl:variable>
+                <xsl:variable name="internal">
                     <xsl:apply-templates select="." mode="internal-id" />
                 </xsl:variable>
-                <li><a href="{$fn}#{$xref}" data-scroll="{$xref}">
+                <li><a href="{$inner-url}" data-scroll="{$internal}">
                 <xsl:apply-templates select="title" /></a></li>
             </xsl:for-each>
             </ul>
