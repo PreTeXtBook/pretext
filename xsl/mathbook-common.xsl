@@ -338,19 +338,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Filenames -->
-<!-- Automatically generated basenames for -->
-<!-- filenames, when chunking, especially  -->
-<xsl:template match="*" mode="basename">
-    <xsl:choose>
-        <!-- Articles all one page, before chunking support -->
-        <xsl:when test="//mathbook/article"></xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="ancestor::chapter/@filebase" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
 <!-- Textual Representations of structural elements  -->
 <!--   conveniences for annotating derivative products -->
 <!--   such as Sage doc tests, LaTeX source            -->

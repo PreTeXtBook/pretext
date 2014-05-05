@@ -467,10 +467,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="local-name($target)" />
         </xsl:attribute>
         <xsl:attribute name="href">
-            <xsl:apply-templates select="$target" mode="basename" />
-            <xsl:text>.html</xsl:text>
-            <xsl:text>#</xsl:text>
-            <xsl:apply-templates select="$target" mode="internal-id" />
+            <xsl:apply-templates select="$target" mode="url" />
         </xsl:attribute>
     <xsl:value-of select="$visual" />
     </xsl:element>
@@ -1100,7 +1097,6 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 
 <!-- An individual page:                                     -->
 <!-- Inputs:                                                 -->
-<!--     * basename for file name                            -->
 <!--     * strings for page title, subtitle, authors/editors -->
 <!--     * content (exclusive of banners, etc)               -->
 <xsl:template match="*" mode="page-wrap">
@@ -1109,7 +1105,8 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <xsl:param name="subtitle" />
     <xsl:param name="credits" />
     <xsl:param name="content" />
-    <exsl:document href="{@filebase}.html" method="html">
+    <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
+    <exsl:document href="{$url}" method="html">
     <!-- Need to be careful for format of this initial string     -->
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
     <html> <!-- lang="", and/or dir="rtl" here -->
@@ -1360,8 +1357,10 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <xsl:when test="$summary='true' or $content='true'">
             <xsl:apply-templates select="$a-node" mode="internal-id" />
             <xsl:text>.html</xsl:text>
-            <!-- Warn of deprecated filebase here -->
-            <!-- <xsl:value-of select="$a-node/@xml:id" /> -->
+            <!-- DEPRECATION: May 2015, replace with terminate=yes if present without an xml:id -->
+            <xsl:if test="$a-node/@filebase">
+                <xsl:message>WARNING: filebase attribute (value=<xsl:value-of select="$a-node/@filebase" />) is deprecated, use xml:id attribute instead (by 1 May 2015)</xsl:message>
+            </xsl:if>
         </xsl:when>
         <xsl:otherwise>
             <xsl:call-template name="filename">
