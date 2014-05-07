@@ -255,6 +255,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="/mathbook//term">
         <xsl:text>\newcommand{\terminology}[1]{\textbf{#1}}&#xa;</xsl:text>
     </xsl:if>
+    <!-- Could condition following on existence of any amsthm environment -->
     <xsl:text>%% Environments with amsthm package&#xa;</xsl:text>
     <xsl:text>\usepackage{amsthm}&#xa;</xsl:text>
     <xsl:text>% Theorem-like enviroments, italicized statement, proof, etc&#xa;</xsl:text>
@@ -262,7 +263,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%   i.e. Corollary 4.3 is third item in Chapter 4 of a book&#xa;</xsl:text>
     <xsl:text>%   i.e. Lemma 5.6 is sixth item in Section 5 of an article&#xa;</xsl:text>
     <xsl:text>\theoremstyle{plain}&#xa;</xsl:text>
-    <xsl:if test="//theorem">
+    <xsl:text>% Always need a theorem environment to set base numbering scheme&#xa;</xsl:text>
+    <xsl:text>% even if document has no theorems (but has other environments)&#xa;</xsl:text>
     <xsl:text>\newtheorem{theorem}{</xsl:text>
     <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'theorem'" /></xsl:call-template>
     <xsl:text>}</xsl:text>
@@ -271,7 +273,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="/mathbook/book"><xsl:text>[chapter]</xsl:text></xsl:when>
     </xsl:choose>
     <xsl:text>&#xa;</xsl:text>
-</xsl:if>
 <xsl:text>% Only variants actually used in document appear here&#xa;</xsl:text>
 <xsl:text>% Numbering: all theorem-like numbered consecutively&#xa;</xsl:text>
 <xsl:text>%   i.e. Corollary 4.3 follows Theorem 4.2&#xa;</xsl:text>
@@ -305,11 +306,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'conjecture'" /></xsl:call-template>
     <xsl:text>}&#xa;</xsl:text>
 </xsl:if>
-<xsl:text>% definition-like, normal text
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}
-\newtheorem{example}{Example}
-\newtheorem{exercise}{Exercise}&#xa;</xsl:text>
+<xsl:if test="//definition or //example or //exercise">
+    <xsl:text>% Definition-like environments, normal text</xsl:text>
+    <xsl:text>% Numbering is in sync with theorems, etc</xsl:text>
+    <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
+    <xsl:if test="//definition">
+        <xsl:text>\newtheorem{definition}[theorem]{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'definition'" /></xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="//definition">
+        <xsl:text>\newtheorem{example}[theorem]{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'example'" /></xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="//definition">
+        <xsl:text>\newtheorem{exercise}[theorem]{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'exercise'" /></xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+</xsl:if>
 <xsl:text>%% Raster graphics inclusion, wrapped figures in paragraphs&#xa;</xsl:text>
 <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
 <xsl:text>%% Colors for Sage boxes and author tools (red hilites)&#xa;</xsl:text>
