@@ -91,7 +91,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="latex-preamble" />
     <xsl:call-template name="title-page-info-article" />
     <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
-    <xsl:if test="/mathbook/article/title or /mathbook/docinfo/event or /mathbook/docinfo/author or /mathbook/docinfo/date">
+    <xsl:if test="/mathbook/article/title or /mathbook/docinfo/event or /mathbook/docinfo/author or/mathbook/docinfo/editor or /mathbook/docinfo/date">
         <xsl:text>\maketitle&#xa;%&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\thispagestyle{empty}&#xa;%&#xa;</xsl:text>
@@ -340,7 +340,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 \usepackage[pdftex]{hyperref}
 \hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
 <xsl:text>\hypersetup{pdftitle={</xsl:text>
-<xsl:apply-templates select="title/node()" />
+<xsl:apply-templates select="title" />
 <xsl:text>}}&#xa;</xsl:text>
 <xsl:if test="$latex.watermark">
     <xsl:text>\usepackage{draftwatermark}&#xa;</xsl:text>
@@ -364,8 +364,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template name="title-page-info-book">
     <xsl:text>%% Title page information for book&#xa;</xsl:text>
-    <xsl:text>\title{</xsl:text><xsl:apply-templates select="title/node()" /><xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\author{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/author" /><xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\title{</xsl:text><xsl:apply-templates select="title" /><xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\author{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/author" /><xsl:apply-templates select="/mathbook/docinfo/editor" /><xsl:text>}&#xa;</xsl:text>
     <xsl:text>\date{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/date" /><xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
@@ -373,7 +373,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="title-page-info-article">
     <xsl:text>%% Title page information for article&#xa;</xsl:text>
     <xsl:text>\title{</xsl:text>
-    <xsl:apply-templates select="title/node()" />
+    <xsl:apply-templates select="title" />
     <xsl:if test="/mathbook/docinfo/event">
         <xsl:if test="title">
             <xsl:text>\\</xsl:text>
@@ -381,7 +381,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="/mathbook/docinfo/event" />
     </xsl:if>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\author{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/author" /><xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\author{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/author" /><xsl:apply-templates select="/mathbook/docinfo/editor" /><xsl:text>}&#xa;</xsl:text>
     <xsl:text>\date{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/date" /><xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
@@ -396,7 +396,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
     <xsl:text>\begin{center}\Huge&#xa;</xsl:text>
-    <xsl:apply-templates select="/mathbook/book/title/node()" />
+    <xsl:apply-templates select="/mathbook/book/title" />
     <xsl:text>\end{center}\par&#xa;</xsl:text>
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
     <xsl:text>\clearpage&#xa;</xsl:text>
@@ -440,10 +440,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Author, one at titlepage -->
+<!-- Authors, editors, full info for titlepage -->
 <!-- http://stackoverflow.com/questions/2817664/xsl-how-to-tell-if-element-is-last-in-series -->
 <xsl:template match="author">
     <xsl:apply-templates select="personname" />
+    <xsl:if test = "department">
+        <xsl:text>\\&#xa;</xsl:text>
+        <xsl:apply-templates select="department" />
+    </xsl:if>
+    <xsl:if test = "institution">
+        <xsl:text>\\&#xa;</xsl:text>
+        <xsl:apply-templates select="institution" />
+    </xsl:if>
+    <xsl:if test = "email">
+        <xsl:text>\\&#xa;</xsl:text>
+        <xsl:apply-templates select="email" />
+    </xsl:if>
+    <xsl:if test="position() != last()" >
+        <xsl:text>&#xa;\and</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+<xsl:template match="editor">
+    <xsl:apply-templates select="personname" />
+    <xsl:text>, </xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="generic" select="'editor'" />
+    </xsl:call-template>
     <xsl:if test = "department">
         <xsl:text>\\&#xa;</xsl:text>
         <xsl:apply-templates select="department" />
@@ -475,10 +498,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{abstract}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Titles, captions are handled specially               -->
-<!-- so get killed via apply-templates                    -->
-<!-- When needed, get content with XPath, eg title/node() -->
-<xsl:template match="title"></xsl:template>
+<!-- Captions are handled specially                         -->
+<!-- so get killed via apply-templates                      -->
+<!-- When needed, get content with XPath, eg caption/node() -->
 <xsl:template match="caption"></xsl:template>
 
 <!-- Logos (images) -->
@@ -533,11 +555,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\</xsl:text>
     <xsl:value-of select="$level" />
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="title/node()" />
+    <xsl:apply-templates select="title" />
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>&#xa;%&#xa;</xsl:text>
-    <xsl:apply-templates />
+    <xsl:if test="author">
+        <xsl:text>\noindent\Large{\textbf{</xsl:text>
+        <xsl:apply-templates select="author" mode="name-list"/>
+        <xsl:text>}\par\bigskip&#xa;%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="*[not(self::title or self::author)]"/>
 </xsl:template>
 
 
@@ -548,7 +575,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Definitions have notation, which is handled elsewhere -->
 <!-- Examples have no additional structure                 -->
 <!-- Exercises have solutions                              -->
-<!-- TODO: consider optional titles -->
+
+<!-- Titles are passed as options to environments -->
+<xsl:template match="title" mode="environment-option">
+    <xsl:text>[</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>]</xsl:text>
+</xsl:template>
 
 <xsl:template match="theorem|corollary|lemma">
     <xsl:apply-templates select="statement|proof" />
@@ -561,6 +594,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Include solutions to exercises by default value of switch-->
 <xsl:template match="exercise">
     <xsl:text>\begin{exercise}</xsl:text>
+    <xsl:apply-templates select="title" mode="environment-option" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="statement"/>
@@ -581,6 +615,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="theorem/statement">
     <xsl:text>\begin{theorem}</xsl:text>
+    <xsl:apply-templates select="../title" mode="environment-option" />
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
@@ -589,6 +624,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="corollary/statement">
     <xsl:text>\begin{corollary}</xsl:text>
+    <xsl:apply-templates select="../title" mode="environment-option" />
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
@@ -597,6 +633,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="lemma/statement">
     <xsl:text>\begin{lemma}</xsl:text>
+    <xsl:apply-templates select="../title" mode="environment-option" />
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
@@ -605,6 +642,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="definition/statement">
     <xsl:text>\begin{definition}</xsl:text>
+    <xsl:apply-templates select="../title" mode="environment-option" />
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
@@ -613,6 +651,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="example">
     <xsl:text>\begin{example}</xsl:text>
+    <xsl:apply-templates select="title" mode="environment-option" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />

@@ -78,6 +78,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$generic='bibliography'">  <xsl:text>References</xsl:text></xsl:when>
         <!-- -->
         <xsl:when test="$generic='todo'">          <xsl:text>To Do</xsl:text></xsl:when>
+        <xsl:when test="$generic='editor'">        <xsl:text>Editor</xsl:text></xsl:when>
         <xsl:otherwise>
             <xsl:message terminate="no">Warning: Unable to translate <xsl:value-of select="$generic" />.&#xa;</xsl:message>
         </xsl:otherwise>
