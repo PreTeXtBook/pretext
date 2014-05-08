@@ -35,6 +35,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="chunk-level">2</xsl:variable>
 
+<xsl:variable name="toc-level">2</xsl:variable>
+
 <xsl:template match="/mathbook">
     <xsl:apply-templates />
 </xsl:template>
@@ -1190,32 +1192,36 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- Table of Contents SideBar -->
 <!-- Identical on each page    -->
 <xsl:template name="toc-items">
-    <div id="toc-navbar-item" class="navbar-item">
-        <h2 class="navbar-item-text icon-navicon-round ">Table of Contents</h2>
-        <nav id="toc">
-        <xsl:for-each select="/mathbook/book/chapter|/mathbook/book/appendix|/mathbook/article/section">
-            <xsl:variable name="outer-url">
-                <xsl:apply-templates select="." mode="url"/>
-           </xsl:variable>
-            <h2 class="link"><a href="{$outer-url}">
-            <xsl:apply-templates select="." mode="number" />
-            <xsl:text> </xsl:text>
-            <xsl:apply-templates select="title" /></a></h2>
-            <ul>
-            <xsl:for-each select="./section|./subsection">
-                <xsl:variable name="inner-url">
-                    <xsl:apply-templates select="." mode="url" />
-                </xsl:variable>
-                <xsl:variable name="internal">
-                    <xsl:apply-templates select="." mode="internal-id" />
-                </xsl:variable>
-                <li><a href="{$inner-url}" data-scroll="{$internal}">
-                <xsl:apply-templates select="title" /></a></li>
+    <xsl:if test="$toc-level > 0">
+        <div id="toc-navbar-item" class="navbar-item">
+            <h2 class="navbar-item-text icon-navicon-round ">Table of Contents</h2>
+            <nav id="toc">
+            <xsl:for-each select="/mathbook/book/chapter|/mathbook/book/appendix|/mathbook/article/section">
+                <xsl:variable name="outer-url">
+                    <xsl:apply-templates select="." mode="url"/>
+               </xsl:variable>
+                <h2 class="link"><a href="{$outer-url}">
+                <xsl:apply-templates select="." mode="number" />
+                <xsl:text> </xsl:text>
+                <xsl:apply-templates select="title" /></a></h2>
+                <ul>
+                <xsl:if test="$toc-level > 1">
+                    <xsl:for-each select="./section|./subsection">
+                        <xsl:variable name="inner-url">
+                            <xsl:apply-templates select="." mode="url" />
+                        </xsl:variable>
+                        <xsl:variable name="internal">
+                            <xsl:apply-templates select="." mode="internal-id" />
+                        </xsl:variable>
+                        <li><a href="{$inner-url}" data-scroll="{$internal}">
+                        <xsl:apply-templates select="title" /></a></li>
+                    </xsl:for-each>
+                </xsl:if>
+                </ul>
             </xsl:for-each>
-            </ul>
-        </xsl:for-each>
-        </nav>
-    </div>
+            </nav>
+        </div>
+    </xsl:if>
 </xsl:template>
 
 <!-- Navigational Arrows -->
