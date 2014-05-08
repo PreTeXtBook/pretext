@@ -364,21 +364,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Figures and their captions -->
 <xsl:template match="figure">
     <div class="figure">
-        <xsl:apply-templates />
+        <xsl:apply-templates select="*[not(self::caption)]"/>
+        <xsl:apply-templates select="caption"/>
     </div>
-</xsl:template>
-
-<!-- Caption of a figure                           -->
-<!-- All the relevant information is in the parent -->
-<xsl:template match="figure/caption">
-    <figcaption>
-        <xsl:apply-templates select=".." mode="type-name"/>
-        <xsl:text> </xsl:text>
-        <xsl:apply-templates select=".." mode="number"/>
-        <xsl:text>: </xsl:text>
-        <xsl:apply-templates />
-        <xsl:apply-templates select=".." mode="label" />
-    </figcaption>
 </xsl:template>
 
 <!-- Images -->
@@ -417,7 +405,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Follow "XML Exchange Table Model"           -->
 <!-- A subset of the (failed) "CALS Table Model" -->
 <!-- Should be able to replace this by extant XSLT for this conversion -->
-<xsl:template match="table"><table class="plain-table"><xsl:apply-templates /></table></xsl:template>
+<xsl:template match="table">
+    <table class="plain-table">
+        <xsl:apply-templates select="*[not(self::caption)]" />
+        <xsl:apply-templates select="caption" />
+    </table>
+</xsl:template>
+
 <xsl:template match="tgroup"><xsl:apply-templates /></xsl:template>
 <xsl:template match="thead"><thead><xsl:apply-templates /></thead></xsl:template>
 <xsl:template match="tbody"><tbody><xsl:apply-templates /></tbody></xsl:template>
@@ -426,9 +420,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="thead/row/entry"><th align="{../../../@align}"><xsl:apply-templates /></th></xsl:template>
 <xsl:template match="tbody/row/entry"><td align="{../../../@align}"><xsl:apply-templates /></td></xsl:template>
 
-<!-- Caption of a table                            -->
+<!-- Caption of a figure or table                  -->
 <!-- All the relevant information is in the parent -->
-<xsl:template match="table/caption">
+<xsl:template match="caption">
     <caption>
         <xsl:apply-templates select=".." mode="type-name"/>
         <xsl:text> </xsl:text>

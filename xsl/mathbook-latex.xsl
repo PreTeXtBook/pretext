@@ -514,11 +514,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{abstract}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Captions are handled specially                         -->
-<!-- so get killed via apply-templates                      -->
-<!-- When needed, get content with XPath, eg caption/node() -->
-<xsl:template match="caption"></xsl:template>
-
 <!-- Logos (images) -->
 <!-- Fine-grained placement of graphics files on pages      -->
 <!-- May be placed anywhere on current page                 -->
@@ -1098,17 +1093,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Figures and Captions -->
 <!-- http://tex.stackexchange.com/questions/2275/keeping-tables-figures-close-to-where-they-are-mentioned -->
+<xsl:template match="caption">
+    <xsl:text>\caption{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
 <xsl:template match="figure">
     <xsl:text>\begin{figure}[!htbp]&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\caption{</xsl:text>
-    <xsl:apply-templates select="caption/node()" />
-    <xsl:apply-templates select="." mode="label"/>
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:apply-templates select="*[not(self::caption)]"/>
+    <xsl:apply-templates select="caption" />
     <xsl:text>\end{figure}&#xa;%&#xa;</xsl:text>
 </xsl:template>
-
 
 <!-- Images -->
 <xsl:template match="image" >
@@ -1154,16 +1152,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See http://stackoverflow.com/questions/19716449/converting-xhtml-table-to-latex-using-xslt -->
 <xsl:template match="table">
     <xsl:text>\begin{table}[thb]\centering&#xa;</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
-    <xsl:apply-templates />
+    <xsl:apply-templates select="*[not(self::caption)]" />
+    <xsl:apply-templates select="caption" />
     <xsl:text>\end{table}&#xa;</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="table/caption">
-    <xsl:text>\caption{</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Unclear how to handle *multiple* tgroups in latex -->
