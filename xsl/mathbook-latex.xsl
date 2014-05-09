@@ -1084,9 +1084,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- http://tex.stackexchange.com/questions/2275/keeping-tables-figures-close-to-where-they-are-mentioned -->
 <xsl:template match="figure">
     <xsl:text>\begin{figure}[!htbp]&#xa;</xsl:text>
-    <xsl:text>\begin{center}&#xa;</xsl:text>
+    <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{center}&#xa;</xsl:text>
     <xsl:text>\caption{</xsl:text>
     <xsl:apply-templates select="caption/node()" />
     <xsl:apply-templates select="." mode="label"/>
@@ -1138,10 +1137,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Should be able to replace this by extant XSLT for this conversion -->
 <!-- See http://stackoverflow.com/questions/19716449/converting-xhtml-table-to-latex-using-xslt -->
 <xsl:template match="table">
-    <xsl:text>\begin{table}[thb]\begin{center}&#xa;</xsl:text>
+    <xsl:text>\begin{table}[thb]\centering&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="label" />
     <xsl:apply-templates />
-    <xsl:text>\end{center}\end{table}&#xa;</xsl:text>
+    <xsl:text>\end{table}&#xa;</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
