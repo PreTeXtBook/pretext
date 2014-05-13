@@ -217,19 +217,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX preamble is common for both books, articles and letters      -->
 <!-- Except: title info allows an "event" for an article (presentation) -->
 <xsl:template name="latex-preamble">
-    <xsl:text>%% Custom entries to preamble, early&#xa;</xsl:text>
-    <xsl:value-of select="$latex.preamble.early" />
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% Custom Preamble Entries, early (latex.preamble.early)&#xa;</xsl:text>
+    <xsl:if test="$latex.preamble.early != ''">
+        <xsl:value-of select="$latex.preamble.early" />
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
     <!-- Override any page margins set per style, default is empty -->
-    <xsl:text>%% Page layout adjustment&#xa;</xsl:text>
-    <xsl:text>\geometry{</xsl:text>
-    <xsl:value-of select="$latex.geometry" />
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% Page Layout Adjustments (latex.geometry)&#xa;</xsl:text>
+    <xsl:if test="$latex.geometry != ''">
+        <xsl:text>\geometry{</xsl:text>
+        <xsl:value-of select="$latex.geometry" />
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Symbols, align environment, bracket-matrix&#xa;</xsl:text>
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
     <xsl:text>%% allow more columns to a matrix&#xa;</xsl:text>
-    <xsl:text>%% can make this even bigger by overiding with preamble addition&#xa;</xsl:text>
+    <xsl:text>%% can make this even bigger by overiding with preamble late addition&#xa;</xsl:text>
     <xsl:text>\setcounter{MaxMatrixCols}{30}&#xa;</xsl:text>
     <xsl:text>\usepackage{amssymb}&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
@@ -249,6 +255,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\terminology}[1]{\textbf{#1}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Could condition following on existence of any amsthm environment -->
+    <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Environments with amsthm package&#xa;</xsl:text>
     <xsl:text>\usepackage{amsthm}&#xa;</xsl:text>
     <xsl:text>% Theorem-like enviroments, italicized statement, proof, etc&#xa;</xsl:text>
@@ -342,12 +349,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
      -->
     <xsl:if test="//logo">
-        <xsl:text>%% Precise image placement (for logos on pages)&#xa;</xsl:text>
+        <xsl:text>%% Package for precise image placement (for logos on pages)&#xa;</xsl:text>
         <xsl:text>\usepackage{eso-pic}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% Hyperlinking in PDFs, all links solid and blue
-    \usepackage[pdftex]{hyperref}
-    \hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% Hyperlinking in PDFs, all links solid and blue&#xa;</xsl:text>
+    <xsl:text>\usepackage[pdftex]{hyperref}&#xa;</xsl:text>
+    <xsl:text>\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
     <xsl:text>\hypersetup{pdftitle={</xsl:text>
     <xsl:apply-templates select="title" />
     <xsl:text>}}&#xa;</xsl:text>
@@ -364,11 +372,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usepackage[letter,cam,center,pdflatex]{crop}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%%&#xa;</xsl:text>
-    <xsl:text>%% Custom entries to preamble, late&#xa;</xsl:text>
-    <xsl:value-of select="$latex.preamble.late" />
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>%% Custom Preamble Entries, late (latex.preamble.late)&#xa;</xsl:text>
+    <xsl:if test="$latex.preamble.late != ''">
+        <xsl:value-of select="$latex.preamble.late" />
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Convenience macros&#xa;</xsl:text>
-    <xsl:value-of select="/mathbook/docinfo/macros" /><xsl:text>&#xa;</xsl:text>
+    <xsl:if test="/mathbook/docinfo/macros">
+        <xsl:value-of select="/mathbook/docinfo/macros" />
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template name="title-page-info-book">
