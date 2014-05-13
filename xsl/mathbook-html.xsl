@@ -1167,6 +1167,8 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <xsl:text>    *</xsl:text>
     </xsl:comment><xsl:text>&#xa;</xsl:text>
     <xsl:comment>*                                    *</xsl:comment><xsl:text>&#xa;</xsl:text>
+    <xsl:comment>*   http://mathbook.pugetsound.edu   *</xsl:comment><xsl:text>&#xa;</xsl:text>
+    <xsl:comment>*                                    *</xsl:comment><xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ################# -->

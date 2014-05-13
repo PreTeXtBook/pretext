@@ -1397,6 +1397,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="date:date-time()" />
     <xsl:text>    %%&#xa;</xsl:text>
     <xsl:text>%%                                    %%&#xa;</xsl:text>
+    <xsl:text>%%   http://mathbook.pugetsound.edu   %%&#xa;</xsl:text>
+    <xsl:text>%%                                    %%&#xa;</xsl:text>
 </xsl:template>
 
 
