@@ -315,12 +315,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'definition'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="//definition">
+        <xsl:if test="//example">
             <xsl:text>\newtheorem{example}[theorem]{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'example'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="//definition">
+        <xsl:if test="//exercise">
             <xsl:text>\newtheorem{exercise}[theorem]{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'exercise'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
