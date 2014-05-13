@@ -63,6 +63,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="sage figure" />
 <xsl:strip-space elements="table tgroup thead tbody row" />
 
+<!-- ############## -->
+<!-- Entry template -->
+<!-- ############## -->
+
+<!-- docinfo is metadata, retrieve as needed              -->
+<!-- Otherwise, processs book, article, letter, memo, etc -->
+<xsl:template match="/mathbook">
+    <xsl:apply-templates select="*[not(self::docinfo)]" />
+</xsl:template>
+
+
 <!-- Mathematics (LaTeX/MathJax)                                                 -->
 <!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
 <!-- mrow logic controls numbering, based on variant here, and per-row overrides -->

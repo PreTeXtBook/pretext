@@ -64,14 +64,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="latex.preamble.early" select="''" />
 <xsl:param name="latex.preamble.late" select="''" />
 
-<xsl:template match="/" >
-    <xsl:apply-templates select="mathbook"/>
-</xsl:template>
-
-<!-- docinfo is handled specially                     -->
-<!-- so gets killed via apply-templates                -->
-<xsl:template match="docinfo"></xsl:template>
-
+<!-- Entry template is in mathbook-common file -->
 
 <!-- An article, LaTeX structure -->
 <!--     One page, full of sections (with abstract, references)                    -->

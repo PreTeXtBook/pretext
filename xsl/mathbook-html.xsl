@@ -37,17 +37,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="toc-level">2</xsl:variable>
 
-<xsl:template match="/mathbook">
-    <xsl:apply-templates />
-</xsl:template>
-
-<!-- Kill docinfo, handle pieces on ad-hoc basis -->
-<!-- Save in a global variable for easy access   -->
-<xsl:template match="/mathbook/docinfo"></xsl:template>
-<xsl:variable name="docinfo" select="/mathbook/docinfo" />
+<!-- Entry template is in mathbook-common file -->
 
 <!-- Authors, editors in serial lists for headers           -->
 <!-- Presumes authors get selected first, so editors follow -->
+<!-- TODO: Move to common -->
 <xsl:template match="author[1]" mode="name-list" >
     <xsl:apply-templates select="personname" />
 </xsl:template>
@@ -1156,7 +1150,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                     </div>
                 </main>
             </div>
-        <xsl:apply-templates select="$docinfo/analytics" />
+        <xsl:apply-templates select="/mathbook/docinfo/analytics" />
         </xsl:element>
     </html>
     </exsl:document>
