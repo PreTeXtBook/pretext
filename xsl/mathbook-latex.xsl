@@ -266,104 +266,104 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="/mathbook/book"><xsl:text>[chapter]</xsl:text></xsl:when>
     </xsl:choose>
     <xsl:text>&#xa;</xsl:text>
-<xsl:text>% Only variants actually used in document appear here&#xa;</xsl:text>
-<xsl:text>% Numbering: all theorem-like numbered consecutively&#xa;</xsl:text>
-<xsl:text>%   i.e. Corollary 4.3 follows Theorem 4.2&#xa;</xsl:text>
-<xsl:if test="//corollary">
-    <xsl:text>\newtheorem{corollary}[theorem]{</xsl:text>
-    <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'corollary'" /></xsl:call-template>
-    <xsl:text>}&#xa;</xsl:text>
-</xsl:if>
-<xsl:if test="//lemma">
-    <xsl:text>\newtheorem{lemma}[theorem]{</xsl:text>
-    <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'lemma'" /></xsl:call-template>
-    <xsl:text>}&#xa;</xsl:text>
-</xsl:if>
-<xsl:if test="//proposition">
-    <xsl:text>\newtheorem{proposition}[theorem]{</xsl:text>
-    <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'proposition'" /></xsl:call-template>
-    <xsl:text>}&#xa;</xsl:text>
-</xsl:if>
-<xsl:if test="//claim">
-    <xsl:text>\newtheorem{claim}[theorem]{</xsl:text>
-    <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'claim'" /></xsl:call-template>
-    <xsl:text>}&#xa;</xsl:text>
-</xsl:if>
-<xsl:if test="//fact">
-    <xsl:text>\newtheorem{fact}[theorem]{</xsl:text>
-    <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'fact'" /></xsl:call-template>
-    <xsl:text>}&#xa;</xsl:text>
-</xsl:if>
-<xsl:if test="//conjecture">
-    <xsl:text>\newtheorem{conjecture}[theorem]{</xsl:text>
-    <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'conjecture'" /></xsl:call-template>
-    <xsl:text>}&#xa;</xsl:text>
-</xsl:if>
-<xsl:if test="//definition or //example or //exercise">
-    <xsl:text>% Definition-like environments, normal text</xsl:text>
-    <xsl:text>% Numbering is in sync with theorems, etc</xsl:text>
-    <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
-    <xsl:if test="//definition">
-        <xsl:text>\newtheorem{definition}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'definition'" /></xsl:call-template>
+    <xsl:text>% Only variants actually used in document appear here&#xa;</xsl:text>
+    <xsl:text>% Numbering: all theorem-like numbered consecutively&#xa;</xsl:text>
+    <xsl:text>%   i.e. Corollary 4.3 follows Theorem 4.2&#xa;</xsl:text>
+    <xsl:if test="//corollary">
+        <xsl:text>\newtheorem{corollary}[theorem]{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'corollary'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//definition">
-        <xsl:text>\newtheorem{example}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'example'" /></xsl:call-template>
+    <xsl:if test="//lemma">
+        <xsl:text>\newtheorem{lemma}[theorem]{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'lemma'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//definition">
-        <xsl:text>\newtheorem{exercise}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'exercise'" /></xsl:call-template>
+    <xsl:if test="//proposition">
+        <xsl:text>\newtheorem{proposition}[theorem]{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'proposition'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-</xsl:if>
-<xsl:text>%% Raster graphics inclusion, wrapped figures in paragraphs&#xa;</xsl:text>
-<xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
-<xsl:text>%% Colors for Sage boxes and author tools (red hilites)&#xa;</xsl:text>
-<xsl:text>\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}&#xa;</xsl:text>
-<!-- TODO: incorporate global listing options here -->
-<xsl:if test="//sage">
-    <xsl:text>%% Sage input, listings package: boxed, colored, line breaking&#xa;</xsl:text>
-    <xsl:text>\usepackage{listings}&#xa;</xsl:text>
-</xsl:if>
-<xsl:if test="//tikz">
-    <xsl:text>%% Tikz graphics&#xa;</xsl:text>
-    <xsl:text>\usepackage{tikz}&#xa;</xsl:text>
-    <xsl:text>\usetikzlibrary{backgrounds}&#xa;</xsl:text>
-    <xsl:text>\usetikzlibrary{arrows,matrix}&#xa;</xsl:text>
-</xsl:if>
-<!-- Asymptote package just does external processing -->
-<!-- 
-<xsl:if test="//asymptote">
-    <xsl:text>%% Asymptote graphics&#xa;</xsl:text>
-    <xsl:text>\usepackage[inline]{asymptote}&#xa;</xsl:text>
-</xsl:if>
- -->
- <xsl:if test="//logo">
-    <xsl:text>%% Precise image placement (for logos on pages)&#xa;</xsl:text>
-    <xsl:text>\usepackage{eso-pic}&#xa;</xsl:text>
-</xsl:if>
-<xsl:text>%% Hyperlinking in PDFs, all links solid and blue
-\usepackage[pdftex]{hyperref}
-\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
-<xsl:text>\hypersetup{pdftitle={</xsl:text>
-<xsl:apply-templates select="title" />
-<xsl:text>}}&#xa;</xsl:text>
-<xsl:if test="$latex.watermark">
-    <xsl:text>\usepackage{draftwatermark}&#xa;</xsl:text>
-    <xsl:text>\SetWatermarkText{</xsl:text>
-    <xsl:value-of select="$latex.watermark" />
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\SetWatermarkScale{</xsl:text>
-    <xsl:value-of select="$latex.watermark.scale" />
-    <xsl:text>}&#xa;</xsl:text>
-</xsl:if>
-<xsl:if test="$latex.draft='yes'" >
-    <xsl:text>\usepackage[letter,cam,center,pdflatex]{crop}&#xa;</xsl:text>
-</xsl:if>
-<xsl:text>%%&#xa;</xsl:text>
+    <xsl:if test="//claim">
+        <xsl:text>\newtheorem{claim}[theorem]{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'claim'" /></xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="//fact">
+        <xsl:text>\newtheorem{fact}[theorem]{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'fact'" /></xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="//conjecture">
+        <xsl:text>\newtheorem{conjecture}[theorem]{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'conjecture'" /></xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="//definition or //example or //exercise">
+        <xsl:text>% Definition-like environments, normal text</xsl:text>
+        <xsl:text>% Numbering is in sync with theorems, etc</xsl:text>
+        <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
+        <xsl:if test="//definition">
+            <xsl:text>\newtheorem{definition}[theorem]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'definition'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//definition">
+            <xsl:text>\newtheorem{example}[theorem]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'example'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//definition">
+            <xsl:text>\newtheorem{exercise}[theorem]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'exercise'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
+    <xsl:text>%% Raster graphics inclusion, wrapped figures in paragraphs&#xa;</xsl:text>
+    <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
+    <xsl:text>%% Colors for Sage boxes and author tools (red hilites)&#xa;</xsl:text>
+    <xsl:text>\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}&#xa;</xsl:text>
+    <!-- TODO: incorporate global listing options here -->
+    <xsl:if test="//sage">
+        <xsl:text>%% Sage input, listings package: boxed, colored, line breaking&#xa;</xsl:text>
+        <xsl:text>\usepackage{listings}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="//tikz">
+        <xsl:text>%% Tikz graphics&#xa;</xsl:text>
+        <xsl:text>\usepackage{tikz}&#xa;</xsl:text>
+        <xsl:text>\usetikzlibrary{backgrounds}&#xa;</xsl:text>
+        <xsl:text>\usetikzlibrary{arrows,matrix}&#xa;</xsl:text>
+    </xsl:if>
+    <!-- Asymptote package just does external processing -->
+    <!-- 
+    <xsl:if test="//asymptote">
+        <xsl:text>%% Asymptote graphics&#xa;</xsl:text>
+        <xsl:text>\usepackage[inline]{asymptote}&#xa;</xsl:text>
+    </xsl:if>
+     -->
+    <xsl:if test="//logo">
+        <xsl:text>%% Precise image placement (for logos on pages)&#xa;</xsl:text>
+        <xsl:text>\usepackage{eso-pic}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>%% Hyperlinking in PDFs, all links solid and blue
+    \usepackage[pdftex]{hyperref}
+    \hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
+    <xsl:text>\hypersetup{pdftitle={</xsl:text>
+    <xsl:apply-templates select="title" />
+    <xsl:text>}}&#xa;</xsl:text>
+    <xsl:if test="$latex.watermark">
+        <xsl:text>\usepackage{draftwatermark}&#xa;</xsl:text>
+        <xsl:text>\SetWatermarkText{</xsl:text>
+        <xsl:value-of select="$latex.watermark" />
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>\SetWatermarkScale{</xsl:text>
+        <xsl:value-of select="$latex.watermark.scale" />
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$latex.draft='yes'" >
+        <xsl:text>\usepackage[letter,cam,center,pdflatex]{crop}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Custom entries to preamble, late&#xa;</xsl:text>
     <xsl:value-of select="$latex.preamble.late" />
     <xsl:text>&#xa;</xsl:text>
