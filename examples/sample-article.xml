@@ -34,7 +34,7 @@
     The "filebase" attribute is used for the filename of the
     HTML output, s part of a chunking scheme that is not complete.
     -->
-    <article filebase="derivatives">
+    <article xml:id="derivatives">
         <title>Derivatives and Integrals</title>
         <!--
         Articles have sections, which have subsections,
@@ -215,6 +215,13 @@
                 <title>A Pedagogical Note</title>
 
                 <p>The Fundamental Theorem explains why we use the same notation for a definite integral, which is a numerical calculation,<fn>Which I think sometimes students lose sight of.</fn> and an antiderivative, which is a symbolic expression.</p>
+
+                <exercise>
+                    <statement>
+                        <p>Write a short paragraph which compares, and contrasts, the definite and indefinite integral.</p>
+                    </statement>
+                </exercise>
+
 
                 <subsubsection>
                     <title>Advice</title>
@@ -441,8 +448,17 @@
 
         </section>
 
-        <section>
+        <exercises xml:id="exercises">
             <title>Exercises</title>
+
+            <exercise>
+                <statement>
+                    <p>Exercises can appear in a <q>section</q> of their own.  You need to give the section a title, even if it seems obvious what to call it.  They are numbered automatically.  How should we hide solutions?</p>
+                </statement>
+                <solution>
+                    <p>Maybe a global switch should be used to supress solutions, while a separate processing regime could use them as part of a solutions manual.</p>
+                </solution>
+            </exercise>
 
             <exercise>
                 <statement>
@@ -462,11 +478,7 @@
                 </hint>
             </exercise>
 
-        <p>Generated: <today />, <timeofday /></p>
-
-        </section>
-
-        
+         </exercises>
         
         <!--
         Various author tools are planned.  Note the embedded "todo"
@@ -528,6 +540,8 @@
             </article>
 
         </bibliography>
+
+       <p>Generated: <today />, <timeofday /></p>
 
     </article>
 
