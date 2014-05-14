@@ -91,7 +91,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   (a) A web page full of content (at chunking level, or below and a docuemnt leaf) -->
 <!--   (b) A summary web page (level less than chunking-level, not a document leaf)     -->
 <!--   (c) A visual component of some enclosing web page                                -->
-<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection">
+<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection|exercises">
     <xsl:variable name="summary"><xsl:apply-templates select="." mode="is-summary" /></xsl:variable>
     <xsl:variable name="content"><xsl:apply-templates select="." mode="is-content" /></xsl:variable>
     <xsl:choose>
@@ -159,7 +159,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
              </xsl:apply-templates>
              <!-- Items in summary mode do not recurse, need to restart outside web page wrapper -->
              <xsl:if test="$summary='true'">
-                <xsl:apply-templates select="book|article|chapter|appendix|section|subsection|subsubsection" /> 
+                <xsl:apply-templates select="book|article|chapter|appendix|section|subsection|subsubsection|exercises" />
             </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
@@ -170,7 +170,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- some do not (eg introductions)                                              -->
 
 <!-- Document node summaries are just links to the page -->
-<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection" mode="summary">
+<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection|exercises" mode="summary">
     <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
     <h2 class="link"><a href="{$url}">
         <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
@@ -1192,28 +1192,38 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <div id="toc-navbar-item" class="navbar-item">
             <h2 class="navbar-item-text icon-navicon-round ">Table of Contents</h2>
             <nav id="toc">
-            <xsl:for-each select="/mathbook/book/chapter|/mathbook/book/appendix|/mathbook/article/section">
-                <xsl:variable name="outer-url">
-                    <xsl:apply-templates select="." mode="url"/>
-               </xsl:variable>
-                <h2 class="link"><a href="{$outer-url}">
-                <xsl:apply-templates select="." mode="number" />
-                <xsl:text> </xsl:text>
-                <xsl:apply-templates select="title" /></a></h2>
-                <ul>
-                <xsl:if test="$toc-level > 1">
-                    <xsl:for-each select="./section|./subsection">
-                        <xsl:variable name="inner-url">
-                            <xsl:apply-templates select="." mode="url" />
-                        </xsl:variable>
-                        <xsl:variable name="internal">
-                            <xsl:apply-templates select="." mode="internal-id" />
-                        </xsl:variable>
-                        <li><a href="{$inner-url}" data-scroll="{$internal}">
-                        <xsl:apply-templates select="title" /></a></li>
-                    </xsl:for-each>
+            <xsl:for-each select="/mathbook/book/*|/mathbook/article/*">
+                <xsl:variable name="structural">
+                    <xsl:apply-templates select="." mode="is-structural" />
+                </xsl:variable>
+                <xsl:if test="$structural='true'">
+                    <xsl:variable name="outer-url">
+                        <xsl:apply-templates select="." mode="url"/>
+                   </xsl:variable>
+                    <h2 class="link"><a href="{$outer-url}">
+                    <xsl:apply-templates select="." mode="number" />
+                    <xsl:text> </xsl:text>
+                    <xsl:apply-templates select="title" /></a></h2>
+                    <ul> <!-- CSS expects a sublist, even if it is empty -->
+                    <xsl:if test="$toc-level > 1">
+                        <xsl:for-each select="./*">
+                            <xsl:variable name="inner-structural">
+                                <xsl:apply-templates select="." mode="is-structural" />
+                            </xsl:variable>
+                            <xsl:if test="$inner-structural='true'">
+                                <xsl:variable name="inner-url">
+                                    <xsl:apply-templates select="." mode="url" />
+                                </xsl:variable>
+                                <xsl:variable name="internal">
+                                    <xsl:apply-templates select="." mode="internal-id" />
+                                </xsl:variable>
+                                <li><a href="{$inner-url}" data-scroll="{$internal}">
+                                <xsl:apply-templates select="title" /></a></li>
+                            </xsl:if>
+                        </xsl:for-each>
+                    </xsl:if>
+                    </ul>
                 </xsl:if>
-                </ul>
             </xsl:for-each>
             </nav>
         </div>

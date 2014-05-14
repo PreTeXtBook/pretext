@@ -468,6 +468,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:number level="any" count="fn" />
 </xsl:template>
 
+<!-- Exercises in an Exercises subdivision -->
+<!-- TODO: needs more care when exercise groups appear -->
+<xsl:template match="exercises/exercise" mode="number">
+    <xsl:number from="exercises" level="any" count="exercise" />
+</xsl:template>
+
 <!-- Equations:           -->
 <!--   chapter.x in books -->
 <!--   x in articles      -->
