@@ -58,6 +58,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$generic='section'">       <xsl:text>Section</xsl:text></xsl:when>
         <xsl:when test="$generic='subsection'">    <xsl:text>Subsection</xsl:text></xsl:when>
         <xsl:when test="$generic='subsubsection'"> <xsl:text>Subsubsection</xsl:text></xsl:when>
+        <xsl:when test="$generic='exercises'">     <xsl:text>Exercises</xsl:text></xsl:when>
         <xsl:when test="$generic='paragraph'">     <xsl:text>Paragraph</xsl:text></xsl:when>
         <xsl:when test="$generic='subparagraph'">  <xsl:text>Subparagraph</xsl:text></xsl:when>
         <!-- -->

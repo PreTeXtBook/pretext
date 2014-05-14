@@ -307,8 +307,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//definition or //example or //exercise">
-        <xsl:text>% Definition-like environments, normal text</xsl:text>
-        <xsl:text>% Numbering is in sync with theorems, etc</xsl:text>
+        <xsl:text>% Definition-like environments, normal text&#xa;</xsl:text>
+        <xsl:text>% Numbering for definition, examples is in sync with theorems, etc&#xa;</xsl:text>
+        <xsl:text>% also for free-form exercises, not in exercise sections&#xa;</xsl:text>
         <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
         <xsl:if test="//definition">
             <xsl:text>\newtheorem{definition}[theorem]{</xsl:text>
@@ -552,24 +553,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Sectioning -->
 <!-- Subdivisions, Chapters down to Paragraphs -->
-<!-- Relies on element names echoing latex names   -->
-<!-- But appendices are just chapters after \appendix macro -->
-<xsl:template match="chapter|appendix|section|subsection|subsubsection|paragraph">
+<!-- Mostly relies on element names echoing latex names      -->
+<!-- (1) appendices are just chapters after \appendix macro  -->
+<!-- (2) exercises can appear at any depth, so compute level -->
+<xsl:template match="chapter|appendix|section|subsection|subsubsection|paragraph|exercises">
     <xsl:variable name="level">
         <xsl:choose>
             <xsl:when test="local-name(.)='appendix'">
                 <xsl:text>chapter</xsl:text>
+            </xsl:when>
+            <xsl:when test="local-name(.)='exercises'">
+                <xsl:apply-templates select="." mode="latex-level" />
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="local-name(.)" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
+    <!-- Information to console for latex run -->
     <xsl:text>\typeout{************************************************}&#xa;</xsl:text>
     <xsl:text>\typeout{</xsl:text>
     <xsl:apply-templates select="." mode="long-name" />
     <xsl:text>}&#xa;</xsl:text>
     <xsl:text>\typeout{************************************************}&#xa;%&#xa;</xsl:text>
+    <!-- Construct the header of the subdivision -->
     <xsl:text>\</xsl:text>
     <xsl:value-of select="$level" />
     <xsl:text>{</xsl:text>
@@ -577,12 +584,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>&#xa;%&#xa;</xsl:text>
+    <!-- List the author of this division, if present -->
     <xsl:if test="author">
         <xsl:text>\noindent\Large{\textbf{</xsl:text>
         <xsl:apply-templates select="author" mode="name-list"/>
         <xsl:text>}\par\bigskip&#xa;%&#xa;</xsl:text>
     </xsl:if>
+    <!-- Exercises are in a list -->
+    <xsl:if test="local-name(.)='exercises'">
+        <xsl:text>\begin{enumerate}&#xa;</xsl:text>
+    </xsl:if>
+    <!-- Process the contents -->
     <xsl:apply-templates select="*[not(self::title or self::author)]"/>
+    <!-- Exercises are in a list -->
+    <xsl:if test="local-name(.)='exercises'">
+        <xsl:text>\end{enumerate}&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 
@@ -609,15 +626,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="statement" />
 </xsl:template>
 
-<!-- Include solutions to exercises by default value of switch-->
+<!-- Exercises -->
+<!-- Free-range exercises go into environments -->
+<!-- Otherwise items in lists in "exercises" subdivisions   -->
+<!-- TODO: Solutions to exercises by default value of switch-->
 <xsl:template match="exercise">
     <xsl:text>\begin{exercise}</xsl:text>
     <xsl:apply-templates select="title" mode="environment-option" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="statement"/>
+    <xsl:apply-templates select="hint"/>
     <xsl:apply-templates select="solution"/>
     <xsl:text>\end{exercise}&#xa;%&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="exercises//exercise">
+    <xsl:text>\item</xsl:text>
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="statement"/>
+    <xsl:apply-templates select="hint"/>
+    <xsl:apply-templates select="solution"/>
+    <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="exercise/solution">
@@ -625,6 +656,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\par\smallskip\noindent\textbf{</xsl:text>
         <xsl:apply-templates select="." mode="type-name" />
         <xsl:text>.}\quad&#xa;</xsl:text>
+        <xsl:apply-templates />
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="exercise/hint">
+    <xsl:if test="$hints.included='yes'">
+        <xsl:apply-templates select="." mode="type-name" />
+        <xsl:text>: </xsl:text>
         <xsl:apply-templates />
     </xsl:if>
 </xsl:template>
@@ -1382,6 +1421,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>, </xsl:text>
     <xsl:apply-templates />
 </xsl:template>
+
+<!-- Level names in LaTeX -->
+
+<xsl:template match="*" mode="latex-level">
+    <xsl:variable name="level">
+        <xsl:apply-templates select="." mode="level" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="/mathbook/book">
+            <xsl:choose>
+                <xsl:when test="$level=0">book</xsl:when>
+                <xsl:when test="$level=1">chapter</xsl:when>
+                <xsl:when test="$level=2">section</xsl:when>
+                <xsl:when test="$level=3">subsection</xsl:when>
+                <xsl:when test="$level=4">subsubsection</xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>ERROR: Level computation is out-of-bounds (<xsl:value-of select="$level" />)</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="/mathbook/article">
+            <xsl:choose>
+                <xsl:when test="$level=0">article</xsl:when>
+                <xsl:when test="$level=1">section</xsl:when>
+                <xsl:when test="$level=2">subsection</xsl:when>
+                <xsl:when test="$level=3">subsubsection</xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>ERROR: Level computation is out-of-bounds (<xsl:value-of select="$level" />)</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>ERROR: Level computation only for books, articles</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- Miscellaneous -->
 

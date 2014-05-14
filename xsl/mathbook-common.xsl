@@ -37,9 +37,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!-- These here are independent of the output format as well                  -->
-<!--  -->
-<!-- Solutions to exercises is configurable, eg text versus solution manual -->
-<!-- Default is to show them, a production version can switch them off      -->
+<!-- -->
+<!-- Hints and solutions for exercises is configurable        -->
+<!-- For example, in a text versus a solution manual          -->
+<!-- Default is to show them, global switch can turn them off -->
+<xsl:param name="hints.included" select="'yes'" />
 <xsl:param name="solutions.included" select="'yes'" />
 <!-- Author tools are for drafts, mostly "todo" items                 -->
 <!-- and "provisional" citations and cross-references                 -->
@@ -52,7 +54,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
 <!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
 <xsl:strip-space elements="mathbook book article letter" />
-<xsl:strip-space elements="chapter appendix section subsection subsubsection paragraph subparagraph" />
+<xsl:strip-space elements="chapter appendix section subsection subsubsection exercises paragraph subparagraph" />
 <xsl:strip-space elements="docinfo author abstract preface" />
 <xsl:strip-space elements="theorem corollary lemma proposition claim fact conjecture proof" />
 <xsl:strip-space elements="definition axiom" />
@@ -288,7 +290,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Some elements of the XML tree -->
 <!-- are part of the document tree -->
 <xsl:template match="*" mode="is-structural">
-    <xsl:value-of select="self::book or self::article or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection" />
+    <xsl:value-of select="self::book or self::article or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection or self::exercises" />
 </xsl:template>
 
 <!-- Structural Leaves -->
@@ -298,7 +300,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="structural"><xsl:apply-templates select="." mode="is-structural" /></xsl:variable>
     <xsl:choose>
         <xsl:when test="$structural='true'">
-            <xsl:value-of select="not(child::book or child::article or child::chapter or child::appendix or child::section or child::subsection or child::subsubsection)" />
+            <xsl:value-of select="not(child::book or child::article or child::chapter or child::appendix or child::section or child::subsection or child::subsubsection or child::exercises)" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:value-of select="$structural" />
@@ -407,8 +409,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Default is LaTeX's numbering scheme -->
 
 <!-- Sectioning -->
-<xsl:template match="chapter|section|subsection|subsubsection|paragraph|subparagraph" mode="number">
-    <xsl:number level="multiple" count="chapter|section|subsection|subsubsection|paragraph|subparagraph" />
+<xsl:template match="chapter|section|subsection|subsubsection|paragraph|subparagraph|exercises" mode="number">
+    <xsl:number level="multiple" count="chapter|section|subsection|subsubsection|paragraph|subparagraph|exercises" />
 </xsl:template>
 
 <!-- We presume only one of these, hence no number -->
