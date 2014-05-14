@@ -48,8 +48,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Default is to hide todo's, inline provisionals                   -->
 <!-- Otherwise ('yes'), todo's in red paragraphs, provisionals in red -->
 <xsl:param name="author-tools" select="'no'" />
-
-<xsl:variable name="toc-level">2</xsl:variable>
+<!-- How many levels to table of contents  -->
+<!-- Not peculiar to HTML or LaTeX or etc. -->
+<!-- Sentinel indicates no choice made     -->
+<xsl:param name="toc.level" select="''" />
 
 <!-- Strip whitespace text nodes from container elements                    -->
 <!-- Improve source readability with whitespace control in text output mode -->
@@ -66,6 +68,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="md mdn" />
 <xsl:strip-space elements="sage figure" />
 <xsl:strip-space elements="table tgroup thead tbody row" />
+
+<!-- ######### -->
+<!-- Variables -->
+<!-- ######### -->
+
+<xsl:variable name="toc-level">
+    <xsl:choose>
+        <xsl:when test="$toc.level != ''">
+            <xsl:value-of select="$toc.level" />
+        </xsl:when>
+        <xsl:when test="/mathbook/book">2</xsl:when>
+        <xsl:when test="/mathbook/article and /mathbook/article/section">1</xsl:when>
+        <xsl:when test="/mathbook/article">0</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>ERROR: Table of Contents level not determined</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 
 <!-- ############## -->
 <!-- Entry template -->
