@@ -33,7 +33,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Intend output for rendering by a web browser -->
 <xsl:output method="html" encoding="utf-8"/>
 
-<xsl:variable name="chunk-level">2</xsl:variable>
+<!-- Parameters -->
+<!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
+<!-- Or make a thin customization layer and use 'select' to provide overrides -->
+<!-- See others in mathbook-common.xsl file                                   -->
+<!--  -->
+<!-- Depth to which web pages are "chunked" -->
+<!-- Sentinel indicates no choice made      -->
+<xsl:param name="html.chunk.level" select="''" />
+
+<!-- Variables  -->
+<xsl:variable name="chunk-level">
+    <xsl:choose>
+        <xsl:when test="$html.chunk.level != ''">
+            <xsl:value-of select="$html.chunk.level" />
+        </xsl:when>
+        <xsl:when test="/mathbook/book">2</xsl:when>
+        <xsl:when test="/mathbook/article and /mathbook/article/section">1</xsl:when>
+        <xsl:when test="/mathbook/article">0</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>ERROR: Chunk level not determined</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 
 <!-- Entry template is in mathbook-common file -->
 
