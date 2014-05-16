@@ -118,9 +118,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="." mode="page-wrap">
-                <xsl:with-param name="toc">
-                    <xsl:value-of select="'yes'" />
-                </xsl:with-param>
                 <xsl:with-param name="title">
                     <xsl:apply-templates select="/mathbook/book/title|/mathbook/article/title" />
                 </xsl:with-param>
@@ -1091,7 +1088,6 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!--     * strings for page title, subtitle, authors/editors -->
 <!--     * content (exclusive of banners, etc)               -->
 <xsl:template match="*" mode="page-wrap">
-    <xsl:param name="toc" />
     <xsl:param name="title" />
     <xsl:param name="subtitle" />
     <xsl:param name="credits" />
@@ -1116,7 +1112,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             </xsl:if>
         </head>
         <xsl:element name="body">
-            <xsl:if test="$toc='yes'">
+            <xsl:if test="$toc-level > 0">
                 <xsl:attribute name="class">has-toc</xsl:attribute>
             </xsl:if>
             <xsl:call-template name="latex-macros" />
@@ -1139,9 +1135,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                             </div>
                         </div>
                 </div>
-                <xsl:if test="$toc='yes'">
-                    <xsl:apply-templates select="." mode="nav-sidebar" />
-                </xsl:if>
+            <xsl:apply-templates select="." mode="navigation" />
             </header>
             <div class="page">
                 <main class="main">
@@ -1176,7 +1170,8 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- ################# -->
 
 <!-- Navigation Section -->
-<xsl:template match="*" mode="nav-sidebar">
+<!-- Using mode since navigation arrows are relative to node -->
+<xsl:template match="*" mode="navigation">
     <div id="navbar">
         <div class="container">
             <xsl:call-template name="toc-items" />
