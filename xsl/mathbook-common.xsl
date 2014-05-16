@@ -49,6 +49,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Otherwise ('yes'), todo's in red paragraphs, provisionals in red -->
 <xsl:param name="author-tools" select="'no'" />
 
+<xsl:variable name="toc-level">2</xsl:variable>
+
 <!-- Strip whitespace text nodes from container elements                    -->
 <!-- Improve source readability with whitespace control in text output mode -->
 <!-- Newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->

@@ -89,6 +89,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>\thispagestyle{empty}&#xa;%&#xa;</xsl:text>
     <xsl:apply-templates select="abstract"/>
+    <xsl:if test="$toc-level > 0">
+        <xsl:text>\setcounter{tocdepth}{</xsl:text>
+        <xsl:value-of select="$toc-level" />
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>\renewcommand*\contentsname{</xsl:text>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="generic" select="'toc'" />
+        </xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>\tableofcontents&#xa;</xsl:text>
+        <xsl:text>\clearpage&#xa;%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="*[not(self::abstract or self::bibliography)]"/>
     <xsl:apply-templates select="bibliography"/>
    <xsl:text>\end{document}&#xa;</xsl:text>
@@ -115,7 +127,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\maketitle&#xa;</xsl:text>
     <xsl:text>\clearpage&#xa;%&#xa;</xsl:text>
     <xsl:call-template name="copyright-page" />
-    <xsl:text>\tableofcontents&#xa;%&#xa;</xsl:text>
+    <xsl:if test="$toc-level > 0">
+        <xsl:text>\setcounter{tocdepth}{</xsl:text>
+        <xsl:value-of select="$toc-level" />
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>\renewcommand*\contentsname{</xsl:text>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="generic" select="'toc'" />
+        </xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>\tableofcontents&#xa;%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="preface" />
     <xsl:text>\mainmatter&#xa;%&#xa;</xsl:text>
     <xsl:apply-templates select="chapter" />

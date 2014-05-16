@@ -35,8 +35,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="chunk-level">2</xsl:variable>
 
-<xsl:variable name="toc-level">2</xsl:variable>
-
 <!-- Entry template is in mathbook-common file -->
 
 <!-- Authors, editors in serial lists for headers           -->
