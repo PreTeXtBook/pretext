@@ -111,7 +111,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   (a) A web page full of content (at chunking level, or below and a docuemnt leaf) -->
 <!--   (b) A summary web page (level less than chunking-level, not a document leaf)     -->
 <!--   (c) A visual component of some enclosing web page                                -->
-<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection|exercises">
+<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection|exercises|references">
     <xsl:variable name="summary"><xsl:apply-templates select="." mode="is-summary" /></xsl:variable>
     <xsl:variable name="content"><xsl:apply-templates select="." mode="is-content" /></xsl:variable>
     <xsl:choose>
@@ -176,7 +176,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
              </xsl:apply-templates>
              <!-- Items in summary mode do not recurse, need to restart outside web page wrapper -->
              <xsl:if test="$summary='true'">
-                <xsl:apply-templates select="book|article|chapter|appendix|section|subsection|subsubsection|exercises" />
+                <xsl:apply-templates select="book|article|chapter|appendix|section|subsection|subsubsection|exercises|references" />
             </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
@@ -187,7 +187,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- some do not (eg introductions)                                              -->
 
 <!-- Document node summaries are just links to the page -->
-<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection|exercises" mode="summary">
+<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection|exercises|references" mode="summary">
     <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
     <h2 class="link"><a href="{$url}">
         <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
@@ -197,14 +197,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Some items in summary pages are of interest and are not subdivisions -->
-<!-- TODO: maybe bibliographies, exercise(section)s should be knowl-ized -->
-<xsl:template match="introduction|bibliography" mode="summary">
+<xsl:template match="introduction" mode="summary">
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- Bibliography killing is temporary -->
 <!-- TODO's can be anywhere and we do not want to see them -->
-<xsl:template match="todo|bibliography" mode="summary" />
+<xsl:template match="todo" mode="summary" />
 
 <!-- Page Navigation Bar -->
 <!-- OBSOLETE: but useful example (filebase, title/node are no longer used)  -->
@@ -442,7 +440,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="cite[@ref]">
     <xsl:call-template name="knowl-link-factory">
         <xsl:with-param name="css-class">cite</xsl:with-param>
-        <xsl:with-param name="identifier"><xsl:value-of select="@ref" /></xsl:with-param>
+        <xsl:with-param name="identifier">
+            <xsl:apply-templates select="id(@ref)" mode="xref-identifier" />
+        </xsl:with-param>
         <xsl:with-param name="content">
             <xsl:text>[</xsl:text>
             <xsl:apply-templates select="id(@ref)" mode="number" />
@@ -769,127 +769,52 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- Raw Bibliographic Entry Formatting              -->
+<!-- Markup really, not full-blown data preservation -->
 
-<!-- Bibliography -->
-
-<!-- Enclosing structure of bibliography -->
-<xsl:template match="bibliography">
-    <div class="bibliography">
-    <div class="title">References</div>
-        <ol>
-            <xsl:apply-templates select="article|book" />
-        </ol>
-    </div>
-</xsl:template>
-
-
-<!-- TODO: deduplicate actual entry and knowl content -->
-<xsl:template match="bibliography//article">
-    <li id="{@xmlid}" class="article">
-        <xsl:apply-templates select="author" />
-        <xsl:apply-templates select="title" />
-        <xsl:apply-templates select="journal" />
-        <xsl:apply-templates select="volume" />
-        <xsl:apply-templates select="pages" />
-        <xsl:text>.</xsl:text>
-    </li>
+<!-- Entry as a list item    -->
+<!-- And manufacture a knowl -->
+<xsl:template match="biblio[@type='raw']">
+    <li><xsl:apply-templates /></li>
     <xsl:call-template name="knowl-factory">
-        <xsl:with-param name="identifier"><xsl:value-of select="@xml:id" /></xsl:with-param>
+        <xsl:with-param name="identifier">
+            <xsl:apply-templates select="." mode="xref-identifier" />
+        </xsl:with-param>
         <xsl:with-param name="content">
             <span class="article">
-                <xsl:apply-templates select="author" />
-                <xsl:apply-templates select="title" />
-                <xsl:apply-templates select="journal" />
-                <xsl:apply-templates select="volume" />
-                <xsl:apply-templates select="pages" />
-                <xsl:text>.</xsl:text>
+            <xsl:apply-templates />
             </span>
         </xsl:with-param>
     </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="bibliography//book">
-    <li id="{@xmlid}" class="book">
-        <xsl:apply-templates select="author" />
-        <xsl:apply-templates select="title" />
-        <xsl:apply-templates select="publisher" />
-        <xsl:text>.</xsl:text>
-    </li>
-    <xsl:call-template name="knowl-factory">
-        <xsl:with-param name="identifier"><xsl:value-of select="@xml:id" /></xsl:with-param>
-        <xsl:with-param name="content">
-            <span class="book">
-                <xsl:apply-templates select="author" />
-                <xsl:apply-templates select="title" />
-                <xsl:apply-templates select="publisher" />
-                <xsl:text>.</xsl:text>
-            </span>
-        </xsl:with-param>
-    </xsl:call-template>
+<!-- Bibliographic items can have annotations            -->
+<!-- Presumably just paragraphs, nothing too complicated -->
+<xsl:template match="biblio/note">
+    <xsl:apply-templates />
 </xsl:template>
 
-<xsl:template match="bibliography//author">
-    <span class="author"><xsl:apply-templates /></span>
+<!-- Title in italics -->
+<xsl:template match="biblio[@type='raw']/title">
+    <i><xsl:apply-templates /></i>
 </xsl:template>
 
-<xsl:template match="bibliography/article/title">
-    <xsl:text>, </xsl:text>
-    <span class="title">
-        <xsl:text>'</xsl:text>
-        <xsl:apply-templates />
-        <xsl:text>'</xsl:text>
-    </span>
+<!-- No treatment for journal -->
+<xsl:template match="biblio[@type='raw']/journal">
+    <xsl:apply-templates />
 </xsl:template>
 
-<xsl:template match="bibliography/book/title">
-    <xsl:text>, </xsl:text>
-    <span class="title">
-        <xsl:apply-templates />
-    </span>
+<!-- Volume in bold -->
+<xsl:template match="biblio[@type='raw']/volume">
+    <b><xsl:apply-templates /></b>
 </xsl:template>
 
-<xsl:template match="bibliography//journal">
-    <xsl:text>, </xsl:text>
-    <span class="journal">
-        <xsl:apply-templates />
-        <xsl:text> (</xsl:text>
-        <xsl:if test="../month">
-            <xsl:value-of select="../month" />
-            <xsl:text> </xsl:text>
-        </xsl:if>
-        <xsl:value-of select="../year" />
-        <xsl:text>)</xsl:text>
-    </span>
+<!-- Number -->
+<xsl:template match="biblio[@type='raw']/number">
+    <xsl:text>no. </xsl:text>
+    <xsl:apply-templates />
 </xsl:template>
 
-<xsl:template match="bibliography//publisher">
-    <xsl:text>, </xsl:text>
-    <span class="publisher">
-        <xsl:text> (</xsl:text>
-        <xsl:apply-templates />
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="../year" />
-        <xsl:text>)</xsl:text>
-    </span>
-</xsl:template>
-
-<xsl:template match="bibliography//volume">
-    <xsl:text>, </xsl:text>
-    <span class="volume">
-        <xsl:text> (</xsl:text>
-        <xsl:value-of select="." />
-        <xsl:text>)</xsl:text>
-        <xsl:if test="../number">
-            <xsl:text> no. </xsl:text>
-            <xsl:value-of select="../number" />
-        </xsl:if>
-    </span>
-</xsl:template>
-
-<xsl:template match="bibliography//pages">
-    <xsl:text>, </xsl:text>
-    <span class="pages"><xsl:apply-templates /></span>
-</xsl:template>
 
 <!-- Math  -->
 <!-- Inline snippets -->
@@ -996,7 +921,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="content"/>
     <exsl:document href="./knowl/{$identifier}.html" method="html">
         <xsl:call-template name="converter-blurb" />
-        <xsl:value-of select="$content" />
+        <xsl:copy-of select="$content" />
     </exsl:document>
 </xsl:template>
 <!-- Second, make a clickable knowl link -->
