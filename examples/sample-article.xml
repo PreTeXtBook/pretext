@@ -109,7 +109,7 @@
             "ref" to match the cross-reference use.
             Citations render as knowls on web pages.
             -->
-            <p>You will find almost nothing about all this in the article <cite ref="bib-fundamental" />, nor in the book <cite ref="bib-fcla" />, since they belong in some other article, but we can cite them out-of-order for practice anyway.</p>
+            <p>You will find almost nothing about all this in the article <cite ref="bib-lay-article" />, nor in the book <cite ref="bib-judson-AATA" />, since they belong in some other article, but we can cite them out-of-order for practice anyway.</p>
 
             <!--
             There are various tools for authors
@@ -382,6 +382,24 @@
 
             shipout(bbox(0.25cm));
             </asymptote>
+        </section>
+
+        <section>
+            <title>Further Reading</title>
+
+            <introduction>
+                <p>In a longer work you might wish to have some references on a per-chapter basis, or similar.  You can make a <q>references</q> subdivion anywhere to hold bibliographic items, and you can reference the items like any other item.  For example, we can cite the article below <cite ref="biblio-beezer-fcla" />.</p>
+            </introduction>
+
+            <references>
+                <title>References</title>
+
+                <biblio type="raw" xml:id="biblio-strang-article">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio> 
+
+                <biblio type="raw" xml:id="biblio-beezer-fcla">Robert A. Beezer, <title>A First Course in Linear Algebra</title>, 3rd Edition, Congruent Press, 2012.
+                <note><p>An online, open-source offering.</p></note>
+                </biblio>
+            </references>
 
         </section>
 
@@ -503,55 +521,18 @@
         A "preview" XSL transform to HTML could be especially useful.
         -->
 
-    <!-- WARNING: Bibliographies are only minimally
-    functional now and subject to change. -->
+        <!-- Bibliography/References can appear anywhere -->
 
-        <bibliography>
+        <references>
+            <title>References</title>
 
-<biblio type="raw" xml:id="bib-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>, <volume>55</volume></biblio>
+            <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>, <volume>55</volume>
+            <note><p>Another online, open-source offering.</p></note>
+            </biblio>
 
-            <book xml:id="bib-fcla">
-                <author>Robert A. Beezer</author>
-                <title>A First Course in Linear Algebra</title>
-                <edition>3rd Edition</edition>
-                <publisher>Congruent Press</publisher>
-                <year>2012</year>
-                <isbn>978-0984417551</isbn>
-                <!-- <url>linear.pugetsound.edu</url> -->
-            </book>
+            <biblio type="raw" xml:id="biblio-lay-article">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash />62.</biblio>
 
-            <book xml:id="bib-lay-book">
-                <author>David C. Lay</author>
-                <title>Linear Algebra and Its Applications</title>
-                <edition>4th Edition</edition>
-                <publisher>Pearson</publisher>
-                <year>2011</year>
-                <isbn>978-0321385178</isbn>
-            </book>
-
-            <article xml:id="bib-lay-article">
-                <author>David C. Lay</author>
-                <title>Subspaces and Echelon Forms</title>
-                <journal>The College Mathematics Journal</journal>
-                <year>1993</year>
-                <month>January</month>
-                <volume>24</volume>
-                <number>1</number>
-                <pages>57-62</pages>
-            </article>
-
-            <article xml:id="bib-fundamental">
-                <author>Gilbert Strang</author>
-                <title>The Fundamental Theorem of Linear Algebra</title>
-                <journal>The American Mathematical Monthly</journal>
-                <year>1993</year>
-                <month>November</month>
-                <volume>100</volume>
-                <number>9</number>
-                <pages>848-855</pages>
-            </article>
-
-        </bibliography>
+        </references>
 
        <p>Generated: <today />, <timeofday /></p>
 
