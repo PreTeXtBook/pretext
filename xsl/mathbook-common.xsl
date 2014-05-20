@@ -58,7 +58,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
 <!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
 <xsl:strip-space elements="mathbook book article letter" />
-<xsl:strip-space elements="chapter appendix section subsection subsubsection exercises paragraph subparagraph" />
+<xsl:strip-space elements="chapter appendix section subsection subsubsection exercises references paragraph subparagraph" />
 <xsl:strip-space elements="docinfo author abstract preface" />
 <xsl:strip-space elements="theorem corollary lemma proposition claim fact conjecture proof" />
 <xsl:strip-space elements="definition axiom" />
@@ -313,7 +313,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Some elements of the XML tree -->
 <!-- are part of the document tree -->
 <xsl:template match="*" mode="is-structural">
-    <xsl:value-of select="self::book or self::article or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection or self::exercises" />
+    <xsl:value-of select="self::book or self::article or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection or self::exercises or self::references" />
 </xsl:template>
 
 <!-- Structural Leaves -->
@@ -323,7 +323,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="structural"><xsl:apply-templates select="." mode="is-structural" /></xsl:variable>
     <xsl:choose>
         <xsl:when test="$structural='true'">
-            <xsl:value-of select="not(child::book or child::article or child::chapter or child::appendix or child::section or child::subsection or child::subsubsection or child::exercises)" />
+            <xsl:value-of select="not(child::book or child::article or child::chapter or child::appendix or child::section or child::subsection or child::subsubsection or child::exercises or child::references)" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:value-of select="$structural" />
@@ -432,21 +432,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Default is LaTeX's numbering scheme -->
 
 <!-- Sectioning -->
-<xsl:template match="chapter|section|subsection|subsubsection|paragraph|subparagraph|exercises" mode="number">
-    <xsl:number level="multiple" count="chapter|section|subsection|subsubsection|paragraph|subparagraph|exercises" />
+<xsl:template match="chapter|section|subsection|subsubsection|paragraph|subparagraph|exercises|references" mode="number">
+    <xsl:number level="multiple" count="chapter|section|subsection|subsubsection|paragraph|subparagraph|exercises|references" />
 </xsl:template>
 
-<!-- We presume only one of these, hence no number -->
-<!--   book, article, abstract, bibliography       -->
-<xsl:template match="book|article|abstract|bibliography" mode="number"></xsl:template>
-
-<xsl:template match="*" mode="number">
-    <xsl:message terminate="no">
-        <xsl:text>WARNING: </xsl:text>
-        <xsl:apply-templates select="." mode="type-name" />
-        <xsl:text> without a number</xsl:text>
-    </xsl:message>
-</xsl:template>
+<!-- We presume only one each for these, hence no number -->
+<xsl:template match="book|article|abstract" mode="number"></xsl:template>
 
 <!-- Appendices: A -->
 <!-- TODO: integrate appendices with chapters -->
@@ -497,6 +488,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:number from="exercises" level="any" count="exercise" />
 </xsl:template>
 
+<!-- Bibliographic items in a References subdivision -->
+<xsl:template match="biblio" mode="number">
+    <xsl:number from="references" level="any" count="biblio" />
+</xsl:template>
+
 <!-- Equations:           -->
 <!--   chapter.x in books -->
 <!--   x in articles      -->
@@ -508,9 +504,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:number from="chapter" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]" />
 </xsl:template>
 
-<!-- Bibliography items: x -->
-<xsl:template match="bibliography//article|bibliography//book" mode="number">
-    <xsl:number from="bibliography" level="single" count="article|book" />
+<!-- Warn if we try to number an item and don't know how -->
+<xsl:template match="*" mode="number">
+    <xsl:message terminate="no">
+        <xsl:text>WARNING: </xsl:text>
+        <xsl:apply-templates select="." mode="type-name" />
+        <xsl:text> found something without a number</xsl:text>
+    </xsl:message>
 </xsl:template>
 
 <!-- Warnings for high-frequency mistakes -->
@@ -525,8 +525,5 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>WARNING: Cross-reference (xref) with no ref or provisional attribute</xsl:text>
     </xsl:message>
 </xsl:template>
-
-
-
 
 </xsl:stylesheet>

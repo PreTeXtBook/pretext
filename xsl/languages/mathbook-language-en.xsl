@@ -77,7 +77,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$generic='abstract'">      <xsl:text>Abstract</xsl:text></xsl:when>
         <xsl:when test="$generic='preface'">       <xsl:text>Preface</xsl:text></xsl:when>
         <xsl:when test="$generic='toc'">           <xsl:text>Contents</xsl:text></xsl:when>
-        <xsl:when test="$generic='bibliography'">  <xsl:text>References</xsl:text></xsl:when>
+        <xsl:when test="$generic='references'">    <xsl:text>References</xsl:text></xsl:when>
         <!-- -->
         <xsl:when test="$generic='todo'">          <xsl:text>To Do</xsl:text></xsl:when>
         <xsl:when test="$generic='editor'">        <xsl:text>Editor</xsl:text></xsl:when>
