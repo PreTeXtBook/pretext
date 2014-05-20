@@ -574,17 +574,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Sectioning -->
-<!-- Subdivisions, Chapters down to Paragraphs -->
-<!-- Mostly relies on element names echoing latex names      -->
-<!-- (1) appendices are just chapters after \appendix macro  -->
-<!-- (2) exercises can appear at any depth, so compute level -->
-<xsl:template match="chapter|appendix|section|subsection|subsubsection|paragraph|exercises">
+<!-- Subdivisions, Chapters down to Paragraphs                -->
+<!-- Mostly relies on element names echoing latex names       -->
+<!-- (1) appendices are just chapters after \backmatter macro -->
+<!-- (2) exercises, references can appear at any depth,       -->
+<!--     so compute the subdivision name                      -->
+<xsl:template match="chapter|appendix|section|subsection|subsubsection|paragraph|exercises|references">
     <xsl:variable name="level">
         <xsl:choose>
+            <!-- TODO: appendix handling is only right for books, expand to articles -->
+            <!-- http://www.tex.ac.uk/cgi-bin/texfaq2html?label=appendix -->
             <xsl:when test="local-name(.)='appendix'">
                 <xsl:text>chapter</xsl:text>
             </xsl:when>
-            <xsl:when test="local-name(.)='exercises'">
+            <xsl:when test="local-name(.)='exercises' or local-name(.)='references'">
                 <xsl:apply-templates select="." mode="latex-level" />
             </xsl:when>
             <xsl:otherwise>
@@ -612,19 +615,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="author" mode="name-list"/>
         <xsl:text>}\par\bigskip&#xa;%&#xa;</xsl:text>
     </xsl:if>
-    <!-- Exercises are in a list -->
-    <xsl:if test="local-name(.)='exercises'">
+    <!-- Exercises, references are in a numbered list -->
+    <xsl:if test="local-name(.)='exercises' or local-name(.)='references'">
         <xsl:text>\begin{enumerate}&#xa;</xsl:text>
     </xsl:if>
     <!-- Process the contents -->
     <xsl:apply-templates select="*[not(self::title or self::author)]"/>
-    <!-- Exercises are in a list -->
-    <xsl:if test="local-name(.)='exercises'">
+    <!-- Exercises, references are in a list -->
+    <xsl:if test="local-name(.)='exercises' or local-name(.)='references'">
         <xsl:text>\end{enumerate}&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
-
-
 
 <!-- Theorems, Proofs, Definitions, Examples, Exercises -->
 
@@ -839,19 +840,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Lists -->
 <xsl:template match="ol">
     <xsl:text>\begin{enumerate}&#xa;</xsl:text>
-    <xsl:apply-templates select="li" />
+    <xsl:apply-templates />
     <xsl:text>\end{enumerate}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="ul">
     <xsl:text>\begin{itemize}&#xa;</xsl:text>
-    <xsl:apply-templates select="li" />
+    <xsl:apply-templates />
     <xsl:text>\end{itemize}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="dl">
     <xsl:text>\begin{description}&#xa;</xsl:text>
-    <xsl:apply-templates select="li" />
+    <xsl:apply-templates />
     <xsl:text>\end{description}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
@@ -1279,9 +1280,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: make citation references blue (not green box) in hyperref -->
 <!-- TODO: make citations work like xrefs                            -->
 <xsl:template match="cite[@ref]">
-    <xsl:text>\cite{</xsl:text>
-    <xsl:value-of select="@ref" />
-    <xsl:text>}</xsl:text>
+    <xsl:variable name="target" select="id(@ref)" />
+    <xsl:if test="$target/parent::bibliography">
+        <xsl:text>\cite{</xsl:text>
+        <xsl:apply-templates select="$target" mode="xref-identifier" />
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <!-- We allow biblio items in ordered lists, other than bibliography -->
+    <!-- So we have to roll our own citations as \ref (cross-references) -->
+    <xsl:if test="$target/parent::ol">
+        <xsl:text>[\ref{</xsl:text>
+        <xsl:apply-templates select="$target" mode="xref-identifier" />
+        <xsl:text>}]</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- LaTeX references equations differently than theorems, etc -->
@@ -1330,119 +1341,93 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Bibliography -->
+<!-- References/Bibliography -->
 
-<!-- Enclosing structure of bibliography -->
-<!-- TODO: Get number of last bibitem node for width parameter -->
-<xsl:template match="bibliography">
-    <xsl:text>\begin{thebibliography}{99}&#xa;%&#xa;</xsl:text>
-    <xsl:apply-templates select="book|article|biblio" />
+<!-- Enclosing structure of main bibliography                      -->
+<!-- Use LaTeX structure for top-level, to make compatible output  -->
+<!-- thebibliography environment needs count of bibitem's          -->
+<!-- to set width for numbering                                    -->
+<!-- We overide LaTeX's "References" to support other languages    -->
+<!-- http://www.latex-community.org/forum/viewtopic.php?f=5&t=4089 -->
+<!-- http://www.tex.ac.uk/cgi-bin/texfaq2html?label=fixnam         -->
+<xsl:template match="book/references">
+    <xsl:text>\renewcommand{\bibname}{</xsl:text>
+    <xsl:apply-templates select="title"/>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\begin{thebibliography}{</xsl:text>
+    <xsl:value-of select="count(biblio)"/>
+    <xsl:text>}&#xa;%&#xa;</xsl:text>
+    <xsl:apply-templates select="*[not(self::title)]"/>
     <xsl:text>\end{thebibliography}&#xa;%&#xa;</xsl:text>
 </xsl:template>
+<!-- Entirely similar, but for renew'ed command name -->
+<xsl:template match="article/references">
+    <xsl:text>\renewcommand{\refname}{</xsl:text>
+    <xsl:apply-templates select="title"/>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\begin{thebibliography}{</xsl:text>
+    <xsl:value-of select="count(biblio)"/>
+    <xsl:text>}&#xa;%&#xa;</xsl:text>
+    <xsl:apply-templates select="*[not(self::title)]"/>
+    <xsl:text>\end{thebibliography}&#xa;%&#xa;</xsl:text>
+</xsl:template>
+<!-- References at other levels are just ordered lists in a subdivision     -->
+<!-- This gets handled in the generic sectioning code, just like exercises  -->
 
-<xsl:template match="biblio[@type='raw']">
+<!-- Raw Bibliographic Entry Formatting              -->
+<!-- Markup really, not full-blown data preservation -->
+
+<!-- As a TeX \bibitem in top-level bibliography-->
+<xsl:template match="book/references/biblio[@type='raw']|article/references/biblio[@type='raw']">
     <xsl:text>\bibitem{</xsl:text>
-    <xsl:value-of select="@xml:id" />
+    <xsl:apply-templates select="." mode="xref-identifier"/>
     <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
+<!-- As an item of a plain numbered list, for subsidiary references -->
+<xsl:template match="biblio[@type='raw']">
+    <xsl:text>\item</xsl:text>
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:apply-templates />
+    <xsl:text>&#xa;%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Bibliographic items can have annotations            -->
+<!-- Presumably just paragraphs, nothing too complicated -->
+<!-- We first close off the citation itself -->
+<xsl:template match="biblio/note">
+    <xsl:text>\par </xsl:text>
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- Title in italics -->
 <xsl:template match="biblio[@type='raw']/title">
     <xsl:text>\textit{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Trash eventually, but here allows next to have precedence -->
-<xsl:template match="bibliography//volume">
-    <xsl:text>, </xsl:text>
-    <xsl:text> (</xsl:text>
-    <xsl:value-of select="." />
-    <xsl:text>)</xsl:text>
-    <xsl:if test="../number">
-        <xsl:text> no. </xsl:text>
-        <xsl:value-of select="../number" />
-    </xsl:if>
+<!-- No treatment for journal -->
+<xsl:template match="biblio[@type='raw']/journal">
+    <xsl:apply-templates />
 </xsl:template>
 
+<!-- Volume in bold -->
 <xsl:template match="biblio[@type='raw']/volume">
     <xsl:text>\textbf{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-
-
-<!-- Individual bibliography entry leader-->
-<xsl:template name="bibleader">
-    <xsl:text>\bibitem{</xsl:text><xsl:value-of select="@xml:id" />
-    <xsl:text>}&#xa;</xsl:text>
-</xsl:template>
-
-
-
-<xsl:template match="bibliography//article">
-    <xsl:call-template name="bibleader" />
-    <xsl:apply-templates select="author" />
-    <xsl:apply-templates select="title" />
-    <xsl:apply-templates select="journal" />
-    <xsl:apply-templates select="volume" />
-    <xsl:apply-templates select="pages" />
-    <xsl:text>.&#xa;%&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="bibliography//book">
-    <xsl:call-template name="bibleader" />
-    <xsl:apply-templates select="author" />
-    <xsl:apply-templates select="title" />
-    <xsl:apply-templates select="publisher" />
-    <xsl:text>.&#xa;%&#xa;</xsl:text>
-</xsl:template>
-
-
-<xsl:template match="bibliography//author">
-    <span class="author"><xsl:apply-templates /></span>
-</xsl:template>
-
-<xsl:template match="bibliography/article/title">
-    <xsl:text>, ``</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>''</xsl:text>
-</xsl:template>
-
-<xsl:template match="bibliography/book/title">
-    <xsl:text>, \textsl{</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>}</xsl:text>
-</xsl:template>
-
-<xsl:template match="bibliography//journal">
-    <xsl:text>, </xsl:text>
-    <xsl:apply-templates />
-    <xsl:text> (</xsl:text>
-    <xsl:if test="../month">
-        <xsl:value-of select="../month" />
-        <xsl:text> </xsl:text>
-    </xsl:if>
-    <xsl:value-of select="../year" />
-    <xsl:text>)</xsl:text>
-</xsl:template>
-
-<xsl:template match="bibliography//publisher">
-    <xsl:text>, </xsl:text>
-    <xsl:text> (</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text> </xsl:text>
-    <xsl:value-of select="../year" />
-    <xsl:text>)</xsl:text>
-</xsl:template>
-
-
-<xsl:template match="bibliography//pages">
-    <xsl:text>, </xsl:text>
+<!-- Number, handle TeX period idosyncracy -->
+<xsl:template match="biblio[@type='raw']/number">
+    <xsl:text>no.\@\,</xsl:text>
     <xsl:apply-templates />
 </xsl:template>
+
+
 
 <!-- Level names in LaTeX -->
 
@@ -1479,7 +1464,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
-
 
 <!-- Miscellaneous -->
 
