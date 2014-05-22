@@ -272,7 +272,9 @@
                 </ol></li>
             </ul>
 
-            <p>You can gain a greater undestanding of derivatives by studying the graphs of functions with their derivatives.  Can you discern the derivative<ndash />antiderivative relationship in Figure<nbsp /><xref ref="figure-function-derivative" />?</p>
+            <remark>
+                <p>You can gain a greater undestanding of derivatives by studying the graphs of functions with their derivatives.  Can you discern the derivative<ndash />antiderivative relationship in Figure<nbsp /><xref ref="figure-function-derivative" />?</p>
+            </remark>
 
             <!--
             Sage Source;

@@ -328,7 +328,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'conjecture'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//definition or //example or //exercise">
+    <xsl:if test="//definition or //example or //exercise or //remark">
         <xsl:text>% Definition-like environments, normal text&#xa;</xsl:text>
         <xsl:text>% Numbering for definition, examples is in sync with theorems, etc&#xa;</xsl:text>
         <xsl:text>% also for free-form exercises, not in exercise sections&#xa;</xsl:text>
@@ -346,6 +346,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="//exercise">
             <xsl:text>\newtheorem{exercise}[theorem]{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'exercise'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//remark">
+            <xsl:text>\newtheorem{remark}[theorem]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'remark'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
@@ -736,6 +741,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::title)]"/>
     <xsl:text>\end{example}&#xa;%&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="remark">
+    <xsl:text>\begin{remark}</xsl:text>
+    <xsl:apply-templates select="title" mode="environment-option" />
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="*[not(self::title)]"/>
+    <xsl:text>\end{remark}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="notation">
