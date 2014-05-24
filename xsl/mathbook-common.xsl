@@ -81,6 +81,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="/mathbook/book">2</xsl:when>
         <xsl:when test="/mathbook/article and /mathbook/article/section">1</xsl:when>
         <xsl:when test="/mathbook/article">0</xsl:when>
+        <xsl:when test="/mathbook/letter">0</xsl:when>
+        <xsl:when test="/mathbook/memo">0</xsl:when>
         <xsl:otherwise>
             <xsl:message>ERROR: Table of Contents level not determined</xsl:message>
         </xsl:otherwise>
