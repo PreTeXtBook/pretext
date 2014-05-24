@@ -103,6 +103,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:apply-templates select="*[not(self::abstract or self::bibliography)]"/>
     <xsl:apply-templates select="bibliography"/>
+    <xsl:call-template name="latex-postamble" />
    <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
 
@@ -145,6 +146,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="appendix" />
     <xsl:text>\backmatter&#xa;%&#xa;</xsl:text>
     <xsl:apply-templates select="bibliography" />
+    <xsl:call-template name="latex-postamble" />
     <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
 
@@ -233,6 +235,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- Stretchy vertical space, useful if still on page 1 -->
     <xsl:text>\par\vspace*{\stretch{2}}&#xa;%&#xa;</xsl:text>
+    <xsl:call-template name="latex-postamble" />
     <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
 
@@ -376,6 +379,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usepackage[inline]{asymptote}&#xa;</xsl:text>
     </xsl:if>
      -->
+    <!-- TODO:  \showidx package as part of a draft mode, prints entries in margin -->
+    <xsl:if test="//index">
+        <xsl:text>%% Support for index creation&#xa;</xsl:text>
+        <xsl:text>%% Requires $ makeindex &lt;filename&gt;&#xa;</xsl:text>
+        <xsl:text>%% prior to second LaTeX pass&#xa;</xsl:text>
+        <xsl:text>\usepackage{makeidx}&#xa;</xsl:text>
+        <xsl:text>\makeindex&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="//logo">
         <xsl:text>%% Package for precise image placement (for logos on pages)&#xa;</xsl:text>
         <xsl:text>\usepackage{eso-pic}&#xa;</xsl:text>
@@ -387,6 +398,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\hypersetup{pdftitle={</xsl:text>
     <xsl:apply-templates select="title" />
     <xsl:text>}}&#xa;</xsl:text>
+    <!-- http://tex.stackexchange.com/questions/44088/when-do-i-need-to-invoke-phantomsection -->
+    <xsl:text>%% If you manually remove hyperref, leave in this next command&#xa;</xsl:text>
+    <xsl:text>\providecommand\phantomsection{}&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
     <xsl:if test="$latex.watermark">
         <xsl:text>\usepackage{draftwatermark}&#xa;</xsl:text>
         <xsl:text>\SetWatermarkText{</xsl:text>
@@ -410,6 +425,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="/mathbook/docinfo/macros">
         <xsl:value-of select="/mathbook/docinfo/macros" />
         <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- LaTeX postamble is common for books, articles and letters      -->
+<xsl:template name="latex-postamble">
+    <xsl:if test="//index">
+        <xsl:text>%% Index goes here at very end&#xa;</xsl:text>
+        <xsl:text>\clearpage&#xa;</xsl:text>
+        <xsl:text>%% Help hyperref point to the right place&#xa;</xsl:text>
+        <xsl:text>\phantomsection&#xa;</xsl:text>
+        <xsl:if test="/mathbook/book">
+            <xsl:text>\addcontentsline{toc}{chapter}{Index}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="/mathbook/article">
+            <xsl:text>\addcontentsline{toc}{section}{Index}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:text>\printindex&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 
@@ -777,6 +809,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Index -->
+
+<xsl:template match="index">
+    <xsl:text>\index{</xsl:text>
+    <xsl:apply-templates select="main" />
+    <xsl:apply-templates select="sub" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="index/sub">
+    <xsl:text>!</xsl:text>
+    <xsl:apply-templates />
+</xsl:template>
 
 <!-- Math  -->
 <!--       -->

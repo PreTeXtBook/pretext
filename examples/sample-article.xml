@@ -95,6 +95,7 @@
             -->
             <theorem xml:id="theorem-FTC">
                 <title>The Fundamental Theorem of Calculus</title>
+                <index><main>Fundamental Theorem of Calculus</main></index>
                 <statement>
                     <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me></p>
                 </statement>
@@ -147,6 +148,8 @@
 
         <section>
             <title>Computing Integrals</title>
+
+            <index><main>Sage</main><sub>integration</sub></index>
 
             <p>Sage can compute definite integrals.  The output contains the approximate numerical value of the definite integral, followed by an upper bound  of the error in the approximation.</p>
 

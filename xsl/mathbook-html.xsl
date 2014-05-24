@@ -920,6 +920,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
+<!-- Index -->
+<!-- Just kill it for now -->
+<xsl:template match="index" />
 
 <!-- Math  -->
 <!-- Inline snippets -->
