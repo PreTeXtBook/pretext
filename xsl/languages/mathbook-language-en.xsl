@@ -28,6 +28,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="date"
 >
 
+<!-- See LaTEX preamble construction for a hackish way to abuse    -->
+<!-- the  mode="type-name"  template to make changes available at: -->
+<!-- http://tex.stackexchange.com/questions/82993/how-to-change-the-name-of-document-elements-like-figure-contents-bibliogr -->
+
 <!-- MathBook XML templates for language-specific phrases in headings, etc.      -->
 <!-- Intended to be imported by mathbook-common.xsl for use in any output format -->
 
