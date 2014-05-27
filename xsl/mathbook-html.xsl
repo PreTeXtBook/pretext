@@ -103,14 +103,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   (c) A visual component of some enclosing web page                                -->
 <xsl:template match="book|article|frontmatter|chapter|appendix|titlepage|preface|section|subsection|subsubsection|exercises|references">
     <xsl:variable name="summary"><xsl:apply-templates select="." mode="is-summary" /></xsl:variable>
-    <xsl:variable name="content"><xsl:apply-templates select="." mode="is-content" /></xsl:variable>
+    <xsl:variable name="webpage"><xsl:apply-templates select="." mode="is-webpage" /></xsl:variable>
 <xsl:message>
     <xsl:apply-templates  select="." mode="long-name"/>
     <xsl:value-of select="$summary" />
-    <xsl:value-of select="$content" />
+    <xsl:value-of select="$webpage" />
 </xsl:message>
     <xsl:choose>
-        <xsl:when test="$summary='false' and $content='false'">
+        <xsl:when test="$summary='false' and $webpage='false'">
             <!-- At a node that is not a web page, so make heading and enclosing div -->
             <xsl:variable name="url"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
             <section class="{local-name(.)}" id="{$url}">
@@ -161,7 +161,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <p id="byline"><span class="byline"><xsl:apply-templates select="author" mode="name-list"/></span></p>
                         </xsl:if>
                        <!-- Now contents, or summaries (can't be both)-->
-                         <xsl:if test="$content='true'">
+                         <xsl:if test="$webpage='true'">
                              <xsl:apply-templates select="*[not(self::title or self::author)]" />
                         </xsl:if>
                         <xsl:if test="$summary='true'">
@@ -1243,10 +1243,11 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- ######## -->
 
 <!-- Web Page Determination -->
-<!-- Two types of web pages, content and summary                                   -->
-<!-- See definition of document structure nodes in mathbook-common file            -->
+<!-- Three types of document nodes:                                                -->
 <!-- Summary: structural node, not a document leaf, smaller level than chunk level -->
-<!-- Content: structural node, at chunk-level or a document leaf at smaller level  -->
+<!-- Webpage: structural node, at chunk-level or a document leaf at smaller level  -->
+<!-- Neither: Subsidiary to some Webpage node                                      -->
+<!-- See definition of document structure nodes in mathbook-common file            -->
 <xsl:template match="*" mode="is-summary">
     <xsl:variable name="structural">
         <xsl:apply-templates select="." mode="is-structural" />
@@ -1267,7 +1268,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="*" mode="is-content">
+<xsl:template match="*" mode="is-webpage">
     <xsl:variable name="structural">
         <xsl:apply-templates select="." mode="is-structural" />
     </xsl:variable>
@@ -1296,9 +1297,9 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <xsl:template name="filename">
     <xsl:param name="a-node" />
     <xsl:variable name="summary"><xsl:apply-templates select="$a-node" mode="is-summary" /></xsl:variable>
-    <xsl:variable name="content"><xsl:apply-templates select="$a-node" mode="is-content" /></xsl:variable>
+    <xsl:variable name="webpage"><xsl:apply-templates select="$a-node" mode="is-webpage" /></xsl:variable>
     <xsl:choose>
-        <xsl:when test="$summary='true' or $content='true'">
+        <xsl:when test="$summary='true' or $webpage='true'">
             <xsl:apply-templates select="$a-node" mode="internal-id" />
             <xsl:text>.html</xsl:text>
             <!-- DEPRECATION: May 2015, replace with terminate=yes if present without an xml:id -->
@@ -1316,11 +1317,11 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 
 <xsl:template match ="*" mode="url">
     <xsl:variable name="summary"><xsl:apply-templates select="." mode="is-summary" /></xsl:variable>
-    <xsl:variable name="content"><xsl:apply-templates select="." mode="is-content" /></xsl:variable>
+    <xsl:variable name="webpage"><xsl:apply-templates select="." mode="is-webpage" /></xsl:variable>
     <xsl:call-template name="filename">
         <xsl:with-param name="a-node" select="." />
     </xsl:call-template>
-    <xsl:if test="$summary='false' and $content='false'">
+    <xsl:if test="$summary='false' and $webpage='false'">
         <xsl:text>#</xsl:text>
         <xsl:apply-templates select="." mode="internal-id" />
     </xsl:if>
