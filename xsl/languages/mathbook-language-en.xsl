@@ -53,6 +53,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$generic='article'">       <xsl:text>Article</xsl:text></xsl:when>
         <xsl:when test="$generic='letter'">        <xsl:text>Letter</xsl:text></xsl:when>
         <!-- -->
+        <xsl:when test="$generic='frontmatter'">   <xsl:text>Front Matter</xsl:text></xsl:when>
         <xsl:when test="$generic='chapter'">       <xsl:text>Chapter</xsl:text></xsl:when>
         <xsl:when test="$generic='appendix'">      <xsl:text>Appendix</xsl:text></xsl:when>
         <xsl:when test="$generic='section'">       <xsl:text>Section</xsl:text></xsl:when>

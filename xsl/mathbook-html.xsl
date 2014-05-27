@@ -90,16 +90,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>)</xsl:text>
 </xsl:template>
 
-<!-- Preface, automatic title, no subsections, etc         -->
-<xsl:template match="preface">
-    <div class="preface">
-        <div class="title">
-            <xsl:text>Preface</xsl:text>
-        </div>
-        <xsl:apply-templates />
-    </div>
-</xsl:template>
-
 <!-- ################## -->
 <!-- Document Structure -->
 <!-- ################## -->
@@ -111,9 +101,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   (a) A web page full of content (at chunking level, or below and a docuemnt leaf) -->
 <!--   (b) A summary web page (level less than chunking-level, not a document leaf)     -->
 <!--   (c) A visual component of some enclosing web page                                -->
-<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection|exercises|references">
+<xsl:template match="book|article|frontmatter|chapter|appendix|titlepage|preface|section|subsection|subsubsection|exercises|references">
     <xsl:variable name="summary"><xsl:apply-templates select="." mode="is-summary" /></xsl:variable>
     <xsl:variable name="content"><xsl:apply-templates select="." mode="is-content" /></xsl:variable>
+<xsl:message>
+    <xsl:apply-templates  select="." mode="long-name"/>
+    <xsl:value-of select="$summary" />
+    <xsl:value-of select="$content" />
+</xsl:message>
     <xsl:choose>
         <xsl:when test="$summary='false' and $content='false'">
             <!-- At a node that is not a web page, so make heading and enclosing div -->
@@ -151,13 +146,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- Heading, div for subdivision that is this page -->
                      <section class="{local-name(.)}">
                         <h1 class="heading">
-                            <xsl:if test="not(self::book or self::article)">
+                            <xsl:if test="not(self::book or self::article or self::frontmatter)">
                                 <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
                                 <xsl:text> </xsl:text>
                                 <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
                                 <xsl:text> </xsl:text>
                             </xsl:if>
-                            <span class="title"><xsl:apply-templates select="title" /></span>
+                            <xsl:if test="not(self::frontmatter)">
+                                <span class="title"><xsl:apply-templates select="title" /></span>
+                            </xsl:if>
                         </h1>
                         <!-- Need some CSS for authors at subsidiary level in collected works -->
                         <xsl:if test="author">
@@ -176,7 +173,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
              </xsl:apply-templates>
              <!-- Items in summary mode do not recurse, need to restart outside web page wrapper -->
              <xsl:if test="$summary='true'">
-                <xsl:apply-templates select="book|article|chapter|appendix|section|subsection|subsubsection|exercises|references" />
+                <xsl:apply-templates select="book|article|frontmatter|chapter|appendix|preface|section|subsection|subsubsection|exercises|references" />
             </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
@@ -187,7 +184,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- some do not (eg introductions)                                              -->
 
 <!-- Document node summaries are just links to the page -->
-<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection|exercises|references" mode="summary">
+<xsl:template match="book|article|frontmatter|chapter|appendix|titlepage|preface|section|subsection|subsubsection|exercises|references" mode="summary">
     <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
     <h2 class="link"><a href="{$url}">
         <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
@@ -197,7 +194,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Some items in summary pages are of interest and are not subdivisions -->
-<xsl:template match="introduction" mode="summary">
+<xsl:template match="titlepage|introduction" mode="summary">
     <xsl:apply-templates />
 </xsl:template>
 
