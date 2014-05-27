@@ -98,85 +98,129 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The document tree is all the structural components of the book                     -->
 <!-- Here we decide if they are web pages, or just visual components of a web page      -->
 <!-- Each such document node is                                                         -->
-<!--   (a) A web page full of content (at chunking level, or below and a docuemnt leaf) -->
+<!--   (a) A web page full of content (at chunking level, or below and a document leaf) -->
 <!--   (b) A summary web page (level less than chunking-level, not a document leaf)     -->
 <!--   (c) A visual component of some enclosing web page                                -->
+<!-- They are dispatched here, and recurse back to handle children, typically           -->
 <xsl:template match="book|article|frontmatter|chapter|appendix|titlepage|preface|section|subsection|subsubsection|exercises|references">
     <xsl:variable name="summary"><xsl:apply-templates select="." mode="is-summary" /></xsl:variable>
     <xsl:variable name="webpage"><xsl:apply-templates select="." mode="is-webpage" /></xsl:variable>
-<xsl:message>
-    <xsl:apply-templates  select="." mode="long-name"/>
-    <xsl:value-of select="$summary" />
-    <xsl:value-of select="$webpage" />
-</xsl:message>
     <xsl:choose>
         <xsl:when test="$summary='false' and $webpage='false'">
-            <!-- At a node that is not a web page, so make heading and enclosing div -->
-            <xsl:variable name="url"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
-            <section class="{local-name(.)}" id="{$url}">
+            <xsl:apply-templates select="." mode="content" />
+        </xsl:when>
+        <xsl:when test="$webpage='true'">
+            <xsl:apply-templates select="." mode="webpage" />
+        </xsl:when>
+        <xsl:when test="$summary='true'">
+            <xsl:apply-templates select="." mode="summary" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>WARNING: Document node is considered both summary and webpage at <xsl:apply-templates  select="." mode="long-name"/>.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Document nodes subsidiary to a web page                -->
+<!-- Make heading and enclosing div, no page infrastructure -->
+<xsl:template match="*" mode="content">
+    <xsl:variable name="url"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
+    <section class="{local-name(.)}" id="{$url}">
+        <h1 class="heading">
+            <xsl:if test="not(self::book or self::article)">
+                <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+                <xsl:text> </xsl:text>
+                <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+                <xsl:text> </xsl:text>
+            </xsl:if>
+            <span class="title"><xsl:apply-templates select="title" /></span>
+        </h1>
+        <!-- Need some CSS for authors at subsidiary level in collected works -->
+        <xsl:if test="author">
+            <p id="byline"><span class="byline"><xsl:apply-templates select="author" mode="name-list"/></span></p>
+        </xsl:if>
+        <!-- Now recurse through contents, ignoring title and author -->
+        <xsl:apply-templates  select="./*[not(self::title or self::author)]"/>
+    </section>
+</xsl:template>
+
+<!-- Document nodes that are an entire webpage               -->
+<!-- A node at the top-level of a page, build infrastructure -->
+<xsl:template match="*" mode="webpage">
+    <xsl:apply-templates select="." mode="page-wrap">
+        <xsl:with-param name="title">
+            <xsl:apply-templates select="/mathbook/book/title|/mathbook/article/title" />
+        </xsl:with-param>
+        <xsl:with-param name="subtitle"></xsl:with-param> -->
+        <!-- Serial list of authors, then editors, as names only -->
+         <xsl:with-param name="credits">
+            <xsl:apply-templates select="/mathbook/docinfo/author" mode="name-list"/>
+            <xsl:apply-templates select="/mathbook/docinfo/editor" mode="name-list"/>
+        </xsl:with-param>
+        <xsl:with-param name="content">
+            <!-- Heading, div for subdivision that is this page -->
+             <section class="{local-name(.)}">
                 <h1 class="heading">
-                    <xsl:if test="not(self::book or self::article)">
+                    <xsl:if test="not(self::book or self::article or self::frontmatter)">
                         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
                         <xsl:text> </xsl:text>
                         <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
                         <xsl:text> </xsl:text>
                     </xsl:if>
-                    <span class="title"><xsl:apply-templates select="title" /></span>
+                    <xsl:if test="not(self::frontmatter)">
+                        <span class="title"><xsl:apply-templates select="title" /></span>
+                    </xsl:if>
                 </h1>
                 <!-- Need some CSS for authors at subsidiary level in collected works -->
                 <xsl:if test="author">
                     <p id="byline"><span class="byline"><xsl:apply-templates select="author" mode="name-list"/></span></p>
                 </xsl:if>
-                <!-- Now recurse through contents -->
-                <xsl:apply-templates  select="*[not(self::title or self::author)]"/>
+                <!-- Recurse through contents inside enclosing section, ignore title, author -->
+                <xsl:apply-templates select="*[not(self::title or self::author)]" />
             </section>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="." mode="page-wrap">
-                <xsl:with-param name="title">
-                    <xsl:apply-templates select="/mathbook/book/title|/mathbook/article/title" />
-                </xsl:with-param>
-                <xsl:with-param name="subtitle"></xsl:with-param> -->
-                <!-- Serial list of authors, then editors, as names only -->
-                 <xsl:with-param name="credits">
-                    <xsl:apply-templates select="/mathbook/docinfo/author" mode="name-list"/>
-                    <xsl:apply-templates select="/mathbook/docinfo/editor" mode="name-list"/>
-                </xsl:with-param>
-                <xsl:with-param name="content">
-                    <!-- Heading, div for subdivision that is this page -->
-                     <section class="{local-name(.)}">
-                        <h1 class="heading">
-                            <xsl:if test="not(self::book or self::article or self::frontmatter)">
-                                <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-                                <xsl:text> </xsl:text>
-                                <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
-                                <xsl:text> </xsl:text>
-                            </xsl:if>
-                            <xsl:if test="not(self::frontmatter)">
-                                <span class="title"><xsl:apply-templates select="title" /></span>
-                            </xsl:if>
-                        </h1>
-                        <!-- Need some CSS for authors at subsidiary level in collected works -->
-                        <xsl:if test="author">
-                            <p id="byline"><span class="byline"><xsl:apply-templates select="author" mode="name-list"/></span></p>
-                        </xsl:if>
-                       <!-- Now contents, or summaries (can't be both)-->
-                         <xsl:if test="$webpage='true'">
-                             <xsl:apply-templates select="*[not(self::title or self::author)]" />
-                        </xsl:if>
-                        <xsl:if test="$summary='true'">
-                            <!-- <xsl:apply-templates select="introduction" /> -->
-                            <xsl:apply-templates select="*[not(self::title or self::author)]" mode="summary" />
-                        </xsl:if>
-                    </section>
-                 </xsl:with-param>
-             </xsl:apply-templates>
-             <!-- Items in summary mode do not recurse, need to restart outside web page wrapper -->
-             <xsl:if test="$summary='true'">
-                <xsl:apply-templates select="book|article|frontmatter|chapter|appendix|preface|section|subsection|subsubsection|exercises|references" />
-            </xsl:if>
-        </xsl:otherwise>
-    </xsl:choose>
+         </xsl:with-param>
+     </xsl:apply-templates>
+</xsl:template>
+
+<!-- Document node that is a summary of children                  -->
+<!-- Build a page and create summaries of children                -->
+<!-- Some summaries are actual content (introductions, typically) -->
+<xsl:template match="*" mode="summary">
+    <xsl:apply-templates select="." mode="page-wrap">
+        <xsl:with-param name="title">
+            <xsl:apply-templates select="/mathbook/book/title|/mathbook/article/title" />
+        </xsl:with-param>
+        <xsl:with-param name="subtitle"></xsl:with-param> -->
+        <!-- Serial list of authors, then editors, as names only -->
+         <xsl:with-param name="credits">
+            <xsl:apply-templates select="/mathbook/docinfo/author" mode="name-list"/>
+            <xsl:apply-templates select="/mathbook/docinfo/editor" mode="name-list"/>
+        </xsl:with-param>
+        <xsl:with-param name="content">
+            <!-- Heading, div for subdivision that is this page -->
+             <section class="{local-name(.)}">
+                <h1 class="heading">
+                    <xsl:if test="not(self::book or self::article or self::frontmatter)">
+                        <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+                        <xsl:text> </xsl:text>
+                        <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+                        <xsl:text> </xsl:text>
+                    </xsl:if>
+                    <xsl:if test="not(self::frontmatter)">
+                        <span class="title"><xsl:apply-templates select="title" /></span>
+                    </xsl:if>
+                </h1>
+                <!-- Need some CSS for authors at subsidiary level in collected works -->
+                <xsl:if test="author">
+                    <p id="byline"><span class="byline"><xsl:apply-templates select="author" mode="name-list"/></span></p>
+                </xsl:if>
+                <!-- Create summaries of each child node (which will be a document node) -->
+                 <xsl:apply-templates select="*[not(self::title or self::author)]" mode="summary-entry" />
+            </section>
+         </xsl:with-param>
+     </xsl:apply-templates>
+     <!-- Summary-entries do not recurse, need to restart outside web page wrapper -->
+    <xsl:apply-templates select="book|article|frontmatter|chapter|appendix|preface|section|subsection|subsubsection|exercises|references" />
 </xsl:template>
 
 <!-- Document summaries -->
@@ -184,7 +228,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- some do not (eg introductions)                                              -->
 
 <!-- Document node summaries are just links to the page -->
-<xsl:template match="book|article|frontmatter|chapter|appendix|titlepage|preface|section|subsection|subsubsection|exercises|references" mode="summary">
+<xsl:template match="book|article|frontmatter|chapter|appendix|preface|section|subsection|subsubsection|exercises|references" mode="summary-entry">
     <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
     <h2 class="link"><a href="{$url}">
         <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
@@ -193,13 +237,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </h2>
 </xsl:template>
 
-<!-- Some items in summary pages are of interest and are not subdivisions -->
-<xsl:template match="titlepage|introduction" mode="summary">
+<!-- Some items in summary pages are of interest and are not document nodes -->
+<xsl:template match="titlepage|introduction" mode="summary-entry">
     <xsl:apply-templates />
 </xsl:template>
 
 <!-- TODO's can be anywhere and we do not want to see them -->
-<xsl:template match="todo" mode="summary" />
+<xsl:template match="todo" mode="summary-entry" />
 
 <!-- Page Navigation Bar -->
 <!-- OBSOLETE: but useful example (filebase, title/node are no longer used)  -->
