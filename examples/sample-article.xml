@@ -52,13 +52,20 @@
         <todo>Titled paragraph subdivisions</todo>
 
         <abstract>
-            <p>This is a sample of many of the things you can do with MathBook XML.  Sometimes the math makes sense, sometimes it seems to be written in the fist person, sort of like this Abstract.</p>
+            <p>This is a sample of many of the things you can do with MathBook XML.  Sometimes the math makes sense, sometimes it seems to be written in the first person, sort of like this Abstract.</p>
         </abstract>
 
         <section>
             <title>Introduction</title>
 
-            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me></p>
+            <!--
+            URLs can be done in a traditional fashion, as in the
+            abstract below. Or you can make an empty element and the URL in
+            the href attribute will be the content you click on.  See the
+            example near the discussion of Asymptote.
+            -->
+
+            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me> This is also a demonstration of the capabilities of <url href="http://mathbook.pugetsound.edu">MathBook XML</url>.</p>
 
         </section>
 
@@ -337,6 +344,11 @@
             <title>Graphics</title>
 
             <p>The Asymptote graphics language may be placed in your source to draw pictures.  For <latex /> processing you must have Asymptote's style file, <c>asymptote.sty</c>, available, and then it is a three-step process: <latex />, <c>asy</c>, <latex />.  For these reasons, the source is commented-out and you will see nothing below.  So you need to edit <c>sample-article.tex</c> if you want to experiment.  Rules for formatting code are identical to those for Sage code.  For more on Asymptote and <latex /> see <url href="http://asymptote.sourceforge.net/doc/LaTeX-usage.html" />.</p>
+
+            <!--
+            See a different (more traditional) variant of URL usage
+            in the introductory section.
+            -->
 
             <p>A simple Venn diagram example from the Asymptote documentation.</p>
 
