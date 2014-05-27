@@ -983,9 +983,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- Sage -->
-<xsl:template match="sage">
-    <div class="sage-compute">
+<!-- Sage Cells -->
+<!-- Various customizations, with more typical at end -->
+<!-- TODO: make hidden autoeval cells link against sage-compute cells -->
+
+<!-- Type: "display"; input portion as uneditable, unevaluatable -->
+<xsl:template match="sage[@type='display']">
+    <div class="sage-display">
     <script type="text/x-sage">
     <xsl:call-template name="sanitize-sage">
         <xsl:with-param name="raw-sage-code" select="input" />
@@ -993,11 +997,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </script>
     </div>
 </xsl:template>
-<!-- Bare sage element means an empty cell to scribble in -->
-<xsl:template match="sage[not(input) and not(output)]">
+
+<!-- Type: "practice"; empty, but with practice string from config -->
+<xsl:template match="sage[@type='practice']">
+    <div class="sage-compute">
+    <script type="text/x-sage">
+    <xsl:text># Sage practice area&#xa;</xsl:text>
+    </script>
+    </div>
+</xsl:template>
+
+<!-- Copy previous cell and "replay" it-->
+<xsl:template match="sage[@copy]">
+    <div class="sage-compute">
+    <script type="text/x-sage">
+    <xsl:call-template name="sanitize-sage">
+        <xsl:with-param name="raw-sage-code" select="id(@copy)/input" />
+    </xsl:call-template>
+    </script>
+    </div>
+</xsl:template>
+
+<!-- Totally empty element: an empty cell to scribble in -->
+<xsl:template match="sage[not(input) and not(output) and not(@type) and not(@copy)]">
     <div class="sage-compute"><script type="text/x-sage">
     <xsl:text>&#xa;</xsl:text>
     </script></div>
+</xsl:template>
+
+<!-- Type: "full" or no attributes; input portion to an evaluatable cell -->
+<xsl:template match="sage[(not(@copy) and not(@type)) or (@type='full')]">
+    <div class="sage-compute">
+    <script type="text/x-sage">
+    <xsl:call-template name="sanitize-sage">
+        <xsl:with-param name="raw-sage-code" select="input" />
+    </xsl:call-template>
+    </script>
+    </div>
 </xsl:template>
 
 <!-- Geogebra                               -->
@@ -1401,15 +1437,23 @@ MathJax.Hub.Config({
 </xsl:template>
 
 <!-- Sage Cell header -->
+<!-- TODO: internationalize button labels, strings below -->
+<!-- TODO: make an initialization cell which links with the sage-compute cells -->
 <xsl:template name="sagecell">
     <script src="http://sagecell.sagemath.org/static/jquery.min.js"></script>
     <script src="http://sagecell.sagemath.org/embedded_sagecell.js"></script>
     <script>
 $(function () {
-    // Make *any* div with class 'sage-compute' a Sage cell
+    // Make *any* div with class 'sage-compute' an executable Sage cell
     sagecell.makeSagecell({inputLocation: 'div.sage-compute',
                            linked: true,
                            evalButtonText: 'Evaluate'});
+});
+$(function () {
+    // Make *any* div with class 'sage-display' a visible, uneditable Sage cell
+    sagecell.makeSagecell({inputLocation: 'div.sage-display',
+                           editor: 'codemirror-readonly',
+                           hide: ['evalButton', 'editorToggle', 'language']});
 });
     </script>
 </xsl:template>

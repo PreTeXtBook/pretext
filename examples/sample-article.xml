@@ -150,7 +150,7 @@
 
             <p>Sage can compute definite integrals.  The output contains the approximate numerical value of the definite integral, followed by an upper bound  of the error in the approximation.</p>
 
-            <sage>
+            <sage xml:id="sage-numerical-integral">
                 <input>numerical_integral(sin(x)^2, (0, 2))</input>
                 <!-- need to use wildcard matching to make this doctestable -->
                 <output>(1.189200623826982, 1.320277913471315e-14)</output>
@@ -165,10 +165,22 @@
 
             <p>The same command can be used to employ the antiderivative in the application of the Fundamental Theorem.  Notice that the answer is <em>exact</em> and any further manipulation is likely to be simply producing a numerical approximation.</p>
 
-            <sage>
+            <!-- The "full" type is the default, it is used here only for testing purposes -->
+            <sage type="full">
                 <input>integral(sin(x)^2, (x, 0, 2))</input>
                 <output>-1/4*sin(4) + 1</output>
             </sage>
+
+            <p>There are integrals you really do not want to evaluate, or you do not want your reader to evaluate.  A Sage cell can be configured for display purposes only <mdash /> you can look but you cannot touch.</p>
+
+            <sage type="display">
+                <input>integral(e^(x^2), x)</input>
+                <output>-1/2*I*sqrt(pi)*erf(I*x)</output>
+            </sage>
+
+            <p>Here is a blank Sage cell that you may use for practice and experimentation with the commands above.</p>
+
+            <sage type="practice" />
 
         </section>
 
@@ -248,6 +260,15 @@
                 </exercises>
 
             </subsection>
+
+            <subsection>
+                <title>Linking Sage Cells</title>
+
+                <p>Sage cells share their results on a per-webpage basis, so if you move to a new chapter, section, or subsection that happens to be on another webpage, your Sage computations are gone and you start fresh.  But maybe you need some results from elsewhere.  As an author, you can make an exact copy of a cell in another location.  As a reader you are suggested to <q>replay</q> the cell.  You have seen the next cell before.  More typically such a cell might define a function or set some values of a variable.</p>
+
+                <sage copy="sage-numerical-integral" />
+            </subsection>
+
         </section>
 
         <!--
@@ -264,6 +285,19 @@
 
         <section>
             <title>Some Facts and Figures</title>
+
+            <!-- This is not implemented
+            This Sage code will be (a) hidden and (b) automatically executed
+            <sage type="init">
+                <input>
+                def square(m):
+                    return m*m
+
+                aaa= 78
+                print aaa
+                </input>
+            </sage>
+            -->
 
             <p>Because of the Fundamental Theorem, for every derivative we know, there is an antiderivative we might find useful.  Because of the Fundamental Theorem of Calculus, we recycle the <q><m>\int</m></q> symbol as notation for an antiderivative.</p>
             <ul>
@@ -296,6 +330,21 @@
                 <caption>A function and its derivative</caption>
                 <image width="350" source="images/cubic-function.png" />
             </figure>
+
+            <!-- This is not implemented
+            <subsection>
+                <title>Automatically Defining Sage Code</title>
+
+                <p>There is a bit of Sage code in the source for this section, defined at the beginning.  It is both (a) hidden, and (b) automatically evaluated.  It's effect is to define a function <c>square()</c>, which  will square a number.  The next (visible) cell will demonstrate the effect.  This will work as along as the initialization code and it's use are on the same webpage (which will depend on how you decide to break up your document into pages).</p>
+
+                <sage>
+                    <input>square(13)</input>
+                    <output>169</output>
+                </sage>
+
+            </subsection>
+            -->
+
         </section>
 
         <!--
