@@ -17,6 +17,9 @@
 <!-- TODO: Investigate just when random-number seed is reinitialized, -->
 <!-- per docstring or per verbatim marker -->
 <xsl:template match="/mathbook" >
+    <xsl:text>#&#xa;</xsl:text>
+    <xsl:text># At command-line: ./sage -t &lt;this-file&gt;&#xa;</xsl:text>
+    <xsl:text>#&#xa;</xsl:text>
     <xsl:text>r"""&#xa;</xsl:text>
     <xsl:apply-templates select="article|worksheet|book" />
     <xsl:text>"""&#xa;</xsl:text>
@@ -59,13 +62,19 @@
 <!-- Form doctring/ReST verbatim block -->
 <!-- for one input/output pair         -->
 <xsl:template match="sage">
-<xsl:text>~~~~~~~~~~~~~~~~~~~~~~ ::&#xA;&#xA;</xsl:text>
-<xsl:apply-templates select="input" />
-<xsl:apply-templates select="output" />
-<xsl:text>&#xA;</xsl:text>
+    <xsl:text>~~~~~~~~~~~~~~~~~~~~~~ ::&#xA;&#xA;</xsl:text>
+    <xsl:apply-templates select="input" />
+    <xsl:apply-templates select="output" />
+    <xsl:text>&#xA;</xsl:text>
 </xsl:template>
 
-<!-- Sanitize intput block      -->
+<!-- Totally kill a display block, cannot depend on it, etc -->
+<xsl:template match="sage[@type='display']" />
+
+<!-- Totally kill a practice block, it is uninteresting -->
+<xsl:template match="sage[@type='practice']" />
+
+<!-- Sanitize input block       -->
 <!-- Add in 4-space indentation -->
 <!-- and Sage prompts           -->
 <xsl:template match="input">
