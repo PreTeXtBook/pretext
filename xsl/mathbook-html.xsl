@@ -90,6 +90,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>)</xsl:text>
 </xsl:template>
 
+<!-- Authors and editors with affiliations (eg, on title page) -->
+<xsl:template match="author|editor" mode="full-info">
+    <xsl:apply-templates select="personname" />
+    <xsl:if test="self::editor">
+        <xsl:text>, </xsl:text>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="generic" select="'editor'" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="department">
+        <br /><xsl:apply-templates select="department" />
+    </xsl:if>
+    <xsl:if test="department">
+        <br /><xsl:apply-templates select="institution" />
+    </xsl:if>
+    <xsl:if test="department">
+        <br /><xsl:apply-templates select="email" />
+    </xsl:if>
+    <br /><br />
+</xsl:template>
+
+
 <!-- ################## -->
 <!-- Document Structure -->
 <!-- ################## -->
@@ -237,9 +259,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </h2>
 </xsl:template>
 
-<!-- Some items in summary pages are of interest and are not document nodes -->
-<xsl:template match="titlepage|introduction" mode="summary-entry">
+<!-- Some document nodes will not normally have titles and we need default titles -->
+<!-- Especially if one-off (eg Preface), or generic (Exercises)                   -->
+<xsl:template match="exercises|references|frontmatter|preface|acknowledgement|authorbiography|foreword|dedication|colophon" mode="summary-entry">
+    <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
+    <h2 class="link"><a href="{$url}">
+        <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+        <xsl:text> </xsl:text>
+        <xsl:choose>
+            <xsl:when test="title">
+                <xsl:apply-templates select="title" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="type-name" />
+            </xsl:otherwise>
+        </xsl:choose>
+        </a>
+    </h2>
+</xsl:template>
+
+
+
+<!-- An introduction is not a document node -->
+<!-- We want all the content as a summary   -->
+<xsl:template match="introduction" mode="summary-entry">
     <xsl:apply-templates />
+</xsl:template>
+
+<!-- A titlepage is a front-matter introduction   -->
+<!-- We always handle it the same, summary or not -->
+<xsl:template match="titlepage" mode="summary-entry">
+    <xsl:apply-templates select="."/>
 </xsl:template>
 
 <!-- TODO's can be anywhere and we do not want to see them -->
@@ -271,6 +321,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </tr>
     </table>
 </xsl:template>
+
+
+<!-- Title Page -->
+<xsl:template match="titlepage">
+    <h1 class="heading" style="text-align:center;">
+        <span class="title"><xsl:apply-templates select="//book/title" /></span>
+        <span class="title"><xsl:apply-templates select="//article/title" /></span>
+    </h1>
+    <div style="text-align:center;">
+        <xsl:apply-templates select="/mathbook/docinfo/author" mode="full-info"/>
+        <xsl:apply-templates select="/mathbook/docinfo/editor" mode="full-info"/>
+    </div>
+</xsl:template>
+
 
 <!-- Theorem-Like, plus associated Proofs                                   -->
 <!-- <statement>s and <proof>s are sequences of paragraphs and other blocks -->
