@@ -1284,7 +1284,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                     <h2 class="link"><a href="{$outer-url}">
                     <xsl:apply-templates select="." mode="number" />
                     <xsl:text> </xsl:text>
-                    <xsl:apply-templates select="title" /></a></h2>
+                    <xsl:apply-templates select="." mode="toc-entry" /></a></h2>
                     <ul> <!-- CSS expects a sublist, even if it is empty -->
                     <xsl:if test="$toc-level > 1">
                         <xsl:for-each select="./*">
@@ -1299,7 +1299,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                                     <xsl:apply-templates select="." mode="internal-id" />
                                 </xsl:variable>
                                 <li><a href="{$inner-url}" data-scroll="{$internal}">
-                                <xsl:apply-templates select="title" /></a></li>
+                                <xsl:apply-templates select="." mode="toc-entry" /></a></li>
                             </xsl:if>
                         </xsl:for-each>
                     </xsl:if>
@@ -1309,6 +1309,19 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             </nav>
         </div>
     </xsl:if>
+</xsl:template>
+
+<!-- Some entries of table of contents are based on a title   -->
+<!-- Others are just one-off and have language-specific names -->
+<xsl:template match="*" mode="toc-entry">
+    <xsl:choose>
+        <xsl:when test="title">
+            <xsl:apply-templates select="title" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="type-name" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Navigational Arrows -->
