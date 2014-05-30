@@ -102,7 +102,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   (b) A summary web page (level less than chunking-level, not a document leaf)     -->
 <!--   (c) A visual component of some enclosing web page                                -->
 <!-- They are dispatched here, and recurse back to handle children, typically           -->
-<xsl:template match="book|article|frontmatter|chapter|appendix|titlepage|preface|section|subsection|subsubsection|exercises|references">
+<xsl:template match="book|article|frontmatter|chapter|appendix|preface|acknowledgement|authorbiography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references">
     <xsl:variable name="summary"><xsl:apply-templates select="." mode="is-summary" /></xsl:variable>
     <xsl:variable name="webpage"><xsl:apply-templates select="." mode="is-webpage" /></xsl:variable>
     <xsl:choose>
@@ -220,7 +220,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
          </xsl:with-param>
      </xsl:apply-templates>
      <!-- Summary-entries do not recurse, need to restart outside web page wrapper -->
-    <xsl:apply-templates select="book|article|frontmatter|chapter|appendix|preface|section|subsection|subsubsection|exercises|references" />
+    <xsl:apply-templates select="book|article|frontmatter|chapter|appendix|preface|acknowledgement|authorbiography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references" />
 </xsl:template>
 
 <!-- Document summaries -->
@@ -228,7 +228,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- some do not (eg introductions)                                              -->
 
 <!-- Document node summaries are just links to the page -->
-<xsl:template match="book|article|frontmatter|chapter|appendix|preface|section|subsection|subsubsection|exercises|references" mode="summary-entry">
+<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection" mode="summary-entry">
     <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
     <h2 class="link"><a href="{$url}">
         <span class="counter"><xsl:apply-templates select="." mode="number" /></span>

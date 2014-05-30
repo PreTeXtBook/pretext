@@ -60,7 +60,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="mathbook book article letter" />
 <xsl:strip-space elements="frontmatter chapter appendix section subsection subsubsection exercises references paragraph subparagraph" />
 <xsl:strip-space elements="docinfo author abstract" />
-<xsl:strip-space elements="titlepage preface" />
+<xsl:strip-space elements="titlepage preface acknowledgement authorbiography foreword dedication colophon" />
 <xsl:strip-space elements="theorem corollary lemma proposition claim fact conjecture proof" />
 <xsl:strip-space elements="definition axiom" />
 <xsl:strip-space elements="statement" />
@@ -316,7 +316,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Some elements of the XML tree -->
 <!-- are part of the document tree -->
 <xsl:template match="*" mode="is-structural">
-    <xsl:value-of select="self::book or self::article or self::frontmatter or self::chapter or self::appendix or self::preface or self::section or self::subsection or self::subsubsection or self::exercises or self::references" />
+    <xsl:value-of select="self::book or self::article or self::frontmatter or self::chapter or self::appendix or self::preface or self::acknowledgement or self::authorbiography or self::foreword or self::dedication or self::colophon or self::section or self::subsection or self::subsubsection or self::exercises or self::references" />
 </xsl:template>
 
 <!-- Structural Leaves -->
@@ -326,7 +326,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="structural"><xsl:apply-templates select="." mode="is-structural" /></xsl:variable>
     <xsl:choose>
         <xsl:when test="$structural='true'">
-            <xsl:value-of select="not(child::book or child::article or child::chapter or child::frontmatter or child::appendix or child::preface or child::section or child::subsection or child::subsubsection or child::exercises or child::references)" />
+            <xsl:value-of select="not(child::book or child::article or child::chapter or child::frontmatter or child::appendix or child::preface or child::acknowledgement or child::authorbiography or child::foreword or child::dedication or child::colophon or child::section or child::subsection or child::subsubsection or child::exercises or child::references)" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:value-of select="$structural" />
@@ -424,7 +424,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Some units don't have titles or numbers -->
 <!-- TODO: bibliography, abstract(?), others -->
-<xsl:template match="preface" mode="long-name">
+<xsl:template match="preface|acknowledgement|authorbiography|foreword|dedication|colophon" mode="long-name">
     <xsl:apply-templates select="." mode="type-name" />
     <xsl:text> </xsl:text>
 </xsl:template>
@@ -440,7 +440,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- We presume only one each for these, hence no number -->
-<xsl:template match="book|article|abstract|frontmatter|preface" mode="number"></xsl:template>
+<xsl:template match="book|article|abstract|frontmatter|preface|acknowledgement|authorbiography|foreword|dedication|colophon" mode="number"></xsl:template>
 
 <!-- Appendices: A -->
 <!-- TODO: integrate appendices with chapters -->

@@ -60,6 +60,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$generic='subsection'">    <xsl:text>Subsection</xsl:text></xsl:when>
         <xsl:when test="$generic='subsubsection'"> <xsl:text>Subsubsection</xsl:text></xsl:when>
         <xsl:when test="$generic='exercises'">     <xsl:text>Exercises</xsl:text></xsl:when>
+        <xsl:when test="$generic='references'">    <xsl:text>References</xsl:text></xsl:when>
         <xsl:when test="$generic='paragraph'">     <xsl:text>Paragraph</xsl:text></xsl:when>
         <xsl:when test="$generic='subparagraph'">  <xsl:text>Subparagraph</xsl:text></xsl:when>
         <!-- -->
@@ -75,10 +76,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- -->
         <xsl:when test="$generic='figure'">        <xsl:text>Figure</xsl:text></xsl:when>
         <xsl:when test="$generic='table'">         <xsl:text>Table</xsl:text></xsl:when>
-        <xsl:when test="$generic='abstract'">      <xsl:text>Abstract</xsl:text></xsl:when>
-        <xsl:when test="$generic='preface'">       <xsl:text>Preface</xsl:text></xsl:when>
-        <xsl:when test="$generic='toc'">           <xsl:text>Contents</xsl:text></xsl:when>
-        <xsl:when test="$generic='references'">    <xsl:text>References</xsl:text></xsl:when>
+
+        <xsl:when test="$generic='toc'">             <xsl:text>Contents</xsl:text></xsl:when>
+        <xsl:when test="$generic='abstract'">        <xsl:text>Abstract</xsl:text></xsl:when>
+        <xsl:when test="$generic='preface'">         <xsl:text>Preface</xsl:text></xsl:when>
+        <xsl:when test="$generic='acknowledgement'"> <xsl:text>Acknowledgements</xsl:text></xsl:when>
+        <xsl:when test="$generic='authorbiography'"> <xsl:text>Author Biographies</xsl:text></xsl:when>
+        <xsl:when test="$generic='foreword'">        <xsl:text>Foreword</xsl:text></xsl:when>
+        <xsl:when test="$generic='dedication'">      <xsl:text>Dedication</xsl:text></xsl:when>
+        <xsl:when test="$generic='colophon'">        <xsl:text>Colophon</xsl:text></xsl:when>
         <!-- -->
         <xsl:when test="$generic='todo'">          <xsl:text>To Do</xsl:text></xsl:when>
         <xsl:when test="$generic='editor'">        <xsl:text>Editor</xsl:text></xsl:when>
