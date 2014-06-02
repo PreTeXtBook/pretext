@@ -469,6 +469,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:element>
 </xsl:template>
 
+<!-- tikz diagrams as files -->
+<!-- A side process will generate SVG image files from tikz code            -->
+<!-- we simply grab those files here, based on attribute providing the name -->
+<!-- TODO: manufacture filename from xml:id? -->
+<!-- TODO: generalize default directory with processing switch -->
+<xsl:template match="tikz">
+    <xsl:element name="img">
+        <xsl:attribute name="src">
+            <xsl:value-of select="$tikz-dir" />
+            <xsl:value-of select="@filebase" />
+            <xsl:text>.svg</xsl:text>
+        </xsl:attribute>
+    </xsl:element>
+</xsl:template>
+
+
 <!-- Asymptote graphics language -->
 <!-- unimplemented               -->
 <xsl:template match="asymptote">

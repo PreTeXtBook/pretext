@@ -1252,12 +1252,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- tikz graphics language -->
 <!-- preliminary (cursory) support -->
 <!-- http://tex.stackexchange.com/questions/4338/correctly-scaling-a-tikzpicture -->
+<!-- Resize entire tikzpicture with \resizebox{0.75\textwidth}{!}{....}          -->
 <xsl:template match="tikz">
-    <xsl:text>\resizebox{0.75\textwidth}{!}{&#xa;</xsl:text>
-    <xsl:text>\begin{tikzpicture}&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{tikzpicture}&#xa;</xsl:text>
-    <xsl:text>} % end box resizing&#xa;%&#xa;</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Asymptote graphics language -->

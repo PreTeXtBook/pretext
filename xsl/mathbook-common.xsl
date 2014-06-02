@@ -90,6 +90,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- Directories -->
+<!-- Relative to top-level XML source tree -->
+<!-- AND top-level HTML source tree        -->
+<!-- Include trailing  slash               -->
+
+<!-- tikz graphics directory for manufacture and HTML use -->
+<!-- TODO: customize with processing directives -->
+<xsl:variable name="tikz-dir">tikz/</xsl:variable>
+
 
 <!-- ############## -->
 <!-- Entry template -->
