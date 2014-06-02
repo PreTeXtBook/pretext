@@ -546,7 +546,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="knowl-link-factory">
         <xsl:with-param name="css-class">cite</xsl:with-param>
         <xsl:with-param name="identifier">
-            <xsl:apply-templates select="id(@ref)" mode="xref-identifier" />
+            <xsl:apply-templates select="id(@ref)" mode="internal-id" />
         </xsl:with-param>
         <xsl:with-param name="content">
             <xsl:text>[</xsl:text>
@@ -883,7 +883,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <li><xsl:apply-templates /></li>
     <xsl:call-template name="knowl-factory">
         <xsl:with-param name="identifier">
-            <xsl:apply-templates select="." mode="xref-identifier" />
+            <xsl:apply-templates select="." mode="internal-id" />
         </xsl:with-param>
         <xsl:with-param name="content">
             <span class="article">
