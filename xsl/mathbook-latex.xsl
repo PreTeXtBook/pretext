@@ -331,6 +331,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'conjecture'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="//axiom">
+        <xsl:text>\newtheorem{axiom}[theorem]{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'axiom'" /></xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="//principle">
+        <xsl:text>\newtheorem{principle}[theorem]{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'principle'" /></xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="//definition or //example or //exercise or //remark">
         <xsl:text>% Definition-like environments, normal text&#xa;</xsl:text>
         <xsl:text>% Numbering for definition, examples is in sync with theorems, etc&#xa;</xsl:text>
@@ -678,11 +688,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]</xsl:text>
 </xsl:template>
 
-<xsl:template match="theorem|corollary|lemma">
+<xsl:template match="theorem|corollary|lemma|proposition|claim|fact">
     <xsl:apply-templates select="statement|proof" />
 </xsl:template>
 
 <xsl:template match="definition">
+    <xsl:apply-templates select="statement" />
+</xsl:template>
+
+<xsl:template match="conjecture|axiom|principle">
     <xsl:apply-templates select="statement" />
 </xsl:template>
 
@@ -757,6 +771,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{lemma}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
+<xsl:template match="proposition/statement">
+    <xsl:text>\begin{proposition}</xsl:text>
+    <xsl:apply-templates select="../title" mode="environment-option" />
+    <xsl:apply-templates select=".." mode="label"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>\end{proposition}&#xa;%&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="claim/statement">
+    <xsl:text>\begin{claim}</xsl:text>
+    <xsl:apply-templates select="../title" mode="environment-option" />
+    <xsl:apply-templates select=".." mode="label"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>\end{claim}&#xa;%&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="fact/statement">
+    <xsl:text>\begin{fact}</xsl:text>
+    <xsl:apply-templates select="../title" mode="environment-option" />
+    <xsl:apply-templates select=".." mode="label"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>\end{fact}&#xa;%&#xa;</xsl:text>
+</xsl:template>
+
 <xsl:template match="definition/statement">
     <xsl:text>\begin{definition}</xsl:text>
     <xsl:apply-templates select="../title" mode="environment-option" />
@@ -764,6 +805,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\end{definition}&#xa;%&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="conjecture/statement">
+    <xsl:text>\begin{conjecture}</xsl:text>
+    <xsl:apply-templates select="../title" mode="environment-option" />
+    <xsl:apply-templates select=".." mode="label"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>\end{conjecture}&#xa;%&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="axiom/statement">
+    <xsl:text>\begin{axiom}</xsl:text>
+    <xsl:apply-templates select="../title" mode="environment-option" />
+    <xsl:apply-templates select=".." mode="label"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>\end{axiom}&#xa;%&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="principle/statement">
+    <xsl:text>\begin{principle}</xsl:text>
+    <xsl:apply-templates select="../title" mode="environment-option" />
+    <xsl:apply-templates select=".." mode="label"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>\end{principle}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="example">
