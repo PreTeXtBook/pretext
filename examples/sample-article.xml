@@ -491,6 +491,7 @@
                    <figure>
                         <caption>GeoGebra demonstration of the Euler Line</caption>
                         <tikz>
+                            \begin{tikzpicture}
                             \definecolor{ffqqqq}{rgb}{1,0,0}
                             \definecolor{uuuuuu}{rgb}{0.27,0.27,0.27}
                             \definecolor{zzttqq}{rgb}{0.6,0.2,0}
@@ -516,6 +517,7 @@
                             \fill [color=uuuuuu] (-2.53,1.39) circle (1.5pt);
                             \draw[color=uuuuuu] (-1.29,1.79) node {$orthocentre$};
                             \draw[color=ffqqqq] (-3.75,6.23) node {$Euler$};
+                            \end{tikzpicture}
                         </tikz>
                     </figure>
                 </geogebra-applet>
