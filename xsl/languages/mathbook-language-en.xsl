@@ -46,7 +46,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$generic='proposition'">   <xsl:text>Proposition</xsl:text></xsl:when>
         <xsl:when test="$generic='claim'">         <xsl:text>Claim</xsl:text></xsl:when>
         <xsl:when test="$generic='fact'">          <xsl:text>Fact</xsl:text></xsl:when>
-        <xsl:when test="$generic='conjecture'">    <xsl:text>Conjecture</xsl:text></xsl:when>
         <xsl:when test="$generic='proof'">         <xsl:text>Proof</xsl:text></xsl:when>
         <!-- -->
         <xsl:when test="$generic='book'">          <xsl:text>Book</xsl:text></xsl:when>
@@ -65,7 +64,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$generic='subparagraph'">  <xsl:text>Subparagraph</xsl:text></xsl:when>
         <!-- -->
         <xsl:when test="$generic='definition'">    <xsl:text>Definition</xsl:text></xsl:when>
+        <xsl:when test="$generic='conjecture'">    <xsl:text>Conjecture</xsl:text></xsl:when>
         <xsl:when test="$generic='axiom'">         <xsl:text>Axiom</xsl:text></xsl:when>
+        <xsl:when test="$generic='principle'">     <xsl:text>Principle</xsl:text></xsl:when>
         <!-- -->
         <xsl:when test="$generic='example'">       <xsl:text>Example</xsl:text></xsl:when>
         <xsl:when test="$generic='remark'">        <xsl:text>Remark</xsl:text></xsl:when>

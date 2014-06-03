@@ -265,6 +265,21 @@
             </subsection>
 
             <subsection>
+                <title>Theorem-Like Environments</title>
+
+                <p>There are a variety of pre-defined enviroments in MathBook XML.  All take a title, and must have a statement.  Some have proofs (theorems, corollaries, <etc />), while some do not have proofs (conjectures, axioms, principles).</p>
+
+                <principle>
+                    <title>The Title Principle</title>
+
+                    <statement>
+                        <p>It is a fundamental principle that many elements can have a title.  Try it and see. If you get better formatting, then it is being recognized.  If it looks very plain, check the documentation and perhaps make a feature request.</p>
+                    </statement>
+                </principle>
+
+            </subsection>
+
+            <subsection>
                 <title>Linking Sage Cells</title>
 
                 <p>Sage cells share their results on a per-webpage basis, so if you move to a new chapter, section, or subsection that happens to be on another webpage, your Sage computations are gone and you start fresh.  But maybe you need some results from elsewhere.  As an author, you can make an exact copy of a cell in another location.  As a reader you are suggested to <q>replay</q> the cell.  You have seen the next cell before.  More typically such a cell might define a function or set some values of a variable.</p>

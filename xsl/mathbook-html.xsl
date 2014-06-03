@@ -338,7 +338,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Theorem-Like, plus associated Proofs                                   -->
 <!-- <statement>s and <proof>s are sequences of paragraphs and other blocks -->
-<xsl:template match="theorem|corollary|lemma|proposition|claim|fact|conjecture|definition">
+<xsl:template match="theorem|corollary|lemma|proposition|claim|fact">
     <xsl:variable name="xref">
         <xsl:apply-templates select="." mode="internal-id" />
     </xsl:variable>
@@ -366,8 +366,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Definitions, Axioms -->
-<!-- Statement, just like a proof, to separate from notation perhaps -->
-<xsl:template match="definition|axiom">
+<!-- Statement, just like a theorem, but no proof -->
+<xsl:template match="definition|axiom|conjecture|principle">
     <xsl:variable name="xref">
         <xsl:apply-templates select="." mode="internal-id" />
     </xsl:variable>

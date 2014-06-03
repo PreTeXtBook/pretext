@@ -62,7 +62,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="docinfo author abstract" />
 <xsl:strip-space elements="titlepage preface acknowledgement authorbiography foreword dedication colophon" />
 <xsl:strip-space elements="theorem corollary lemma proposition claim fact conjecture proof" />
-<xsl:strip-space elements="definition axiom" />
+<xsl:strip-space elements="definition axiom principle" />
 <xsl:strip-space elements="statement" />
 <xsl:strip-space elements="example remark exercise hint solution" />
 <xsl:strip-space elements="ul ol dl" />
@@ -470,21 +470,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Two-level numbering for book with chapters and theorem-like environments, plus -->
 <!-- Condition on articles, and then articles with sections -->
 <!-- TODO: Number exercises in an exercise section properly, these are sporadic in text -->
-<xsl:template match="theorem|corollary|lemma|proposition|claim|fact|conjecture|definition|example|exercise|remark" mode="number">
+<xsl:template match="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|exercise|remark" mode="number">
     <xsl:choose>
         <xsl:when test="/mathbook/book">
             <xsl:if test="/mathbook/book/chapter">
                 <xsl:number from="book" level="any" count="chapter" />
                 <xsl:text>.</xsl:text>
             </xsl:if>
-                <xsl:number from="chapter" level="any" count="theorem|corollary|lemma|proposition|claim|fact|conjecture|definition|example|exercise|remark" />
+                <xsl:number from="chapter" level="any" count="theorem|corollary|lemma|proposition|claim|fact|conjecture|definition|axiom|principle|example|exercise|remark" />
         </xsl:when>
         <xsl:when test="/mathbook/article">
             <xsl:if test="/mathbook/article/section">
                 <xsl:number from="article" level="any" count="section" />
                 <xsl:text>.</xsl:text>
             </xsl:if>
-                <xsl:number from="section" level="any" count="theorem|corollary|lemma|proposition|claim|fact|conjecture|definition|example|exercise|remark" />
+                <xsl:number from="section" level="any" count="theorem|corollary|lemma|proposition|claim|fact|conjecture|definition|axiom|principle|example|exercise|remark" />
         </xsl:when>
     </xsl:choose>
 </xsl:template>
