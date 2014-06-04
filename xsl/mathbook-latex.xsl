@@ -22,8 +22,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Identify as a stylesheet -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace" 
+    xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
-    extension-element-prefixes="date"
+    extension-element-prefixes="exsl date"
 >
 
 <xsl:import href="./mathbook-common.xsl" />
@@ -1423,6 +1424,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX references equations differently than theorems, etc -->
 <xsl:template match="xref[@ref]">
     <xsl:variable name="target" select="id(@ref)" />
+    <!-- Check to see if the ref is any good -->
+    <!-- http://www.stylusstudio.com/xsllist/200412/post20720.html -->
+    <xsl:if test="not(exsl:node-set($target)/*)">
+        <xsl:message>MBX:WARNING: unresolved xref due to ref="<xsl:value-of select="@ref"/>"</xsl:message>
+    </xsl:if>
     <xsl:choose>
         <xsl:when test="$target/self::mrow or $target/self::me or $target/self::men">
             <xsl:text>\eqref{</xsl:text>
