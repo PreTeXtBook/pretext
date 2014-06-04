@@ -511,10 +511,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A subset of the (failed) "CALS Table Model" -->
 <!-- Should be able to replace this by extant XSLT for this conversion -->
 <xsl:template match="table">
-    <table class="plain-table">
-        <xsl:apply-templates select="*[not(self::caption)]" />
+    <figure>
+        <table class="center">
+            <xsl:apply-templates select="*[not(self::caption)]" />
+        </table>
         <xsl:apply-templates select="caption" />
-    </table>
+    </figure>
 </xsl:template>
 
 <xsl:template match="tgroup"><xsl:apply-templates /></xsl:template>
