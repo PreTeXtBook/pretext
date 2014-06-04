@@ -520,11 +520,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="tgroup"><xsl:apply-templates /></xsl:template>
-<xsl:template match="thead"><thead><xsl:apply-templates /></thead></xsl:template>
-<xsl:template match="tbody"><tbody><xsl:apply-templates /></tbody></xsl:template>
-<xsl:template match="row"><tr><xsl:apply-templates /></tr></xsl:template>
+<xsl:template match="thead">
+    <thead><xsl:apply-templates /></thead>
+</xsl:template>
+<xsl:template match="tbody">
+    <tbody><xsl:apply-templates /></tbody>
+</xsl:template>
+<xsl:template match="thead/row">
+    <tr><xsl:apply-templates /></tr>
+    <tr><xsl:apply-templates mode="hline" /></tr>
+</xsl:template>
+<xsl:template match="tbody/row">
+    <tr><xsl:apply-templates /></tr>
+</xsl:template>
 <!-- With a parent axis, get overrides easily? -->
-<xsl:template match="thead/row/entry"><th align="{../../../@align}"><xsl:apply-templates /></th></xsl:template>
+<xsl:template match="thead/row/entry"><td align="{../../../@align}"><xsl:apply-templates /></td></xsl:template>
+<xsl:template match="thead/row/entry" mode="hline"><td class="hline"><hr /></td></xsl:template>
 <xsl:template match="tbody/row/entry"><td align="{../../../@align}"><xsl:apply-templates /></td></xsl:template>
 
 <!-- Caption of a figure or table                  -->
