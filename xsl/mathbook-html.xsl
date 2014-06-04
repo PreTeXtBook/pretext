@@ -448,12 +448,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+
 <!-- Figures and their captions -->
+<!-- TODO: class="wrap" is possible -->
 <xsl:template match="figure">
-    <div class="figure">
+    <figure>
         <xsl:apply-templates select="*[not(self::caption)]"/>
         <xsl:apply-templates select="caption"/>
-    </div>
+    </figure>
 </xsl:template>
 
 <!-- Images -->
@@ -526,14 +528,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Caption of a figure or table                  -->
 <!-- All the relevant information is in the parent -->
 <xsl:template match="caption">
-    <caption>
-        <xsl:apply-templates select=".." mode="type-name"/>
-        <xsl:text> </xsl:text>
-        <xsl:apply-templates select=".." mode="number"/>
-        <xsl:text>: </xsl:text>
+    <figcaption>
+        <span class="heading">
+            <xsl:apply-templates select=".." mode="type-name"/>
+        </span>
+        <span class="counter">
+            <xsl:apply-templates select=".." mode="number"/>
+        </span>
         <xsl:apply-templates />
         <xsl:apply-templates select=".." mode="label" />
-    </caption>
+    </figcaption>
 </xsl:template>
 
 
