@@ -78,17 +78,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$latex.draft='yes'" >
         <xsl:text>draft,</xsl:text>
     </xsl:if>
-    <xsl:text>]{article}&#xa;%&#xa;</xsl:text>
-    <xsl:text>% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
+    <xsl:text>]{article}&#xa;</xsl:text>
+    <xsl:text>%% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
     <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
     <xsl:text>\geometry{letterpaper,total={5.0in,9.0in}}&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
     <xsl:call-template name="title-page-info-article" />
-    <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\begin{document}&#xa;</xsl:text>
     <xsl:if test="/mathbook/article/title or /mathbook/docinfo/event or /mathbook/docinfo/author or/mathbook/docinfo/editor or /mathbook/docinfo/date">
-        <xsl:text>\maketitle&#xa;%&#xa;</xsl:text>
+        <xsl:text>\maketitle&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>\thispagestyle{empty}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:apply-templates select="abstract"/>
     <xsl:if test="$toc-level > 0">
         <xsl:text>\setcounter{tocdepth}{</xsl:text>
@@ -100,12 +100,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\tableofcontents&#xa;</xsl:text>
-        <xsl:text>\clearpage&#xa;%&#xa;</xsl:text>
+        <xsl:text>\clearpage&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="*[not(self::abstract or self::bibliography)]"/>
+    <xsl:apply-templates select="*[not(self::abstract or self::title or self::bibliography)]"/>
     <xsl:apply-templates select="bibliography"/>
     <xsl:call-template name="latex-postamble" />
-   <xsl:text>\end{document}&#xa;</xsl:text>
+   <xsl:text>\end{document}</xsl:text>
 </xsl:template>
 
 <!-- A book, LaTeX structure -->
@@ -117,17 +117,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$latex.draft='yes'" >
         <xsl:text>draft,</xsl:text>
     </xsl:if>
-    <xsl:text>]{book}&#xa;%&#xa;</xsl:text>
-    <xsl:text>% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
+    <xsl:text>]{book}&#xa;</xsl:text>
+    <xsl:text>%% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
     <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
     <xsl:text>\geometry{letterpaper,total={5.0in,9.0in}}&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
     <xsl:call-template name="title-page-info-book" />
-    <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
-    <xsl:text>\frontmatter&#xa;%&#xa;</xsl:text>
+    <xsl:text>\begin{document}&#xa;</xsl:text>
+    <xsl:text>\frontmatter&#xa;</xsl:text>
     <xsl:call-template name="half-title" />
     <xsl:text>\maketitle&#xa;</xsl:text>
-    <xsl:text>\clearpage&#xa;%&#xa;</xsl:text>
+    <xsl:text>\clearpage&#xa;</xsl:text>
     <xsl:call-template name="copyright-page" />
     <xsl:if test="$toc-level > 0">
         <xsl:text>\setcounter{tocdepth}{</xsl:text>
@@ -138,17 +138,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="generic" select="'toc'" />
         </xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
-        <xsl:text>\tableofcontents&#xa;%&#xa;</xsl:text>
+        <xsl:text>\tableofcontents&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="preface" />
-    <xsl:text>\mainmatter&#xa;%&#xa;</xsl:text>
+    <xsl:text>\mainmatter&#xa;</xsl:text>
     <xsl:apply-templates select="chapter" />
-    <xsl:text>\appendix&#xa;%&#xa;</xsl:text>
+    <xsl:text>\appendix&#xa;</xsl:text>
     <xsl:apply-templates select="appendix" />
-    <xsl:text>\backmatter&#xa;%&#xa;</xsl:text>
+    <xsl:text>\backmatter&#xa;</xsl:text>
     <xsl:apply-templates select="bibliography" />
     <xsl:call-template name="latex-postamble" />
-    <xsl:text>\end{document}&#xa;</xsl:text>
+    <xsl:text>\end{document}</xsl:text>
 </xsl:template>
 
 <!-- A letter, LaTeX structure -->
@@ -160,14 +160,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$latex.draft='yes'" >
         <xsl:text>draft,</xsl:text>
     </xsl:if>
-    <xsl:text>]{article}&#xa;%&#xa;</xsl:text>
-    <xsl:text>% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
+    <xsl:text>]{article}&#xa;</xsl:text>
+    <xsl:text>%% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
     <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
     <xsl:text>\geometry{letterpaper,total={6.0in,9.0in}}&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
-    <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
-    <xsl:text>\vspace*{\stretch{1}}&#xa;%&#xa;</xsl:text>
-    <xsl:text>\thispagestyle{empty}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\begin{document}&#xa;</xsl:text>
+    <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
+    <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <!-- Logos (letterhead images) to first page -->
     <xsl:apply-templates select="/mathbook/docinfo/logo" />
     <xsl:text>\vspace*{0.75in}&#xa;</xsl:text>
@@ -187,21 +187,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="/mathbook/docinfo/date">
             <xsl:apply-templates select="/mathbook/docinfo/date" />
         </xsl:if>
-        <xsl:text>&#xa;\end{tabular}\\\par&#xa;%&#xa;</xsl:text>
+        <xsl:text>&#xa;\end{tabular}\\\par&#xa;</xsl:text>
     </xsl:if>
     <!-- Destination address, flush left -->
     <xsl:if test="/mathbook/docinfo/to">
         <xsl:text>\noindent{}</xsl:text>
         <xsl:apply-templates select="/mathbook/docinfo/to" />
         <xsl:text>\\\par</xsl:text>
-        <xsl:text>&#xa;%&#xa;</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
     </xsl:if>
     <!-- Salutation, flush left -->
     <xsl:if test="/mathbook/docinfo/salutation">
         <xsl:text>\noindent{}</xsl:text>
         <xsl:apply-templates select="/mathbook/docinfo/salutation" />
         <xsl:text>,\\\par</xsl:text>
-        <xsl:text>&#xa;%&#xa;</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
     </xsl:if>
     <!-- process the body -->
     <xsl:apply-templates />
@@ -232,39 +232,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:apply-templates select="/mathbook/docinfo/signature" />
-        <xsl:text>&#xa;\end{tabular}\hspace{\stretch{1}}&#xa;%&#xa;</xsl:text>
+        <xsl:text>&#xa;\end{tabular}\hspace{\stretch{1}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Stretchy vertical space, useful if still on page 1 -->
-    <xsl:text>\par\vspace*{\stretch{2}}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\par\vspace*{\stretch{2}}&#xa;</xsl:text>
     <xsl:call-template name="latex-postamble" />
-    <xsl:text>\end{document}&#xa;</xsl:text>
+    <xsl:text>\end{document}</xsl:text>
 </xsl:template>
 
 <!-- LaTeX preamble is common for both books, articles and letters      -->
 <!-- Except: title info allows an "event" for an article (presentation) -->
 <xsl:template name="latex-preamble">
-    <xsl:text>%%&#xa;</xsl:text>
-    <xsl:text>%% Custom Preamble Entries, early (latex.preamble.early)&#xa;</xsl:text>
+    <xsl:text>%% Custom Preamble Entries, early (use latex.preamble.early)&#xa;</xsl:text>
     <xsl:if test="$latex.preamble.early != ''">
         <xsl:value-of select="$latex.preamble.early" />
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
-    <!-- Override any page margins set per style, default is empty -->
-    <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Page Layout Adjustments (latex.geometry)&#xa;</xsl:text>
     <xsl:if test="$latex.geometry != ''">
         <xsl:text>\geometry{</xsl:text>
         <xsl:value-of select="$latex.geometry" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Symbols, align environment, bracket-matrix&#xa;</xsl:text>
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
-    <xsl:text>%% allow more columns to a matrix&#xa;</xsl:text>
-    <xsl:text>%% can make this even bigger by overiding with preamble late addition&#xa;</xsl:text>
-    <xsl:text>\setcounter{MaxMatrixCols}{30}&#xa;</xsl:text>
     <xsl:text>\usepackage{amssymb}&#xa;</xsl:text>
-    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% allow more columns to a matrix&#xa;</xsl:text>
+    <xsl:text>%% can make this even bigger by overiding with  latex.preamble.late  processing option&#xa;</xsl:text>
+    <xsl:text>\setcounter{MaxMatrixCols}{30}&#xa;</xsl:text>
     <xsl:text>%% XML, MathJax Conflict Macros&#xa;</xsl:text>
     <xsl:text>%% Two nonstandard macros that MathJax supports automatically&#xa;</xsl:text>
     <xsl:text>%% so we always define them in order to allow their use and&#xa;</xsl:text>
@@ -273,7 +268,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Need CDATA here to protect inequalities as part of an XML file -->
     <xsl:text><![CDATA[\newcommand{\lt}{<}]]>&#xa;</xsl:text>
     <xsl:text><![CDATA[\newcommand{\gt}{>}]]>&#xa;</xsl:text>
-    <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Semantic Macros&#xa;</xsl:text>
     <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
     <xsl:text>%% Only defined here if required in this document&#xa;</xsl:text>
@@ -281,16 +275,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\terminology}[1]{\textbf{#1}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Could condition following on existence of any amsthm environment -->
-    <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Environments with amsthm package&#xa;</xsl:text>
     <xsl:text>\usepackage{amsthm}&#xa;</xsl:text>
-    <xsl:text>% Theorem-like enviroments, italicized statement, proof, etc&#xa;</xsl:text>
-    <xsl:text>% Numbering: X.Y numbering scheme&#xa;</xsl:text>
-    <xsl:text>%   i.e. Corollary 4.3 is third item in Chapter 4 of a book&#xa;</xsl:text>
-    <xsl:text>%   i.e. Lemma 5.6 is sixth item in Section 5 of an article&#xa;</xsl:text>
+    <xsl:text>%% Theorem-like enviroments, italicized statement, proof, etc&#xa;</xsl:text>
+    <xsl:text>%% Numbering: X.Y numbering scheme&#xa;</xsl:text>
+    <xsl:text>%%   i.e. Corollary 4.3 is third item in Chapter 4 of a book&#xa;</xsl:text>
+    <xsl:text>%%   i.e. Lemma 5.6 is sixth item in Section 5 of an article&#xa;</xsl:text>
     <xsl:text>\theoremstyle{plain}&#xa;</xsl:text>
-    <xsl:text>% Always need a theorem environment to set base numbering scheme&#xa;</xsl:text>
-    <xsl:text>% even if document has no theorems (but has other environments)&#xa;</xsl:text>
+    <xsl:text>%% Always need a theorem environment to set base numbering scheme&#xa;</xsl:text>
+    <xsl:text>%% even if document has no theorems (but has other environments)&#xa;</xsl:text>
     <xsl:text>\newtheorem{theorem}{</xsl:text>
     <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'theorem'" /></xsl:call-template>
     <xsl:text>}</xsl:text>
@@ -299,9 +292,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="/mathbook/book"><xsl:text>[chapter]</xsl:text></xsl:when>
     </xsl:choose>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:text>% Only variants actually used in document appear here&#xa;</xsl:text>
-    <xsl:text>% Numbering: all theorem-like numbered consecutively&#xa;</xsl:text>
-    <xsl:text>%   i.e. Corollary 4.3 follows Theorem 4.2&#xa;</xsl:text>
+    <xsl:text>%% Only variants actually used in document appear here&#xa;</xsl:text>
+    <xsl:text>%% Numbering: all theorem-like numbered consecutively&#xa;</xsl:text>
+    <xsl:text>%%   i.e. Corollary 4.3 follows Theorem 4.2&#xa;</xsl:text>
     <xsl:if test="//corollary">
         <xsl:text>\newtheorem{corollary}[theorem]{</xsl:text>
         <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'corollary'" /></xsl:call-template>
@@ -343,9 +336,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//definition or //example or //exercise or //remark">
-        <xsl:text>% Definition-like environments, normal text&#xa;</xsl:text>
-        <xsl:text>% Numbering for definition, examples is in sync with theorems, etc&#xa;</xsl:text>
-        <xsl:text>% also for free-form exercises, not in exercise sections&#xa;</xsl:text>
+        <xsl:text>%% Definition-like environments, normal text&#xa;</xsl:text>
+        <xsl:text>%% Numbering for definition, examples is in sync with theorems, etc&#xa;</xsl:text>
+        <xsl:text>%% also for free-form exercises, not in exercise sections&#xa;</xsl:text>
         <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
         <xsl:if test="//definition">
             <xsl:text>\newtheorem{definition}[theorem]{</xsl:text>
@@ -402,7 +395,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Package for precise image placement (for logos on pages)&#xa;</xsl:text>
         <xsl:text>\usepackage{eso-pic}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Hyperlinking in PDFs, all links solid and blue&#xa;</xsl:text>
     <xsl:text>\usepackage[pdftex]{hyperref}&#xa;</xsl:text>
     <xsl:text>\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
@@ -412,7 +404,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- http://tex.stackexchange.com/questions/44088/when-do-i-need-to-invoke-phantomsection -->
     <xsl:text>%% If you manually remove hyperref, leave in this next command&#xa;</xsl:text>
     <xsl:text>\providecommand\phantomsection{}&#xa;</xsl:text>
-    <xsl:text>%%&#xa;</xsl:text>
     <xsl:if test="$latex.watermark">
         <xsl:text>\usepackage{draftwatermark}&#xa;</xsl:text>
         <xsl:text>\SetWatermarkText{</xsl:text>
@@ -425,17 +416,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$latex.draft='yes'" >
         <xsl:text>\usepackage[letter,cam,center,pdflatex]{crop}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%%&#xa;</xsl:text>
-    <xsl:text>%% Custom Preamble Entries, late (latex.preamble.late)&#xa;</xsl:text>
+    <xsl:text>%% Custom Preamble Entries, late (use latex.preamble.late)&#xa;</xsl:text>
     <xsl:if test="$latex.preamble.late != ''">
         <xsl:value-of select="$latex.preamble.late" />
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Convenience macros&#xa;</xsl:text>
     <xsl:if test="/mathbook/docinfo/macros">
-        <xsl:value-of select="/mathbook/docinfo/macros" />
-        <xsl:text>&#xa;</xsl:text>
+        <xsl:call-template name="sanitize-sage">
+            <xsl:with-param name="raw-sage-code" select="/mathbook/docinfo/macros" />
+        </xsl:call-template>
     </xsl:if>
 </xsl:template>
 
@@ -486,7 +476,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and then do "thispagestyle" on both                  -->
 <!-- These two pages contribute to frontmatter page count -->
 <xsl:template name="half-title" >
-    <xsl:text>% half-title&#xa;</xsl:text>
+    <xsl:text>%% half-title&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
     <xsl:text>\begin{center}\Huge&#xa;</xsl:text>
@@ -581,7 +571,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Preface, within \frontmatter is handled correctly by LaTeX-->
 <xsl:template match="preface">
-    <xsl:text>\chapter{Preface}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\chapter{Preface}&#xa;</xsl:text>
     <xsl:apply-templates />
 </xsl:template>
 
@@ -589,7 +579,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="abstract">
     <xsl:text>\begin{abstract}&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{abstract}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{abstract}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Logos (images) -->
@@ -648,7 +638,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\typeout{</xsl:text>
     <xsl:apply-templates select="." mode="long-name" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\typeout{************************************************}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\typeout{************************************************}&#xa;</xsl:text>
     <!-- Construct the header of the subdivision -->
     <xsl:text>\</xsl:text>
     <xsl:value-of select="$level" />
@@ -656,12 +646,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="title" />
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="label" />
-    <xsl:text>&#xa;%&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
     <!-- List the author of this division, if present -->
     <xsl:if test="author">
         <xsl:text>\noindent\Large{\textbf{</xsl:text>
         <xsl:apply-templates select="author" mode="name-list"/>
-        <xsl:text>}\par\bigskip&#xa;%&#xa;</xsl:text>
+        <xsl:text>}\par\bigskip&#xa;</xsl:text>
     </xsl:if>
     <!-- Exercises, references are in a numbered list -->
     <xsl:if test="local-name(.)='exercises' or local-name(.)='references'">
@@ -703,8 +693,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Exercises -->
 <!-- Free-range exercises go into environments -->
-<!-- Otherwise items in lists in "exercises" subdivisions   -->
-<!-- TODO: Solutions to exercises by default value of switch-->
 <xsl:template match="exercise">
     <xsl:text>\begin{exercise}</xsl:text>
     <xsl:apply-templates select="title" mode="environment-option" />
@@ -713,9 +701,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="statement"/>
     <xsl:apply-templates select="hint"/>
     <xsl:apply-templates select="solution"/>
-    <xsl:text>\end{exercise}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{exercise}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- An exercise in an "exercises" subdivision            -->
+<!-- is a list item in an enumerated list                 -->
+<!-- Assume solution ends with non-blank-line and newline -->
+<!-- TODO: Solution and hint, switches-->
 <xsl:template match="exercises//exercise">
     <xsl:text>\item</xsl:text>
     <xsl:apply-templates select="." mode="label"/>
@@ -723,22 +715,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="statement"/>
     <xsl:apply-templates select="hint"/>
     <xsl:apply-templates select="solution"/>
-    <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="exercise/solution">
-    <xsl:if test="$solutions.included='yes'">
-        <xsl:text>\par\smallskip\noindent\textbf{</xsl:text>
+<!-- An exercise statement is just a container -->
+<xsl:template match="exercise/statement">
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- A hint continues the previous paragraph of the statement -->
+<xsl:template match="exercise/hint">
+    <xsl:if test="$hints.included='yes'">
+        <xsl:text>\space&#xa;</xsl:text>
         <xsl:apply-templates select="." mode="type-name" />
-        <xsl:text>.}\quad&#xa;</xsl:text>
+        <xsl:text>: </xsl:text>
         <xsl:apply-templates />
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="exercise/hint">
-    <xsl:if test="$hints.included='yes'">
+<!-- Assume pargraphs of solution end with non-blank line and newline -->
+<xsl:template match="exercise/solution">
+    <xsl:if test="$solutions.included='yes'">
+        <xsl:text>\par\smallskip&#xa;\noindent\textbf{</xsl:text>
         <xsl:apply-templates select="." mode="type-name" />
-        <xsl:text>: </xsl:text>
+        <xsl:text>.}\quad&#xa;</xsl:text>
         <xsl:apply-templates />
     </xsl:if>
 </xsl:template>
@@ -751,7 +750,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{theorem}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{theorem}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="corollary/statement">
@@ -760,7 +759,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{corollary}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{corollary}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="lemma/statement">
@@ -769,7 +768,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{lemma}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{lemma}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="proposition/statement">
@@ -778,7 +777,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{proposition}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{proposition}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="claim/statement">
@@ -787,7 +786,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{claim}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{claim}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="fact/statement">
@@ -796,7 +795,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{fact}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{fact}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="definition/statement">
@@ -805,7 +804,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{definition}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{definition}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="conjecture/statement">
@@ -814,7 +813,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{conjecture}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{conjecture}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="axiom/statement">
@@ -823,7 +822,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{axiom}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{axiom}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="principle/statement">
@@ -832,7 +831,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{principle}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{principle}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="example">
@@ -841,7 +840,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::title)]"/>
-    <xsl:text>\end{example}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{example}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="remark">
@@ -850,19 +849,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::title)]"/>
-    <xsl:text>\end{remark}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{remark}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="notation">
     <xsl:text>Sample notation (in a master list eventually): $</xsl:text>
     <xsl:value-of select="." />
-    <xsl:text>$\par&#xa;%&#xa;</xsl:text>
+    <xsl:text>$\par&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="proof">
     <xsl:text>\begin{proof}&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{proof}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{proof}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Paragraphs                         -->
@@ -1268,7 +1267,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="sanitize-sage">
         <xsl:with-param name="raw-sage-code" select="." />
     </xsl:call-template>
-    <xsl:text>\end{lstlisting}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{lstlisting}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Geogebra                                     -->
@@ -1288,23 +1287,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-
-
-<!-- Figures and Captions -->
-<!-- http://tex.stackexchange.com/questions/2275/keeping-tables-figures-close-to-where-they-are-mentioned -->
+<!-- Captions for Figures and Tables -->
+<!-- xml:id is on parent, but LaTeX generates number with caption -->
 <xsl:template match="caption">
     <xsl:text>\caption{</xsl:text>
     <xsl:apply-templates />
-    <xsl:apply-templates select="." mode="label" />
+    <xsl:apply-templates select=".." mode="label" />
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Figures -->
+<!-- For floatation advice see                                                                            -->
+<!-- http://tex.stackexchange.com/questions/2275/keeping-tables-figures-close-to-where-they-are-mentioned -->
 <xsl:template match="figure">
     <xsl:text>\begin{figure}[!htbp]&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]"/>
     <xsl:apply-templates select="caption" />
-    <xsl:text>\end{figure}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{figure}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Images -->
@@ -1325,8 +1325,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- http://tex.stackexchange.com/questions/4338/correctly-scaling-a-tikzpicture -->
 <!-- Resize entire tikzpicture with \resizebox{0.75\textwidth}{!}{....}          -->
 <xsl:template match="tikz">
-    <xsl:apply-templates />
-    <xsl:text>%&#xa;</xsl:text>
+    <xsl:call-template name="sanitize-sage">
+        <xsl:with-param name="raw-sage-code" select="." />
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Asymptote graphics language -->
@@ -1352,8 +1353,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*[not(self::caption)]" />
     <xsl:apply-templates select="caption" />
     <xsl:text>\end{table}&#xa;</xsl:text>
-    <xsl:text>%&#xa;</xsl:text>
-</xsl:template>
+    </xsl:template>
 
 <!-- Unclear how to handle *multiple* tgroups in latex -->
 <xsl:template match="tgroup">
@@ -1489,9 +1489,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
     <xsl:text>\begin{thebibliography}{</xsl:text>
     <xsl:value-of select="count(biblio)"/>
-    <xsl:text>}&#xa;%&#xa;</xsl:text>
+    <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::title)]"/>
-    <xsl:text>\end{thebibliography}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{thebibliography}&#xa;</xsl:text>
 </xsl:template>
 <!-- Entirely similar, but for renew'ed command name -->
 <xsl:template match="article/references">
@@ -1500,9 +1500,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
     <xsl:text>\begin{thebibliography}{</xsl:text>
     <xsl:value-of select="count(biblio)"/>
-    <xsl:text>}&#xa;%&#xa;</xsl:text>
+    <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::title)]"/>
-    <xsl:text>\end{thebibliography}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{thebibliography}&#xa;</xsl:text>
 </xsl:template>
 <!-- References at other levels are just ordered lists in a subdivision     -->
 <!-- This gets handled in the generic sectioning code, just like exercises  -->
@@ -1516,7 +1516,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="xref-identifier"/>
     <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>&#xa;%&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- As an item of a plain numbered list, for subsidiary references -->
@@ -1524,7 +1524,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\item</xsl:text>
     <xsl:apply-templates select="." mode="label"/>
     <xsl:apply-templates />
-    <xsl:text>&#xa;%&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Bibliographic items can have annotations            -->

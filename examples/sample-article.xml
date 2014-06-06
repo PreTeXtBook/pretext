@@ -375,8 +375,7 @@
         <section>
             <title>Some Advanced Ideas</title>
 
-            <p>The multi-row displayed mathematics in the proof of the Fundamental Theorem had equations aligned on the equals signs via the <ampersand /> character.  Sometimes you don't want that.  Here is an example with some differential equations, with each equation centered and unnumbered,
-            <md>
+            <p>The multi-row displayed mathematics in the proof of the Fundamental Theorem had equations aligned on the equals signs via the <ampersand /> character.  Sometimes you don't want that.  Here is an example with some differential equations, with each equation centered and unnumbered, <md>
                 <mrow>{\mathcal L}(y')(s) = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
             </md></p>
@@ -469,7 +468,7 @@
             <title>Further Reading</title>
 
             <introduction>
-                <p>In a longer work you might wish to have some references on a per-chapter basis, or similar.  You can make a <q>references</q> subdivion anywhere to hold bibliographic items, and you can reference the items like any other item.  For example, we can cite the article below <cite ref="biblio-beezer-fcla" />.</p>
+                <p>In a longer work you might wish to have some references on a per-chapter basis, or similar.  You can make a <q>references</q> subdivision anywhere to hold bibliographic items, and you can reference the items like any other item.  For example, we can cite the article below <cite ref="biblio-beezer-fcla" />.</p>
             </introduction>
 
             <references>
