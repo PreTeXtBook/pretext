@@ -319,16 +319,16 @@
 
             <p>Because of the Fundamental Theorem, for every derivative we know, there is an antiderivative we might find useful.  Because of the Fundamental Theorem of Calculus, we recycle the <q><m>\int</m></q> symbol as notation for an antiderivative.</p>
             <ul>
-                <li>Derivatives<ol>
-                    <li><m>\frac{d}{dx}x^n = nx^{n-1}</m></li>
-                    <li><m>\frac{d}{dx}e^x = e^x</m></li>
-                    <li><m>\frac{d}{dx}\cos(x) = -\sin(x)</m></li>
-                </ol></li>
-                <li>Antiderivatives<ol>
-                    <li><m>\indefiniteintegral{x^n}{x} = \displaystyle\frac{x^{n-1}}{n+1}\text{ if }n\neq -1</m></li>
-                    <li><m>\indefiniteintegral{e^x}{x} = e^x</m></li>
-                    <li><m>\indefiniteintegral{\sin(x)}{x} = -\cos(x)</m></li>
-                </ol></li>
+                <li><p>Derivatives<ol>
+                    <li><p><m>\frac{d}{dx}x^n = nx^{n-1}</m></p></li>
+                    <li><p><m>\frac{d}{dx}e^x = e^x</m></p><p><m>\frac{d}{dx}e^x = e^x</m></p></li>
+                    <li><p><m>\frac{d}{dx}\cos(x) = -\sin(x)</m></p></li>
+                </ol></p></li>
+                <li><p>Antiderivatives<ol>
+                    <li><p><m>\indefiniteintegral{x^n}{x} = \displaystyle\frac{x^{n-1}}{n+1}\text{ if }n\neq -1</m></p></li>
+                    <li><p><m>\indefiniteintegral{e^x}{x} = e^x</m></p></li>
+                    <li><p><m>\indefiniteintegral{\sin(x)}{x} = -\cos(x)</m></p></li>
+                </ol></p></li>
             </ul>
 
             <remark>

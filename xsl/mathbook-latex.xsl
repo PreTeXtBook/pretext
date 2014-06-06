@@ -865,17 +865,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{proof}&#xa;%&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Paragraphs                              -->
-<!-- \par marks the start of a new paragraph -->
+<!-- Paragraphs                         -->
+<!-- \par separates paragraphs          -->
+<!-- So prior to second, and subsequent -->
+<!-- Guarantee: Never a blank line,     -->
+<!-- always finish with newline         -->
 <xsl:template match="p[1]">
     <xsl:apply-templates />
-    <xsl:text>&#xa;%&#xa;</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="p">
-    <xsl:text>\par </xsl:text>
+    <xsl:text>\par&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>&#xa;%&#xa;</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Index -->
@@ -969,44 +972,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="ol">
     <xsl:text>\begin{enumerate}&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{enumerate}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{enumerate}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="ul">
     <xsl:text>\begin{itemize}&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{itemize}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{itemize}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="dl">
     <xsl:text>\begin{description}&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{description}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{description}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Sometimes a nested list ends as part of an item  -->
-<!-- We output a % with each carriage return to avoid -->
-<!-- getting extraneous blank lines in the source     -->
-<xsl:template match="li">
+<!-- We assume content of list items  -->
+<!-- (typically paragraphs), end with -->
+<!-- non-blank line and a newline     -->
+<xsl:template match="ol/li|ul/li">
     <xsl:text>\item </xsl:text>
     <xsl:apply-templates />
-    <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Description lists get additional argument next -->
 <xsl:template match="dl/li">
     <xsl:text>\item</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Description lists have titled elements -->
-<!-- so no space after \item above          -->
-<!-- and title must be first inside li      -->
+<!-- Description lists *must* have titled elements -->
+<!-- Leave space before start of content           -->
 <xsl:template match="dl/li/title">
     <xsl:text>[</xsl:text>
     <xsl:apply-templates />
     <xsl:text>] </xsl:text>
 </xsl:template>
+
 
 <!-- Markup, typically within paragraphs            -->
 <!-- Quotes, double or single, see quotations below -->
@@ -1258,7 +1260,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="sanitize-sage">
         <xsl:with-param name="raw-sage-code" select="." />
     </xsl:call-template>
-    <xsl:text>\end{lstlisting}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\end{lstlisting}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="output">
