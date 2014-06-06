@@ -742,62 +742,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Reorg?, consolidate following with local-name() -->
-
-<xsl:template match="theorem/statement">
-    <xsl:text>\begin{theorem}</xsl:text>
+<!-- Theorem Environments/Statements -->
+<!-- Statements are the place to generate environment -->
+<!-- Most information comes from parent               -->
+<!-- Proofs are written outside of environment        -->
+<xsl:template match="theorem/statement|corollary/statement|lemma/statement|proposition/statement|claim/statement|fact/statement|conjecture/statement|axiom/statement|principle/statement">
+    <xsl:text>\begin{</xsl:text>
+        <xsl:value-of select="local-name(..)" />
+    <xsl:text>}</xsl:text>
     <xsl:apply-templates select="../title" mode="environment-option" />
     <xsl:apply-templates select=".." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{theorem}&#xa;</xsl:text>
+    <xsl:text>\end{</xsl:text>
+        <xsl:value-of select="local-name(..)" />
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="corollary/statement">
-    <xsl:text>\begin{corollary}</xsl:text>
-    <xsl:apply-templates select="../title" mode="environment-option" />
-    <xsl:apply-templates select=".." mode="label"/>
-    <xsl:text>&#xa;</xsl:text>
+<!-- Proofs -->
+<!-- Conjectures, axioms, principles do not have proofs -->
+<xsl:template match="proof">
+    <xsl:text>\begin{proof}&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{corollary}&#xa;</xsl:text>
+    <xsl:text>\end{proof}&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="lemma/statement">
-    <xsl:text>\begin{lemma}</xsl:text>
-    <xsl:apply-templates select="../title" mode="environment-option" />
-    <xsl:apply-templates select=".." mode="label"/>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\end{lemma}&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="proposition/statement">
-    <xsl:text>\begin{proposition}</xsl:text>
-    <xsl:apply-templates select="../title" mode="environment-option" />
-    <xsl:apply-templates select=".." mode="label"/>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\end{proposition}&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="claim/statement">
-    <xsl:text>\begin{claim}</xsl:text>
-    <xsl:apply-templates select="../title" mode="environment-option" />
-    <xsl:apply-templates select=".." mode="label"/>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\end{claim}&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="fact/statement">
-    <xsl:text>\begin{fact}</xsl:text>
-    <xsl:apply-templates select="../title" mode="environment-option" />
-    <xsl:apply-templates select=".." mode="label"/>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\end{fact}&#xa;</xsl:text>
-</xsl:template>
-
+<!-- Definition Statement -->
+<!-- Definitions are unique, perhaps coulds consolidate into theorem structure -->
 <xsl:template match="definition/statement">
     <xsl:text>\begin{definition}</xsl:text>
     <xsl:apply-templates select="../title" mode="environment-option" />
@@ -807,61 +778,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{definition}&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="conjecture/statement">
-    <xsl:text>\begin{conjecture}</xsl:text>
-    <xsl:apply-templates select="../title" mode="environment-option" />
-    <xsl:apply-templates select=".." mode="label"/>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\end{conjecture}&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="axiom/statement">
-    <xsl:text>\begin{axiom}</xsl:text>
-    <xsl:apply-templates select="../title" mode="environment-option" />
-    <xsl:apply-templates select=".." mode="label"/>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\end{axiom}&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="principle/statement">
-    <xsl:text>\begin{principle}</xsl:text>
-    <xsl:apply-templates select="../title" mode="environment-option" />
-    <xsl:apply-templates select=".." mode="label"/>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\end{principle}&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="example">
-    <xsl:text>\begin{example}</xsl:text>
+<!-- Examples and Remarks -->
+<!-- Simpler than theorems, definitions, etc            -->
+<!-- Information comes from self, so slightly different -->
+<xsl:template match="example|remark">
+    <xsl:text>\begin{</xsl:text>
+        <xsl:value-of select="local-name(.)" />
+    <xsl:text>}</xsl:text>
     <xsl:apply-templates select="title" mode="environment-option" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::title)]"/>
-    <xsl:text>\end{example}&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="remark">
-    <xsl:text>\begin{remark}</xsl:text>
-    <xsl:apply-templates select="title" mode="environment-option" />
-    <xsl:apply-templates select="." mode="label"/>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::title)]"/>
-    <xsl:text>\end{remark}&#xa;</xsl:text>
+    <xsl:text>\end{</xsl:text>
+        <xsl:value-of select="local-name(.)" />
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="notation">
     <xsl:text>Sample notation (in a master list eventually): $</xsl:text>
     <xsl:value-of select="." />
     <xsl:text>$\par&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="proof">
-    <xsl:text>\begin{proof}&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\end{proof}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Paragraphs                         -->
@@ -881,7 +817,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Index -->
-
 <xsl:template match="index">
     <xsl:text>\index{</xsl:text>
     <xsl:apply-templates select="main" />
@@ -1243,8 +1178,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
     <xsl:text>''</xsl:text>
 </xsl:template>
-
-
 
 <!-- Sage -->
 <xsl:template match="sage">
@@ -1629,6 +1562,5 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%%   http://mathbook.pugetsound.edu   %%&#xa;</xsl:text>
     <xsl:text>%%                                    %%&#xa;</xsl:text>
 </xsl:template>
-
 
 </xsl:stylesheet>
