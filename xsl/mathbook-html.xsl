@@ -1353,10 +1353,11 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 
 <!-- Some entries of table of contents are based on a title   -->
 <!-- Others are just one-off and have language-specific names -->
+<!-- Footnotes wreck havoc with table-of-contents text        -->
 <xsl:template match="*" mode="toc-entry">
     <xsl:choose>
         <xsl:when test="title">
-            <xsl:apply-templates select="title" />
+            <xsl:apply-templates select="title/node()[not(self::fn)]" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="." mode="type-name" />

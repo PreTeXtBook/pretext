@@ -642,6 +642,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Construct the header of the subdivision -->
     <xsl:text>\</xsl:text>
     <xsl:value-of select="$level" />
+    <!-- Optional argument gets used for ToC and headers, identical but with no footnotes -->
+    <!-- http://www.tex.ac.uk/cgi-bin/texfaq2html?label=ftnsect -->
+    <xsl:text>[</xsl:text>
+    <xsl:apply-templates select="title/node()[not(self::fn)]" />
+    <xsl:text>]</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="title" />
     <xsl:text>}</xsl:text>

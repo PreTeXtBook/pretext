@@ -421,6 +421,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Long Names -->
 <!-- Simple text representations of structural elements        -->
 <!-- Type, number, title typically                             -->
+<!-- Ignore footnotes in these constructions                   -->
 <!-- Used for author's report, LaTeX typeout during processing -->
 <xsl:template match="*" mode="long-name">
     <xsl:apply-templates select="." mode="type-name" />
@@ -428,7 +429,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="number" />
     <xsl:if test="title">
         <xsl:text> </xsl:text>
-        <xsl:apply-templates select="title"/>
+        <xsl:apply-templates select="title/node()[not(self::fn)]"/>
     </xsl:if>
 </xsl:template>
 
