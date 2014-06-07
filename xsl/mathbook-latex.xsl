@@ -372,6 +372,62 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
+    <!-- Numbering Equations -->
+    <!-- See numbering-equations variable being set in mathbook-common.xsl -->
+    <xsl:if test="//men|//md">
+        <xsl:text>%% Equation Numbering&#xa;</xsl:text>
+        <xsl:text>%% Controlled by  numbering.equations.level  processing parameter&#xa;</xsl:text>
+        <xsl:text>\numberwithin{equation}{</xsl:text>
+        <xsl:call-template name="level-number-to-latex-name">
+            <xsl:with-param name="level" select="$numbering-equations" />
+        </xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <!-- Float package allows for placment [H]ere                    -->
+    <!-- Numbering happens along with theorem counter above,         -->
+    <!-- but could be done with caption package hook, see both       -->
+    <!-- New names are necessary to make "within" numbering possible -->
+    <!-- http://tex.stackexchange.com/questions/127914/custom-counter-steps-twice-when-invoked-from-caption-using-caption-package -->
+    <!-- http://tex.stackexchange.com/questions/160207/side-effect-of-caption-package-with-custom-counter                         -->
+    <xsl:if test="//figure or //table">
+        <xsl:text>%% Figures, Tables, Floats&#xa;</xsl:text>
+        <xsl:text>%% The [H]ere option of the float package fixes floats in-place,&#xa;</xsl:text>
+        <xsl:text>%% in deference to web usage, where floats are totally irrelevant&#xa;</xsl:text>
+        <xsl:text>%% We define new figure and table environments, if used&#xa;</xsl:text>
+        <xsl:text>%% Remove this package if you want figures and tables to float&#xa;</xsl:text>
+        <xsl:text>%% and rename the environments to the LaTeX standards&#xa;</xsl:text>
+        <xsl:text>%% NB: Figures and tables are numbered along with theorems, definitions, examples, etc&#xa;</xsl:text>
+        <xsl:text>%% NB: and this is accomplished with (identical) code manipulating counters in each environment&#xa;</xsl:text>
+        <xsl:text>%% NB: If floats are allowed, they may float to locations that appear "out-of-order", however&#xa;</xsl:text>
+        <xsl:text>%% NB: disabling the counter manipulation will de-synchronize numbering with HTML versions&#xa;</xsl:text>
+        <xsl:text>\usepackage{float}&#xa;</xsl:text>
+        <xsl:if test="//figure">
+            <xsl:variable name="fig-node"><figure /></xsl:variable>
+            <xsl:text>\newfloat{mbxfigure}{H}{lof}</xsl:text>
+            <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
+            <xsl:text>[</xsl:text>
+            <xsl:call-template name="level-number-to-latex-name">
+                <xsl:with-param name="level" select="$numbering-theorems" />
+            </xsl:call-template>
+            <xsl:text>]&#xa;</xsl:text>
+            <xsl:text>\floatname{mbxfigure}{</xsl:text>
+            <xsl:apply-templates select="exsl:node-set($fig-node)" mode="type-name"/>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//table">
+            <xsl:variable name="tab-node"><table /></xsl:variable>
+            <xsl:text>\newfloat{mbxtable}{H}{lot}</xsl:text>
+            <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
+            <xsl:text>[</xsl:text>
+            <xsl:call-template name="level-number-to-latex-name">
+                <xsl:with-param name="level" select="$numbering-theorems" />
+            </xsl:call-template>
+            <xsl:text>]&#xa;</xsl:text>
+            <xsl:text>\floatname{mbxtable}{</xsl:text>
+            <xsl:apply-templates select="exsl:node-set($tab-node)" mode="type-name"/>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
     <xsl:text>%% Raster graphics inclusion, wrapped figures in paragraphs&#xa;</xsl:text>
     <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
     <xsl:text>%% Colors for Sage boxes and author tools (red hilites)&#xa;</xsl:text>
@@ -1298,12 +1354,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Figures -->
 <!-- For floatation advice see                                                                            -->
 <!-- http://tex.stackexchange.com/questions/2275/keeping-tables-figures-close-to-where-they-are-mentioned -->
+<!-- Counter manipulations are a hack, see preamble comments -->
 <xsl:template match="figure">
-    <xsl:text>\begin{figure}[!htbp]&#xa;</xsl:text>
+    <xsl:text>\begin{mbxfigure}&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]"/>
+    <xsl:text>\setcounter{mbxfigure}{\value{theorem}}\stepcounter{theorem}&#xa;</xsl:text>
     <xsl:apply-templates select="caption" />
-    <xsl:text>\end{figure}&#xa;</xsl:text>
+    <xsl:text>\end{mbxfigure}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Images -->
@@ -1347,11 +1405,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A subset of the (failed) "CALS Table Model" -->
 <!-- Should be able to replace this by extant XSLT for this conversion -->
 <!-- See http://stackoverflow.com/questions/19716449/converting-xhtml-table-to-latex-using-xslt -->
+<!-- Counter manipulations are a hack, see preamble comments -->
 <xsl:template match="table">
-    <xsl:text>\begin{table}[thb]\centering&#xa;</xsl:text>
+    <xsl:text>\begin{mbxtable}&#xa;</xsl:text>
+    <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]" />
+    <xsl:text>\setcounter{mbxtable}{\value{theorem}}\stepcounter{theorem}&#xa;</xsl:text>
     <xsl:apply-templates select="caption" />
-    <xsl:text>\end{table}&#xa;</xsl:text>
+    <xsl:text>\end{mbxtable}&#xa;</xsl:text>
     </xsl:template>
 
 <!-- Unclear how to handle *multiple* tgroups in latex -->
