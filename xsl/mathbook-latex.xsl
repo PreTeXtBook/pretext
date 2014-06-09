@@ -1366,7 +1366,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="target" select="id(@ref)" />
     <!-- Check to see if the ref is any good -->
     <!-- http://www.stylusstudio.com/xsllist/200412/post20720.html -->
-    <xsl:if test="not(exsl:node-set($target)/*)">
+    <xsl:if test="not(exsl:node-set($target))">
         <xsl:message>MBX:WARNING: unresolved xref due to ref="<xsl:value-of select="@ref"/>"</xsl:message>
     </xsl:if>
     <xsl:choose>

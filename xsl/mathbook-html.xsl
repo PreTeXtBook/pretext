@@ -593,7 +593,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Save what the reference points to -->
     <xsl:variable name="target" select="id(@ref)" />
     <!-- Check to see if the ref is any good -->
-    <xsl:if test="not(exsl:node-set($target)/*)">
+    <xsl:if test="not(exsl:node-set($target))">
         <xsl:message>MBX:WARNING: unresolved xref due to ref="<xsl:value-of select="@ref"/>"</xsl:message>
     </xsl:if>
     <!-- Create what the reader sees, equation references get parentheses -->
