@@ -1015,7 +1015,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\href{</xsl:text>
             <xsl:value-of select="@href" />
             <xsl:text>}{</xsl:text>
-            <xsl:value-of select="." />
+            <xsl:apply-templates />
             <xsl:text>}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>

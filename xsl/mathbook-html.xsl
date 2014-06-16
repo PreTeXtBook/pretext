@@ -788,7 +788,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="@href" />
         </xsl:when>
         <xsl:otherwise>         
-            <xsl:value-of select="." />
+            <xsl:apply-templates />
         </xsl:otherwise>
     </xsl:choose>
     </a>
