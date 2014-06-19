@@ -284,7 +284,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An introduction is not a document node -->
 <!-- We want all the content as a summary   -->
 <xsl:template match="introduction" mode="summary-entry">
-    <xsl:apply-templates />
+    <section class="introduction">
+        <xsl:apply-templates />
+    </section>
 </xsl:template>
 
 <!-- A titlepage is a front-matter introduction   -->
