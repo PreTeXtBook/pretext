@@ -152,7 +152,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="not(self::book or self::article)">
                 <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
                 <xsl:text> </xsl:text>
-                <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+                <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
                 <xsl:text> </xsl:text>
             </xsl:if>
             <span class="title"><xsl:apply-templates select="title" /></span>
@@ -186,7 +186,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:if test="not(self::book or self::article or self::frontmatter)">
                         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
                         <xsl:text> </xsl:text>
-                        <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+                        <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
                         <xsl:text> </xsl:text>
                     </xsl:if>
                     <xsl:if test="not(self::frontmatter)">
@@ -225,7 +225,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:if test="not(self::book or self::article or self::frontmatter)">
                         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
                         <xsl:text> </xsl:text>
-                        <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+                        <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
                         <xsl:text> </xsl:text>
                     </xsl:if>
                     <xsl:if test="not(self::frontmatter)">
