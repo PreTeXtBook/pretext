@@ -157,9 +157,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
             <span class="title"><xsl:apply-templates select="title" /></span>
         </h1>
-        <!-- Need some CSS for authors at subsidiary level in collected works -->
         <xsl:if test="author">
-            <p id="byline"><span class="byline"><xsl:apply-templates select="author" mode="name-list"/></span></p>
+            <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
         </xsl:if>
         <!-- Now recurse through contents, ignoring title and author -->
         <xsl:apply-templates  select="./*[not(self::title or self::author)]"/>
@@ -193,9 +192,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <span class="title"><xsl:apply-templates select="title" /></span>
                     </xsl:if>
                 </h1>
-                <!-- Need some CSS for authors at subsidiary level in collected works -->
                 <xsl:if test="author">
-                    <p id="byline"><span class="byline"><xsl:apply-templates select="author" mode="name-list"/></span></p>
+                    <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
                 </xsl:if>
                 <!-- Recurse through contents inside enclosing section, ignore title, author -->
                 <xsl:apply-templates select="*[not(self::title or self::author)]" />
@@ -232,9 +230,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <span class="title"><xsl:apply-templates select="title" /></span>
                     </xsl:if>
                 </h1>
-                <!-- Need some CSS for authors at subsidiary level in collected works -->
                 <xsl:if test="author">
-                    <p id="byline"><span class="byline"><xsl:apply-templates select="author" mode="name-list"/></span></p>
+                    <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
                 </xsl:if>
                 <!-- Create summaries of each child node (which will be a document node) -->
                  <xsl:apply-templates select="*[not(self::title or self::author)]" mode="summary-entry" />
@@ -1226,17 +1223,15 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                         <div class="container">
                             <xsl:call-template name="brand-logo" />
                             <div class="title-container">
-                                <h1 id="title">
+                                <h1 class="title">
                                     <span class="title"><xsl:value-of select="$title" /></span>
                                     <xsl:if test="normalize-space($subtitle)">
-                                        <p id="subtitle">
-                                            <span class="subtitle">
-                                                <xsl:value-of select="$subtitle" />
-                                            </span>
+                                        <p class="subtitle">
+                                            <xsl:value-of select="$subtitle" />
                                         </p>
                                     </xsl:if>
                                 </h1>
-                                <p id="byline"><span class="byline"><xsl:value-of select="$credits" /></span></p>
+                                <p class="byline"><xsl:value-of select="$credits" /></p>
                             </div>
                         </div>
                 </div>
