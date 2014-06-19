@@ -181,6 +181,22 @@
                 <output>-1/2*I*sqrt(pi)*erf(I*x)</output>
             </sage>
 
+            <p>You can give a Sage element a <c>doctest</c> attribute, whose value mirrors the optional hash tags used in Sage doctests.  Possible values are <c>random</c>, <c>long time</c>, <c>not implemented</c>, <c>not tested</c>, <c>known bug</c>, <c>absolute</c>, <c>relative</c>, and <c>optional</c>.  The values <c>absolute</c> and <c>relative</c> refer to floating-point tolerances for equality and require a second attribute <c>tolerance</c> to specify a floating point value.  The value <c>optional</c> refers to the test requiring that an optional Sage package be present.  The name of that package should be provided in the <c>package</c> attribute.</p>
+
+            <p>The next cell is marked in the source as <c>doctest="random"</c>, and so is specified as unpredictable and not tested.  But there is some <q>sample</q> output which will appear in the <latex /> version (and always be the same).</p>
+
+            <sage doctest="random">
+                <input>random()</input>
+                <output>0.11736021338650582</output>
+            </sage>
+
+            <p>While the next cell is random, the returned value will never be more than <m>0.01</m> away from <m>12</m>, since the <c>random()</c> function stays between <m>0</m> and <m>1</m>.  So we provide <m>12.005</m> as the expected answer, but test with an absoluute tolerance of <m>\epsilon=0.006</m>.</p>
+
+            <sage doctest="absolute" tolerance="0.006">
+                <input>12 + 0.01*random()</input>
+                <output>12.005</output>
+            </sage>
+
             <p>Here is a blank Sage cell that you may use for practice and experimentation with the commands above.</p>
 
             <sage type="practice" />

@@ -74,17 +74,114 @@
 <!-- Totally kill a practice block, it is uninteresting -->
 <xsl:template match="sage[@type='practice']" />
 
+<!-- Options to doctesting -->
+<!-- A property of the Sage element,         -->
+<!-- but employed in processing input        -->
+<!-- Returns: necessary string, no adornment -->
+<xsl:template match="sage" mode="doctest-marker">
+    <xsl:if test="@doctest">
+        <xsl:choose>
+            <xsl:when test="@doctest='random'">
+                <xsl:text>random</xsl:text>
+            </xsl:when>
+            <xsl:when test="@doctest='long time'">
+                <xsl:text>long time</xsl:text>
+            </xsl:when>
+            <xsl:when test="@doctest='not implemented'">
+                <xsl:text>not implemented</xsl:text>
+            </xsl:when>
+            <xsl:when test="@doctest='not tested'">
+                <xsl:text>not tested</xsl:text>
+            </xsl:when>
+            <xsl:when test="@doctest='known bug'">
+                <xsl:text>known bug</xsl:text>
+            </xsl:when>
+            <!-- absolute and relative floating point need literal tolerance -->
+            <xsl:when test="@doctest='absolute' or @doctest='relative'">
+                <xsl:choose>
+                    <xsl:when test="@doctest='absolute'">
+                        <xsl:text>absolute</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="@doctest='relative'">
+                        <xsl:text>relative</xsl:text>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:text> tolerance </xsl:text>
+                <xsl:choose>
+                    <xsl:when test="@tolerance">
+                        <xsl:value-of select="@tolerance" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:message>MBX:WARNING: '<xsl:value-of select="@doctest" /> tolerance' Sage doctest needs 'tolerance=' attribute</xsl:message>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <!-- 'optional' indicates an optional package is needed for the test -->
+            <xsl:when test="@doctest='optional'">
+                <xsl:text>optional</xsl:text>
+                <xsl:choose>
+                    <xsl:when test="@package">
+                        <xsl:text>: </xsl:text>
+                        <xsl:value-of select="@package" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:message>MBX:WARNING: 'optional' Sage doctest missing package, supply a 'package=' attribute</xsl:message>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:if>
+</xsl:template>
+
+
 <!-- Sanitize input block       -->
 <!-- Add in 4-space indentation -->
-<!-- and Sage prompts           -->
+<!-- and Sage prompts, then     -->
+<!-- add Sage doctest markers   -->
 <xsl:template match="input">
-    <xsl:call-template name="prepend-prompt">
-        <xsl:with-param name="text">
-            <xsl:call-template name="sanitize-sage" >
-                <xsl:with-param name="raw-sage-code" select="." />
-            </xsl:call-template>
-        </xsl:with-param>
-    </xsl:call-template>
+    <xsl:variable name="input-block">
+        <xsl:call-template name="prepend-prompt">
+            <xsl:with-param name="text">
+                <xsl:call-template name="sanitize-sage" >
+                    <xsl:with-param name="raw-sage-code" select="." />
+                </xsl:call-template>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:variable>
+    <!-- Construct an option marker, perhaps empty -->
+    <xsl:variable name="doctest-marker">
+        <xsl:apply-templates select=".." mode="doctest-marker" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$doctest-marker!=''">
+            <!-- Locate pieces relative to: end of first line of last input command -->
+            <xsl:variable name="before-last-sage">
+                <xsl:call-template name="substring-before-last">
+                    <xsl:with-param name="input"  select="$input-block" />
+                    <xsl:with-param name="substr" select="'sage:'" />
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:variable name="after-last-sage">
+                <xsl:call-template name="substring-after-last">
+                    <xsl:with-param name="input"  select="$input-block" />
+                    <xsl:with-param name="substr" select="'sage:'" />
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:variable name="before-eol" select="substring-before($after-last-sage, '&#xa;')" />
+            <xsl:variable name="after-eol"  select="substring-after($after-last-sage, '&#xa;')" />
+            <!-- Back in its box, with markers and doctest marker -->
+            <xsl:value-of select="$before-last-sage" />
+            <xsl:text>sage:</xsl:text>
+            <xsl:value-of select="$before-eol" />
+            <xsl:text>   # </xsl:text>
+            <xsl:value-of select="$doctest-marker" />
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:value-of select="$after-eol" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$input-block" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Sanitize output block      -->
@@ -101,7 +198,6 @@
 </xsl:template>
 
 <!-- Doctest specific template, others are in common XSL file -->
-
 <xsl:template name="prepend-prompt">
     <xsl:param name="text" />
     <!-- Just quit when string becomes empty -->
