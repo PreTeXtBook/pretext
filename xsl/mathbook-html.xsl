@@ -92,23 +92,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Authors and editors with affiliations (eg, on title page) -->
 <xsl:template match="author|editor" mode="full-info">
-    <xsl:apply-templates select="personname" />
-    <xsl:if test="self::editor">
-        <xsl:text>, </xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="generic" select="'editor'" />
-        </xsl:call-template>
-    </xsl:if>
-    <xsl:if test="department">
-        <br /><xsl:apply-templates select="department" />
-    </xsl:if>
-    <xsl:if test="department">
-        <br /><xsl:apply-templates select="institution" />
-    </xsl:if>
-    <xsl:if test="department">
-        <br /><xsl:apply-templates select="email" />
-    </xsl:if>
-    <br /><br />
+    <p>
+        <xsl:apply-templates select="personname" />
+        <xsl:if test="self::editor">
+            <xsl:text>, </xsl:text>
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="generic" select="'editor'" />
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:if test="department|institution|email">
+            <xsl:if test="department">
+                <br /><xsl:apply-templates select="department" />
+            </xsl:if>
+            <xsl:if test="institution">
+                <br /><xsl:apply-templates select="institution" />
+            </xsl:if>
+            <xsl:if test="email">
+                <br /><xsl:apply-templates select="email" />
+            </xsl:if>
+        </xsl:if>
+    </p>
 </xsl:template>
 
 
@@ -180,20 +183,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:with-param>
         <xsl:with-param name="content">
             <!-- Heading, div for subdivision that is this page -->
+            <!-- frontmatter/titlepage is exceptional           -->
              <section class="{local-name(.)}">
-                <h1 class="heading">
-                    <xsl:if test="not(self::book or self::article or self::frontmatter)">
-                        <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-                        <xsl:text> </xsl:text>
-                        <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
-                        <xsl:text> </xsl:text>
-                    </xsl:if>
-                    <xsl:if test="not(self::frontmatter)">
+                <xsl:if test="not(self::frontmatter)">
+                    <h1 class="heading">
+                        <!-- Book 1 or Article 1 is silly -->
+                        <xsl:if test="not(self::book or self::article )">
+                            <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+                            <xsl:text> </xsl:text>
+                            <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
+                            <xsl:text> </xsl:text>
+                        </xsl:if>
                         <span class="title"><xsl:apply-templates select="title" /></span>
+                    </h1>
+                    <!-- Subdivisions may have individual authors -->
+                    <xsl:if test="author">
+                        <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
                     </xsl:if>
-                </h1>
-                <xsl:if test="author">
-                    <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
                 </xsl:if>
                 <!-- Recurse through contents inside enclosing section, ignore title, author -->
                 <xsl:apply-templates select="*[not(self::title or self::author)]" />
@@ -283,6 +289,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- A titlepage is a front-matter introduction   -->
 <!-- We always handle it the same, summary or not -->
+<!-- So this just calls the default template -->
 <xsl:template match="titlepage" mode="summary-entry">
     <xsl:apply-templates select="."/>
 </xsl:template>
@@ -291,15 +298,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="todo" mode="summary-entry" />
 
 <!-- Title Page -->
+<!-- A frontmatter has no title, so we reproduce the            -->
+<!-- title of the work (book or article) here                   -->
+<!-- We add other material prior to links to major subdivisions -->
 <xsl:template match="titlepage">
-    <h1 class="heading" style="text-align:center;">
-        <span class="title"><xsl:apply-templates select="//book/title" /></span>
-        <span class="title"><xsl:apply-templates select="//article/title" /></span>
+    <h1 class="heading">
+        <span class="title"><xsl:apply-templates select="/mathbook/book/title|/mathbook/article/title" /></span>
     </h1>
-    <div style="text-align:center;">
-        <xsl:apply-templates select="/mathbook/docinfo/author" mode="full-info"/>
-        <xsl:apply-templates select="/mathbook/docinfo/editor" mode="full-info"/>
-    </div>
+    <address class="contributors">
+        <xsl:apply-templates select="/mathbook/docinfo/author|/mathbook/docinfo/editor" mode="full-info"/>
+    </address>
 </xsl:template>
 
 <!-- Introductions and Conclusions -->
