@@ -276,6 +276,44 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
+<!-- Substrings at last markers               -->
+<!-- XSLT Cookbook, 2nd Edition               -->
+<!-- Recipe 2.4, nearly verbatim, reformatted -->
+<xsl:template name="substring-before-last">
+    <xsl:param name="input" />
+    <xsl:param name="substr" />
+    <xsl:if test="$substr and contains($input, $substr)">
+        <xsl:variable name="temp" select="substring-after($input, $substr)" />
+        <xsl:value-of select="substring-before($input, $substr)" />
+        <xsl:if test="contains($temp, $substr)">
+            <xsl:value-of select="$substr" />
+            <xsl:call-template name="substring-before-last">
+                <xsl:with-param name="input" select="$temp" />
+                <xsl:with-param name="substr" select="$substr" />
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template name="substring-after-last">
+    <xsl:param name="input"/>
+    <xsl:param name="substr"/>
+    <!-- Extract the string which comes after the first occurrence -->
+    <xsl:variable name="temp" select="substring-after($input,$substr)"/>
+    <xsl:choose>
+        <!-- If it still contains the search string then recursively process -->
+        <xsl:when test="$substr and contains($temp,$substr)">
+            <xsl:call-template name="substring-after-last">
+                <xsl:with-param name="input" select="$temp"/>
+                <xsl:with-param name="substr" select="$substr"/>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$temp"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- Date and Time Functions -->
 <!-- http://stackoverflow.com/questions/1437995/how-to-convert-2009-09-18-to-18th-sept-in-xslt -->
 <!-- http://remysharp.com/2008/08/15/how-to-default-a-variable-in-xslt/ -->
