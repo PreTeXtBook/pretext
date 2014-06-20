@@ -1091,6 +1091,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Various customizations, with more typical at end -->
 <!-- TODO: make hidden autoeval cells link against sage-compute cells -->
 
+<!-- Type: "invisible"; to doctest, but never show to a reader -->
+<xsl:template match="sage[@type='invisible']" />
+
 <!-- Type: "display"; input portion as uneditable, unevaluatable -->
 <xsl:template match="sage[@type='display']">
     <div class="sage-display">

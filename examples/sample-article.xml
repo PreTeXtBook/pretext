@@ -201,6 +201,22 @@
 
             <sage type="practice" />
 
+            <p>You can make Sage blocks which are of <c>type="invisible"</c>, which will never be shown to a reader, but which get doctested.  Why do this?  If some code produces an error, and you hope it is fixed someday, use an invisible block to raise the error.  Once fixed, the doctest will fail, and you can adjust your commentary to suit.  There is such a block right now, <em>but</em> you will need to go to the source to see it.</p>
+
+            <!--
+            This code raises a "not implemented" error.
+            Maybe it'll never change? It is not important -
+            but let me know if it changes.
+            -->
+            <sage type="invisible">
+                <input>graphs(augment='vertices').next()</input>
+                <output>
+                Traceback (most recent call last):
+                ...
+                NotImplementedError
+                </output>
+            </sage>
+
         </section>
 
         <!--

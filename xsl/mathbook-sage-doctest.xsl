@@ -87,9 +87,9 @@
 <!-- Totally kill a practice block, it is uninteresting -->
 <xsl:template match="sage[@type='practice']" />
 
-<!-- "Normal" Sage blocks, including invisible -->
-<!-- Form doctring/ReST verbatim block         -->
-<!-- for one input/output pair                 -->
+<!-- "Normal" Sage blocks, including "invisible" -->
+<!-- Form doctring/ReST verbatim block           -->
+<!-- for one input/output pair                   -->
 <xsl:template match="sage">
     <xsl:text>~~~~~~~~~~~~~~~~~~~~~~ ::&#xA;&#xA;</xsl:text>
     <xsl:apply-templates select="input" />

@@ -1184,7 +1184,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>''</xsl:text>
 </xsl:template>
 
-<!-- Sage -->
+<!-- Sage Cells -->
+
+<!-- Type: "invisible"; to doctest, but never show to a reader -->
+<xsl:template match="sage[@type='invisible']" />
+
+<!-- Type: "practice"; not much point to show to a reader -->
+<xsl:template match="sage[@type='practice']" />
+
+<!-- Type: "copy"; used for replays in HTML -->
+<!-- Just handle the same way as others     -->
+<xsl:template match="sage[@copy]">
+    <xsl:apply-templates select="id(@copy)" />
+</xsl:template>
+
+<!-- Types: "full" (default), "display" -->
 <xsl:template match="sage">
     <xsl:apply-templates select="input" />
     <xsl:if test="output">
