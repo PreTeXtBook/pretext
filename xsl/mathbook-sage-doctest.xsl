@@ -230,11 +230,11 @@
             <!-- could be important content of triply-quoted strings? -->
             <!-- no harm if really just spacing at totally out-dented level? -->
             <xsl:when test="not(string-length($first-line))">
-                <xsl:text>    ...   </xsl:text>
+                <xsl:text>    ....: </xsl:text>
             </xsl:when>
             <!-- leading blank indicates continuation -->
             <xsl:when test="substring($first-line,1,1)=' '">
-                <xsl:text>    ...   </xsl:text>
+                <xsl:text>    ....: </xsl:text>
             </xsl:when>
             <!-- otherwise, totally outdented, needs sage prompt -->
             <xsl:otherwise>
