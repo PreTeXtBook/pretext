@@ -335,6 +335,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
+<!-- Introductions and Conclusions -->
+<!-- Simple containers, allowed before and after       -->
+<!-- explicit subdivisions, to introduce or summarize  -->
+<!-- No title allowed, typically just a few paragraphs -->
+<xsl:template match="introduction|conclusion">
+    <section class="{local-name(.)}">
+        <xsl:apply-templates />
+    </section>
+</xsl:template>
 
 <!-- Theorem-Like, plus associated Proofs                                   -->
 <!-- <statement>s and <proof>s are sequences of paragraphs and other blocks -->

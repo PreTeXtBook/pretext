@@ -625,6 +625,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="local-name(.)='appendix'">
                 <xsl:text>chapter</xsl:text>
             </xsl:when>
+            <!-- Collections of exercises and reference can happen at any level, so need correct LaTeX name -->
             <xsl:when test="local-name(.)='exercises' or local-name(.)='references'">
                 <xsl:apply-templates select="." mode="latex-level" />
             </xsl:when>
@@ -668,6 +669,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="local-name(.)='exercises' or local-name(.)='references'">
         <xsl:text>\end{enumerate}&#xa;</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<!-- Introductions and Conclusions -->
+<!-- Simple containers, allowed before and after       -->
+<!-- explicit subdivisions, to introduce or summarize  -->
+<!-- No title allowed, typically just a few paragraphs -->
+<xsl:template match="introduction|conclusion">
+    <xsl:apply-templates />
 </xsl:template>
 
 <!-- Theorems, Proofs, Definitions, Examples, Exercises -->
