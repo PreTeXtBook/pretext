@@ -117,7 +117,7 @@
             "ref" to match the cross-reference use.
             Citations render as knowls on web pages.
             -->
-            <p>You will find almost nothing about all this in the article <cite ref="bib-lay-article" />, nor in the book <cite ref="bib-judson-AATA" />, since they belong in some other article, but we can cite them out-of-order for practice anyway.</p>
+            <p>You will find almost nothing about all this in the article <cite ref="biblio-lay-article" />, nor in the book <cite ref="biblio-judson-AATA" />, since they belong in some other article, but we can cite them out-of-order for practice anyway.</p>
 
             <!--
             There are various tools for authors
@@ -500,17 +500,25 @@
             <title>Further Reading</title>
 
             <introduction>
-                <p>In a longer work you might wish to have some references on a per-chapter basis, or similar.  You can make a <q>references</q> subdivision anywhere to hold bibliographic items, and you can reference the items like any other item.  For example, we can cite the article below <cite ref="biblio-beezer-fcla" />.</p>
+                <p>In a longer work you might wish to have some references on a per-chapter basis, or similar.  You can make a <q>references</q> subdivision anywhere to hold bibliographic items, and you can reference the items like any other item.  For example, we can cite the article below <cite ref="biblio-beezer-fcla" detail="Chapter R" />, included an indication that a specific chapter may be relevant. Notice that the list may be prefaced with an introduction, and followed by a conclusion.</p>
             </introduction>
 
             <references>
                 <title>References</title>
+
+                <introduction>
+                    <p>These items are united in that they are both about linear algebra, but one is a textbook and the other an article.</p>
+                </introduction>
 
                 <biblio type="raw" xml:id="biblio-strang-article">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio> 
 
                 <biblio type="raw" xml:id="biblio-beezer-fcla">Robert A. Beezer, <title>A First Course in Linear Algebra</title>, 3rd Edition, Congruent Press, 2012.
                 <note><p>An online, open-source offering.</p></note>
                 </biblio>
+
+                <conclusion>
+                    <p>This is a conclusion, which has not been used very much in this sample.  Did you see the the second reference above has a short annotation?  So you can make annotated bibliographies easily.</p>
+                </conclusion>
             </references>
 
         </section>

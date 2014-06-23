@@ -604,6 +604,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="content">
             <xsl:text>[</xsl:text>
             <xsl:apply-templates select="id(@ref)" mode="number" />
+            <xsl:if test="@detail">
+                <xsl:text>, </xsl:text>
+                <xsl:apply-templates select="@detail" />
+            </xsl:if>
             <xsl:text>]</xsl:text>
         </xsl:with-param>
     </xsl:call-template>

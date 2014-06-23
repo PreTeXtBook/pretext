@@ -674,6 +674,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Exceptional handling for exercises, references needs to be abstracted away -->
     <xsl:apply-templates select="introduction" />
     <!-- Exercises, references are in managed description lists -->
+    <xsl:if test="local-name(.)='references'">
+        <xsl:text>%% If this is a top-level references&#xa;</xsl:text>
+        <xsl:text>%%   you can replace with "thebibliography" environment&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="local-name(.)='exercises' or local-name(.)='references'">
         <xsl:text>\begin{description}&#xa;</xsl:text>
     </xsl:if>
@@ -1399,23 +1403,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These can be "provisional"          -->
 <!-- as a tool for drafts, otherwise "ref" to -->
 <!-- an xml:id elsewhere                      -->
-<!-- Warnings at command-line for mess-ups are in common file -->
-<!-- TODO: make citation references blue (not green box) in hyperref -->
-<!-- TODO: make citations work like xrefs                            -->
+<!-- Warnings at command-line for mess-ups are in common file  -->
+<!-- Obtain enclosing section with  select="$target/parent::*" -->
+<!-- TODO: make citations work like xrefs                      -->
 <xsl:template match="cite[@ref]">
     <xsl:variable name="target" select="id(@ref)" />
-    <xsl:if test="$target/parent::bibliography">
-        <xsl:text>\cite{</xsl:text>
-        <xsl:apply-templates select="$target" mode="xref-identifier" />
+        <xsl:text>\cite</xsl:text>
+        <xsl:if test="@detail">
+            <xsl:text>[</xsl:text>
+            <xsl:apply-templates select="@detail" />
+            <xsl:text>]</xsl:text>
+        </xsl:if>
+        <xsl:text>{</xsl:text>
+        <xsl:apply-templates select="$target" mode="internal-id" />
         <xsl:text>}</xsl:text>
-    </xsl:if>
-    <!-- We allow biblio items in ordered lists, other than bibliography -->
-    <!-- So we have to roll our own citations as \ref (cross-references) -->
-    <xsl:if test="$target/parent::ol">
-        <xsl:text>[\ref{</xsl:text>
-        <xsl:apply-templates select="$target" mode="xref-identifier" />
-        <xsl:text>}]</xsl:text>
-    </xsl:if>
 </xsl:template>
 
 <!-- LaTeX references equations differently than theorems, etc -->
@@ -1469,66 +1470,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- References/Bibliography -->
+<!-- References Sections -->
+<!-- We use description lists to manage bibliographies,  -->
+<!-- and \bibitem seems comfortable there, so our source -->
+<!-- is nearly compatible with the usual usage           -->
+<!-- TODO: use enumitem package to make bibitems look as expected -->
 
-<!-- Enclosing structure of main bibliography                      -->
-<!-- Use LaTeX structure for top-level, to make compatible output  -->
-<!-- thebibliography environment needs count of bibitem's          -->
-<!-- to set width for numbering                                    -->
-<!-- We overide LaTeX's "References" to support other languages    -->
-<!-- http://www.latex-community.org/forum/viewtopic.php?f=5&t=4089 -->
-<!-- http://www.tex.ac.uk/cgi-bin/texfaq2html?label=fixnam         -->
-<xsl:template match="book/references">
-    <xsl:text>\renewcommand{\bibname}{</xsl:text>
-    <xsl:apply-templates select="title"/>
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\begin{thebibliography}{</xsl:text>
-    <xsl:value-of select="count(biblio)"/>
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::title)]"/>
-    <xsl:text>\end{thebibliography}&#xa;</xsl:text>
+<!-- As an item of a description list, but       -->
+<!-- compatible with thebibliography environment -->
+<xsl:template match="biblio[@type='raw']">
+    <xsl:text>\bibitem</xsl:text>
+    <!-- "label" something like Jud99           -->
+    <!-- Or supply the actual number by default -->
+    <xsl:text>[</xsl:text>
+    <xsl:choose>
+        <xsl:when test="label">
+            <xsl:apply-templates select="label" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="number" />
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>]</xsl:text>
+    <!-- "key" for cross-referencing -->
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:text>} </xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
-<!-- Entirely similar, but for renew'ed command name -->
-<xsl:template match="article/references">
-    <xsl:text>\renewcommand{\refname}{</xsl:text>
-    <xsl:apply-templates select="title"/>
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\begin{thebibliography}{</xsl:text>
-    <xsl:value-of select="count(biblio)"/>
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::title)]"/>
-    <xsl:text>\end{thebibliography}&#xa;</xsl:text>
-</xsl:template>
-<!-- References at other levels are just ordered lists in a subdivision     -->
-<!-- This gets handled in the generic sectioning code, just like exercises  -->
 
 <!-- Raw Bibliographic Entry Formatting              -->
 <!-- Markup really, not full-blown data preservation -->
-
-<!-- As a TeX \bibitem in top-level bibliography-->
-<xsl:template match="book/references/biblio[@type='raw']|article/references/biblio[@type='raw']">
-    <xsl:text>\bibitem{</xsl:text>
-    <xsl:apply-templates select="." mode="xref-identifier"/>
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
-<!-- As an item of a plain numbered list, for subsidiary references -->
-<xsl:template match="biblio[@type='raw']">
-    <xsl:text>\item</xsl:text>
-    <xsl:apply-templates select="." mode="label"/>
-    <xsl:apply-templates />
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Bibliographic items can have annotations            -->
-<!-- Presumably just paragraphs, nothing too complicated -->
-<!-- We first close off the citation itself -->
-<xsl:template match="biblio/note">
-    <xsl:text>\par </xsl:text>
-    <xsl:apply-templates />
-</xsl:template>
 
 <!-- Title in italics -->
 <xsl:template match="biblio[@type='raw']/title">
@@ -1555,10 +1528,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
-
+<!-- Annotated Bibliography Items -->
+<!--   Presumably just paragraphs, nothing too complicated -->
+<!--   We first close off the citation itself -->
+<xsl:template match="biblio/note">
+    <xsl:text>\par </xsl:text>
+    <xsl:apply-templates />
+</xsl:template>
 
 <!-- Level names in LaTeX -->
-
 <xsl:template match="*" mode="latex-level">
     <xsl:variable name="level">
         <xsl:apply-templates select="." mode="level" />
