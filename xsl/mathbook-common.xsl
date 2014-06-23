@@ -65,6 +65,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="definition axiom principle" />
 <xsl:strip-space elements="statement" />
 <xsl:strip-space elements="example remark exercise hint solution" />
+<xsl:strip-space elements="exercisegroup" />
 <xsl:strip-space elements="note" />  <!-- TODO: biblio, record, etc too -->
 <xsl:strip-space elements="ul ol dl" />
 <xsl:strip-space elements="md mdn" />

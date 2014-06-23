@@ -659,16 +659,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="author" mode="name-list"/>
         <xsl:text>}\par\bigskip&#xa;</xsl:text>
     </xsl:if>
-    <!-- Exercises, references are in a numbered list -->
+    <!-- Exceptional handling for exercises, references needs to be abstracted away -->
+    <xsl:apply-templates select="introduction" />
+    <!-- Exercises, references are in managed description lists -->
     <xsl:if test="local-name(.)='exercises' or local-name(.)='references'">
-        <xsl:text>\begin{enumerate}&#xa;</xsl:text>
+        <xsl:text>\begin{description}&#xa;</xsl:text>
     </xsl:if>
-    <!-- Process the contents -->
-    <xsl:apply-templates select="*[not(self::title or self::author)]"/>
-    <!-- Exercises, references are in a list -->
+    <!-- Process the remaining contents -->
+    <xsl:apply-templates select="*[not(self::title or self::author or self::introduction or self::conclusion)]"/>
+    <!-- Exercises, references are in managed description lists -->
     <xsl:if test="local-name(.)='exercises' or local-name(.)='references'">
-        <xsl:text>\end{enumerate}&#xa;</xsl:text>
+        <xsl:text>\end{description}&#xa;</xsl:text>
     </xsl:if>
+    <xsl:apply-templates select="conclusion" />
 </xsl:template>
 
 <!-- Introductions and Conclusions -->
@@ -718,14 +721,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{exercise}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Exercise Group -->
+<!-- We interrupt a description list with short commentary, -->
+<!-- typically instructions for a list of similar exercises -->
+<!-- Commentary goes in an introduction and/or conclusion   -->
+<xsl:template match="exercisegroup">
+    <xsl:if test="introduction">
+        <xsl:text>\end{description}&#xa;</xsl:text>
+        <xsl:apply-templates select="introduction" />
+        <xsl:text>\begin{description}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="exercise"/>
+    <xsl:if test="conclusion">
+        <xsl:text>\end{description}&#xa;</xsl:text>
+        <xsl:apply-templates select="conclusion" />
+        <xsl:text>\begin{description}&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <!-- An exercise in an "exercises" subdivision            -->
-<!-- is a list item in an enumerated list                 -->
+<!-- is a list item in a description list                 -->
 <!-- Assume solution ends with non-blank-line and newline -->
-<!-- TODO: Solution and hint, switches-->
-<xsl:template match="exercises//exercise">
-    <xsl:text>\item</xsl:text>
-    <xsl:apply-templates select="." mode="label"/>
-    <xsl:text>&#xa;</xsl:text>
+<!-- TODO: Implement solution and hint switches for user  -->
+<!-- TODO, allow killing statements for hint sections, etc? -->
+<xsl:template match="exercises/exercise|exercisegroup/exercise">
+    <xsl:text>\item[</xsl:text>
+    <xsl:apply-templates select="." mode="number" />
+    <xsl:text>.] </xsl:text>
     <xsl:apply-templates select="statement"/>
     <xsl:apply-templates select="hint"/>
     <xsl:apply-templates select="solution"/>

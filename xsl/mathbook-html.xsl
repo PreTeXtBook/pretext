@@ -414,7 +414,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </article>
 </xsl:template>
 
-<!-- Solutions are include by default switch, could be knowls -->
+<!-- Exercise Group -->
+<!-- We interrupt a list of exercises with short commentary, -->
+<!-- typically instructions for a list of similar exercises  -->
+<!-- Commentary goes in an introduction and/or conclusion    -->
+<xsl:template match="exercisegroup">
+    <div class="exercisegroup">
+        <xsl:apply-templates />
+    </div>
+</xsl:template>
+
+<!-- Solutions are included by default switch, could be knowls -->
 <xsl:template match="exercise">
     <xsl:variable name="xref">
         <xsl:apply-templates select="." mode="internal-id" />
@@ -430,11 +440,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         </h5>
         <xsl:apply-templates select="statement" />
+        <xsl:apply-templates select="hint" />
+        <xsl:apply-templates select="solution" />
     </article>
-    <xsl:apply-templates select="solution" />
 </xsl:template>
 
-<xsl:template match="exercise/solution">
+<xsl:template match="exercise/hint|exercise/solution">
     <xsl:apply-templates select="." mode="type-name" />
     <xsl:text>. </xsl:text>
     <xsl:apply-templates />
