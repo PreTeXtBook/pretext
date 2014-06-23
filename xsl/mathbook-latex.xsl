@@ -35,7 +35,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!--  -->
-<!-- Fontsize: 10pt, 11pt, or 12pt -->
+<!-- LaTeX executable, "engine"                       -->
+<!-- pdflatex is default, xelatex for Unicode support -->
+<!-- N.B. This has no effect, and may never.  xelatex support is automatic -->
+<xsl:param name="latex.engine" select="'pdflatex'" />
+<!--  -->
+<!-- Fontsize: 10pt, 11pt, or 12pt           -->
 <!-- extsizes, memoir class offer more sizes -->
 <xsl:param name="latex.font.size" select="'10pt'" />
 <!--  -->
@@ -57,6 +62,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (1) LaTeX's draft mode                        -->
 <!-- (2) Crop marks on letter paper, centered      -->
 <!--     presuming geometry sets smaller page size -->
+<!--     with paperheight, paperwidth              -->
 <xsl:param name="latex.draft" select="'no'"/>
 <!--  -->
 <!-- Preamble insertions                    -->
@@ -254,6 +260,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.geometry" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
+    <xsl:text>%% For unicode character support, use the "xelatex" executable&#xa;</xsl:text>
+    <xsl:text>%% If never using xelatex, the next three lines can be removed&#xa;</xsl:text>
+    <xsl:text>\usepackage{ifxetex}&#xa;</xsl:text>
+    <!-- latex ifthen package, with \boolean{xetex} is option -->
+    <xsl:text>\ifxetex\usepackage{xltxtra}\fi&#xa;</xsl:text>
     <xsl:text>%% Symbols, align environment, bracket-matrix&#xa;</xsl:text>
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
     <xsl:text>\usepackage{amssymb}&#xa;</xsl:text>
@@ -395,8 +406,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Package for precise image placement (for logos on pages)&#xa;</xsl:text>
         <xsl:text>\usepackage{eso-pic}&#xa;</xsl:text>
     </xsl:if>
+    <xsl:text>%% hyperref driver does not need to be specified&#xa;</xsl:text>
+    <xsl:text>\usepackage{hyperref}&#xa;</xsl:text>
     <xsl:text>%% Hyperlinking in PDFs, all links solid and blue&#xa;</xsl:text>
-    <xsl:text>\usepackage[pdftex]{hyperref}&#xa;</xsl:text>
     <xsl:text>\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
     <xsl:text>\hypersetup{pdftitle={</xsl:text>
     <xsl:apply-templates select="title" />

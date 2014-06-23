@@ -635,6 +635,64 @@
         A "preview" XSL transform to HTML could be especially useful.
         -->
 
+        <section xml:id="section-internationalization">
+            <title>Internationalization</title>
+
+            <p>Accented characters and different alphabets may be entered directly into your source file.  How you do this is dependent on your operating system and is outside the scope of our documentation.  You can cut/paste from the source of this document for initial testing and experimentation.</p>
+
+            <p>Usage is simple: process your <latex /> output with the <c>xelatex</c> executable rather than <c>pdflatex</c>.  Adjustment in your <latex /> preamble will take place automatically.  For HTML ouput, your browser will be responsible for displaying the characters.  None of this has been tested thoroughly, so please send reports of failures or successful modifications.</p>
+
+            <p>Here are some sample characters from Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url>, which seem to be available in a default TeXLive installation.  The sample entries below will mostly be empty if you do not process this file with <c>xelatex</c>.</p>
+
+            <table xml:id="table-unicode-samples">
+                <tgroup cols="4" align="left">
+                    <thead>
+                        <row><entry>Name</entry><entry>Range</entry><entry>Samples</entry><entry>LaTeX</entry></row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>Latin Extended-A</entry>
+                            <entry><c>U+0100</c> <ndash /> <c>U+017F</c></entry>
+                            <entry>Ą ą Ĳ ĳ</entry>
+                            <entry>TeXLive</entry>
+                        </row>
+                        <row>
+                            <entry>Latin Extended Additional</entry>
+                            <entry><c>U+1E00</c> <ndash /> <c>U+1EFF</c></entry>
+                            <entry>Ḁ Ẁ Ặ ỳ</entry>
+                            <entry><m>\approx</m>TeXLive</entry>
+                        </row>
+                        <row>
+                            <entry>Cyrillic</entry>
+                            <entry><c>U+0400</c> <ndash /> <c>U+04FF</c></entry>
+                            <entry>Љ Щ щ Ӄ</entry>
+                            <entry>polyglossia</entry>
+                        </row>
+                        <row>
+                            <entry>Arabic</entry>
+                            <entry><c>U+0600</c> <ndash /> <c>U+06FF</c></entry>
+                            <entry>؟ ب حٍ ۳</entry>
+                            <entry>polyglossia</entry>
+                        </row>
+                        <row>
+                            <entry>General Punctuation</entry>
+                            <entry><c>U+2000</c> <ndash /> <c>U+206F</c></entry>
+                            <entry>— “ ‰ ※</entry>
+                            <entry>TeXLive</entry>
+                        </row>
+                        <row>
+                            <entry>Letterlike Symbols</entry>
+                            <entry><c>U+2100</c> <ndash /> <c>U+214F</c></entry>
+                            <entry>℀ ℃ № ™</entry>
+                            <entry><m>\approx</m>TeXLive</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            <caption>Sample Unicode Characters</caption>
+            </table>
+
+        </section>
+
         <!-- Bibliography/References can appear anywhere -->
 
         <references>
