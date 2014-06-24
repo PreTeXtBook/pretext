@@ -284,6 +284,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="/mathbook//term">
         <xsl:text>\newcommand{\terminology}[1]{\textbf{#1}}&#xa;</xsl:text>
     </xsl:if>
+    <xsl:text>%% Subdivision Numbering, Chapters, Sections, Subsections, etc&#xa;</xsl:text>
+    <xsl:text>%% Subdivision numbers may be turned off at some level ("depth")&#xa;</xsl:text>
+    <xsl:text>%% The latex default is 3.  If a larger number is present here, then&#xa;</xsl:text>
+    <xsl:text>%% removing this command may make some cross-references ambiguous&#xa;</xsl:text>
+    <xsl:text>%% The variable $numbering-maxlevel is checked for consistency in the common XSL file&#xa;</xsl:text>
+    <xsl:text>\setcounter{secnumdepth}{</xsl:text>
+        <xsl:value-of select="$numbering-maxlevel" />
+    <xsl:text>}&#xa;</xsl:text>
     <!-- Could condition following on existence of any amsthm environment -->
     <xsl:text>%% Environments with amsthm package&#xa;</xsl:text>
     <xsl:text>%% Theorem-like enviroments in "plain" style, with or without proof&#xa;</xsl:text>

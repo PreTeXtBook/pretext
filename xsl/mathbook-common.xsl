@@ -64,6 +64,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Level where footnote numbering resets                                -->
 <!-- For example, "2" would be sections in books, subsections in articles -->
 <xsl:param name="numbering.footnotes.level" select="''" />
+<!-- Last level where subdivision (section) numbering takes place     -->
+<!-- For example, "2" would mean subsections of a book are unnumbered -->
+<!-- N.B.: the levels above cannot be numerically larger              -->
+<xsl:param name="numbering.maximum.level" select="''" />
 
 <!-- Strip whitespace text nodes from container elements                    -->
 <!-- Improve source readability with whitespace control in text output mode -->
@@ -154,6 +158,51 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="/mathbook/memo">0</xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Footnote numbering level not determined</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- User-supplied Numbering for Maximum Level    -->
+<!-- Respect switch, or provide sensible defaults -->
+<xsl:variable name="numbering-maxlevel">
+    <xsl:variable name="max-feasible">
+        <xsl:choose>
+            <xsl:when test="/mathbook/book">4</xsl:when>
+            <xsl:when test="/mathbook/article">3</xsl:when>
+            <xsl:when test="/mathbook/letter">0</xsl:when>
+            <xsl:when test="/mathbook/memo">0</xsl:when>
+            <xsl:otherwise>
+                <xsl:message>MBX:BUG: New document type for maximum level defaults</xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- If not provided, try the biggest possible for consistency -->
+    <xsl:variable name="candidate">
+        <xsl:choose>
+            <xsl:when test="$numbering.maximum.level = ''">
+                <xsl:value-of select="$max-feasible" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$numbering.maximum.level" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$candidate &lt; $numbering-theorems">
+            <xsl:message terminate="yes">MBX:ERROR: theorem numbering level cannot exceed sectioning level</xsl:message>
+        </xsl:when>
+        <xsl:when test="$candidate &lt; $numbering-equations">
+            <xsl:message terminate="yes">MBX:ERROR: equation numbering level cannot exceed sectioning level</xsl:message>
+        </xsl:when>
+        <xsl:when test="$candidate &lt; $numbering-footnotes">
+            <xsl:message terminate="yes">MBX:ERROR: footnote numbering level cannot exceed sectioning level</xsl:message>
+        </xsl:when>
+        <xsl:when test="$candidate &gt; $max-feasible">
+            <xsl:message terminate="yes">MBX:ERROR: sectioning level exceeds maximum possible for this document (<xsl:value-of select="$max-feasible" />)</xsl:message>
+        </xsl:when>
+        <!-- Survived the gauntlet, spit it out candidate as $numbering-maxlevel -->
+        <xsl:otherwise>
+            <xsl:value-of select="$candidate" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -605,10 +654,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Numbering Structural Subdivisions -->
-<!-- A structural node just gets its structural number,           -->
-<!-- there is no truncation (can just not number at lower levels) -->
+<!-- A structural node just gets its structural number,              -->
+<!-- there is no truncation (can just not number at lower levels)    -->
+<!-- The variable  number-maxlevel  controls absence at lower levels -->
 <xsl:template match="chapter|appendix|section|subsection|subsubsection|references|exercises" mode="number">
-    <xsl:apply-templates select="." mode="structural-number" />
+    <xsl:variable name="level">
+        <xsl:apply-templates select="." mode="level" />
+    </xsl:variable>
+    <xsl:if test="$level &lt;= $numbering-maxlevel">
+        <xsl:apply-templates select="." mode="structural-number" />
+    </xsl:if>
 </xsl:template>
 
 <!-- Numbering Subdivisions without Numbers -->
