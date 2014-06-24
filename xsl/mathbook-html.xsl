@@ -460,7 +460,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <p><xsl:apply-templates /></p>
 </xsl:template>
 
-
 <!-- Pass-through stock HTML for lists-->
 <xsl:template match="ol|ul|li">
     <xsl:copy>
@@ -468,6 +467,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- With cols specified, we form the list items with variable -->
+<!-- widths then clear the floating property to resume -->
+<xsl:template match="ol[@cols]|ul[@cols]">
+    <xsl:copy>
+        <xsl:apply-templates select="li" mode="variable-width">
+            <xsl:with-param name="percent-width" select="98 div @cols" />
+        </xsl:apply-templates>
+    </xsl:copy>
+    <div style="clear:both;"></div>
+</xsl:template>
+
+<xsl:template match="li" mode="variable-width">
+    <xsl:param name="percent-width" />
+    <xsl:copy>
+        <xsl:attribute name="style">
+            <xsl:text>width:</xsl:text><xsl:value-of select="$percent-width" /><xsl:text>%; float:left;</xsl:text>
+        </xsl:attribute>
+       <xsl:apply-templates />
+    </xsl:copy>
+</xsl:template>
 
 <!-- Figures and their captions -->
 <!-- TODO: class="wrap" is possible -->

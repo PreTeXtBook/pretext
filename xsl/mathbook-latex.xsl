@@ -452,6 +452,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
      -->
     <!-- TODO:  \showidx package as part of a draft mode, prints entries in margin -->
+     <xsl:if test="//ol[@cols] or //ul[@cols] or //dl[@cols]">
+        <xsl:text>%% Multiple column, column-major lists&#xa;</xsl:text>
+        <xsl:text>\usepackage{multicol}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="//index">
         <xsl:text>%% Support for index creation&#xa;</xsl:text>
         <xsl:text>%% Requires $ makeindex &lt;filename&gt;&#xa;</xsl:text>
@@ -1014,6 +1018,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Lists -->
+<!-- Good match between basic HTML types and basic LaTeX types -->
 <xsl:template match="ol">
     <xsl:text>\begin{enumerate}&#xa;</xsl:text>
     <xsl:apply-templates />
@@ -1032,6 +1037,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{description}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Multicolumn Lists -->
+<!-- The "cols" attribute signals need for multiple columns -->
+<xsl:template match="ol[@cols]">
+    <xsl:text>\begin{multicols}{</xsl:text>
+    <xsl:value-of select="@cols" />
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\begin{enumerate}&#xa;</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>\end{enumerate}&#xa;</xsl:text>
+    <xsl:text>\end{multicols}&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="ul[@cols]">
+    <xsl:text>\begin{multicols}{</xsl:text>
+    <xsl:value-of select="@cols" />
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\begin{itemize}&#xa;</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>\end{itemize}&#xa;</xsl:text>
+    <xsl:text>\end{multicols}&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="dl[@cols]">
+    <xsl:text>\begin{multicols}{</xsl:text>
+    <xsl:value-of select="@cols" />
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\begin{description}&#xa;</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>\end{description}&#xa;</xsl:text>
+    <xsl:text>\end{multicols}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- List Items -->
 <!-- We assume content of list items  -->
 <!-- (typically paragraphs), end with -->
 <!-- non-blank line and a newline     -->
