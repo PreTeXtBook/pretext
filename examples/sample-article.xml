@@ -248,7 +248,7 @@
                 </statement>
                 <todo>Should equation references come with parentheses?</todo>
                 <proof>
-                    <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at (<xref ref="equation-use-FTC" />).</p>
+                    <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.</p>
                     <mdn>
                         <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
                         <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
@@ -286,9 +286,9 @@
                 <exercises>
                     <title>Exercises</title>
 
-                    <exercise>
+                    <exercise xml:id="exercise-test-number">
                         <statement>
-                            <p>This is an exercise in an <q>Exercises</q> subdivision at the level of a subsubsection.  There is no question other than if the numbering is appropriate.</p>
+                            <p>This is an exercise in an <q>Exercises</q> subdivision at the level of a subsubsection.  There is no question other than if the numbering is appropriate (it is not for <latex /> at the moment).  Here is a self-referential link: Exercise<nbsp /><xref ref="exercise-test-number" />.</p>
                         </statement>
                     </exercise>
 
@@ -521,6 +521,41 @@
                 </conclusion>
             </references>
 
+            <exercises>
+
+                <exercise>
+                    <statement>
+                        <p>No problem here, but the next two are in an <q>exercise group</q> with an introduction.</p>
+                    </statement>
+                </exercise>
+
+                <exercisegroup>
+
+                    <introduction>
+                        <p>In the next two problems compute the indicated derivative.</p>
+                    </introduction>
+
+                    <exercise>
+                        <statement>
+                            <p><m>f(x)=x^3</m>, <m>\frac{df}{dx}</m>.</p>
+                        </statement>
+                    </exercise>
+
+                    <exercise>
+                        <statement>
+                            <p><m>y = \cos(x)</m>, <m>y^\prime</m>.</p>
+                        </statement>
+                    </exercise>
+
+                </exercisegroup>
+
+                <exercise>
+                    <statement>
+                        <p>Compute <m>\int 3x^2\,dx</m>.</p>
+                    </statement>
+                </exercise>
+
+            </exercises>
         </section>
 
         <section>
