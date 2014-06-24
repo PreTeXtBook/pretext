@@ -245,7 +245,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="latex-postamble" />
     <xsl:text>\end{document}</xsl:text>
 </xsl:template>
-
 <!-- LaTeX preamble is common for both books, articles and letters      -->
 <!-- Except: title info allows an "event" for an article (presentation) -->
 <xsl:template name="latex-preamble">
@@ -287,25 +286,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- Could condition following on existence of any amsthm environment -->
     <xsl:text>%% Environments with amsthm package&#xa;</xsl:text>
+    <xsl:text>%% Theorem-like enviroments in "plain" style, with or without proof&#xa;</xsl:text>
     <xsl:text>\usepackage{amsthm}&#xa;</xsl:text>
-    <xsl:text>%% Theorem-like enviroments, italicized statement, proof, etc&#xa;</xsl:text>
-    <xsl:text>%% Numbering: X.Y numbering scheme&#xa;</xsl:text>
-    <xsl:text>%%   i.e. Corollary 4.3 is third item in Chapter 4 of a book&#xa;</xsl:text>
-    <xsl:text>%%   i.e. Lemma 5.6 is sixth item in Section 5 of an article&#xa;</xsl:text>
     <xsl:text>\theoremstyle{plain}&#xa;</xsl:text>
+    <xsl:text>%% Numbering for Theorems, Conjectures, Examples, Figures, etc&#xa;</xsl:text>
+    <xsl:text>%% Controlled by  numbering.theorems.level  processing parameter&#xa;</xsl:text>
     <xsl:text>%% Always need a theorem environment to set base numbering scheme&#xa;</xsl:text>
     <xsl:text>%% even if document has no theorems (but has other environments)&#xa;</xsl:text>
     <xsl:text>\newtheorem{theorem}{</xsl:text>
     <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'theorem'" /></xsl:call-template>
     <xsl:text>}</xsl:text>
-    <xsl:choose>
-        <xsl:when test="/mathbook/article"><xsl:text>[section]</xsl:text></xsl:when>
-        <xsl:when test="/mathbook/book"><xsl:text>[chapter]</xsl:text></xsl:when>
-    </xsl:choose>
-    <xsl:text>&#xa;</xsl:text>
+    <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
+    <xsl:text>[</xsl:text>
+    <xsl:call-template name="level-number-to-latex-name">
+        <xsl:with-param name="level" select="$numbering-theorems" />
+    </xsl:call-template>
+    <xsl:text>]&#xa;</xsl:text>
     <xsl:text>%% Only variants actually used in document appear here&#xa;</xsl:text>
     <xsl:text>%% Numbering: all theorem-like numbered consecutively&#xa;</xsl:text>
-    <xsl:text>%%   i.e. Corollary 4.3 follows Theorem 4.2&#xa;</xsl:text>
+    <xsl:text>%% i.e. Corollary 4.3 follows Theorem 4.2&#xa;</xsl:text>
     <xsl:if test="//corollary">
         <xsl:text>\newtheorem{corollary}[theorem]{</xsl:text>
         <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'corollary'" /></xsl:call-template>
@@ -819,7 +818,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercises/exercise|exercisegroup/exercise">
     <xsl:text>\item[</xsl:text>
     <xsl:apply-templates select="." mode="number" />
-    <xsl:text>.] </xsl:text>
+    <xsl:text>.]</xsl:text>
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text> </xsl:text>
     <xsl:apply-templates select="statement"/>
     <xsl:apply-templates select="hint"/>
     <xsl:apply-templates select="solution"/>
@@ -1597,11 +1598,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- Level names in LaTeX -->
-<xsl:template match="*" mode="latex-level">
-    <xsl:variable name="level">
-        <xsl:apply-templates select="." mode="level" />
-    </xsl:variable>
+<!-- Level Numbers to LaTeX Names -->
+<!-- Convert a level (integer) to the corresponding LaTeX division name -->
+<xsl:template name="level-number-to-latex-name">
+    <xsl:param name="level" />
     <xsl:choose>
         <xsl:when test="/mathbook/book">
             <xsl:choose>
@@ -1630,6 +1630,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:message>ERROR: Level computation only for books, articles</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- Nodes to Names in LaTeX -->
+<!-- Compute level of node, then tranlate to a name above -->
+<xsl:template match="*" mode="latex-level">
+    <xsl:call-template name="level-number-to-latex-name">
+        <xsl:with-param name="level">
+            <xsl:apply-templates select="." mode="level" />
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->
