@@ -26,6 +26,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="date"
 >
 
+
 <xsl:import href="./languages/mathbook-language-en.xsl" />
 
 <!-- MathBook XML common templates                        -->
@@ -52,6 +53,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Not peculiar to HTML or LaTeX or etc. -->
 <!-- Sentinel indicates no choice made     -->
 <xsl:param name="toc.level" select="''" />
+<!-- How many levels in numbering of theorems, etc     -->
+<!-- Followed by a sequential number across that level -->
+<!-- For example "2" implies Theorem 5.3.12 is         -->
+<!-- 12-th theorem, lemma, etc in 5.2                  -->
+<xsl:param name="numbering.theorems.level" select="''" />
+<!-- How many levels in numbering of equations     -->
+<!-- Analagous to numbering theorems, but distinct -->
+<xsl:param name="numbering.equations.level" select="''" />
+<!-- Level where footnote numbering resets                                -->
+<!-- For example, "2" would be sections in books, subsections in articles -->
+<xsl:param name="numbering.footnotes.level" select="''" />
 
 <!-- Strip whitespace text nodes from container elements                    -->
 <!-- Improve source readability with whitespace control in text output mode -->
@@ -87,7 +99,61 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="/mathbook/letter">0</xsl:when>
         <xsl:when test="/mathbook/memo">0</xsl:when>
         <xsl:otherwise>
-            <xsl:message>ERROR: Table of Contents level not determined</xsl:message>
+            <xsl:message>MBX:ERROR: Table of Contents level not determined</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- User-supplied Numbering for Theorems, etc    -->
+<!-- Respect switch, or provide sensible defaults -->
+<xsl:variable name="numbering-theorems">
+    <xsl:choose>
+        <xsl:when test="$numbering.theorems.level != ''">
+            <xsl:value-of select="$numbering.theorems.level" />
+        </xsl:when>
+        <xsl:when test="/mathbook/book">2</xsl:when>
+        <xsl:when test="/mathbook/article and /mathbook/article/section">1</xsl:when>
+        <xsl:when test="/mathbook/article">0</xsl:when>
+        <xsl:when test="/mathbook/letter">0</xsl:when>
+        <xsl:when test="/mathbook/memo">0</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: Theorem numbering level not determined</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- User-supplied Numbering for Equations    -->
+<!-- Respect switch, or provide sensible defaults -->
+<xsl:variable name="numbering-equations">
+    <xsl:choose>
+        <xsl:when test="$numbering.equations.level != ''">
+            <xsl:value-of select="$numbering.equations.level" />
+        </xsl:when>
+        <xsl:when test="/mathbook/book">2</xsl:when>
+        <xsl:when test="/mathbook/article and /mathbook/article/section">1</xsl:when>
+        <xsl:when test="/mathbook/article">0</xsl:when>
+        <xsl:when test="/mathbook/letter">0</xsl:when>
+        <xsl:when test="/mathbook/memo">0</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: Equation numbering level not determined</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- User-supplied Numbering for Footnotes        -->
+<!-- Respect switch, or provide sensible defaults -->
+<xsl:variable name="numbering-footnotes">
+    <xsl:choose>
+        <xsl:when test="$numbering.footnotes.level != ''">
+            <xsl:value-of select="$numbering.footnotes.level" />
+        </xsl:when>
+        <xsl:when test="/mathbook/book">2</xsl:when>
+        <xsl:when test="/mathbook/article and /mathbook/article/section">1</xsl:when>
+        <xsl:when test="/mathbook/article">0</xsl:when>
+        <xsl:when test="/mathbook/letter">0</xsl:when>
+        <xsl:when test="/mathbook/memo">0</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: Footnote numbering level not determined</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -481,89 +547,233 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Numbering  -->
 <!-- Nodes "know" how to number themselves, -->
-<!-- which is helful in a variety of places -->
+<!-- which is helpful in a variety of places -->
 <!-- Default is LaTeX's numbering scheme -->
 
-<!-- Sectioning -->
-<xsl:template match="chapter|section|subsection|subsubsection|paragraph|subparagraph|exercises|references" mode="number">
-    <xsl:number level="multiple" count="chapter|section|subsection|subsubsection|paragraph|subparagraph|exercises|references" />
+<!-- Any node is enclosed in some structural node,          -->
+<!-- this utility template computes the hierarchical number -->
+<!-- of the enclosing structural node.                      -->
+<!-- Level 0 (book, article) is ignored                     -->
+<!-- TODO: need filter, if, to handle appendices formatting with letters-->
+<xsl:template match="*" mode="structural-number">
+    <xsl:number level="multiple" count="chapter|appendix|section|subsection|subsubsection|references|exercises" />
 </xsl:template>
 
-<!-- We presume only one each for these, hence no number -->
-<xsl:template match="book|article|abstract|frontmatter|preface|acknowledgement|authorbiography|foreword|dedication|colophon" mode="number"></xsl:template>
-
-<!-- Appendices: A -->
-<!-- TODO: integrate appendices with chapters -->
-<xsl:template match="appendix" mode="number">
-    <xsl:number level="single" count="appendix" format="A"/>
-</xsl:template>
-
-<!-- Figures & Tables:  chapter.x                       -->
-<!-- These float, so number independent of theorems (?) -->
-<!-- But separate from each other -->
-<xsl:template match="figure" mode="number">
-    <xsl:number level="multiple" count="chapter|figure" />
-</xsl:template>
-<xsl:template match="table" mode="number">
-    <xsl:number level="multiple" count="chapter|table" />
-</xsl:template>
-
-<!-- Two-level numbering for book with chapters and theorem-like environments, plus -->
-<!-- Condition on articles, and then articles with sections -->
-<!-- TODO: Number exercises in an exercise section properly, these are sporadic in text -->
-<xsl:template match="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|exercise|remark" mode="number">
+<!-- We truncate a structural number to a               -->
+<!-- specfified number of terms.                        -->
+<!-- The string ends with a period, for                 -->
+<!-- subsequent concatenation, unless no                -->
+<!-- terms are requested and then the string is empty   -->
+<!-- for use when numbering is sequential document-wide -->
+<xsl:template name="level-number" >
+    <xsl:param name="number" />
+    <xsl:param name="level" />
     <xsl:choose>
-        <xsl:when test="/mathbook/book">
-            <xsl:if test="/mathbook/book/chapter">
-                <xsl:number from="book" level="any" count="chapter" />
-                <xsl:text>.</xsl:text>
-            </xsl:if>
-                <xsl:number from="chapter" level="any" count="theorem|corollary|lemma|proposition|claim|fact|conjecture|definition|axiom|principle|example|exercise|remark" />
-        </xsl:when>
-        <xsl:when test="/mathbook/article">
-            <xsl:if test="/mathbook/article/section">
-                <xsl:number from="article" level="any" count="section" />
-                <xsl:text>.</xsl:text>
-            </xsl:if>
-                <xsl:number from="section" level="any" count="theorem|corollary|lemma|proposition|claim|fact|conjecture|definition|axiom|principle|example|exercise|remark" />
-        </xsl:when>
+        <xsl:when test="$level=0"></xsl:when>
+        <xsl:otherwise>
+            <xsl:choose>
+                <xsl:when test="$number=''">
+                    <xsl:text>0.</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="substring-before($number, '.')" />
+                    <xsl:text>.</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:call-template name="level-number">
+                <xsl:with-param name="number">
+                    <xsl:value-of select="substring-after($number, '.')" />
+                </xsl:with-param>
+                <xsl:with-param name="level">
+                    <xsl:value-of select="$level - 1" />
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-<!-- Footnotes  x -->
-<xsl:template match="fn" mode="number">
-    <xsl:number level="any" count="fn" />
+<!-- Oops -->
+<xsl:template match="*" mode="number">
+    <xsl:text>[NUMBER]</xsl:text>
+<!--
+    <xsl:message terminate="no">
+        <xsl:text>WARNING: trying to number a </xsl:text>
+        <xsl:apply-templates select="." mode="type-name" />
+        <xsl:text>, but this is not defined</xsl:text>
+    </xsl:message>
+-->
 </xsl:template>
 
-<!-- Exercises in an Exercises subdivision -->
-<!-- TODO: needs more care when exercise groups appear -->
-<xsl:template match="exercises/exercise" mode="number">
-    <xsl:number from="exercises" level="any" count="exercise" />
+<!-- Numbering Structural Subdivisions -->
+<!-- A structural node just gets its structural number,           -->
+<!-- there is no truncation (can just not number at lower levels) -->
+<xsl:template match="chapter|appendix|section|subsection|subsubsection|references|exercises" mode="number">
+    <xsl:apply-templates select="." mode="structural-number" />
 </xsl:template>
 
-<!-- Bibliographic items in a References subdivision -->
-<xsl:template match="biblio" mode="number">
-    <xsl:number from="references" level="any" count="biblio" />
+<!-- Numbering Subdivisions without Numbers -->
+<!-- Only one, or not subdivisible, or ... -->
+<!-- TODO: add more frontmatter, backmatter as it stabilizes -->
+<xsl:template match="book|article|letter|memo|preface|frontmatter|introduction" mode="number"/>
+
+<!-- Numbering Theorems, Definitions, Examples, Inline Exercises, Figures, etc.-->
+<!-- Sructural to a configurable depth, then numbered across depth -->
+<!-- We include figures and tables, which is different than LaTeX out-of-the-box behavior -->
+<xsl:template match="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table" mode="number">
+    <xsl:call-template name="level-number">
+        <xsl:with-param name="number">
+            <xsl:apply-templates select="." mode="structural-number" />
+            <xsl:text>.</xsl:text>
+        </xsl:with-param>
+        <xsl:with-param name="level">
+            <xsl:value-of select="$numbering-theorems" />
+        </xsl:with-param>
+    </xsl:call-template>
+    <!-- Books vs articles, translate level to from attribute node in sequential numbering -->
+    <xsl:choose>
+        <xsl:when test="/mathbook/book">
+            <xsl:choose>
+                <xsl:when test="$numbering-theorems=0"><xsl:number select="." from="book" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table"/></xsl:when>
+                <xsl:when test="$numbering-theorems=1"><xsl:number select="." from="chapter" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table"/></xsl:when>
+                <xsl:when test="$numbering-theorems=2"><xsl:number select="." from="section" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table"/></xsl:when>
+                <xsl:when test="$numbering-theorems=3"><xsl:number select="." from="subsection" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table"/></xsl:when>
+                <xsl:when test="$numbering-theorems=4"><xsl:number select="." from="subsubsection" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table"/></xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>MBX:ERROR: Level for theorem number computation is out-of-bounds (<xsl:value-of select="$numbering-theorems" />)</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="/mathbook/article">
+            <xsl:choose>
+                <xsl:when test="$numbering-theorems=0"><xsl:number select="." from="article" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table"/></xsl:when>
+                <xsl:when test="$numbering-theorems=1"><xsl:number select="." from="section" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table"/></xsl:when>
+                <xsl:when test="$numbering-theorems=2"><xsl:number select="." from="subsection" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table"/></xsl:when>
+                <xsl:when test="$numbering-theorems=3"><xsl:number select="." from="subsubsection" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table"/></xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>ERROR: Level for theorem number computation is out-of-bounds (<xsl:value-of select="$numbering-theorems" />)</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>ERROR: Level for theorem number computation implemented only for books, articles</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
+
+<!-- Numbering Equations -->
+<xsl:template match="mrow|men" mode="number">
+    <xsl:call-template name="level-number">
+        <xsl:with-param name="number">
+            <xsl:apply-templates select="." mode="structural-number" />
+            <xsl:text>.</xsl:text>
+        </xsl:with-param>
+        <xsl:with-param name="level">
+            <xsl:value-of select="$numbering-equations" />
+        </xsl:with-param>
+    </xsl:call-template>
+
+    <!-- Books vs articles, translate level to from attribute node in sequential numbering -->
+    <xsl:choose>
+        <xsl:when test="/mathbook/book">
+            <xsl:choose>
+                <xsl:when test="$numbering-equations=0"><xsl:number select="." from="book" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
+                <xsl:when test="$numbering-equations=1"><xsl:number select="." from="chapter" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
+                <xsl:when test="$numbering-equations=2"><xsl:number select="." from="section" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
+                <xsl:when test="$numbering-equations=3"><xsl:number select="." from="subsection" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
+                <xsl:when test="$numbering-equations=4"><xsl:number select="." from="subsubsection" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>MBX:ERROR: Level for theorem number computation is out-of-bounds (<xsl:value-of select="$numbering-equations" />)</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="/mathbook/article">
+            <xsl:choose>
+                <xsl:when test="$numbering-equations=0"><xsl:number select="." from="article" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
+                <xsl:when test="$numbering-equations=1"><xsl:number select="." from="section" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
+                <xsl:when test="$numbering-equations=2"><xsl:number select="." from="subsection" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
+                <xsl:when test="$numbering-equations=3"><xsl:number select="." from="subsubsection" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>ERROR: Level for theorem number computation is out-of-bounds (<xsl:value-of select="$numbering-equations" />)</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>ERROR: Level for theorem number computation implemented only for books, articles</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- Equations:           -->
 <!--   chapter.x in books -->
 <!--   x in articles      -->
-<xsl:template match="mrow|men" mode="number">
+<!-- <xsl:template match="mrow|men" mode="number">
     <xsl:if test="ancestor::chapter">
         <xsl:apply-templates select="ancestor::chapter" mode="number" />
         <xsl:text>.</xsl:text>
     </xsl:if>
     <xsl:number from="chapter" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]" />
 </xsl:template>
+ -->
 
-<!-- Warn if we try to number an item and don't know how -->
-<xsl:template match="*" mode="number">
-    <xsl:message terminate="no">
-        <xsl:text>WARNING: </xsl:text>
-        <xsl:apply-templates select="." mode="type-name" />
-        <xsl:text> found something without a number</xsl:text>
-    </xsl:message>
+
+
+
+
+<!-- Numbering Footnotes -->
+<!-- At a configurable level                  -->
+<!-- Sequential within subdivision,           -->
+<!-- not unique across text unless level is 0 -->
+<!-- TODO: consider endnotes possibly         -->
+<xsl:template match="fn" mode="number">
+    <xsl:choose>
+        <xsl:when test="/mathbook/book">
+            <xsl:choose>
+                <xsl:when test="$numbering-footnotes=0"><xsl:number select="." from="book" level="any" count="fn" /></xsl:when>
+                <xsl:when test="$numbering-footnotes=1"><xsl:number select="." from="chapter" level="any" count="fn" /></xsl:when>
+                <xsl:when test="$numbering-footnotes=2"><xsl:number select="." from="section" level="any" count="fn" /></xsl:when>
+                <xsl:when test="$numbering-footnotes=3"><xsl:number select="." from="subsection" level="any" count="fn" /></xsl:when>
+                <xsl:when test="$numbering-footnotes=4"><xsl:number select="." from="subsubsection" level="any" count="fn" /></xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>ERROR: Level for footnote number computation is out-of-bounds (<xsl:value-of select="$numbering-footnotes" />)</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="/mathbook/article">
+            <xsl:choose>
+                <xsl:when test="$numbering-footnotes=0"><xsl:number select="." from="article" level="any" count="fn" /></xsl:when>
+                <xsl:when test="$numbering-footnotes=1"><xsl:number select="." from="section" level="any" count="fn" /></xsl:when>
+                <xsl:when test="$numbering-footnotes=2"><xsl:number select="." from="subsection" level="any" count="fn" /></xsl:when>
+                <xsl:when test="$numbering-footnotes=3"><xsl:number select="." from="subsubsection" level="any" count="fn" /></xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>ERROR: Level for footnote number computation is out-of-bounds (<xsl:value-of select="$numbering-footnotes" />)</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>ERROR: Level for footnote number computation implemented only for books, articles</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Numbering Exercises in Exercises Subdivision -->
+<!-- Exercises sections can appear at any level, so we need         -->
+<!-- the full structural number, then a sequential number           -->
+<!-- Groupings of exercise might be intermediate, but do not hinder -->
+<xsl:template match="exercises/exercise|exercises/exercisegroup/exercise" mode="number">
+    <xsl:apply-templates select="." mode="structural-number" />
+    <xsl:text>.</xsl:text>
+    <xsl:number from="exercises" level="any" count="exercise" />
+</xsl:template>
+
+<!-- Numbering Bibliography Items in References -->
+<!-- Structural number for References section, -->
+<!-- plus sequential tacked on -->
+<!-- A single number at book/article level -->
+<xsl:template match="biblio" mode="number">
+    <xsl:apply-templates select="." mode="structural-number" />
+    <xsl:text>.</xsl:text>
+    <xsl:number from="references" level="any" count="biblio" />
 </xsl:template>
 
 <!-- Warnings for high-frequency mistakes -->
