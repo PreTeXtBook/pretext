@@ -89,6 +89,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- -->
         <xsl:when test="$generic='todo'">          <xsl:text>To Do</xsl:text></xsl:when>
         <xsl:when test="$generic='editor'">        <xsl:text>Editor</xsl:text></xsl:when>
+        <xsl:when test="$generic='indexsection'">  <xsl:text>Index</xsl:text></xsl:when>
+        <xsl:when test="$generic='see'">           <xsl:text>see</xsl:text></xsl:when> <!-- LaTeX indices -->
         <xsl:otherwise>
             <xsl:message terminate="no">Warning: Unable to translate <xsl:value-of select="$generic" />.&#xa;</xsl:message>
         </xsl:otherwise>

@@ -468,7 +468,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Support for index creation&#xa;</xsl:text>
         <xsl:text>%% Requires $ makeindex &lt;filename&gt;&#xa;</xsl:text>
         <xsl:text>%% prior to second LaTeX pass&#xa;</xsl:text>
+        <xsl:text>%% We provide language support for the "see" phrase&#xa;</xsl:text>
+        <xsl:text>%% and for the title of the "Index" section&#xa;</xsl:text>
         <xsl:text>\usepackage{makeidx}&#xa;</xsl:text>
+        <xsl:variable name="see-node"><see /></xsl:variable>
+        <xsl:text>\renewcommand{\seename}{</xsl:text>
+        <xsl:apply-templates select="exsl:node-set($see-node)" mode="type-name"/>
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:variable name="index-node"><indexsection /></xsl:variable>
+        <xsl:text>\renewcommand{\indexname}{</xsl:text>
+        <xsl:apply-templates select="exsl:node-set($index-node)" mode="type-name"/>
+        <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\makeindex&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//logo">
@@ -940,16 +950,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Index -->
+<!-- LaTeX only, no companion for other conversions -->
 <xsl:template match="index">
     <xsl:text>\index{</xsl:text>
     <xsl:apply-templates select="main" />
     <xsl:apply-templates select="sub" />
+    <xsl:apply-templates select="see" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
 <xsl:template match="index/sub">
     <xsl:text>!</xsl:text>
     <xsl:apply-templates />
+</xsl:template>
+
+<xsl:template match="index/see">
+    <xsl:text>|see{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- Math  -->

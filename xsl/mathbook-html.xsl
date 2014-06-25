@@ -1001,7 +1001,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Index -->
-<!-- Just kill it for now -->
+<!-- Only implemented for LaTeX, where it -->
+<!-- makes sense, otherwise just kill it  -->
 <xsl:template match="index" />
 
 <!-- Math  -->
