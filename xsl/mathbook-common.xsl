@@ -513,7 +513,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Identifiers        -->
 <!-- ################## -->
 
-<!-- Internal Identifier                                 -->
+<!-- Internal Identifier                        -->
 <!-- A unique text identifier for any element   -->
 <!-- Uses:                                      -->
 <!--   HTML: filenames (pages and knowls)       -->
@@ -540,6 +540,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- Visual Identifiers -->
+<!-- What a reader sees in any cross-referencing system -->
+<!-- Two types: -->
+<!--     origin: what is displayed to mark the object -->
+<!--         - subdivisions: full hierarchical numbers -->
+<!--         - exercises: serial number in a list -->
+<!--         - and so on -->
+<!--     reference: what is displayed to guide to the object -->
+<!--         - subdivisions: ditto -->
+<!--         - exercises: full hierarchical numbers -->
+<!--         - citations: [number] -->
+<!--         - equations: (number) -->
+<!-- Normally, these are numbers.  But with overrides in a        -->
+<!-- customization layer, some objects could be known by          -->
+<!-- another system, such as acronyms.  So redirection through    -->
+<!-- here is a useful abstraction from simply plunking in numbers -->
+
+<!-- Default is the object's number            -->
+<!-- (which will report "[NUMBER]" on failure) -->
+<xsl:template match="*" mode="origin-id">
+    <xsl:apply-templates select="." mode="number" />
+</xsl:template>
+
+<xsl:template match="*" mode="ref-id">
+    <xsl:apply-templates select="." mode="number" />
+</xsl:template>
+
 
 <!-- Textual Representations of structural elements  -->
 <!--   conveniences for annotating derivative products -->
