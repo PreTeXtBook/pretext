@@ -1571,11 +1571,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="$target" mode="internal-id" />
             <xsl:text>}</xsl:text>
         </xsl:when>
-        <xsl:when test="$target/self::mrow or $target/self::me or $target/self::men">
-            <xsl:text>\eqref{</xsl:text>
-            <xsl:apply-templates select="$target" mode="internal-id" />
-            <xsl:text>}</xsl:text>
-        </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="$target" mode="ref-id" />
         </xsl:otherwise>
@@ -1598,6 +1593,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Plain here, with @detail is part of xref template above -->
 <xsl:template match="biblio" mode="ref-id">
     <xsl:text>\cite{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- Referencing an AMSmath equation (resp. MathJax) is a \eqref{} -->
+<!-- TODO: will we allow me's to be numbered, or not?              -->
+<xsl:template match="me|men|mrow" mode="ref-id">
+    <xsl:text>\eqref{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}</xsl:text>
 </xsl:template>

@@ -622,13 +622,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="@detail" />
                 <xsl:text>]</xsl:text>
             </xsl:when>
-            <!-- Displayed equations have targets manufactured by MathJax,    -->
-            <!-- which we ensure are consistent with our scheme here          -->
-            <xsl:when test="$target/self::mrow or $target/self::me or $target/self::men">
-                <xsl:text>(</xsl:text>
-                <xsl:apply-templates select="$target" mode="number" />
-                <xsl:text>)</xsl:text>
-            </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates select="$target" mode="ref-id" />
             </xsl:otherwise>
@@ -658,6 +651,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>[</xsl:text>
         <xsl:apply-templates select="." mode="number" />
     <xsl:text>]</xsl:text>
+</xsl:template>
+
+<!-- Displayed equations have targets manufactured by MathJax,                   -->
+<!-- Elsewhere we number these just as MathJax/AMSMath would                     -->
+<!-- For HTML we need to provide the parentheses, which LaTeX does automatically -->
+<!-- TODO: will we allow me's to be numbered, or not? -->
+<xsl:template match="me|men|mrow" mode="ref-id">
+    <xsl:text>(</xsl:text>
+    <xsl:apply-templates select="." mode="number" />
+    <xsl:text>)</xsl:text>
 </xsl:template>
 
 <!-- Provisional cross-references -->
