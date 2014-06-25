@@ -433,7 +433,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <h5>
         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
         <xsl:text> </xsl:text>
-        <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+        <span class="counter"><xsl:apply-templates select="." mode="origin-id" /></span>
         <xsl:if test="title">
             <xsl:text> </xsl:text>
             <span class="title"><xsl:apply-templates select="title" /></span>

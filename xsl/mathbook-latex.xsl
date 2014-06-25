@@ -841,7 +841,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO, allow killing statements for hint sections, etc? -->
 <xsl:template match="exercises/exercise|exercisegroup/exercise">
     <xsl:text>\item[</xsl:text>
-    <xsl:apply-templates select="." mode="number" />
+    <xsl:apply-templates select="." mode="origin-id" />
     <xsl:text>.]</xsl:text>
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text> </xsl:text>

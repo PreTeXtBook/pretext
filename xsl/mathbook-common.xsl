@@ -568,6 +568,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 
+<!-- Exercises in lists are always in an enclosing subdivision          -->
+<!-- Their default numbers are hierarchical, so we strip the            -->
+<!-- serial number for display, if a hard-coded number is not available -->
+<xsl:template match="exercises/exercise|exercisegroup/exercise" mode="origin-id">
+    <xsl:call-template name="substring-after-last">
+        <xsl:with-param name="input">
+            <xsl:apply-templates select="." mode="number" />
+        </xsl:with-param>
+        <xsl:with-param name="substr" select="'.'" />
+    </xsl:call-template>
+</xsl:template>
+
+<!-- If we hard-code a number for an exercise, so be it           -->
+<!-- N.B. Same priority as above, so needs to come in this order, -->
+<!-- as we wish hard-coded to have higher priority                -->
+<!-- TODO: Enforce with numbered priority? -->
+<xsl:template match="exercises/exercise[@number]|exercisegroup/exercise[@number]" mode="origin-id">
+    <xsl:apply-templates select="@number" />
+</xsl:template>
+
 
 <!-- Textual Representations of structural elements  -->
 <!--   conveniences for annotating derivative products -->

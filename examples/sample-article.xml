@@ -683,16 +683,20 @@
         <exercises xml:id="exercises">
             <title>Exercises</title>
 
+            <introduction>
+                <p>Exercises in an <q>exercises</q> section are numbered automatically.  However, what if you have a busted problem and remove it?  Then a bunch of problem numbers change and your list of homework for your students changes as well.  What a mess.  Use auto-numbering while writing and refining.  Once stable, go ahead and hard-code problem numbers as you delete/add.  Notice the oddly numbered problem below.  Once you go down this road, you can't stop.  But instructors will thank you for it.</p>
+            </introduction>
+
             <exercise>
                 <statement>
-                    <p>Exercises can appear in a <q>section</q> of their own.  You need to give the section a title, even if it seems obvious what to call it.  They are numbered automatically.  How should we hide solutions?</p>
+                    <p>Exercises can appear in a <q>section</q> of their own.  You need to give the section a title, even if it seems obvious what to call it.  How should we hide solutions?</p>
                 </statement>
                 <solution>
                     <p>Maybe a global switch should be used to supress solutions, while a separate processing regime could use them as part of a solutions manual.</p>
                 </solution>
             </exercise>
 
-            <exercise>
+            <exercise number="42a">
                 <statement>
                     <p>Compute the definite integral <m>\definiteintegral{2}{4}{x^2}{x}</m>, not as an approximate value from a Riemann sum, but as an exact value based of the limit by using the Fundamental Theorem.</p>
                 </statement>
