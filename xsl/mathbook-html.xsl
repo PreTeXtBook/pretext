@@ -593,46 +593,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- Cross-References, Citations -->
+<!-- Warnings at command-line for absent ref/provisional are in common file  -->
 
-<!-- Citations, Cross-References -->
-<!-- Each a bit different in style of link (eg knowl), or content of link (eg "here") -->
-<!-- Warnings at command-line for mess-ups are in common file -->
-
-<!-- Bring up bibliographic entries as knowls with cite -->
-<!-- Style the bare number with CSS, eg [6]             -->
-<!-- A citation can be "provisional"   -->
-<!-- as a tool for drafts, otherwise "ref" to -->
-<!-- an xml:id in bibliography                     -->
-<!-- TODO: tokenize a list of labels? -->
-
-<!-- Point to any numbered item with link, content is number only -->
-<!-- Displayed equations have targets manufactured by MathJax,    -->
-<!-- which we ensure are consistent with our scheme here          -->
-<!-- A cross-reference can be "provisional"   -->
-<!-- as a tool for drafts, otherwise "ref" to -->
-<!-- an xml:id elsewhere                      -->
-<!-- TODO: need to take into account chunking for href manufacture -->
-<!-- need to use basename for targetnode's file        -->
-<!-- or knowl these references, with "in context link" -->
-<xsl:template match="cite[@ref]">
-    <xsl:message>MBX:WARNING: &lt;cite ref="<xsl:value-of select="@ref" />&gt; is deprecated, convert to &lt;xref ref="<xsl:value-of select="@ref" />"&gt;</xsl:message>
-    <xsl:call-template name="knowl-link-factory">
-        <xsl:with-param name="css-class">cite</xsl:with-param>
-        <xsl:with-param name="identifier">
-            <xsl:apply-templates select="id(@ref)" mode="internal-id" />
-        </xsl:with-param>
-        <xsl:with-param name="content">
-            <xsl:text>[</xsl:text>
-            <xsl:apply-templates select="id(@ref)" mode="number" />
-            <xsl:if test="@detail">
-                <xsl:text>, </xsl:text>
-                <xsl:apply-templates select="@detail" />
-            </xsl:if>
-            <xsl:text>]</xsl:text>
-        </xsl:with-param>
-    </xsl:call-template>
-</xsl:template>
-
+<!-- Cross-reference template -->
+<!-- Every (non-provisional) cross-reference comes through here            -->
+<!-- and is fact-checked before being dispatched to a "ref-id" template    -->
+<!-- The ref-id templates produce the code to create what a reader sees    -->
+<!-- to locate the referenced item                                         -->
+<!-- Unlike LaTeX, we supply content and "clickable" behavior              -->
+<!-- When "detail" is provided for a citation, we need handle it specially -->
 <xsl:template match="xref[@ref]">
     <!-- Save what the reference points to -->
     <xsl:variable name="target" select="id(@ref)" />
@@ -643,13 +613,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Create what the reader sees, equation references get parentheses -->
     <xsl:variable name="visual">
         <xsl:choose>
+            <!-- Citations with detail are exceptional, and not uniform, so handle here -->
+            <!-- TODO: knowls for xrefs, especially citations -->
+            <xsl:when test="@detail">
+                <xsl:text>[</xsl:text>
+                    <xsl:apply-templates select="$target" mode="number" />
+                <xsl:text>, </xsl:text>
+                    <xsl:apply-templates select="@detail" />
+                <xsl:text>]</xsl:text>
+            </xsl:when>
+            <!-- Displayed equations have targets manufactured by MathJax,    -->
+            <!-- which we ensure are consistent with our scheme here          -->
             <xsl:when test="$target/self::mrow or $target/self::me or $target/self::men">
                 <xsl:text>(</xsl:text>
                 <xsl:apply-templates select="$target" mode="number" />
                 <xsl:text>)</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates select="$target" mode="number" />
+                <xsl:apply-templates select="$target" mode="ref-id" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -667,6 +648,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- Visual Identifiers -->
+<!-- Format of visual identifiers, peculiar to HTML  -->
+<!-- (Perhaps these should be in the common file?)   -->
+<!-- LaTeX does much of this semi-automatically      -->
+
+<!-- Citations with detail are handled above, generic here -->
+<xsl:template match="biblio" mode="ref-id">
+    <xsl:text>[</xsl:text>
+        <xsl:apply-templates select="." mode="number" />
+    <xsl:text>]</xsl:text>
+</xsl:template>
+
+<!-- Provisional cross-references -->
+<!-- A convenience for authors in early stages of writing -->
+<!-- TODO: Move cite/@provisional to common file with warning, once deactivated (as error) -->
 <xsl:template match="cite[@provisional]|xref[@provisional]">
     <xsl:if test="self::cite">
         <xsl:message>MBX:WARNING: &lt;cite provisional="<xsl:value-of select="@provisional" />"&gt; is deprecated, convert to &lt;xref provisional="<xsl:value-of select="@provisional" />"&gt;</xsl:message>
@@ -1754,6 +1750,31 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
             <xsl:apply-templates />
         </xsl:element>
     </xsl:if>
+</xsl:template>
+
+<!-- Uninteresting Code, aka the Bad Bank                    -->
+<!-- Deprecated, unmaintained, etc, parked here out of sight -->
+
+<!-- Legacy code: not maintained                  -->
+<!-- Banish to common file when removed, as error -->
+<!-- 2014/06/25: implemented with xref as link, need to duplicate knowl functionality -->
+<xsl:template match="cite[@ref]">
+    <xsl:message>MBX:WARNING: &lt;cite ref="<xsl:value-of select="@ref" />&gt; is deprecated, convert to &lt;xref ref="<xsl:value-of select="@ref" />"&gt;</xsl:message>
+    <xsl:call-template name="knowl-link-factory">
+        <xsl:with-param name="css-class">cite</xsl:with-param>
+        <xsl:with-param name="identifier">
+            <xsl:apply-templates select="id(@ref)" mode="internal-id" />
+        </xsl:with-param>
+        <xsl:with-param name="content">
+            <xsl:text>[</xsl:text>
+            <xsl:apply-templates select="id(@ref)" mode="number" />
+            <xsl:if test="@detail">
+                <xsl:text>, </xsl:text>
+                <xsl:apply-templates select="@detail" />
+            </xsl:if>
+            <xsl:text>]</xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
 </xsl:stylesheet>

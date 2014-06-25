@@ -1546,30 +1546,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- Cross-References, Citations -->
+<!-- Warnings at command-line for absent ref/provisional are in common file  -->
 
-<!-- Point to bibliographic entries with cite -->
-<!-- Point to other items with xref           -->
-<!-- These can be "provisional"          -->
-<!-- as a tool for drafts, otherwise "ref" to -->
-<!-- an xml:id elsewhere                      -->
-<!-- Warnings at command-line for mess-ups are in common file  -->
-<!-- Obtain enclosing section with  select="$target/parent::*" -->
-<!-- TODO: make citations work like xrefs                      -->
-<xsl:template match="cite[@ref]">
-    <xsl:message>MBX:WARNING: &lt;cite ref="<xsl:value-of select="@ref" />&gt; is deprecated, convert to &lt;xref ref="<xsl:value-of select="@ref" />"&gt;</xsl:message>    
-    <xsl:variable name="target" select="id(@ref)" />
-        <xsl:text>\cite</xsl:text>
-        <xsl:if test="@detail">
-            <xsl:text>[</xsl:text>
-            <xsl:apply-templates select="@detail" />
-            <xsl:text>]</xsl:text>
-        </xsl:if>
-        <xsl:text>{</xsl:text>
-        <xsl:apply-templates select="$target" mode="internal-id" />
-        <xsl:text>}</xsl:text>
-</xsl:template>
-
-<!-- LaTeX references equations differently than theorems, etc -->
+<!-- Cross-reference template -->
+<!-- Every (non-provisional) cross-reference comes through here            -->
+<!-- and is fact-checked before being dispatched to a "ref-id" template    -->
+<!-- The ref-id templates produce the code to create what a reader sees    -->
+<!-- to locate the referenced item                                         -->
+<!-- LaTeX has several schemes: \ref, \cite, \eqref                        -->
+<!-- When "detail" is provided for a citation, we need handle it specially -->
 <xsl:template match="xref[@ref]">
     <xsl:variable name="target" select="id(@ref)" />
     <!-- Check to see if the ref is any good -->
@@ -1577,18 +1562,49 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(exsl:node-set($target))">
         <xsl:message>MBX:WARNING: unresolved &lt;xref&gt; due to ref="<xsl:value-of select="@ref"/>"</xsl:message>
     </xsl:if>
+    <!-- Citation detail is a property of the xref, so need to handle here exceptionally -->
     <xsl:choose>
+        <xsl:when test="@detail">
+            <xsl:text>\cite[</xsl:text>
+            <xsl:apply-templates select="@detail" />
+            <xsl:text>]{</xsl:text>
+            <xsl:apply-templates select="$target" mode="internal-id" />
+            <xsl:text>}</xsl:text>
+        </xsl:when>
         <xsl:when test="$target/self::mrow or $target/self::me or $target/self::men">
             <xsl:text>\eqref{</xsl:text>
+            <xsl:apply-templates select="$target" mode="internal-id" />
+            <xsl:text>}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>\ref{</xsl:text>
+            <xsl:apply-templates select="$target" mode="ref-id" />
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates select="$target" mode="internal-id" />
+</xsl:template>
+
+<!-- Visual Identifiers -->
+<!-- Format of visual identifiers, peculiar to LaTeX              -->
+<!-- This is complete LaTeX code to make visual reference         -->
+<!-- LaTeX does the numbering and visual formatting automatically -->
+
+<!-- Almost always, a \ref is good enough -->
+<xsl:template match="*" mode="ref-id">
+    <xsl:text>\ref{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
+<!-- Referencing a biblio is cite in LaTeX                   -->
+<!-- Plain here, with @detail is part of xref template above -->
+<xsl:template match="biblio" mode="ref-id">
+    <xsl:text>\cite{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- Provisional cross-references -->
+<!-- A convenience for authors in early stages of writing -->
+<!-- TODO: Move cite/@provisional to common file with warning, once deactivated (as error) -->
 <xsl:template match="cite[@provisional]|xref[@provisional]">
     <xsl:if test="self::cite">
         <xsl:message>MBX:WARNING: &lt;cite provisional="<xsl:value-of select="@provisional" />"&gt; is deprecated, convert to &lt;xref provisional="<xsl:value-of select="@provisional" />"&gt;</xsl:message>
@@ -1603,7 +1619,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}</xsl:text>
     </xsl:if>
 </xsl:template>
-
 
 <!-- Insert a xref identifier as a LaTeX label on anything   -->
 <!-- Calls to this template need come from where LaTeX likes -->
@@ -1763,6 +1778,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%%                                    %%&#xa;</xsl:text>
     <xsl:text>%%   http://mathbook.pugetsound.edu   %%&#xa;</xsl:text>
     <xsl:text>%%                                    %%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Uninteresting Code, aka the Bad Bank                    -->
+<!-- Deprecated, unmaintained, etc, parked here out of sight -->
+
+<!-- Legacy code: not maintained                  -->
+<!-- Banish to common file when removed, as error -->
+<!-- 2014/06/25:  All functionality here is replicated -->
+<xsl:template match="cite[@ref]">
+    <xsl:message>MBX:WARNING: &lt;cite ref="<xsl:value-of select="@ref" />&gt; is deprecated, convert to &lt;xref ref="<xsl:value-of select="@ref" />"&gt;</xsl:message>
+    <xsl:variable name="target" select="id(@ref)" />
+        <xsl:text>\cite</xsl:text>
+        <xsl:if test="@detail">
+            <xsl:text>[</xsl:text>
+            <xsl:apply-templates select="@detail" />
+            <xsl:text>]</xsl:text>
+        </xsl:if>
+        <xsl:text>{</xsl:text>
+        <xsl:apply-templates select="$target" mode="internal-id" />
+        <xsl:text>}</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>
