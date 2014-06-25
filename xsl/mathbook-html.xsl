@@ -615,6 +615,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- need to use basename for targetnode's file        -->
 <!-- or knowl these references, with "in context link" -->
 <xsl:template match="cite[@ref]">
+    <xsl:message>MBX:WARNING: &lt;cite ref="<xsl:value-of select="@ref" />&gt; is deprecated, convert to &lt;xref ref="<xsl:value-of select="@ref" />"&gt;</xsl:message>
     <xsl:call-template name="knowl-link-factory">
         <xsl:with-param name="css-class">cite</xsl:with-param>
         <xsl:with-param name="identifier">
@@ -637,7 +638,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="target" select="id(@ref)" />
     <!-- Check to see if the ref is any good -->
     <xsl:if test="not(exsl:node-set($target))">
-        <xsl:message>MBX:WARNING: unresolved xref due to ref="<xsl:value-of select="@ref"/>"</xsl:message>
+        <xsl:message>MBX:WARNING: unresolved &lt;xref&gt; due to ref="<xsl:value-of select="@ref"/>"</xsl:message>
     </xsl:if>
     <!-- Create what the reader sees, equation references get parentheses -->
     <xsl:variable name="visual">
@@ -667,6 +668,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="cite[@provisional]|xref[@provisional]">
+    <xsl:if test="self::cite">
+        <xsl:message>MBX:WARNING: &lt;cite provisional="<xsl:value-of select="@provisional" />"&gt; is deprecated, convert to &lt;xref provisional="<xsl:value-of select="@provisional" />"&gt;</xsl:message>
+    </xsl:if>
     <xsl:element name="span">
         <xsl:if test="$author-tools='yes'" >
             <xsl:attribute name="style">color:red</xsl:attribute>

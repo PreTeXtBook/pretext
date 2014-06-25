@@ -1556,6 +1556,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Obtain enclosing section with  select="$target/parent::*" -->
 <!-- TODO: make citations work like xrefs                      -->
 <xsl:template match="cite[@ref]">
+    <xsl:message>MBX:WARNING: &lt;cite ref="<xsl:value-of select="@ref" />&gt; is deprecated, convert to &lt;xref ref="<xsl:value-of select="@ref" />"&gt;</xsl:message>    
     <xsl:variable name="target" select="id(@ref)" />
         <xsl:text>\cite</xsl:text>
         <xsl:if test="@detail">
@@ -1574,7 +1575,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Check to see if the ref is any good -->
     <!-- http://www.stylusstudio.com/xsllist/200412/post20720.html -->
     <xsl:if test="not(exsl:node-set($target))">
-        <xsl:message>MBX:WARNING: unresolved xref due to ref="<xsl:value-of select="@ref"/>"</xsl:message>
+        <xsl:message>MBX:WARNING: unresolved &lt;xref&gt; due to ref="<xsl:value-of select="@ref"/>"</xsl:message>
     </xsl:if>
     <xsl:choose>
         <xsl:when test="$target/self::mrow or $target/self::me or $target/self::men">
@@ -1589,6 +1590,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="cite[@provisional]|xref[@provisional]">
+    <xsl:if test="self::cite">
+        <xsl:message>MBX:WARNING: &lt;cite provisional="<xsl:value-of select="@provisional" />"&gt; is deprecated, convert to &lt;xref provisional="<xsl:value-of select="@provisional" />"&gt;</xsl:message>
+    </xsl:if>
     <xsl:if test="$author-tools='yes'" >
         <xsl:text>\textcolor{red}{</xsl:text>
     </xsl:if>

@@ -116,7 +116,7 @@
             "ref" to match the cross-reference use.
             Citations render as knowls on web pages.
             -->
-            <p>You will find almost nothing about all this in the article <cite ref="biblio-lay-article" />, nor in the book <cite ref="biblio-judson-AATA" />, since they belong in some other article, but we can cite them out-of-order for practice anyway.</p>
+            <p>You will find almost nothing about all this in the article <xref ref="biblio-lay-article" />, nor in the book <xref ref="biblio-judson-AATA" />, since they belong in some other article, but we can cite them out-of-order for practice anyway.</p>
 
             <!--
             There are various tools for authors
@@ -124,7 +124,7 @@
             make these visible, or not
             -->
 
-            <p>When we are writing we do not always know what we want to cite, or just where subsequent material will end up.  For example, we might want a citation to <cite provisional="some textbook about the FTC" /> or we might want to reference a later<nbsp /><xref provisional="chapter about DiffEq's" />.</p>
+            <p>When we are writing we do not always know what we want to cite, or just where subsequent material will end up.  For example, we might want a citation to <xref provisional="some textbook about the FTC" /> or we might want to reference a later<nbsp /><xref provisional="chapter about DiffEq's" />.</p>
 
             <p>We can also embed <q>todo</q>s in the source, and selectively display them, so you may not see the one here in the output you are looking at now.  Or maybe you do see it?</p>
 
@@ -545,7 +545,7 @@
             <title>Further Reading</title>
 
             <introduction>
-                <p>In a longer work you might wish to have some references on a per-chapter basis, or similar.  You can make a <q>references</q> subdivision anywhere to hold bibliographic items, and you can reference the items like any other item.  For example, we can cite the article below <cite ref="biblio-beezer-fcla" detail="Chapter R" />, included an indication that a specific chapter may be relevant. Notice that the list may be prefaced with an introduction, and followed by a conclusion.</p>
+                <p>In a longer work you might wish to have some references on a per-chapter basis, or similar.  You can make a <q>references</q> subdivision anywhere to hold bibliographic items, and you can reference the items like any other item.  For example, we can cite the article below <xref ref="biblio-beezer-fcla" detail="Chapter R" />, included an indication that a specific chapter may be relevant. Notice that the list may be prefaced with an introduction, and followed by a conclusion.</p>
             </introduction>
 
             <references>
@@ -780,6 +780,16 @@
             </table>
 
         </section>
+
+        <section>
+            <title>Deprecated Items</title>
+
+            <p>We collect some bad things here, to test deprecation warnings.  Don't be alarmed.</p>
+
+            <p>Citations using <c>cite</c> element, not <c>xref</c>: <cite provisional="just-a-test" /> and <cite ref="biblio-only-a-test" /></p>
+
+        </section>
+
 
         <!-- Bibliography/References can appear anywhere -->
 
