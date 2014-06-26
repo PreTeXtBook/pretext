@@ -733,7 +733,7 @@
         <section xml:id="section-internationalization">
             <title>Internationalization</title>
 
-            <p>Accented characters and different alphabets may be entered directly into your source file.  How you do this is dependent on your operating system and is outside the scope of our documentation.  You can cut/paste from the source of this document for initial testing and experimentation.</p>
+            <p>Accented characters and different alphabets may be entered directly into your source file.  How you do this is dependent on your operating system and is outside the scope of our documentation.  You can cut/paste from the source of this document for initial testing and experimentation.  Likely you need the incantation <c latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c> as the first line of your source file. (Maybe don't cut/paste this one here, it may have weird characters in it, go back to the top of this source file.)</p>
 
             <p>Usage is simple: process your <latex /> output with the <c>xelatex</c> executable rather than <c>pdflatex</c>.  Adjustment in your <latex /> preamble will take place automatically.  For HTML ouput, your browser will be responsible for displaying the characters.  None of this has been tested thoroughly, so please send reports of failures or successful modifications.</p>
 
