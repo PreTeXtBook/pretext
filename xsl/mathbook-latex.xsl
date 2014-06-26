@@ -1224,11 +1224,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Code, inline -->
-<!-- A question mark is invalid Python, but may need to be more general here? -->
+<!-- A question mark is invalid Python -->
+<!-- but we allow for another option -->
 <xsl:template match="c">
-    <xsl:text>\verb?</xsl:text>
+    <xsl:variable name="separator">
+        <xsl:choose>
+            <xsl:when test="@latexsep">
+                <xsl:value-of select="@latexsep" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>?</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:text>\verb</xsl:text>
+    <xsl:value-of select="$separator" />
     <xsl:value-of select="." />
-    <xsl:text>?</xsl:text>
+    <xsl:value-of select="$separator" />
 </xsl:template>
 
 <!-- External URLs, and email addresses -->
