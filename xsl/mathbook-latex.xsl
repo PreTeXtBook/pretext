@@ -1703,13 +1703,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- In some cases we supply our own cross-referencing via      -->
-<!-- hyperref's hypertarget mechanism, specifically for         -->
-<!-- exercises, which may have hard-coded numbers in the source -->
+<!-- In some cases we supply our own cross-referencing via       -->
+<!-- hyperref's hypertarget mechanism, specifically for          -->
+<!-- exercises, which may have hard-coded numbers in the source  -->
+<!-- The target being null is necessary, up hard to environments -->
 <xsl:template match="exercises//exercise" mode="label">
     <xsl:text>\phantomsection\hypertarget{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>}</xsl:text>
+    <xsl:text>}{\null}</xsl:text>
 </xsl:template>
 
 <!-- Footnotes               -->
