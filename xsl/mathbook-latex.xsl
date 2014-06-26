@@ -880,10 +880,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="origin-id" />
     <xsl:text>.]</xsl:text>
     <xsl:apply-templates select="." mode="label"/>
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="statement"/>
-    <xsl:apply-templates select="hint"/>
-    <xsl:apply-templates select="solution"/>
+    <xsl:if test="title">
+        <xsl:text>(</xsl:text>
+        <xsl:apply-templates select="title" />
+        <xsl:text>)\space\space </xsl:text>
+    </xsl:if>
+    <!-- Assumes statement, hint, solution -->
+    <xsl:apply-templates select="*[not(self::title)]"/>
 </xsl:template>
 
 <!-- An exercise statement is just a container -->

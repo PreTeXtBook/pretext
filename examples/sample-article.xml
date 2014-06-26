@@ -271,8 +271,9 @@
                 <p>The Fundamental Theorem explains why we use the same notation for a definite integral, which is a numerical calculation,<fn>Which I think sometimes students lose sight of.</fn> and an antiderivative, which is a symbolic expression.</p>
 
                 <exercise>
+                    <title>Essay Question: Compare and Contrast</title>
                     <statement>
-                        <p>Write a short paragraph which compares, and contrasts, the definite and indefinite integral.</p>
+                        <p>Write a short paragraph which compares, and contrasts, the definite and indefinite integral. This is an exercise which sits in the midst of the narrative, so is formatted more like an example or a remark.  It can have a hint and a solution, but this one does not.  It can have a title, which this one does.</p>
                     </statement>
                 </exercise>
 
@@ -689,8 +690,9 @@
             </introduction>
 
             <exercise>
+                <title>An Exercise in a Section</title>
                 <statement>
-                    <p>Exercises can appear in a <q>section</q> of their own.  You need to give the section a title, even if it seems obvious what to call it.  How should we hide solutions?</p>
+                    <p>Exercises can appear in a <q>section</q> of their own.  You need to give the section a title, even if it seems obvious what to call it.  Individual exercises may have titles, as you choose.  Problem: How should we hide solutions?</p>
                 </statement>
                 <solution>
                     <p>Maybe a global switch should be used to supress solutions, while a separate processing regime could use them as part of a solutions manual.</p>
