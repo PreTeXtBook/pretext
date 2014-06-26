@@ -588,6 +588,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="@number" />
 </xsl:template>
 
+<!-- Bibliographic items are in lists in references section -->
+<!-- so we always have a hierarchical number, that we can strip -->
+<!-- Or we provide a label if one is given -->
+<!-- TODO: probably better to have a processing switch for label use? -->
+<xsl:template match="biblio" mode="origin-id">
+    <xsl:choose>
+        <xsl:when test="label">
+            <xsl:apply-templates select="label" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="substring-after-last">
+                <xsl:with-param name="input">
+                    <xsl:apply-templates select="." mode="number" />
+                </xsl:with-param>
+                <xsl:with-param name="substr" select="'.'" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- Textual Representations of structural elements  -->
 <!--   conveniences for annotating derivative products -->

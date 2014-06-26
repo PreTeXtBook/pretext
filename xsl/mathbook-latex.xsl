@@ -1651,17 +1651,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- compatible with thebibliography environment -->
 <xsl:template match="biblio[@type='raw']">
     <xsl:text>\bibitem</xsl:text>
-    <!-- "label" something like Jud99           -->
-    <!-- Or supply the actual number by default -->
+    <!-- "label" (e.g. Jud99), or by default serial number -->
+    <!-- LaTeX's bibitem will provide the visual brackets  -->
     <xsl:text>[</xsl:text>
-    <xsl:choose>
-        <xsl:when test="label">
-            <xsl:apply-templates select="label" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="." mode="number" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="origin-id" />
     <xsl:text>]</xsl:text>
     <!-- "key" for cross-referencing -->
     <xsl:text>{</xsl:text>
