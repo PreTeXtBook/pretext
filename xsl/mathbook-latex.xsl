@@ -1605,6 +1605,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
+<!-- We do links to exercises manually since they may be hard-coded -->
+<!-- Show the fully-qualified number as a reference                 -->
+<xsl:template match="exercises//exercise" mode="ref-id">
+    <xsl:text>\hyperlink{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="number" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
 <!-- Provisional cross-references -->
 <!-- A convenience for authors in early stages of writing -->
 <!-- TODO: Move cite/@provisional to common file with warning, once deactivated (as error) -->
@@ -1623,12 +1633,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Insert a xref identifier as a LaTeX label on anything   -->
+<!-- Insert an identifier as a LaTeX label on anything       -->
 <!-- Calls to this template need come from where LaTeX likes -->
 <!-- a \label, generally someplace that can be numbered      -->
 <!-- Could do optionally: <xsl:value-of select="@xml:id" />  -->
 <xsl:template match="*" mode="label">
     <xsl:text>\label{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- In some cases we supply our own cross-referencing via      -->
+<!-- hyperref's hypertarget mechanism, specifically for         -->
+<!-- exercises, which may have hard-coded numbers in the source -->
+<xsl:template match="exercises//exercise" mode="label">
+    <xsl:text>\phantomsection\hypertarget{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}</xsl:text>
 </xsl:template>

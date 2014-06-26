@@ -567,6 +567,7 @@
             </references>
 
             <exercises>
+                <title>Exercises</title>
 
                 <exercise>
                     <statement>
@@ -586,7 +587,7 @@
                         </statement>
                     </exercise>
 
-                    <exercise>
+                    <exercise xml:id="exercises-cosine-derivative">
                         <statement>
                             <p><m>y = \cos(x)</m>, <m>y^\prime</m>.</p>
                         </statement>
@@ -664,12 +665,12 @@
 
             </subsection>
 
-
         </section>
-
 
         <section>
             <title>Video</title>
+
+            <p>First, a gratuitous reference to Exercise<nbsp /><xref ref="exercises-cosine-derivative" /> about the derivative of a cosine.</p>
 
             <p>Embedded videos can make sense for a web version of your document. This is a video promoting the University of Puget Sound to potential new students.  Support is limited to WebM format initially, mp4 support will be easy to add.  This may require an HTML5 capable browser, such as Chrome, to render properly.</p>
 
