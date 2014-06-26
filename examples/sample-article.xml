@@ -381,7 +381,7 @@
                 <image width="350" source="images/cubic-function.png" />
             </figure>
 
-            <p>Lists can have multiple columns.  With HTML items displayed in row-major order (horizontally first) and with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items <mdash /> derivatives and integrals <mdash /> where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.</p>
+            <p>Lists can have multiple columns.  With HTML items displayed in row-major order (horizontally first) and with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items <mdash /> derivatives and integrals <mdash /> where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.<index xml:id="index-start-multicolumn" finish="index-finish-multicolumn"><main>Lists</main><sub>multicolumn</sub></index></p>
 
             <ol cols="5">
                 <li><p>Red</p></li>
@@ -450,7 +450,9 @@
         <section>
             <title>Some Advanced Ideas</title>
 
-            <p>The multi-row displayed mathematics in the proof of the Fundamental Theorem had equations aligned on the equals signs via the <ampersand /> character.  Sometimes you don't want that.  Here is an example with some differential equations, with each equation centered and unnumbered, <md>
+            <todo>Move index-finish marker back once it is allowed other places</todo>
+
+            <p><index xml:id="index-finish-multicolumn" start="index-start-multicolumn" />The multi-row displayed mathematics in the proof of the Fundamental Theorem had equations aligned on the equals signs via the <ampersand /> character.  Sometimes you don't want that.  Here is an example with some differential equations, with each equation centered and unnumbered, <md>
                 <mrow>{\mathcal L}(y')(s) = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
             </md></p>
@@ -792,6 +794,8 @@
 
             <conclusion>
                 <p>There is an index manufactured for the <latex /> verion, which contains a few entries.  Look at the source of this XML file to see how they are written.  They may be placed inside of paragraphs (<c>&lt;p&gt;</c>) and statements (<c>&lt;statements&gt;</c>), and probably other places as well <mdash /> this should be liberalized.  Look at the preamble of the generated <latex /> file for instructions on generating the index.  No other converters are producing an index.</p>
+
+                <p>There is an index entry about multicolumn lists which spans more than one page.  This requires doubly-linked index entries, the first has the index content and points to the <c>xml:id</c> of the second.  The second is an empty element, but points back to the <c>xml:id</c> of the first entry.  So each has a marker and a reference, which allows the span of the index topic to cut across XML boundaries in the source.  See the source of this article for syntax details.</p>
             </conclusion>
 
         </references>

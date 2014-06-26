@@ -956,6 +956,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="main" />
     <xsl:apply-templates select="sub" />
     <xsl:apply-templates select="see" />
+    <xsl:apply-templates select="@finish" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -967,6 +968,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="index/see">
     <xsl:text>|see{</xsl:text>
     <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- finish  attribute suggests range (only) -->
+<xsl:template match="@finish">
+    <xsl:text>|(</xsl:text>
+</xsl:template>
+
+<!-- start  attribute marks end of range  -->
+<xsl:template match="@start">
+    <xsl:text>|)</xsl:text>
+</xsl:template>
+
+<xsl:template match="index[@start]">
+    <xsl:variable name="start" select="id(@start)" />
+    <xsl:text>\index{</xsl:text>
+    <xsl:apply-templates select="$start/main" />
+    <xsl:apply-templates select="$start/sub" />
+    <xsl:apply-templates select="$start/see" />
+    <xsl:apply-templates select="@start" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
