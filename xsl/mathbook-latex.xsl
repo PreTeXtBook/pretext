@@ -65,6 +65,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     with paperheight, paperwidth              -->
 <xsl:param name="latex.draft" select="'no'"/>
 <!--  -->
+<!-- Print Option                                     -->
+<!-- For a non-electronic copy, mostly links in black -->
+<xsl:param name="latex.print" select="'no'"/>
+<!--  -->
 <!-- Preamble insertions                    -->
 <!-- Insert packages, options into preamble -->
 <!-- early or late                          -->
@@ -487,8 +491,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>%% hyperref driver does not need to be specified&#xa;</xsl:text>
     <xsl:text>\usepackage{hyperref}&#xa;</xsl:text>
-    <xsl:text>%% Hyperlinking in PDFs, all links solid and blue&#xa;</xsl:text>
-    <xsl:text>\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
+    <xsl:if test="$latex.print='no'">
+        <xsl:text>%% Hyperlinking active in PDFs, all links solid and blue&#xa;</xsl:text>
+        <xsl:text>\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$latex.print='yes'">
+        <xsl:text>%% latex.print parameter set to 'yes', all hyperlinks black&#xa;</xsl:text>
+        <xsl:text>\hypersetup{hidelinks}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>\hypersetup{pdftitle={</xsl:text>
     <xsl:apply-templates select="title" />
     <xsl:text>}}&#xa;</xsl:text>
