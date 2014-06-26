@@ -1713,7 +1713,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="$level=3">subsection</xsl:when>
                 <xsl:when test="$level=4">subsubsection</xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>ERROR: Level computation is out-of-bounds (<xsl:value-of select="$level" />)</xsl:message>
+                    <xsl:message>MBX:ERROR: Level computation is out-of-bounds (<xsl:value-of select="$level" />)</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
@@ -1724,12 +1724,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="$level=2">subsection</xsl:when>
                 <xsl:when test="$level=3">subsubsection</xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>ERROR: Level computation is out-of-bounds (<xsl:value-of select="$level" />)</xsl:message>
+                    <xsl:message>MBX:ERROR: Level computation is out-of-bounds (<xsl:value-of select="$level" />)</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>ERROR: Level computation only for books, articles</xsl:message>
+            <xsl:message>MBX:ERROR: Level computation only for books, articles</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>

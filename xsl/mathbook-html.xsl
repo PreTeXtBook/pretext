@@ -52,7 +52,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="/mathbook/article and /mathbook/article/section">1</xsl:when>
         <xsl:when test="/mathbook/article">0</xsl:when>
         <xsl:otherwise>
-            <xsl:message>ERROR: Chunk level not determined</xsl:message>
+            <xsl:message>MBX:ERROR: Chunk level not determined</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -138,7 +138,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="summary" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>WARNING: Document node is considered both summary and webpage at <xsl:apply-templates  select="." mode="long-name"/>.</xsl:message>
+            <xsl:message>MBX:BUG: Document node is considered both summary and webpage at <xsl:apply-templates  select="." mode="long-name"/>.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -278,8 +278,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </h2>
 </xsl:template>
 
-
-
 <!-- An introduction is not a document node -->
 <!-- We want all the content as a summary   -->
 <xsl:template match="introduction" mode="summary-entry">
@@ -294,34 +292,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- TODO's can be anywhere and we do not want to see them -->
 <xsl:template match="todo" mode="summary-entry" />
-
-<!-- Page Navigation Bar -->
-<!-- OBSOLETE: but useful example (filebase, title/node are no longer used)  -->
-<!-- TODO: Rework as a floating navigation bar with arrows at bottom of page -->
-<!-- http://stackoverflow.com/questions/12347412/concept-xml-xlst-preceding-sibling-and-ancestor -->
-<!-- http://stackoverflow.com/questions/10367387/are-there-css-alternatives-to-the-deprecated-html-attributes-align-and-valign -->
-<xsl:template name="page-navigation-bar">
-    <table class="page-nav-bar">
-        <tr>
-        <td class="previous">
-        <a href="{preceding-sibling::*[1]/@filebase}.html">
-            <xsl:apply-templates select="preceding-sibling::*[1]/title/node()" />
-        </a>
-        </td>
-        <td class="up">
-        <a href="{parent::*/@filebase}.html">
-            <xsl:apply-templates select="parent::*/title/node()" />
-        </a>
-        </td>
-        <td class="next">
-        <a href="{following-sibling::*[1]/@filebase}.html">
-            <xsl:apply-templates select="following-sibling::*[1]/title/node()" />
-        </a>
-        </td>
-        </tr>
-    </table>
-</xsl:template>
-
 
 <!-- Title Page -->
 <xsl:template match="titlepage">
@@ -592,7 +562,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </figcaption>
 </xsl:template>
 
-
 <!-- Cross-References, Citations -->
 <!-- Warnings at command-line for absent ref/provisional are in common file  -->
 
@@ -680,7 +649,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-
 <!-- Footnotes                                             -->
 <!-- Mimicking basic LaTeX, but as knowls                  -->
 <!-- Put content into knowl, then make a knowl link for it -->
@@ -723,9 +691,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-
-
-
 <!-- TODO: condition on id present!!!!!-->
 <!-- TODO: perhaps back up a level on xml:id and regroup elsewhere, see latex version -->
 <xsl:template match="*" mode="label">
@@ -738,7 +703,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
     </xsl:element>
 </xsl:template>
-
 
 <!-- Miscellaneous -->
 
@@ -899,7 +863,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 <xsl:template match="braces">
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates />>
+    <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -1100,17 +1064,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </p>
     <xsl:text>\begin{align}&#xa;</xsl:text>
 </xsl:template>
-
-
-<!--Manual numbering example
-<xsl:template match="mrow">
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:value-of select="." />
-    <xsl:text>\tag{</xsl:text>
-        <xsl:apply-templates select="." mode="number" />
-    <xsl:text>}</xsl:text>
-    <xsl:text>\\</xsl:text>
-</xsl:template>-->
 
 <!-- Manufacturing Knowls              -->
 <!-- "knowl" subdirectory is hardcoded -->
@@ -1425,6 +1378,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 
 <!-- Navigational Arrows -->
 <!-- Page-specific       -->
+<!-- TODO: Also make a floating navigation bar with arrows at bottom of page? -->
 <xsl:template match="*" mode="nav-arrows">
     <nav id="prevnext">
         <!-- Previous -->

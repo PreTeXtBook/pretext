@@ -26,7 +26,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="date"
 >
 
-
 <xsl:import href="./languages/mathbook-language-en.xsl" />
 
 <!-- MathBook XML common templates                        -->
@@ -189,16 +188,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$candidate &lt; $numbering-theorems">
-            <xsl:message terminate="yes">MBX:ERROR: theorem numbering level cannot exceed sectioning level</xsl:message>
+            <xsl:message terminate="yes">MBX:FATAL: theorem numbering level cannot exceed sectioning level</xsl:message>
         </xsl:when>
         <xsl:when test="$candidate &lt; $numbering-equations">
-            <xsl:message terminate="yes">MBX:ERROR: equation numbering level cannot exceed sectioning level</xsl:message>
+            <xsl:message terminate="yes">MBX:FATAL: equation numbering level cannot exceed sectioning level</xsl:message>
         </xsl:when>
         <xsl:when test="$candidate &lt; $numbering-footnotes">
-            <xsl:message terminate="yes">MBX:ERROR: footnote numbering level cannot exceed sectioning level</xsl:message>
+            <xsl:message terminate="yes">MBX:FATAL: footnote numbering level cannot exceed sectioning level</xsl:message>
         </xsl:when>
         <xsl:when test="$candidate &gt; $max-feasible">
-            <xsl:message terminate="yes">MBX:ERROR: sectioning level exceeds maximum possible for this document (<xsl:value-of select="$max-feasible" />)</xsl:message>
+            <xsl:message terminate="yes">MBX:FATAL: sectioning level exceeds maximum possible for this document (<xsl:value-of select="$max-feasible" />)</xsl:message>
         </xsl:when>
         <!-- Survived the gauntlet, spit it out candidate as $numbering-maxlevel -->
         <xsl:otherwise>
@@ -215,7 +214,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- tikz graphics directory for manufacture and HTML use -->
 <!-- TODO: customize with processing directives -->
 <xsl:variable name="tikz-dir">tikz/</xsl:variable>
-
 
 <!-- ############## -->
 <!-- Entry template -->
@@ -498,7 +496,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-
 <!-- Names                                          -->
 <!-- Relies on translations in language files       -->
 <!-- which provides the named template, type-name   -->
@@ -608,38 +605,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-
-<!-- Textual Representations of structural elements  -->
-<!--   conveniences for annotating derivative products -->
-<!--   such as Sage doc tests, LaTeX source            -->
-<!--   Short names for filenames, ids                  -->
-<!--   Long names (below) for content                  -->
-
-<xsl:template match="chapter" mode="short-name">
-    <xsl:text>chap-</xsl:text>
-    <xsl:apply-templates select="." mode="number" />
-</xsl:template>
-
-<xsl:template match="section" mode="short-name">
-    <xsl:text>sec-</xsl:text>
-    <xsl:apply-templates select="." mode="number" />
-</xsl:template>
-
-<xsl:template match="subsection" mode="short-name">
-    <xsl:text>subsec-</xsl:text>
-    <xsl:apply-templates select="." mode="number" />
-</xsl:template>
-
-<xsl:template match="subsubsection" mode="short-name">
-    <xsl:text>subsubsec-</xsl:text>
-    <xsl:apply-templates select="." mode="number" />
-</xsl:template>
-
-<xsl:template match="paragraph" mode="short-name">
-    <xsl:text>para-</xsl:text>
-    <xsl:apply-templates select="." mode="number" />
-</xsl:template>
-
 <!-- Long Names -->
 <!-- Simple text representations of structural elements        -->
 <!-- Type, number, title typically                             -->
@@ -710,15 +675,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Oops -->
+<!-- TODO: convert to error/warning once more stable -->
 <xsl:template match="*" mode="number">
     <xsl:text>[NUMBER]</xsl:text>
-<!--
-    <xsl:message terminate="no">
-        <xsl:text>WARNING: trying to number a </xsl:text>
-        <xsl:apply-templates select="." mode="type-name" />
-        <xsl:text>, but this is not defined</xsl:text>
-    </xsl:message>
--->
 </xsl:template>
 
 <!-- Numbering Structural Subdivisions -->
@@ -773,12 +732,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="$numbering-theorems=2"><xsl:number select="." from="subsection" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table"/></xsl:when>
                 <xsl:when test="$numbering-theorems=3"><xsl:number select="." from="subsubsection" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table"/></xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>ERROR: Level for theorem number computation is out-of-bounds (<xsl:value-of select="$numbering-theorems" />)</xsl:message>
+                    <xsl:message>MBX:ERROR: Level for theorem number computation is out-of-bounds (<xsl:value-of select="$numbering-theorems" />)</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>ERROR: Level for theorem number computation implemented only for books, articles</xsl:message>
+            <xsl:message>MBX:ERROR: Level for theorem number computation implemented only for books, articles</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -816,32 +775,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="$numbering-equations=2"><xsl:number select="." from="subsection" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
                 <xsl:when test="$numbering-equations=3"><xsl:number select="." from="subsubsection" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>ERROR: Level for theorem number computation is out-of-bounds (<xsl:value-of select="$numbering-equations" />)</xsl:message>
+                    <xsl:message>MBX:ERROR: Level for theorem number computation is out-of-bounds (<xsl:value-of select="$numbering-equations" />)</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>ERROR: Level for theorem number computation implemented only for books, articles</xsl:message>
+            <xsl:message>MBX:ERROR: Level for theorem number computation implemented only for books, articles</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
-
-
-<!-- Equations:           -->
-<!--   chapter.x in books -->
-<!--   x in articles      -->
-<!-- <xsl:template match="mrow|men" mode="number">
-    <xsl:if test="ancestor::chapter">
-        <xsl:apply-templates select="ancestor::chapter" mode="number" />
-        <xsl:text>.</xsl:text>
-    </xsl:if>
-    <xsl:number from="chapter" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]" />
-</xsl:template>
- -->
-
-
-
-
 
 <!-- Numbering Footnotes -->
 <!-- At a configurable level                  -->
@@ -858,7 +800,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="$numbering-footnotes=3"><xsl:number select="." from="subsection" level="any" count="fn" /></xsl:when>
                 <xsl:when test="$numbering-footnotes=4"><xsl:number select="." from="subsubsection" level="any" count="fn" /></xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>ERROR: Level for footnote number computation is out-of-bounds (<xsl:value-of select="$numbering-footnotes" />)</xsl:message>
+                    <xsl:message>MBX:ERROR: Level for footnote number computation is out-of-bounds (<xsl:value-of select="$numbering-footnotes" />)</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
@@ -869,12 +811,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="$numbering-footnotes=2"><xsl:number select="." from="subsection" level="any" count="fn" /></xsl:when>
                 <xsl:when test="$numbering-footnotes=3"><xsl:number select="." from="subsubsection" level="any" count="fn" /></xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>ERROR: Level for footnote number computation is out-of-bounds (<xsl:value-of select="$numbering-footnotes" />)</xsl:message>
+                    <xsl:message>MBX:ERROR: Level for footnote number computation is out-of-bounds (<xsl:value-of select="$numbering-footnotes" />)</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>ERROR: Level for footnote number computation implemented only for books, articles</xsl:message>
+            <xsl:message>MBX:ERROR: Level for footnote number computation implemented only for books, articles</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -901,15 +843,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Warnings for high-frequency mistakes -->
 <xsl:template match="cite">
-    <xsl:message terminate="no">
-    <xsl:text>WARNING: Citation (cite) with no ref or provisional attribute</xsl:text>
-    </xsl:message>
+    <xsl:message>MBX:WARNING: Citation (cite) with no ref or provisional attribute, check spelling</xsl:message>
 </xsl:template>
 
 <xsl:template match="xref">
-    <xsl:message terminate="no">
-    <xsl:text>WARNING: Cross-reference (xref) with no ref or provisional attribute</xsl:text>
-    </xsl:message>
+    <xsl:message>MBX:WARNING: Cross-reference (xref) with no ref or provisional attribute, check spelling</xsl:message>
 </xsl:template>
 
 </xsl:stylesheet>
