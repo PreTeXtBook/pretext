@@ -240,7 +240,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
                 </xsl:if>
                 <!-- Create summaries of each child node (which will be a document node) -->
-                 <xsl:apply-templates select="*[not(self::title or self::author)]" mode="summary-entry" />
+                <!-- NB: be more careful about just wrapping links -->
+                <xsl:apply-templates select="titlepage|introduction" mode="summary-entry"/>
+                <nav class="summary-links">
+                    <xsl:apply-templates select="*[not(self::title or self::author or self::titlepage or self::introduction or self::conclusion)]" mode="summary-entry" />
+                </nav>
+                <xsl:apply-templates select="conclusion" mode="summary-entry"/>
             </section>
          </xsl:with-param>
      </xsl:apply-templates>
@@ -249,52 +254,46 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Document summaries -->
-<!-- On a summary page, some items get summarized (eg subdivisions become links) -->
-<!-- some do not (eg introductions)                                              -->
+<!-- On a summary page, some items get summarized (eg subdivisions become links)          -->
+<!-- some do not.  For eample and introduction just gets reproduced verbatim              -->
+<!-- NB: listed here roughly in "order of appearance", note <nav> section of summary page -->
+
+<!-- A titlepage is a front-matter introduction      -->
+<!-- We always handle these the same, summary or not -->
+<!-- So this just calls the default template         -->
+<xsl:template match="titlepage|introduction|conclusion" mode="summary-entry">
+    <xsl:apply-templates select="."/>
+</xsl:template>
 
 <!-- Document node summaries are just links to the page -->
 <xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection" mode="summary-entry">
     <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
-    <h2 class="link"><a href="{$url}">
-        <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+    <a href="{$url}">
+        <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
         <xsl:text> </xsl:text>
-        <xsl:apply-templates select="title" /></a>
-    </h2>
+        <span class="title"><xsl:apply-templates select="title" /></span>
+    </a>
 </xsl:template>
 
 <!-- Some document nodes will not normally have titles and we need default titles -->
 <!-- Especially if one-off (eg Preface), or generic (Exercises)                   -->
 <xsl:template match="exercises|references|frontmatter|preface|acknowledgement|authorbiography|foreword|dedication|colophon" mode="summary-entry">
     <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
-    <h2 class="link"><a href="{$url}">
-        <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+    <a href="{$url}">
+        <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
         <xsl:text> </xsl:text>
-        <xsl:choose>
-            <xsl:when test="title">
-                <xsl:apply-templates select="title" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="." mode="type-name" />
-            </xsl:otherwise>
-        </xsl:choose>
-        </a>
-    </h2>
-</xsl:template>
-
-<!-- An introduction is not a document node -->
-<!-- We want all the content as a summary   -->
-<xsl:template match="introduction" mode="summary-entry">
-    <section class="introduction">
-        <xsl:apply-templates />
-    </section>
-</xsl:template>
-
-<!-- A titlepage is a front-matter introduction   -->
-<!-- We always handle it the same, summary or not -->
-<!-- So this just calls the default template -->
-<xsl:template match="titlepage" mode="summary-entry">
-    <xsl:apply-templates select="."/>
-</xsl:template>
+        <span class="title">
+            <xsl:choose>
+                <xsl:when test="title">
+                    <xsl:apply-templates select="title" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="." mode="type-name" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </span>
+    </a>
+ </xsl:template>
 
 <!-- TODO's can be anywhere and we do not want to see them -->
 <xsl:template match="todo" mode="summary-entry" />
