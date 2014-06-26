@@ -578,6 +578,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Check to see if the ref is any good -->
     <xsl:if test="not(exsl:node-set($target))">
         <xsl:message>MBX:WARNING: unresolved &lt;xref&gt; due to ref="<xsl:value-of select="@ref"/>"</xsl:message>
+        <xsl:if test="$author-tools='yes'" >
+            <xsl:element name="span">
+                <xsl:attribute name="style">color:red</xsl:attribute>
+                <xsl:text>&lt;&lt;Unresolved xref="</xsl:text>
+                <xsl:value-of select="@ref" />
+                <xsl:text>", check spelling or use @provisional&gt;&gt;</xsl:text>
+            </xsl:element>
+        </xsl:if>
     </xsl:if>
     <!-- Create what the reader sees, equation references get parentheses -->
     <xsl:variable name="visual">

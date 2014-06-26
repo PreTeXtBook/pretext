@@ -57,12 +57,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="latex.watermark" select="''"/>
 <xsl:param name="latex.watermark.scale" select="2.0"/>
 <!--  -->
-<!-- Draft Copies                                  -->
-<!-- Various options for working copies            -->
-<!-- (1) LaTeX's draft mode                        -->
-<!-- (2) Crop marks on letter paper, centered      -->
-<!--     presuming geometry sets smaller page size -->
-<!--     with paperheight, paperwidth              -->
+<!-- Author's Tools                                            -->
+<!-- Set the author-tools parameter to 'yes'                   -->
+<!-- (Documented in mathbook-common.xsl)                       -->
+<!-- Installs some LaTeX-specific behavior                     -->
+<!-- (1) Index entries in margin of the page                   -->
+<!--      where defined, on single pass (no real index)        -->
+<!-- (2) LaTeX labels near definition and use                  -->
+<!--     N.B. Some are author-defined; others are internal,    -->
+<!--     and CANNOT be used as xml:id's (will raise a warning) -->
+<!--  -->
+<!-- Draft Copies                                              -->
+<!-- Various options for working copies for authors            -->
+<!-- (1) LaTeX's draft mode                                    -->
+<!-- (2) Crop marks on letter paper, centered                  -->
+<!--     presuming geometry sets smaller page size             -->
+<!--     with paperheight, paperwidth                          -->
 <xsl:param name="latex.draft" select="'no'"/>
 <!--  -->
 <!-- Print Option                                     -->
@@ -470,20 +480,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="//index">
         <xsl:text>%% Support for index creation&#xa;</xsl:text>
-        <xsl:text>%% Requires $ makeindex &lt;filename&gt;&#xa;</xsl:text>
-        <xsl:text>%% prior to second LaTeX pass&#xa;</xsl:text>
-        <xsl:text>%% We provide language support for the "see" phrase&#xa;</xsl:text>
-        <xsl:text>%% and for the title of the "Index" section&#xa;</xsl:text>
-        <xsl:text>\usepackage{makeidx}&#xa;</xsl:text>
-        <xsl:variable name="see-node"><see /></xsl:variable>
-        <xsl:text>\renewcommand{\seename}{</xsl:text>
-        <xsl:apply-templates select="exsl:node-set($see-node)" mode="type-name"/>
-        <xsl:text>}&#xa;</xsl:text>
-        <xsl:variable name="index-node"><indexsection /></xsl:variable>
-        <xsl:text>\renewcommand{\indexname}{</xsl:text>
-        <xsl:apply-templates select="exsl:node-set($index-node)" mode="type-name"/>
-        <xsl:text>}&#xa;</xsl:text>
-        <xsl:text>\makeindex&#xa;</xsl:text>
+        <xsl:if test="$author-tools='no'">
+            <xsl:text>%% Requires doing $ makeindex &lt;filename&gt;&#xa;</xsl:text>
+            <xsl:text>%% prior to second LaTeX pass&#xa;</xsl:text>
+            <xsl:text>%% We provide language support for the "see" phrase&#xa;</xsl:text>
+            <xsl:text>%% and for the title of the "Index" section&#xa;</xsl:text>
+            <xsl:text>\usepackage{makeidx}&#xa;</xsl:text>
+            <xsl:variable name="see-node"><see /></xsl:variable>
+            <xsl:text>\renewcommand{\seename}{</xsl:text>
+            <xsl:apply-templates select="exsl:node-set($see-node)" mode="type-name"/>
+            <xsl:text>}&#xa;</xsl:text>
+            <xsl:variable name="index-node"><indexsection /></xsl:variable>
+            <xsl:text>\renewcommand{\indexname}{</xsl:text>
+            <xsl:apply-templates select="exsl:node-set($index-node)" mode="type-name"/>
+            <xsl:text>}&#xa;</xsl:text>
+            <xsl:text>\makeindex&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="$author-tools='yes'">
+            <xsl:text>%% author-tools = 'yes' activates marginal notes about index&#xa;</xsl:text>
+            <xsl:text>%% and supresses the actual creation of the index itself&#xa;</xsl:text>
+            <xsl:text>\usepackage{showidx}&#xa;</xsl:text>
+        </xsl:if>
     </xsl:if>
     <xsl:if test="//logo">
         <xsl:text>%% Package for precise image placement (for logos on pages)&#xa;</xsl:text>
@@ -514,7 +531,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.watermark.scale" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$latex.draft='yes'" >
+    <xsl:if test="$author-tools='yes'" >
+        <xsl:text>%% Collected author tools options (author-tools='yes')&#xa;</xsl:text>
+        <xsl:text>%% others need to be elsewhere, these are simply package additions&#xa;</xsl:text>
+        <xsl:text>\usepackage{showkeys}&#xa;</xsl:text>
         <xsl:text>\usepackage[letter,cam,center,pdflatex]{crop}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% Custom Preamble Entries, late (use latex.preamble.late)&#xa;</xsl:text>
@@ -531,17 +551,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- LaTeX postamble is common for books, articles and letters      -->
+<!-- No index if in draft mode                                      -->
 <xsl:template name="latex-postamble">
-    <xsl:if test="//index">
+    <xsl:if test="//index and $author-tools='no'">
         <xsl:text>%% Index goes here at very end&#xa;</xsl:text>
         <xsl:text>\clearpage&#xa;</xsl:text>
         <xsl:text>%% Help hyperref point to the right place&#xa;</xsl:text>
         <xsl:text>\phantomsection&#xa;</xsl:text>
+        <xsl:variable name="index-node"><indexsection /></xsl:variable>
         <xsl:if test="/mathbook/book">
-            <xsl:text>\addcontentsline{toc}{chapter}{Index}&#xa;</xsl:text>
+            <xsl:text>\addcontentsline{toc}{chapter}{</xsl:text>
+            <xsl:apply-templates select="exsl:node-set($index-node)" mode="type-name"/>
+            <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="/mathbook/article">
-            <xsl:text>\addcontentsline{toc}{section}{Index}&#xa;</xsl:text>
+            <xsl:text>\addcontentsline{toc}{section}{</xsl:text>
+            <xsl:apply-templates select="exsl:node-set($index-node)" mode="type-name"/>
+            <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
         <xsl:text>\printindex&#xa;</xsl:text>
     </xsl:if>
@@ -1571,6 +1597,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- http://www.stylusstudio.com/xsllist/200412/post20720.html -->
     <xsl:if test="not(exsl:node-set($target))">
         <xsl:message>MBX:WARNING: unresolved &lt;xref&gt; due to ref="<xsl:value-of select="@ref"/>"</xsl:message>
+        <xsl:if test="$author-tools='yes'" >
+            <xsl:text>\textcolor{red}{</xsl:text>
+        </xsl:if>
+        <xsl:text>$\langle\langle$Unresolved ref=``</xsl:text>
+       <xsl:value-of select="@ref"/>
+        <xsl:text>'', check spelling or use $@$provisional$\rangle\rangle$</xsl:text>
+        <xsl:if test="$author-tools='yes'" >
+            <xsl:text>}</xsl:text>
+        </xsl:if>
     </xsl:if>
     <!-- Citation detail is a property of the xref, so need to handle here exceptionally -->
     <xsl:choose>

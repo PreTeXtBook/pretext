@@ -787,11 +787,13 @@
         </section>
 
         <section>
-            <title>Deprecated Items</title>
+            <title>Warnings, Errors, and Deprecated Items</title>
 
-            <p>We collect some bad things here, to test deprecation warnings.  Don't be alarmed.</p>
+            <p>We collect some bad things here, to test deprecation warnings and error handling.  Don't be alarmed.</p>
 
-            <p>Citations using <c>cite</c> element, not <c>xref</c>: <cite provisional="just-a-test" /> and <cite ref="biblio-only-a-test" /></p>
+            <p>Citations using <c>cite</c> element, not <c>xref</c> (deprecated): <cite provisional="just-a-test" /> and <cite ref="biblio-only-a-test" /></p>
+
+            <p>A cross-reference to nowhere (warnings): <xref ref="pointer-to-nowhere-as-test" /></p>
 
         </section>
 
