@@ -1279,19 +1279,22 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- ################# -->
 
 <!-- Navigation Section -->
-<!-- Using mode since navigation arrows are relative to node -->
 <xsl:template match="*" mode="navigation">
     <div id="navbar">
         <div class="container">
-            <xsl:call-template name="toc-items" />
             <xsl:apply-templates select="." mode="nav-arrows" />
+            <xsl:apply-templates select="." mode="toc-items" />
         </div>
     </div>
 </xsl:template>
 
 <!-- Table of Contents SideBar -->
-<!-- Identical on each page    -->
-<xsl:template name="toc-items">
+<!-- Includes "active" class for enclosing outer node              -->
+<!-- Node set equality and subset based on unions of subtrees, see -->
+<!-- http://www.xml.com/cookbooks/xsltckbk/solution.csp?day=5      -->
+<xsl:template match="*" mode="toc-items">
+    <!-- Subtree for page this sidebar will adorn -->
+    <xsl:variable name="this-page-node" select="descendant-or-self::*" />
     <xsl:if test="$toc-level > 0">
         <div id="toc-navbar-item" class="navbar-item">
             <h2 class="navbar-item-text icon-navicon-round ">Table of Contents</h2>
@@ -1301,10 +1304,25 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                     <xsl:apply-templates select="." mode="is-structural" />
                 </xsl:variable>
                 <xsl:if test="$structural='true'">
+                    <!-- Subtree represented by this ToC item -->
+                    <xsl:variable name="outer-node" select="descendant-or-self::*" />
                     <xsl:variable name="outer-url">
                         <xsl:apply-templates select="." mode="url"/>
                    </xsl:variable>
-                    <h2 class="link"><a href="{$outer-url}">
+                   <!-- text of anchor's class, active if a match, otherwise plain -->
+                   <!-- Based on node-set union size                               -->
+                   <xsl:variable name="class">
+                        <xsl:choose>
+                            <xsl:when test="count($this-page-node|$outer-node) = count($outer-node)" >
+                                <xsl:text>link active</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>link</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <!-- The link itself -->
+                    <h2 class="{$class}"><a href="{$outer-url}">
                     <xsl:apply-templates select="." mode="number" />
                     <xsl:text> </xsl:text>
                     <xsl:apply-templates select="." mode="toc-entry" /></a></h2>
@@ -1315,6 +1333,8 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                                 <xsl:apply-templates select="." mode="is-structural" />
                             </xsl:variable>
                             <xsl:if test="$inner-structural='true'">
+                                <!-- Subtree represented by this ToC item -->
+                                <xsl:variable name="inner-node" select="descendant-or-self::*" />
                                 <xsl:variable name="inner-url">
                                     <xsl:apply-templates select="." mode="url" />
                                 </xsl:variable>
@@ -1322,6 +1342,10 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                                     <xsl:apply-templates select="." mode="internal-id" />
                                 </xsl:variable>
                                 <li><a href="{$inner-url}" data-scroll="{$internal}">
+                                <!-- Add if an "active" class if this is where we are -->
+                                <xsl:if test="count($this-page-node|$inner-node) = count($inner-node)">
+                                    <xsl:attribute name="class">active</xsl:attribute>
+                                </xsl:if>
                                 <xsl:apply-templates select="." mode="toc-entry" /></a></li>
                             </xsl:if>
                         </xsl:for-each>
