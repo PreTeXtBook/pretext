@@ -696,7 +696,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Numbering Subdivisions without Numbers -->
 <!-- Only one, or not subdivisible, or ... -->
 <!-- TODO: add more frontmatter, backmatter as it stabilizes -->
-<xsl:template match="book|article|letter|memo|preface|frontmatter|introduction" mode="number"/>
+<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraph|frontmatter|preface|acknowledgement|authorbiography" mode="number"/>
 
 <!-- Numbering Theorems, Definitions, Examples, Inline Exercises, Figures, etc.-->
 <!-- Sructural to a configurable depth, then numbered across depth -->
