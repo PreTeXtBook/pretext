@@ -50,6 +50,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Default is to hide todo's, inline provisionals                   -->
 <!-- Otherwise ('yes'), todo's in red paragraphs, provisionals in red -->
 <xsl:param name="author-tools" select="'no'" />
+<!-- Cross-references like Section 5.2, Theorem 6.7.89    -->
+<!-- "know" what they point to, so we can get the "name"  -->
+<!-- part automatically (and have it change with editing) -->
+<!-- This switch is global, override with @autoname='no'  -->
+<!-- on an <xref> where it is unjustified or a problem    -->
+<!-- Default is to have this feature off                  -->
+<xsl:param name="autoname" select="'no'" />
 <!-- How many levels to table of contents  -->
 <!-- Not peculiar to HTML or LaTeX or etc. -->
 <!-- Sentinel indicates no choice made     -->

@@ -1690,6 +1690,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="$target" mode="internal-id" />
             <xsl:text>}</xsl:text>
         </xsl:when>
+        <xsl:when test="@autoname">
+            <xsl:apply-templates  select="$target" mode="ref-id" >
+                <xsl:with-param name="local" select="@autoname" />
+            </xsl:apply-templates>
+        </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="$target" mode="ref-id" />
         </xsl:otherwise>
@@ -1701,11 +1706,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is complete LaTeX code to make visual reference         -->
 <!-- LaTeX does the numbering and visual formatting automatically -->
 
-<!-- Almost always, a \ref is good enough -->
+<!-- Almost always, a \ref is good enough                       -->
+<!-- \hyperref{Section~\ref*{a-label}} is hyperref construction -->
+<!-- TODO: migrate ugly English-centric hack to language files! -->
 <xsl:template match="*" mode="ref-id">
-    <xsl:text>\ref{</xsl:text>
+    <!-- Parameter is the local @autoname of the calling xref -->
+    <xsl:param name="local" />
+    <!-- Set label for hyperref -->
+    <xsl:text>\hyperref[</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>}</xsl:text>
+    <xsl:text>]{</xsl:text>
+    <!-- Capture 7 of 10 combinations -->
+    <!-- TODO: write a plain \ref if no autonaming? -->
+    <xsl:if test="($autoname='yes' and $local!='no') or
+                  ($autoname='no' and ($local!='no' and $local!=''))" >
+        <xsl:choose>
+            <!-- Capture 5 of 7 combinations -->
+            <xsl:when test="$local='yes' or $local='plural' or ($autoname='yes' and $local='')">
+                <xsl:apply-templates select="." mode="type-name" />
+                <xsl:if test="$local='plural'">
+                    <xsl:text>s</xsl:text>
+                </xsl:if>
+            </xsl:when>
+            <!-- 2 combinations left, global yes/no, local title -->
+            <xsl:when test="$local='title'">
+                <xsl:apply-templates select="title" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message>MBX:BUG: Some autonaming combination slipped through unhandled</xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>~</xsl:text>
+    </xsl:if>
+    <xsl:text>\ref*{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}}</xsl:text>
 </xsl:template>
 
 <!-- Referencing a biblio is cite in LaTeX                   -->
@@ -1727,6 +1762,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We do links to exercises manually since they may be hard-coded -->
 <!-- Show the fully-qualified number as a reference                 -->
 <xsl:template match="exercises//exercise" mode="ref-id">
+    <xsl:if test="$autoname='yes'" >
+        <xsl:apply-templates select="." mode="type-name" />
+        <xsl:text>~</xsl:text>
+    </xsl:if>
     <xsl:text>\hyperlink{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}{</xsl:text>

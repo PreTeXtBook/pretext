@@ -587,7 +587,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:element>
         </xsl:if>
     </xsl:if>
-    <!-- Create what the reader sees, equation references get parentheses -->
+    <!-- Create what the reader sees, if xref has options         -->
+    <!--   bibliographic references, with detail, get brackets, etc -->
+    <!--   theorem references, etc, get autoname overrides, pluralization -->
     <xsl:variable name="visual">
         <xsl:choose>
             <!-- Citations with detail are exceptional, and not uniform, so handle here -->
@@ -598,6 +600,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>, </xsl:text>
                     <xsl:apply-templates select="@detail" />
                 <xsl:text>]</xsl:text>
+            </xsl:when>
+            <xsl:when test="@autoname">
+                <xsl:apply-templates  select="$target" mode="ref-id" >
+                    <xsl:with-param name="local" select="@autoname" />
+                </xsl:apply-templates>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates select="$target" mode="ref-id" />
@@ -614,7 +621,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="href">
             <xsl:apply-templates select="$target" mode="url" />
         </xsl:attribute>
-    <xsl:value-of select="$visual" />
+    <xsl:value-of  disable-output-escaping="yes" select="$visual" />
     </xsl:element>
 </xsl:template>
 
@@ -622,6 +629,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Format of visual identifiers, peculiar to HTML  -->
 <!-- (Perhaps these should be in the common file?)   -->
 <!-- LaTeX does much of this semi-automatically      -->
+
+<!-- Most cross-references have targets that know -->
+<!-- their names, so we default to trying that,   -->
+<!-- subject to various customizations            -->
+<!-- TODO: migrate ugly English-centric hack to language files! -->
+<xsl:template match="*" mode="ref-id">
+    <!-- Parameter is the local @autoname of the calling xref -->
+    <xsl:param name="local" />
+    <!-- Capture 7 of 10 combinations -->
+<xsl:message><xsl:value-of select="@xml:id" /> 1)<xsl:value-of select="$autoname" /> 2)<xsl:value-of select="$local" /></xsl:message>
+    <xsl:if test="($autoname='yes' and $local!='no') or
+                  ($autoname='no' and ($local!='no' and $local!=''))" >
+        <xsl:choose>
+            <!-- Capture 5 of 7 combinations -->
+            <xsl:when test="$local='yes' or $local='plural' or ($autoname='yes' and $local='')">
+                <xsl:apply-templates select="." mode="type-name" />
+                <xsl:if test="$local='plural'">
+                    <xsl:text>s</xsl:text>
+                </xsl:if>
+            </xsl:when>
+            <!-- 2 combinations left, global yes/no, local title -->
+            <xsl:when test="$local='title'">
+                <xsl:apply-templates select="title" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message>MBX:BUG: Some autonaming combination slipped through unhandled</xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="number" />
+</xsl:template>
 
 <!-- Citations with detail are handled above, generic here -->
 <xsl:template match="biblio" mode="ref-id">
