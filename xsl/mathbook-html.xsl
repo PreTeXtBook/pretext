@@ -1159,6 +1159,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
+<!-- Program Listings -->
+<!-- Research:  http://softwaremaniacs.org/blog/2011/05/22/highlighters-comparison/           -->
+<!-- From Google: downloadable, auto-detects languages, has hint-handlers                     -->
+<!-- http://code.google.com/p/google-code-prettify/                                           -->
+<!-- http://code.google.com/p/google-code-prettify/wiki/GettingStarted                        -->
+<!-- See common file for more on language handlers, and "language-prettify" template          -->
+<xsl:template match="program">
+    <xsl:variable name="classes">
+        <xsl:text>prettyprint</xsl:text>
+        <xsl:if test="@language">
+            <xsl:text> lang-</xsl:text>
+            <xsl:value-of select="@language" />
+        </xsl:if>
+    </xsl:variable>
+    <pre class="{$classes}" style="font-size:80%">
+    <xsl:call-template name="sanitize-sage">
+        <xsl:with-param name="raw-sage-code" select="input" />
+    </xsl:call-template>
+    </pre>
+</xsl:template>
+
 <!-- Geogebra                               -->
 <!-- Empty cell for scribbling if empty tag -->
 <!-- From Bruce Cohen's Sage iFrame demo    -->
@@ -1248,6 +1269,9 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
             <xsl:call-template name="mathjax" />
             <xsl:call-template name="sagecell" />
+            <xsl:if test="/mathbook//program">
+                <xsl:call-template name="goggle-code-prettifier" />
+            </xsl:if>
             <xsl:call-template name="knowl" />
             <xsl:call-template name="mathbook-js" />
             <xsl:call-template name="fonts" />
@@ -1594,6 +1618,12 @@ $(function () {
                            hide: ['evalButton', 'editorToggle', 'language']});
 });
     </script>
+</xsl:template>
+
+<!-- Program Listings from Google -->
+<!--   ?skin=sunburst  on end of src URL gives black terminal look -->
+<xsl:template name="goggle-code-prettifier">
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
 </xsl:template>
 
 <!-- Knowl header -->

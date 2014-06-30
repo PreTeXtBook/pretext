@@ -453,12 +453,55 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
     <xsl:text>%% Colors for Sage boxes and author tools (red hilites)&#xa;</xsl:text>
     <xsl:text>\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}&#xa;</xsl:text>
-    <xsl:if test="//sage">
-        <xsl:text>%% Sage input, listings package: boxed, colored, line breaking&#xa;</xsl:text>
-        <xsl:text>%% Sage output, similar, but not colored&#xa;</xsl:text>
+    <!-- Inconsolata font, sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html            -->
+    <!-- As seen on: http://tex.stackexchange.com/questions/50810/good-monospace-font-for-code-in-latex -->
+    <!-- "Fonts for Displaying Program Code in LaTeX":  http://nepsweb.co.uk/docs%/progfonts.pdf        -->
+    <!-- Fonts and xelatex:  http://tex.stackexchange.com/questions/102525/use-type-1-fonts-with-xelatex -->
+    <!--   http://tex.stackexchange.com/questions/179448/beramono-in-xetex -->
+    <!-- http://tex.stackexchange.com/questions/25249/how-do-i-use-a-particular-font-for-a-small-section-of-text-in-my-document -->
+    <!-- Coloring listings: http://tex.stackexchange.com/questions/18376/beautiful-listing-for-csharp -->
+    <xsl:if test="//sage or //program">
+        <xsl:text>%% Program listing support, for Sage code or otherwise&#xa;</xsl:text>
         <xsl:text>\usepackage{listings}&#xa;</xsl:text>
-        <xsl:text>\lstdefinestyle{sageinput}{language=Python,breaklines=true,breakatwhitespace=true,basicstyle=\small\ttfamily,columns=fixed,frame=single,frameround=tttt,backgroundcolor=\color{blue!10},xleftmargin=4ex,xrightmargin=4ex}&#xa;</xsl:text>
-        <xsl:text>\lstdefinestyle{sageoutput}{language=Python,breaklines=true,breakatwhitespace=true,basicstyle=\small\ttfamily,columns=fixed,xleftmargin=8ex,xrightmargin=4ex}&#xa;</xsl:text>
+        <xsl:text>%% We define \listingsfont to provide Bitstream Vera Mono font&#xa;</xsl:text>
+        <xsl:text>%% for program listings, under both pdflate and xelatex&#xa;</xsl:text>
+        <xsl:text>%% If you remove this, define \listingsfont to be \ttfamily perhaps&#xa;</xsl:text>
+        <xsl:text>\ifxetex&#xa;</xsl:text>
+        <xsl:text>\usepackage{fontspec}\newfontface\listingsfont[Path]{fvmr8a.pfb}&#xa;</xsl:text>
+        <xsl:text>\else&#xa;</xsl:text>
+        <xsl:text>\edef\oldtt{\ttdefault}\usepackage[scaled]{beramono}\usepackage[T1]{fontenc}&#xa;</xsl:text>
+        <xsl:text>\renewcommand*\ttdefault{\oldtt}\newcommand{\listingsfont}{\fontfamily{fvm}\selectfont}&#xa;</xsl:text>
+        <xsl:text>\fi&#xa;</xsl:text>
+        <xsl:text>%% End of program listing font definition&#xa;</xsl:text>
+        <xsl:if test="//program">
+            <xsl:text>%% Generic input, listings package: boxed, white, line breaking, language per instance&#xa;</xsl:text>
+            <xsl:if test="$latex.print='no'" >
+                <xsl:text>%% Colors match a subset of Google prettify "Default" style&#xa;</xsl:text>
+                <xsl:text>%% Set latex.print='yes" to get all black&#xa;</xsl:text>
+                <xsl:text>%% http://code.google.com/p/google-code-prettify/source/browse/trunk/src/prettify.css&#xa;</xsl:text>
+                <xsl:text>\definecolor{identifiers}{rgb}{0.375,0,0.375}&#xa;</xsl:text>
+                <xsl:text>\definecolor{comments}{rgb}{0.5,0,0}&#xa;</xsl:text>
+                <xsl:text>\definecolor{strings}{rgb}{0,0.5,0}&#xa;</xsl:text>
+                <xsl:text>\definecolor{keywords}{rgb}{0,0,0.5}&#xa;</xsl:text>
+            </xsl:if>
+            <xsl:if test="$latex.print='yes'" >
+                <xsl:text>%% All-black colors&#xa;</xsl:text>
+                <xsl:text>\definecolor{identifiers}{rgb}{0,0,0}&#xa;</xsl:text>
+                <xsl:text>\definecolor{comments}{rgb}{0,0,0}&#xa;</xsl:text>
+                <xsl:text>\definecolor{strings}{rgb}{0,0,0}&#xa;</xsl:text>
+                <xsl:text>\definecolor{keywords}{rgb}{0,0,0}&#xa;</xsl:text>
+            </xsl:if>
+            <xsl:text>\lstdefinestyle{genericinput}{breaklines=true,breakatwhitespace=true,columns=fixed,frame=single,xleftmargin=4ex,xrightmargin=4ex,&#xa;</xsl:text>
+            <xsl:text>basicstyle=\footnotesize\listingsfont,identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//sage">
+            <xsl:text>%% Sage's blue is 50%, we go way lighter (blue!05 would work)&#xa;</xsl:text>
+            <xsl:text>\definecolor{sageblue}{rgb}{0.95,0.95,1}&#xa;</xsl:text>
+            <xsl:text>%% Sage input, listings package: Python syntax, boxed, colored, line breaking&#xa;</xsl:text>
+            <xsl:text>\lstdefinestyle{sageinput}{language=Python,breaklines=true,breakatwhitespace=true,basicstyle=\footnotesize\listingsfont,columns=fixed,frame=single,backgroundcolor=\color{sageblue},xleftmargin=4ex,xrightmargin=4ex}&#xa;</xsl:text>
+            <xsl:text>%% Sage output, similar, but not boxed, not colored&#xa;</xsl:text>
+            <xsl:text>\lstdefinestyle{sageoutput}{language=Python,breaklines=true,breakatwhitespace=true,basicstyle=\footnotesize\listingsfont,columns=fixed,xleftmargin=8ex,xrightmargin=4ex}&#xa;</xsl:text>
+        </xsl:if>
     </xsl:if>
     <xsl:if test="//tikz">
         <xsl:text>%% Tikz graphics&#xa;</xsl:text>
@@ -1458,6 +1501,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="output">
     <xsl:text>\begin{lstlisting}[style=sageoutput]&#xa;</xsl:text>
+    <xsl:call-template name="sanitize-sage">
+        <xsl:with-param name="raw-sage-code" select="." />
+    </xsl:call-template>
+    <xsl:text>\end{lstlisting}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Program Listings -->
+<!-- The "listings-language" template is in the common file -->
+<xsl:template match="program">
+    <xsl:variable name="language"><xsl:apply-templates select="." mode="listings-language" /></xsl:variable>
+    <xsl:text>\begin{lstlisting}[style=genericinput</xsl:text>
+    <xsl:if test="$language!=''">
+        <xsl:text>, language=</xsl:text>
+        <xsl:value-of select="$language" />
+    </xsl:if>
+    <xsl:text>]&#xa;</xsl:text>
     <xsl:call-template name="sanitize-sage">
         <xsl:with-param name="raw-sage-code" select="." />
     </xsl:call-template>

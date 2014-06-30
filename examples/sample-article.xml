@@ -804,6 +804,45 @@
         </section>
 
         <section>
+            <title>Program Listings</title>
+
+            <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt (in-browser Python) or the Python language argument to the Sage Cell Server.</p>
+
+            <p>In the meantime, program listings, especially with syntax highlighting, is useful all by itself.  The <q>R</q> language might not be a bad stand-in for pseudo-code, as it supports assignment with a left arrow and has fairly generic procedural syntax for control structures and data structures.  Or maybe Pascal would be a good choice?  Here is an example of R.</p>
+
+            <!-- Output in knowls?? -->
+
+            <!-- Comments edited for length                                                         -->
+            <!-- http://connectmv.com/tutorials/r-tutorial/programming-in-r-loops-and-flow-control/ -->
+            <program language="r">
+                <input>
+                <![CDATA[n_loops <- 10
+                x.means <- numeric(n_loops)  # create a vector of zeros for results
+                for (i in 1:n_loops){
+                    x <- as.integer(runif(100, 1, 7))  # 1 to 6, uniformly
+                    x.means[i] <- mean(x)
+                }
+                x.means]]>
+                </input>
+            </program>
+
+            <p>And some self-referential XSL:</p>
+
+            <program language="xslt">
+                <input>
+                <![CDATA[<xsl:template match="biblio" mode="number">
+                    <xsl:apply-templates select="." mode="structural-number" />
+                    <xsl:text>.</xsl:text>
+                    <xsl:number from="references" level="any" count="biblio" />
+                </xsl:template>]]>
+                </input>
+            </program>
+
+            <p>Look in the <c>mathbook-common.xsl</c> file to see the strings to use to identify languages.  Always all-lowercase, no symbols, no punctuation.</p>
+
+        </section>
+
+        <section>
             <title>Warnings, Errors, and Deprecated Items</title>
 
             <p>We collect some bad things here, to test deprecation warnings and error handling.  Don't be alarmed.</p>
@@ -813,7 +852,6 @@
             <p>A cross-reference to nowhere (warnings): <xref ref="pointer-to-nowhere-as-test" /></p>
 
         </section>
-
 
         <!-- Bibliography/References can appear anywhere -->
 

@@ -24,6 +24,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xml="http://www.w3.org/XML/1998/namespace" 
     xmlns:date="http://exslt.org/dates-and-times"
     extension-element-prefixes="date"
+    xmlns:mb="http://mathbook.pugetsound.edu/"
+    exclude-result-prefixes="mb"
 >
 
 <xsl:import href="./languages/mathbook-language-en.xsl" />
@@ -840,6 +842,96 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>.</xsl:text>
     <xsl:number from="references" level="any" count="biblio" />
 </xsl:template>
+
+<!-- Programming Language Names -->
+<!-- Packages for listing and syntax highlighting             -->
+<!-- have their own ideas about the names of languages        -->
+<!-- We use keys to perform the translation                   -->
+<!-- See: https://gist.github.com/frabad/4189876              -->
+<!-- for motivation and document() syntax for standalone file -->
+<!-- Also: see contributors in FCLA work                      -->
+
+<!-- The data: attribute is our usage,    -->
+<!-- elements belong to other packages.   -->
+<!-- Blank means not explicitly supported -->
+<!-- Alphabetical by type                 -->
+<!-- Prettify: -->
+<!-- Last reviewed 2014/06/28                                                     -->
+<!-- http://code.google.com/p/google-code-prettify/source/browse/trunk/src        -->
+<!-- Look inside files, it can be a one-handler-to-several-languages relationship -->
+<!-- Listings: -->
+<!-- Last reviewed 2014/06/28                           -->
+<!-- Exact matches, or best guesses, some unimplemented -->
+
+<!-- Our strings (@mbx) are always all-lowercase, no symbols, no punctuation -->
+<mb:programming>
+    <!-- Procedural -->
+    <language mbx="basic"       listings="Basic"        prettify="basic" />     <!-- Prettify handler verified -->
+    <language mbx="c"           listings="C"            prettify="" />          <!-- No Prettify handler -->
+    <language mbx="cpp"         listings="C++"          prettify="" />          <!-- No Prettify handler -->
+    <language mbx="go"          listings="C"            prettify="go" />        <!-- Prettify handler verified -->
+    <language mbx="java"        listings="Java"         prettify="" />          <!-- No Prettify handler -->
+    <language mbx="lua"         listings="Lua"          prettify="lua" />       <!-- Prettify handler verified -->
+    <language mbx="pascal"      listings="Pascal"       prettify="pascal" />    <!-- Prettify handler verified -->
+    <language mbx="perl"        listings="Perl"         prettify="" />          <!-- No Prettify handler -->
+    <language mbx="python"      listings="Python"       prettify="" />          <!-- No Prettify handler -->
+    <language mbx="r"           listings="R"            prettify="r" />         <!-- Prettify handler verified -->
+    <language mbx="s"           listings="S"            prettify="s" />         <!-- Prettify handler verified -->
+    <language mbx="sas"         listings="SAS"          prettify="s" />         <!-- Prettify handler verified -->
+    <language mbx="sage"        listings="Python"       prettify="" />          <!-- No Prettify handler -->
+    <language mbx="splus"       listings="[Plus]S"      prettify="Splus" />     <!-- Prettify handler verified -->
+    <language mbx="vbasic"     listings="[Visual]Basic" prettify="vb" />        <!-- Prettify handler verified -->
+    <language mbx="vbscript"    listings="VBscript"     prettify="vbs" />       <!-- Prettify handler verified -->
+    <!-- Others (esp. functional-->
+    <language mbx="apollo"      listings=""             prettify="apollo" />    <!-- Prettify handler verified --> 
+    <language mbx="clojure"     listings="Lisp"         prettify="clojure" />   <!-- Prettify handler verified -->
+    <language mbx="lisp"        listings="Lisp"         prettify="lisp" />      <!-- Prettify handler verified -->
+    <language mbx="clisp"       listings="Lisp"         prettify="cl" />        <!-- Prettify handler verified -->
+    <language mbx="elisp"       listings="Lisp"         prettify="el" />        <!-- Prettify handler verified -->
+    <language mbx="scheme"      listings="Lisp"         prettify="scm" />       <!-- Prettify handler verified -->
+    <language mbx="racket"      listings="Lisp"         prettify="rkt" />       <!-- Prettify handler verified -->
+    <language mbx="llvm"        listings="LLVM"         prettify="llvm" />      <!-- Prettify handler verified -->
+    <language mbx="matlab"      listings="Matlab"       prettify="" />          <!-- No Prettify handler -->
+    <language mbx="ml"          listings="ML"           prettify="ml" />        <!-- Prettify handler verified -->
+    <language mbx="fsharp"      listings="ML"           prettify="fs" />        <!-- Prettify handler verified -->
+    <!-- Text Manipulation -->
+    <language mbx="css"         listings=""             prettify="css" />       <!-- Prettify handler verified -->
+    <language mbx="latex"       listings="TeX"          prettify="latex" />     <!-- Prettify handler verified -->
+    <language mbx="html"        listings="HTML"         prettify="" />          <!-- No Prettify handler -->
+    <language mbx="tex"         listings="TeX"          prettify="tex" />       <!-- Prettify handler verified -->
+    <language mbx="xml"         listings="XML"          prettify="" />          <!-- No Prettify handler -->
+    <language mbx="xslt"        listings="XSLT"         prettify="" />          <!-- No Prettify handler -->
+</mb:programming>
+
+<!-- Define the key for indexing into the data list -->
+<xsl:key name="proglang" match="language" use="@mbx" />
+
+<!-- A whole <program> node comes in,  -->
+<!-- text of listings name comes out -->
+<xsl:template match="*" mode="listings-language">
+    <xsl:variable name="language"><xsl:value-of select="@language" /></xsl:variable>
+    <xsl:for-each select="document('')/*/mb:programming">
+        <xsl:value-of select="key('proglang', $language)/@listings" />
+    </xsl:for-each>
+</xsl:template>
+
+<!-- A whole <program> node comes in,  -->
+<!-- text of prettify name comes out -->
+<xsl:template match="*" mode="prettify-language">
+    <xsl:variable name="language"><xsl:value-of select="@language" /></xsl:variable>
+    <xsl:for-each select="document('')/*/mb:programming">
+        <xsl:value-of select="key('proglang', $language)/@listings" />
+    </xsl:for-each>
+</xsl:template>
+
+<!-- This works, without keys, and could be adapted to range over actual data in text -->
+<!-- For example, this approach is used for contributors to FCLA                      -->
+<!--
+<xsl:template match="*" mode="listings-language">
+    <xsl:variable name="language"><xsl:value-of select="@language" /></xsl:variable>
+    <xsl:value-of select="document('')/*/mb:programming/language[@mbx=$language]/listings"/>
+</xsl:template>
+-->
 
 <!-- Warnings for high-frequency mistakes -->
 <xsl:template match="cite">
