@@ -228,12 +228,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Entry template -->
 <!-- ############## -->
 
-<!-- docinfo is metadata, retrieve as needed              -->
+<!-- docinfo is metadata, kill and retrieve as needed     -->
 <!-- Otherwise, processs book, article, letter, memo, etc -->
 <xsl:template match="/mathbook">
-    <xsl:apply-templates select="*[not(self::docinfo)]" />
+    <xsl:apply-templates />
 </xsl:template>
 
+<xsl:template match="docinfo" />
 
 <!-- Mathematics (LaTeX/MathJax)                                                 -->
 <!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
