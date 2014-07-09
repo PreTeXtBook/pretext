@@ -497,10 +497,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Asymptote graphics language -->
-<!-- unimplemented               -->
+<!-- Asymptote graphics language  -->
+<!-- SVG's produced by mbx script -->
 <xsl:template match="asymptote">
-    <p style="margin:auto">&lt;Asymptote graphics migration to HTML not implemented, but is planned&gt;</p>
+    <xsl:element name="object">
+        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
+        <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
+        <xsl:attribute name="data">
+            <xsl:value-of select="$directory.images" />
+            <xsl:text>/</xsl:text>
+            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:text>.svg</xsl:text>
+        </xsl:attribute>
+        <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
+    </xsl:element>
 </xsl:template>
 
 <!-- Video -->
