@@ -480,18 +480,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:element>
 </xsl:template>
 
-<!-- tikz diagrams as files -->
-<!-- A side process will generate SVG image files from tikz code            -->
-<!-- we simply grab those files here, based on attribute providing the name -->
-<!-- TODO: manufacture filename from xml:id? -->
-<!-- TODO: generalize default directory with processing switch -->
+<!-- tikz graphics language       -->
+<!-- SVG's produced by mbx script -->
 <xsl:template match="tikz">
-    <xsl:element name="img">
-        <xsl:attribute name="src">
-            <xsl:value-of select="$tikz-dir" />
-            <xsl:value-of select="@filebase" />
+    <xsl:element name="object">
+        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
+        <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
+        <xsl:attribute name="data">
+            <xsl:value-of select="$directory.images" />
+            <xsl:text>/</xsl:text>
+            <xsl:apply-templates select="." mode="internal-id" />
             <xsl:text>.svg</xsl:text>
         </xsl:attribute>
+        <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
     </xsl:element>
 </xsl:template>
 
