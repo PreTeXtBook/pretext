@@ -77,7 +77,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For example, "2" would mean subsections of a book are unnumbered -->
 <!-- N.B.: the levels above cannot be numerically larger              -->
 <xsl:param name="numbering.maximum.level" select="''" />
-
+<!-- Image files, media files and knowls are placed in directories    -->
+<!-- The defaults are relative to wherever principal output goes      -->
+<!-- These can be overridden at the command-line or in customizations -->
+<xsl:param name="directory.images" select="'images'" />
+<xsl:param name="directory.media"  select="'media'" />
+<xsl:param name="directory.knowls" select="'knowls'" />
 <!-- Strip whitespace text nodes from container elements                    -->
 <!-- Improve source readability with whitespace control in text output mode -->
 <!-- Newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
@@ -216,14 +221,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<!-- Directories -->
-<!-- Relative to top-level XML source tree -->
-<!-- AND top-level HTML source tree        -->
-<!-- Include trailing  slash               -->
-
-<!-- tikz graphics directory for manufacture and HTML use -->
-<!-- TODO: customize with processing directives -->
-<xsl:variable name="tikz-dir">tikz/</xsl:variable>
 
 <!-- ############## -->
 <!-- Entry template -->
