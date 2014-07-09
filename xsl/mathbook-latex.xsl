@@ -520,13 +520,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usetikzlibrary{backgrounds}&#xa;</xsl:text>
         <xsl:text>\usetikzlibrary{arrows,matrix}&#xa;</xsl:text>
     </xsl:if>
-    <!-- Asymptote package just does external processing -->
-    <!-- 
-    <xsl:if test="//asymptote">
-        <xsl:text>%% Asymptote graphics&#xa;</xsl:text>
-        <xsl:text>\usepackage[inline]{asymptote}&#xa;</xsl:text>
-    </xsl:if>
-     -->
     <!-- TODO:  \showidx package as part of a draft mode, prints entries in margin -->
      <xsl:if test="//ol[@cols] or //ul[@cols] or //dl[@cols]">
         <xsl:text>%% Multiple column, column-major lists&#xa;</xsl:text>
@@ -1538,17 +1531,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
-<!-- Asymptote graphics language -->
-<!-- preliminary (cursory) support -->
-<!-- http://asymptote.sourceforge.net/doc/LaTeX-usage.html -->
-<!-- TODO: better to just process this externally               -->
- <!--      since this is all the asympotote package does anyway -->
+<!-- Asymptote graphics language  -->
+<!-- EPS's produced by mbx script -->
 <xsl:template match="asymptote">
-<!--     <xsl:text>\begin{asy}&#xa;</xsl:text>
-    <xsl:call-template name="sanitize-sage">
-        <xsl:with-param name="raw-sage-code" select="." />
-    </xsl:call-template>
-    <xsl:text>\end{asy}&#xa;</xsl:text> -->
+    <xsl:text>\includegraphics[width=0.80\textwidth]{</xsl:text>
+    <xsl:value-of select="$directory.images" />
+    <xsl:text>/</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>.pdf}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Tables -->
