@@ -1664,7 +1664,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The ref-id templates produce the code to create what a reader sees    -->
 <!-- to locate the referenced item                                         -->
 <!-- LaTeX has several schemes: \ref, \cite, \eqref                        -->
-<!-- When "detail" is provided for a citation, we need handle it specially -->
+<!-- Qualifiers of cross-references are passed to their templates          -->
 <xsl:template match="xref[@ref]">
     <xsl:variable name="target" select="id(@ref)" />
     <!-- Check to see if the ref is any good -->
@@ -1681,14 +1681,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}</xsl:text>
         </xsl:if>
     </xsl:if>
-    <!-- Citation detail is a property of the xref, so need to handle here exceptionally -->
+    <!-- Cross-references may have qualifiers of their targets, which -->
+    <!-- we pass to their ref-id templates to handle appropriately    -->
+    <!-- Default is to pass nothing extra                             -->
     <xsl:choose>
         <xsl:when test="@detail">
-            <xsl:text>\cite[</xsl:text>
-            <xsl:apply-templates select="@detail" />
-            <xsl:text>]{</xsl:text>
-            <xsl:apply-templates select="$target" mode="internal-id" />
-            <xsl:text>}</xsl:text>
+            <xsl:apply-templates select="$target" mode="ref-id">
+                <xsl:with-param name="detail" select="@detail" />
+            </xsl:apply-templates>
         </xsl:when>
         <xsl:when test="@autoname">
             <xsl:apply-templates  select="$target" mode="ref-id" >
@@ -1743,10 +1743,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}}</xsl:text>
 </xsl:template>
 
-<!-- Referencing a biblio is cite in LaTeX                   -->
-<!-- Plain here, with @detail is part of xref template above -->
+<!-- Referencing a biblio is a cite in LaTeX                     -->
+<!-- A cross-reference to a biblio may have "detail",            -->
+<!-- extra information about the location in the referenced work -->
 <xsl:template match="biblio" mode="ref-id">
-    <xsl:text>\cite{</xsl:text>
+    <xsl:param name="detail" />
+    <xsl:text>\cite</xsl:text>
+    <xsl:if test="$detail != ''">
+        <xsl:text>[</xsl:text>
+        <xsl:apply-templates select="$detail" />
+        <xsl:text>]</xsl:text>
+    </xsl:if>
+    <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}</xsl:text>
 </xsl:template>

@@ -572,6 +572,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- to locate the referenced item                                         -->
 <!-- Unlike LaTeX, we supply content and "clickable" behavior              -->
 <!-- When "detail" is provided for a citation, we need handle it specially -->
+<!-- Qualifiers of cross-references are passed to their templates          -->
 <xsl:template match="xref[@ref]">
     <!-- Save what the reference points to -->
     <xsl:variable name="target" select="id(@ref)" />
@@ -587,19 +588,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:element>
         </xsl:if>
     </xsl:if>
-    <!-- Create what the reader sees, if xref has options         -->
-    <!--   bibliographic references, with detail, get brackets, etc -->
-    <!--   theorem references, etc, get autoname overrides, pluralization -->
+    <!-- Cross-references may have qualifiers of their targets, which -->
+    <!-- we pass to their ref-id templates to handle appropriately    -->
+    <!-- Default is to pass nothing extra                             -->
     <xsl:variable name="visual">
         <xsl:choose>
-            <!-- Citations with detail are exceptional, and not uniform, so handle here -->
-            <!-- TODO: knowls for xrefs, especially citations -->
             <xsl:when test="@detail">
-                <xsl:text>[</xsl:text>
-                    <xsl:apply-templates select="$target" mode="number" />
-                <xsl:text>, </xsl:text>
-                    <xsl:apply-templates select="@detail" />
-                <xsl:text>]</xsl:text>
+                <xsl:apply-templates select="$target" mode="ref-id">
+                    <xsl:with-param name="detail" select="@detail" />
+                </xsl:apply-templates>
             </xsl:when>
             <xsl:when test="@autoname">
                 <xsl:apply-templates  select="$target" mode="ref-id" >
@@ -661,10 +658,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 
-<!-- Citations with detail are handled above, generic here -->
+<!-- Citations get marked off in a pair of brackets              -->
+<!-- A cross-reference to a biblio may have "detail",            -->
+<!-- extra information about the location in the referenced work -->
 <xsl:template match="biblio" mode="ref-id">
+    <xsl:param name="detail" />
     <xsl:text>[</xsl:text>
-        <xsl:apply-templates select="." mode="number" />
+    <xsl:apply-templates select="." mode="number" />
+    <xsl:if test="$detail != ''">
+        <xsl:text>, </xsl:text>
+        <xsl:apply-templates select="$detail" />
+   </xsl:if>
     <xsl:text>]</xsl:text>
 </xsl:template>
 
