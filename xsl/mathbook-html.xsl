@@ -600,7 +600,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <xsl:when test="@autoname">
                 <xsl:apply-templates  select="$target" mode="ref-id" >
-                    <xsl:with-param name="local" select="@autoname" />
+                    <xsl:with-param name="autoname" select="@autoname" />
                 </xsl:apply-templates>
             </xsl:when>
             <xsl:otherwise>
@@ -627,32 +627,52 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (Perhaps these should be in the common file?)   -->
 <!-- LaTeX does much of this semi-automatically      -->
 
+<!-- Some references get a prefix (eg Section, Theorem, Exercise), -->
+<!-- subject to global and local options, interpreted here         -->
+<!-- Default is to not provide anything for the prefix             -->
+<xsl:template match="*" mode="ref-prefix">
+    <!-- Parameter is the local @autoname of the calling xref -->
+    <!-- Five values: blank, yes/no, plural, title            -->
+    <xsl:param name="local" />
+    <!-- Global: yes/no, so 10 combinations -->
+    <xsl:choose>
+        <!-- 2 combinations: global no, without local override -->
+        <xsl:when test="$autoname='no' and ($local='' or $local='no')" />
+        <!-- 1 combination: global yes, but local override -->
+        <xsl:when test="$autoname='yes' and $local='no'" />
+        <!-- 2 combinations: global yes/no, local title option-->
+        <xsl:when test="$local='title'">
+            <xsl:apply-templates select="title" />
+        </xsl:when>
+        <!-- 2 combinations: global no, local yes/plural        -->
+        <!-- 3 combinations: global yes, local blank/yes/plural -->
+        <!-- TODO: migrate ugly English-centric hack to language files! -->
+        <xsl:when test="$local='yes' or $local='plural' or ($autoname='yes' and $local='')">
+            <xsl:apply-templates select="." mode="type-name" />
+            <xsl:if test="$local='plural'">
+                <xsl:text>s</xsl:text>
+            </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: Some autonaming combination slipped through unhandled</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- Most cross-references have targets that know -->
 <!-- their names, so we default to trying that,   -->
 <!-- subject to various customizations            -->
-<!-- TODO: migrate ugly English-centric hack to language files! -->
 <xsl:template match="*" mode="ref-id">
     <!-- Parameter is the local @autoname of the calling xref -->
-    <xsl:param name="local" />
-    <!-- Capture 7 of 10 combinations -->
-    <xsl:if test="($autoname='yes' and $local!='no') or
-                  ($autoname='no' and ($local!='no' and $local!=''))" >
-        <xsl:choose>
-            <!-- Capture 5 of 7 combinations -->
-            <xsl:when test="$local='yes' or $local='plural' or ($autoname='yes' and $local='')">
-                <xsl:apply-templates select="." mode="type-name" />
-                <xsl:if test="$local='plural'">
-                    <xsl:text>s</xsl:text>
-                </xsl:if>
-            </xsl:when>
-            <!-- 2 combinations left, global yes/no, local title -->
-            <xsl:when test="$local='title'">
-                <xsl:apply-templates select="title" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:message>MBX:BUG: Some autonaming combination slipped through unhandled</xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
+    <xsl:param name="autoname" />
+    <xsl:variable name="prefix">
+        <xsl:apply-templates select="." mode="ref-prefix">
+            <xsl:with-param name="local" select="$autoname" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <!-- Autonaming prefix: add non-breaking space -->
+    <xsl:value-of select="$prefix" />
+    <xsl:if test="$prefix!=''">
         <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="." mode="number" />
