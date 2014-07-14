@@ -638,7 +638,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Parameter is the local @autoname of the calling xref -->
     <xsl:param name="local" />
     <!-- Capture 7 of 10 combinations -->
-<xsl:message><xsl:value-of select="@xml:id" /> 1)<xsl:value-of select="$autoname" /> 2)<xsl:value-of select="$local" /></xsl:message>
     <xsl:if test="($autoname='yes' and $local!='no') or
                   ($autoname='no' and ($local!='no' and $local!=''))" >
         <xsl:choose>
