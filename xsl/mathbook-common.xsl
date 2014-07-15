@@ -1052,6 +1052,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
+<!-- Warnings for a high-frequency mistake -->
+<xsl:template match="xref">
+    <xsl:message>MBX:WARNING: Cross-reference (xref) with no ref or provisional attribute, check spelling</xsl:message>
+    <xsl:call-template name="inline-warning">
+        <xsl:with-param name="warning">
+            <xsl:text>xref without ref or provisional attribute, check spelling</xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:call-template name="margin-warning">
+        <xsl:with-param name="warning">
+            <xsl:text>xref, no attribute</xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
 
 <!-- Miscellaneous -->
 
@@ -1065,15 +1079,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates />
         </xsl:with-param>
     </xsl:call-template>
-</xsl:template>
-
-<!-- Warnings for high-frequency mistakes -->
-<xsl:template match="cite">
-    <xsl:message>MBX:WARNING: Citation (cite) with no ref or provisional attribute, check spelling</xsl:message>
-</xsl:template>
-
-<xsl:template match="xref">
-    <xsl:message>MBX:WARNING: Cross-reference (xref) with no ref or provisional attribute, check spelling</xsl:message>
 </xsl:template>
 
 </xsl:stylesheet>

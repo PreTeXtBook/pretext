@@ -873,6 +873,8 @@
 
             <p>A cross-reference to nowhere (warnings): <xref ref="pointer-to-nowhere-as-test" /></p>
 
+            <p>A cross-reference with a bad/missing attribute: <xref perversional="spelled-bad" />.</p>
+
         </section>
 
         <!-- Bibliography/References can appear anywhere -->
