@@ -295,12 +295,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="md|mdn">
     <xsl:choose>
         <xsl:when test="contains(., '&amp;')">
-            <xsl:text>\begin{align}</xsl:text>
+            <xsl:text>\begin{align}&#xa;</xsl:text>
             <xsl:apply-templates select="mrow|intertext" />
             <xsl:text>\end{align}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>\begin{gather}</xsl:text>
+            <xsl:text>\begin{gather}&#xa;</xsl:text>
             <xsl:apply-templates select="mrow" />
             <xsl:text>\end{gather}</xsl:text>
         </xsl:otherwise>
@@ -315,7 +315,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (3) "tag" modal template is abstract -->
 <!-- (4) Last row special, has no line-break marker    -->
 <xsl:template match="mrow">
-    <xsl:text>&#xa;</xsl:text>
     <xsl:value-of select="." />
     <xsl:choose>
         <xsl:when test="(local-name(parent::*)='mdn') and (@number='no')">
@@ -329,14 +328,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="tag"/>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:choose>
-        <xsl:when test="position()=last()">
-            <xsl:text>&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\\</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+        <xsl:if test="position()!=last()">
+           <xsl:text>\\</xsl:text>
+       </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Sanitize Sage code                 -->
