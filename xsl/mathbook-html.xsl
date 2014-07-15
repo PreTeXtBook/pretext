@@ -944,15 +944,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- makes sense, otherwise just kill it  -->
 <xsl:template match="index" />
 
-<!-- Math  -->
-<!-- Inline snippets -->
-<!-- Numbered equations have a TeX \label set -->
-<xsl:template match= "m">
-    <xsl:text>\(</xsl:text>
-    <xsl:value-of select="." />
-    <xsl:text>\)</xsl:text>
-</xsl:template>
-
 <!-- Unnumbered, single displayed equation -->
 <!-- Output follows source line breaks     -->
 <xsl:template match="me">

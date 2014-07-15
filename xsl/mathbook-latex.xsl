@@ -267,6 +267,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.preamble.early" />
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
+    <xsl:text>%% Inline math delimiters, \(, \), made robust with next package&#xa;</xsl:text>
+    <xsl:text>\usepackage{fixltx2e}&#xa;</xsl:text>
     <xsl:text>%% Page Layout Adjustments (latex.geometry)&#xa;</xsl:text>
     <xsl:if test="$latex.geometry != ''">
         <xsl:text>\geometry{</xsl:text>
@@ -1080,22 +1082,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$start/see" />
     <xsl:apply-templates select="@start" />
     <xsl:text>}</xsl:text>
-</xsl:template>
-
-<!-- Math  -->
-<!--       -->
-
-<!-- Inline snippets -->
-<!-- It would be nice to produce source          -->
-<!-- with \( and \) as delimiters, ala amsmath   -->
-<!-- But these break section titles moving to    -->
-<!-- the table of contents, for example.         -->
-<!-- So we have $ instead.                       -->
-<!-- The  fixltx2e  package could be a solution. -->
-<xsl:template match= "m">
-    <xsl:text>$</xsl:text>
-    <xsl:value-of select="." />
-    <xsl:text>$</xsl:text>
 </xsl:template>
 
 <!-- Unnumbered, single displayed equation -->

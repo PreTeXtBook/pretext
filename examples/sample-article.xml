@@ -146,7 +146,7 @@
         -->
 
         <section>
-            <title>Computing Integrals</title>
+            <title>Computing Integrals (<m>\int</m>)</title>
 
             <index><main>Sage</main><sub>integration</sub></index>
             <index><main>Numerical integration</main><see>Sage integration</see></index>
