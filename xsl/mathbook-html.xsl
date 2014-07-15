@@ -944,14 +944,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- makes sense, otherwise just kill it  -->
 <xsl:template match="index" />
 
-<!-- Unnumbered, single displayed equation -->
-<!-- Output follows source line breaks     -->
-<xsl:template match="me">
-    <xsl:text>\[</xsl:text>
-    <xsl:value-of select="." />
-    <xsl:text>\]</xsl:text>
-</xsl:template>
-
 <!-- Numbered, single displayed equation -->
 <!-- Output follows source line breaks   -->
 <xsl:template match="men">

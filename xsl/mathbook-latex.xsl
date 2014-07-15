@@ -1084,14 +1084,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Unnumbered, single displayed equation -->
-<!-- Output follows source line breaks     -->
-<xsl:template match="me">
-    <xsl:text>\begin{displaymath}</xsl:text>
-    <xsl:value-of select="." />
-    <xsl:text>\end{displaymath}</xsl:text>
-</xsl:template>
-
 <!-- Numbered, single displayed equation -->
 <!-- Possibly given a label              -->
 <!-- Output follows source line breaks   -->

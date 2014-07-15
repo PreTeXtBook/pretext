@@ -252,6 +252,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\)</xsl:text>
 </xsl:template>
 
+<!-- Displayed Math -->
+<!-- Single displayed equation, unnumbered                         -->
+<!-- Output follows source line breaks                             -->
+<!-- MathJax: out-of-the-box support                               -->
+<!-- LaTeX: with AMS-TeX, \[,\] tranlates to equation* environment -->
+<!-- LaTeX: without AMS-TEX, it is improved version of $$, $$      -->
+<!-- See: http://tex.stackexchange.com/questions/40492/what-are-the-differences-between-align-equation-and-displaymath -->
+<xsl:template match="me">
+    <xsl:text>\[</xsl:text>
+    <xsl:value-of select="." />
+    <xsl:text>\]</xsl:text>
+</xsl:template>
+
 <!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
 <!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
 <!-- align if there are ampersands, gather otherwise                             -->
