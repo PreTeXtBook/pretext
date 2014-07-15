@@ -1084,15 +1084,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Numbered, single displayed equation -->
-<!-- Possibly given a label              -->
-<!-- Output follows source line breaks   -->
-<xsl:template match="men">
-    <xsl:text>\begin{equation}</xsl:text>
-    <xsl:value-of select="." />
-    <xsl:apply-templates select="." mode="label"/>
-    <xsl:text>\end{equation}</xsl:text>
-</xsl:template>
+<!-- #### -->
+<!-- Math -->
+<!-- #### -->
+
+<!-- We do not "tag" numbered equations in LaTeX output, -->
+<!-- and instead let the preamble configuration control   -->
+<!-- the way numbers are generated and assigned          -->
+<xsl:template match="men|mrow" mode="tag" />
 
 <!-- md, mdn containers are generic gather/align environments, so in common xsl -->
 

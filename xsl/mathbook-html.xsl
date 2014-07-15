@@ -944,16 +944,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- makes sense, otherwise just kill it  -->
 <xsl:template match="index" />
 
-<!-- Numbered, single displayed equation -->
-<!-- Output follows source line breaks   -->
-<xsl:template match="men">
-    <xsl:text>\[</xsl:text>
-    <xsl:value-of select="." />
-    <xsl:apply-templates select="." mode="label" />
+<!-- #### -->
+<!-- Math -->
+<!-- #### -->
+
+<!-- We do "tag" numbered equations in MathJax output, -->
+<!-- because we want to control and duplicate the way  -->
+<!-- numbers are generated and assigned by LaTeX       -->
+<xsl:template match="men|mrow" mode="tag">
     <xsl:text>\tag{</xsl:text>
     <xsl:apply-templates select="." mode="number" />
     <xsl:text>}</xsl:text>
-    <xsl:text>\]</xsl:text>
 </xsl:template>
 
 <!-- md, mdn containers are generic gather/align environments, so in common xsl -->

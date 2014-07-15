@@ -265,6 +265,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\]</xsl:text>
 </xsl:template>
 
+<!-- Single displayed equation, numbered                        -->
+<!-- MathJax: out-of-the-box support                            -->
+<!-- LaTeX: with AMS-TeX, equation* environment supported       -->
+<!-- LaTeX: without AMS-TEX, $$ with equation numbering         -->
+<!-- "tag" modal template is abstract, see specialized versions -->
+<!-- We do tag HTML, but not LaTeX.  See link above, also.      -->
+<xsl:template match="men">
+    <xsl:text>\begin{equation}</xsl:text>
+    <xsl:value-of select="." />
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:apply-templates select="." mode="tag"/>
+    <xsl:text>\end{equation}</xsl:text>
+</xsl:template>
+
 <!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
 <!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
 <!-- align if there are ampersands, gather otherwise                             -->
