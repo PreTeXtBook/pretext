@@ -23,7 +23,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace" 
     xmlns:date="http://exslt.org/dates-and-times"
-    extension-element-prefixes="date"
+    xmlns:exsl="http://exslt.org/common"
+    extension-element-prefixes="exsl date"
     xmlns:mb="http://mathbook.pugetsound.edu/"
     exclude-result-prefixes="mb"
 >
@@ -940,6 +941,131 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="document('')/*/mb:programming/language[@mbx=$language]/listings"/>
 </xsl:template>
 -->
+
+<!-- ################ -->
+<!-- Cross-References -->
+<!-- ################ -->
+
+<!-- Cross-reference template -->
+<!-- Every (non-provisional) cross-reference comes through here            -->
+<!-- and is fact-checked before being dispatched to a "ref-id" template    -->
+<!-- Qualifiers of cross-references are passed to their templates          -->
+<!--                                                                       -->
+<!-- LaTeX has several schemes: \ref, \cite, \eqref                        -->
+<!-- HTML will do traditional hyperlinks or modern knowls                  -->
+<!-- The ref-id templates produce the code to create what a reader sees    -->
+<!-- to locate the referenced item                                         -->
+<!-- So see specialized routines for those constructions                   -->
+<xsl:template match="xref[@ref]">
+    <xsl:variable name="target" select="id(@ref)" />
+    <!-- Check to see if the ref is any good              -->
+    <!-- Set off various alarms if target is non-existent -->
+    <!-- http://www.stylusstudio.com/xsllist/200412/post20720.html -->
+    <xsl:if test="not(exsl:node-set($target))">
+        <xsl:message>MBX:WARNING: unresolved &lt;xref&gt; due to ref="<xsl:value-of select="@ref"/>"</xsl:message>
+        <xsl:variable name="inline-warning">
+            <xsl:text>Unresolved xref, ref="</xsl:text>
+            <xsl:value-of select="@ref"/>
+            <xsl:text>"; check spelling or use "provisional" attribute</xsl:text>
+        </xsl:variable>
+        <xsl:variable name="margin-warning">
+            <xsl:text>Unresolved xref</xsl:text>
+        </xsl:variable>
+        <xsl:call-template name="inline-warning">
+            <xsl:with-param name="warning" select="$inline-warning" />
+        </xsl:call-template>
+        <xsl:call-template name="margin-warning">
+            <xsl:with-param name="warning" select="$margin-warning" />
+        </xsl:call-template>
+    </xsl:if>
+    <!-- Cross-references may have qualifiers of their targets, which -->
+    <!-- we pass to their ref-id templates to handle appropriately    -->
+    <!-- Default is to pass nothing extra, which is not a problem     -->
+    <xsl:choose>
+        <xsl:when test="@detail">
+            <xsl:apply-templates select="$target" mode="ref-id">
+                <xsl:with-param name="detail" select="@detail" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:when test="@autoname">
+            <xsl:apply-templates  select="$target" mode="ref-id" >
+                <xsl:with-param name="autoname" select="@autoname" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="$target" mode="ref-id" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Autonaming of Cross-References -->
+<!-- Some references get a prefix (eg Section, Theorem, Exercise), -->
+<!-- subject to global and local options, interpreted here         -->
+<xsl:template match="*" mode="ref-prefix">
+    <!-- Parameter is the local @autoname of the calling xref -->
+    <!-- Five values: blank, yes/no, plural, title            -->
+    <xsl:param name="local" />
+    <!-- Global: yes/no, so 10 combinations -->
+    <xsl:choose>
+        <!-- 2 combinations: global no, without local override -->
+        <xsl:when test="$autoname='no' and ($local='' or $local='no')" />
+        <!-- 1 combination: global yes, but local override -->
+        <xsl:when test="$autoname='yes' and $local='no'" />
+        <!-- 2 combinations: global yes/no, local title option-->
+        <xsl:when test="$local='title'">
+            <xsl:apply-templates select="title" />
+        </xsl:when>
+        <!-- 2 combinations: global no, local yes/plural        -->
+        <!-- 3 combinations: global yes, local blank/yes/plural -->
+        <!-- TODO: migrate ugly English-centric hack to language files! -->
+        <xsl:when test="$local='yes' or $local='plural' or ($autoname='yes' and $local='')">
+            <xsl:apply-templates select="." mode="type-name" />
+            <xsl:if test="$local='plural'">
+                <xsl:text>s</xsl:text>
+            </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: Some autonaming combination slipped through unhandled</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Provisional cross-references -->
+<!-- A convenience for authors in early stages of writing -->
+<!-- Appear both inline and moreso in author tools        -->
+<!-- TODO: Make cite/@provisional an error eventually     -->
+<xsl:template match="cite[@provisional]|xref[@provisional]">
+    <xsl:if test="self::cite">
+        <xsl:message>MBX:WARNING: &lt;cite provisional="<xsl:value-of select="@provisional" />"&gt; is deprecated, convert to &lt;xref provisional="<xsl:value-of select="@provisional" />"&gt;</xsl:message>
+    </xsl:if>
+    <xsl:variable name="inline-warning">
+        <xsl:value-of select="@provisional" />
+    </xsl:variable>
+    <xsl:variable name="margin-warning">
+        <xsl:text>Provisional xref</xsl:text>
+    </xsl:variable>
+    <xsl:call-template name="inline-warning">
+        <xsl:with-param name="warning" select="$inline-warning" />
+    </xsl:call-template>
+    <xsl:call-template name="margin-warning">
+        <xsl:with-param name="warning" select="$margin-warning" />
+    </xsl:call-template>
+</xsl:template>
+
+
+<!-- Miscellaneous -->
+
+<!-- ToDo's are silent unless requested           -->
+<!-- as part of an author's report, then marginal -->
+<xsl:template match="todo">
+    <xsl:call-template name="margin-warning">
+        <xsl:with-param name="warning">
+            <xsl:apply-templates select="." mode="type-name" />
+            <xsl:text>: </xsl:text>
+            <xsl:apply-templates />
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
 
 <!-- Warnings for high-frequency mistakes -->
 <xsl:template match="cite">

@@ -1654,89 +1654,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
-
-<!-- Cross-References, Citations -->
-<!-- Warnings at command-line for absent ref/provisional are in common file  -->
-
-<!-- Cross-reference template -->
-<!-- Every (non-provisional) cross-reference comes through here            -->
-<!-- and is fact-checked before being dispatched to a "ref-id" template    -->
-<!-- The ref-id templates produce the code to create what a reader sees    -->
-<!-- to locate the referenced item                                         -->
-<!-- LaTeX has several schemes: \ref, \cite, \eqref                        -->
-<!-- Qualifiers of cross-references are passed to their templates          -->
-<xsl:template match="xref[@ref]">
-    <xsl:variable name="target" select="id(@ref)" />
-    <!-- Check to see if the ref is any good -->
-    <!-- http://www.stylusstudio.com/xsllist/200412/post20720.html -->
-    <xsl:if test="not(exsl:node-set($target))">
-        <xsl:message>MBX:WARNING: unresolved &lt;xref&gt; due to ref="<xsl:value-of select="@ref"/>"</xsl:message>
-        <xsl:if test="$author-tools='yes'" >
-            <xsl:text>\textcolor{red}{</xsl:text>
-        </xsl:if>
-        <xsl:text>$\langle\langle$Unresolved ref=``</xsl:text>
-       <xsl:value-of select="@ref"/>
-        <xsl:text>'', check spelling or use $@$provisional$\rangle\rangle$</xsl:text>
-        <xsl:if test="$author-tools='yes'" >
-            <xsl:text>}</xsl:text>
-        </xsl:if>
-    </xsl:if>
-    <!-- Cross-references may have qualifiers of their targets, which -->
-    <!-- we pass to their ref-id templates to handle appropriately    -->
-    <!-- Default is to pass nothing extra                             -->
-    <xsl:choose>
-        <xsl:when test="@detail">
-            <xsl:apply-templates select="$target" mode="ref-id">
-                <xsl:with-param name="detail" select="@detail" />
-            </xsl:apply-templates>
-        </xsl:when>
-        <xsl:when test="@autoname">
-            <xsl:apply-templates  select="$target" mode="ref-id" >
-                <xsl:with-param name="autoname" select="@autoname" />
-            </xsl:apply-templates>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="$target" mode="ref-id" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- Visual Identifiers -->
+<!-- Visual Identifiers for Cross-References -->
 <!-- Format of visual identifiers, peculiar to LaTeX              -->
 <!-- This is complete LaTeX code to make visual reference         -->
 <!-- LaTeX does the numbering and visual formatting automatically -->
-
-<!-- Some references get a prefix (eg Section, Theorem, Exercise), -->
-<!-- subject to global and local options, interpreted here         -->
-<!-- Default is to not provide anything for the prefix             -->
-<xsl:template match="*" mode="ref-prefix">
-    <!-- Parameter is the local @autoname of the calling xref -->
-    <!-- Five values: blank, yes/no, plural, title            -->
-    <xsl:param name="local" />
-    <!-- Global: yes/no, so 10 combinations -->
-    <xsl:choose>
-        <!-- 2 combinations: global no, without local override -->
-        <xsl:when test="$autoname='no' and ($local='' or $local='no')" />
-        <!-- 1 combination: global yes, but local override -->
-        <xsl:when test="$autoname='yes' and $local='no'" />
-        <!-- 2 combinations: global yes/no, local title option-->
-        <xsl:when test="$local='title'">
-            <xsl:apply-templates select="title" />
-        </xsl:when>
-        <!-- 2 combinations: global no, local yes/plural        -->
-        <!-- 3 combinations: global yes, local blank/yes/plural -->
-        <!-- TODO: migrate ugly English-centric hack to language files! -->
-        <xsl:when test="$local='yes' or $local='plural' or ($autoname='yes' and $local='')">
-            <xsl:apply-templates select="." mode="type-name" />
-            <xsl:if test="$local='plural'">
-                <xsl:text>s</xsl:text>
-            </xsl:if>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Some autonaming combination slipped through unhandled</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
+<!-- Many components are built from common routines               -->
 
 <!-- Almost always, a \ref is good enough       -->
 <!-- Hyperref construction:                     -->
@@ -1807,23 +1729,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Provisional cross-references -->
-<!-- A convenience for authors in early stages of writing -->
-<!-- TODO: Move cite/@provisional to common file with warning, once deactivated (as error) -->
-<xsl:template match="cite[@provisional]|xref[@provisional]">
-    <xsl:if test="self::cite">
-        <xsl:message>MBX:WARNING: &lt;cite provisional="<xsl:value-of select="@provisional" />"&gt; is deprecated, convert to &lt;xref provisional="<xsl:value-of select="@provisional" />"&gt;</xsl:message>
-    </xsl:if>
-    <xsl:if test="$author-tools='yes'" >
-        <xsl:text>\textcolor{red}{</xsl:text>
-    </xsl:if>
-    <xsl:text>$\langle\langle$</xsl:text>
-    <xsl:value-of select="@provisional" />
-    <xsl:text>$\rangle\rangle$</xsl:text>
-    <xsl:if test="$author-tools='yes'" >
-        <xsl:text>}</xsl:text>
-    </xsl:if>
-</xsl:template>
 
 <!-- Insert an identifier as a LaTeX label on anything       -->
 <!-- Calls to this template need come from where LaTeX likes -->
@@ -1958,19 +1863,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Miscellaneous -->
 
-<!-- ToDo's are silent unless asked for                   -->
-<!-- Can also grep across the source                      -->
+<!-- Inline warnings go into text, no matter what -->
+<!-- They are colored for an author's report -->
+<xsl:template name="inline-warning">
+    <xsl:param name="warning" />
+    <!-- Color for author tools version -->
+    <xsl:if test="$author-tools='yes'" >
+        <xsl:text>\textcolor{red}</xsl:text>
+    </xsl:if>
+    <xsl:text>{</xsl:text>
+    <xsl:text>$\langle\langle$</xsl:text>
+    <xsl:value-of select="$warning"/>
+    <xsl:text>$\rangle\rangle$</xsl:text>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- Marginal notes are only for author's report          -->
+<!-- and are always colored red                           -->
 <!-- Marginpar's from http://www.f.kth.se/~ante/latex.php -->
-<xsl:template match="todo">
+<xsl:template name="margin-warning">
+    <xsl:param name="warning" />
     <xsl:if test="$author-tools='yes'" >
         <xsl:text>\marginpar[\raggedleft\footnotesize\textcolor{red}{</xsl:text>
-        <xsl:apply-templates select="." mode="type-name" />
-        <xsl:text>: </xsl:text>
-        <xsl:apply-templates />
+        <xsl:value-of select="$warning" />
         <xsl:text>}]{\raggedright\footnotesize\textcolor{red}{</xsl:text>
-        <xsl:apply-templates select="." mode="type-name" />
-        <xsl:text>: </xsl:text>
-        <xsl:apply-templates />
+        <xsl:value-of select="$warning" />
         <xsl:text>}}</xsl:text>
     </xsl:if>
 </xsl:template>

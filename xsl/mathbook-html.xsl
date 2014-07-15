@@ -562,102 +562,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </figcaption>
 </xsl:template>
 
-<!-- Cross-References, Citations -->
-<!-- Warnings at command-line for absent ref/provisional are in common file  -->
-
-<!-- Cross-reference template -->
-<!-- Every (non-provisional) cross-reference comes through here            -->
-<!-- and is fact-checked before being dispatched to a "ref-id" template    -->
-<!-- The ref-id templates produce the code to create what a reader sees    -->
-<!-- to locate the referenced item                                         -->
-<!-- Unlike LaTeX, we supply content and "clickable" behavior              -->
-<!-- When "detail" is provided for a citation, we need handle it specially -->
-<!-- Qualifiers of cross-references are passed to their templates          -->
-<xsl:template match="xref[@ref]">
-    <!-- Save what the reference points to -->
-    <xsl:variable name="target" select="id(@ref)" />
-    <!-- Check to see if the ref is any good -->
-    <xsl:if test="not(exsl:node-set($target))">
-        <xsl:message>MBX:WARNING: unresolved &lt;xref&gt; due to ref="<xsl:value-of select="@ref"/>"</xsl:message>
-        <xsl:if test="$author-tools='yes'" >
-            <xsl:element name="span">
-                <xsl:attribute name="style">color:red</xsl:attribute>
-                <xsl:text>&lt;&lt;Unresolved xref="</xsl:text>
-                <xsl:value-of select="@ref" />
-                <xsl:text>", check spelling or use @provisional&gt;&gt;</xsl:text>
-            </xsl:element>
-        </xsl:if>
-    </xsl:if>
-    <!-- Cross-references may have qualifiers of their targets, which -->
-    <!-- we pass to their ref-id templates to handle appropriately    -->
-    <!-- Default is to pass nothing extra                             -->
-    <xsl:variable name="visual">
-        <xsl:choose>
-            <xsl:when test="@detail">
-                <xsl:apply-templates select="$target" mode="ref-id">
-                    <xsl:with-param name="detail" select="@detail" />
-                </xsl:apply-templates>
-            </xsl:when>
-            <xsl:when test="@autoname">
-                <xsl:apply-templates  select="$target" mode="ref-id" >
-                    <xsl:with-param name="autoname" select="@autoname" />
-                </xsl:apply-templates>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="$target" mode="ref-id" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- Build the anchor -->
-    <xsl:element name ="a">
-        <!-- http://stackoverflow.com/questions/585261/is-there-an-xslt-name-of-element -->
-        <!-- Sans namespace (would be name(.)) -->
-        <xsl:attribute name="class">
-            <xsl:value-of select="local-name($target)" />
-        </xsl:attribute>
-        <xsl:attribute name="href">
-            <xsl:apply-templates select="$target" mode="url" />
-        </xsl:attribute>
-    <xsl:value-of  disable-output-escaping="yes" select="$visual" />
-    </xsl:element>
-</xsl:template>
-
-<!-- Visual Identifiers -->
-<!-- Format of visual identifiers, peculiar to HTML  -->
-<!-- (Perhaps these should be in the common file?)   -->
-<!-- LaTeX does much of this semi-automatically      -->
-
-<!-- Some references get a prefix (eg Section, Theorem, Exercise), -->
-<!-- subject to global and local options, interpreted here         -->
-<!-- Default is to not provide anything for the prefix             -->
-<xsl:template match="*" mode="ref-prefix">
-    <!-- Parameter is the local @autoname of the calling xref -->
-    <!-- Five values: blank, yes/no, plural, title            -->
-    <xsl:param name="local" />
-    <!-- Global: yes/no, so 10 combinations -->
-    <xsl:choose>
-        <!-- 2 combinations: global no, without local override -->
-        <xsl:when test="$autoname='no' and ($local='' or $local='no')" />
-        <!-- 1 combination: global yes, but local override -->
-        <xsl:when test="$autoname='yes' and $local='no'" />
-        <!-- 2 combinations: global yes/no, local title option-->
-        <xsl:when test="$local='title'">
-            <xsl:apply-templates select="title" />
-        </xsl:when>
-        <!-- 2 combinations: global no, local yes/plural        -->
-        <!-- 3 combinations: global yes, local blank/yes/plural -->
-        <!-- TODO: migrate ugly English-centric hack to language files! -->
-        <xsl:when test="$local='yes' or $local='plural' or ($autoname='yes' and $local='')">
-            <xsl:apply-templates select="." mode="type-name" />
-            <xsl:if test="$local='plural'">
-                <xsl:text>s</xsl:text>
-            </xsl:if>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Some autonaming combination slipped through unhandled</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
+<!-- Visual Identifiers for Cross-References -->
+<!-- Format of visual identifiers, peculiar to HTML       -->
+<!-- This is complete HTML  code to make visual reference -->
+<!-- LaTeX does much of this semi-automatically           -->
+<!-- Many components are built from common routines       -->
 
 <!-- Most cross-references have targets that know -->
 <!-- their names, so we default to trying that,   -->
@@ -670,12 +579,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="local" select="$autoname" />
         </xsl:apply-templates>
     </xsl:variable>
-    <!-- Autonaming prefix: add non-breaking space -->
-    <xsl:value-of select="$prefix" />
-    <xsl:if test="$prefix!=''">
-        <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="." mode="number" />
+    <xsl:variable name="content">
+        <!-- Autonaming prefix: add non-breaking space -->
+        <xsl:value-of select="$prefix" />
+        <xsl:if test="$prefix!=''">
+            <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
+        </xsl:if>
+        <xsl:apply-templates select="." mode="number" />
+    </xsl:variable>
+    <xsl:apply-templates select="." mode="xref-hyperlink">
+        <xsl:with-param name="content" select="$content" />
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Citations get marked off in a pair of brackets              -->
@@ -683,13 +597,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- extra information about the location in the referenced work -->
 <xsl:template match="biblio" mode="ref-id">
     <xsl:param name="detail" />
-    <xsl:text>[</xsl:text>
-    <xsl:apply-templates select="." mode="number" />
-    <xsl:if test="$detail != ''">
-        <xsl:text>, </xsl:text>
-        <xsl:apply-templates select="$detail" />
-   </xsl:if>
-    <xsl:text>]</xsl:text>
+    <xsl:variable name="content">
+        <xsl:text>[</xsl:text>
+        <xsl:apply-templates select="." mode="number" />
+        <xsl:if test="$detail != ''">
+            <xsl:text>, </xsl:text>
+            <xsl:apply-templates select="$detail" />
+       </xsl:if>
+        <xsl:text>]</xsl:text>
+    </xsl:variable>
+    <xsl:apply-templates select="." mode="xref-hyperlink">
+        <xsl:with-param name="content" select="$content" />
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Displayed equations have targets manufactured by MathJax,                   -->
@@ -697,25 +616,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For HTML we need to provide the parentheses, which LaTeX does automatically -->
 <!-- TODO: will we allow me's to be numbered, or not? -->
 <xsl:template match="me|men|mrow" mode="ref-id">
-    <xsl:text>(</xsl:text>
-    <xsl:apply-templates select="." mode="number" />
-    <xsl:text>)</xsl:text>
+    <xsl:variable name="content">
+        <xsl:text>(</xsl:text>
+        <xsl:apply-templates select="." mode="number" />
+        <xsl:text>)</xsl:text>
+    </xsl:variable>
+    <xsl:apply-templates select="." mode="xref-hyperlink">
+        <xsl:with-param name="content" select="$content" />
+    </xsl:apply-templates>
 </xsl:template>
 
-<!-- Provisional cross-references -->
-<!-- A convenience for authors in early stages of writing -->
-<!-- TODO: Move cite/@provisional to common file with warning, once deactivated (as error) -->
-<xsl:template match="cite[@provisional]|xref[@provisional]">
-    <xsl:if test="self::cite">
-        <xsl:message>MBX:WARNING: &lt;cite provisional="<xsl:value-of select="@provisional" />"&gt; is deprecated, convert to &lt;xref provisional="<xsl:value-of select="@provisional" />"&gt;</xsl:message>
-    </xsl:if>
-    <xsl:element name="span">
-        <xsl:if test="$author-tools='yes'" >
-            <xsl:attribute name="style">color:red</xsl:attribute>
-        </xsl:if>
-        <xsl:text>&lt;&lt;</xsl:text>
-        <xsl:value-of select="@provisional" />
-        <xsl:text>&gt;&gt;</xsl:text>
+
+<!-- A cross-reference has a visual component,      -->
+<!-- formed above, and a realization as a hyperlink -->
+<!-- We build the latter here                       -->
+<!-- TODO: maybe create knowls via the "url" mode template? -->
+<xsl:template match="*" mode="xref-hyperlink">
+    <xsl:param name="content" />
+    <xsl:element name ="a">
+        <!-- http://stackoverflow.com/questions/585261/is-there-an-xslt-name-of-element -->
+        <!-- Sans namespace (would be name(.)) -->
+        <xsl:attribute name="class">
+            <xsl:value-of select="local-name(.)" />
+        </xsl:attribute>
+        <xsl:attribute name="href">
+            <xsl:apply-templates select="." mode="url" />
+        </xsl:attribute>
+    <xsl:value-of  disable-output-escaping="yes" select="$content" />
     </xsl:element>
 </xsl:template>
 
@@ -1803,19 +1730,34 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
 
 <!-- Miscellaneous -->
 
-
-<!-- ToDo's are silent unless asked for -->
-<!-- Can also grep across the source    -->
-<xsl:template match="todo">
-    <xsl:if test="$author-tools='yes'" >
-        <xsl:element name="p">
+<!-- Inline warnings go into text, no matter what -->
+<!-- They are colored for an author's report -->
+<xsl:template name="inline-warning">
+    <xsl:param name="warning" />
+    <xsl:element name="span">
+        <!-- Color for author tools version -->
+        <xsl:if test="$author-tools='yes'" >
             <xsl:attribute name="style">color:red</xsl:attribute>
-            <xsl:apply-templates select="." mode="type-name" />
-            <xsl:text>: </xsl:text>
-            <xsl:apply-templates />
+        </xsl:if>
+        <xsl:text>&lt;&lt;</xsl:text>
+        <xsl:value-of select="$warning" />
+        <xsl:text>&gt;&gt;</xsl:text>
+    </xsl:element>
+</xsl:template>
+
+<!-- Marginal notes are only for author's report                     -->
+<!-- and are always colored red.  Marginpar's from                   -->
+<!-- http://www.sitepoint.com/web-foundations/floating-clearing-css/ -->
+<xsl:template name="margin-warning">
+    <xsl:param name="warning" />
+    <xsl:if test="$author-tools='yes'" >
+        <xsl:element name="span">
+            <xsl:attribute name="style">color:red;float:right;width:20em;margin-right:-25em;</xsl:attribute>
+            <xsl:value-of select="$warning" />
         </xsl:element>
     </xsl:if>
 </xsl:template>
+
 
 <!-- Uninteresting Code, aka the Bad Bank                    -->
 <!-- Deprecated, unmaintained, etc, parked here out of sight -->
