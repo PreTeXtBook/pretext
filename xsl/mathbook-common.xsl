@@ -549,6 +549,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- LaTeX labels get used on MathJax content in HTML, so we -->
+<!-- put this template in the common file for universal use  -->
+<!-- Insert an identifier as a LaTeX label on anything       -->
+<!-- Calls to this template need come from where LaTeX likes -->
+<!-- a \label, generally someplace that can be numbered      -->
+<xsl:template match="*" mode="label">
+    <xsl:text>\label{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
 <!-- Visual Identifiers -->
 <!-- What a reader sees in any cross-referencing system -->
 <!-- Two types: -->

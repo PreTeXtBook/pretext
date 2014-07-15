@@ -244,7 +244,7 @@
 
             <corollary xml:id="corollary-FTC-derivative">
                 <statement>
-                    <p>Suppose <m>f(x)</m> is a continuous function.  Then <me>\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</me></p>
+                    <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men></p>
                 </statement>
                 <todo>Should equation references come with parentheses?</todo>
                 <proof>
@@ -256,6 +256,8 @@
                     </mdn>
                 </proof>
             </corollary>
+
+            <p>The alternative version of the Fundamental Theorem in <xref ref="equation-alternate-FTC" /> is a compact way to express the result.</p>
 
             <!--
             Articles can be sectioned further, into subsections

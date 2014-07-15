@@ -1734,17 +1734,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-
-<!-- Insert an identifier as a LaTeX label on anything       -->
-<!-- Calls to this template need come from where LaTeX likes -->
-<!-- a \label, generally someplace that can be numbered      -->
-<!-- Could do optionally: <xsl:value-of select="@xml:id" />  -->
-<xsl:template match="*" mode="label">
-    <xsl:text>\label{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>}</xsl:text>
-</xsl:template>
-
 <!-- In some cases we supply our own cross-referencing via       -->
 <!-- hyperref's hypertarget mechanism, specifically for          -->
 <!-- exercises, which may have hard-coded numbers in the source  -->

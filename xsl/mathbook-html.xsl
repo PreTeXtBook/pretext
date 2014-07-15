@@ -558,7 +558,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select=".." mode="number"/>
         </span>
         <xsl:apply-templates />
-        <xsl:apply-templates select=".." mode="label" />
     </figcaption>
 </xsl:template>
 
@@ -674,40 +673,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </sup>
 </xsl:template>
 
-<!-- Point to a "random" mark, with generic "this point" link -->
-<xsl:template match="pageref">
-    <xsl:variable name="target-node" select="id(@label)" />
-    <xsl:element name ="a">
-        <xsl:attribute name="class">
-            <xsl:value-of select="'pageref'" />
-        </xsl:attribute>
-        <xsl:attribute name="href">
-            <xsl:text>#</xsl:text><xsl:value-of select="@label" />
-        </xsl:attribute>
-    <xsl:text>this point</xsl:text>
-    </xsl:element>
-</xsl:template>
-
-<!-- TODO: condition on id present!!!!!-->
-<!-- TODO: perhaps back up a level on xml:id and regroup elsewhere, see latex version -->
-<xsl:template match="*" mode="label">
-    <xsl:element name="a">
-        <xsl:attribute name="class">
-            <xsl:value-of select="'label'" />
-        </xsl:attribute>
-        <xsl:attribute name="name">
-            <xsl:value-of select="@xml:id" />
-        </xsl:attribute>
-    </xsl:element>
-</xsl:template>
 
 <!-- Miscellaneous -->
-
-<!-- A marker we can point to -->
-<xsl:template match="mark">
-   <xsl:apply-templates select="." mode="label" />
-</xsl:template>
-
 
 <!-- Markup, typically within paragraphs            -->
 <!-- Quotes, double or single, see quotations below -->
@@ -979,9 +946,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Math  -->
 <!-- Inline snippets -->
-<!-- Any numbered equation needs a TeX \label set                    -->
-<!-- with the xml:id of the equation, so equation references workout -->
-<!-- Note: we could set \label with something different              -->
+<!-- Numbered equations have a TeX \label set -->
 <xsl:template match= "m">
     <xsl:text>\(</xsl:text>
     <xsl:value-of select="." />
@@ -1001,14 +966,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="men">
     <xsl:text>\[</xsl:text>
     <xsl:value-of select="." />
+    <xsl:apply-templates select="." mode="label" />
     <xsl:text>\tag{</xsl:text>
     <xsl:apply-templates select="." mode="number" />
     <xsl:text>}</xsl:text>
-    <xsl:if test="@xml:id">
-        <xsl:text>\label{</xsl:text>
-        <xsl:value-of select="@xml:id" />
-        <xsl:text>}</xsl:text>
-    </xsl:if>
     <xsl:text>\]</xsl:text>
 </xsl:template>
 
@@ -1031,14 +992,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\notag</xsl:text>
         </xsl:when>
         <xsl:otherwise>
+            <xsl:apply-templates select="." mode="label" />
             <xsl:text>\tag{</xsl:text>
             <xsl:apply-templates select="." mode="number" />
             <xsl:text>}</xsl:text>
-            <xsl:if test="@xml:id">
-                <xsl:text>\label{</xsl:text>
-                <xsl:value-of select="@xml:id" />
-                <xsl:text>}</xsl:text>
-            </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:choose>
