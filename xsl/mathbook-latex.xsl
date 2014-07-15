@@ -1089,42 +1089,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- #### -->
 
 <!-- We do not "tag" numbered equations in LaTeX output, -->
-<!-- and instead let the preamble configuration control   -->
+<!-- and instead let the preamble configuration control  -->
 <!-- the way numbers are generated and assigned          -->
 <xsl:template match="men|mrow" mode="tag" />
 
-<!-- md, mdn containers are generic gather/align environments, so in common xsl -->
-
-<!-- Rows of a multi-line math display                         -->
-<!-- (1) Numbered by align environment, supress as appropriate -->
-<!-- (2) Optionally label if numbered                          -->
-<!-- (3) Last row special, has no line-break marker            -->
-<xsl:template match="mrow">
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:value-of select="." />
-    <xsl:choose>
-        <xsl:when test="(local-name(parent::*)='mdn') and (@number='no')">
-            <xsl:text>\notag</xsl:text>
-        </xsl:when>
-        <xsl:when test="(local-name(parent::*)='md') and not(@number='yes')">
-            <xsl:text>\notag</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="." mode="label"/>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:choose>
-        <xsl:when test="position()=last()">
-            <xsl:text>&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\\</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
 <!-- Intertext -->
-<!-- A LaTeX construct really, so we just do the right thing -->
+<!-- A pure LaTeX construct, so we just do the right thing -->
 <xsl:template match="md/intertext|mdn/intertext">
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>\intertext{</xsl:text>

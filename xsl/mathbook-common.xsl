@@ -241,6 +241,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Mathematics (LaTeX/MathJax) -->
 <!-- ########################### -->
 
+<!-- Since MathJax interprets a large subset of LaTeX,  -->
+<!-- there is little difference between LaTeX and HTML  -->
+<!-- output.  See "abstract" templates for intertext    -->
+<!-- elements and numbering of equations (automatic for -->
+<!-- LaTeX, managed for HTML)                           -->
+
 <!-- Inline Math -->
 <!-- We use the LaTeX delimiters \( and \)                                       -->
 <!-- MathJax: needs to be specified in the tex2jax/inlineMath configuration list -->
@@ -279,12 +285,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{equation}</xsl:text>
 </xsl:template>
 
+<!-- Multi-Line Math -->
 <!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
 <!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
-<!-- align if there are ampersands, gather otherwise                             -->
+<!-- align environment if ampersands are present, gather environment otherwise   -->
 <!-- Output follows source line breaks                                           -->
-<!-- Individual mrows are handled differently for HTML versus MathJax            -->
-<!-- The intertext element assumes an align environment for HTML output          -->
+<!-- The intertext element is an abstract template, see specialized versions     -->
+<!-- TODO: specialize md versus mdn with *-ed versions of environments, then md/mrow, mdn/mrow -->
 <xsl:template match="md|mdn">
     <xsl:choose>
         <xsl:when test="contains(., '&amp;')">
@@ -300,6 +307,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Rows of a multi-line math display                 -->
+<!-- (1) MathJax config turns off all numbering        -->
+<!-- (1) Numbering controlled here with \tag{}, \notag -->
+<!-- (2) Labels are TeX-style, created by MathJax      -->
+<!-- (2) MathJax config makes span id's predictable    -->
+<!-- (3) "tag" modal template is abstract -->
+<!-- (4) Last row special, has no line-break marker    -->
+<xsl:template match="mrow">
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:value-of select="." />
+    <xsl:choose>
+        <xsl:when test="(local-name(parent::*)='mdn') and (@number='no')">
+            <xsl:text>\notag</xsl:text>
+        </xsl:when>
+        <xsl:when test="(local-name(parent::*)='md') and not(@number='yes')">
+            <xsl:text>\notag</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="label" />
+            <xsl:apply-templates select="." mode="tag"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:choose>
+        <xsl:when test="position()=last()">
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\\</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- Sanitize Sage code                 -->
 <!-- No leading whitespace, no trailing -->
