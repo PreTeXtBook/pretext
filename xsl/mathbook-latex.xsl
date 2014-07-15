@@ -414,13 +414,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Figures, Tables, Floats&#xa;</xsl:text>
         <xsl:text>%% The [H]ere option of the float package fixes floats in-place,&#xa;</xsl:text>
         <xsl:text>%% in deference to web usage, where floats are totally irrelevant&#xa;</xsl:text>
-        <xsl:text>%% We define new figure and table environments, if used&#xa;</xsl:text>
-        <xsl:text>%% Remove this package if you want figures and tables to float&#xa;</xsl:text>
-        <xsl:text>%% and rename the environments to the LaTeX standards&#xa;</xsl:text>
-        <xsl:text>%% NB: Figures and tables are numbered along with theorems, definitions, examples, etc&#xa;</xsl:text>
-        <xsl:text>%% NB: and this is accomplished with (identical) code manipulating counters in each environment&#xa;</xsl:text>
-        <xsl:text>%% NB: If floats are allowed, they may float to locations that appear "out-of-order", however&#xa;</xsl:text>
-        <xsl:text>%% NB: disabling the counter manipulation will de-synchronize numbering with HTML versions&#xa;</xsl:text>
+        <xsl:text>%% We redefine the figure and table environments, if used&#xa;</xsl:text>
+        <xsl:text>%%   1) New mbxfigure and/or mbxtable environments are defined with float package&#xa;</xsl:text>
+        <xsl:text>%%   2) Standard LaTeX environments redefined to use new environments&#xa;</xsl:text>
+        <xsl:text>%%   3) Standard LaTeX environments redefined to step theorem counter&#xa;</xsl:text>
+        <xsl:text>%%   4) Counter for new enviroments is set to the theorem counter before caption&#xa;</xsl:text>
+        <xsl:text>%% You can remove all this figure/table setup, to restore standard LaTeX behavior&#xa;</xsl:text>
+        <xsl:text>%% HOWEVER, numbering of figures/tables AND theorems/examples/remarks, etc&#xa;</xsl:text>
+        <xsl:text>%% WILL ALL de-synchronize with the numbering in the HTML version&#xa;</xsl:text>
+        <xsl:text>%% You can remove the [H] argument of the \newfloat command, to allow flotation and &#xa;</xsl:text>
+        <xsl:text>%% preserve numbering, BUT the numbering may then appear "out-of-order"&#xa;</xsl:text>
         <xsl:text>\usepackage{float}&#xa;</xsl:text>
         <xsl:if test="//figure">
             <xsl:variable name="fig-node"><figure /></xsl:variable>
@@ -434,6 +437,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\floatname{mbxfigure}{</xsl:text>
             <xsl:apply-templates select="exsl:node-set($fig-node)" mode="type-name"/>
             <xsl:text>}&#xa;</xsl:text>
+            <xsl:text>\renewenvironment{figure}%&#xa;</xsl:text>
+            <xsl:text>{\begin{mbxfigure}\setcounter{mbxfigure}{\value{theorem}}\stepcounter{theorem}}%&#xa;</xsl:text>
+            <xsl:text>{\end{mbxfigure}}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="//table">
             <xsl:variable name="tab-node"><table /></xsl:variable>
@@ -447,6 +453,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\floatname{mbxtable}{</xsl:text>
             <xsl:apply-templates select="exsl:node-set($tab-node)" mode="type-name"/>
             <xsl:text>}&#xa;</xsl:text>
+            <xsl:text>\renewenvironment{table}%&#xa;</xsl:text>
+            <xsl:text>{\begin{mbxtable}\setcounter{mbxtable}{\value{theorem}}\stepcounter{theorem}}%&#xa;</xsl:text>
+            <xsl:text>{\end{mbxtable}}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
     <xsl:text>%% Raster graphics inclusion, wrapped figures in paragraphs&#xa;</xsl:text>
@@ -1550,16 +1559,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Figures -->
-<!-- For floatation advice see                                                                            -->
-<!-- http://tex.stackexchange.com/questions/2275/keeping-tables-figures-close-to-where-they-are-mentioned -->
-<!-- Counter manipulations are a hack, see preamble comments -->
+<!-- Standard LaTeX figure environment redefined, see preamble comments -->
 <xsl:template match="figure">
-    <xsl:text>\begin{mbxfigure}&#xa;</xsl:text>
+    <xsl:text>\begin{figure}&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]"/>
-    <xsl:text>\setcounter{mbxfigure}{\value{theorem}}\stepcounter{theorem}&#xa;</xsl:text>
     <xsl:apply-templates select="caption" />
-    <xsl:text>\end{mbxfigure}&#xa;</xsl:text>
+    <xsl:text>\end{figure}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Images -->
@@ -1603,15 +1609,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A subset of the (failed) "CALS Table Model" -->
 <!-- Should be able to replace this by extant XSLT for this conversion -->
 <!-- See http://stackoverflow.com/questions/19716449/converting-xhtml-table-to-latex-using-xslt -->
-<!-- Counter manipulations are a hack, see preamble comments -->
+<!-- Standard LaTeX table environment redefined, see preamble comments -->
 <xsl:template match="table">
-    <xsl:text>\begin{mbxtable}&#xa;</xsl:text>
+    <xsl:text>\begin{table}&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]" />
-    <xsl:text>\setcounter{mbxtable}{\value{theorem}}\stepcounter{theorem}&#xa;</xsl:text>
     <xsl:apply-templates select="caption" />
-    <xsl:text>\end{mbxtable}&#xa;</xsl:text>
-    </xsl:template>
+    <xsl:text>\end{table}&#xa;</xsl:text>
+</xsl:template>
 
 <!-- Unclear how to handle *multiple* tgroups in latex -->
 <xsl:template match="tgroup">
