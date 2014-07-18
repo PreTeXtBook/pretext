@@ -501,7 +501,7 @@
                 <!-- http://www.texample.net/media/tikz/examples/TEX/noise-shaper.tex -->
                 <figure xml:id="figure-tikz-electronics">
                     <caption>TikZ Electronics Diagram</caption>
-                    <tikz>
+                    <tikz xml:id="tikz-electronics">
                     <![CDATA[\tikzset{%
                       block/.style    = {draw, thick, rectangle, minimum height = 3em,
                         minimum width = 3em},
@@ -587,7 +587,7 @@
                 <!-- http://www.texample.net/media/tikz/examples/TEX/3d-cone.tex -->
                 <figure xml:id="figure-tikz-cone3D">
                     <caption>TikZ Cone Drawing</caption>
-                    <tikz>
+                    <tikz xml:id="tikz-cone">
                     <![CDATA[\begin{tikzpicture}[join=round]
                     \tikzstyle{conefill} = [fill=blue!20,fill opacity=0.8]
                     \tikzstyle{ann} = [fill=white,font=\footnotesize,inner sep=1pt]
@@ -690,7 +690,7 @@
 
                 <figure xml:id="figure-asymptote-levers">
                     <caption>Aymptote Lever Demonstration</caption>
-                    <asymptote>
+                    <asymptote xml:id="asymptote-lever">
                     size(200,0);
 
                     pair z0=(0,0);
@@ -721,7 +721,7 @@
 
                 <figure xml:id="figure-asymptote-contour-plot">
                     <caption>Aymptote Contour Plot</caption>
-                    <asymptote>
+                    <asymptote xml:id="asymptote-contour">
                     import graph;
                     import palette;
 
@@ -749,7 +749,7 @@
 
                 <figure xml:id="figure-asymptote-latex-macro">
                     <caption>Aymptote Lever, plus Integral</caption>
-                    <asymptote>
+                    <asymptote xml:id="asymptote-lever-integral">
                     size(200,0);
 
                     pair z0=(0,0);
@@ -780,7 +780,7 @@
 
                 <figure xml:id="figure-asymptote-surface">
                     <caption>Asymptote 3-D Surface</caption>
-                    <asymptote>
+                    <asymptote xml:id="asymptote-surface">
                     // Riemann surface of z^{1/n}
                     import graph3;
                     import palette;
@@ -808,7 +808,7 @@
 
                 <figure xml:id="figure-sage-parabola">
                     <caption>A Sage standard parabola, on <m>[-2,4]</m></caption>
-                    <sageplot>
+                    <sageplot xml:id="sageplot-parabola">
                     f(x) = x^2
                     plot(f, (x, -2, 4), color='green', thickness=3)
                     </sageplot>
@@ -819,7 +819,7 @@
                 <!-- Tour example modified: figsize moved from show() into plot() -->
                 <figure xml:id="figure-sage-multigraph">
                     <caption>A Sage multigraph of a sentence</caption>
-                    <sageplot>
+                    <sageplot xml:id="sageplot-sentence-multigraph">
                     stnc = 'I am a cool multiedge graph with loops'
                     g = DiGraph({}, loops=True, multiedges=True)
                     for a,b in [(stnc[i], stnc[i+1]) for i in xrange(len(stnc)-1)]:
@@ -832,7 +832,7 @@
                 <!-- Tour example modified: dropped ymin/ymax, figsize -->
                 <figure xml:id="figure-sage-polynomial-approximation">
                     <caption>Sage polynomial approximations of <m>f(x)=1/(1+25x^2)</m></caption>
-                    <sageplot>
+                    <sageplot xml:id="sageplot-polynomial-approximation">
                     def f(x):
                        return RDF(1 / (1 + 25 * x^2))
 
@@ -855,7 +855,7 @@
 
                 <figure xml:id="figure-sage-implicit-surface">
                     <caption>A Sage implicitly defined 3D surface</caption>
-                    <sageplot>
+                    <sageplot xml:id="sageplot-implicit-surface">
                     var('x y z')
                     T = RDF(golden_ratio)
                     p = 2 - (cos(x + T*y) + cos(x - T*y) + cos(y + T*z) + cos(y - T*z) + cos(z - T*x) + cos(z + T*x))
@@ -952,7 +952,7 @@
                     <ggbBase64>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</ggbBase64>
                    <figure>
                         <caption>GeoGebra demonstration of the Euler Line</caption>
-                        <tikz>
+                        <tikz xml:id="tikz-geogebra-euler">
                             \begin{tikzpicture}
                             \definecolor{ffqqqq}{rgb}{1,0,0}
                             \definecolor{uuuuuu}{rgb}{0.27,0.27,0.27}
