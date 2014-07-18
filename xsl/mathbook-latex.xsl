@@ -1541,6 +1541,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>.pdf}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Sage graphics plots          -->
+<!-- EPS's produced by mbx script -->
+<!-- PNGs are fallback for 3D     -->
+<xsl:template match="sageplot">
+    <xsl:text>\IfFileExists{</xsl:text>
+    <xsl:value-of select="$directory.images" />
+    <xsl:text>/</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>.pdf}%&#xa;</xsl:text>
+    <xsl:text>{\includegraphics[width=0.80\textwidth]{</xsl:text>
+    <xsl:value-of select="$directory.images" />
+    <xsl:text>/</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>.pdf}}%&#xa;</xsl:text>
+    <xsl:text>{\includegraphics[width=0.80\textwidth]{</xsl:text>
+    <xsl:value-of select="$directory.images" />
+    <xsl:text>/</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>.png}}&#xa;</xsl:text>
+</xsl:template>
+
 <!-- Tables -->
 <!-- Follow "XML Exchange Table Model"           -->
 <!-- A subset of the (failed) "CALS Table Model" -->
