@@ -513,6 +513,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- Sage graphics plots          -->
+<!-- SVG's produced by mbx script -->
+<!-- PNGs are fall back for 3D    -->
+<xsl:template match="sageplot">
+    <xsl:element name="object">
+        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
+        <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
+        <xsl:attribute name="data">
+            <xsl:value-of select="$directory.images" />
+            <xsl:text>/</xsl:text>
+            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:text>.svg</xsl:text>
+        </xsl:attribute>
+        <xsl:element name="img">
+            <xsl:attribute name="src">
+                <xsl:value-of select="$directory.images" />
+                <xsl:text>/</xsl:text>
+                <xsl:apply-templates select="." mode="internal-id" />
+                <xsl:text>.png</xsl:text>
+            </xsl:attribute>
+        </xsl:element>
+    </xsl:element>
+</xsl:template>
+
 <!-- Video -->
 <!-- Embed FlowPlayer to play mp4 format                                    -->
 <!-- 2014/03/07:  http://flowplayer.org/docs/setup.html                     -->
