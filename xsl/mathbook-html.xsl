@@ -927,14 +927,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- if we wrote enclosing HTML and overrode display -->
 <!-- Also manufacture a knowl,as a matter of course  -->
 <xsl:template match="biblio[@type='raw']">
-    <p>
-        <xsl:comment>Style me, please. (Maybe as a list item with hard-coded numbers/labels, not automatic)</xsl:comment>
-        <xsl:text>[</xsl:text>
-            <xsl:apply-templates select="." mode="origin-id" />
-        <xsl:text>]</xsl:text>
-        <xsl:text disable-output-escaping="yes">&amp;nbsp;&amp;nbsp;</xsl:text>
-        <xsl:apply-templates />
-    </p>
+    <xsl:element name="div">
+        <xsl:attribute name="class">biblio</xsl:attribute>
+        <xsl:attribute name="id"><xsl:apply-templates select="." mode="internal-id" /></xsl:attribute>
+        <xsl:comment>Style me, please. (Maybe as a list item with hard-coded numbers/labels, not automatic, or just a span)</xsl:comment>
+        <p>
+            <xsl:text>[</xsl:text>
+                <xsl:apply-templates select="." mode="origin-id" />
+            <xsl:text>]</xsl:text>
+            <xsl:text disable-output-escaping="yes">&amp;nbsp;&amp;nbsp;</xsl:text>
+            <xsl:apply-templates select="text()|*[not(self::note)]" />
+        </p>
+        <xsl:apply-templates select="note" />
+    </xsl:element>
     <xsl:call-template name="knowl-factory">
         <xsl:with-param name="identifier">
             <xsl:apply-templates select="." mode="internal-id" />
