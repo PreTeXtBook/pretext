@@ -1462,38 +1462,38 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 </xsl:template>
 
 
-<!-- Files -->
-<!-- Every web page has a file name,                       -->
-<!-- and every node is subsidiary to some web page.        -->
-<!-- With a web page objects will be referenced by anchors -->
-<!-- formed from their internal identifier to make a URL   -->
-<xsl:template name="filename">
-    <xsl:param name="a-node" />
-    <xsl:variable name="summary"><xsl:apply-templates select="$a-node" mode="is-summary" /></xsl:variable>
-    <xsl:variable name="webpage"><xsl:apply-templates select="$a-node" mode="is-webpage" /></xsl:variable>
+<!-- Filenames -->
+<!-- Every web page has a file name,                           -->
+<!-- and every node is subsidiary to some web page.            -->
+<!-- This template give the filename of the webpage enclosing  -->
+<!-- any node (or the webpage representing that node)          -->
+<!-- This allows cross-references to point to the right page   -->
+<!-- when chunking the content into many subdivisions          -->
+<xsl:template match="*" mode="filename">
+    <xsl:variable name="summary"><xsl:apply-templates select="." mode="is-summary" /></xsl:variable>
+    <xsl:variable name="webpage"><xsl:apply-templates select="." mode="is-webpage" /></xsl:variable>
     <xsl:choose>
         <xsl:when test="$summary='true' or $webpage='true'">
-            <xsl:apply-templates select="$a-node" mode="internal-id" />
+            <xsl:apply-templates select="." mode="internal-id" />
             <xsl:text>.html</xsl:text>
             <!-- DEPRECATION: May 2015, replace with terminate=yes if present without an xml:id -->
-            <xsl:if test="$a-node/@filebase">
+            <xsl:if test="@filebase">
                 <xsl:message>WARNING: filebase attribute (value=<xsl:value-of select="$a-node/@filebase" />) is deprecated, use xml:id attribute instead (by 1 May 2015)</xsl:message>
             </xsl:if>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:call-template name="filename">
-                <xsl:with-param name="a-node" select="$a-node/.." />
-            </xsl:call-template>
+            <xsl:apply-templates select=".." mode="filename" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
+<!-- URL's -->
+<!-- Every node has a URL associated with it -->
+<!-- A filename, plus an optional anchor/id  -->
 <xsl:template match ="*" mode="url">
     <xsl:variable name="summary"><xsl:apply-templates select="." mode="is-summary" /></xsl:variable>
     <xsl:variable name="webpage"><xsl:apply-templates select="." mode="is-webpage" /></xsl:variable>
-    <xsl:call-template name="filename">
-        <xsl:with-param name="a-node" select="." />
-    </xsl:call-template>
+    <xsl:apply-templates select="." mode="filename" />
     <xsl:if test="$summary='false' and $webpage='false'">
         <xsl:text>#</xsl:text>
         <xsl:apply-templates select="." mode="internal-id" />
