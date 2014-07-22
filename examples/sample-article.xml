@@ -67,6 +67,8 @@
 
             <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me> This is also a demonstration of the capabilities of <url href="http://mathbook.pugetsound.edu">MathBook XML</url>.</p>
 
+            <p>Generated: <today />, <timeofday /></p>
+
         </section>
 
         <!--
@@ -82,6 +84,7 @@
 
         <section>
             <title>The Fundamental Theorem</title>
+
             <p>There is a remarkable theorem:<fn>And fortunately we do not need to try to write it in the margin!</fn></p>
             <!--
             Mathematics:  Wrap inline mathematics in the "m"
@@ -112,8 +115,6 @@
             <!--
             Next paragraph has two citations.  These reference
             aliases given by "xml:id"'s in the bibliography.
-            WARNING: the "label" attribute will change to
-            "ref" to match the cross-reference use.
             Citations render as knowls on web pages.
             -->
             <p>You will find almost nothing about all this in the article <xref ref="biblio-lay-article" />, nor in the book <xref ref="biblio-judson-AATA" />, since they belong in some other article, but we can cite them out-of-order for practice anyway.</p>
@@ -135,14 +136,14 @@
         <!--
         Sage Code: Next section has Sage code examples.
         For HTML it renders as Sage Cells, with no sample output.
-        For LaTeX it renders as input/output with input in a blue box.
-        A separate XSL transform will isolate code and produce a file
-        for doctesting.  This is "working" but not released yet.
+        For LaTeX it renders as input/output, suggestively typeset.
+        A separate XSL transform isolates code and produces a file
+        for doctesting.
 
         Note: These small examples are wrapped "tight" in the
-        input and output elements.  You can preserve indentation for
-        several lines if you move the code all the way left.
-        This looks ugly and will be rectified.
+        input and output elements.  For multiline code snippets,
+        the left margin is determined by the whitespace preceding
+        the first non-trivial character.
         -->
 
         <section>
@@ -235,50 +236,65 @@
         environment, which uses ampersands (&) for formatting
         control.  This is an evil situation, but the (easy) way
         around it is to use "&amp;" in this situation.
+
+        The previous sections were sequences of paragraphs, along with
+        theorems, Sage code, etc.  The next section has subsections, so
+        the structure must look like *only* subsections, excepting a
+        brief introduction and conclusion (that are sequences of
+        paragraphs and other blocks.)
         -->
 
         <section>
             <title>An Interesting Corollary</title>
 
-            <p>The Fundamental Theorem comes in two flavors, where usually one is a corollary of the other.</p>
+            <introduction>
+                <p>The Fundamental Theorem comes in two flavors, where usually one is a corollary of the other.</p>
+            </introduction>
 
-            <corollary xml:id="corollary-FTC-derivative">
-                <statement>
-                    <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men></p>
-                </statement>
-                <todo>Should equation references come with parentheses?</todo>
-                <proof>
-                    <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.</p>
-                    <mdn>
-                        <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
-                        <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
-                        <mrow>&amp;=f(x)-0 = f(x)</mrow>
-                    </mdn>
-                </proof>
-            </corollary>
+            <subsection>
+                <title>Second Version of FTC</title>
 
-            <p>The alternative version of the Fundamental Theorem in <xref ref="equation-alternate-FTC" /> is a compact way to express the result.</p>
+                <corollary xml:id="corollary-FTC-derivative">
+                    <statement>
+                        <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men></p>
+                    </statement>
+                    <todo>Should equation references come with parentheses?</todo>
+                    <proof>
+                        <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.</p>
+                        <mdn>
+                            <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
+                            <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
+                            <mrow>&amp;=f(x)-0 = f(x)</mrow>
+                        </mdn>
+                    </proof>
+                </corollary>
+
+                <p>The alternative version of the Fundamental Theorem in <xref ref="equation-alternate-FTC" /> is a compact way to express the result.</p>
+            </subsection>
 
             <!--
             Articles can be sectioned further, into subsections
             and subsubsections.  Books have a large subdivision,
             chapters, which can be collections of sections.  A
-            further subdivision is a paragraph, which mimics
+            further subdivision is a "paragraph," which mimics
             the structure of the same name in LaTeX.
             -->
 
             <subsection>
                 <title>A Pedagogical Note</title>
 
-                <p>The Fundamental Theorem explains why we use the same notation for a definite integral, which is a numerical calculation,<fn>Which I think sometimes students lose sight of.</fn> and an antiderivative, which is a symbolic expression.</p>
+                <subsubsection>
+                    <title>Symbolic and Numerical Integrals</title>
 
-                <exercise>
-                    <title>Essay Question: Compare and Contrast</title>
-                    <statement>
-                        <p>Write a short paragraph which compares, and contrasts, the definite and indefinite integral. This is an exercise which sits in the midst of the narrative, so is formatted more like an example or a remark.  It can have a hint and a solution, but this one does not.  It can have a title, which this one does.</p>
-                    </statement>
-                </exercise>
+                    <p>The Fundamental Theorem explains why we use the same notation for a definite integral, which is a numerical calculation,<fn>Which I think sometimes students lose sight of.</fn> and an antiderivative, which is a symbolic expression.</p>
 
+                    <exercise>
+                        <title>Essay Question: Compare and Contrast</title>
+                        <statement>
+                            <p>Write a short paragraph which compares, and contrasts, the definite and indefinite integral. This is an exercise which sits in the midst of the narrative, so is formatted more like an example or a remark.  It can have a hint and a solution, but this one does not.  It can have a title, which this one does.</p>
+                        </statement>
+                    </exercise>
+                </subsubsection>
 
                 <subsubsection>
                     <title>Advice</title>
@@ -294,7 +310,6 @@
                             <p>This is an exercise in an <q>Exercises</q> subdivision at the level of a subsubsection.  There is no question other than if the numbering is appropriate (it is not for <latex /> at the moment).  Here is a self-referential link: Exercise<nbsp /><xref ref="exercise-test-number" />.</p>
                         </statement>
                     </exercise>
-
                 </exercises>
 
             </subsection>
@@ -934,7 +949,9 @@
         <section>
             <title>Embedded Interactive Elements</title>
 
-            <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.</p>
+            <introduction>
+                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.</p>
+            </introduction>
 
             <subsection>
                 <title>GeoGebra</title>
@@ -1221,8 +1238,6 @@
             </conclusion>
 
         </references>
-
-       <p>Generated: <today />, <timeofday /></p>
 
     </article>
 
