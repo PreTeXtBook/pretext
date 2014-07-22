@@ -1435,8 +1435,11 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             </xsl:variable>
             <xsl:value-of select="($leaf='false') and ($chunk-level > $current-level)" />
         </xsl:when>
-        <xsl:otherwise>
+        <xsl:when test="$structural='false'">
             <xsl:value-of select="$structural" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:BUG: Structural determination (<xsl:value-of select="$structural" />) failed for is-summary at <xsl:apply-templates select="." mode="long-name"/></xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -1455,8 +1458,11 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             </xsl:variable>
             <xsl:value-of select="($chunk-level = $current-level) or ( ($leaf='true') and ($chunk-level > $current-level) )" />
         </xsl:when>
-        <xsl:otherwise>
+        <xsl:when test="$structural='false'">
             <xsl:value-of select="$structural" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:BUG: Structural determination (<xsl:value-of select="$structural" />) failed for is-webpage at <xsl:apply-templates select="." mode="long-name"/></xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
