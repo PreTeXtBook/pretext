@@ -1610,10 +1610,18 @@ $(function () {
 
 </xsl:template>
 
-<!-- Mathbook Javasript header -->
+<!-- Mathbook Javascript header -->
 <xsl:template name="mathbook-js">
-    <script src="http://aimath.org/mathbook/ScrollingNav.js"></script>
-    <script src="http://aimath.org/mathbook/Mathbook.js"></script>
+    <!-- GSAP Animation Platform for granular animation control -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.12.1/TweenLite.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.12.1/TimelineLite.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.12.1/plugins/CSSPlugin.min.js"></script>
+
+    <script src="http://mathbook.staging.michaeldubois.me/develop/js/lib/jquery.sticky.js"></script>
+    <script src="http://mathbook.staging.michaeldubois.me/develop/js/lib/jquery.intersections.js"></script>
+    <script src="http://mathbook.staging.michaeldubois.me/develop/js/SidebarView.js"></script>
+    <script src="http://mathbook.staging.michaeldubois.me/develop/js/TouchController.js"></script>
+    <script src="http://mathbook.staging.michaeldubois.me/develop/js/Mathbook.js"></script>
 </xsl:template>
 
 <!-- Font header -->
@@ -1627,10 +1635,11 @@ $(function () {
 <!-- CSS header -->
 <xsl:template name="css">
     <!-- #1 to #5 for different color schemes -->
-    <link href="http://aimath.org/mathbook/mathbook-modern-3.css" rel="stylesheet" type="text/css" />
-    <link href="http://aimath.org/mathbook/icons.css" rel="stylesheet" type="text/css" />
+    <link href="http://mathbook.staging.michaeldubois.me/develop/stylesheets/mathbook-modern-3.css" rel="stylesheet" type="text/css" />
+    <link href="http://mathbook.staging.michaeldubois.me/develop/stylesheets/icons.css" rel="stylesheet" type="text/css" />
     <link href="http://aimath.org/mathbook/add-on.css" rel="stylesheet" type="text/css" />
 </xsl:template>
+
 
 <!-- Video header                    -->
 <!-- Flowplayer setup                -->
