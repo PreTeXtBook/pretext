@@ -1250,10 +1250,12 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                             </div>
                         </div>
                 </div>
-            <xsl:apply-templates select="." mode="navigation" />
+            <xsl:apply-templates select="." mode="primary-navigation" />
             </header>
-            <div class="page">
+            <div class="page container">
+                <xsl:apply-templates select="." mode="sidebars" />
                 <main class="main">
+                    <xsl:apply-templates select="." mode="secondary-navigation" />
                     <div id="content">
                         <xsl:copy-of select="$content" />
                     </div>
@@ -1284,17 +1286,119 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- Navigational Aids -->
 <!-- ################# -->
 
-<!-- Navigation Section -->
-<xsl:template match="*" mode="navigation">
-    <div id="navbar">
-        <div class="container">
-            <xsl:apply-templates select="." mode="nav-arrows" />
-            <xsl:apply-templates select="." mode="toc-items" />
-        </div>
-    </div>
+<!-- Prev/Next URL's -->
+<!-- Check if the XML tree has a preceding/following node -->
+<!-- Then check if it is a document node (structural)     -->
+<!-- If so, compute the URL for the node                  -->
+<!-- TODO: make the up/back version, then drop obsolete SVG arrows -->
+<xsl:template match="*" mode="previous-url">
+    <xsl:if test="preceding-sibling::*">
+        <xsl:variable name="preceding" select="preceding-sibling::*[1]" />
+        <xsl:variable name="structural">
+            <xsl:apply-templates select="$preceding" mode="is-structural" />
+        </xsl:variable>
+        <xsl:if test="$structural='true'">
+            <xsl:apply-templates select="$preceding" mode="url" />
+        </xsl:if>
+    </xsl:if>
+    <!-- could be empty -->
 </xsl:template>
 
-<!-- Table of Contents SideBar -->
+<xsl:template match="*" mode="next-url">
+    <xsl:if test="following-sibling::*">
+        <xsl:variable name="following" select="following-sibling::*[1]" />
+        <xsl:variable name="structural">
+            <xsl:apply-templates select="$following" mode="is-structural" />
+        </xsl:variable>
+        <xsl:if test="$structural='true'">
+            <xsl:apply-templates select="$following" mode="url" />
+        </xsl:if>
+    </xsl:if>
+    <!-- could be empty -->
+</xsl:template>
+
+
+<!-- Navigation Sections, Primary and Secondary -->
+<!-- TODO: consolidate duplicated button generation, once it is clear how to handle empty buttons -->
+<!-- Primary - complete for mobile target -->
+<xsl:template match="*" mode="primary-navigation">
+    <nav id="primary-navbar" class="navbar">
+        <div class="container">
+            <!-- place buttons in order for mobile -->
+            <!-- begin Previous -->
+            <xsl:element name="a">
+                <xsl:attribute name="class">previous-button button</xsl:attribute>
+                <xsl:attribute name="href">
+                    <xsl:apply-templates select="." mode="previous-url" />
+                </xsl:attribute>
+                <xsl:text>Previous</xsl:text>  <!-- internationalize -->
+            </xsl:element>
+            <!-- end Previous -->
+            <button id="sidebar-left-toggle-button" class="button">Table of Contents</button> <!-- internationalize -->
+            <button id="sidebar-right-toggle-button" class="button">Annotations</button> <!-- internationalize -->
+            <!-- begin Next -->
+            <xsl:element name="a">
+                <xsl:attribute name="class">next-button button</xsl:attribute>
+                <xsl:attribute name="href">
+                    <xsl:apply-templates select="." mode="next-url" />
+                </xsl:attribute>
+                <xsl:text>Next</xsl:text>  <!-- internationalize -->
+            </xsl:element>
+            <!-- end Next -->
+        </div>
+    </nav>
+</xsl:template>
+
+<!-- Secondary - desktop has ToC, Annotation buttons on top -->
+<xsl:template match="*" mode="secondary-navigation">
+    <nav id="secondary-navbar" class="navbar">
+        <!-- begin Previous -->
+        <xsl:element name="a">
+            <xsl:attribute name="class">previous-button button</xsl:attribute>
+            <xsl:attribute name="href">
+                <xsl:apply-templates select="." mode="previous-url" />
+            </xsl:attribute>
+            <xsl:text>Previous</xsl:text>  <!-- internationalize -->
+        </xsl:element>
+        <!-- end Previous -->
+        <!-- Put Up/Back here -->
+        <!-- begin Next -->
+        <xsl:element name="a">
+            <xsl:attribute name="class">next-button button</xsl:attribute>
+            <xsl:attribute name="href">
+                <xsl:apply-templates select="." mode="next-url" />
+            </xsl:attribute>
+            <xsl:text>Next</xsl:text>  <!-- internationalize -->
+        </xsl:element>
+        <!-- end Next -->
+    </nav>
+</xsl:template>
+
+
+<!-- Sidebars -->
+<!-- Two HTML aside's for ToC (left), Annotations (right)       -->
+<!-- Need to pass node down into "toc-items", which is per-page -->
+<xsl:template match="*" mode="sidebars">
+    <aside id="sidebar-left" class="sidebar">
+        <div class="sidebar-content">
+            <nav id="toc" style="height: 394px;">
+                 <xsl:apply-templates select="." mode="toc-items" />
+            </nav>
+            <div class="extras">
+                <nav>
+                    <a class="feedback-link" href="">Feedback</a>
+                    <a class="mathbook-link" href="http://mathbook.pugetsound.edu">Authored in MathBook XML</a>
+                </nav>
+            </div>
+        </div>
+    </aside>
+    <aside id="sidebar-right" class="sidebar">
+        <div class="sidebar-content">Mock right sidebar content</div>
+    </aside>
+</xsl:template>
+
+
+<!-- Table of Contents Contents (Items) -->
 <!-- Includes "active" class for enclosing outer node              -->
 <!-- Node set equality and subset based on unions of subtrees, see -->
 <!-- http://www.xml.com/cookbooks/xsltckbk/solution.csp?day=5      -->
@@ -1378,6 +1482,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     </xsl:choose>
 </xsl:template>
 
+<!-- Now OBSOLETE, save for Up/Back code integrated elsewhere -->
 <!-- Navigational Arrows -->
 <!-- Page-specific       -->
 <!-- TODO: Also make a floating navigation bar with arrows at bottom of page? -->
