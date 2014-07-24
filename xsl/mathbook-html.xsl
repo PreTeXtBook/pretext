@@ -336,6 +336,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <article class="theorem-like" id="{$xref}">
         <h5>
         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+        <xsl:text> </xsl:text>
         <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
         <xsl:if test="title">
             <xsl:text> (</xsl:text>
