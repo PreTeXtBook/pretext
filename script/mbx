@@ -1,7 +1,7 @@
 #! /usr/bin/python
 
 # ********************************************************************
-# Copyright 2014 Robert A. Beezer
+# Copyright 2010-2014 Robert A. Beezer
 #
 # This file is part of MathBook XML.
 #
@@ -18,6 +18,12 @@
 # You should have received a copy of the GNU General Public License
 # along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 # *********************************************************************
+
+##############################################
+#
+#  Graphics Language Extraction and Processing
+#
+##############################################
 
 def tikz_conversion(xml_source, dest_dir, outformat):
 	global config
@@ -142,8 +148,233 @@ def sage_conversion(xml_source, dest_dir, outformat):
 			for f in glob.glob(sagepng):
 				shutil.copy2(f, dest_dir)
 
+#######################################
+#
+# Sage Worksheet Creation and Packaging
+#
+#######################################
 
-# Utility functions
+# Conversion object adapted/simplified from  tex2sws  project (c. 2010)
+
+# TODO: patrol normalized paths for Windows compatibility (universally)
+# TODO: Cleanup temporay directory if not -vv
+
+class MathBookXMLtoSWS(object):
+
+    def __init__(self, xslt_exec, mbx_dir, xml_file, sws_file):
+        r"""
+        Configure the working environment for a conversion.
+
+        INPUT:
+
+        - ``xslt_exec`` - XSLT executable
+
+        - ``mbx_dir`` - root of MBX distribution
+
+        - ``xml_file`` - a MathBook XML file to convert
+          to a Sage Notebook file
+
+        - ``sws_file`` - final name/location of Sage Notebook file
+
+        OUTPUT:
+        An sws format file for the Sage Notebook reflecting the document.
+        """
+        import os.path   # join
+        import tempfile  # mkdtemp
+
+        _verbose('converting {} to {}'.format(xml_file, sws_file))
+
+        if not xml_file:
+            raise ValueError('an XML file for input must be specified')
+        if not sws_file:
+            raise ValueError('an SWS file for output must be specified')
+
+        _debug('MBX, XML, SWS locations: {}, {}, {}'.format(mbx_dir, xml_file, sws_file))
+
+        # Record locations for use later in the class
+        # Prior to making/using temporary directory
+        self._xml_file = os.path.abspath(xml_file)
+        self._sws_file = os.path.abspath(sws_file)
+        self._xsltproc_exec = xslt_exec
+        self._mathbook_xslt = os.path.join(mbx_dir, 'xsl/mathbook-sagenb.xsl')
+        self._source_dir = get_source_path(self._xml_file)
+        self._tmp_dir = tempfile.mkdtemp()
+        _debug('xslt exec, MB XSL, source-dir, temp-dir: {}, {}, {}, {}'.format(self._xsltproc_exec, self._mathbook_xslt, self._source_dir, self._tmp_dir))
+
+    def _process_xml(self):
+        import os
+        import subprocess
+
+        _verbose('extracting files and assets from XML file via XSLT')
+        os.chdir(self._tmp_dir)
+        devnull = open(os.devnull, 'w')
+        content_cmd = [self._xsltproc_exec, '--xinclude',
+                       '--stringparam', 'purpose', 'files',
+                       self._mathbook_xslt, self._xml_file
+                      ]
+        subprocess.call(content_cmd)
+        info_cmd = [self._xsltproc_exec, '--xinclude',
+                       '--stringparam', 'purpose', 'info',
+                       self._mathbook_xslt, self._xml_file
+                      ]
+        # info will be a string that begins with "manifest = "
+        # A list, each element a pair
+        # first a filename, then a list of included files
+        info = subprocess.check_output(info_cmd)
+        exec(info)
+        _debug('Manifest, information list: {}'.format(manifest))
+        return manifest
+
+
+    def _create_single_sws(self, html_file, title, assets):
+        r"""
+        Create a single Sage worksheet in SWS format.
+
+        INPUTS:
+
+        - ``html_file`` - name of an HTML file of "raw" content
+
+        - ``title`` - string for title
+
+        - ``assets`` - a list of (image) files to place
+          in the worksheet data directory
+
+        This routine creates a worksheet "from scratch" using just Python
+        and none of the notebook code.  This makes for quicker startup times
+        and the ability to run without Sage present.
+
+        OUTPUT:  This routine places a Sage worksheet in the main
+        temporary directory.  Later we determine if there are more.
+        """
+        import time  # for last change in pickled worksheet info
+        import tempfile
+        import tarfile
+        import cPickle
+        import os
+        import os.path  # join, split, splitext
+
+        # Make a generic worksheet configuration as a Python dictionary
+        basic = {
+            'name': title,
+            'system': 'sage',
+            'owner': 'admin',
+            'last_change': ('admin', time.time()),
+            }
+
+        basename, _ = os.path.splitext(html_file)
+        base_dir = 'sage_worksheet'
+        data_dir = 'data'
+
+        # Build sws as a tar file
+        sws_file = '{}.sws'.format(basename)
+        T = tarfile.open(sws_file, 'w:bz2')
+
+        # Pickle configuration file
+        # Write into temp file, add to sws file
+        fd, configfile =  tempfile.mkstemp()
+        config = cPickle.dumps(basic)
+        open(configfile, 'w').write(config)
+        T.add(configfile, os.path.join(base_dir, 'worksheet_conf.pickle'))
+        os.unlink(configfile)
+        os.fdopen(fd,'w').close()
+
+        # Worksheet file, new style (.html suffix)
+        _debug('Making "worksheet.html" in sws archive from {}'.format(html_file))
+        T.add(html_file, arcname=os.path.join(base_dir, 'worksheet.html'))
+
+        # Worksheet file, old style (prepend two-line header, .txt suffix)
+        _debug('Making "worksheet.txt" in sws archive from {}'.format(html_file))
+        header = '{}\nsystem: sage\n'.format(title)
+        original = open(html_file, 'r').read()
+        fd, oldstyle =  tempfile.mkstemp()
+        open(oldstyle, 'w').write(header + original)
+        T.add(oldstyle, arcname=os.path.join(base_dir, 'worksheet.txt'))
+        os.unlink(oldstyle)
+        os.fdopen(fd,'w').close()
+
+        # add various necessary files from asset list
+        for afile in assets:
+            source = os.path.join(self._source_dir, afile)
+            # XSLT produces SVG file names for generated plots
+            # PNG is the fallback, esp for <sageplot>
+            if not(os.path.isfile(source)):
+				source = source[:-3] + 'png'
+				afile = afile[:-3] + 'png'
+            dest = os.path.join(base_dir, data_dir, afile)
+            _debug('adding {} to sws archive as {}'.format(source, dest))
+            T.add(source, arcname=dest)
+
+        T.close()
+        return sws_file
+
+    def _package_worksheets(self, worksheets):
+        r"""
+        Rename/move single worksheet, or zip a collection.
+
+        INPUTS:
+
+        - ``worksheets`` - a list of worsheet file names, no paths
+
+        OUTPUT:  One SWS file, or several collected in a zip archive.
+        """
+        import os.path # splitext
+        import shutil  # copy2
+        import zipfile # Zipfile
+
+        destination = self._sws_file  # perhaps really a zip file
+        print "junky", destination
+        _verbose('Manufacturing final notebook-compatible file: {}'.format(destination))
+        _debug('Packaging following SWS files: {}'.format(worksheets))
+
+        # Sanity checks on worksheets, filename
+        if len(worksheets) == 0:
+			raise ValueError('XSLT transform produced no output, check configuration')
+        single = (len(worksheets) == 1)
+        _, ext = os.path.splitext(destination)
+		if single:
+			if not(ext in ['.sws', '.SWS']):
+				print 'MBX:WARNING: creating a single worksheet, filename should end in ".sws"'
+				print "MY"
+		else:
+			if not(ext in ['.zip', '.ZIP']):
+				print 'MBX:WARNING: creating multiple worksheets, filename should end in ".zip"'
+        if single:
+			# Singe worksheet: copy from temp/working to final resting place
+			# Prepend temp directory
+			sws = os.path.join(self._tmp_dir, worksheets[0])
+			shutil.copy2(sws, destination)
+        else:
+			# Multiple worksheets: manufactured in final resting place
+			Z = zipfile.ZipFile(destination, 'a')
+			for afile in worksheets:
+				Z.write(afile)
+			Z.close()
+
+
+    def convert(self):
+        r"""
+        The one public method.
+        """
+        import subprocess
+        import os.path
+
+        worksheets = []
+        info = self._process_xml()
+        # Creating early portions of the document later in time
+        # provides later timestamps and places them lower in the
+        # time-sorted worksheet-list of the Sage notebook interface
+        for afile in reversed(info):
+			_verbose('Converting {} to an SWS file'.format(afile[0]))
+			sws_file = self._create_single_sws(afile[0], afile[1], afile[2])
+			worksheets.append(sws_file)
+        self._package_worksheets(worksheets)
+
+
+###################
+#
+# Utility Functions
+#
+###################
 
 def _verbose(msg):
 	"""Write a message to the console on program progress"""
@@ -169,6 +400,15 @@ def get_mbx_path():
 	return os.path.normpath(program_dir[:-6])
 
 
+def get_source_path(source_file):
+	"""Returns path of source XML file"""
+	import sys, os.path
+	_verbose("discovering source directory from source location")
+	# split path off filename
+	source_dir, _ = os.path.split(source_file)
+	return os.path.normpath(source_dir)
+
+
 def get_cli_arguments():
 	"""Return the CLI arguments in parser object"""
 	import argparse
@@ -183,6 +423,7 @@ def get_cli_arguments():
 		('tikz', 'tikz pictures'), 
 		('asy', 'Asymptote diagrams'),
 		('sageplot', 'Sage graphics'),
+		('all', 'Complete document'),
 	]
 	component_help = 'Possible components are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in component_info])
 	parser.add_argument('-c', '--component', help=component_help, action="store", dest="component")
@@ -191,7 +432,9 @@ def get_cli_arguments():
 		('svg', 'Scalable Vector Graphicsfile(s)'), 
 		('pdf', 'Portable Document Format file(s)'),
 		('source', 'Standalone source files'),
-		('html', 'HyperText Markup Language (web pages)'), 
+		('latex', 'LaTeX source file'),
+		('html', 'HyperText Markup Language (web pages)'),
+		('sagenb', 'Sage *.sws archive of worksheets'),
 	]
 	format_help = 'Output formats are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in format_info])
 	parser.add_argument('-f', '--format', help=format_help, action="store", dest='format')
@@ -230,26 +473,30 @@ def get_config_info(script_dir):
 	return config
 
 
-############################
-# Main
-############################
+######
 #
+# Main
+#
+######
+
 # Parse command line
-
-args = get_cli_arguments()
-
-_debug("CLI args {}".format(vars(args)))
+# Deduce some paths
+# Read configuration file
+# Switch on command line
 
 import os.path
+
+args = get_cli_arguments()
+_debug("CLI args {}".format(vars(args)))
 
 mbx_dir = get_mbx_path()
 mbx_xsl_dir = os.path.join(mbx_dir, "xsl")
 mbx_script_dir = os.path.join(mbx_dir, "script")
-
-_debug("xsl dir: {}".format(mbx_xsl_dir))
-_debug("script dir: {}".format(mbx_script_dir))
+_debug("xsl, script dirs: {}, {}".format(mbx_xsl_dir, mbx_script_dir))
 
 config = get_config_info(mbx_script_dir)
+xslt_executable = config.get('executables', 'xslt')
+_debug("xslt executable command: {}".format(xslt_executable))
 
 if args.component == 'tikz':
 	if args.format == 'pdf':
@@ -259,7 +506,7 @@ if args.component == 'tikz':
 	elif args.format == 'source':
 		tikz_conversion(args.xml_file, args.dir, 'source')
 	else:
-		raise NotImplementedError("cannot make tikz pictures in {} format".format(args.format))
+		raise NotImplementedError('cannot make TikZ pictures in "{}" format'.format(args.format))
 elif args.component == 'asy':
 	if args.format == 'pdf':
 		asymptote_conversion(args.xml_file, args.dir, 'pdf')
@@ -268,7 +515,7 @@ elif args.component == 'asy':
 	elif args.format == 'source':
 		asymptote_conversion(args.xml_file, args.dir, 'source')
 	else:
-		raise NotImplementedError("cannot make asymptote diagrams in {} format".format(args.format))
+		raise NotImplementedError('cannot make Asymptote diagrams in "{}" format'.format(args.format))
 elif args.component == 'sage':
 	if args.format == 'pdf':
 		sage_conversion(args.xml_file, args.dir, 'pdf')
@@ -277,6 +524,18 @@ elif args.component == 'sage':
 	elif args.format == 'source':
 		sage_conversion(args.xml_file, args.dir, 'source')
 	else:
-		raise NotImplementedError("cannot make Sage graphics in {} format".format(args.format))
+		raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
+elif args.component == 'all':
+	if args.format == 'sagenb':
+		# initialize  the converter
+		m2s = MathBookXMLtoSWS(xslt_exec=xslt_executable, mbx_dir=mbx_dir, xml_file=args.xml_file, sws_file=args.out)
+		# Do the conversion
+		m2s.convert()
+	elif args.format == 'html':
+		raise NotImplementedError("conversion to HTML version not integrated yet, use command line")
+	elif args.format == 'latex':
+		raise NotImplementedError("conversion to LaTeX version not integrated yet, use command line")
+	else:
+		raise NotImplementedError('cannot make entire document in "{}" format'.format(args.format))
 else:
-	raise ValueError('the {} component is not an option'.format(args.component))
+	raise ValueError('the "{}" component is not a conversion option'.format(args.component))
