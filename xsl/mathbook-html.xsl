@@ -1268,21 +1268,6 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     </exsl:document>
 </xsl:template>
 
-<!-- Converter information for header -->
-<!-- TODO: add date, URL -->
-<xsl:template name="converter-blurb">
-    <xsl:comment>*                                    *</xsl:comment><xsl:text>&#xa;</xsl:text>
-    <xsl:comment>* Generated from MathBook XML source *</xsl:comment><xsl:text>&#xa;</xsl:text>
-    <xsl:comment>
-        <xsl:text>*    on </xsl:text>
-        <xsl:value-of select="date:date-time()" />
-        <xsl:text>    *</xsl:text>
-    </xsl:comment><xsl:text>&#xa;</xsl:text>
-    <xsl:comment>*                                    *</xsl:comment><xsl:text>&#xa;</xsl:text>
-    <xsl:comment>*   http://mathbook.pugetsound.edu   *</xsl:comment><xsl:text>&#xa;</xsl:text>
-    <xsl:comment>*                                    *</xsl:comment><xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
 <!-- ################# -->
 <!-- Navigational Aids -->
 <!-- ################# -->
@@ -1827,6 +1812,21 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
 </div>
 </noscript>
 <xsl:comment>End: StatCounter code</xsl:comment>
+</xsl:template>
+
+<!-- Converter information for header -->
+<!-- TODO: add date, URL -->
+<xsl:template name="converter-blurb">
+    <xsl:comment>*                                    *</xsl:comment><xsl:text>&#xa;</xsl:text>
+    <xsl:comment>* Generated from MathBook XML source *</xsl:comment><xsl:text>&#xa;</xsl:text>
+    <xsl:comment>
+        <xsl:text>*    on </xsl:text>
+        <xsl:value-of select="date:date-time()" />
+        <xsl:text>    *</xsl:text>
+    </xsl:comment><xsl:text>&#xa;</xsl:text>
+    <xsl:comment>*                                    *</xsl:comment><xsl:text>&#xa;</xsl:text>
+    <xsl:comment>*   http://mathbook.pugetsound.edu   *</xsl:comment><xsl:text>&#xa;</xsl:text>
+    <xsl:comment>*                                    *</xsl:comment><xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 
