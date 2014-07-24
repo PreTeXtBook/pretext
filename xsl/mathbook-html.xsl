@@ -248,7 +248,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- Create summaries of each child node (which will be a document node) -->
                 <!-- NB: be more careful about just wrapping links -->
                 <xsl:apply-templates select="titlepage|introduction" mode="summary-entry"/>
-                <nav class="summary-links">
+                <nav class="chapter-toc">
                     <xsl:apply-templates select="*[not(self::title or self::author or self::titlepage or self::introduction or self::conclusion)]" mode="summary-entry" />
                 </nav>
                 <xsl:apply-templates select="conclusion" mode="summary-entry"/>
@@ -1230,7 +1230,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         </head>
         <xsl:element name="body">
             <xsl:if test="$toc-level > 0">
-                <xsl:attribute name="class">has-toc</xsl:attribute>
+                <xsl:attribute name="class">has-toc has-sidebar-left</xsl:attribute> <!-- later add right -->
             </xsl:if>
             <xsl:call-template name="latex-macros" />
              <header id="masthead">
@@ -1239,7 +1239,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                             <xsl:call-template name="brand-logo" />
                             <div class="title-container">
                                 <h1 class="title">
-                                    <span class="title"><xsl:value-of select="$title" /></span>
+                                    <xsl:value-of select="$title" />
                                     <xsl:if test="normalize-space($subtitle)">
                                         <p class="subtitle">
                                             <xsl:value-of select="$subtitle" />
