@@ -26,127 +26,127 @@
 ##############################################
 
 def tikz_conversion(xml_source, dest_dir, outformat):
-	global config
-	import tempfile, os, os.path, subprocess, shutil
-	_verbose('converting tikz pictures from {} to {} graphics in {}'.format(xml_source, outformat, dest_dir))
-	dest_dir = sanitize_directory(dest_dir)
-	tmp_dir = tempfile.mkdtemp()
-	_debug("temporary directory: {}".format(tmp_dir))
-	xslt_executable = config.get('executables', 'xslt')
-	_debug("xslt executable: {}".format(xslt_executable))
-	tex_executable = config.get('executables', 'tex')
-	_debug("tex executable: {}".format(tex_executable))
-	pdfsvg_executable = config.get('executables', 'pdfsvg')
-	_debug("pdfsvg executable: {}".format(pdfsvg_executable))
-	# http://stackoverflow.com/questions/11269575/how-to-hide-output-of-subprocess-in-python-2-7
-	devnull = open(os.devnull, 'w')
-	convert_cmd = [xslt_executable,
-		'--stringparam', 'scratch', tmp_dir,
-		'--xinclude',
-		os.path.join(mbx_xsl_dir, 'extract-tikz.xsl'),
-		xml_source
-		]
-	_verbose("extracting tikz pictures from {}".format(xml_source))
-	_debug("tikz conversion {}".format(convert_cmd))
-	subprocess.call(convert_cmd)
-	cwd = os.getcwd()
-	os.chdir(tmp_dir)
-	for tikzpic in os.listdir(tmp_dir):
-		if outformat == 'source':
-			shutil.copy2(tikzpic, dest_dir)
-		else:
-			filebase, _ = os.path.splitext(tikzpic)
-			tikzpdf = "{}.pdf".format(filebase)
-			tikzsvg = "{}.svg".format(filebase)
-			latex_cmd = [tex_executable, tikzpic]
-			_verbose("converting {} to {}".format(tikzpic, tikzpdf))
-			subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-			if outformat == 'svg':
-				svg_cmd = [pdfsvg_executable, tikzpdf, tikzsvg]
-				_verbose("converting {} to {}".format(tikzpdf, tikzsvg))
-				subprocess.call(svg_cmd)
-				shutil.copy2(tikzsvg, dest_dir)
-			if outformat == 'pdf':
-				shutil.copy2(tikzpdf, dest_dir)
+    global config
+    import tempfile, os, os.path, subprocess, shutil
+    _verbose('converting tikz pictures from {} to {} graphics in {}'.format(xml_source, outformat, dest_dir))
+    dest_dir = sanitize_directory(dest_dir)
+    tmp_dir = tempfile.mkdtemp()
+    _debug("temporary directory: {}".format(tmp_dir))
+    xslt_executable = config.get('executables', 'xslt')
+    _debug("xslt executable: {}".format(xslt_executable))
+    tex_executable = config.get('executables', 'tex')
+    _debug("tex executable: {}".format(tex_executable))
+    pdfsvg_executable = config.get('executables', 'pdfsvg')
+    _debug("pdfsvg executable: {}".format(pdfsvg_executable))
+    # http://stackoverflow.com/questions/11269575/how-to-hide-output-of-subprocess-in-python-2-7
+    devnull = open(os.devnull, 'w')
+    convert_cmd = [xslt_executable,
+        '--stringparam', 'scratch', tmp_dir,
+        '--xinclude',
+        os.path.join(mbx_xsl_dir, 'extract-tikz.xsl'),
+        xml_source
+        ]
+    _verbose("extracting tikz pictures from {}".format(xml_source))
+    _debug("tikz conversion {}".format(convert_cmd))
+    subprocess.call(convert_cmd)
+    cwd = os.getcwd()
+    os.chdir(tmp_dir)
+    for tikzpic in os.listdir(tmp_dir):
+        if outformat == 'source':
+            shutil.copy2(tikzpic, dest_dir)
+        else:
+            filebase, _ = os.path.splitext(tikzpic)
+            tikzpdf = "{}.pdf".format(filebase)
+            tikzsvg = "{}.svg".format(filebase)
+            latex_cmd = [tex_executable, tikzpic]
+            _verbose("converting {} to {}".format(tikzpic, tikzpdf))
+            subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            if outformat == 'svg':
+                svg_cmd = [pdfsvg_executable, tikzpdf, tikzsvg]
+                _verbose("converting {} to {}".format(tikzpdf, tikzsvg))
+                subprocess.call(svg_cmd)
+                shutil.copy2(tikzsvg, dest_dir)
+            if outformat == 'pdf':
+                shutil.copy2(tikzpdf, dest_dir)
 
 
 def asymptote_conversion(xml_source, dest_dir, outformat):
-	global config
-	import tempfile, os, os.path, subprocess, shutil, glob
-	_verbose('converting Asymptote diagrams from {} to {} graphics in {}'.format(xml_source, outformat.upper(), dest_dir))
-	dest_dir = sanitize_directory(dest_dir)
-	tmp_dir = tempfile.mkdtemp()
-	_debug("temporary directory: {}".format(tmp_dir))
-	xslt_executable = config.get('executables', 'xslt')
-	_debug("xslt executable: {}".format(xslt_executable))
-	asy_executable = config.get('executables', 'asy')
-	_debug("asy executable: {}".format(asy_executable))
-	extract_cmd = [xslt_executable,
-		'--stringparam', 'scratch', tmp_dir,
-		'--xinclude',
-		os.path.join(mbx_xsl_dir, 'extract-asymptote.xsl'),
-		xml_source
-		]
-	_verbose("extracting Asymptote diagrams from {}".format(xml_source))
-	subprocess.call(extract_cmd)
-	cwd = os.getcwd()
-	os.chdir(tmp_dir)
-	devnull = open(os.devnull, 'w')
-	for asydiagram in os.listdir(tmp_dir):
-		if outformat == 'source':
-			shutil.copy2(asydiagram, dest_dir)
-		else:
-			filebase, _ = os.path.splitext(asydiagram)
-			asyout = "{}.{}".format(filebase, outformat)
-			asypng = "{}_*.png".format(filebase)
-			asy_cmd = [asy_executable, '-batchMask', '-outformat', outformat, asydiagram]
-			_verbose("converting {} to {}".format(asydiagram, asyout))
-			_debug("asymptote conversion {}".format(asy_cmd))
-			subprocess.call(asy_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-			shutil.copy2(asyout, dest_dir)
-			# Sometimes Asymptotes SVGs include multiple PNGs for colored regions
-			for f in glob.glob(asypng):
-				shutil.copy2(f, dest_dir)
+    global config
+    import tempfile, os, os.path, subprocess, shutil, glob
+    _verbose('converting Asymptote diagrams from {} to {} graphics in {}'.format(xml_source, outformat.upper(), dest_dir))
+    dest_dir = sanitize_directory(dest_dir)
+    tmp_dir = tempfile.mkdtemp()
+    _debug("temporary directory: {}".format(tmp_dir))
+    xslt_executable = config.get('executables', 'xslt')
+    _debug("xslt executable: {}".format(xslt_executable))
+    asy_executable = config.get('executables', 'asy')
+    _debug("asy executable: {}".format(asy_executable))
+    extract_cmd = [xslt_executable,
+        '--stringparam', 'scratch', tmp_dir,
+        '--xinclude',
+        os.path.join(mbx_xsl_dir, 'extract-asymptote.xsl'),
+        xml_source
+        ]
+    _verbose("extracting Asymptote diagrams from {}".format(xml_source))
+    subprocess.call(extract_cmd)
+    cwd = os.getcwd()
+    os.chdir(tmp_dir)
+    devnull = open(os.devnull, 'w')
+    for asydiagram in os.listdir(tmp_dir):
+        if outformat == 'source':
+            shutil.copy2(asydiagram, dest_dir)
+        else:
+            filebase, _ = os.path.splitext(asydiagram)
+            asyout = "{}.{}".format(filebase, outformat)
+            asypng = "{}_*.png".format(filebase)
+            asy_cmd = [asy_executable, '-batchMask', '-outformat', outformat, asydiagram]
+            _verbose("converting {} to {}".format(asydiagram, asyout))
+            _debug("asymptote conversion {}".format(asy_cmd))
+            subprocess.call(asy_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            shutil.copy2(asyout, dest_dir)
+            # Sometimes Asymptotes SVGs include multiple PNGs for colored regions
+            for f in glob.glob(asypng):
+                shutil.copy2(f, dest_dir)
 
 
 def sage_conversion(xml_source, dest_dir, outformat):
-	global config
-	import tempfile, os, os.path, subprocess, shutil, glob
-	_verbose('converting Sage diagrams from {} to {} graphics in {}'.format(xml_source, outformat.upper(), dest_dir))
-	dest_dir = sanitize_directory(dest_dir)
-	tmp_dir = tempfile.mkdtemp()
-	_debug("temporary directory: {}".format(tmp_dir))
-	xslt_executable = config.get('executables', 'xslt')
-	_debug("xslt executable: {}".format(xslt_executable))
-	sage_executable = config.get('executables', 'sage')
-	_debug("sage executable: {}".format(sage_executable))
-	extract_cmd = [xslt_executable,
-		'--stringparam', 'scratch', tmp_dir,
-		'--xinclude',
-		os.path.join(mbx_xsl_dir, 'extract-sageplot.xsl'),
-		xml_source
-		]
-	_verbose("extracting Sage diagrams from {}".format(xml_source))
-	subprocess.call(extract_cmd)
-	cwd = os.getcwd()
-	os.chdir(tmp_dir)
-	devnull = open(os.devnull, 'w')
-	for sageplot in os.listdir(tmp_dir):
-		if outformat == 'source':
-			shutil.copy2(sageplot, dest_dir)
-		else:
-			filebase, _ = os.path.splitext(sageplot)
-			sageout = "{0}.{1}".format(filebase, outformat)
-			sagepng = "{0}.png".format(filebase, outformat)
-			sage_cmd = [sage_executable,  sageplot, outformat]
-			_verbose("converting {} to {} (or {} for 3D)".format(sageplot, sageout, sagepng))
-			_debug("sage conversion {}".format(sage_cmd))
-			subprocess.call(sage_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-			# Sage makes PNGs for 3D
-			for f in glob.glob(sageout):
-				shutil.copy2(f, dest_dir)
-			for f in glob.glob(sagepng):
-				shutil.copy2(f, dest_dir)
+    global config
+    import tempfile, os, os.path, subprocess, shutil, glob
+    _verbose('converting Sage diagrams from {} to {} graphics in {}'.format(xml_source, outformat.upper(), dest_dir))
+    dest_dir = sanitize_directory(dest_dir)
+    tmp_dir = tempfile.mkdtemp()
+    _debug("temporary directory: {}".format(tmp_dir))
+    xslt_executable = config.get('executables', 'xslt')
+    _debug("xslt executable: {}".format(xslt_executable))
+    sage_executable = config.get('executables', 'sage')
+    _debug("sage executable: {}".format(sage_executable))
+    extract_cmd = [xslt_executable,
+        '--stringparam', 'scratch', tmp_dir,
+        '--xinclude',
+        os.path.join(mbx_xsl_dir, 'extract-sageplot.xsl'),
+        xml_source
+        ]
+    _verbose("extracting Sage diagrams from {}".format(xml_source))
+    subprocess.call(extract_cmd)
+    cwd = os.getcwd()
+    os.chdir(tmp_dir)
+    devnull = open(os.devnull, 'w')
+    for sageplot in os.listdir(tmp_dir):
+        if outformat == 'source':
+            shutil.copy2(sageplot, dest_dir)
+        else:
+            filebase, _ = os.path.splitext(sageplot)
+            sageout = "{0}.{1}".format(filebase, outformat)
+            sagepng = "{0}.png".format(filebase, outformat)
+            sage_cmd = [sage_executable,  sageplot, outformat]
+            _verbose("converting {} to {} (or {} for 3D)".format(sageplot, sageout, sagepng))
+            _debug("sage conversion {}".format(sage_cmd))
+            subprocess.call(sage_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            # Sage makes PNGs for 3D
+            for f in glob.glob(sageout):
+                shutil.copy2(f, dest_dir)
+            for f in glob.glob(sagepng):
+                shutil.copy2(f, dest_dir)
 
 #######################################
 #
@@ -298,8 +298,8 @@ class MathBookXMLtoSWS(object):
             # XSLT produces SVG file names for generated plots
             # PNG is the fallback, esp for <sageplot>
             if not(os.path.isfile(source)):
-				source = source[:-3] + 'png'
-				afile = afile[:-3] + 'png'
+                source = source[:-3] + 'png'
+                afile = afile[:-3] + 'png'
             dest = os.path.join(base_dir, data_dir, afile)
             _debug('adding {} to sws archive as {}'.format(source, dest))
             T.add(source, arcname=dest)
@@ -328,27 +328,27 @@ class MathBookXMLtoSWS(object):
 
         # Sanity checks on worksheets, filename
         if len(worksheets) == 0:
-			raise ValueError('XSLT transform produced no output, check configuration')
+            raise ValueError('XSLT transform produced no output, check configuration')
         single = (len(worksheets) == 1)
         _, ext = os.path.splitext(destination)
-		if single:
-			if not(ext in ['.sws', '.SWS']):
-				print 'MBX:WARNING: creating a single worksheet, filename should end in ".sws"'
-				print "MY"
-		else:
-			if not(ext in ['.zip', '.ZIP']):
-				print 'MBX:WARNING: creating multiple worksheets, filename should end in ".zip"'
         if single:
-			# Singe worksheet: copy from temp/working to final resting place
-			# Prepend temp directory
-			sws = os.path.join(self._tmp_dir, worksheets[0])
-			shutil.copy2(sws, destination)
+            if not(ext in ['.sws', '.SWS']):
+                print 'MBX:WARNING: creating a single worksheet, filename should end in ".sws"'
+                print "MY"
         else:
-			# Multiple worksheets: manufactured in final resting place
-			Z = zipfile.ZipFile(destination, 'a')
-			for afile in worksheets:
-				Z.write(afile)
-			Z.close()
+            if not(ext in ['.zip', '.ZIP']):
+                print 'MBX:WARNING: creating multiple worksheets, filename should end in ".zip"'
+        if single:
+            # Singe worksheet: copy from temp/working to final resting place
+            # Prepend temp directory
+            sws = os.path.join(self._tmp_dir, worksheets[0])
+            shutil.copy2(sws, destination)
+        else:
+            # Multiple worksheets: manufactured in final resting place
+            Z = zipfile.ZipFile(destination, 'a')
+            for afile in worksheets:
+                Z.write(afile)
+            Z.close()
 
 
     def convert(self):
@@ -364,9 +364,9 @@ class MathBookXMLtoSWS(object):
         # provides later timestamps and places them lower in the
         # time-sorted worksheet-list of the Sage notebook interface
         for afile in reversed(info):
-			_verbose('Converting {} to an SWS file'.format(afile[0]))
-			sws_file = self._create_single_sws(afile[0], afile[1], afile[2])
-			worksheets.append(sws_file)
+            _verbose('Converting {} to an SWS file'.format(afile[0]))
+            sws_file = self._create_single_sws(afile[0], afile[1], afile[2])
+            worksheets.append(sws_file)
         self._package_worksheets(worksheets)
 
 
@@ -377,100 +377,100 @@ class MathBookXMLtoSWS(object):
 ###################
 
 def _verbose(msg):
-	"""Write a message to the console on program progress"""
-	global args
-	if args.verbose >= 1:
-		print 'MBX: {}'.format(msg)
+    """Write a message to the console on program progress"""
+    global args
+    if args.verbose >= 1:
+        print 'MBX: {}'.format(msg)
 
 
 def _debug(msg):
-	"""Write a message to the console with some raw information"""
-	global args
-	if args.verbose >= 2:
-		print 'MBX-DEBUG: {}'.format(msg)
+    """Write a message to the console with some raw information"""
+    global args
+    if args.verbose >= 2:
+        print 'MBX-DEBUG: {}'.format(msg)
 
 
 def get_mbx_path():
-	"""Returns path of root MBX directory"""
-	import sys, os.path
-	_verbose("discovering MBX location from executable location")
-	# split path off executable
-	program_dir, _ = os.path.split(sys.argv[0])
-	# strip "script", remove trailing separator
-	return os.path.normpath(program_dir[:-6])
+    """Returns path of root MBX directory"""
+    import sys, os.path
+    _verbose("discovering MBX location from executable location")
+    # split path off executable
+    program_dir, _ = os.path.split(sys.argv[0])
+    # strip "script", remove trailing separator
+    return os.path.normpath(program_dir[:-6])
 
 
 def get_source_path(source_file):
-	"""Returns path of source XML file"""
-	import sys, os.path
-	_verbose("discovering source directory from source location")
-	# split path off filename
-	source_dir, _ = os.path.split(source_file)
-	return os.path.normpath(source_dir)
+    """Returns path of source XML file"""
+    import sys, os.path
+    _verbose("discovering source directory from source location")
+    # split path off filename
+    source_dir, _ = os.path.split(source_file)
+    return os.path.normpath(source_dir)
 
 
 def get_cli_arguments():
-	"""Return the CLI arguments in parser object"""
-	import argparse
-	parser = argparse.ArgumentParser(description='MathBook XML utility script', formatter_class=argparse.RawTextHelpFormatter)
+    """Return the CLI arguments in parser object"""
+    import argparse
+    parser = argparse.ArgumentParser(description='MathBook XML utility script', formatter_class=argparse.RawTextHelpFormatter)
 
-	verbose_help = '\n'.join(["verbosity of information on progress of the program", 
-		                      "  -v  is actions being performed",
-		                      "  -vv is some additional raw debugging information"])
-	parser.add_argument('-v', '--verbose', help=verbose_help, action="count")
-	
-	component_info = [
-		('tikz', 'tikz pictures'), 
-		('asy', 'Asymptote diagrams'),
-		('sageplot', 'Sage graphics'),
-		('all', 'Complete document'),
-	]
-	component_help = 'Possible components are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in component_info])
-	parser.add_argument('-c', '--component', help=component_help, action="store", dest="component")
-	
-	format_info = [
-		('svg', 'Scalable Vector Graphicsfile(s)'), 
-		('pdf', 'Portable Document Format file(s)'),
-		('source', 'Standalone source files'),
-		('latex', 'LaTeX source file'),
-		('html', 'HyperText Markup Language (web pages)'),
-		('sagenb', 'Sage *.sws archive of worksheets'),
-	]
-	format_help = 'Output formats are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in format_info])
-	parser.add_argument('-f', '--format', help=format_help, action="store", dest='format')
+    verbose_help = '\n'.join(["verbosity of information on progress of the program",
+                              "  -v  is actions being performed",
+                              "  -vv is some additional raw debugging information"])
+    parser.add_argument('-v', '--verbose', help=verbose_help, action="count")
 
-	parser.add_argument('-o', '--output', help='file for output', action="store", dest='out')
-	parser.add_argument('-d', '--directory', help='directory for output', action="store", dest='dir')
+    component_info = [
+        ('tikz', 'tikz pictures'),
+        ('asy', 'Asymptote diagrams'),
+        ('sageplot', 'Sage graphics'),
+        ('all', 'Complete document'),
+    ]
+    component_help = 'Possible components are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in component_info])
+    parser.add_argument('-c', '--component', help=component_help, action="store", dest="component")
 
-	parser.add_argument('xml_file', help='MathBook XML source file with content', action="store")
+    format_info = [
+        ('svg', 'Scalable Vector Graphicsfile(s)'),
+        ('pdf', 'Portable Document Format file(s)'),
+        ('source', 'Standalone source files'),
+        ('latex', 'LaTeX source file'),
+        ('html', 'HyperText Markup Language (web pages)'),
+        ('sagenb', 'Sage *.sws archive of worksheets'),
+    ]
+    format_help = 'Output formats are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in format_info])
+    parser.add_argument('-f', '--format', help=format_help, action="store", dest='format')
 
-	return parser.parse_args()
+    parser.add_argument('-o', '--output', help='file for output', action="store", dest='out')
+    parser.add_argument('-d', '--directory', help='directory for output', action="store", dest='dir')
+
+    parser.add_argument('xml_file', help='MathBook XML source file with content', action="store")
+
+    return parser.parse_args()
 
 
 def sanitize_directory(dir):
-	"""Verify directory name, or raise error"""
-	# Use with os.path.join, and do not sweat separator
-	import os.path
-	_verbose('verifying directory: {}'.format(dir))
-	if not(os.path.isdir(dir)):
-		raise ValueError('directory {} does not exist'.format(dir))
-	return dir
+    """Verify directory name, or raise error"""
+    # Use with os.path.join, and do not sweat separator
+    import os.path
+    _verbose('verifying directory: {}'.format(dir))
+    if not(os.path.isdir(dir)):
+        raise ValueError('directory {} does not exist'.format(dir))
+    return dir
 
 
 def get_config_info(script_dir):
-	"""Return configuation in object for querying"""
-	import ConfigParser, os.path
-	defaults = {}
-	defaults['xslt'] = 'xsltproc'
-	defaults['tex'] = 'xelatex'
-	defaults['pdfsvg'] = 'pdf2svg'
-	defaults['asy'] = 'asy'
-	defaults['sage'] = 'sage'
-	config_file = os.path.join(script_dir, "mbx.cfg")
-	_verbose("reading configuration file at {}".format(config_file))
-	config = ConfigParser.SafeConfigParser(defaults)
-	config.read(config_file)
-	return config
+    """Return configuation in object for querying"""
+    import ConfigParser, os.path
+    defaults = {}
+    defaults['xslt'] = 'xsltproc'
+    defaults['tex'] = 'xelatex'
+    defaults['pdfsvg'] = 'pdf2svg'
+    defaults['asy'] = 'asy'
+    defaults['sage'] = 'sage'
+    config_file = os.path.join(script_dir, "mbx.cfg")
+    _verbose("reading configuration file at {}".format(config_file))
+    config = ConfigParser.SafeConfigParser(defaults)
+    config.read(config_file)
+    return config
 
 
 ######
@@ -499,43 +499,43 @@ xslt_executable = config.get('executables', 'xslt')
 _debug("xslt executable command: {}".format(xslt_executable))
 
 if args.component == 'tikz':
-	if args.format == 'pdf':
-		tikz_conversion(args.xml_file, args.dir, 'pdf')
-	elif args.format == 'svg':
-		tikz_conversion(args.xml_file, args.dir, 'svg')
-	elif args.format == 'source':
-		tikz_conversion(args.xml_file, args.dir, 'source')
-	else:
-		raise NotImplementedError('cannot make TikZ pictures in "{}" format'.format(args.format))
+    if args.format == 'pdf':
+        tikz_conversion(args.xml_file, args.dir, 'pdf')
+    elif args.format == 'svg':
+        tikz_conversion(args.xml_file, args.dir, 'svg')
+    elif args.format == 'source':
+        tikz_conversion(args.xml_file, args.dir, 'source')
+    else:
+        raise NotImplementedError('cannot make TikZ pictures in "{}" format'.format(args.format))
 elif args.component == 'asy':
-	if args.format == 'pdf':
-		asymptote_conversion(args.xml_file, args.dir, 'pdf')
-	elif args.format == 'svg':
-		asymptote_conversion(args.xml_file, args.dir, 'svg')
-	elif args.format == 'source':
-		asymptote_conversion(args.xml_file, args.dir, 'source')
-	else:
-		raise NotImplementedError('cannot make Asymptote diagrams in "{}" format'.format(args.format))
+    if args.format == 'pdf':
+        asymptote_conversion(args.xml_file, args.dir, 'pdf')
+    elif args.format == 'svg':
+        asymptote_conversion(args.xml_file, args.dir, 'svg')
+    elif args.format == 'source':
+        asymptote_conversion(args.xml_file, args.dir, 'source')
+    else:
+        raise NotImplementedError('cannot make Asymptote diagrams in "{}" format'.format(args.format))
 elif args.component == 'sage':
-	if args.format == 'pdf':
-		sage_conversion(args.xml_file, args.dir, 'pdf')
-	elif args.format == 'svg':
-		sage_conversion(args.xml_file, args.dir, 'svg')
-	elif args.format == 'source':
-		sage_conversion(args.xml_file, args.dir, 'source')
-	else:
-		raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
+    if args.format == 'pdf':
+        sage_conversion(args.xml_file, args.dir, 'pdf')
+    elif args.format == 'svg':
+        sage_conversion(args.xml_file, args.dir, 'svg')
+    elif args.format == 'source':
+        sage_conversion(args.xml_file, args.dir, 'source')
+    else:
+        raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
 elif args.component == 'all':
-	if args.format == 'sagenb':
-		# initialize  the converter
-		m2s = MathBookXMLtoSWS(xslt_exec=xslt_executable, mbx_dir=mbx_dir, xml_file=args.xml_file, sws_file=args.out)
-		# Do the conversion
-		m2s.convert()
-	elif args.format == 'html':
-		raise NotImplementedError("conversion to HTML version not integrated yet, use command line")
-	elif args.format == 'latex':
-		raise NotImplementedError("conversion to LaTeX version not integrated yet, use command line")
-	else:
-		raise NotImplementedError('cannot make entire document in "{}" format'.format(args.format))
+    if args.format == 'sagenb':
+        # initialize  the converter
+        m2s = MathBookXMLtoSWS(xslt_exec=xslt_executable, mbx_dir=mbx_dir, xml_file=args.xml_file, sws_file=args.out)
+        # Do the conversion
+        m2s.convert()
+    elif args.format == 'html':
+        raise NotImplementedError("conversion to HTML version not integrated yet, use command line")
+    elif args.format == 'latex':
+        raise NotImplementedError("conversion to LaTeX version not integrated yet, use command line")
+    else:
+        raise NotImplementedError('cannot make entire document in "{}" format'.format(args.format))
 else:
-	raise ValueError('the "{}" component is not a conversion option'.format(args.component))
+    raise ValueError('the "{}" component is not a conversion option'.format(args.component))
