@@ -248,7 +248,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- Create summaries of each child node (which will be a document node) -->
                 <!-- NB: be more careful about just wrapping links -->
                 <xsl:apply-templates select="titlepage|introduction" mode="summary-entry"/>
-                <nav class="chapter-toc">
+                <nav class="summary-links">
                     <xsl:apply-templates select="*[not(self::title or self::author or self::titlepage or self::introduction or self::conclusion)]" mode="summary-entry" />
                 </nav>
                 <xsl:apply-templates select="conclusion" mode="summary-entry"/>
