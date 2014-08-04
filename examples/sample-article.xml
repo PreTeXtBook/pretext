@@ -1,5 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
+<!--********************************************************************
+Copyright 2013 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!--
+To process this file, at the command-line issue:
+
+xsltproc /path/to/mathbook/xsl/mathbook-html.xsl /path/to/mathbook/examples/sample-article.xml
+
+then find  "derivatives.html"  in the current working directory
+and use a web browser to view.  For PDF/print, issue:
+
+xsltproc /path/to/mathbook/xsl/mathbook-latex.xsl /path/to/mathbook/examples/sample-article.xml
+
+and apply  pdflatex  or  xelatex  to  "derivatives.tex"  in
+the current working directory.
+
+Ignore any warnings, they are part of testing the warning system.
+
+To see images in your results, copy the examples/images directory
+so that your working directory has the images subdirectory.  See
+the  mathbook.pugetsound.edu  website for information on installing
+the xsltproc executable.
+-->
+
 <!-- Overall element for a Mathbook XML document; mandatory, always-->
 <mathbook>
 
