@@ -32,11 +32,11 @@ def tikz_conversion(xml_source, dest_dir, outformat):
     dest_dir = sanitize_directory(dest_dir)
     tmp_dir = tempfile.mkdtemp()
     _debug("temporary directory: {}".format(tmp_dir))
-    xslt_executable = config.get('executables', 'xslt')
+    xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable: {}".format(xslt_executable))
-    tex_executable = config.get('executables', 'tex')
+    tex_executable = get_executable(config,  'tex')
     _debug("tex executable: {}".format(tex_executable))
-    pdfsvg_executable = config.get('executables', 'pdfsvg')
+    pdfsvg_executable = get_executable(config, 'pdfsvg')
     _debug("pdfsvg executable: {}".format(pdfsvg_executable))
     # http://stackoverflow.com/questions/11269575/how-to-hide-output-of-subprocess-in-python-2-7
     devnull = open(os.devnull, 'w')
@@ -77,9 +77,9 @@ def asymptote_conversion(xml_source, dest_dir, outformat):
     dest_dir = sanitize_directory(dest_dir)
     tmp_dir = tempfile.mkdtemp()
     _debug("temporary directory: {}".format(tmp_dir))
-    xslt_executable = config.get('executables', 'xslt')
+    xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable: {}".format(xslt_executable))
-    asy_executable = config.get('executables', 'asy')
+    asy_executable = get_executable(config,  'asy')
     _debug("asy executable: {}".format(asy_executable))
     extract_cmd = [xslt_executable,
         '--stringparam', 'scratch', tmp_dir,
@@ -116,9 +116,9 @@ def sage_conversion(xml_source, dest_dir, outformat):
     dest_dir = sanitize_directory(dest_dir)
     tmp_dir = tempfile.mkdtemp()
     _debug("temporary directory: {}".format(tmp_dir))
-    xslt_executable = config.get('executables', 'xslt')
+    xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable: {}".format(xslt_executable))
-    sage_executable = config.get('executables', 'sage')
+    sage_executable = get_executable(config,  'sage')
     _debug("sage executable: {}".format(sage_executable))
     extract_cmd = [xslt_executable,
         '--stringparam', 'scratch', tmp_dir,
@@ -322,7 +322,6 @@ class MathBookXMLtoSWS(object):
         import zipfile # Zipfile
 
         destination = self._sws_file  # perhaps really a zip file
-        print "junky", destination
         _verbose('Manufacturing final notebook-compatible file: {}'.format(destination))
         _debug('Packaging following SWS files: {}'.format(worksheets))
 
@@ -333,11 +332,12 @@ class MathBookXMLtoSWS(object):
         _, ext = os.path.splitext(destination)
         if single:
             if not(ext in ['.sws', '.SWS']):
-                print 'MBX:WARNING: creating a single worksheet, filename should end in ".sws"'
-                print "MY"
+                msg = 'creating a single worksheet, filename should end in ".sws", not "{}"'
+                raise ValueError(msg.format(ext))
         else:
             if not(ext in ['.zip', '.ZIP']):
-                print 'MBX:WARNING: creating multiple worksheets, filename should end in ".zip"'
+                msg = 'creating multiple worksheets, filename should end in ".zip", not "{}"'
+                raise ValueError(msg.format(ext))
         if single:
             # Singe worksheet: copy from temp/working to final resting place
             # Prepend temp directory
@@ -408,6 +408,33 @@ def get_source_path(source_file):
     source_dir, _ = os.path.split(source_file)
     return os.path.normpath(source_dir)
 
+def get_executable(config, exec_name):
+    "Queries configuration file for executable name, verifies existence in Unix"
+    import os
+    import platform
+    import subprocess
+
+    # http://stackoverflow.com/questions/11210104/check-if-a-program-exists-from-a-python-script
+    # suggests  where.exe  as Windows equivalent (post Windows Server 2003)
+    # which  = 'where.exe' if platform.system() == 'Windows' else 'which'
+
+    # get the name, but then see if it really, really works
+    _debug('locating "{}" in [executables] section of configuration file'.format(exec_name))
+    config_name = config.get('executables', exec_name)
+
+    devnull = open(os.devnull, 'w')
+    try:
+        result_code = subprocess.call(['which', config_name], stdout=devnull, stderr=subprocess.STDOUT)
+    except OSError:
+        print 'MBX:WARNING: executable existence-checking was not performed (e.g. on Windows)'
+        result_code = 0  # perhaps a lie on Windows
+    if result_code != 0:
+        error_message = '\n'.join([
+                        'cannot locate executable with configuration name "{}" as command "{}"',
+                        'Edit the configuration file and/or install the necessary program'])
+        raise OSError(error_message.format(exec_name, config_name))
+    _debug("{} executable: {}".format(exec_name, config_name))
+    return config_name
 
 def get_cli_arguments():
     """Return the CLI arguments in parser object"""
@@ -495,8 +522,6 @@ mbx_script_dir = os.path.join(mbx_dir, "script")
 _debug("xsl, script dirs: {}, {}".format(mbx_xsl_dir, mbx_script_dir))
 
 config = get_config_info(mbx_script_dir)
-xslt_executable = config.get('executables', 'xslt')
-_debug("xslt executable command: {}".format(xslt_executable))
 
 if args.component == 'tikz':
     if args.format == 'pdf':
@@ -528,6 +553,8 @@ elif args.component == 'sage':
 elif args.component == 'all':
     if args.format == 'sagenb':
         # initialize  the converter
+        xslt_executable = get_executable(config,  'xslt')
+        _debug("xslt executable command: {}".format(xslt_executable))
         m2s = MathBookXMLtoSWS(xslt_exec=xslt_executable, mbx_dir=mbx_dir, xml_file=args.xml_file, sws_file=args.out)
         # Do the conversion
         m2s.convert()
