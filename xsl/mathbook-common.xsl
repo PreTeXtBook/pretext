@@ -219,6 +219,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- Document language comes from the mathbook element -->
+<!-- or defaults to US English if not present          -->
+<xsl:variable name="document-language">
+    <xsl:choose>
+        <xsl:when test="/mathbook/@xml:lang">
+            <xsl:value-of select="/mathbook/@xml:lang" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="'en-US'" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 
 <!-- ############## -->
 <!-- Entry template -->
@@ -599,14 +611,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Names                                          -->
-<!-- Relies on translations in language files       -->
-<!-- which provides the named template, type-name   -->
-<!-- This template allows a node to report its name -->
+<!-- Names of Objects -->
+<!-- Ultimately translations are all contained in the           -->
+<!-- mathbook-localization.xsl file, which provides upper-case, -->
+<!-- singular versions.  In this way, we only ever hardcode a   -->
+<!-- string (like "Chapter") once                               -->
+<!-- First template is modal, and calls subsequent named        -->
+<!-- template where translation with keys happens               -->
+<!-- This template allows a node to report its name             -->
 <xsl:template match="*" mode="type-name">
     <xsl:call-template name="type-name">
-        <xsl:with-param name="generic" select="local-name(.)" />
+        <xsl:with-param name="string-id" select="local-name(.)" />
     </xsl:call-template>
+</xsl:template>
+
+<!-- This template translates an string to an upper-case language-equivalent -->
+<!-- Sometimes we must call this directly, but usually better to apply the   -->
+<!-- template mode="type-name" to the node, which then calls this routine    -->
+<!-- TODO: perhaps allow mixed languages, so don't set document language globally,  -->
+<!-- but search up through parents until you find a lang tag                        -->
+<xsl:key name="localization-key" match="localization" use="concat(../@name, @string-id)"/>
+
+<xsl:template name="type-name">
+    <xsl:param name="string-id" />
+    <xsl:variable name="translation">
+        <xsl:for-each select="document('mathbook-localization.xsl')">
+            <xsl:value-of select="key('localization-key', concat($document-language,$string-id) )"/>
+        </xsl:for-each>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$translation!=''"><xsl:value-of select="$translation" /></xsl:when>
+        <xsl:otherwise>
+            <xsl:text>[</xsl:text>
+            <xsl:value-of select="$string-id" />
+            <xsl:text>]&#xa;</xsl:text>
+            <xsl:message>MBX:WARNING: could not translate string with id "<xsl:value-of select="$string-id" />" into language for code "<xsl:value-of select="$document-language" />"</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- ################## -->
