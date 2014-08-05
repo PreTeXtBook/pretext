@@ -155,7 +155,9 @@
             <span class="title"><xsl:value-of select="$title" /></span>
             <p id="byline"><span class="byline"><xsl:value-of select="$credits" /></span></p>
         </h1>
-        <xsl:copy-of select="$content" />
+        <div id="content" class="mathbook-content">
+            <xsl:copy-of select="$content" />
+        </div>
         <!-- <xsl:apply-templates select="/mathbook/docinfo/analytics" /> -->
     </exsl:document>
 </xsl:template>
