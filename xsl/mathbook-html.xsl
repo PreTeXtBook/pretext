@@ -1422,8 +1422,8 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                     <xsl:apply-templates select="." mode="number" />
                     <xsl:text> </xsl:text>
                     <xsl:apply-templates select="." mode="toc-entry" /></a></h2>
-                    <ul> <!-- CSS expects a sublist, even if it is empty -->
                     <xsl:if test="$toc-level > 1">
+                        <ul>
                         <xsl:for-each select="./*">
                             <xsl:variable name="inner-structural">
                                 <xsl:apply-templates select="." mode="is-structural" />
@@ -1445,8 +1445,8 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                                 <xsl:apply-templates select="." mode="toc-entry" /></a></li>
                             </xsl:if>
                         </xsl:for-each>
+                        </ul>
                     </xsl:if>
-                    </ul>
                 </xsl:if>
             </xsl:for-each>
             </nav>
