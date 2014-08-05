@@ -1256,7 +1256,6 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <div class="page container">
                 <xsl:apply-templates select="." mode="sidebars" />
                 <main class="main">
-                    <xsl:apply-templates select="." mode="secondary-navigation" />
                     <div id="content">
                         <xsl:copy-of select="$content" />
                     </div>
@@ -1272,11 +1271,11 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- Navigational Aids -->
 <!-- ################# -->
 
-<!-- Prev/Next URL's -->
-<!-- Check if the XML tree has a preceding/following node -->
-<!-- Then check if it is a document node (structural)     -->
-<!-- If so, compute the URL for the node                  -->
-<!-- TODO: make the up/back version, then drop obsolete SVG arrows -->
+<!-- Prev/Up/Next URL's -->
+<!-- Check if the XML tree has a preceding/following/parent node -->
+<!-- Then check if it is a document node (structural)            -->
+<!-- If so, compute the URL for the node                         -->
+<!-- TODO: drop obsolete SVG arrows -->
 <xsl:template match="*" mode="previous-url">
     <xsl:if test="preceding-sibling::*">
         <xsl:variable name="preceding" select="preceding-sibling::*[1]" />
@@ -1303,60 +1302,117 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <!-- could be empty -->
 </xsl:template>
 
+<xsl:template match="*" mode="up-url">
+    <xsl:if test="parent::*">
+        <xsl:variable name="parent" select="parent::*[1]" />
+        <xsl:variable name="structural">
+            <xsl:apply-templates select="$parent" mode="is-structural" />
+        </xsl:variable>
+        <xsl:if test="$structural='true'">
+            <xsl:apply-templates select="$parent" mode="url" />
+        </xsl:if>
+    </xsl:if>
+    <!-- could be empty -->
+</xsl:template>
 
-<!-- Navigation Sections, Primary and Secondary -->
-<!-- TODO: consolidate duplicated button generation, once it is clear how to handle empty buttons -->
-<!-- Primary - complete for mobile target -->
-<xsl:template match="*" mode="primary-navigation">
-    <nav id="primary-navbar" class="navbar">
-        <div class="container">
-            <!-- place buttons in order for mobile -->
-            <!-- begin Previous -->
+<!--                     -->
+<!-- Navigation Sections -->
+<!--                     -->
+
+<!-- Button code, <a href=""> when active -->
+<!-- <span> with "disabled" class otherwise -->
+<xsl:template match="*" mode="previous-button">
+    <xsl:variable name="previous-url">
+        <xsl:apply-templates select="." mode="previous-url" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$previous-url!=''">
             <xsl:element name="a">
                 <xsl:attribute name="class">previous-button button</xsl:attribute>
                 <xsl:attribute name="href">
-                    <xsl:apply-templates select="." mode="previous-url" />
+                    <xsl:value-of select="$previous-url" />
                 </xsl:attribute>
                 <xsl:text>Previous</xsl:text>  <!-- internationalize -->
             </xsl:element>
-            <!-- end Previous -->
-            <button id="sidebar-left-toggle-button" class="button">Table of Contents</button> <!-- internationalize -->
-            <button id="sidebar-right-toggle-button" class="button">Annotations</button> <!-- internationalize -->
-            <!-- begin Next -->
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:element name="span">
+                <xsl:attribute name="class">previous-button button disabled</xsl:attribute>
+                <xsl:text>Previous</xsl:text>  <!-- internationalize -->
+            </xsl:element>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="*" mode="next-button">
+    <xsl:variable name="next-url">
+        <xsl:apply-templates select="." mode="next-url" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$next-url!=''">
             <xsl:element name="a">
                 <xsl:attribute name="class">next-button button</xsl:attribute>
                 <xsl:attribute name="href">
-                    <xsl:apply-templates select="." mode="next-url" />
+                    <xsl:value-of select="$next-url" />
                 </xsl:attribute>
                 <xsl:text>Next</xsl:text>  <!-- internationalize -->
             </xsl:element>
-            <!-- end Next -->
-        </div>
-    </nav>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:element name="span">
+                <xsl:attribute name="class">next-button button disabled</xsl:attribute>
+                <xsl:text>Next</xsl:text>  <!-- internationalize -->
+            </xsl:element>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
-<!-- Secondary - desktop has ToC, Annotation buttons on top -->
-<xsl:template match="*" mode="secondary-navigation">
-    <nav id="secondary-navbar" class="navbar">
-        <!-- begin Previous -->
-        <xsl:element name="a">
-            <xsl:attribute name="class">previous-button button</xsl:attribute>
-            <xsl:attribute name="href">
-                <xsl:apply-templates select="." mode="previous-url" />
-            </xsl:attribute>
-            <xsl:text>Previous</xsl:text>  <!-- internationalize -->
-        </xsl:element>
-        <!-- end Previous -->
-        <!-- Put Up/Back here -->
-        <!-- begin Next -->
-        <xsl:element name="a">
-            <xsl:attribute name="class">next-button button</xsl:attribute>
-            <xsl:attribute name="href">
-                <xsl:apply-templates select="." mode="next-url" />
-            </xsl:attribute>
-            <xsl:text>Next</xsl:text>  <!-- internationalize -->
-        </xsl:element>
-        <!-- end Next -->
+<xsl:template match="*" mode="up-button">
+    <xsl:variable name="up-url">
+        <xsl:apply-templates select="." mode="up-url" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$up-url!=''">
+            <xsl:element name="a">
+                <xsl:attribute name="class">up-button button</xsl:attribute>
+                <xsl:attribute name="href">
+                    <xsl:value-of select="$up-url" />
+                </xsl:attribute>
+                <xsl:text>Up</xsl:text>  <!-- internationalize -->
+            </xsl:element>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:element name="span">
+                <xsl:attribute name="class">up-button button disabled</xsl:attribute>
+                <xsl:text>Up</xsl:text>  <!-- internationalize -->
+            </xsl:element>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Primary Navigation Panel         -->
+<!-- For smaller modes, like phones   -->
+<!-- Includes ToC, Annotation buttons -->
+<xsl:template match="*" mode="primary-navigation">
+    <nav id="primary-navbar" class="navbar" style="">
+        <div class="container">
+            <div class="navbar-bottom-buttons button-count-5">
+                <button class="sidebar-left-toggle-button button" style="">Table of Contents</button>
+                <xsl:apply-templates select="." mode="previous-button" />
+                <xsl:apply-templates select="." mode="up-button" />
+                <xsl:apply-templates select="." mode="next-button" />
+                <button class="sidebar-right-toggle-button button" style="">Annotations</button>
+            </div>
+            <div class="navbar-top-buttons button-count-5">
+                <button class="sidebar-left-toggle-button button" style="">Table of Contents</button>
+                <div class="tree-nav button-count-3">
+                    <xsl:apply-templates select="." mode="previous-button" />
+                    <xsl:apply-templates select="." mode="up-button" />
+                    <xsl:apply-templates select="." mode="next-button" />
+                </div>
+                <button class="sidebar-right-toggle-button button" style="">Annotations</button>
+            </div>
+        </div>
     </nav>
 </xsl:template>
 
@@ -1378,9 +1434,11 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             </div>
         </div>
     </aside>
+<!-- Content here appears in odd places if turned sidebar is turned off
     <aside id="sidebar-right" class="sidebar">
         <div class="sidebar-content">Mock right sidebar content</div>
     </aside>
+-->
 </xsl:template>
 
 
@@ -1393,7 +1451,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <xsl:variable name="this-page-node" select="descendant-or-self::*" />
     <xsl:if test="$toc-level > 0">
         <div id="toc-navbar-item" class="navbar-item">
-            <h2 class="navbar-item-text icon-navicon-round ">Table of Contents</h2>
+            <h2 class="navbar-item-text icon-navicon-round ">Table of Contents</h2>  <!-- internationalize -->
             <nav id="toc">
             <xsl:for-each select="/mathbook/book/*|/mathbook/article/*">
                 <xsl:variable name="structural">
