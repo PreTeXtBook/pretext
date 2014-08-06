@@ -1450,65 +1450,62 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <!-- Subtree for page this sidebar will adorn -->
     <xsl:variable name="this-page-node" select="descendant-or-self::*" />
     <xsl:if test="$toc-level > 0">
-        <div id="toc-navbar-item" class="navbar-item">
-            <h2 class="navbar-item-text icon-navicon-round ">Table of Contents</h2>  <!-- internationalize -->
-            <nav id="toc">
-            <xsl:for-each select="/mathbook/book/*|/mathbook/article/*">
-                <xsl:variable name="structural">
-                    <xsl:apply-templates select="." mode="is-structural" />
+        <nav id="toc">
+        <xsl:for-each select="/mathbook/book/*|/mathbook/article/*">
+            <xsl:variable name="structural">
+                <xsl:apply-templates select="." mode="is-structural" />
+            </xsl:variable>
+            <xsl:if test="$structural='true'">
+                <!-- Subtree represented by this ToC item -->
+                <xsl:variable name="outer-node" select="descendant-or-self::*" />
+                <xsl:variable name="outer-url">
+                    <xsl:apply-templates select="." mode="url"/>
+               </xsl:variable>
+               <!-- text of anchor's class, active if a match, otherwise plain -->
+               <!-- Based on node-set union size                               -->
+               <xsl:variable name="class">
+                    <xsl:choose>
+                        <xsl:when test="count($this-page-node|$outer-node) = count($outer-node)" >
+                            <xsl:text>link active</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>link</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:variable>
-                <xsl:if test="$structural='true'">
-                    <!-- Subtree represented by this ToC item -->
-                    <xsl:variable name="outer-node" select="descendant-or-self::*" />
-                    <xsl:variable name="outer-url">
-                        <xsl:apply-templates select="." mode="url"/>
-                   </xsl:variable>
-                   <!-- text of anchor's class, active if a match, otherwise plain -->
-                   <!-- Based on node-set union size                               -->
-                   <xsl:variable name="class">
-                        <xsl:choose>
-                            <xsl:when test="count($this-page-node|$outer-node) = count($outer-node)" >
-                                <xsl:text>link active</xsl:text>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:text>link</xsl:text>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:variable>
-                    <!-- The link itself -->
-                    <h2 class="{$class}"><a href="{$outer-url}">
-                    <xsl:apply-templates select="." mode="number" />
-                    <xsl:text> </xsl:text>
-                    <xsl:apply-templates select="." mode="toc-entry" /></a></h2>
-                    <xsl:if test="$toc-level > 1">
-                        <ul>
-                        <xsl:for-each select="./*">
-                            <xsl:variable name="inner-structural">
-                                <xsl:apply-templates select="." mode="is-structural" />
+                <!-- The link itself -->
+                <h2 class="{$class}"><a href="{$outer-url}">
+                <xsl:apply-templates select="." mode="number" />
+                <xsl:text> </xsl:text>
+                <xsl:apply-templates select="." mode="toc-entry" /></a></h2>
+                <xsl:if test="$toc-level > 1">
+                    <ul>
+                    <xsl:for-each select="./*">
+                        <xsl:variable name="inner-structural">
+                            <xsl:apply-templates select="." mode="is-structural" />
+                        </xsl:variable>
+                        <xsl:if test="$inner-structural='true'">
+                            <!-- Subtree represented by this ToC item -->
+                            <xsl:variable name="inner-node" select="descendant-or-self::*" />
+                            <xsl:variable name="inner-url">
+                                <xsl:apply-templates select="." mode="url" />
                             </xsl:variable>
-                            <xsl:if test="$inner-structural='true'">
-                                <!-- Subtree represented by this ToC item -->
-                                <xsl:variable name="inner-node" select="descendant-or-self::*" />
-                                <xsl:variable name="inner-url">
-                                    <xsl:apply-templates select="." mode="url" />
-                                </xsl:variable>
-                                <xsl:variable name="internal">
-                                    <xsl:apply-templates select="." mode="internal-id" />
-                                </xsl:variable>
-                                <li><a href="{$inner-url}" data-scroll="{$internal}">
-                                <!-- Add if an "active" class if this is where we are -->
-                                <xsl:if test="count($this-page-node|$inner-node) = count($inner-node)">
-                                    <xsl:attribute name="class">active</xsl:attribute>
-                                </xsl:if>
-                                <xsl:apply-templates select="." mode="toc-entry" /></a></li>
+                            <xsl:variable name="internal">
+                                <xsl:apply-templates select="." mode="internal-id" />
+                            </xsl:variable>
+                            <li><a href="{$inner-url}" data-scroll="{$internal}">
+                            <!-- Add if an "active" class if this is where we are -->
+                            <xsl:if test="count($this-page-node|$inner-node) = count($inner-node)">
+                                <xsl:attribute name="class">active</xsl:attribute>
                             </xsl:if>
-                        </xsl:for-each>
-                        </ul>
-                    </xsl:if>
+                            <xsl:apply-templates select="." mode="toc-entry" /></a></li>
+                        </xsl:if>
+                    </xsl:for-each>
+                    </ul>
                 </xsl:if>
-            </xsl:for-each>
-            </nav>
-        </div>
+            </xsl:if>
+        </xsl:for-each>
+        </nav>
     </xsl:if>
 </xsl:template>
 
