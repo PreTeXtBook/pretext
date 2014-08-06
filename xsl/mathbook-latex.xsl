@@ -680,9 +680,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- TODO: split out copyright section as template -->
     <xsl:if test="/mathbook/docinfo/copyright" >
-        <xsl:text>\noindent\copyright\ </xsl:text>
+        <xsl:text>\noindent\copyright{}</xsl:text>
         <xsl:apply-templates select="/mathbook/docinfo/copyright/year" />
-        <xsl:text>\quad </xsl:text>
+        <xsl:text>\quad{}</xsl:text>
         <xsl:apply-templates select="/mathbook/docinfo/copyright/holder" />
         <xsl:if test="/mathbook/docinfo/copyright/shortlicense">
             <xsl:text>\\[0.5\baselineskip]&#xa;</xsl:text>
@@ -930,7 +930,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="title">
         <xsl:text>(</xsl:text>
         <xsl:apply-templates select="title" />
-        <xsl:text>)\space\space </xsl:text>
+        <xsl:text>)\space\space{}</xsl:text>
     </xsl:if>
     <!-- Assumes statement, hint, solution -->
     <xsl:apply-templates select="*[not(self::title)]"/>
@@ -1152,7 +1152,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (typically paragraphs), end with -->
 <!-- non-blank line and a newline     -->
 <xsl:template match="ol/li|ul/li">
-    <xsl:text>\item </xsl:text>
+    <xsl:text>\item{}</xsl:text>
     <xsl:apply-templates />
 </xsl:template>
 
@@ -1167,7 +1167,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="dl/li/title">
     <xsl:text>[</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>] </xsl:text>
+    <xsl:text>]{}</xsl:text>
 </xsl:template>
 
 
@@ -1195,7 +1195,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Use at the end of a blockquote -->
 <xsl:template match="blockquote/attribution">
-    <xsl:text>\\\hspace*{\stretch{1}}\textemdash\space </xsl:text>
+    <xsl:text>\\\hspace*{\stretch{1}}\textemdash\space{}</xsl:text>
     <xsl:apply-templates />
 </xsl:template>
 
@@ -1286,7 +1286,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Circumflex  -->
 <xsl:template match="circum">
-    <xsl:text>\textasciicircum </xsl:text>
+    <xsl:text>\textasciicircum{}</xsl:text>
 </xsl:template>
 
 <!-- Ampersand -->
@@ -1317,20 +1317,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Tilde -->
 <xsl:template match="tilde">
-    <xsl:text>\textasciitilde </xsl:text>
+    <xsl:text>\textasciitilde{}</xsl:text>
 </xsl:template>
 
 <!-- Backslash -->
 <!-- See url element for comprehensive approach -->
 <xsl:template match="backslash">
-    <xsl:text>\textbackslash </xsl:text>
+    <xsl:text>\textbackslash{}</xsl:text>
 </xsl:template>
 
 <!-- Other Miscellaneous Symbols, Constructions -->
 
 <!-- Ellipsis (dots), for text, not math -->
 <xsl:template match="ellipsis">
-    <xsl:text>\dots </xsl:text>
+    <xsl:text>\dots{}</xsl:text>
 </xsl:template>
 
 <!-- \@ following a period makes it an abbreviation, not the end of a sentence -->
@@ -1345,7 +1345,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Copyright symbol -->
 <xsl:template match="copyright">
-    <xsl:text>\copyright </xsl:text>
+    <xsl:text>\copyright{}</xsl:text>
 </xsl:template>
 
 
@@ -1365,10 +1365,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- TeX, LaTeX -->
 <xsl:template match="latex">
-    <xsl:text>\LaTeX </xsl:text>
+    <xsl:text>\LaTeX{}</xsl:text>
 </xsl:template>
 <xsl:template match="tex">
-    <xsl:text>\TeX </xsl:text>
+    <xsl:text>\TeX{}</xsl:text>
 </xsl:template>
 
 <!-- Foreign words/idioms        -->
@@ -1385,7 +1385,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- use sparingly, e.g. for poetry, *not* in math environments -->
 <!-- Must be in TeX's paragraph mode                            -->
 <xsl:template match="br">
-    <xsl:text>\newline </xsl:text>
+    <xsl:text>\newline{}</xsl:text>
 </xsl:template>
 
 <!-- Non-breaking space, which "joins" two words as a unit -->
@@ -1397,10 +1397,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Dashes -->
 <!-- http://www.public.asu.edu/~arrows/tidbits/dashes.html -->
 <xsl:template match="mdash">
-    <xsl:text>\textemdash </xsl:text>
+    <xsl:text>\textemdash{}</xsl:text>
 </xsl:template>
 <xsl:template match="ndash">
-    <xsl:text>\textendash </xsl:text>
+    <xsl:text>\textendash{}</xsl:text>
 </xsl:template>
 <xsl:template match="hyphen">
     <xsl:text>-</xsl:text>
@@ -1594,9 +1594,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="thead">
-    <xsl:text>\hline\hline </xsl:text>
+    <xsl:text>\hline\hline{}</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\\\hline\hline </xsl:text>
+    <xsl:text>\\\hline\hline{}</xsl:text>
 </xsl:template>
 
 <xsl:template match="tbody">
@@ -1728,7 +1728,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- "key" for cross-referencing -->
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id"/>
-    <xsl:text>} </xsl:text>
+    <xsl:text>}</xsl:text>
     <xsl:apply-templates />
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
