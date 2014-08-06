@@ -1256,7 +1256,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <div class="page container">
                 <xsl:apply-templates select="." mode="sidebars" />
                 <main class="main">
-                    <div id="content">
+                    <div id="content" class="mathbook-content">
                         <xsl:copy-of select="$content" />
                     </div>
                 </main>
