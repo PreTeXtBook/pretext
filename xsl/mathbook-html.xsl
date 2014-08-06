@@ -334,7 +334,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="internal-id" />
     </xsl:variable>
     <article class="theorem-like" id="{$xref}">
-        <h5>
+        <h5 class="heading">
         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
         <xsl:text> </xsl:text>
         <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
@@ -352,7 +352,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: Does a proof have a title ever? -->
 <xsl:template match="proof">
     <article class="proof">
-        <h5><xsl:apply-templates select="." mode="type-name" /></h5>
+        <h5 class="heading">
+        <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+        </h5>
         <xsl:apply-templates />
     </article>
 </xsl:template>
@@ -364,7 +366,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="internal-id" />
     </xsl:variable>
     <article class="theorem-like" id="{$xref}">
-        <h5>
+        <h5 class="heading">
         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
         <xsl:text> </xsl:text>
         <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
@@ -384,7 +386,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="internal-id" />
     </xsl:variable>
     <article class="example-like" id="{$xref}">
-        <xsl:element name="h5">
+        <h5 class="heading">
             <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
             <xsl:text> </xsl:text>
             <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
@@ -392,7 +394,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text> </xsl:text>
                 <span class="title"><xsl:apply-templates select="title" /></span>
             </xsl:if>
-        </xsl:element>
+        </h5>
         <xsl:apply-templates select="*[not(self::title)]"/>
     </article>
 </xsl:template>
@@ -413,7 +415,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="internal-id" />
     </xsl:variable>
     <article class="exercise-like" id="{$xref}">
-        <h5>
+        <h5 class="heading">
         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
         <xsl:text> </xsl:text>
         <span class="counter"><xsl:apply-templates select="." mode="origin-id" /></span>
