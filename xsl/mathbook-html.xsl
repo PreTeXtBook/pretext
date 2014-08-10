@@ -797,8 +797,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Code, inline -->
+<!-- NB: "code-block" class otherwise -->
 <xsl:template match="c">
-    <tt class="code"><xsl:apply-templates /></tt>
+    <tt class="code-inline"><xsl:apply-templates /></tt>
 </xsl:template>
 
 <!-- External URLs, Email        -->
