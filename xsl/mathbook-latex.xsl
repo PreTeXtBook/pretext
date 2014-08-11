@@ -22,9 +22,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Identify as a stylesheet -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace" 
-    xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
-    extension-element-prefixes="exsl date"
+    extension-element-prefixes="date"
 >
 
 <xsl:import href="./mathbook-common.xsl" />
@@ -116,7 +115,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\renewcommand*\contentsname{</xsl:text>
         <xsl:call-template name="type-name">
-            <xsl:with-param name="generic" select="'toc'" />
+            <xsl:with-param name="string-id" select="'toc'" />
         </xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\tableofcontents&#xa;</xsl:text>
@@ -155,7 +154,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\renewcommand*\contentsname{</xsl:text>
         <xsl:call-template name="type-name">
-            <xsl:with-param name="generic" select="'toc'" />
+            <xsl:with-param name="string-id" select="'toc'" />
         </xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\tableofcontents&#xa;</xsl:text>
@@ -318,7 +317,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Always need a theorem environment to set base numbering scheme&#xa;</xsl:text>
     <xsl:text>%% even if document has no theorems (but has other environments)&#xa;</xsl:text>
     <xsl:text>\newtheorem{theorem}{</xsl:text>
-    <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'theorem'" /></xsl:call-template>
+    <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'theorem'" /></xsl:call-template>
     <xsl:text>}</xsl:text>
     <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
     <xsl:text>[</xsl:text>
@@ -331,42 +330,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% i.e. Corollary 4.3 follows Theorem 4.2&#xa;</xsl:text>
     <xsl:if test="//corollary">
         <xsl:text>\newtheorem{corollary}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'corollary'" /></xsl:call-template>
+        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'corollary'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//lemma">
         <xsl:text>\newtheorem{lemma}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'lemma'" /></xsl:call-template>
+        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'lemma'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//proposition">
         <xsl:text>\newtheorem{proposition}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'proposition'" /></xsl:call-template>
+        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'proposition'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//claim">
         <xsl:text>\newtheorem{claim}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'claim'" /></xsl:call-template>
+        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'claim'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//fact">
         <xsl:text>\newtheorem{fact}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'fact'" /></xsl:call-template>
+        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'fact'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//conjecture">
         <xsl:text>\newtheorem{conjecture}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'conjecture'" /></xsl:call-template>
+        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'conjecture'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//axiom">
         <xsl:text>\newtheorem{axiom}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'axiom'" /></xsl:call-template>
+        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'axiom'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//principle">
         <xsl:text>\newtheorem{principle}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'principle'" /></xsl:call-template>
+        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'principle'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//definition or //example or //exercise or //remark">
@@ -376,22 +375,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
         <xsl:if test="//definition">
             <xsl:text>\newtheorem{definition}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'definition'" /></xsl:call-template>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'definition'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="//example">
             <xsl:text>\newtheorem{example}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'example'" /></xsl:call-template>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'example'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="//exercise">
             <xsl:text>\newtheorem{exercise}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'exercise'" /></xsl:call-template>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'exercise'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="//remark">
             <xsl:text>\newtheorem{remark}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="generic" select="'remark'" /></xsl:call-template>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'remark'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
@@ -428,7 +427,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% preserve numbering, BUT the numbering may then appear "out-of-order"&#xa;</xsl:text>
         <xsl:text>\usepackage{float}&#xa;</xsl:text>
         <xsl:if test="//figure">
-            <xsl:variable name="fig-node"><figure /></xsl:variable>
             <xsl:text>\newfloat{mbxfigure}{H}{lof}</xsl:text>
             <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
             <xsl:text>[</xsl:text>
@@ -437,14 +435,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
             <xsl:text>]&#xa;</xsl:text>
             <xsl:text>\floatname{mbxfigure}{</xsl:text>
-            <xsl:apply-templates select="exsl:node-set($fig-node)" mode="type-name"/>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'figure'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
             <xsl:text>\renewenvironment{figure}%&#xa;</xsl:text>
             <xsl:text>{\begin{mbxfigure}\setcounter{mbxfigure}{\value{theorem}}\stepcounter{theorem}}%&#xa;</xsl:text>
             <xsl:text>{\end{mbxfigure}}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="//table">
-            <xsl:variable name="tab-node"><table /></xsl:variable>
             <xsl:text>\newfloat{mbxtable}{H}{lot}</xsl:text>
             <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
             <xsl:text>[</xsl:text>
@@ -453,7 +450,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
             <xsl:text>]&#xa;</xsl:text>
             <xsl:text>\floatname{mbxtable}{</xsl:text>
-            <xsl:apply-templates select="exsl:node-set($tab-node)" mode="type-name"/>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'table'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
             <xsl:text>\renewenvironment{table}%&#xa;</xsl:text>
             <xsl:text>{\begin{mbxtable}\setcounter{mbxtable}{\value{theorem}}\stepcounter{theorem}}%&#xa;</xsl:text>
@@ -533,13 +530,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% We provide language support for the "see" phrase&#xa;</xsl:text>
             <xsl:text>%% and for the title of the "Index" section&#xa;</xsl:text>
             <xsl:text>\usepackage{makeidx}&#xa;</xsl:text>
-            <xsl:variable name="see-node"><see /></xsl:variable>
             <xsl:text>\renewcommand{\seename}{</xsl:text>
-            <xsl:apply-templates select="exsl:node-set($see-node)" mode="type-name"/>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'see'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
-            <xsl:variable name="index-node"><indexsection /></xsl:variable>
             <xsl:text>\renewcommand{\indexname}{</xsl:text>
-            <xsl:apply-templates select="exsl:node-set($index-node)" mode="type-name"/>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'indexsection'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
             <xsl:text>\makeindex&#xa;</xsl:text>
         </xsl:if>
@@ -605,15 +600,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\clearpage&#xa;</xsl:text>
         <xsl:text>%% Help hyperref point to the right place&#xa;</xsl:text>
         <xsl:text>\phantomsection&#xa;</xsl:text>
-        <xsl:variable name="index-node"><indexsection /></xsl:variable>
         <xsl:if test="/mathbook/book">
             <xsl:text>\addcontentsline{toc}{chapter}{</xsl:text>
-            <xsl:apply-templates select="exsl:node-set($index-node)" mode="type-name"/>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'indexsection'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="/mathbook/article">
             <xsl:text>\addcontentsline{toc}{section}{</xsl:text>
-            <xsl:apply-templates select="exsl:node-set($index-node)" mode="type-name"/>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'indexsection'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
         <xsl:text>\printindex&#xa;</xsl:text>
@@ -723,7 +717,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="personname" />
     <xsl:text>, </xsl:text>
     <xsl:call-template name="type-name">
-        <xsl:with-param name="generic" select="'editor'" />
+        <xsl:with-param name="string-id" select="'editor'" />
     </xsl:call-template>
     <xsl:if test = "department">
         <xsl:text>\\&#xa;</xsl:text>

@@ -75,18 +75,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:apply-templates select="personname" />
     <xsl:text> (</xsl:text>
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="generic" select="'editor'" />
-    </xsl:call-template>
+    <xsl:apply-templates select="." mode="type-name" />
     <xsl:text>)</xsl:text>
 </xsl:template>
 <xsl:template match="editor" mode="name-list" >
     <xsl:text>, </xsl:text>
     <xsl:apply-templates select="personname" />
     <xsl:text> (</xsl:text>
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="generic" select="'editor'" />
-    </xsl:call-template>
+    <xsl:apply-templates select="." mode="type-name" />
     <xsl:text>)</xsl:text>
 </xsl:template>
 
@@ -96,9 +92,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="personname" />
         <xsl:if test="self::editor">
             <xsl:text>, </xsl:text>
-            <xsl:call-template name="type-name">
-                <xsl:with-param name="generic" select="'editor'" />
-            </xsl:call-template>
+            <xsl:apply-templates select="." mode="type-name" />
         </xsl:if>
         <xsl:if test="department|institution|email">
             <xsl:if test="department">
