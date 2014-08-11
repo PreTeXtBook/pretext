@@ -1448,7 +1448,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <xsl:template match="*" mode="sidebars">
     <aside id="sidebar-left" class="sidebar">
         <div class="sidebar-content">
-            <nav id="toc" style="height: 394px;">
+            <nav id="toc">
                  <xsl:apply-templates select="." mode="toc-items" />
             </nav>
             <div class="extras">
