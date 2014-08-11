@@ -1329,13 +1329,17 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                 <xsl:attribute name="href">
                     <xsl:value-of select="$previous-url" />
                 </xsl:attribute>
-                <xsl:text>Previous</xsl:text>  <!-- internationalize -->
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'previous'" />
+                </xsl:call-template>
             </xsl:element>
         </xsl:when>
         <xsl:otherwise>
             <xsl:element name="span">
                 <xsl:attribute name="class">previous-button button disabled</xsl:attribute>
-                <xsl:text>Previous</xsl:text>  <!-- internationalize -->
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'previous'" />
+                </xsl:call-template>
             </xsl:element>
         </xsl:otherwise>
     </xsl:choose>
@@ -1352,13 +1356,17 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                 <xsl:attribute name="href">
                     <xsl:value-of select="$next-url" />
                 </xsl:attribute>
-                <xsl:text>Next</xsl:text>  <!-- internationalize -->
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'next'" />
+                </xsl:call-template>
             </xsl:element>
         </xsl:when>
         <xsl:otherwise>
             <xsl:element name="span">
                 <xsl:attribute name="class">next-button button disabled</xsl:attribute>
-                <xsl:text>Next</xsl:text>  <!-- internationalize -->
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'next'" />
+                </xsl:call-template>
             </xsl:element>
         </xsl:otherwise>
     </xsl:choose>
@@ -1375,13 +1383,17 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                 <xsl:attribute name="href">
                     <xsl:value-of select="$up-url" />
                 </xsl:attribute>
-                <xsl:text>Up</xsl:text>  <!-- internationalize -->
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'up'" />
+                </xsl:call-template>
             </xsl:element>
         </xsl:when>
         <xsl:otherwise>
             <xsl:element name="span">
                 <xsl:attribute name="class">up-button button disabled</xsl:attribute>
-                <xsl:text>Up</xsl:text>  <!-- internationalize -->
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'up'" />
+                </xsl:call-template>
             </xsl:element>
         </xsl:otherwise>
     </xsl:choose>
@@ -1394,21 +1406,37 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <nav id="primary-navbar" class="navbar" style="">
         <div class="container">
             <div class="navbar-bottom-buttons button-count-5">
-                <button class="sidebar-left-toggle-button button" style="">Table of Contents</button>
+                <button class="sidebar-left-toggle-button button" style="">
+                    <xsl:call-template name="type-name">
+                        <xsl:with-param name="string-id" select="'toc'" />
+                    </xsl:call-template>
+                </button>
                 <xsl:apply-templates select="." mode="previous-button" />
                 <xsl:apply-templates select="." mode="up-button" />
                 <xsl:apply-templates select="." mode="next-button" />
-                <button class="sidebar-right-toggle-button button" style="">Annotations</button>
+                <button class="sidebar-right-toggle-button button" style="">
+                    <xsl:call-template name="type-name">
+                        <xsl:with-param name="string-id" select="'annotations'" />
+                    </xsl:call-template>
+                </button>
             </div>
             <div class="navbar-top-buttons button-count-5">
-                <button class="sidebar-left-toggle-button button" style="">Table of Contents</button>
+                <button class="sidebar-left-toggle-button button" style="">
+                    <xsl:call-template name="type-name">
+                        <xsl:with-param name="string-id" select="'toc'" />
+                    </xsl:call-template>
+                </button>
                 <div class="tree-nav button-count-3">
                     <xsl:apply-templates select="." mode="previous-button" />
                     <xsl:apply-templates select="." mode="up-button" />
                     <xsl:apply-templates select="." mode="next-button" />
                 </div>
-                <button class="sidebar-right-toggle-button button" style="">Annotations</button>
-            </div>
+                <button class="sidebar-right-toggle-button button" style="">
+                    <xsl:call-template name="type-name">
+                        <xsl:with-param name="string-id" select="'annotations'" />
+                    </xsl:call-template>
+                </button>
+             </div>
         </div>
     </nav>
 </xsl:template>
@@ -1425,8 +1453,19 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             </nav>
             <div class="extras">
                 <nav>
-                    <a class="feedback-link" href="">Feedback</a>
-                    <a class="mathbook-link" href="http://mathbook.pugetsound.edu">Authored in MathBook XML</a>
+                    <a class="feedback-link" href="">
+                        <xsl:call-template name="type-name">
+                            <xsl:with-param name="string-id" select="'feedback'" />
+                        </xsl:call-template>
+                    </a>
+                    <a class="mathbook-link" href="http://mathbook.pugetsound.edu">
+                        <xsl:call-template name="type-name">
+                            <xsl:with-param name="string-id" select="'authored'" />
+                        </xsl:call-template>
+                        <xsl:text> MathBook</xsl:text>
+                        <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
+                        <xsl:text>XML</xsl:text>
+                    </a>
                 </nav>
             </div>
         </div>
