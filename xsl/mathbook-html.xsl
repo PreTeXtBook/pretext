@@ -1798,6 +1798,7 @@ $(function () {
     <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.12.1/TweenLite.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.12.1/TimelineLite.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.12.1/plugins/CSSPlugin.min.js"></script>
+    <script src="http://mathbook.staging.michaeldubois.me/develop/js/lib/backbone-events-standalone/backbone-events-standalone.min.js"></script>
 
     <script src="http://mathbook.staging.michaeldubois.me/develop/js/lib/jquery.sticky.js"></script>
     <script src="http://mathbook.staging.michaeldubois.me/develop/js/lib/jquery.intersections.js"></script>
