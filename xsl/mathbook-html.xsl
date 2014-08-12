@@ -1269,11 +1269,18 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- ################# -->
 
 <!-- Prev/Up/Next URL's -->
+<!-- The "tree" versions are simpler, though less natural for a reader -->
+<!-- They often return empty and require the use of the Up button      -->
+<!-- The "linear" versions are breadth-first search, and so mimic      -->
+<!-- the way a reader would encounter the sections in a (linear) book  -->
+
+<!-- TODO: drop obsolete SVG arrows -->
+
 <!-- Check if the XML tree has a preceding/following/parent node -->
 <!-- Then check if it is a document node (structural)            -->
 <!-- If so, compute the URL for the node                         -->
-<!-- TODO: drop obsolete SVG arrows -->
-<xsl:template match="*" mode="previous-url">
+<!-- NB: tree urls maybe enabled as a processing option          -->
+<xsl:template match="*" mode="previous-tree-url">
     <xsl:if test="preceding-sibling::*">
         <xsl:variable name="preceding" select="preceding-sibling::*[1]" />
         <xsl:variable name="structural">
@@ -1286,7 +1293,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <!-- could be empty -->
 </xsl:template>
 
-<xsl:template match="*" mode="next-url">
+<xsl:template match="*" mode="next-tree-url">
     <xsl:if test="following-sibling::*">
         <xsl:variable name="following" select="following-sibling::*[1]" />
         <xsl:variable name="structural">
@@ -1299,6 +1306,10 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <!-- could be empty -->
 </xsl:template>
 
+<!-- Create the URL of the parent document node    -->
+<!-- Parent always exists, since the               -->
+<!-- structural check fails at <mathbook>          -->
+<!-- Identical in tree/linear schemes, up is up    -->
 <xsl:template match="*" mode="up-url">
     <xsl:if test="parent::*">
         <xsl:variable name="parent" select="parent::*[1]" />
@@ -1309,8 +1320,130 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:apply-templates select="$parent" mode="url" />
         </xsl:if>
     </xsl:if>
-    <!-- could be empty -->
+    <!-- will be empty precisely at children of <mathbook> -->
 </xsl:template>
+
+<!-- Next Linear URL -->
+<!-- Breadth-first search, try to descend into first summary link -->
+<!-- Else, look sideways for next structural sibling              -->
+<!-- Else, go up to parent and look sideways                      -->
+<!-- Else done and return empty url                               -->
+<xsl:template match="*" mode="next-linear-url">
+    <xsl:variable name="summary">
+        <xsl:apply-templates select="." mode="is-summary" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$summary='true'">
+            <!-- Descend once, will always have a child that is structural -->
+            <xsl:variable name="first-structural-child" select="*[not(self::title or self::subtitle or self::todo or self::introduction or self::conclusion)][1]" />
+            <xsl:variable name="structural">
+                <xsl:apply-templates select="$first-structural-child" mode="is-structural" />
+            </xsl:variable>
+            <xsl:if test="$structural='false'">
+                <xsl:message>MBX:ERROR: descending into first node of a summary page (<xsl:value-of select="local-name($first-structural-child)" />) that is non-structural</xsl:message>
+            </xsl:if>
+            <xsl:apply-templates select="$first-structural-child" mode="url" />
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- try going sideways, which climbs up the tree recursively -->
+            <xsl:apply-templates select="." mode="next-sideways-url" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Recursively look sideways to the right, else up     -->
+<!-- <mathbook> is not structural, so halt looking there -->
+<xsl:template match="*" mode="next-sideways-url">
+    <xsl:variable name="url">
+        <xsl:if test="following-sibling::*">
+            <xsl:variable name="following" select="following-sibling::*[1]" />
+            <xsl:variable name="structural">
+                <xsl:apply-templates select="$following" mode="is-structural" />
+            </xsl:variable>
+            <xsl:if test="$structural='true'">
+                <!-- A normal sibling following -->
+                <xsl:apply-templates select="$following" mode="url" />
+            </xsl:if>
+        </xsl:if>
+        <!-- could be empty here-->
+    </xsl:variable>
+    <xsl:value-of select="$url" /> <!-- no harm if empty -->
+    <xsl:if test="$url=''">
+        <!-- Try going up and then sideways                           -->
+        <!-- parent always exists, since <mathbook> is non-structural -->
+        <xsl:variable name="parent" select="parent::*[1]" />
+        <xsl:variable name="structural">
+            <xsl:apply-templates select="$parent" mode="is-structural" />
+        </xsl:variable>
+        <xsl:if test="$structural='true'">
+            <!-- Up a level, so try looking sideways again -->
+            <xsl:apply-templates select="$parent" mode="next-sideways-url" />
+        </xsl:if>
+        <!-- otherwise we are off the top and quit with an empty url -->
+    </xsl:if>
+</xsl:template>
+
+<!-- Look sideways to the left                                  -->
+<!-- If present, move there and descend right branches          -->
+<!-- If nothing there, move up once                             -->
+<!-- <mathbook> is not structural, so halt if we go up to there -->
+<xsl:template match="*" mode="previous-linear-url">
+    <xsl:variable name="url">
+        <xsl:if test="preceding-sibling::*">
+            <xsl:variable name="preceding" select="preceding-sibling::*[1]" />
+            <xsl:variable name="structural">
+                <xsl:apply-templates select="$preceding" mode="is-structural" />
+            </xsl:variable>
+            <xsl:if test="$structural='true'">
+                <!-- A normal sibling precedin, result is just a sentinel-->
+                <xsl:apply-templates select="$preceding" mode="url" />
+            </xsl:if>
+        </xsl:if>
+        <!-- could be empty here -->
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$url=''">
+            <!-- Go up to parent and get the URL there (not recursive)    -->
+            <!-- parent always exists, since <mathbook> is non-structural -->
+            <xsl:variable name="parent" select="parent::*[1]" />
+            <xsl:variable name="structural">
+                <xsl:apply-templates select="$parent" mode="is-structural" />
+            </xsl:variable>
+            <xsl:if test="$structural='true'">
+                <xsl:apply-templates select="$parent" mode="url" />
+            </xsl:if>
+            <!-- otherwise we are off the top and quit with an empty url -->
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- found a preceding sibling, so descend right branches to a leaf -->
+            <xsl:apply-templates select="preceding-sibling::*[1]" mode="previous-descent-url"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Descend recursively through summary pages -->
+<!-- to a leaf (content) and get URL           -->
+<xsl:template match="*" mode="previous-descent-url" >
+    <xsl:variable name="summary">
+        <xsl:apply-templates select="." mode="is-summary" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$summary='false'">
+            <xsl:apply-templates select="." mode="url" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:variable name="last-structural-child" select="*[not(self::title or self::subtitle or self::todo or self::introduction or self::conclusion)][last()]" />
+            <xsl:variable name="structural">
+                <xsl:apply-templates select="$last-structural-child" mode="is-structural" />
+            </xsl:variable>
+            <xsl:if test="$structural='false'">
+                <xsl:message>MBX:ERROR: descending into last node of a summary page (<xsl:value-of select="local-name($last-structural-child)" />) that is non-structural</xsl:message>
+            </xsl:if>
+            <xsl:apply-templates select="$last-structural-child" mode="previous-descent-url" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!--                     -->
 <!-- Navigation Sections -->
@@ -1320,7 +1453,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- <span> with "disabled" class otherwise -->
 <xsl:template match="*" mode="previous-button">
     <xsl:variable name="previous-url">
-        <xsl:apply-templates select="." mode="previous-url" />
+        <xsl:apply-templates select="." mode="previous-linear-url" />
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$previous-url!=''">
@@ -1347,7 +1480,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 
 <xsl:template match="*" mode="next-button">
     <xsl:variable name="next-url">
-        <xsl:apply-templates select="." mode="next-url" />
+        <xsl:apply-templates select="." mode="next-linear-url" />
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$next-url!=''">
