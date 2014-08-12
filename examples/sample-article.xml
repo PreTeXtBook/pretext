@@ -830,8 +830,9 @@ the xsltproc executable.
                     </asymptote>
                 </figure>
 
-                <p>And finally, an example of a 3-D graph (from the documentation again). <em>Production of a PDF of this image is currently broken, so the image is blank in <latex />/PDF output for the moment.</em></p>
+                <p>And finally, an example of a 3-D graph (from the documentation again).</p>
                 <!-- http://asymptote.sourceforge.net/gallery/3D%20graphs/filesurface.asy -->
+                <!-- Projection point adjusted by Michael Doob -->
 
                 <figure xml:id="figure-asymptote-surface">
                     <caption>Asymptote 3-D Surface</caption>
@@ -844,7 +845,7 @@ the xsltproc executable.
 
                     size(200,300,keepAspect=false);
 
-                    currentprojection=orthographic(10,10,30);
+                    currentprojection=orthographic(10,10,5);
                     currentlight=(10,10,5);
                     triple f(pair t) {return (t.x*cos(t.y),t.x*sin(t.y),t.x^(1/n)*sin(t.y/n));}
 
