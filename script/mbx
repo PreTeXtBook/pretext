@@ -345,7 +345,7 @@ class MathBookXMLtoSWS(object):
             shutil.copy2(sws, destination)
         else:
             # Multiple worksheets: manufactured in final resting place
-            Z = zipfile.ZipFile(destination, 'a')
+            Z = zipfile.ZipFile(destination, 'w')
             for afile in worksheets:
                 Z.write(afile)
             Z.close()
