@@ -1414,41 +1414,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Sage Cells -->
 
-<!-- Type: "invisible"; to doctest, but never show to a reader -->
-<xsl:template match="sage[@type='invisible']" />
-
-<!-- Type: "practice"; not much point to show to a reader -->
-<xsl:template match="sage[@type='practice']" />
-
-<!-- Type: "copy"; used for replays in HTML -->
-<!-- Just handle the same way as others     -->
-<xsl:template match="sage[@copy]">
-    <xsl:apply-templates select="id(@copy)" />
-</xsl:template>
-
-<!-- Types: "full" (default), "display" -->
-<xsl:template match="sage">
-    <xsl:apply-templates select="input" />
-    <xsl:if test="output">
-        <xsl:apply-templates select="output" />
+<!-- An abstract named template accepts input text and               -->
+<!-- output text, then wraps it for print, including output          -->
+<!-- But we do not write an environment if there isn't any content   -->
+<!-- So conceivably, this template can do nothing (ie an empty cell) -->
+<xsl:template name="sage-active-markup">
+    <xsl:param name="in" />
+    <xsl:param name="out" />
+    <xsl:if test="$in!=''">
+        <xsl:text>\begin{lstlisting}[style=sageinput]&#xa;</xsl:text>
+        <xsl:value-of select="$in" />
+        <xsl:text>\end{lstlisting}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$out!=''">
+        <xsl:text>\begin{lstlisting}[style=sageoutput]&#xa;</xsl:text>
+        <xsl:value-of select="$out" />
+        <xsl:text>\end{lstlisting}&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="input">
-    <xsl:text>\begin{lstlisting}[style=sageinput]&#xa;</xsl:text>
-    <xsl:call-template name="sanitize-sage">
-        <xsl:with-param name="raw-sage-code" select="." />
-    </xsl:call-template>
-    <xsl:text>\end{lstlisting}&#xa;</xsl:text>
-</xsl:template>
+<!-- Type: "practice"; not much point to show to a print reader  -->
+<!-- This overrides the default, which is a small annotated cell -->
+<xsl:template match="sage[@type='practice']" />
 
-<xsl:template match="output">
-    <xsl:text>\begin{lstlisting}[style=sageoutput]&#xa;</xsl:text>
-    <xsl:call-template name="sanitize-sage">
-        <xsl:with-param name="raw-sage-code" select="." />
-    </xsl:call-template>
-    <xsl:text>\end{lstlisting}&#xa;</xsl:text>
-</xsl:template>
 
 <!-- Program Listings -->
 <!-- The "listings-language" template is in the common file -->

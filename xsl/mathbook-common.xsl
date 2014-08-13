@@ -364,6 +364,76 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Sage Cells -->
+<!-- Contents are text manipulations (below)    -->
+<!-- Abstract named templates in other files    -->
+<!-- provide the necessary wrapping, per format -->
+
+<!-- Type; empty element                      -->
+<!-- Provide an empty cell to scribble in     -->
+<!-- Or break text cells in the Sage notebook -->
+<xsl:template match="sage[not(input) and not(output) and not(@type) and not(@copy)]">
+    <xsl:call-template name="sage-active-markup">
+        <xsl:with-param name="in" select="''"/>
+        <xsl:with-param name="out" select="''" />
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Type: "invisible"; to doctest, but never show to a reader -->
+<xsl:template match="sage[@type='invisible']" />
+
+<!-- Type: "practice"; empty, but with practice announcement -->
+<!-- We override this in LaTeX, since it is useless          -->
+<!-- (and we can't tell in the abstract wrapping template)   -->
+<xsl:template match="sage[@type='practice']">
+    <xsl:call-template name="sage-active-markup">
+        <xsl:with-param name="in" select="'# Sage practice area&#xa;'"/>
+        <xsl:with-param name="out" select="''" />
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Type: "copy"; used for replays     -->
+<!-- Mostly when HTML is chunked        -->
+<!-- Just handle the same way as others -->
+<xsl:template match="sage[@copy]">
+    <xsl:apply-templates select="id(@copy)" />
+</xsl:template>
+
+<!-- Type: "display"; input portion as uneditable, unevaluatable -->
+<!-- We do not pass along any output, since this is silly        -->
+<!-- These cells are not meant to be correct (syntax, effect)    -->
+<!-- For HTML we do an override                                  -->
+<xsl:template match="sage[@type='display']">
+    <xsl:call-template name="sage-active-markup">
+        <xsl:with-param name="in">
+            <xsl:call-template name="sanitize-sage">
+                <xsl:with-param name="raw-sage-code" select="input" />
+            </xsl:call-template>
+        </xsl:with-param>
+        <xsl:with-param name="out" select="''" />
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Type: "full" (the default)         -->
+<!-- Absent meeting any other condition -->
+<xsl:template match="sage|sage[@type='full']">
+    <xsl:call-template name="sage-active-markup">
+        <xsl:with-param name="in">
+            <xsl:call-template name="sanitize-sage">
+                <xsl:with-param name="raw-sage-code" select="input" />
+            </xsl:call-template>
+        </xsl:with-param>
+        <xsl:with-param name="out">
+            <xsl:if test="output">
+                <xsl:call-template name="sanitize-sage">
+                    <xsl:with-param name="raw-sage-code" select="output" />
+                </xsl:call-template>
+            </xsl:if>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+
 <!-- Sanitize Sage code                 -->
 <!-- No leading whitespace, no trailing -->
 <!-- http://stackoverflow.com/questions/1134318/xslt-xslstrip-space-does-not-work -->
