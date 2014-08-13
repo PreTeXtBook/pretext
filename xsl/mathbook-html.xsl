@@ -1381,6 +1381,7 @@ is just flat out on the page, as if printed there.
 <!-- http://code.google.com/p/google-code-prettify/                                           -->
 <!-- http://code.google.com/p/google-code-prettify/wiki/GettingStarted                        -->
 <!-- See common file for more on language handlers, and "language-prettify" template          -->
+<!-- Coordinate with disabling in Sage Notebook production                                    -->
 <xsl:template match="program">
     <xsl:variable name="classes">
         <xsl:text>prettyprint</xsl:text>

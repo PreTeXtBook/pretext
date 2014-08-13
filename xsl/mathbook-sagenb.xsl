@@ -40,6 +40,9 @@
         <xsl:if test="not(/mathbook/docinfo/initialization)">
             <xsl:message>MBX:WARNING: providing an &lt;inititalization&gt; in the &lt;docinfo&gt; can make the Sage Notebook worksheet list more usable</xsl:message>
         </xsl:if>
+        <xsl:if test="/mathbook//program">
+            <xsl:message>MBX:WARNING: syntax highlighting of program listings is not possible in the Sage Notebook - though you will see a display with a black monospace font</xsl:message>
+        </xsl:if>
         <xsl:text>manifest = [</xsl:text>
         <xsl:apply-templates select="mathbook" mode="filenames"/>
         <xsl:text>]</xsl:text>
@@ -189,9 +192,6 @@
         <xsl:call-template name="css" />
         <xsl:call-template name="styling" />            
 <!--         
-        <xsl:if test="/mathbook//program">
-            <xsl:call-template name="goggle-code-prettifier" />
-        </xsl:if>
         <xsl:if test="//video">
             <xsl:call-template name="video" />
         </xsl:if>
