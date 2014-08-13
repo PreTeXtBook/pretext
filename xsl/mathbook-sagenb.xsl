@@ -7,7 +7,6 @@
 
 <xsl:import href="./mathbook-html.xsl" />
 
-<!-- TODO: protect math sections from Sage cell marker of triple-braces -->
 <!-- TODO: better header for page-wrap -->
 <!-- TODO: free chunking level, fix toc -->
 <!-- TODO: liberate book -->
@@ -80,6 +79,24 @@
         </div>
         <xsl:apply-templates select="*[not(self::title)]" />
  -->
+</xsl:template>
+
+<!-- ########## -->
+<!-- Sage Cells -->
+<!-- ########## -->
+
+<!-- The Sage Notebook expects wiki markup for               -->
+<!-- Sage input/output pairs.  Perhaps a regrettable         -->
+<!-- design decision way back when.  We can at least warn    -->
+<!-- about the conceivable event that some math contains the -->
+<!-- evil leading triple braces. (It seems trailing braces   -->
+<!-- are not a problem, but the test could be adjusted.)     -->
+<xsl:template match="m|me|men|mrow">
+    <xsl:variable name="tex"><xsl:value-of select="." /></xsl:variable>
+    <xsl:if test="contains($tex, '{{{')">
+        <xsl:message>MBX:WARNING: your source contains LaTeX syntax with three consecutive braces ("{{{") which confuses the Sage Notebook interface.  Consider adding canceling thin spaces ("\!\,"") to your source to break up the consecutive braces.  (Offending math: <xsl:value-of select="$tex" />)</xsl:message>
+    </xsl:if>
+    <xsl:apply-imports />
 </xsl:template>
 
 <xsl:template match="sage">

@@ -1284,6 +1284,10 @@ the xsltproc executable.
 
             <p>A cross-reference with a bad/missing attribute: <xref perversional="spelled-bad" />.</p>
 
+            <p>Some math that gives the Sage notebook trouble:  first the fixed version, where we use a small negative space followed by a small positive space to breakup the triple braces: <m>x^2{{\!\,{y^3}}}</m></p>
+
+            <p>Now the problem version, which in the Sage notebook will wreck this page.  You should be warned about this at the console when you built this worksheet.  Elsewhere the fixed version should look like this version: <m>x^2{{{y^3}}}</m></p>
+
         </section>
 
         <!-- Bibliography/References can appear anywhere -->
