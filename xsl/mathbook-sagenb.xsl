@@ -108,9 +108,16 @@
     </xsl:if>
 </xsl:template>
 
+<!-- Adjustments to the Sage Notebook size parameters     -->
+<!-- #user-worksheet-page includes all UI elements        -->
+<!-- We scrunch so that button lists do not reflow        -->
+<!-- #worksheet is the "page", so we mimic the parameters -->
+<!-- of the standard HTML view                            -->
+<!-- NB: Annotations may require adjusting these          -->
 <xsl:template name="styling" >
     <style>
-    <xsl:text>#worksheet {padding-left:4em; padding-right:4em}</xsl:text>
+        <xsl:text>#user-worksheet-page {max-width:1080px;}</xsl:text>
+        <xsl:text>#worksheet {max-width:600px; padding-left:48px; padding-right:48px;}</xsl:text>
     </style>
 </xsl:template>
 
@@ -160,6 +167,16 @@
         </div>
         <!-- <xsl:apply-templates select="/mathbook/docinfo/analytics" /> -->
     </exsl:document>
+</xsl:template>
+
+<!-- CSS header -->
+<!-- No interface work, just content styling -->
+<!-- The Sage Notebook provides the interface -->
+<xsl:template name="css">
+    <!-- #1 to #5 for different color schemes -->
+    <link href="http://mathbook.staging.michaeldubois.me/develop/stylesheets/mathbook-content.css" rel="stylesheet" type="text/css" />
+    <!-- <link href="http://mathbook.staging.michaeldubois.me/develop/stylesheets/icons.css" rel="stylesheet" type="text/css" /> -->
+    <link href="http://aimath.org/mathbook/add-on.css" rel="stylesheet" type="text/css" />
 </xsl:template>
 
 <!-- Filename Determination -->
