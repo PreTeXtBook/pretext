@@ -287,6 +287,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Document node summaries are just links to the page -->
+<!-- See overrides in Sage Notebook production          -->
 <xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection" mode="summary-entry">
     <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
     <a href="{$url}">
@@ -298,6 +299,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Some document nodes will not normally have titles and we need default titles -->
 <!-- Especially if one-off (eg Preface), or generic (Exercises)                   -->
+<!-- See overrides in Sage Notebook production                                    -->
 <xsl:template match="exercises|references|frontmatter|preface|acknowledgement|authorbiography|foreword|dedication|colophon" mode="summary-entry">
     <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
     <a href="{$url}">

@@ -13,7 +13,6 @@
 <!-- TODO: liberate book -->
 <!-- TODO: acronyms to source (blank number, no double dash) -->
 <!-- TODO: liberate GeoGebra -->
-<!-- TODO: more care with links/no-links -->
 
 <!-- Intend output for rendering by browsers-->
 <xsl:output method="html" indent="yes"/>
@@ -94,19 +93,57 @@
     <xsl:text>}}}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- URL's: only internally within a page-->
-<!-- Maybe apply-imports on xref and compare filenames of target and xref for match? -->
-<xsl:template match ="*" mode="url">
-    <xsl:variable name="summary"><xsl:apply-templates select="." mode="is-summary" /></xsl:variable>
-    <xsl:variable name="webpage"><xsl:apply-templates select="." mode="is-webpage" /></xsl:variable>
-<!--     <xsl:call-template name="filename">
-        <xsl:with-param name="a-node" select="." />
-    </xsl:call-template>
- -->    <xsl:if test="$summary='false' and $webpage='false'">
-        <xsl:text>#</xsl:text>
-        <xsl:apply-templates select="." mode="internal-id" />
-    </xsl:if>
+<!-- ############## -->
+<!-- URL Banishment -->
+<!-- ############## -->
+
+<!-- Cross-worksheet links in the Sage Notebook are untenable -->
+<!-- Strategy now is to 100% ban them, we could do relative   -->
+<!-- links on a page with some work                           -->
+
+<!-- A cross-reference has a visual component,             -->
+<!-- formed elsewhere, and a realization as a hyperlink    -->
+<!-- We override this for the Sage notebook, since         -->
+<!-- we cannot determine cross-worksheet links in advance. -->
+<!-- So just the content appears and no hyperlink          -->
+<!-- TODO: generally improve xref links (urls) to be relative -->
+ <!-- when possible, then recognize them here for use. -->
+<xsl:template match="*" mode="xref-hyperlink">
+    <xsl:param name="content" />
+    <xsl:value-of  disable-output-escaping="yes" select="$content" />
 </xsl:template>
+
+<!-- Document node summaries are normally links to the page    -->
+<!-- Override for Sage Notebook production, no anchor/href     -->
+<!-- We format these as smaller headings                       -->
+<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection" mode="summary-entry">
+    <h5 class="heading">
+        <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
+        <xsl:text> </xsl:text>
+        <span class="title"><xsl:apply-templates select="title" /></span>
+    </h5>
+</xsl:template>
+
+<!-- Some document nodes will not normally have titles and we need default titles -->
+<!-- Especially if one-off (eg Preface), or generic (Exercises)                   -->
+<!-- Override for Sage Notebook production, no anchor/href                        -->
+<!-- We format these as smaller headings                                          -->
+<xsl:template match="exercises|references|frontmatter|preface|acknowledgement|authorbiography|foreword|dedication|colophon" mode="summary-entry">
+    <h5 class="heading">
+        <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
+        <xsl:text> </xsl:text>
+        <span class="title">
+            <xsl:choose>
+                <xsl:when test="title">
+                    <xsl:apply-templates select="title" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="." mode="type-name" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </span>
+    </h5>
+ </xsl:template>
 
 <!-- Adjustments to the Sage Notebook size parameters     -->
 <!-- #user-worksheet-page includes all UI elements        -->
