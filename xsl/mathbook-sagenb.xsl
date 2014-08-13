@@ -11,7 +11,6 @@
 <!-- TODO: better header for page-wrap -->
 <!-- TODO: free chunking level, fix toc -->
 <!-- TODO: liberate book -->
-<!-- TODO: acronyms to source (blank number, no double dash) -->
 <!-- TODO: liberate GeoGebra -->
 
 <!-- Intend output for rendering by browsers-->
@@ -38,6 +37,9 @@
     <!-- their titles and their assets within       -->
     <!-- Creates a Python assignment, to be exec'ed -->
     <xsl:if test="$purpose='info'">
+        <xsl:if test="not(/mathbook/docinfo/initialization)">
+            <xsl:message>MBX:WARNING: providing an &lt;inititalization&gt; in the &lt;docinfo&gt; can make the Sage Notebook worksheet list more usable</xsl:message>
+        </xsl:if>
         <xsl:text>manifest = [</xsl:text>
         <xsl:apply-templates select="mathbook" mode="filenames"/>
         <xsl:text>]</xsl:text>
@@ -234,10 +236,17 @@
         <!-- Title, prepended for Sage NB ToC sorting-->
         <!-- Triply-quoted for apostrophe, quote protection -->
         <xsl:text>"""</xsl:text>
-        <xsl:text>AATA</xsl:text> <!-- TODO: generalize, condition on existence -->
-        <xsl:text>-</xsl:text>
-        <xsl:apply-templates select="." mode="number" />
-        <xsl:text>-</xsl:text>
+        <!-- NB: coordinate with inititlization warning in 'info' template -->
+        <xsl:if test="/mathbook/docinfo/initialization">
+            <xsl:value-of select="/mathbook/docinfo/initialization" />
+            <xsl:text>-</xsl:text>
+        </xsl:if>
+        <!-- Protect against double-dash for un-numbered divisions -->
+        <xsl:variable name="num"><xsl:apply-templates select="." mode="number" /></xsl:variable>
+        <xsl:if test="$num!=''">
+            <xsl:value-of select="$num" />
+            <xsl:text>-</xsl:text>
+        </xsl:if>
         <xsl:apply-templates select="title/node()[not(self::fn)]" />
         <xsl:text>"""</xsl:text>
         <xsl:text>, </xsl:text>

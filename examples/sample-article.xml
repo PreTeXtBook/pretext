@@ -66,6 +66,15 @@ the xsltproc executable.
         \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4}
         \newcommand{\indefiniteintegral}[2]{\int#1\,d#2}
         </macros>
+<!--
+        The Sage Notebook has its own interface and worksheet list.
+        To use the sorting features optimally, it helps to have subdivisions
+        begin with the same short prefix.  An "initialization" (nee acronym)
+        here will be used for that purpose if present.  This is only employed
+        for producing Sage notebook versions. (If not present, you will get a
+        harmless warning just for Sage worksheet production.)
+-->
+        <initialization>SA</initialization>
     </docinfo>
 
     <!--
