@@ -122,6 +122,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Various -->
     <localization string-id='todo'><xsl:text>To Do</xsl:text></localization>
     <localization string-id='editor'><xsl:text>Editor</xsl:text></localization>
+    <localization string-id='copyright'><xsl:text>Copyright</xsl:text></localization>
 </xsl:variable>
 
 <!-- pt-BR, Brazilian Portugese -->
@@ -201,6 +202,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Various -->
     <localization string-id='todo'><xsl:text>Para fazer</xsl:text></localization>
     <localization string-id='editor'><xsl:text>Editor</xsl:text></localization>
+    <localization string-id='copyright'><xsl:text>XXXCopyright</xsl:text></localization>
 </xsl:variable>
 
 </xsl:stylesheet>

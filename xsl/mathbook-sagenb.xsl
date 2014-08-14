@@ -187,13 +187,38 @@
         <xsl:call-template name="css" />
         <xsl:call-template name="styling" />            
         <xsl:call-template name="latex-macros" />
-        <h1 id="title">
-            <span class="title"><xsl:value-of select="$title" /></span>
-            <p id="byline"><span class="byline"><xsl:value-of select="$credits" /></span></p>
-        </h1>
-        <div id="content" class="mathbook-content">
-            <xsl:copy-of select="$content" />
-        </div>
+        <header>
+            <h1 class="heading">
+                <span class="title"><xsl:value-of select="$title" /></span>
+                <p id="byline"><span class="byline"><xsl:value-of select="$credits" /></span></p>
+            </h1>
+            <!-- Write a URL into the header of each page, on principle -->
+            <xsl:if test="/mathbook/docinfo/website or /mathbook/docinfo/copyright">
+                <h5 class="heading">
+                    <xsl:if test="/mathbook/docinfo/copyright">
+                        <xsl:apply-templates select="/mathbook/docinfo/copyright" mode="type-name" />
+                        <xsl:text> </xsl:text>
+                        <xsl:apply-templates select="/mathbook/docinfo/copyright/year" />
+                        <xsl:if test="/mathbook/docinfo/copyright/minilicense">
+                            <xsl:text> </xsl:text>
+                            <xsl:apply-templates select="/mathbook/docinfo/copyright/minilicense" />
+                        </xsl:if>
+                        <xsl:if test="/mathbook/docinfo/website">
+                            <br />
+                        </xsl:if>
+                    </xsl:if>
+                    <xsl:if test="/mathbook/docinfo/website">
+                        <xsl:element name="a">
+                            <xsl:attribute name="href">
+                                <xsl:apply-templates select="/mathbook/docinfo/website/url" />
+                            </xsl:attribute>
+                            <xsl:apply-templates select="/mathbook/docinfo/website/title" />
+                        </xsl:element>
+                    </xsl:if>
+                </h5>
+            </xsl:if>
+        </header>
+        <xsl:copy-of select="$content" />
         <xsl:apply-templates select="/mathbook/docinfo/analytics" />
     </exsl:document>
 </xsl:template>
