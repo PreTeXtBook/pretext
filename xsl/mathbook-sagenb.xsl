@@ -5,32 +5,30 @@
                 extension-element-prefixes="exsl"
 >
 
+<!-- Trade on HTML markup, numbering, chunking, etc. -->
+<!-- Override as pecularities of Sage Notebook arise -->
 <xsl:import href="./mathbook-html.xsl" />
 
-<!-- TODO: better header for page-wrap -->
-<!-- TODO: free chunking level, fix toc -->
-<!-- TODO: liberate book -->
-<!-- TODO: liberate GeoGebra -->
+<!-- TODO: free chunking level -->
+<!-- TODO: liberate GeoGebra, videos -->
 <!-- TODO: style Sage display-only code in a similar padded box -->
 
 <!-- Intend output for rendering by browsers-->
 <xsl:output method="html" indent="yes"/>
 
-<!-- Single worksheets are <article>s, -->
-<!-- so do not chunk into sections     -->
-<!-- And no table of contents, either  -->
-<!-- (even though it is header-info)   -->
+<!-- We hard-code the chunking level, need to pass this  -->
+<!-- through the mbx script or use a compatibility layer -->
 <xsl:param name="html.chunk.level" select="1" />
-<xsl:param name="toc.level" select="2" />
+<!-- We disable the ToC level to avoid any conflicts with chunk level -->
+<xsl:param name="toc.level" select="0" />
+
+<!-- Dual-purpose transform -->
+<!-- 'files': produces the relevant content                 -->
+<!-- 'info:': produces a sting mbx can use to locate assets -->
 <xsl:param name="purpose" />
 
 <xsl:template match="/">
-    <!-- <link rel="stylesheet" type="text/css" href="mathbook.css" /> -->
-    <!-- Book length inactive -->
-<!--     <xsl:if test="mathbook/book">
-        <xsl:message terminate="yes">Book length documents do not yet convert to Sage Notebook worksheets.  Quitting...</xsl:message>
-    </xsl:if>
- -->    <xsl:if test="$purpose='files'">
+    <xsl:if test="$purpose='files'">
         <xsl:apply-templates select="mathbook"/>
     </xsl:if>
     <!-- Determine filenames of chunks,             -->
@@ -49,37 +47,9 @@
     </xsl:if>
 </xsl:template>
 
-<!-- Overall Structure -->
-<!-- Everything you might see in a <body>, -->
-<!-- but not enclosed in <body>            -->
-<!-- Don't match bibliography articles     -->
+<!-- Root template, look at everything  -->
 <xsl:template match="mathbook">
-<!--     <xsl:apply-templates select="." mode="page-wrap">
-        <xsl:with-param name="content">
-            <xsl:apply-templates select="*[not(self::title)]"/>
-        </xsl:with-param>
-    </xsl:apply-templates>
- -->
     <xsl:apply-templates />
-
-
- <!-- 
-
-        <xsl:text>{</xsl:text>
-        <xsl:text>'title': "</xsl:text>
-        <xsl:apply-templates select="title" />
-        <xsl:text>"</xsl:text>
-        <xsl:text>}&#xa;</xsl:text>
-        <xsl:call-template name="styling" />
-        <xsl:call-template name="insert-macros" />
-        <div class="headerblock">
-            <div class="title"><xsl:apply-templates select="title" /></div>
-            <div class="event"><xsl:apply-templates select="/mathbook/docinfo/event" /></div>
-            <div class="authorgroup"><xsl:apply-templates select="/mathbook/docinfo/author" /></div>
-            <div class="date"><xsl:apply-templates select="/mathbook/docinfo/date" /></div>
-        </div>
-        <xsl:apply-templates select="*[not(self::title)]" />
- -->
 </xsl:template>
 
 <!-- ########## -->
@@ -199,8 +169,6 @@
     <xsl:call-template name="margin-warning">
         <xsl:with-param name="warning">GeoGebra disabled</xsl:with-param>
     </xsl:call-template>
-
-    <p></p>
 </xsl:template>
 
 <!-- An individual page:                                     -->
@@ -218,11 +186,6 @@
         <xsl:call-template name="fonts" />
         <xsl:call-template name="css" />
         <xsl:call-template name="styling" />            
-<!--         
-        <xsl:if test="//video">
-            <xsl:call-template name="video" />
-        </xsl:if>
- -->        
         <xsl:call-template name="latex-macros" />
         <h1 id="title">
             <span class="title"><xsl:value-of select="$title" /></span>
@@ -231,7 +194,7 @@
         <div id="content" class="mathbook-content">
             <xsl:copy-of select="$content" />
         </div>
-        <!-- <xsl:apply-templates select="/mathbook/docinfo/analytics" /> -->
+        <xsl:apply-templates select="/mathbook/docinfo/analytics" />
     </exsl:document>
 </xsl:template>
 
@@ -239,11 +202,18 @@
 <!-- No interface work, just content styling -->
 <!-- The Sage Notebook provides the interface -->
 <xsl:template name="css">
-    <!-- #1 to #5 for different color schemes -->
     <link href="http://mathbook.staging.michaeldubois.me/develop/stylesheets/mathbook-content.css" rel="stylesheet" type="text/css" />
-    <!-- <link href="http://mathbook.staging.michaeldubois.me/develop/stylesheets/icons.css" rel="stylesheet" type="text/css" /> -->
     <link href="http://aimath.org/mathbook/add-on.css" rel="stylesheet" type="text/css" />
 </xsl:template>
+
+<!-- ################### -->
+<!-- Asset Determination -->
+<!-- ################### -->
+
+<!-- We need to locate all the files which are "included" -->
+<!-- more easily in the HTML version, both for packaging  -->
+<!-- into the *.sws file, and for their appearance in     -->
+<!-- the worsheet itself                                  -->
 
 <!-- Filename Determination -->
 <!-- Traverse the tree, writing filename and title of every webpage created           -->
@@ -263,7 +233,7 @@
         <!-- Title, prepended for Sage NB ToC sorting-->
         <!-- Triply-quoted for apostrophe, quote protection -->
         <xsl:text>"""</xsl:text>
-        <!-- NB: coordinate with inititlization warning in 'info' template -->
+        <!-- NB: coordinate with inititalization warning in 'info' template -->
         <xsl:if test="/mathbook/docinfo/initialization">
             <xsl:value-of select="/mathbook/docinfo/initialization" />
             <xsl:text>-</xsl:text>
@@ -293,17 +263,8 @@
     <xsl:apply-templates select="@*|node()" mode="filenames" />
 </xsl:template>
 
-<!-- Asset Determination -->
-<!-- We need to locate all the files which are "included" -->
-<!-- more easily in the HTML version, both for packaging  -->
-<!-- into the *.sws file, and for their appearance in     -->
-<!-- the worsheet itself                                  -->
-
 <!-- Traverse subtree, looking for datafiles to include  -->
 <xsl:template match="@*|node()" mode="assets">
-<!--     <xsl:variable name="leaf"><xsl:apply-templates select="." mode="is-leaf" /></xsl:variable>
-    <xsl:if test="$leaf='true'">
- -->
     <xsl:apply-templates select="@*|node()" mode="assets" />
 </xsl:template>
 
@@ -322,6 +283,5 @@
     <xsl:value-of select="@source" />
     <xsl:text>', </xsl:text>
 </xsl:template>
-
 
 </xsl:stylesheet>
