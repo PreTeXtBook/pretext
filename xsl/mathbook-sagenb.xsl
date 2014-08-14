@@ -11,6 +11,7 @@
 <!-- TODO: free chunking level, fix toc -->
 <!-- TODO: liberate book -->
 <!-- TODO: liberate GeoGebra -->
+<!-- TODO: style Sage display-only code in a similar padded box -->
 
 <!-- Intend output for rendering by browsers-->
 <xsl:output method="html" indent="yes"/>
@@ -99,21 +100,30 @@
     <xsl:apply-imports />
 </xsl:template>
 
-<xsl:template match="sage">
+<!-- An abstract named template accepts input text and output            -->
+<!-- text, then wraps it in the Sage Notebook's wiki syntax              -->
+<!-- Output is always computable, so we do not show it.                  -->
+<!-- Though we once experimented with printing it in green,              -->
+<!-- hence readable, but clued in that it was not the "real" blue output -->
+<xsl:template name="sage-active-markup">
+    <xsl:param name="in" />
+    <xsl:param name="out" />
     <xsl:text>&#xa;{{{&#xa;</xsl:text>
-    <xsl:call-template name="sanitize-sage">
-        <xsl:with-param name="raw-sage-code" select="input" />
-    </xsl:call-template>
+        <xsl:value-of select="$in" />
     <xsl:text>///&#xa;</xsl:text>
     <xsl:text>}}}&#xa;</xsl:text>
 </xsl:template>
-<!-- Bare sage element means an empty cell to scribble in -->
-<xsl:template match="sage[not(input) and not(output)]">
-    <xsl:text>&#xa;{{{&#xa;</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>///&#xa;</xsl:text>
-    <xsl:text>}}}&#xa;</xsl:text>
+
+<!-- An abstract named template accepts input text -->
+<!-- and employs a <pre> element, so untouchable   -->
+<!-- TODO: learn of a way to prevent notebook evaluation -->
+<xsl:template name="sage-display-markup">
+    <xsl:param name="in" />
+    <pre style="font-size:80%">
+        <xsl:value-of select="$in" />
+    </pre>
 </xsl:template>
+
 
 <!-- ############## -->
 <!-- URL Banishment -->
