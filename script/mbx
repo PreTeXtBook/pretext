@@ -256,6 +256,7 @@ class MathBookXMLtoSWS(object):
         import cPickle
         import os
         import os.path  # join, split, splitext
+        import glob     # find PNG's of SVg's
 
         # Make a generic worksheet configuration as a Python dictionary
         basic = {
@@ -307,6 +308,16 @@ class MathBookXMLtoSWS(object):
             dest = os.path.join(base_dir, data_dir, afile)
             _debug('adding {} to sws archive as {}'.format(source, dest))
             T.add(source, arcname=dest)
+            # look for Asymptote SVG's which include similarly-named PNG's
+            base, ext = os.path.splitext(afile)
+            if ext in ['.svg', '.SVG']:
+                pattern = os.path.join(self._source_dir, base + '_*.png')
+                print "GOTIT", source, pattern
+                for f in glob.glob(pattern):
+                    _, includedfile = os.path.split(f)
+                    dest = os.path.join(base_dir, data_dir, base + '_*.png')
+                    print "SUBS", f, dest
+                    T.add(f, arcname=dest)
 
         T.close()
         return sws_file
