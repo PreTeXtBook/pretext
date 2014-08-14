@@ -1433,6 +1433,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- An abstract named template accepts input text -->
+<!-- and wraps it, untouchable by default in print -->
+<xsl:template name="sage-display-markup">
+    <xsl:param name="in" />
+    <xsl:if test="$in!=''">
+        <xsl:text>\begin{lstlisting}[style=sageinput]&#xa;</xsl:text>
+        <xsl:value-of select="$in" />
+        <xsl:text>\end{lstlisting}&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <!-- Type: "practice"; not much point to show to a print reader  -->
 <!-- This overrides the default, which is a small annotated cell -->
 <xsl:template match="sage[@type='practice']" />

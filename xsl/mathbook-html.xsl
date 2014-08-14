@@ -1349,8 +1349,8 @@ is just flat out on the page, as if printed there.
 
 <!-- An abstract named template accepts input text and   -->
 <!-- output text, then wraps it for the Sage Cell Server -->
-<!-- TODO: consider showing output in green span (?), -->
-<!-- presently output is dropped as computable        -->
+<!-- TODO: consider showing output in green span (?),    -->
+<!-- presently output is dropped as computable           -->
 <xsl:template name="sage-active-markup">
     <xsl:param name="in" />
     <xsl:param name="out" />
@@ -1361,19 +1361,16 @@ is just flat out on the page, as if printed there.
     </div>
 </xsl:template>
 
-<!-- Type: "display"; input portion as uneditable, unevaluatable -->
-<!-- This is an override of the base template,                   -->
-<!-- since we need a different class on the outer div            -->
-<xsl:template match="sage[@type='display']">
+<!-- An abstract named template accepts input text   -->
+<!-- and provides the display class, so untouchable  -->
+<xsl:template name="sage-display-markup">
+    <xsl:param name="in" />
     <div class="sage-display">
     <script type="text/x-sage">
-    <xsl:call-template name="sanitize-sage">
-        <xsl:with-param name="raw-sage-code" select="input" />
-    </xsl:call-template>
+        <xsl:value-of select="$in" />
     </script>
     </div>
 </xsl:template>
-
 
 <!-- Program Listings -->
 <!-- Research:  http://softwaremaniacs.org/blog/2011/05/22/highlighters-comparison/           -->

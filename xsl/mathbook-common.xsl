@@ -365,9 +365,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Sage Cells -->
-<!-- Contents are text manipulations (below)    -->
-<!-- Abstract named templates in other files    -->
-<!-- provide the necessary wrapping, per format -->
+<!-- Contents are text manipulations (below)     -->
+<!-- Two abstract named templates in other files -->
+<!-- provide the necessary wrapping, per format  -->
 
 <!-- Type; empty element                      -->
 <!-- Provide an empty cell to scribble in     -->
@@ -400,17 +400,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Type: "display"; input portion as uneditable, unevaluatable -->
+<!-- This calls a slightly different abstract template           -->
 <!-- We do not pass along any output, since this is silly        -->
-<!-- These cells are not meant to be correct (syntax, effect)    -->
-<!-- For HTML we do an override                                  -->
+<!-- These cells are meant to be be incorrect or incomplete      -->
 <xsl:template match="sage[@type='display']">
-    <xsl:call-template name="sage-active-markup">
+    <xsl:call-template name="sage-display-markup">
         <xsl:with-param name="in">
             <xsl:call-template name="sanitize-sage">
                 <xsl:with-param name="raw-sage-code" select="input" />
             </xsl:call-template>
         </xsl:with-param>
-        <xsl:with-param name="out" select="''" />
     </xsl:call-template>
 </xsl:template>
 
