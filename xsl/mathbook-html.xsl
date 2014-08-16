@@ -171,7 +171,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="title">
             <xsl:apply-templates select="/mathbook/book/title|/mathbook/article/title" />
         </xsl:with-param>
-        <xsl:with-param name="subtitle"></xsl:with-param> -->
+        <xsl:with-param name="subtitle">
+            <xsl:apply-templates select="/mathbook/book/subtitle|/mathbook/article/subtitle" />
+        </xsl:with-param>
         <!-- Serial list of authors, then editors, as names only -->
          <xsl:with-param name="credits">
             <xsl:apply-templates select="/mathbook/docinfo/author" mode="name-list"/>
@@ -214,7 +216,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="title">
             <xsl:apply-templates select="/mathbook/book/title|/mathbook/article/title" />
         </xsl:with-param>
-        <xsl:with-param name="subtitle"></xsl:with-param> -->
+        <xsl:with-param name="subtitle">
+            <xsl:apply-templates select="/mathbook/book/subtitle|/mathbook/article/subtitle" />
+        </xsl:with-param>
         <!-- Serial list of authors, then editors, as names only -->
          <xsl:with-param name="credits">
             <xsl:apply-templates select="/mathbook/docinfo/author" mode="name-list"/>
@@ -1214,9 +1218,9 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                                 <h1 class="title">
                                     <xsl:value-of select="$title" />
                                     <xsl:if test="normalize-space($subtitle)">
-                                        <p class="subtitle">
+                                        <span class="subtitle">
                                             <xsl:value-of select="$subtitle" />
-                                        </p>
+                                        </span>
                                     </xsl:if>
                                 </h1>
                                 <p class="byline"><xsl:value-of select="$credits" /></p>
