@@ -219,7 +219,10 @@
             </xsl:if>
         </header>
         <xsl:copy-of select="$content" />
+        <!--
+        Script tags seem to confuse the notebook, so this is a broader problem
         <xsl:apply-templates select="/mathbook/docinfo/analytics" />
+        -->
     </exsl:document>
 </xsl:template>
 
