@@ -197,6 +197,10 @@ class MathBookXMLtoSWS(object):
         self._sws_file = os.path.abspath(sws_file)
         self._xsltproc_exec = xslt_exec
         self._mathbook_xslt = os.path.join(mbx_dir, 'xsl/mathbook-sagenb.xsl')
+        # Whole book as Sage worksheets
+        # self._mathbook_xslt = '/home/rob/books/aata/aata/xsl/aata-sagenb.xsl'
+        # Just exercises as Sage worksheets
+        # self._mathbook_xslt = '/home/rob/books/aata/aata/xsl/aata-sage-exercises.xsl'
         self._source_dir = get_source_path(self._xml_file)
         self._tmp_dir = tempfile.mkdtemp()
         _debug('xslt exec, MB XSL, source-dir, temp-dir: {}, {}, {}, {}'.format(self._xsltproc_exec, self._mathbook_xslt, self._source_dir, self._tmp_dir))
