@@ -1229,7 +1229,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                 </div>
             <xsl:apply-templates select="." mode="primary-navigation" />
             </header>
-            <div class="page container">
+            <div class="page">
                 <xsl:apply-templates select="." mode="sidebars" />
                 <main class="main">
                     <div id="content" class="mathbook-content">
@@ -1252,6 +1252,8 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- They often return empty and require the use of the Up button      -->
 <!-- The "linear" versions are breadth-first search, and so mimic      -->
 <!-- the way a reader would encounter the sections in a (linear) book  -->
+
+<!-- TODO: perhaps isolate logic to return nodes and put into "common" -->
 
 <!-- Check if the XML tree has a preceding/following/parent node -->
 <!-- Then check if it is a document node (structural)            -->
@@ -1435,7 +1437,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <xsl:choose>
         <xsl:when test="$previous-url!=''">
             <xsl:element name="a">
-                <xsl:attribute name="class">previous-button button</xsl:attribute>
+                <xsl:attribute name="class">previous-button toolbar-item button</xsl:attribute>
                 <xsl:attribute name="href">
                     <xsl:value-of select="$previous-url" />
                 </xsl:attribute>
@@ -1446,7 +1448,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         </xsl:when>
         <xsl:otherwise>
             <xsl:element name="span">
-                <xsl:attribute name="class">previous-button button disabled</xsl:attribute>
+                <xsl:attribute name="class">previous-button button toolbar-item disabled</xsl:attribute>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'previous'" />
                 </xsl:call-template>
@@ -1462,7 +1464,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <xsl:choose>
         <xsl:when test="$next-url!=''">
             <xsl:element name="a">
-                <xsl:attribute name="class">next-button button</xsl:attribute>
+                <xsl:attribute name="class">next-button button toolbar-item</xsl:attribute>
                 <xsl:attribute name="href">
                     <xsl:value-of select="$next-url" />
                 </xsl:attribute>
@@ -1473,7 +1475,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         </xsl:when>
         <xsl:otherwise>
             <xsl:element name="span">
-                <xsl:attribute name="class">next-button button disabled</xsl:attribute>
+                <xsl:attribute name="class">next-button button toolbar-item disabled</xsl:attribute>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'next'" />
                 </xsl:call-template>
@@ -1489,7 +1491,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <xsl:choose>
         <xsl:when test="$up-url!=''">
             <xsl:element name="a">
-                <xsl:attribute name="class">up-button button</xsl:attribute>
+                <xsl:attribute name="class">up-button button toolbar-item</xsl:attribute>
                 <xsl:attribute name="href">
                     <xsl:value-of select="$up-url" />
                 </xsl:attribute>
@@ -1500,7 +1502,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         </xsl:when>
         <xsl:otherwise>
             <xsl:element name="span">
-                <xsl:attribute name="class">up-button button disabled</xsl:attribute>
+                <xsl:attribute name="class">up-button button disabled toolbar-item</xsl:attribute>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'up'" />
                 </xsl:call-template>
@@ -1513,10 +1515,29 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- For smaller modes, like phones   -->
 <!-- Includes ToC, Annotation buttons -->
 <xsl:template match="*" mode="primary-navigation">
-    <nav id="primary-navbar" class="navbar" style="">
+    <nav id="primary-navbar">
         <div class="container">
-            <div class="navbar-bottom-buttons button-count-5">
-                <button class="sidebar-left-toggle-button button" style="">
+            <!--  -->
+            <div class="navbar-top-buttons">
+                <button class="sidebar-left-toggle-button button active">
+                    <xsl:call-template name="type-name">
+                        <xsl:with-param name="string-id" select="'toc'" />
+                    </xsl:call-template>
+                </button>
+                <div class="tree-nav toolbar toolbar-divisor-3">
+                    <xsl:apply-templates select="." mode="previous-button" />
+                    <xsl:apply-templates select="." mode="up-button" />
+                    <xsl:apply-templates select="." mode="next-button" />
+                </div>
+                <button class="sidebar-right-toggle-button button active">
+                    <xsl:call-template name="type-name">
+                        <xsl:with-param name="string-id" select="'annotations'" />
+                    </xsl:call-template>
+                </button>
+            </div>
+            <!--  -->
+            <div class="navbar-bottom-buttons toolbar toolbar-divisor-4">
+                <button class="sidebar-left-toggle-button button toolbar-item active">
                     <xsl:call-template name="type-name">
                         <xsl:with-param name="string-id" select="'toc'" />
                     </xsl:call-template>
@@ -1524,29 +1545,14 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                 <xsl:apply-templates select="." mode="previous-button" />
                 <xsl:apply-templates select="." mode="up-button" />
                 <xsl:apply-templates select="." mode="next-button" />
-                <button class="sidebar-right-toggle-button button" style="">
+                <!-- unused, increment to  toolbar-divisor-5  above
+                <button class="sidebar-right-toggle-button button toolbar-item active">
                     <xsl:call-template name="type-name">
                         <xsl:with-param name="string-id" select="'annotations'" />
                     </xsl:call-template>
-                </button>
+                </button> -->
             </div>
-            <div class="navbar-top-buttons button-count-5">
-                <button class="sidebar-left-toggle-button button" style="">
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'toc'" />
-                    </xsl:call-template>
-                </button>
-                <div class="tree-nav button-count-3">
-                    <xsl:apply-templates select="." mode="previous-button" />
-                    <xsl:apply-templates select="." mode="up-button" />
-                    <xsl:apply-templates select="." mode="next-button" />
-                </div>
-                <button class="sidebar-right-toggle-button button" style="">
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'annotations'" />
-                    </xsl:call-template>
-                </button>
-             </div>
+            <!--  -->
         </div>
     </nav>
 </xsl:template>
