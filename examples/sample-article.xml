@@ -125,7 +125,7 @@ the xsltproc executable.
         <section>
             <title>The Fundamental Theorem</title>
 
-            <p>There is a remarkable theorem:<fn>And fortunately we do not need to try to write it in the margin!</fn></p>
+            <p>There is a remarkable theorem:<fn xml:id="footnote-fermat">And fortunately we do not need to try to write it in the margin!</fn></p>
             <!--
             Mathematics:  Wrap inline mathematics in the "m"
             element (short for "math").  You may use TeX, LaTeX,
@@ -310,6 +310,11 @@ the xsltproc executable.
                 </corollary>
 
                 <p>The alternative version of the Fundamental Theorem in <xref ref="equation-alternate-FTC" /> is a compact way to express the result.</p>
+
+                <example xml:id="example-mysterious">
+                    <title>A Mysterious Derivative</title>
+                    <p>So if we define a function with its variable employed as a limit of integration, like so <me>K(z)=\definiteintegral{345}{z}{x^4\sin(x^2)}{x}</me> then we get the derivative of that function so easily it seems like a mystery, <me>\frac{d}{dz}K(z)=z^4\sin(z^2)</me>  That's it.</p>
+                </example>
             </subsection>
 
             <!--
@@ -359,7 +364,7 @@ the xsltproc executable.
 
                 <p>There are a variety of pre-defined enviroments in MathBook XML.  All take a title, and must have a statement.  Some have proofs (theorems, corollaries, <etc />), while some do not have proofs (conjectures, axioms, principles).</p>
 
-                <principle>
+                <principle xml:id="principle-principle">
                     <title>The Title Principle</title>
 
                     <statement>
@@ -1133,6 +1138,17 @@ the xsltproc executable.
             <p>Suppose you want to reference two theorems, so you might want to say something like <q>Theorems 4.6 and 5.2.</q>  With global autonaming on, you can override with <c>autoname="plural"</c> on the first <c>xref</c> and <c>autoname="no"</c> on the second <c>xref</c>.  (With global autonaming off, you just write what you want and only the numbers are links/knowls.) The <c>plural</c> option is implies the <c>yes</c> option.  Here is the test, which should look correct no matter what the global switch is:  <xref ref="section-cross-referencing" autoname="plural" /> and <xref ref="section-internationalization" autoname="no" />.  (But notice that it is up to you to be certain the type of the second one does not change without the first also changing.  The <q>author-tools</q> mode and careful choices of <c>xml:id</c> strings can help avoid this trap.)</p>
 
             <p>One final twist.  If you say <c>autoname="title"</c>, then the title you assigned to the theorem will prefix the number.  Here is a the final example, which should always refer to a fundamental theorem by name <xref ref="theorem-FTC" autoname="title" />.</p>
+
+            <p>Here we form a list to test pointing at various things:</p>
+
+            <ul>
+                <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" />.</p></li>
+                <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" />.</p></li>
+                <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" />.</p></li>
+
+
+
+            </ul>
 
         </section>
 

@@ -57,6 +57,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- Content as Knowls -->
+<!-- These parameters control if content is -->
+<!-- hidden in a knowl on first appearance -->
+<!-- The happens automatically sometimes, -->
+<!-- eg a footnote should always be hidden -->
+<!-- Some things never are hidden, -->
+<!-- eg an entire section (too big) -->
+<xsl:param name="html.knowl.theorem" select="'no'" />
+<xsl:param name="html.knowl.proof" select="'no'" />
+<xsl:param name="html.knowl.definition" select="'no'" />
+<xsl:param name="html.knowl.example" select="'no'" />
+<xsl:param name="html.knowl.remark" select="'no'" />
+<xsl:param name="html.knowl.figure" select="'no'" />
+<xsl:param name="html.knowl.table" select="'no'" />
+<xsl:param name="html.knowl.exercise" select="'no'" />
+
+
 <!-- Entry template is in mathbook-common file -->
 
 <!-- Authors, editors in serial lists for headers           -->
@@ -325,77 +342,322 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </section>
 </xsl:template>
 
-<!-- Theorem-Like, plus associated Proofs                                   -->
-<!-- <statement>s and <proof>s are sequences of paragraphs and other blocks -->
-<xsl:template match="theorem|corollary|lemma|proposition|claim|fact">
-    <xsl:variable name="xref">
-        <xsl:apply-templates select="." mode="internal-id" />
-    </xsl:variable>
-    <article class="theorem-like" id="{$xref}">
-        <h5 class="heading">
-        <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-        <xsl:text> </xsl:text>
-        <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
-        <xsl:if test="title">
-            <xsl:text> (</xsl:text>
-            <span class="title"><xsl:apply-templates select="title" /></span>
-            <xsl:text>)</xsl:text>
-        </xsl:if>
-        </h5>
-        <xsl:apply-templates select="statement" />
-    </article>
-    <xsl:apply-templates select="proof" />
+
+<!-- ####################### -->
+<!-- Environments and Knowls -->
+<!-- ####################### -->
+
+<!--
+Environments are small amounts of information,
+often the right size to be a knowl.  They usually
+contain information that allows them to be targets of
+a cross-reference.  A classic example is an Example.
+Footnotes are at one end of the spectrum, while a
+Theorem or Exercise is at the other end.
+
+When placed in knowls they can be the target of
+a cross-reference (a bibliographic reference), or
+they can be information-hiding (solution to an
+exercise).  These are not "environments" in the
+same sense as LaTeX uses the word, in particular
+they are not structural subdivisions.
+
+An environment can be hidden at its first
+presentation to a reader.  A footnote is
+always hidden, that is its main feature.
+An equation is never hidden, that would be odd.
+Usually we hide something like an example,
+presenting the reader just a header-like
+clickable to bring up a knowl.
+
+The opposite of "hidden" is "visible", which
+is just flat out on the page, as if printed there.
+-->
+
+<!-- Hidden and Visible Environments -->
+<!-- The "is-hidden" template returns 'yes'/'no' -->
+<!-- for each environment. Some choices are      -->
+<!-- customizable, and some are fixed.           -->
+<!-- Default just issues an error warning.       -->
+<xsl:template match="*" mode="is-hidden">
+    <xsl:message>MBX:ERROR: inquired inappropriately if an environment is hidden or not</xsl:message>
 </xsl:template>
 
-<!-- TODO: Does a proof have a title ever? -->
-<xsl:template match="proof">
-    <article class="proof">
-        <h5 class="heading">
-        <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-        </h5>
-        <xsl:apply-templates />
-    </article>
+<!-- Environment Element Names -->
+<!-- Environments get wrapped in HTML elements.        -->
+<!-- They have an id where they are born, and          -->
+<!-- not when they are the content of a xref knowl.    -->
+<!-- ID's are needed so context links to have targets. -->
+<!-- TODO: Kludge, convert to error-->
+<xsl:template match="*" mode="environment-element">
+    <!-- <xsl:text>article</xsl:text> -->
+    <xsl:message>MBX:ERROR: an environment  (<xsl:value-of select="local-name(.)" />) does not know its HTML element</xsl:message>
 </xsl:template>
 
-<!-- Definitions, Axioms -->
-<!-- Statement, just like a theorem, but no proof -->
-<xsl:template match="definition|axiom|conjecture|principle">
-    <xsl:variable name="xref">
-        <xsl:apply-templates select="." mode="internal-id" />
-    </xsl:variable>
-    <article class="theorem-like" id="{$xref}">
-        <h5 class="heading">
-        <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-        <xsl:text> </xsl:text>
-        <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
-        <xsl:if test="title">
-            <xsl:text> </xsl:text>
-            <span class="title"><xsl:apply-templates select="title" /></span>
-        </xsl:if>
-        </h5>
-        <xsl:apply-templates select="statement" />
-    </article>
+<!-- Environment Class Names -->
+<!-- An environment, visible or hidden has a      -->
+<!-- class name for CSS to recognize it.  Some    -->
+<!-- are grouped in broad classes.  This template -->
+<!-- returns the relevant class name.             -->
+<xsl:template match="*" mode="environment-class">
+    <xsl:message>MBX:ERROR: an environment  (<xsl:value-of select="local-name(.)" />) does not know its CSS class</xsl:message>
 </xsl:template>
+
+<!-- Entry Point to Process Environments -->
+<!-- This is the entry point for *all* environments       -->
+<!-- We always build a knowl to be target of a xref       -->
+<!-- We build a hidden knowl and place a link on the page -->
+<!-- Or, we show the full content of the item on the page -->
+<xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|proposition|claim|fact|proof|hint|answer|solution|note">
+    <!-- Always build a knowl we can point to it with a cross-reference -->
+    <xsl:apply-templates select="." mode="xref-knowl-factory" />
+    <!-- Born hidden or not (visible) -->
+    <xsl:variable name="hidden">
+        <xsl:apply-templates select="." mode="is-hidden" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$hidden='yes'">
+            <xsl:apply-templates select="." mode="environment-hidden" />
+            <!-- embedded, so place on page right below -->
+            <xsl:apply-templates select="." mode="hidden-knowl-factory" />
+        </xsl:when>
+        <xsl:when test="$hidden='no'">
+            <xsl:apply-templates select="." mode="environment-visible" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: an environment does not know if it is hidden or not</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Environments Rendered Hidden -->
+<!-- Similar content as the visible case, but now -->
+<!-- a knowl to actual content (in the body) that -->
+<!-- has the head as the clickable                -->
+<!-- Wrapped in an element with an id and a class -->
+<xsl:template match="*" mode="environment-hidden">
+    <xsl:variable name="element">
+        <xsl:apply-templates select="." mode="environment-element" />
+    </xsl:variable>
+    <xsl:element name="{$element}">
+        <xsl:attribute name="class">
+           <xsl:apply-templates select="." mode="environment-class" />
+        </xsl:attribute>
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:attribute>
+        <xsl:element name="a">
+            <!-- empty, indicates content *not* in a file -->
+            <xsl:attribute name="knowl"></xsl:attribute>
+            <!-- class indicates content is in div referenced by id -->
+            <xsl:attribute name="class">
+                <xsl:text>id-ref</xsl:text>
+            </xsl:attribute>
+            <!-- and the id via a template for consistency -->
+            <xsl:attribute name="refid">
+                <xsl:apply-templates select="." mode="hidden-knowl-id" />
+            </xsl:attribute>
+            <xsl:apply-templates select="." mode="head" />
+        </xsl:element>
+    </xsl:element>
+</xsl:template>
+
+<!-- Environments Rendered Visible -->
+<!-- This would be a "normal" display of an environment -->
+<!-- Wrapped in some type of element, with a class name -->
+<!-- and an id, for HTML rendering                      -->
+<xsl:template match="*" mode="environment-visible">
+    <xsl:variable name="element">
+        <xsl:apply-templates select="." mode="environment-element" />
+    </xsl:variable>
+    <xsl:element name="{$element}">
+        <xsl:attribute name="class">
+           <xsl:apply-templates select="." mode="environment-class" />
+        </xsl:attribute>
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:attribute>
+        <xsl:apply-templates select="." mode="head" />
+        <xsl:apply-templates select="." mode="body" />
+    </xsl:element>
+</xsl:template>
+
+<!-- Footnotes -->
+<!-- Always born hidden -->
+<xsl:template match="fn" mode="is-hidden">
+    <xsl:text>yes</xsl:text>
+</xsl:template>
+<!-- Head is the "mark", a number with two thin spaces -->
+<xsl:template match="fn" mode="head">
+    <xsl:text>&#x2009;</xsl:text>
+    <xsl:apply-templates select="." mode="origin-id" />
+    <xsl:text>&#x2009;</xsl:text>
+</xsl:template>
+<!-- Body is just all content, but joined to the head -->
+<xsl:template match="fn" mode="body">
+    <xsl:text>) </xsl:text>
+    <xsl:apply-templates />
+</xsl:template>
+<!-- HTML, CSS -->
+<xsl:template match="fn" mode="environment-element">
+    <xsl:text>sup</xsl:text>
+</xsl:template>
+<xsl:template match="fn" mode="environment-class">
+    <xsl:text>footnote</xsl:text>
+</xsl:template>
+
+
+<!-- References, Citations (biblio) -->
+<!-- Never born hidden -->
+<xsl:template match="biblio" mode="is-hidden">
+    <xsl:text>no</xsl:text>
+</xsl:template>
+<!-- There is no head, all body -->
+<xsl:template match="biblio" mode="head" />
+<!-- Body is all the content -->
+<xsl:template match="biblio" mode="body">
+    <div class="bibitem">
+        <xsl:text>[</xsl:text>
+        <xsl:apply-templates select="." mode="origin-id" />
+        <xsl:text>]</xsl:text>
+    </div>
+    <xsl:text disable-output-escaping="yes">&amp;nbsp;&amp;nbsp;</xsl:text>
+    <div class="bibentry">
+        <xsl:apply-templates select="text()|*[not(self::note)]" />
+    </div>
+    <xsl:apply-templates select="note" />
+</xsl:template>
+<!-- HTML, CSS -->
+<xsl:template match="biblio" mode="environment-element">
+    <xsl:text>div</xsl:text>
+</xsl:template>
+<xsl:template match="biblio" mode="environment-class">
+    <xsl:text>bib</xsl:text>
+</xsl:template>
+
 
 <!-- Examples, Remarks -->
-<!-- Just a sequence of paragraphs, etc -->
-<xsl:template match="example|remark">
-    <xsl:variable name="xref">
-        <xsl:apply-templates select="." mode="internal-id" />
-    </xsl:variable>
-    <article class="example-like" id="{$xref}">
-        <h5 class="heading">
-            <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-            <xsl:text> </xsl:text>
-            <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
-            <xsl:if test="title">
-                <xsl:text> </xsl:text>
-                <span class="title"><xsl:apply-templates select="title" /></span>
-            </xsl:if>
-        </h5>
-        <xsl:apply-templates select="*[not(self::title)]"/>
-    </article>
+<!-- Individually customizable -->
+<!-- Similar, as just runs of paragraphs -->
+<xsl:template match="example" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.example" />
 </xsl:template>
+<xsl:template match="remark" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.remark" />
+</xsl:template>
+<!-- Head is type, number, title -->  <!-- GENERALIZE -->
+<xsl:template match="example|remark" mode="head">
+    <h5 class="heading">
+        <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+        <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+        <xsl:if test="title">
+            <span class="title"><xsl:apply-templates select="title" /></span>
+        </xsl:if>
+    </h5>
+</xsl:template>
+<!-- Body is just all content, but no title -->
+<xsl:template match="example|remark" mode="body">
+    <xsl:apply-templates select="*[not(self::title)]"/>
+</xsl:template>
+<!-- HTML, CSS -->
+<xsl:template match="example|remark" mode="environment-element">
+    <xsl:text>article</xsl:text>
+</xsl:template>
+<xsl:template match="example|remark" mode="environment-class">
+    <xsl:text>example-like</xsl:text>
+</xsl:template>
+
+<!-- Definitions, etc. -->
+<!-- Customizable as hidden    -->
+<!-- A statement without proof -->
+<xsl:template match="definition|axiom|conjecture|principle" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.definition" />
+</xsl:template>
+<!-- Head is type, number, title -->  <!-- GENERALIZE -->
+<xsl:template match="definition|axiom|conjecture|principle" mode="head">
+    <h5 class="heading">
+        <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+        <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+        <xsl:if test="title">
+            <span class="title"><xsl:apply-templates select="title" /></span>
+        </xsl:if>
+    </h5>
+</xsl:template>
+<!-- Body is just the statement (ignore notation) -->
+<xsl:template match="definition|axiom|conjecture|principle" mode="body">
+    <xsl:apply-templates select="statement" />
+</xsl:template>
+<!-- HTML, CSS -->
+<xsl:template match="definition|axiom|conjecture|principle" mode="environment-element">
+    <xsl:text>article</xsl:text>
+</xsl:template>
+<xsl:template match="definition|axiom|conjecture|principle" mode="environment-class">
+    <xsl:text>definition-like</xsl:text>
+</xsl:template>
+
+
+<!-- Theorems, etc. -->
+<!-- Customizable as hidden    -->
+<!-- A statement with proof -->
+<xsl:template match="theorem|corollary|lemma|proposition|claim|fact" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.theorem" />
+</xsl:template>
+<!-- Head is type, number, title -->  <!-- GENERALIZE -->
+<xsl:template match="theorem|corollary|lemma|proposition|claim|fact" mode="head">
+    <h5 class="heading">
+        <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+        <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+        <xsl:if test="title">
+            <span class="title"><xsl:apply-templates select="title" /></span>
+        </xsl:if>
+    </h5>
+</xsl:template>
+<!-- Body is just the statement and the proof -->
+<xsl:template match="theorem|corollary|lemma|proposition|claim|fact" mode="body">
+    <xsl:apply-templates select="statement" />
+    <xsl:apply-templates select="proof" />
+</xsl:template>
+<!-- HTML, CSS -->
+<xsl:template match="theorem|corollary|lemma|proposition|claim|fact" mode="environment-element">
+    <xsl:text>article</xsl:text>
+</xsl:template>
+<xsl:template match="theorem|corollary|lemma|proposition|claim|fact" mode="environment-class">
+    <xsl:text>theorem-like</xsl:text>
+</xsl:template>
+
+<!-- Proofs, etc -->
+<!-- Hints, Answers, Solutions (on exercises)  -->
+<!-- Proofs customizable as hidden             -->
+<!-- Help with exercises are always are hidden -->
+<!-- Notes on references always are hidden     -->
+<!-- All subsidiary to some other environment  -->
+<xsl:template match="proof" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.proof" />
+</xsl:template>
+<xsl:template match="hint|answer|solution|note" mode="is-hidden">
+    <xsl:text>yes</xsl:text>
+</xsl:template>
+<!-- Head is just the type               -->
+<!-- We do not ask for a number or title -->
+<!-- TODO: Maybe this should change      -->
+<xsl:template match="proof|hint|answer|solution|note" mode="head">
+    <h5 class="heading">
+        <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+    </h5>
+</xsl:template>
+<!-- Body is everything (no title?) -->
+<xsl:template match="proof|hint|answer|solution|note" mode="body">
+    <xsl:apply-templates />
+</xsl:template>
+<!-- HTML, CSS -->
+<xsl:template match="proof|hint|answer|solution|note" mode="environment-element">
+    <xsl:text>article</xsl:text>
+</xsl:template>
+<xsl:template match="proof|hint|answer|solution|note" mode="environment-class">
+    <xsl:text>proof</xsl:text>   <!-- "proof-like"? -->
+</xsl:template>
+
+<!-- BELOW NOT ADAPTED TO ENVIRONMENTS/KNOWLS -->
 
 <!-- Exercise Group -->
 <!-- We interrupt a list of exercises with short commentary, -->
@@ -437,6 +699,109 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="notation">
 <p>Sample notation (in a master list eventually): \(<xsl:value-of select="." />\)</p>
 </xsl:template>
+
+<!-- ################# -->
+<!-- Knowl Manufacture -->
+<!-- ################# -->
+
+<!-- Two types of knowls:                                          -->
+<!-- "xref": the content that is shown to a reader via a click     -->
+<!--    typically with header info, since clickable may be opaque  -->
+<!--    This content is the same as the "visible" content, but     -->
+<!--    without any kind of identification (ie an "id" attribute)  -->
+<!--    eg, no title information in clickable                      -->
+<!-- "hidden": content that is born in a knowl, hidden at creation -->
+<!--    typically without header, since clickable will have more   -->
+<!--    eg, a hidden Example will have title visible               -->
+
+<!-- The directory of knowls that are cross-references -->
+<!-- is hard-coded here for consistency.  The filetype -->
+<!-- *.html so recognized as OK by web servers         -->
+<xsl:template match="*" mode="xref-knowl-filename">
+    <xsl:text>./knowl/</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>.html</xsl:text>
+</xsl:template>
+
+<!-- Hidden knowls are embedded on the page in a   -->
+<!-- div that MathJax is told to ignore.  That div -->
+<!-- needs and id for the knowl to locate it       -->
+<xsl:template match="*" mode="hidden-knowl-id">
+    <xsl:text>hk-</xsl:text>  <!-- "hidden-knowl" -->
+    <xsl:apply-templates select="." mode="internal-id" />
+</xsl:template>
+
+
+<!-- Knowls for cross-reference targets -->
+<!-- (1) have a context link   -->
+<!-- (2) live in a file        -->
+<!-- (3) have no id info       -->
+<!-- (4) Just the body, since  -->
+<!-- head is part of clickable -->
+<xsl:template match="*" mode="xref-knowl-factory">
+    <xsl:variable name="knowl-file">
+        <xsl:apply-templates select="." mode="xref-knowl-filename" />
+    </xsl:variable>
+    <exsl:document href="{$knowl-file}" method="html">
+        <xsl:call-template name="converter-blurb" />
+        <xsl:variable name="element">
+            <xsl:apply-templates select="." mode="environment-element" />
+        </xsl:variable>
+        <xsl:element name="{$element}">
+            <xsl:attribute name="class">
+               <xsl:apply-templates select="." mode="environment-class" />
+            </xsl:attribute>
+            <xsl:apply-templates select="." mode="head" />
+            <xsl:apply-templates select="." mode="body" />
+        </xsl:element>
+        <div class="context-link" style="text-align:right;">
+            <xsl:element name="a">
+                <xsl:attribute name="href">
+                    <xsl:apply-templates select="." mode="url" />
+                </xsl:attribute>
+                <xsl:text>(in-context)</xsl:text>
+            </xsl:element>
+        </div>
+    </exsl:document>
+</xsl:template>
+
+<!-- Knowls for born-hidden content -->
+<!-- (1) context link is useless    -->
+<!-- (2) live in a div              -->
+<!-- (3) have no id info in content -->
+<!-- (4) only have a body           -->
+<xsl:template match="*" mode="hidden-knowl-factory">
+    <xsl:element name="div">
+        <!-- different id, for use by the knowl mechanism -->
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="hidden-knowl-id" />
+        </xsl:attribute>
+        <!-- not "visibility,"" display:none takes no space -->
+        <xsl:attribute name="style">
+            <xsl:text>display: none;</xsl:text>
+        </xsl:attribute>
+        <!-- Do not process the contents on page load, wait until it is exposed -->
+        <xsl:attribute name="class">
+            <xsl:text>tex2jax_ignore</xsl:text>
+        </xsl:attribute>
+        <xsl:variable name="element">
+            <xsl:apply-templates select="." mode="environment-element" />
+        </xsl:variable>
+        <xsl:element name="{$element}">
+            <xsl:attribute name="class">
+               <xsl:apply-templates select="." mode="environment-class" />
+            </xsl:attribute>
+            <xsl:apply-templates select="." mode="body" />
+        </xsl:element>
+    </xsl:element>
+  </xsl:template>
+
+
+
+
+<!-- ########### -->
+<!-- HTML Markup -->
+<!-- ########### -->
 
 <!-- Wrap generic paragraphs in p tag -->
 <xsl:template match="p">
@@ -673,53 +1038,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- TODO: trash escaping by building content with hex nbsp -->
 
 <!-- A cross-reference has a visual component,      -->
 <!-- formed above, and a realization as a hyperlink -->
-<!-- We build the latter here                       -->
-<!-- TODO: maybe create knowls via the "url" mode template? -->
+<!-- or as a knowl.  Default is a link              -->
 <xsl:template match="*" mode="xref-hyperlink">
     <xsl:param name="content" />
-    <xsl:element name ="a">
-        <!-- http://stackoverflow.com/questions/585261/is-there-an-xslt-name-of-element -->
-        <!-- Sans namespace (would be name(.)) -->
-        <xsl:attribute name="class">
-            <xsl:value-of select="local-name(.)" />
-        </xsl:attribute>
+    <xsl:element name="a">
         <xsl:attribute name="href">
             <xsl:apply-templates select="." mode="url" />
         </xsl:attribute>
-    <xsl:value-of  disable-output-escaping="yes" select="$content" />
+        <xsl:value-of  disable-output-escaping="yes" select="$content" />
+    </xsl:element>
+</xsl:template>
+<!-- Now, those items that are knowls -->
+<!-- TODO: proof|figure|table|exercise|me|men|mrow (hint|answer|solution|note) -->
+<xsl:template match="fn|biblio|example|remark|theorem|corollary|lemma|proposition|claim|fact|definition|axiom|conjecture|principle" mode="xref-hyperlink">
+    <xsl:param name="content" />
+    <xsl:element name="a">
+        <xsl:attribute name="knowl">
+            <xsl:apply-templates select="." mode="xref-knowl-filename" />
+        </xsl:attribute>
+        <!-- TODO: check if this "knowl-id" is needed, knowl.js implies it is -->
+        <xsl:attribute name="knowl-id">
+            <xsl:text>xref-</xsl:text>
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:attribute>
+        <xsl:attribute name="title">
+            <xsl:apply-templates select="title" />
+        </xsl:attribute>
+        <xsl:value-of  disable-output-escaping="yes" select="$content" />
     </xsl:element>
 </xsl:template>
 
-<!-- Footnotes                                             -->
-<!-- Mimicking basic LaTeX, but as knowls                  -->
-<!-- Put content into knowl, then make a knowl link for it -->
-<!-- The knowl link gets placed into a superscript         -->
-<xsl:template match="fn">
-    <xsl:variable name="ident">
-        <xsl:text>footnote-</xsl:text>
-        <xsl:apply-templates select="." mode="number" />
-    </xsl:variable>
-    <!-- -->
-    <xsl:call-template name="knowl-factory">
-        <xsl:with-param name="identifier" select="$ident" />
-        <xsl:with-param name="content">
-            <xsl:apply-templates />
-        </xsl:with-param>
-    </xsl:call-template>
-    <!-- -->
-    <sup>
-    <xsl:call-template name="knowl-link-factory">
-        <xsl:with-param name="css-class">footnote</xsl:with-param>
-        <xsl:with-param name="identifier" select="$ident" />
-        <xsl:with-param name="content">
-            <xsl:apply-templates select="." mode="number" />
-        </xsl:with-param>
-    </xsl:call-template>
-    </sup>
-</xsl:template>
 
 
 <!-- Miscellaneous -->
@@ -937,41 +1289,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Raw Bibliographic Entry Formatting              -->
 <!-- Markup really, not full-blown data preservation -->
 
-<!-- Entry could be a list item                      -->
-<!-- if we wrote enclosing HTML and overrode display -->
-<!-- Also manufacture a knowl,as a matter of course  -->
-<xsl:template match="biblio[@type='raw']">
-    <xsl:element name="div">
-        <xsl:attribute name="class">biblio</xsl:attribute>
-        <xsl:attribute name="id"><xsl:apply-templates select="." mode="internal-id" /></xsl:attribute>
-        <xsl:comment>Style me, please. (Maybe as a list item with hard-coded numbers/labels, not automatic, or just a span)</xsl:comment>
-        <p>
-            <xsl:text>[</xsl:text>
-                <xsl:apply-templates select="." mode="origin-id" />
-            <xsl:text>]</xsl:text>
-            <xsl:text disable-output-escaping="yes">&amp;nbsp;&amp;nbsp;</xsl:text>
-            <xsl:apply-templates select="text()|*[not(self::note)]" />
-        </p>
-        <xsl:apply-templates select="note" />
-    </xsl:element>
-    <xsl:call-template name="knowl-factory">
-        <xsl:with-param name="identifier">
-            <xsl:apply-templates select="." mode="internal-id" />
-        </xsl:with-param>
-        <xsl:with-param name="content">
-            <span class="article">
-            <xsl:apply-templates />
-            </span>
-        </xsl:with-param>
-    </xsl:call-template>
-</xsl:template>
-
-<!-- Bibliographic items can have annotations            -->
-<!-- Presumably just paragraphs, nothing too complicated -->
-<xsl:template match="biblio/note">
-    <xsl:apply-templates />
-</xsl:template>
-
 <!-- Title in italics -->
 <xsl:template match="biblio[@type='raw']/title">
     <i><xsl:apply-templates /></i>
@@ -1023,35 +1340,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{align}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Manufacturing Knowls              -->
-<!-- "knowl" subdirectory is hardcoded -->
-<!-- Name knowls as *.html so a known filetype for servers -->
-<!-- First, make actual content in predictable location    -->
-<xsl:template name="knowl-factory">
-    <xsl:param name="identifier"/>
-    <xsl:param name="content"/>
-    <exsl:document href="./knowl/{$identifier}.html" method="html">
-        <xsl:call-template name="converter-blurb" />
-        <xsl:copy-of select="$content" />
-    </exsl:document>
-</xsl:template>
-<!-- Second, make a clickable knowl link -->
-<xsl:template name="knowl-link-factory">
-    <xsl:param name="css-class"/>
-    <xsl:param name="identifier"/>
-    <xsl:param name="content"/>
-    <xsl:element name ="a">
-        <xsl:attribute name="class">
-            <xsl:value-of select="$css-class" />
-        </xsl:attribute>
-        <xsl:attribute name="knowl">
-            <xsl:text>./knowl/</xsl:text>
-            <xsl:value-of select="$identifier" />
-            <xsl:text>.html</xsl:text>
-        </xsl:attribute>
-        <xsl:value-of select="$content" />
-    </xsl:element>
-</xsl:template>
+
 
 <!-- Sage Cells -->
 <!-- TODO: make hidden autoeval cells link against sage-compute cells -->
@@ -1994,6 +2283,7 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
 <!-- Legacy code: not maintained                  -->
 <!-- Banish to common file when removed, as error -->
 <!-- 2014/06/25: implemented with xref as link, need to duplicate knowl functionality -->
+<!-- 2014/08/14: remove knowl-link-factory at the same time -->
 <xsl:template match="cite[@ref]">
     <xsl:message>MBX:WARNING: &lt;cite ref="<xsl:value-of select="@ref" />&gt; is deprecated, convert to &lt;xref ref="<xsl:value-of select="@ref" />"&gt;</xsl:message>
     <xsl:call-template name="knowl-link-factory">
@@ -2011,6 +2301,24 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
             <xsl:text>]</xsl:text>
         </xsl:with-param>
     </xsl:call-template>
+</xsl:template>
+
+<!-- Only used by <cite> above, so can be removed at same time -->
+<xsl:template name="knowl-link-factory">
+    <xsl:param name="css-class"/>
+    <xsl:param name="identifier"/>
+    <xsl:param name="content"/>
+    <xsl:element name ="a">
+        <xsl:attribute name="class">
+            <xsl:value-of select="$css-class" />
+        </xsl:attribute>
+        <xsl:attribute name="knowl">
+            <xsl:text>./knowl/</xsl:text>
+            <xsl:value-of select="$identifier" />
+            <xsl:text>.html</xsl:text>
+        </xsl:attribute>
+        <xsl:value-of select="$content" />
+    </xsl:element>
 </xsl:template>
 
 </xsl:stylesheet>
