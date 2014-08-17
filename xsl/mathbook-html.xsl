@@ -337,9 +337,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- explicit subdivisions, to introduce or summarize  -->
 <!-- No title allowed, typically just a few paragraphs -->
 <xsl:template match="introduction|conclusion">
-    <section class="{local-name(.)}">
+    <article class="{local-name(.)}">
         <xsl:apply-templates />
-    </section>
+    </article>
 </xsl:template>
 
 
