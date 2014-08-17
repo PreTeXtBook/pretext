@@ -124,7 +124,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='editor'><xsl:text>Editor</xsl:text></localization>
 </xsl:variable>
 
-<!-- pt-BR, Brazilian Portugese, Igor Morgado, 2014/08/11 -->
+<!-- pt-BR, Brazilian Portugese -->
+<!-- Igor Morgado, morgado.igor@gmail.com, 2014/08/11, 2014/08/14 -->
 <xsl:variable name="pt-BR">
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id="theorem">Teorema</localization>
@@ -140,15 +141,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='axiom'><xsl:text>Axioma</xsl:text></localization>
     <localization string-id='principle'><xsl:text>Princípio</xsl:text></localization>
     <!-- Types of documents, mostly for informational messages -->
-    <localization string-id='volume'><xsl:text>XXXVolume</xsl:text></localization>
+    <localization string-id='volume'><xsl:text>Volume</xsl:text></localization>
     <localization string-id='book'><xsl:text>Livro</xsl:text></localization>
     <localization string-id='article'><xsl:text>Artigo</xsl:text></localization>
     <localization string-id='letter'><xsl:text>Carta</xsl:text></localization>
-    <localization string-id='memo'><xsl:text>XXXMemo</xsl:text></localization>
-    <localization string-id='presentation'><xsl:text>XXXPresentation</xsl:text></localization>
+    <localization string-id='memo'><xsl:text>Memorando</xsl:text></localization>
+    <localization string-id='presentation'><xsl:text>Apresentação</xsl:text></localization>
     <!-- Parts of a document -->
     <localization string-id='frontmatter'><xsl:text>Pré-textual</xsl:text></localization>
-    <localization string-id='part'><xsl:text>XXXPart</xsl:text></localization>
+    <localization string-id='part'><xsl:text>Parte</xsl:text></localization>
     <localization string-id='chapter'><xsl:text>Capítulo</xsl:text></localization>
     <localization string-id='appendix'><xsl:text>Apêndice</xsl:text></localization>
     <localization string-id='section'><xsl:text>Seção</xsl:text></localization>
@@ -163,11 +164,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='remark'><xsl:text>Observação</xsl:text></localization>
     <localization string-id='figure'><xsl:text>Figura</xsl:text></localization>
     <localization string-id='table'><xsl:text>Tabela</xsl:text></localization>
-    <localization string-id='fn'><xsl:text>XXXFootnote</xsl:text></localization>
+    <localization string-id='fn'><xsl:text>Nota de rodapé</xsl:text></localization>
     <!-- Parts of an exercise and it's solution -->
     <localization string-id='exercise'><xsl:text>Exercício</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Dica</xsl:text></localization>
-    <localization string-id='answer'><xsl:text>XXXAnswer</xsl:text></localization>
+    <localization string-id='answer'><xsl:text>Resposta</xsl:text></localization>
     <localization string-id='solution'><xsl:text>Solução</xsl:text></localization>
      <!-- Front matter components -->
     <localization string-id='toc'><xsl:text>Sumário</xsl:text></localization>
@@ -181,22 +182,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Parts of the Index -->
     <localization string-id='indexsection'><xsl:text>Índice</xsl:text></localization>
     <localization string-id='see'><xsl:text>veja</xsl:text></localization>
-    <localization string-id='also'><xsl:text>XXXsee also</xsl:text></localization>
+    <localization string-id='also'><xsl:text>veja também</xsl:text></localization>
     <!-- Navigation Interface elements -->
     <localization string-id='previous'><xsl:text>Anterior</xsl:text></localization>
     <localization string-id='up'><xsl:text>Acima</xsl:text></localization>
     <localization string-id='next'><xsl:text>Próximo</xsl:text></localization>
     <!-- NB: Use toc from above for both headings and navigation sidebar-->
     <localization string-id='annotations'><xsl:text>Anotações</xsl:text></localization>
-    <localization string-id='feedback'><xsl:text>XXXFeedback</xsl:text></localization>
+    <localization string-id='feedback'><xsl:text>Comentário</xsl:text></localization>
     <localization string-id='authored'><xsl:text>Feito com</xsl:text></localization>
     <!-- Parts of memos and letters -->
-    <localization string-id='to'><xsl:text>XXXTo</xsl:text></localization>
-    <localization string-id='from'><xsl:text>XXXFrom</xsl:text></localization>
-    <localization string-id='subject'><xsl:text>XXXSubject</xsl:text></localization>
-    <localization string-id='date'><xsl:text>XXXDate</xsl:text></localization>
-    <localization string-id='copy'><xsl:text>XXXcc</xsl:text></localization>
-    <localization string-id='enclosure'><xsl:text>XXXencl</xsl:text></localization>
+    <localization string-id='to'><xsl:text>Para</xsl:text></localization>
+    <localization string-id='from'><xsl:text>De</xsl:text></localization>
+    <localization string-id='subject'><xsl:text>Assunto</xsl:text></localization>
+    <localization string-id='date'><xsl:text>Data</xsl:text></localization>
+    <localization string-id='copy'><xsl:text>Cópia</xsl:text></localization>
+    <localization string-id='enclosure'><xsl:text>Anexo</xsl:text></localization>
     <!-- Various -->
     <localization string-id='todo'><xsl:text>Para fazer</xsl:text></localization>
     <localization string-id='editor'><xsl:text>Editor</xsl:text></localization>
