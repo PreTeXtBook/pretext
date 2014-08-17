@@ -549,7 +549,7 @@ is just flat out on the page, as if printed there.
 <xsl:template match="example|remark" mode="head">
     <h5 class="heading">
         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-        <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+        <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
         <xsl:if test="title">
             <span class="title"><xsl:apply-templates select="title" /></span>
         </xsl:if>
@@ -577,7 +577,7 @@ is just flat out on the page, as if printed there.
 <xsl:template match="definition|axiom|conjecture|principle" mode="head">
     <h5 class="heading">
         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-        <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+        <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
         <xsl:if test="title">
             <span class="title"><xsl:apply-templates select="title" /></span>
         </xsl:if>
@@ -606,7 +606,7 @@ is just flat out on the page, as if printed there.
 <xsl:template match="theorem|corollary|lemma|proposition|claim|fact" mode="head">
     <h5 class="heading">
         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-        <span class="counter"><xsl:apply-templates select="." mode="number" /></span>
+        <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
         <xsl:if test="title">
             <span class="title"><xsl:apply-templates select="title" /></span>
         </xsl:if>
@@ -678,7 +678,7 @@ is just flat out on the page, as if printed there.
         <h5 class="heading">
         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
         <xsl:text> </xsl:text>
-        <span class="counter"><xsl:apply-templates select="." mode="origin-id" /></span>
+        <span class="codenumber"><xsl:apply-templates select="." mode="origin-id" /></span>
         <xsl:if test="title">
             <xsl:text> </xsl:text>
             <span class="title"><xsl:apply-templates select="title" /></span>
@@ -967,7 +967,7 @@ is just flat out on the page, as if printed there.
         <span class="heading">
             <xsl:apply-templates select=".." mode="type-name"/>
         </span>
-        <span class="counter">
+        <span class="codenumber">
             <xsl:apply-templates select=".." mode="number"/>
         </span>
         <xsl:apply-templates />
