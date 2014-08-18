@@ -312,11 +312,9 @@ class MathBookXMLtoSWS(object):
             base, ext = os.path.splitext(afile)
             if ext in ['.svg', '.SVG']:
                 pattern = os.path.join(self._source_dir, base + '_*.png')
-                print "GOTIT", source, pattern
                 for f in glob.glob(pattern):
                     _, includedfile = os.path.split(f)
                     dest = os.path.join(base_dir, data_dir, base + '_*.png')
-                    print "SUBS", f, dest
                     T.add(f, arcname=dest)
 
         T.close()
