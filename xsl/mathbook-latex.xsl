@@ -104,11 +104,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="latex-preamble" />
     <xsl:call-template name="title-page-info-article" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
-    <xsl:if test="/mathbook/article/title or /mathbook/docinfo/event or /mathbook/docinfo/author or/mathbook/docinfo/editor or /mathbook/docinfo/date">
+    <xsl:if test="title or frontmatter/titlepage">
         <xsl:text>\maketitle&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
-    <xsl:apply-templates select="abstract"/>
+    <xsl:apply-templates select="frontmatter/abstract" />
     <xsl:if test="$toc-level > 0">
         <xsl:text>\setcounter{tocdepth}{</xsl:text>
         <xsl:value-of select="$toc-level" />
@@ -121,8 +121,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\tableofcontents&#xa;</xsl:text>
         <xsl:text>\clearpage&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="*[not(self::abstract or self::title or self::bibliography)]"/>
-    <xsl:apply-templates select="bibliography"/>
+    <xsl:apply-templates select="*[not(self::frontmatter or self::title or self::subtitle)]"/>
     <xsl:call-template name="latex-postamble" />
    <xsl:text>\end{document}</xsl:text>
 </xsl:template>
@@ -616,9 +615,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template name="title-page-info-book">
     <xsl:text>%% Title page information for book&#xa;</xsl:text>
-    <xsl:text>\title{</xsl:text><xsl:apply-templates select="title" /><xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\author{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/author" /><xsl:apply-templates select="/mathbook/docinfo/editor" /><xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\date{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/date" /><xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\title{</xsl:text>
+    <xsl:apply-templates select="title" />
+    <xsl:if test="subtitle">
+        <xsl:text>\\&#xa;</xsl:text>
+        <!-- Trying to match author fontsize -->
+        <xsl:text>{\large </xsl:text>
+        <xsl:apply-templates select="subtitle" />
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\author{</xsl:text><xsl:apply-templates select="frontmatter/titlepage/author" /><xsl:apply-templates select="frontmatter/titlepage/editor" /><xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\date{</xsl:text><xsl:apply-templates select="frontmatter/titlepage/date" /><xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Includes an "event" for presentations -->
@@ -626,6 +634,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Title page information for article&#xa;</xsl:text>
     <xsl:text>\title{</xsl:text>
     <xsl:apply-templates select="title" />
+    <xsl:if test="subtitle">
+        <xsl:text>\\&#xa;</xsl:text>
+        <!-- Trying to match author fontsize -->
+        <xsl:text>{\large </xsl:text>
+        <xsl:apply-templates select="subtitle" />
+        <xsl:text>}</xsl:text>
+    </xsl:if>
     <xsl:if test="/mathbook/docinfo/event">
         <xsl:if test="title">
             <xsl:text>\\</xsl:text>
@@ -633,8 +648,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="/mathbook/docinfo/event" />
     </xsl:if>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\author{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/author" /><xsl:apply-templates select="/mathbook/docinfo/editor" /><xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\date{</xsl:text><xsl:apply-templates select="/mathbook/docinfo/date" /><xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\author{</xsl:text><xsl:apply-templates select="frontmatter/titlepage/author" /><xsl:apply-templates select="frontmatter/titlepage/editor" /><xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\date{</xsl:text><xsl:apply-templates select="frontmatter/titlepage/date" /><xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 
@@ -647,8 +662,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% half-title&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
-    <xsl:text>\begin{center}\Huge&#xa;</xsl:text>
-    <xsl:apply-templates select="/mathbook/book/title" />
+    <xsl:text>\begin{center}&#xa;</xsl:text>
+    <xsl:text>{\Huge </xsl:text>
+    <xsl:apply-templates select="title" />
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:if test="subtitle">
+        <xsl:text>\\[2\baselineskip]{\Large </xsl:text>
+        <xsl:apply-templates select="subtitle" />
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>\end{center}\par&#xa;</xsl:text>
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
     <xsl:text>\clearpage&#xa;</xsl:text>
@@ -660,27 +682,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Lots of stuff here, much of it optional  -->
 <xsl:template name="copyright-page" >
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
-    <xsl:if test="/mathbook/docinfo/author/biography" >
+    <xsl:if test="frontmatter/titlepage/author/biography|frontmatter/titlepage/editor/biography" >
         <xsl:text>{\setlength{\parindent}{0pt}\setlength{\parskip}{4pt}</xsl:text>
-        <xsl:apply-templates select="/mathbook/docinfo/author/biography" />}
+        <xsl:apply-templates select="frontmatter/titlepage/author/biography|frontmatter/titlepage/editor/biography" />}
         <xsl:text>\par\vspace*{\stretch{2}}</xsl:text>
     </xsl:if>
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
-    <xsl:if test="/mathbook/docinfo/edition" >
+    <xsl:if test="frontmatter/colophon/edition" >
         <xsl:text>\noindent{\bf Edition}: </xsl:text>
-        <xsl:apply-templates select="/mathbook/docinfo/edition" />}
+        <xsl:apply-templates select="frontmatter/colophon/edition" />}
         <xsl:text>\par&#xa;</xsl:text>
     </xsl:if>
-
     <!-- TODO: split out copyright section as template -->
-    <xsl:if test="/mathbook/docinfo/copyright" >
-        <xsl:text>\noindent\copyright{}</xsl:text>
-        <xsl:apply-templates select="/mathbook/docinfo/copyright/year" />
+    <xsl:if test="frontmatter/colophon/copyright" >
+        <xsl:text>\noindent\copyright\ </xsl:text>
+        <xsl:apply-templates select="frontmatter/colophon/copyright/year" />
         <xsl:text>\quad{}</xsl:text>
-        <xsl:apply-templates select="/mathbook/docinfo/copyright/holder" />
-        <xsl:if test="/mathbook/docinfo/copyright/shortlicense">
+        <xsl:apply-templates select="frontmatter/colophon/copyright/holder" />
+        <xsl:if test="frontmatter/colophon/copyright/shortlicense">
             <xsl:text>\\[0.5\baselineskip]&#xa;</xsl:text>
-            <xsl:apply-templates select="/mathbook/docinfo/copyright/shortlicense" />
+            <xsl:apply-templates select="frontmatter/colophon/copyright/shortlicense" />
         </xsl:if>
         <xsl:text>\par&#xa;</xsl:text>
     </xsl:if>
