@@ -1524,9 +1524,16 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             </xsl:if>
         </head>
         <xsl:element name="body">
-            <xsl:if test="$toc-level > 0">
-                <xsl:attribute name="class">has-toc has-sidebar-left</xsl:attribute> <!-- later add right -->
-            </xsl:if>
+            <!-- the first class controls the default icon -->
+            <xsl:attribute name="class">
+                <xsl:choose>
+                    <xsl:when test="/mathbook/book">mathbook-book</xsl:when>
+                    <xsl:when test="/mathbook/article">mathbook-article</xsl:when>
+                </xsl:choose>
+                <xsl:if test="$toc-level > 0">
+                    <xsl:text> has-toc has-sidebar-left</xsl:text> <!-- note space, later add right -->
+                </xsl:if>
+            </xsl:attribute>
             <xsl:call-template name="latex-macros" />
              <header id="masthead">
                 <div class="banner">
@@ -2203,12 +2210,19 @@ $(function () {
 
 <!-- Brand Logo -->
 <!-- Place image in masthead -->
+<!-- TODO: separate url and image, now need both or neither -->
+<!-- should allow specifying just URL and get default image -->
 <xsl:template name="brand-logo">
-    <xsl:if test="/mathbook/docinfo/brandlogo">
-        <a id="logo-link" href="{/mathbook/docinfo/brandlogo/@url}" target="_blank" >
-            <img src="{/mathbook/docinfo/brandlogo/@source}" />
-        </a>
-    </xsl:if>
+    <xsl:choose>
+        <xsl:when test="/mathbook/docinfo/brandlogo">
+            <a id="logo-link" href="{/mathbook/docinfo/brandlogo/@url}" target="_blank" >
+                <img src="{/mathbook/docinfo/brandlogo/@source}" />
+            </a>
+        </xsl:when>
+        <xsl:otherwise>
+            <a id="logo-link" href="" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Analytics Footers -->
