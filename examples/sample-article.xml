@@ -44,65 +44,105 @@ the xsltproc executable.
 <mathbook>
 
     <!--
-    "docinfo" is like metadata, it mostly migrates
-    various places, or gets used multiple times
+    "docinfo" is like metadata, it is necessary technical
+    information which a reader mostly will never see.  LaTeX
+    macros and Web analytics project numbers are good examples.
+    If you are getting started, you do not need any of this initially.
+    So on a first reading, skip ahead to the article tag.
     -->
     <docinfo>
-        <!-- There can be several authors here -->
-        <author>
-            <personname>Robert Beezer</personname>
-            <department>Department of Mathematics and Computer Science</department>
-            <!-- Use "break" tag anywhere for forced line break -->
-            <institution>University of Puget Sound<br />Tacoma, Washington, USA</institution>
-            <email>beezer@pugetsound.edu</email>
-        </author>
-        <!-- Could set date manually or use the "today" element -->
-        <date><today /></date>
+        <!--
+        In the HTML version there is room for a picture or logo
+        in the upper left corner.  An image of a cover for a
+        physical version is a good choice to go here.  We use
+        16th Century Art Book Cover, 176x240 pixels, Public Domain, due to age
+        http://commons.wikimedia.org/wiki/File:Book_Cover_-_Google_Art_Project.jpg
+        -->
+        <brandlogo url="http://mathbook.pugetsound.edu" source="images/book-cover-google-art-project.jpg" />
         <!--
         TeX/LaTeX macros can be written in the usual way.
         Whitespace and line breaks are irrelevant here.
+        These are "write once, use everywhere".
         -->
         <macros>
         \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4}
         \newcommand{\indefiniteintegral}[2]{\int#1\,d#2}
         </macros>
-<!--
+        <!--
         The Sage Notebook has its own interface and worksheet list.
         To use the sorting features optimally, it helps to have subdivisions
-        begin with the same short prefix.  An "initialization" (nee acronym)
+        begin with the same short prefix.  An "initialism" (nee acronym)
         here will be used for that purpose if present.  This is only employed
         for producing Sage notebook versions. (If not present, you will get a
         harmless warning just for Sage worksheet production.)
--->
-        <initialization>SA</initialization>
+        -->
+        <initialism>SA</initialism>
     </docinfo>
 
     <!--
     The article element is top-level for anything short of a book.
     There is a book element, which is not demonstrated here.
-    The "filebase" attribute is used for the filename of the
-    HTML output, s part of a chunking scheme that is not complete.
+    The "xml:id" attribute will be used for the filename of the
+    HTML output.
     -->
     <article xml:id="derivatives">
         <title>Derivatives and Integrals</title>
+        <subtitle>An Annotated Discourse</subtitle>
+
+        <!--
+        The frontmatter contains a variety of items that precede
+        the actual content.  They tend to get placed in the "right"
+        place and order, and not necessarily the order they appear here.
+        They differ from "docinfo" items in that they will be *content*
+        that a reader will actually see.
+
+        The xml:id string is used to form a filename for the webpage.
+        Setting this one to "index" makes for a good default page
+        when you host your project on a server.
+        -->
+
+        <frontmatter xml:id="index">
+            <!--
+            Items typically on the main title page, perhaps duplicated
+            in the half-title page, page headings, etc.
+            One exception - main title and (optional) subtitle follow
+            the scheme for titling any division of the work.
+             -->
+
+            <titlepage>
+
+               <!-- There can be several authors here -->
+                <author>
+                    <personname>Robert Beezer</personname>
+                    <department>Department of Mathematics and Computer Science</department>
+                    <!-- Use "break" tag anywhere for forced line break -->
+                    <institution>University of Puget Sound<br />Tacoma, Washington, USA</institution>
+                    <email>beezer@pugetsound.edu</email>
+                </author>
+
+                <!-- Can set date manually or use the "today" element -->
+                <date><today /></date>
+
+            </titlepage>
+
+            <abstract>
+                <p>This is a sample of many of the things you can do with MathBook XML.  Sometimes the math makes sense, sometimes it seems to be written in the first person, sort of like this Abstract.</p>
+            </abstract>
+            <!--
+            Acknowledgements, dedications, colophon (ISBN, copyright, etc)
+            are supported in the book document type.  Such a diverse range
+            is not yet available for articles.  Send requests.
+             -->
+        </frontmatter>
+
         <!--
         Articles have sections, which have subsections,
-        which have subsubsections.  A titled-paragraph
-        subdivision is planned.  These are all "containers"
+        which have subsubsections.These are all "containers"
         and so line breaks and extraneous whitespace gets
         scrubbed.  Use indentation and line breaks liberally
         within containers to make the structure of your 
         source readable.
-
-        An abstract and a bibliography are like special sections,
-        they belong at the same level in the hierarchy as a
-        section.
         -->
-        <todo>Titled paragraph subdivisions</todo>
-
-        <abstract>
-            <p>This is a sample of many of the things you can do with MathBook XML.  Sometimes the math makes sense, sometimes it seems to be written in the first person, sort of like this Abstract.</p>
-        </abstract>
 
         <section>
             <title>Introduction</title>
