@@ -845,8 +845,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Some units don't have titles or numbers -->
-<!-- TODO: bibliography, abstract(?), others -->
-<xsl:template match="preface|acknowledgement|authorbiography|foreword|dedication|colophon" mode="long-name">
+<xsl:template match="preface|abstract|acknowledgement|authorbiography|foreword|dedication|colophon" mode="long-name">
     <xsl:apply-templates select="." mode="type-name" />
     <xsl:text> </xsl:text>
 </xsl:template>
@@ -920,7 +919,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Numbering Subdivisions without Numbers -->
 <!-- Only one, or not subdivisible, or ... -->
 <!-- TODO: add more frontmatter, backmatter as it stabilizes -->
-<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraph|frontmatter|preface|acknowledgement|authorbiography" mode="number"/>
+<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraph|frontmatter|preface|abstract|acknowledgement|authorbiography|foreword|dedication|colophon" mode="number"/>
 
 <!-- Numbering Theorems, Definitions, Examples, Inline Exercises, Figures, etc.-->
 <!-- Sructural to a configurable depth, then numbered across depth -->

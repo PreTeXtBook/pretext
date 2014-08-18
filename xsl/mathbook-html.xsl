@@ -87,7 +87,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="personname" />
 </xsl:template>
 <xsl:template match="editor[1]" mode="name-list" >
-    <xsl:if test="/mathbook/docinfo/author" >
+    <xsl:if test="//frontmatter/titlepage/author" >
         <xsl:text>, </xsl:text>
     </xsl:if>
     <xsl:apply-templates select="personname" />
@@ -141,6 +141,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="book|article|frontmatter|chapter|appendix|preface|acknowledgement|authorbiography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references">
     <xsl:variable name="summary"><xsl:apply-templates select="." mode="is-summary" /></xsl:variable>
     <xsl:variable name="webpage"><xsl:apply-templates select="." mode="is-webpage" /></xsl:variable>
+    <!-- Useful for debugging:
+    <xsl:message><xsl:value-of select="local-name(.)"/><xsl:value-of select="$summary"/><xsl:value-of select="$webpage"/></xsl:message>
+    -->
     <xsl:choose>
         <xsl:when test="$summary='false' and $webpage='false'">
             <xsl:apply-templates select="." mode="content" />
@@ -193,8 +196,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:with-param>
         <!-- Serial list of authors, then editors, as names only -->
          <xsl:with-param name="credits">
-            <xsl:apply-templates select="/mathbook/docinfo/author" mode="name-list"/>
-            <xsl:apply-templates select="/mathbook/docinfo/editor" mode="name-list"/>
+            <xsl:apply-templates select="//frontmatter/titlepage/author" mode="name-list"/>
+            <xsl:apply-templates select="//frontmatter/titlepage/editor" mode="name-list"/>
         </xsl:with-param>
         <xsl:with-param name="content">
             <!-- Heading, div for subdivision that is this page -->
@@ -238,8 +241,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:with-param>
         <!-- Serial list of authors, then editors, as names only -->
          <xsl:with-param name="credits">
-            <xsl:apply-templates select="/mathbook/docinfo/author" mode="name-list"/>
-            <xsl:apply-templates select="/mathbook/docinfo/editor" mode="name-list"/>
+            <xsl:apply-templates select="//frontmatter/titlepage/author" mode="name-list"/>
+            <xsl:apply-templates select="//frontmatter/titlepage/editor" mode="name-list"/>
         </xsl:with-param>
         <xsl:with-param name="content">
             <!-- Heading, div for subdivision that is this page -->
@@ -276,7 +279,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Document summaries -->
 <!-- On a summary page, some items get summarized (eg subdivisions become links)          -->
-<!-- some do not.  For eample and introduction just gets reproduced verbatim              -->
+<!-- some do not.  For example, an introduction just gets reproduced verbatim             -->
 <!-- NB: listed here roughly in "order of appearance", note <nav> section of summary page -->
 
 <!-- A titlepage is a front-matter introduction      -->
@@ -321,6 +324,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO's can be anywhere and we do not want to see them -->
 <xsl:template match="todo" mode="summary-entry" />
 
+<!-- ####################### -->
+<!-- Front Matter Components -->
+<!-- ####################### -->
+
 <!-- Title Page -->
 <!-- A frontmatter has no title, so we reproduce the            -->
 <!-- title of the work (book or article) here                   -->
@@ -330,8 +337,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <span class="title"><xsl:apply-templates select="/mathbook/book/title|/mathbook/article/title" /></span>
     </h1>
     <address class="contributors">
-        <xsl:apply-templates select="/mathbook/docinfo/author|/mathbook/docinfo/editor" mode="full-info"/>
+        <xsl:apply-templates select="author|editor" mode="full-info"/>
     </address>
+    <xsl:if test="date">
+        <p style="text-align:center"><xsl:apply-templates select="date" /></p>
+    </xsl:if>
+</xsl:template>
+
+<!-- Colophon -->
+<!-- Licenses, ISBN, Cover Designer, etc -->
+<!-- We process pieces, in document order -->
+<!-- TODO: edition, publisher, production notes, cover design, etc -->
+<!-- TODO: revision control commit hash -->
+<xsl:template match="colophon/copyright">
+    <p>
+        <xsl:text>&#xa9;</xsl:text>
+        <xsl:apply-templates select="year" />
+        <xsl:text>&#xa0;&#xa0;</xsl:text>
+        <xsl:apply-templates select="holder" />
+    </p>
+    <xsl:if test="shortlicense">
+        <p>
+            <xsl:apply-templates select="shortlicense" />
+        </p>
+    </xsl:if>
 </xsl:template>
 
 <!-- Introductions and Conclusions -->
@@ -1603,7 +1632,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <xsl:choose>
         <xsl:when test="$summary='true'">
             <!-- Descend once, will always have a child that is structural -->
-            <xsl:variable name="first-structural-child" select="*[not(self::title or self::subtitle or self::todo or self::introduction or self::conclusion)][1]" />
+            <xsl:variable name="first-structural-child" select="*[not(self::title or self::subtitle or self::todo or self::introduction or self::conclusion or self::titlepage or self::author)][1]" />
             <xsl:variable name="structural">
                 <xsl:apply-templates select="$first-structural-child" mode="is-structural" />
             </xsl:variable>
