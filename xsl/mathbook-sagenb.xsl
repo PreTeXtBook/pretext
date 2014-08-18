@@ -115,9 +115,9 @@
     <xsl:value-of  disable-output-escaping="yes" select="$content" />
 </xsl:template>
 
-<!-- Document node summaries are normally links to the page    -->
-<!-- Override for Sage Notebook production, no anchor/href     -->
-<!-- We format these as smaller headings                       -->
+<!-- Document node summaries are normally links to the page         -->
+<!-- Override for Sage Notebook production, no anchor/href, no type -->
+<!-- We format these as smaller headings                            -->
 <xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection" mode="summary-entry">
     <h5 class="heading">
         <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
@@ -128,7 +128,8 @@
 
 <!-- Some document nodes will not normally have titles and we need default titles -->
 <!-- Especially if one-off (eg Preface), or generic (Exercises)                   -->
-<!-- Override for Sage Notebook production, no anchor/href                        -->
+<!-- These mostly will not have numbers, either                                   -->
+<!-- Override for Sage Notebook production, no anchor/href, no type               -->
 <!-- We format these as smaller headings                                          -->
 <xsl:template match="exercises|references|frontmatter|preface|acknowledgement|biography|foreword|dedication|colophon" mode="summary-entry">
     <h5 class="heading">
