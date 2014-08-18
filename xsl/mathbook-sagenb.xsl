@@ -35,10 +35,10 @@
     <!-- their titles and their assets within       -->
     <!-- Creates a Python assignment, to be exec'ed -->
     <xsl:if test="$purpose='info'">
-        <xsl:if test="not(/mathbook/docinfo/initialization)">
-            <xsl:message>MBX:WARNING: providing an &lt;inititalization&gt; in the &lt;docinfo&gt; can make the Sage Notebook worksheet list more usable</xsl:message>
+        <xsl:if test="not(//docinfo/initialism)">
+            <xsl:message>MBX:WARNING: providing an &lt;initialism&gt; in the &lt;docinfo&gt; can make the Sage Notebook worksheet list more usable</xsl:message>
         </xsl:if>
-        <xsl:if test="/mathbook//program">
+        <xsl:if test="//program">
             <xsl:message>MBX:WARNING: syntax highlighting of program listings is not possible in the Sage Notebook - though you will see a display with a black monospace font</xsl:message>
         </xsl:if>
         <xsl:text>manifest = [</xsl:text>
@@ -187,37 +187,39 @@
         <xsl:call-template name="css" />
         <xsl:call-template name="styling" />            
         <xsl:call-template name="latex-macros" />
-        <header>
-            <h1 class="heading">
-                <span class="title"><xsl:value-of select="$title" /></span>
-                <p id="byline"><span class="byline"><xsl:value-of select="$credits" /></span></p>
-            </h1>
-            <!-- Write a URL into the header of each page, on principle -->
-            <xsl:if test="/mathbook/docinfo/website or /mathbook/docinfo/copyright">
-                <h5 class="heading">
-                    <xsl:if test="/mathbook/docinfo/copyright">
-                        <xsl:apply-templates select="/mathbook/docinfo/copyright" mode="type-name" />
-                        <xsl:text> </xsl:text>
-                        <xsl:apply-templates select="/mathbook/docinfo/copyright/year" />
-                        <xsl:if test="/mathbook/docinfo/copyright/minilicense">
+        <xsl:if test="not(self::frontmatter)" >
+            <header>
+                <h1 class="heading">
+                    <span class="title"><xsl:value-of select="$title" /></span>
+                    <p id="byline"><span class="byline"><xsl:value-of select="$credits" /></span></p>
+                </h1>
+                <!-- Write a URL into the header of each page, on principle -->
+                <xsl:if test="//colophon/website or //colophon/copyright">
+                    <h5 class="heading">
+                        <xsl:if test="//colophon/copyright">
+                            <xsl:apply-templates select="//colophon/copyright" mode="type-name" />
                             <xsl:text> </xsl:text>
-                            <xsl:apply-templates select="/mathbook/docinfo/copyright/minilicense" />
+                            <xsl:apply-templates select="//colophon/copyright/year" />
+                            <xsl:if test="//colophon/copyright/minilicense">
+                                <xsl:text> </xsl:text>
+                                <xsl:apply-templates select="//colophon/copyright/minilicense" />
+                            </xsl:if>
+                            <xsl:if test="//colophon/website">
+                                <br />
+                            </xsl:if>
                         </xsl:if>
-                        <xsl:if test="/mathbook/docinfo/website">
-                            <br />
+                        <xsl:if test="//colophon/website">
+                            <xsl:element name="a">
+                                <xsl:attribute name="href">
+                                    <xsl:apply-templates select="//colophon/website/url" />
+                                </xsl:attribute>
+                                <xsl:apply-templates select="//colophon/website/title" />
+                            </xsl:element>
                         </xsl:if>
-                    </xsl:if>
-                    <xsl:if test="/mathbook/docinfo/website">
-                        <xsl:element name="a">
-                            <xsl:attribute name="href">
-                                <xsl:apply-templates select="/mathbook/docinfo/website/url" />
-                            </xsl:attribute>
-                            <xsl:apply-templates select="/mathbook/docinfo/website/title" />
-                        </xsl:element>
-                    </xsl:if>
-                </h5>
-            </xsl:if>
-        </header>
+                    </h5>
+                </xsl:if>
+            </header>
+        </xsl:if>
         <xsl:copy-of select="$content" />
         <!--
         Script tags seem to confuse the notebook, so this is a broader problem
@@ -261,9 +263,9 @@
         <!-- Title, prepended for Sage NB ToC sorting-->
         <!-- Triply-quoted for apostrophe, quote protection -->
         <xsl:text>"""</xsl:text>
-        <!-- NB: coordinate with inititalization warning in 'info' template -->
-        <xsl:if test="/mathbook/docinfo/initialization">
-            <xsl:value-of select="/mathbook/docinfo/initialization" />
+        <!-- NB: coordinate with inititalism warning in 'info' template -->
+        <xsl:if test="//docinfo/initialism">
+            <xsl:value-of select="//docinfo/initialism" />
             <xsl:text>-</xsl:text>
         </xsl:if>
         <!-- Protect against double-dash for un-numbered divisions -->
@@ -272,7 +274,14 @@
             <xsl:value-of select="$num" />
             <xsl:text>-</xsl:text>
         </xsl:if>
-        <xsl:apply-templates select="title/node()[not(self::fn)]" />
+        <xsl:choose>
+            <xsl:when test="title">
+                <xsl:apply-templates select="title/node()[not(self::fn)]" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="type-name" />
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:text>"""</xsl:text>
         <xsl:text>, </xsl:text>
         <!-- Any included files, necessary for inclusions -->
