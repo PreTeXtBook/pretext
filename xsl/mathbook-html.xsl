@@ -138,7 +138,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   (b) A summary web page (level less than chunking-level, not a document leaf)     -->
 <!--   (c) A visual component of some enclosing web page                                -->
 <!-- They are dispatched here, and recurse back to handle children, typically           -->
-<xsl:template match="book|article|frontmatter|chapter|appendix|preface|acknowledgement|authorbiography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references">
+<xsl:template match="book|article|frontmatter|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references">
     <xsl:variable name="summary"><xsl:apply-templates select="." mode="is-summary" /></xsl:variable>
     <xsl:variable name="webpage"><xsl:apply-templates select="." mode="is-webpage" /></xsl:variable>
     <!-- Useful for debugging:
@@ -274,7 +274,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
          </xsl:with-param>
      </xsl:apply-templates>
      <!-- Summary-entries do not recurse, need to restart outside web page wrapper -->
-    <xsl:apply-templates select="book|article|frontmatter|chapter|appendix|preface|acknowledgement|authorbiography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references" />
+    <xsl:apply-templates select="book|article|frontmatter|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references" />
 </xsl:template>
 
 <!-- Document summaries -->
@@ -303,7 +303,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Some document nodes will not normally have titles and we need default titles -->
 <!-- Especially if one-off (eg Preface), or generic (Exercises)                   -->
 <!-- See overrides in Sage Notebook production                                    -->
-<xsl:template match="exercises|references|frontmatter|preface|acknowledgement|authorbiography|foreword|dedication|colophon" mode="summary-entry">
+<xsl:template match="exercises|references|frontmatter|preface|acknowledgement|biography|foreword|dedication|colophon" mode="summary-entry">
     <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
     <a href="{$url}">
         <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>

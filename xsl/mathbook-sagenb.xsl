@@ -130,7 +130,7 @@
 <!-- Especially if one-off (eg Preface), or generic (Exercises)                   -->
 <!-- Override for Sage Notebook production, no anchor/href                        -->
 <!-- We format these as smaller headings                                          -->
-<xsl:template match="exercises|references|frontmatter|preface|acknowledgement|authorbiography|foreword|dedication|colophon" mode="summary-entry">
+<xsl:template match="exercises|references|frontmatter|preface|acknowledgement|biography|foreword|dedication|colophon" mode="summary-entry">
     <h5 class="heading">
         <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
         <xsl:text> </xsl:text>

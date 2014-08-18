@@ -682,9 +682,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Lots of stuff here, much of it optional  -->
 <xsl:template name="copyright-page" >
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
-    <xsl:if test="frontmatter/titlepage/author/biography|frontmatter/titlepage/editor/biography" >
+    <xsl:if test="frontmatter/biography" >
         <xsl:text>{\setlength{\parindent}{0pt}\setlength{\parskip}{4pt}</xsl:text>
-        <xsl:apply-templates select="frontmatter/titlepage/author/biography|frontmatter/titlepage/editor/biography" />}
+        <xsl:apply-templates select="frontmatter/biography" />}
         <xsl:text>\par\vspace*{\stretch{2}}</xsl:text>
     </xsl:if>
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>

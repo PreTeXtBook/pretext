@@ -96,7 +96,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='abstract'><xsl:text>Abstract</xsl:text></localization>
     <localization string-id='preface'><xsl:text>Preface</xsl:text></localization>
     <localization string-id='acknowledgement'><xsl:text>Acknowledgements</xsl:text></localization>
-    <localization string-id='authorbiography'><xsl:text>Author Biographies</xsl:text></localization>
+    <localization string-id='biography'><xsl:text>Author Biography</xsl:text></localization>
     <localization string-id='foreword'><xsl:text>Foreword</xsl:text></localization>
     <localization string-id='dedication'><xsl:text>Dedication</xsl:text></localization>
     <localization string-id='colophon'><xsl:text>Colophon</xsl:text></localization>
@@ -176,7 +176,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='abstract'><xsl:text>Resumo</xsl:text></localization>
     <localization string-id='preface'><xsl:text>Prefácio</xsl:text></localization>
     <localization string-id='acknowledgement'><xsl:text>Agradecimentos</xsl:text></localization>
-    <localization string-id='authorbiography'><xsl:text>Biografia do Autor</xsl:text></localization>
+    <localization string-id='biography'><xsl:text>Biografia do Autor</xsl:text></localization>
     <localization string-id='foreword'><xsl:text>Preâmbulo</xsl:text></localization>
     <localization string-id='dedication'><xsl:text>Dedicatória</xsl:text></localization>
     <localization string-id='colophon'><xsl:text>Ficha técnica</xsl:text></localization>
