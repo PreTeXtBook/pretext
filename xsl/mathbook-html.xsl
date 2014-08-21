@@ -2102,6 +2102,8 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!--   these are just the contents of the \label on an equation -->
 <!--   which we provide as the xml:id of the equation           -->
 <!-- Note: we could set \label with something different         -->
+<!-- Autobold extension is critical for captions (bold'ed) that -->
+<!-- have mathematics in them (suggested by P. Krautzberger)    -->
 <xsl:template name="mathjax">
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -2109,7 +2111,7 @@ MathJax.Hub.Config({
         inlineMath: [['\\(','\\)']]
     },
     TeX: {
-        extensions: ["AMSmath.js", "AMSsymbols.js"],
+        extensions: ["AMSmath.js", "AMSsymbols.js", "autobold.js"],
         equationNumbers: { autoNumber: "none",
                            useLabelIds: true,
                            formatID: function (n) {return String(n).replace(/[:'"&lt;&gt;&amp;]/g,"")},
