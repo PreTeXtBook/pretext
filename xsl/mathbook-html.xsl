@@ -267,7 +267,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- NB: be more careful about just wrapping links -->
                 <xsl:apply-templates select="titlepage|introduction" mode="summary-entry"/>
                 <nav class="summary-links">
-                    <xsl:apply-templates select="*[not(self::title or self::author or self::titlepage or self::introduction or self::conclusion)]" mode="summary-entry" />
+                    <xsl:apply-templates select="*[not(self::title or self::subtitle or self::author or self::titlepage or self::introduction or self::conclusion)]" mode="summary-entry" />
                 </nav>
                 <xsl:apply-templates select="conclusion" mode="summary-entry"/>
             </section>
