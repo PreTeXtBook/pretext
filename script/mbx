@@ -554,7 +554,7 @@ elif args.component == 'asy':
         asymptote_conversion(args.xml_file, args.dir, 'source')
     else:
         raise NotImplementedError('cannot make Asymptote diagrams in "{}" format'.format(args.format))
-elif args.component == 'sage':
+elif args.component == 'sageplot':
     if args.format == 'pdf':
         sage_conversion(args.xml_file, args.dir, 'pdf')
     elif args.format == 'svg':
