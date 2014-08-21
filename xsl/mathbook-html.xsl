@@ -1514,8 +1514,17 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <!-- Need to be careful for format of this initial string     -->
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
     <html> <!-- lang="", and/or dir="rtl" here -->
+        <xsl:call-template name="converter-blurb" />
         <head>
-            <xsl:call-template name="converter-blurb" />
+            <title>
+                <!-- Leading with initials is useful for small tabs -->
+                <xsl:if test="//docinfo/initialism">
+                    <xsl:apply-templates select="//docinfo/initialism" />
+                    <xsl:text> </xsl:text>
+                </xsl:if>
+            <xsl:apply-templates select="title/node()[not(self::fn)]" />  <!-- footnotes again -->
+            </title>
+            <meta name="Keywords" content="Authored in MathBook XML" />
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
             <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
             <xsl:call-template name="mathjax" />
