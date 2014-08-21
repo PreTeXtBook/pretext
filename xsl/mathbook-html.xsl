@@ -289,14 +289,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="."/>
 </xsl:template>
 
+<!-- TODO: combine these next two when thre is a title template -->
+
 <!-- Document node summaries are just links to the page -->
 <!-- See overrides in Sage Notebook production          -->
 <xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection" mode="summary-entry">
+    <xsl:variable name="num"><xsl:apply-templates select="." mode="number" /></xsl:variable>
     <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
     <a href="{$url}">
-        <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
-        <xsl:text> </xsl:text>
-        <span class="title"><xsl:apply-templates select="title" /></span>
+        <!-- important not include codenumber span -->
+        <xsl:if test="$num!=''">
+            <span class="codenumber"><xsl:value-of select="$num" /></span>
+        </xsl:if>
+        <span class="title"><xsl:apply-templates select="title/node()[not(self::fn)]" /></span>
     </a>
 </xsl:template>
 
@@ -304,14 +309,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Especially if one-off (eg Preface), or generic (Exercises)                   -->
 <!-- See overrides in Sage Notebook production                                    -->
 <xsl:template match="exercises|references|frontmatter|preface|acknowledgement|biography|foreword|dedication|colophon" mode="summary-entry">
+    <xsl:variable name="num"><xsl:apply-templates select="." mode="number" /></xsl:variable>
     <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
     <a href="{$url}">
-        <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
-        <xsl:text> </xsl:text>
+        <!-- important not include codenumber span -->
+        <xsl:if test="$num!=''">
+            <span class="codenumber"><xsl:value-of select="$num" /></span>
+        </xsl:if>
         <span class="title">
             <xsl:choose>
                 <xsl:when test="title">
-                    <xsl:apply-templates select="title" />
+                    <xsl:apply-templates select="title/node()[not(self::fn)]" />
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:apply-templates select="." mode="type-name" />
@@ -1951,10 +1959,19 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                     </xsl:choose>
                 </xsl:variable>
                 <!-- The link itself -->
-                <h2 class="{$class}"><a href="{$outer-url}">
-                <xsl:apply-templates select="." mode="number" />
-                <xsl:text> </xsl:text>
-                <xsl:apply-templates select="." mode="toc-entry" /></a></h2>
+                <h2 class="{$class}">
+                    <a href="{$outer-url}">
+                        <!-- <xsl:apply-templates select="." mode="number" /> -->
+                        <!-- <xsl:text> </xsl:text> -->
+                        <xsl:variable name="num"><xsl:apply-templates select="." mode="number" /></xsl:variable>
+                        <xsl:if test="$num!=''">
+                            <span class="codenumber"><xsl:value-of select="$num" /></span>
+                        </xsl:if>
+                        <span class="title">
+                            <xsl:apply-templates select="." mode="toc-entry" />
+                        </span>
+                    </a>
+                </h2>
                 <xsl:if test="$toc-level > 1">
                     <ul>
                     <xsl:for-each select="./*">
