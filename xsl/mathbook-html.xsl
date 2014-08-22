@@ -73,9 +73,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.knowl.table" select="'no'" />
 <xsl:param name="html.knowl.exercise" select="'no'" />
 
-
-<!-- Entry template is in mathbook-common file -->
-
 <!-- Authors, editors in serial lists for headers           -->
 <!-- Presumes authors get selected first, so editors follow -->
 <!-- TODO: Move to common -->
@@ -126,28 +123,56 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- ################## -->
-<!-- Document Structure -->
-<!-- ################## -->
+<!-- ############################# -->
+<!-- Document Structure, version 2 -->
+<!-- ############################# -->
 
-<!-- Document Nodes -->
-<!-- The document tree is all the structural components of the book                     -->
-<!-- Here we decide if they are web pages, or just visual components of a web page      -->
-<!-- Each such document node is                                                         -->
-<!--   (a) A web page full of content (at chunking level, or below and a document leaf) -->
-<!--   (b) A summary web page (level less than chunking-level, not a document leaf)     -->
-<!--   (c) A visual component of some enclosing web page                                -->
-<!-- They are dispatched here, and recurse back to handle children, typically           -->
-<xsl:template match="book|article|frontmatter|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references">
+<!-- Some XML nodes reflect the overall structure                 -->
+<!-- of the document, such as chapter, section, backmatter.       -->
+<!-- A routine in the common file describes precisely which ones. -->
+<!--                                                             -->
+<!-- Sometimes these nodes are a leaf of the structure tree,      -->
+<!-- with no children that are structural.  A routine in          -->
+<!-- the common file will identify this situation.                -->
+<!--                                                             -->
+<!-- Also in the common file, the "chunking" level is used to     -->
+<!-- decide which of these nodes is a summary of its children,    -->
+<!-- and which should comprise an entire HTML page (where the     -->
+<!-- structure is just evidenced typographically).                -->
+<!--                                                              -->
+<!-- The "dispatch" template decides which of these two cases     -->
+<!-- to handle.                                                   -->
+
+
+<!-- Entry Point -->
+<!-- This is the entry point for this stylesheet          -->
+<!-- The root <mathbook> element has two children         -->
+<!-- typically.  We kill <docinfo> for use in an ad-hoc   -->
+<!-- fashion, and dispatch the other (book, article, etc) -->
+<xsl:template match="/mathbook">
+    <xsl:apply-templates mode="dispatch" />
+</xsl:template>
+
+<xsl:template match="docinfo" mode="dispatch" />
+
+<!-- Dispatch -->
+<!-- This routine should only ever receive a         -->
+<!-- structual document node.  Anything at           -->
+<!-- chunking level, or leaves at lesser levels,     -->
+<!-- becomes a web page of its own.                  -->
+<!--                                                 -->
+<!-- Otherwise a node has structural children, so we -->
+<!-- create a page that is a summary of the node.    -->
+<!-- See below about page decorations.               -->
+<xsl:template match="*" mode="dispatch">
+    <xsl:variable name="structural"><xsl:apply-templates select="." mode="is-structural" /></xsl:variable>
+    <xsl:if test="$structural='false'">
+        <xsl:message>MBX:BUG: Dispatching a node (<xsl:apply-templates  select="." mode="long-name"/>) that is not structural.</xsl:message>
+    </xsl:if>
     <xsl:variable name="summary"><xsl:apply-templates select="." mode="is-summary" /></xsl:variable>
     <xsl:variable name="webpage"><xsl:apply-templates select="." mode="is-webpage" /></xsl:variable>
-    <!-- Useful for debugging:
-    <xsl:message><xsl:value-of select="local-name(.)"/><xsl:value-of select="$summary"/><xsl:value-of select="$webpage"/></xsl:message>
-    -->
+    <!-- <xsl:message>INFO: <xsl:value-of select="local-name(.)"/> Summary: <xsl:value-of select="$summary"/> Webpage: <xsl:value-of select="$webpage"/> Name: <xsl:apply-templates  select="." mode="long-name"/></xsl:message> -->
     <xsl:choose>
-        <xsl:when test="$summary='false' and $webpage='false'">
-            <xsl:apply-templates select="." mode="content" />
-        </xsl:when>
         <xsl:when test="$webpage='true'">
             <xsl:apply-templates select="." mode="webpage" />
         </xsl:when>
@@ -160,9 +185,127 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Document nodes subsidiary to a web page                -->
-<!-- Make heading and enclosing div, no page infrastructure -->
-<xsl:template match="*" mode="content">
+<!-- Page Decorations -->
+<!-- Even if we summarize a node, it has some    -->
+<!-- decorations we would like to ignore.  So    -->
+<!-- we do not dispatch these and just slide by. -->
+<xsl:template match="title|subtitle|author|introduction|abstract|titlepage|conclusion" mode="dispatch" />
+
+<!-- Summary Page -->
+<!-- A summary page has some initial decorations,       -->
+<!-- such as title, author and introduction.  Then      -->
+<!-- the structural subnodes become links in a          -->
+<!-- navigation section, followed by some final         -->
+<!-- decorations like conclusions.                      -->
+<!--                                                    -->
+<!-- The webpage parameters below should be clear, while -->
+<!-- the content is a heading, followed by mostly a list -->
+<!-- of hyperlinks to the subsidiary document nodes.  So -->
+<!-- we can isolate the links, we hit everything on the  -->
+<!-- page three times, mostly doing nothing.             -->
+<!--                                                     -->
+<!-- Once concluded, we dispatch all the elements,       -->
+<!-- knowing some will get killed immediately.           -->
+<xsl:template match="*" mode="summary">
+    <xsl:apply-templates select="." mode="page-wrap">
+        <xsl:with-param name="title">
+            <xsl:apply-templates select="/mathbook/book/title|/mathbook/article/title" />
+        </xsl:with-param>
+        <xsl:with-param name="subtitle">
+            <xsl:apply-templates select="/mathbook/book/subtitle|/mathbook/article/subtitle" />
+        </xsl:with-param>
+        <!-- Serial list of authors, then editors, as names only -->
+         <xsl:with-param name="credits">
+            <xsl:apply-templates select="//frontmatter/titlepage/author" mode="name-list"/>
+            <xsl:apply-templates select="//frontmatter/titlepage/editor" mode="name-list"/>
+        </xsl:with-param>
+        <xsl:with-param name="content">
+            <!-- Heading, div for subdivision that is this page -->
+             <section class="{local-name(.)}">
+                <header>
+                    <h1 class="heading">
+                        <xsl:if test="not(self::book or self::article or self::frontmatter)">
+                            <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+                            <xsl:text> </xsl:text>
+                            <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
+                            <xsl:text> </xsl:text>
+                        </xsl:if>
+                        <xsl:if test="not(self::frontmatter)">
+                            <span class="title"><xsl:apply-templates select="title" /></span>
+                        </xsl:if>
+                    </h1>
+                    <xsl:if test="author">
+                        <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
+                    </xsl:if>
+                </header>
+                <!-- Summarize elements of the node (which could be verbatim) -->
+                <xsl:apply-templates select="*" mode="summary-prenav" />
+                <nav class="summary-links">
+                    <xsl:apply-templates select="*" mode="summary-nav" />
+                </nav>
+                <xsl:apply-templates select="*" mode="summary-postnav"/>
+            </section>
+         </xsl:with-param>
+     </xsl:apply-templates>
+     <!-- Summary-mode templates do not recurse,  -->
+     <!-- need to restart outside web page        -->
+     <!-- wrapper and dispatch everything         -->
+    <xsl:apply-templates mode="dispatch" />
+</xsl:template>
+
+<!-- Some elements inside a document node being summarized    -->
+<!-- appear as content on the summary page, or are otherwise  -->
+<!-- handled in an ad-hoc fashion (titles).  These can appear -->
+<!-- before, or after, a navigation section, which holds      -->
+<!-- links to the elements that are again structural.         -->
+
+<!-- Pre-Navigation -->
+<xsl:template match="introduction|titlepage|abstract" mode="summary-prenav">
+    <xsl:apply-templates select="."/>
+</xsl:template>
+<xsl:template match="*" mode="summary-prenav" />
+
+<!-- Post-Navigation -->
+<xsl:template match="conclusion" mode="summary-postnav">
+    <xsl:apply-templates select="."/>
+</xsl:template>
+<xsl:template match="*" mode="summary-postnav" />
+
+<!-- Navigation -->
+<!-- Any structural node becomes a hyperlink        -->
+<!-- Could recurse into "dispatch" inside the "if", -->
+<!-- but might pile too much onto the stack?        -->
+<xsl:template match="*" mode="summary-nav">
+    <xsl:variable name="structural">
+        <xsl:apply-templates select="." mode="is-structural" />
+    </xsl:variable>
+    <xsl:if test="$structural='true'">
+        <xsl:variable name="num"><xsl:apply-templates select="." mode="number" /></xsl:variable>
+        <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
+        <a href="{$url}">
+            <!-- important not include codenumber span -->
+            <xsl:if test="$num!=''">
+                <span class="codenumber"><xsl:value-of select="$num" /></span>
+            </xsl:if>
+            <span class="title">
+                <xsl:choose>
+                    <xsl:when test="title">
+                        <xsl:apply-templates select="title/node()[not(self::fn)]" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:apply-templates select="." mode="type-name" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </span>
+        </a>
+    </xsl:if>
+</xsl:template>
+
+<!-- Document Nodes -->
+<!-- A structural node may be one of many on a web page -->
+<!-- We make an HTML section, then a header, then       -->
+<!-- recurse into remaining content                     -->
+<xsl:template match="book|article|frontmatter|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references">
     <xsl:variable name="url"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
     <section class="{local-name(.)}" id="{$url}">
         <header>
@@ -180,12 +323,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </header>
         <!-- Now recurse through contents, ignoring title and author -->
-        <xsl:apply-templates  select="./*[not(self::title or self::author)]"/>
+        <!-- Just applying templates right and left -->
+        <xsl:apply-templates  select="./*[not(self::title or self::subtitle or self::author)]"/>
     </section>
 </xsl:template>
 
-<!-- Document nodes that are an entire webpage               -->
-<!-- A node at the top-level of a page, build infrastructure -->
+<!-- Web Page -->
+<!-- When a structural node is the parent of an   -->
+<!-- entire web page, we build it here as content -->
+<!-- sent to the web page wrapping template       -->
 <xsl:template match="*" mode="webpage">
     <xsl:apply-templates select="." mode="page-wrap">
         <xsl:with-param name="title">
@@ -222,115 +368,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </header>
                 </xsl:if>
                 <!-- Recurse through contents inside enclosing section, ignore title, author -->
-                <xsl:apply-templates select="*[not(self::title or self::author)]" />
+                <xsl:apply-templates select="./*[not(self::title or self::subtitle or self::author)]" />
             </section>
          </xsl:with-param>
      </xsl:apply-templates>
 </xsl:template>
 
-<!-- Document node that is a summary of children                  -->
-<!-- Build a page and create summaries of children                -->
-<!-- Some summaries are actual content (introductions, typically) -->
-<xsl:template match="*" mode="summary">
-    <xsl:apply-templates select="." mode="page-wrap">
-        <xsl:with-param name="title">
-            <xsl:apply-templates select="/mathbook/book/title|/mathbook/article/title" />
-        </xsl:with-param>
-        <xsl:with-param name="subtitle">
-            <xsl:apply-templates select="/mathbook/book/subtitle|/mathbook/article/subtitle" />
-        </xsl:with-param>
-        <!-- Serial list of authors, then editors, as names only -->
-         <xsl:with-param name="credits">
-            <xsl:apply-templates select="//frontmatter/titlepage/author" mode="name-list"/>
-            <xsl:apply-templates select="//frontmatter/titlepage/editor" mode="name-list"/>
-        </xsl:with-param>
-        <xsl:with-param name="content">
-            <!-- Heading, div for subdivision that is this page -->
-             <section class="{local-name(.)}">
-                <header>
-                    <h1 class="heading">
-                        <xsl:if test="not(self::book or self::article or self::frontmatter)">
-                            <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-                            <xsl:text> </xsl:text>
-                            <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
-                            <xsl:text> </xsl:text>
-                        </xsl:if>
-                        <xsl:if test="not(self::frontmatter)">
-                            <span class="title"><xsl:apply-templates select="title" /></span>
-                        </xsl:if>
-                    </h1>
-                    <xsl:if test="author">
-                        <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
-                    </xsl:if>
-                </header>
-                <!-- Create summaries of each child node (which will be a document node) -->
-                <!-- NB: be more careful about just wrapping links -->
-                <xsl:apply-templates select="titlepage|introduction" mode="summary-entry"/>
-                <nav class="summary-links">
-                    <xsl:apply-templates select="*[not(self::title or self::subtitle or self::author or self::titlepage or self::introduction or self::conclusion)]" mode="summary-entry" />
-                </nav>
-                <xsl:apply-templates select="conclusion" mode="summary-entry"/>
-            </section>
-         </xsl:with-param>
-     </xsl:apply-templates>
-     <!-- Summary-entries do not recurse, need to restart outside web page wrapper -->
-    <xsl:apply-templates select="book|article|frontmatter|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references" />
-</xsl:template>
-
-<!-- Document summaries -->
-<!-- On a summary page, some items get summarized (eg subdivisions become links)          -->
-<!-- some do not.  For example, an introduction just gets reproduced verbatim             -->
-<!-- NB: listed here roughly in "order of appearance", note <nav> section of summary page -->
-
-<!-- A titlepage is a front-matter introduction      -->
-<!-- We always handle these the same, summary or not -->
-<!-- So this just calls the default template         -->
-<xsl:template match="titlepage|introduction|conclusion" mode="summary-entry">
-    <xsl:apply-templates select="."/>
-</xsl:template>
-
-<!-- TODO: combine these next two when thre is a title template -->
-
-<!-- Document node summaries are just links to the page -->
-<!-- See overrides in Sage Notebook production          -->
-<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection" mode="summary-entry">
-    <xsl:variable name="num"><xsl:apply-templates select="." mode="number" /></xsl:variable>
-    <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
-    <a href="{$url}">
-        <!-- important not include codenumber span -->
-        <xsl:if test="$num!=''">
-            <span class="codenumber"><xsl:value-of select="$num" /></span>
-        </xsl:if>
-        <span class="title"><xsl:apply-templates select="title/node()[not(self::fn)]" /></span>
-    </a>
-</xsl:template>
-
-<!-- Some document nodes will not normally have titles and we need default titles -->
-<!-- Especially if one-off (eg Preface), or generic (Exercises)                   -->
-<!-- See overrides in Sage Notebook production                                    -->
-<xsl:template match="exercises|references|frontmatter|preface|acknowledgement|biography|foreword|dedication|colophon" mode="summary-entry">
-    <xsl:variable name="num"><xsl:apply-templates select="." mode="number" /></xsl:variable>
-    <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
-    <a href="{$url}">
-        <!-- important not include codenumber span -->
-        <xsl:if test="$num!=''">
-            <span class="codenumber"><xsl:value-of select="$num" /></span>
-        </xsl:if>
-        <span class="title">
-            <xsl:choose>
-                <xsl:when test="title">
-                    <xsl:apply-templates select="title/node()[not(self::fn)]" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="type-name" />
-                </xsl:otherwise>
-            </xsl:choose>
-        </span>
-    </a>
- </xsl:template>
-
-<!-- TODO's can be anywhere and we do not want to see them -->
-<xsl:template match="todo" mode="summary-entry" />
 
 <!-- ####################### -->
 <!-- Front Matter Components -->
