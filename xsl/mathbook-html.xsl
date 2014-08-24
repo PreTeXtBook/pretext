@@ -206,23 +206,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Heading, div for subdivision that is this page -->
             <!-- frontmatter/titlepage is exceptional           -->
              <section class="{local-name(.)}">
-                <xsl:if test="not(self::frontmatter)">
-                    <header>
-                        <h1 class="heading">
-                            <!-- Book 1 or Article 1 is silly -->
-                            <xsl:if test="not(self::book or self::article )">
-                                <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-                                <xsl:text> </xsl:text>
-                                <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
-                                <xsl:text> </xsl:text>
-                            </xsl:if>
-                            <span class="title"><xsl:apply-templates select="title" /></span>
-                        </h1>
-                        <!-- Subdivisions may have individual authors -->
-                        <xsl:if test="author">
-                            <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
-                        </xsl:if>
-                    </header>
+                <xsl:if test="not(self::frontmatter)">   <!-- (just kill it?) -->
+                    <xsl:apply-templates select="." mode="section-header" />
                 </xsl:if>
                 <!-- Recurse through contents inside enclosing section, ignore title, author -->
                 <xsl:apply-templates select="./*[not(self::title or self::subtitle or self::author)]" />
@@ -267,23 +252,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:with-param>
         <xsl:with-param name="content">
             <!-- Heading, div for subdivision that is this page -->
-             <section class="{local-name(.)}">
-                <header>
-                    <h1 class="heading">
-                        <xsl:if test="not(self::book or self::article or self::frontmatter)">
-                            <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-                            <xsl:text> </xsl:text>
-                            <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
-                            <xsl:text> </xsl:text>
-                        </xsl:if>
-                        <xsl:if test="not(self::frontmatter)">
-                            <span class="title"><xsl:apply-templates select="title" /></span>
-                        </xsl:if>
-                    </h1>
-                    <xsl:if test="author">
-                        <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
-                    </xsl:if>
-                </header>
+            <section class="{local-name(.)}">
+                <xsl:apply-templates select="." mode="section-header" />
                 <!-- Summarize elements of the node (which could be verbatim) -->
                 <xsl:apply-templates select="*" mode="summary-prenav" />
                 <nav class="summary-links">
@@ -354,26 +324,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="book|article|frontmatter|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references">
     <xsl:variable name="url"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
     <section class="{local-name(.)}" id="{$url}">
-        <header>
-            <h1 class="heading">
-                <xsl:if test="not(self::book or self::article)">
-                    <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-                    <xsl:text> </xsl:text>
-                    <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
-                    <xsl:text> </xsl:text>
-                </xsl:if>
-                <span class="title"><xsl:apply-templates select="title" /></span>
-            </h1>
-            <xsl:if test="author">
-                <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
-            </xsl:if>
-        </header>
+        <xsl:apply-templates select="." mode="section-header" />
         <!-- Now recurse through contents, ignoring title and author -->
         <!-- Just applying templates right and left -->
         <xsl:apply-templates  select="./*[not(self::title or self::subtitle or self::author)]"/>
     </section>
 </xsl:template>
 
+<!-- Header for Document Nodes -->
+<!-- Every document node goes the same way, a    -->
+<!-- heading followed by its subsidiary elements -->
+<!-- hit with templates.  This is the header.    -->
+<xsl:template match="*" mode="section-header">
+    <header>
+        <h1 class="heading">
+            <xsl:if test="not(self::book or self::article)"> <!-- kill with type-code-title template -->
+                <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+                <xsl:text> </xsl:text>
+                <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
+                <xsl:text> </xsl:text>
+            </xsl:if>
+            <span class="title"><xsl:apply-templates select="title" /></span>
+        </h1>
+        <xsl:if test="author">
+            <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
+        </xsl:if>
+    </header>
+</xsl:template>
+
+<!-- The "frontmatter" node will always lead with -->
+<!-- a pseudo-introduction that is the titlepage. -->
+<!-- The section-header is then redundant.        -->
+<xsl:template match="frontmatter" mode="section-header" />
 
 <!-- ####################### -->
 <!-- Front Matter Components -->
