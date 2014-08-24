@@ -205,7 +205,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="content">
             <!-- Heading, div for subdivision that is this page -->
             <!-- frontmatter/titlepage is exceptional           -->
-             <section class="{local-name(.)}">
+                <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
+                <section class="{local-name(.)}" id="{$ident}">
                 <xsl:if test="not(self::frontmatter)">   <!-- (just kill it?) -->
                     <xsl:apply-templates select="." mode="section-header" />
                 </xsl:if>
@@ -252,7 +253,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:with-param>
         <xsl:with-param name="content">
             <!-- Heading, div for subdivision that is this page -->
-            <section class="{local-name(.)}">
+            <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
+            <section class="{local-name(.)}" id="{$ident}">
                 <xsl:apply-templates select="." mode="section-header" />
                 <!-- Summarize elements of the node (which could be verbatim) -->
                 <xsl:apply-templates select="*" mode="summary-prenav" />
@@ -322,8 +324,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We make an HTML section, then a header, then       -->
 <!-- recurse into remaining content                     -->
 <xsl:template match="book|article|frontmatter|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references">
-    <xsl:variable name="url"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
-    <section class="{local-name(.)}" id="{$url}">
+    <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
+    <section class="{local-name(.)}" id="{$ident}">
         <xsl:apply-templates select="." mode="section-header" />
         <!-- Now recurse through contents, ignoring title and author -->
         <!-- Just applying templates right and left -->
