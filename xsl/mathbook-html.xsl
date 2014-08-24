@@ -1974,11 +1974,11 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- Includes "active" class for enclosing outer node              -->
 <!-- Node set equality and subset based on unions of subtrees, see -->
 <!-- http://www.xml.com/cookbooks/xsltckbk/solution.csp?day=5      -->
+<!-- TODO: split out inner link formation, outer link formation? -->
 <xsl:template match="*" mode="toc-items">
-    <!-- Subtree for page this sidebar will adorn -->
-    <xsl:variable name="this-page-node" select="descendant-or-self::*" />
     <xsl:if test="$toc-level > 0">
-        <nav id="toc">
+        <!-- Subtree for page this sidebar will adorn -->
+        <xsl:variable name="this-page-node" select="descendant-or-self::*" />
         <xsl:for-each select="/mathbook/book/*|/mathbook/article/*">
             <xsl:variable name="structural">
                 <xsl:apply-templates select="." mode="is-structural" />
@@ -2001,11 +2001,20 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
+                <xsl:variable name="outer-internal">
+                    <xsl:apply-templates select="." mode="internal-id" />
+                </xsl:variable>
                 <!-- The link itself -->
                 <h2 class="{$class}">
-                    <a href="{$outer-url}">
-                        <!-- <xsl:apply-templates select="." mode="number" /> -->
-                        <!-- <xsl:text> </xsl:text> -->
+                    <xsl:element name="a">
+                        <xsl:attribute name="href">
+                            <xsl:value-of select="$outer-url" />
+                        </xsl:attribute>
+                        <xsl:if test="1 > html.chunk.level">
+                            <xsl:attribute name="data-scroll">
+                                <xsl:value-of select="$outer-internal" />
+                            </xsl:attribute>
+                        </xsl:if>
                         <xsl:variable name="num"><xsl:apply-templates select="." mode="number" /></xsl:variable>
                         <xsl:if test="$num!=''">
                             <span class="codenumber"><xsl:value-of select="$num" /></span>
@@ -2013,7 +2022,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                         <span class="title">
                             <xsl:apply-templates select="." mode="toc-entry" />
                         </span>
-                    </a>
+                    </xsl:element>
                 </h2>
                 <xsl:if test="$toc-level > 1">
                     <ul>
@@ -2027,22 +2036,32 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                             <xsl:variable name="inner-url">
                                 <xsl:apply-templates select="." mode="url" />
                             </xsl:variable>
-                            <xsl:variable name="internal">
+                            <xsl:variable name="inner-internal">
                                 <xsl:apply-templates select="." mode="internal-id" />
                             </xsl:variable>
-                            <li><a href="{$inner-url}" data-scroll="{$internal}">
-                            <!-- Add if an "active" class if this is where we are -->
-                            <xsl:if test="count($this-page-node|$inner-node) = count($inner-node)">
-                                <xsl:attribute name="class">active</xsl:attribute>
-                            </xsl:if>
-                            <xsl:apply-templates select="." mode="toc-entry" /></a></li>
+                            <li>
+                                <xsl:element name="a">
+                                    <xsl:attribute name="href">
+                                        <xsl:value-of select="$inner-url" />
+                                    </xsl:attribute>
+                                    <xsl:if test="2 > html.chunk.level">
+                                        <xsl:attribute name="data-scroll">
+                                            <xsl:value-of select="$outer-internal" />
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <!-- Add if an "active" class if this is where we are -->
+                                    <xsl:if test="count($this-page-node|$inner-node) = count($inner-node)">
+                                        <xsl:attribute name="class">active</xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:apply-templates select="." mode="toc-entry" />
+                                </xsl:element>
+                            </li>
                         </xsl:if>
                     </xsl:for-each>
                     </ul>
                 </xsl:if>
             </xsl:if>
         </xsl:for-each>
-        </nav>
     </xsl:if>
 </xsl:template>
 
@@ -2225,6 +2244,8 @@ $(function () {
 
 <!-- Mathbook Javascript header -->
 <xsl:template name="mathbook-js">
+    <!-- condition first on toc present? -->
+    <script src="http://mathbook.staging.michaeldubois.me/develop/js/lib/jquery.espy.min.js"></script>
     <script src="http://mathbook.staging.michaeldubois.me/develop/js/lib/jquery.sticky.js"></script>
     <script src="http://mathbook.staging.michaeldubois.me/develop/js/Mathbook.js"></script>
 </xsl:template>
