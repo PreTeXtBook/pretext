@@ -185,6 +185,52 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Web Page -->
+<!-- When a structural node is the parent of an   -->
+<!-- entire web page, we build it here as content -->
+<!-- sent to the web page wrapping template       -->
+<xsl:template match="*" mode="webpage">
+    <xsl:apply-templates select="." mode="page-wrap">
+        <xsl:with-param name="title">
+            <xsl:apply-templates select="/mathbook/book/title|/mathbook/article/title" />
+        </xsl:with-param>
+        <xsl:with-param name="subtitle">
+            <xsl:apply-templates select="/mathbook/book/subtitle|/mathbook/article/subtitle" />
+        </xsl:with-param>
+        <!-- Serial list of authors, then editors, as names only -->
+         <xsl:with-param name="credits">
+            <xsl:apply-templates select="//frontmatter/titlepage/author" mode="name-list"/>
+            <xsl:apply-templates select="//frontmatter/titlepage/editor" mode="name-list"/>
+        </xsl:with-param>
+        <xsl:with-param name="content">
+            <!-- Heading, div for subdivision that is this page -->
+            <!-- frontmatter/titlepage is exceptional           -->
+             <section class="{local-name(.)}">
+                <xsl:if test="not(self::frontmatter)">
+                    <header>
+                        <h1 class="heading">
+                            <!-- Book 1 or Article 1 is silly -->
+                            <xsl:if test="not(self::book or self::article )">
+                                <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+                                <xsl:text> </xsl:text>
+                                <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
+                                <xsl:text> </xsl:text>
+                            </xsl:if>
+                            <span class="title"><xsl:apply-templates select="title" /></span>
+                        </h1>
+                        <!-- Subdivisions may have individual authors -->
+                        <xsl:if test="author">
+                            <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
+                        </xsl:if>
+                    </header>
+                </xsl:if>
+                <!-- Recurse through contents inside enclosing section, ignore title, author -->
+                <xsl:apply-templates select="./*[not(self::title or self::subtitle or self::author)]" />
+            </section>
+         </xsl:with-param>
+     </xsl:apply-templates>
+</xsl:template>
+
 <!-- Page Decorations -->
 <!-- Even if we summarize a node, it has some    -->
 <!-- decorations we would like to ignore.  So    -->
@@ -326,52 +372,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Just applying templates right and left -->
         <xsl:apply-templates  select="./*[not(self::title or self::subtitle or self::author)]"/>
     </section>
-</xsl:template>
-
-<!-- Web Page -->
-<!-- When a structural node is the parent of an   -->
-<!-- entire web page, we build it here as content -->
-<!-- sent to the web page wrapping template       -->
-<xsl:template match="*" mode="webpage">
-    <xsl:apply-templates select="." mode="page-wrap">
-        <xsl:with-param name="title">
-            <xsl:apply-templates select="/mathbook/book/title|/mathbook/article/title" />
-        </xsl:with-param>
-        <xsl:with-param name="subtitle">
-            <xsl:apply-templates select="/mathbook/book/subtitle|/mathbook/article/subtitle" />
-        </xsl:with-param>
-        <!-- Serial list of authors, then editors, as names only -->
-         <xsl:with-param name="credits">
-            <xsl:apply-templates select="//frontmatter/titlepage/author" mode="name-list"/>
-            <xsl:apply-templates select="//frontmatter/titlepage/editor" mode="name-list"/>
-        </xsl:with-param>
-        <xsl:with-param name="content">
-            <!-- Heading, div for subdivision that is this page -->
-            <!-- frontmatter/titlepage is exceptional           -->
-             <section class="{local-name(.)}">
-                <xsl:if test="not(self::frontmatter)">
-                    <header>
-                        <h1 class="heading">
-                            <!-- Book 1 or Article 1 is silly -->
-                            <xsl:if test="not(self::book or self::article )">
-                                <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-                                <xsl:text> </xsl:text>
-                                <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
-                                <xsl:text> </xsl:text>
-                            </xsl:if>
-                            <span class="title"><xsl:apply-templates select="title" /></span>
-                        </h1>
-                        <!-- Subdivisions may have individual authors -->
-                        <xsl:if test="author">
-                            <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
-                        </xsl:if>
-                    </header>
-                </xsl:if>
-                <!-- Recurse through contents inside enclosing section, ignore title, author -->
-                <xsl:apply-templates select="./*[not(self::title or self::subtitle or self::author)]" />
-            </section>
-         </xsl:with-param>
-     </xsl:apply-templates>
 </xsl:template>
 
 
