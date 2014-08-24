@@ -304,14 +304,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <span class="codenumber"><xsl:value-of select="$num" /></span>
             </xsl:if>
             <span class="title">
-                <xsl:choose>
-                    <xsl:when test="title">
-                        <xsl:apply-templates select="title/node()[not(self::fn)]" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:apply-templates select="." mode="type-name" />
-                    </xsl:otherwise>
-                </xsl:choose>
+                <xsl:apply-templates select="." mode="title-simple" />
             </span>
         </a>
     </xsl:if>
@@ -344,7 +337,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
                 <xsl:text> </xsl:text>
             </xsl:if>
-            <span class="title"><xsl:apply-templates select="title" /></span>
+            <span class="title">
+                <xsl:apply-templates select="." mode="title-full" />
+            </span>
         </h1>
         <xsl:if test="author">
             <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
@@ -356,6 +351,94 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a pseudo-introduction that is the titlepage. -->
 <!-- The section-header is then redundant.        -->
 <xsl:template match="frontmatter" mode="section-header" />
+
+<!-- ###### -->
+<!-- Titles -->
+<!-- ###### -->
+
+<!-- Almost everything can have a title, and they       -->
+<!-- are important for navigation, so get recycled      -->
+<!-- in various uses.  Some are nearly-mandatory,       -->
+<!-- others are optional, and some nodes can get titled -->
+<!-- automatically.  So mostly we handle them with      -->
+<!-- modal templates and kill the generic occurence.    -->
+
+<!-- Simple titles are lacking footnotes, and perhaps more. -->
+<!-- Full titles have everything present.  We pass the      -->
+<!-- complexity as a parameter until we get to actually     -->
+<!-- processing the title itself.  But the interface to all -->
+<!-- this is based on two modal templates of the enclosing  -->
+<!-- structure that has a title, since we handle some       -->
+<!-- structures differently.                                -->
+
+<!-- Interface to Titles -->
+<!-- Two levels of complexity                    -->
+<!-- full:   lives on a page, go for it          -->
+<!-- simple: used someplace else, be careful     -->
+<!-- Pass the distinction through as a parameter -->
+<xsl:template match="*" mode="title-full">
+    <xsl:apply-templates select="." mode="title">
+        <xsl:with-param name="complexity">full</xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="*" mode="title-simple">
+    <xsl:apply-templates select="." mode="title">
+        <xsl:with-param name="complexity">simple</xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- Chapters, Sections, etc may be untitled, so may be empty, though unusual -->
+<!-- Environments could be untitled much of the time                          -->
+<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|proposition|claim|fact|proof" mode="title">
+    <xsl:param name="complexity" />
+    <xsl:apply-templates select="title" mode="title">
+        <xsl:with-param name="complexity"><xsl:value-of select="$complexity" /></xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- Other subdivisions can be auto-titled with their type-name -->
+<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|references|exercises|backmatter" mode="title">
+    <xsl:param name="complexity" />
+    <!-- Check if these subdivisions have been given a title -->
+    <xsl:variable name="title">
+        <xsl:apply-templates select="title" mode="title">
+            <xsl:with-param name="complexity"><xsl:value-of select="$complexity" /></xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <!-- Provide the title itself, or use the type-name as a default -->
+    <xsl:choose>
+        <xsl:when test="$title=''">
+            <xsl:apply-templates select="." mode="type-name" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$title" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Once actually at a title element, we    -->
+<!-- process it or process without footnotes -->
+<xsl:template match="title|subtitle" mode="title" >
+    <xsl:param name="complexity" />
+    <xsl:choose>
+        <xsl:when test="$complexity='full'">
+            <xsl:apply-templates />
+        </xsl:when>
+        <xsl:when test="$complexity='simple'">
+            <xsl:apply-templates  select="./node()[not(self::fn)]" />
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Unhandled title requests,           -->
+<!-- likely subdivisions or environments -->
+<xsl:template match="*" mode="title">
+    <xsl:message>MBX:BUG: asking for title of unhandled <xsl:value-of select="local-name(.)" /></xsl:message>
+</xsl:template>
+
+<!-- Kill titles, once all are handled, then strip avoidances elsewhere -->
+<!-- <xsl:template match="*" select="title|subtitle" /> -->
 
 <!-- ####################### -->
 <!-- Front Matter Components -->
@@ -1556,7 +1639,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                     <xsl:apply-templates select="//docinfo/initialism" />
                     <xsl:text> </xsl:text>
                 </xsl:if>
-            <xsl:apply-templates select="title/node()[not(self::fn)]" />  <!-- footnotes again -->
+            <xsl:apply-templates select="." mode="title-simple" />
             </title>
             <meta name="Keywords" content="Authored in MathBook XML" />
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
@@ -1974,6 +2057,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- Includes "active" class for enclosing outer node              -->
 <!-- Node set equality and subset based on unions of subtrees, see -->
 <!-- http://www.xml.com/cookbooks/xsltckbk/solution.csp?day=5      -->
+<!-- Displayed text is simple titles                               -->
 <!-- TODO: split out inner link formation, outer link formation? -->
 <xsl:template match="*" mode="toc-items">
     <xsl:if test="$toc-level > 0">
@@ -2020,7 +2104,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                             <span class="codenumber"><xsl:value-of select="$num" /></span>
                         </xsl:if>
                         <span class="title">
-                            <xsl:apply-templates select="." mode="toc-entry" />
+                            <xsl:apply-templates select="." mode="title-simple" />
                         </span>
                     </xsl:element>
                 </h2>
@@ -2053,7 +2137,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                                     <xsl:if test="count($this-page-node|$inner-node) = count($inner-node)">
                                         <xsl:attribute name="class">active</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:apply-templates select="." mode="toc-entry" />
+                                    <xsl:apply-templates select="." mode="title-simple" />
                                 </xsl:element>
                             </li>
                         </xsl:if>
@@ -2063,20 +2147,6 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             </xsl:if>
         </xsl:for-each>
     </xsl:if>
-</xsl:template>
-
-<!-- Some entries of table of contents are based on a title   -->
-<!-- Others are just one-off and have language-specific names -->
-<!-- Footnotes wreck havoc with table-of-contents text        -->
-<xsl:template match="*" mode="toc-entry">
-    <xsl:choose>
-        <xsl:when test="title">
-            <xsl:apply-templates select="title/node()[not(self::fn)]" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="." mode="type-name" />
-        </xsl:otherwise>
-    </xsl:choose>
 </xsl:template>
 
 
