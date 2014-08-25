@@ -205,11 +205,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="content">
             <!-- Heading, div for subdivision that is this page -->
             <!-- frontmatter/titlepage is exceptional           -->
-                <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
-                <section class="{local-name(.)}" id="{$ident}">
-                <xsl:if test="not(self::frontmatter)">   <!-- (just kill it?) -->
-                    <xsl:apply-templates select="." mode="section-header" />
-                </xsl:if>
+            <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
+            <section class="{local-name(.)}" id="{$ident}">
+                <xsl:apply-templates select="." mode="section-header" />
                 <!-- Recurse through contents inside enclosing section, ignore title, author -->
                 <xsl:apply-templates select="./*[not(self::title or self::subtitle or self::author)]" />
             </section>
