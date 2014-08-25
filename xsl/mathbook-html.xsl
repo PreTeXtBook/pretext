@@ -1397,14 +1397,22 @@ is just flat out on the page, as if printed there.
 <!-- A LaTeX construct really, we just jump in/out of the align environment   -->
 <!-- And package the text in an HTML paragraph, assuming it is just a snippet -->
 <!-- This breaks the alignment, but MathJax has no good solution for this     -->
-<xsl:template match="md/intertext|mdn/intertext">
+<!-- We need * (no numbers, md), and plain (numbers, mdn) variants            -->
+<xsl:template match="md/intertext">
+    <xsl:text>\end{align*}&#xa;</xsl:text>
+    <p>
+    <xsl:apply-templates />
+    </p>
+    <xsl:text>\begin{align*}&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="mdn/intertext">
     <xsl:text>\end{align}&#xa;</xsl:text>
     <p>
     <xsl:apply-templates />
     </p>
     <xsl:text>\begin{align}&#xa;</xsl:text>
 </xsl:template>
-
 
 
 <!-- Sage Cells -->
