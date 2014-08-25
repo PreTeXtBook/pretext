@@ -1104,12 +1104,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="men|mrow" mode="tag" />
 
 <!-- Intertext -->
-<!-- A pure LaTeX construct, so we just do the right thing -->
+<!-- A pure LaTeX construct, so we just do the right thing        -->
+<!-- An <mrow> will provide trailing newline, so do the same here -->
 <xsl:template match="md/intertext|mdn/intertext">
-    <xsl:text>&#xa;</xsl:text>
     <xsl:text>\intertext{</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>}</xsl:text>
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Lists -->
