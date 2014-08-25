@@ -855,13 +855,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% If this is a top-level references&#xa;</xsl:text>
         <xsl:text>%%   you can replace with "thebibliography" environment&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="local-name(.)='exercises' or local-name(.)='references'">
+    <!-- Could be no contents (just an introduction), then -->
+    <!-- LaTeX chokes on empty list, so check for entries  -->
+    <xsl:if test="(local-name(.)='exercises' or local-name(.)='references') and (.//exercise or .//biblio)">
         <xsl:text>\begin{description}&#xa;</xsl:text>
     </xsl:if>
     <!-- Process the remaining contents -->
     <xsl:apply-templates select="*[not(self::title or self::author or self::introduction or self::conclusion)]"/>
     <!-- Exercises, references are in managed description lists -->
-    <xsl:if test="local-name(.)='exercises' or local-name(.)='references'">
+    <xsl:if test="(local-name(.)='exercises' or local-name(.)='references') and (.//exercise or .//biblio)">
         <xsl:text>\end{description}&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="conclusion" />
