@@ -401,7 +401,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- explicit subdivisions, to introduce or summarize  -->
 <!-- No title allowed, typically just a few paragraphs -->
 <xsl:template match="introduction|conclusion">
-    <article class="{local-name(.)}">
+    <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
+    <article class="{local-name(.)}" id="{$ident}">
         <xsl:apply-templates />
     </article>
 </xsl:template>
