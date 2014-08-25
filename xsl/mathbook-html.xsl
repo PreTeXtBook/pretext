@@ -219,7 +219,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Even if we summarize a node, it has some    -->
 <!-- decorations we would like to ignore.  So    -->
 <!-- we do not dispatch these and just slide by. -->
-<xsl:template match="title|subtitle|author|introduction|abstract|titlepage|conclusion" mode="dispatch" />
+<xsl:template match="title|subtitle|author|introduction|todo|abstract|titlepage|conclusion" mode="dispatch" />
 
 <!-- Summary Page -->
 <!-- A summary page has some initial decorations,       -->
