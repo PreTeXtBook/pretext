@@ -324,6 +324,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="level" select="$numbering-theorems" />
     </xsl:call-template>
     <xsl:text>]&#xa;</xsl:text>
+    <!-- Localize "Proof" environment -->
+    <!-- http://tex.stackexchange.com/questions/62020/how-to-change-the-word-proof-in-the-proof-environment -->
+    <xsl:text>\renewcommand*{\proofname}{</xsl:text>
+    <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'proof'" /></xsl:call-template>
+    <xsl:text>}</xsl:text>
     <xsl:text>%% Only variants actually used in document appear here&#xa;</xsl:text>
     <xsl:text>%% Numbering: all theorem-like numbered consecutively&#xa;</xsl:text>
     <xsl:text>%% i.e. Corollary 4.3 follows Theorem 4.2&#xa;</xsl:text>
