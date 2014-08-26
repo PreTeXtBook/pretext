@@ -83,6 +83,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- early or late                          -->
 <xsl:param name="latex.preamble.early" select="''" />
 <xsl:param name="latex.preamble.late" select="''" />
+<!--  -->
+<!-- A LaTeX ToC level of 0 will get you a list of top        -->
+<!-- level subdivisions, where we mean it to be "no contents" -->
+<!-- so we translate MBX level to LaTeX-speak and use that    -->
+<xsl:param name="latex-toc-level">
+    <xsl:value-of select="$toc-level - 1" />
+</xsl:param>
 
 <!-- Entry template is in mathbook-common file -->
 
@@ -109,9 +116,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:apply-templates select="frontmatter/abstract" />
-    <xsl:if test="$toc-level > 0">
+    <xsl:if test="$latex-toc-level > -1">
         <xsl:text>\setcounter{tocdepth}{</xsl:text>
-        <xsl:value-of select="$toc-level" />
+        <xsl:value-of select="$latex-toc-level" />
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\renewcommand*\contentsname{</xsl:text>
         <xsl:call-template name="type-name">
@@ -147,9 +154,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\maketitle&#xa;</xsl:text>
     <xsl:text>\clearpage&#xa;</xsl:text>
     <xsl:call-template name="copyright-page" />
-    <xsl:if test="$toc-level > 0">
+    <xsl:if test="$latex-toc-level > -1">
         <xsl:text>\setcounter{tocdepth}{</xsl:text>
-        <xsl:value-of select="$toc-level" />
+        <xsl:value-of select="$latex-toc-level" />
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\renewcommand*\contentsname{</xsl:text>
         <xsl:call-template name="type-name">
