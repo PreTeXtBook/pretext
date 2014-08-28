@@ -2262,8 +2262,7 @@ $(function () {
 <xsl:template name="css">
     <!-- #1 to #5 for different color schemes -->
     <link href="http://mathbook.staging.michaeldubois.me/develop/stylesheets/mathbook-modern-3.css" rel="stylesheet" type="text/css" />
-    <link href="http://mathbook.staging.michaeldubois.me/develop/stylesheets/icons.css" rel="stylesheet" type="text/css" />
-    <link href="http://aimath.org/mathbook/add-on.css" rel="stylesheet" type="text/css" />
+    <!-- <link href="http://aimath.org/mathbook/add-on.css" rel="stylesheet" type="text/css" /> -->
 </xsl:template>
 
 
