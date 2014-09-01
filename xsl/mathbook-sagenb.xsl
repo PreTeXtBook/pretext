@@ -29,7 +29,7 @@
 
 <xsl:template match="/">
     <xsl:if test="$purpose='files'">
-        <xsl:apply-templates select="mathbook"/>
+        <xsl:apply-templates select="mathbook/*" mode="dispatch" />
     </xsl:if>
     <!-- Determine filenames of chunks,             -->
     <!-- their titles and their assets within       -->
@@ -118,35 +118,13 @@
 <!-- Document node summaries are normally links to the page         -->
 <!-- Override for Sage Notebook production, no anchor/href, no type -->
 <!-- We format these as smaller headings                            -->
-<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection" mode="summary-entry">
+<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection|exercises|references|frontmatter|preface|acknowledgement|biography|foreword|dedication|colophon" mode="summary-nav">
     <h5 class="heading">
         <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
         <xsl:text> </xsl:text>
-        <span class="title"><xsl:apply-templates select="title" /></span>
+        <span class="title"><xsl:apply-templates select="." mode="title-simple" /></span>
     </h5>
 </xsl:template>
-
-<!-- Some document nodes will not normally have titles and we need default titles -->
-<!-- Especially if one-off (eg Preface), or generic (Exercises)                   -->
-<!-- These mostly will not have numbers, either                                   -->
-<!-- Override for Sage Notebook production, no anchor/href, no type               -->
-<!-- We format these as smaller headings                                          -->
-<xsl:template match="exercises|references|frontmatter|preface|acknowledgement|biography|foreword|dedication|colophon" mode="summary-entry">
-    <h5 class="heading">
-        <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
-        <xsl:text> </xsl:text>
-        <span class="title">
-            <xsl:choose>
-                <xsl:when test="title">
-                    <xsl:apply-templates select="title" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="type-name" />
-                </xsl:otherwise>
-            </xsl:choose>
-        </span>
-    </h5>
- </xsl:template>
 
 <!-- Adjustments to the Sage Notebook size parameters     -->
 <!-- #user-worksheet-page includes all UI elements        -->
@@ -275,14 +253,7 @@
             <xsl:value-of select="$num" />
             <xsl:text>-</xsl:text>
         </xsl:if>
-        <xsl:choose>
-            <xsl:when test="title">
-                <xsl:apply-templates select="title/node()[not(self::fn)]" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="." mode="type-name" />
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates select="." mode="title-simple" />
         <xsl:text>"""</xsl:text>
         <xsl:text>, </xsl:text>
         <!-- Any included files, necessary for inclusions -->
