@@ -2028,30 +2028,19 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             </nav>
             <div class="extras">
                 <nav>
-                    <a class="feedback-link" href="">
-                        <xsl:call-template name="type-name">
-                            <xsl:with-param name="string-id" select="'feedback'" />
-                        </xsl:call-template>
-                    </a>
-                    <a class="mathbook-link" href="http://mathbook.pugetsound.edu">
-                        <xsl:call-template name="type-name">
-                            <xsl:with-param name="string-id" select="'authored'" />
-                        </xsl:call-template>
-                        <xsl:text> MathBook</xsl:text>
-                        <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
-                        <xsl:text>XML</xsl:text>
-                    </a>
+                    <xsl:if test="/mathbook/docinfo/feedback">
+                        <xsl:call-template name="feedback-link" />
+                    </xsl:if>
+                    <xsl:call-template name="mathbook-link" />
                 </nav>
             </div>
         </div>
     </aside>
-<!-- Content here appears in odd places if turned sidebar is turned off
-    <aside id="sidebar-right" class="sidebar">
-        <div class="sidebar-content">Mock right sidebar content</div>
-    </aside>
--->
+    <!-- Content here appears in odd places if turned sidebar is turned off
+        <aside id="sidebar-right" class="sidebar">
+            <div class="sidebar-content">Mock right sidebar content</div>
+        </aside> -->
 </xsl:template>
-
 
 <!-- Table of Contents Contents (Items) -->
 <!-- Includes "active" class for enclosing outer node              -->
@@ -2149,6 +2138,40 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     </xsl:if>
 </xsl:template>
 
+<!-- Feedback Button goes at the bottom (in "extras") -->
+<!-- Text from docinfo, or localized string           -->
+<!-- Target URL from docinfo                          -->
+<xsl:template name="feedback-link">
+    <xsl:variable name="feedback-text">
+        <xsl:choose>
+            <xsl:when test="/mathbook/docinfo/feedback/text">
+                <xsl:apply-templates select="/mathbook/docinfo/feedback/text" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'feedback'" />
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Possibly an empty URL -->
+    <xsl:variable name="feedback-url">
+        <xsl:apply-templates select="/mathbook/docinfo/feedback/url" />
+    </xsl:variable>
+    <a class="feedback-link" href="{$feedback-url}">
+        <xsl:value-of select="$feedback-text" />
+    </a>
+</xsl:template>
+
+<!-- Branding in "extras", mostly hard-coded -->
+<xsl:template name="mathbook-link">
+    <a class="mathbook-link" href="http://mathbook.pugetsound.edu">
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'authored'" />
+        </xsl:call-template>
+        <xsl:text> MathBook&#xa0;XML</xsl:text>
+    </a>
+</xsl:template>
 
 <!-- ######## -->
 <!-- Chunking -->
