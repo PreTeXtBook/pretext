@@ -239,10 +239,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="summary">
     <xsl:apply-templates select="." mode="page-wrap">
         <xsl:with-param name="title">
-            <xsl:apply-templates select="/mathbook/book/title|/mathbook/article/title" />
+            <xsl:apply-templates select="/mathbook/*" mode="title-simple" />
         </xsl:with-param>
         <xsl:with-param name="subtitle">
-            <xsl:apply-templates select="/mathbook/book/subtitle|/mathbook/article/subtitle" />
+            <xsl:apply-templates select="/mathbook/*/subtitle"/>
         </xsl:with-param>
         <!-- Serial list of authors, then editors, as names only -->
          <xsl:with-param name="credits">
@@ -417,6 +417,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- <docinfo> is a sibling of book, article, etc              -->
+<!-- So sometimes we ask for its title, which it does not have -->
+<xsl:template match="docinfo" mode="title" />
+
 <!-- Once actually at a title element, we    -->
 <!-- process it or process without footnotes -->
 <xsl:template match="title|subtitle" mode="title" >
@@ -450,7 +454,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We add other material prior to links to major subdivisions -->
 <xsl:template match="titlepage">
     <h1 class="heading">
-        <span class="title"><xsl:apply-templates select="/mathbook/book/title|/mathbook/article/title" /></span>
+        <span class="title"><xsl:apply-templates select="/mathbook/*/title" /></span>
+        <xsl:if test="/mathbook/*/subtitle">
+            <span class="subtitle"><xsl:apply-templates select="/mathbook/*/subtitle" /></span>
+        </xsl:if>
     </h1>
     <address class="contributors">
         <xsl:apply-templates select="author|editor" mode="full-info"/>
@@ -1674,8 +1681,10 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                         <div class="container">
                             <xsl:call-template name="brand-logo" />
                             <div class="title-container">
-                                <h1 class="title">
-                                    <xsl:value-of select="$title" />
+                                <h1 class="heading">
+                                    <span class="title">
+                                        <xsl:value-of select="$title" />
+                                    </span>
                                     <xsl:if test="normalize-space($subtitle)">
                                         <span class="subtitle">
                                             <xsl:value-of select="$subtitle" />
