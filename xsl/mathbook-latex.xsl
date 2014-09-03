@@ -115,7 +115,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\maketitle&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
-    <xsl:apply-templates select="frontmatter/abstract" />
+    <!-- Likely only an abstract found in frontmatter -->
+    <xsl:apply-templates select="frontmatter" />
     <xsl:if test="$latex-toc-level > -1">
         <xsl:text>\setcounter{tocdepth}{</xsl:text>
         <xsl:value-of select="$latex-toc-level" />
@@ -165,7 +166,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\tableofcontents&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="preface" />
+    <xsl:apply-templates select="frontmatter" />
     <xsl:text>\mainmatter&#xa;</xsl:text>
     <xsl:apply-templates select="chapter" />
     <xsl:text>\appendix&#xa;</xsl:text>
@@ -773,13 +774,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- ############ -->
+<!-- Front Matter -->
+<!-- ############ -->
+
+<!-- The "titlepage" and "colophon" portions of  -->
+<!-- frontmatter generally gets mined to migrate -->
+<!-- various places, so we kill it as part of    -->
+<!-- processing the front matter element.        -->
+<xsl:template match="titlepage|colophon" />
+
+<!-- We process the frontmatter piece-by-piece -->
+<!-- A DTD should enforce the proper order     -->
+<xsl:template match="frontmatter">
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- TODO: Add acknowledgement, etc.  Localize the terms -->
+
 <!-- Preface, within \frontmatter is handled correctly by LaTeX-->
 <xsl:template match="preface">
     <xsl:text>\chapter{Preface}&#xa;</xsl:text>
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- Articles may have an abstract at the top level -->
+<!-- Articles may have an abstract in the frontmatter -->
 <xsl:template match="abstract">
     <xsl:text>\begin{abstract}&#xa;</xsl:text>
     <xsl:apply-templates />
