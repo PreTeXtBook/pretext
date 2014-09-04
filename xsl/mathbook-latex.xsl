@@ -831,7 +831,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <!-- Collections of exercises and reference can happen at any level, so need correct LaTeX name -->
             <xsl:when test="local-name(.)='exercises' or local-name(.)='references'">
-                <xsl:apply-templates select="." mode="latex-level" />
+                <xsl:apply-templates select="." mode="subdivision-name" />
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="local-name(.)" />
@@ -1798,50 +1798,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="biblio/note">
     <xsl:text>\par </xsl:text>
     <xsl:apply-templates />
-</xsl:template>
-
-<!-- Level Numbers to LaTeX Names -->
-<!-- Convert a level (integer) to the corresponding LaTeX division name -->
-<xsl:template name="level-number-to-latex-name">
-    <xsl:param name="level" />
-    <xsl:choose>
-        <xsl:when test="/mathbook/book">
-            <xsl:choose>
-                <xsl:when test="$level=0">book</xsl:when>
-                <xsl:when test="$level=1">chapter</xsl:when>
-                <xsl:when test="$level=2">section</xsl:when>
-                <xsl:when test="$level=3">subsection</xsl:when>
-                <xsl:when test="$level=4">subsubsection</xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>MBX:ERROR: Level computation is out-of-bounds (<xsl:value-of select="$level" />)</xsl:message>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:when test="/mathbook/article">
-            <xsl:choose>
-                <xsl:when test="$level=0">article</xsl:when>
-                <xsl:when test="$level=1">section</xsl:when>
-                <xsl:when test="$level=2">subsection</xsl:when>
-                <xsl:when test="$level=3">subsubsection</xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>MBX:ERROR: Level computation is out-of-bounds (<xsl:value-of select="$level" />)</xsl:message>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Level computation only for books, articles</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- Nodes to Names in LaTeX -->
-<!-- Compute level of node, then tranlate to a name above -->
-<xsl:template match="*" mode="latex-level">
-    <xsl:call-template name="level-number-to-latex-name">
-        <xsl:with-param name="level">
-            <xsl:apply-templates select="." mode="level" />
-        </xsl:with-param>
-    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->

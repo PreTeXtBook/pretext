@@ -1064,6 +1064,59 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:number from="references" level="any" count="biblio" />
 </xsl:template>
 
+<!-- ################ -->
+<!-- Names for Levels -->
+<!-- ################ -->
+
+<!-- Levels (ie depths in the tree) translate to            -->
+<!-- element names and LaTeX sections, which we keep the    -->
+<!-- same primarily.  So this is more general than it looks -->
+
+<!-- Level Numbers to LaTeX Names -->
+<!-- Convert a level (integer) to the corresponding LaTeX division name -->
+<xsl:template name="level-number-to-latex-name">
+    <xsl:param name="level" />
+    <xsl:choose>
+        <xsl:when test="/mathbook/book">
+            <xsl:choose>
+                <xsl:when test="$level=0">book</xsl:when>
+                <xsl:when test="$level=1">chapter</xsl:when>
+                <xsl:when test="$level=2">section</xsl:when>
+                <xsl:when test="$level=3">subsection</xsl:when>
+                <xsl:when test="$level=4">subsubsection</xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>MBX:ERROR: Level computation is out-of-bounds (<xsl:value-of select="$level" />)</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="/mathbook/article">
+            <xsl:choose>
+                <xsl:when test="$level=0">article</xsl:when>
+                <xsl:when test="$level=1">section</xsl:when>
+                <xsl:when test="$level=2">subsection</xsl:when>
+                <xsl:when test="$level=3">subsubsection</xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>MBX:ERROR: Level computation is out-of-bounds (<xsl:value-of select="$level" />)</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: Level computation only for books, articles</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Nodes to Subdivision Names -->
+<!-- Compute level given a node, via this modal template -->
+<!-- Subdivision name comes from named template above    -->
+<xsl:template match="*" mode="subdivision-name">
+    <xsl:call-template name="level-number-to-latex-name">
+        <xsl:with-param name="level">
+            <xsl:apply-templates select="." mode="level" />
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
 <!-- Programming Language Names -->
 <!-- Packages for listing and syntax highlighting             -->
 <!-- have their own ideas about the names of languages        -->
