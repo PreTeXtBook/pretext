@@ -331,15 +331,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="section-header">
     <header>
         <h1 class="heading">
-            <xsl:if test="not(self::book or self::article)"> <!-- kill with type-code-title template -->
-                <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-                <xsl:text> </xsl:text>
-                <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
-                <xsl:text> </xsl:text>
-            </xsl:if>
-            <span class="title">
-                <xsl:apply-templates select="." mode="title-full" />
-            </span>
+            <xsl:apply-templates select="." mode="header-content" />
+        </h1>
+        <xsl:if test="author">
+            <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
+        </xsl:if>
+    </header>
+</xsl:template>
+
+<!-- The "type" is redundant at the top-level, -->
+<!-- so we hide it with a class specification  -->
+<xsl:template match="book|article" mode="section-header">
+    <header>
+        <h1 class="heading hide-type">
+            <xsl:apply-templates select="." mode="header-content" />
+        </h1>
+        <xsl:if test="author">
+            <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
+        </xsl:if>
+    </header>
+</xsl:template>
+
+<!-- Sections which are "auto-titled" do not need to           -->
+<!-- display their type since that is the default title        -->
+<!-- The references and exercises are exceptions, see Headings -->
+<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|backmatter" mode="section-header">
+    <header>
+        <h1 class="heading hide-type">
+            <xsl:apply-templates select="." mode="header-content" />
         </h1>
         <xsl:if test="author">
             <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
@@ -398,6 +417,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Other subdivisions can be auto-titled with their type-name -->
+<!-- Synchronize with the header-content template above         -->
 <xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|references|exercises|backmatter" mode="title">
     <xsl:param name="complexity" />
     <!-- Check if these subdivisions have been given a title -->
@@ -443,6 +463,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Kill titles, once all are handled, then strip avoidances elsewhere -->
 <!-- <xsl:template match="*" select="title|subtitle" /> -->
+
+<!-- ######## -->
+<!-- Headings -->
+<!-- ######## -->
+
+<!-- Both environments and sections have a "type,"         -->
+<!-- a "codenumber," and a "title."  We format these       -->
+<!-- consistently here with a modal template.  We can hide -->
+<!-- components with classes on the enclosing "heading"    -->
+<xsl:template match="*" mode="header-content">
+    <span class="type">
+        <xsl:apply-templates select="." mode="type-name" />
+    </span>
+    <span class="codenumber">
+        <xsl:apply-templates select="." mode="number" />
+    </span>
+    <span class="title">
+        <xsl:apply-templates select="." mode="title-full" />
+    </span>
+</xsl:template>
+
+<!-- References and Exercises are universal subdivisions       -->
+<!-- We give them a localized "type" computed from their level -->
+<xsl:template match="exercises|references" mode="header-content">
+    <span class="type">
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id">
+                <xsl:apply-templates select="." mode="subdivision-name" />
+            </xsl:with-param>
+        </xsl:call-template>
+    </span>
+    <span class="codenumber">
+        <xsl:apply-templates select="." mode="number" />
+    </span>
+    <span class="title">
+        <xsl:apply-templates select="." mode="title-full" />
+    </span>
+</xsl:template>
+
 
 <!-- ####################### -->
 <!-- Front Matter Components -->
