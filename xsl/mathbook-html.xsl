@@ -409,7 +409,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Chapters, Sections, etc may be untitled, so may be empty, though unusual -->
 <!-- Environments could be untitled much of the time                          -->
-<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|proposition|claim|fact|proof" mode="title">
+<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|proposition|claim|fact|proof|demonstration" mode="title">
     <xsl:param name="complexity" />
     <xsl:apply-templates select="title" mode="title">
         <xsl:with-param name="complexity"><xsl:value-of select="$complexity" /></xsl:with-param>
@@ -1563,6 +1563,19 @@ is just flat out on the page, as if printed there.
     <xsl:text>\begin{align}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Demonstrations -->
+<!-- A simple page with no constraints -->
+<xsl:template match="demonstration">
+    <xsl:variable name="url"><xsl:apply-templates select="." mode="internal-id" />.html</xsl:variable>
+    <a href="{$url}" target="_blank" class="link">
+        <xsl:apply-templates select="." mode="title-full" />
+    </a>
+    <xsl:apply-templates select="." mode="simple-page-wrap" >
+        <xsl:with-param name="content">
+            <xsl:apply-templates />
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
 
 <!-- Sage Cells -->
 <!-- TODO: make hidden autoeval cells link against sage-compute cells -->
