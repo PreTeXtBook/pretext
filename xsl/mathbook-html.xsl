@@ -1770,6 +1770,37 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     </exsl:document>
 </xsl:template>
 
+<!-- A minimal individual page:                              -->
+<!-- Inputs:                                                 -->
+<!--     * content (exclusive of banners, etc)               -->
+<!-- Maybe a page title -->
+<xsl:template match="*" mode="simple-page-wrap">
+    <xsl:param name="content" />
+    <xsl:variable name="url"><xsl:apply-templates select="." mode="internal-id" />.html</xsl:variable>
+    <xsl:message>URL: <xsl:value-of select="$url" /></xsl:message>
+    <exsl:document href="{$url}" method="html">
+    <!-- Need to be careful for format of this initial string     -->
+    <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
+    <html> <!-- lang="", and/or dir="rtl" here -->
+        <xsl:call-template name="converter-blurb" />
+        <head>
+            <meta name="Keywords" content="Authored in MathBook XML" />
+            <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+            <xsl:call-template name="mathjax" />
+            <xsl:call-template name="sagecell" />
+            <xsl:call-template name="knowl" />
+            <xsl:call-template name="fonts" />
+            <xsl:call-template name="css" />
+        </head>
+        <!-- TODO: needs some padding etc -->
+        <body>
+            <xsl:copy-of select="$content" />
+            <xsl:apply-templates select="/mathbook/docinfo/analytics" />
+        </body>
+    </html>
+    </exsl:document>
+</xsl:template>
+
 <!-- ################# -->
 <!-- Navigational Aids -->
 <!-- ################# -->
