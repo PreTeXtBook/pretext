@@ -509,6 +509,46 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
    </xsl:choose>
 </xsl:template>
 
+<!-- Compute width of left margin        -->
+<!-- Assumes each line ends in a newline -->
+<!-- A blank line will cause 0 width,    -->
+<!-- which is OK for Sage doctesting but -->
+<!-- maybe not general enough            -->
+<xsl:template name="left-margin">
+    <xsl:param name="text" />
+    <xsl:param name="margin" select="32767" />  <!-- 2^15 - 1 as max? -->
+    <xsl:choose>
+        <xsl:when test="$text=''">
+            <!-- Nothing left, then done, return -->
+            <xsl:value-of select="$margin" />
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- Non-destructively count leading whitespace -->
+            <xsl:variable name="pad-top-line">
+                <xsl:call-template name="count-pad-length">
+                    <xsl:with-param name="text" select="$text" />
+                </xsl:call-template>
+            </xsl:variable>
+            <!-- Compute margin as smaller of incoming and computed -->
+            <xsl:variable name="new-margin">
+                <xsl:choose>
+                    <xsl:when test="$margin > $pad-top-line">
+                        <xsl:value-of select="$pad-top-line" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$margin" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <!-- Recursive call with one less line, new margin -->
+            <xsl:call-template name="left-margin">
+                <xsl:with-param name="margin" select="$new-margin" />
+                <xsl:with-param name="text" select="substring-after($text,'&#xA;')" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- An "out-dented" line is assumed to be intermediate blank line     -->
 <!-- indent parameter is a number giving number of characters to strip -->
 <xsl:template name="strip-indentation">
