@@ -462,7 +462,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Trim all totally whitespace lines from beginning of code hunk -->
 <xsl:template name="trim-start-lines">
    <xsl:param name="text"/>
-   <xsl:param name="pad" default="''"/>
+   <xsl:param name="pad" select="''"/>
    <xsl:variable name="first-char" select="substring($text, 1, 1)" />
    <xsl:choose>
         <!-- Possibly nothing, return just final carriage return -->
@@ -491,7 +491,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Assumes each line, including last, ends in a carriage return  -->
 <xsl:template name="count-pad-length">
    <xsl:param name="text"/>
-   <xsl:param name="pad" default=''/>
+   <xsl:param name="pad" select="''"/>
    <xsl:variable name="first-char" select="substring($text, 1, 1)" />
    <xsl:choose>
         <xsl:when test="$first-char='&#xA;'">
