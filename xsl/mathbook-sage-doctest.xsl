@@ -211,8 +211,8 @@
 <xsl:template match="output">
     <xsl:call-template name="add-indentation">
         <xsl:with-param name="text">
-            <xsl:call-template name="sanitize-sage" >
-                <xsl:with-param name="raw-sage-code" select="." />
+            <xsl:call-template name="sanitize-text-output" >
+                <xsl:with-param name="text" select="." />
             </xsl:call-template>
         </xsl:with-param>
         <xsl:with-param name="indent" select="'    '" />

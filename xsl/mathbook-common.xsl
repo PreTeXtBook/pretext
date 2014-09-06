@@ -424,8 +424,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:with-param>
         <xsl:with-param name="out">
             <xsl:if test="output">
-                <xsl:call-template name="sanitize-sage">
-                    <xsl:with-param name="raw-sage-code" select="output" />
+                <xsl:call-template name="sanitize-text-output" >
+                    <xsl:with-param name="text" select="output" />
                 </xsl:call-template>
             </xsl:if>
         </xsl:with-param>
@@ -611,6 +611,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="strip-indentation" >
         <xsl:with-param name="text" select="$trimmed-sage-code" />
         <xsl:with-param name="indent" select="$pad-length" />
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Santitize Sage Output -->
+<!-- (1) Trim leading and ending blank lines -->
+<!-- (2) Scan *all* lines for left margin    -->
+<!-- (3) Remove left margin                  -->
+<!-- TODO: very similar to "sanitize-sage", but <BLANKLINE> is necessary -->
+<!-- TODO: sanitize <BLANKLINE> for print output -->
+<xsl:template name="sanitize-text-output">
+    <xsl:param name="text" />
+    <xsl:variable name="trimmed-text">
+        <xsl:call-template name="trim-start-lines">
+            <xsl:with-param name="text">
+                <xsl:call-template name="trim-end">
+                    <xsl:with-param name="text" select="$text" />
+                </xsl:call-template>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="left-margin">
+        <xsl:call-template name="left-margin">
+            <xsl:with-param name="text" select="$trimmed-text" />
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:call-template name="strip-indentation" >
+        <xsl:with-param name="text" select="$trimmed-text" />
+        <xsl:with-param name="indent" select="$left-margin" />
     </xsl:call-template>
 </xsl:template>
 
