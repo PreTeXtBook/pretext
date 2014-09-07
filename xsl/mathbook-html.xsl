@@ -676,16 +676,21 @@ is just flat out on the page, as if printed there.
             <xsl:apply-templates select="." mode="internal-id" />
         </xsl:attribute>
         <xsl:element name="a">
+            <!-- Point to the file version, may have silly in-context link -->
+            <xsl:attribute name="knowl">
+                <xsl:apply-templates select="." mode="xref-knowl-filename" />
+            </xsl:attribute>
+            <!-- Following creates an embedded knowl, careully uncomment -->
             <!-- empty, indicates content *not* in a file -->
-            <xsl:attribute name="knowl"></xsl:attribute>
+            <!-- <xsl:attribute name="knowl"></xsl:attribute> -->
             <!-- class indicates content is in div referenced by id -->
-            <xsl:attribute name="class">
-                <xsl:text>id-ref</xsl:text>
-            </xsl:attribute>
+            <!-- <xsl:attribute name="class"> -->
+                <!-- <xsl:text>id-ref</xsl:text> -->
+            <!-- </xsl:attribute> -->
             <!-- and the id via a template for consistency -->
-            <xsl:attribute name="refid">
-                <xsl:apply-templates select="." mode="hidden-knowl-id" />
-            </xsl:attribute>
+            <!-- <xsl:attribute name="refid"> -->
+                <!-- <xsl:apply-templates select="." mode="hidden-knowl-id" /> -->
+            <!-- </xsl:attribute> -->
             <xsl:apply-templates select="." mode="head" />
         </xsl:element>
     </xsl:element>
