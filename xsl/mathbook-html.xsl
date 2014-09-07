@@ -617,6 +617,21 @@ is just flat out on the page, as if printed there.
     <xsl:message>MBX:ERROR: an environment  (<xsl:value-of select="local-name(.)" />) does not know its CSS class</xsl:message>
 </xsl:template>
 
+<!-- Head, Body, Posterior -->
+<!-- An environment had a head (for knowl clickables),     -->
+<!-- a body (the actual content after the head), and a     -->
+<!-- posterior (to follow outside the structure, eg proof) -->
+<xsl:template match="*" mode="head">
+    <xsl:message>MBX:ERROR: an environment  (<xsl:value-of select="local-name(.)" />) does not know its header</xsl:message>
+</xsl:template>
+<xsl:template match="*" mode="body">
+    <xsl:message>MBX:ERROR: an environment  (<xsl:value-of select="local-name(.)" />) does not know its body</xsl:message>
+</xsl:template>
+<xsl:template match="*" mode="posterior">
+    <xsl:message>MBX:ERROR: an environment  (<xsl:value-of select="local-name(.)" />) does not know its posterior</xsl:message>
+</xsl:template>
+
+
 <!-- Entry Point to Process Environments -->
 <!-- This is the entry point for *all* environments       -->
 <!-- We always build a knowl to be target of a xref       -->
@@ -694,6 +709,7 @@ is just flat out on the page, as if printed there.
         <xsl:apply-templates select="." mode="head" />
         <xsl:apply-templates select="." mode="body" />
     </xsl:element>
+    <xsl:apply-templates select="." mode="posterior" />
 </xsl:template>
 
 <!-- Footnotes -->
@@ -712,6 +728,8 @@ is just flat out on the page, as if printed there.
     <xsl:text>) </xsl:text>
     <xsl:apply-templates />
 </xsl:template>
+<!-- No posterior  -->
+<xsl:template match="fn" mode="posterior" />
 <!-- HTML, CSS -->
 <xsl:template match="fn" mode="environment-element">
     <xsl:text>sup</xsl:text>
@@ -741,6 +759,8 @@ is just flat out on the page, as if printed there.
     </div>
     <xsl:apply-templates select="note" />
 </xsl:template>
+<!-- No posterior  -->
+<xsl:template match="biblio" mode="posterior" />
 <!-- HTML, CSS -->
 <xsl:template match="biblio" mode="environment-element">
     <xsl:text>div</xsl:text>
@@ -773,6 +793,8 @@ is just flat out on the page, as if printed there.
 <xsl:template match="example|remark" mode="body">
     <xsl:apply-templates select="*[not(self::title)]"/>
 </xsl:template>
+<!-- No posterior  -->
+<xsl:template match="example|remark" mode="posterior" />
 <!-- HTML, CSS -->
 <xsl:template match="example|remark" mode="environment-element">
     <xsl:text>article</xsl:text>
@@ -801,6 +823,8 @@ is just flat out on the page, as if printed there.
 <xsl:template match="definition|axiom|conjecture|principle" mode="body">
     <xsl:apply-templates select="statement" />
 </xsl:template>
+<!-- No posterior  -->
+<xsl:template match="definition|axiom|conjecture|principle" mode="posterior" />
 <!-- HTML, CSS -->
 <xsl:template match="definition|axiom|conjecture|principle" mode="environment-element">
     <xsl:text>article</xsl:text>
@@ -826,9 +850,12 @@ is just flat out on the page, as if printed there.
         </xsl:if>
     </h5>
 </xsl:template>
-<!-- Body is just the statement and the proof -->
+<!-- Body is just the statement -->
 <xsl:template match="theorem|corollary|lemma|proposition|claim|fact" mode="body">
     <xsl:apply-templates select="statement" />
+</xsl:template>
+<!-- Posterior is just the proof -->
+<xsl:template match="theorem|corollary|lemma|proposition|claim|fact" mode="posterior">
     <xsl:apply-templates select="proof" />
 </xsl:template>
 <!-- HTML, CSS -->
@@ -863,6 +890,8 @@ is just flat out on the page, as if printed there.
 <xsl:template match="proof|hint|answer|solution|note" mode="body">
     <xsl:apply-templates />
 </xsl:template>
+<!-- No posterior  -->
+<xsl:template match="proof|hint|answer|solution|note" mode="posterior" />
 <!-- HTML, CSS -->
 <xsl:template match="proof|hint|answer|solution|note" mode="environment-element">
     <xsl:text>article</xsl:text>
@@ -968,6 +997,7 @@ is just flat out on the page, as if printed there.
             <xsl:apply-templates select="." mode="head" />
             <xsl:apply-templates select="." mode="body" />
         </xsl:element>
+        <xsl:apply-templates select="." mode="posterior" />
         <div class="context-link" style="text-align:right;">
             <xsl:element name="a">
                 <xsl:attribute name="href">
