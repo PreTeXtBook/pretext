@@ -65,7 +65,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Some things never are hidden, -->
 <!-- eg an entire section (too big) -->
 <xsl:param name="html.knowl.theorem" select="'no'" />
-<xsl:param name="html.knowl.proof" select="'no'" />
+<xsl:param name="html.knowl.proof" select="'yes'" />
 <xsl:param name="html.knowl.definition" select="'no'" />
 <xsl:param name="html.knowl.example" select="'no'" />
 <xsl:param name="html.knowl.remark" select="'no'" />
