@@ -2,13 +2,17 @@
 
 <!-- For TJ Hitchman's Linear Algebra Workbook     -->
 <!-- 2014/09/04  R. Beezer, page break at sections -->
+<!-- 2014/09/09  R. Beezer, implemented "tasks"    -->
 
 <!-- Identify as a stylesheet -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
-<!-- Import the usual LaTeX conversion templates           -->
-<!-- EDIT ME to point the right place, maybe use full path -->
-<xsl:import href="/Users/hitchman/github/mathbook/xsl/mathbook-latex.xsl" />
+<!-- Import the usual LaTeX conversion templates            -->
+<!-- Place this file in  mathbook/user  (mkdir if necessary)-->
+<xsl:import href="../xsl/mathbook-latex.xsl" />
+
+<!-- Intend output for rendering by pdflatex -->
+<xsl:output method="text" />
 
 <!-- Examples of items you usually set as "stringparam" on the command line -->
 <xsl:param name="latex.font.size" select="'10pt'" />
@@ -33,5 +37,23 @@
 	<xsl:apply-imports />
 	<xsl:text>\clearpage&#xa;</xsl:text>
 </xsl:template>
+
+<!-- ##### -->
+<!-- Tasks -->
+<!-- ##### -->
+
+<xsl:param name="latex.preamble.late">
+	<xsl:text>\newtheorem{task}{Task}&#xa;</xsl:text>
+</xsl:param>
+
+<xsl:template match="task">
+	<xsl:text>\begin{task}&#xa;</xsl:text>
+    <xsl:apply-templates select="title" mode="environment-option" />
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="*[not(self::title)]"/>
+	<xsl:text>\end{task}&#xa;</xsl:text>
+</xsl:template>
+
 
 </xsl:stylesheet>
