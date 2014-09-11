@@ -90,6 +90,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="latex-toc-level">
     <xsl:value-of select="$toc-level - 1" />
 </xsl:param>
+<!-- A LaTeX "section depth" is *always* 1 for a section        -->
+<!-- But our numbering begins at the root, we need to decrement -->
+<!-- for a <book> due to intervening chapters, etc.             -->
+<xsl:param name="latex-numbering-maxlevel">
+    <xsl:choose>
+        <xsl:when test="/mathbook/book">
+            <xsl:value-of select="$numbering-maxlevel - 1" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$numbering-maxlevel" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:param>
 
 <!-- Entry template is in mathbook-common file -->
 
@@ -311,11 +324,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>%% Subdivision Numbering, Chapters, Sections, Subsections, etc&#xa;</xsl:text>
     <xsl:text>%% Subdivision numbers may be turned off at some level ("depth")&#xa;</xsl:text>
+    <xsl:text>%% A section *always* has depth 1, contrary to us counting from the document root&#xa;</xsl:text>
     <xsl:text>%% The latex default is 3.  If a larger number is present here, then&#xa;</xsl:text>
     <xsl:text>%% removing this command may make some cross-references ambiguous&#xa;</xsl:text>
-    <xsl:text>%% The variable $numbering-maxlevel is checked for consistency in the common XSL file&#xa;</xsl:text>
+    <xsl:text>%% The precursor variable $numbering-maxlevel is checked for consistency in the common XSL file&#xa;</xsl:text>
     <xsl:text>\setcounter{secnumdepth}{</xsl:text>
-        <xsl:value-of select="$numbering-maxlevel" />
+        <xsl:value-of select="$latex-numbering-maxlevel" />
     <xsl:text>}&#xa;</xsl:text>
     <!-- Could condition following on existence of any amsthm environment -->
     <xsl:text>%% Environments with amsthm package&#xa;</xsl:text>
