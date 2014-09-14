@@ -35,7 +35,7 @@
 
 <!-- Number tasks globally, serially -->
 <xsl:template match="task" mode="number">
-	<xsl:number count="task" from="mathbook" />
+	<xsl:number count="task" from="mathbook" level="any" />
 </xsl:template>
 
 <xsl:template match="task">
