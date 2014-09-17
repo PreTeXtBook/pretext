@@ -1374,6 +1374,11 @@ is just flat out on the page, as if printed there.
     <em class="terminology"><xsl:apply-templates /></em>
 </xsl:template>
 
+<!-- Acronyms (no-op) -->
+<xsl:template match="acro">
+    <abbr class="acronym"><xsl:comment>Style me</xsl:comment><xsl:apply-templates /></abbr>
+</xsl:template>
+
 <!-- Emphasis -->
 <xsl:template match="em">
     <em><xsl:apply-templates /></em>
