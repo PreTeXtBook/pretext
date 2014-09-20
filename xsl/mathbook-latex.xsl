@@ -982,12 +982,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- An exercise in an "exercises" subdivision            -->
-<!-- is a list item in a description list                 -->
-<!-- Assume solution ends with non-blank-line and newline -->
-<!-- TODO: Implement solution and hint switches for user  -->
-<!-- TODO, allow killing statements for hint sections, etc? -->
+<!-- An exercise in an "exercises" subdivision             -->
+<!-- is a list item in a description list                  -->
+<!-- TODO: parameterize as a backmatter item, new switches -->
 <xsl:template match="exercises/exercise|exercisegroup/exercise">
+    <xsl:variable name="statement-visible">
+        <xsl:value-of select="$exercise.text.statement='yes'" />
+    </xsl:variable>
+    <xsl:variable name="hint-visible">
+        <xsl:value-of select="$exercise.text.hint='yes'" />
+    </xsl:variable>
+    <xsl:variable name="answer-visible">
+        <xsl:value-of select="$exercise.text.answer='yes'" />
+    </xsl:variable>
+    <xsl:variable name="solution-visible">
+        <xsl:value-of select="$exercise.text.solution='yes'" />
+    </xsl:variable>
     <xsl:text>\item[</xsl:text>
     <xsl:apply-templates select="." mode="origin-id" />
     <xsl:text>.]</xsl:text>
@@ -997,8 +1007,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="title" />
         <xsl:text>)\space\space{}</xsl:text>
     </xsl:if>
-    <!-- Assumes statement, hint, solution -->
-    <xsl:apply-templates select="*[not(self::title)]"/>
+    <!-- Order enforced: statement, hint, answer, solution -->
+    <xsl:if test="$statement-visible">
+        <xsl:apply-templates select="statement"/>
+    </xsl:if>
+    <xsl:if test="$hint-visible">
+        <xsl:apply-templates select="hint"/>
+    </xsl:if>
+    <xsl:if test="$answer-visible">
+        <xsl:apply-templates select="answer"/>
+    </xsl:if>
+    <xsl:if test="$solution-visible">
+        <xsl:apply-templates select="solution"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- An exercise statement is just a container -->
@@ -1006,24 +1027,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- A hint continues the previous paragraph of the statement -->
-<xsl:template match="exercise/hint">
-    <xsl:if test="$hints.included='yes'">
-        <xsl:text>\space&#xa;</xsl:text>
-        <xsl:apply-templates select="." mode="type-name" />
-        <xsl:text>: </xsl:text>
-        <xsl:apply-templates />
-    </xsl:if>
-</xsl:template>
-
-<!-- Assume pargraphs of solution end with non-blank line and newline -->
-<xsl:template match="exercise/solution">
-    <xsl:if test="$solutions.included='yes'">
-        <xsl:text>\par\smallskip&#xa;\noindent\textbf{</xsl:text>
-        <xsl:apply-templates select="." mode="type-name" />
-        <xsl:text>.}\quad&#xa;</xsl:text>
-        <xsl:apply-templates />
-    </xsl:if>
+<!-- Assume various solution-types with non-blank line and newline -->
+<xsl:template match="exercise/hint|exercise/answer|exercise/solution">
+    <xsl:text>\par\smallskip&#xa;\noindent\textbf{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name" />
+    <xsl:text>.}\quad&#xa;</xsl:text>
+    <xsl:apply-templates />
 </xsl:template>
 
 <!-- Theorem Environments/Statements -->

@@ -38,12 +38,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!-- These here are independent of the output format as well                  -->
-<!-- -->
-<!-- Hints and solutions for exercises is configurable        -->
-<!-- For example, in a text versus a solution manual          -->
-<!-- Default is to show them, global switch can turn them off -->
-<xsl:param name="hints.included" select="'yes'" />
-<xsl:param name="solutions.included" select="'yes'" />
+<!--                                                                          -->
+<!-- An exercise has a statement, and may have a hint,     -->
+<!-- an answer and a solution.  An anser is just the       -->
+<!-- final number, expression, whatever, while a solution  -->
+<!-- includes intermediate steps. Parameters here control  -->
+<!-- what is visible where.                                -->
+<!-- First, an exercise in exercises section.              -->
+<!-- Default is "yes" for every part, so experiment        -->
+<!-- with parameters to make some parts hidden.            -->
+<xsl:param name="exercise.text.statement" select="'yes'" />
+<xsl:param name="exercise.text.hint" select="'yes'" />
+<xsl:param name="exercise.text.answer" select="'yes'" />
+<xsl:param name="exercise.text.solution" select="'yes'" />
 <!-- Author tools are for drafts, mostly "todo" items                 -->
 <!-- and "provisional" citations and cross-references                 -->
 <!-- Default is to hide todo's, inline provisionals                   -->

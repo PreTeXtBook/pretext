@@ -917,10 +917,22 @@ is just flat out on the page, as if printed there.
     </div>
 </xsl:template>
 
-<!-- Solutions are included by default switch, could be knowls -->
+<!-- Exercise, inline or in exercises section -->
 <xsl:template match="exercise">
     <xsl:variable name="xref">
         <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:variable>
+    <xsl:variable name="statement-visible">
+        <xsl:value-of select="$exercise.text.statement='yes'" />
+    </xsl:variable>
+    <xsl:variable name="hint-visible">
+        <xsl:value-of select="$exercise.text.hint='yes'" />
+    </xsl:variable>
+    <xsl:variable name="answer-visible">
+        <xsl:value-of select="$exercise.text.answer='yes'" />
+    </xsl:variable>
+    <xsl:variable name="solution-visible">
+        <xsl:value-of select="$exercise.text.solution='yes'" />
     </xsl:variable>
     <article class="exercise-like" id="{$xref}">
         <h5 class="heading">
@@ -932,14 +944,24 @@ is just flat out on the page, as if printed there.
             <span class="title"><xsl:apply-templates select="title" /></span>
         </xsl:if>
         </h5>
-        <xsl:apply-templates select="statement" />
-        <xsl:apply-templates select="hint" />
-        <xsl:apply-templates select="solution" />
+        <!-- Order enforced: statement, hint, answer, solution -->
+        <xsl:if test="$statement-visible">
+            <xsl:apply-templates select="statement"/>
+        </xsl:if>
+        <xsl:if test="$hint-visible">
+            <xsl:apply-templates select="hint"/>
+        </xsl:if>
+        <xsl:if test="$answer-visible">
+            <xsl:apply-templates select="answer"/>
+        </xsl:if>
+        <xsl:if test="$solution-visible">
+            <xsl:apply-templates select="solution"/>
+        </xsl:if>
     </article>
 </xsl:template>
 
-<xsl:template match="exercise/hint|exercise/solution">
-    <xsl:apply-templates select="." mode="type-name" />
+<xsl:template match="exercise/hint|exercise/answer|exercise/solution">
+    <b><xsl:comment>Style me</xsl:comment><xsl:apply-templates select="." mode="type-name" /></b>
     <xsl:text>. </xsl:text>
     <xsl:apply-templates />
 </xsl:template>
