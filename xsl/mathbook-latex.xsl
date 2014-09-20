@@ -1447,10 +1447,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Line Breaks -->
 <!-- \newline works best in table cells in paragraph mode       -->
 <!-- so as to not be confused with \\ at the end of a table row -->
-<!-- use sparingly, e.g. for poetry, *not* in math environments -->
+<!-- but \\ is definitley better for multi-line main titles     -->
+<!-- Use sparingly, e.g. for poetry, *not* in math environments -->
 <!-- Must be in TeX's paragraph mode                            -->
 <xsl:template match="br">
     <xsl:text>\newline{}</xsl:text>
+</xsl:template>
+<xsl:template match="title/br|subtitle/br">
+    <xsl:text>\\</xsl:text>
 </xsl:template>
 
 <!-- Non-breaking space, which "joins" two words as a unit -->
