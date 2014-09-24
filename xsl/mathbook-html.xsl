@@ -73,6 +73,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.knowl.table" select="'no'" />
 <xsl:param name="html.knowl.exercise" select="'no'" />
 
+<!-- CSS and Javascript Servers -->
+<!-- We allow processing paramteers to specify new servers   -->
+<!-- or to specify the particular CSS file, which may have   -->
+<!-- different color schemes.  The defaults should work      -->
+<!-- fine and will not need changes on initial or casual use -->
+<!-- #0 to #5 on mathbook-modern for different color schemes -->
+<!-- We just like #3 as the default                          -->
+<!-- N.B.:  This scheme is transitional and may change             -->
+<!-- N.B.:  without warning and without any deprecation indicators -->
+<xsl:param name="html.js.server"  select="'http://aimath.org'" />
+<xsl:param name="html.css.server" select="'http://aimath.org'" />
+<xsl:param name="html.css.file"   select="'mathbook-modern-3.css'" />
+
 <!-- Authors, editors in serial lists for headers           -->
 <!-- Presumes authors get selected first, so editors follow -->
 <!-- TODO: Move to common -->
@@ -2515,9 +2528,9 @@ $(function () {
 <!-- Mathbook Javascript header -->
 <xsl:template name="mathbook-js">
     <!-- condition first on toc present? -->
-    <script src="http://mathbook.staging.michaeldubois.me/develop/js/lib/jquery.espy.min.js"></script>
-    <script src="http://mathbook.staging.michaeldubois.me/develop/js/lib/jquery.sticky.js"></script>
-    <script src="http://mathbook.staging.michaeldubois.me/develop/js/Mathbook.js"></script>
+    <script src="{$html.js.server}/mathbook/js/lib/jquery.sticky.js" ></script>
+    <script src="{$html.js.server}/mathbook/js/lib/jquery.espy.min.js"></script>
+    <script src="{$html.js.server}/mathbook/js/Mathbook.js"></script>
 </xsl:template>
 
 <!-- Font header -->
@@ -2530,9 +2543,8 @@ $(function () {
 
 <!-- CSS header -->
 <xsl:template name="css">
-    <!-- #1 to #5 for different color schemes -->
-    <link href="http://mathbook.staging.michaeldubois.me/develop/stylesheets/mathbook-modern-3.css" rel="stylesheet" type="text/css" />
-    <!-- <link href="http://aimath.org/mathbook/add-on.css" rel="stylesheet" type="text/css" /> -->
+    <link href="{$html.css.server}/mathbook/stylesheets/{$html.css.file}" rel="stylesheet" type="text/css" />
+    <link href="http://aimath.org/mathbook/mathbook-add-on.css" rel="stylesheet" type="text/css" />
 </xsl:template>
 
 
