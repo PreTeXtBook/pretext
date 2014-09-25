@@ -84,7 +84,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- N.B.:  without warning and without any deprecation indicators -->
 <xsl:param name="html.js.server"  select="'http://aimath.org'" />
 <xsl:param name="html.css.server" select="'http://aimath.org'" />
-<xsl:param name="html.css.file"   select="'mathbook-modern-3.css'" />
+<xsl:param name="html.css.file"   select="'mathbook-3.css'" />
 
 <!-- Authors, editors in serial lists for headers           -->
 <!-- Presumes authors get selected first, so editors follow -->
