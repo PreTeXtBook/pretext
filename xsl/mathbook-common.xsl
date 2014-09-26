@@ -864,9 +864,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 
-<!-- Exercises in lists are always in an enclosing subdivision          -->
-<!-- Their default numbers are hierarchical, so we strip the            -->
-<!-- serial number for display, if a hard-coded number is not available -->
+<!-- Exercises in lists are always in an enclosing       -->
+<!-- subdivision Their default numbers are hierarchical, -->
+<!-- so we strip the serial number for display           -->
 <xsl:template match="exercises/exercise|exercisegroup/exercise" mode="origin-id">
     <xsl:call-template name="substring-after-last">
         <xsl:with-param name="input">
@@ -874,14 +874,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:with-param>
         <xsl:with-param name="substr" select="'.'" />
     </xsl:call-template>
-</xsl:template>
-
-<!-- If we hard-code a number for an exercise, so be it           -->
-<!-- N.B. Same priority as above, so needs to come in this order, -->
-<!-- as we wish hard-coded to have higher priority                -->
-<!-- TODO: Enforce with numbered priority? -->
-<xsl:template match="exercises/exercise[@number]|exercisegroup/exercise[@number]" mode="origin-id">
-    <xsl:apply-templates select="@number" />
 </xsl:template>
 
 <!-- Bibliographic items are in lists in references section -->
@@ -1128,6 +1120,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>.</xsl:text>
     <xsl:number from="exercises" level="any" count="exercise" />
 </xsl:template>
+
+<!-- If we hard-code a number for an exercise, so be it           -->
+<!-- N.B. Same priority as above, so needs to come in this order, -->
+<!-- as we wish hard-coded to have higher priority                -->
+<!-- TODO: Enforce with numbered priority? -->
+<xsl:template match="exercises/exercise[@number]|exercisegroup/exercise[@number]" mode="number">
+    <xsl:apply-templates select="." mode="structural-number" />
+    <xsl:text>.</xsl:text>
+    <xsl:apply-templates select="@number" />
+</xsl:template>
+
 
 <!-- Numbering Bibliography Items in References -->
 <!-- Structural number for References section, -->

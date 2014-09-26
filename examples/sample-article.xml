@@ -1177,6 +1177,8 @@ the xsltproc executable.
 
             <introduction>
                 <p>Exercises in an <q>exercises</q> section are numbered automatically.  However, what if you have a busted problem and remove it?  Then a bunch of problem numbers change and your list of homework for your students changes as well.  What a mess.  Use auto-numbering while writing and refining.  Once stable, go ahead and hard-code problem numbers as you delete/add.  Notice the oddly numbered problem below.  Once you go down this road, you can't stop.  But instructors will thank you for it.</p>
+
+                <p>More precisely, once you hard-code a number for a problem, you will likely need to hard-code every subsequent problem number in that section of exercises.  This is because the automatic numbering is unlikely to be what you really want, or what you had before.</p>
             </introduction>
 
             <exercise>
@@ -1189,7 +1191,8 @@ the xsltproc executable.
                 </solution>
             </exercise>
 
-            <exercise number="42a">
+            <exercise number="42a" xml:id="exercise-with-hardcoded-number">
+                <title>An Exercise with a Hard-Coded Problem Number</title>
                 <statement>
                     <p>Compute the definite integral <m>\definiteintegral{2}{4}{x^2}{x}</m>, not as an approximate value from a Riemann sum, but as an exact value based of the limit by using the Fundamental Theorem.</p>
                 </statement>
@@ -1239,6 +1242,8 @@ the xsltproc executable.
             <p>Suppose you want to reference two theorems, so you might want to say something like <q>Theorems 4.6 and 5.2.</q>  With global autonaming on, you can override with <c>autoname="plural"</c> on the first <c>xref</c> and <c>autoname="no"</c> on the second <c>xref</c>.  (With global autonaming off, you just write what you want and only the numbers are links/knowls.) The <c>plural</c> option is implies the <c>yes</c> option.  Here is the test, which should look correct no matter what the global switch is:  <xref ref="section-cross-referencing" autoname="plural" /> and <xref ref="section-internationalization" autoname="no" />.  (But notice that it is up to you to be certain the type of the second one does not change without the first also changing.  The <q>author-tools</q> mode and careful choices of <c>xml:id</c> strings can help avoid this trap.)</p>
 
             <p>One final twist.  If you say <c>autoname="title"</c>, then the title you assigned to the theorem will prefix the number.  Here is a the final example, which should always refer to a fundamental theorem by name <xref ref="theorem-FTC" autoname="title" />.</p>
+
+            <p>Cross-references to exercises with hard-coded numbers should respect the supplied number.  Exercise<nbsp /><xref ref="exercise-with-hardcoded-number" /> should reference problem 42a.</p>
 
             <p>Here we form a list to test pointing at various things:</p>
 
