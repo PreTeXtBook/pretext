@@ -1041,14 +1041,16 @@ the xsltproc executable.
                 <title>References</title>
 
                 <introduction>
-                    <p>These items are united in that they are both about linear algebra, but one is a textbook and the other an article.</p>
+                    <p>These items are united in that they are all about linear algebra, but one is a textbook and the other an article.</p>
                 </introduction>
 
-                <biblio type="raw" xml:id="biblio-strang-article">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio> 
+                <biblio type="raw" xml:id="biblio-strang-article">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio>
 
                 <biblio type="raw" xml:id="biblio-beezer-fcla">Robert A. Beezer, <title>A First Course in Linear Algebra</title>, 3rd Edition, Congruent Press, 2012.
                 <note><p>An online, open-source offering.</p></note>
                 </biblio>
+
+                <biblio type="raw" xml:id="biblio-strang-article">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio>
 
                 <conclusion>
                     <p>This is a conclusion, which has not been used very much in this sample.  Did you see the the second reference above has a short annotation?  So you can make annotated bibliographies easily.</p>
@@ -1060,7 +1062,7 @@ the xsltproc executable.
 
                 <exercise>
                     <statement>
-                        <p>No problem here, but the next two are in an <q>exercise group</q> with an introduction.</p>
+                        <p>No problem here, but the next two are in an <q>exercise group</q> with an introduction and a conclusion.  The two problems of the exercise group should be indented some to indicate the grouping.</p>
                     </statement>
                 </exercise>
 
@@ -1072,7 +1074,7 @@ the xsltproc executable.
 
                     <exercise>
                         <statement>
-                            <p><m>f(x)=x^3</m>, <m>\frac{df}{dx}</m>.</p>
+                            <p><m>f(x)=x^3</m>, <m>\frac{df}{dx}</m>.  This sentence is just a bunch of gibberish to be certain that the problem's left margin aligns with the problem number's indentation.</p>
                         </statement>
                     </exercise>
 
@@ -1081,6 +1083,10 @@ the xsltproc executable.
                             <p><m>y = \cos(x)</m>, <m>y^\prime</m>.</p>
                         </statement>
                     </exercise>
+
+                    <conclusion>
+                        <p>Note that the previous two problems used very different notation for the function and the resulting derivative.</p>
+                    </conclusion>
 
                 </exercisegroup>
 
@@ -1392,7 +1398,7 @@ the xsltproc executable.
         <references>
             <title>References</title>
 
-            <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>, <volume>55</volume>
+            <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>.
             <note><p>Another online, open-source offering.</p></note>
             </biblio>
 

@@ -563,6 +563,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Multiple column, column-major lists&#xa;</xsl:text>
         <xsl:text>\usepackage{multicol}&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="//exercises or //references">
+        <xsl:text>%% More flexible list management, esp. for references and exercises&#xa;</xsl:text>
+        <xsl:text>\usepackage{enumitem}&#xa;</xsl:text>
+        <xsl:if test="//references">
+            <xsl:text>%% Lists of references in their own section, maximum depth 1&#xa;</xsl:text>
+            <xsl:text>\newlist{referencelist}{description}{1}&#xa;</xsl:text>
+            <!-- labelindent defaults to 0, ! means computed -->
+            <xsl:text>\setlist[referencelist]{leftmargin=!,labelwidth=!,labelsep=0ex,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//exercises">
+            <xsl:text>%% Lists of exercises in their own section, maximum depth 4&#xa;</xsl:text>
+            <xsl:text>\newlist{exerciselist}{description}{4}&#xa;</xsl:text>
+            <xsl:text>\setlist[exerciselist]{leftmargin=0pt,itemsep=-1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
     <xsl:if test="//index">
         <xsl:text>%% Support for index creation&#xa;</xsl:text>
         <xsl:if test="$author-tools='no'">
@@ -917,14 +932,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- Could be no contents (just an introduction), then -->
     <!-- LaTeX chokes on empty list, so check for entries  -->
-    <xsl:if test="(local-name(.)='exercises' or local-name(.)='references') and (.//exercise or .//biblio)">
-        <xsl:text>\begin{description}&#xa;</xsl:text>
+    <xsl:if test="local-name(.)='exercises' and .//exercise">
+        <xsl:text>\begin{exerciselist}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="local-name(.)='references' and .//biblio">
+        <xsl:text>\begin{referencelist}&#xa;</xsl:text>
     </xsl:if>
     <!-- Process the remaining contents -->
     <xsl:apply-templates select="*[not(self::title or self::author or self::introduction or self::conclusion)]"/>
     <!-- Exercises, references are in managed description lists -->
-    <xsl:if test="(local-name(.)='exercises' or local-name(.)='references') and (.//exercise or .//biblio)">
-        <xsl:text>\end{description}&#xa;</xsl:text>
+    <xsl:if test="local-name(.)='exercises' and .//exercise">
+        <xsl:text>\end{exerciselist}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="local-name(.)='references' and .//biblio">
+        <xsl:text>\end{referencelist}&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="conclusion" />
 </xsl:template>
@@ -981,17 +1002,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- typically instructions for a list of similar exercises -->
 <!-- Commentary goes in an introduction and/or conclusion   -->
 <xsl:template match="exercisegroup">
-    <xsl:if test="introduction">
-        <xsl:text>\end{description}&#xa;</xsl:text>
-        <xsl:apply-templates select="introduction" />
-        <xsl:text>\begin{description}&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>\end{exerciselist}&#xa;</xsl:text>
+    <xsl:apply-templates select="introduction" />
+    <xsl:text>\setlength{\parskip}{0pt}</xsl:text>
+    <xsl:text>\begin{exerciselist}[leftmargin=2em,labelindent=2em]&#xa;</xsl:text>
     <xsl:apply-templates select="exercise"/>
-    <xsl:if test="conclusion">
-        <xsl:text>\end{description}&#xa;</xsl:text>
-        <xsl:apply-templates select="conclusion" />
-        <xsl:text>\begin{description}&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>\end{exerciselist}&#xa;</xsl:text>
+    <xsl:apply-templates select="conclusion" />
+    <xsl:text>\begin{exerciselist}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- An exercise in an "exercises" subdivision             -->
@@ -1810,7 +1828,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We use description lists to manage bibliographies,  -->
 <!-- and \bibitem seems comfortable there, so our source -->
 <!-- is nearly compatible with the usual usage           -->
-<!-- TODO: use enumitem package to make bibitems look as expected -->
 
 <!-- As an item of a description list, but       -->
 <!-- compatible with thebibliography environment -->
