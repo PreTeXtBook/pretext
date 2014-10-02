@@ -890,6 +890,7 @@ is just flat out on the page, as if printed there.
 <!-- Help with exercises are always are hidden -->
 <!-- Notes on references always are hidden     -->
 <!-- All subsidiary to some other environment  -->
+<!-- TODO: need to split out solutions, etc -->
 <xsl:template match="proof" mode="is-hidden">
     <xsl:value-of select="$html.knowl.proof" />
 </xsl:template>
@@ -915,7 +916,14 @@ is just flat out on the page, as if printed there.
     <xsl:text>article</xsl:text>
 </xsl:template>
 <xsl:template match="proof|hint|answer|solution|note" mode="environment-class">
-    <xsl:text>proof</xsl:text>   <!-- "proof-like"? -->
+    <xsl:choose>
+        <xsl:when test="$html.knowl.proof='yes'">
+            <xsl:text>hiddenproof</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>proof</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- BELOW NOT ADAPTED TO ENVIRONMENTS/KNOWLS -->
