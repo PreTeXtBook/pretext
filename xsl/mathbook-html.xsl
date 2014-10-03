@@ -966,16 +966,16 @@ is just flat out on the page, as if printed there.
         </xsl:if>
         </h5>
         <!-- Order enforced: statement, hint, answer, solution -->
-        <xsl:if test="$statement-visible">
+        <xsl:if test="$statement-visible='true'">
             <xsl:apply-templates select="statement"/>
         </xsl:if>
-        <xsl:if test="$hint-visible">
+        <xsl:if test="$hint-visible='true'">
             <xsl:apply-templates select="hint"/>
         </xsl:if>
-        <xsl:if test="$answer-visible">
+        <xsl:if test="$answer-visible='true'">
             <xsl:apply-templates select="answer"/>
         </xsl:if>
-        <xsl:if test="$solution-visible">
+        <xsl:if test="$solution-visible='true'">
             <xsl:apply-templates select="solution"/>
         </xsl:if>
     </article>
