@@ -84,11 +84,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="latex.preamble.early" select="''" />
 <xsl:param name="latex.preamble.late" select="''" />
 <!--  -->
-<!-- A LaTeX ToC level of 0 will get you a list of top        -->
-<!-- level subdivisions, where we mean it to be "no contents" -->
-<!-- so we translate MBX level to LaTeX-speak and use that    -->
+<!-- LaTeX ToC levels always have sections at level "1"     -->
+<!-- MBX has level "0" as the root, and gives "no contents" -->
+<!-- So we translate MBX level to LaTeX-speak for books     -->
 <xsl:param name="latex-toc-level">
-    <xsl:value-of select="$toc-level - 1" />
+    <xsl:choose>
+        <xsl:when test="/mathbook/book">
+            <xsl:value-of select="$toc-level - 1" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$toc-level" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:param>
 <!-- A LaTeX "section depth" is *always* 1 for a section        -->
 <!-- But our numbering begins at the root, we need to decrement -->
@@ -130,7 +137,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <!-- Likely only an abstract found in frontmatter -->
     <xsl:apply-templates select="frontmatter" />
-    <xsl:if test="$latex-toc-level > -1">
+    <xsl:if test="$latex-toc-level > 0">
         <xsl:text>\setcounter{tocdepth}{</xsl:text>
         <xsl:value-of select="$latex-toc-level" />
         <xsl:text>}&#xa;</xsl:text>
