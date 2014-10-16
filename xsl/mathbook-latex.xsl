@@ -150,6 +150,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\clearpage&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="*[not(self::frontmatter or self::title or self::subtitle)]"/>
+    <!-- TODO: backmatter in an article? -->
     <xsl:call-template name="latex-postamble" />
    <xsl:text>\end{document}</xsl:text>
 </xsl:template>
@@ -189,9 +190,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="frontmatter" />
     <xsl:text>\mainmatter&#xa;</xsl:text>
     <xsl:apply-templates select="chapter" />
-    <xsl:text>\appendix&#xa;</xsl:text>
-    <xsl:apply-templates select="appendix" />
+    <xsl:if test="appendix">
+        <xsl:text>%&#xa;</xsl:text>
+        <xsl:text>\appendix&#xa;</xsl:text>
+        <xsl:text>%&#xa;</xsl:text>
+        <xsl:apply-templates select="appendix" />
+    </xsl:if>
+    <!-- TODO: condition on backmatter, once bibliography set, move out postamble -->
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:text>\backmatter&#xa;</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
+    <xsl:apply-templates select="backmatter" />
     <xsl:apply-templates select="bibliography" />
     <xsl:call-template name="latex-postamble" />
     <xsl:text>\end{document}</xsl:text>
@@ -650,6 +659,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- LaTeX postamble is common for books, articles and letters      -->
 <!-- No index if in draft mode                                      -->
+<!-- Maybe make this elective as a backmatter item (HTML effect?)   -->
 <xsl:template name="latex-postamble">
     <xsl:if test="//index and $author-tools='no'">
         <xsl:text>%% Index goes here at very end&#xa;</xsl:text>
@@ -831,6 +841,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
+<!-- We process the backmatter piece-by-piece -->
+<!-- No real sectioning happens, so kill title-->
+<xsl:template match="backmatter">
+    <xsl:apply-templates select="*[not(self::title)]"/>
+</xsl:template>
+
 <!-- TODO: Add acknowledgement, etc.  Localize the terms -->
 
 <!-- Preface, within \frontmatter is handled correctly by LaTeX-->
@@ -907,15 +923,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Construct the header of the subdivision -->
     <xsl:text>\</xsl:text>
     <xsl:value-of select="$level" />
-    <!-- Optional argument gets used for ToC and headers, identical but with no footnotes -->
-    <!-- http://www.tex.ac.uk/cgi-bin/texfaq2html?label=ftnsect -->
-    <xsl:text>[</xsl:text>
-    <xsl:apply-templates select="title/node()[not(self::fn)]" />
-    <xsl:text>]</xsl:text>
-    <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="title" />
-    <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
+    <!-- Handle section titles carefully.  Sanitized versions    -->
+    <!-- as optional argument to table of contents, headers.     -->
+    <!-- Starred sections for backmatter principal subdivisions. -->
+    <!-- http://www.tex.ac.uk/cgi-bin/texfaq2html?label=ftnsect  -->
+    <!-- TODO: get non-footnote title from "simple" title routines -->
+    <!-- TODO: let author specify short versions (ToC, header) -->
+    <xsl:choose>
+        <xsl:when test="ancestor::backmatter and
+            ((/mathbook/book and self::chapter) or (/mathbook/article and self::section))" >
+            <xsl:text>*</xsl:text>
+            <xsl:text>{</xsl:text>
+            <xsl:apply-templates select="title" />
+            <xsl:text>}</xsl:text>
+            <xsl:apply-templates select="." mode="label" />
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:text>\addcontentsline{toc}{</xsl:text>
+            <xsl:value-of select="local-name(.)" />
+            <xsl:text>}{</xsl:text>
+            <xsl:apply-templates select="title/node()[not(self::fn)]" />
+            <xsl:text>}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>[</xsl:text>
+            <xsl:apply-templates select="title/node()[not(self::fn)]" />
+            <xsl:text>]</xsl:text>
+            <xsl:text>{</xsl:text>
+            <xsl:apply-templates select="title" />
+            <xsl:text>}</xsl:text>
+            <xsl:apply-templates select="." mode="label" />
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>&#xa;</xsl:text>
     <!-- List the author of this division, if present -->
     <xsl:if test="author">
@@ -1016,18 +1054,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- is a list item in a description list                  -->
 <!-- TODO: parameterize as a backmatter item, new switches -->
 <xsl:template match="exercises/exercise|exercisegroup/exercise">
-    <xsl:variable name="statement-visible">
-        <xsl:value-of select="$exercise.text.statement='yes'" />
-    </xsl:variable>
-    <xsl:variable name="hint-visible">
-        <xsl:value-of select="$exercise.text.hint='yes'" />
-    </xsl:variable>
-    <xsl:variable name="answer-visible">
-        <xsl:value-of select="$exercise.text.answer='yes'" />
-    </xsl:variable>
-    <xsl:variable name="solution-visible">
-        <xsl:value-of select="$exercise.text.solution='yes'" />
-    </xsl:variable>
     <xsl:text>\item[</xsl:text>
     <xsl:apply-templates select="." mode="origin-id" />
     <xsl:text>.]</xsl:text>
@@ -1038,17 +1064,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>)\space\space{}</xsl:text>
     </xsl:if>
     <!-- Order enforced: statement, hint, answer, solution -->
-    <xsl:if test="$statement-visible">
-        <xsl:apply-templates select="statement"/>
+    <xsl:if test="$exercise.text.statement='yes'">
+        <xsl:apply-templates select="statement" />
+        <xsl:text>\par\smallskip&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$hint-visible">
-        <xsl:apply-templates select="hint"/>
+    <xsl:if test="hint and $exercise.text.hint='yes'">
+        <xsl:apply-templates select="hint" />
     </xsl:if>
-    <xsl:if test="$answer-visible">
-        <xsl:apply-templates select="answer"/>
+    <xsl:if test="answer and $exercise.text.answer='yes'">
+        <xsl:apply-templates select="answer" />
     </xsl:if>
-    <xsl:if test="$solution-visible">
-        <xsl:apply-templates select="solution"/>
+    <xsl:if test="solution and $exercise.text.solution='yes'">
+        <xsl:apply-templates select="solution" />
     </xsl:if>
 </xsl:template>
 
@@ -1063,6 +1090,60 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="type-name" />
     <xsl:text>.}\quad&#xa;</xsl:text>
     <xsl:apply-templates />
+</xsl:template>
+
+<xsl:template match="solution-list">
+    <!-- TODO: check here once for backmatter switches set to "knowl", which is unrealizable -->
+    <xsl:apply-templates select="//exercises" mode="backmatter" />
+</xsl:template>
+
+<!-- Create a heading for each non-empty collection of solutions -->
+<!-- Format as appropriate LaTeX subdivision for this level      -->
+<!-- But number according to the actual Exercises section        -->
+<xsl:template match="exercises" mode="backmatter">
+    <xsl:variable name="nonempty" select="(.//hint and $exercise.backmatter.hint='yes') or (.//answer and $exercise.backmatter.answer='yes') or (.//solution and $exercise.backmatter.solution='yes')" />
+    <xsl:if test="$nonempty='true'">
+        <xsl:text>\</xsl:text>
+        <xsl:apply-templates select="." mode="subdivision-name" />
+        <xsl:text>*{</xsl:text>
+        <xsl:apply-templates select="." mode="number" />
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="title" />
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:apply-templates select="*[not(self::title)]" mode="backmatter" />
+    </xsl:if>
+</xsl:template>
+
+<!-- Print exercises with some solution component -->
+<!-- Respect switches about visibility ("knowl" is assumed to be 'no') -->
+<xsl:template match="exercise" mode="backmatter">
+    <xsl:if test="hint or answer or solution">
+        <!-- Lead with the problem number and some space -->
+        <xsl:text>\noindent\textbf{</xsl:text>
+        <xsl:apply-templates select="." mode="origin-id" />
+        <xsl:text>.}\quad{}</xsl:text>
+        <xsl:if test="$exercise.backmatter.statement='yes'">
+            <!-- TODO: not a "backmatter" template - make one possibly? Or not necessary -->
+            <xsl:apply-templates select="statement" />
+            <xsl:text>\par\smallskip&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="hint and $exercise.backmatter.hint='yes'">
+            <xsl:apply-templates select="hint" mode="backmatter" />
+        </xsl:if>
+        <xsl:if test="answer and $exercise.backmatter.answer='yes'">
+            <xsl:apply-templates select="answer" mode="backmatter" />
+        </xsl:if>
+        <xsl:if test="solution and $exercise.backmatter.solution='yes'">
+            <xsl:apply-templates select="solution" mode="backmatter" />
+        </xsl:if>
+    </xsl:if>
+</xsl:template>
+
+<!-- We print hints, answers, solutions with no heading. -->
+<!-- TODO: make heading on solution components configurable -->
+<xsl:template match="exercise/hint|exercise/answer|exercise/solution" mode="backmatter">
+    <xsl:apply-templates />
+    <xsl:text>\par\smallskip&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Theorem Environments/Statements -->
