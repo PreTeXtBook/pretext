@@ -1412,6 +1412,21 @@ the xsltproc executable.
 
         </references>
 
+        <backmatter>
+            <title>Reference</title>
+
+            <section>
+                <title>Notation</title>
+                <notation-list />
+            </section>
+
+            <section>
+                <title>Solutions to Selected Exercises</title>
+                <solution-list />
+            </section>
+
+        </backmatter>
+
     </article>
 
 </mathbook>
