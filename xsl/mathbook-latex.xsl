@@ -847,13 +847,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*[not(self::title)]"/>
 </xsl:template>
 
-<!-- TODO: Add acknowledgement, etc.  Localize the terms -->
-
-<!-- Preface, within \frontmatter is handled correctly by LaTeX-->
-<xsl:template match="preface">
-    <xsl:text>\chapter{Preface}&#xa;</xsl:text>
+<!-- Preface, etc within \frontmatter is usually handled correctly by LaTeX -->
+<!-- Allow alternative titles, like "Preface to 2nd Edition"                -->
+<!-- But we use starred version anyway, so chapter headings react properly  -->
+<!-- TODO: add dedication, other frontmatter, move in title handling        -->
+<!-- TODO: add to headers, currently just CONTENTS, check backmatter        -->
+<xsl:template match="preface|acknowledgement">
+    <xsl:variable name="preface-title">
+        <xsl:choose>
+            <xsl:when test="title">
+                <xsl:apply-templates select="title" /> <!-- footnotes dangerous here -->
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="type-name" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:text>\chapter*{</xsl:text>
+    <xsl:value-of select="$preface-title" />
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>\addcontentsline{toc}{chapter}{</xsl:text>
+    <xsl:value-of select="$preface-title" />
+    <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates />
 </xsl:template>
+
 
 <!-- Articles may have an abstract in the frontmatter -->
 <xsl:template match="abstract">
