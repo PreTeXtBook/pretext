@@ -44,6 +44,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Subtag Registry:                                                                  -->
 <!-- http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry -->
 
+<!-- To test, or use:                             -->
+<!--   place  xml:lang="es-ES", or similar,       -->
+<!--   as an attribute on your <mathbook> element -->
 
 <!-- en-US, US English, Robert A. Beezer, 2014/08/11 -->
 <!-- This is the default if no @lang attribute is given on the mathbook element -->
