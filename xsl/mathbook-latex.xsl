@@ -613,6 +613,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Package for precise image placement (for logos on pages)&#xa;</xsl:text>
         <xsl:text>\usepackage{eso-pic}&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="//notation">
+        <xsl:text>%% Package for tables spanning several pages&#xa;</xsl:text>
+        <xsl:text>\usepackage{longtable}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>%% hyperref driver does not need to be specified&#xa;</xsl:text>
     <xsl:text>\usepackage{hyperref}&#xa;</xsl:text>
     <xsl:if test="$latex.print='no'">
@@ -885,7 +889,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*[not(self::title)]"/>
 </xsl:template>
 
+<!-- At location, we just drop a page marker -->
+<xsl:template match="notation">
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
 
+
+<!-- Notation list -->
+<!-- TODO: Localize/Internationalize header row -->
+<xsl:template match="notation-list">
+    <xsl:text>\begin{longtable}[l]{llr}&#xa;</xsl:text>
+    <xsl:text>\textbf{Symbol}&amp;\textbf{Description}&amp;\textbf{Page}\\[1em]&#xa;</xsl:text>
+    <xsl:text>\endfirsthead&#xa;</xsl:text>
+    <xsl:text>\textbf{Symbol}&amp;\textbf{Description}&amp;\textbf{Page}\\[1em]&#xa;</xsl:text>
+    <xsl:text>\endhead&#xa;</xsl:text>
+    <xsl:text>\multicolumn{3}{r}{(Continued on next page)}\\&#xa;</xsl:text>
+    <xsl:text>\endfoot&#xa;</xsl:text>
+    <xsl:text>\endlastfoot&#xa;</xsl:text>
+    <xsl:apply-templates select="//notation" mode="backmatter" />
+    <xsl:text>\end{longtable}&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="notation" mode="backmatter">
+    <xsl:text>$</xsl:text>
+    <xsl:value-of select="usage" />
+    <xsl:text>$</xsl:text>
+    <xsl:text>&amp;</xsl:text>
+    <xsl:apply-templates select="description" />
+    <xsl:text>&amp;</xsl:text>
+    <xsl:text>\pageref{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}</xsl:text>
+    <xsl:text>\\&#xa;</xsl:text>
+</xsl:template>
 
 
 
@@ -1227,12 +1264,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="notation">
-    <xsl:text>Sample notation (in a master list eventually): $</xsl:text>
-    <xsl:value-of select="." />
-    <xsl:text>$\par&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Paragraphs                         -->
