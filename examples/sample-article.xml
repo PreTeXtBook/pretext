@@ -168,6 +168,11 @@ the xsltproc executable.
 
             <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me> This is also a demonstration of the capabilities of <url href="http://mathbook.pugetsound.edu">MathBook XML</url>.</p>
 
+            <notation>
+                <usage>\int_a^b\,f(x)\,dx</usage>
+                <description>definite integral of <m>f(x)</m></description>
+            </notation>
+
             <p>Generated: <today />, <timeofday /></p>
 
         </section>
@@ -230,7 +235,12 @@ the xsltproc executable.
 
             <p>We can also embed <q>todo</q>s in the source, and selectively display them, so you may not see the one here in the output you are looking at now.  Or maybe you do see it?</p>
 
-            <todo>Talk more about author's tools, such as todo's</todo>
+            <notation>
+                <usage>\int\,f(x)\,dx</usage>
+                <description>antiderivative of <m>f(x)</m></description>
+            </notation>
+
+<todo>Talk more about author's tools, such as todo's</todo>
 
         </section>
 
@@ -624,6 +634,11 @@ the xsltproc executable.
                 <mrow>\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}}</mrow>
                 <mrow>\nabla \cdot \vec{\mathbf{B}} &amp; = 0</mrow>
             </md></p>
+
+            <notation>
+                <usage>\nabla</usage>
+                <description>gradient operator</description>
+            </notation>
 
             <p>A small test that the extensible arrows library is included properly:<me>A\xmapsto[\text{bijection}]{\Phi+\Psi+\Theta}B</me></p>
 
