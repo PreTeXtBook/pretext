@@ -578,13 +578,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="exercises" mode="backmatter">
-    <xsl:message><xsl:apply-templates select="." mode="long-name" /></xsl:message>
-    <xsl:message>HERE!</xsl:message>
     <xsl:variable name="nonempty" select="(.//hint and $exercise.backmatter.hint='yes') or
                                           (.//answer and $exercise.backmatter.answer='yes') or
                                           (.//solution and $exercise.backmatter.solution='yes')" />
-    <!-- <xsl:if test="nonempty='true'"> -->
-        <xsl:message>SECTION!</xsl:message>
+
+    <xsl:if test="$nonempty='true'">
         <section class="exercises" id="">
             <h1 class="heading">
                 <span class="type">Exercises</span>
@@ -593,8 +591,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </h1>
             <xsl:apply-templates select="*[not(self::title)]" mode="backmatter" />
         </section>
-    <!-- </xsl:if> -->
+    </xsl:if>
 </xsl:template>
+
+<!-- We kill the introduction and conclusion for -->
+<!-- the exercises and for the exercisegroups    -->
+<xsl:template match="exercises//introduction|exercises//conclusion" mode="backmatter" />
 
 <!-- Print exercises with some solution component -->
 <!-- Respect switches about visibility ("knowl" is assumed to be 'no') -->
@@ -642,7 +644,46 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </article>
 </xsl:template>
 
+<!-- At location, we just drop a marker -->
+<xsl:template match="notation">
+    <xsl:element name="span">
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:attribute>
+    </xsl:element>
+</xsl:template>
 
+<!-- Notation list -->
+<!-- TODO: Localize/Internationalize header row -->
+<xsl:template match="notation-list">
+    <table>
+        <tr>
+            <th style="text-align:left">Symbol</th>
+            <th style="text-align:left">Description</th>
+        </tr>
+        <xsl:apply-templates select="//notation" mode="backmatter" />
+    </table>
+</xsl:template>
+
+<xsl:template match="notation" mode="backmatter">
+    <tr>
+        <td>
+            <xsl:text>\(</xsl:text>
+            <xsl:value-of select="usage" />
+            <xsl:text>\)</xsl:text>
+        </td>
+        <td>
+            <xsl:apply-templates select="description" />
+            <xsl:text> </xsl:text>
+            <xsl:element name="a">
+                <xsl:attribute name="href">
+                    <xsl:apply-templates select="." mode="url" />
+                </xsl:attribute>
+                <xsl:text>[*]</xsl:text>
+            </xsl:element>
+        </td>
+    </tr>
+</xsl:template>
 
 
 <!-- ####################### -->
@@ -1060,10 +1101,6 @@ is just flat out on the page, as if printed there.
     <b><xsl:comment>Style me</xsl:comment><xsl:apply-templates select="." mode="type-name" /></b>
     <xsl:text>. </xsl:text>
     <xsl:apply-templates />
-</xsl:template>
-
-<xsl:template match="notation">
-<p>Sample notation (in a master list eventually): \(<xsl:value-of select="." />\)</p>
 </xsl:template>
 
 <!-- ################# -->
