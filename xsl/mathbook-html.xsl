@@ -327,7 +327,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A structural node may be one of many on a web page -->
 <!-- We make an HTML section, then a header, then       -->
 <!-- recurse into remaining content                     -->
-<xsl:template match="book|article|frontmatter|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references">
+<xsl:template match="book|article|frontmatter|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references|backmatter">
     <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
     <section class="{local-name(.)}" id="{$ident}">
         <xsl:apply-templates select="." mode="section-header" />
@@ -568,6 +568,81 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates />
     </article>
 </xsl:template>
+
+<!-- ####################### -->
+<!-- Back Matter Components -->
+<!-- ####################### -->
+
+<xsl:template match="solution-list">
+    <xsl:apply-templates select="//exercises" mode="backmatter" />
+</xsl:template>
+
+<xsl:template match="exercises" mode="backmatter">
+    <xsl:message><xsl:apply-templates select="." mode="long-name" /></xsl:message>
+    <xsl:message>HERE!</xsl:message>
+    <xsl:variable name="nonempty" select="(.//hint and $exercise.backmatter.hint='yes') or
+                                          (.//answer and $exercise.backmatter.answer='yes') or
+                                          (.//solution and $exercise.backmatter.solution='yes')" />
+    <!-- <xsl:if test="nonempty='true'"> -->
+        <xsl:message>SECTION!</xsl:message>
+        <section class="exercises" id="">
+            <h1 class="heading">
+                <span class="type">Exercises</span>
+                <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
+                <span class="title"><xsl:apply-templates select="title-full" /></span>
+            </h1>
+            <xsl:apply-templates select="*[not(self::title)]" mode="backmatter" />
+        </section>
+    <!-- </xsl:if> -->
+</xsl:template>
+
+<!-- Print exercises with some solution component -->
+<!-- Respect switches about visibility ("knowl" is assumed to be 'no') -->
+<xsl:template match="exercise" mode="backmatter">
+    <xsl:if test="hint or answer or solution">
+        <!-- Lead with the problem number and some space -->
+        <xsl:variable name="xref">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:variable>
+        <article class="exercise-like" id="{$xref}">
+            <h5 class="heading hidden-type">
+            <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+            <span class="codenumber"><xsl:apply-templates select="." mode="origin-id" /></span>
+            <xsl:if test="title">
+                <span class="title"><xsl:apply-templates select="title" /></span>
+            </xsl:if>
+            </h5>
+            <xsl:if test="$exercise.backmatter.statement='yes'">
+                <!-- TODO: not a "backmatter" template - make one possibly? Or not necessary -->
+                <xsl:apply-templates select="statement" />
+            </xsl:if>
+            <xsl:if test="hint and $exercise.backmatter.hint='yes'">
+                <xsl:apply-templates select="hint" mode="backmatter" />
+            </xsl:if>
+            <xsl:if test="answer and $exercise.backmatter.answer='yes'">
+                <xsl:apply-templates select="answer" mode="backmatter" />
+            </xsl:if>
+            <xsl:if test="solution and $exercise.backmatter.solution='yes'">
+                <xsl:apply-templates select="solution" mode="backmatter" />
+            </xsl:if>
+        </article>
+    </xsl:if>
+</xsl:template>
+
+
+<xsl:template match="hint|answer|solution" mode="backmatter">
+    <article class="example-like">
+        <h5 class="heading">
+            <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+            <!-- Careful: number comes from enclosing exercise -->
+            <span class="codenumber"><xsl:apply-templates select=".." mode="number" /></span>
+            <span class="title"><xsl:apply-templates select="title-full" /></span>
+        </h5>
+        <xsl:apply-templates />
+    </article>
+</xsl:template>
+
+
 
 
 <!-- ####################### -->
