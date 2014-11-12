@@ -841,12 +841,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- We process the backmatter piece-by-piece -->
-<!-- No real sectioning happens, so kill title-->
-<xsl:template match="backmatter">
-    <xsl:apply-templates select="*[not(self::title)]"/>
-</xsl:template>
-
 <!-- Preface, etc within \frontmatter is usually handled correctly by LaTeX -->
 <!-- Allow alternative titles, like "Preface to 2nd Edition"                -->
 <!-- But we use starred version anyway, so chapter headings react properly  -->
@@ -874,13 +868,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
-
 <!-- Articles may have an abstract in the frontmatter -->
 <xsl:template match="abstract">
     <xsl:text>\begin{abstract}&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\end{abstract}&#xa;</xsl:text>
 </xsl:template>
+
+<!-- ############ -->
+<!-- Back Matter -->
+<!-- ############ -->
+
+<!-- We process the backmatter piece-by-piece -->
+<!-- No real sectioning happens, so kill title-->
+<xsl:template match="backmatter">
+    <xsl:apply-templates select="*[not(self::title)]"/>
+</xsl:template>
+
+
+
+
 
 <!-- Logos (images) -->
 <!-- Fine-grained placement of graphics files on pages      -->
@@ -1133,6 +1140,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="*[not(self::title)]" mode="backmatter" />
     </xsl:if>
 </xsl:template>
+
+<!-- We kill the introduction and conclusion for -->
+<!-- the exercises and for the exercisegroups    -->
+<xsl:template match="exercises//introduction|exercises//conclusion" mode="backmatter" />
 
 <!-- Print exercises with some solution component -->
 <!-- Respect switches about visibility ("knowl" is assumed to be 'no') -->
