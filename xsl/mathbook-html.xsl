@@ -1611,6 +1611,7 @@ is just flat out on the page, as if printed there.
             <xsl:if test="@base='inch'">             <xsl:text>in</xsl:text> </xsl:if>
             <xsl:if test="@base='yard'">             <xsl:text>yd</xsl:text> </xsl:if>
             <xsl:if test="@base='mile'">             <xsl:text>mi</xsl:text> </xsl:if>
+            <xsl:if test="@base='gallon'">           <xsl:text>gal</xsl:text> </xsl:if>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>??base needed??</xsl:text>
