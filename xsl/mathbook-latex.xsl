@@ -332,6 +332,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Need CDATA here to protect inequalities as part of an XML file -->
     <xsl:text><![CDATA[\newcommand{\lt}{<}]]>&#xa;</xsl:text>
     <xsl:text><![CDATA[\newcommand{\gt}{>}]]>&#xa;</xsl:text>
+    <xsl:if test="//m[contains(text(),'sfrac')] or //md[contains(text(),'sfrac')] or //me[contains(text(),'sfrac')] or //mrow[contains(text(),'sfrac')]">
+        <xsl:text>%% xfrac package for 'beveled fractions': http://tex.stackexchange.com/questions/3372/how-do-i-typeset-arbitrary-fractions-like-the-standard-symbol-for-5-%C2%BD&#xa;</xsl:text>
+        <xsl:text>\usepackage{xfrac}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>%% Semantic Macros&#xa;</xsl:text>
     <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
     <xsl:text>%% Only defined here if required in this document&#xa;</xsl:text>
