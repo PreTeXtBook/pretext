@@ -347,6 +347,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Used to markup acronyms, defaults is no effect&#xa;</xsl:text>
         <xsl:text>\newcommand{\acronym}[1]{#1}&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="//quantity">
+        <xsl:text>%% Used for units and number formatting&#xa;</xsl:text>
+        <xsl:text>\usepackage[per-mode=fraction]{siunitx}&#xa;</xsl:text>
+        <xsl:text>\ifxetex\sisetup{math-micro=\text{µ},text-micro=µ}\fi</xsl:text>
+        <xsl:text>%% Common non-SI units&#xa;</xsl:text>
+        <xsl:for-each select="document('mathbook-units.xsl')//base[@siunitx]">
+            <xsl:text>\DeclareSIUnit\</xsl:text>
+            <xsl:value-of select="@full" />
+            <xsl:text>{</xsl:text>
+            <xsl:choose>
+                <xsl:when test="@siunitx='none'">
+                    <xsl:value-of select="@short" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="@siunitx" />
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:for-each>
+    </xsl:if>
     <xsl:text>%% Subdivision Numbering, Chapters, Sections, Subsections, etc&#xa;</xsl:text>
     <xsl:text>%% Subdivision numbers may be turned off at some level ("depth")&#xa;</xsl:text>
     <xsl:text>%% A section *always* has depth 1, contrary to us counting from the document root&#xa;</xsl:text>
@@ -1550,6 +1570,82 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>[</xsl:text>
     <xsl:apply-templates />
     <xsl:text>]{}</xsl:text>
+</xsl:template>
+
+
+<!-- Numbers, units, quantities                     -->
+<!-- quantity                                       -->
+<xsl:template match="quantity">
+    <!-- warning if there is no content -->
+    <xsl:if test="not(descendant::unit) and not(descendant::per) and not(descendant::mag)">
+        <xsl:message terminate="no">
+        <xsl:text>MBX:WARNING: magnitude or units needed</xsl:text>
+        </xsl:message>
+    </xsl:if>
+    <!-- if it's just a number with no units -->
+    <xsl:if test="not(descendant::unit) and not(descendant::per) and (descendant::mag)">
+        <xsl:text>\num{</xsl:text>
+        <xsl:apply-templates select="mag"/>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <!-- if it has a magnitude and units -->
+    <xsl:if test="((descendant::unit) or (descendant::per)) and descendant::mag">
+        <xsl:text>\SI{</xsl:text>
+        <xsl:apply-templates select="mag"/>
+        <xsl:text>}{</xsl:text>
+        <xsl:apply-templates select="unit"/>
+        <xsl:apply-templates select="per"/>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <!-- if it is just units with no magnitude -->
+    <xsl:if test="((descendant::unit) or (descendant::per)) and not(descendant::mag)">
+        <xsl:text>\si{</xsl:text>
+        <xsl:apply-templates select="unit"/>
+        <xsl:apply-templates select="per"/>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- Magnitude                                      -->
+<xsl:template match="mag">
+    <xsl:if test="not(parent::quantity)">
+        <xsl:message>MBX:WARNING: mag element should have parent quantity element</xsl:message>
+    </xsl:if>
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- Units                                          -->
+<xsl:template match="unit|per">
+    <xsl:if test="not(parent::quantity)">
+        <xsl:message>MBX:WARNING: unit or per element should have parent quantity element</xsl:message>
+    </xsl:if>
+    <!-- if we're in a 'per' node -->
+    <xsl:if test="self::per">
+        <xsl:text>\per</xsl:text>
+    </xsl:if>
+    <!-- prefix is optional -->
+    <xsl:if test="@prefix">
+        <xsl:text>\</xsl:text>
+        <xsl:value-of select="@prefix"/>
+    </xsl:if>
+    <!-- base unit is *mandatory* so check to see if it has been provided -->
+    <xsl:choose>
+        <xsl:when test="@base">
+            <xsl:text>\</xsl:text>
+            <xsl:value-of select="@base"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message terminate="no">
+                <xsl:text>MBX:WARNING: base unit needed</xsl:text>
+            </xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- optional exponent -->
+    <xsl:if test="@exp">
+        <xsl:text>\tothe{</xsl:text>
+            <xsl:value-of select="@exp"/>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 
