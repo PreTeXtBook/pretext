@@ -1478,67 +1478,52 @@ is just flat out on the page, as if printed there.
 
 
 <!-- Numbers, units, quantities                     -->
-<!-- Numbers with no units:                         -->
-<!-- quant element with mag attribute (magnitude)   -->
-<xsl:template match="quant[not(descendant::unit) and not(descendant::per)]">
-    <xsl:choose>
-        <xsl:when test="@mag">
-            <xsl:value-of select="@mag"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>??magnitude needed??</xsl:text>
-            <xsl:message terminate="no">
-                <xsl:text>magnitude needed</xsl:text>
-            </xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- Quantity with units, but no per parts,         -->
-<!-- with or without a magnitude                    -->
-<xsl:template match="quant[descendant::unit and not(descendant::per)]">
-    <!-- print the magnitude if there is one -->
-        <xsl:if test="@mag">
-              <xsl:value-of select="@mag"/>
+<!-- quant                                          -->
+<xsl:template match="quant">
+    <!-- warning if there is no content -->
+    <xsl:if test="not(descendant::unit) and not(descendant::per) and not(descendant::mag)">
+        <xsl:message terminate="no">
+        <xsl:text>MBX:WARNING: magnitude or units needed</xsl:text>
+        </xsl:message>
+    </xsl:if>
+    <!-- print magnitude if there is one -->
+    <xsl:if test="descendant::mag">
+        <xsl:apply-templates select="mag"/>
+        <!-- if the units that follow are fractional, thin space -->
+        <xsl:if test="descendant::per">
+            <xsl:text>&#8239;</xsl:text>
         </xsl:if>
+    </xsl:if>
+    <!-- if there are non-fracitonal units, print them -->
+    <xsl:if test="descendant::unit and not(descendant::per)">
         <xsl:apply-templates select="unit" />
-</xsl:template>
-
-<!-- Quantity with units, that do have per parts,   --> 
-<!-- and at least one numerator unit part,          -->
-<!-- with or without a magnitude                    -->
-<xsl:template match="quant[descendant::unit and descendant::per]">
-    <!-- print the magnitude if there is one -->
-        <xsl:if test="@mag">
-            <xsl:value-of select="@mag"/>
-        </xsl:if>
-        <!-- numerator units, slash, denominator units -->
+    </xsl:if>
+    <!-- if there are fracitonal units with a numerator part, print them -->
+    <xsl:if test="descendant::unit and descendant::per">
         <sup> <xsl:apply-templates select="unit" /> </sup>
         <xsl:text>&#8260;</xsl:text>
         <sub> <xsl:apply-templates select="per" /> </sub>
-</xsl:template>
-
-<!-- Quantity with units, that do have per parts,   -->       
-<!-- but no numerator unit parts,                   -->
-<!-- with or without a magnitude                    -->
-<xsl:template match="quant[not(descendant::unit) and descendant::per]">
-    <!-- print the magnitude if there is one -->
-        <xsl:if test="@mag">
-            <xsl:value-of select="@mag"/>
-        </xsl:if>
-        <!-- numerator 1, slash, denominator units -->
-        <sup> <xsl:if test="@mag"> <xsl:text>&#8239;</xsl:text> </xsl:if> <xsl:text>1</xsl:text> </sup>
+    </xsl:if>
+    <!-- if there are fracitonal units without a numerator part, print them -->
+    <xsl:if test="not(descendant::unit) and descendant::per">
+        <sup> <xsl:text>1</xsl:text></sup>
         <xsl:text>&#8260;</xsl:text>
         <sub> <xsl:apply-templates select="per" /> </sub>
+    </xsl:if>
+</xsl:template>
+
+<!-- Magnitude                                      -->
+<xsl:template match="mag">
+    <xsl:apply-templates />
 </xsl:template>
 
 <!-- unit and per children of a quant element       -->
 <!-- have a mandatory base attribute                -->
 <!-- may have prefix and exp attributes             -->
 <!-- base and prefix are not abbreviations          --> 
-<xsl:template match="quant/unit|quant/per">
+<xsl:template match="unit|per">
     <!-- if the unit is 1st and no mag, no need for thinspace. Otherwise, give thinspace -->
-    <xsl:if test="position() != 1 or (local-name(.)='unit' and ../@mag)">
+    <xsl:if test="position() != 1 or (local-name(.)='unit' and (preceding-sibling::mag or following-sibling::mag) and not(preceding-sibling::per or following-sibling::per))">
         <xsl:text>&#8239;</xsl:text>
     </xsl:if>
     <!-- prefix is optional -->
@@ -1606,17 +1591,18 @@ is just flat out on the page, as if printed there.
             <xsl:if test="@base='minute'">           <xsl:text>min</xsl:text> </xsl:if>
             <xsl:if test="@base='arcsecond'">        <xsl:text>&#8243;</xsl:text> </xsl:if>
             <xsl:if test="@base='degreeFahrenheit'"> <xsl:text>&#176;F</xsl:text> </xsl:if>
+            <xsl:if test="@base='fahrenheit'">       <xsl:text>&#176;F</xsl:text> </xsl:if>
             <xsl:if test="@base='pound'">            <xsl:text>lb</xsl:text> </xsl:if>
             <xsl:if test="@base='foot'">             <xsl:text>ft</xsl:text> </xsl:if>
             <xsl:if test="@base='inch'">             <xsl:text>in</xsl:text> </xsl:if>
             <xsl:if test="@base='yard'">             <xsl:text>yd</xsl:text> </xsl:if>
             <xsl:if test="@base='mile'">             <xsl:text>mi</xsl:text> </xsl:if>
+            <xsl:if test="@base='mileperhour'">      <xsl:text>mph</xsl:text> </xsl:if>
             <xsl:if test="@base='gallon'">           <xsl:text>gal</xsl:text> </xsl:if>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>??base needed??</xsl:text>
             <xsl:message terminate="no">
-                <xsl:text>base unit needed</xsl:text>
+                <xsl:text>MBX:WARNING: base unit needed</xsl:text>
             </xsl:message>
         </xsl:otherwise>
     </xsl:choose>

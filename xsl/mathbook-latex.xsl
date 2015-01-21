@@ -343,6 +343,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Used to markup acronyms, defaults is no effect&#xa;</xsl:text>
         <xsl:text>\newcommand{\acronym}[1]{#1}&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="//quant">
+        <xsl:text>%% Used for units and number formatting&#xa;</xsl:text>
+        <xsl:text>\usepackage[per-mode=fraction]{siunitx}&#xa;</xsl:text>
+        <xsl:text>%% Common non-SI units&#xa;</xsl:text>
+        <xsl:text>\DeclareSIUnit\degreeFahrenheit{\SIUnitSymbolDegree{F}}&#xa;</xsl:text> 
+        <xsl:text>\DeclareSIUnit\fahrenheit{\degreeFahrenheit}&#xa;</xsl:text>                       
+        <xsl:text>\DeclareSIUnit\pound{lb}&#xa;</xsl:text>
+        <xsl:text>\DeclareSIUnit\foot{ft}&#xa;</xsl:text>
+        <xsl:text>\DeclareSIUnit\inch{in}&#xa;</xsl:text>
+        <xsl:text>\DeclareSIUnit\yard{yd}&#xa;</xsl:text>
+        <xsl:text>\DeclareSIUnit\mile{mi}&#xa;</xsl:text>
+        <xsl:text>\DeclareSIUnit\mileperhour{mph}&#xa;</xsl:text>
+        <xsl:text>\DeclareSIUnit\gallon{gal}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>%% Subdivision Numbering, Chapters, Sections, Subsections, etc&#xa;</xsl:text>
     <xsl:text>%% Subdivision numbers may be turned off at some level ("depth")&#xa;</xsl:text>
     <xsl:text>%% A section *always* has depth 1, contrary to us counting from the document root&#xa;</xsl:text>
@@ -1419,46 +1433,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- Numbers, units, quantities                     -->
-<!-- Numbers with no units:                         -->
-<!-- quant element with mag attribute (magnitude)   -->
-<xsl:template match="quant[not(descendant::unit) and not(descendant::per)]">
-    <xsl:choose>
-        <xsl:when test="@mag">
-            <xsl:text>\num{</xsl:text>
-            <xsl:value-of select="@mag"/>
-            <xsl:text>}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>??magnitude needed??</xsl:text>
-            <xsl:message terminate="no">
-                <xsl:text>magnitude needed</xsl:text>
-            </xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
+<!-- quant                                          -->
+<xsl:template match="quant">
+    <!-- warning if there is no content -->
+    <xsl:if test="not(descendant::unit) and not(descendant::per) and not(descendant::mag)">
+        <xsl:message terminate="no">
+        <xsl:text>MBX:WARNING: magnitude or units needed</xsl:text>
+        </xsl:message>
+    </xsl:if>
+    <!-- if it's just a number with no units -->
+    <xsl:if test="not(descendant::unit) and not(descendant::per) and (descendant::mag)">
+        <xsl:text>\num{</xsl:text>
+        <xsl:apply-templates select="mag"/>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <!-- if it has a magnitude and units -->
+    <xsl:if test="((descendant::unit) or (descendant::per)) and descendant::mag">
+        <xsl:text>\SI{</xsl:text>
+        <xsl:apply-templates select="mag"/>
+        <xsl:text>}{</xsl:text>
+        <xsl:apply-templates select="unit"/>
+        <xsl:apply-templates select="per"/>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <!-- if it is just units with no magnitude -->
+    <xsl:if test="((descendant::unit) or (descendant::per)) and not(descendant::mag)">
+        <xsl:text>\si{</xsl:text>
+        <xsl:apply-templates select="unit"/>
+        <xsl:apply-templates select="per"/>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
 </xsl:template>
 
-<!-- Quantity with units with or without a magnitude-->
-<!-- quant element may have unit and per children   -->
-<!-- which must have a base attribute               -->
-<!-- and may have prefix and exp attributes         -->
-<!-- base and prefix attributes are whole words     -->
-<xsl:template match="quant/unit|quant/per">
-    <!-- check if this is the first child -->
-    <xsl:if test="position() &lt; 2">
-        <xsl:choose>
-            <!-- quantity with number; note that magnitude
-                 is part of the (parent) quant node -->
-            <xsl:when test="../@mag">
-                <xsl:text>\SI{</xsl:text>
-                <xsl:value-of select="../@mag"/>
-                <xsl:text>}{</xsl:text>
-            </xsl:when>
-            <!-- quantity with*out* number -->
-            <xsl:otherwise>
-                <xsl:text>\si{</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:if>
+<!-- Magnitude                                      -->
+<xsl:template match="mag">
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- Units                                          -->
+<xsl:template match="unit|per">
     <!-- if we're in a 'per' node -->
     <xsl:if test="local-name(.)='per'">
         <xsl:text>\per</xsl:text>
@@ -1476,7 +1489,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <xsl:message terminate="no">
-                <xsl:text>base unit needed</xsl:text>
+                <xsl:text>MBX:WARNING: base unit needed</xsl:text>
             </xsl:message>
         </xsl:otherwise>
     </xsl:choose>
@@ -1484,10 +1497,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="@exp">
         <xsl:text>\tothe{</xsl:text>
             <xsl:value-of select="@exp"/>
-        <xsl:text>}</xsl:text>
-    </xsl:if>
-    <!-- last child gets to close the brace } -->
-    <xsl:if test="position() = last()">
         <xsl:text>}</xsl:text>
     </xsl:if>
 </xsl:template>
