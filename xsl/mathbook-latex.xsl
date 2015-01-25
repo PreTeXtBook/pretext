@@ -78,6 +78,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For a non-electronic copy, mostly links in black -->
 <xsl:param name="latex.print" select="'no'"/>
 <!--  -->
+<!-- Typeout Option                                     -->
+<!-- Some users may not want the \typeout{Section ***}  -->
+<!-- Simply change latex.typeout to 'no' and typeout    -->
+<!-- will be removed -->
+<xsl:param name="latex.typeout" select="'yes'"/>
+<!--  -->
 <!-- Preamble insertions                    -->
 <!-- Insert packages, options into preamble -->
 <!-- early or late                          -->
@@ -978,12 +984,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <!-- Information to console for latex run -->
-    <xsl:text>\typeout{************************************************}&#xa;</xsl:text>
-    <xsl:text>\typeout{</xsl:text>
-    <xsl:apply-templates select="." mode="long-name" />
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\typeout{************************************************}&#xa;</xsl:text>
+    <xsl:if test="$latex.typeout='yes'">
+        <!-- Information to console for latex run -->
+        <xsl:text>\typeout{************************************************}&#xa;</xsl:text>
+        <xsl:text>\typeout{</xsl:text>
+        <xsl:apply-templates select="." mode="long-name" />
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>\typeout{************************************************}&#xa;</xsl:text>
+    </xsl:if>
     <!-- Construct the header of the subdivision -->
     <xsl:text>\</xsl:text>
     <xsl:value-of select="$level" />
