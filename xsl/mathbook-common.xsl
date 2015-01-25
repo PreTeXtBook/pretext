@@ -74,6 +74,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- on an <xref> where it is unjustified or a problem    -->
 <!-- Default is to have this feature off                  -->
 <xsl:param name="autoname" select="'no'" />
+<!-- Chapters, sections, figures, tables, exercises, etc         -->
+<!-- can receive a generic \label{<object name>-<object number>} -->
+<!-- or not, according to the value of labelObjectsWithoutID     -->
+<xsl:param name="labelObjectsWithoutID" select="'yes'" />
 <!-- How many levels to table of contents  -->
 <!-- Not peculiar to HTML or LaTeX or etc. -->
 <!-- Sentinel indicates no choice made     -->
@@ -843,9 +847,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Calls to this template need come from where LaTeX likes -->
 <!-- a \label, generally someplace that can be numbered      -->
 <xsl:template match="*" mode="label">
-    <xsl:text>\label{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>}</xsl:text>
+    <xsl:if test="$labelObjectsWithoutID='yes' or @xml:id or local-name(.)='notation'">
+      <xsl:text>\label{</xsl:text>
+      <xsl:apply-templates select="." mode="internal-id" />
+      <xsl:text>}</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Visual Identifiers -->
