@@ -1547,7 +1547,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Circumflex  -->
+<!-- 2015/01/28: there was a mismatch between HTML and LaTeX names -->
 <xsl:template match="circum">
+    <xsl:text>\textasciicircum{}</xsl:text>
+    <xsl:message>MBX:WARNING: the "circum" element is deprecated (2015/01/28), use "circumflex"</xsl:message>
+</xsl:template>
+
+<xsl:template match="circumflex">
     <xsl:text>\textasciicircum{}</xsl:text>
 </xsl:template>
 
