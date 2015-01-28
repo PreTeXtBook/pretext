@@ -965,13 +965,26 @@ the xsltproc executable.
             <subsection>
                 <title>Sage Plots</title>
 
-                <p>Any of the numerous capabilities of Sage may bbe used to produce any graphics object, be it the simple graph of a single-variable function or some realization of a more complicated object.  All of the usual rules about formatting Sage code (esp. indentation) apply, along with one more caveat.  The last line of your Sage code <em>must</em> return a Sage <c>Graphics</c> object (or 3D plot).  The <c>mbx</c> script will isolate this last line, use it as the RHS of an assignment statement, and the Sage <c>.save()</c> method will be called to generate the image, which is either a Portable Document Format (PDF) file amenable to <latex /> output, or a Scalable Vector Graphics (SVG) file amenable to HTML output.  For visualizations of 3D plots, Sage will only produce Portable Network Graphics (PNG) files, which can be included in HTML pages or <latex /> output.</p>
+                <p>Any of the numerous capabilities of Sage may be used to produce any graphics object, be it the simple graph of a single-variable function or some realization of a more complicated object.  All of the usual rules about formatting Sage code (esp. indentation) apply, along with one more caveat.  The last line of your Sage code <em>must</em> return a Sage <c>Graphics</c> object (or 3D plot).  The <c>mbx</c> script will isolate this last line, use it as the RHS of an assignment statement, and the Sage <c>.save()</c> method will be called to generate the image, which is either a Portable Document Format (PDF) file amenable to <latex /> output, or a Scalable Vector Graphics (SVG) file amenable to HTML output.  For visualizations of 3D plots, Sage will only produce Portable Network Graphics (PNG) files, which can be included in HTML pages or <latex /> output.</p>
 
                 <figure xml:id="figure-sage-parabola">
                     <caption>A Sage standard parabola, on <m>[-2,4]</m></caption>
                     <sageplot xml:id="sageplot-parabola">
                     f(x) = x^2
                     plot(f, (x, -2, 4), color='green', thickness=3)
+                    </sageplot>
+                </figure>
+
+                <p>Pay careful attention to the requirement that the last line of your code be a graphics object.  In particular, while <c>show()</c> might appear to do the right thing, it evaluates to Python's <c>None</c> object and that is just what you will get.  The code for Figure<nbsp /><xref ref="figure-sage-double-plot" /> illustrates creating two graphics objects and combining them into an expression on the last line that evalutes to a graphics object.</p>
+
+                <figure xml:id="figure-sage-double-plot">
+                    <caption>Two Sage plots on one set of axes</caption>
+                    <sageplot xml:id="sageplot-updown">
+                    f(x) = x^4
+                    g(x) = -x^4
+                    up = plot(f, (x, -1.5, 1.5), color='blue', thickness=2)
+                    down = plot(g, (x, -1.5, 1.5), color='red', thickness=2)
+                    up + down
                     </sageplot>
                 </figure>
 
