@@ -135,7 +135,7 @@
 <xsl:template name="styling" >
     <style>
         <xsl:text>#user-worksheet-page {max-width:1080px;}</xsl:text>
-        <xsl:text>#worksheet {max-width:600px; padding-left:48px; padding-right:48px;}</xsl:text>
+        <xsl:text>#worksheet {padding-left:48px; padding-right:48px;}</xsl:text>
     </style>
 </xsl:template>
 
