@@ -242,6 +242,14 @@ the xsltproc executable.
 
 <todo>Talk more about author's tools, such as todo's</todo>
 
+            <p>Because a definite integral can be computed using an antiderivative, we have the following definition.</p>
+
+            <definition xml:id="definition-indefinite-integral">
+                <statement>
+                    <p>Suppose that <m>\frac{d}{dx}F(x)=f(x)</m>.  Then the <term>indefinite integral</term> of <m>f(x)</m> is <m>F(x)</m> and is written as <me>\int\,f(x)\,dx=F(x)</me></p>
+                </statement>
+            </definition>
+
         </section>
 
         <!--
