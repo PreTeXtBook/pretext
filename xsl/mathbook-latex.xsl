@@ -1089,8 +1089,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="statement|proof" />
 </xsl:template>
 
+<!-- It is natural to place notation within a definition    -->
+<!-- We might take advantage of that, but are not currently -->
 <xsl:template match="definition">
     <xsl:apply-templates select="statement" />
+    <xsl:apply-templates select="notation" />
 </xsl:template>
 
 <xsl:template match="conjecture|axiom|principle">

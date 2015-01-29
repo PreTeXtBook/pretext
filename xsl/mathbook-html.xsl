@@ -953,9 +953,12 @@ is just flat out on the page, as if printed there.
         </xsl:if>
     </h5>
 </xsl:template>
-<!-- Body is just the statement (ignore notation) -->
+<!-- Body is just the statement -->
+<!-- For definitions, we also process any notation                -->
+<!-- The other environments should not use the notation construct -->
 <xsl:template match="definition|axiom|conjecture|principle" mode="body">
     <xsl:apply-templates select="statement" />
+    <xsl:apply-templates select="notation" />
 </xsl:template>
 <!-- No posterior  -->
 <xsl:template match="definition|axiom|conjecture|principle" mode="posterior" />

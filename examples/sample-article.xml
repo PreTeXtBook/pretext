@@ -235,19 +235,25 @@ the xsltproc executable.
 
             <p>We can also embed <q>todo</q>s in the source, and selectively display them, so you may not see the one here in the output you are looking at now.  Or maybe you do see it?</p>
 
-            <notation>
-                <usage>\int\,f(x)\,dx</usage>
-                <description>antiderivative of <m>f(x)</m></description>
-            </notation>
-
 <todo>Talk more about author's tools, such as todo's</todo>
 
             <p>Because a definite integral can be computed using an antiderivative, we have the following definition.</p>
+
+            <!-- 
+            Notation may be associated with a definition,
+            or it can be placed standalone.  If associated
+            with a definition, future work will reflect that
+            association in the list of notation.
+            -->
 
             <definition xml:id="definition-indefinite-integral">
                 <statement>
                     <p>Suppose that <m>\frac{d}{dx}F(x)=f(x)</m>.  Then the <term>indefinite integral</term> of <m>f(x)</m> is <m>F(x)</m> and is written as <me>\int\,f(x)\,dx=F(x)</me></p>
                 </statement>
+                <notation>
+                    <usage>\int\,f(x)\,dx</usage>
+                    <description>indefinite integral of <m>f(x)</m></description>
+                </notation>
             </definition>
 
         </section>
