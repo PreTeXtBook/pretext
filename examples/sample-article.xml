@@ -619,6 +619,52 @@ the xsltproc executable.
             <caption>Euler's approximation for Duffing's Equation with <m>h = 0.2</m></caption>
             </table>
 
+                <table>
+                  <caption/>
+                  <coltypes>
+                    <col align="decimal" format="2.0"/>
+                    <col align="decimal" format="1.2"/>
+                    <col align="decimal" format="1.4"/>
+                    <col align="decimal" format="1.4"/>
+                  </coltypes>
+                  <thead>
+                        <row><entry><m>i</m></entry><entry><m>t_i</m></entry><entry><m>x_i</m></entry><entry><m>y_i</m></entry></row>
+                  </thead>
+                  <tbody>
+                        <row><entry>0</entry><entry>0</entry><entry>0</entry><entry>0.5000</entry></row>
+                        <row><entry>1</entry><entry>0.20</entry><entry>0.1000</entry><entry>0.4800</entry></row>
+                        <row><entry>2</entry><entry>0.40</entry><entry>0.1960</entry><entry>0.4560</entry></row>
+                        <row><entry>3</entry><entry>0.60</entry><entry>0.2872</entry><entry>0.4295</entry></row>
+                        <row><entry>4</entry><entry>0.80</entry><entry>0.3731</entry><entry>0.4027</entry></row>
+                        <row><entry>5</entry><entry>1.00</entry><entry>0.4536</entry><entry>0.3783</entry></row>
+                        <row><entry>6</entry><entry>1.20</entry><entry>0.5293</entry><entry>0.3591</entry></row>
+                        <row><entry>7</entry><entry>1.40</entry><entry>0.6011</entry><entry>0.3480</entry></row>
+                        <row><entry>8</entry><entry>1.60</entry><entry>0.6707</entry><entry>0.3474</entry></row>
+                        <row><entry>9</entry><entry>1.80</entry><entry>0.7402</entry><entry>0.3603</entry></row>
+                        <row><entry>10</entry><entry>2.00</entry><entry>0.8123</entry><entry>0.3900</entry></row>
+                  </tbody>
+                </table>
+
+                <table>
+                  <caption/>
+                  <coltypes>
+                    <col align="center"/>
+                    <col align="left"/>
+                    <col align="right"/>
+                    <col align="decimal" format="4.4"/>
+                    <col align="decimal" format="6.5"/>
+                  </coltypes>
+                  <thead>
+                    <row><entry>Month</entry><entry>Name</entry><entry>Country</entry><entry>Savings</entry><entry>Other</entry></row>
+                  </thead>
+                  <tbody>
+                    <row><entry>January</entry><entry>Chris</entry><entry>UK</entry><entry>13.3</entry><entry>000.3</entry></row>
+                    <row><entry>February</entry><entry>Alex</entry><entry>USA</entry><entry>3.34</entry><entry>1.00000</entry></row>
+                    <row><entry>March</entry><entry>Rob</entry><entry>USA</entry><entry>103.34</entry><entry>100000</entry></row>
+                    <row><entry>April</entry><entry>Carl</entry><entry>Malaysia</entry><entry>??</entry><entry>10.0000</entry></row>
+                  </tbody>
+                </table>
+
         </section>
 
         <section>

@@ -340,6 +340,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% xfrac package for 'beveled fractions': http://tex.stackexchange.com/questions/3372/how-do-i-typeset-arbitrary-fractions-like-the-standard-symbol-for-5-%C2%BD&#xa;</xsl:text>
         <xsl:text>\usepackage{xfrac}&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="//col[@align='decimal']">
+      <xsl:text>%% siunitx for decimal alignment&#xa;</xsl:text>
+      <xsl:text>\usepackage{siunitx}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>%% for beautiful tables &#xa;</xsl:text>
+    <xsl:text>\usepackage{booktabs}&#xa;</xsl:text>
+    <xsl:text>%% heading command for tabulars that have decimal alignment &#xa;</xsl:text>
+    <xsl:text>\newcommand*\heading[1]{\multicolumn{1}{c}{#1}}&#xa;</xsl:text>
+    <xsl:text>%% for captions &#xa;</xsl:text>
+    <xsl:text>\usepackage[bf]{caption}&#xa;</xsl:text>
     <xsl:text>%% Semantic Macros&#xa;</xsl:text>
     <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
     <xsl:text>%% Only defined here if required in this document&#xa;</xsl:text>
@@ -500,6 +510,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>{\end{mbxfigure}}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="//table">
+            <!-- captions of tables should be on top: 
+                http://tex.stackexchange.com/questions/3243/why-should-a-table-caption-be-placed-above-the-table -->
+            <xsl:text>\floatstyle{plaintop}&#xa;</xsl:text>
             <xsl:text>\newfloat{mbxtable}{H}{lot}</xsl:text>
             <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
             <xsl:text>[</xsl:text>
@@ -1836,14 +1849,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="table">
     <xsl:text>\begin{table}&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::caption)]" />
     <xsl:apply-templates select="caption" />
+    <xsl:text>\begin{tabular}</xsl:text>
+    <xsl:apply-templates select="*[not(self::caption)]" />
+    <xsl:text>\end{tabular}&#xa;</xsl:text>
     <xsl:text>\end{table}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Unclear how to handle *multiple* tgroups in latex -->
 <xsl:template match="tgroup">
-    <xsl:text>\begin{tabular}</xsl:text>
     <xsl:text>{*{</xsl:text>
     <xsl:value-of select="@cols" />
     <xsl:text>}{</xsl:text>
@@ -1855,17 +1869,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
     <xsl:text>}}&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{tabular}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- table column types allows columns to have different alignments, e.g center, left, decimal, right -->
+<xsl:template match="coltypes">
+     <xsl:text>{</xsl:text>
+     <xsl:apply-templates select="col"/>
+     <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- column types of a table; either left, center, right, or decimal -->
+<xsl:template match="table/coltypes/col">
+    <xsl:choose>
+        <xsl:when test="@align='center'">
+            <xsl:text>c</xsl:text>
+        </xsl:when>
+        <xsl:when test="@align='left'">
+            <xsl:text>l</xsl:text>
+        </xsl:when>
+        <xsl:when test="@align='right'">
+            <xsl:text>r</xsl:text>
+        </xsl:when>
+        <xsl:when test="@align='decimal'">
+            <xsl:text>S[table-format=</xsl:text>
+            <xsl:value-of select="@format"/>
+            <xsl:text>]</xsl:text>
+        </xsl:when>
+        <!-- default is center -->
+        <xsl:otherwise>
+            <xsl:text>c</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="thead">
-    <xsl:text>\hline\hline{}</xsl:text>
+    <xsl:text>\toprule&#xa;</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\\\hline\hline{}</xsl:text>
+    <xsl:text>\midrule&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="tbody">
     <xsl:apply-templates />
+    <xsl:text>\bottomrule&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="row">
@@ -1880,6 +1925,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="entry">
     <xsl:text>&amp;</xsl:text>
     <xsl:apply-templates />
+</xsl:template>
+
+<xsl:template match="thead/row/entry[not(descendant::tgroup)]">
+  <!-- get the column *position* of the current entry, e.g 1st, 2nd, 3rd -->
+  <xsl:variable name="columnPos">
+    <xsl:value-of select="position()" />
+  </xsl:variable>
+  <!-- get the column *type* of the current entry, e.g left, center, right, decimal -->
+  <xsl:variable name="columnType">
+    <xsl:value-of select="(../../../coltypes/col[@align])[position()=$columnPos]/@align" />
+  </xsl:variable>
+  <!-- put the entry within a \heading{} command, if we're in a decimal-aligned column -->
+  <xsl:choose>
+    <xsl:when test="$columnType='decimal'">
+        <xsl:text>\heading{</xsl:text>
+          <xsl:apply-templates />
+          <xsl:text>}</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+          <xsl:apply-templates />
+    </xsl:otherwise>
+  </xsl:choose>
+  <!-- add an & if we're inbetween elements -->
+  <xsl:if test="not(position()=last())">
+    <xsl:text>&amp;</xsl:text>
+  </xsl:if>
 </xsl:template>
 
 <!-- Visual Identifiers for Cross-References -->
