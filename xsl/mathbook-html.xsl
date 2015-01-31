@@ -1587,6 +1587,18 @@ is just flat out on the page, as if printed there.
     </xsl:element>
 </xsl:template>
 
+<!-- Chunks of Pre-Formatted Text                -->
+<!-- 100% analogue of LaTeX's verbatim           -->
+<!-- environment or HTML's <pre> element         -->
+<!-- Text is massaged just like Sage input code  -->
+<xsl:template match="pre">
+    <xsl:element name="pre">
+        <xsl:call-template name="sanitize-sage">
+            <xsl:with-param name="raw-sage-code" select="." />
+        </xsl:call-template>
+    </xsl:element>
+</xsl:template>
+
 <!-- Special Characters from TeX -->
 <!--    # $ % ^ & _ { } ~ \      -->
 <!-- These need special treatment, elements     -->

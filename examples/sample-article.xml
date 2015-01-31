@@ -1406,6 +1406,34 @@ the xsltproc executable.
         </section>
 
         <section>
+            <title>Pre-Formatted Text</title>
+
+            <p>In Sage, if you wanted to build a matrix, then you would use the <c>matrix()</c> constructor.  Here is the matrix of second partials of <m>f(x,y)=x^3+8x^2y^3 + y^4</m>, as you would enter it in Sage.  Notice that <c>SR</c> is the ring of symbolic expressions, <c>Symbolic Ring</c>.</p>
+
+            <pre>
+            var('x', 'y')
+            J = matrix(SR, [
+                [6*x + 16*y^3, 48*x*y^2],
+                [48*x*y^2, 48*x^2*y + 12*y^2]
+                ])
+            </pre>
+
+            <p>That accomplished, Sage will easily and naturally provide a <latex /> representation of the matrix with the command <c>latex(J)</c>.</p>
+
+            <pre>
+            \left(\begin{array}{rr}
+            16 \, y^{3} + 6 \, x &amp; 48 \, x y^{2} \\
+            48 \, x y^{2} &amp; 48 \, x^{2} y + 12 \, y^{2}
+            \end{array}\right)
+            </pre>
+
+            <p>Ideally, the realization of preformatted text will be robust enough that it can be cut from documents and pasted without any substitutions of <q>fancier</q> Unicode characters for generic ASCII characters.  Authoring follows the same rules as for Sge input code, the first non-whitespace character sets the left margin.  If indentation is important, do not mix spaces and tabs.  For syntax highlighting of text representing computer programs, or parts of them, see Section<nbsp /><xref ref="section-programs" />.</p>
+
+            <p>The <c>&lt;c&gt;</c> element, for inline code snippets (or anything else in a monospace font) uses the question-mark character to tell <latex /> where the text begins and ends.  This will be a problem if the text has a question mark in it!  So there is the attribute <c>latexsep</c> that allows you to specify another character that does not appear in your text.  For example, XML directives use question-marks now and then, so writing about them in MathBook XML requires specifying a different separation character, as in:  <c latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c>.  The <c>&lt;pre&gt;</c> element does not suffer from this quirk.</p>
+
+        </section>
+
+        <section xml:id="section-programs">
             <title>Program Listings</title>
 
             <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt (in-browser Python) or the Python language argument to the Sage Cell Server.  To see examples of authoring Sace cells, have a look at Section<nbsp /><xref ref="section-sage-cells" />.</p>

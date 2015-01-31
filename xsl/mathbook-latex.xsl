@@ -656,6 +656,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usepackage{showkeys}&#xa;</xsl:text>
         <xsl:text>\usepackage[letter,cam,center,pdflatex]{crop}&#xa;</xsl:text>
     </xsl:if>
+    <!-- upquote package should come as late as possible -->
+    <xsl:if test="//c or //pre or //program or //sage"> <!-- verbatim elements (others?) -->
+        <xsl:text>%% Use upright quotes rather than LaTeX's curly quotes&#xa;</xsl:text>
+        <xsl:text>%% If custom font substitutions follow, this might be ineffective&#xa;</xsl:text>
+        <xsl:text>%% If fonts lack upright quotes, the textcomp package is employed&#xa;</xsl:text>
+        <xsl:text>\usepackage{upquote}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>%% Custom Preamble Entries, late (use latex.preamble.late)&#xa;</xsl:text>
     <xsl:if test="$latex.preamble.late != ''">
         <xsl:value-of select="$latex.preamble.late" />
@@ -1497,7 +1504,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$separator" />
 </xsl:template>
 
-<!-- External URLs, and email addresses -->
+<!-- External URLs, Email        -->
 <!-- URL itself, if content-less -->
 <!-- http://stackoverflow.com/questions/9782021/check-for-empty-xml-element-using-xslt -->
 <xsl:template match="url">
@@ -1515,6 +1522,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- Chunks of Pre-Formatted Text                -->
+<!-- 100% analogue of LaTeX's verbatim           -->
+<!-- environment or HTML's <pre> element         -->
+<!-- Text is massaged just like Sage input code  -->
+<xsl:template match="pre">
+    <xsl:text>\begin{verbatim}&#xa;</xsl:text>
+        <xsl:call-template name="sanitize-sage">
+            <xsl:with-param name="raw-sage-code" select="." />
+        </xsl:call-template>
+    <xsl:text>\end{verbatim}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="email">
