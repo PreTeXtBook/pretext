@@ -257,8 +257,8 @@ the xsltproc executable.
         the first non-trivial character.
         -->
 
-        <section>
-            <title>Computing Integrals (<m>\int</m>)</title>
+        <section xml:id="section-sage-cells">
+            <title>Computing Integrals with Sage (<m>\int</m>)</title>
 
             <index><main>Sage</main><sub>integration</sub></index>
             <index><main>Numerical integration</main><see>Sage integration</see></index>
@@ -1169,7 +1169,7 @@ the xsltproc executable.
             <title>Embedded Interactive Elements</title>
 
             <introduction>
-                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.</p>
+                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See Section<nbsp /><xref ref="section-sage-cells" /> for the specifics of embedding instances of the Sage Cell Server.</p>
             </introduction>
 
             <subsection>
@@ -1408,7 +1408,7 @@ the xsltproc executable.
         <section>
             <title>Program Listings</title>
 
-            <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt (in-browser Python) or the Python language argument to the Sage Cell Server.</p>
+            <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt (in-browser Python) or the Python language argument to the Sage Cell Server.  To see examples of authoring Sace cells, have a look at Section<nbsp /><xref ref="section-sage-cells" />.</p>
 
             <p>In the meantime, program listings, especially with syntax highlighting, is useful all by itself.  The <q>R</q> language might not be a bad stand-in for pseudo-code, as it supports assignment with a left arrow and has fairly generic procedural syntax for control structures and data structures.  Or maybe Pascal would be a good choice?  Here is an example of R.</p>
 
