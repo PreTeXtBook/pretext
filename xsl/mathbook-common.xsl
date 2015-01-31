@@ -99,6 +99,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="directory.images" select="'images'" />
 <xsl:param name="directory.media"  select="'media'" />
 <xsl:param name="directory.knowls" select="'knowls'" />
+<!-- Table captions can be placed above or below the table -->
+<!-- according to the value of table.caption.position      -->
+<xsl:param name="table.caption.position" select="'below'" />
 <!-- Strip whitespace text nodes from container elements                    -->
 <!-- Improve source readability with whitespace control in text output mode -->
 <!-- Newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->

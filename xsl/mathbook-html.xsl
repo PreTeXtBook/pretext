@@ -1338,10 +1338,15 @@ is just flat out on the page, as if printed there.
 <!-- Should be able to replace this by extant XSLT for this conversion -->
 <xsl:template match="table">
     <figure>
-        <xsl:apply-templates select="caption" />
+        <xsl:if test="$table.caption.position='above'">
+            <xsl:apply-templates select="caption" />
+        </xsl:if>
         <table class="center">
             <xsl:apply-templates select="*[not(self::caption)]" />
         </table>
+        <xsl:if test="$table.caption.position='below'">
+            <xsl:apply-templates select="caption" />
+        </xsl:if>
     </figure>
 </xsl:template>
 

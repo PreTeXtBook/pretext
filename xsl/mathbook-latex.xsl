@@ -510,9 +510,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>{\end{mbxfigure}}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="//table">
-            <!-- captions of tables should be on top: 
+            <!-- captions of tables can go above or below the table: 
                 http://tex.stackexchange.com/questions/3243/why-should-a-table-caption-be-placed-above-the-table -->
-            <xsl:text>\floatstyle{plaintop}&#xa;</xsl:text>
+            <xsl:if test="$table.caption.position='above'">
+                <xsl:text>\floatstyle{plaintop}&#xa;</xsl:text>
+            </xsl:if>
             <xsl:text>\newfloat{mbxtable}{H}{lot}</xsl:text>
             <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
             <xsl:text>[</xsl:text>
