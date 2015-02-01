@@ -1625,20 +1625,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Best: \makeatletter\newcommand\etc{etc\@ifnextchar.{}{.\@}}\makeatother   -->
 <!-- http://latex-alive.tumblr.com/post/827168808/correct-punctuation-spaces   -->
 
-<!-- for example -->
+<!-- exempli gratia, for example -->
 <xsl:template match="eg">
     <xsl:text>e.g.\@</xsl:text>
+</xsl:template>
+
+<!-- id est, in other words -->
+<xsl:template match="ie">
+    <xsl:text>i.e.\@</xsl:text>
+</xsl:template>
+
+<!-- et cetera -->
+<xsl:template match="etc">
+    <xsl:text>etc.\@</xsl:text>
 </xsl:template>
 
 <!-- Copyright symbol -->
 <xsl:template match="copyright">
     <xsl:text>\copyright{}</xsl:text>
-</xsl:template>
-
-
-<!-- in other words -->
-<xsl:template match="ie">
-    <xsl:text>i.e.\@</xsl:text>
 </xsl:template>
 
 <!-- Implication Symbols -->

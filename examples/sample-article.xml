@@ -677,7 +677,8 @@ the xsltproc executable.
             <p><copyright /><nbsp /><nbsp />
             <ellipsis /><nbsp /><nbsp />
             <eg /><nbsp /><nbsp />
-            <ie /><nbsp /><nbsp /></p>
+            <ie /><nbsp /><nbsp />
+            <etc /><nbsp /><nbsp /></p>
 
             <p>It might be instructive to see how the paragraphs above about escape characters were written without inadvertenly using an escape character improperly.</p>
 

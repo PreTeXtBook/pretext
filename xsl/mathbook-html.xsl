@@ -1522,14 +1522,19 @@ is just flat out on the page, as if printed there.
     <xsl:text>&#169;</xsl:text>
 </xsl:template>
 
-<!-- for example -->
+<!-- exempli gratia, for example -->
 <xsl:template match="eg">
     <xsl:text>e.g.</xsl:text>
 </xsl:template>
 
-<!-- in other words -->
+<!-- id est, in other words -->
 <xsl:template match="ie">
     <xsl:text>i.e.</xsl:text>
+</xsl:template>
+
+<!-- et cetera -->
+<xsl:template match="etc">
+    <xsl:text>etc.</xsl:text>
 </xsl:template>
 
 <!-- Implication Symbols -->
