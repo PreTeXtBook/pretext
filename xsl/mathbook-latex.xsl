@@ -314,11 +314,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% If never using xelatex, the next three lines can be removed&#xa;</xsl:text>
     <xsl:text>\usepackage{ifxetex}&#xa;</xsl:text>
     <!-- latex ifthen package, with \boolean{xetex} is option -->
-    <!-- Obsolete: \usepackage{xltxtra} -->
-    <xsl:text>\ifxetex%&#xa;</xsl:text>
-    <xsl:text>\usepackage{fontspec}&#xa;</xsl:text>
-    <xsl:text>\setmainfont[Ligatures=TeX]{Linux Libertine O}&#xa;</xsl:text>
-    <xsl:text>\fi&#xa;</xsl:text>
+    <xsl:text>\ifxetex\usepackage{xltxtra}\fi&#xa;</xsl:text>
     <xsl:text>%% Symbols, align environment, bracket-matrix&#xa;</xsl:text>
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
     <xsl:text>\usepackage{amssymb}&#xa;</xsl:text>
