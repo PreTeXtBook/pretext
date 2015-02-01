@@ -461,6 +461,7 @@ the xsltproc executable.
                     </statement>
                 </principle>
 
+                <p>More precisely, <c>&lt;theorem&gt;</c>, <c>&lt;corollary&gt;</c>, <c>&lt;lemma&gt;</c>, <c>&lt;proposition&gt;</c>, <c>&lt;claim&gt;</c>, and <c>&lt;fact&gt;</c>, all behave exactly the same, requiring a statement (as a sequence of paragraphs) followed by an optional proof, and may have an optional title.  The elements <c>&lt;definition&gt;</c>, <c>&lt;conjecture&gt;</c>, <c>&lt;axiom&gt;</c>, and <c>&lt;principle&gt;</c> are functionally the same, barring a proof (since they would never have one!).  Definitions are an exception, as it is natural to place <c>&lt;notation&gt;</c> within<mdash />see the source for Definition<nbsp /><xref ref="definition-indefinite-integral" /> for an example.</p>
             </subsection>
 
             <subsection>
