@@ -78,11 +78,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For a non-electronic copy, mostly links in black -->
 <xsl:param name="latex.print" select="'no'"/>
 <!--  -->
-<!-- Typeout Option                                     -->
-<!-- Some users may not want the \typeout{Section ***}  -->
-<!-- Simply change latex.typeout to 'no' and typeout    -->
-<!-- will be removed -->
-<xsl:param name="latex.typeout" select="'yes'"/>
+<!-- Typeout Option                                                       -->
+<!-- By default, each heading (chapter, section, subsection, etc)         -->
+<!-- adds verbose \typeout{Chapter ***} information to the .tex file.     -->
+<!-- This feature can be switched on/off as follows:                      -->
+<!--    latex.logging=1  means that \typeout will be used                 -->
+<!--    latex.logging=0  means that \typeout will *not* be used           -->
+<xsl:param name="latex.logging" select="'1'"/>
 <!--  -->
 <!-- Preamble insertions                    -->
 <!-- Insert packages, options into preamble -->
@@ -999,7 +1001,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:if test="$latex.typeout='yes'">
+    <xsl:if test="$latex.logging>0">
         <!-- Information to console for latex run -->
         <xsl:text>\typeout{************************************************}&#xa;</xsl:text>
         <xsl:text>\typeout{</xsl:text>
