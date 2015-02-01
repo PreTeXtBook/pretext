@@ -77,7 +77,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Chapters, sections, figures, tables, exercises, etc         -->
 <!-- can receive a generic \label{<object name>-<object number>} -->
 <!-- or not, according to the value of labelObjectsWithoutID     -->
-<xsl:param name="labelObjectsWithoutID" select="'yes'" />
+<!-- If you'd like to guarantee that certain objects always get  -->
+<!-- an ID, add it to alwaysGiveLabel                            -->
+<xsl:param name="labelObjectsWithoutID" select="'no'" />
+<xsl:param name="alwaysGiveLabel" select="'notation section'" />
 <!-- How many levels to table of contents  -->
 <!-- Not peculiar to HTML or LaTeX or etc. -->
 <!-- Sentinel indicates no choice made     -->
@@ -847,7 +850,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Calls to this template need come from where LaTeX likes -->
 <!-- a \label, generally someplace that can be numbered      -->
 <xsl:template match="*" mode="label">
-    <xsl:if test="$labelObjectsWithoutID='yes' or @xml:id or local-name(.)='notation'">
+    <xsl:if test="$labelObjectsWithoutID='yes' or @xml:id or contains($alwaysGiveLabel, local-name(.))">
       <xsl:text>\label{</xsl:text>
       <xsl:apply-templates select="." mode="internal-id" />
       <xsl:text>}</xsl:text>
