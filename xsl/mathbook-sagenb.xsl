@@ -135,7 +135,7 @@
 <xsl:template name="styling" >
     <style>
         <xsl:text>#user-worksheet-page {max-width:1080px;}</xsl:text>
-        <xsl:text>#worksheet {max-width:600px; padding-left:48px; padding-right:48px;}</xsl:text>
+        <xsl:text>#worksheet {padding-left:48px; padding-right:48px;}</xsl:text>
     </style>
 </xsl:template>
 
@@ -207,13 +207,16 @@
     </exsl:document>
 </xsl:template>
 
-<!-- CSS header -->
-<!-- No interface work, just content styling -->
-<!-- The Sage Notebook provides the interface -->
-<xsl:template name="css">
-    <link href="http://mathbook.staging.michaeldubois.me/develop/stylesheets/mathbook-content.css" rel="stylesheet" type="text/css" />
-    <link href="http://aimath.org/mathbook/add-on.css" rel="stylesheet" type="text/css" />
-</xsl:template>
+<!-- CSS Servers -->
+<!-- We override processing paramters of the generic    -->
+<!-- HTML file to specify new servers, which the        -->
+<!-- generic named "css" template will employ.          -->
+<!-- We use the "content" version which is lightweight. -->
+<!-- Note: we do not employ any javascript, leaving     -->
+<!-- that to the Sage Notebook, hence not specified     -->
+<xsl:param name="html.css.server" select="'http://aimath.org'" />
+<xsl:param name="html.css.file"   select="'mathbook-content-3.css'" />
+
 
 <!-- ################### -->
 <!-- Asset Determination -->

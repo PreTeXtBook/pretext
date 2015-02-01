@@ -314,7 +314,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% If never using xelatex, the next three lines can be removed&#xa;</xsl:text>
     <xsl:text>\usepackage{ifxetex}&#xa;</xsl:text>
     <!-- latex ifthen package, with \boolean{xetex} is option -->
-    <xsl:text>\ifxetex\usepackage{xltxtra}\fi&#xa;</xsl:text>
+    <!-- Obsolete: \usepackage{xltxtra} -->
+    <xsl:text>\ifxetex%&#xa;</xsl:text>
+    <xsl:text>\usepackage{fontspec}&#xa;</xsl:text>
+    <xsl:text>\setmainfont[Ligatures=TeX]{Linux Libertine O}&#xa;</xsl:text>
+    <xsl:text>\fi&#xa;</xsl:text>
     <xsl:text>%% Symbols, align environment, bracket-matrix&#xa;</xsl:text>
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
     <xsl:text>\usepackage{amssymb}&#xa;</xsl:text>
@@ -332,6 +336,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Need CDATA here to protect inequalities as part of an XML file -->
     <xsl:text><![CDATA[\newcommand{\lt}{<}]]>&#xa;</xsl:text>
     <xsl:text><![CDATA[\newcommand{\gt}{>}]]>&#xa;</xsl:text>
+    <xsl:if test="//m[contains(text(),'sfrac')] or //md[contains(text(),'sfrac')] or //me[contains(text(),'sfrac')] or //mrow[contains(text(),'sfrac')]">
+        <xsl:text>%% xfrac package for 'beveled fractions': http://tex.stackexchange.com/questions/3372/how-do-i-typeset-arbitrary-fractions-like-the-standard-symbol-for-5-%C2%BD&#xa;</xsl:text>
+        <xsl:text>\usepackage{xfrac}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>%% Semantic Macros&#xa;</xsl:text>
     <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
     <xsl:text>%% Only defined here if required in this document&#xa;</xsl:text>
@@ -647,6 +655,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% others need to be elsewhere, these are simply package additions&#xa;</xsl:text>
         <xsl:text>\usepackage{showkeys}&#xa;</xsl:text>
         <xsl:text>\usepackage[letter,cam,center,pdflatex]{crop}&#xa;</xsl:text>
+    </xsl:if>
+    <!-- upquote package should come as late as possible -->
+    <xsl:if test="//c or //pre or //program or //sage"> <!-- verbatim elements (others?) -->
+        <xsl:text>%% Use upright quotes rather than LaTeX's curly quotes&#xa;</xsl:text>
+        <xsl:text>%% If custom font substitutions follow, this might be ineffective&#xa;</xsl:text>
+        <xsl:text>%% If fonts lack upright quotes, the textcomp package is employed&#xa;</xsl:text>
+        <xsl:text>\usepackage{upquote}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% Custom Preamble Entries, late (use latex.preamble.late)&#xa;</xsl:text>
     <xsl:if test="$latex.preamble.late != ''">
@@ -1489,7 +1504,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$separator" />
 </xsl:template>
 
-<!-- External URLs, and email addresses -->
+<!-- External URLs, Email        -->
 <!-- URL itself, if content-less -->
 <!-- http://stackoverflow.com/questions/9782021/check-for-empty-xml-element-using-xslt -->
 <xsl:template match="url">
@@ -1507,6 +1522,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- Chunks of Pre-Formatted Text                -->
+<!-- 100% analogue of LaTeX's verbatim           -->
+<!-- environment or HTML's <pre> element         -->
+<!-- Text is massaged just like Sage input code  -->
+<xsl:template match="pre">
+    <xsl:text>\begin{verbatim}&#xa;</xsl:text>
+        <xsl:call-template name="sanitize-sage">
+            <xsl:with-param name="raw-sage-code" select="." />
+        </xsl:call-template>
+    <xsl:text>\end{verbatim}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="email">
@@ -1539,7 +1566,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Circumflex  -->
+<!-- 2015/01/28: there was a mismatch between HTML and LaTeX names -->
 <xsl:template match="circum">
+    <xsl:text>\textasciicircum{}</xsl:text>
+    <xsl:message>MBX:WARNING: the "circum" element is deprecated (2015/01/28), use "circumflex"</xsl:message>
+</xsl:template>
+
+<xsl:template match="circumflex">
     <xsl:text>\textasciicircum{}</xsl:text>
 </xsl:template>
 
@@ -1592,20 +1625,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Best: \makeatletter\newcommand\etc{etc\@ifnextchar.{}{.\@}}\makeatother   -->
 <!-- http://latex-alive.tumblr.com/post/827168808/correct-punctuation-spaces   -->
 
-<!-- for example -->
+<!-- exempli gratia, for example -->
 <xsl:template match="eg">
     <xsl:text>e.g.\@</xsl:text>
+</xsl:template>
+
+<!-- id est, in other words -->
+<xsl:template match="ie">
+    <xsl:text>i.e.\@</xsl:text>
+</xsl:template>
+
+<!-- et cetera -->
+<xsl:template match="etc">
+    <xsl:text>etc.\@</xsl:text>
 </xsl:template>
 
 <!-- Copyright symbol -->
 <xsl:template match="copyright">
     <xsl:text>\copyright{}</xsl:text>
-</xsl:template>
-
-
-<!-- in other words -->
-<xsl:template match="ie">
-    <xsl:text>i.e.\@</xsl:text>
 </xsl:template>
 
 <!-- Implication Symbols -->

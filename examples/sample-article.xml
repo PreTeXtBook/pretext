@@ -257,8 +257,8 @@ the xsltproc executable.
         the first non-trivial character.
         -->
 
-        <section>
-            <title>Computing Integrals (<m>\int</m>)</title>
+        <section xml:id="section-sage-cells">
+            <title>Computing Integrals with Sage (<m>\int</m>)</title>
 
             <index><main>Sage</main><sub>integration</sub></index>
             <index><main>Numerical integration</main><see>Sage integration</see></index>
@@ -643,6 +643,45 @@ the xsltproc executable.
             <p>A small test that the extensible arrows library is included properly:<me>A\xmapsto[\text{bijection}]{\Phi+\Psi+\Theta}B</me></p>
 
             <p>Look back at the top of the source file of this document to see how to include your <tex /> macros just once.  For best results keep your macros simple and semantic.</p>
+
+            <p>Chris Hughes has made available <q>slanted</q>, or <q>beveled</q>, or <q>nice</q> fractions.  To wit, we mean fractions such as: <m>\sfrac{3}{8}</m>.  Use the built-in <c>\sfrac{}{}</c> macro in your mathematics to achieve this presentation.</p>
+
+        </section>
+
+        <section>
+            <title>Special, Reserved, and Escape Characters</title>
+
+            <p>One of the goals of MathBook XML is to relieve an author of managing the numerous conflicts when mixing languages that use different characters for special purposes.  But, of course, XML has its own special characters.</p>
+
+            <p>The left angle bracket (<c>&lt;</c>) of XML is the second most-dangerous, since it looks to the processor like the start of a new element.   Use the XML entity <c>&amp;lt;</c> for that character.  Similarly, use <c>&amp;gt;</c> for a right angle bracket.  These are likely to be necessary in source code, such as Sage code (think generators of field extensions) or TikZ code (think arrowheads).  Of course ampersands (<ampersand />) have their own meaning in <latex /> so the entities just described are problematic.  So in mathematics, if you need strict inequalities, use the macros <c>\lt</c> and <c>\gt</c>, which are pre-defined for both <latex />, and MathJax in HTML.</p>
+
+            <p>Everybody wants the ampersand, it is the most-dangerous.  It is <em>the</em> escape character for XML, and <latex /> uses it in tables and arrays.  Use the element <c>&lt;ampersand /&gt;</c> to make a literal ampersand in text, such as in <q>A<ampersand />P.</q>  If you want an ampersand in code (Sage, TikZ) or in math (<latex />) use <c>&amp;amp;</c>.  As a convenience, if you have a big matrix, or a huge chunk of TikZ code, you can protect it all from the processor by wrapping it in <q><c>&lt;![CDATA[</c><nbsp /><nbsp /><nbsp /><c>]]&gt;</c>.</q>  It should be possible to write without ever using the <q>CDATA</q> mechanism, but it might get tedious in places.</p>
+
+            <p>There are a handful of characters that might render just fine in HTML, but <latex /> reserves them for special purposes.  So if they appear unadorned in your source, they will wreak havoc with the <latex /> processing.  And if you escape them with backslashes for <latex />, then you will see those backslashes in your HTML.  You can't win.  Thus, if you intend to create both HTML and <latex /> output, then you need to be aware of these symbols and use the provided MathBook elements for them to get the right behavior in each type of output.  Here are the outputs, look at the source of this document to see the input elements.</p>
+
+            <!-- Carriage returns are unwise, but this is impossible to read otherwise -->
+            <p><hash /><nbsp /><nbsp />
+            <dollar /><nbsp /><nbsp />
+            <percent /><nbsp /><nbsp />
+            <circumflex /><nbsp /><nbsp />
+            <ampersand /><nbsp /><nbsp />
+            <underscore /><nbsp /><nbsp />
+            <lbrace /><nbsp /><nbsp />
+            <rbrace /><nbsp /><nbsp />
+            <tilde /><nbsp /><nbsp />
+            <backslash /><nbsp /><nbsp /></p>
+
+            <p>There are a few other constructions that can be achieved in HTML one way, and in <latex /> with a slightly different mechanism.  Some are due to <latex />'s treatment of a period (full stop), depending on its surroundings.  So not reserved characters, but just divergent treatment of common constructions.  Again, outputs here, see the source for inputs.</p>
+
+            <!-- Carriage returns are unwise, but this is impossible to read otherwise -->
+            <p><copyright /><nbsp /><nbsp />
+            <ellipsis /><nbsp /><nbsp />
+            <eg /><nbsp /><nbsp />
+            <ie /><nbsp /><nbsp />
+            <etc /><nbsp /><nbsp /></p>
+
+            <p>It might be instructive to see how the paragraphs above about escape characters were written without inadvertenly using an escape character improperly.</p>
+
         </section>
 
 
@@ -965,13 +1004,26 @@ the xsltproc executable.
             <subsection>
                 <title>Sage Plots</title>
 
-                <p>Any of the numerous capabilities of Sage may bbe used to produce any graphics object, be it the simple graph of a single-variable function or some realization of a more complicated object.  All of the usual rules about formatting Sage code (esp. indentation) apply, along with one more caveat.  The last line of your Sage code <em>must</em> return a Sage <c>Graphics</c> object (or 3D plot).  The <c>mbx</c> script will isolate this last line, use it as the RHS of an assignment statement, and the Sage <c>.save()</c> method will be called to generate the image, which is either a Portable Document Format (PDF) file amenable to <latex /> output, or a Scalable Vector Graphics (SVG) file amenable to HTML output.  For visualizations of 3D plots, Sage will only produce Portable Network Graphics (PNG) files, which can be included in HTML pages or <latex /> output.</p>
+                <p>Any of the numerous capabilities of Sage may be used to produce any graphics object, be it the simple graph of a single-variable function or some realization of a more complicated object.  All of the usual rules about formatting Sage code (esp. indentation) apply, along with one more caveat.  The last line of your Sage code <em>must</em> return a Sage <c>Graphics</c> object (or 3D plot).  The <c>mbx</c> script will isolate this last line, use it as the RHS of an assignment statement, and the Sage <c>.save()</c> method will be called to generate the image, which is either a Portable Document Format (PDF) file amenable to <latex /> output, or a Scalable Vector Graphics (SVG) file amenable to HTML output.  For visualizations of 3D plots, Sage will only produce Portable Network Graphics (PNG) files, which can be included in HTML pages or <latex /> output.</p>
 
                 <figure xml:id="figure-sage-parabola">
                     <caption>A Sage standard parabola, on <m>[-2,4]</m></caption>
                     <sageplot xml:id="sageplot-parabola">
                     f(x) = x^2
                     plot(f, (x, -2, 4), color='green', thickness=3)
+                    </sageplot>
+                </figure>
+
+                <p>Pay careful attention to the requirement that the last line of your code be a graphics object.  In particular, while <c>show()</c> might appear to do the right thing, it evaluates to Python's <c>None</c> object and that is just what you will get.  The code for Figure<nbsp /><xref ref="figure-sage-double-plot" /> illustrates creating two graphics objects and combining them into an expression on the last line that evalutes to a graphics object.</p>
+
+                <figure xml:id="figure-sage-double-plot">
+                    <caption>Two Sage plots on one set of axes</caption>
+                    <sageplot xml:id="sageplot-updown">
+                    f(x) = x^4
+                    g(x) = -x^4
+                    up = plot(f, (x, -1.5, 1.5), color='blue', thickness=2)
+                    down = plot(g, (x, -1.5, 1.5), color='red', thickness=2)
+                    up + down
                     </sageplot>
                 </figure>
 
@@ -1118,7 +1170,7 @@ the xsltproc executable.
             <title>Embedded Interactive Elements</title>
 
             <introduction>
-                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.</p>
+                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See Section<nbsp /><xref ref="section-sage-cells" /> for the specifics of embedding instances of the Sage Cell Server.</p>
             </introduction>
 
             <subsection>
@@ -1350,12 +1402,42 @@ the xsltproc executable.
                 <p>ƀ Ɓ Ƃ ƃ Ƅ ƅ Ɔ Ƈ ƈ Ɖ Ɗ Ƌ ƌ ƍ Ǝ Ə Ɛ Ƒ ƒ i Ɠ Ɣ ƕ Ɩ Ɨ Ƙ ƙ ƚ ƛ Ɯ Ɲ ƞ Ɵ Ơ ơ Ƣ ƣ Ƥ ƥ Ʀ Ƨ ƨ Ʃ ƪ ƫ Ƭ ƭ Ʈ Ư ư Ʊ Ʋ Ƴ ƴ Ƶ ƶ Ʒ Ƹ ƹ ƺ ƻ Ƽ ƽ ƾ ƿ ǀ ǁ ǂ ǃ Ǆ ǅ ǆ Ǉ ǈ ǉ Ǌ ǋ ǌ Ǎ ǎ Ǐ ǐ Ǒ ǒ Ǔ ǔ Ǖ ǖ Ǘ ǘ Ǚ ǚ Ǜ ǜ ǝ Ǟ ǟ Ǡ ǡ Ǣ ǣ Ǥ ǥ Ǧ ǧ Ǩ ǩ Ǫ ǫ Ǭ ǭ Ǯ ǯ ǰ Ǳ ǲ ǳ Ǵ ǵ Ƕ Ƿ Ǹ ǹ Ǻ ǻ Ǽ ǽ Ǿ ǿ Ȁ ȁ Ȃ ȃ Ȅ ȅ Ȇ ȇ Ȉ ȉ Ȋ ȋ Ȍ ȍ Ȏ ȏ Ȑ ȑ Ȓ ȓ Ȕ ȕ Ȗ ȗ Ș ș Ț ț Ȝ ȝ Ȟ ȟ Ƞ ȡ Ȣ ȣ Ȥ ȥ Ȧ ȧ Ȩ ȩ Ȫ ȫ Ȭ ȭ Ȯ ȯ Ȱ ȱ Ȳ ȳ ȴ ȵ ȶ ȷ ȸ ȹ Ⱥ Ȼ ȼ Ƚ Ⱦ ȿ ɀ Ɂ ɂ Ƀ Ʉ Ʌ Ɇ ɇ Ɉ ɉ Ɋ ɋ Ɍ ɍ Ɏ ɏ</p>
             </paragraph>
 
+            <p>More examples and more thorough explanations can be found in the sample article: <c>examples/fonts-and-characters.xml</c>.</p>
+
         </section>
 
         <section>
+            <title>Pre-Formatted Text</title>
+
+            <p>In Sage, if you wanted to build a matrix, then you would use the <c>matrix()</c> constructor.  Here is the matrix of second partials of <m>f(x,y)=x^3+8x^2y^3 + y^4</m>, as you would enter it in Sage.  Notice that <c>SR</c> is the ring of symbolic expressions, <c>Symbolic Ring</c>.</p>
+
+            <pre>
+            var('x', 'y')
+            J = matrix(SR, [
+                [6*x + 16*y^3, 48*x*y^2],
+                [48*x*y^2, 48*x^2*y + 12*y^2]
+                ])
+            </pre>
+
+            <p>That accomplished, Sage will easily and naturally provide a <latex /> representation of the matrix with the command <c>latex(J)</c>.</p>
+
+            <pre>
+            \left(\begin{array}{rr}
+            16 \, y^{3} + 6 \, x &amp; 48 \, x y^{2} \\
+            48 \, x y^{2} &amp; 48 \, x^{2} y + 12 \, y^{2}
+            \end{array}\right)
+            </pre>
+
+            <p>Ideally, the realization of preformatted text will be robust enough that it can be cut from documents and pasted without any substitutions of <q>fancier</q> Unicode characters for generic ASCII characters.  Authoring follows the same rules as for Sge input code, the first non-whitespace character sets the left margin.  If indentation is important, do not mix spaces and tabs.  For syntax highlighting of text representing computer programs, or parts of them, see Section<nbsp /><xref ref="section-programs" />.</p>
+
+            <p>The <c>&lt;c&gt;</c> element, for inline code snippets (or anything else in a monospace font) uses the question-mark character to tell <latex /> where the text begins and ends.  This will be a problem if the text has a question mark in it!  So there is the attribute <c>latexsep</c> that allows you to specify another character that does not appear in your text.  For example, XML directives use question-marks now and then, so writing about them in MathBook XML requires specifying a different separation character, as in:  <c latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c>.  The <c>&lt;pre&gt;</c> element does not suffer from this quirk.</p>
+
+        </section>
+
+        <section xml:id="section-programs">
             <title>Program Listings</title>
 
-            <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt (in-browser Python) or the Python language argument to the Sage Cell Server.</p>
+            <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt (in-browser Python) or the Python language argument to the Sage Cell Server.  To see examples of authoring Sace cells, have a look at Section<nbsp /><xref ref="section-sage-cells" />.</p>
 
             <p>In the meantime, program listings, especially with syntax highlighting, is useful all by itself.  The <q>R</q> language might not be a bad stand-in for pseudo-code, as it supports assignment with a left arrow and has fairly generic procedural syntax for control structures and data structures.  Or maybe Pascal would be a good choice?  Here is an example of R.</p>
 

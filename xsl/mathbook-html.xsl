@@ -1522,14 +1522,19 @@ is just flat out on the page, as if printed there.
     <xsl:text>&#169;</xsl:text>
 </xsl:template>
 
-<!-- for example -->
+<!-- exempli gratia, for example -->
 <xsl:template match="eg">
     <xsl:text>e.g.</xsl:text>
 </xsl:template>
 
-<!-- in other words -->
+<!-- id est, in other words -->
 <xsl:template match="ie">
     <xsl:text>i.e.</xsl:text>
+</xsl:template>
+
+<!-- et cetera -->
+<xsl:template match="etc">
+    <xsl:text>etc.</xsl:text>
 </xsl:template>
 
 <!-- Implication Symbols -->
@@ -1584,6 +1589,18 @@ is just flat out on the page, as if printed there.
             mailto:<xsl:value-of select="." />
         </xsl:attribute>
         <xsl:value-of select="." />
+    </xsl:element>
+</xsl:template>
+
+<!-- Chunks of Pre-Formatted Text                -->
+<!-- 100% analogue of LaTeX's verbatim           -->
+<!-- environment or HTML's <pre> element         -->
+<!-- Text is massaged just like Sage input code  -->
+<xsl:template match="pre">
+    <xsl:element name="pre">
+        <xsl:call-template name="sanitize-sage">
+            <xsl:with-param name="raw-sage-code" select="." />
+        </xsl:call-template>
     </xsl:element>
 </xsl:template>
 
@@ -2605,6 +2622,24 @@ MathJax.Hub.Config({
         scale: 88,
     },
 });
+    <xsl:if test="//m[contains(text(),'sfrac')] or //md[contains(text(),'sfrac')] or //me[contains(text(),'sfrac')] or //mrow[contains(text(),'sfrac')]">
+    /* support for the sfrac command in MathJax (Beveled fraction)
+        see: https://github.com/mathjax/MathJax-docs/wiki/Beveled-fraction-like-sfrac,-nicefrac-bfrac */
+MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
+  var MML = MathJax.ElementJax.mml,
+      TEX = MathJax.InputJax.TeX;
+
+  TEX.Definitions.macros.sfrac = "myBevelFraction";
+
+  TEX.Parse.Augment({
+    myBevelFraction: function (name) {
+      var num = this.ParseArg(name),
+          den = this.ParseArg(name);
+      this.Push(MML.mfrac(num,den).With({bevelled: true}));
+    }
+  });
+});
+    </xsl:if>
 </script>
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full" />
 </xsl:template>
