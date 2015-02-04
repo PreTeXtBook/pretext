@@ -343,7 +343,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Used to markup acronyms, defaults is no effect&#xa;</xsl:text>
         <xsl:text>\newcommand{\acronym}[1]{#1}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//quant">
+    <xsl:if test="//quantity">
         <xsl:text>%% Used for units and number formatting&#xa;</xsl:text>
         <xsl:text>\usepackage[per-mode=fraction]{siunitx}&#xa;</xsl:text>
         <xsl:text>%% Common non-SI units&#xa;</xsl:text>
@@ -1433,8 +1433,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- Numbers, units, quantities                     -->
-<!-- quant                                          -->
-<xsl:template match="quant">
+<!-- quantity                                       -->
+<xsl:template match="quantity">
     <!-- warning if there is no content -->
     <xsl:if test="not(descendant::unit) and not(descendant::per) and not(descendant::mag)">
         <xsl:message terminate="no">
