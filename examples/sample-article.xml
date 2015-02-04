@@ -504,12 +504,12 @@ the xsltproc executable.
 
             <p>Because of the Fundamental Theorem, for every derivative we know, there is an antiderivative we might find useful.  Because of the Fundamental Theorem of Calculus, we recycle the <q><m>\int</m></q> symbol as notation for an antiderivative.</p>
             <ul cols="2">
-                <li><p>Derivatives<ol>
+                <li><p>Derivatives<ol label="(a)">
                     <li><p><m>\frac{d}{dx}x^n = nx^{n-1}</m></p></li>
                     <li><p><m>\frac{d}{dx}e^x = e^x</m></p></li>
                     <li><p><m>\frac{d}{dx}\cos(x) = -\sin(x)</m></p></li>
                 </ol></p></li>
-                <li><p>Antiderivatives<ol>
+                <li><p>Antiderivatives<ol label="i)">
                     <li><p><m>\indefiniteintegral{x^n}{x} = \displaystyle\frac{x^{n-1}}{n+1}\text{ if }n\neq -1</m></p></li>
                     <li><p><m>\indefiniteintegral{e^x}{x} = e^x</m></p></li>
                     <li><p><m>\indefiniteintegral{\sin(x)}{x} = -\cos(x)</m></p></li>
@@ -1182,6 +1182,131 @@ the xsltproc executable.
         </section>
 
         <section>
+            <title>List Calisthenics</title>
+
+            <p>This section contains nested lists, to demonstrate how they get assigned labels (numbering, symbols).  First we have a list with no customization and multiple levels to test the defaults.  <latex /> allows a maximum of four levels of ordered/numbered lists, and a total of six levels if some unordered lists are mixed in.  The second-level defaults (lower-case Latin) are formatted slightly different in <latex /> versus HTML.  The HTML style is not easy to adjust, but you can  specify the <latex /> version to match if it is important.</p>
+
+            <ol>
+                <li>Level 1, first.</li>
+                <li>Level 1, second.<ol>
+                    <li>Level 2, first.</li>
+                    <li>Level 2, second.<ol>
+                            <li>Level 3, first.</li>
+                                <li>Level 3, second.<ol>
+                                    <li>Level 4, first.</li>
+                                    <li>Level 4, second.</li>
+                                    <li>Level 4, third.</li>
+                                </ol></li>
+                            <li>Level 3, third.</li>
+                        </ol></li>
+                    <li>Level 2, third.</li>
+                </ol></li>
+                <li>Level 1, third.</li>
+            </ol>
+
+            <p>And now a four-level deep unordered list with the default labels supplied by MBX (disc, circle, square, disc).</p>
+
+            <ul>
+                <li>Level 1, first.</li>
+                <li>Level 1, second.<ul>
+                    <li>Level 2, first.</li>
+                    <li>Level 2, second.<ul>
+                            <li>Level 3, first.</li>
+                                <li>Level 3, second.<ul>
+                                    <li>Level 4, first.</li>
+                                    <li>Level 4, second.</li>
+                                    <li>Level 4, third.</li>
+                                </ul></li>
+                            <li>Level 3, third.</li>
+                        </ul></li>
+                    <li>Level 2, third.</li>
+                </ul></li>
+                <li>Level 1, third.</li>
+            </ul>
+
+            <p>And a total of six levels with a mix of ordered and unordered lists, the most that out-of-the-box-<latex /> is able to handle.</p>
+
+            <ol>
+                <li>Level 1, first.</li>
+                <li>Level 1, second.<ol>
+                    <li>Level 2, first.</li>
+                    <li>Level 2, second.<ul>
+                            <li>Level 3, first.</li>
+                                <li>Level 3, second.<ol>
+                                    <li>Level 4, first.</li>
+                                    <li>Level 4, second.<ol>
+                                        <li>Level 5, first.</li>
+                                        <li>Level 5, second.<ul>
+                                            <li>Level 6, first.</li>
+                                            <li>Level 6, second.</li>
+                                            <li>Level 6, third.</li>
+                                        </ul></li>
+                                        <li>Level 5, third.</li>
+                                    </ol></li>
+                                    <li>Level 4, third.</li>
+                                </ol></li>
+                            <li>Level 3, third.</li>
+                        </ul></li>
+                    <li>Level 2, third.</li>
+                </ol></li>
+                <li>Level 1, third.</li>
+            </ol>
+
+            <p>Now, nested lists with the defaults replaced by custom choices.  First, an ordered list, three deep, upper Roman numerals, then upper-case Latin, then no label on the three elements of the third level.  Note the adornments of the labels will be rendered in LaTeX, but not in HTML.</p>
+
+            <ol label="*I*">
+                <li>Level 1, first.</li>
+                <li>Level 1, second.<ol label="++A">
+                    <li>Level 2, first.</li>
+                    <li>Level 2, second.<ol label="">
+                            <li>Level 3, first.</li>
+                            <li>Level 3, second.</li>
+                            <li>Level 3, third.</li>
+                        </ol></li>
+                    <li>Level 2, third.</li>
+                </ol></li>
+                <li>Level 1, third.</li>
+            </ol>
+
+
+            <p>Exercises and References are specialized subdivisions you can put anywhere.  They are implemented as top-level lists, so should share behavior.  For example, an exercise may have many parts and when expressed as a list, should have the expected labels.</p>
+
+            <exercises>
+                <title>Exercises (with lists)</title>
+
+                <exercise>
+                    <statement>
+                        <p>This exercise should have several parts, and labels should follow the defaults for second-level lists (since the exercise is numbered according to the top-level default).</p>
+                        <ol>
+                            <li>Exercise 1, first part.</li>
+                            <li>Exercise 1, second part.</li>
+                            <li>Exercise 1, third part.</li>
+                        </ol>
+                    </statement>
+                </exercise>
+            </exercises>
+
+            <p>Similarly, References may have lists in their annotations.  Unlikely?  But possible.</p>
+
+            <references>
+                <title>References (with lists in Annotations)</title>
+
+                <biblio type="raw" xml:id="biblio-undetermined">
+                    Some book would be listed here.
+                    <note>
+                        <p>Here is the annotation and an ordered list as part of that annotation.  (The lack of a space will be addressed with more work on references.)</p>
+                        <ol>
+                            <li>Book 1, first part.</li>
+                            <li>Book 1, second part.</li>
+                            <li>Book 1, third part.</li>
+                        </ol>
+                    </note>
+                </biblio>
+            </references>
+
+        </section>
+
+        <section>
             <title>Embedded Interactive Elements</title>
 
             <introduction>
@@ -1291,7 +1416,11 @@ the xsltproc executable.
 
             <exercise>
                 <statement>
-                    <p>Can you prove Corollary<nbsp /><xref ref="corollary-FTC-derivative" /> directly?</p>
+                    <p>Can you prove Corollary<nbsp /><xref ref="corollary-FTC-derivative" /> directly?  If not consider that a problem could have several parts, which should be formatted as a second-level list, since the problems normally get numbered at the top level</p>
+                    <ol>
+                        <li>Why is this result a Corollary?</li>
+                        <li>Could you interchange the Theorem and Corollary?</li>
+                    </ol>
                 </statement>
                 <hint>
                     <p>Consider the definite integral as an area function and employ the Mean Value Theorem.</p>
