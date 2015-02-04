@@ -73,8 +73,9 @@ the xsltproc executable.
         To use the sorting features optimally, it helps to have subdivisions
         begin with the same short prefix.  An "initialism" (nee acronym)
         here will be used for that purpose if present.  This is only employed
-        for producing Sage notebook versions. (If not present, you will get a
-        harmless warning just for Sage worksheet production.)
+        for producing Sage notebook versions and in the title shown in the
+        browser. (If not present, you will get a harmless warning just for
+        Sage worksheet production.)
         -->
         <initialism>SA</initialism>
         <!--
