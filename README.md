@@ -5,4 +5,4 @@ A lightweight XML application for authors of scientific articles, textbooks and 
 
 GPL License.
 
-http://mathbook.pugetsound.edu
+Quickstart instructions at project website:  http://mathbook.pugetsound.edu

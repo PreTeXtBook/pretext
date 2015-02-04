@@ -235,12 +235,26 @@ the xsltproc executable.
 
             <p>We can also embed <q>todo</q>s in the source, and selectively display them, so you may not see the one here in the output you are looking at now.  Or maybe you do see it?</p>
 
-            <notation>
-                <usage>\int\,f(x)\,dx</usage>
-                <description>antiderivative of <m>f(x)</m></description>
-            </notation>
-
 <todo>Talk more about author's tools, such as todo's</todo>
+
+            <p>Because a definite integral can be computed using an antiderivative, we have the following definition.</p>
+
+            <!-- 
+            Notation may be associated with a definition,
+            or it can be placed standalone.  If associated
+            with a definition, future work will reflect that
+            association in the list of notation.
+            -->
+
+            <definition xml:id="definition-indefinite-integral">
+                <statement>
+                    <p>Suppose that <m>\frac{d}{dx}F(x)=f(x)</m>.  Then the <term>indefinite integral</term> of <m>f(x)</m> is <m>F(x)</m> and is written as <me>\int\,f(x)\,dx=F(x)</me></p>
+                </statement>
+                <notation>
+                    <usage>\int\,f(x)\,dx</usage>
+                    <description>indefinite integral of <m>f(x)</m></description>
+                </notation>
+            </definition>
 
         </section>
 
@@ -257,8 +271,8 @@ the xsltproc executable.
         the first non-trivial character.
         -->
 
-        <section>
-            <title>Computing Integrals (<m>\int</m>)</title>
+        <section xml:id="section-sage-cells">
+            <title>Computing Integrals with Sage (<m>\int</m>)</title>
 
             <index><main>Sage</main><sub>integration</sub></index>
             <index><main>Numerical integration</main><see>Sage integration</see></index>
@@ -447,6 +461,7 @@ the xsltproc executable.
                     </statement>
                 </principle>
 
+                <p>More precisely, <c>&lt;theorem&gt;</c>, <c>&lt;corollary&gt;</c>, <c>&lt;lemma&gt;</c>, <c>&lt;proposition&gt;</c>, <c>&lt;claim&gt;</c>, and <c>&lt;fact&gt;</c>, all behave exactly the same, requiring a statement (as a sequence of paragraphs) followed by an optional proof, and may have an optional title.  The elements <c>&lt;definition&gt;</c>, <c>&lt;conjecture&gt;</c>, <c>&lt;axiom&gt;</c>, and <c>&lt;principle&gt;</c> are functionally the same, barring a proof (since they would never have one!).  Definitions are an exception, as it is natural to place <c>&lt;notation&gt;</c> within<mdash />see the source for Definition<nbsp /><xref ref="definition-indefinite-integral" /> for an example.</p>
             </subsection>
 
             <subsection>
@@ -489,12 +504,12 @@ the xsltproc executable.
 
             <p>Because of the Fundamental Theorem, for every derivative we know, there is an antiderivative we might find useful.  Because of the Fundamental Theorem of Calculus, we recycle the <q><m>\int</m></q> symbol as notation for an antiderivative.</p>
             <ul cols="2">
-                <li><p>Derivatives<ol>
+                <li><p>Derivatives<ol label="(a)">
                     <li><p><m>\frac{d}{dx}x^n = nx^{n-1}</m></p></li>
                     <li><p><m>\frac{d}{dx}e^x = e^x</m></p></li>
                     <li><p><m>\frac{d}{dx}\cos(x) = -\sin(x)</m></p></li>
                 </ol></p></li>
-                <li><p>Antiderivatives<ol>
+                <li><p>Antiderivatives<ol label="i)">
                     <li><p><m>\indefiniteintegral{x^n}{x} = \displaystyle\frac{x^{n-1}}{n+1}\text{ if }n\neq -1</m></p></li>
                     <li><p><m>\indefiniteintegral{e^x}{x} = e^x</m></p></li>
                     <li><p><m>\indefiniteintegral{\sin(x)}{x} = -\cos(x)</m></p></li>
@@ -723,7 +738,8 @@ the xsltproc executable.
             <p><copyright /><nbsp /><nbsp />
             <ellipsis /><nbsp /><nbsp />
             <eg /><nbsp /><nbsp />
-            <ie /><nbsp /><nbsp /></p>
+            <ie /><nbsp /><nbsp />
+            <etc /><nbsp /><nbsp /></p>
 
             <p>It might be instructive to see how the paragraphs above about escape characters were written without inadvertenly using an escape character improperly.</p>
 
@@ -1162,7 +1178,7 @@ the xsltproc executable.
                 <note><p>An online, open-source offering.</p></note>
                 </biblio>
 
-                <biblio type="raw" xml:id="biblio-strang-article">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio>
+                <biblio type="raw" xml:id="biblio-strang-article-duplicate">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio>
 
                 <conclusion>
                     <p>This is a conclusion, which has not been used very much in this sample.  Did you see the the second reference above has a short annotation?  So you can make annotated bibliographies easily.</p>
@@ -1212,10 +1228,135 @@ the xsltproc executable.
         </section>
 
         <section>
+            <title>List Calisthenics</title>
+
+            <p>This section contains nested lists, to demonstrate how they get assigned labels (numbering, symbols).  First we have a list with no customization and multiple levels to test the defaults.  <latex /> allows a maximum of four levels of ordered/numbered lists, and a total of six levels if some unordered lists are mixed in.  The second-level defaults (lower-case Latin) are formatted slightly different in <latex /> versus HTML.  The HTML style is not easy to adjust, but you can  specify the <latex /> version to match if it is important.</p>
+
+            <ol>
+                <li>Level 1, first.</li>
+                <li>Level 1, second.<ol>
+                    <li>Level 2, first.</li>
+                    <li>Level 2, second.<ol>
+                            <li>Level 3, first.</li>
+                                <li>Level 3, second.<ol>
+                                    <li>Level 4, first.</li>
+                                    <li>Level 4, second.</li>
+                                    <li>Level 4, third.</li>
+                                </ol></li>
+                            <li>Level 3, third.</li>
+                        </ol></li>
+                    <li>Level 2, third.</li>
+                </ol></li>
+                <li>Level 1, third.</li>
+            </ol>
+
+            <p>And now a four-level deep unordered list with the default labels supplied by MBX (disc, circle, square, disc).</p>
+
+            <ul>
+                <li>Level 1, first.</li>
+                <li>Level 1, second.<ul>
+                    <li>Level 2, first.</li>
+                    <li>Level 2, second.<ul>
+                            <li>Level 3, first.</li>
+                                <li>Level 3, second.<ul>
+                                    <li>Level 4, first.</li>
+                                    <li>Level 4, second.</li>
+                                    <li>Level 4, third.</li>
+                                </ul></li>
+                            <li>Level 3, third.</li>
+                        </ul></li>
+                    <li>Level 2, third.</li>
+                </ul></li>
+                <li>Level 1, third.</li>
+            </ul>
+
+            <p>And a total of six levels with a mix of ordered and unordered lists, the most that out-of-the-box-<latex /> is able to handle.</p>
+
+            <ol>
+                <li>Level 1, first.</li>
+                <li>Level 1, second.<ol>
+                    <li>Level 2, first.</li>
+                    <li>Level 2, second.<ul>
+                            <li>Level 3, first.</li>
+                                <li>Level 3, second.<ol>
+                                    <li>Level 4, first.</li>
+                                    <li>Level 4, second.<ol>
+                                        <li>Level 5, first.</li>
+                                        <li>Level 5, second.<ul>
+                                            <li>Level 6, first.</li>
+                                            <li>Level 6, second.</li>
+                                            <li>Level 6, third.</li>
+                                        </ul></li>
+                                        <li>Level 5, third.</li>
+                                    </ol></li>
+                                    <li>Level 4, third.</li>
+                                </ol></li>
+                            <li>Level 3, third.</li>
+                        </ul></li>
+                    <li>Level 2, third.</li>
+                </ol></li>
+                <li>Level 1, third.</li>
+            </ol>
+
+            <p>Now, nested lists with the defaults replaced by custom choices.  First, an ordered list, three deep, upper Roman numerals, then upper-case Latin, then no label on the three elements of the third level.  Note the adornments of the labels will be rendered in LaTeX, but not in HTML.</p>
+
+            <ol label="*I*">
+                <li>Level 1, first.</li>
+                <li>Level 1, second.<ol label="++A">
+                    <li>Level 2, first.</li>
+                    <li>Level 2, second.<ol label="">
+                            <li>Level 3, first.</li>
+                            <li>Level 3, second.</li>
+                            <li>Level 3, third.</li>
+                        </ol></li>
+                    <li>Level 2, third.</li>
+                </ol></li>
+                <li>Level 1, third.</li>
+            </ol>
+
+
+            <p>Exercises and References are specialized subdivisions you can put anywhere.  They are implemented as top-level lists, so should share behavior.  For example, an exercise may have many parts and when expressed as a list, should have the expected labels.</p>
+
+            <exercises>
+                <title>Exercises (with lists)</title>
+
+                <exercise>
+                    <statement>
+                        <p>This exercise should have several parts, and labels should follow the defaults for second-level lists (since the exercise is numbered according to the top-level default).</p>
+                        <ol>
+                            <li>Exercise 1, first part.</li>
+                            <li>Exercise 1, second part.</li>
+                            <li>Exercise 1, third part.</li>
+                        </ol>
+                    </statement>
+                </exercise>
+            </exercises>
+
+            <p>Similarly, References may have lists in their annotations.  Unlikely?  But possible.</p>
+
+            <references>
+                <title>References (with lists in Annotations)</title>
+
+                <biblio type="raw" xml:id="biblio-undetermined">
+                    Some book would be listed here.
+                    <note>
+                        <p>Here is the annotation and an ordered list as part of that annotation.  (The lack of a space will be addressed with more work on references.)</p>
+                        <ol>
+                            <li>Book 1, first part.</li>
+                            <li>Book 1, second part.</li>
+                            <li>Book 1, third part.</li>
+                        </ol>
+                    </note>
+                </biblio>
+            </references>
+
+        </section>
+
+        <section>
             <title>Embedded Interactive Elements</title>
 
             <introduction>
-                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.</p>
+                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See Section<nbsp /><xref ref="section-sage-cells" /> for the specifics of embedding instances of the Sage Cell Server.</p>
             </introduction>
 
             <subsection>
@@ -1321,7 +1462,11 @@ the xsltproc executable.
 
             <exercise>
                 <statement>
-                    <p>Can you prove Corollary<nbsp /><xref ref="corollary-FTC-derivative" /> directly?</p>
+                    <p>Can you prove Corollary<nbsp /><xref ref="corollary-FTC-derivative" /> directly?  If not consider that a problem could have several parts, which should be formatted as a second-level list, since the problems normally get numbered at the top level</p>
+                    <ol>
+                        <li>Why is this result a Corollary?</li>
+                        <li>Could you interchange the Theorem and Corollary?</li>
+                    </ol>
                 </statement>
                 <hint>
                     <p>Consider the definite integral as an area function and employ the Mean Value Theorem.</p>
@@ -1452,9 +1597,37 @@ the xsltproc executable.
         </section>
 
         <section>
+            <title>Pre-Formatted Text</title>
+
+            <p>In Sage, if you wanted to build a matrix, then you would use the <c>matrix()</c> constructor.  Here is the matrix of second partials of <m>f(x,y)=x^3+8x^2y^3 + y^4</m>, as you would enter it in Sage.  Notice that <c>SR</c> is the ring of symbolic expressions, <c>Symbolic Ring</c>.</p>
+
+            <pre>
+            var('x', 'y')
+            J = matrix(SR, [
+                [6*x + 16*y^3, 48*x*y^2],
+                [48*x*y^2, 48*x^2*y + 12*y^2]
+                ])
+            </pre>
+
+            <p>That accomplished, Sage will easily and naturally provide a <latex /> representation of the matrix with the command <c>latex(J)</c>.</p>
+
+            <pre>
+            \left(\begin{array}{rr}
+            16 \, y^{3} + 6 \, x &amp; 48 \, x y^{2} \\
+            48 \, x y^{2} &amp; 48 \, x^{2} y + 12 \, y^{2}
+            \end{array}\right)
+            </pre>
+
+            <p>Ideally, the realization of preformatted text will be robust enough that it can be cut from documents and pasted without any substitutions of <q>fancier</q> Unicode characters for generic ASCII characters.  Authoring follows the same rules as for Sge input code, the first non-whitespace character sets the left margin.  If indentation is important, do not mix spaces and tabs.  For syntax highlighting of text representing computer programs, or parts of them, see Section<nbsp /><xref ref="section-programs" />.</p>
+
+            <p>The <c>&lt;c&gt;</c> element, for inline code snippets (or anything else in a monospace font) uses the question-mark character to tell <latex /> where the text begins and ends.  This will be a problem if the text has a question mark in it!  So there is the attribute <c>latexsep</c> that allows you to specify another character that does not appear in your text.  For example, XML directives use question-marks now and then, so writing about them in MathBook XML requires specifying a different separation character, as in:  <c latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c>.  The <c>&lt;pre&gt;</c> element does not suffer from this quirk.</p>
+
+        </section>
+
+        <section xml:id="section-programs">
             <title>Program Listings</title>
 
-            <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt (in-browser Python) or the Python language argument to the Sage Cell Server.</p>
+            <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt (in-browser Python) or the Python language argument to the Sage Cell Server.  To see examples of authoring Sace cells, have a look at Section<nbsp /><xref ref="section-sage-cells" />.</p>
 
             <p>In the meantime, program listings, especially with syntax highlighting, is useful all by itself.  The <q>R</q> language might not be a bad stand-in for pseudo-code, as it supports assignment with a left arrow and has fairly generic procedural syntax for control structures and data structures.  Or maybe Pascal would be a good choice?  Here is an example of R.</p>
 

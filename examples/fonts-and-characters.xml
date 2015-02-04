@@ -62,6 +62,12 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
             <title>Examples</title>
 
             <paragraph>
+                <title>Update (2015/02/01)</title>
+
+                <p>Greek characters will not all render presently via <latex />.</p>
+            </paragraph>
+
+            <paragraph>
                 <title>Spanish</title>
 
                 <!-- Juan Ruiz, el Arcipreste de Hita (¿1283?-¿1350?), Las ranas que demandaban un rey, del Libro de buen amor (Las ranas en un lago cantaban et jugaban), http://users.ipfw.edu/jehle/poetry.htm -->
@@ -71,6 +77,8 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
 
             <paragraph>
                 <title>(Ancient) Greek</title>
+
+                <!-- KDC's original: (EZ?) <p>ὁ δὴ ΕΖ ἤτοι πρῶτός ἐστιν ἢ οὔ.</p> -->
 
                 <!-- Homer, Iliad ("Agamemnon", "Hom. Od. 9.1", "denarius"), http://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0133&redirect=true -->
                 <p>μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος οὐλομένην, ἣ μυρί᾽ Ἀχαιοῖς ἄλγε᾽ ἔθηκε, πολλὰς δ᾽ ἰφθίμους ψυχὰς Ἄϊδι προΐαψεν ἡρώων, αὐτοὺς δὲ ἑλώρια τεῦχε κύνεσσιν οἰωνοῖσί τε πᾶσι, Διὸς δ᾽ ἐτελείετο βουλή, ἐξ οὗ δὴ τὰ πρῶτα διαστήτην ἐρίσαντε Ἀτρεΐδης τε ἄναξ ἀνδρῶν καὶ δῖος Ἀχιλλεύς.</p>

@@ -953,9 +953,12 @@ is just flat out on the page, as if printed there.
         </xsl:if>
     </h5>
 </xsl:template>
-<!-- Body is just the statement (ignore notation) -->
+<!-- Body is just the statement -->
+<!-- For definitions, we also process any notation                -->
+<!-- The other environments should not use the notation construct -->
 <xsl:template match="definition|axiom|conjecture|principle" mode="body">
     <xsl:apply-templates select="statement" />
+    <xsl:apply-templates select="notation" />
 </xsl:template>
 <!-- No posterior  -->
 <xsl:template match="definition|axiom|conjecture|principle" mode="posterior" />
@@ -1212,32 +1215,167 @@ is just flat out on the page, as if printed there.
 <p><xsl:apply-templates /></p>
 </xsl:template>
 
-<!-- Pass-through stock HTML for lists-->
-<xsl:template match="ol|ul|li">
-    <xsl:copy>
-        <xsl:apply-templates />
-    </xsl:copy>
+<!-- Lists -->
+
+<!-- Utility templates to translate MBX              -->
+<!-- enumeration style to HTML list-style-type       -->
+<!-- NB: this is currently inferior to latex version -->
+<!-- NB: all pre-, post-formatting is lost           -->
+<xsl:template match="*" mode="html-ordered-list-label">
+   <xsl:choose>
+        <xsl:when test="contains(@label,'1')">decimal</xsl:when>
+        <xsl:when test="contains(@label,'a')">lower-alpha</xsl:when>
+        <xsl:when test="contains(@label,'A')">upper-alpha</xsl:when>
+        <xsl:when test="contains(@label,'i')">lower-roman</xsl:when>
+        <xsl:when test="contains(@label,'I')">upper-roman</xsl:when>
+        <xsl:when test="@label=''">none</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: ordered list label not found or not recognized</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
+<xsl:template match="*" mode="html-unordered-list-label">
+   <xsl:choose>
+        <xsl:when test="@label='disc'">disc</xsl:when>
+        <xsl:when test="@label='circle'">circle</xsl:when>
+        <xsl:when test="@label='square'">square</xsl:when>
+        <xsl:when test="@label=''">none</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: unordered list label not found or not recognized</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Utility template to translate ordered list    -->
+<!-- level to HTML list-style-type                 -->
+<!-- This mimics LaTeX's choice and order:         -->
+<!-- arabic, lower alpha, lower roman, upper alpha -->
+<xsl:template match="*" mode="html-ordered-list-label-default">
+    <xsl:variable name="level">
+        <xsl:apply-templates select="." mode="ordered-list-level" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$level='0'">decimal</xsl:when>
+        <xsl:when test="$level='1'">lower-alpha</xsl:when>
+        <xsl:when test="$level='2'">lower-roman</xsl:when>
+        <xsl:when test="$level='3'">upper-alpha</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: ordered list is more than 4 levels deep (<xsl:value-of select="$level" /> levels)</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Utility template to translate unordered    -->
+<!-- list level to HTML list-style-type         -->
+<!-- This is similar to Firefox default choices -->
+<!-- but different in the fourth slot           -->
+<!-- disc, circle, square, disc                 -->
+<xsl:template match="*" mode="html-unordered-list-label-default">
+    <xsl:variable name="level">
+        <xsl:apply-templates select="." mode="unordered-list-level" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$level='0'">disc</xsl:when>
+        <xsl:when test="$level='1'">circle</xsl:when>
+        <xsl:when test="$level='2'">square</xsl:when>
+        <xsl:when test="$level='3'">disc</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: unordered list is more than 4 levels deep</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
+<xsl:template match="ol">
+    <xsl:element name="ol">
+        <xsl:attribute name="style">
+            <xsl:text>list-style-type: </xsl:text>
+            <xsl:choose>
+                <xsl:when test="@label">
+                    <xsl:apply-templates select="." mode="html-ordered-list-label" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="." mode="html-ordered-list-label-default" />
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates />
+    </xsl:element>
+</xsl:template>
+
+<xsl:template match="ul">
+    <xsl:element name="ul">
+        <xsl:attribute name="style">
+            <xsl:text>list-style-type: </xsl:text>
+            <xsl:choose>
+                <xsl:when test="@label">
+                    <xsl:apply-templates select="." mode="html-unordered-list-label" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="." mode="html-unordered-list-label-default" />
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates />
+    </xsl:element>
+</xsl:template>
+
+<!-- Pass-through list items            -->
+<!-- Allow paragraphs in larger items,  -->
+<!-- or just snippets for smaller items -->
+<xsl:template match="li">
+    <li>
+        <xsl:apply-templates />
+    </li>
+</xsl:template>
+
+<!-- ##################### -->
+<!-- Multiple-column lists -->
+<!-- ##################### -->
+
+<!-- TODO: Accept top-level list label formatting in here -->
+<!-- TODO: Protect for top-level use only -->
+
+<!-- Note: ul, ol combined with "<xsl:copy>" led to namespace trouble -->
+
 <!-- With cols specified, we form the list items with variable -->
-<!-- widths then clear the floating property to resume -->
-<xsl:template match="ol[@cols]|ul[@cols]">
-    <xsl:copy>
+<!-- widths then clear the floating property to resume         -->
+<xsl:template match="ol[@cols]">
+    <xsl:if test="@label">
+        <xsl:message>MBX:WARNING: Custom labeling of multi-column lists not implemented</xsl:message>
+    </xsl:if>
+    <xsl:element name="ol">
         <xsl:apply-templates select="li" mode="variable-width">
             <xsl:with-param name="percent-width" select="98 div @cols" />
         </xsl:apply-templates>
-    </xsl:copy>
+    </xsl:element>
     <div style="clear:both;"></div>
 </xsl:template>
 
+<xsl:template match="ul[@cols]">
+    <xsl:if test="@label">
+        <xsl:message>MBX:WARNING: Custom labeling of multi-column lists not implemented</xsl:message>
+    </xsl:if>
+    <xsl:element name="ul">
+        <xsl:apply-templates select="li" mode="variable-width">
+            <xsl:with-param name="percent-width" select="98 div @cols" />
+        </xsl:apply-templates>
+    </xsl:element>
+    <div style="clear:both;"></div>
+</xsl:template>
+
+<!-- Each list item needs styling independent of CSS -->
 <xsl:template match="li" mode="variable-width">
     <xsl:param name="percent-width" />
-    <xsl:copy>
+    <xsl:element name="li">
         <xsl:attribute name="style">
             <xsl:text>width:</xsl:text><xsl:value-of select="$percent-width" /><xsl:text>%; float:left;</xsl:text>
         </xsl:attribute>
        <xsl:apply-templates />
-    </xsl:copy>
+    </xsl:element>
 </xsl:template>
 
 <!-- Figures and their captions -->
@@ -1622,14 +1760,19 @@ is just flat out on the page, as if printed there.
     <xsl:text>&#169;</xsl:text>
 </xsl:template>
 
-<!-- for example -->
+<!-- exempli gratia, for example -->
 <xsl:template match="eg">
     <xsl:text>e.g.</xsl:text>
 </xsl:template>
 
-<!-- in other words -->
+<!-- id est, in other words -->
 <xsl:template match="ie">
     <xsl:text>i.e.</xsl:text>
+</xsl:template>
+
+<!-- et cetera -->
+<xsl:template match="etc">
+    <xsl:text>etc.</xsl:text>
 </xsl:template>
 
 <!-- Implication Symbols -->
@@ -1684,6 +1827,18 @@ is just flat out on the page, as if printed there.
             mailto:<xsl:value-of select="." />
         </xsl:attribute>
         <xsl:value-of select="." />
+    </xsl:element>
+</xsl:template>
+
+<!-- Chunks of Pre-Formatted Text                -->
+<!-- 100% analogue of LaTeX's verbatim           -->
+<!-- environment or HTML's <pre> element         -->
+<!-- Text is massaged just like Sage input code  -->
+<xsl:template match="pre">
+    <xsl:element name="pre">
+        <xsl:call-template name="sanitize-sage">
+            <xsl:with-param name="raw-sage-code" select="." />
+        </xsl:call-template>
     </xsl:element>
 </xsl:template>
 
