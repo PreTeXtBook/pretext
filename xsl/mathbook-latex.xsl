@@ -314,11 +314,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% If never using xelatex, the next three lines can be removed&#xa;</xsl:text>
     <xsl:text>\usepackage{ifxetex}&#xa;</xsl:text>
     <!-- latex ifthen package, with \boolean{xetex} is option -->
-    <!-- Obsolete: \usepackage{xltxtra} -->
-    <xsl:text>\ifxetex%&#xa;</xsl:text>
-    <xsl:text>\usepackage{fontspec}&#xa;</xsl:text>
-    <xsl:text>\setmainfont[Ligatures=TeX]{Linux Libertine O}&#xa;</xsl:text>
-    <xsl:text>\fi&#xa;</xsl:text>
+    <xsl:text>\ifxetex\usepackage{xltxtra}\fi&#xa;</xsl:text>
     <xsl:text>%% Symbols, align environment, bracket-matrix&#xa;</xsl:text>
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
     <xsl:text>\usepackage{amssymb}&#xa;</xsl:text>
@@ -585,7 +581,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usepackage{enumitem}&#xa;</xsl:text>
         <xsl:if test="//references">
             <xsl:text>%% Lists of references in their own section, maximum depth 1&#xa;</xsl:text>
-            <xsl:text>\newlist{referencelist}{description}{1}&#xa;</xsl:text>
+            <xsl:text>\newlist{referencelist}{description}{4}&#xa;</xsl:text>
             <!-- labelindent defaults to 0, ! means computed -->
             <xsl:text>\setlist[referencelist]{leftmargin=!,labelwidth=!,labelsep=0ex,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
         </xsl:if>
@@ -1093,8 +1089,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="statement|proof" />
 </xsl:template>
 
+<!-- It is natural to place notation within a definition    -->
+<!-- We might take advantage of that, but are not currently -->
 <xsl:template match="definition">
     <xsl:apply-templates select="statement" />
+    <xsl:apply-templates select="notation" />
 </xsl:template>
 
 <xsl:template match="conjecture|axiom|principle">
@@ -1359,14 +1358,128 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Lists -->
 <!-- Good match between basic HTML types and basic LaTeX types -->
+
+<!-- Utility templates to translate MBX @label specification -->
+<!-- for use with LaTeX enumitem package's label keyword     -->
+<xsl:template match="*" mode="latex-ordered-list-label">
+    <xsl:variable name="code">
+        <xsl:choose>
+            <xsl:when test="contains(@label,'1')">1</xsl:when>
+            <xsl:when test="contains(@label,'a')">a</xsl:when>
+            <xsl:when test="contains(@label,'A')">A</xsl:when>
+            <xsl:when test="contains(@label,'i')">i</xsl:when>
+            <xsl:when test="contains(@label,'I')">I</xsl:when>
+            <xsl:when test="@label=''"></xsl:when>
+            <xsl:otherwise>
+                <xsl:message>MBX:ERROR: ordered list label not found or not recognized</xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- deconstruct the left, middle, right portions of code   -->
+    <!-- MBX codes translate to codes from the enumitem package -->
+    <xsl:value-of select="substring-before(@label, $code)" />
+    <xsl:choose>
+        <xsl:when test="$code='1'">\arabic*</xsl:when>
+        <xsl:when test="$code='a'">\alph*</xsl:when>
+        <xsl:when test="$code='A'">\Alph*</xsl:when>
+        <xsl:when test="$code='i'">\roman*</xsl:when>
+        <xsl:when test="$code='I'">\Roman*</xsl:when>
+        <xsl:when test="$code=''"></xsl:when>
+    </xsl:choose>
+    <xsl:value-of select="substring-after(@label, $code)" />
+</xsl:template>
+
+<xsl:template match="*" mode="latex-unordered-list-label">
+   <xsl:choose>
+        <xsl:when test="@label='disc'">\textbullet</xsl:when>
+        <xsl:when test="@label='circle'">$\circ$</xsl:when>
+        <xsl:when test="@label='square'">$\blacksquare$</xsl:when>
+        <xsl:when test="@label=''">none</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: unordered list label not found or not recognized</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Utility template to translate ordered list    -->
+<!-- level to HTML list-style-type                 -->
+<!-- This mimics LaTeX's choice and order:         -->
+<!-- arabic, lower alpha, lower roman, upper alpha -->
+<!-- NB: we need this for sublists in exercises, reference annotations -->
+<!-- othrwise, we try to avoid it, in hopes of cleaner LaTeX source    -->
+<xsl:template match="*" mode="latex-ordered-list-label-default">
+    <xsl:variable name="level">
+        <xsl:apply-templates select="." mode="ordered-list-level" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$level='0'">\arabic*.</xsl:when>
+        <xsl:when test="$level='1'">(\alph*)</xsl:when>
+        <xsl:when test="$level='2'">\roman*.</xsl:when>
+        <xsl:when test="$level='3'">\Alph*.</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: ordered list is more than 4 levels deep (<xsl:value-of select="$level" /> levels)</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Utility template to translate unordered    -->
+<!-- list level to HTML list-style-type         -->
+<!-- This is similar to Firefox default choices -->
+<!-- but different in the fourth slot           -->
+<!-- disc, circle, square, disc                 -->
+<!-- TODO: cannot find text mode filled black square symbol -->
+<!-- TODO: textcomp package has \textopenbullet (unexamined) -->
+<xsl:template match="*" mode="latex-unordered-list-label-default">
+    <xsl:variable name="level">
+        <xsl:apply-templates select="." mode="unordered-list-level" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$level='0'">\textbullet</xsl:when>
+        <xsl:when test="$level='1'">$\circ$</xsl:when>
+        <xsl:when test="$level='2'">$\blacksquare$</xsl:when>
+        <xsl:when test="$level='3'">\textbullet</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: unordered list is more than 4 levels deep</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <xsl:template match="ol">
-    <xsl:text>\begin{enumerate}&#xa;</xsl:text>
-    <xsl:apply-templates />
+    <xsl:text>\begin{enumerate}</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@label">
+            <xsl:text>[label=</xsl:text>
+            <xsl:apply-templates select="." mode="latex-ordered-list-label" />
+            <xsl:text>]</xsl:text>
+        </xsl:when>
+        <xsl:when test="ancestor::exercises or ancestor::references">
+            <xsl:text>[label=</xsl:text>
+            <xsl:apply-templates select="." mode="latex-ordered-list-label-default" />
+            <xsl:text>]</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- No-op: Allow LaTeX (or a style) to determine -->
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>&#xa;</xsl:text>
+     <xsl:apply-templates />
     <xsl:text>\end{enumerate}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- MBX unordered list scheme is distinct -->
+<!-- from LaTeX's so we right out a label  -->
+<!-- choice for each such list             -->
 <xsl:template match="ul">
-    <xsl:text>\begin{itemize}&#xa;</xsl:text>
+    <xsl:text>\begin{itemize}[label=</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@label">
+            <xsl:apply-templates select="." mode="latex-unordered-list-label" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="latex-unordered-list-label-default" />
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>]&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\end{itemize}&#xa;</xsl:text>
 </xsl:template>

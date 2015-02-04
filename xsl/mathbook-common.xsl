@@ -1162,6 +1162,68 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:number from="references" level="any" count="biblio" />
 </xsl:template>
 
+<!-- ########### -->
+<!-- List Levels -->
+<!-- ########### -->
+
+<!-- Utility templates to determine the depth      -->
+<!-- of a list, relative to nesting in other lists -->
+
+<!-- We determine the depth of an unordered     -->
+<!-- list, relative only to other unordered     -->
+<!-- lists in a nesting, so as to determine     -->
+<!-- the right label to apply, esp. as defaults -->
+<!-- The recursive template should be called    -->
+<!-- without a level, since it defaults to zero -->
+<xsl:template match="ul" mode="unordered-list-level">
+    <!-- Start with level zero, and increment on successive calls -->
+    <xsl:param name="level" select="0"/>
+    <xsl:choose>
+        <!-- Another unordered list above, add one and recurse -->
+        <xsl:when test="ancestor::ul">
+            <xsl:apply-templates select="ancestor::ul[1]" mode="unordered-list-level">
+                <xsl:with-param name="level" select="$level + 1" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- No unordered list above, done, so return level -->
+        <xsl:otherwise>
+            <xsl:value-of select="$level" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Ordered lists follow the same strategy,           -->
+<!-- except we implement exercises and references      -->
+<!-- elements as ordered lists, so we need to absorb   -->
+<!-- them into the general treatment of nested lists   -->
+<!-- They do only occur as top-level elements, so that -->
+<!-- assumption allows for some economy                -->
+<xsl:template match="ol" mode="ordered-list-level">
+    <xsl:param name="level" select="0"/>
+    <xsl:choose>
+        <!-- Since exercises and references are top-level        -->
+        <!-- ordered lists, when these are the only interesting  -->
+        <!-- ancestor, we add one to the level and return        -->
+        <xsl:when test="(ancestor::exercises or ancestor::references) and not(ancestor::ol)">
+            <xsl:value-of select="$level + 1" />
+        </xsl:when>
+        <xsl:when test="ancestor::ol">
+            <xsl:apply-templates select="ancestor::ol[1]" mode="ordered-list-level">
+                <xsl:with-param name="level" select="$level + 1" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$level" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Exercises and References are        -->
+<!-- specialized top-level ordered lists -->
+<xsl:template match="exercises|references" mode="ordered-list-level">
+    <xsl:value-of select="0" />
+</xsl:template>
+
 <!-- ################ -->
 <!-- Names for Levels -->
 <!-- ################ -->
