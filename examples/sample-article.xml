@@ -532,6 +532,7 @@ the xsltproc executable.
             <figure xml:id="figure-function-derivative">
                 <caption>A function and its derivative</caption>
                 <image width="350" source="images/cubic-function.png" />
+                <description>This graph shows the function, f, that has formula f(x)=(x-3)*(x-1)*(x+2), and its derivative f'(x).</description>
             </figure>
 
             <p>Lists can have multiple columns.  With <acro>HTML</acro> items displayed in row-major order (horizontally first) and with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items <mdash /> derivatives and integrals <mdash /> where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.<index xml:id="index-start-multicolumn" finish="index-finish-multicolumn"><main>Lists</main><sub>multicolumn</sub></index></p>
