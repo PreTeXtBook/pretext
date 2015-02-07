@@ -749,7 +749,6 @@ the xsltproc executable.
                     \newcommand{\suma}{\Large$+$}
                     \newcommand{\inte}{$\displaystyle \int$}
                     \newcommand{\derv}{\huge$\frac{d}{dt}$}
-
                     \begin{tikzpicture}[auto, thick, node distance=2cm, >=triangle 45]
                     \draw
                         % Drawing the blocks of first filter :
@@ -900,6 +899,33 @@ the xsltproc executable.
                     \end{tikzpicture}]]>
                     </tikz>
                 </figure>
+		
+		<p>Bring in extra packages to help make your image. Here is an example from the forest package. The code for this fancy example comes from the documentation for the forest package.</p>
+ 
+                <figure xml:id="figure-tikz-forest">
+                    <caption>TikZ forest</caption>
+                    <tikz xml:id="tikz-forest">
+			<tikz-extra-preamble>
+			\usepackage{forest}
+			</tikz-extra-preamble>
+			
+			<![CDATA[\pgfmathsetseed{14285} 
+			\begin{forest}
+				random tree/.style n args={3}{% #1=max levels, #2=max children, #3=max content 
+					content/.pgfmath={random(0,#3)}, 
+					if={#1>0}{repeat={random(0,#2)}{append={[,random tree={#1-1}{#2}{#3}]}}}{}},
+				for deepest/.style={before drawing tree={ 
+					alias=deepest,
+					where={y()<y("deepest")}{alias=deepest}{},
+					for name={deepest}{#1}}},
+				colorone/.style={fill=yellow,for children=colortwo}, colortwo/.style={fill=green,for children=colorone}, 
+				important/.style={draw=red,line width=1.5pt,edge={red,line width=1.5pt,draw}},
+				before typesetting nodes={colorone, for tree={draw,s sep=2pt,rotate={int(30*rand)},l+={5*rand}}},
+				for deepest={for ancestors’={important,typeset node}}
+				[,random tree={9}{3}{100}]
+			\end{forest}]]>
+		    </tikz>
+		</figure>
 
             </subsection>
 
