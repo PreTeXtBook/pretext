@@ -1397,8 +1397,30 @@ is just flat out on the page, as if printed there.
         <xsl:attribute name="height"><xsl:value-of select="@height" /></xsl:attribute>
     </xsl:if>
     <xsl:attribute name="src"><xsl:value-of select="@source" /></xsl:attribute>
+    <xsl:call-template name="figuredescription"/>
 </xsl:element>
 </xsl:template>
+
+<xsl:template name="figuredescription">
+    <!-- test to see if <description> exists, otherwise put a message -->
+    <xsl:choose>
+        <xsl:when test="../description!=''">
+            <xsl:attribute name="title">
+              <xsl:value-of select="../description"/>
+            </xsl:attribute>
+            <xsl:attribute name="alt">
+                <xsl:value-of select="../description"/>
+            </xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:attribute name="title">DESCRIPTION NEEDED!</xsl:attribute>
+            <xsl:attribute name="alt">DESCRIPTION NEEDED!</xsl:attribute>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- create an empty template for figure descriptions -->
+<xsl:template match="figure/description"/>
 
 <!-- tikz graphics language       -->
 <!-- SVG's produced by mbx script -->
@@ -1453,6 +1475,7 @@ is just flat out on the page, as if printed there.
                 <xsl:apply-templates select="." mode="internal-id" />
                 <xsl:text>.png</xsl:text>
             </xsl:attribute>
+            <xsl:call-template name="figuredescription"/>
         </xsl:element>
     </xsl:element>
 </xsl:template>

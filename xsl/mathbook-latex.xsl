@@ -1928,6 +1928,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text><xsl:value-of select="@source" /><xsl:text>}</xsl:text>
 </xsl:template>
 
+<!-- create an empty template for figure descriptions -->
+<xsl:template match="figure/description"/>
+
 <!-- tikz graphics language -->
 <!-- preliminary (cursory) support -->
 <!-- http://tex.stackexchange.com/questions/4338/correctly-scaling-a-tikzpicture -->
