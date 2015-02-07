@@ -73,8 +73,9 @@ the xsltproc executable.
         To use the sorting features optimally, it helps to have subdivisions
         begin with the same short prefix.  An "initialism" (nee acronym)
         here will be used for that purpose if present.  This is only employed
-        for producing Sage notebook versions. (If not present, you will get a
-        harmless warning just for Sage worksheet production.)
+        for producing Sage notebook versions and in the title shown in the
+        browser. (If not present, you will get a harmless warning just for
+        Sage worksheet production.)
         -->
         <initialism>SA</initialism>
         <!--
@@ -670,6 +671,27 @@ the xsltproc executable.
             <p>One of the goals of MathBook XML is to relieve an author of managing the numerous conflicts when mixing languages that use different characters for special purposes.  But, of course, XML has its own special characters.</p>
 
             <p>The left angle bracket (<c>&lt;</c>) of XML is the second most-dangerous, since it looks to the processor like the start of a new element.   Use the XML entity <c>&amp;lt;</c> for that character.  Similarly, use <c>&amp;gt;</c> for a right angle bracket.  These are likely to be necessary in source code, such as Sage code (think generators of field extensions) or TikZ code (think arrowheads).  Of course ampersands (<ampersand />) have their own meaning in <latex /> so the entities just described are problematic.  So in mathematics, if you need strict inequalities, use the macros <c>\lt</c> and <c>\gt</c>, which are pre-defined for both <latex />, and MathJax in HTML.</p>
+
+            <p>Sage defines generators of algebraic structures with a syntax that might remind one of common notation for all <q>combinations</q> of some generators.  It is non-standard Python, but is instead pre-parsed by Sage.  No matter, at issue here is the left angle bracket used to specify generators.  Here is an example, which can be doctested by Sage to verify the example will behaves correctly.</p>
+
+            <sage>
+                <input>
+                P.&lt;t> = ZZ[]
+                P
+                </input>
+                <output>Univariate Polynomial Ring in t over Integer Ring</output>
+            </sage>
+
+            <p>There is an alternate syntax, which avoids the angle brackets.</p>
+
+            <sage>
+                <input>
+                R = ZZ['u']
+                u = R.gen(0)
+                (u, R)
+                </input>
+                <output>(u, Univariate Polynomial Ring in u over Integer Ring)</output>
+            </sage>
 
             <p>Everybody wants the ampersand, it is the most-dangerous.  It is <em>the</em> escape character for XML, and <latex /> uses it in tables and arrays.  Use the element <c>&lt;ampersand /&gt;</c> to make a literal ampersand in text, such as in <q>A<ampersand />P.</q>  If you want an ampersand in code (Sage, TikZ) or in math (<latex />) use <c>&amp;amp;</c>.  As a convenience, if you have a big matrix, or a huge chunk of TikZ code, you can protect it all from the processor by wrapping it in <q><c>&lt;![CDATA[</c><nbsp /><nbsp /><nbsp /><c>]]&gt;</c>.</q>  It should be possible to write without ever using the <q>CDATA</q> mechanism, but it might get tedious in places.</p>
 
