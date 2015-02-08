@@ -36,6 +36,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:import href="./extract-identity.xsl" />
 
 <!-- tikz graphics to standalone file        -->
+<!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <!-- Default border of 0.5bp seems too small -->
 <!-- http://tex.stackexchange.com/questions/51757/how-can-i-use-tikz-to-make-standalone-graphics -->
 <xsl:template match="tikz">

@@ -1924,18 +1924,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- tikz graphics language -->
+<!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <!-- preliminary (cursory) support -->
 <!-- http://tex.stackexchange.com/questions/4338/correctly-scaling-a-tikzpicture -->
 <!-- Resize entire tikzpicture with \resizebox{0.75\textwidth}{!}{....}          -->
 <xsl:template match="tikz">
+    <xsl:message>MBX:WARNING: tikz element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
     <xsl:call-template name="sanitize-sage">
         <xsl:with-param name="raw-sage-code" select="." />
     </xsl:call-template>
 </xsl:template>
 
 <!-- Asymptote graphics language  -->
+<!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <!-- EPS's produced by mbx script -->
 <xsl:template match="asymptote">
+    <xsl:message>MBX:WARNING: asymptote element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
     <xsl:text>\includegraphics[width=0.80\textwidth]{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
@@ -1944,9 +1948,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Sage graphics plots          -->
+<!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <!-- EPS's produced by mbx script -->
 <!-- PNGs are fallback for 3D     -->
 <xsl:template match="sageplot">
+    <xsl:message>MBX:WARNING: sageplot element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
     <xsl:text>\IfFileExists{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>

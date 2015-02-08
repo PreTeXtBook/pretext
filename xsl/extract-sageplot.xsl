@@ -38,6 +38,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:import href="./extract-identity.xsl" />
 
 <!-- Sage graphics to standalone Sage/Python file      -->
+<!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <xsl:template match="sageplot">
     <!-- has one trailing newline, which we ignore later (?) -->
     <xsl:variable name="raw-code">

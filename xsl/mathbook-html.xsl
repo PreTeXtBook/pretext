@@ -1393,8 +1393,10 @@ is just flat out on the page, as if printed there.
 </xsl:template>
 
 <!-- tikz graphics language       -->
+<!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <!-- SVG's produced by mbx script -->
 <xsl:template match="tikz">
+    <xsl:message>MBX:WARNING: tikz element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
     <xsl:element name="object">
         <xsl:attribute name="type">image/svg+xml</xsl:attribute>
         <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
@@ -1410,8 +1412,10 @@ is just flat out on the page, as if printed there.
 
 
 <!-- Asymptote graphics language  -->
+<!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <!-- SVG's produced by mbx script -->
 <xsl:template match="asymptote">
+    <xsl:message>MBX:WARNING: asymptote element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
     <xsl:element name="object">
         <xsl:attribute name="type">image/svg+xml</xsl:attribute>
         <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
@@ -1426,9 +1430,11 @@ is just flat out on the page, as if printed there.
 </xsl:template>
 
 <!-- Sage graphics plots          -->
+<!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <!-- SVG's produced by mbx script -->
 <!-- PNGs are fall back for 3D    -->
 <xsl:template match="sageplot">
+    <xsl:message>MBX:WARNING: sageplot element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
     <xsl:element name="object">
         <xsl:attribute name="type">image/svg+xml</xsl:attribute>
         <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>

@@ -34,6 +34,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:import href="./extract-identity.xsl" />
 
 <!-- Asymptote graphics to standalone file           -->
+<!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <!-- Prepend document's macros, otherwise no changes -->
 <xsl:template match="asymptote">
     <xsl:variable name="filebase">
