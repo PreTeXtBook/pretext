@@ -737,85 +737,87 @@ the xsltproc executable.
                 <!-- http://www.texample.net/media/tikz/examples/TEX/noise-shaper.tex -->
                 <figure xml:id="figure-tikz-electronics">
                     <caption>TikZ Electronics Diagram</caption>
-                    <tikz xml:id="tikz-electronics">
-                    <![CDATA[\tikzset{%
-                      block/.style    = {draw, thick, rectangle, minimum height = 3em,
-                        minimum width = 3em},
-                      sum/.style      = {draw, circle, node distance = 2cm}, % Adder
-                      input/.style    = {coordinate}, % Input
-                      output/.style   = {coordinate} % Output
-                    }
-                    % Defining string as labels of certain blocks.
-                    \newcommand{\suma}{\Large$+$}
-                    \newcommand{\inte}{$\displaystyle \int$}
-                    \newcommand{\derv}{\huge$\frac{d}{dt}$}
+                    <image xml:id="tikz-electronics">
+                        <tikz>
+                        <![CDATA[\tikzset{%
+                          block/.style    = {draw, thick, rectangle, minimum height = 3em,
+                            minimum width = 3em},
+                          sum/.style      = {draw, circle, node distance = 2cm}, % Adder
+                          input/.style    = {coordinate}, % Input
+                          output/.style   = {coordinate} % Output
+                        }
+                        % Defining string as labels of certain blocks.
+                        \newcommand{\suma}{\Large$+$}
+                        \newcommand{\inte}{$\displaystyle \int$}
+                        \newcommand{\derv}{\huge$\frac{d}{dt}$}
 
-                    \begin{tikzpicture}[auto, thick, node distance=2cm, >=triangle 45]
-                    \draw
-                        % Drawing the blocks of first filter :
-                        node at (0,0)[right=-3mm]{\Large \textbullet}
-                        node [input, name=input1] {}
-                        node [sum, right of=input1] (suma1) {\suma}
-                        node [block, right of=suma1] (inte1) {\inte}
-                             node at (6.8,0)[block] (Q1) {\Large $Q_1$}
-                             node [block, below of=inte1] (ret1) {\Large$T_1$};
-                        % Joining blocks.
-                        % Commands \draw with options like [->] must be written individually
-                        \draw[->](input1) -- node {$X(Z)$}(suma1);
-                        \draw[->](suma1) -- node {} (inte1);
-                        \draw[->](inte1) -- node {} (Q1);
-                        \draw[->](ret1) -| node[near end]{} (suma1);
-                        % Adder
-                    \draw
-                        node at (5.4,-4) [sum, name=suma2] {\suma}
-                            % Second stage of filter
-                        node at  (1,-6) [sum, name=suma3] {\suma}
-                        node [block, right of=suma3] (inte2) {\inte}
-                        node [sum, right of=inte2] (suma4) {\suma}
-                        node [block, right of=suma4] (inte3) {\inte}
-                        node [block, right of=inte3] (Q2) {\Large$Q_2$}
-                        node at (9,-8) [block, name=ret2] {\Large$T_2$}
-                    ;
-                        % Joining the blocks of second filter
-                        \draw[->] (suma3) -- node {} (inte2);
-                        \draw[->] (inte2) -- node {} (suma4);
-                        \draw[->] (suma4) -- node {} (inte3);
-                        \draw[->] (inte3) -- node {} (Q2);
-                        \draw[->] (ret2) -| (suma3);
-                        \draw[->] (ret2) -| (suma4);
-                             % Third stage of filter:
-                        % Defining nodes:
-                    \draw
-                        node at (11.5, 0) [sum, name=suma5]{\suma}
-                        node [output, right of=suma5]{}
-                        node [block, below of=suma5] (deriv1){\derv}
-                        node [output, right of=suma5] (sal2){}
-                    ;
-                        % Joining the blocks:
-                        \draw[->] (suma2) -| node {}(suma3);
-                        \draw[->] (Q1) -- (8,0) |- node {}(ret1);
-                        \draw[->] (8,0) |- (suma2);
-                        \draw[->] (5.4,0) -- (suma2);
-                        \draw[->] (Q1) -- node {}(suma5);
-                        \draw[->] (deriv1) -- node {}(suma5);
-                        \draw[->] (Q2) -| node {}(deriv1);
-                            \draw[<->] (ret2) -| node {}(deriv1);
-                            \draw[->] (suma5) -- node {$Y(Z)$}(sal2);
-                            % Drawing nodes with \textbullet
-                    \draw
-                        node at (8,0) {\textbullet}
-                        node at (8,-2){\textbullet}
-                        node at (5.4,0){\textbullet}
-                            node at (5,-8){\textbullet}
-                            node at (11.5,-6){\textbullet}
-                            ;
-                        % Boxing and labelling noise shapers
-                        \draw [color=gray,thick](-0.5,-3) rectangle (9,1);
-                        \node at (-0.5,1) [above=5mm, right=0mm] {\textsc{first-order noise shaper}};
-                        \draw [color=gray,thick](-0.5,-9) rectangle (12.5,-5);
-                        \node at (-0.5,-9) [below=5mm, right=0mm] {\textsc{second-order noise shaper}};
-                    \end{tikzpicture}]]>
-                    </tikz>
+                        \begin{tikzpicture}[auto, thick, node distance=2cm, >=triangle 45]
+                        \draw
+                            % Drawing the blocks of first filter :
+                            node at (0,0)[right=-3mm]{\Large \textbullet}
+                            node [input, name=input1] {}
+                            node [sum, right of=input1] (suma1) {\suma}
+                            node [block, right of=suma1] (inte1) {\inte}
+                                 node at (6.8,0)[block] (Q1) {\Large $Q_1$}
+                                 node [block, below of=inte1] (ret1) {\Large$T_1$};
+                            % Joining blocks.
+                            % Commands \draw with options like [->] must be written individually
+                            \draw[->](input1) -- node {$X(Z)$}(suma1);
+                            \draw[->](suma1) -- node {} (inte1);
+                            \draw[->](inte1) -- node {} (Q1);
+                            \draw[->](ret1) -| node[near end]{} (suma1);
+                            % Adder
+                        \draw
+                            node at (5.4,-4) [sum, name=suma2] {\suma}
+                                % Second stage of filter
+                            node at  (1,-6) [sum, name=suma3] {\suma}
+                            node [block, right of=suma3] (inte2) {\inte}
+                            node [sum, right of=inte2] (suma4) {\suma}
+                            node [block, right of=suma4] (inte3) {\inte}
+                            node [block, right of=inte3] (Q2) {\Large$Q_2$}
+                            node at (9,-8) [block, name=ret2] {\Large$T_2$}
+                        ;
+                            % Joining the blocks of second filter
+                            \draw[->] (suma3) -- node {} (inte2);
+                            \draw[->] (inte2) -- node {} (suma4);
+                            \draw[->] (suma4) -- node {} (inte3);
+                            \draw[->] (inte3) -- node {} (Q2);
+                            \draw[->] (ret2) -| (suma3);
+                            \draw[->] (ret2) -| (suma4);
+                                 % Third stage of filter:
+                            % Defining nodes:
+                        \draw
+                            node at (11.5, 0) [sum, name=suma5]{\suma}
+                            node [output, right of=suma5]{}
+                            node [block, below of=suma5] (deriv1){\derv}
+                            node [output, right of=suma5] (sal2){}
+                        ;
+                            % Joining the blocks:
+                            \draw[->] (suma2) -| node {}(suma3);
+                            \draw[->] (Q1) -- (8,0) |- node {}(ret1);
+                            \draw[->] (8,0) |- (suma2);
+                            \draw[->] (5.4,0) -- (suma2);
+                            \draw[->] (Q1) -- node {}(suma5);
+                            \draw[->] (deriv1) -- node {}(suma5);
+                            \draw[->] (Q2) -| node {}(deriv1);
+                                \draw[<->] (ret2) -| node {}(deriv1);
+                                \draw[->] (suma5) -- node {$Y(Z)$}(sal2);
+                                % Drawing nodes with \textbullet
+                        \draw
+                            node at (8,0) {\textbullet}
+                            node at (8,-2){\textbullet}
+                            node at (5.4,0){\textbullet}
+                                node at (5,-8){\textbullet}
+                                node at (11.5,-6){\textbullet}
+                                ;
+                            % Boxing and labelling noise shapers
+                            \draw [color=gray,thick](-0.5,-3) rectangle (9,1);
+                            \node at (-0.5,1) [above=5mm, right=0mm] {\textsc{first-order noise shaper}};
+                            \draw [color=gray,thick](-0.5,-9) rectangle (12.5,-5);
+                            \node at (-0.5,-9) [below=5mm, right=0mm] {\textsc{second-order noise shaper}};
+                        \end{tikzpicture}]]>
+                        </tikz>
+                    </image>
                 </figure>
 
                 <p>The next example began life in <url href="http://www.frontiernet.net/~eugene.ressler/">Sketch</url>, which will output TikZ code (though the code has been edited by hand for readability).</p>
@@ -823,82 +825,84 @@ the xsltproc executable.
                 <!-- http://www.texample.net/media/tikz/examples/TEX/3d-cone.tex -->
                 <figure xml:id="figure-tikz-cone3D">
                     <caption>TikZ Cone Drawing</caption>
-                    <tikz xml:id="tikz-cone">
-                    <![CDATA[\begin{tikzpicture}[join=round]
-                    \tikzstyle{conefill} = [fill=blue!20,fill opacity=0.8]
-                    \tikzstyle{ann} = [fill=white,font=\footnotesize,inner sep=1pt]
-                    \tikzstyle{ghostfill} = [fill=white]
-                         \tikzstyle{ghostdraw} = [draw=black!50]
-                    \filldraw[conefill](-.775,1.922)--(-1.162,.283)--(-.274,.5)
-                                        --(-.183,2.067)--cycle;
-                    \filldraw[conefill](-.183,2.067)--(-.274,.5)--(.775,.424)
-                                        --(.516,2.016)--cycle;
-                    \filldraw[conefill](.516,2.016)--(.775,.424)--(1.369,.1)
-                                        --(.913,1.8)--cycle;
-                    \filldraw[conefill](-.913,1.667)--(-1.369,-.1)--(-1.162,.283)
-                                        --(-.775,1.922)--cycle;
-                    \draw(1.461,.107)--(1.734,.127);
-                    \draw[arrows=<->](1.643,1.853)--(1.643,.12);
-                    \filldraw[conefill](.913,1.8)--(1.369,.1)--(1.162,-.283)
-                                        --(.775,1.545)--cycle;
-                    \draw[arrows=->,line width=.4pt](.274,-.5)--(0,0)--(0,2.86);
-                    \draw[arrows=-,line width=.4pt](0,0)--(-1.369,-.1);
-                    \draw[arrows=->,line width=.4pt](-1.369,-.1)--(-2.1,-.153);
-                    \filldraw[conefill](-.516,1.45)--(-.775,-.424)--(-1.369,-.1)
-                                        --(-.913,1.667)--cycle;
-                    \draw(-1.369,.073)--(-1.369,2.76);
-                    \draw(1.004,1.807)--(1.734,1.86);
-                    \filldraw[conefill](.775,1.545)--(1.162,-.283)--(.274,-.5)
-                                        --(.183,1.4)--cycle;
-                    \draw[arrows=<->](0,2.34)--(-.913,2.273);
-                    \draw(-.913,1.84)--(-.913,2.447);
-                    \draw[arrows=<->](0,2.687)--(-1.369,2.587);
-                    \filldraw[conefill](.183,1.4)--(.274,-.5)--(-.775,-.424)
-                                        --(-.516,1.45)--cycle;
-                    \draw[arrows=<-,line width=.4pt](.42,-.767)--(.274,-.5);
-                    \node[ann] at (-.456,2.307) {$r_0$};
-                    \node[ann] at (-.685,2.637) {$r_1$};
-                    \node[ann] at (1.643,.987) {$h$};
-                    \path (.42,-.767) node[below] {$x$}
-                        (0,2.86) node[above] {$y$}
-                        (-2.1,-.153) node[left] {$z$};
-                    % Second version of the cone
-                    \begin{scope}[xshift=3.5cm]
-                    \filldraw[ghostdraw,ghostfill](-.775,1.922)--(-1.162,.283)--(-.274,.5)
-                                                   --(-.183,2.067)--cycle;
-                    \filldraw[ghostdraw,ghostfill](-.183,2.067)--(-.274,.5)--(.775,.424)
-                                                   --(.516,2.016)--cycle;
-                    \filldraw[ghostdraw,ghostfill](.516,2.016)--(.775,.424)--(1.369,.1)
-                                                   --(.913,1.8)--cycle;
-                    \filldraw[ghostdraw,ghostfill](-.913,1.667)--(-1.369,-.1)--(-1.162,.283)
-                                                   --(-.775,1.922)--cycle;
-                    \filldraw[ghostdraw,ghostfill](.913,1.8)--(1.369,.1)--(1.162,-.283)
-                                                   --(.775,1.545)--cycle;
-                    \filldraw[ghostdraw,ghostfill](-.516,1.45)--(-.775,-.424)--(-1.369,-.1)
-                                                   --(-.913,1.667)--cycle;
-                    \filldraw[ghostdraw,ghostfill](.775,1.545)--(1.162,-.283)--(.274,-.5)
-                                                   --(.183,1.4)--cycle;
-                    \filldraw[fill=red,fill opacity=0.5](-.516,1.45)--(-.775,-.424)--(.274,-.5)
-                                                         --(.183,1.4)--cycle;
-                    \fill(-.775,-.424) circle (2pt);
-                    \fill(.274,-.5) circle (2pt);
-                    \fill(-.516,1.45) circle (2pt);
-                    \fill(.183,1.4) circle (2pt);
-                    \path[font=\footnotesize]
-                            (.913,1.8) node[right] {$i\hbox{$=$}0$}
-                            (1.369,.1) node[right] {$i\hbox{$=$}1$};
-                    \path[font=\footnotesize]
-                            (-.645,.513) node[left] {$j$}
-                            (.228,.45) node[right] {$j\hbox{$+$}1$};
-                    \draw (-.209,.482)+(-60:.25) [yscale=1.3,->] arc(-60:240:.25);
-                    \fill[black,font=\footnotesize]
-                                    (-.516,1.45) node [above] {$P_{00}$}
-                                    (-.775,-.424) node [below] {$P_{10}$}
-                                    (.183,1.4) node [above] {$P_{01}$}
-                                    (.274,-.5) node [below] {$P_{11}$};
-                    \end{scope}
-                    \end{tikzpicture}]]>
-                    </tikz>
+                    <image xml:id="tikz-cone">
+                        <tikz>
+                        <![CDATA[\begin{tikzpicture}[join=round]
+                        \tikzstyle{conefill} = [fill=blue!20,fill opacity=0.8]
+                        \tikzstyle{ann} = [fill=white,font=\footnotesize,inner sep=1pt]
+                        \tikzstyle{ghostfill} = [fill=white]
+                             \tikzstyle{ghostdraw} = [draw=black!50]
+                        \filldraw[conefill](-.775,1.922)--(-1.162,.283)--(-.274,.5)
+                                            --(-.183,2.067)--cycle;
+                        \filldraw[conefill](-.183,2.067)--(-.274,.5)--(.775,.424)
+                                            --(.516,2.016)--cycle;
+                        \filldraw[conefill](.516,2.016)--(.775,.424)--(1.369,.1)
+                                            --(.913,1.8)--cycle;
+                        \filldraw[conefill](-.913,1.667)--(-1.369,-.1)--(-1.162,.283)
+                                            --(-.775,1.922)--cycle;
+                        \draw(1.461,.107)--(1.734,.127);
+                        \draw[arrows=<->](1.643,1.853)--(1.643,.12);
+                        \filldraw[conefill](.913,1.8)--(1.369,.1)--(1.162,-.283)
+                                            --(.775,1.545)--cycle;
+                        \draw[arrows=->,line width=.4pt](.274,-.5)--(0,0)--(0,2.86);
+                        \draw[arrows=-,line width=.4pt](0,0)--(-1.369,-.1);
+                        \draw[arrows=->,line width=.4pt](-1.369,-.1)--(-2.1,-.153);
+                        \filldraw[conefill](-.516,1.45)--(-.775,-.424)--(-1.369,-.1)
+                                            --(-.913,1.667)--cycle;
+                        \draw(-1.369,.073)--(-1.369,2.76);
+                        \draw(1.004,1.807)--(1.734,1.86);
+                        \filldraw[conefill](.775,1.545)--(1.162,-.283)--(.274,-.5)
+                                            --(.183,1.4)--cycle;
+                        \draw[arrows=<->](0,2.34)--(-.913,2.273);
+                        \draw(-.913,1.84)--(-.913,2.447);
+                        \draw[arrows=<->](0,2.687)--(-1.369,2.587);
+                        \filldraw[conefill](.183,1.4)--(.274,-.5)--(-.775,-.424)
+                                            --(-.516,1.45)--cycle;
+                        \draw[arrows=<-,line width=.4pt](.42,-.767)--(.274,-.5);
+                        \node[ann] at (-.456,2.307) {$r_0$};
+                        \node[ann] at (-.685,2.637) {$r_1$};
+                        \node[ann] at (1.643,.987) {$h$};
+                        \path (.42,-.767) node[below] {$x$}
+                            (0,2.86) node[above] {$y$}
+                            (-2.1,-.153) node[left] {$z$};
+                        % Second version of the cone
+                        \begin{scope}[xshift=3.5cm]
+                        \filldraw[ghostdraw,ghostfill](-.775,1.922)--(-1.162,.283)--(-.274,.5)
+                                                       --(-.183,2.067)--cycle;
+                        \filldraw[ghostdraw,ghostfill](-.183,2.067)--(-.274,.5)--(.775,.424)
+                                                       --(.516,2.016)--cycle;
+                        \filldraw[ghostdraw,ghostfill](.516,2.016)--(.775,.424)--(1.369,.1)
+                                                       --(.913,1.8)--cycle;
+                        \filldraw[ghostdraw,ghostfill](-.913,1.667)--(-1.369,-.1)--(-1.162,.283)
+                                                       --(-.775,1.922)--cycle;
+                        \filldraw[ghostdraw,ghostfill](.913,1.8)--(1.369,.1)--(1.162,-.283)
+                                                       --(.775,1.545)--cycle;
+                        \filldraw[ghostdraw,ghostfill](-.516,1.45)--(-.775,-.424)--(-1.369,-.1)
+                                                       --(-.913,1.667)--cycle;
+                        \filldraw[ghostdraw,ghostfill](.775,1.545)--(1.162,-.283)--(.274,-.5)
+                                                       --(.183,1.4)--cycle;
+                        \filldraw[fill=red,fill opacity=0.5](-.516,1.45)--(-.775,-.424)--(.274,-.5)
+                                                             --(.183,1.4)--cycle;
+                        \fill(-.775,-.424) circle (2pt);
+                        \fill(.274,-.5) circle (2pt);
+                        \fill(-.516,1.45) circle (2pt);
+                        \fill(.183,1.4) circle (2pt);
+                        \path[font=\footnotesize]
+                                (.913,1.8) node[right] {$i\hbox{$=$}0$}
+                                (1.369,.1) node[right] {$i\hbox{$=$}1$};
+                        \path[font=\footnotesize]
+                                (-.645,.513) node[left] {$j$}
+                                (.228,.45) node[right] {$j\hbox{$+$}1$};
+                        \draw (-.209,.482)+(-60:.25) [yscale=1.3,->] arc(-60:240:.25);
+                        \fill[black,font=\footnotesize]
+                                        (-.516,1.45) node [above] {$P_{00}$}
+                                        (-.775,-.424) node [below] {$P_{10}$}
+                                        (.183,1.4) node [above] {$P_{01}$}
+                                        (.274,-.5) node [below] {$P_{11}$};
+                        \end{scope}
+                        \end{tikzpicture}]]>
+                        </tikz>
+                    </image>
                 </figure>
 
             </subsection>
@@ -926,30 +930,32 @@ the xsltproc executable.
 
                 <figure xml:id="figure-asymptote-levers">
                     <caption>Aymptote Lever Demonstration</caption>
-                    <asymptote xml:id="asymptote-lever">
-                    size(200,0);
+                    <image xml:id="asymptote-lever">
+                        <asymptote>
+                        size(200,0);
 
-                    pair z0=(0,0);
-                    pair z1=(2,0);
-                    pair z2=(5,0);
-                    pair zf=z1+0.75*(z2-z1);
+                        pair z0=(0,0);
+                        pair z1=(2,0);
+                        pair z2=(5,0);
+                        pair zf=z1+0.75*(z2-z1);
 
-                    draw(z1--z2);
-                    dot(z1,red+0.15cm);
-                    dot(z2,darkgreen+0.3cm);
-                    label("$m$",z1,1.2N,red);
-                    label("$M$",z2,1.5N,darkgreen);
-                    label("$\hat{\ }$",zf,0.2*S,fontsize(24pt)+blue);
+                        draw(z1--z2);
+                        dot(z1,red+0.15cm);
+                        dot(z2,darkgreen+0.3cm);
+                        label("$m$",z1,1.2N,red);
+                        label("$M$",z2,1.5N,darkgreen);
+                        label("$\hat{\ }$",zf,0.2*S,fontsize(24pt)+blue);
 
-                    pair s=-0.2*I;
-                    draw("$x$",z0+s--z1+s,N,red,Arrows,Bars,PenMargins);
+                        pair s=-0.2*I;
+                        draw("$x$",z0+s--z1+s,N,red,Arrows,Bars,PenMargins);
 
-                    s=-0.5*I;
-                    draw("$\bar{x}$",z0+s--zf+s,blue,Arrows,Bars,PenMargins);
+                        s=-0.5*I;
+                        draw("$\bar{x}$",z0+s--zf+s,blue,Arrows,Bars,PenMargins);
 
-                    s=-0.95*I;
-                    draw("$X$",z0+s--z2+s,darkgreen,Arrows,Bars,PenMargins);
-                    </asymptote>
+                        s=-0.95*I;
+                        draw("$X$",z0+s--z2+s,darkgreen,Arrows,Bars,PenMargins);
+                        </asymptote>
+                    </image>
                 </figure>
 
                 <p>And a colorful contour plot with logarithmic scale.  Again, from the Asymptote documentation.</p>
@@ -957,58 +963,62 @@ the xsltproc executable.
 
                 <figure xml:id="figure-asymptote-contour-plot">
                     <caption>Aymptote Contour Plot</caption>
-                    <asymptote xml:id="asymptote-contour">
-                    import graph;
-                    import palette;
+                    <image xml:id="asymptote-contour">
+                        <asymptote>
+                        import graph;
+                        import palette;
 
-                    size(10cm,10cm,IgnoreAspect);
+                        size(10cm,10cm,IgnoreAspect);
 
-                    real f(real x, real y) {
-                      return 0.9*pow10(2*sin(x/5+2*y^0.25)) + 0.1*(1+cos(10*log(y)));
-                    }
+                        real f(real x, real y) {
+                          return 0.9*pow10(2*sin(x/5+2*y^0.25)) + 0.1*(1+cos(10*log(y)));
+                        }
 
-                    scale(Linear,Log,Log);
+                        scale(Linear,Log,Log);
 
-                    pen[] Palette=BWRainbow();
+                        pen[] Palette=BWRainbow();
 
-                    bounds range=image(f,Automatic,(0,1),(100,100),nx=200,Palette);
+                        bounds range=image(f,Automatic,(0,1),(100,100),nx=200,Palette);
 
-                    xaxis("$x$",BottomTop,LeftTicks,above=true);
-                    yaxis("$y$",LeftRight,RightTicks,above=true);
+                        xaxis("$x$",BottomTop,LeftTicks,above=true);
+                        yaxis("$y$",LeftRight,RightTicks,above=true);
 
-                    palette("$f(x,y)$",range,(0,200),(100,250),Top,Palette,
-                            PaletteTicks(ptick=linewidth(0.5*linewidth())));
-                    </asymptote>
+                        palette("$f(x,y)$",range,(0,200),(100,250),Top,Palette,
+                                PaletteTicks(ptick=linewidth(0.5*linewidth())));
+                        </asymptote>
+                    </image>
                 </figure>
 
                 <p>Here is the lever diagram again, but now we have added an integral to one of the legends, <em>using a <latex /> macro of our own,</em> which is idential to one we used in the early part of this article.  The point is, we only needed to define the macro once for the entire document, and it is available as we make Asymptote diagrams.  This device can be used to maintain flexibility and consistency in your choice of notation.</p>
 
                 <figure xml:id="figure-asymptote-latex-macro">
                     <caption>Aymptote Lever, plus Integral</caption>
-                    <asymptote xml:id="asymptote-lever-integral">
-                    size(200,0);
+                    <image xml:id="asymptote-lever-integral">
+                        <asymptote>
+                        size(200,0);
 
-                    pair z0=(0,0);
-                    pair z1=(2,0);
-                    pair z2=(5,0);
-                    pair zf=z1+0.75*(z2-z1);
+                        pair z0=(0,0);
+                        pair z1=(2,0);
+                        pair z2=(5,0);
+                        pair zf=z1+0.75*(z2-z1);
 
-                    draw(z1--z2);
-                    dot(z1,red+0.15cm);
-                    dot(z2,darkgreen+0.3cm);
-                    label("$m$",z1,1.2N,red);
-                    label("$M$",z2,1.5N,darkgreen);
-                    label("$\hat{\ }$",zf,0.2*S,fontsize(24pt)+blue);
+                        draw(z1--z2);
+                        dot(z1,red+0.15cm);
+                        dot(z2,darkgreen+0.3cm);
+                        label("$m$",z1,1.2N,red);
+                        label("$M$",z2,1.5N,darkgreen);
+                        label("$\hat{\ }$",zf,0.2*S,fontsize(24pt)+blue);
 
-                    pair s=-0.2*I;
-                    draw("$x$",z0+s--z1+s,N,red,Arrows,Bars,PenMargins);
+                        pair s=-0.2*I;
+                        draw("$x$",z0+s--z1+s,N,red,Arrows,Bars,PenMargins);
 
-                    s=-0.5*I;
-                    draw("$\bar{x}=\definiteintegral{0}{1}{x\delta(x)}{x}$",z0+s--zf+s,blue,Arrows,Bars,PenMargins);
+                        s=-0.5*I;
+                        draw("$\bar{x}=\definiteintegral{0}{1}{x\delta(x)}{x}$",z0+s--zf+s,blue,Arrows,Bars,PenMargins);
 
-                    s=-1.05*I;
-                    draw("$X$",z0+s--z2+s,darkgreen,Arrows,Bars,PenMargins);
-                    </asymptote>
+                        s=-1.05*I;
+                        draw("$X$",z0+s--z2+s,darkgreen,Arrows,Bars,PenMargins);
+                        </asymptote>
+                    </image>
                 </figure>
 
                 <p>And finally, an example of a 3-D graph (from the documentation again).</p>
@@ -1017,24 +1027,26 @@ the xsltproc executable.
 
                 <figure xml:id="figure-asymptote-surface">
                     <caption>Asymptote 3-D Surface</caption>
-                    <asymptote xml:id="asymptote-surface">
-                    // Riemann surface of z^{1/n}
-                    import graph3;
-                    import palette;
+                    <image xml:id="asymptote-surface">
+                        <asymptote>
+                        // Riemann surface of z^{1/n}
+                        import graph3;
+                        import palette;
 
-                    int n=3;
+                        int n=3;
 
-                    size(200,300,keepAspect=false);
+                        size(200,300,keepAspect=false);
 
-                    currentprojection=orthographic(10,10,5);
-                    currentlight=(10,10,5);
-                    triple f(pair t) {return (t.x*cos(t.y),t.x*sin(t.y),t.x^(1/n)*sin(t.y/n));}
+                        currentprojection=orthographic(10,10,5);
+                        currentlight=(10,10,5);
+                        triple f(pair t) {return (t.x*cos(t.y),t.x*sin(t.y),t.x^(1/n)*sin(t.y/n));}
 
-                    surface s=surface(f,(0,0),(1,2pi*n),8,16,Spline);
-                    s.colors(palette(s.map(zpart),Rainbow()));
+                        surface s=surface(f,(0,0),(1,2pi*n),8,16,Spline);
+                        s.colors(palette(s.map(zpart),Rainbow()));
 
-                    draw(s,meshpen=black,render(merge=true));
-                    </asymptote>
+                        draw(s,meshpen=black,render(merge=true));
+                        </asymptote>
+                    </image>
                 </figure>
             </subsection>
 
@@ -1045,23 +1057,27 @@ the xsltproc executable.
 
                 <figure xml:id="figure-sage-parabola">
                     <caption>A Sage standard parabola, on <m>[-2,4]</m></caption>
-                    <sageplot xml:id="sageplot-parabola">
-                    f(x) = x^2
-                    plot(f, (x, -2, 4), color='green', thickness=3)
-                    </sageplot>
+                    <image xml:id="sageplot-parabola">
+                        <sageplot>
+                        f(x) = x^2
+                        plot(f, (x, -2, 4), color='green', thickness=3)
+                        </sageplot>
+                    </image>
                 </figure>
 
                 <p>Pay careful attention to the requirement that the last line of your code be a graphics object.  In particular, while <c>show()</c> might appear to do the right thing, it evaluates to Python's <c>None</c> object and that is just what you will get.  The code for Figure<nbsp /><xref ref="figure-sage-double-plot" /> illustrates creating two graphics objects and combining them into an expression on the last line that evalutes to a graphics object.</p>
 
                 <figure xml:id="figure-sage-double-plot">
                     <caption>Two Sage plots on one set of axes</caption>
-                    <sageplot xml:id="sageplot-updown">
-                    f(x) = x^4
-                    g(x) = -x^4
-                    up = plot(f, (x, -1.5, 1.5), color='blue', thickness=2)
-                    down = plot(g, (x, -1.5, 1.5), color='red', thickness=2)
-                    up + down
-                    </sageplot>
+                    <image xml:id="sageplot-updown">
+                        <sageplot>
+                        f(x) = x^4
+                        g(x) = -x^4
+                        up = plot(f, (x, -1.5, 1.5), color='blue', thickness=2)
+                        down = plot(g, (x, -1.5, 1.5), color='red', thickness=2)
+                        up + down
+                        </sageplot>
+                    </image>
                 </figure>
 
                 <p>The following examples are from the <url href="http://www.sagemath.org/tour-graphics.html">Sage Tour</url>.</p>
@@ -1069,49 +1085,55 @@ the xsltproc executable.
                 <!-- Tour example modified: figsize moved from show() into plot() -->
                 <figure xml:id="figure-sage-multigraph">
                     <caption>A Sage multigraph of a sentence</caption>
-                    <sageplot xml:id="sageplot-sentence-multigraph">
-                    stnc = 'I am a cool multiedge graph with loops'
-                    g = DiGraph({}, loops=True, multiedges=True)
-                    for a,b in [(stnc[i], stnc[i+1]) for i in xrange(len(stnc)-1)]:
-                       g.add_edge(a, b, b)
-                    g.plot(color_by_label=True, edge_style='solid', figsize=(8,8))
-                    </sageplot>
+                    <image xml:id="sageplot-sentence-multigraph">
+                        <sageplot>
+                        stnc = 'I am a cool multiedge graph with loops'
+                        g = DiGraph({}, loops=True, multiedges=True)
+                        for a,b in [(stnc[i], stnc[i+1]) for i in xrange(len(stnc)-1)]:
+                           g.add_edge(a, b, b)
+                        g.plot(color_by_label=True, edge_style='solid', figsize=(8,8))
+                        </sageplot>
+                    </image>
                 </figure>
 
                 <!-- Tour example modified: now using R.lagrange_polynomial() -->
                 <!-- Tour example modified: dropped ymin/ymax, figsize -->
                 <figure xml:id="figure-sage-polynomial-approximation">
                     <caption>Sage polynomial approximations of <m>f(x)=1/(1+25x^2)</m></caption>
-                    <sageplot xml:id="sageplot-polynomial-approximation">
-                    def f(x):
-                       return RDF(1 / (1 + 25 * x^2))
+                    <image xml:id="sageplot-polynomial-approximation">
+                        <sageplot>
+                        def f(x):
+                           return RDF(1 / (1 + 25 * x^2))
 
-                    def runge():
-                        R = PolynomialRing(RDF, 'x')
-                        g = plot(f, -1, 1, rgbcolor='red', thickness=1)
-                        polynom = []
-                        for i, n in enumerate([6, 8, 10, 12]):
-                          data = [(x, f(x)) for x in xsrange(-1, 1, 2 / (n - 1), include_endpoint=True)]
-                          polynom.append(R.lagrange_polynomial(data))
-                          g += list_plot(data, rgbcolor='black', pointsize=5)
-                        g += plot(polynom, -1, 1, fill=f, fillalpha=0.2, thickness=0)
-                        return g
+                        def runge():
+                            R = PolynomialRing(RDF, 'x')
+                            g = plot(f, -1, 1, rgbcolor='red', thickness=1)
+                            polynom = []
+                            for i, n in enumerate([6, 8, 10, 12]):
+                              data = [(x, f(x)) for x in xsrange(-1, 1, 2 / (n - 1), include_endpoint=True)]
+                              polynom.append(R.lagrange_polynomial(data))
+                              g += list_plot(data, rgbcolor='black', pointsize=5)
+                            g += plot(polynom, -1, 1, fill=f, fillalpha=0.2, thickness=0)
+                            return g
 
-                    runge()
-                    </sageplot>
+                        runge()
+                        </sageplot>
+                    </image>
                 </figure>
 
                 <p>From the Sage documentation, with slight modifications, credited to Douglas Summers-Stay.  A plot of the implicity defined surface <me>2 = \cos(x + ty) + \cos(x - ty) + \cos(y + tz) + \cos(y - tz) + \cos(z - tx) + \cos(z + tx)</me> in rectangular <m>xyz</m> coordinates, with <m>t</m> equal to the golden ratio.</p>
 
                 <figure xml:id="figure-sage-implicit-surface">
                     <caption>A Sage implicitly defined 3D surface</caption>
-                    <sageplot xml:id="sageplot-implicit-surface">
-                    var('x y z')
-                    T = RDF(golden_ratio)
-                    p = 2 - (cos(x + T*y) + cos(x - T*y) + cos(y + T*z) + cos(y - T*z) + cos(z - T*x) + cos(z + T*x))
-                    r = 4.77
-                    implicit_plot3d(p, (x, -r, r), (y, -r, r), (z, -r, r), plot_points=100, frame=False)
-                    </sageplot>
+                    <image xml:id="sageplot-implicit-surface">
+                        <sageplot>
+                        var('x y z')
+                        T = RDF(golden_ratio)
+                        p = 2 - (cos(x + T*y) + cos(x - T*y) + cos(y + T*z) + cos(y - T*z) + cos(z - T*x) + cos(z + T*x))
+                        r = 4.77
+                        implicit_plot3d(p, (x, -r, r), (y, -r, r), (z, -r, r), plot_points=100, frame=False)
+                        </sageplot>
+                    </image>
                 </figure>
 
             </subsection>
@@ -1351,7 +1373,8 @@ the xsltproc executable.
                     <ggbBase64>UEsDBBQACAAIAAdcL0QAAAAAAAAAAAAAAAASAAAAZ2VvZ2VicmFfbWFjcm8ueG1s7VhNb9s4ED1vfwXBu2V9WLYTRCkcB4sGSDcLJIe9FRTFyNxKpCrRiZ1fv0NSSuXIcho3QZ1FfbAofgyH73EeOTr5uMozdMfKiksRYc9xMWKCyoSLNMJLdTuY4o+nH05SJlMWlwTdyjInKsIjx8ffx8GbM3b1YLSq+LGQf5GcVQWh7JouWE4uJSXK9FwoVRwPh/f3905j05FlOkxT5ayqBCPwR1QRrgvHYG5j0H1guvuu6w3/+XxpzQ+4qBQRlGEEvuaElhLRPNFORPj625KU0KKkzLo1n1hW6Nk4leJPnjFdrhby/kLcQOsZKSOsyiV0prJYz0mhV1HVdc1cF6JYKkTcCM8wIl6Ez/CwabtaqqaR2Mb4iwcFP8LUFIIIJ6YwinAhs7UuhhGew2Mc4XNjCXyrYEaqJ0eKK+smWaqFLHUpIUrXQE+WsZwJhdS6YNoeFwqjjMQs086dfvjjRC8OyfhfRlWztLrdvAx1H2iey0yWCKwDp6n5jyPshyFMmxULAjXAtumckTUr0R3JdK+6Bux9lgnbqCWC52YToEqxQhuApVYFYwnsO1x7DIUCDJrdd0uyqnaISlkmFVqBC44/xmith4+h8GD3rOlkVnvNH+ppg3atWmdtb06GNVDPQHb2f4Bs5BxNa8hG01eBjMo8JyJBwoYTS3W9gYpvDQWApx0Gxlpto0NAVVtrICbPUNBach8H7v4MfEcRsJ+6G7/QgOo7E3+j2u7KAWxUt93g1dNwwSy0asHpV8EqUBO/4dK1hU88SZiW40fwMs3vhVAguMzIQGXdbK3+K2PFDQy+EjclEZUWatun2aT9DF6VoCSpFCS7BPeeEHlmiSQdIuPdROqVPrIUd1m0rv94JL0Ki4NtdK172NWREjij8Kg1YrQ/jeybsEMq/R9hnhcZp1zt5mbOS5r1cDLrcEJ3cwIHCaePmNNfSspeEPKUiTvwVJYVXDXc+saydu386KGpWQE6A1O19uqqB68lfCCrJV+hWdN/1vSawcHsTZzwqP0D1ZwF9RQzOKcHVlJnoZkERHUrvyDUlN9yupvfx6B+QjGtbwv2ruB3mJ7vZnrzHJvvdY6Np4Zp/Yjt4+cDMHS8cTvMPBN+gbMZlN4bHFM7RW7WJ3LJC0QueaciN3Zcf3oYwtZ7a2AvETb2W9i2CtvAc6bTSSv+wuCpstn7da1scMN+A2VjluOkT9nOX6Js5wejbL4zCjZOjbCWtmAj6N5C2v6GvBGUrS+WDM5zm2ued+Bukk4tf01qGjepKW1SU52jPkOL9aEB3prdNx5e7b7vBS/hsz8v7KQlX7znROZ3ZrJPZrIb9ngb7L8kH+wcst72M3a8PY8YvyPQ6eGADvBONkR24hvYu2zYq82RMw78FiGTdwR7cjCw99wnt7OhJcbeKA9VYobt76n63Xyp1YXmk/Tpf1BLBwgvoJ72MAQAABgXAABQSwMEFAAIAAgAB1wvRAAAAAAAAAAAAAAAABYAAABnZW9nZWJyYV9qYXZhc2NyaXB0LmpzSyvNSy7JzM9TSE9P8s/zzMss0dBUqK7lAgBQSwcIRczeXRoAAAAYAAAAUEsDBBQACAAIAAdcL0QAAAAAAAAAAAAAAAAMAAAAZ2VvZ2VicmEueG1s1Vtbc9u4FX7O/goMH/oU08SFIJlK2XFu03SSTaZOO52+QSQkIaZILUnZkic/vucApERJvslxsoocGwSJ2/m+cwPEDH5fznJyqavalMXQo37gEV2kZWaKydBbNOOT2Pv95W+DiS4nelQpMi6rmWqGnvCZt+kHNV8G2NlkQy9UajwScnwiYqlOhBL6JOEBP0mTUPJxKnQ2Tj1ClrV5UZR/qJmu5yrV5+lUz9SHMlWNHXPaNPMXp6dXV1d+N7tfVpPTyWTkL+vMI7Dyoh567cULGG6r0xW3zVkQ0NP/fvzghj8xRd2oItUeQakW5uVvzwZXpsjKK3JlsmY69GJKPTLVZjIFMaXgHjnFRnOQda7TxlzqGrr2qlbmZjb3bDNV4PNn7orka3E8kplLk+lq6AU+E1IGCWUi5JEMosQjZWV00bRtaTvnaTfa4NLoKzcsXtkZRZBEQIGpzSjXQ2+s8hqkMsW4AkRhQdUCqnWzyvVIVV19sx76HH6ggbnWOBZQ52AYeux5kjyPguB5GAZuIf1ZPdKUZW6HDEiYkG/fCAtYQJ5jQV3BoJDSPQrcvYC7grlCuCJ0bYTrLlxT4doI1wYJuFXItr6Rsr2xJWYnJO8LSUE+/JXwa6XfkTPuyUlRiG+E4uptwQmum9r1YyHaqnTVyBY0cAVtH8b4x+Ilv1Mi/iiJaG9Wpwy3T7qnLN2MIerqQ2dkB8y4J+ZaSHaTkCy8RcjvxLablIa9SWEu+8/+7k3J2SFT3orsATNK8T12/4gJo2DL6juTdyVty7tgeLJFDU47TzhoF0TqKbZt9avRsxqXyBPrmwglIdiujMCVhIQmUERow4zQkIgQqjQmEsuIcDRbQTiJCbajnFgPFMbwR1iTliSEsfBm5GybcEFCTqj1W4IACsT6PsCEcWgRhiSETjg7xWm5JEJChcdEwALR60XoWTj0gzpMzginhGNfGhEmiWQkQs9JBTpUGePaYVBGZEAkdgXXCW7TuUzoEROO0sjW56Dj8si8rM0a56nO52uCLKSmmC+aLRjTWdZdNuVO66xML17twK5V3XTX0Aji1iY6uji2FTyfDXI10jmkGOeoEYRcqhwN3o4/LouGdNrA3L1JpeZTk9bnummgV02+qkv1QTV6+Q5a190C7dQ2pg/0Is1NZlTxH1AXHAIHJF2It16sC/EiTNwsaVlW2fmqBh0iy//pqgTfE8WY1KzaWhj5sv9BH5UqVHjOfd7/gDGsbnnUyqkv19KopV7LQCYVWlyv8r5+VeabW/PSFM1rNW8Wlc3RYA0VCnJWTHJt8bQ0Q7aTXozK5bkDkruxvqzmUAvcCkaT12VeVqRCyUJo0JYjV9o2uLR1q8C2CWyLoGPGZOvnNGG2hS1HrrStgGq3tFZU2olJg24aU1tPA4M7xepcMyoKJk+LwjQfukpj0ouNqNjhj8VsBDrWKuH2mPSpxhyc7qjV4EJXhc6d8hRA5qJc1E6b1xr5bLCo9WfVTM+K7F96Amb4WaFTbGBo13Sz5EynZgYd3f0WPIXE/huW6u5melLpTsTcpsUOWvs06Kvy3m071LuqnL0vLr+A1uwsdXDayTOo08rMUTvJCLz0hd7oX2ZqBT4+6/cD4WuQIkUnA0A2COLbRa4r8gGY94haNNMSFOSNKooVAflr6ABDgQWjyyf/VMVCVSvwn1R4aL25nkE2TBqrrlbj17Sd2TQb+SHl6Cv4lHU0cc83aMLjG1XXKrnK51OFqXgLTa5WsNw+WHa8j2W2CyEwZOUEPzF3ujLX2qmZWy9czGE4a509NbCc1GQ59E6Ej0tYwRX1Q0jir93Oy+0zUFq02i2v6O7uEAr66IC6B7JXvz5kDqcVzk7DHw7Y618fsBPmx4lFjPkRfxLE0nI2U0VGCpvSfS7z1aQsvE0GoQK0TqIoahxRDHF0IC2a7vkcelHXJnVtFBR86I3cbO0cN/DjZusYcONsx5YGUoQL2C/XdufRtKHOXvzDZJm2+c/p3cz2sOxTS0NuyQ1pG/w23NJDuL1dAWs9wdp6Iek9Knj4Qg9Uwp4qUT9iVpWkDxmZU6UoZmI3uD+cANCIHJX3fYFhUNvAsR84L7SeY8byqfhSqaLGo6ftiPlwONURwcn8MHbeX/hCWjyFH9FE/kJ4jo4HT+HzLpbKMOl/2sgq/SSM46MCd9uVfjSZiz/bvnS05z3f3Ock+0HszT5F2wnwzVFMxpYhLEaueAKV56jf/U/cBnO0hCcPTbfgqfbwfHsInm+PCM8A9qEWQeoL8fMQTPcQfHcIgu+OCEEALr5BIwHZyJ6brD/0B8B73nrTbXTfubxoP2nK7gZ51zdn98F8i3Pe3t4/jdmjdjrfLLZQDZzWnkBGcWyB7yFUvenS3F2q9GFU6WOhKvAF2zKHxBEX+ixxTAGDMv71mHrrmDrbY2p8GFPjY2GK++iSVta64m0X5vKdCIJqvHfwdkRErQfeoSpzVOk9qlKNPUpzjx/cDjabTo/Zyz865nwaj2vdIFEuoNCHukrYC7A4Ys7sIl/GXHSbLWA0CeUTxh88lXtlkIKyujfpnNyNem5P+FowJ8diJTftBVbtXuEajUjGtJeRxtHj7UX/WbgutTs9NrN5blLTPJqC/SxregAF02Oh4MSdFqzWBwg2igQ+59tp1/EAv79BMAcAb44FeHeqsFqfNFzjwY0M46gH+89G/TafP3E+f7rv802VLmboxKt7cqodt9/v9xd5fnfuGj/QTHjsUx5wvvZXjrvQ51KEYmMslkgGKbUM4ieMBa8BsFzvuqA+irckUBd305KWhUnXWF887rzoiWzjUXpuJrq4tG6iJmQZtC/HrQI3P7nu7iyp3TbiM9reuqa9HeNMNZVZkrOu/VnX6oxBxwgDFY9YJKKIMw6BiJzxdoozYQMZC1kUhwnjUcjtd85noX2HjMXQNU4YE2EUxzK62T7xe3czNundWvCpaqblpCxUbr+x29aG192B/a4KfD3APX49Fvd4c1xifpJQttmf8p/tIe9koP1aZT9A5QcwkB8LAzcEKCp9Jr7nG4UfAPorB/p+Rjw7APTZsYB+T0YMu0kW0u/YNj5tXvDVYZ/vYV8iY4enBf1uPzUruNMRUR8iPPjvzVEjMoInLSxa5wNx+IMi/w0q34fJ+fz+1nv77Bzf7zjAEFz7x2DfvZx0qDFsErJ2Vy3YQ02F80CGnFL8ljOhLTF46M6iSFIRhzGTQeDOW5jPqWAQu/FAWcLu5sfbkF7OKxgP3xDokNPLBlYJD4be3/5clM3fN+/fkDd6Zl/Qse8UuKd2xG22cAhve7y/Mmez7wHWujLjzVu0oPAfEfDA27wg2GHVdqsbVTWf0RBIe86f7B0822+ykcDNh/VP+ftQn/bfbbLvF7b/F+Hl/wFQSwcIHn8WWOwJAAA7MQAAUEsBAhQAFAAIAAgAB1wvRC+gnvYwBAAAGBcAABIAAAAAAAAAAAAAAAAAAAAAAGdlb2dlYnJhX21hY3JvLnhtbFBLAQIUABQACAAIAAdcL0RFzN5dGgAAABgAAAAWAAAAAAAAAAAAAAAAAHAEAABnZW9nZWJyYV9qYXZhc2NyaXB0LmpzUEsBAhQAFAAIAAgAB1wvRB5/FljsCQAAOzEAAAwAAAAAAAAAAAAAAAAAzgQAAGdlb2dlYnJhLnhtbFBLBQYAAAAAAwADAL4AAAD0DgAAAAA=</ggbBase64>
                    <figure>
                         <caption>GeoGebra demonstration of the Euler Line</caption>
-                        <tikz xml:id="tikz-geogebra-euler">
+                        <image xml:id="tikz-geogebra-euler">
+                            <tikz>
                             \begin{tikzpicture}
                             \definecolor{ffqqqq}{rgb}{1,0,0}
                             \definecolor{uuuuuu}{rgb}{0.27,0.27,0.27}
@@ -1379,7 +1402,8 @@ the xsltproc executable.
                             \draw[color=uuuuuu] (-1.29,1.79) node {$orthocentre$};
                             \draw[color=ffqqqq] (-3.75,6.23) node {$Euler$};
                             \end{tikzpicture}
-                        </tikz>
+                            </tikz>
+                        </image>
                     </figure>
                 </geogebra-applet>
 
