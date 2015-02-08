@@ -1286,6 +1286,10 @@ is just flat out on the page, as if printed there.
     </xsl:choose>
 </xsl:template>
 
+<!-- Lists themselves -->
+<!-- Use a style to create the symbol sets   -->
+<!-- When columns are specified, float items -->
+<!-- and clear afterwards                    -->
 
 <xsl:template match="ol">
     <xsl:element name="ol">
@@ -1301,8 +1305,20 @@ is just flat out on the page, as if printed there.
             </xsl:choose>
             <xsl:text>;</xsl:text>
         </xsl:attribute>
-        <xsl:apply-templates />
+        <xsl:choose>
+            <xsl:when test="@cols">
+                <xsl:apply-templates select="li" mode="variable-width">
+                    <xsl:with-param name="percent-width" select="98 div @cols" />
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="li" />
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:element>
+    <xsl:if test="@cols">
+        <div style="clear:both;"></div>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="ul">
@@ -1319,55 +1335,30 @@ is just flat out on the page, as if printed there.
             </xsl:choose>
             <xsl:text>;</xsl:text>
         </xsl:attribute>
-        <xsl:apply-templates />
+        <xsl:choose>
+            <xsl:when test="@cols">
+                <xsl:apply-templates select="li" mode="variable-width">
+                    <xsl:with-param name="percent-width" select="98 div @cols" />
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="li" />
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:element>
+    <xsl:if test="@cols">
+        <div style="clear:both;"></div>
+    </xsl:if>
 </xsl:template>
 
-<!-- Pass-through list items            -->
+<!-- Pass-through regular list items    -->
 <!-- Allow paragraphs in larger items,  -->
 <!-- or just snippets for smaller items -->
 <xsl:template match="li">
-    <li>
-        <xsl:apply-templates />
-    </li>
+    <li><xsl:apply-templates /></li>
 </xsl:template>
 
-<!-- ##################### -->
-<!-- Multiple-column lists -->
-<!-- ##################### -->
-
-<!-- TODO: Accept top-level list label formatting in here -->
-<!-- TODO: Protect for top-level use only -->
-
-<!-- Note: ul, ol combined with "<xsl:copy>" led to namespace trouble -->
-
-<!-- With cols specified, we form the list items with variable -->
-<!-- widths then clear the floating property to resume         -->
-<xsl:template match="ol[@cols]">
-    <xsl:if test="@label">
-        <xsl:message>MBX:WARNING: Custom labeling of multi-column lists not implemented</xsl:message>
-    </xsl:if>
-    <xsl:element name="ol">
-        <xsl:apply-templates select="li" mode="variable-width">
-            <xsl:with-param name="percent-width" select="98 div @cols" />
-        </xsl:apply-templates>
-    </xsl:element>
-    <div style="clear:both;"></div>
-</xsl:template>
-
-<xsl:template match="ul[@cols]">
-    <xsl:if test="@label">
-        <xsl:message>MBX:WARNING: Custom labeling of multi-column lists not implemented</xsl:message>
-    </xsl:if>
-    <xsl:element name="ul">
-        <xsl:apply-templates select="li" mode="variable-width">
-            <xsl:with-param name="percent-width" select="98 div @cols" />
-        </xsl:apply-templates>
-    </xsl:element>
-    <div style="clear:both;"></div>
-</xsl:template>
-
-<!-- Each list item needs styling independent of CSS -->
+<!-- List items in HTML need to float with fractional widths -->
 <xsl:template match="li" mode="variable-width">
     <xsl:param name="percent-width" />
     <xsl:element name="li">
@@ -1377,6 +1368,7 @@ is just flat out on the page, as if printed there.
        <xsl:apply-templates />
     </xsl:element>
 </xsl:template>
+
 
 <!-- Figures and their captions -->
 <!-- TODO: class="wrap" is possible -->

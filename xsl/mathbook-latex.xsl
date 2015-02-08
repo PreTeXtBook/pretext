@@ -1444,7 +1444,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Lists themselves -->
+<!-- If columns are specified, we        -->
+<!-- wrap in the multicolumn environment -->
 <xsl:template match="ol">
+    <xsl:if test="@cols">
+        <xsl:text>\begin{multicols}{</xsl:text>
+        <xsl:value-of select="@cols" />
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>\begin{enumerate}</xsl:text>
     <xsl:choose>
         <xsl:when test="@label">
@@ -1464,12 +1472,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
      <xsl:apply-templates />
     <xsl:text>\end{enumerate}&#xa;</xsl:text>
+    <xsl:if test="@cols">
+        <xsl:text>\end{multicols}&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- MBX unordered list scheme is distinct -->
-<!-- from LaTeX's so we right out a label  -->
+<!-- from LaTeX's so we write out a label  -->
 <!-- choice for each such list             -->
 <xsl:template match="ul">
+    <xsl:if test="@cols">
+        <xsl:text>\begin{multicols}{</xsl:text>
+        <xsl:value-of select="@cols" />
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>\begin{itemize}[label=</xsl:text>
     <xsl:choose>
         <xsl:when test="@label">
@@ -1482,44 +1498,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\end{itemize}&#xa;</xsl:text>
+    <xsl:if test="@cols">
+        <xsl:text>\end{multicols}&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="dl">
+    <xsl:if test="@cols">
+        <xsl:text>\begin{multicols}{</xsl:text>
+        <xsl:value-of select="@cols" />
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>\begin{description}&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\end{description}&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Multicolumn Lists -->
-<!-- The "cols" attribute signals need for multiple columns -->
-<xsl:template match="ol[@cols]">
-    <xsl:text>\begin{multicols}{</xsl:text>
-    <xsl:value-of select="@cols" />
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\begin{enumerate}&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\end{enumerate}&#xa;</xsl:text>
-    <xsl:text>\end{multicols}&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="ul[@cols]">
-    <xsl:text>\begin{multicols}{</xsl:text>
-    <xsl:value-of select="@cols" />
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\begin{itemize}&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\end{itemize}&#xa;</xsl:text>
-    <xsl:text>\end{multicols}&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="dl[@cols]">
-    <xsl:text>\begin{multicols}{</xsl:text>
-    <xsl:value-of select="@cols" />
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\begin{description}&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\end{description}&#xa;</xsl:text>
-    <xsl:text>\end{multicols}&#xa;</xsl:text>
+    <xsl:if test="@cols">
+        <xsl:text>\end{multicols}&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- List Items -->
