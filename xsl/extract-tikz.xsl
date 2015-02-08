@@ -39,6 +39,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <!-- Default border of 0.5bp seems too small -->
 <!-- http://tex.stackexchange.com/questions/51757/how-can-i-use-tikz-to-make-standalone-graphics -->
+<xsl:template match="image/tikz">
+    <xsl:variable name="filebase">
+        <xsl:apply-templates select=".." mode="internal-id" />
+    </xsl:variable>
+    <exsl:document href="{$scratch}/{$filebase}.tex" method="text">
+        <xsl:text>\documentclass[12pt,border=2pt]{standalone}&#xa;</xsl:text>
+        <xsl:text>\usepackage{amsmath,amssymb}&#xa;</xsl:text>
+        <xsl:value-of select="/mathbook/docinfo/macros"/>
+        <xsl:text>\usepackage{tikz}&#xa;</xsl:text>
+        <xsl:text>\usetikzlibrary{backgrounds}&#xa;</xsl:text>
+        <xsl:text>\usetikzlibrary{arrows,matrix}&#xa;</xsl:text>
+        <xsl:text>\begin{document}&#xa;</xsl:text>
+        <xsl:value-of select="."/>
+        <xsl:text>\end{document}&#xa;</xsl:text>
+    </exsl:document>
+  </xsl:template>
+
+<!-- ################################## -->
+<!-- Deprecated Graphics Code Templates -->
+<!-- ################################## -->
+<!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <xsl:template match="tikz">
     <xsl:variable name="filebase">
         <xsl:apply-templates select="." mode="internal-id" />
@@ -55,5 +76,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\end{document}&#xa;</xsl:text>
     </exsl:document>
   </xsl:template>
+<!-- ################################## -->
+<!-- Deprecated Graphics Code Templates -->
+<!-- ################################## -->
 
 </xsl:stylesheet>

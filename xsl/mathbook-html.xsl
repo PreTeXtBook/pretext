@@ -1381,20 +1381,82 @@ is just flat out on the page, as if printed there.
 
 <!-- Images -->
 <xsl:template match="image" >
-<xsl:element name="img">
-    <xsl:if test="@width">
-        <xsl:attribute name="width"><xsl:value-of select="@width" /></xsl:attribute>
+    <xsl:if test="@source">
+        <xsl:element name="img">
+            <xsl:if test="@width">
+                <xsl:attribute name="width"><xsl:value-of select="@width" /></xsl:attribute>
+            </xsl:if>
+            <xsl:if test="@height">
+                <xsl:attribute name="height"><xsl:value-of select="@height" /></xsl:attribute>
+            </xsl:if>
+            <xsl:attribute name="src"><xsl:value-of select="@source" /></xsl:attribute>
+        </xsl:element>
     </xsl:if>
-    <xsl:if test="@height">
-        <xsl:attribute name="height"><xsl:value-of select="@height" /></xsl:attribute>
-    </xsl:if>
-    <xsl:attribute name="src"><xsl:value-of select="@source" /></xsl:attribute>
-</xsl:element>
+    <xsl:apply-templates select="tikz|asymptote|sageplot" />
 </xsl:template>
 
 <!-- tikz graphics language       -->
-<!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <!-- SVG's produced by mbx script -->
+<xsl:template match="image/tikz">
+    <xsl:element name="object">
+        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
+        <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
+        <xsl:attribute name="data">
+            <xsl:value-of select="$directory.images" />
+            <xsl:text>/</xsl:text>
+            <xsl:apply-templates select=".." mode="internal-id" />
+            <xsl:text>.svg</xsl:text>
+        </xsl:attribute>
+        <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
+    </xsl:element>
+</xsl:template>
+
+
+<!-- Asymptote graphics language  -->
+<!-- SVG's produced by mbx script -->
+<xsl:template match="image/asymptote">
+    <xsl:element name="object">
+        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
+        <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
+        <xsl:attribute name="data">
+            <xsl:value-of select="$directory.images" />
+            <xsl:text>/</xsl:text>
+            <xsl:apply-templates select=".." mode="internal-id" />
+            <xsl:text>.svg</xsl:text>
+        </xsl:attribute>
+        <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
+    </xsl:element>
+</xsl:template>
+
+<!-- Sage graphics plots          -->
+<!-- SVG's produced by mbx script -->
+<!-- PNGs are fall back for 3D    -->
+<xsl:template match="image/sageplot">
+    <xsl:element name="object">
+        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
+        <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
+        <xsl:attribute name="data">
+            <xsl:value-of select="$directory.images" />
+            <xsl:text>/</xsl:text>
+            <xsl:apply-templates select=".." mode="internal-id" />
+            <xsl:text>.svg</xsl:text>
+        </xsl:attribute>
+        <xsl:element name="img">
+            <xsl:attribute name="src">
+                <xsl:value-of select="$directory.images" />
+                <xsl:text>/</xsl:text>
+                <xsl:apply-templates select=".." mode="internal-id" />
+                <xsl:text>.png</xsl:text>
+            </xsl:attribute>
+        </xsl:element>
+    </xsl:element>
+</xsl:template>
+
+
+<!-- ################################## -->
+<!-- Deprecated Graphics Code Templates -->
+<!-- ################################## -->
+<!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <xsl:template match="tikz">
     <xsl:message>MBX:WARNING: tikz element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
     <xsl:element name="object">
@@ -1409,11 +1471,7 @@ is just flat out on the page, as if printed there.
         <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
     </xsl:element>
 </xsl:template>
-
-
-<!-- Asymptote graphics language  -->
 <!-- 2015/02/08: Deprecated, still functional but not maintained -->
-<!-- SVG's produced by mbx script -->
 <xsl:template match="asymptote">
     <xsl:message>MBX:WARNING: asymptote element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
     <xsl:element name="object">
@@ -1428,11 +1486,7 @@ is just flat out on the page, as if printed there.
         <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
     </xsl:element>
 </xsl:template>
-
-<!-- Sage graphics plots          -->
 <!-- 2015/02/08: Deprecated, still functional but not maintained -->
-<!-- SVG's produced by mbx script -->
-<!-- PNGs are fall back for 3D    -->
 <xsl:template match="sageplot">
     <xsl:message>MBX:WARNING: sageplot element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
     <xsl:element name="object">
@@ -1454,6 +1508,10 @@ is just flat out on the page, as if printed there.
         </xsl:element>
     </xsl:element>
 </xsl:template>
+<!-- ################################## -->
+<!-- Deprecated Graphics Code Templates -->
+<!-- ################################## -->
+
 
 <!-- Video -->
 <!-- Embed FlowPlayer to play mp4 format                                    -->
