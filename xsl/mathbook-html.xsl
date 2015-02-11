@@ -534,10 +534,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <address class="contributors">
         <xsl:apply-templates select="author|editor" mode="full-info"/>
     </address>
-    <xsl:if test="date">
-        <p style="text-align:center"><xsl:apply-templates select="date" /></p>
-    </xsl:if>
+    <xsl:apply-templates select="date" />
 </xsl:template>
+
+<!-- A template manages the date      -->
+<!-- Until we have better CSS for it  -->
+<xsl:template match="titlepage/date">
+    <!-- <p style="text-align:center"> -->
+    <address class="contributors">
+        <xsl:apply-templates />
+    </address>
+    <p></p>
+</xsl:template>
+
 
 <!-- Colophon -->
 <!-- Licenses, ISBN, Cover Designer, etc -->
