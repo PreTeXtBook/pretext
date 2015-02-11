@@ -741,7 +741,7 @@ the xsltproc executable.
             <title>Graphics</title>
 
             <introduction>
-                <p>Mathbook XML supports several languages for describing diagrams and pictures with human-readable source code (<ie /> plain text), rather than using a <q>paint</q> program.  Any <latex /> macros used in the rest of your document may be employed in the <latex>-standalone or Asymptote diagrams (with Sage graphics coming next?).</p>
+                <p>Mathbook XML supports several languages for describing diagrams and pictures with human-readable source code (<ie /> plain text), rather than using a <q>paint</q> program.  Any <latex /> macros used in the rest of your document may be employed in the <latex/>-standalone or Asymptote diagrams (with Sage graphics coming next?).</p>
             </introduction>
 
             <subsection>
@@ -927,9 +927,9 @@ the xsltproc executable.
 
                 <figure xml:id="figure-pgflots-demo">
                     <caption>Sample pgfplots plot</caption>
-                    <image>
+                    <image xml:id="pgfplots-demo">
                         <description>A pgfplkots example, with a function, a parametric curve, and some points plotted.</description>
-                        <latex-image xml:id="pgfplots-demo">
+                        <latex-image>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[\begin{tikzpicture}
                         \begin{axis}[]
@@ -950,7 +950,7 @@ the xsltproc executable.
                             \addplot[
                                 variable=\t,
                                 domain=0:360,
-                                samples=100,
+                                samples=200,
                                 color=orange,
                             ]({3*sin(2*t)}, {2*cos(5*t)});
                         \end{axis}
