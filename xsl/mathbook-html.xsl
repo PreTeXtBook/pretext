@@ -1390,9 +1390,21 @@ is just flat out on the page, as if printed there.
                 <xsl:attribute name="height"><xsl:value-of select="@height" /></xsl:attribute>
             </xsl:if>
             <xsl:attribute name="src"><xsl:value-of select="@source" /></xsl:attribute>
+            <xsl:apply-templates select="description" />
         </xsl:element>
     </xsl:if>
     <xsl:apply-templates select="tikz|asymptote|sageplot" />
+</xsl:template>
+
+<!-- Write an "alt" and "title" attribute as part -->
+<!-- of whatever element holds the image           -->
+<xsl:template match="image/description">
+    <xsl:attribute name="alt">
+        <xsl:apply-templates />
+    </xsl:attribute>
+    <xsl:attribute name="title">
+        <xsl:apply-templates />
+    </xsl:attribute>
 </xsl:template>
 
 <!-- tikz graphics language       -->
@@ -1407,6 +1419,7 @@ is just flat out on the page, as if printed there.
             <xsl:apply-templates select=".." mode="internal-id" />
             <xsl:text>.svg</xsl:text>
         </xsl:attribute>
+        <xsl:apply-templates select="../description" />
         <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
     </xsl:element>
 </xsl:template>
@@ -1424,6 +1437,7 @@ is just flat out on the page, as if printed there.
             <xsl:apply-templates select=".." mode="internal-id" />
             <xsl:text>.svg</xsl:text>
         </xsl:attribute>
+        <xsl:apply-templates select="../description" />
         <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
     </xsl:element>
 </xsl:template>
@@ -1441,6 +1455,7 @@ is just flat out on the page, as if printed there.
             <xsl:apply-templates select=".." mode="internal-id" />
             <xsl:text>.svg</xsl:text>
         </xsl:attribute>
+        <xsl:apply-templates select="../description" />
         <xsl:element name="img">
             <xsl:attribute name="src">
                 <xsl:value-of select="$directory.images" />
