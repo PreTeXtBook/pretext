@@ -673,7 +673,7 @@ the xsltproc executable.
 
             <p>The left angle bracket (<c>&lt;</c>) of XML is the second most-dangerous, since it looks to the processor like the start of a new element.   Use the XML entity <c>&amp;lt;</c> for that character.  Similarly, use <c>&amp;gt;</c> for a right angle bracket.  These are likely to be necessary in source code, such as Sage code (think generators of field extensions) or TikZ code (think arrowheads).  Of course ampersands (<ampersand />) have their own meaning in <latex /> so the entities just described are problematic.  So in mathematics, if you need strict inequalities, use the macros <c>\lt</c> and <c>\gt</c>, which are pre-defined for both <latex />, and MathJax in HTML.</p>
 
-            <p>Sage defines generators of algebraic structures with a syntax that might remind one of common notation for all <q>combinations</q> of some generators.  It is non-standard Python, but is instead pre-parsed by Sage.  No matter, at issue here is the left angle bracket used to specify generators.  Here is an example, which can be doctested by Sage to verify the example will behaves correctly.</p>
+            <p>Sage defines generators of algebraic structures with a syntax that might remind one of common notation for all <q>combinations</q> of some generators.  It is non-standard Python, but is instead pre-parsed by Sage.  No matter, at issue here is the left angle bracket used to specify generators.  Here is an example, which can be doctested by Sage to verify the example behaves correctly.</p>
 
             <sage>
                 <input>
@@ -1070,7 +1070,7 @@ the xsltproc executable.
                     </image>
                 </figure>
 
-                <p>Pay careful attention to the requirement that the last line of your code be a graphics object.  In particular, while <c>show()</c> might appear to do the right thing, it evaluates to Python's <c>None</c> object and that is just what you will get.  The code for Figure<nbsp /><xref ref="figure-sage-double-plot" /> illustrates creating two graphics objects and combining them into an expression on the last line that evalutes to a graphics object.</p>
+                <p>Pay careful attention to the requirement that the last line of your code be a graphics object.  In particular, while <c>show()</c> might appear to do the right thing, it evaluates to Python's <c>None</c> object and that is just what you will get.  The code for Figure<nbsp /><xref ref="figure-sage-double-plot" /> illustrates creating two graphics objects and combining them into an expression on the last line that evaluates to a graphics object.</p>
 
                 <figure xml:id="figure-sage-double-plot">
                     <caption>Two Sage plots on one set of axes</caption>
