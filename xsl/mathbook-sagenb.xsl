@@ -70,27 +70,31 @@
     <xsl:apply-imports />
 </xsl:template>
 
-<!-- An abstract named template accepts input text and output            -->
-<!-- text, then wraps it in the Sage Notebook's wiki syntax              -->
-<!-- Output is always computable, so we do not show it.                  -->
-<!-- Though we once experimented with printing it in green,              -->
-<!-- hence readable, but clued in that it was not the "real" blue output -->
+<!-- An abstract named template accepts input text and output             -->
+<!-- text, then wraps it in the Sage Notebook's wiki syntax               -->
+<!-- Output is always computable, so we do not show it.                   -->
+<!-- Though we once experimented with printing it in green,               -->
+<!-- hence readable, but clued in that it was not the "real" blue output  -->
+<!-- Sage cell output goes in <script> element, xsltproc leaves "<" alone -->
+<!-- Here xsltproc tries to escape them, so we explicitly prevent that    -->
 <xsl:template name="sage-active-markup">
     <xsl:param name="in" />
     <xsl:param name="out" />
     <xsl:text>&#xa;{{{&#xa;</xsl:text>
-        <xsl:value-of select="$in" />
+        <xsl:value-of select="$in" disable-output-escaping="yes" />
     <xsl:text>///&#xa;</xsl:text>
     <xsl:text>}}}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- An abstract named template accepts input text -->
-<!-- and employs a <pre> element, so untouchable   -->
+<!-- An abstract named template accepts input text                        -->
+<!-- and employs a <pre> element, so untouchable                          -->
+<!-- Sage cell output goes in <script> element, xsltproc leaves "<" alone -->
+<!-- Here xsltproc tries to escape them, so we explicitly prevent that    -->
 <!-- TODO: learn of a way to prevent notebook evaluation -->
 <xsl:template name="sage-display-markup">
     <xsl:param name="in" />
     <pre style="font-size:80%">
-        <xsl:value-of select="$in" />
+        <xsl:value-of select="$in" disable-output-escaping="yes" />
     </pre>
 </xsl:template>
 
