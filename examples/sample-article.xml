@@ -532,7 +532,9 @@ the xsltproc executable.
 
             <figure xml:id="figure-function-derivative">
                 <caption>A function and its derivative</caption>
-                <image width="350" source="images/cubic-function.png" />
+                <image width="350" source="images/cubic-function.png">
+                    <description>A third degree polynomial with a local max and a local min, along with its second degree derivative plotted on the same axes</description>
+                </image>
             </figure>
 
             <p>Lists can have multiple columns.  With <acro>HTML</acro> items displayed in row-major order (horizontally first) and with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items <mdash /> derivatives and integrals <mdash /> where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.<index xml:id="index-start-multicolumn" finish="index-finish-multicolumn"><main>Lists</main><sub>multicolumn</sub></index></p>
@@ -738,6 +740,7 @@ the xsltproc executable.
                 <figure xml:id="figure-tikz-electronics">
                     <caption>TikZ Electronics Diagram</caption>
                     <image xml:id="tikz-electronics">
+                        <description>A pile of electronic components wired together</description>
                         <tikz>
                         <![CDATA[\tikzset{%
                           block/.style    = {draw, thick, rectangle, minimum height = 3em,
@@ -929,8 +932,9 @@ the xsltproc executable.
                 -->
 
                 <figure xml:id="figure-asymptote-levers">
-                    <caption>Aymptote Lever Demonstration</caption>
+                    <caption>Asymptote Lever Demonstration</caption>
                     <image xml:id="asymptote-lever">
+                        <description>Moments on a lever</description>
                         <asymptote>
                         size(200,0);
 
@@ -1058,6 +1062,7 @@ the xsltproc executable.
                 <figure xml:id="figure-sage-parabola">
                     <caption>A Sage standard parabola, on <m>[-2,4]</m></caption>
                     <image xml:id="sageplot-parabola">
+                        <description>A standard parabola on the interval [-2,4]</description>
                         <sageplot>
                         f(x) = x^2
                         plot(f, (x, -2, 4), color='green', thickness=3)
