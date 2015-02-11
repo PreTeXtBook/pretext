@@ -1286,6 +1286,10 @@ is just flat out on the page, as if printed there.
     </xsl:choose>
 </xsl:template>
 
+<!-- Lists themselves -->
+<!-- Use a style to create the symbol sets   -->
+<!-- When columns are specified, float items -->
+<!-- and clear afterwards                    -->
 
 <xsl:template match="ol">
     <xsl:element name="ol">
@@ -1301,8 +1305,20 @@ is just flat out on the page, as if printed there.
             </xsl:choose>
             <xsl:text>;</xsl:text>
         </xsl:attribute>
-        <xsl:apply-templates />
+        <xsl:choose>
+            <xsl:when test="@cols">
+                <xsl:apply-templates select="li" mode="variable-width">
+                    <xsl:with-param name="percent-width" select="98 div @cols" />
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="li" />
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:element>
+    <xsl:if test="@cols">
+        <div style="clear:both;"></div>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="ul">
@@ -1319,55 +1335,30 @@ is just flat out on the page, as if printed there.
             </xsl:choose>
             <xsl:text>;</xsl:text>
         </xsl:attribute>
-        <xsl:apply-templates />
+        <xsl:choose>
+            <xsl:when test="@cols">
+                <xsl:apply-templates select="li" mode="variable-width">
+                    <xsl:with-param name="percent-width" select="98 div @cols" />
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="li" />
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:element>
+    <xsl:if test="@cols">
+        <div style="clear:both;"></div>
+    </xsl:if>
 </xsl:template>
 
-<!-- Pass-through list items            -->
+<!-- Pass-through regular list items    -->
 <!-- Allow paragraphs in larger items,  -->
 <!-- or just snippets for smaller items -->
 <xsl:template match="li">
-    <li>
-        <xsl:apply-templates />
-    </li>
+    <li><xsl:apply-templates /></li>
 </xsl:template>
 
-<!-- ##################### -->
-<!-- Multiple-column lists -->
-<!-- ##################### -->
-
-<!-- TODO: Accept top-level list label formatting in here -->
-<!-- TODO: Protect for top-level use only -->
-
-<!-- Note: ul, ol combined with "<xsl:copy>" led to namespace trouble -->
-
-<!-- With cols specified, we form the list items with variable -->
-<!-- widths then clear the floating property to resume         -->
-<xsl:template match="ol[@cols]">
-    <xsl:if test="@label">
-        <xsl:message>MBX:WARNING: Custom labeling of multi-column lists not implemented</xsl:message>
-    </xsl:if>
-    <xsl:element name="ol">
-        <xsl:apply-templates select="li" mode="variable-width">
-            <xsl:with-param name="percent-width" select="98 div @cols" />
-        </xsl:apply-templates>
-    </xsl:element>
-    <div style="clear:both;"></div>
-</xsl:template>
-
-<xsl:template match="ul[@cols]">
-    <xsl:if test="@label">
-        <xsl:message>MBX:WARNING: Custom labeling of multi-column lists not implemented</xsl:message>
-    </xsl:if>
-    <xsl:element name="ul">
-        <xsl:apply-templates select="li" mode="variable-width">
-            <xsl:with-param name="percent-width" select="98 div @cols" />
-        </xsl:apply-templates>
-    </xsl:element>
-    <div style="clear:both;"></div>
-</xsl:template>
-
-<!-- Each list item needs styling independent of CSS -->
+<!-- List items in HTML need to float with fractional widths -->
 <xsl:template match="li" mode="variable-width">
     <xsl:param name="percent-width" />
     <xsl:element name="li">
@@ -1377,6 +1368,7 @@ is just flat out on the page, as if printed there.
        <xsl:apply-templates />
     </xsl:element>
 </xsl:template>
+
 
 <!-- Figures and their captions -->
 <!-- TODO: class="wrap" is possible -->
@@ -1389,29 +1381,45 @@ is just flat out on the page, as if printed there.
 
 <!-- Images -->
 <xsl:template match="image" >
-<xsl:element name="img">
-    <xsl:if test="@width">
-        <xsl:attribute name="width"><xsl:value-of select="@width" /></xsl:attribute>
+    <xsl:if test="@source">
+        <xsl:element name="img">
+            <xsl:if test="@width">
+                <xsl:attribute name="width"><xsl:value-of select="@width" /></xsl:attribute>
+            </xsl:if>
+            <xsl:if test="@height">
+                <xsl:attribute name="height"><xsl:value-of select="@height" /></xsl:attribute>
+            </xsl:if>
+            <xsl:attribute name="src"><xsl:value-of select="@source" /></xsl:attribute>
+            <xsl:apply-templates select="description" />
+        </xsl:element>
     </xsl:if>
-    <xsl:if test="@height">
-        <xsl:attribute name="height"><xsl:value-of select="@height" /></xsl:attribute>
-    </xsl:if>
-    <xsl:attribute name="src"><xsl:value-of select="@source" /></xsl:attribute>
-</xsl:element>
+    <xsl:apply-templates select="tikz|asymptote|sageplot" />
+</xsl:template>
+
+<!-- Write an "alt" and "title" attribute as part -->
+<!-- of whatever element holds the image           -->
+<xsl:template match="image/description">
+    <xsl:attribute name="alt">
+        <xsl:apply-templates />
+    </xsl:attribute>
+    <xsl:attribute name="title">
+        <xsl:apply-templates />
+    </xsl:attribute>
 </xsl:template>
 
 <!-- tikz graphics language       -->
 <!-- SVG's produced by mbx script -->
-<xsl:template match="tikz">
+<xsl:template match="image/tikz">
     <xsl:element name="object">
         <xsl:attribute name="type">image/svg+xml</xsl:attribute>
         <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
         <xsl:attribute name="data">
             <xsl:value-of select="$directory.images" />
             <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select=".." mode="internal-id" />
             <xsl:text>.svg</xsl:text>
         </xsl:attribute>
+        <xsl:apply-templates select="../description" />
         <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
     </xsl:element>
 </xsl:template>
@@ -1419,7 +1427,53 @@ is just flat out on the page, as if printed there.
 
 <!-- Asymptote graphics language  -->
 <!-- SVG's produced by mbx script -->
-<xsl:template match="asymptote">
+<xsl:template match="image/asymptote">
+    <xsl:element name="object">
+        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
+        <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
+        <xsl:attribute name="data">
+            <xsl:value-of select="$directory.images" />
+            <xsl:text>/</xsl:text>
+            <xsl:apply-templates select=".." mode="internal-id" />
+            <xsl:text>.svg</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="../description" />
+        <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
+    </xsl:element>
+</xsl:template>
+
+<!-- Sage graphics plots          -->
+<!-- SVG's produced by mbx script -->
+<!-- PNGs are fall back for 3D    -->
+<xsl:template match="image/sageplot">
+    <xsl:element name="object">
+        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
+        <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
+        <xsl:attribute name="data">
+            <xsl:value-of select="$directory.images" />
+            <xsl:text>/</xsl:text>
+            <xsl:apply-templates select=".." mode="internal-id" />
+            <xsl:text>.svg</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="../description" />
+        <xsl:element name="img">
+            <xsl:attribute name="src">
+                <xsl:value-of select="$directory.images" />
+                <xsl:text>/</xsl:text>
+                <xsl:apply-templates select=".." mode="internal-id" />
+                <xsl:text>.png</xsl:text>
+            </xsl:attribute>
+        </xsl:element>
+    </xsl:element>
+</xsl:template>
+
+
+<!-- ################################## -->
+<!-- Deprecated Graphics Code Templates -->
+<!-- ################################## -->
+<!-- 2015/02/08: Deprecated, still functional but not maintained -->
+<xsl:template match="tikz">
+    <xsl:message>MBX:WARNING: tikz element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
     <xsl:element name="object">
         <xsl:attribute name="type">image/svg+xml</xsl:attribute>
         <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
@@ -1432,11 +1486,24 @@ is just flat out on the page, as if printed there.
         <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
     </xsl:element>
 </xsl:template>
-
-<!-- Sage graphics plots          -->
-<!-- SVG's produced by mbx script -->
-<!-- PNGs are fall back for 3D    -->
+<!-- 2015/02/08: Deprecated, still functional but not maintained -->
+<xsl:template match="asymptote">
+    <xsl:message>MBX:WARNING: asymptote element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
+    <xsl:element name="object">
+        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
+        <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
+        <xsl:attribute name="data">
+            <xsl:value-of select="$directory.images" />
+            <xsl:text>/</xsl:text>
+            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:text>.svg</xsl:text>
+        </xsl:attribute>
+        <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
+    </xsl:element>
+</xsl:template>
+<!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <xsl:template match="sageplot">
+    <xsl:message>MBX:WARNING: sageplot element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
     <xsl:element name="object">
         <xsl:attribute name="type">image/svg+xml</xsl:attribute>
         <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
@@ -1456,6 +1523,10 @@ is just flat out on the page, as if printed there.
         </xsl:element>
     </xsl:element>
 </xsl:template>
+<!-- ################################## -->
+<!-- Deprecated Graphics Code Templates -->
+<!-- ################################## -->
+
 
 <!-- Video -->
 <!-- Embed FlowPlayer to play mp4 format                                    -->

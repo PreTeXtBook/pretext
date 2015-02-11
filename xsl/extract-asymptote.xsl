@@ -35,6 +35,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Asymptote graphics to standalone file           -->
 <!-- Prepend document's macros, otherwise no changes -->
+<xsl:template match="image/asymptote">
+    <xsl:variable name="filebase">
+        <xsl:apply-templates select=".." mode="internal-id" />
+    </xsl:variable>
+    <exsl:document href="{$scratch}/{$filebase}.asy" method="text">
+        <xsl:text>texpreamble("&#xa;</xsl:text>
+        <xsl:value-of select="/mathbook/docinfo/macros"/>
+        <xsl:text>");&#xa;&#xa;</xsl:text>
+        <xsl:value-of select="."/>
+    </exsl:document>
+ </xsl:template>
+
+<!-- ################################## -->
+<!-- Deprecated Graphics Code Templates -->
+<!-- ################################## -->
+<!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <xsl:template match="asymptote">
     <xsl:variable name="filebase">
         <xsl:apply-templates select="." mode="internal-id" />
@@ -46,5 +62,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="."/>
     </exsl:document>
  </xsl:template>
+<!-- ################################## -->
+<!-- Deprecated Graphics Code Templates -->
+<!-- ################################## -->
 
 </xsl:stylesheet>
