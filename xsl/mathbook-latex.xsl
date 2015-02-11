@@ -566,6 +566,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
     </xsl:if>
     <xsl:if test="//tikz">
+        <xsl:message>MBX:WARNING: the "tikz" element is deprecated (2015/02/10), use "latex-image" and include the tikz package and relevant libraries in docinfo/latex-image-preamble</xsl:message>
         <xsl:text>%% Tikz graphics&#xa;</xsl:text>
         <xsl:text>\usepackage{tikz}&#xa;</xsl:text>
         <xsl:text>\usetikzlibrary{backgrounds}&#xa;</xsl:text>
@@ -658,6 +659,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% If custom font substitutions follow, this might be ineffective&#xa;</xsl:text>
         <xsl:text>%% If fonts lack upright quotes, the textcomp package is employed&#xa;</xsl:text>
         <xsl:text>\usepackage{upquote}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>%% Graphics Preamble Entries&#xa;</xsl:text>
+    <xsl:if test="/mathbook/docinfo/latex-image-preamble">
+        <!-- outer braces rein in the scope of any local graphics settings -->
+        <xsl:text>{&#xa;</xsl:text>
+        <xsl:call-template name="sanitize-sage">
+            <xsl:with-param name="raw-sage-code" select="/mathbook/docinfo/latex-image-preamble" />
+        </xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% Custom Preamble Entries, late (use latex.preamble.late)&#xa;</xsl:text>
     <xsl:if test="$latex.preamble.late != ''">
@@ -1923,17 +1933,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>]</xsl:text>
         <xsl:text>{</xsl:text><xsl:value-of select="@source" /><xsl:text>}</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="tikz|asymptote|sageplot" />
-</xsl:template>
-
-<!-- tikz graphics language -->
-<!-- preliminary (cursory) support -->
-<!-- http://tex.stackexchange.com/questions/4338/correctly-scaling-a-tikzpicture -->
-<!-- Resize entire tikzpicture with \resizebox{0.75\textwidth}{!}{....}          -->
-<xsl:template match="image/tikz">
-    <xsl:call-template name="sanitize-sage">
-        <xsl:with-param name="raw-sage-code" select="." />
-    </xsl:call-template>
+    <xsl:apply-templates select="tikz|asymptote|sageplot|latex-image" />
 </xsl:template>
 
 <!-- Asymptote graphics language  -->
@@ -1965,6 +1965,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>/</xsl:text>
     <xsl:apply-templates select=".." mode="internal-id" />
     <xsl:text>.png}}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- LaTeX graphics (tikz, pgfplots, pstricks, etc) -->
+<xsl:template match="image/latex-image">
+    <xsl:call-template name="sanitize-sage">
+        <xsl:with-param name="raw-sage-code" select="." />
+    </xsl:call-template>
 </xsl:template>
 
 

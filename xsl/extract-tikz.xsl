@@ -71,24 +71,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usepackage{tikz}&#xa;</xsl:text>
         <xsl:text>\usetikzlibrary{backgrounds}&#xa;</xsl:text>
         <xsl:text>\usetikzlibrary{arrows,matrix}&#xa;</xsl:text>
-        <xsl:apply-templates select="tikz-extra-preamble"/>
-        <xsl:text>&#xa;</xsl:text>
         <xsl:text>\begin{document}&#xa;</xsl:text>
-        <xsl:for-each select="text()">
-          <xsl:value-of select="."/>
-          <xsl:text>&#xa;</xsl:text>
-        </xsl:for-each>
+        <xsl:value-of select="."/>
         <xsl:text>\end{document}&#xa;</xsl:text>
     </exsl:document>
   </xsl:template>
 <!-- ################################## -->
 <!-- Deprecated Graphics Code Templates -->
 <!-- ################################## -->
-
-<!-- extra preamble content for tikz standalone file -->
-<xsl:template match="tikz-extra-preamble">
-    <xsl:value-of select="."/>
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
 
 </xsl:stylesheet>

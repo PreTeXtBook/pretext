@@ -1393,7 +1393,7 @@ is just flat out on the page, as if printed there.
             <xsl:apply-templates select="description" />
         </xsl:element>
     </xsl:if>
-    <xsl:apply-templates select="tikz|asymptote|sageplot" />
+    <xsl:apply-templates select="tikz|asymptote|sageplot|latex-image" />
 </xsl:template>
 
 <!-- Write an "alt" and "title" attribute as part -->
@@ -1464,6 +1464,23 @@ is just flat out on the page, as if printed there.
                 <xsl:text>.png</xsl:text>
             </xsl:attribute>
         </xsl:element>
+    </xsl:element>
+</xsl:template>
+
+<!-- LaTeX standalone image       -->
+<!-- SVG's produced by mbx script -->
+<xsl:template match="image/latex-image">
+    <xsl:element name="object">
+        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
+        <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
+        <xsl:attribute name="data">
+            <xsl:value-of select="$directory.images" />
+            <xsl:text>/</xsl:text>
+            <xsl:apply-templates select=".." mode="internal-id" />
+            <xsl:text>.svg</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="../description" />
+        <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
     </xsl:element>
 </xsl:template>
 
