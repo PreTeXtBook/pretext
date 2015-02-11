@@ -662,12 +662,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>%% Graphics Preamble Entries&#xa;</xsl:text>
     <xsl:if test="/mathbook/docinfo/latex-image-preamble">
-        <!-- outer braces rein in the scope of any local graphics settings -->
-        <xsl:text>{&#xa;</xsl:text>
         <xsl:call-template name="sanitize-sage">
             <xsl:with-param name="raw-sage-code" select="/mathbook/docinfo/latex-image-preamble" />
         </xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% Custom Preamble Entries, late (use latex.preamble.late)&#xa;</xsl:text>
     <xsl:if test="$latex.preamble.late != ''">
@@ -1969,9 +1966,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- LaTeX graphics (tikz, pgfplots, pstricks, etc) -->
 <xsl:template match="image/latex-image">
+    <!-- outer braces rein in the scope of any local graphics settings -->
+    <xsl:text>{&#xa;</xsl:text>
     <xsl:call-template name="sanitize-sage">
         <xsl:with-param name="raw-sage-code" select="." />
     </xsl:call-template>
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 
