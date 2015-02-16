@@ -754,7 +754,7 @@ the xsltproc executable.
                     <caption>TikZ Electronics Diagram</caption>
                     <image xml:id="tikz-electronics">
                         <description>A pile of electronic components wired together</description>
-                        <latex-image>
+                        <latex-image-code>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[\tikzset{%
                           block/.style    = {draw, thick, rectangle, minimum height = 3em,
@@ -833,7 +833,7 @@ the xsltproc executable.
                             \draw [color=gray,thick](-0.5,-9) rectangle (12.5,-5);
                             \node at (-0.5,-9) [below=5mm, right=0mm] {\textsc{second-order noise shaper}};
                         \end{tikzpicture}]]>
-                        </latex-image>
+                        </latex-image-code>
                     </image>
                 </figure>
 
@@ -843,7 +843,7 @@ the xsltproc executable.
                 <figure xml:id="figure-tikz-cone3D">
                     <caption>TikZ Cone Drawing</caption>
                     <image xml:id="tikz-cone">
-                        <latex-image>
+                        <latex-image-code>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[\begin{tikzpicture}[join=round]
                         \tikzstyle{conefill} = [fill=blue!20,fill opacity=0.8]
@@ -919,7 +919,7 @@ the xsltproc executable.
                                         (.274,-.5) node [below] {$P_{11}$};
                         \end{scope}
                         \end{tikzpicture}]]>
-                        </latex-image>
+                        </latex-image-code>
                     </image>
                 </figure>
 
@@ -928,8 +928,8 @@ the xsltproc executable.
                 <figure xml:id="figure-pgflots-demo">
                     <caption>Sample pgfplots plot</caption>
                     <image xml:id="pgfplots-demo">
-                        <description>A pgfplkots example, with a function, a parametric curve, and some points plotted.</description>
-                        <latex-image>
+                        <description>A pgfplots example, with a function, a parametric curve, and some points plotted.</description>
+                        <latex-image-code>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[\begin{tikzpicture}
                         \begin{axis}[]
@@ -956,7 +956,7 @@ the xsltproc executable.
                         \end{axis}
                         \end{tikzpicture}]]>
 
-                        </latex-image>
+                        </latex-image-code>
 		    </image>
                 </figure>
 		
@@ -1431,7 +1431,7 @@ the xsltproc executable.
                    <figure>
                         <caption>GeoGebra demonstration of the Euler Line</caption>
                         <image xml:id="tikz-geogebra-euler">
-                            <latex-image>
+                            <latex-image-code>
                             \begin{tikzpicture}
                             \definecolor{ffqqqq}{rgb}{1,0,0}
                             \definecolor{uuuuuu}{rgb}{0.27,0.27,0.27}
@@ -1459,7 +1459,7 @@ the xsltproc executable.
                             \draw[color=uuuuuu] (-1.29,1.79) node {$orthocentre$};
                             \draw[color=ffqqqq] (-3.75,6.23) node {$Euler$};
                             \end{tikzpicture}
-                            </latex-image>
+                            </latex-image-code>
                         </image>
                     </figure>
                 </geogebra-applet>

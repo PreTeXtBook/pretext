@@ -566,7 +566,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
     </xsl:if>
     <xsl:if test="//tikz">
-        <xsl:message>MBX:WARNING: the "tikz" element is deprecated (2015/02/10), use "latex-image" and include the tikz package and relevant libraries in docinfo/latex-image-preamble</xsl:message>
+        <xsl:message>MBX:WARNING: the "tikz" element is deprecated (2015/16/10), use "latex-image-code" tag inside an "image" tag, and include the tikz package and relevant libraries in docinfo/latex-image-preamble</xsl:message>
         <xsl:text>%% Tikz graphics&#xa;</xsl:text>
         <xsl:text>\usepackage{tikz}&#xa;</xsl:text>
         <xsl:text>\usetikzlibrary{backgrounds}&#xa;</xsl:text>
@@ -1930,7 +1930,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>]</xsl:text>
         <xsl:text>{</xsl:text><xsl:value-of select="@source" /><xsl:text>}</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="tikz|asymptote|sageplot|latex-image" />
+    <xsl:apply-templates select="tikz|asymptote|sageplot|latex-image-code" />
 </xsl:template>
 
 <!-- Asymptote graphics language  -->
@@ -1981,6 +1981,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <xsl:template match="tikz">
     <xsl:message>MBX:WARNING: tikz element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
+    <xsl:message>MBX:WARNING: tikz element superceded by latex-image-code element - deprecation (2015/02/16)</xsl:message>
     <xsl:call-template name="sanitize-sage">
         <xsl:with-param name="raw-sage-code" select="." />
     </xsl:call-template>
