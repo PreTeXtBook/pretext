@@ -71,11 +71,11 @@ the xsltproc executable.
         <!--
         Extra packages, package options, and package settings for latex-based images.
         Inserted in the preamble for LaTeX output.
-        Inserted in the preamble to each standalone latex-based image for HMTL SVG output. 
+        Inserted in the preamble to each standalone latex-based image for HMTL SVG output.
         -->
         <latex-image-preamble>
         \usepackage{pgfplots}
-        \pgfplotsset{axis x line = middle, 
+        \pgfplotsset{axis x line = middle,
                      axis y line = middle}
         \usepackage{tikz}
         \usetikzlibrary{backgrounds}
@@ -753,7 +753,6 @@ the xsltproc executable.
                 <figure xml:id="figure-tikz-electronics">
                     <caption>TikZ Electronics Diagram</caption>
                     <image xml:id="tikz-electronics">
-                        <description>A pile of electronic components wired together</description>
                         <latex-image-code>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[\tikzset{%
@@ -933,7 +932,7 @@ the xsltproc executable.
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[\begin{tikzpicture}
                         \begin{axis}[]
-                            \addplot[		
+                            \addplot[
                                 domain=0.1:10,
                                 <->,
                                 smooth,
@@ -959,7 +958,7 @@ the xsltproc executable.
                         </latex-image-code>
 		    </image>
                 </figure>
-		
+
             </subsection>
 
             <subsection>

@@ -1,4 +1,4 @@
-<?xml version='1.0'?> 
+<?xml version='1.0'?>
 
 <!--********************************************************************
 Copyright 2014 Robert A. Beezer
@@ -19,13 +19,13 @@ You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!-- This stylesheet locates <latex-image> elements        -->
+<!-- This stylesheet locates <latex-image-code> elements   -->
 <!-- and wraps them for LaTeX processing                   -->
 <!-- This includes the document's docinfo/macros           -->
 <!-- and the document's docinfo/latex-image-preamble       -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
-    xmlns:xml="http://www.w3.org/XML/1998/namespace" 
+    xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
     extension-element-prefixes="exsl"
 >
@@ -36,7 +36,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:import href="./extract-identity.xsl" />
 
 <!-- latex graphics to standalone file        -->
-<xsl:template match="image/latex-image">
+<xsl:template match="image/latex-image-code">
     <xsl:variable name="filebase">
         <xsl:apply-templates select=".." mode="internal-id" />
     </xsl:variable>

@@ -174,23 +174,23 @@ def latex_image_conversion(xml_source, dest_dir, outformat):
     subprocess.call(convert_cmd)
     cwd = os.getcwd()
     os.chdir(tmp_dir)
-    for latexpic in os.listdir(tmp_dir):
+    for latex_image in os.listdir(tmp_dir):
         if outformat == 'source':
-            shutil.copy2(latexpic, dest_dir)
+            shutil.copy2(latex_image, dest_dir)
         else:
-            filebase, _ = os.path.splitext(latexpic)
-            latexpdf = "{}.pdf".format(filebase)
-            latexsvg = "{}.svg".format(filebase)
-            latex_cmd = [tex_executable, latexpic]
-            _verbose("converting {} to {}".format(latexpic, latexpdf))
+            filebase, _ = os.path.splitext(latex_image)
+            latex_image_pdf = "{}.pdf".format(filebase)
+            latex_image_svg = "{}.svg".format(filebase)
+            latex_cmd = [tex_executable, latex_image]
+            _verbose("converting {} to {}".format(latex_image, latex_image_pdf))
             subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
             if outformat == 'svg':
-                svg_cmd = [pdfsvg_executable, latexpdf, latexsvg]
-                _verbose("converting {} to {}".format(latexpdf, latexsvg))
+                svg_cmd = [pdfsvg_executable, latex_image_pdf, latex_image_svg]
+                _verbose("converting {} to {}".format(latex_image_pdf, latex_image_svg))
                 subprocess.call(svg_cmd)
-                shutil.copy2(latexsvg, dest_dir)
+                shutil.copy2(latex_image_svg, dest_dir)
             if outformat == 'pdf':
-                shutil.copy2(latexpdf, dest_dir)
+                shutil.copy2(latex_image_pdf, dest_dir)
 
 #######################################
 #
@@ -507,7 +507,7 @@ def get_cli_arguments():
         ('tikz', 'tikz pictures'),
         ('asy', 'Asymptote diagrams'),
         ('sageplot', 'Sage graphics'),
-        ('latex', 'LaTeX pictures'),
+        ('latex-image', 'LaTeX pictures'),
         ('all', 'Complete document'),
     ]
     component_help = 'Possible components are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in component_info])
@@ -608,7 +608,7 @@ elif args.component == 'sageplot':
         sage_conversion(args.xml_file, args.dir, 'source')
     else:
         raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
-elif args.component == 'latex':
+elif args.component == 'latex-image':
     if args.format == 'pdf':
         latex_image_conversion(args.xml_file, args.dir, 'pdf')
     elif args.format == 'svg':

@@ -1965,7 +1965,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- LaTeX graphics (tikz, pgfplots, pstricks, etc) -->
-<xsl:template match="image/latex-image">
+<xsl:template match="latex-image-code">
+    <xsl:if test="not(parent::image)">
+        <xsl:message>MBX:WARNING: latex-image-code element should be enclosed by an image element</xsl:message>
+    </xsl:if>
     <!-- outer braces rein in the scope of any local graphics settings -->
     <xsl:text>{&#xa;</xsl:text>
     <xsl:call-template name="sanitize-sage">
@@ -1980,8 +1983,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################################## -->
 <!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <xsl:template match="tikz">
-    <xsl:message>MBX:WARNING: tikz element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
-    <xsl:message>MBX:WARNING: tikz element superceded by latex-image-code element - deprecation (2015/02/16)</xsl:message>
+    <xsl:message>MBX:WARNING: tikz element superceded by latex-image-code element</xsl:message>
+    <xsl:message>MBX:WARNING: tikz package and necessary libraries should be included in docinfo/latex-image-preamble</xsl:message>
     <xsl:call-template name="sanitize-sage">
         <xsl:with-param name="raw-sage-code" select="." />
     </xsl:call-template>

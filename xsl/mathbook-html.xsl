@@ -1393,7 +1393,7 @@ is just flat out on the page, as if printed there.
             <xsl:apply-templates select="description" />
         </xsl:element>
     </xsl:if>
-    <xsl:apply-templates select="tikz|asymptote|sageplot|latex-image" />
+    <xsl:apply-templates select="tikz|asymptote|sageplot|latex-image-code" />
 </xsl:template>
 
 <!-- Write an "alt" and "title" attribute as part -->
@@ -1406,24 +1406,6 @@ is just flat out on the page, as if printed there.
         <xsl:apply-templates />
     </xsl:attribute>
 </xsl:template>
-
-<!-- tikz graphics language       -->
-<!-- SVG's produced by mbx script -->
-<xsl:template match="image/tikz">
-    <xsl:element name="object">
-        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
-        <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
-        <xsl:attribute name="data">
-            <xsl:value-of select="$directory.images" />
-            <xsl:text>/</xsl:text>
-            <xsl:apply-templates select=".." mode="internal-id" />
-            <xsl:text>.svg</xsl:text>
-        </xsl:attribute>
-        <xsl:apply-templates select="../description" />
-        <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
-    </xsl:element>
-</xsl:template>
-
 
 <!-- Asymptote graphics language  -->
 <!-- SVG's produced by mbx script -->
@@ -1469,7 +1451,10 @@ is just flat out on the page, as if printed there.
 
 <!-- LaTeX standalone image       -->
 <!-- SVG's produced by mbx script -->
-<xsl:template match="image/latex-image">
+<xsl:template match="latex-image-code">
+    <xsl:if test="not(parent::image)">
+        <xsl:message>MBX WARNING: latex-image-code element should be enclosed by an image element</xsl:message>
+    </xsl:if>
     <xsl:element name="object">
         <xsl:attribute name="type">image/svg+xml</xsl:attribute>
         <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
@@ -1490,7 +1475,8 @@ is just flat out on the page, as if printed there.
 <!-- ################################## -->
 <!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <xsl:template match="tikz">
-    <xsl:message>MBX:WARNING: tikz element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
+    <xsl:message>MBX:WARNING: tikz element superceded by latex-image-code element</xsl:message>
+    <xsl:message>MBX:WARNING: tikz package and necessary libraries should be included in docinfo/latex-image-preamble</xsl:message>
     <xsl:element name="object">
         <xsl:attribute name="type">image/svg+xml</xsl:attribute>
         <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
