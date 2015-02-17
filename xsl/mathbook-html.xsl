@@ -1396,13 +1396,10 @@ is just flat out on the page, as if printed there.
     <xsl:apply-templates select="tikz|asymptote|sageplot" />
 </xsl:template>
 
-<!-- Write an "alt" and "title" attribute as part -->
-<!-- of whatever element holds the image           -->
+<!-- Write an "alt" attribute as part    -->
+<!-- of whatever element holds the image -->
 <xsl:template match="image/description">
     <xsl:attribute name="alt">
-        <xsl:apply-templates />
-    </xsl:attribute>
-    <xsl:attribute name="title">
         <xsl:apply-templates />
     </xsl:attribute>
 </xsl:template>
