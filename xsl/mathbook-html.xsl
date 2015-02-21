@@ -1765,10 +1765,10 @@ is just flat out on the page, as if printed there.
 
 <!-- TeX, LaTeX -->
 <xsl:template match="latex">
-    <xsl:text>\(\LaTeX\)</xsl:text>
+    <xsl:text>\(\mathrm{\LaTeX}\)</xsl:text>
 </xsl:template>
 <xsl:template match="tex">
-    <xsl:text>\(\TeX\)</xsl:text>
+    <xsl:text>\(\mathrm{\TeX}\)</xsl:text>
 </xsl:template>
 
 <!-- Line Breaks -->
