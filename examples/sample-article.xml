@@ -69,6 +69,19 @@ the xsltproc executable.
         \newcommand{\indefiniteintegral}[2]{\int#1\,d#2}
         </macros>
         <!--
+        Extra packages, package options, and package settings for latex-based images.
+        Inserted in the preamble for LaTeX output.
+        Inserted in the preamble to each standalone latex-based image for HMTL SVG output.
+        -->
+        <latex-image-preamble>
+        \usepackage{pgfplots}
+        \pgfplotsset{axis x line = middle,
+                     axis y line = middle}
+        \usepackage{tikz}
+        \usetikzlibrary{backgrounds}
+        \usetikzlibrary{arrows,matrix}
+        </latex-image-preamble>
+        <!--
         The Sage Notebook has its own interface and worksheet list.
         To use the sorting features optimally, it helps to have subdivisions
         begin with the same short prefix.  An "initialism" (nee acronym)
@@ -728,20 +741,21 @@ the xsltproc executable.
             <title>Graphics</title>
 
             <introduction>
-                <p>Mathbook XML supports several languages for describing diagrams and pictures with human-readable source code (<ie /> plain text), rather than using a <q>paint</q> program.  Any <latex /> macros used in the rest of your document may be employed in the TikZ or Asymptote diagrams (with Sage graphics coming next?).</p>
+                <p>Mathbook XML supports several languages for describing diagrams and pictures with human-readable source code (<ie /> plain text), rather than using a <q>paint</q> program.  Any <latex /> macros used in the rest of your document may be employed in the <latex/>-standalone or Asymptote diagrams (with Sage graphics coming next?).</p>
             </introduction>
 
             <subsection>
-                <title>TikZ</title>
+                <title><latex /> images</title>
 
-                <p>TikZ is an add-on for <latex />, and as-such, the code renders diagrams automatically as part of normal processing of <latex /> files.  For HTML output the <c>mbx</c> script produces SVG versions of the pictures.  Examples are from the <url href="http://www.texample.net/tikz/examples/">TeXample.net</url> site.</p>
+                <p>There are several graphics engine packages that a <latex /> document can employ. Code from these packages renders diagrams automatically as part of normal processing of <latex /> files.  For HTML output the <c>mbx</c> script produces SVG versions of the pictures.  The packages should be loaded in docinfo/latex-image-preamble, which is also where global package settings should be made. These first examples are from the <url href="http://www.texample.net/tikz/examples/">TeXample.net</url> site.</p>
 
                 <!-- http://www.texample.net/media/tikz/examples/TEX/noise-shaper.tex -->
                 <figure xml:id="figure-tikz-electronics">
                     <caption>TikZ Electronics Diagram</caption>
                     <image xml:id="tikz-electronics">
                         <description>A pile of electronic components wired together</description>
-                        <tikz>
+                        <latex-image-code>
+                        <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[\tikzset{%
                           block/.style    = {draw, thick, rectangle, minimum height = 3em,
                             minimum width = 3em},
@@ -819,7 +833,7 @@ the xsltproc executable.
                             \draw [color=gray,thick](-0.5,-9) rectangle (12.5,-5);
                             \node at (-0.5,-9) [below=5mm, right=0mm] {\textsc{second-order noise shaper}};
                         \end{tikzpicture}]]>
-                        </tikz>
+                        </latex-image-code>
                     </image>
                 </figure>
 
@@ -829,7 +843,8 @@ the xsltproc executable.
                 <figure xml:id="figure-tikz-cone3D">
                     <caption>TikZ Cone Drawing</caption>
                     <image xml:id="tikz-cone">
-                        <tikz>
+                        <latex-image-code>
+                        <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[\begin{tikzpicture}[join=round]
                         \tikzstyle{conefill} = [fill=blue!20,fill opacity=0.8]
                         \tikzstyle{ann} = [fill=white,font=\footnotesize,inner sep=1pt]
@@ -904,8 +919,45 @@ the xsltproc executable.
                                         (.274,-.5) node [below] {$P_{11}$};
                         \end{scope}
                         \end{tikzpicture}]]>
-                        </tikz>
+                        </latex-image-code>
                     </image>
+                </figure>
+
+		<p>The pgfplots package was included in docinfo/latex-image-preamble. Here, it is used.</p>
+
+                <figure xml:id="figure-pgflots-demo">
+                    <caption>Sample pgfplots plot</caption>
+                    <image xml:id="pgfplots-demo">
+                        <description>A pgfplots example, with a function, a parametric curve, and some points plotted.</description>
+                        <latex-image-code>
+                        <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
+                        <![CDATA[\begin{tikzpicture}
+                        \begin{axis}[]
+                            \addplot[
+                                domain=0.1:10,
+                                <->,
+                                smooth,
+                                thin,
+                                color=blue,
+                            ]{4*ln(x)/ln(10)};
+                            \addplot[
+                                only marks,
+                            ]coordinates{
+                                (0,2)
+                                (4,3)
+                                (2,4)
+                                (3,4)};
+                            \addplot[
+                                variable=\t,
+                                domain=0:360,
+                                samples=200,
+                                color=orange,
+                            ]({3*sin(2*t)}, {2*cos(5*t)});
+                        \end{axis}
+                        \end{tikzpicture}]]>
+
+                        </latex-image-code>
+		    </image>
                 </figure>
 
             </subsection>
@@ -1379,7 +1431,7 @@ the xsltproc executable.
                    <figure>
                         <caption>GeoGebra demonstration of the Euler Line</caption>
                         <image xml:id="tikz-geogebra-euler">
-                            <tikz>
+                            <latex-image-code>
                             \begin{tikzpicture}
                             \definecolor{ffqqqq}{rgb}{1,0,0}
                             \definecolor{uuuuuu}{rgb}{0.27,0.27,0.27}
@@ -1407,7 +1459,7 @@ the xsltproc executable.
                             \draw[color=uuuuuu] (-1.29,1.79) node {$orthocentre$};
                             \draw[color=ffqqqq] (-3.75,6.23) node {$Euler$};
                             \end{tikzpicture}
-                            </tikz>
+                            </latex-image-code>
                         </image>
                     </figure>
                 </geogebra-applet>
