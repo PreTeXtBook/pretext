@@ -1,4 +1,4 @@
-<?xml version='1.0'?> 
+<?xml version='1.0'?>
 
 <!--********************************************************************
 Copyright 2014 Robert A. Beezer
@@ -19,13 +19,17 @@ You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
+<!-- This should eventually be obsolete. The tikz element has been superceded with latex-image-code.  -->
+<!-- New authors shouldn't be using "tikz" tags. But this can stay a while for backwards compat.      -->
+<!-- Once this is ready for removal, the body of the mbx script should be simplified too.             -->
+
 <!-- This stylesheet locates <tikz> elements -->
 <!-- and wraps them for LaTeX processing     -->
 <!-- This includes the document's macros     -->
 <!-- TODO: integrate a tikz.preamble into this and main LaTeX processing (in common file) -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
-    xmlns:xml="http://www.w3.org/XML/1998/namespace" 
+    xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
     extension-element-prefixes="exsl"
 >
@@ -36,7 +40,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:import href="./extract-identity.xsl" />
 
 <!-- tikz graphics to standalone file        -->
-<!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <!-- Default border of 0.5bp seems too small -->
 <!-- http://tex.stackexchange.com/questions/51757/how-can-i-use-tikz-to-make-standalone-graphics -->
 <xsl:template match="image/tikz">
