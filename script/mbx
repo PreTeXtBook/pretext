@@ -148,6 +148,50 @@ def sage_conversion(xml_source, dest_dir, outformat):
             for f in glob.glob(sagepng):
                 shutil.copy2(f, dest_dir)
 
+def latex_image_conversion(xml_source, dest_dir, outformat):
+    global config
+    import tempfile, os, os.path, subprocess, shutil
+    _verbose('converting latex-image pictures from {} to {} graphics in {}'.format(xml_source, outformat, dest_dir))
+    dest_dir = sanitize_directory(dest_dir)
+    tmp_dir = tempfile.mkdtemp()
+    _debug("temporary directory: {}".format(tmp_dir))
+    xslt_executable = get_executable(config,  'xslt')
+    _debug("xslt executable: {}".format(xslt_executable))
+    tex_executable = get_executable(config,  'tex')
+    _debug("tex executable: {}".format(tex_executable))
+    pdfsvg_executable = get_executable(config, 'pdfsvg')
+    _debug("pdfsvg executable: {}".format(pdfsvg_executable))
+    # http://stackoverflow.com/questions/11269575/how-to-hide-output-of-subprocess-in-python-2-7
+    devnull = open(os.devnull, 'w')
+    convert_cmd = [xslt_executable,
+        '--stringparam', 'scratch', tmp_dir,
+        '--xinclude',
+        os.path.join(mbx_xsl_dir, 'extract-latex-image.xsl'),
+        xml_source
+        ]
+    _verbose("extracting latex-image pictures from {}".format(xml_source))
+    _debug("latex-image conversion {}".format(convert_cmd))
+    subprocess.call(convert_cmd)
+    cwd = os.getcwd()
+    os.chdir(tmp_dir)
+    for latex_image in os.listdir(tmp_dir):
+        if outformat == 'source':
+            shutil.copy2(latex_image, dest_dir)
+        else:
+            filebase, _ = os.path.splitext(latex_image)
+            latex_image_pdf = "{}.pdf".format(filebase)
+            latex_image_svg = "{}.svg".format(filebase)
+            latex_cmd = [tex_executable, latex_image]
+            _verbose("converting {} to {}".format(latex_image, latex_image_pdf))
+            subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            if outformat == 'svg':
+                svg_cmd = [pdfsvg_executable, latex_image_pdf, latex_image_svg]
+                _verbose("converting {} to {}".format(latex_image_pdf, latex_image_svg))
+                subprocess.call(svg_cmd)
+                shutil.copy2(latex_image_svg, dest_dir)
+            if outformat == 'pdf':
+                shutil.copy2(latex_image_pdf, dest_dir)
+
 #######################################
 #
 # Sage Worksheet Creation and Packaging
@@ -463,6 +507,7 @@ def get_cli_arguments():
         ('tikz', 'tikz pictures'),
         ('asy', 'Asymptote diagrams'),
         ('sageplot', 'Sage graphics'),
+        ('latex-image', 'LaTeX pictures'),
         ('all', 'Complete document'),
     ]
     component_help = 'Possible components are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in component_info])
@@ -563,6 +608,15 @@ elif args.component == 'sageplot':
         sage_conversion(args.xml_file, args.dir, 'source')
     else:
         raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
+elif args.component == 'latex-image':
+    if args.format == 'pdf':
+        latex_image_conversion(args.xml_file, args.dir, 'pdf')
+    elif args.format == 'svg':
+        latex_image_conversion(args.xml_file, args.dir, 'svg')
+    elif args.format == 'source':
+        latex_image_conversion(args.xml_file, args.dir, 'source')
+    else:
+        raise NotImplementedError('cannot make LaTeX pictures in "{}" format'.format(args.format))
 elif args.component == 'all':
     if args.format == 'sagenb':
         # initialize  the converter
