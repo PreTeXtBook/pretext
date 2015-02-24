@@ -1039,9 +1039,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
     <!-- List the author of this division, if present -->
     <xsl:if test="author">
-        <xsl:text>\noindent\Large{\textbf{</xsl:text>
+        <xsl:text>\noindent{\Large\textbf{</xsl:text>
         <xsl:apply-templates select="author" mode="name-list"/>
-        <xsl:text>}\par\bigskip&#xa;</xsl:text>
+        <xsl:text>}}\par\bigskip&#xa;</xsl:text>
     </xsl:if>
     <!-- Exceptional handling for exercises, references needs to be abstracted away -->
     <xsl:apply-templates select="introduction" />
