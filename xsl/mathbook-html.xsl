@@ -1555,10 +1555,15 @@ is just flat out on the page, as if printed there.
 <!-- Should be able to replace this by extant XSLT for this conversion -->
 <xsl:template match="table">
     <figure>
+        <xsl:if test="$table.caption.position='above'">
+            <xsl:apply-templates select="caption" />
+        </xsl:if>
         <table class="center">
             <xsl:apply-templates select="*[not(self::caption)]" />
         </table>
-        <xsl:apply-templates select="caption" />
+        <xsl:if test="$table.caption.position='below'">
+            <xsl:apply-templates select="caption" />
+        </xsl:if>
     </figure>
 </xsl:template>
 
@@ -1571,15 +1576,110 @@ is just flat out on the page, as if printed there.
 </xsl:template>
 <xsl:template match="thead/row">
     <tr><xsl:apply-templates /></tr>
-    <tr><xsl:apply-templates mode="hline" /></tr>
 </xsl:template>
 <xsl:template match="tbody/row">
     <tr><xsl:apply-templates /></tr>
 </xsl:template>
 <!-- With a parent axis, get overrides easily? -->
-<xsl:template match="thead/row/entry"><td align="{../../../@align}"><xsl:apply-templates /></td></xsl:template>
+<xsl:template match="thead/row/entry[descendant::tgroup]"><td align="{../../../@align}"><xsl:apply-templates /></td></xsl:template>
 <xsl:template match="thead/row/entry" mode="hline"><td class="hline"><hr /></td></xsl:template>
-<xsl:template match="tbody/row/entry"><td align="{../../../@align}"><xsl:apply-templates /></td></xsl:template>
+<xsl:template match="tbody/row/entry[descendant::tgroup]"><td align="{../../../@align}"><xsl:apply-templates /></td></xsl:template>
+
+<!-- td match in thead when tgroup tag is *not* used -->
+<xsl:template match="thead/row/entry[not(descendant::tgroup)]">
+  <!-- get the column *position* of the current entry, e.g 1st, 2nd, 3rd -->
+  <xsl:variable name="columnPos">
+    <xsl:value-of select="position()" />
+  </xsl:variable>
+  <!-- get the column *type* of the current entry, e.g left, center, right, decimal -->
+  <xsl:variable name="columnType">
+    <xsl:value-of select="(../../../coltypes/col[@align])[position()=$columnPos]/@align" />
+  </xsl:variable>
+  <!-- set up <td>...</td> -->
+  <xsl:element name="td">
+    <xsl:choose>
+      <!-- when columnType is decimal we have to use
+           <td style="center">CONTENTS</td>
+                -->
+        <xsl:when test="$columnType='decimal'">
+            <xsl:attribute name="style">text-align:center</xsl:attribute>
+            <xsl:apply-templates />
+        </xsl:when>
+        <!-- when columnType is *not* decimal <td text-align="$columnType"> -->
+        <xsl:otherwise>
+            <xsl:attribute name="style">text-align:<xsl:value-of select="$columnType"/></xsl:attribute>
+            <!-- insert contents of <entry> -->
+            <xsl:apply-templates />
+        </xsl:otherwise>
+    </xsl:choose>
+  </xsl:element>
+</xsl:template>
+
+<!-- td match in tbody when tgroup tag is *not* used -->
+<xsl:template match="tbody/row/entry[not(descendant::tgroup)]">
+  <!-- get the column *position* of the current entry, e.g 1st, 2nd, 3rd -->
+  <xsl:variable name="columnPos">
+    <xsl:value-of select="position()" />
+  </xsl:variable>
+  <!-- get the column *type* of the current entry, e.g left, center, right, decimal -->
+  <xsl:variable name="columnType">
+    <xsl:value-of select="(../../../coltypes/col[@align])[position()=$columnPos]/@align" />
+  </xsl:variable>
+  <!-- set up <td>...</td> -->
+  <xsl:element name="td">
+    <xsl:choose>
+      <!-- when columnType is decimal we have to use
+           <td style="width:TOTALwidthEM">
+                <span class="left" style="width:LENGTHofCELL+em">xxx</span>
+           </td>
+                -->
+        <xsl:when test="$columnType='decimal'">
+          <!-- store the cell value into the variable $cell -->
+          <xsl:variable name="cell">
+            <xsl:value-of select="."/>
+          </xsl:variable>
+          <!-- grab the format, e.g 2.4 or 3.5, etc-->
+          <xsl:variable name="format">
+            <xsl:value-of select="(../../../coltypes/col[@align])[position()=$columnPos]/@format"/>
+          </xsl:variable>
+          <!-- the format attribute will be format="2.4", for example,
+               so we need to grab the 2 and the 4 -->
+          <xsl:variable name="integerPart">
+            <xsl:value-of select="substring-before($format,'.')"/>
+          </xsl:variable>
+          <xsl:variable name="fractionalPart">
+            <xsl:value-of select="substring-after($format,'.')"/>
+          </xsl:variable>
+          <!-- we need the length of the string *after* the decimal place 
+               a bit of adjustment when the cell has *no* decimal -->
+          <xsl:variable name="fractionalPartLength">
+            <xsl:choose>
+              <xsl:when test="contains($cell,'.')">
+                  <xsl:value-of select="string-length(substring-after($cell,'.'))"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:text>-.5</xsl:text>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <!-- form <td style="width:TOTALwidthEM"> -->
+          <xsl:attribute name="style">width:<xsl:value-of select="$integerPart+$fractionalPart+.5" />ex</xsl:attribute>
+          <!-- form <span class="left" style="width:LENGTHofCELLem">XXX</span> -->
+          <xsl:element name="span">
+            <xsl:attribute name="class">left</xsl:attribute>
+            <xsl:attribute name="style">width:<xsl:value-of select="$integerPart+.5+$fractionalPartLength"/>ex</xsl:attribute>
+            <xsl:text>\(</xsl:text><xsl:value-of select="$cell"/><xsl:text>\)</xsl:text>
+          </xsl:element>
+        </xsl:when>
+        <!-- when columnType is *not* decimal <td text-align="$columnType"> -->
+        <xsl:otherwise>
+            <xsl:attribute name="style">text-align:<xsl:value-of select="$columnType"/></xsl:attribute>
+            <!-- insert contents of <entry> -->
+            <xsl:apply-templates />
+        </xsl:otherwise>
+    </xsl:choose>
+  </xsl:element>
+</xsl:template>
 
 <!-- Caption of a figure or table                  -->
 <!-- All the relevant information is in the parent -->
@@ -2917,6 +3017,13 @@ $(function () {
 <xsl:template name="css">
     <link href="{$html.css.server}/mathbook/stylesheets/{$html.css.file}" rel="stylesheet" type="text/css" />
     <link href="http://aimath.org/mathbook/mathbook-add-on.css" rel="stylesheet" type="text/css" />
+    <style>/*for decimal alignment */
+      span.left { float: left; text-align: right; }
+/* table styles */
+table thead { border-top: 2px solid #000; }
+table tbody { border-top: 1px solid #000; 
+border-bottom: 2px solid #000; 
+</style>
 </xsl:template>
 
 
