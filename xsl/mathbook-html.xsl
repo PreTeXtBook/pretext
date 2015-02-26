@@ -1381,7 +1381,8 @@ is just flat out on the page, as if printed there.
 <!-- Figures and their captions -->
 <!-- TODO: class="wrap" is possible -->
 <xsl:template match="figure">
-    <figure>
+    <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
+    <figure id="{$ident}">
         <xsl:apply-templates select="*[not(self::caption)]"/>
         <xsl:apply-templates select="caption"/>
     </figure>
