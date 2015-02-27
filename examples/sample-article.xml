@@ -1571,9 +1571,7 @@ the xsltproc executable.
                 <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" />.</p></li>
                 <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" />.</p></li>
                 <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" />.</p></li>
-
-
-
+                <li><p>Figures: An early plot, Figure<nbsp /><xref ref="figure-function-derivative" />.</p></li>
             </ul>
 
         </section>
