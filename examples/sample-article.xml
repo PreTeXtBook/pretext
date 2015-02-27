@@ -1668,14 +1668,20 @@ the xsltproc executable.
 
             <pre>
             \left(\begin{array}{rr}
-            16 \, y^{3} + 6 \, x &amp; 48 \, x y^{2} \\
+            16 \, y^{3} + 6 \, x &amp; -48 \, x y^{2} \\
             48 \, x y^{2} &amp; 48 \, x^{2} y + 12 \, y^{2}
             \end{array}\right)
             </pre>
 
-            <p>Ideally, the realization of preformatted text will be robust enough that it can be cut from documents and pasted without any substitutions of <q>fancier</q> Unicode characters for generic ASCII characters.  Authoring follows the same rules as for Sge input code, the first non-whitespace character sets the left margin.  If indentation is important, do not mix spaces and tabs.  For syntax highlighting of text representing computer programs, or parts of them, see Section<nbsp /><xref ref="section-programs" />.</p>
+            <p>The realization of preformatted text should be robust enough that it can be cut from documents and pasted without any substitutions of <q>fancier</q> Unicode characters for generic ASCII characters.  Try the <q>minus</q> sign on the <m>48</m> above to see if it does not become a dash, or the single quotes on the Sage variables.</p>
+
+            <p>Authoring follows the same rules as for Sage input code, the first non-whitespace character sets the left margin.  If indentation is important, do not mix spaces and tabs.  For syntax highlighting of text representing computer programs, or parts of them, see Section<nbsp /><xref ref="section-programs" />.</p>
 
             <p>The <c>&lt;c&gt;</c> element, for inline code snippets (or anything else in a monospace font) uses the question-mark character to tell <latex /> where the text begins and ends.  This will be a problem if the text has a question mark in it!  So there is the attribute <c>latexsep</c> that allows you to specify another character that does not appear in your text.  For example, XML directives use question-marks now and then, so writing about them in MathBook XML requires specifying a different separation character, as in:  <c latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c>.  The <c>&lt;pre&gt;</c> element does not suffer from this quirk.</p>
+
+            <p>Snippets should also be robust for cut/paste operations.  For example, you should not get <q>curly</q> <q>smart</q> quote marks in verbatim text: <c>this should have "dumb" quote marks</c>. Here are a few characters that should migrate through <latex /> to a PDF unmolested:  <c>'"----"'</c></p>
+
+            <p><c>If you write a very long snippet of inline code it can impinge on the right margin, especially if it were to begin close to that margin.  For output in LaTeX we allow line-breaking, but we do not get hyphenation and the font is fixed-width.  So not always perfect.  Consider a display (program listing as above with the pre element) or maybe reorganizing a sentence.  And it looks like a space after that left parenthesis just got ignored in the PDF created from the latex output.</c></p>
 
         </section>
 

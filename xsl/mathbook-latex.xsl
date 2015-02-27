@@ -522,11 +522,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!--   http://tex.stackexchange.com/questions/179448/beramono-in-xetex -->
     <!-- http://tex.stackexchange.com/questions/25249/how-do-i-use-a-particular-font-for-a-small-section-of-text-in-my-document -->
     <!-- Coloring listings: http://tex.stackexchange.com/questions/18376/beautiful-listing-for-csharp -->
-    <xsl:if test="//sage or //program">
-        <xsl:text>%% Program listing support, for Sage code or otherwise&#xa;</xsl:text>
+    <xsl:if test="//c or //sage or //program">
+        <xsl:text>%% Program listing support, for inline code, Sage code or otherwise&#xa;</xsl:text>
         <xsl:text>\usepackage{listings}&#xa;</xsl:text>
         <xsl:text>%% We define \listingsfont to provide Bitstream Vera Mono font&#xa;</xsl:text>
-        <xsl:text>%% for program listings, under both pdflate and xelatex&#xa;</xsl:text>
+        <xsl:text>%% for program listings, under both pdflatex and xelatex&#xa;</xsl:text>
         <xsl:text>%% If you remove this, define \listingsfont to be \ttfamily perhaps&#xa;</xsl:text>
         <xsl:text>\ifxetex&#xa;</xsl:text>
         <xsl:text>\usepackage{fontspec}\newfontface\listingsfont[Path]{fvmr8a.pfb}&#xa;</xsl:text>
@@ -534,7 +534,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\edef\oldtt{\ttdefault}\usepackage[scaled]{beramono}\usepackage[T1]{fontenc}&#xa;</xsl:text>
         <xsl:text>\renewcommand*\ttdefault{\oldtt}\newcommand{\listingsfont}{\fontfamily{fvm}\selectfont}&#xa;</xsl:text>
         <xsl:text>\fi&#xa;</xsl:text>
+        <xsl:text>%% To fix hyphens/dashes rendered in PDF as fancy minus signs by listing&#xa;</xsl:text>
+        <xsl:text>%% http://tex.stackexchange.com/questions/33185/listings-package-changes-hyphens-to-minus-signs&#xa;</xsl:text>
+        <xsl:text>\makeatletter&#xa;</xsl:text>
+        <xsl:text>\lst@CCPutMacro\lst@ProcessOther {"2D}{\lst@ttfamily{-{}}{-{}}}&#xa;</xsl:text>
+        <xsl:text>\@empty\z@\@empty&#xa;</xsl:text>
+        <xsl:text>\makeatother&#xa;</xsl:text>
         <xsl:text>%% End of program listing font definition&#xa;</xsl:text>
+        <xsl:if test="//c">
+            <xsl:text>%% Inline code, typically from "c" element&#xa;</xsl:text>
+            <xsl:text>%% Global, document-wide options apply to \lstinline&#xa;</xsl:text>
+            <xsl:text>%% Search/replace \lstinline by \verb to remove this dependency&#xa;</xsl:text>
+            <xsl:text>%% (redefining \lstinline with \verb is unlikely to work)&#xa;</xsl:text>
+            <xsl:text>\lstset{basicstyle=\footnotesize\listingsfont,breaklines=true}&#xa;</xsl:text>
+        </xsl:if>
         <xsl:if test="//program">
             <xsl:text>%% Generic input, listings package: boxed, white, line breaking, language per instance&#xa;</xsl:text>
             <xsl:if test="$latex.print='no'" >
@@ -654,6 +667,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usepackage[letter,cam,center,pdflatex]{crop}&#xa;</xsl:text>
     </xsl:if>
     <!-- upquote package should come as late as possible -->
+    <!-- we fix minus signs in listings package above    -->
     <xsl:if test="//c or //pre or //program or //sage"> <!-- verbatim elements (others?) -->
         <xsl:text>%% Use upright quotes rather than LaTeX's curly quotes&#xa;</xsl:text>
         <xsl:text>%% If custom font substitutions follow, this might be ineffective&#xa;</xsl:text>
@@ -1600,8 +1614,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Code, inline -->
-<!-- A question mark is invalid Python -->
-<!-- but we allow for another option -->
+<!-- A question mark is invalid Python, so a useful separator    -->
+<!-- The latexsep attribute allows specifying a different symbol -->
+<!-- The lstinline macro is more robust than \verb,              -->
+<!-- for example when used in \multicolumn in a tabular          -->
 <xsl:template match="c">
     <xsl:variable name="separator">
         <xsl:choose>
@@ -1613,7 +1629,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:text>\verb</xsl:text>
+    <xsl:text>\lstinline</xsl:text>
     <xsl:value-of select="$separator" />
     <xsl:value-of select="." />
     <xsl:value-of select="$separator" />
