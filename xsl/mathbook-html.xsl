@@ -1709,9 +1709,13 @@ is just flat out on the page, as if printed there.
 </xsl:template>
 
 <!-- Tables -->
-<!-- Follow "XML Exchange Table Model"           -->
-<!-- A subset of the (failed) "CALS Table Model" -->
-<!-- Should be able to replace this by extant XSLT for this conversion -->
+
+<!-- Top-down organization -->
+
+<!-- MBX "table" is a displayed, captioned, numbered object      -->
+<!-- Implemented as an HTML figure, but caption will say "Table" -->
+<!-- Numbered in sequence with real figures and other tables     -->
+<!-- Contents should always be a "tabular" element               -->
 <xsl:template match="table">
     <xsl:element name="figure">
         <xsl:variable name="ident">
@@ -1732,24 +1736,256 @@ is just flat out on the page, as if printed there.
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="tgroup"><xsl:apply-templates /></xsl:template>
-<xsl:template match="thead">
-    <thead><xsl:apply-templates /></thead>
+<!-- A tabular layout, a naked table -->
+<!-- Allowed to be placed various locations, but gets no              -->
+<!-- vertical space etc, that is the container's responsibiility      -->
+<!-- A sequence of rows, we ignore column group in applying templates -->
+<!-- Realized as an HTML table                                        -->
+<xsl:template match="tabular">
+    <xsl:element name="table">
+        <xsl:apply-templates select="row" />
+    </xsl:element>
 </xsl:template>
-<xsl:template match="tbody">
-    <tbody><xsl:apply-templates /></tbody>
+
+<!-- Columns element is a container              -->
+<!-- We merely inspect its contents as necessary -->
+<!-- This template should never even be hit      -->
+<!-- TODO: consider abandoning this? -->
+<xsl:template match="columns" />
+
+<!-- A row of table -->
+<xsl:template match="row">
+    <!-- Form the HTML table row -->
+    <xsl:element name="tr">
+        <!-- Walk the cells of the row -->
+        <xsl:call-template name="row-cells">
+            <xsl:with-param name="the-cell" select="cell[1]" />
+            <xsl:with-param name="the-col" select="ancestor::tabular/columns/col[1]" />  <!-- possibly empty -->
+        </xsl:call-template>
+    </xsl:element>
 </xsl:template>
-<xsl:template match="thead/row">
-    <tr><xsl:apply-templates /></tr>
-    <tr><xsl:apply-templates mode="hline" /></tr>
+
+<xsl:template name="row-cells">
+    <xsl:param name="the-cell" />
+    <xsl:param name="the-col" />
+             <!-- <xsl:message>Cell: <xsl:value-of select="$the-cell" /></xsl:message> -->
+    <!-- Look ahead one column, anticipating recursion   -->
+    <!-- but also probing for end of row (no more cells) -->
+    <xsl:variable name="next-cell" select="$the-cell/following-sibling::*[1]" />
+    <xsl:variable name="next-col"  select="$the-col/following-sibling::*[1]" /> <!-- possibly empty -->
+    <xsl:if test="$the-cell">
+        <!-- build an HTML data cell, with CSS decorations              -->
+        <!-- we set properties in various variables,                    -->
+        <!-- then write them in a class attribute                       -->
+        <!-- we look outward and upward for characteristics of the cell -->
+        <!--                                                            -->
+        <!-- horizontal alignment -->
+        <xsl:variable name="alignment">
+            <xsl:choose>
+                <!-- cell attribute first -->
+                <xsl:when test="$the-cell/@halign">
+                    <xsl:value-of select="$the-cell/@halign" />
+                </xsl:when>
+                <!-- parent row attribute next -->
+                <xsl:when test="$the-cell/ancestor::row/@halign">
+                    <xsl:value-of select="$the-cell/ancestor::row/@halign" />
+                </xsl:when>
+                <!-- col attribute next -->
+                <xsl:when test="$the-col/@halign">
+                    <xsl:value-of select="$the-col/@halign" />
+                </xsl:when>
+                <!-- table attribute last -->
+                <xsl:when test="$the-cell/ancestor::tabular/@halign">
+                    <xsl:value-of select="$the-cell/ancestor::tabular/@halign" />
+                </xsl:when>
+                <!-- HTML default is left, we write it for consistency -->
+                <xsl:otherwise>
+                    <xsl:text>left</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <!-- bottom borders -->
+        <xsl:variable name="bottom">
+            <xsl:choose>
+                <!-- cell attribute first -->
+                <xsl:when test="$the-cell/@bottom">
+                    <xsl:value-of select="$the-cell/@bottom" />
+                </xsl:when>
+                <!-- parent row attribute next -->
+                <xsl:when test="$the-cell/ancestor::row/@bottom">
+                    <xsl:value-of select="$the-cell/ancestor::row/@bottom" />
+                </xsl:when>
+                <!-- not available on columns, table attribute last -->
+                <xsl:when test="$the-cell/ancestor::tabular/@bottom">
+                    <xsl:value-of select="$the-cell/ancestor::tabular/@bottom" />
+                </xsl:when>
+                <!-- default is none -->
+                <xsl:otherwise>
+                    <xsl:text>none</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <!-- right borders -->
+        <xsl:variable name="right">
+            <xsl:choose>
+                <!-- cell attribute first -->
+                <xsl:when test="$the-cell/@right">
+                    <xsl:value-of select="$the-cell/@right" />
+                </xsl:when>
+                <!-- not available on rows, col attribute next -->
+                <xsl:when test="$the-col/@right">
+                    <xsl:value-of select="$the-col/@right" />
+                </xsl:when>
+                <!-- table attribute last -->
+                <xsl:when test="$the-cell/ancestor::tabular/@right">
+                    <xsl:value-of select="$the-cell/ancestor::tabular/@right" />
+                </xsl:when>
+                <!-- default is none -->
+                <xsl:otherwise>
+                    <xsl:text>none</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <!-- left borders -->
+        <xsl:variable name="left">
+            <xsl:choose>
+                <!-- the first cell of the row, so may have left border -->
+                <xsl:when test="not($the-cell/preceding-sibling::cell)">
+                    <xsl:choose>
+                        <!-- row attribute first -->
+                        <xsl:when test="$the-cell/ancestor::row/@left">
+                            <xsl:value-of select="$the-cell/ancestor::row/@left" />
+                        </xsl:when>
+                        <!-- table attribute last -->
+                        <xsl:when test="$the-cell/ancestor::tabular/@left">
+                            <xsl:value-of select="$the-cell/ancestor::tabular/@left" />
+                        </xsl:when>
+                        <!-- default is none -->
+                        <xsl:otherwise>
+                            <xsl:text>none</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <!-- not the first cell of the row, so no left border -->
+                <xsl:otherwise>
+                    <xsl:text>none</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <!-- top borders -->
+        <xsl:variable name="top">
+            <xsl:choose>
+                <!-- the first row of the table, so may have top border -->
+                <!-- http://ajaxandxml.blogspot.com/2006/11/xsl-detect-first-of-type-element-in.html -->
+                <xsl:when test="not($the-cell/ancestor::row/preceding-sibling::row)">
+                    <xsl:choose>
+                        <!-- col attribute first -->
+                        <xsl:when test="$the-col/@top">
+                            <xsl:value-of select="$the-col/@top" />
+                        </xsl:when>
+                        <!-- table attribute last -->
+                        <xsl:when test="$the-cell/ancestor::tabular/@top">
+                            <xsl:value-of select="$the-cell/ancestor::tabular/@top" />
+                        </xsl:when>
+                        <!-- default is none -->
+                        <xsl:otherwise>
+                            <xsl:text>none</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <!-- not the first cell of the row, so no left border -->
+                <xsl:otherwise>
+                    <xsl:text>none</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <!-- the HTML element for the cell -->
+        <xsl:element name="td">
+            <!-- and the class attribute -->
+            <xsl:attribute name="class">
+                <!-- always write alignmant, so *precede* all subsequent with a space -->
+                <xsl:call-template name="halign-specification">
+                    <xsl:with-param name="align" select="$alignment" />
+                </xsl:call-template>
+                <!-- bottom border -->
+                <xsl:text> b</xsl:text>
+                <xsl:call-template name="thickness-specification">
+                    <xsl:with-param name="width" select="$bottom" />
+                </xsl:call-template>
+                <!-- right border -->
+                <xsl:text> r</xsl:text>
+                <xsl:call-template name="thickness-specification">
+                    <xsl:with-param name="width" select="$right" />
+                </xsl:call-template>
+                <!-- left border -->
+                <xsl:text> l</xsl:text>
+                <xsl:call-template name="thickness-specification">
+                    <xsl:with-param name="width" select="$left" />
+                </xsl:call-template>
+                <!-- top border -->
+                <xsl:text> t</xsl:text>
+                <xsl:call-template name="thickness-specification">
+                    <xsl:with-param name="width" select="$top" />
+                </xsl:call-template>
+            </xsl:attribute>
+            <!-- process the actual contents -->
+            <xsl:apply-templates select="$the-cell" />
+        </xsl:element>
+        <!-- recurse forward, perhaps to an empty cell -->
+        <xsl:call-template name="row-cells">
+            <xsl:with-param name="the-cell" select="$next-cell" />
+            <xsl:with-param name="the-col" select="$next-col" />
+        </xsl:call-template>
+    </xsl:if>
+    <!-- Arrive here only when we have no cell so      -->
+    <!-- we bail out of recursion with no action taken -->
 </xsl:template>
-<xsl:template match="tbody/row">
-    <tr><xsl:apply-templates /></tr>
+
+
+<!-- ############################ -->
+<!-- Table construction utilities -->
+<!-- ############################ -->
+
+<!-- Translate thickness attribute value to integer short name -->
+<xsl:template name="thickness-specification">
+    <xsl:param name="width" />
+    <xsl:choose>
+        <xsl:when test="$width='none'">
+            <xsl:text>0</xsl:text>
+        </xsl:when>
+        <xsl:when test="$width='minor'">
+            <xsl:text>1</xsl:text>
+        </xsl:when>
+        <xsl:when test="$width='medium'">
+            <xsl:text>2</xsl:text>
+        </xsl:when>
+        <xsl:when test="$width='major'">
+            <xsl:text>3</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:WARNING: tabular rule thickness not recognized: use none, minor, medium, major</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
-<!-- With a parent axis, get overrides easily? -->
-<xsl:template match="thead/row/entry"><td align="{../../../@align}"><xsl:apply-templates /></td></xsl:template>
-<xsl:template match="thead/row/entry" mode="hline"><td class="hline"><hr /></td></xsl:template>
-<xsl:template match="tbody/row/entry"><td align="{../../../@align}"><xsl:apply-templates /></td></xsl:template>
+
+<!-- Translate horizontal alignment to CSS short name -->
+<xsl:template name="halign-specification">
+    <xsl:param name="align" />
+    <xsl:choose>
+        <xsl:when test="$align='left'">
+            <xsl:text>l</xsl:text>
+        </xsl:when>
+        <xsl:when test="$align='center'">
+            <xsl:text>c</xsl:text>
+        </xsl:when>
+        <xsl:when test="$align='right'">
+            <xsl:text>r</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:WARNING: tabular horizontal alignment attribute not recognized: use left, center, right</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- Caption of a figure or table                  -->
 <!-- All the relevant information is in the parent -->

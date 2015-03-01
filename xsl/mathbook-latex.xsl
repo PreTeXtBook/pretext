@@ -484,6 +484,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="//tabular">
+        <xsl:text>%% For improved tables&#xa;</xsl:text>
+        <xsl:text>\usepackage{array}&#xa;</xsl:text>
+        <xsl:text>%% Some extra height on each row is desirable, especially with horizontal rules&#xa;</xsl:text>
+        <xsl:text>%% Increment determined experimentally&#xa;</xsl:text>
+        <xsl:text>\setlength{\extrarowheight}{0.2ex}&#xa;</xsl:text>
+        <xsl:text>%% Define variable thickness horizontal rules, full and partial&#xa;</xsl:text>
+        <xsl:text>%% Thicknesses are 0.03, 0.05, 0.08 in the  booktabs  package&#xa;</xsl:text>
+        <xsl:text>\makeatletter&#xa;</xsl:text>
+        <!-- http://tex.stackexchange.com/questions/119153/table-with-different-rule-widths -->
+        <xsl:text>\newcommand{\hrulethin}  {\noalign{\hrule height 0.04em}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\hrulemedium}{\noalign{\hrule height 0.07em}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\hrulethick} {\noalign{\hrule height 0.11em}}&#xa;</xsl:text>
+        <!-- http://tex.stackexchange.com/questions/24549/horizontal-rule-with-adjustable-height-behaving-like-clinen-m -->
+        <!-- Could preserve/restore \arrayrulewidth on entry/exit to tabular -->
+        <!-- But we'll get cleaner source with this built into macros        -->
+        <xsl:text>\newlength{\Oldarrayrulewidth}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\crulethin}[1]%&#xa;</xsl:text>
+        <xsl:text>{\noalign{\global\setlength{\Oldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\setlength{\arrayrulewidth}{0.04em}}\cline{#1}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\setlength{\arrayrulewidth}{\Oldarrayrulewidth}}}%&#xa;</xsl:text>
+        <xsl:text>\newcommand{\crulemedium}[1]%&#xa;</xsl:text>
+        <xsl:text>{\noalign{\global\setlength{\Oldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\setlength{\arrayrulewidth}{0.07em}}\cline{#1}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\setlength{\arrayrulewidth}{\Oldarrayrulewidth}}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\crulethick}[1]%&#xa;</xsl:text>
+        <xsl:text>{\noalign{\global\setlength{\Oldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\setlength{\arrayrulewidth}{0.11em}}\cline{#1}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\setlength{\arrayrulewidth}{\Oldarrayrulewidth}}}&#xa;</xsl:text>
+        <!-- http://tex.stackexchange.com/questions/119153/table-with-different-rule-widths -->
+        <xsl:text>%% Single letter column specifiers defined via array package&#xa;</xsl:text>
+        <xsl:text>\newcolumntype{A}{!{\vrule width 0.04em}}&#xa;</xsl:text>
+        <xsl:text>\newcolumntype{B}{!{\vrule width 0.07em}}&#xa;</xsl:text>
+        <xsl:text>\newcolumntype{C}{!{\vrule width 0.11em}}&#xa;</xsl:text>
+        <xsl:text>\makeatother&#xa;</xsl:text>
+    </xsl:if>
     <!-- Float package allows for placment [H]ere                    -->
     <!-- Numbering happens along with theorem counter above,         -->
     <!-- but could be done with caption package hook, see both       -->
@@ -2371,11 +2407,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- Tables -->
-<!-- Follow "XML Exchange Table Model"           -->
-<!-- A subset of the (failed) "CALS Table Model" -->
-<!-- Should be able to replace this by extant XSLT for this conversion -->
-<!-- See http://stackoverflow.com/questions/19716449/converting-xhtml-table-to-latex-using-xslt -->
-<!-- Standard LaTeX table environment redefined, see preamble comments -->
+
+<!-- Top-down organization -->
+
+<!-- A table is like a figure, centered, captioned  -->
+<!-- The meat of the table is given by a tabular    -->
+<!-- element, which may be used outside of a table  -->
+<!-- Standard LaTeX table environment is redefined, -->
+<!-- see preamble comments for details              -->
 <xsl:template match="table">
     <xsl:text>\begin{table}&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
@@ -2384,46 +2423,607 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{table}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Unclear how to handle *multiple* tgroups in latex -->
-<xsl:template match="tgroup">
-    <xsl:text>\begin{tabular}</xsl:text>
-    <xsl:text>{*{</xsl:text>
-    <xsl:value-of select="@cols" />
-    <xsl:text>}{</xsl:text>
+<!-- A tabular layout -->
+<xsl:template match="tabular">
+    <!-- Determine global, table-wide properties -->
+    <!-- set defaults here if values not given   -->
+    <xsl:variable name="table-top">
+        <xsl:choose>
+            <xsl:when test="@top">
+                <xsl:value-of select="@top" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>none</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="table-left">
+        <xsl:choose>
+            <xsl:when test="@left">
+                <xsl:value-of select="@left" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>none</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="table-bottom">
+        <xsl:choose>
+            <xsl:when test="@bottom">
+                <xsl:value-of select="@bottom" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>none</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="table-right">
+        <xsl:choose>
+            <xsl:when test="@right">
+                <xsl:value-of select="@right" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>none</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="table-halign">
+        <xsl:choose>
+            <xsl:when test="@halign">
+                <xsl:value-of select="@halign" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>left</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="table-valign">
+        <xsl:choose>
+            <xsl:when test="@valign">
+                <xsl:value-of select="@valign" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>middle</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Build latex column specification                         -->
+    <!--   vertical borders (left side, right side, three widths) -->
+    <!--   horizontal alignment (left, center, right)             -->
+    <xsl:text>\begin{tabular}{</xsl:text>
+    <!-- start with left vertical border -->
+    <xsl:call-template name="vrule-specification">
+        <xsl:with-param name="width" select="$table-left" />
+    </xsl:call-template>
     <xsl:choose>
-        <xsl:when test="@align='left'">  <xsl:text>l</xsl:text></xsl:when>
-        <xsl:when test="@align='center'"><xsl:text>c</xsl:text></xsl:when>
-        <xsl:when test="@align='right'"> <xsl:text>r</xsl:text></xsl:when>
-        <xsl:otherwise>                  <xsl:text>c</xsl:text></xsl:otherwise>
+        <!-- Potential for individual column overrides    -->
+        <!--   Deduce number of columns from col elements -->
+        <!--   Employ individual column overrides,        -->
+        <!--   or use global table-wide values            -->
+        <!--   write alignment (mandatory)                -->
+        <!--   follow with right border (optional)        -->
+        <xsl:when test="columns">
+            <xsl:for-each select="columns/col">
+                <xsl:call-template name="halign-specification">
+                    <xsl:with-param name="align">
+                        <xsl:choose>
+                            <xsl:when test="@halign">
+                                <xsl:value-of select="@halign" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="$table-halign" />
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:with-param>
+                </xsl:call-template>
+                <xsl:call-template name="vrule-specification">
+                    <xsl:with-param name="width">
+                        <xsl:choose>
+                            <xsl:when test="@right">
+                                <xsl:value-of select="@right" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="$table-right" />
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:for-each>
+        </xsl:when>
+        <!-- All columns specified identically so far   -->
+        <!--   so can repeat global, table-wide values  -->
+        <!--   use first row to determine number        -->
+        <!--   write alignment (mandatory)              -->
+        <!--   follow with right border (optional)      -->
+        <xsl:otherwise>
+            <xsl:for-each select="row[1]/cell">
+                <xsl:call-template name="halign-specification">
+                    <xsl:with-param name="align" select="$table-halign" />
+                </xsl:call-template>
+                <xsl:call-template name="vrule-specification">
+                    <xsl:with-param name="width" select="$table-right" />
+                </xsl:call-template>
+            </xsl:for-each>
+        </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>}}&#xa;</xsl:text>
-    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+    <!-- column specification done -->
+    <!-- top horizontal rule is specified after column specification -->
+    <xsl:choose>
+        <!-- columns element might indicate top border customizations         -->
+        <!-- so we walk the column group to build a cline-style specification -->
+        <xsl:when test="columns/col/@top">
+            <xsl:call-template name="column-cols">
+                <xsl:with-param name="the-col" select="columns/col[1]" />
+                <xsl:with-param name="col-number" select="1" />
+                <xsl:with-param name="clines" select="''" />
+                <xsl:with-param name="table-top" select="$table-top"/>
+                <xsl:with-param name="prior-top" select="'undefined'" />
+                <xsl:with-param name="start-run" select="1" />
+            </xsl:call-template>
+        </xsl:when>
+        <!-- with no customization, we have one continuous rule (if at all) -->
+        <!-- use global, table-wide value of top specification              -->
+        <xsl:otherwise>
+            <xsl:call-template name="hrule-specification">
+                <xsl:with-param name="width" select="$table-top" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- now ready to build rows -->
+    <xsl:text>&#xa;</xsl:text>
+    <!-- table-wide values are needed to reconstruct/determine overrides -->
+    <xsl:apply-templates select="row">
+        <xsl:with-param name="table-left" select="$table-left" />
+        <xsl:with-param name="table-bottom" select="$table-bottom" />
+        <xsl:with-param name="table-right" select="$table-right" />
+        <xsl:with-param name="table-halign" select="$table-halign" />
+    </xsl:apply-templates>
+    <!-- mandatory finish, exclusive of any final row specifications -->
     <xsl:text>\end{tabular}&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="thead">
-    <xsl:text>\hline\hline{}</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\\\hline\hline{}</xsl:text>
-</xsl:template>
 
-<xsl:template match="tbody">
-    <xsl:apply-templates />
+<!-- We recursively traverse the "col" elements of the "column" group         -->
+<!-- The cline specification is accumulated in the clines variable            -->
+<!-- A similar strategy is used to traverse the "cell" elements of each "row" -->
+<!-- but becomes much more involved, see the "row-cells" template             -->
+<xsl:template name="column-cols">
+    <xsl:param name="the-col" />
+    <xsl:param name="col-number" />
+    <xsl:param name="clines" />
+    <xsl:param name="table-top" />
+    <xsl:param name="prior-top" />
+    <xsl:param name="start-run" />
+    <!-- Look ahead one column, anticipating recursion           -->
+    <!-- but also probing for end of column group (no more cols) -->
+    <xsl:variable name="next-col"  select="$the-col/following-sibling::*[1]" /> <!-- possibly empty -->
+    <!-- The desired top border style for this column   -->
+    <!-- Considered, but also paid forward as prior-top -->
+    <xsl:variable name="current-top">
+        <xsl:choose>
+            <!-- cell specification -->
+            <xsl:when test="$the-col/@top">
+                <xsl:value-of select="$the-col/@top" />
+            </xsl:when>
+            <!-- inherited specification for top -->
+            <xsl:otherwise>
+                <xsl:value-of select="$table-top" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Formulate any necessary update to cline  -->
+    <!-- information for the top border -->
+    <xsl:variable name="updated-cline">
+        <!-- write current cline information -->
+        <xsl:value-of select="$clines" />
+        <!-- is there a change, or end of column group, indicating need to flush -->
+        <xsl:if test="not($the-col) or not($prior-top = $current-top)">
+            <xsl:choose>
+                <!-- end of column group and have never flushed -->
+                <!-- hence a uniform top border                 -->
+                <xsl:when test="not($next-col) and ($start-run = 1)">
+                    <xsl:call-template name="hrule-specification">
+                        <xsl:with-param name="width" select="$prior-top" />
+                    </xsl:call-template>
+                </xsl:when>
+                <!-- write cline for up-to, and including, prior col   -->
+                <!-- prior-top always lags, so never operate on col #1 -->
+                <xsl:when test="($col-number != 1) and not($prior-top = 'none')">
+                    <xsl:call-template name="crule-specification">
+                        <xsl:with-param name="width" select="$prior-top" />
+                        <xsl:with-param name="start" select="$start-run" />
+                        <xsl:with-param name="finish" select="$col-number - 1" />
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                    <!-- no update -->
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
+    </xsl:variable>
+    <xsl:variable name="new-start-run">
+        <xsl:choose>
+            <xsl:when test="$col-number = 1 or $prior-top = $current-top">
+                <xsl:value-of select="$start-run" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$col-number" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <!-- Call this template on next cell              -->
+        <!-- Possibly passing an empty node (as sentinel) -->
+        <xsl:when test="$the-col">
+            <xsl:call-template name="column-cols">
+                <xsl:with-param name="the-col" select="$next-col" />
+                <xsl:with-param name="col-number" select="$col-number + 1" />
+                <xsl:with-param name="clines" select="$updated-cline" />
+                <xsl:with-param name="table-top" select="$table-top" />
+                <xsl:with-param name="prior-top" select="$current-top" />
+                <xsl:with-param name="start-run" select="$new-start-run" />
+            </xsl:call-template>
+        </xsl:when>
+        <!-- At non-col, done with column group -->
+        <!-- conclude line, dump cline info     -->
+        <xsl:otherwise>
+            <xsl:value-of select="$updated-cline" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="row">
-    <xsl:apply-templates />
-    <xsl:text>\\&#xa;</xsl:text>
+    <xsl:param name="table-left" />
+    <xsl:param name="table-bottom" />
+    <xsl:param name="table-right" />
+    <xsl:param name="table-halign" />
+    <!-- inherit global table-wide values    -->
+    <!-- or replace with row-specific values -->
+    <xsl:variable name="row-left">
+        <xsl:choose>
+            <xsl:when test="@left">
+                <xsl:value-of select="@left" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$table-left" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="row-bottom">
+        <xsl:choose>
+            <xsl:when test="@bottom">
+                <xsl:value-of select="@bottom" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$table-bottom" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- End of the row is too late to see if we have the last one -->
+    <!-- so we get it here and just kick it down the road          -->
+    <xsl:variable name="last-row" select="not(following-sibling::row)" />
+    <!-- Walking the row's cells, write contents and bottom borders -->
+    <xsl:call-template name="row-cells">
+        <xsl:with-param name="the-cell" select="cell[1]" />
+        <xsl:with-param name="the-col" select="../columns/col[1]" /> <!-- possibly empty -->
+        <xsl:with-param name="cell-number" select="1" />
+        <xsl:with-param name="last-row" select="$last-row" />
+        <xsl:with-param name="clines" select="''" />
+        <xsl:with-param name="table-left" select="$table-left"/>
+        <xsl:with-param name="table-bottom" select="$table-bottom"/>
+        <xsl:with-param name="table-right" select="$table-right" />
+        <xsl:with-param name="table-halign" select="$table-halign" />
+        <xsl:with-param name="row-left" select="$row-left" />
+        <xsl:with-param name="row-bottom" select="$row-bottom" />
+        <xsl:with-param name="prior-bottom" select="'undefined'" />
+        <xsl:with-param name="start-run" select="1" />
+    </xsl:call-template>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="entry[1]">
-    <xsl:apply-templates />
+<!-- Recursively traverse the "cell"'s of a "row" while simultaneously     -->
+<!-- traversing the "col" elements of the column group, if present.        -->
+<!-- Inspect the (previously) built column specifications to see if        -->
+<!-- a \multicolumn is necessary for an override on a table entry          -->
+<!-- Accumulate cline information to write at the end of the line/row.     -->
+<!-- Study the "column-cols" template for a less-involved template         -->
+<!-- that uses an identical strategy, if you want to see something simpler -->
+<xsl:template name="row-cells">
+    <xsl:param name="the-cell" />
+    <xsl:param name="the-col" />
+    <xsl:param name="cell-number" />
+    <xsl:param name="last-row" />
+    <xsl:param name="clines" />
+    <xsl:param name="table-left" />
+    <xsl:param name="table-bottom" />
+    <xsl:param name="table-right" />
+    <xsl:param name="table-halign" />
+    <xsl:param name="row-left" />
+    <xsl:param name="row-bottom" />
+    <xsl:param name="prior-bottom" />
+    <xsl:param name="start-run" />
+    <!-- Look ahead one column, anticipating recursion   -->
+    <!-- but also probing for end of row (no more cells) -->
+    <xsl:variable name="next-cell" select="$the-cell/following-sibling::*[1]" /> <!-- possibly empty -->
+    <xsl:variable name="next-col"  select="$the-col/following-sibling::*[1]" />
+    <!-- recreate the column specification for a right border       -->
+    <!-- either a per-column value, or the global, table-wide value -->
+    <xsl:variable name="column-right">
+        <xsl:choose>
+            <xsl:when test="$the-col/@right">
+                <xsl:value-of select="$the-col/@right" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$table-right" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- determine a custom right border on a cell -->
+    <!-- else default to the column value          -->
+    <xsl:variable name="cell-right">
+        <xsl:choose>
+            <xsl:when test="$the-cell/@right">
+                <xsl:value-of select="$the-cell/@right" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$column-right" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- recreate the column specification for horizontal alignment -->
+    <!-- either a per-column value, or the global, table-wide value -->
+    <xsl:variable name="column-halign">
+        <xsl:choose>
+            <xsl:when test="$the-col/@halign">
+                <xsl:value-of select="$the-col/@halign" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$table-halign" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- determine a custom horizontal alignment on a cell        -->
+    <!-- check for row override, else default to the column value -->
+    <xsl:variable name="cell-halign">
+        <xsl:choose>
+            <xsl:when test="$the-cell/@halign">
+                <xsl:value-of select="$the-cell/@halign" />
+            </xsl:when>
+            <!-- look to the row -->
+            <xsl:when test="$the-cell/parent::*[1]/@halign">
+                <xsl:value-of select="$the-cell/parent::*[1]/@halign" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$column-halign" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Write the cell's contents -->
+    <!-- if the left border, alignment or right border        -->
+    <!-- conflict with the column specification, then we      -->
+    <!-- wrap in a multicolumn to specify the overrides.      -->
+    <!-- $table-left and $row-left *can* differ on first use, -->
+    <!-- but row-left is subsequently set to $table-left      -->
+    <xsl:if test="$the-cell">
+        <xsl:choose>
+            <xsl:when test="not($table-left = $row-left) or not($column-halign = $cell-halign) or not($column-right = $cell-right)">
+                <xsl:text>\multicolumn{1}{</xsl:text>
+                <!-- only place latex allows/needs a left border -->
+                <xsl:if test="$cell-number = 1">
+                    <xsl:call-template name="vrule-specification">
+                        <xsl:with-param name="width" select="$row-left" />
+                    </xsl:call-template>
+                </xsl:if>
+                <xsl:call-template name="halign-specification">
+                    <xsl:with-param name="align" select="$cell-halign" />
+                </xsl:call-template>
+                <xsl:call-template name="vrule-specification">
+                    <xsl:with-param name="width" select="$cell-right" />
+                </xsl:call-template>
+                <xsl:text>}{</xsl:text>
+                <xsl:apply-templates select="$the-cell" />
+                <xsl:text>}</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="$the-cell" />
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:if test="$the-cell/following-sibling::cell">
+            <xsl:text>&amp;</xsl:text>
+        </xsl:if>
+    </xsl:if>
+    <!-- The desired bottom border style for this cell     -->
+    <!-- Considered, but also paid forward as prior-bottom -->
+    <xsl:variable name="current-bottom">
+        <xsl:choose>
+            <!-- cell specification -->
+            <xsl:when test="$the-cell/@bottom">
+                <xsl:value-of select="$the-cell/@bottom" />
+            </xsl:when>
+            <!-- inherited specification for row -->
+            <xsl:otherwise>
+                <xsl:value-of select="$row-bottom" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Formulate any necessary update to cline  -->
+    <!-- information for the bottom border -->
+    <xsl:variable name="updated-cline">
+        <!-- write current cline information -->
+        <xsl:value-of select="$clines" />
+        <!-- is there a change, or end of row, indicating need to flush -->
+        <xsl:if test="not($the-cell) or not($prior-bottom = $current-bottom)">
+            <xsl:choose>
+                <!-- end of row and have never flushed -->
+                <!-- hence a uniform bottom border     -->
+                <xsl:when test="not($next-cell) and ($start-run = 1)">
+                    <xsl:call-template name="hrule-specification">
+                        <xsl:with-param name="width" select="$prior-bottom" />
+                    </xsl:call-template>
+                </xsl:when>
+                <!-- write cline for up-to, and including, prior cell      -->
+                <!-- prior-bottom always lags, so never operate on cell #1 -->
+                <xsl:when test="($cell-number != 1) and not($prior-bottom = 'none')">
+                    <xsl:call-template name="crule-specification">
+                        <xsl:with-param name="width" select="$prior-bottom" />
+                        <xsl:with-param name="start" select="$start-run" />
+                        <xsl:with-param name="finish" select="$cell-number - 1" />
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                    <!-- no update -->
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
+    </xsl:variable>
+    <!-- update start of consecutive run of styles -->
+    <xsl:variable name="new-start-run">
+        <xsl:choose>
+            <xsl:when test="$cell-number = 1 or $prior-bottom = $current-bottom">
+                <xsl:value-of select="$start-run" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$cell-number" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <!-- Call this template on next cell              -->
+        <!-- Possibly passing an empty node (as sentinel) -->
+        <xsl:when test="$the-cell">
+            <xsl:call-template name="row-cells">
+                <xsl:with-param name="the-cell" select="$next-cell" />
+                <xsl:with-param name="the-col" select="$next-col" /> <!-- possibly empty -->
+                <xsl:with-param name="cell-number" select="$cell-number + 1" />
+                <xsl:with-param name="last-row" select="$last-row" />
+                <xsl:with-param name="clines" select="$updated-cline" />
+                <xsl:with-param name="table-left" select="$table-left" />
+                <xsl:with-param name="table-bottom" select="$table-bottom" />
+                <xsl:with-param name="table-right" select="$table-right" />
+                <xsl:with-param name="table-halign" select="$table-halign" />
+                <!-- next line correct, only allow discrepancy on first use -->
+                <xsl:with-param name="row-left" select="$table-left" />
+                <xsl:with-param name="row-bottom" select="$row-bottom" />
+                <xsl:with-param name="prior-bottom" select="$current-bottom" />
+                <xsl:with-param name="start-run" select="$new-start-run" />
+            </xsl:call-template>
+        </xsl:when>
+        <!-- At non-cell, done with row          -->
+        <!-- conclude line, dump cline info, etc -->
+        <xsl:otherwise>
+            <xsl:if test="not($updated-cline='') or not($last-row)">
+                <xsl:text>\\</xsl:text>
+            </xsl:if>
+            <xsl:value-of select="$updated-cline" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
-<xsl:template match="entry">
-    <xsl:text>&amp;</xsl:text>
-    <xsl:apply-templates />
+<!-- ############################ -->
+<!-- Table construction utilities -->
+<!-- ############################ -->
+
+<!-- Mostly translating MBX terms to LaTeX terms         -->
+<!-- Typically use these at the last moment,             -->
+<!-- while outputting, and thus use MBX terms internally -->
+
+<!-- Translate horizontal alignment to standard LaTeX column specification -->
+<xsl:template name="halign-specification">
+    <xsl:param name="align" />
+    <xsl:choose>
+        <xsl:when test="$align='left'">
+            <xsl:text>l</xsl:text>
+        </xsl:when>
+        <xsl:when test="$align='center'">
+            <xsl:text>c</xsl:text>
+        </xsl:when>
+        <xsl:when test="$align='right'">
+            <xsl:text>r</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:WARNING: tabular horizontal alignment attribute not recognized: use left, center, right</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
+
+<!-- Translate vertical rule width to a LaTeX "new" column specification -->
+<xsl:template name="vrule-specification">
+    <xsl:param name="width" />
+    <xsl:choose>
+        <xsl:when test="$width='none'">
+            <xsl:text></xsl:text>
+        </xsl:when>
+        <xsl:when test="$width='minor'">
+            <xsl:text>A</xsl:text>
+        </xsl:when>
+        <xsl:when test="$width='medium'">
+            <xsl:text>B</xsl:text>
+        </xsl:when>
+        <xsl:when test="$width='major'">
+            <xsl:text>C</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:WARNING: tabular left or right attribute not recognized: use none, minor, medium, major</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Translate horizontal rule width to hrule terms -->
+<xsl:template name="hrule-specification">
+    <xsl:param name="width" />
+    <xsl:choose>
+        <xsl:when test="$width='none'">
+            <xsl:text></xsl:text>
+        </xsl:when>
+        <xsl:when test="$width='minor'">
+            <xsl:text>\hrulethin</xsl:text>
+        </xsl:when>
+        <xsl:when test="$width='medium'">
+            <xsl:text>\hrulemedium</xsl:text>
+        </xsl:when>
+        <xsl:when test="$width='major'">
+            <xsl:text>\hrulethick</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:WARNING: tabular top or bottom attribute not recognized: use none, minor, medium, major</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Translate abbreviated horizontal rules to cline specifications -->
+<xsl:template name="crule-specification">
+    <xsl:param name="width" />
+    <xsl:param name="start" />
+    <xsl:param name="finish" />
+    <!-- style. thickness -->
+    <xsl:choose>
+        <xsl:when test="$width='none'">
+            <xsl:text></xsl:text>
+        </xsl:when>
+        <xsl:when test="$width='minor'">
+            <xsl:text>\crulethin</xsl:text>
+        </xsl:when>
+        <xsl:when test="$width='medium'">
+            <xsl:text>\crulemedium</xsl:text>
+        </xsl:when>
+        <xsl:when test="$width='major'">
+            <xsl:text>\crulethick</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:WARNING: tabular top or bottom attribute not recognized: use none, minor, medium, major</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- span -->
+    <xsl:if test="not($width='none')">
+        <xsl:text>{</xsl:text>
+        <xsl:value-of select="$start" />
+        <xsl:text>-</xsl:text>
+        <xsl:value-of select="$finish" />
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- Visual Identifiers for Cross-References -->
 <!-- Format of visual identifiers, peculiar to LaTeX              -->
