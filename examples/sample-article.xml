@@ -647,24 +647,26 @@ the xsltproc executable.
             <p>Table can get quite complex.  Simple ones are simpler, such as this example of numerical computations for Euler's method.</p>
 
             <table xml:id="table-euler1">
-                <tgroup cols="4" align="center">
-                    <thead>
-                        <row><entry><m>i</m></entry><entry><m>t_i</m></entry><entry><m>x_i</m></entry><entry><m>y_i</m></entry></row>
-                    </thead>
-                    <tbody>
-                        <row><entry>0</entry><entry>0</entry><entry>0</entry><entry>0.5000</entry></row>
-                        <row><entry>1</entry><entry>0.20</entry><entry>0.1000</entry><entry>0.4800</entry></row>
-                        <row><entry>2</entry><entry>0.40</entry><entry>0.1960</entry><entry>0.4560</entry></row>
-                        <row><entry>3</entry><entry>0.60</entry><entry>0.2872</entry><entry>0.4295</entry></row>
-                        <row><entry>4</entry><entry>0.80</entry><entry>0.3731</entry><entry>0.4027</entry></row>
-                        <row><entry>5</entry><entry>1.00</entry><entry>0.4536</entry><entry>0.3783</entry></row>
-                        <row><entry>6</entry><entry>1.20</entry><entry>0.5293</entry><entry>0.3591</entry></row>
-                        <row><entry>7</entry><entry>1.40</entry><entry>0.6011</entry><entry>0.3480</entry></row>
-                        <row><entry>8</entry><entry>1.60</entry><entry>0.6707</entry><entry>0.3474</entry></row>
-                        <row><entry>9</entry><entry>1.80</entry><entry>0.7402</entry><entry>0.3603</entry></row>
-                        <row><entry>10</entry><entry>2.00</entry><entry>0.8123</entry><entry>0.3900</entry></row>
-                    </tbody>
-                </tgroup>
+                <tabular top="major" halign="center">
+                    <row bottom="minor">
+                        <cell>  <m>i</m></cell>
+                        <cell><m>t_i</m></cell>
+                        <cell><m>x_i</m></cell>
+                        <cell><m>y_i</m></cell>
+                    </row>
+                    <row> <cell>0</cell><cell>0.00</cell><cell>0.0000</cell><cell>0.5000</cell></row>
+                    <row> <cell>1</cell><cell>0.20</cell><cell>0.1000</cell><cell>0.4800</cell></row>
+                    <row> <cell>2</cell><cell>0.40</cell><cell>0.1960</cell><cell>0.4560</cell></row>
+                    <row> <cell>3</cell><cell>0.60</cell><cell>0.2872</cell><cell>0.4295</cell></row>
+                    <row> <cell>4</cell><cell>0.80</cell><cell>0.3731</cell><cell>0.4027</cell></row>
+                    <row> <cell>5</cell><cell>1.00</cell><cell>0.4536</cell><cell>0.3783</cell></row>
+                    <row> <cell>6</cell><cell>1.20</cell><cell>0.5293</cell><cell>0.3591</cell></row>
+                    <row> <cell>7</cell><cell>1.40</cell><cell>0.6011</cell><cell>0.3480</cell></row>
+                    <row> <cell>8</cell><cell>1.60</cell><cell>0.6707</cell><cell>0.3474</cell></row>
+                    <row> <cell>9</cell><cell>1.80</cell><cell>0.7402</cell><cell>0.3603</cell></row>
+                    <row bottom="medium">
+                          <cell>10</cell><cell>2.00</cell><cell>0.8123</cell><cell>0.3900</cell></row>
+                </tabular>
             <caption>Euler's approximation for Duffing's Equation with <m>h = 0.2</m></caption>
             </table>
 
@@ -1453,6 +1455,419 @@ the xsltproc executable.
         </section>
 
         <section>
+            <title>Table Calisthenics</title>
+
+            <p>A very minimal table, hence with left-justified cells, no borders.  We do wrap the tabular element in a table element to get centering, numbering and a caption.</p>
+
+            <table>
+                <caption>Some Colors</caption>
+                <tabular>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <p>Tables can be used many ways.  We describe long division of polynomials by using vertical and horizontal borders on individual entries of a table.  The division lines are slightly thicker than the subtraction lines.  This is a good example of the typical abuse of tables for horizontal and vertical layout.</p>
+
+            <figure>
+                <caption>Polynomial Long Division</caption>
+                <tabular halign="right">
+                    <row>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell bottom="medium"></cell>
+                        <cell bottom="medium"></cell>
+                        <cell bottom="medium"><m>x</m></cell>
+                        <cell bottom="medium"><m>-</m></cell>
+                        <cell bottom="medium"><m>5</m></cell>
+                    </row>
+                    <row>
+                        <cell><m>x</m></cell>
+                        <cell><m>+</m></cell>
+                        <cell right="medium"><m>2</m></cell>
+                        <cell><m>x^2</m></cell>
+                        <cell><m>-</m></cell>
+                        <cell><m>3x</m></cell>
+                        <cell><m>-</m></cell>
+                        <cell><m>8</m></cell>
+                    </row>
+                    <row>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell bottom="minor"><m>x^2</m></cell>
+                        <cell bottom="minor"><m>+</m></cell>
+                        <cell bottom="minor"><m>2x</m></cell>
+                        <cell bottom="minor"></cell>
+                        <cell bottom="minor"></cell>
+                    </row>
+                    <row>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell><m>-5x</m></cell>
+                        <cell><m>-</m></cell>
+                        <cell><m>8</m></cell>
+                    </row>
+                    <row>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell bottom="minor"><m>-5x</m></cell>
+                        <cell bottom="minor"><m>-</m></cell>
+                        <cell bottom="minor"><m>10</m></cell>
+                   </row>
+                    <row>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell><m>2</m></cell>
+                    </row>
+                </tabular>
+            </figure>
+
+            <p>The next table describes how to construct tables via the <c>tabular</c> element.  The <c>table</c> element may be used to enclose the raw table, so as to associate a caption and get vertical separation with horizontal centering.</p>
+
+            <p>The <c>tabular</c> element contains a sequence of <c>row</c> elements, and must contain at least one.  Each <c>row</c> contains a sequence of <c>cell</c> elements and must have the same number in each row (acccounting for the use of the <c>colspan</c> attribute).  The contents of the <c>cell</c> elements are the text to appear in entries of the table.</p>
+
+            <p>A sequence of <c>col</c> elements may optionally be used.  But if one appears, then there must be the right number for the width of the table.  They are empty elements always, and just carry information about their respective column.</p>
+
+            <p>Where the body of the table below has an entry, it means the attribute may be used on the element, and effects the range of the tabular described by the element.  Employment of an attribute on elements to the right in the table will supersede use on elements to the left.  Generally, every cell has right and bottom borders, but only cells at the left side of the table have a left border and only cells across the top have a top border.  Only one cell has four borders.</p>
+
+            <table>
+                <caption>Tabular Elements and Attributes (p = planned)</caption>
+                <tabular top="major" halign="center">
+                    <col halign="left" />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col halign="left"/>
+                    <!--  -->
+                    <row>
+                        <cell>Attributes</cell>
+                        <cell colspan="4" halign="center">Elements</cell>
+                        <cell>Values</cell>
+                    </row>
+                    <row bottom="medium">
+                        <cell></cell>
+                        <cell><c>tabular</c></cell>
+                        <cell><c>col</c></cell>
+                        <cell><c>row</c></cell>
+                        <cell><c>cell</c></cell>
+                        <cell>* = default</cell>
+                    </row>
+                    <row>
+                        <cell><c>top</c></cell>
+                        <cell><m>\times</m></cell>
+                        <cell><m>\times</m></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell>none*, minor, medium, major</cell>
+                    </row>
+                    <row>
+                        <cell><c>left</c></cell>
+                        <cell><m>\times</m></cell>
+                        <cell></cell>
+                        <cell><m>\times</m></cell>
+                        <cell></cell>
+                        <cell>none*, minor, medium, major</cell>
+                    </row>
+                    <row>
+                        <cell><c>bottom</c></cell>
+                        <cell><m>\times</m></cell>
+                        <cell></cell>
+                        <cell><m>\times</m></cell>
+                        <cell><m>\times</m></cell>
+                        <cell>none*, minor, medium, major</cell>
+                    </row>
+                    <row>
+                        <cell><c>right</c></cell>
+                        <cell><m>\times</m></cell>
+                        <cell><m>\times</m></cell>
+                        <cell></cell>
+                        <cell><m>\times</m></cell>
+                        <cell>none*, minor, medium, major</cell>
+                    </row>
+                    <row>
+                        <cell><c>halign</c></cell>
+                        <cell><m>\times</m></cell>
+                        <cell><m>\times</m></cell>
+                        <cell><m>\times</m></cell>
+                        <cell><m>\times</m></cell>
+                        <cell>left*, center, right</cell>
+                    </row>
+                    <row>
+                        <cell><c>halign</c></cell>
+                        <cell></cell>
+                        <cell>p</cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell>decimal, character</cell>
+                    </row>
+                    <row>
+                        <cell><c>header</c></cell>
+                        <cell></cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell>yes/no*</cell>
+                    </row>
+                    <row>
+                        <cell><c>footer</c></cell>
+                        <cell></cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell>yes/no*</cell>
+                    </row>
+                    <row>
+                        <cell><c>valign</c></cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell></cell>
+                        <cell>top, middle, bottom</cell>
+                    </row>
+                    <row>
+                        <cell><c>colspan</c></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell><m>\times</m></cell>
+                        <cell>1*, integer</cell>
+                    </row>
+                    <row>
+                        <cell><c>rowspan</c></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell>p</cell>
+                        <cell>1*, integer</cell>
+                    </row>
+                    <row>
+                        <cell>colors</cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell></cell>
+                    </row>
+                </tabular>
+            </table>
+
+
+
+            <p>An example of aligning table cells' contents horizontally. See the source for comments.</p>
+
+            <!-- Default matches HTML and LaTEX, left. -->
+            <!-- We set this table's default to right. -->
+            <table>
+                <caption>Horizontal Alignment Example</caption>
+                <tabular halign="right">
+                    <col />
+                    <col />
+                    <col halign="center" />
+                    <col />
+                    <!--  -->
+                    <!-- A uniform row to judge effects by, each centered -->
+                    <row halign="center">
+                        <cell>1234567890</cell>
+                        <cell>1234567890</cell>
+                        <cell>1234567890</cell>
+                        <cell>1234567890</cell>
+                    </row>
+                    <!-- Totally generic, so by columns, all to right -->
+                    <row>
+                        <cell>First</cell>
+                        <cell>Second</cell>
+                        <cell>Third</cell>
+                        <cell>Fourth</cell>
+                    </row>
+                    <!-- cell-by-cell, with one taking global default -->
+                    <row>
+                        <cell halign="center">A</cell>
+                        <cell halign="right">B</cell>
+                        <cell>C</cell>
+                        <cell halign="left">D</cell>
+                    </row>
+                    <!-- whole row is left, but one is centered -->
+                    <row halign="left">
+                        <cell>1</cell>
+                        <cell halign="center">2</cell>
+                        <cell>3</cell>
+                        <cell>4</cell>
+                    </row>
+                    <!-- A comment -->
+                </tabular>
+            </table>
+
+            <p>Example from above, but now with horizontal rules, plus an extra row to test the bottom border.  See the source for comments.</p>
+
+            <table>
+                <caption>Horizontal Rules Example</caption>
+                <tabular bottom="minor" top="major" halign="right">
+                    <col top="minor"/>
+                    <col />
+                    <col top="none" halign="center" />
+                    <col top="major" />
+                    <!--  -->
+                    <!-- A uniform row to judge effects by, each centered -->
+                    <row halign="center">
+                        <cell>1234567890</cell>
+                        <cell>1234567890</cell>
+                        <cell>1234567890</cell>
+                        <cell>1234567890</cell>
+                    </row>
+                    <!-- Totally generic, so by columns, all to right -->
+                    <row bottom="none">
+                        <cell>First</cell>
+                        <cell bottom="major">Second</cell>
+                        <cell bottom="major">Third</cell>
+                        <cell>Fourth</cell>
+                    </row>
+                    <!-- cell-by-cell, with one taking global default -->
+                    <row bottom="medium">
+                        <cell halign="center">A</cell>
+                        <cell halign="right">B</cell>
+                        <cell>C</cell>
+                        <cell halign="left">D</cell>
+                    </row>
+                    <!-- whole row is left, but one is centered -->
+                    <row halign="left">
+                        <cell bottom="none">1</cell>
+                        <cell halign="center" bottom="minor">2</cell>
+                        <cell bottom="none">3</cell>
+                        <cell>4</cell>
+                    </row>
+                    <!-- proper bottom, otherwise defaults -->
+                    <row bottom="medium">
+                        <cell>1</cell>
+                        <cell>2</cell>
+                        <cell>3</cell>
+                        <cell>4</cell>
+                    </row>
+                    <!-- A comment -->
+                </tabular>
+            </table>
+
+            <p>Same example, but now with vertical rules.  See the source for comments.</p>
+
+            <table>
+                <caption>Vertical Rules Example</caption>
+                <tabular bottom="minor" top="major" left="major" right="medium"  halign="right">
+                    <col top="minor"/>
+                    <col />
+                    <col top="none" halign="center"  right="none"/>
+                    <col top="major" />
+                    <!--  -->
+                    <!-- A uniform row to judge effects by, each centered -->
+                    <row halign="center">
+                        <cell>1234567890</cell>
+                        <cell>1234567890</cell>
+                        <cell right="minor">1234567890</cell>
+                        <cell>1234567890</cell>
+                    </row>
+                    <!-- Totally generic, so by columns, all to right -->
+                    <row bottom="none">
+                        <cell>First</cell>
+                        <cell bottom="major">Second</cell>
+                        <cell bottom="major" right="medium">Third</cell>
+                        <cell>Fourth</cell>
+                    </row>
+                    <!-- cell-by-cell, with one taking global default -->
+                    <row bottom="medium">
+                        <cell halign="center">A</cell>
+                        <cell halign="right">B</cell>
+                        <cell>C</cell>
+                        <cell halign="left">D</cell>
+                    </row>
+                    <!-- whole row is left, but one is centered -->
+                    <row left="none" halign="left">
+                        <cell bottom="none">1</cell>
+                        <cell halign="center" bottom="minor">2</cell>
+                        <cell bottom="none">3</cell>
+                        <cell right="major">4</cell>
+                    </row>
+                    <!-- proper bottom, otherwise defaults -->
+                    <row bottom="medium">
+                        <cell right="none">1</cell>
+                        <cell>2</cell>
+                        <cell>3</cell>
+                        <cell>4</cell>
+                    </row>
+                    <!-- A comment -->
+                </tabular>
+            </table>
+
+            <table>
+                <caption>Progressively Thicker Rules Example</caption>
+                <tabular top="minor" left="minor" halign="center">
+                    <col right="medium"/>
+                    <col right="major"/>
+                    <col />
+                    <!--  -->
+                    <row bottom="medium">
+                        <cell>1111</cell>
+                        <cell>2222</cell>
+                        <cell right="minor">3333</cell>
+                    </row>
+                    <row bottom="major">
+                        <cell>aaaa</cell>
+                        <cell>bbbb</cell>
+                        <cell right="medium">cccc</cell>
+                    </row>
+                    <row>
+                        <cell bottom="minor">AAAA</cell>
+                        <cell bottom="medium">BBBB</cell>
+                        <cell bottom="major" right="major">CCCC</cell>
+                    </row>
+                </tabular>
+            </table>
+            <table>
+                <caption>Column Span Example</caption>
+                <tabular top="minor" left="minor" halign="center">
+                    <col right="medium"/>
+                    <col right="major"/>
+                    <col />
+                    <!--  -->
+                    <row bottom="medium">
+                        <cell colspan="2">1111, 2222</cell>
+                        <cell right="minor">3333</cell>
+                    </row>
+                    <row bottom="major">
+                        <cell>aaaa</cell>
+                        <cell colspan="2" right="medium">bbbb,cccc</cell>
+                    </row>
+                    <row>
+                        <cell bottom="minor">AAAA</cell>
+                        <cell bottom="medium">BBBB</cell>
+                        <cell bottom="major" right="major">CCCC</cell>
+                    </row>
+                </tabular>
+            </table>
+
+        </section>
+
+
+        <section>
             <title>Embedded Interactive Elements</title>
 
             <introduction>
@@ -1631,49 +2046,45 @@ the xsltproc executable.
             <p>Here are some sample characters from Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url>, which seem to be available in a default TeXLive installation.  The sample entries below will mostly be empty if you do not process this file with <c>xelatex</c>.</p>
 
             <table xml:id="table-unicode-samples">
-                <tgroup cols="4" align="left">
-                    <thead>
-                        <row><entry>Name</entry><entry>Range</entry><entry>Samples</entry><entry>LaTeX</entry></row>
-                    </thead>
-                    <tbody>
-                        <row>
-                            <entry>Latin Extended-A</entry>
-                            <entry><c>U+0100</c> <ndash /> <c>U+017F</c></entry>
-                            <entry>Ą ą Ĳ ĳ</entry>
-                            <entry>TeXLive</entry>
-                        </row>
-                        <row>
-                            <entry>Latin Extended Additional</entry>
-                            <entry><c>U+1E00</c> <ndash /> <c>U+1EFF</c></entry>
-                            <entry>Ḁ Ẁ Ặ ỳ</entry>
-                            <entry><m>\approx</m>TeXLive</entry>
-                        </row>
-                        <row>
-                            <entry>Cyrillic</entry>
-                            <entry><c>U+0400</c> <ndash /> <c>U+04FF</c></entry>
-                            <entry>Љ Щ щ Ӄ</entry>
-                            <entry>polyglossia</entry>
-                        </row>
-                        <row>
-                            <entry>Arabic</entry>
-                            <entry><c>U+0600</c> <ndash /> <c>U+06FF</c></entry>
-                            <entry>؟ ب حٍ ۳</entry>
-                            <entry>polyglossia</entry>
-                        </row>
-                        <row>
-                            <entry>General Punctuation</entry>
-                            <entry><c>U+2000</c> <ndash /> <c>U+206F</c></entry>
-                            <entry>— “ ‰ ※</entry>
-                            <entry>TeXLive</entry>
-                        </row>
-                        <row>
-                            <entry>Letterlike Symbols</entry>
-                            <entry><c>U+2100</c> <ndash /> <c>U+214F</c></entry>
-                            <entry>℀ ℃ № ™</entry>
-                            <entry><m>\approx</m>TeXLive</entry>
-                        </row>
-                    </tbody>
-                </tgroup>
+                <tabular top="major">
+                    <row bottom="minor"><cell>Name</cell><cell>Range</cell><cell>Samples</cell><cell>LaTeX</cell></row>
+                    <row>
+                        <cell>Latin Extended-A</cell>
+                        <cell><c>U+0100</c> <ndash /> <c>U+017F</c></cell>
+                        <cell>Ą ą Ĳ ĳ</cell>
+                        <cell>TeXLive</cell>
+                    </row>
+                    <row>
+                        <cell>Latin Extended Additional</cell>
+                        <cell><c>U+1E00</c> <ndash /> <c>U+1EFF</c></cell>
+                        <cell>Ḁ Ẁ Ặ ỳ</cell>
+                        <cell><m>\approx</m>TeXLive</cell>
+                    </row>
+                    <row>
+                        <cell>Cyrillic</cell>
+                        <cell><c>U+0400</c> <ndash /> <c>U+04FF</c></cell>
+                        <cell>Љ Щ щ Ӄ</cell>
+                        <cell>polyglossia</cell>
+                    </row>
+                    <row>
+                        <cell>Arabic</cell>
+                        <cell><c>U+0600</c> <ndash /> <c>U+06FF</c></cell>
+                        <cell>؟ ب حٍ ۳</cell>
+                        <cell>polyglossia</cell>
+                    </row>
+                    <row>
+                        <cell>General Punctuation</cell>
+                        <cell><c>U+2000</c> <ndash /> <c>U+206F</c></cell>
+                        <cell>— “ ‰ ※</cell>
+                        <cell>TeXLive</cell>
+                    </row>
+                    <row>
+                        <cell>Letterlike Symbols</cell>
+                        <cell><c>U+2100</c> <ndash /> <c>U+214F</c></cell>
+                        <cell>℀ ℃ № ™</cell>
+                        <cell><m>\approx</m>TeXLive</cell>
+                    </row>
+                </tabular>
             <caption>Sample Unicode Characters</caption>
             </table>
 
@@ -1977,22 +2388,22 @@ the xsltproc executable.
             <caption>Side-by-side Table, with subtable children.</caption>
             <table halign="left" width="50%" xml:id="tab-sidebyside-subtable">
               <caption>width=50<percent/></caption>
-              <tabular>tabular body</tabular>
+              <tabular><row><cell>tabular body</cell></row></tabular>
             </table>
             <table width="25%">
               <caption>width=25<percent/></caption>
-              <tabular>tabular body</tabular>
+              <tabular><row><cell>tabular body</cell></row></tabular>
             </table>
           </sidebyside>
           <sidebyside>
             <caption>Widths can be calculated automatically.</caption>
             <table>
               <caption></caption>
-              <tabular>tabular body</tabular>
+              <tabular><row><cell>tabular body</cell></row></tabular>
             </table>
             <table>
               <caption></caption>
-              <tabular>tabular body</tabular>
+              <tabular><row><cell>tabular body</cell></row></tabular>
             </table>
           </sidebyside>
           <p>If you put two <c>table</c> elements side-by-side without a <q>global</q> caption, then they will use regular numbering; see
@@ -2001,16 +2412,16 @@ the xsltproc executable.
             <table xml:id="tab-regular-fig1">
               <caption></caption>
               <tabular>
-              tabular body
+              <row><cell>tabular body</cell></row>
               </tabular>
             </table>
             <table xml:id="tab-regular-fig2">
               <caption></caption>
-              <tabular>tabular body</tabular>
+              <tabular><row><cell>tabular body</cell></row></tabular>
             </table>
             <table xml:id="tab-regular-fig3">
               <caption></caption>
-              <tabular>tabular body</tabular>
+              <tabular><row><cell>tabular body</cell></row></tabular>
             </table>
           </sidebyside>
         </subsection>
@@ -2023,15 +2434,15 @@ the xsltproc executable.
             <caption>Global Caption</caption>
             <table>
               <caption></caption>
-              <tabular>tabular body</tabular>
+              <tabular><row><cell>tabular body</cell></row></tabular>
             </table>
             <table xml:id="tab-regular-halign-demo" halign="right">
               <caption>halign="right"</caption>
-              <tabular>tabular body</tabular>
+              <tabular><row><cell>tabular body</cell></row></tabular>
             </table>
             <table xml:id="tab-regular-valign-demo" valign="top">
               <caption>valign="top"</caption>
-              <tabular>tabular body</tabular>
+              <tabular><row><cell>tabular body</cell></row></tabular>
             </table>
           </sidebyside>
          </subsection>
@@ -2042,7 +2453,7 @@ the xsltproc executable.
           <sidebyside>
             <table xml:id="table-next-figure">
               <caption>Table next to a Figure</caption>
-              <tabular>tabular body</tabular>
+              <tabular><row><cell>tabular body</cell></row></tabular>
             </table>
             <figure xml:id="figure-next-table">
               <image source="images/trefoil.png"/>
@@ -2056,7 +2467,7 @@ the xsltproc executable.
           <sidebyside>
             <table>
               <caption>Table next to text</caption>
-              <tabular>tabular body</tabular>
+              <tabular><row><cell>tabular body</cell></row></tabular>
             </table>
             <paragraphs width="20%" halign="left" valign="top">
               <p>here is some text here is some text here is some text here is some text here </p>
@@ -2074,16 +2485,16 @@ the xsltproc executable.
           <p>Tables can go next to each other without captions using the <c>tabular</c> element.</p>
           <sidebyside>
             <tabular>
-              tabular body
+              <row><cell>tabular body</cell></row>
             </tabular>
             <tabular>
-              tabular body
+              <row><cell>tabular body</cell></row>
             </tabular>
             <tabular>
-              tabular body
+              <row><cell>tabular body</cell></row>
             </tabular>
             <tabular>
-              tabular body
+              <row><cell>tabular body</cell></row>
             </tabular>
           </sidebyside>
         </subsection>
