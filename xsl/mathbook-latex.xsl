@@ -320,7 +320,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\usepackage{amssymb}&#xa;</xsl:text>
     <xsl:text>%% extpfeil package for certain extensible arrows,&#xa;</xsl:text>
     <xsl:text>%% as also provided by MathJax extension of the same name&#xa;</xsl:text>
-    <xsl:text>\usepackage{extpfeil}&#xa;</xsl:text>
+    <!-- <xsl:text>\usepackage{extpfeil}&#xa;</xsl:text> -->
     <xsl:text>%% allow more columns to a matrix&#xa;</xsl:text>
     <xsl:text>%% can make this even bigger by overiding with  latex.preamble.late  processing option&#xa;</xsl:text>
     <xsl:text>\setcounter{MaxMatrixCols}{30}&#xa;</xsl:text>
