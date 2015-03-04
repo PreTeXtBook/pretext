@@ -1057,22 +1057,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="author" mode="name-list"/>
         <xsl:text>}}\par\bigskip&#xa;</xsl:text>
     </xsl:if>
-    <!-- Exceptional handling for references needs to be abstracted away -->
     <xsl:apply-templates select="introduction" />
-    <!-- Exercises, references are in managed description lists -->
-    <xsl:if test="local-name(.)='references'">
-        <xsl:text>%% If this is a top-level references&#xa;</xsl:text>
-        <xsl:text>%%   you can replace with "thebibliography" environment&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="local-name(.)='references' and .//biblio">
-        <xsl:text>\begin{referencelist}&#xa;</xsl:text>
-    </xsl:if>
     <!-- Process the remaining contents -->
     <xsl:apply-templates select="*[not(self::title or self::author or self::introduction or self::conclusion)]"/>
-    <!-- Exercises, references are in managed description lists -->
-    <xsl:if test="local-name(.)='references' and .//biblio">
-        <xsl:text>\end{referencelist}&#xa;</xsl:text>
-    </xsl:if>
     <xsl:apply-templates select="conclusion" />
 </xsl:template>
 
@@ -2198,6 +2185,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- As an item of a description list, but       -->
 <!-- compatible with thebibliography environment -->
 <xsl:template match="biblio[@type='raw']">
+    <!-- begin the list with first item -->
+    <xsl:if test="not(preceding-sibling::biblio)">
+        <xsl:text>%% If this is a top-level references&#xa;</xsl:text>
+        <xsl:text>%%   you can replace with "thebibliography" environment&#xa;</xsl:text>
+        <xsl:text>\begin{referencelist}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>\bibitem</xsl:text>
     <!-- "label" (e.g. Jud99), or by default serial number -->
     <!-- LaTeX's bibitem will provide the visual brackets  -->
@@ -2210,6 +2203,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:apply-templates />
     <xsl:text>&#xa;</xsl:text>
+    <!-- end the list after last item -->
+    <xsl:if test="not(following-sibling::biblio)">
+        <xsl:text>\end{referencelist}&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Raw Bibliographic Entry Formatting              -->
