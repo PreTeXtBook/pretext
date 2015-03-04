@@ -1057,17 +1057,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="author" mode="name-list"/>
         <xsl:text>}}\par\bigskip&#xa;</xsl:text>
     </xsl:if>
-    <!-- Exceptional handling for exercises, references needs to be abstracted away -->
+    <!-- Exceptional handling for references needs to be abstracted away -->
     <xsl:apply-templates select="introduction" />
     <!-- Exercises, references are in managed description lists -->
     <xsl:if test="local-name(.)='references'">
         <xsl:text>%% If this is a top-level references&#xa;</xsl:text>
         <xsl:text>%%   you can replace with "thebibliography" environment&#xa;</xsl:text>
-    </xsl:if>
-    <!-- Could be no contents (just an introduction), then -->
-    <!-- LaTeX chokes on empty list, so check for entries  -->
-    <xsl:if test="local-name(.)='exercises' and .//exercise">
-        <xsl:text>\begin{exerciselist}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="local-name(.)='references' and .//biblio">
         <xsl:text>\begin{referencelist}&#xa;</xsl:text>
@@ -1075,9 +1070,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Process the remaining contents -->
     <xsl:apply-templates select="*[not(self::title or self::author or self::introduction or self::conclusion)]"/>
     <!-- Exercises, references are in managed description lists -->
-    <xsl:if test="local-name(.)='exercises' and .//exercise">
-        <xsl:text>\end{exerciselist}&#xa;</xsl:text>
-    </xsl:if>
     <xsl:if test="local-name(.)='references' and .//biblio">
         <xsl:text>\end{referencelist}&#xa;</xsl:text>
     </xsl:if>
@@ -1139,20 +1131,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- typically instructions for a list of similar exercises -->
 <!-- Commentary goes in an introduction and/or conclusion   -->
 <xsl:template match="exercisegroup">
-    <xsl:text>\end{exerciselist}&#xa;</xsl:text>
     <xsl:apply-templates select="introduction" />
-    <xsl:text>\setlength{\parskip}{0pt}</xsl:text>
-    <xsl:text>\begin{exerciselist}[leftmargin=2em,labelindent=2em]&#xa;</xsl:text>
     <xsl:apply-templates select="exercise"/>
-    <xsl:text>\end{exerciselist}&#xa;</xsl:text>
     <xsl:apply-templates select="conclusion" />
-    <xsl:text>\begin{exerciselist}&#xa;</xsl:text>
+    <xsl:text>\par\smallskip\noindent&#xa;</xsl:text>
 </xsl:template>
 
 <!-- An exercise in an "exercises" subdivision             -->
 <!-- is a list item in a description list                  -->
 <!-- TODO: parameterize as a backmatter item, new switches -->
+<!-- TODO: would an "exercisegrouplist" allow parameters to move to preamble? -->
 <xsl:template match="exercises/exercise|exercisegroup/exercise">
+    <!-- Start a list right before first exercise of subdivision, or of a group -->
+    <xsl:choose>
+        <xsl:when test="not(preceding-sibling::exercise) and parent::exercises">
+            <xsl:text>\begin{exerciselist}&#xa;</xsl:text>
+        </xsl:when>
+        <!-- Tweak parameters inside a group for indent -->
+        <xsl:when test="not(preceding-sibling::exercise) and parent::exercisegroup">
+            <xsl:text>\setlength{\parskip}{0pt}&#xa;</xsl:text>
+            <xsl:text>\begin{exerciselist}[leftmargin=2em,labelindent=2em]&#xa;</xsl:text>
+        </xsl:when>
+    </xsl:choose>
     <xsl:text>\item[</xsl:text>
     <xsl:apply-templates select="." mode="origin-id" />
     <xsl:text>.]</xsl:text>
@@ -1175,6 +1175,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="solution and $exercise.text.solution='yes'">
         <xsl:apply-templates select="solution" />
+    </xsl:if>
+    <!-- close list if no more exercise in subdivision or in group -->
+    <xsl:if test="not(following-sibling::exercise)">
+        <xsl:text>\end{exerciselist}&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 

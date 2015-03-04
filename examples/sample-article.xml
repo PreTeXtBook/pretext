@@ -1280,6 +1280,30 @@ the xsltproc executable.
                 </exercise>
 
             </exercises>
+
+            <p>Another subsection of exercises, which begins and ends with an exercise group, and has two consecutive exercise groups.</p>
+
+            <exercises>
+                <title>More Exercises</title>
+                <exercisegroup>
+                    <introduction><p>Introduction to first exercise group.</p></introduction>
+                    <exercise>
+                        <statement><p>Only exercise of first group.</p></statement>
+                    </exercise>
+                    <conclusion><p>Conclusion to first exercise group.</p></conclusion>
+                </exercisegroup>
+                <exercisegroup>
+                    <introduction><p>Introduction to second exercise group.</p></introduction>
+                    <exercise>
+                        <statement><p>First exercise of second group.</p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p>Second exercise of second group.</p></statement>
+                    </exercise>
+                    <conclusion><p>Conclusion to second exercise group.</p></conclusion>
+                </exercisegroup>
+            </exercises>
+
         </section>
 
         <section>
