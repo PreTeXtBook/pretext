@@ -500,35 +500,92 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% You can remove the [H] argument of the \newfloat command, to allow flotation and &#xa;</xsl:text>
         <xsl:text>%% preserve numbering, BUT the numbering may then appear "out-of-order"&#xa;</xsl:text>
         <xsl:text>\usepackage{float}&#xa;</xsl:text>
+        <xsl:text>\usepackage[bf]{caption} % http://tex.stackexchange.com/questions/95631/defining-a-new-type-of-floating-environment &#xa;</xsl:text>
+        <xsl:text>\usepackage{newfloat}&#xa;</xsl:text>
+        <xsl:if test="//sidebyside/caption">
+            <xsl:text>\usepackage{subcaption}&#xa;</xsl:text>
+            <xsl:text>\captionsetup[subfigure]{labelformat=simple}&#xa;</xsl:text>
+            <xsl:text>\captionsetup[subtable]{labelformat=simple}&#xa;</xsl:text>
+            <xsl:text>\renewcommand\thesubfigure{(\alph{subfigure})}&#xa;</xsl:text>
+            <xsl:text>\makeatletter&#xa;</xsl:text>
+            <xsl:text>% we plan to use subtables within figure environments, so they need to reset accordingly&#xa;</xsl:text>
+            <xsl:text>\@addtoreset{subtable}{figure}&#xa;</xsl:text>
+            <xsl:text>\makeatother&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//sidebyside">
+          <xsl:text>% Side-by-side elements need careful treatement for aligning captions, see: &#xa;</xsl:text>
+          <xsl:text>% http://tex.stackexchange.com/questions/230335/vertically-aligning-minipages-subfigures-and-subtables-not-with-baseline &#xa;</xsl:text>
+          <xsl:text>\usepackage{stackengine,ifthen}&#xa;</xsl:text>
+          <xsl:text>\newcounter{figstack}&#xa;</xsl:text>
+          <xsl:text>\newcounter{figindex}&#xa;</xsl:text>
+          <xsl:text>\newlength\fight&#xa;</xsl:text>
+          <xsl:text>\newcommand\pushValignCaptionBottom[5][b]{%&#xa;</xsl:text>
+          <xsl:text>\stepcounter{figstack}%&#xa;</xsl:text>
+          <xsl:text>\expandafter\def\csname %&#xa;</xsl:text>
+          <xsl:text>figalign\romannumeral\value{figstack}\endcsname{#1}%&#xa;</xsl:text>
+          <xsl:text>\expandafter\def\csname %&#xa;</xsl:text>
+          <xsl:text>figtype\romannumeral\value{figstack}\endcsname{#2}%&#xa;</xsl:text>
+          <xsl:text>\expandafter\def\csname %&#xa;</xsl:text>
+          <xsl:text>figwd\romannumeral\value{figstack}\endcsname{#3}%&#xa;</xsl:text>
+          <xsl:text>\expandafter\def\csname %&#xa;</xsl:text>
+          <xsl:text>figcontent\romannumeral\value{figstack}\endcsname{#4}%&#xa;</xsl:text>
+          <xsl:text>\expandafter\def\csname %&#xa;</xsl:text>
+          <xsl:text>figcap\romannumeral\value{figstack}\endcsname{#5}%&#xa;</xsl:text>
+          <xsl:text>\setbox0=\hbox{%&#xa;</xsl:text>
+          <xsl:text>\begin{#2}{#3}#4\end{#2}}%&#xa;</xsl:text>
+          <xsl:text>\ifdim\dimexpr\ht0+\dp0\relax&gt;\fight\global\setlength{\fight}{%&#xa;</xsl:text>
+          <xsl:text>\dimexpr\ht0+\dp0\relax}\fi%&#xa;</xsl:text>
+          <xsl:text>}&#xa;</xsl:text>
+          <xsl:text>\newcommand\popValignCaptionBottom{%&#xa;</xsl:text>
+          <xsl:text>\setcounter{figindex}{0}%&#xa;</xsl:text>
+          <xsl:text>\hfill%&#xa;</xsl:text>
+          <xsl:text>\whiledo{\value{figindex}&lt;\value{figstack}}{%&#xa;</xsl:text>
+          <xsl:text>\stepcounter{figindex}%&#xa;</xsl:text>
+          <xsl:text>\def\tmp{\csname figwd\romannumeral\value{figindex}\endcsname}%&#xa;</xsl:text>
+          <xsl:text>\begin{\csname figtype\romannumeral\value{figindex}\endcsname}[t]{\tmp}%&#xa;</xsl:text>
+          <xsl:text>\centering%&#xa;</xsl:text>
+          <xsl:text>\stackinset{c}{}%&#xa;</xsl:text>
+          <xsl:text>{\csname figalign\romannumeral\value{figindex}\endcsname}{}%&#xa;</xsl:text>
+          <xsl:text>{\csname figcontent\romannumeral\value{figindex}\endcsname}%&#xa;</xsl:text>
+          <xsl:text>{\rule{0pt}{\fight}}\par%&#xa;</xsl:text>
+          <xsl:text>\csname figcap\romannumeral\value{figindex}\endcsname%&#xa;</xsl:text>
+          <xsl:text>\end{\csname figtype\romannumeral\value{figindex}\endcsname}%&#xa;</xsl:text>
+          <xsl:text>\hfill%&#xa;</xsl:text>
+          <xsl:text>}%&#xa;</xsl:text>
+          <xsl:text>\setcounter{figstack}{0}%&#xa;</xsl:text>
+          <xsl:text>\setlength{\fight}{0pt}%&#xa;</xsl:text>
+          <xsl:text>\hfill%&#xa;</xsl:text>
+          <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
         <xsl:if test="//figure">
-            <xsl:text>\newfloat{mbxfigure}{H}{lof}</xsl:text>
+            <xsl:text>% Figure environment setup so that it no longer floats&#xa;</xsl:text>
+            <xsl:text>\SetupFloatingEnvironment{figure}{fileext=lof,placement={H},within=</xsl:text>
             <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
-            <xsl:text>[</xsl:text>
             <xsl:call-template name="level-number-to-latex-name">
                 <xsl:with-param name="level" select="$numbering-theorems" />
             </xsl:call-template>
-            <xsl:text>]&#xa;</xsl:text>
-            <xsl:text>\floatname{mbxfigure}{</xsl:text>
+            <xsl:text>,name=</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'figure'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
-            <xsl:text>\renewenvironment{figure}%&#xa;</xsl:text>
-            <xsl:text>{\begin{mbxfigure}\setcounter{mbxfigure}{\value{theorem}}\stepcounter{theorem}}%&#xa;</xsl:text>
-            <xsl:text>{\end{mbxfigure}}&#xa;</xsl:text>
+            <xsl:text>% figures have the same number as theorems: http://tex.stackexchange.com/questions/16195/how-to-make-equations-figures-and-theorems-use-the-same-numbering-scheme &#xa;</xsl:text>
+            <xsl:text>\makeatletter&#xa;</xsl:text>
+            <xsl:text>\let\c@figure\c@theorem&#xa;</xsl:text>
+            <xsl:text>\makeatother&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="//table">
-            <xsl:text>\newfloat{mbxtable}{H}{lot}</xsl:text>
+            <xsl:text>% Table environment setup so that it no longer floats&#xa;</xsl:text>
+            <xsl:text>\SetupFloatingEnvironment{table}{fileext=lot,placement={H},within=</xsl:text>
             <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
-            <xsl:text>[</xsl:text>
             <xsl:call-template name="level-number-to-latex-name">
                 <xsl:with-param name="level" select="$numbering-theorems" />
             </xsl:call-template>
-            <xsl:text>]&#xa;</xsl:text>
-            <xsl:text>\floatname{mbxtable}{</xsl:text>
+            <xsl:text>,name=</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'table'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
-            <xsl:text>\renewenvironment{table}%&#xa;</xsl:text>
-            <xsl:text>{\begin{mbxtable}\setcounter{mbxtable}{\value{theorem}}\stepcounter{theorem}}%&#xa;</xsl:text>
-            <xsl:text>{\end{mbxtable}}&#xa;</xsl:text>
+            <xsl:text>% tables have the same number as theorems: http://tex.stackexchange.com/questions/16195/how-to-make-equations-figures-and-theorems-use-the-same-numbering-scheme &#xa;</xsl:text>
+            <xsl:text>\makeatletter&#xa;</xsl:text>
+            <xsl:text>\let\c@table\c@theorem&#xa;</xsl:text>
+            <xsl:text>\makeatother&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
     <xsl:text>%% Raster graphics inclusion, wrapped figures in paragraphs&#xa;</xsl:text>
@@ -1003,9 +1060,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>,</xsl:text>
     <xsl:value-of select="@lly" />
     <xsl:text>){\includegraphics</xsl:text>
-    <xsl:if test="@width">
+    <xsl:if test="@width"> 
         <xsl:text>[width=</xsl:text>
-        <xsl:value-of select="@width" />
+            <xsl:value-of select="@width" />
         <xsl:text>]</xsl:text>
     </xsl:if>
     <xsl:text>{</xsl:text>
@@ -2014,7 +2071,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Captions for Figures and Tables -->
 <!-- xml:id is on parent, but LaTeX generates number with caption -->
 <xsl:template match="caption">
-    <xsl:text>\caption{</xsl:text>
+    <xsl:choose>
+      <xsl:when test="ancestor::sidebyside and ancestor::table and not(ancestor::sidebyside/caption)">
+            <xsl:text>\captionof{table}{</xsl:text>
+      </xsl:when>
+      <xsl:when test="ancestor::sidebyside and ancestor::figure and not(ancestor::sidebyside/caption)">
+            <xsl:text>\captionof{figure}{</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+          <xsl:text>\caption{</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:apply-templates />
     <xsl:apply-templates select=".." mode="label" />
     <xsl:text>}&#xa;</xsl:text>
@@ -2022,7 +2089,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Figures -->
 <!-- Standard LaTeX figure environment redefined, see preamble comments -->
-<xsl:template match="figure">
+<!-- The sidebyside template 'wrapping' environment will always be a figure; 
+     captions will be accounted for appropriately using \captionof{<name/>}{<CAPTION/>}. 
+     See the caption template for details. -->
+<xsl:template match="figure|sidebyside">
     <xsl:text>\begin{figure}&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]"/>
@@ -2030,16 +2100,158 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{figure}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- the width of a <object/> inside a sidebyside is translated into 
+     a fraction of \textwidth 
+     we do this by stripping the % sign, and 
+     adding a leading .
+     for example 50% is turned into .50\textwith
+
+     Each sidebyside element is put through a measuring routine,
+     which allows us to align captions correctly;
+     see: http://tex.stackexchange.com/questions/230335/vertically-aligning-minipages-subfigures-and-subtables-not-with-baseline
+     for details.
+
+     The following elements are supported:
+
+     sidebyside/figure 
+     sidebyside/table 
+     sidebyside/paragraphs 
+     sidebyside/p 
+     sidebyside/image 
+     sidebyside/tabular 
+     -->
+<xsl:template match="sidebyside/figure|sidebyside/table|sidebyside/image|sidebyside/tabular|sidebyside/paragraphs|sidebyside/p">
+    <!-- process the width attritbute -->
+    <xsl:variable name="width">
+        <xsl:choose>
+            <xsl:when test="@width">
+                <xsl:value-of select="substring-before(@width,'%')" />
+            </xsl:when>
+            <xsl:otherwise>
+              <!-- default width is calculated by computing 100/(number of figures)
+                   for example, if there are 4 figures, the default width will be 25% -->
+              <xsl:call-template name="printWidth" select="."/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="length" select="string-length($width)"/>
+    <!-- capture each element -->
+    <xsl:text>\pushValignCaptionBottom</xsl:text>
+    <!-- specify the vertical alignment -->
+    <xsl:choose>
+        <xsl:when test="@valign='top'">
+            <xsl:text>[t]</xsl:text>
+        </xsl:when>
+        <xsl:when test="@valign='middle'">
+            <xsl:text>[c]</xsl:text>
+        </xsl:when>
+        <!-- default value -->
+        <xsl:otherwise>
+            <xsl:text>[b]</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- specify minipage, subfigure, or subtable -->
+    <xsl:text>{</xsl:text>
+    <xsl:choose>
+      <xsl:when test="self::figure and ancestor::sidebyside/caption">
+            <xsl:text>subfigure</xsl:text>
+      </xsl:when>
+      <xsl:when test="self::table and ancestor::sidebyside/caption">
+            <xsl:text>subtable</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+            <xsl:text>minipage</xsl:text>
+      </xsl:otherwise> 
+    </xsl:choose>
+    <xsl:text>}</xsl:text>
+    <!-- specify the text width -->
+    <xsl:text>{.</xsl:text>
+    <xsl:choose>
+        <!-- @width can contain a decimal, e.g 25.56%, in which 
+           case we need to remove the decimal -->
+        <xsl:when test="contains($width,'.')">
+            <xsl:value-of select="substring-before($width,'.')"/>
+            <xsl:value-of select="substring-after($width,'.')"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$width"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>\textwidth}{%&#xa;</xsl:text>
+    <!-- paragraphs and p elements need wrapping in a parbox -->
+    <xsl:if test="self::paragraphs or self::p">
+      <xsl:text>\parbox{\textwidth}{%&#xa;</xsl:text>
+    </xsl:if>
+    <!-- horizontal alignment -->
+    <xsl:choose>
+        <xsl:when test="@halign='right'">
+            <xsl:text>\raggedleft</xsl:text>
+        </xsl:when>
+        <xsl:when test="@halign='left'">
+            <xsl:text>\raggedright</xsl:text>
+        </xsl:when>
+        <xsl:when test="@halign='center'">
+            <xsl:text>\centering</xsl:text>
+        </xsl:when>
+        <!-- default value -->
+        <xsl:otherwise>
+              <!-- anything except a paragraph gets centering by default -->
+              <xsl:if test="not(self::paragraphs or self::p)">
+                    <xsl:text>\centering</xsl:text>
+              </xsl:if> 
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>% horizontal alignment &#xa;</xsl:text>
+    <!-- body of the figure/table/image/paragraph/tabular -->
+    <xsl:if test="self::p or self::tabular">
+        <xsl:apply-templates />
+    </xsl:if>
+    <xsl:apply-templates select="*[not(self::caption)]" />
+    <xsl:if test="self::image">
+      <xsl:call-template name="processImage"/>
+    </xsl:if>
+    <!-- \parbox needs closing-->
+    <xsl:if test="self::paragraphs or self::p">
+      <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <!-- end the body of the figure/image/table/tabular/paragraph -->
+    <xsl:text>}% end body &#xa;{</xsl:text>
+    <!-- add caption -->
+    <xsl:apply-templates select="caption" />
+    <xsl:text>}% caption &#xa;</xsl:text>
+    <!-- last child gets an \end{verticallyaligned} -->
+    <xsl:if test="not(following-sibling::figure or following-sibling::image or following-sibling::paragraphs or following-sibling::p or following-sibling::table or following-sibling::tabular)">
+      <xsl:text>\popValignCaptionBottom&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="sidebyside/paragraphs/title">
+  <xsl:text>\paragraph{</xsl:text>
+    <xsl:apply-templates />
+  <xsl:text>}</xsl:text>
+</xsl:template>
+
 <!-- Images -->
 <xsl:template match="image" >
+  <xsl:call-template name="processImage"/>
+</xsl:template>
+
+<xsl:template name="processImage">
     <xsl:if test="@source">
         <xsl:text>\includegraphics[</xsl:text>
+        <xsl:choose>
+          <xsl:when test="ancestor::sidebyside">
+            <xsl:text>width=\textwidth,</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
             <xsl:if test="@width">
                 <xsl:text>width=</xsl:text><xsl:value-of select="@width" /><xsl:text>pt,</xsl:text>
             </xsl:if>
-            <xsl:if test="@height">
-                <xsl:text>height=</xsl:text><xsl:value-of select="@height" /><xsl:text>pt,</xsl:text>
-            </xsl:if>
+          </xsl:otherwise>
+        </xsl:choose>
+         <xsl:if test="@height">
+             <xsl:text>height=</xsl:text><xsl:value-of select="@height" /><xsl:text>pt,</xsl:text>
+         </xsl:if>
         <xsl:text>]</xsl:text>
         <xsl:text>{</xsl:text><xsl:value-of select="@source" /><xsl:text>}</xsl:text>
     </xsl:if>

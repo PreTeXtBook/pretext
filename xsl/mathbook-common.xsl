@@ -117,6 +117,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="md mdn" />
 <xsl:strip-space elements="sage figure index" />
 <xsl:strip-space elements="table tgroup thead tbody row" />
+<xsl:strip-space elements="sidebyside paragraphs" />
 
 <!-- ######### -->
 <!-- Variables -->
@@ -781,6 +782,65 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="sidebyside" mode="type-name">
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'figure'" />
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="printWidth">
+    <xsl:variable name="existingWidths">
+        <xsl:choose>
+            <!-- when no siblings have a width specified -->
+            <xsl:when test="count(ancestor::sidebyside/*/@width)=0">    
+                    <xsl:value-of select="0"/>
+            </xsl:when>
+            <!-- otherwise add together the existing widths -->
+            <xsl:otherwise>
+                <xsl:variable name="tmpWidths">
+                   <xsl:for-each select="ancestor::sidebyside/*/@width">
+                    <xsl:value-of select="."/>
+                   </xsl:for-each>
+                </xsl:variable>
+                <xsl:variable name="length" select="string-length($tmpWidths)"/>
+                <xsl:call-template name="remaingingWidth">
+                    <xsl:with-param name="str" select="substring(string($tmpWidths),1,($length -1))" />
+                    <xsl:with-param name="delimiter" select="'%'" />
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- output the width to at most four decimal places, e.g 3.1415 -->
+    <xsl:value-of select="format-number((100-$existingWidths) div count(ancestor::sidebyside/*[not(self::caption)][not(@width)]),'#.###')"/>
+</xsl:template>
+
+<!-- sidebyside children can have @width attribute; they can also
+     omit it. In the case where it is not present, we need to add 
+     together the numbers contained in a string separated by % symbols.
+
+     Reference:
+     http://stackoverflow.com/questions/28430054/how-to-add-all-comma-separated-values-in-xslt -->
+<xsl:template name="remaingingWidth" >
+    <xsl:param name="str" />   <!-- $str is having '0.001,0.003' value -->
+    <xsl:param name="delimiter" />
+    <xsl:param name="summation" select="0" />
+     <xsl:choose>
+        <xsl:when test="contains($str,$delimiter)">
+            <xsl:variable name="beforecomma" select="substring-before($str,$delimiter)" />
+            <xsl:variable name="aftercomma" select="substring-after($str,$delimiter)" />
+            <xsl:call-template name="remaingingWidth">
+                <xsl:with-param name="str" select="$aftercomma" />
+                <xsl:with-param name="delimiter" select="$delimiter" />
+                <xsl:with-param name="summation" select="$summation + $beforecomma" />
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$summation + $str" />
+        </xsl:otherwise>
+     </xsl:choose>
+</xsl:template>
+
+
 <!-- This template translates an string to an upper-case language-equivalent -->
 <!-- Sometimes we must call this directly, but usually better to apply the   -->
 <!-- template mode="type-name" to the node, which then calls this routine    -->
@@ -1003,7 +1063,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Numbering Theorems, Definitions, Examples, Inline Exercises, Figures, etc.-->
 <!-- Sructural to a configurable depth, then numbered across depth -->
 <!-- We include figures and tables, which is different than LaTeX out-of-the-box behavior -->
-<xsl:template match="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table" mode="number">
+<xsl:template match="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table|sidebyside" mode="number">
     <xsl:call-template name="level-number">
         <xsl:with-param name="number">
             <xsl:apply-templates select="." mode="structural-number" />
@@ -1017,11 +1077,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="/mathbook/book">
             <xsl:choose>
-                <xsl:when test="$numbering-theorems=0"><xsl:number select="." from="book" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table"/></xsl:when>
-                <xsl:when test="$numbering-theorems=1"><xsl:number select="." from="chapter" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table"/></xsl:when>
-                <xsl:when test="$numbering-theorems=2"><xsl:number select="." from="section" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table"/></xsl:when>
-                <xsl:when test="$numbering-theorems=3"><xsl:number select="." from="subsection" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table"/></xsl:when>
-                <xsl:when test="$numbering-theorems=4"><xsl:number select="." from="subsubsection" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table"/></xsl:when>
+                <xsl:when test="$numbering-theorems=0"><xsl:number select="." from="book" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
+                <xsl:when test="$numbering-theorems=1"><xsl:number select="." from="chapter" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
+                <xsl:when test="$numbering-theorems=2"><xsl:number select="." from="section" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
+                <xsl:when test="$numbering-theorems=3"><xsl:number select="." from="subsection" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
+                <xsl:when test="$numbering-theorems=4"><xsl:number select="." from="subsubsection" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
                 <xsl:otherwise>
                     <xsl:message>MBX:ERROR: Level for theorem number computation is out-of-bounds (<xsl:value-of select="$numbering-theorems" />)</xsl:message>
                 </xsl:otherwise>
@@ -1029,10 +1089,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="/mathbook/article">
             <xsl:choose>
-                <xsl:when test="$numbering-theorems=0"><xsl:number select="." from="article" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table"/></xsl:when>
-                <xsl:when test="$numbering-theorems=1"><xsl:number select="." from="section" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table"/></xsl:when>
-                <xsl:when test="$numbering-theorems=2"><xsl:number select="." from="subsection" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table"/></xsl:when>
-                <xsl:when test="$numbering-theorems=3"><xsl:number select="." from="subsubsection" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table"/></xsl:when>
+              <xsl:when test="$numbering-theorems=0"><xsl:number select="." from="article" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
+                <xsl:when test="$numbering-theorems=1"><xsl:number select="." from="section" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
+                <xsl:when test="$numbering-theorems=2"><xsl:number select="." from="subsection" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
+                <xsl:when test="$numbering-theorems=3"><xsl:number select="." from="subsubsection" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
                 <xsl:otherwise>
                     <xsl:message>MBX:ERROR: Level for theorem number computation is out-of-bounds (<xsl:value-of select="$numbering-theorems" />)</xsl:message>
                 </xsl:otherwise>
@@ -1042,6 +1102,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:message>MBX:ERROR: Level for theorem number computation implemented only for books, articles</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- subfigures -->
+<xsl:template match="sidebyside[count(caption)>0]/figure" mode="number">
+    <xsl:text>(</xsl:text>
+    <xsl:number format="a" count="sidebyside/figure"/>
+    <xsl:text>)</xsl:text>
+</xsl:template>
+
+<!-- subtables -->
+<xsl:template match="sidebyside[count(caption)>0]/table" mode="number">
+    <xsl:text>(</xsl:text>
+    <xsl:number format="a" count="sidebyside/table"/>
+    <xsl:text>)</xsl:text>
 </xsl:template>
 
 <!-- Numbering Equations -->

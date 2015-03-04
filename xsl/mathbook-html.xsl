@@ -1382,20 +1382,41 @@ is just flat out on the page, as if printed there.
 <!-- Figures and their captions -->
 <!-- TODO: class="wrap" is possible -->
 <xsl:template match="figure">
-    <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
-    <figure id="{$ident}">
+    <xsl:element name="figure">
+        <xsl:variable name="ident">
+          <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:variable>
+        <xsl:attribute name="id"><xsl:value-of select="$ident"/></xsl:attribute>
+        <!-- side by side figures can accept additional attributes -->
+        <xsl:if test="ancestor::sidebyside">
+            <xsl:call-template name="sidebysideCSS" select="."/>
+        </xsl:if>
+        <!-- regular figure, no subfigures -->
         <xsl:apply-templates select="*[not(self::caption)]"/>
         <xsl:apply-templates select="caption"/>
-    </figure>
+    </xsl:element>
+    <xsl:if test="ancestor::sidebyside">
+       <xsl:text>&#xa;&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Images -->
 <xsl:template match="image" >
     <xsl:if test="@source">
         <xsl:element name="img">
-            <xsl:if test="@width">
-                <xsl:attribute name="width"><xsl:value-of select="@width" /></xsl:attribute>
-            </xsl:if>
+          <xsl:if test="ancestor::sidebyside and not(ancestor::figure)"> 
+              <xsl:call-template name="sidebysideCSS" select="."/>
+          </xsl:if>
+          <xsl:choose>
+            <xsl:when test="ancestor::figure"> 
+                <xsl:attribute name="width">100%</xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:if test="@width and not(ancestor::sidebyside)">
+                    <xsl:attribute name="width"><xsl:value-of select="@width" /></xsl:attribute>
+                </xsl:if>
+            </xsl:otherwise>
+          </xsl:choose>
             <xsl:if test="@height">
                 <xsl:attribute name="height"><xsl:value-of select="@height" /></xsl:attribute>
             </xsl:if>
@@ -1404,6 +1425,9 @@ is just flat out on the page, as if printed there.
         </xsl:element>
     </xsl:if>
     <xsl:apply-templates select="tikz|asymptote|sageplot|latex-image-code" />
+    <xsl:if test="ancestor::sidebyside">
+       <xsl:text>&#xa;&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Write an "alt" attribute as part    -->
@@ -1475,6 +1499,122 @@ is just flat out on the page, as if printed there.
         <xsl:apply-templates select="../description" />
         <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
     </xsl:element>
+</xsl:template>
+
+<!-- side by side objects -->
+<xsl:template match="sidebyside">
+  <!-- create div wrapper -->
+  <xsl:element name="div">
+    <xsl:variable name="ident">
+      <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:variable>
+    <xsl:attribute name="id"><xsl:value-of select="$ident"/></xsl:attribute>
+    <xsl:attribute name="class">sidebyside</xsl:attribute>
+    <xsl:apply-templates select="*[not(self::caption)]"/>
+    <xsl:apply-templates select="caption"/>
+  </xsl:element>
+</xsl:template>
+
+<xsl:template match="sidebyside/tabular|sidebyside/p">
+    <xsl:choose>
+      <xsl:when test="self::p">
+        <xsl:element name="p">
+            <xsl:call-template name="sidebysideCSS" select="."/>
+            <xsl:apply-templates/>
+        </xsl:element>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:element name="figure">
+            <xsl:call-template name="sidebysideCSS" select="."/>
+            <xsl:apply-templates/>
+        </xsl:element>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>&#xa;&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="sidebyside/paragraphs">
+ <xsl:element name="article">
+   <xsl:attribute name="class">paragraphs</xsl:attribute>
+   <xsl:call-template name="sidebysideCSS" select="."/>
+      <xsl:apply-templates/>
+  </xsl:element>
+    <xsl:text>&#xa;&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="sidebyside/paragraphs/title">
+  <xsl:element name="h5">
+    <xsl:attribute name="class">heading</xsl:attribute>
+    <xsl:apply-templates/>
+  </xsl:element>
+</xsl:template>
+
+<!-- this template adds class="left|middle|right" and, optionally, style="width=@width;vertical-align=@valign;text-align=@halign"
+     to figure, table, image, p elements within a sidebyside tag -->
+<xsl:template name="sidebysideCSS">
+  <!-- paragraphs have their own class -->
+  <xsl:if test="not(self::paragraphs)">
+    <xsl:choose>
+        <!-- first child is class="left" -->
+        <xsl:when test="not(preceding-sibling::figure or preceding-sibling::image or preceding-sibling::paragraphs or preceding-sibling::p or preceding-sibling::table or preceding-sibling::tabular)">
+          <xsl:attribute name="class">left</xsl:attribute>
+        </xsl:when>
+        <!-- last child is class="right" -->
+        <xsl:when test="not(following-sibling::figure or following-sibling::image or following-sibling::paragraphs or following-sibling::p or following-sibling::table or following-sibling::tabular)">
+          <xsl:attribute name="class">right</xsl:attribute>
+        </xsl:when>
+        <!-- middle children are class="middle" -->
+        <xsl:otherwise>
+          <xsl:attribute name="class">middle</xsl:attribute>
+        </xsl:otherwise>
+    </xsl:choose>
+  </xsl:if>
+  <xsl:attribute name="style">
+  <xsl:text>width:</xsl:text>
+  <!-- if width is defined, then use it -->
+  <xsl:variable name="width">
+    <xsl:choose>
+      <xsl:when test="@width">
+          <xsl:value-of select="substring-before(@width,'%')"/>
+      </xsl:when>
+      <xsl:otherwise>
+          <!-- calculate widths that have been specified 
+             and auto-print a remaining width -->
+               <xsl:call-template name="printWidth" select="."/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <!-- the width needs to be cut a small amount to allow a space between objects -->
+  <xsl:value-of select="floor(($width)*.97)"/>
+  <xsl:text>%</xsl:text>
+  <xsl:text>;</xsl:text>
+  <!-- vertical alignment option -->
+  <xsl:text>vertical-align:</xsl:text>
+  <xsl:choose>
+    <xsl:when test="@valign">
+      <xsl:value-of select="@valign"/>
+    </xsl:when>
+    <!-- default -->
+    <xsl:otherwise>
+      <xsl:text>bottom</xsl:text>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:text>;</xsl:text>
+  <!-- horizontal alignment option -->
+  <xsl:text>text-align:</xsl:text>
+  <xsl:choose>
+    <xsl:when test="@halign">
+      <xsl:value-of select="@halign"/>
+    </xsl:when>
+    <!-- default -->
+    <xsl:otherwise>
+        <xsl:if test="not(self::paragraphs or self::p)">
+            <xsl:text>center</xsl:text>
+        </xsl:if>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:text>;</xsl:text>
+  </xsl:attribute>
 </xsl:template>
 
 
@@ -1560,12 +1700,23 @@ is just flat out on the page, as if printed there.
 <!-- A subset of the (failed) "CALS Table Model" -->
 <!-- Should be able to replace this by extant XSLT for this conversion -->
 <xsl:template match="table">
-    <figure>
+    <xsl:element name="figure">
+        <xsl:variable name="ident">
+          <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:variable>
+        <xsl:attribute name="id"><xsl:value-of select="$ident"/></xsl:attribute>
+        <!-- side by side figures can accept additional attributes -->
+        <xsl:if test="ancestor::sidebyside">
+            <xsl:call-template name="sidebysideCSS" select="."/>
+        </xsl:if>
         <table class="center">
             <xsl:apply-templates select="*[not(self::caption)]" />
         </table>
         <xsl:apply-templates select="caption" />
-    </figure>
+    </xsl:element>
+    <xsl:if test="ancestor::sidebyside">
+       <xsl:text>&#xa;&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="tgroup"><xsl:apply-templates /></xsl:template>
@@ -1591,9 +1742,13 @@ is just flat out on the page, as if printed there.
 <!-- All the relevant information is in the parent -->
 <xsl:template match="caption">
     <figcaption>
-        <span class="heading">
-            <xsl:apply-templates select=".." mode="type-name"/>
-        </span>
+        <!-- subfigure/subtable captions don't have 'Figure'/'Table' in the caption -->
+        <xsl:if test="not(ancestor::sidebyside[count(caption)>0]) or local-name(..)='sidebyside'">
+          <!-- regular figures, e.g Figure 1.3 or global captions for a collection of subfigures/subtables-->
+            <span class="heading">
+                <xsl:apply-templates select=".." mode="type-name"/>
+            </span>
+        </xsl:if>
         <span class="codenumber">
             <xsl:apply-templates select=".." mode="number"/>
         </span>
@@ -1623,6 +1778,10 @@ is just flat out on the page, as if printed there.
         <xsl:value-of select="$prefix" />
         <xsl:if test="$prefix!=''">
             <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
+        </xsl:if>
+        <!-- subfigures/subtables need their parent figure's number, e.g Figure 21.1(a) -->
+        <xsl:if test="ancestor::sidebyside[count(caption)>0]">
+              <xsl:apply-templates select="ancestor::sidebyside" mode="number" />
         </xsl:if>
         <xsl:apply-templates select="." mode="number" />
     </xsl:variable>
