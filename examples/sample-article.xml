@@ -1757,6 +1757,289 @@ the xsltproc executable.
 
         </section>
 
+        <section>
+          <title>Side-By-Side Objects</title>
+        <subsection>
+          <title>Introduction</title>
+          <p>A variety of different objects can be put side-by-side using the <c>sidebyside</c> element.</p>
+        </subsection>
+        <subsection>
+          <title>Figures with Numbers Side-By-Side</title>
+        <p>Figures can be put side-by-side using the <c>sidebyside</c> element; if a <q>global</q>
+          caption is present, then the figures will be labelled as (a), (b), (c), etc; for example, see the subfigures in <xref ref="fig-sidebyside-global" autoname="yes"/>.
+          You can, of course, reference the subfigures individually, for example: <xref ref="fig-sidebyside-subfigure" autoname="yes"/>.</p>
+        <p>If a global caption is <emph>not</emph> present, then the figures will be labeled regularly, as for example, <xref ref="regular-figure" autoname="yes"/> and <xref ref="another-regular-figure" autoname="yes"/></p>
+        <p>The <c>width</c> can be specified for each child,
+          or omitted, in which case it will be calculated automatically based on the <emph>remaining</emph> width available; for 
+          finer control, it is generally best to specify the width.</p>
+          <sidebyside xml:id="fig-sidebyside-global">
+            <figure width="25.67%" xml:id="fig-sidebyside-subfigure">
+              <image source="images/trefoil.png"/>
+              <caption></caption>
+            </figure>
+            <figure width="25%">
+              <image source="images/trefoil.png"/>
+              <caption></caption>
+            </figure>
+          <caption>Side-by-side Figure, with subfigure children.</caption>
+          </sidebyside>
+          <sidebyside>
+            <figure width="50%">
+              <image source="images/trefoil.png"/>
+              <caption>width=50<percent/></caption>
+            </figure>
+            <figure width="25%">
+              <image source="images/trefoil.png"/>
+              <caption>width=25<percent/></caption>
+            </figure>
+          <caption>Side-by-side Figure, with subfigure children.</caption>
+          </sidebyside>
+          <sidebyside>
+            <figure>
+              <image source="images/trefoil.png"/>
+              <caption></caption>
+            </figure>
+            <figure>
+              <image source="images/trefoil.png"/>
+              <caption></caption>
+            </figure>
+            <figure>
+              <image source="images/trefoil.png"/>
+              <caption></caption>
+            </figure>
+          <caption>Widths can be calculated automatically</caption>
+          </sidebyside>
+          <sidebyside>
+            <figure xml:id="regular-figure">
+              <image source="images/trefoil.png"/>
+              <caption>Side-by-side Figures.</caption>
+            </figure>
+            <figure xml:id="another-regular-figure">
+              <image source="images/trefoil.png"/>
+              <caption>Regular numbering.</caption>
+            </figure>
+            <figure width="50%">
+              <image source="images/trefoil.png"/>
+              <caption>Regular numbering.</caption>
+            </figure>
+          </sidebyside>
+        </subsection>
+        <subsection>
+          <title>Images Without Captions</title>
+          <p>We can use the <c>sidebyside</c> element to put <c>images</c> next to each other; there's no
+            need to specify the <c>width</c>, unless you want to fine tune things.</p>
+          <sidebyside>
+              <image source="images/trefoil.png"/>
+              <image source="images/trefoil.png"/>
+          </sidebyside>
+          <sidebyside>
+              <image width="10%" source="images/trefoil.png"/>
+              <image width="30%" source="images/trefoil.png"/>
+              <image width="20%" source="images/trefoil.png"/>
+              <image width="20%" source="images/trefoil.png"/>
+              <image width="20%" source="images/trefoil.png"/>
+          </sidebyside>
+        </subsection>
+        <subsection>
+          <title>Vertical Alignment</title>
+          <p>Vertical alignment can be specified using the (optional) <c>valign</c> attribute which
+            can take values <c>top</c>, <c>middle</c>, and <c>bottom</c>; the default is <c>bottom</c>.</p>
+          <sidebyside>
+            <figure width="33%" valign="middle">
+              <image source="images/trefoil.png"/>
+              <caption>Middle</caption>
+            </figure>
+            <figure width="17%" valign="top">
+              <image source="images/trefoil.png"/>
+              <caption>Top</caption>
+            </figure>
+            <figure width="50%" valign="middle">
+              <image source="images/trefoil.png"/>
+              <caption>Middle</caption>
+            </figure>
+          </sidebyside>
+          <p>We may apply the same <c>valign</c> attribute to <c>images</c> without captions.</p>
+          <sidebyside>
+              <image width="10%" valign="top" source="images/trefoil.png"/>
+              <image width="10%" valign="bottom" source="images/trefoil.png"/>
+              <image width="20%" source="images/trefoil.png"/>
+              <image width="10%" valign="bottom" source="images/trefoil.png"/>
+              <image width="20%" source="images/trefoil.png"/>
+          </sidebyside>
+        </subsection>
+        <subsection>
+          <title>Text Next to Text and Images</title>
+          <p>Text can be put next to other blocks of text using either the <c>paragraphs</c> element,
+            which can contain multiple paragraphs using the <c>p</c> element.</p>
+          <p>If only one paragraph is required, simply use the <c>p</c> element on its own.</p>
+          <sidebyside>
+              <paragraphs width="20%" valign="middle">
+                <title>Sample title</title>
+                <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text</p>
+              </paragraphs>
+              <paragraphs width="20%" valign="top">
+                <p>here is some text here is some text here is some text here is some text here</p>
+                <p>here is some text here is some text here is some text here is some text here</p>
+                <p>here is some text here is some text here is some text here is some text here</p>
+              </paragraphs>
+              <p width="20%" valign="middle" halign="right">here is some text here is some text here is some text here is some text here</p>
+              <p width="20%" valign="bottom" halign="center">here is some text here is some text here is some text here is some text here</p>
+          </sidebyside>
+          <p>Similarly, text can be put next to images</p>
+          <sidebyside>
+              <paragraphs width="50%" valign="middle">
+                <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text</p>
+              </paragraphs>
+              <image width="20%" valign="top" source="images/trefoil.png"/>
+          </sidebyside>
+          <p>You can even place text next to numbered figures, as shown below in <xref ref="text-next-to-figure" autoname="yes"/>.</p>
+          <sidebyside>
+              <paragraphs width="50%" valign="middle">
+                <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text</p>
+              </paragraphs>
+              <figure width="20%" valign="top" xml:id="text-next-to-figure">
+              <image source="images/trefoil.png" height="30" />
+              <caption>Text next to a figure</caption>
+              </figure>
+          </sidebyside>
+        </subsection>
+        <subsection>
+          <title>Horizontal Alignment</title>
+          <p>Text can be horizontally aligned to the <c>left</c> (default), <c>center</c>, or <c>right</c> using the optional <c>halign</c> attribute. </p>
+          <sidebyside>
+              <paragraphs width="20%" halign="center" valign="bottom">
+                <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text</p>
+              </paragraphs>
+              <paragraphs width="20%" halign="left" valign="top">
+                <p>here is some text here is some text here is some text here is some text here </p>
+                <p>here is some text here is some text here is some text here is some text here </p>
+                <p>here is some text here is some text here is some text here is some text here </p>
+              </paragraphs>
+              <paragraphs width="20%" halign="right" valign="middle">
+                <p>here is some text here is some text here is some text here is some text here </p>
+                <p>here is some text here is some text here is some text here is some text here </p>
+              </paragraphs>
+          </sidebyside>
+        </subsection>
+        <subsection>
+          <title>Tables Side-By-Side</title>
+          <p>Tables can also be put side-by-side, as demonstrated below in <xref ref="tab-sidebyside-global" autoname="yes"/>; 
+            naturally, subtables can be referenced as in <xref ref="tab-sidebyside-subtable" autoname="yes"/>.</p>
+          <sidebyside xml:id="tab-sidebyside-global">
+            <caption>Side-by-side Table, with subtable children.</caption>
+            <table halign="left" width="50%" xml:id="tab-sidebyside-subtable">
+              <caption>width=50<percent/></caption>
+              <tabular>tabular body</tabular>
+            </table>
+            <table width="25%">
+              <caption>width=25<percent/></caption>
+              <tabular>tabular body</tabular>
+            </table>
+          </sidebyside>
+          <sidebyside>
+            <caption>Widths can be calculated automatically.</caption>
+            <table>
+              <caption></caption>
+              <tabular>tabular body</tabular>
+            </table>
+            <table>
+              <caption></caption>
+              <tabular>tabular body</tabular>
+            </table>
+          </sidebyside>
+          <p>If you put two <c>table</c> elements side-by-side without a <q>global</q> caption, then they will use regular numbering; see
+            <xref ref="tab-regular-fig1" autoname="plural"/> through <xref ref="tab-regular-fig3"/>.</p>
+          <sidebyside>
+            <table xml:id="tab-regular-fig1">
+              <caption></caption>
+              <tabular>
+              tabular body
+              </tabular>
+            </table>
+            <table xml:id="tab-regular-fig2">
+              <caption></caption>
+              <tabular>tabular body</tabular>
+            </table>
+            <table xml:id="tab-regular-fig3">
+              <caption></caption>
+              <tabular>tabular body</tabular>
+            </table>
+          </sidebyside>
+        </subsection>
+        <subsection>
+            <title>Horizontal and Vertical Alignment</title>
+            <p>Tables within the <c>sidebyside</c> element can accept the <c>halign</c> and <c>valign</c> attributes; see <xref ref="tab-regular-halign-demo" autoname="plural"/> 
+            and <xref ref="tab-regular-valign-demo"/>. The <c>halign</c> attribute can take values <c>left</c>, <c>center</c> (default), and 
+            <c>right</c>; the <c>valign</c> attribute can take values <c>top</c>, <c>middle</c>, and <c>bottom</c> (default).</p>
+          <sidebyside>
+            <caption>Global Caption</caption>
+            <table>
+              <caption></caption>
+              <tabular>tabular body</tabular>
+            </table>
+            <table xml:id="tab-regular-halign-demo" halign="right">
+              <caption>halign="right"</caption>
+              <tabular>tabular body</tabular>
+            </table>
+            <table xml:id="tab-regular-valign-demo" valign="top">
+              <caption>valign="top"</caption>
+              <tabular>tabular body</tabular>
+            </table>
+          </sidebyside>
+         </subsection>
+        <subsection>
+            <title>Tables Next to Figures</title>
+            <p>Tables and Figures can go next to each other, as demonstrated in <xref ref="table-next-figure" autoname="yes"/>
+              and <xref ref="figure-next-table" autoname="yes"/>.</p>
+          <sidebyside>
+            <table xml:id="table-next-figure">
+              <caption>Table next to a Figure</caption>
+              <tabular>tabular body</tabular>
+            </table>
+            <figure xml:id="figure-next-table">
+              <image source="images/trefoil.png"/>
+              <caption>Figure next to a Table</caption>
+              </figure>
+            </sidebyside>
+        </subsection>
+        <subsection>
+          <title>Tables Next to Text</title>
+          <p>Tables can go next to text blocks.</p>
+          <sidebyside>
+            <table>
+              <caption>Table next to text</caption>
+              <tabular>tabular body</tabular>
+            </table>
+            <paragraphs width="20%" halign="left" valign="top">
+              <p>here is some text here is some text here is some text here is some text here </p>
+              <p>here is some text here is some text here is some text here is some text here </p>
+              <p>here is some text here is some text here is some text here is some text here </p>
+            </paragraphs>
+            <paragraphs width="20%" halign="center" valign="middle">
+              <p>here is some text here is some text here is some text here is some text here </p>
+              <p>here is some text here is some text here is some text here is some text here </p>
+            </paragraphs>
+          </sidebyside>
+        </subsection>
+        <subsection>
+          <title>Tables Without Captions Next to Each Other</title>
+          <p>Tables can go next to each other without captions using the <c>tabular</c> element.</p>
+          <sidebyside>
+            <tabular>
+              tabular body
+            </tabular>
+            <tabular>
+              tabular body
+            </tabular>
+            <tabular>
+              tabular body
+            </tabular>
+            <tabular>
+              tabular body
+            </tabular>
+          </sidebyside>
+        </subsection>
+        </section>
         <!-- Bibliography/References can appear anywhere -->
 
         <references>
