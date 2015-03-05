@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2015 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!--
+To process this file, at the command-line issue:
+
+xsltproc /path/to/mathbook/xsl/mathbook-html.xsl /path/to/mathbook/examples/sample-errors-and-warnings.xml
+
+Some warnings are converter-specific (such as 
+triple braces in LaTeX source migrating to Sage
+notebooks where that syntax is relevant).
+
+Errors and warnings will be output at the console, 
+so the actual HTML output should not be of interest,
+and may not even be usable.  That's not the point.
+
+Developers: use this file as a permanent place to
+test specific errors or warnings, and/or to test
+improvements to the error/warning/deprecation
+systems.
+-->
+
+<mathbook>
+
+    <article xml:id="errors-and-warnings">
+        <title>Errors and Warnings in MathBook XML</title>
+
+        <section>
+            <title>Introduction</title>
+
+            <p>We collect some bad things here, to test deprecation warnings and error handling.  Don't be alarmed.</p>
+        </section>
+
+        <section>
+            <title>Global Deprecations</title>
+            <p>These are sprinkled around as necessary, but listed here.</p>
+            <!-- Newer deprecations first  -->
+            <p>Cite element subsumed into xref scheme (2014/06/25).</p>
+            <p>Obsolete filebase attribute (2014/05/04).</p>
+        </section>
+
+        <section filebase="obsolete-way-to-introduce-filename-strings">
+            <title>Introduction</title>
+            <p>A sample paragraph.</p>
+        </section>
+
+        <section>
+            <title>Cross-References</title>
+            <p>A <c>cite</c> is replaced directly by an <c>xref</c>, the obsolete use here would be functional <cite ref="errors-and-warning" /> and  <cite provisional="just-a-test" />.</p>
+
+            <p>A cross-reference to nowhere (warnings): <xref ref="pointer-to-nowhere-as-test" /></p>
+
+            <p>A cross-reference with a bad/missing attribute: <xref perversional="spelled-bad" />.</p>
+        </section>
+
+        <section>
+            <title>Bad Math</title>
+
+            <p>Some math that gives the Sage notebook trouble:  first the fixed version, where we use a small negative space followed by a small positive space to breakup the triple braces: <m>x^2{{\!\,{y^3}}}</m></p>
+
+            <p>Now the problem version, which in the Sage notebook will wreck this page.  You should be warned about this at the console when you built this worksheet.  Elsewhere the fixed version should look like this version: <m>x^2{{{y^3}}}</m></p>
+
+        </section>
+
+        <section>
+            <title>Images</title>
+
+            <p>TikZ code no longer goes in a <c>tikz</c> element, but <c>latex-image-code</c> instead.  And similar graphics languages need to go into an <c>image</c>c> element.  We globally trap occurence inside <c>figure</c>c> without an intervening <c>image</c>, which may not be the only way this could occur.</p>
+
+            <tikz />
+
+            <figure>
+                <tikz>
+                </tikz>
+            </figure>
+
+            <figure>
+                <asymptote>
+                </asymptote>
+            </figure>
+
+            <figure>
+                <sageplot>
+                </sageplot>
+            </figure>
+
+        </section>
+
+
+
+    </article>
+
+</mathbook>

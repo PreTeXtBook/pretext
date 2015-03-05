@@ -1748,23 +1748,6 @@ the xsltproc executable.
 
         </section>
 
-        <section>
-            <title>Warnings, Errors, and Deprecated Items</title>
-
-            <p>We collect some bad things here, to test deprecation warnings and error handling.  Don't be alarmed.</p>
-
-            <p>Citations using <c>cite</c> element, not <c>xref</c> (deprecated): <cite provisional="just-a-test" /> and <cite ref="biblio-only-a-test" /></p>
-
-            <p>A cross-reference to nowhere (warnings): <xref ref="pointer-to-nowhere-as-test" /></p>
-
-            <p>A cross-reference with a bad/missing attribute: <xref perversional="spelled-bad" />.</p>
-
-            <p>Some math that gives the Sage notebook trouble:  first the fixed version, where we use a small negative space followed by a small positive space to breakup the triple braces: <m>x^2{{\!\,{y^3}}}</m></p>
-
-            <p>Now the problem version, which in the Sage notebook will wreck this page.  You should be warned about this at the console when you built this worksheet.  Elsewhere the fixed version should look like this version: <m>x^2{{{y^3}}}</m></p>
-
-        </section>
-
         <!-- Bibliography/References can appear anywhere -->
 
         <references>
