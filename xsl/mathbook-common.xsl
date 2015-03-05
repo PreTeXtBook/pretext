@@ -257,6 +257,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- docinfo is metadata, kill and retrieve as needed     -->
 <!-- Otherwise, processs book, article, letter, memo, etc -->
 <xsl:template match="/mathbook">
+    <xsl:apply-templates select="." mode="deprecation-warnings" />
     <xsl:apply-templates />
 </xsl:template>
 
@@ -1481,6 +1482,73 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>xref, no attribute</xsl:text>
         </xsl:with-param>
     </xsl:call-template>
+</xsl:template>
+
+<!-- ############ -->
+<!-- Deprecations -->
+<!-- ############ -->
+
+<!-- Generic deprecation message for uniformity -->
+<xsl:template name="deprecation-message">
+    <xsl:param name="date-string" />
+    <xsl:param name="message" />
+    <xsl:param name="occurences" />
+    <xsl:message>
+        <xsl:text>MBX:DEPRECATE: (</xsl:text>
+        <xsl:value-of select="$date-string" />
+        <xsl:text>) </xsl:text>
+        <xsl:value-of select="$message" />
+        <xsl:text> (</xsl:text>
+        <xsl:value-of select="$occurences" />
+        <xsl:text> time</xsl:text>
+        <xsl:if test="$occurences > 1">
+            <xsl:text>s</xsl:text>
+        </xsl:if>
+        <xsl:text>)</xsl:text>
+        <!-- once verbosity is implemented -->
+        <!-- <xsl:text>, set log.level to see more details</xsl:text> -->
+    </xsl:message>
+</xsl:template>
+
+<xsl:template match="*" mode="deprecation-warnings">
+    <!-- newer deprecations at the top of this list, user will see in this order -->
+    <!--  -->
+    <!-- tikz is generalized to latex-image-code -->
+    <xsl:if test="//tikz">
+        <xsl:call-template name="deprecation-message">
+            <xsl:with-param name="date-string" select="'2015/02/20'" />
+            <xsl:with-param name="message" select="'the &quot;tikz&quot; element is deprecated, convert to &quot;latex-image-code&quot; inside &quot;image&quot;'" />
+            <xsl:with-param name="occurences" select="count(//tikz)" />
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <!-- naked tikz, asymptote, sageplot are banned                -->
+    <!-- typically these would be in a figure, but not necessarily -->
+    <xsl:if test="//figure/tikz or //figure/asymptote or //figure/sageplot">
+        <xsl:call-template name="deprecation-message">
+            <xsl:with-param name="date-string" select="'2015/02/08'" />
+            <xsl:with-param name="message" select="'&quot;tikz&quot;, &quot;asymptote&quot;, &quot;sageplot&quot;, elements must always be contained directly within an &quot;image&quot; element, rather than directly within a &quot;figure&quot; element'" />
+            <xsl:with-param name="occurences" select="count(//figure/tikz) + count(//figure/asymptote) + count(//figure/sageplot)" />
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <!-- xref once had variant called "cite" -->
+    <xsl:if test="//cite">
+        <xsl:call-template name="deprecation-message">
+            <xsl:with-param name="date-string" select="'2014/06/25'" />
+            <xsl:with-param name="message" select="'the &quot;cite&quot; element is deprecated, convert to &quot;xref&quot;'" />
+            <xsl:with-param name="occurences" select="count(//cite)" />
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <!-- @filebase has been replaced in function by @xml:id -->
+    <xsl:if test="//@filebase">
+        <xsl:call-template name="deprecation-message">
+            <xsl:with-param name="date-string" select="'2014/05/04'" />
+            <xsl:with-param name="message" select="'the &quot;filebase&quot; attribute is deprecated, convert to &quot;xml:id&quot;'" />
+            <xsl:with-param name="occurences" select="count(//@filebase)" />
+        </xsl:call-template>
+    </xsl:if>
 </xsl:template>
 
 <!-- Miscellaneous -->
