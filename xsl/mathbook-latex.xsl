@@ -605,6 +605,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\newlist{exerciselist}{description}{4}&#xa;</xsl:text>
             <xsl:text>\setlist[exerciselist]{leftmargin=0pt,itemsep=-1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
         </xsl:if>
+        <xsl:if test="//exercisegroup">
+            <xsl:text>%% Indented groups of exercises within an exercise section, maximum depth 4&#xa;</xsl:text>
+            <xsl:text>\newlist{exercisegroup}{description}{4}&#xa;</xsl:text>
+            <xsl:text>\setlist[exercisegroup]{leftmargin=2em,labelindent=2em,itemsep=-1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
+        </xsl:if>
     </xsl:if>
     <xsl:if test="//index">
         <xsl:text>%% Support for index creation&#xa;</xsl:text>
@@ -1130,15 +1135,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: parameterize as a backmatter item, new switches -->
 <!-- TODO: would an "exercisegrouplist" allow parameters to move to preamble? -->
 <xsl:template match="exercises/exercise|exercisegroup/exercise">
-    <!-- Start a list right before first exercise of subdivision, or of a group -->
+    <!-- Start a list right before first exercise of subdivision, or of exercise group -->
     <xsl:choose>
+        <xsl:when test="not(preceding-sibling::exercise) and parent::exercisegroup">
+            <xsl:text>\begin{exercisegroup}&#xa;</xsl:text>
+        </xsl:when>
         <xsl:when test="not(preceding-sibling::exercise) and parent::exercises">
             <xsl:text>\begin{exerciselist}&#xa;</xsl:text>
-        </xsl:when>
-        <!-- Tweak parameters inside a group for indent -->
-        <xsl:when test="not(preceding-sibling::exercise) and parent::exercisegroup">
-            <xsl:text>\setlength{\parskip}{0pt}&#xa;</xsl:text>
-            <xsl:text>\begin{exerciselist}[leftmargin=2em,labelindent=2em]&#xa;</xsl:text>
         </xsl:when>
     </xsl:choose>
     <xsl:text>\item[</xsl:text>
@@ -1164,10 +1167,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="solution and $exercise.text.solution='yes'">
         <xsl:apply-templates select="solution" />
     </xsl:if>
-    <!-- close list if no more exercise in subdivision or in group -->
-    <xsl:if test="not(following-sibling::exercise)">
-        <xsl:text>\end{exerciselist}&#xa;</xsl:text>
-    </xsl:if>
+    <!-- close list if no more exercise in subdivision or in exercise group -->
+    <xsl:choose>
+        <xsl:when test="not(following-sibling::exercise) and parent::exercisegroup">
+            <xsl:text>\end{exercisegroup}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:when test="not(following-sibling::exercise) and parent::exercises">
+            <xsl:text>\end{exerciselist}&#xa;</xsl:text>
+        </xsl:when>
+    </xsl:choose>
 </xsl:template>
 
 <!-- An exercise statement is just a container -->
