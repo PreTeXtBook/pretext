@@ -43,7 +43,7 @@ systems.
     <article xml:id="errors-and-warnings">
         <title>Errors and Warnings in MathBook XML</title>
 
-        <section>
+        <section xml:id="introduction-id">
             <title>Introduction</title>
 
             <p>We collect some bad things here, to test deprecation warnings and error handling.  Don't be alarmed.</p>
@@ -80,7 +80,7 @@ systems.
 
         </section>
 
-        <section>
+        <section xml:id="section-images">
             <title>Images</title>
 
             <p>TikZ code no longer goes in a <c>tikz</c> element, but <c>latex-image-code</c> instead.  And similar graphics languages need to go into an <c>image</c>c> element.  We globally trap occurence inside <c>figure</c>c> without an intervening <c>image</c>, which may not be the only way this could occur.</p>
@@ -104,7 +104,11 @@ systems.
 
         </section>
 
+        <section>
+            <title>Miscellaneous</title>
 
+            <p>A circumflex should still be obtainable with <c>circum</c>: <circum />.</p>
+        </section>
 
     </article>
 

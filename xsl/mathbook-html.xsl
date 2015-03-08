@@ -163,6 +163,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- typically.  We kill <docinfo> for use in an ad-hoc   -->
 <!-- fashion, and dispatch the other (book, article, etc) -->
 <xsl:template match="/mathbook">
+    <xsl:apply-templates select="." mode="deprecation-warnings" />
     <xsl:apply-templates mode="dispatch" />
 </xsl:template>
 
@@ -1460,6 +1461,7 @@ is just flat out on the page, as if printed there.
 <xsl:template match="latex-image-code">
     <xsl:if test="not(parent::image)">
         <xsl:message>MBX WARNING: latex-image-code element should be enclosed by an image element</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
     </xsl:if>
     <xsl:element name="object">
         <xsl:attribute name="type">image/svg+xml</xsl:attribute>
@@ -1483,6 +1485,7 @@ is just flat out on the page, as if printed there.
 <xsl:template match="tikz">
     <xsl:message>MBX:WARNING: tikz element superceded by latex-image-code element</xsl:message>
     <xsl:message>MBX:WARNING: tikz package and necessary libraries should be included in docinfo/latex-image-preamble</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
     <xsl:element name="object">
         <xsl:attribute name="type">image/svg+xml</xsl:attribute>
         <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
@@ -1498,6 +1501,7 @@ is just flat out on the page, as if printed there.
 <!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <xsl:template match="asymptote">
     <xsl:message>MBX:WARNING: asymptote element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
     <xsl:element name="object">
         <xsl:attribute name="type">image/svg+xml</xsl:attribute>
         <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
@@ -1513,6 +1517,7 @@ is just flat out on the page, as if printed there.
 <!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <xsl:template match="sageplot">
     <xsl:message>MBX:WARNING: sageplot element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
     <xsl:element name="object">
         <xsl:attribute name="type">image/svg+xml</xsl:attribute>
         <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
@@ -2788,7 +2793,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:text>.html</xsl:text>
             <!-- DEPRECATION: May 2015, replace with terminate=yes if present without an xml:id -->
             <xsl:if test="@filebase">
-                <xsl:message>WARNING: filebase attribute (value=<xsl:value-of select="$a-node/@filebase" />) is deprecated, use xml:id attribute instead (by 1 May 2015)</xsl:message>
+                <xsl:message>MBX:WARNING: filebase attribute (value=<xsl:value-of select="@filebase" />) is deprecated, use xml:id attribute instead</xsl:message>
             </xsl:if>
         </xsl:when>
         <xsl:otherwise>
@@ -3066,6 +3071,7 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
 <!-- 2014/08/14: remove knowl-link-factory at the same time -->
 <xsl:template match="cite[@ref]">
     <xsl:message>MBX:WARNING: &lt;cite ref="<xsl:value-of select="@ref" />&gt; is deprecated, convert to &lt;xref ref="<xsl:value-of select="@ref" />"&gt;</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
     <xsl:call-template name="knowl-link-factory">
         <xsl:with-param name="css-class">cite</xsl:with-param>
         <xsl:with-param name="identifier">

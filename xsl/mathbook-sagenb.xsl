@@ -66,6 +66,7 @@
     <xsl:variable name="tex"><xsl:value-of select="." /></xsl:variable>
     <xsl:if test="contains($tex, '{{{')">
         <xsl:message>MBX:WARNING: your source contains LaTeX syntax with three consecutive braces ("{{{") which confuses the Sage Notebook interface.  Consider adding canceling thin spaces ("\!\,"") to your source to break up the consecutive braces.  (Offending math: <xsl:value-of select="$tex" />)</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
     </xsl:if>
     <xsl:apply-imports />
 </xsl:template>

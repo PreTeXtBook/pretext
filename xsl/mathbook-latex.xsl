@@ -580,6 +580,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="//tikz">
         <xsl:message>MBX:WARNING: the "tikz" element is deprecated (2015/16/10), use "latex-image-code" tag inside an "image" tag, and include the tikz package and relevant libraries in docinfo/latex-image-preamble</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
         <xsl:text>%% Tikz graphics&#xa;</xsl:text>
         <xsl:text>\usepackage{tikz}&#xa;</xsl:text>
         <xsl:text>\usetikzlibrary{backgrounds}&#xa;</xsl:text>
@@ -1692,6 +1693,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="circum">
     <xsl:text>\textasciicircum{}</xsl:text>
     <xsl:message>MBX:WARNING: the "circum" element is deprecated (2015/01/28), use "circumflex"</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
 </xsl:template>
 
 <xsl:template match="circumflex">
@@ -1992,6 +1994,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="tikz">
     <xsl:message>MBX:WARNING: tikz element superceded by latex-image-code element</xsl:message>
     <xsl:message>MBX:WARNING: tikz package and necessary libraries should be included in docinfo/latex-image-preamble</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
     <xsl:call-template name="sanitize-sage">
         <xsl:with-param name="raw-sage-code" select="." />
     </xsl:call-template>
@@ -1999,6 +2002,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <xsl:template match="asymptote">
     <xsl:message>MBX:WARNING: asymptote element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
     <xsl:text>\includegraphics[width=0.80\textwidth]{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
@@ -2008,6 +2012,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <xsl:template match="sageplot">
     <xsl:message>MBX:WARNING: sageplot element must be enclosed by an image element - deprecation (2015/02/08)</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
     <xsl:text>\IfFileExists{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
@@ -2296,7 +2301,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Banish to common file when removed, as error -->
 <!-- 2014/06/25:  All functionality here is replicated -->
 <xsl:template match="cite[@ref]">
-    <xsl:message>MBX:WARNING: &lt;cite ref="<xsl:value-of select="@ref" />&gt; is deprecated, convert to &lt;xref ref="<xsl:value-of select="@ref" />"&gt;</xsl:message>
+    <xsl:message>MBX:WARNING: &lt;cite ref="<xsl:value-of select="@ref" />"&gt; is deprecated, convert to &lt;xref ref="<xsl:value-of select="@ref" />"&gt;</xsl:message>
     <xsl:variable name="target" select="id(@ref)" />
         <xsl:text>\cite</xsl:text>
         <xsl:if test="@detail">

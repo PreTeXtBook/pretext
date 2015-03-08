@@ -1454,6 +1454,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="cite[@provisional]|xref[@provisional]">
     <xsl:if test="self::cite">
         <xsl:message>MBX:WARNING: &lt;cite provisional="<xsl:value-of select="@provisional" />"&gt; is deprecated, convert to &lt;xref provisional="<xsl:value-of select="@provisional" />"&gt;</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
     </xsl:if>
     <xsl:variable name="inline-warning">
         <xsl:value-of select="@provisional" />
@@ -1472,6 +1473,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Warnings for a high-frequency mistake -->
 <xsl:template match="xref">
     <xsl:message>MBX:WARNING: Cross-reference (xref) with no ref or provisional attribute, check spelling</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
     <xsl:call-template name="inline-warning">
         <xsl:with-param name="warning">
             <xsl:text>xref without ref or provisional attribute, check spelling</xsl:text>
@@ -1483,6 +1485,47 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:with-param>
     </xsl:call-template>
 </xsl:template>
+
+
+<!-- ################### -->
+<!-- Errors and Warnings -->
+<!-- ################### -->
+
+<!-- We search up the tree, looking for something -->
+<!-- an author will recognize, and then report it -->
+<!-- Useful for warnings that do not contain any  -->
+<!-- identifying information themselves           -->
+<xsl:template match="*" mode="location-report">
+    <xsl:choose>
+        <xsl:when test="@xml:id or title">
+            <!-- print information about location -->
+            <xsl:message>
+                <xsl:text>             located within: </xsl:text>
+                <xsl:if test="@xml:id">
+                    <xsl:text>"</xsl:text>
+                    <xsl:value-of select="@xml:id" />
+                    <xsl:text>" (xml:id)</xsl:text>
+                </xsl:if>
+                <xsl:if test="@xml:id and title">
+                    <xsl:text>, </xsl:text>
+                </xsl:if>
+                <xsl:if test="title">
+                    <xsl:text>"</xsl:text>
+                    <xsl:value-of select="title" />
+                    <xsl:text>" (title)</xsl:text>
+                </xsl:if>
+            </xsl:message>
+        </xsl:when>
+        <xsl:when test="mathbook">
+            <!-- at root, fail with no action -->
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- pop up a level and try again -->
+            <xsl:apply-templates select="parent::*[1]" mode="location-report" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- ############ -->
 <!-- Deprecations -->
@@ -1529,6 +1572,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="date-string" select="'2015/02/08'" />
             <xsl:with-param name="message" select="'&quot;tikz&quot;, &quot;asymptote&quot;, &quot;sageplot&quot;, elements must always be contained directly within an &quot;image&quot; element, rather than directly within a &quot;figure&quot; element'" />
             <xsl:with-param name="occurences" select="count(//figure/tikz) + count(//figure/asymptote) + count(//figure/sageplot)" />
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <!-- once both circum and circumflex existed, circumflex won -->
+    <xsl:if test="//circum">
+        <xsl:call-template name="deprecation-message">
+            <xsl:with-param name="date-string" select="'2015/01/28'" />
+            <xsl:with-param name="message" select="'the &quot;circum&quot; element has been replaced by the &quot;circumflex&quot; element'" />
+            <xsl:with-param name="occurences" select="count(//circum)" />
         </xsl:call-template>
     </xsl:if>
     <!--  -->
