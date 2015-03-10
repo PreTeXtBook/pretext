@@ -20,7 +20,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
 <!-- Identify as a stylesheet -->
-<xsl:stylesheet 
+<xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
@@ -1890,7 +1890,7 @@ is just flat out on the page, as if printed there.
         <xsl:when test="not(*) and not(normalize-space())">
             <xsl:value-of select="@href" />
         </xsl:when>
-        <xsl:otherwise>         
+        <xsl:otherwise>
             <xsl:apply-templates />
         </xsl:otherwise>
     </xsl:choose>
@@ -2988,8 +2988,8 @@ $(function () {
 
 <!-- Knowl header -->
 <xsl:template name="knowl">
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script> 
-<link href="http://aimath.org/knowlstyle.css" rel="stylesheet" type="text/css" /> 
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<link href="http://aimath.org/knowlstyle.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="http://aimath.org/knowl.js"></script>
 
 </xsl:template>

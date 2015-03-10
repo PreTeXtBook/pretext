@@ -166,7 +166,7 @@ the xsltproc executable.
         which have subsubsections.These are all "containers"
         and so line breaks and extraneous whitespace gets
         scrubbed.  Use indentation and line breaks liberally
-        within containers to make the structure of your 
+        within containers to make the structure of your
         source readable.
         -->
 
@@ -253,7 +253,7 @@ the xsltproc executable.
 
             <p>Because a definite integral can be computed using an antiderivative, we have the following definition.</p>
 
-            <!-- 
+            <!--
             Notation may be associated with a definition,
             or it can be placed standalone.  If associated
             with a definition, future work will reflect that
@@ -1555,7 +1555,7 @@ the xsltproc executable.
             </exercise>
 
          </exercises>
-        
+
         <!--
         Various author tools are planned.  Note the embedded "todo"
         elements above.  An XSL transform in-testing will extract them
