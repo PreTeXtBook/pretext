@@ -85,6 +85,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.js.server"  select="'http://aimath.org'" />
 <xsl:param name="html.css.server" select="'http://aimath.org'" />
 <xsl:param name="html.css.file"   select="'mathbook-3.css'" />
+<!-- A space-separated list of CSS URLs (points to servers or local files) -->
+<xsl:param name="html.css.extra"  select="''" />
 
 <!-- Authors, editors in serial lists for headers           -->
 <!-- Presumes authors get selected first, so editors follow -->
@@ -3178,8 +3180,56 @@ $(function () {
 <xsl:template name="css">
     <link href="{$html.css.server}/mathbook/stylesheets/{$html.css.file}" rel="stylesheet" type="text/css" />
     <link href="http://aimath.org/mathbook/mathbook-add-on.css" rel="stylesheet" type="text/css" />
+    <xsl:call-template name="external-css">
+        <xsl:with-param name="css-list" select="normalize-space($html.css.extra)" />
+    </xsl:call-template>
 </xsl:template>
 
+<!-- Recursively unpack the list of URLs for extra CSS                       -->
+<!-- Presumes normalized, so no leading/trailing space and single separators -->
+<!-- If unspecified, default is empty string and nothing at all happens      -->
+<xsl:template name="external-css">
+    <xsl:param name="css-list" />
+    <xsl:variable name="delimiter" select="' '" />
+    <xsl:choose>
+        <xsl:when test="$css-list = ''">
+            <!-- bail out: done, halt recursion, take no action -->
+        </xsl:when>
+        <!--
+        Unnormalized:
+        strip leading space, or leftover from multiple spaces, or trailing
+        <xsl:when test="substring($css-list, 1, 1) = ' '">
+            <xsl:call-template name="external-css">
+                <xsl:with-param name="css-list" select="substring($css-list, 2)" />
+            </xsl:call-template>
+        </xsl:when>
+        -->
+        <xsl:when test="contains($css-list, $delimiter)">
+            <!-- Form the css inclusion element from front, recurse -->
+            <!-- Presumes a single space as separator               -->
+            <xsl:element name="link">
+                <xsl:attribute name="href">
+                    <xsl:value-of select="substring-before($css-list, $delimiter)" />
+                </xsl:attribute>
+                <xsl:attribute name="rel">stylesheet</xsl:attribute>
+                <xsl:attribute name="type">text/css</xsl:attribute>
+            </xsl:element>
+            <xsl:call-template name="external-css">
+                <xsl:with-param name="css-list" select="substring-after($css-list, $delimiter)" />
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- form the css inclusion element from last/only URL -->
+            <xsl:element name="link">
+                <xsl:attribute name="href">
+                    <xsl:value-of select="$css-list" />
+                </xsl:attribute>
+                <xsl:attribute name="rel">stylesheet</xsl:attribute>
+                <xsl:attribute name="type">text/css</xsl:attribute>
+            </xsl:element>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- Video header                    -->
 <!-- Flowplayer setup                -->
