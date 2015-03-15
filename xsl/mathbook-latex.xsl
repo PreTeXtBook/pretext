@@ -1940,6 +1940,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>etc.\@</xsl:text>
 </xsl:template>
 
+<!-- circa -->
+<xsl:template match="circa">
+    <xsl:text>c.\@</xsl:text>
+</xsl:template>
+
 <!-- Copyright symbol -->
 <xsl:template match="copyright">
     <xsl:text>\copyright{}</xsl:text>

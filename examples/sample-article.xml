@@ -741,14 +741,15 @@ the xsltproc executable.
             <tilde /><nbsp /><nbsp />
             <backslash /><nbsp /><nbsp /></p>
 
-            <p>There are a few other constructions that can be achieved in HTML one way, and in <latex /> with a slightly different mechanism.  Some are due to <latex />'s treatment of a period (full stop), depending on its surroundings.  So not reserved characters, but just divergent treatment of common constructions.  Again, outputs here, see the source for inputs.</p>
+            <p>There are a few other constructions that can be achieved in HTML one way, and in <latex /> with a slightly different mechanism.  Some are due to <latex />'s treatment of a period (full stop), depending on its surroundings.  So not reserved characters, but just divergent treatment of common constructions.  Again, outputs here, see the source for inputs. If you are planning <latex /> output, and you are finicky about it, use the XML versions of these common abbreviations.  If you only care about HTML and friends, then just go ahead and type the abbreviations straightaway.  These are here for your use, but not necessarily mandatory.  See Will Robertson's informative and arcane <url href="http://latex-alive.tumblr.com/post/827168808/correct-punctuation-spaces">blog post</url> on the topic if you want the full story.</p>
 
             <!-- Carriage returns are unwise, but this is impossible to read otherwise -->
             <p><copyright /><nbsp /><nbsp />
             <ellipsis /><nbsp /><nbsp />
             <eg /><nbsp /><nbsp />
             <ie /><nbsp /><nbsp />
-            <etc /><nbsp /><nbsp /></p>
+            <etc /><nbsp /><nbsp />
+            <circa /><nbsp /><nbsp /></p>
 
             <p>It might be instructive to see how the paragraphs above about escape characters were written without inadvertenly using an escape character improperly.</p>
 
@@ -1771,7 +1772,7 @@ the xsltproc executable.
             <algorithm xml:id="algorithm-sieve-eratosthenes">
                 <title>Sieve of Eratosthenes</title>
                 <statement>
-                    <p>On input of a positive integer <c>n</c> this algorithm will compute all the prime numbers up to, and including, <c>n</c>.  It was named for Eratosthenes of Cyrene (c. 276 BC<ndash />c. 195/194 BC) by Nicomachus (c. 60<ndash />c. 120 CE) in <booktitle>Introduction to Arithmetic</booktitle>. (<url href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Wikipedia</url>, 2015)</p>
+                    <p>On input of a positive integer <c>n</c> this algorithm will compute all the prime numbers up to, and including, <c>n</c>.  It was named for Eratosthenes of Cyrene (<circa /> 276 BC<ndash /><circa /> 195/194 BC) by Nicomachus (<circa /> 60<ndash /><circa /> 120 CE) in <booktitle>Introduction to Arithmetic</booktitle>. (<url href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Wikipedia</url>, 2015)</p>
 
                     <ol>
                         <li>Input: <c>n</c></li>

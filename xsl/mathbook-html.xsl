@@ -2033,6 +2033,11 @@ is just flat out on the page, as if printed there.
     <xsl:text>etc.</xsl:text>
 </xsl:template>
 
+<!-- circa -->
+<xsl:template match="circa">
+    <xsl:text>c.</xsl:text>
+</xsl:template>
+
 <!-- Implication Symbols -->
 <!-- TODO: better names! -->
 <xsl:template match="imply">
