@@ -500,7 +500,7 @@ the xsltproc executable.
                 <paragraphs>
                     <title>Properties of the <c>paragraphs</c> element</title>
 
-                    <p>It is always a logical section of the document, but never gets a number.  It can never contain another subdivision, and so is always a leaf of the document tree.  It does not appear in the table of contents.  The title is inline with the first paragraph.  Vertical space usually sets it off from its surroundings slightly.</p>
+                    <p>It is always a logical section of the document, but never gets a number.  It can be used within any subdivision, and thus cannot ever contain another subdivision, and so is always a leaf of the document tree.  It does not appear in the table of contents.  The title is inline with the first paragraph.  Vertical space usually sets it off slightly from its surroundings.</p>
                 </paragraphs>
             </subsection>
 
