@@ -486,6 +486,24 @@ the xsltproc executable.
                 <sage copy="sage-numerical-integral" />
             </subsection>
 
+            <subsection>
+                <title>Hierachy</title>
+
+                <paragraphs>
+                    <title>Structure</title>
+
+                    <p>This section of this article has subsections and subsubsections.  In a book you can have chapters enclosing multiple sections.  There is one finer subdivision, it is achieved with the <c>paragraphs</c> element.</p>
+
+                    <p>It is basically a sequence of paragraphs, where the first one gets an inline title.  You are reading the second, and final, paragraph of one right now. It is useful for organizing very short documents, where numbered subdivisions might be overkill.</p>
+                </paragraphs>
+
+                <paragraphs>
+                    <title>Properties of the <c>paragraphs</c> element</title>
+
+                    <p>It is always a logical section of the document, but never gets a number.  It can never contain another subdivision, and so is always a leaf of the document tree.  It does not appear in the table of contents.  The title is inline with the first paragraph.  Vertical space usually sets it off from its surroundings slightly.</p>
+                </paragraphs>
+            </subsection>
+
         </section>
 
         <!--
@@ -1656,20 +1674,20 @@ the xsltproc executable.
             <caption>Sample Unicode Characters</caption>
             </table>
 
-            <paragraph>
+            <paragraphs>
                 <title>Characters from Latin-1 Supplement</title>
                 <p>‘ ¡ ¢ £ ¤ ¥ ¦ § ¨ © ª « ¬ ® ¯ ° ± ² ³ ´ µ ¶ · ¸ ¹ º » ¼ ½ ¾ ¿ À Á Â Ã Ä Å Æ Ç È É Ê Ë Ì Í Î Ï Ð Ñ Ò Ó Ô Õ Ö × Ø Ù Ú Û Ü Ý Þ ß à á â ã ä å æ ç è é ê ë ì í î ï ð ñ ò ó ô õ ö ÷ ø ù ú û ü ý þ ÿ</p>
-            </paragraph>
+            </paragraphs>
 
-            <paragraph>
+            <paragraphs>
                 <title>Characters from Latin Extended-A</title>
                 <p>Ā ā Ă ă Ą ą Ć ć Ĉ ĉ Ċ ċ Č č Ď ď Đ đ Ē ē Ĕ ĕ Ė ė Ę ę Ě ě Ĝ ĝ Ğ ğ Ġ ġ Ģ ģ Ĥ ĥ Ħ ħ Ĩ ĩ Ī ī Ĭ ĭ Į į İ ı Ĳ ĳ Ĵ ĵ Ķ ķ ĸ Ĺ ĺ Ļ ļ Ľ ľ Ŀ ŀ Ł ł Ń ń Ņ ņ Ň ň ŉ Ŋ ŋ Ō ō Ŏ ŏ Ő ő Œ œ Ŕ ŕ Ŗ ŗ Ř ř Ś ś Ŝ ŝ Ş ş Š š Ţ ţ Ť ť Ŧ ŧ Ũ ũ Ū ū Ŭ ŭ Ů ů Ű ű Ų ų Ŵ ŵ Ŷ ŷ Ÿ Ź ź Ż ż Ž ž ſ</p>
-                </paragraph>
+                </paragraphs>
 
-            <paragraph>
+            <paragraphs>
                 <title>Characters from Latin Extended-B</title>
                 <p>ƀ Ɓ Ƃ ƃ Ƅ ƅ Ɔ Ƈ ƈ Ɖ Ɗ Ƌ ƌ ƍ Ǝ Ə Ɛ Ƒ ƒ i Ɠ Ɣ ƕ Ɩ Ɨ Ƙ ƙ ƚ ƛ Ɯ Ɲ ƞ Ɵ Ơ ơ Ƣ ƣ Ƥ ƥ Ʀ Ƨ ƨ Ʃ ƪ ƫ Ƭ ƭ Ʈ Ư ư Ʊ Ʋ Ƴ ƴ Ƶ ƶ Ʒ Ƹ ƹ ƺ ƻ Ƽ ƽ ƾ ƿ ǀ ǁ ǂ ǃ Ǆ ǅ ǆ Ǉ ǈ ǉ Ǌ ǋ ǌ Ǎ ǎ Ǐ ǐ Ǒ ǒ Ǔ ǔ Ǖ ǖ Ǘ ǘ Ǚ ǚ Ǜ ǜ ǝ Ǟ ǟ Ǡ ǡ Ǣ ǣ Ǥ ǥ Ǧ ǧ Ǩ ǩ Ǫ ǫ Ǭ ǭ Ǯ ǯ ǰ Ǳ ǲ ǳ Ǵ ǵ Ƕ Ƿ Ǹ ǹ Ǻ ǻ Ǽ ǽ Ǿ ǿ Ȁ ȁ Ȃ ȃ Ȅ ȅ Ȇ ȇ Ȉ ȉ Ȋ ȋ Ȍ ȍ Ȏ ȏ Ȑ ȑ Ȓ ȓ Ȕ ȕ Ȗ ȗ Ș ș Ț ț Ȝ ȝ Ȟ ȟ Ƞ ȡ Ȣ ȣ Ȥ ȥ Ȧ ȧ Ȩ ȩ Ȫ ȫ Ȭ ȭ Ȯ ȯ Ȱ ȱ Ȳ ȳ ȴ ȵ ȶ ȷ ȸ ȹ Ⱥ Ȼ ȼ Ƚ Ⱦ ȿ ɀ Ɂ ɂ Ƀ Ʉ Ʌ Ɇ ɇ Ɉ ɉ Ɋ ɋ Ɍ ɍ Ɏ ɏ</p>
-            </paragraph>
+            </paragraphs>
 
             <p>More examples and more thorough explanations can be found in the sample article: <c>examples/fonts-and-characters.xml</c>.</p>
 
