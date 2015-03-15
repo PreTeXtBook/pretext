@@ -1766,6 +1766,33 @@ the xsltproc executable.
 
             <p>Look in the <c>mathbook-common.xsl</c> file to see the strings to use to identify languages.  Always all-lowercase, no symbols, no punctuation.</p>
 
+            <p>If you are discussing algorithms in the abstract (or even concretely), you can set them off like a theorem, with a number, a title and a target for cross-references.  Sometimes you claim an algorithm produces something in particular, or has certain properties, such as a theoretical run time, so a proof maybe included.  See the discussion just preceding about (limited) options for pseudo-code.</p>
+
+            <algorithm xml:id="algorithm-sieve-eratosthenes">
+                <title>Sieve of Eratosthenes</title>
+                <statement>
+                    <p>On input of a positive integer <c>n</c> this algorithm will compute all the prime numbers up to, and including, <c>n</c>.  It was named for Eratosthenes of Cyrene (c. 276 BC<ndash />c. 195/194 BC) by Nicomachus (c. 60<ndash />c. 120 CE) in <booktitle>Introduction to Arithmetic</booktitle>. (<url href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Wikipedia</url>, 2015)</p>
+
+                    <ol>
+                        <li>Input: <c>n</c></li>
+                        <li>Form the list of all integers from <c>2</c> to <c>n</c></li>
+                        <li>Set <c>p = 2</c></li>
+                        <li>While <c>p &lt; sqrt(n)</c>
+                            <ol label="1.">
+                                <li>If present, remove from the list multiples <c>2p, 3p, ...</c></li>
+                                <li>If <c>p</c> is now the last element of the list, stop</li>
+                                <li>Otherwise, set <c>p</c> to the element of the list immediately after current <c>p</c></li>
+                            </ol></li>
+                    </ol>
+                </statement>
+
+                <proof>
+                    <p>Any element removed is a non-trivial product of two integers and hence composite.  So no prime is is ever removed from the list.</p>
+
+                    <p>Each composite number is a multiple of some prime, and since no prime is ever removed, each composite will be removed.  Hence the removed elements are precisely the set of composite numbers in the list and thus the remainder are precisely the primes on the list.</p>
+                </proof>
+            </algorithm>
+
         </section>
 
         <section>
