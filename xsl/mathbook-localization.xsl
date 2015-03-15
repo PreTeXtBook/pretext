@@ -55,6 +55,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='theorem'><xsl:text>Theorem</xsl:text></localization>
     <localization string-id='corollary'><xsl:text>Corollary</xsl:text></localization>
     <localization string-id='lemma'><xsl:text>Lemma</xsl:text></localization>
+    <localization string-id='algorithm'><xsl:text>Algorithm</xsl:text></localization>
     <localization string-id='proposition'><xsl:text>Proposition</xsl:text></localization>
     <localization string-id='claim'><xsl:text>Claim</xsl:text></localization>
     <localization string-id='fact'><xsl:text>Fact</xsl:text></localization>
@@ -137,6 +138,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id="theorem">Teorema</localization>
     <localization string-id="corollary">Corolário</localization>
     <localization string-id="lemma">Lema</localization>
+    <!-- Translation needed for algorithm -->
+    <!-- <localization string-id='algorithm'><xsl:text>XX</xsl:text></localization> -->
     <localization string-id='proposition'><xsl:text>Proposição</xsl:text></localization>
     <localization string-id='claim'><xsl:text>Afirmação</xsl:text></localization>
     <localization string-id='fact'><xsl:text>Fato</xsl:text></localization>
@@ -219,6 +222,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id="theorem">Teorema</localization>
     <localization string-id="corollary">Corolario</localization>
     <localization string-id="lemma">Lema</localization>
+    <!-- Translation needed for algorithm -->
+    <!-- <localization string-id='algorithm'><xsl:text>XX</xsl:text></localization> -->
     <localization string-id='proposition'><xsl:text>Proposición</xsl:text></localization>
     <localization string-id='claim'><xsl:text>Postulado</xsl:text></localization>
     <localization string-id='fact'><xsl:text>Hecho</xsl:text></localization>

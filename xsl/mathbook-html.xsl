@@ -441,7 +441,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Chapters, Sections, etc may be untitled, so may be empty, though unusual -->
 <!-- Environments could be untitled much of the time                          -->
-<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection|paragraphs|paragraph|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|proposition|claim|fact|proof|demonstration" mode="title">
+<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection|paragraphs|paragraph|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration" mode="title">
     <xsl:param name="complexity" />
     <xsl:apply-templates select="title" mode="title">
         <xsl:with-param name="complexity"><xsl:value-of select="$complexity" /></xsl:with-param>
@@ -793,7 +793,7 @@ is just flat out on the page, as if printed there.
 <!-- We always build a knowl to be target of a xref       -->
 <!-- We build a hidden knowl and place a link on the page -->
 <!-- Or, we show the full content of the item on the page -->
-<xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|proposition|claim|fact|proof|hint|answer|solution|note">
+<xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|hint|answer|solution|note">
     <!-- Always build a knowl we can point to it with a cross-reference -->
     <xsl:apply-templates select="." mode="xref-knowl-factory" />
     <!-- Born hidden or not (visible) -->
@@ -1001,11 +1001,11 @@ is just flat out on the page, as if printed there.
 <!-- Theorems, etc. -->
 <!-- Customizable as hidden    -->
 <!-- A statement with proof -->
-<xsl:template match="theorem|corollary|lemma|proposition|claim|fact" mode="is-hidden">
+<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact" mode="is-hidden">
     <xsl:value-of select="$html.knowl.theorem" />
 </xsl:template>
 <!-- Head is type, number, title -->  <!-- GENERALIZE -->
-<xsl:template match="theorem|corollary|lemma|proposition|claim|fact" mode="head">
+<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact" mode="head">
     <h5 class="heading">
         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
         <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
@@ -1015,18 +1015,18 @@ is just flat out on the page, as if printed there.
     </h5>
 </xsl:template>
 <!-- Body is just the statement -->
-<xsl:template match="theorem|corollary|lemma|proposition|claim|fact" mode="body">
+<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact" mode="body">
     <xsl:apply-templates select="statement" />
 </xsl:template>
 <!-- Posterior is just the proof -->
-<xsl:template match="theorem|corollary|lemma|proposition|claim|fact" mode="posterior">
+<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact" mode="posterior">
     <xsl:apply-templates select="proof" />
 </xsl:template>
 <!-- HTML, CSS -->
-<xsl:template match="theorem|corollary|lemma|proposition|claim|fact" mode="environment-element">
+<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact" mode="environment-element">
     <xsl:text>article</xsl:text>
 </xsl:template>
-<xsl:template match="theorem|corollary|lemma|proposition|claim|fact" mode="environment-class">
+<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact" mode="environment-class">
     <xsl:text>theorem-like</xsl:text>
 </xsl:template>
 
@@ -1858,7 +1858,7 @@ is just flat out on the page, as if printed there.
 </xsl:template>
 <!-- Now, those items that are knowls -->
 <!-- TODO: proof|figure|table|exercise|me|men|mrow (hint|answer|solution|note) -->
-<xsl:template match="fn|biblio|example|remark|theorem|corollary|lemma|proposition|claim|fact|definition|axiom|conjecture|principle" mode="xref-hyperlink">
+<xsl:template match="fn|biblio|example|remark|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|axiom|conjecture|principle" mode="xref-hyperlink">
     <xsl:param name="content" />
     <xsl:element name="a">
         <xsl:attribute name="knowl">

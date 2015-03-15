@@ -107,8 +107,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="frontmatter chapter appendix section subsection subsubsection exercises references introduction conclusion paragraphs paragraph subparagraph backmatter" />
 <xsl:strip-space elements="docinfo author abstract" />
 <xsl:strip-space elements="titlepage preface acknowledgement biography foreword dedication colophon" />
-<xsl:strip-space elements="theorem corollary lemma proposition claim fact conjecture proof" />
-<xsl:strip-space elements="definition axiom principle" />
+<xsl:strip-space elements="theorem corollary lemma algorithm proposition claim fact proof" />
+<xsl:strip-space elements="definition axiom conjecture principle" />
 <xsl:strip-space elements="statement" />
 <xsl:strip-space elements="example remark exercise hint solution" />
 <xsl:strip-space elements="exercisegroup" />
@@ -1063,7 +1063,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Numbering Theorems, Definitions, Examples, Inline Exercises, Figures, etc.-->
 <!-- Sructural to a configurable depth, then numbered across depth -->
 <!-- We include figures and tables, which is different than LaTeX out-of-the-box behavior -->
-<xsl:template match="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table|sidebyside" mode="number">
+<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table|sidebyside" mode="number">
     <xsl:call-template name="level-number">
         <xsl:with-param name="number">
             <xsl:apply-templates select="." mode="structural-number" />
@@ -1077,11 +1077,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="/mathbook/book">
             <xsl:choose>
-                <xsl:when test="$numbering-theorems=0"><xsl:number select="." from="book" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
-                <xsl:when test="$numbering-theorems=1"><xsl:number select="." from="chapter" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
-                <xsl:when test="$numbering-theorems=2"><xsl:number select="." from="section" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
-                <xsl:when test="$numbering-theorems=3"><xsl:number select="." from="subsection" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
-                <xsl:when test="$numbering-theorems=4"><xsl:number select="." from="subsubsection" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
+                <xsl:when test="$numbering-theorems=0"><xsl:number select="." from="book" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
+                <xsl:when test="$numbering-theorems=1"><xsl:number select="." from="chapter" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
+                <xsl:when test="$numbering-theorems=2"><xsl:number select="." from="section" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
+                <xsl:when test="$numbering-theorems=3"><xsl:number select="." from="subsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
+                <xsl:when test="$numbering-theorems=4"><xsl:number select="." from="subsubsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
                 <xsl:otherwise>
                     <xsl:message>MBX:ERROR: Level for theorem number computation is out-of-bounds (<xsl:value-of select="$numbering-theorems" />)</xsl:message>
                 </xsl:otherwise>
@@ -1089,10 +1089,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="/mathbook/article">
             <xsl:choose>
-              <xsl:when test="$numbering-theorems=0"><xsl:number select="." from="article" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
-                <xsl:when test="$numbering-theorems=1"><xsl:number select="." from="section" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
-                <xsl:when test="$numbering-theorems=2"><xsl:number select="." from="subsection" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
-                <xsl:when test="$numbering-theorems=3"><xsl:number select="." from="subsubsection" level="any" count="theorem|corollary|lemma|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
+              <xsl:when test="$numbering-theorems=0"><xsl:number select="." from="article" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
+                <xsl:when test="$numbering-theorems=1"><xsl:number select="." from="section" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
+                <xsl:when test="$numbering-theorems=2"><xsl:number select="." from="subsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
+                <xsl:when test="$numbering-theorems=3"><xsl:number select="." from="subsubsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[count(caption)>0]"/></xsl:when>
                 <xsl:otherwise>
                     <xsl:message>MBX:ERROR: Level for theorem number computation is out-of-bounds (<xsl:value-of select="$numbering-theorems" />)</xsl:message>
                 </xsl:otherwise>

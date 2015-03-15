@@ -412,6 +412,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'lemma'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="//algorithm">
+        <xsl:text>\newtheorem{algorithm}[theorem]{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'algorithm'" /></xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="//proposition">
         <xsl:text>\newtheorem{proposition}[theorem]{</xsl:text>
         <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'proposition'" /></xsl:call-template>
@@ -1178,7 +1183,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]</xsl:text>
 </xsl:template>
 
-<xsl:template match="theorem|corollary|lemma|proposition|claim|fact">
+<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact">
     <xsl:apply-templates select="statement|proof" />
 </xsl:template>
 
@@ -1340,7 +1345,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Statements are the place to generate environment -->
 <!-- Most information comes from parent               -->
 <!-- Proofs are written outside of environment        -->
-<xsl:template match="theorem/statement|corollary/statement|lemma/statement|proposition/statement|claim/statement|fact/statement|conjecture/statement|axiom/statement|principle/statement">
+<xsl:template match="theorem/statement|corollary/statement|lemma/statement|algorithm/statement|proposition/statement|claim/statement|fact/statement|conjecture/statement|axiom/statement|principle/statement">
     <xsl:text>\begin{</xsl:text>
         <xsl:value-of select="local-name(..)" />
     <xsl:text>}</xsl:text>
