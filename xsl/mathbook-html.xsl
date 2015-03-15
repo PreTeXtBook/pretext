@@ -330,7 +330,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A structural node may be one of many on a web page -->
 <!-- We make an HTML section, then a header, then       -->
 <!-- recurse into remaining content                     -->
-<xsl:template match="book|article|frontmatter|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references|backmatter">
+<xsl:template match="book|article|frontmatter|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|paragraphs|paragraph|exercises|references|backmatter">
     <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
     <section class="{local-name(.)}" id="{$ident}">
         <xsl:apply-templates select="." mode="section-header" />
@@ -338,6 +338,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Just applying templates right and left -->
         <xsl:apply-templates  select="./*[not(self::title or self::subtitle or self::author)]"/>
     </section>
+</xsl:template>
+
+<!-- Paragraphs -->
+<!-- Never structural, never named, somewhat distinct -->
+<xsl:template match="paragraphs|paragraph">
+    <xsl:if test="local-name(.)='paragraph'">
+        <xsl:message>MBX:WARNING: the "paragraph" element is deprecated (2015/03/13), use "paragraphs" instead</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+    <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
+    <article class="paragraphs" id="{$ident}">
+        <h5 class="heading">
+            <xsl:apply-templates select="." mode="title-full" />
+        </h5>
+        <xsl:apply-templates  select="./*[not(self::title)]"/>
+    </article>
 </xsl:template>
 
 <!-- Header for Document Nodes -->
@@ -425,7 +441,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Chapters, Sections, etc may be untitled, so may be empty, though unusual -->
 <!-- Environments could be untitled much of the time                          -->
-<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|proposition|claim|fact|proof|demonstration" mode="title">
+<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection|paragraphs|paragraph|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|proposition|claim|fact|proof|demonstration" mode="title">
     <xsl:param name="complexity" />
     <xsl:apply-templates select="title" mode="title">
         <xsl:with-param name="complexity"><xsl:value-of select="$complexity" /></xsl:with-param>

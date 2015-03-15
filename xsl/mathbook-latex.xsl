@@ -1076,13 +1076,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (1) appendices are just chapters after \backmatter macro -->
 <!-- (2) exercises, references can appear at any depth,       -->
 <!--     so compute the subdivision name                      -->
-<xsl:template match="chapter|appendix|section|subsection|subsubsection|paragraph|exercises|references">
+<xsl:template match="chapter|appendix|section|subsection|subsubsection|paragraphs|paragraph|exercises|references">
     <xsl:variable name="level">
         <xsl:choose>
             <!-- TODO: appendix handling is only right for books, expand to articles -->
             <!-- http://www.tex.ac.uk/cgi-bin/texfaq2html?label=appendix -->
             <xsl:when test="local-name(.)='appendix'">
                 <xsl:text>chapter</xsl:text>
+            </xsl:when>
+            <!-- We implement the pseudo-structural paragraphs with LaTeX's paragraph       -->
+            <!-- Presuming we never go below susubsection in a hierarchy and bump into this -->
+            <xsl:when test="local-name(.)='paragraphs'">
+                <xsl:text>paragraph</xsl:text>
             </xsl:when>
             <!-- Collections of exercises and reference can happen at any level, so need correct LaTeX name -->
             <xsl:when test="local-name(.)='exercises' or local-name(.)='references'">
@@ -1099,6 +1104,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="long-name" />
     <xsl:text>}&#xa;</xsl:text>
     <xsl:text>\typeout{************************************************}&#xa;</xsl:text>
+    <!-- Warn about paragraph deprecation -->
+    <xsl:if test="local-name(.)='paragraph'">
+        <xsl:message>MBX:WARNING: the "paragraph" element is deprecated (2015/03/13), use "paragraphs" instead</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
     <!-- Construct the header of the subdivision -->
     <xsl:text>\</xsl:text>
     <xsl:value-of select="$level" />

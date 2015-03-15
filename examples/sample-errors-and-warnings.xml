@@ -108,6 +108,13 @@ systems.
             <title>Miscellaneous</title>
 
             <p>A circumflex should still be obtainable with <c>circum</c>: <circum />.</p>
+
+            <paragraph>
+                <title>Groups of paragraphs</title>
+
+                <p>There has always been a sort of odd mini-sectioning element, called <c>paragraph</c> orignally since that is what it is in <latex />, but now better named as <c>paragraphs</c>.</p>
+            </paragraph>
+
         </section>
 
     </article>

@@ -104,7 +104,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
 <!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
 <xsl:strip-space elements="mathbook book article letter" />
-<xsl:strip-space elements="frontmatter chapter appendix section subsection subsubsection exercises references introduction conclusion paragraph subparagraph backmatter" />
+<xsl:strip-space elements="frontmatter chapter appendix section subsection subsubsection exercises references introduction conclusion paragraphs paragraph subparagraph backmatter" />
 <xsl:strip-space elements="docinfo author abstract" />
 <xsl:strip-space elements="titlepage preface acknowledgement biography foreword dedication colophon" />
 <xsl:strip-space elements="theorem corollary lemma proposition claim fact conjecture proof" />
@@ -1058,7 +1058,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Numbering Subdivisions without Numbers -->
 <!-- Only one, or not subdivisible, or ... -->
 <!-- TODO: add more frontmatter, backmatter as it stabilizes -->
-<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraph|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|colophon|backmatter" mode="number"/>
+<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|paragraph|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|colophon|backmatter" mode="number"/>
 
 <!-- Numbering Theorems, Definitions, Examples, Inline Exercises, Figures, etc.-->
 <!-- Sructural to a configurable depth, then numbered across depth -->
@@ -1630,6 +1630,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="deprecation-warnings">
     <!-- newer deprecations at the top of this list, user will see in this order -->
     <!--  -->
+    <!-- paragraph is renamed more accurately to paragraphs -->
+    <xsl:if test="//paragraph">
+        <xsl:call-template name="deprecation-message">
+            <xsl:with-param name="date-string" select="'2015/03/13'" />
+            <xsl:with-param name="message" select="'the &quot;paragraph&quot; element is deprecated, replaced by functional equivalent &quot;paragraphs&quot;'" />
+            <xsl:with-param name="occurences" select="count(//paragraph)" />
+        </xsl:call-template>
+    </xsl:if>
     <!-- tikz is generalized to latex-image-code -->
     <xsl:if test="//tikz">
         <xsl:call-template name="deprecation-message">

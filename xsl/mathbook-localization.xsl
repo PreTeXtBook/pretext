@@ -81,6 +81,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='subsubsection'><xsl:text>Subsubsection</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Exercises</xsl:text></localization>
     <localization string-id='references'><xsl:text>References</xsl:text></localization>
+    <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
+    <localization string-id='paragraphs'><xsl:text>Paragraphs</xsl:text></localization>
     <localization string-id='paragraph'><xsl:text>Paragraph</xsl:text></localization>
     <localization string-id='subparagraph'><xsl:text>Subparagraph</xsl:text></localization>
     <!-- Components of the narrative -->
@@ -161,6 +163,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='subsubsection'><xsl:text>Subsubseção</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Exercícios</xsl:text></localization>
     <localization string-id='references'><xsl:text>Referêcias</xsl:text></localization>
+    <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
+    <localization string-id='paragraphs'><xsl:text>Parágrafo</xsl:text></localization>
     <localization string-id='paragraph'><xsl:text>Parágrafo</xsl:text></localization>
     <localization string-id='subparagraph'><xsl:text>Subparágrafo</xsl:text></localization>
     <!-- Components of the narrative -->
@@ -241,6 +245,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='subsubsection'><xsl:text>Subsubsección</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Ejercicios</xsl:text></localization>
     <localization string-id='references'><xsl:text>Referencias</xsl:text></localization>
+    <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
+    <localization string-id='paragraphs'><xsl:text>Párrafo</xsl:text></localization>
     <localization string-id='paragraph'><xsl:text>Párrafo</xsl:text></localization>
     <localization string-id='subparagraph'><xsl:text>Subpárrafo</xsl:text></localization>
     <!-- Components of the narrative -->
