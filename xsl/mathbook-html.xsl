@@ -2226,12 +2226,24 @@ is just flat out on the page, as if printed there.
     <b><xsl:apply-templates /></b>
 </xsl:template>
 
+<!-- Year in parentheses -->
+<xsl:template match="biblio[@type='raw']/year">
+    <xsl:text>(</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>)</xsl:text>
+</xsl:template>
+
 <!-- Number -->
 <xsl:template match="biblio[@type='raw']/number">
     <xsl:text>no. </xsl:text>
     <xsl:apply-templates />
 </xsl:template>
 
+<!-- Ibid, nee ibidem, handle TeX period idosyncracy, empty element -->
+<!-- A 3em dash is used for identical authors                       -->
+<xsl:template match="biblio[@type='raw']/ibid">
+    <xsl:text>Ibid.</xsl:text>
+</xsl:template>
 <!-- Index -->
 <!-- Only implemented for LaTeX, where it -->
 <!-- makes sense, otherwise just kill it  -->

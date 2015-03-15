@@ -1242,7 +1242,7 @@ the xsltproc executable.
                 <title>References</title>
 
                 <introduction>
-                    <p>These items are united in that they are all about linear algebra, but one is a textbook and the other an article.</p>
+                    <p>These items are here to test basic formatting of references.</p>
                 </introduction>
 
                 <biblio type="raw" xml:id="biblio-strang-article">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio>
@@ -1251,7 +1251,9 @@ the xsltproc executable.
                 <note><p>An online, open-source offering.</p></note>
                 </biblio>
 
-                <biblio type="raw" xml:id="biblio-strang-article-duplicate">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio>
+                <biblio type="raw" xml:id="biblio-rosswell-fictional">Alexander Rosswell, <title>Diffeomorphisms of Penciled Fiber Bundles</title>, <journal>Mathematicians of America</journal> <year>2020</year>, <volume>2</volume> <number>6</number>, 884<ndash />888.</biblio>
+
+                <biblio type="raw" xml:id="biblio-rosswell-fictional-two"><ibid />, <title>Diffeomorphisms of Penciled Fiber Bundles, Part 2</title>, <journal>Mathematicians of America</journal> <year>2021</year>, <volume>3</volume> <number>4</number>, 102<ndash />103.</biblio>
 
                 <conclusion>
                     <p>This is a conclusion, which has not been used very much in this sample.  Did you see the the second reference above has a short annotation?  So you can make annotated bibliographies easily.</p>

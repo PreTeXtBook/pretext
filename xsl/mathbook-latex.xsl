@@ -2562,11 +2562,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
+<!-- Year in parentheses -->
+<xsl:template match="biblio[@type='raw']/year">
+    <xsl:text>(</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>)</xsl:text>
+</xsl:template>
+
 <!-- Number, handle TeX period idosyncracy -->
 <xsl:template match="biblio[@type='raw']/number">
     <xsl:text>no.\@\,</xsl:text>
     <xsl:apply-templates />
 </xsl:template>
+
+<!-- Ibid, nee ibidem, handle TeX period idosyncracy, empty element -->
+<xsl:template match="biblio[@type='raw']/ibid">
+    <xsl:text>Ibid.\@\,</xsl:text>
+</xsl:template>
+
 
 <!-- Annotated Bibliography Items -->
 <!--   Presumably just paragraphs, nothing too complicated -->
