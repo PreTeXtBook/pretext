@@ -1456,9 +1456,11 @@ is just flat out on the page, as if printed there.
     </xsl:attribute>
 </xsl:template>
 
-<!-- Asymptote graphics language  -->
-<!-- SVG's produced by mbx script -->
-<xsl:template match="image/asymptote">
+<!-- A wrapper for SVG images w/ optional fallback -->
+<!-- object element seems fine for HTML            -->
+<!-- but SageMathCloud prefers img element         -->
+<xsl:template match="*" mode="svg-wrapper">
+    <xsl:param name="png-fallback" />
     <xsl:element name="object">
         <xsl:attribute name="type">image/svg+xml</xsl:attribute>
         <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
@@ -1469,33 +1471,37 @@ is just flat out on the page, as if printed there.
             <xsl:text>.svg</xsl:text>
         </xsl:attribute>
         <xsl:apply-templates select="../description" />
-        <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
+        <xsl:choose>
+            <xsl:when test="$png-fallback = 'yes'">
+                <xsl:element name="img">
+                    <xsl:attribute name="src">
+                        <xsl:value-of select="$directory.images" />
+                        <xsl:text>/</xsl:text>
+                        <xsl:apply-templates select=".." mode="internal-id" />
+                        <xsl:text>.png</xsl:text>
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:when>
+            <xsl:otherwise>
+                <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:element>
+</xsl:template>
+
+<!-- Asymptote graphics language  -->
+<!-- SVG's produced by mbx script -->
+<xsl:template match="image/asymptote">
+    <xsl:apply-templates select="." mode="svg-wrapper" />
 </xsl:template>
 
 <!-- Sage graphics plots          -->
 <!-- SVG's produced by mbx script -->
 <!-- PNGs are fall back for 3D    -->
 <xsl:template match="image/sageplot">
-    <xsl:element name="object">
-        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
-        <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
-        <xsl:attribute name="data">
-            <xsl:value-of select="$directory.images" />
-            <xsl:text>/</xsl:text>
-            <xsl:apply-templates select=".." mode="internal-id" />
-            <xsl:text>.svg</xsl:text>
-        </xsl:attribute>
-        <xsl:apply-templates select="../description" />
-        <xsl:element name="img">
-            <xsl:attribute name="src">
-                <xsl:value-of select="$directory.images" />
-                <xsl:text>/</xsl:text>
-                <xsl:apply-templates select=".." mode="internal-id" />
-                <xsl:text>.png</xsl:text>
-            </xsl:attribute>
-        </xsl:element>
-    </xsl:element>
+    <xsl:apply-templates select="." mode="svg-wrapper">
+        <xsl:with-param name="png-fallback" select="'yes'" />
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- LaTeX standalone image       -->
@@ -1505,18 +1511,7 @@ is just flat out on the page, as if printed there.
         <xsl:message>MBX WARNING: latex-image-code element should be enclosed by an image element</xsl:message>
         <xsl:apply-templates select="." mode="location-report" />
     </xsl:if>
-    <xsl:element name="object">
-        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
-        <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
-        <xsl:attribute name="data">
-            <xsl:value-of select="$directory.images" />
-            <xsl:text>/</xsl:text>
-            <xsl:apply-templates select=".." mode="internal-id" />
-            <xsl:text>.svg</xsl:text>
-        </xsl:attribute>
-        <xsl:apply-templates select="../description" />
-        <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
-    </xsl:element>
+    <xsl:apply-templates select="." mode="svg-wrapper" />
 </xsl:template>
 
 <!-- side by side objects -->
