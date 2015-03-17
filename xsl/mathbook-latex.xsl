@@ -318,9 +318,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Symbols, align environment, bracket-matrix&#xa;</xsl:text>
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
     <xsl:text>\usepackage{amssymb}&#xa;</xsl:text>
-    <xsl:text>%% extpfeil package for certain extensible arrows,&#xa;</xsl:text>
-    <xsl:text>%% as also provided by MathJax extension of the same name&#xa;</xsl:text>
-    <!-- <xsl:text>\usepackage{extpfeil}&#xa;</xsl:text> -->
     <xsl:text>%% allow more columns to a matrix&#xa;</xsl:text>
     <xsl:text>%% can make this even bigger by overiding with  latex.preamble.late  processing option&#xa;</xsl:text>
     <xsl:text>\setcounter{MaxMatrixCols}{30}&#xa;</xsl:text>
@@ -500,19 +497,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- http://tex.stackexchange.com/questions/24549/horizontal-rule-with-adjustable-height-behaving-like-clinen-m -->
         <!-- Could preserve/restore \arrayrulewidth on entry/exit to tabular -->
         <!-- But we'll get cleaner source with this built into macros        -->
+        <!-- Could condition \setlength debacle on the use of extpfeil       -->
+        <!-- arrows (see discussion below)                                   -->
+        <xsl:text>%% We preserve a copy of the \setlength package before other&#xa;</xsl:text>
+        <xsl:text>%% packages (extpfeil) get a change to load packages that redefine it&#xa;</xsl:text>
+        <xsl:text>\let\oldsetlength\setlength&#xa;</xsl:text>
         <xsl:text>\newlength{\Oldarrayrulewidth}&#xa;</xsl:text>
         <xsl:text>\newcommand{\crulethin}[1]%&#xa;</xsl:text>
-        <xsl:text>{\noalign{\global\setlength{\Oldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\setlength{\arrayrulewidth}{0.04em}}\cline{#1}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\setlength{\arrayrulewidth}{\Oldarrayrulewidth}}}%&#xa;</xsl:text>
+        <xsl:text>{\noalign{\global\oldsetlength{\Oldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\oldsetlength{\arrayrulewidth}{0.04em}}\cline{#1}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\oldsetlength{\arrayrulewidth}{\Oldarrayrulewidth}}}%&#xa;</xsl:text>
         <xsl:text>\newcommand{\crulemedium}[1]%&#xa;</xsl:text>
-        <xsl:text>{\noalign{\global\setlength{\Oldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\setlength{\arrayrulewidth}{0.07em}}\cline{#1}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\setlength{\arrayrulewidth}{\Oldarrayrulewidth}}}&#xa;</xsl:text>
+        <xsl:text>{\noalign{\global\oldsetlength{\Oldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\oldsetlength{\arrayrulewidth}{0.07em}}\cline{#1}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\oldsetlength{\arrayrulewidth}{\Oldarrayrulewidth}}}&#xa;</xsl:text>
         <xsl:text>\newcommand{\crulethick}[1]%&#xa;</xsl:text>
-        <xsl:text>{\noalign{\global\setlength{\Oldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\setlength{\arrayrulewidth}{0.11em}}\cline{#1}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\setlength{\arrayrulewidth}{\Oldarrayrulewidth}}}&#xa;</xsl:text>
+        <xsl:text>{\noalign{\global\oldsetlength{\Oldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\oldsetlength{\arrayrulewidth}{0.11em}}\cline{#1}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\oldsetlength{\arrayrulewidth}{\Oldarrayrulewidth}}}&#xa;</xsl:text>
         <!-- http://tex.stackexchange.com/questions/119153/table-with-different-rule-widths -->
         <xsl:text>%% Single letter column specifiers defined via array package&#xa;</xsl:text>
         <xsl:text>\newcolumntype{A}{!{\vrule width 0.04em}}&#xa;</xsl:text>
@@ -803,6 +805,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="sanitize-sage">
             <xsl:with-param name="raw-sage-code" select="/mathbook/docinfo/latex-image-preamble" />
         </xsl:call-template>
+    </xsl:if>
+    <!-- We could use contains() on the 5 types of arrows  -->
+    <!-- to really defend against this problematic package -->
+    <xsl:if test="//m or //md or //mrow">
+        <xsl:text>%% extpfeil package for certain extensible arrows,&#xa;</xsl:text>
+        <xsl:text>%% as also provided by MathJax extension of the same name&#xa;</xsl:text>
+        <xsl:text>%% NB: this package loads mtools, which loads calc, which redefines&#xa;</xsl:text>
+        <xsl:text>%%     \setlength, so it can be removed if it seems to be in the &#xa;</xsl:text>
+        <xsl:text>%%     way and your math does not use:&#xa;</xsl:text>
+        <xsl:text>%%     &#xa;</xsl:text>
+        <xsl:text>%%     \xtwoheadrightarrow, \xtwoheadleftarrow, \xmapsto, \xlongequal, \xtofrom&#xa;</xsl:text>
+        <xsl:text>%%     &#xa;</xsl:text>
+        <xsl:text>%%     we have had to be extra careful with variable thickness&#xa;</xsl:text>
+        <xsl:text>%%     lines in tables, and so also load this package late&#xa;</xsl:text>
+        <xsl:text>\usepackage{extpfeil}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% Custom Preamble Entries, late (use latex.preamble.late)&#xa;</xsl:text>
     <xsl:if test="$latex.preamble.late != ''">
