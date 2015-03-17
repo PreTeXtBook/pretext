@@ -1747,12 +1747,6 @@ is just flat out on the page, as if printed there.
     </xsl:element>
 </xsl:template>
 
-<!-- Columns element is a container              -->
-<!-- We merely inspect its contents as necessary -->
-<!-- This template should never even be hit      -->
-<!-- TODO: consider abandoning this? -->
-<xsl:template match="columns" />
-
 <!-- A row of table -->
 <xsl:template match="row">
     <!-- Form the HTML table row -->
@@ -1760,7 +1754,7 @@ is just flat out on the page, as if printed there.
         <!-- Walk the cells of the row -->
         <xsl:call-template name="row-cells">
             <xsl:with-param name="the-cell" select="cell[1]" />
-            <xsl:with-param name="left-col" select="ancestor::tabular/columns/col[1]" />  <!-- possibly empty -->
+            <xsl:with-param name="left-col" select="ancestor::tabular/col[1]" />  <!-- possibly empty -->
         </xsl:call-template>
     </xsl:element>
 </xsl:template>

@@ -117,7 +117,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="md mdn" />
 <xsl:strip-space elements="sage figure index" />
 <xsl:strip-space elements="sidebyside paragraphs" />
-<xsl:strip-space elements="table tabular columns col row" />
+<xsl:strip-space elements="table tabular col row" />
 
 <!-- ######### -->
 <!-- Variables -->

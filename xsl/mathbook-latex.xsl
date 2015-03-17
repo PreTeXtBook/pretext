@@ -2502,8 +2502,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!--   or use global table-wide values            -->
         <!--   write alignment (mandatory)                -->
         <!--   follow with right border (optional)        -->
-        <xsl:when test="columns">
-            <xsl:for-each select="columns/col">
+        <xsl:when test="col">
+            <xsl:for-each select="col">
                 <xsl:call-template name="halign-specification">
                     <xsl:with-param name="align">
                         <xsl:choose>
@@ -2550,11 +2550,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- column specification done -->
     <!-- top horizontal rule is specified after column specification -->
     <xsl:choose>
-        <!-- columns element might indicate top border customizations         -->
-        <!-- so we walk the column group to build a cline-style specification -->
-        <xsl:when test="columns/col/@top">
+        <!-- A col element might indicate top border customizations   -->
+        <!-- so we walk the cols to build a cline-style specification -->
+        <xsl:when test="col/@top">
             <xsl:call-template name="column-cols">
-                <xsl:with-param name="the-col" select="columns/col[1]" />
+                <xsl:with-param name="the-col" select="col[1]" />
                 <xsl:with-param name="col-number" select="1" />
                 <xsl:with-param name="clines" select="''" />
                 <xsl:with-param name="table-top" select="$table-top"/>
@@ -2706,7 +2706,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Walking the row's cells, write contents and bottom borders -->
     <xsl:call-template name="row-cells">
         <xsl:with-param name="the-cell" select="cell[1]" />
-        <xsl:with-param name="left-col" select="../columns/col[1]" /> <!-- possibly empty -->
+        <xsl:with-param name="left-col" select="../col[1]" /> <!-- possibly empty -->
         <xsl:with-param name="left-column-number" select="1" />
         <xsl:with-param name="last-row" select="$last-row" />
         <xsl:with-param name="clines" select="''" />
