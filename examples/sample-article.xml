@@ -2242,7 +2242,9 @@ the xsltproc executable.
           finer control, it is generally best to specify the width.</p>
           <sidebyside xml:id="fig-sidebyside-global">
             <figure width="25.67%" xml:id="fig-sidebyside-subfigure">
-              <image source="images/trefoil.png"/>
+              <image source="images/trefoil.png">
+              <description>Trefoil image</description>
+              </image>
               <caption></caption>
             </figure>
             <figure width="25%">
@@ -2355,15 +2357,16 @@ the xsltproc executable.
           </sidebyside>
           <p>Similarly, text can be put next to images</p>
           <sidebyside>
-              <paragraphs width="50%" valign="middle">
-                <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text</p>
-              </paragraphs>
+              <p width="50%" valign="middle">
+                here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text
+                cross reference: <xref ref="text-next-to-figure" autoname="yes"/> and math: <m>x^2</m></p>
               <image width="20%" valign="top" source="images/trefoil.png"/>
           </sidebyside>
           <p>You can even place text next to numbered figures, as shown below in <xref ref="text-next-to-figure" autoname="yes"/>.</p>
           <sidebyside>
               <paragraphs width="50%" valign="middle">
-                <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text</p>
+                <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text;
+                  cross reference: <xref ref="text-next-to-figure" autoname="yes"/> and math: <m>x^2</m></p>
               </paragraphs>
               <figure width="20%" valign="top" xml:id="text-next-to-figure">
               <image source="images/trefoil.png" height="30" />
@@ -2397,22 +2400,90 @@ the xsltproc executable.
             <caption>Side-by-side Table, with subtable children.</caption>
             <table halign="left" width="50%" xml:id="tab-sidebyside-subtable">
               <caption>width=50<percent/></caption>
-              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+              <tabular top="minor" left="minor" halign="center">
+                  <col right="medium"/>
+                  <col right="major"/>
+                  <col />
+                  <!--  -->
+                  <row bottom="medium">
+                      <cell>1111</cell>
+                      <cell right="minor">2222</cell>
+                  </row>
+                  <row bottom="major">
+                      <cell>aaaa</cell>
+                      <cell right="medium">bbbb</cell>
+                  </row>
+                  <row>
+                      <cell bottom="minor">AAAA</cell>
+                      <cell bottom="major" right="major">BBBB</cell>
+                  </row>
+              </tabular>
             </table>
             <table width="25%">
               <caption>width=25<percent/></caption>
-              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+              <tabular top="minor" left="minor" halign="center">
+                  <col right="medium"/>
+                  <col right="major"/>
+                  <col />
+                  <!--  -->
+                  <row bottom="medium">
+                      <cell>1111</cell>
+                      <cell right="minor">2222</cell>
+                  </row>
+                  <row bottom="major">
+                      <cell>aaaa</cell>
+                      <cell right="medium">bbbb</cell>
+                  </row>
+                  <row>
+                      <cell bottom="minor">AAAA</cell>
+                      <cell bottom="major" right="major">BBBB</cell>
+                  </row>
+              </tabular>
             </table>
           </sidebyside>
           <sidebyside>
             <caption>Widths can be calculated automatically.</caption>
             <table>
               <caption></caption>
-              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+              <tabular top="minor" left="minor" halign="center">
+                  <col right="medium"/>
+                  <col right="major"/>
+                  <col />
+                  <!--  -->
+                  <row bottom="medium">
+                      <cell>1111</cell>
+                      <cell right="minor">2222</cell>
+                  </row>
+                  <row bottom="major">
+                      <cell>aaaa</cell>
+                      <cell right="medium">bbbb</cell>
+                  </row>
+                  <row>
+                      <cell bottom="minor">AAAA</cell>
+                      <cell bottom="major" right="major">BBBB</cell>
+                  </row>
+              </tabular>
             </table>
             <table>
               <caption></caption>
-              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+              <tabular top="minor" left="minor" halign="center">
+                  <col right="medium"/>
+                  <col right="major"/>
+                  <col />
+                  <!--  -->
+                  <row bottom="medium">
+                      <cell>1111</cell>
+                      <cell right="minor">2222</cell>
+                  </row>
+                  <row bottom="major">
+                      <cell>aaaa</cell>
+                      <cell right="medium">bbbb</cell>
+                  </row>
+                  <row>
+                      <cell bottom="minor">AAAA</cell>
+                      <cell bottom="major" right="major">BBBB</cell>
+                  </row>
+              </tabular>
             </table>
           </sidebyside>
           <p>If you put two <c>table</c> elements side-by-side without a <q>global</q> caption, then they will use regular numbering; see
@@ -2420,17 +2491,66 @@ the xsltproc executable.
           <sidebyside>
             <table xml:id="tab-regular-fig1">
               <caption></caption>
-              <tabular>
-              <row><cell>tabular body</cell><cell>tabular body</cell></row>
+              <tabular top="minor" left="minor" halign="center">
+                  <col right="medium"/>
+                  <col right="major"/>
+                  <col />
+                  <!--  -->
+                  <row bottom="medium">
+                      <cell>1111</cell>
+                      <cell right="minor">2222</cell>
+                  </row>
+                  <row bottom="major">
+                      <cell>aaaa</cell>
+                      <cell right="medium">bbbb</cell>
+                  </row>
+                  <row>
+                      <cell bottom="minor">AAAA</cell>
+                      <cell bottom="major" right="major">BBBB</cell>
+                  </row>
               </tabular>
             </table>
             <table xml:id="tab-regular-fig2">
               <caption></caption>
-              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+              <tabular top="minor" left="minor" halign="center">
+                  <col right="medium"/>
+                  <col right="major"/>
+                  <col />
+                  <!--  -->
+                  <row bottom="medium">
+                      <cell>1111</cell>
+                      <cell right="minor">2222</cell>
+                  </row>
+                  <row bottom="major">
+                      <cell>aaaa</cell>
+                      <cell right="medium">bbbb</cell>
+                  </row>
+                  <row>
+                      <cell bottom="minor">AAAA</cell>
+                      <cell bottom="major" right="major">BBBB</cell>
+                  </row>
+              </tabular>
             </table>
             <table xml:id="tab-regular-fig3">
               <caption></caption>
-              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+              <tabular top="minor" left="minor" halign="center">
+                  <col right="medium"/>
+                  <col right="major"/>
+                  <col />
+                  <!--  -->
+                  <row bottom="medium">
+                      <cell>1111</cell>
+                      <cell right="minor">2222</cell>
+                  </row>
+                  <row bottom="major">
+                      <cell>aaaa</cell>
+                      <cell right="medium">bbbb</cell>
+                  </row>
+                  <row>
+                      <cell bottom="minor">AAAA</cell>
+                      <cell bottom="major" right="major">BBBB</cell>
+                  </row>
+              </tabular>
             </table>
           </sidebyside>
         </subsection>
@@ -2443,15 +2563,66 @@ the xsltproc executable.
             <caption>Global Caption</caption>
             <table>
               <caption></caption>
-              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+              <tabular top="minor" left="minor" halign="center">
+                  <col right="medium"/>
+                  <col right="major"/>
+                  <col />
+                  <!--  -->
+                  <row bottom="medium">
+                      <cell>1111</cell>
+                      <cell right="minor">2222</cell>
+                  </row>
+                  <row bottom="major">
+                      <cell>aaaa</cell>
+                      <cell right="medium">bbbb</cell>
+                  </row>
+                  <row>
+                      <cell bottom="minor">AAAA</cell>
+                      <cell bottom="major" right="major">BBBB</cell>
+                  </row>
+              </tabular>
             </table>
             <table xml:id="tab-regular-halign-demo" halign="right">
               <caption>halign="right"</caption>
-              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+              <tabular top="minor" left="minor" halign="center">
+                  <col right="medium"/>
+                  <col right="major"/>
+                  <col />
+                  <!--  -->
+                  <row bottom="medium">
+                      <cell>1111</cell>
+                      <cell right="minor">2222</cell>
+                  </row>
+                  <row bottom="major">
+                      <cell>aaaa</cell>
+                      <cell right="medium">bbbb</cell>
+                  </row>
+                  <row>
+                      <cell bottom="minor">AAAA</cell>
+                      <cell bottom="major" right="major">BBBB</cell>
+                  </row>
+              </tabular>
             </table>
             <table xml:id="tab-regular-valign-demo" valign="top">
               <caption>valign="top"</caption>
-              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+              <tabular top="minor" left="minor" halign="center">
+                  <col right="medium"/>
+                  <col right="major"/>
+                  <col />
+                  <!--  -->
+                  <row bottom="medium">
+                      <cell>1111</cell>
+                      <cell right="minor">2222</cell>
+                  </row>
+                  <row bottom="major">
+                      <cell>aaaa</cell>
+                      <cell right="medium">bbbb</cell>
+                  </row>
+                  <row>
+                      <cell bottom="minor">AAAA</cell>
+                      <cell bottom="major" right="major">BBBB</cell>
+                  </row>
+              </tabular>
             </table>
           </sidebyside>
          </subsection>
@@ -2462,7 +2633,24 @@ the xsltproc executable.
           <sidebyside>
             <table xml:id="table-next-figure">
               <caption>Table next to a Figure</caption>
-              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+              <tabular top="minor" left="minor" halign="center">
+                  <col right="medium"/>
+                  <col right="major"/>
+                  <col />
+                  <!--  -->
+                  <row bottom="medium">
+                      <cell>1111</cell>
+                      <cell right="minor">2222</cell>
+                  </row>
+                  <row bottom="major">
+                      <cell>aaaa</cell>
+                      <cell right="medium">bbbb</cell>
+                  </row>
+                  <row>
+                      <cell bottom="minor">AAAA</cell>
+                      <cell bottom="major" right="major">BBBB</cell>
+                  </row>
+              </tabular>
             </table>
             <figure xml:id="figure-next-table">
               <image source="images/trefoil.png"/>
@@ -2474,9 +2662,26 @@ the xsltproc executable.
           <title>Tables Next to Text</title>
           <p>Tables can go next to text blocks.</p>
           <sidebyside>
-            <table>
+            <table valign="top">
               <caption>Table next to text</caption>
-              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+                <tabular top="minor" left="minor" halign="center">
+                    <col right="medium"/>
+                    <col right="major"/>
+                    <col />
+                    <!--  -->
+                    <row bottom="medium">
+                        <cell>1111</cell>
+                        <cell right="minor">2222</cell>
+                    </row>
+                    <row bottom="major">
+                        <cell>aaaa</cell>
+                        <cell right="medium">bbbb</cell>
+                    </row>
+                    <row>
+                        <cell bottom="minor">AAAA</cell>
+                        <cell bottom="major" right="major">BBBB</cell>
+                    </row>
+                </tabular>
             </table>
             <paragraphs width="20%" halign="left" valign="top">
               <p>here is some text here is some text here is some text here is some text here </p>
@@ -2489,26 +2694,132 @@ the xsltproc executable.
             </paragraphs>
           </sidebyside>
         </subsection>
-<!-- Removed 2015/03/17, exposing bugs in sidebyside/tabular, will return
         <subsection>
           <title>Tables Without Captions Next to Each Other</title>
           <p>Tables can go next to each other without captions using the <c>tabular</c> element.</p>
           <sidebyside>
-            <tabular>
-              <row><cell>tabular body</cell></row>
-            </tabular>
-            <tabular>
-              <row><cell>tabular body</cell></row>
-            </tabular>
-            <tabular>
-              <row><cell>tabular body</cell></row>
-            </tabular>
-            <tabular>
-              <row><cell>tabular body</cell></row>
-            </tabular>
+                <tabular top="minor" left="minor" halign="center">
+                    <col right="medium"/>
+                    <col right="major"/>
+                    <col />
+                    <!--  -->
+                    <row bottom="medium">
+                        <cell>1111</cell>
+                        <cell right="minor">2222</cell>
+                    </row>
+                    <row bottom="major">
+                        <cell>aaaa</cell>
+                        <cell right="medium">bbbb</cell>
+                    </row>
+                    <row>
+                        <cell bottom="minor">AAAA</cell>
+                        <cell bottom="major" right="major">BBBB</cell>
+                    </row>
+                    <row>
+                        <cell>CCCC</cell>
+                        <cell>DDDD</cell>
+                    </row>
+                </tabular>
+                <tabular valign="top" top="minor" left="minor" halign="center">
+                    <col right="medium"/>
+                    <col right="major"/>
+                    <col />
+                    <!--  -->
+                    <row bottom="medium">
+                        <cell>1111</cell>
+                        <cell right="minor">2222</cell>
+                    </row>
+                    <row bottom="major">
+                        <cell>aaaa</cell>
+                        <cell right="medium">bbbb</cell>
+                    </row>
+                    <row>
+                        <cell bottom="minor">AAAA</cell>
+                        <cell bottom="major" right="major">BBBB</cell>
+                    </row>
+                </tabular>
+                <tabular valign="middle" top="minor" left="minor" halign="center">
+                    <col right="medium"/>
+                    <col right="major"/>
+                    <col />
+                    <!--  -->
+                    <row bottom="medium">
+                        <cell>1111</cell>
+                        <cell right="minor">2222</cell>
+                    </row>
+                    <row bottom="major">
+                        <cell>aaaa</cell>
+                        <cell right="medium">bbbb</cell>
+                    </row>
+                    <row>
+                        <cell bottom="minor">AAAA</cell>
+                        <cell bottom="major" right="major">BBBB</cell>
+                    </row>
+                </tabular>
+                <tabular top="minor" left="minor" halign="center">
+                    <col right="medium"/>
+                    <col right="major"/>
+                    <col />
+                    <!--  -->
+                    <row bottom="medium">
+                        <cell>1111</cell>
+                        <cell right="minor">2222</cell>
+                    </row>
+                    <row bottom="major">
+                        <cell>aaaa</cell>
+                        <cell right="medium">bbbb</cell>
+                    </row>
+                    <row>
+                        <cell bottom="minor">AAAA</cell>
+                        <cell bottom="major" right="major">BBBB</cell>
+                    </row>
+                </tabular>
           </sidebyside>
         </subsection>
--->
+        <subsection>
+          <title>Other objects </title>
+          <p>Other objects such as lists can be put in the <c>sidebyside</c> element.</p>
+          <sidebyside>
+            <paragraphs>
+            <ol>
+                <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" />.</p></li>
+                <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" />.</p></li>
+                <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" />.</p></li>
+                <li><p>Figures: An early plot, Figure<nbsp /><xref ref="figure-function-derivative" />.</p></li>
+            </ol>
+            </paragraphs>
+            <paragraphs>
+            <ul>
+                <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" />.</p></li>
+                <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" />.</p></li>
+                <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" />.</p></li>
+                <li><p>Figures: An early plot, Figure<nbsp /><xref ref="figure-function-derivative" />.</p></li>
+            </ul>
+            </paragraphs>
+          </sidebyside>
+          <p>You can even experiment with <emph>aligned</emph> equations in the <c>sidebyside</c> element.</p>
+          <sidebyside>
+            <paragraphs valign="middle">
+              <p>here is some text, and here is an equation that contains alignment.</p>
+              <md>
+                <mrow>f(x)&amp;= x^2+3x+2</mrow>
+                <mrow>&amp;=(x+2)(x+1)</mrow>
+            </md>
+            </paragraphs>
+            <paragraphs>
+              <p>here is some text, and here is an equation that contains alignment.</p>
+              <md>
+                <mrow>f(x)&amp;= x^2+3x+2</mrow>
+                <mrow>&amp;=(x+2)(x+1)</mrow>
+            </md>
+              <p>here is some text, and here is an equation that contains alignment.</p>
+              <md>
+                <mrow>f(x)&amp;= x^2+3x+2</mrow>
+                <mrow>&amp;=(x+2)(x+1)</mrow>
+            </md>
+            </paragraphs>
+          </sidebyside>
+        </subsection>
       </section>
         <!-- Bibliography/References can appear anywhere -->
 
