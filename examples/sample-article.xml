@@ -647,7 +647,7 @@ the xsltproc executable.
             <p>Table can get quite complex.  Simple ones are simpler, such as this example of numerical computations for Euler's method.</p>
 
             <table xml:id="table-euler1">
-                <tabular top="major" halign="center">
+                <tabular top="major" halign="center" bottom="medium">
                     <row bottom="minor">
                         <cell>  <m>i</m></cell>
                         <cell><m>t_i</m></cell>
@@ -2397,22 +2397,22 @@ the xsltproc executable.
             <caption>Side-by-side Table, with subtable children.</caption>
             <table halign="left" width="50%" xml:id="tab-sidebyside-subtable">
               <caption>width=50<percent/></caption>
-              <tabular><row><cell>tabular body</cell></row></tabular>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
             </table>
             <table width="25%">
               <caption>width=25<percent/></caption>
-              <tabular><row><cell>tabular body</cell></row></tabular>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
             </table>
           </sidebyside>
           <sidebyside>
             <caption>Widths can be calculated automatically.</caption>
             <table>
               <caption></caption>
-              <tabular><row><cell>tabular body</cell></row></tabular>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
             </table>
             <table>
               <caption></caption>
-              <tabular><row><cell>tabular body</cell></row></tabular>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
             </table>
           </sidebyside>
           <p>If you put two <c>table</c> elements side-by-side without a <q>global</q> caption, then they will use regular numbering; see
@@ -2421,16 +2421,16 @@ the xsltproc executable.
             <table xml:id="tab-regular-fig1">
               <caption></caption>
               <tabular>
-              <row><cell>tabular body</cell></row>
+              <row><cell>tabular body</cell><cell>tabular body</cell></row>
               </tabular>
             </table>
             <table xml:id="tab-regular-fig2">
               <caption></caption>
-              <tabular><row><cell>tabular body</cell></row></tabular>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
             </table>
             <table xml:id="tab-regular-fig3">
               <caption></caption>
-              <tabular><row><cell>tabular body</cell></row></tabular>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
             </table>
           </sidebyside>
         </subsection>
@@ -2443,15 +2443,15 @@ the xsltproc executable.
             <caption>Global Caption</caption>
             <table>
               <caption></caption>
-              <tabular><row><cell>tabular body</cell></row></tabular>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
             </table>
             <table xml:id="tab-regular-halign-demo" halign="right">
               <caption>halign="right"</caption>
-              <tabular><row><cell>tabular body</cell></row></tabular>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
             </table>
             <table xml:id="tab-regular-valign-demo" valign="top">
               <caption>valign="top"</caption>
-              <tabular><row><cell>tabular body</cell></row></tabular>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
             </table>
           </sidebyside>
          </subsection>
@@ -2462,7 +2462,7 @@ the xsltproc executable.
           <sidebyside>
             <table xml:id="table-next-figure">
               <caption>Table next to a Figure</caption>
-              <tabular><row><cell>tabular body</cell></row></tabular>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
             </table>
             <figure xml:id="figure-next-table">
               <image source="images/trefoil.png"/>
@@ -2476,7 +2476,7 @@ the xsltproc executable.
           <sidebyside>
             <table>
               <caption>Table next to text</caption>
-              <tabular><row><cell>tabular body</cell></row></tabular>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
             </table>
             <paragraphs width="20%" halign="left" valign="top">
               <p>here is some text here is some text here is some text here is some text here </p>
@@ -2489,6 +2489,7 @@ the xsltproc executable.
             </paragraphs>
           </sidebyside>
         </subsection>
+<!-- Removed 2015/03/17, exposing bugs in sidebyside/tabular, will return
         <subsection>
           <title>Tables Without Captions Next to Each Other</title>
           <p>Tables can go next to each other without captions using the <c>tabular</c> element.</p>
@@ -2507,7 +2508,8 @@ the xsltproc executable.
             </tabular>
           </sidebyside>
         </subsection>
-        </section>
+-->
+      </section>
         <!-- Bibliography/References can appear anywhere -->
 
         <references>
