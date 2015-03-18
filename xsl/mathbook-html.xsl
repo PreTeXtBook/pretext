@@ -1760,19 +1760,36 @@ is just flat out on the page, as if printed there.
         <!-- Walk the cells of the row -->
         <xsl:call-template name="row-cells">
             <xsl:with-param name="the-cell" select="cell[1]" />
-            <xsl:with-param name="the-col" select="ancestor::tabular/columns/col[1]" />  <!-- possibly empty -->
+            <xsl:with-param name="left-col" select="ancestor::tabular/columns/col[1]" />  <!-- possibly empty -->
         </xsl:call-template>
     </xsl:element>
 </xsl:template>
 
 <xsl:template name="row-cells">
     <xsl:param name="the-cell" />
-    <xsl:param name="the-col" />
-             <!-- <xsl:message>Cell: <xsl:value-of select="$the-cell" /></xsl:message> -->
+    <xsl:param name="left-col" />
+    <!-- A cell may span several columns, or default to just 1              -->
+    <!-- When colspan is not trivial, we identify the col elements          -->
+    <!-- for the left and right ends of the span                            -->
+    <!-- When colspan is trivial, the left and right versions are identical -->
+    <!-- Left is used for left border and for horizontal alignment          -->
+    <!-- Right is used for right border                                     -->
+    <xsl:variable name="column-span">
+        <xsl:choose>
+            <xsl:when test="$the-cell/@colspan">
+                <xsl:value-of select="$the-cell/@colspan" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>1</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- For a "normal" 1-column cell this variable effectively makes a copy -->
+    <xsl:variable name="right-col" select="($left-col/self::*|$left-col/following-sibling::col)[position()=$column-span]" />
     <!-- Look ahead one column, anticipating recursion   -->
     <!-- but also probing for end of row (no more cells) -->
-    <xsl:variable name="next-cell" select="$the-cell/following-sibling::*[1]" />
-    <xsl:variable name="next-col"  select="$the-col/following-sibling::*[1]" /> <!-- possibly empty -->
+    <xsl:variable name="next-cell" select="$the-cell/following-sibling::cell[1]" />
+    <xsl:variable name="next-col"  select="$right-col/following-sibling::col[1]" /> <!-- possibly empty -->
     <xsl:if test="$the-cell">
         <!-- build an HTML data cell, with CSS decorations              -->
         <!-- we set properties in various variables,                    -->
@@ -1791,8 +1808,8 @@ is just flat out on the page, as if printed there.
                     <xsl:value-of select="$the-cell/ancestor::row/@halign" />
                 </xsl:when>
                 <!-- col attribute next -->
-                <xsl:when test="$the-col/@halign">
-                    <xsl:value-of select="$the-col/@halign" />
+                <xsl:when test="$left-col/@halign">
+                    <xsl:value-of select="$left-col/@halign" />
                 </xsl:when>
                 <!-- table attribute last -->
                 <xsl:when test="$the-cell/ancestor::tabular/@halign">
@@ -1833,8 +1850,8 @@ is just flat out on the page, as if printed there.
                     <xsl:value-of select="$the-cell/@right" />
                 </xsl:when>
                 <!-- not available on rows, col attribute next -->
-                <xsl:when test="$the-col/@right">
-                    <xsl:value-of select="$the-col/@right" />
+                <xsl:when test="$right-col/@right">
+                    <xsl:value-of select="$right-col/@right" />
                 </xsl:when>
                 <!-- table attribute last -->
                 <xsl:when test="$the-cell/ancestor::tabular/@right">
@@ -1880,8 +1897,8 @@ is just flat out on the page, as if printed there.
                 <xsl:when test="not($the-cell/ancestor::row/preceding-sibling::row)">
                     <xsl:choose>
                         <!-- col attribute first -->
-                        <xsl:when test="$the-col/@top">
-                            <xsl:value-of select="$the-col/@top" />
+                        <xsl:when test="$left-col/@top">
+                            <xsl:value-of select="$left-col/@top" />
                         </xsl:when>
                         <!-- table attribute last -->
                         <xsl:when test="$the-cell/ancestor::tabular/@top">
@@ -1928,13 +1945,18 @@ is just flat out on the page, as if printed there.
                     <xsl:with-param name="width" select="$top" />
                 </xsl:call-template>
             </xsl:attribute>
+            <xsl:if test="not($column-span = 1)">
+                <xsl:attribute name="colspan">
+                    <xsl:value-of select="$column-span" />
+                </xsl:attribute>
+            </xsl:if>
             <!-- process the actual contents -->
             <xsl:apply-templates select="$the-cell" />
         </xsl:element>
         <!-- recurse forward, perhaps to an empty cell -->
         <xsl:call-template name="row-cells">
             <xsl:with-param name="the-cell" select="$next-cell" />
-            <xsl:with-param name="the-col" select="$next-col" />
+            <xsl:with-param name="left-col" select="$next-col" />
         </xsl:call-template>
     </xsl:if>
     <!-- Arrive here only when we have no cell so      -->

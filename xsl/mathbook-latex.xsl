@@ -2597,7 +2597,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="start-run" />
     <!-- Look ahead one column, anticipating recursion           -->
     <!-- but also probing for end of column group (no more cols) -->
-    <xsl:variable name="next-col"  select="$the-col/following-sibling::*[1]" /> <!-- possibly empty -->
+    <xsl:variable name="next-col"  select="$the-col/following-sibling::col[1]" /> <!-- possibly empty -->
     <!-- The desired top border style for this column   -->
     <!-- Considered, but also paid forward as prior-top -->
     <xsl:variable name="current-top">
@@ -2706,8 +2706,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Walking the row's cells, write contents and bottom borders -->
     <xsl:call-template name="row-cells">
         <xsl:with-param name="the-cell" select="cell[1]" />
-        <xsl:with-param name="the-col" select="../columns/col[1]" /> <!-- possibly empty -->
-        <xsl:with-param name="cell-number" select="1" />
+        <xsl:with-param name="left-col" select="../columns/col[1]" /> <!-- possibly empty -->
+        <xsl:with-param name="left-column-number" select="1" />
         <xsl:with-param name="last-row" select="$last-row" />
         <xsl:with-param name="clines" select="''" />
         <xsl:with-param name="table-left" select="$table-left"/>
@@ -2731,8 +2731,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- that uses an identical strategy, if you want to see something simpler -->
 <xsl:template name="row-cells">
     <xsl:param name="the-cell" />
-    <xsl:param name="the-col" />
-    <xsl:param name="cell-number" />
+    <xsl:param name="left-col" />
+    <xsl:param name="left-column-number" />
     <xsl:param name="last-row" />
     <xsl:param name="clines" />
     <xsl:param name="table-left" />
@@ -2743,16 +2743,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="row-bottom" />
     <xsl:param name="prior-bottom" />
     <xsl:param name="start-run" />
-    <!-- Look ahead one column, anticipating recursion   -->
-    <!-- but also probing for end of row (no more cells) -->
-    <xsl:variable name="next-cell" select="$the-cell/following-sibling::*[1]" /> <!-- possibly empty -->
-    <xsl:variable name="next-col"  select="$the-col/following-sibling::*[1]" />
+    <!-- A cell may span several columns, or default to just 1              -->
+    <!-- When colspan is not trivial, we identify the left and right ends   -->
+    <!-- of the span, both as col elements and as column numbers            -->
+    <!-- When colspan is trivial, the left and right versions are identical -->
+    <!-- Left is used for left border and for horizontal alignment          -->
+    <!-- Right is used for right border                                     -->
+    <!-- Left (less 1) is used for lagging cline flushes                    -->
+    <xsl:variable name="column-span">
+        <xsl:choose>
+            <xsl:when test="$the-cell/@colspan">
+                <xsl:value-of select="$the-cell/@colspan" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>1</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- For a "normal" 1-column cell these variables effectively make copies -->
+    <xsl:variable name="right-column-number" select="$left-column-number + $column-span - 1" />
+    <xsl:variable name="right-col" select="($left-col/self::*|$left-col/following-sibling::col)[position()=$column-span]" />
     <!-- recreate the column specification for a right border       -->
     <!-- either a per-column value, or the global, table-wide value -->
     <xsl:variable name="column-right">
         <xsl:choose>
-            <xsl:when test="$the-col/@right">
-                <xsl:value-of select="$the-col/@right" />
+            <xsl:when test="$right-col/@right">
+                <xsl:value-of select="$right-col/@right" />
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="$table-right" />
@@ -2771,12 +2787,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <!-- recreate the column specification for horizontal alignment -->
-    <!-- either a per-column value, or the global, table-wide value -->
+    <!-- Use cell attributes, or col attributes for horizontal alignment -->
+    <!-- recreate the column specification for horizontal alignment      -->
+    <!-- either a per-column value, or the global, table-wide value      -->
     <xsl:variable name="column-halign">
         <xsl:choose>
-            <xsl:when test="$the-col/@halign">
-                <xsl:value-of select="$the-col/@halign" />
+            <xsl:when test="$left-col/@halign">
+                <xsl:value-of select="$left-col/@halign" />
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="$table-halign" />
@@ -2799,18 +2816,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
+    <!-- Look ahead to next cell, anticipating recursion   -->
+    <!-- but also probing for end of row (no more cells),  -->
+    <!-- which is needed when flushing cline specification -->
+    <!-- Also advance to next col element from right one   -->
+    <xsl:variable name="next-cell" select="$the-cell/following-sibling::cell[1]" /> <!-- possibly empty -->
+    <xsl:variable name="next-col"  select="$right-col/following-sibling::col[1]" />
     <!-- Write the cell's contents -->
     <!-- if the left border, alignment or right border        -->
     <!-- conflict with the column specification, then we      -->
     <!-- wrap in a multicolumn to specify the overrides.      -->
+    <!-- Or if we have a colspan, then we use a multicolumn   -->
     <!-- $table-left and $row-left *can* differ on first use, -->
-    <!-- but row-left is subsequently set to $table-left      -->
+    <!-- but row-left is subsequently set to $table-left     -->
     <xsl:if test="$the-cell">
         <xsl:choose>
-            <xsl:when test="not($table-left = $row-left) or not($column-halign = $cell-halign) or not($column-right = $cell-right)">
-                <xsl:text>\multicolumn{1}{</xsl:text>
+            <xsl:when test="not($table-left = $row-left) or not($column-halign = $cell-halign) or not($column-right = $cell-right) or ($column-span > 1)">
+                <xsl:text>\multicolumn{</xsl:text>
+                <xsl:value-of select="$column-span" />
+                <xsl:text>}{</xsl:text>
                 <!-- only place latex allows/needs a left border -->
-                <xsl:if test="$cell-number = 1">
+                <xsl:if test="$left-column-number = 1">
                     <xsl:call-template name="vrule-specification">
                         <xsl:with-param name="width" select="$row-left" />
                     </xsl:call-template>
@@ -2864,11 +2890,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:when>
                 <!-- write cline for up-to, and including, prior cell      -->
                 <!-- prior-bottom always lags, so never operate on cell #1 -->
-                <xsl:when test="($cell-number != 1) and not($prior-bottom = 'none')">
+                <xsl:when test="($left-column-number != 1) and not($prior-bottom = 'none')">
                     <xsl:call-template name="crule-specification">
                         <xsl:with-param name="width" select="$prior-bottom" />
                         <xsl:with-param name="start" select="$start-run" />
-                        <xsl:with-param name="finish" select="$cell-number - 1" />
+                        <xsl:with-param name="finish" select="$left-column-number - 1" />
                     </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>
@@ -2880,11 +2906,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- update start of consecutive run of styles -->
     <xsl:variable name="new-start-run">
         <xsl:choose>
-            <xsl:when test="$cell-number = 1 or $prior-bottom = $current-bottom">
+            <xsl:when test="$left-column-number = 1 or $prior-bottom = $current-bottom">
                 <xsl:value-of select="$start-run" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$cell-number" />
+                <xsl:value-of select="$left-column-number" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -2894,8 +2920,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$the-cell">
             <xsl:call-template name="row-cells">
                 <xsl:with-param name="the-cell" select="$next-cell" />
-                <xsl:with-param name="the-col" select="$next-col" /> <!-- possibly empty -->
-                <xsl:with-param name="cell-number" select="$cell-number + 1" />
+                <xsl:with-param name="left-col" select="$next-col" /> <!-- possibly empty -->
+                <xsl:with-param name="left-column-number" select="$right-column-number + 1" />
                 <xsl:with-param name="last-row" select="$last-row" />
                 <xsl:with-param name="clines" select="$updated-cline" />
                 <xsl:with-param name="table-left" select="$table-left" />
