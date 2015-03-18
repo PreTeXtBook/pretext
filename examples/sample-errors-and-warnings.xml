@@ -115,6 +115,29 @@ systems.
                 <p>There has always been a sort of odd mini-sectioning element, called <c>paragraph</c> orignally since that is what it is in <latex />, but now better named as <c>paragraphs</c>.</p>
             </paragraph>
 
+            <p>Tables once looked like this, but now are really different.</p>
+
+             <table xml:id="table-euler1">
+                <tgroup cols="4" align="center">
+                    <thead>
+                        <row><entry><m>i</m></entry><entry><m>t_i</m></entry><entry><m>x_i</m></entry><entry><m>y_i</m></entry></row>
+                    </thead>
+                    <tbody>
+                        <row><entry>0</entry><entry>0</entry><entry>0</entry><entry>0.5000</entry></row>
+                        <row><entry>1</entry><entry>0.20</entry><entry>0.1000</entry><entry>0.4800</entry></row>
+                        <row><entry>2</entry><entry>0.40</entry><entry>0.1960</entry><entry>0.4560</entry></row>
+                        <row><entry>3</entry><entry>0.60</entry><entry>0.2872</entry><entry>0.4295</entry></row>
+                        <row><entry>4</entry><entry>0.80</entry><entry>0.3731</entry><entry>0.4027</entry></row>
+                        <row><entry>5</entry><entry>1.00</entry><entry>0.4536</entry><entry>0.3783</entry></row>
+                        <row><entry>6</entry><entry>1.20</entry><entry>0.5293</entry><entry>0.3591</entry></row>
+                        <row><entry>7</entry><entry>1.40</entry><entry>0.6011</entry><entry>0.3480</entry></row>
+                        <row><entry>8</entry><entry>1.60</entry><entry>0.6707</entry><entry>0.3474</entry></row>
+                        <row><entry>9</entry><entry>1.80</entry><entry>0.7402</entry><entry>0.3603</entry></row>
+                        <row><entry>10</entry><entry>2.00</entry><entry>0.8123</entry><entry>0.3900</entry></row>
+                    </tbody>
+                </tgroup>
+            </table>
+
         </section>
 
     </article>

@@ -1630,6 +1630,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="deprecation-warnings">
     <!-- newer deprecations at the top of this list, user will see in this order -->
     <!--  -->
+    <!-- tables are radically different, tgroup element is a marker -->
+    <xsl:if test="//tgroup">
+        <xsl:call-template name="deprecation-message">
+            <xsl:with-param name="date-string" select="'2015/03/17'" />
+            <xsl:with-param name="message" select="'tables are done quite differently, the &quot;tgroup&quot; element is indicative'" />
+            <xsl:with-param name="occurences" select="count(//tgroup)" />
+        </xsl:call-template>
+    </xsl:if>
+    <!-- tables are radically different, entry to cell shows magnitude -->
+    <xsl:if test="//tgroup/thead/row/entry or //tgroup/tbody/row/entry">
+        <xsl:call-template name="deprecation-message">
+            <xsl:with-param name="date-string" select="'2015/03/17'" />
+            <xsl:with-param name="message" select="'tables are done quite differently, the &quot;entry&quot; element should be replaced by the &quot;cell&quot; element'" />
+            <xsl:with-param name="occurences" select="count(//tgroup/thead/row/entry) + count(//tgroup/tbody/row/entry)" />
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
     <!-- paragraph is renamed more accurately to paragraphs -->
     <xsl:if test="//paragraph">
         <xsl:call-template name="deprecation-message">
@@ -1683,6 +1700,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="occurences" select="count(//@filebase)" />
         </xsl:call-template>
     </xsl:if>
+</xsl:template>
+
+<!-- Some specific warnings that can go here  -->
+<!-- for items that are totally gone and not  -->
+<!-- useful anymore in their original context -->
+<xsl:template match="tbody">
+    <xsl:message>MBX:WARNING: tables are done very differently now (2015/03/17), the "tbody" element is indicative</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
 </xsl:template>
 
 <!-- Miscellaneous -->
