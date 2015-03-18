@@ -2166,10 +2166,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Figures -->
 <!-- Standard LaTeX figure environment redefined, see preamble comments -->
-<!-- The sidebyside template 'wrapping' environment will always be a figure; 
-     captions will be accounted for appropriately using \captionof{<name/>}{<CAPTION/>}. 
-     See the caption template for details. -->
-<xsl:template match="figure|sidebyside">
+<xsl:template match="figure">
     <xsl:text>\begin{figure}&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]"/>
@@ -2177,11 +2174,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{figure}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- the width of a <object/> inside a sidebyside is translated into 
-     a fraction of \textwidth 
-     we do this by stripping the % sign, and 
-     adding a leading .
-     for example 50% is turned into .50\textwith
+<!-- The sidebyside template 'wrapping' environment will always be a figure; 
+     captions will be accounted for appropriately using \captionof{<name/>}{<CAPTION/>}. 
+     See the caption template for details. 
 
      Each sidebyside element is put through a measuring routine,
      which allows us to align captions correctly;
@@ -2196,10 +2191,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
      sidebyside/p 
      sidebyside/image 
      sidebyside/tabular 
+     
      -->
-<xsl:template match="sidebyside/figure|sidebyside/table|sidebyside/image|sidebyside/tabular|sidebyside/paragraphs|sidebyside/p">
+<xsl:template match="sidebyside">
+    <xsl:text>\begin{figure}&#xa;</xsl:text>
+    <xsl:text>\centering&#xa;</xsl:text>
+    <xsl:apply-templates select="*[not(self::caption)]" mode="sidebyside"/>
+    <!-- output the child nodes -->
+    <xsl:text>\popValignCaptionBottom&#xa;</xsl:text>
+    <!-- global caption -->
+    <xsl:apply-templates select="caption" />
+    <xsl:text>\end{figure}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- vertical alignment of objects inside sidebyside -->
+<xsl:template match="*" mode="sidebyside-subitem-valign">
     <!-- process the width attritbute -->
     <xsl:variable name="width">
+        <!-- the width of a <object/> inside a sidebyside is translated into 
+             a fraction of \textwidth 
+             we do this by stripping the % sign, and 
+             adding a leading .
+             for example 50% is turned into .50\textwith
+               -->
         <xsl:choose>
             <xsl:when test="@width">
                 <xsl:value-of select="substring-before(@width,'%')" />
@@ -2255,10 +2269,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>\textwidth}{%&#xa;</xsl:text>
-    <!-- paragraphs and p elements need wrapping in a parbox -->
-    <xsl:if test="self::paragraphs or self::p">
-      <xsl:text>\parbox{\textwidth}{%&#xa;</xsl:text>
-    </xsl:if>
+</xsl:template>
+
+<!-- horizontal alignment of objects inside sidebyside -->
+<xsl:template match="*" mode="sidebyside-subitem-halign">
     <!-- horizontal alignment -->
     <xsl:choose>
         <xsl:when test="@halign='right'">
@@ -2279,27 +2293,103 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>% horizontal alignment &#xa;</xsl:text>
-    <!-- body of the figure/table/image/paragraph/tabular -->
-    <xsl:if test="self::p or self::tabular">
-        <xsl:apply-templates />
-    </xsl:if>
+</xsl:template>
+
+<xsl:template match="figure" mode="sidebyside">
+    <!-- vertical alignment -->
+    <xsl:apply-templates select="." mode="sidebyside-subitem-valign"/>
+    <!-- horizontal alignment -->
+    <xsl:apply-templates select="." mode="sidebyside-subitem-halign"/>
+    <!-- body of the figure -->
     <xsl:apply-templates select="*[not(self::caption)]" />
-    <xsl:if test="self::image">
-      <xsl:call-template name="processImage"/>
-    </xsl:if>
-    <!-- \parbox needs closing-->
-    <xsl:if test="self::paragraphs or self::p">
-      <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
-    <!-- end the body of the figure/image/table/tabular/paragraph -->
+    <!-- end the body of the figure -->
     <xsl:text>}% end body &#xa;{</xsl:text>
     <!-- add caption -->
     <xsl:apply-templates select="caption" />
     <xsl:text>}% caption &#xa;</xsl:text>
-    <!-- last child gets an \end{verticallyaligned} -->
-    <xsl:if test="not(following-sibling::figure or following-sibling::image or following-sibling::paragraphs or following-sibling::p or following-sibling::table or following-sibling::tabular)">
-      <xsl:text>\popValignCaptionBottom&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="table" mode="sidebyside">
+    <!-- vertical alignment -->
+    <xsl:apply-templates select="." mode="sidebyside-subitem-valign"/>
+    <!-- horizontal alignment -->
+    <xsl:apply-templates select="." mode="sidebyside-subitem-halign"/>
+    <!-- body of the table -->
+    <xsl:apply-templates select="*[not(self::caption)]" />
+    <!-- end the body of the table -->
+    <xsl:text>}% end body &#xa;{</xsl:text>
+    <!-- add caption -->
+    <xsl:apply-templates select="caption" />
+    <xsl:text>}% caption &#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="image" mode="sidebyside">
+    <!-- vertical alignment -->
+    <xsl:apply-templates select="." mode="sidebyside-subitem-valign"/>
+    <!-- horizontal alignment -->
+    <xsl:apply-templates select="." mode="sidebyside-subitem-halign"/>
+    <!-- images need to have their width and height processed -->
+    <xsl:if test="@source">
+        <xsl:text>\includegraphics[</xsl:text>
+        <xsl:text>width=\textwidth,</xsl:text>
+        <xsl:if test="@height">
+            <xsl:text>height=</xsl:text><xsl:value-of select="@height" /><xsl:text>pt,</xsl:text>
+        </xsl:if>
+        <xsl:text>]</xsl:text>
+        <xsl:text>{</xsl:text><xsl:value-of select="@source" /><xsl:text>}</xsl:text>
     </xsl:if>
+    <xsl:apply-templates select="tikz|asymptote|sageplot|latex-image-code" />
+    <!-- end the body of the image -->
+    <xsl:text>}% end body &#xa;{</xsl:text>
+    <!-- add empty caption -->
+    <xsl:text>}% caption &#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="paragraphs" mode="sidebyside">
+    <!-- vertical alignment -->
+    <xsl:apply-templates select="." mode="sidebyside-subitem-valign"/>
+    <!-- horizontal alignment -->
+    <xsl:apply-templates select="." mode="sidebyside-subitem-halign"/>
+    <!-- paragraphs and p elements need wrapping in a parbox -->
+    <xsl:text>\parbox{\textwidth}{%&#xa;</xsl:text>
+    <!-- horizontal alignment (inside the parbox) -->
+    <xsl:apply-templates select="." mode="sidebyside-subitem-halign"/>
+    <xsl:apply-templates />
+    <!-- \parbox needs closing-->
+    <xsl:text>}&#xa;</xsl:text>
+    <!-- end the body of the paragraph -->
+    <xsl:text>}% end body &#xa;{</xsl:text>
+    <!-- add empty caption -->
+    <xsl:text>}% caption &#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="p" mode="sidebyside">
+    <!-- vertical alignment -->
+    <xsl:apply-templates select="." mode="sidebyside-subitem-valign"/>
+    <!-- paragraphs and p elements need wrapping in a parbox -->
+    <xsl:text>\parbox{\textwidth}{%&#xa;</xsl:text>
+    <!-- horizontal alignment (inside the parbox) -->
+    <xsl:apply-templates select="." mode="sidebyside-subitem-halign"/>
+    <xsl:apply-templates />
+    <!-- \parbox needs closing-->
+    <xsl:text>}&#xa;</xsl:text>
+    <!-- end the body of the paragraph -->
+    <xsl:text>}% end body &#xa;{</xsl:text>
+    <!-- add empty caption -->
+    <xsl:text>}% caption &#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="tabular" mode="sidebyside">
+    <!-- vertical alignment -->
+    <xsl:apply-templates select="." mode="sidebyside-subitem-valign"/>
+    <!-- horizontal alignment -->
+    <xsl:apply-templates select="." mode="sidebyside-subitem-halign"/>
+    <!-- body of the tabular -->
+    <xsl:call-template name="tabular" select="self()" />
+    <!-- end the body of the tabular -->
+    <xsl:text>}% end body &#xa;{</xsl:text>
+    <!-- add empty caption -->
+    <xsl:text>}% caption &#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="sidebyside/paragraphs/title">
@@ -2310,10 +2400,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Images -->
 <xsl:template match="image" >
-  <xsl:call-template name="processImage"/>
-</xsl:template>
-
-<xsl:template name="processImage">
     <xsl:if test="@source">
         <xsl:text>\includegraphics[</xsl:text>
         <xsl:choose>
@@ -2445,7 +2531,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- A tabular layout -->
-<xsl:template match="tabular">
+<xsl:template match="tabular" name="tabular">
     <!-- Determine global, table-wide properties -->
     <!-- set defaults here if values not given   -->
     <xsl:variable name="table-top">

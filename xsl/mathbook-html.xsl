@@ -1539,7 +1539,10 @@ is just flat out on the page, as if printed there.
       <xsl:otherwise>
         <xsl:element name="figure">
             <xsl:call-template name="sidebysideCSS" select="."/>
-            <xsl:apply-templates/>
+            <xsl:element name="table">
+                <xsl:attribute name="class">center</xsl:attribute>
+                <xsl:apply-templates/>
+            </xsl:element>
         </xsl:element>
       </xsl:otherwise>
     </xsl:choose>
@@ -1621,9 +1624,14 @@ is just flat out on the page, as if printed there.
     </xsl:when>
     <!-- default -->
     <xsl:otherwise>
-        <xsl:if test="not(self::paragraphs or self::p)">
+      <xsl:choose>
+        <xsl:when test="not(self::paragraphs or self::p)">
             <xsl:text>center</xsl:text>
-        </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>left</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>
   <xsl:text>;</xsl:text>
