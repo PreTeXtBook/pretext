@@ -1,64 +1,193 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
+<!--********************************************************************
+Copyright 2013 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!--
+To process this file, at the command-line issue:
+
+xsltproc /path/to/mathbook/xsl/mathbook-html.xsl /path/to/mathbook/examples/sample-article.xml
+
+then find  "derivatives.html"  in the current working directory
+and use a web browser to view.  For PDF/print, issue:
+
+xsltproc /path/to/mathbook/xsl/mathbook-latex.xsl /path/to/mathbook/examples/sample-article.xml
+
+and apply  pdflatex  or  xelatex  to  "derivatives.tex"  in
+the current working directory.
+
+Ignore any warnings, they are part of testing the warning system.
+
+To see images in your results, copy the examples/images directory
+so that your working directory has the images subdirectory.  See
+the  mathbook.pugetsound.edu  website for information on installing
+the xsltproc executable.
+-->
+
 <!-- Overall element for a Mathbook XML document; mandatory, always-->
 <mathbook>
 
     <!--
-    "docinfo" is like metadata, it mostly migrates
-    various places, or gets used multiple times
+    "docinfo" is like metadata, it is necessary technical
+    information which a reader mostly will never see.  LaTeX
+    macros and Web analytics project numbers are good examples.
+    If you are getting started, you do not need any of this initially.
+    So on a first reading, skip ahead to the article tag.
     -->
     <docinfo>
-        <!-- There can be several authors here -->
-        <author>
-            <personname>Robert Beezer</personname>
-            <department>Department of Mathematics and Computer Science</department>
-            <!-- Use "break" tag anywhere for forced line break -->
-            <institution>University of Puget Sound<br />Tacoma, Washington, USA</institution>
-            <email>beezer@pugetsound.edu</email>
-        </author>
-        <!-- Could set date manually or use the "today" element -->
-        <date><today /></date>
+        <!--
+        In the HTML version there is room for a picture or logo
+        in the upper left corner.  An image of a cover for a
+        physical version is a good choice to go here.  We use
+        16th Century Art Book Cover, 176x240 pixels, Public Domain, due to age
+        http://commons.wikimedia.org/wiki/File:Book_Cover_-_Google_Art_Project.jpg
+        -->
+        <brandlogo url="http://mathbook.pugetsound.edu" source="images/book-cover-google-art-project.jpg" />
         <!--
         TeX/LaTeX macros can be written in the usual way.
         Whitespace and line breaks are irrelevant here.
+        These are "write once, use everywhere".
         -->
         <macros>
         \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4}
         \newcommand{\indefiniteintegral}[2]{\int#1\,d#2}
         </macros>
+        <!--
+        Extra packages, package options, and package settings for latex-based images.
+        Inserted in the preamble for LaTeX output.
+        Inserted in the preamble to each standalone latex-based image for HMTL SVG output.
+        -->
+        <latex-image-preamble>
+        \usepackage{pgfplots}
+        \pgfplotsset{axis x line = middle,
+                     axis y line = middle}
+        \usepackage{tikz}
+        \usetikzlibrary{backgrounds}
+        \usetikzlibrary{arrows,matrix}
+        </latex-image-preamble>
+        <!--
+        The Sage Notebook has its own interface and worksheet list.
+        To use the sorting features optimally, it helps to have subdivisions
+        begin with the same short prefix.  An "initialism" (nee acronym)
+        here will be used for that purpose if present.  This is only employed
+        for producing Sage notebook versions and in the title shown in the
+        browser. (If not present, you will get a harmless warning just for
+        Sage worksheet production.)
+        -->
+        <initialism>SA</initialism>
+        <!--
+        With a <feedback> element, in the HTML version, you get a button
+        for reporting typos and errors.  You might link to a Google Docs
+        spreadsheet or something similar.  Default is to get a button
+        labeled "Feedback", which will be localized to your target language.
+        You can override this with some text of your choosing, but then you
+        lose the localization feature.
+        -->
+        <feedback>
+            <url>not-implemented.html</url>
+             <!-- <text>My Button Text</text>  -->
+        </feedback>
     </docinfo>
 
     <!--
     The article element is top-level for anything short of a book.
     There is a book element, which is not demonstrated here.
-    The "filebase" attribute is used for the filename of the
-    HTML output, s part of a chunking scheme that is not complete.
+    The "xml:id" attribute will be used for the filename of the
+    HTML output.
     -->
-    <article filebase="derivatives">
+    <article xml:id="derivatives">
         <title>Derivatives and Integrals</title>
+        <subtitle>An Annotated Discourse</subtitle>
+
+        <!--
+        The frontmatter contains a variety of items that precede
+        the actual content.  They tend to get placed in the "right"
+        place and order, and not necessarily the order they appear here.
+        They differ from "docinfo" items in that they will be *content*
+        that a reader will actually see.
+
+        The xml:id string is used to form a filename for the webpage.
+        Setting this one to "index" makes for a good default page
+        when you host your project on a server.
+        -->
+
+        <frontmatter xml:id="index">
+            <!--
+            Items typically on the main title page, perhaps duplicated
+            in the half-title page, page headings, etc.
+            One exception - main title and (optional) subtitle follow
+            the scheme for titling any division of the work.
+             -->
+
+            <titlepage>
+
+               <!-- There can be several authors here -->
+                <author>
+                    <personname>Robert Beezer</personname>
+                    <department>Department of Mathematics and Computer Science</department>
+                    <!-- Use "break" tag anywhere for forced line break -->
+                    <institution>University of Puget Sound<br />Tacoma, Washington, USA</institution>
+                    <email>beezer@pugetsound.edu</email>
+                </author>
+
+                <!-- Can set date manually or use the "today" element -->
+                <date><today /></date>
+
+            </titlepage>
+
+            <abstract>
+                <p>This is a sample of many of the things you can do with MathBook XML.  Sometimes the math makes sense, sometimes it seems to be written in the first person, sort of like this Abstract.</p>
+            </abstract>
+            <!--
+            Acknowledgements, dedications, colophon (ISBN, copyright, etc)
+            are supported in the book document type.  Such a diverse range
+            is not yet available for articles.  Send requests.
+             -->
+        </frontmatter>
+
         <!--
         Articles have sections, which have subsections,
-        which have subsubsections.  A titled-paragraph
-        subdivision is planned.  These are all "containers"
+        which have subsubsections.These are all "containers"
         and so line breaks and extraneous whitespace gets
         scrubbed.  Use indentation and line breaks liberally
-        within containers to make the structure of your 
+        within containers to make the structure of your
         source readable.
-
-        An abstract and a bibliography are like special sections,
-        they belong at the same level in the hierarchy as a
-        section.
         -->
-        <todo>Titled paragraph subdivisions</todo>
-
-        <abstract>
-            <p>This is a sample of many of the things you can do with MathBook XML.  Sometimes the math makes sense, sometimes it seems to be written in the fist person, sort of like this Abstract.</p>
-        </abstract>
 
         <section>
             <title>Introduction</title>
 
-            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me></p>
+            <!--
+            URLs can be done in a traditional fashion, as in the
+            abstract below. Or you can make an empty element and the URL in
+            the href attribute will be the content you click on.  See the
+            example near the discussion of Asymptote.
+            -->
+
+            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me> This is also a demonstration of the capabilities of <url href="http://mathbook.pugetsound.edu">MathBook XML</url>.</p>
+
+            <notation>
+                <usage>\int_a^b\,f(x)\,dx</usage>
+                <description>definite integral of <m>f(x)</m></description>
+            </notation>
+
+            <p>Generated: <today />, <timeofday /></p>
 
         </section>
 
@@ -75,7 +204,8 @@
 
         <section>
             <title>The Fundamental Theorem</title>
-            <p>There is a remarkable theorem:<fn>And fortunately we do not need to try to write it in the margin!</fn></p>
+
+            <p>There is a remarkable theorem:<fn xml:id="footnote-fermat">And fortunately we do not need to try to write it in the margin!</fn></p>
             <!--
             Mathematics:  Wrap inline mathematics in the "m"
             element (short for "math").  You may use TeX, LaTeX,
@@ -88,7 +218,7 @@
             -->
             <theorem xml:id="theorem-FTC">
                 <title>The Fundamental Theorem of Calculus</title>
-                <statement>
+                <statement><index><main>Fundamental Theorem of Calculus</main></index>
                     <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me></p>
                 </statement>
                 <proof>
@@ -105,11 +235,9 @@
             <!--
             Next paragraph has two citations.  These reference
             aliases given by "xml:id"'s in the bibliography.
-            WARNING: the "label" attribute will change to
-            "ref" to match the cross-reference use.
             Citations render as knowls on web pages.
             -->
-            <p>You will find almost nothing about all this in the article <cite ref="bib-fundamental" />, nor in the book <cite ref="bib-fcla" />, since they belong in some other article, but we can cite them out-of-order for practice anyway.</p>
+            <p>You will find almost nothing about all this in the article <xref ref="biblio-lay-article" />, nor in the book <xref ref="biblio-judson-AATA" />, since they belong in some other article, but we can cite them out-of-order for practice anyway.</p>
 
             <!--
             There are various tools for authors
@@ -117,33 +245,55 @@
             make these visible, or not
             -->
 
-            <p>When we are writing we do not always know what we want to cite, or just where subsequent material will end up.  For example, we might want a citation to <cite provisional="some textbook about the FTC" /> or we might want to reference a later<nbsp /><xref provisional="chapter about DiffEq's" />.</p>
+            <p>When we are writing we do not always know what we want to cite, or just where subsequent material will end up.  For example, we might want a citation to <xref provisional="some textbook about the FTC" /> or we might want to reference a later<nbsp /><xref provisional="chapter about DiffEq's" />.</p>
 
             <p>We can also embed <q>todo</q>s in the source, and selectively display them, so you may not see the one here in the output you are looking at now.  Or maybe you do see it?</p>
 
-            <todo>Talk more about author's tools, such as todo's</todo>
+<todo>Talk more about author's tools, such as todo's</todo>
+
+            <p>Because a definite integral can be computed using an antiderivative, we have the following definition.</p>
+
+            <!--
+            Notation may be associated with a definition,
+            or it can be placed standalone.  If associated
+            with a definition, future work will reflect that
+            association in the list of notation.
+            -->
+
+            <definition xml:id="definition-indefinite-integral">
+                <statement>
+                    <p>Suppose that <m>\frac{d}{dx}F(x)=f(x)</m>.  Then the <term>indefinite integral</term> of <m>f(x)</m> is <m>F(x)</m> and is written as <me>\int\,f(x)\,dx=F(x)</me></p>
+                </statement>
+                <notation>
+                    <usage>\int\,f(x)\,dx</usage>
+                    <description>indefinite integral of <m>f(x)</m></description>
+                </notation>
+            </definition>
 
         </section>
 
         <!--
         Sage Code: Next section has Sage code examples.
         For HTML it renders as Sage Cells, with no sample output.
-        For LaTeX it renders as input/output with input in a blue box.
-        A separate XSL transform will isolate code and produce a file
-        for doctesting.  This is "working" but not released yet.
+        For LaTeX it renders as input/output, suggestively typeset.
+        A separate XSL transform isolates code and produces a file
+        for doctesting.
 
         Note: These small examples are wrapped "tight" in the
-        input and output elements.  You can preserve indentation for
-        several lines if you move the code all the way left.
-        This looks ugly and will be rectified.
+        input and output elements.  For multiline code snippets,
+        the left margin is determined by the whitespace preceding
+        the first non-trivial character.
         -->
 
-        <section>
-            <title>Computing Integrals</title>
+        <section xml:id="section-sage-cells">
+            <title>Computing Integrals with Sage (<m>\int</m>)</title>
+
+            <index><main>Sage</main><sub>integration</sub></index>
+            <index><main>Numerical integration</main><see>Sage integration</see></index>
 
             <p>Sage can compute definite integrals.  The output contains the approximate numerical value of the definite integral, followed by an upper bound  of the error in the approximation.</p>
 
-            <sage>
+            <sage xml:id="sage-numerical-integral">
                 <input>numerical_integral(sin(x)^2, (0, 2))</input>
                 <!-- need to use wildcard matching to make this doctestable -->
                 <output>(1.189200623826982, 1.320277913471315e-14)</output>
@@ -158,10 +308,58 @@
 
             <p>The same command can be used to employ the antiderivative in the application of the Fundamental Theorem.  Notice that the answer is <em>exact</em> and any further manipulation is likely to be simply producing a numerical approximation.</p>
 
-            <sage>
+            <!-- The "full" type is the default, it is used here only for testing purposes -->
+            <sage type="full">
                 <input>integral(sin(x)^2, (x, 0, 2))</input>
                 <output>-1/4*sin(4) + 1</output>
             </sage>
+
+            <p>There are integrals you really do not want to evaluate, or you do not want your reader to evaluate.  A Sage cell can be configured for display purposes only <mdash /> you can look but you cannot touch.</p>
+
+            <sage type="display">
+                <input>integral(e^(x^2), x)</input>
+                <output>-1/2*I*sqrt(pi)*erf(I*x)</output>
+            </sage>
+
+            <p>You can give a Sage element a <c>doctest</c> attribute, whose value mirrors the optional hash tags used in Sage doctests.  Possible values are <c>random</c>, <c>long time</c>, <c>not implemented</c>, <c>not tested</c>, <c>known bug</c>, <c>absolute</c>, <c>relative</c>, and <c>optional</c>.  The values <c>absolute</c> and <c>relative</c> refer to floating-point tolerances for equality and require a second attribute <c>tolerance</c> to specify a floating point value.  The value <c>optional</c> refers to the test requiring that an optional Sage package be present.  The name of that package should be provided in the <c>package</c> attribute.</p>
+
+            <p>The next cell is marked in the source as <c>doctest="random"</c>, and so is specified as unpredictable and not tested.  But there is some <q>sample</q> output which will appear in the <latex /> version (and always be the same).</p>
+
+            <sage doctest="random">
+                <input>random()</input>
+                <output>0.11736021338650582</output>
+            </sage>
+
+            <p>While the next cell is random, the returned value will never be more than <m>0.01</m> away from <m>12</m>, since the <c>random()</c> function stays between <m>0</m> and <m>1</m>.  So we provide <m>12.005</m> as the expected answer, but test with an absoluute tolerance of <m>\epsilon=0.006</m>.</p>
+
+            <sage doctest="absolute" tolerance="0.006">
+                <input>12 + 0.01*random()</input>
+                <output>12.005</output>
+            </sage>
+
+            <p>Here is a blank Sage cell that you may use for practice and experimentation with the commands above.</p>
+
+            <sage type="practice" />
+
+            <p>You can make Sage blocks which are of <c>type="invisible"</c>, which will never be shown to a reader, but which get doctested.  Why do this?  If some code produces an error, and you hope it is fixed someday, use an invisible block to raise the error.  Once fixed, the doctest will fail, and you can adjust your commentary to suit.  There is such a block right now, <em>but</em> you will need to go to the source to see it.</p>
+
+            <!--
+            This code raises a "not implemented" error.
+            Maybe it'll never change? It is not important -
+            but let me know if it changes.
+            -->
+            <sage type="invisible">
+                <input>graphs(augment='vertices').next()</input>
+                <output>
+                Traceback (most recent call last):
+                ...
+                NotImplementedError
+                </output>
+            </sage>
+
+            <p>Our maximum width for text, designed for readability, suggests you should format your Sage code with a maximum of about 54 characters. On a mobile device, the number of displayed characters might be as low as 28 in portrait orintation, and again around 50 in landscape.  You can use a variety of techniques to shorten long lines, such as using intermediate variables.  Since Sage is just a huge Python library, you can use any of Python's facilities for handling long lines.  These include a continuation character (which I try to avoid using) or natural places where you can break long lines, such as between entries of a list.  Also, if writing loops or functions, you may wish to have your indentation be only two characters wide (rather than, say, four).</p>
+
+            <p>Sage output can sometimes be quite long, though this has improved with some changes in Sage's output routines.  Output code should be included primarly for doctesting purposes, and in this use, you may break at almost whitespace character and the doctesting framework will adjust accordingly.  You may wish to show sample output in a static format, like a PDF, so you can consider formatting your output to fit the width constraints of that medium.  Or you may even adjust exactly what is output, to keep it from being too verbose.  Sage doctesting also allows for a wild-card style syntax which allows you to skip over huge chunks of meaningless or unpredictable output, such as tracebacks on error messages.</p>
 
         </section>
 
@@ -181,47 +379,131 @@
         environment, which uses ampersands (&) for formatting
         control.  This is an evil situation, but the (easy) way
         around it is to use "&amp;" in this situation.
+
+        The previous sections were sequences of paragraphs, along with
+        theorems, Sage code, etc.  The next section has subsections, so
+        the structure must look like *only* subsections, excepting a
+        brief introduction and conclusion (that are sequences of
+        paragraphs and other blocks.)
         -->
 
         <section>
             <title>An Interesting Corollary</title>
 
-            <p>The Fundamental Theorem comes in two flavors, where usually one is a corollary of the other.</p>
+            <introduction>
+                <p>The Fundamental Theorem comes in two flavors, where usually one is a corollary of the other.</p>
+            </introduction>
 
-            <corollary xml:id="corollary-FTC-derivative">
-                <statement>
-                    <p>Suppose <m>f(x)</m> is a continuous function.  Then <me>\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</me></p>
-                </statement>
-                <todo>Should equation references come with parentheses?</todo>
-                <proof>
-                    <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at (<xref ref="equation-use-FTC" />).</p>
-                    <mdn>
-                        <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
-                        <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
-                        <mrow>&amp;=f(x)-0 = f(x)</mrow>
-                    </mdn>
-                </proof>
-            </corollary>
+            <subsection>
+                <title>Second Version of FTC</title>
+
+                <corollary xml:id="corollary-FTC-derivative">
+                    <statement>
+                        <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men></p>
+                    </statement>
+                    <todo>Should equation references come with parentheses?</todo>
+                    <proof>
+                        <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.</p>
+                        <mdn>
+                            <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
+                            <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
+                            <mrow>&amp;=f(x)-0 = f(x)</mrow>
+                        </mdn>
+                    </proof>
+                </corollary>
+
+                <p>The alternative version of the Fundamental Theorem in <xref ref="equation-alternate-FTC" /> is a compact way to express the result.</p>
+
+                <example xml:id="example-mysterious">
+                    <title>A Mysterious Derivative</title>
+                    <p>So if we define a function with its variable employed as a limit of integration, like so <me>K(z)=\definiteintegral{345}{z}{x^4\sin(x^2)}{x}</me> then we get the derivative of that function so easily it seems like a mystery, <me>\frac{d}{dz}K(z)=z^4\sin(z^2)</me>  That's it.</p>
+                </example>
+            </subsection>
 
             <!--
             Articles can be sectioned further, into subsections
             and subsubsections.  Books have a large subdivision,
             chapters, which can be collections of sections.  A
-            further subdivision is a paragraph, which mimics
+            further subdivision is a "paragraph," which mimics
             the structure of the same name in LaTeX.
             -->
 
             <subsection>
                 <title>A Pedagogical Note</title>
 
-                <p>The Fundamental Theorem explains why we use the same notation for a definite integral, which is a numerical calculation,<fn>Which I think sometimes students lose sight of.</fn> and an antiderivative, which is a symbolic expression.</p>
+                <subsubsection>
+                    <title>Symbolic and Numerical Integrals</title>
+
+                    <p>The Fundamental Theorem explains why we use the same notation for a definite integral, which is a numerical calculation,<fn>Which I think sometimes students lose sight of.</fn> and an antiderivative, which is a symbolic expression.</p>
+
+                    <exercise>
+                        <title>Essay Question: Compare and Contrast</title>
+                        <statement>
+                            <p>Write a short paragraph which compares, and contrasts, the definite and indefinite integral. This is an exercise which sits in the midst of the narrative, so is formatted more like an example or a remark.  It can have a hint and a solution, but this one does not.  It can have a title, which this one does.</p>
+                        </statement>
+                    </exercise>
+                </subsubsection>
 
                 <subsubsection>
                     <title>Advice</title>
 
                     <p>Using an <q>integral sign</q> for an antiderivative (aka indefinite integral) would seem to make the Fundamental Theorem a <foreign>fait accompli</foreign>.  So I would suggest not conflating the notation for two very different things until the Fundamental Theorem exposes them as being highly related.</p>
                 </subsubsection>
+
+                <exercises>
+                    <title>Exercises</title>
+
+                    <exercise xml:id="exercise-test-number">
+                        <statement>
+                            <p>This is an exercise in an <q>Exercises</q> subdivision at the level of a subsubsection.  There is no question other than if the numbering is appropriate (it is not for <latex /> at the moment).  Here is a self-referential link: Exercise<nbsp /><xref ref="exercise-test-number" />.</p>
+                        </statement>
+                    </exercise>
+                </exercises>
+
             </subsection>
+
+            <subsection>
+                <title>Theorem-Like Environments</title>
+
+                <p>There are a variety of pre-defined enviroments in MathBook XML.  All take a title, and must have a statement.  Some have proofs (theorems, corollaries, <etc />), while some do not have proofs (conjectures, axioms, principles).</p>
+
+                <principle xml:id="principle-principle">
+                    <title>The Title Principle</title>
+
+                    <statement>
+                        <p>It is a fundamental principle that many elements can have a title.  Try it and see. If you get better formatting, then it is being recognized.  If it looks very plain, check the documentation and perhaps make a feature request.</p>
+                    </statement>
+                </principle>
+
+                <p>More precisely, <c>&lt;theorem&gt;</c>, <c>&lt;corollary&gt;</c>, <c>&lt;lemma&gt;</c>, <c>&lt;algorithm&gt;</c>, <c>&lt;proposition&gt;</c>, <c>&lt;claim&gt;</c>, and <c>&lt;fact&gt;</c>, all behave exactly the same, requiring a statement (as a sequence of paragraphs) followed by an optional proof, and may have an optional title.  The elements <c>&lt;definition&gt;</c>, <c>&lt;conjecture&gt;</c>, <c>&lt;axiom&gt;</c>, and <c>&lt;principle&gt;</c> are functionally the same, barring a proof (since they would never have one!).  Definitions are an exception, as it is natural to place <c>&lt;notation&gt;</c> within<mdash />see the source for Definition<nbsp /><xref ref="definition-indefinite-integral" /> for an example.</p>
+            </subsection>
+
+            <subsection>
+                <title>Linking Sage Cells</title>
+
+                <p>Sage cells share their results on a per-webpage basis, so if you move to a new chapter, section, or subsection that happens to be on another webpage, your Sage computations are gone and you start fresh.  But maybe you need some results from elsewhere.  As an author, you can make an exact copy of a cell in another location.  As a reader you are suggested to <q>replay</q> the cell.  You have seen the next cell before.  More typically such a cell might define a function or set some values of a variable.</p>
+
+                <sage copy="sage-numerical-integral" />
+            </subsection>
+
+            <subsection>
+                <title>Hierachy</title>
+
+                <paragraphs>
+                    <title>Structure</title>
+
+                    <p>This section of this article has subsections and subsubsections.  In a book you can have chapters enclosing multiple sections.  There is one finer subdivision, it is achieved with the <c>paragraphs</c> element.</p>
+
+                    <p>It is basically a sequence of paragraphs, where the first one gets an inline title.  You are reading the second, and final, paragraph of one right now. It is useful for organizing very short documents, where numbered subdivisions might be overkill.</p>
+                </paragraphs>
+
+                <paragraphs>
+                    <title>Properties of the <c>paragraphs</c> element</title>
+
+                    <p>It is always a logical section of the document, but never gets a number.  It can be used within any subdivision, and thus cannot ever contain another subdivision, and so is always a leaf of the document tree.  It does not appear in the table of contents.  The title is inline with the first paragraph.  Vertical space usually sets it off slightly from its surroundings.</p>
+                </paragraphs>
+            </subsection>
+
         </section>
 
         <!--
@@ -230,7 +512,7 @@
         Basic raster images are supported, inside of figures.
         Note that the caption is rendered below the graphic,
         even though it is given first in the source.
-        Support for Tikz graphics is available for LaTeX output, 
+        Support for TikZ graphics is available for LaTeX output,
         and perhaps figures will be automatically generated from Sage code.
         The scale for graphics is points in LaTeX, pixels
         in HTML, which are similar, but not identical.
@@ -239,21 +521,36 @@
         <section>
             <title>Some Facts and Figures</title>
 
+            <!-- This is not implemented
+            This Sage code will be (a) hidden and (b) automatically executed
+            <sage type="init">
+                <input>
+                def square(m):
+                    return m*m
+
+                aaa= 78
+                print aaa
+                </input>
+            </sage>
+            -->
+
             <p>Because of the Fundamental Theorem, for every derivative we know, there is an antiderivative we might find useful.  Because of the Fundamental Theorem of Calculus, we recycle the <q><m>\int</m></q> symbol as notation for an antiderivative.</p>
-            <ul>
-                <li>Derivatives<ol>
-                    <li><m>\frac{d}{dx}x^n = nx^{n-1}</m></li>
-                    <li><m>\frac{d}{dx}e^x = e^x</m></li>
-                    <li><m>\frac{d}{dx}\cos(x) = -\sin(x)</m></li>
-                </ol></li>
-                <li>Antiderivatives<ol>
-                    <li><m>\indefiniteintegral{x^n}{x} = \displaystyle\frac{x^{n-1}}{n+1}\text{ if }n\neq -1</m></li>
-                    <li><m>\indefiniteintegral{e^x}{x} = e^x</m></li>
-                    <li><m>\indefiniteintegral{\sin(x)}{x} = -\cos(x)</m></li>
-                </ol></li>
+            <ul cols="2">
+                <li><p>Derivatives<ol label="(a)">
+                    <li><p><m>\frac{d}{dx}x^n = nx^{n-1}</m></p></li>
+                    <li><p><m>\frac{d}{dx}e^x = e^x</m></p></li>
+                    <li><p><m>\frac{d}{dx}\cos(x) = -\sin(x)</m></p></li>
+                </ol></p></li>
+                <li><p>Antiderivatives<ol label="i)">
+                    <li><p><m>\indefiniteintegral{x^n}{x} = \displaystyle\frac{x^{n-1}}{n+1}\text{ if }n\neq -1</m></p></li>
+                    <li><p><m>\indefiniteintegral{e^x}{x} = e^x</m></p></li>
+                    <li><p><m>\indefiniteintegral{\sin(x)}{x} = -\cos(x)</m></p></li>
+                </ol></p></li>
             </ul>
 
-            <p>You can gain a greater undestanding of derivatives by studying the graphs of functions with their derivatives.  Can you discern the derivative<ndash />antiderivative relationship in Figure<nbsp /><xref ref="figure-function-derivative" />?</p>
+            <remark>
+                <p>You can gain a greater undestanding of derivatives by studying the graphs of functions with their derivatives.  Can you discern the derivative<ndash />antiderivative relationship in Figure<nbsp /><xref ref="figure-function-derivative" />?</p>
+            </remark>
 
             <!--
             Sage Source;
@@ -266,8 +563,68 @@
 
             <figure xml:id="figure-function-derivative">
                 <caption>A function and its derivative</caption>
-                <image width="350" source="images/cubic-function.png" />
+                <image width="350" source="images/cubic-function.png">
+                    <description>A third degree polynomial with a local max and a local min, along with its second degree derivative plotted on the same axes</description>
+                </image>
             </figure>
+
+            <p>Lists can have multiple columns.  With <acro>HTML</acro> items displayed in row-major order (horizontally first) and with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items <mdash /> derivatives and integrals <mdash /> where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.<index xml:id="index-start-multicolumn" finish="index-finish-multicolumn"><main>Lists</main><sub>multicolumn</sub></index></p>
+
+            <ol cols="5">
+                <li><p>Red</p></li>
+                <li><p>Blue</p></li>
+                <li><p>Green</p></li>
+                <li><p>Purple</p></li>
+                <li><p>Yellow</p></li>
+                <li><p>Black</p></li>
+                <li><p>Orange</p></li>
+                <li><p>Pink</p></li>
+                <li><p>Salmon</p></li>
+                <li><p>Aqua</p></li>
+                <li><p>Cyan</p></li>
+                <li><p>Puce</p></li>
+            </ol>
+
+            <ul cols="2">
+                <li>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin lorem diam, convallis in nulla sed, accumsan fermentum urna. Pellentesque aliquet leo elit, ut consequat nunc dapibus ac. Sed lobortis leo tincidunt, vulputate nunc at, ultricies leo. Vivamus purus diam, tristique laoreet purus eget, mollis gravida sapien. Nunc vulputate nisl ac mauris hendrerit cursus. Sed vel molestie velit. Suspendisse sem sem, elementum at vehicula id, volutpat ac mi. Nullam ullamcorper fringilla purus in accumsan. Mauris at nunc accumsan orci dictum vulputate id id augue. Suspendisse at dignissim elit, non euismod nunc. Aliquam faucibus magna ac molestie semper. Aliquam hendrerit sem sit amet metus congue tempor. Donec laoreet laoreet metus, id interdum purus mattis vulputate. Proin condimentum vitae erat varius mollis. Donec venenatis libero sed turpis pretium tempor.</p>
+
+                    <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra. Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                </li>
+
+                <li>
+                    <p>Donec vestibulum auctor nisl. Nullam placerat interdum dui. Quisque lobortis scelerisque augue imperdiet placerat. Maecenas ultricies massa tempor, laoreet urna a, eleifend enim. Integer sed suscipit odio. Pellentesque non dapibus diam, eget tempus dui. Maecenas sollicitudin magna viverra, egestas velit nec, tristique sem. Cras iaculis mattis dui ac cursus. Integer volutpat, urna vel tempus convallis, erat nisi consectetur turpis, id varius dolor lorem vitae mauris. Phasellus erat orci, laoreet commodo gravida quis, congue in lacus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent at bibendum turpis. Pellentesque est nisl, dapibus at sagittis non, ultricies in nunc. Etiam ipsum arcu, porta sed feugiat eget, facilisis nec libero. Mauris tempor convallis felis.</p>
+
+                    <p>Cras iaculis sapien elit, at convallis ligula convallis nec. Duis ante tortor, euismod a libero vitae, ornare viverra purus. Pellentesque facilisis urna a velit volutpat, in malesuada tortor porttitor. Sed vehicula mauris id lectus dignissim, eget consectetur dui pellentesque. Sed vel quam molestie, euismod ligula ac, venenatis arcu. Fusce sit amet sapien non urna dignissim tempus in vitae metus. Aliquam arcu turpis, mattis non libero eu, lacinia feugiat turpis. Phasellus rhoncus lacinia lacus facilisis ullamcorper. Praesent hendrerit accumsan neque, eu dignissim est consequat sed. Nulla facilisi. Proin at mi scelerisque, scelerisque felis ut, tristique diam. Proin in leo in lorem porttitor varius. Praesent condimentum in dui sit amet blandit. In imperdiet blandit congue.</p>
+                </li>
+
+                <li>
+                    <p>Ut nec sem vitae ipsum interdum vestibulum sit amet sed velit. Aliquam tempor nibh vitae augue pulvinar, at ultricies urna commodo. Donec in porta lectus, ac sagittis felis. Vestibulum tincidunt quis metus facilisis luctus. In lobortis lacus vel ornare vehicula. Duis aliquet, ligula semper sodales adipiscing, augue nibh ornare ante, quis pulvinar justo mi eget mi. Mauris varius imperdiet vehicula. Duis dignissim magna quis velit mattis, in cursus lectus vehicula. Morbi quis tempus felis, ut gravida nisi.</p>
+
+                    <p>Vivamus eu commodo est, pretium fringilla dolor. Curabitur vel sollicitudin libero. Integer sit amet auctor felis. Maecenas sagittis erat at ante feugiat, in tincidunt ligula pretium. Integer eget auctor ipsum, quis volutpat felis. Morbi id dignissim eros. Suspendisse aliquet pulvinar lorem gravida egestas. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent nec massa dui. Suspendisse convallis lacus sit amet adipiscing varius. Suspendisse tempus diam vitae justo ornare, in condimentum metus pharetra. Curabitur sem dolor, auctor vitae sagittis vestibulum, posuere imperdiet metus. Etiam pretium lacus urna, vel auctor diam tincidunt non. Etiam viverra sodales iaculis.</p>
+                </li>
+
+                <li>
+                    <p> Sed varius leo urna. Phasellus tempus mollis ultricies. Curabitur non neque aliquet, facilisis tortor in, sodales dui. Donec hendrerit ultricies nulla mollis rhoncus. In vel lobortis est. Vestibulum consectetur lacus vel sem dignissim vestibulum. Etiam sed elementum ligula, vel congue turpis. Morbi nec diam mattis, venenatis eros et, elementum tellus. Integer sed orci ornare, elementum elit id, lacinia augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; In et libero id turpis pharetra faucibus. Integer consequat dignissim semper. Donec pretium magna at ullamcorper ultricies. Nam quis suscipit elit. Donec cursus tellus et venenatis feugiat. Mauris dictum molestie leo, vitae aliquet metus luctus vitae.</p>
+
+                    <p>Ut id iaculis leo. Sed nec vestibulum mi. Mauris est mauris, porta in nulla eget, bibendum luctus nisl. Praesent et posuere felis, molestie vehicula velit. Nulla a nunc venenatis, aliquam orci nec, congue felis. Vestibulum a dolor nisi. Morbi sed nisi nulla. Nam iaculis felis a enim blandit, at venenatis diam congue. Nulla augue diam, egestas eget fermentum nec, posuere eget risus. Praesent egestas nulla eros, eget accumsan augue euismod vel. Pellentesque pellentesque non erat vitae posuere. Curabitur lacus arcu, varius sed risus ut, ullamcorper tincidunt lorem. Sed et lacus dignissim, tincidunt nisl ac, porttitor sapien.</p>
+                </li>
+            </ul>
+
+            <!-- This is not implemented
+            <subsection>
+                <title>Automatically Defining Sage Code</title>
+
+                <p>There is a bit of Sage code in the source for this section, defined at the beginning.  It is both (a) hidden, and (b) automatically evaluated.  It's effect is to define a function <c>square()</c>, which  will square a number.  The next (visible) cell will demonstrate the effect.  This will work as along as the initialization code and it's use are on the same webpage (which will depend on how you decide to break up your document into pages).</p>
+
+                <sage>
+                    <input>square(13)</input>
+                    <output>169</output>
+                </sage>
+
+            </subsection>
+            -->
+
         </section>
 
         <!--
@@ -280,8 +637,9 @@
         <section>
             <title>Some Advanced Ideas</title>
 
-            <p>The multi-row displayed mathematics in the proof of the Fundamental Theorem had equations aligned on the equals signs via the <ampersand /> character.  Sometimes you don't want that.  Here is an example with some differential equations, with each equation centered and unnumbered,
-            <md>
+            <todo>Move index-finish marker back once it is allowed other places</todo>
+
+            <p><index xml:id="index-finish-multicolumn" start="index-start-multicolumn" />The multi-row displayed mathematics in the proof of the Fundamental Theorem had equations aligned on the equals signs via the <ampersand /> character.  Sometimes you don't want that.  Here is an example with some differential equations, with each equation centered and unnumbered, <md>
                 <mrow>{\mathcal L}(y')(s) = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
             </md></p>
@@ -289,94 +647,1248 @@
             <p>Table can get quite complex.  Simple ones are simpler, such as this example of numerical computations for Euler's method.</p>
 
             <table xml:id="table-euler1">
-                <tgroup cols="4" align="center">
-                    <thead>
-                        <row><entry><m>i</m></entry><entry><m>t_i</m></entry><entry><m>x_i</m></entry><entry><m>y_i</m></entry></row>
-                    </thead>
-                    <tbody>
-                        <row><entry>0</entry><entry>0</entry><entry>0</entry><entry>0.5000</entry></row>
-                        <row><entry>1</entry><entry>0.20</entry><entry>0.1000</entry><entry>0.4800</entry></row>
-                        <row><entry>2</entry><entry>0.40</entry><entry>0.1960</entry><entry>0.4560</entry></row>
-                        <row><entry>3</entry><entry>0.60</entry><entry>0.2872</entry><entry>0.4295</entry></row>
-                        <row><entry>4</entry><entry>0.80</entry><entry>0.3731</entry><entry>0.4027</entry></row>
-                        <row><entry>5</entry><entry>1.00</entry><entry>0.4536</entry><entry>0.3783</entry></row>
-                        <row><entry>6</entry><entry>1.20</entry><entry>0.5293</entry><entry>0.3591</entry></row>
-                        <row><entry>7</entry><entry>1.40</entry><entry>0.6011</entry><entry>0.3480</entry></row>
-                        <row><entry>8</entry><entry>1.60</entry><entry>0.6707</entry><entry>0.3474</entry></row>
-                        <row><entry>9</entry><entry>1.80</entry><entry>0.7402</entry><entry>0.3603</entry></row>
-                        <row><entry>10</entry><entry>2.00</entry><entry>0.8123</entry><entry>0.3900</entry></row>
-                    </tbody>
-                </tgroup>
+                <tabular top="major" halign="center" bottom="medium">
+                    <row bottom="minor">
+                        <cell>  <m>i</m></cell>
+                        <cell><m>t_i</m></cell>
+                        <cell><m>x_i</m></cell>
+                        <cell><m>y_i</m></cell>
+                    </row>
+                    <row> <cell>0</cell><cell>0.00</cell><cell>0.0000</cell><cell>0.5000</cell></row>
+                    <row> <cell>1</cell><cell>0.20</cell><cell>0.1000</cell><cell>0.4800</cell></row>
+                    <row> <cell>2</cell><cell>0.40</cell><cell>0.1960</cell><cell>0.4560</cell></row>
+                    <row> <cell>3</cell><cell>0.60</cell><cell>0.2872</cell><cell>0.4295</cell></row>
+                    <row> <cell>4</cell><cell>0.80</cell><cell>0.3731</cell><cell>0.4027</cell></row>
+                    <row> <cell>5</cell><cell>1.00</cell><cell>0.4536</cell><cell>0.3783</cell></row>
+                    <row> <cell>6</cell><cell>1.20</cell><cell>0.5293</cell><cell>0.3591</cell></row>
+                    <row> <cell>7</cell><cell>1.40</cell><cell>0.6011</cell><cell>0.3480</cell></row>
+                    <row> <cell>8</cell><cell>1.60</cell><cell>0.6707</cell><cell>0.3474</cell></row>
+                    <row> <cell>9</cell><cell>1.80</cell><cell>0.7402</cell><cell>0.3603</cell></row>
+                    <row bottom="medium">
+                          <cell>10</cell><cell>2.00</cell><cell>0.8123</cell><cell>0.3900</cell></row>
+                </tabular>
             <caption>Euler's approximation for Duffing's Equation with <m>h = 0.2</m></caption>
             </table>
 
         </section>
 
         <section>
-            <title>Graphics</title>
+            <title>Mathematics</title>
 
-            <p>The Asymptote graphics language may be placed in your source to draw pictures.  For <latex /> processing you must have Asymptote's style file, <c>asymptote.sty</c>, available, and then it is a three-step process: <latex />, <c>asy</c>, <latex />.  For these reasons, the source is commented-out and you will see nothing below.  So you need to edit <c>sample-article.tex</c> if you want to experiment.  Rules for formatting code are identical to those for Sage code.  For more on Asymptote and <latex /> see <url href="http://asymptote.sourceforge.net/doc/LaTeX-usage.html" />.</p>
+            <p>To be able to create both <latex /> and HTML output (plus variations), we rely on MathJax, which in turn supports an extensive subset of the mathematical symbols normally available.  The AMSMath symbol set is a good approximation.  For a complete list, see the <url href="http://docs.mathjax.org/en/latest/tex.html#supported-latex-commands">MathJax Supported LaTeX commands</url>.  We load the <c>AMSsymbols</c> library and the library for extensible arrows, <c>extpfeil</c>.</p>
 
-            <p>A simple Venn diagram example from the Asymptote documentation.</p>
+            <p>The following is from the MathJax <urk href="http://www.mathjax.org/demos/tex-samples/">demonstration page</urk>, an identity due to Ramanujan:<me>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</me></p>
 
-            <!--  Remove this line, and one below to enable an Asymptote example
-            IMPORTANT: a double hyphen is banned in an XML comment, so:
-            Replace 4 instances of "-X-" below by two consectutive hyphens
-            Remove this line, and one above to enable an Asymptote example -->
+            <p>And again, from the MathJax demonstration page, Maxwell's equations:<md>
+                <mrow>\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &amp; = \frac{4\pi}{c}\vec{\mathbf{j}}</mrow>
+                <mrow>\nabla \cdot \vec{\mathbf{E}} &amp; = 4 \pi \rho</mrow>
+                <mrow>\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}}</mrow>
+                <mrow>\nabla \cdot \vec{\mathbf{B}} &amp; = 0</mrow>
+            </md></p>
 
-            <asymptote>
-            size(4cm,0);
-            pen colour1=red;
-            pen colour2=green;
+            <notation>
+                <usage>\nabla</usage>
+                <description>gradient operator</description>
+            </notation>
 
-            pair z0=(0,0);
-            pair z1=(-1,0);
-            pair z2=(1,0);
-            real r=1.5;
-            path c1=circle(z1,r);
-            path c2=circle(z2,r);
-            fill(c1,colour1);
-            fill(c2,colour2);
+            <p>A small test that the extensible arrows library is included properly:<me>A\xmapsto[\text{bijection}]{\Phi+\Psi+\Theta}B</me></p>
 
-            picture intersection=new picture;
-            fill(intersection,c1,colour1+colour2);
-            clip(intersection,c2);
+            <p>Look back at the top of the source file of this document to see how to include your <tex /> macros just once.  For best results keep your macros simple and semantic.</p>
 
-            add(intersection);
-
-            draw(c1);
-            draw(c2);
-
-            //draw("$\A$",box,z1);              // Requires [inline] package option.
-            //draw(Label("$\B$","$B$"),box,z2); // Requires [inline] package option.
-            draw("$A$",box,z1);
-            draw("$B$",box,z2);
-
-            pair z=(0,-2);
-            real m=3;
-            margin BigMargin=Margin(0,m*dot(unit(z1-z),unit(z0-z)));
-
-            draw(Label("$A\cap B$",0),conj(z)-X-z0,Arrow,BigMargin);
-            draw(Label("$A\cup B$",0),z-X-z0,Arrow,BigMargin);
-            draw(z-X-z1,Arrow,Margin(0,m));
-            draw(z-X-z2,Arrow,Margin(0,m));
-
-            shipout(bbox(0.25cm));
-            </asymptote>
+            <p>Chris Hughes has made available <q>slanted</q>, or <q>beveled</q>, or <q>nice</q> fractions.  To wit, we mean fractions such as: <m>\sfrac{3}{8}</m>.  Use the built-in <c>\sfrac{}{}</c> macro in your mathematics to achieve this presentation.</p>
 
         </section>
 
         <section>
+            <title>Special, Reserved, and Escape Characters</title>
+
+            <p>One of the goals of MathBook XML is to relieve an author of managing the numerous conflicts when mixing languages that use different characters for special purposes.  But, of course, XML has its own special characters.</p>
+
+            <p>The left angle bracket (<c>&lt;</c>) of XML is the second most-dangerous, since it looks to the processor like the start of a new element.   Use the XML entity <c>&amp;lt;</c> for that character.  Similarly, use <c>&amp;gt;</c> for a right angle bracket.  These are likely to be necessary in source code, such as Sage code (think generators of field extensions) or TikZ code (think arrowheads).  Of course ampersands (<ampersand />) have their own meaning in <latex /> so the entities just described are problematic.  So in mathematics, if you need strict inequalities, use the macros <c>\lt</c> and <c>\gt</c>, which are pre-defined for both <latex />, and MathJax in HTML.</p>
+
+            <p>Sage defines generators of algebraic structures with a syntax that might remind one of common notation for all <q>combinations</q> of some generators.  It is non-standard Python, but is instead pre-parsed by Sage.  No matter, at issue here is the left angle bracket used to specify generators.  Here is an example, which can be doctested by Sage to verify the example behaves correctly.</p>
+
+            <sage>
+                <input>
+                P.&lt;t> = ZZ[]
+                P
+                </input>
+                <output>Univariate Polynomial Ring in t over Integer Ring</output>
+            </sage>
+
+            <p>There is an alternate syntax, which avoids the angle brackets.</p>
+
+            <sage>
+                <input>
+                R = ZZ['u']
+                u = R.gen(0)
+                (u, R)
+                </input>
+                <output>(u, Univariate Polynomial Ring in u over Integer Ring)</output>
+            </sage>
+
+            <p>Everybody wants the ampersand, it is the most-dangerous.  It is <em>the</em> escape character for XML, and <latex /> uses it in tables and arrays.  Use the element <c>&lt;ampersand /&gt;</c> to make a literal ampersand in text, such as in <q>A<ampersand />P.</q>  If you want an ampersand in code (Sage, TikZ) or in math (<latex />) use <c>&amp;amp;</c>.  As a convenience, if you have a big matrix, or a huge chunk of TikZ code, you can protect it all from the processor by wrapping it in <q><c>&lt;![CDATA[</c><nbsp /><nbsp /><nbsp /><c>]]&gt;</c>.</q>  It should be possible to write without ever using the <q>CDATA</q> mechanism, but it might get tedious in places.</p>
+
+            <p>There are a handful of characters that might render just fine in HTML, but <latex /> reserves them for special purposes.  So if they appear unadorned in your source, they will wreak havoc with the <latex /> processing.  And if you escape them with backslashes for <latex />, then you will see those backslashes in your HTML.  You can't win.  Thus, if you intend to create both HTML and <latex /> output, then you need to be aware of these symbols and use the provided MathBook elements for them to get the right behavior in each type of output.  Here are the outputs, look at the source of this document to see the input elements.</p>
+
+            <!-- Carriage returns are unwise, but this is impossible to read otherwise -->
+            <p><hash /><nbsp /><nbsp />
+            <dollar /><nbsp /><nbsp />
+            <percent /><nbsp /><nbsp />
+            <circumflex /><nbsp /><nbsp />
+            <ampersand /><nbsp /><nbsp />
+            <underscore /><nbsp /><nbsp />
+            <lbrace /><nbsp /><nbsp />
+            <rbrace /><nbsp /><nbsp />
+            <tilde /><nbsp /><nbsp />
+            <backslash /><nbsp /><nbsp /></p>
+
+            <p>There are a few other constructions that can be achieved in HTML one way, and in <latex /> with a slightly different mechanism.  Some are due to <latex />'s treatment of a period (full stop), depending on its surroundings.  So not reserved characters, but just divergent treatment of common constructions.  Again, outputs here, see the source for inputs. If you are planning <latex /> output, and you are finicky about it, use the XML versions of these common abbreviations.  If you only care about HTML and friends, then just go ahead and type the abbreviations straightaway.  These are here for your use, but not necessarily mandatory.  See Will Robertson's informative and arcane <url href="http://latex-alive.tumblr.com/post/827168808/correct-punctuation-spaces">blog post</url> on the topic if you want the full story.</p>
+
+            <!-- Carriage returns are unwise, but this is impossible to read otherwise -->
+            <p><copyright /><nbsp /><nbsp />
+            <ellipsis /><nbsp /><nbsp />
+            <eg /><nbsp /><nbsp />
+            <ie /><nbsp /><nbsp />
+            <etc /><nbsp /><nbsp />
+            <circa /><nbsp /><nbsp /></p>
+
+            <p>It might be instructive to see how the paragraphs above about escape characters were written without inadvertenly using an escape character improperly.</p>
+
+        </section>
+
+
+        <section>
+            <title>Graphics</title>
+
+            <introduction>
+                <p>Mathbook XML supports several languages for describing diagrams and pictures with human-readable source code (<ie /> plain text), rather than using a <q>paint</q> program.  Any <latex /> macros used in the rest of your document may be employed in the <latex/>-standalone or Asymptote diagrams (with Sage graphics coming next?).</p>
+            </introduction>
+
+            <subsection>
+                <title><latex /> images</title>
+
+                <p>There are several graphics engine packages that a <latex /> document can employ. Code from these packages renders diagrams automatically as part of normal processing of <latex /> files.  For HTML output the <c>mbx</c> script produces SVG versions of the pictures.  The packages should be loaded in docinfo/latex-image-preamble, which is also where global package settings should be made. These first examples are from the <url href="http://www.texample.net/tikz/examples/">TeXample.net</url> site.</p>
+
+                <!-- http://www.texample.net/media/tikz/examples/TEX/noise-shaper.tex -->
+                <figure xml:id="figure-tikz-electronics">
+                    <caption>TikZ Electronics Diagram</caption>
+                    <image xml:id="tikz-electronics">
+                        <description>A pile of electronic components wired together</description>
+                        <latex-image-code>
+                        <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
+                        <![CDATA[\tikzset{%
+                          block/.style    = {draw, thick, rectangle, minimum height = 3em,
+                            minimum width = 3em},
+                          sum/.style      = {draw, circle, node distance = 2cm}, % Adder
+                          input/.style    = {coordinate}, % Input
+                          output/.style   = {coordinate} % Output
+                        }
+                        % Defining string as labels of certain blocks.
+                        \newcommand{\suma}{\Large$+$}
+                        \newcommand{\inte}{$\displaystyle \int$}
+                        \newcommand{\derv}{\huge$\frac{d}{dt}$}
+
+                        \begin{tikzpicture}[auto, thick, node distance=2cm, >=triangle 45]
+                        \draw
+                            % Drawing the blocks of first filter :
+                            node at (0,0)[right=-3mm]{\Large \textbullet}
+                            node [input, name=input1] {}
+                            node [sum, right of=input1] (suma1) {\suma}
+                            node [block, right of=suma1] (inte1) {\inte}
+                                 node at (6.8,0)[block] (Q1) {\Large $Q_1$}
+                                 node [block, below of=inte1] (ret1) {\Large$T_1$};
+                            % Joining blocks.
+                            % Commands \draw with options like [->] must be written individually
+                            \draw[->](input1) -- node {$X(Z)$}(suma1);
+                            \draw[->](suma1) -- node {} (inte1);
+                            \draw[->](inte1) -- node {} (Q1);
+                            \draw[->](ret1) -| node[near end]{} (suma1);
+                            % Adder
+                        \draw
+                            node at (5.4,-4) [sum, name=suma2] {\suma}
+                                % Second stage of filter
+                            node at  (1,-6) [sum, name=suma3] {\suma}
+                            node [block, right of=suma3] (inte2) {\inte}
+                            node [sum, right of=inte2] (suma4) {\suma}
+                            node [block, right of=suma4] (inte3) {\inte}
+                            node [block, right of=inte3] (Q2) {\Large$Q_2$}
+                            node at (9,-8) [block, name=ret2] {\Large$T_2$}
+                        ;
+                            % Joining the blocks of second filter
+                            \draw[->] (suma3) -- node {} (inte2);
+                            \draw[->] (inte2) -- node {} (suma4);
+                            \draw[->] (suma4) -- node {} (inte3);
+                            \draw[->] (inte3) -- node {} (Q2);
+                            \draw[->] (ret2) -| (suma3);
+                            \draw[->] (ret2) -| (suma4);
+                                 % Third stage of filter:
+                            % Defining nodes:
+                        \draw
+                            node at (11.5, 0) [sum, name=suma5]{\suma}
+                            node [output, right of=suma5]{}
+                            node [block, below of=suma5] (deriv1){\derv}
+                            node [output, right of=suma5] (sal2){}
+                        ;
+                            % Joining the blocks:
+                            \draw[->] (suma2) -| node {}(suma3);
+                            \draw[->] (Q1) -- (8,0) |- node {}(ret1);
+                            \draw[->] (8,0) |- (suma2);
+                            \draw[->] (5.4,0) -- (suma2);
+                            \draw[->] (Q1) -- node {}(suma5);
+                            \draw[->] (deriv1) -- node {}(suma5);
+                            \draw[->] (Q2) -| node {}(deriv1);
+                                \draw[<->] (ret2) -| node {}(deriv1);
+                                \draw[->] (suma5) -- node {$Y(Z)$}(sal2);
+                                % Drawing nodes with \textbullet
+                        \draw
+                            node at (8,0) {\textbullet}
+                            node at (8,-2){\textbullet}
+                            node at (5.4,0){\textbullet}
+                                node at (5,-8){\textbullet}
+                                node at (11.5,-6){\textbullet}
+                                ;
+                            % Boxing and labelling noise shapers
+                            \draw [color=gray,thick](-0.5,-3) rectangle (9,1);
+                            \node at (-0.5,1) [above=5mm, right=0mm] {\textsc{first-order noise shaper}};
+                            \draw [color=gray,thick](-0.5,-9) rectangle (12.5,-5);
+                            \node at (-0.5,-9) [below=5mm, right=0mm] {\textsc{second-order noise shaper}};
+                        \end{tikzpicture}]]>
+                        </latex-image-code>
+                    </image>
+                </figure>
+
+                <p>The next example began life in <url href="http://www.frontiernet.net/~eugene.ressler/">Sketch</url>, which will output TikZ code (though the code has been edited by hand for readability).</p>
+
+                <!-- http://www.texample.net/media/tikz/examples/TEX/3d-cone.tex -->
+                <figure xml:id="figure-tikz-cone3D">
+                    <caption>TikZ Cone Drawing</caption>
+                    <image xml:id="tikz-cone">
+                        <latex-image-code>
+                        <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
+                        <![CDATA[\begin{tikzpicture}[join=round]
+                        \tikzstyle{conefill} = [fill=blue!20,fill opacity=0.8]
+                        \tikzstyle{ann} = [fill=white,font=\footnotesize,inner sep=1pt]
+                        \tikzstyle{ghostfill} = [fill=white]
+                             \tikzstyle{ghostdraw} = [draw=black!50]
+                        \filldraw[conefill](-.775,1.922)--(-1.162,.283)--(-.274,.5)
+                                            --(-.183,2.067)--cycle;
+                        \filldraw[conefill](-.183,2.067)--(-.274,.5)--(.775,.424)
+                                            --(.516,2.016)--cycle;
+                        \filldraw[conefill](.516,2.016)--(.775,.424)--(1.369,.1)
+                                            --(.913,1.8)--cycle;
+                        \filldraw[conefill](-.913,1.667)--(-1.369,-.1)--(-1.162,.283)
+                                            --(-.775,1.922)--cycle;
+                        \draw(1.461,.107)--(1.734,.127);
+                        \draw[arrows=<->](1.643,1.853)--(1.643,.12);
+                        \filldraw[conefill](.913,1.8)--(1.369,.1)--(1.162,-.283)
+                                            --(.775,1.545)--cycle;
+                        \draw[arrows=->,line width=.4pt](.274,-.5)--(0,0)--(0,2.86);
+                        \draw[arrows=-,line width=.4pt](0,0)--(-1.369,-.1);
+                        \draw[arrows=->,line width=.4pt](-1.369,-.1)--(-2.1,-.153);
+                        \filldraw[conefill](-.516,1.45)--(-.775,-.424)--(-1.369,-.1)
+                                            --(-.913,1.667)--cycle;
+                        \draw(-1.369,.073)--(-1.369,2.76);
+                        \draw(1.004,1.807)--(1.734,1.86);
+                        \filldraw[conefill](.775,1.545)--(1.162,-.283)--(.274,-.5)
+                                            --(.183,1.4)--cycle;
+                        \draw[arrows=<->](0,2.34)--(-.913,2.273);
+                        \draw(-.913,1.84)--(-.913,2.447);
+                        \draw[arrows=<->](0,2.687)--(-1.369,2.587);
+                        \filldraw[conefill](.183,1.4)--(.274,-.5)--(-.775,-.424)
+                                            --(-.516,1.45)--cycle;
+                        \draw[arrows=<-,line width=.4pt](.42,-.767)--(.274,-.5);
+                        \node[ann] at (-.456,2.307) {$r_0$};
+                        \node[ann] at (-.685,2.637) {$r_1$};
+                        \node[ann] at (1.643,.987) {$h$};
+                        \path (.42,-.767) node[below] {$x$}
+                            (0,2.86) node[above] {$y$}
+                            (-2.1,-.153) node[left] {$z$};
+                        % Second version of the cone
+                        \begin{scope}[xshift=3.5cm]
+                        \filldraw[ghostdraw,ghostfill](-.775,1.922)--(-1.162,.283)--(-.274,.5)
+                                                       --(-.183,2.067)--cycle;
+                        \filldraw[ghostdraw,ghostfill](-.183,2.067)--(-.274,.5)--(.775,.424)
+                                                       --(.516,2.016)--cycle;
+                        \filldraw[ghostdraw,ghostfill](.516,2.016)--(.775,.424)--(1.369,.1)
+                                                       --(.913,1.8)--cycle;
+                        \filldraw[ghostdraw,ghostfill](-.913,1.667)--(-1.369,-.1)--(-1.162,.283)
+                                                       --(-.775,1.922)--cycle;
+                        \filldraw[ghostdraw,ghostfill](.913,1.8)--(1.369,.1)--(1.162,-.283)
+                                                       --(.775,1.545)--cycle;
+                        \filldraw[ghostdraw,ghostfill](-.516,1.45)--(-.775,-.424)--(-1.369,-.1)
+                                                       --(-.913,1.667)--cycle;
+                        \filldraw[ghostdraw,ghostfill](.775,1.545)--(1.162,-.283)--(.274,-.5)
+                                                       --(.183,1.4)--cycle;
+                        \filldraw[fill=red,fill opacity=0.5](-.516,1.45)--(-.775,-.424)--(.274,-.5)
+                                                             --(.183,1.4)--cycle;
+                        \fill(-.775,-.424) circle (2pt);
+                        \fill(.274,-.5) circle (2pt);
+                        \fill(-.516,1.45) circle (2pt);
+                        \fill(.183,1.4) circle (2pt);
+                        \path[font=\footnotesize]
+                                (.913,1.8) node[right] {$i\hbox{$=$}0$}
+                                (1.369,.1) node[right] {$i\hbox{$=$}1$};
+                        \path[font=\footnotesize]
+                                (-.645,.513) node[left] {$j$}
+                                (.228,.45) node[right] {$j\hbox{$+$}1$};
+                        \draw (-.209,.482)+(-60:.25) [yscale=1.3,->] arc(-60:240:.25);
+                        \fill[black,font=\footnotesize]
+                                        (-.516,1.45) node [above] {$P_{00}$}
+                                        (-.775,-.424) node [below] {$P_{10}$}
+                                        (.183,1.4) node [above] {$P_{01}$}
+                                        (.274,-.5) node [below] {$P_{11}$};
+                        \end{scope}
+                        \end{tikzpicture}]]>
+                        </latex-image-code>
+                    </image>
+                </figure>
+
+		<p>The pgfplots package was included in docinfo/latex-image-preamble. Here, it is used.</p>
+
+                <figure xml:id="figure-pgflots-demo">
+                    <caption>Sample pgfplots plot</caption>
+                    <image xml:id="pgfplots-demo">
+                        <description>A pgfplots example, with a function, a parametric curve, and some points plotted.</description>
+                        <latex-image-code>
+                        <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
+                        <![CDATA[\begin{tikzpicture}
+                        \begin{axis}[]
+                            \addplot[
+                                domain=0.1:10,
+                                <->,
+                                smooth,
+                                thin,
+                                color=blue,
+                            ]{4*ln(x)/ln(10)};
+                            \addplot[
+                                only marks,
+                            ]coordinates{
+                                (0,2)
+                                (4,3)
+                                (2,4)
+                                (3,4)};
+                            \addplot[
+                                variable=\t,
+                                domain=0:360,
+                                samples=200,
+                                color=orange,
+                            ]({3*sin(2*t)}, {2*cos(5*t)});
+                        \end{axis}
+                        \end{tikzpicture}]]>
+
+                        </latex-image-code>
+		    </image>
+                </figure>
+
+            </subsection>
+
+            <subsection>
+                <title>Asymptote</title>
+
+                <p>The Asymptote graphics language may be placed in your source to draw graphs, diagrams or pictures.  Rules for formatting code are identical to those for Sage code.  For more on Asymptote see <url href="http://asymptote.sourceforge.net/" />.</p>
+
+                <!--
+                See a different (more traditional) variant of URL usage
+                in the introductory section.
+                -->
+
+                <p>This is a simple physics diagram about levers, taken from the Asymptote documentation.  In the HTML version of this article, the images are SVG's and so should scale nicely when you zoom in on the page.</p>
+                <!-- http://asymptote.sourceforge.net/gallery/lever.asy -->
+
+                <!--
+                xml:id's on the figures may be employed for cross-references,
+                while the xml:id's on the actual graphics code will be used to name
+                the files that are created.  They are optional, in which case,
+                generic names will be created, though these use serial numbers and so
+                will change as more are added.
+                -->
+
+                <figure xml:id="figure-asymptote-levers">
+                    <caption>Asymptote Lever Demonstration</caption>
+                    <image xml:id="asymptote-lever">
+                        <description>Moments on a lever</description>
+                        <asymptote>
+                        size(200,0);
+
+                        pair z0=(0,0);
+                        pair z1=(2,0);
+                        pair z2=(5,0);
+                        pair zf=z1+0.75*(z2-z1);
+
+                        draw(z1--z2);
+                        dot(z1,red+0.15cm);
+                        dot(z2,darkgreen+0.3cm);
+                        label("$m$",z1,1.2N,red);
+                        label("$M$",z2,1.5N,darkgreen);
+                        label("$\hat{\ }$",zf,0.2*S,fontsize(24pt)+blue);
+
+                        pair s=-0.2*I;
+                        draw("$x$",z0+s--z1+s,N,red,Arrows,Bars,PenMargins);
+
+                        s=-0.5*I;
+                        draw("$\bar{x}$",z0+s--zf+s,blue,Arrows,Bars,PenMargins);
+
+                        s=-0.95*I;
+                        draw("$X$",z0+s--z2+s,darkgreen,Arrows,Bars,PenMargins);
+                        </asymptote>
+                    </image>
+                </figure>
+
+                <p>And a colorful contour plot with logarithmic scale.  Again, from the Asymptote documentation.</p>
+                <!-- http://asymptote.sourceforge.net/gallery/2D%20graphs/logimage.asy -->
+
+                <figure xml:id="figure-asymptote-contour-plot">
+                    <caption>Aymptote Contour Plot</caption>
+                    <image xml:id="asymptote-contour">
+                        <asymptote>
+                        import graph;
+                        import palette;
+
+                        size(10cm,10cm,IgnoreAspect);
+
+                        real f(real x, real y) {
+                          return 0.9*pow10(2*sin(x/5+2*y^0.25)) + 0.1*(1+cos(10*log(y)));
+                        }
+
+                        scale(Linear,Log,Log);
+
+                        pen[] Palette=BWRainbow();
+
+                        bounds range=image(f,Automatic,(0,1),(100,100),nx=200,Palette);
+
+                        xaxis("$x$",BottomTop,LeftTicks,above=true);
+                        yaxis("$y$",LeftRight,RightTicks,above=true);
+
+                        palette("$f(x,y)$",range,(0,200),(100,250),Top,Palette,
+                                PaletteTicks(ptick=linewidth(0.5*linewidth())));
+                        </asymptote>
+                    </image>
+                </figure>
+
+                <p>Here is the lever diagram again, but now we have added an integral to one of the legends, <em>using a <latex /> macro of our own,</em> which is idential to one we used in the early part of this article.  The point is, we only needed to define the macro once for the entire document, and it is available as we make Asymptote diagrams.  This device can be used to maintain flexibility and consistency in your choice of notation.</p>
+
+                <figure xml:id="figure-asymptote-latex-macro">
+                    <caption>Aymptote Lever, plus Integral</caption>
+                    <image xml:id="asymptote-lever-integral">
+                        <asymptote>
+                        size(200,0);
+
+                        pair z0=(0,0);
+                        pair z1=(2,0);
+                        pair z2=(5,0);
+                        pair zf=z1+0.75*(z2-z1);
+
+                        draw(z1--z2);
+                        dot(z1,red+0.15cm);
+                        dot(z2,darkgreen+0.3cm);
+                        label("$m$",z1,1.2N,red);
+                        label("$M$",z2,1.5N,darkgreen);
+                        label("$\hat{\ }$",zf,0.2*S,fontsize(24pt)+blue);
+
+                        pair s=-0.2*I;
+                        draw("$x$",z0+s--z1+s,N,red,Arrows,Bars,PenMargins);
+
+                        s=-0.5*I;
+                        draw("$\bar{x}=\definiteintegral{0}{1}{x\delta(x)}{x}$",z0+s--zf+s,blue,Arrows,Bars,PenMargins);
+
+                        s=-1.05*I;
+                        draw("$X$",z0+s--z2+s,darkgreen,Arrows,Bars,PenMargins);
+                        </asymptote>
+                    </image>
+                </figure>
+
+                <p>And finally, an example of a 3-D graph (from the documentation again).</p>
+                <!-- http://asymptote.sourceforge.net/gallery/3D%20graphs/filesurface.asy -->
+                <!-- Projection point adjusted by Michael Doob -->
+
+                <figure xml:id="figure-asymptote-surface">
+                    <caption>Asymptote 3-D Surface</caption>
+                    <image xml:id="asymptote-surface">
+                        <asymptote>
+                        // Riemann surface of z^{1/n}
+                        import graph3;
+                        import palette;
+
+                        int n=3;
+
+                        size(200,300,keepAspect=false);
+
+                        currentprojection=orthographic(10,10,5);
+                        currentlight=(10,10,5);
+                        triple f(pair t) {return (t.x*cos(t.y),t.x*sin(t.y),t.x^(1/n)*sin(t.y/n));}
+
+                        surface s=surface(f,(0,0),(1,2pi*n),8,16,Spline);
+                        s.colors(palette(s.map(zpart),Rainbow()));
+
+                        draw(s,meshpen=black,render(merge=true));
+                        </asymptote>
+                    </image>
+                </figure>
+            </subsection>
+
+            <subsection>
+                <title>Sage Plots</title>
+
+                <p>Any of the numerous capabilities of Sage may be used to produce any graphics object, be it the simple graph of a single-variable function or some realization of a more complicated object.  All of the usual rules about formatting Sage code (esp. indentation) apply, along with one more caveat.  The last line of your Sage code <em>must</em> return a Sage <c>Graphics</c> object (or 3D plot).  The <c>mbx</c> script will isolate this last line, use it as the RHS of an assignment statement, and the Sage <c>.save()</c> method will be called to generate the image, which is either a Portable Document Format (PDF) file amenable to <latex /> output, or a Scalable Vector Graphics (SVG) file amenable to HTML output.  For visualizations of 3D plots, Sage will only produce Portable Network Graphics (PNG) files, which can be included in HTML pages or <latex /> output.</p>
+
+                <figure xml:id="figure-sage-parabola">
+                    <caption>A Sage standard parabola, on <m>[-2,4]</m></caption>
+                    <image xml:id="sageplot-parabola">
+                        <description>A standard parabola on the interval [-2,4]</description>
+                        <sageplot>
+                        f(x) = x^2
+                        plot(f, (x, -2, 4), color='green', thickness=3)
+                        </sageplot>
+                    </image>
+                </figure>
+
+                <p>Pay careful attention to the requirement that the last line of your code be a graphics object.  In particular, while <c>show()</c> might appear to do the right thing, it evaluates to Python's <c>None</c> object and that is just what you will get.  The code for Figure<nbsp /><xref ref="figure-sage-double-plot" /> illustrates creating two graphics objects and combining them into an expression on the last line that evaluates to a graphics object.</p>
+
+                <figure xml:id="figure-sage-double-plot">
+                    <caption>Two Sage plots on one set of axes</caption>
+                    <image xml:id="sageplot-updown">
+                        <sageplot>
+                        f(x) = x^4
+                        g(x) = -x^4
+                        up = plot(f, (x, -1.5, 1.5), color='blue', thickness=2)
+                        down = plot(g, (x, -1.5, 1.5), color='red', thickness=2)
+                        up + down
+                        </sageplot>
+                    </image>
+                </figure>
+
+                <p>The following examples are from the <url href="http://www.sagemath.org/tour-graphics.html">Sage Tour</url>.</p>
+
+                <!-- Tour example modified: figsize moved from show() into plot() -->
+                <figure xml:id="figure-sage-multigraph">
+                    <caption>A Sage multigraph of a sentence</caption>
+                    <image xml:id="sageplot-sentence-multigraph">
+                        <sageplot>
+                        stnc = 'I am a cool multiedge graph with loops'
+                        g = DiGraph({}, loops=True, multiedges=True)
+                        for a,b in [(stnc[i], stnc[i+1]) for i in xrange(len(stnc)-1)]:
+                           g.add_edge(a, b, b)
+                        g.plot(color_by_label=True, edge_style='solid', figsize=(8,8))
+                        </sageplot>
+                    </image>
+                </figure>
+
+                <!-- Tour example modified: now using R.lagrange_polynomial() -->
+                <!-- Tour example modified: dropped ymin/ymax, figsize -->
+                <figure xml:id="figure-sage-polynomial-approximation">
+                    <caption>Sage polynomial approximations of <m>f(x)=1/(1+25x^2)</m></caption>
+                    <image xml:id="sageplot-polynomial-approximation">
+                        <sageplot>
+                        def f(x):
+                           return RDF(1 / (1 + 25 * x^2))
+
+                        def runge():
+                            R = PolynomialRing(RDF, 'x')
+                            g = plot(f, -1, 1, rgbcolor='red', thickness=1)
+                            polynom = []
+                            for i, n in enumerate([6, 8, 10, 12]):
+                              data = [(x, f(x)) for x in xsrange(-1, 1, 2 / (n - 1), include_endpoint=True)]
+                              polynom.append(R.lagrange_polynomial(data))
+                              g += list_plot(data, rgbcolor='black', pointsize=5)
+                            g += plot(polynom, -1, 1, fill=f, fillalpha=0.2, thickness=0)
+                            return g
+
+                        runge()
+                        </sageplot>
+                    </image>
+                </figure>
+
+                <p>From the Sage documentation, with slight modifications, credited to Douglas Summers-Stay.  A plot of the implicity defined surface <me>2 = \cos(x + ty) + \cos(x - ty) + \cos(y + tz) + \cos(y - tz) + \cos(z - tx) + \cos(z + tx)</me> in rectangular <m>xyz</m> coordinates, with <m>t</m> equal to the golden ratio.</p>
+
+                <figure xml:id="figure-sage-implicit-surface">
+                    <caption>A Sage implicitly defined 3D surface</caption>
+                    <image xml:id="sageplot-implicit-surface">
+                        <sageplot>
+                        var('x y z')
+                        T = RDF(golden_ratio)
+                        p = 2 - (cos(x + T*y) + cos(x - T*y) + cos(y + T*z) + cos(y - T*z) + cos(z - T*x) + cos(z + T*x))
+                        r = 4.77
+                        implicit_plot3d(p, (x, -r, r), (y, -r, r), (z, -r, r), plot_points=100, frame=False)
+                        </sageplot>
+                    </image>
+                </figure>
+
+            </subsection>
+
+        </section>
+
+        <section>
+            <title>Demonstrations</title>
+
+            <demonstration>
+                <title>A Simple Demonstration</title>
+
+                <p>Hey!</p>
+
+                <sage type="practice" />
+
+            </demonstration>
+
+        </section>
+
+
+
+        <section>
+            <title>Further Reading</title>
+
+            <introduction>
+                <p>In a longer work you might wish to have some references on a per-chapter basis, or similar.  You can make a <q>references</q> subdivision anywhere to hold bibliographic items, and you can reference the items like any other item.  For example, we can cite the article below <xref ref="biblio-beezer-fcla" detail="Chapter R" />, included an indication that a specific chapter may be relevant. Notice that the list may be prefaced with an introduction, and followed by a conclusion.</p>
+            </introduction>
+
+            <references>
+                <title>References</title>
+
+                <introduction>
+                    <p>These items are here to test basic formatting of references.</p>
+                </introduction>
+
+                <biblio type="raw" xml:id="biblio-strang-article">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio>
+
+                <biblio type="raw" xml:id="biblio-beezer-fcla">Robert A. Beezer, <title>A First Course in Linear Algebra</title>, 3rd Edition, Congruent Press, 2012.
+                <note><p>An online, open-source offering.</p></note>
+                </biblio>
+
+                <biblio type="raw" xml:id="biblio-rosswell-fictional">Alexander Rosswell, <title>Diffeomorphisms of Penciled Fiber Bundles</title>, <journal>Mathematicians of America</journal> <year>2020</year>, <volume>2</volume> <number>6</number>, 884<ndash />888.</biblio>
+
+                <biblio type="raw" xml:id="biblio-rosswell-fictional-two"><ibid />, <title>Diffeomorphisms of Penciled Fiber Bundles, Part 2</title>, <journal>Mathematicians of America</journal> <year>2021</year>, <volume>3</volume> <number>4</number>, 102<ndash />103.</biblio>
+
+                <conclusion>
+                    <p>This is a conclusion, which has not been used very much in this sample.  Did you see the the second reference above has a short annotation?  So you can make annotated bibliographies easily.</p>
+                </conclusion>
+            </references>
+
+            <exercises>
+                <title>Exercises</title>
+
+                <exercise>
+                    <statement>
+                        <p>No problem here, but the next two are in an <q>exercise group</q> with an introduction and a conclusion.  The two problems of the exercise group should be indented some to indicate the grouping.</p>
+                    </statement>
+                </exercise>
+
+                <exercisegroup>
+
+                    <introduction>
+                        <p>In the next two problems compute the indicated derivative.</p>
+                    </introduction>
+
+                    <exercise>
+                        <statement>
+                            <p><m>f(x)=x^3</m>, <m>\frac{df}{dx}</m>.  This sentence is just a bunch of gibberish to be certain that the problem's left margin aligns with the problem number's indentation.</p>
+                        </statement>
+                    </exercise>
+
+                    <exercise xml:id="exercises-cosine-derivative">
+                        <statement>
+                            <p><m>y = \cos(x)</m>, <m>y^\prime</m>.</p>
+                        </statement>
+                    </exercise>
+
+                    <conclusion>
+                        <p>Note that the previous two problems used very different notation for the function and the resulting derivative.</p>
+                    </conclusion>
+
+                </exercisegroup>
+
+                <exercise>
+                    <statement>
+                        <p>Compute <m>\int 3x^2\,dx</m>.</p>
+                    </statement>
+                </exercise>
+
+            </exercises>
+
+            <p>Another subsection of exercises, which begins and ends with an exercise group, and has two consecutive exercise groups.</p>
+
+            <exercises>
+                <title>More Exercises</title>
+                <exercisegroup>
+                    <introduction><p>Introduction to first exercise group.</p></introduction>
+                    <exercise>
+                        <statement><p>Only exercise of first group.</p></statement>
+                    </exercise>
+                    <conclusion><p>Conclusion to first exercise group.</p></conclusion>
+                </exercisegroup>
+                <exercisegroup>
+                    <introduction><p>Introduction to second exercise group.</p></introduction>
+                    <exercise>
+                        <statement><p>First exercise of second group.</p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p>Second exercise of second group.</p></statement>
+                    </exercise>
+                    <conclusion><p>Conclusion to second exercise group.</p></conclusion>
+                </exercisegroup>
+            </exercises>
+
+        </section>
+
+        <section>
+            <title>List Calisthenics</title>
+
+            <p>This section contains nested lists, to demonstrate how they get assigned labels (numbering, symbols).  First we have a list with no customization and multiple levels to test the defaults.  <latex /> allows a maximum of four levels of ordered/numbered lists, and a total of six levels if some unordered lists are mixed in.  The second-level defaults (lower-case Latin) are formatted slightly different in <latex /> versus HTML.  The HTML style is not easy to adjust, but you can  specify the <latex /> version to match if it is important.</p>
+
+            <ol>
+                <li>Level 1, first.</li>
+                <li>Level 1, second.<ol>
+                    <li>Level 2, first.</li>
+                    <li>Level 2, second.<ol>
+                            <li>Level 3, first.</li>
+                                <li>Level 3, second.<ol>
+                                    <li>Level 4, first.</li>
+                                    <li>Level 4, second.</li>
+                                    <li>Level 4, third.</li>
+                                </ol></li>
+                            <li>Level 3, third.</li>
+                        </ol></li>
+                    <li>Level 2, third.</li>
+                </ol></li>
+                <li>Level 1, third.</li>
+            </ol>
+
+            <p>And now a four-level deep unordered list with the default labels supplied by MBX (disc, circle, square, disc).</p>
+
+            <ul>
+                <li>Level 1, first.</li>
+                <li>Level 1, second.<ul>
+                    <li>Level 2, first.</li>
+                    <li>Level 2, second.<ul>
+                            <li>Level 3, first.</li>
+                                <li>Level 3, second.<ul>
+                                    <li>Level 4, first.</li>
+                                    <li>Level 4, second.</li>
+                                    <li>Level 4, third.</li>
+                                </ul></li>
+                            <li>Level 3, third.</li>
+                        </ul></li>
+                    <li>Level 2, third.</li>
+                </ul></li>
+                <li>Level 1, third.</li>
+            </ul>
+
+            <p>And a total of six levels with a mix of ordered and unordered lists, the most that out-of-the-box-<latex /> is able to handle.</p>
+
+            <ol>
+                <li>Level 1, first.</li>
+                <li>Level 1, second.<ol>
+                    <li>Level 2, first.</li>
+                    <li>Level 2, second.<ul>
+                            <li>Level 3, first.</li>
+                                <li>Level 3, second.<ol>
+                                    <li>Level 4, first.</li>
+                                    <li>Level 4, second.<ol>
+                                        <li>Level 5, first.</li>
+                                        <li>Level 5, second.<ul>
+                                            <li>Level 6, first.</li>
+                                            <li>Level 6, second.</li>
+                                            <li>Level 6, third.</li>
+                                        </ul></li>
+                                        <li>Level 5, third.</li>
+                                    </ol></li>
+                                    <li>Level 4, third.</li>
+                                </ol></li>
+                            <li>Level 3, third.</li>
+                        </ul></li>
+                    <li>Level 2, third.</li>
+                </ol></li>
+                <li>Level 1, third.</li>
+            </ol>
+
+            <p>Now, nested lists with the defaults replaced by custom choices.  First, an ordered list, three deep, upper Roman numerals, then upper-case Latin, then no label on the three elements of the third level.  Note the adornments of the labels will be rendered in LaTeX, but not in HTML.</p>
+
+            <ol label="*I*">
+                <li>Level 1, first.</li>
+                <li>Level 1, second.<ol label="++A">
+                    <li>Level 2, first.</li>
+                    <li>Level 2, second.<ol label="">
+                            <li>Level 3, first.</li>
+                            <li>Level 3, second.</li>
+                            <li>Level 3, third.</li>
+                        </ol></li>
+                    <li>Level 2, third.</li>
+                </ol></li>
+                <li>Level 1, third.</li>
+            </ol>
+
+
+            <p>Exercises and References are specialized subdivisions you can put anywhere.  They are implemented as top-level lists, so should share behavior.  For example, an exercise may have many parts and when expressed as a list, should have the expected labels.</p>
+
+            <exercises>
+                <title>Exercises (with lists)</title>
+
+                <exercise>
+                    <statement>
+                        <p>This exercise should have several parts, and labels should follow the defaults for second-level lists (since the exercise is numbered according to the top-level default).</p>
+                        <ol>
+                            <li>Exercise 1, first part.</li>
+                            <li>Exercise 1, second part.</li>
+                            <li>Exercise 1, third part.</li>
+                        </ol>
+                    </statement>
+                </exercise>
+            </exercises>
+
+            <p>Similarly, References may have lists in their annotations.  Unlikely?  But possible.</p>
+
+            <references>
+                <title>References (with lists in Annotations)</title>
+
+                <biblio type="raw" xml:id="biblio-undetermined">
+                    Some book would be listed here.
+                    <note>
+                        <p>Here is the annotation and an ordered list as part of that annotation.  (The lack of a space will be addressed with more work on references.)</p>
+                        <ol>
+                            <li>Book 1, first part.</li>
+                            <li>Book 1, second part.</li>
+                            <li>Book 1, third part.</li>
+                        </ol>
+                    </note>
+                </biblio>
+            </references>
+
+        </section>
+
+        <section>
+            <title>Table Calisthenics</title>
+
+            <p>A very minimal table, hence with left-justified cells, no borders.  We do wrap the tabular element in a table element to get centering, numbering and a caption.</p>
+
+            <table>
+                <caption>Some Colors</caption>
+                <tabular>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <p>Tables can be used many ways.  We describe long division of polynomials by using vertical and horizontal borders on individual entries of a table.  The division lines are slightly thicker than the subtraction lines.  This is a good example of the typical abuse of tables for horizontal and vertical layout.</p>
+
+            <figure>
+                <caption>Polynomial Long Division</caption>
+                <tabular halign="right">
+                    <row>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell bottom="medium"></cell>
+                        <cell bottom="medium"></cell>
+                        <cell bottom="medium"><m>x</m></cell>
+                        <cell bottom="medium"><m>-</m></cell>
+                        <cell bottom="medium"><m>5</m></cell>
+                    </row>
+                    <row>
+                        <cell><m>x</m></cell>
+                        <cell><m>+</m></cell>
+                        <cell right="medium"><m>2</m></cell>
+                        <cell><m>x^2</m></cell>
+                        <cell><m>-</m></cell>
+                        <cell><m>3x</m></cell>
+                        <cell><m>-</m></cell>
+                        <cell><m>8</m></cell>
+                    </row>
+                    <row>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell bottom="minor"><m>x^2</m></cell>
+                        <cell bottom="minor"><m>+</m></cell>
+                        <cell bottom="minor"><m>2x</m></cell>
+                        <cell bottom="minor"></cell>
+                        <cell bottom="minor"></cell>
+                    </row>
+                    <row>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell><m>-5x</m></cell>
+                        <cell><m>-</m></cell>
+                        <cell><m>8</m></cell>
+                    </row>
+                    <row>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell bottom="minor"><m>-5x</m></cell>
+                        <cell bottom="minor"><m>-</m></cell>
+                        <cell bottom="minor"><m>10</m></cell>
+                   </row>
+                    <row>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell><m>2</m></cell>
+                    </row>
+                </tabular>
+            </figure>
+
+            <p>The next table describes how to construct tables via the <c>tabular</c> element.  The <c>table</c> element may be used to enclose the raw table, so as to associate a caption and get vertical separation with horizontal centering.</p>
+
+            <p>The <c>tabular</c> element contains a sequence of <c>row</c> elements, and must contain at least one.  Each <c>row</c> contains a sequence of <c>cell</c> elements and must have the same number in each row (acccounting for the use of the <c>colspan</c> attribute).  The contents of the <c>cell</c> elements are the text to appear in entries of the table.</p>
+
+            <p>A sequence of <c>col</c> elements may optionally be used.  But if one appears, then there must be the right number for the width of the table.  They are empty elements always, and just carry information about their respective column.</p>
+
+            <p>Where the body of the table below has an entry, it means the attribute may be used on the element, and effects the range of the tabular described by the element.  Employment of an attribute on elements to the right in the table will supersede use on elements to the left.  Generally, every cell has right and bottom borders, but only cells at the left side of the table have a left border and only cells across the top have a top border.  Only one cell has four borders.</p>
+
+            <table>
+                <caption>Tabular Elements and Attributes (p = planned)</caption>
+                <tabular top="major" halign="center">
+                    <col halign="left" />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col halign="left"/>
+                    <!--  -->
+                    <row>
+                        <cell>Attributes</cell>
+                        <cell colspan="4" halign="center">Elements</cell>
+                        <cell>Values</cell>
+                    </row>
+                    <row bottom="medium">
+                        <cell></cell>
+                        <cell><c>tabular</c></cell>
+                        <cell><c>col</c></cell>
+                        <cell><c>row</c></cell>
+                        <cell><c>cell</c></cell>
+                        <cell>* = default</cell>
+                    </row>
+                    <row>
+                        <cell><c>top</c></cell>
+                        <cell><m>\times</m></cell>
+                        <cell><m>\times</m></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell>none*, minor, medium, major</cell>
+                    </row>
+                    <row>
+                        <cell><c>left</c></cell>
+                        <cell><m>\times</m></cell>
+                        <cell></cell>
+                        <cell><m>\times</m></cell>
+                        <cell></cell>
+                        <cell>none*, minor, medium, major</cell>
+                    </row>
+                    <row>
+                        <cell><c>bottom</c></cell>
+                        <cell><m>\times</m></cell>
+                        <cell></cell>
+                        <cell><m>\times</m></cell>
+                        <cell><m>\times</m></cell>
+                        <cell>none*, minor, medium, major</cell>
+                    </row>
+                    <row>
+                        <cell><c>right</c></cell>
+                        <cell><m>\times</m></cell>
+                        <cell><m>\times</m></cell>
+                        <cell></cell>
+                        <cell><m>\times</m></cell>
+                        <cell>none*, minor, medium, major</cell>
+                    </row>
+                    <row>
+                        <cell><c>halign</c></cell>
+                        <cell><m>\times</m></cell>
+                        <cell><m>\times</m></cell>
+                        <cell><m>\times</m></cell>
+                        <cell><m>\times</m></cell>
+                        <cell>left*, center, right</cell>
+                    </row>
+                    <row>
+                        <cell><c>halign</c></cell>
+                        <cell></cell>
+                        <cell>p</cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell>decimal, character</cell>
+                    </row>
+                    <row>
+                        <cell><c>header</c></cell>
+                        <cell></cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell>yes/no*</cell>
+                    </row>
+                    <row>
+                        <cell><c>footer</c></cell>
+                        <cell></cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell>yes/no*</cell>
+                    </row>
+                    <row>
+                        <cell><c>valign</c></cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell></cell>
+                        <cell>top, middle, bottom</cell>
+                    </row>
+                    <row>
+                        <cell><c>colspan</c></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell><m>\times</m></cell>
+                        <cell>1*, integer</cell>
+                    </row>
+                    <row>
+                        <cell><c>rowspan</c></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell>p</cell>
+                        <cell>1*, integer</cell>
+                    </row>
+                    <row>
+                        <cell>colors</cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell>p</cell>
+                        <cell></cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <paragraphs>
+                <title>Bully Pulpit</title>
+
+                <p>One of the goals of MathBook XML is to gently guide authors towards good choices in the design of their documents, even if we do not claim to know it all ourselves.  Take a close look at that table about tables.  What's missing?  No vertical rules.  Try living without them, you will not really miss them.  If you think you need to divide a table into two halves, maybe you really need two tables (and then see the <q>side-by-side</q> capabilities, Section <xref ref="section-side-by-side" />).</p>
+
+                <p>In the documentation for his excellent <latex /> package, <url href="https://www.ctan.org/pkg/booktabs">booktabs</url>, Simon Fear, gives two rules for what he calls <q>formal tables</q>: (1) Never, ever use vertical rules, and (2) Never use double rules.  We have resisted the temptation to enforce the former and have provided an alternative to the second (three thicknesses).  He refers to using tables for layout as creating <q>tableau.</q>  If you are finicky about the look of your work, the first three pages of the documentation is recommended reading.</p>
+
+                <p>That all said, we now give several examples in order to stress and demonstrate our code.</p>
+            </paragraphs>
+
+
+            <p>An example of aligning table cells' contents horizontally. See the source for comments.</p>
+
+            <!-- Default matches HTML and LaTEX, left. -->
+            <!-- We set this table's default to right. -->
+            <table>
+                <caption>Horizontal Alignment Example</caption>
+                <tabular halign="right">
+                    <col />
+                    <col />
+                    <col halign="center" />
+                    <col />
+                    <!--  -->
+                    <!-- A uniform row to judge effects by, each centered -->
+                    <row halign="center">
+                        <cell>1234567890</cell>
+                        <cell>1234567890</cell>
+                        <cell>1234567890</cell>
+                        <cell>1234567890</cell>
+                    </row>
+                    <!-- Totally generic, so by columns, all to right -->
+                    <row>
+                        <cell>First</cell>
+                        <cell>Second</cell>
+                        <cell>Third</cell>
+                        <cell>Fourth</cell>
+                    </row>
+                    <!-- cell-by-cell, with one taking global default -->
+                    <row>
+                        <cell halign="center">A</cell>
+                        <cell halign="right">B</cell>
+                        <cell>C</cell>
+                        <cell halign="left">D</cell>
+                    </row>
+                    <!-- whole row is left, but one is centered -->
+                    <row halign="left">
+                        <cell>1</cell>
+                        <cell halign="center">2</cell>
+                        <cell>3</cell>
+                        <cell>4</cell>
+                    </row>
+                    <!-- A comment -->
+                </tabular>
+            </table>
+
+            <p>Example from above, but now with horizontal rules, plus an extra row to test the bottom border.  See the source for comments.</p>
+
+            <table>
+                <caption>Horizontal Rules Example</caption>
+                <tabular bottom="minor" top="major" halign="right">
+                    <col top="minor"/>
+                    <col />
+                    <col top="none" halign="center" />
+                    <col top="major" />
+                    <!--  -->
+                    <!-- A uniform row to judge effects by, each centered -->
+                    <row halign="center">
+                        <cell>1234567890</cell>
+                        <cell>1234567890</cell>
+                        <cell>1234567890</cell>
+                        <cell>1234567890</cell>
+                    </row>
+                    <!-- Totally generic, so by columns, all to right -->
+                    <row bottom="none">
+                        <cell>First</cell>
+                        <cell bottom="major">Second</cell>
+                        <cell bottom="major">Third</cell>
+                        <cell>Fourth</cell>
+                    </row>
+                    <!-- cell-by-cell, with one taking global default -->
+                    <row bottom="medium">
+                        <cell halign="center">A</cell>
+                        <cell halign="right">B</cell>
+                        <cell>C</cell>
+                        <cell halign="left">D</cell>
+                    </row>
+                    <!-- whole row is left, but one is centered -->
+                    <row halign="left">
+                        <cell bottom="none">1</cell>
+                        <cell halign="center" bottom="minor">2</cell>
+                        <cell bottom="none">3</cell>
+                        <cell>4</cell>
+                    </row>
+                    <!-- proper bottom, otherwise defaults -->
+                    <row bottom="medium">
+                        <cell>1</cell>
+                        <cell>2</cell>
+                        <cell>3</cell>
+                        <cell>4</cell>
+                    </row>
+                    <!-- A comment -->
+                </tabular>
+            </table>
+
+            <p>Same example, but now with vertical rules.  See the source for comments.</p>
+
+            <table>
+                <caption>Vertical Rules Example</caption>
+                <tabular bottom="minor" top="major" left="major" right="medium"  halign="right">
+                    <col top="minor"/>
+                    <col />
+                    <col top="none" halign="center"  right="none"/>
+                    <col top="major" />
+                    <!--  -->
+                    <!-- A uniform row to judge effects by, each centered -->
+                    <row halign="center">
+                        <cell>1234567890</cell>
+                        <cell>1234567890</cell>
+                        <cell right="minor">1234567890</cell>
+                        <cell>1234567890</cell>
+                    </row>
+                    <!-- Totally generic, so by columns, all to right -->
+                    <row bottom="none">
+                        <cell>First</cell>
+                        <cell bottom="major">Second</cell>
+                        <cell bottom="major" right="medium">Third</cell>
+                        <cell>Fourth</cell>
+                    </row>
+                    <!-- cell-by-cell, with one taking global default -->
+                    <row bottom="medium">
+                        <cell halign="center">A</cell>
+                        <cell halign="right">B</cell>
+                        <cell>C</cell>
+                        <cell halign="left">D</cell>
+                    </row>
+                    <!-- whole row is left, but one is centered -->
+                    <row left="none" halign="left">
+                        <cell bottom="none">1</cell>
+                        <cell halign="center" bottom="minor">2</cell>
+                        <cell bottom="none">3</cell>
+                        <cell right="major">4</cell>
+                    </row>
+                    <!-- proper bottom, otherwise defaults -->
+                    <row bottom="medium">
+                        <cell right="none">1</cell>
+                        <cell>2</cell>
+                        <cell>3</cell>
+                        <cell>4</cell>
+                    </row>
+                    <!-- A comment -->
+                </tabular>
+            </table>
+
+            <table>
+                <caption>Progressively Thicker Rules Example</caption>
+                <tabular top="minor" left="minor" halign="center">
+                    <col right="medium"/>
+                    <col right="major"/>
+                    <col />
+                    <!--  -->
+                    <row bottom="medium">
+                        <cell>1111</cell>
+                        <cell>2222</cell>
+                        <cell right="minor">3333</cell>
+                    </row>
+                    <row bottom="major">
+                        <cell>aaaa</cell>
+                        <cell>bbbb</cell>
+                        <cell right="medium">cccc</cell>
+                    </row>
+                    <row>
+                        <cell bottom="minor">AAAA</cell>
+                        <cell bottom="medium">BBBB</cell>
+                        <cell bottom="major" right="major">CCCC</cell>
+                    </row>
+                </tabular>
+            </table>
+            <table>
+                <caption>Column Span Example</caption>
+                <tabular top="minor" left="minor" halign="center">
+                    <col right="medium"/>
+                    <col right="major"/>
+                    <col />
+                    <!--  -->
+                    <row bottom="medium">
+                        <cell colspan="2">1111, 2222</cell>
+                        <cell right="minor">3333</cell>
+                    </row>
+                    <row bottom="major">
+                        <cell>aaaa</cell>
+                        <cell colspan="2" right="medium">bbbb,cccc</cell>
+                    </row>
+                    <row>
+                        <cell bottom="minor">AAAA</cell>
+                        <cell bottom="medium">BBBB</cell>
+                        <cell bottom="major" right="major">CCCC</cell>
+                    </row>
+                </tabular>
+            </table>
+
+        </section>
+
+
+        <section>
             <title>Embedded Interactive Elements</title>
 
-            <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.</p>
+            <introduction>
+                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See Section<nbsp /><xref ref="section-sage-cells" /> for the specifics of embedding instances of the Sage Cell Server.</p>
+            </introduction>
 
             <subsection>
                 <title>GeoGebra</title>
 
                 <p>This first example of a  GeoGebra demonstration has just the controls for moving the three vertices on the circumfrence of the circle.  This is courtesy of Danny Parsons at the African Institute of Mathematical Sciences.  This demo requires Java, which could be problematic.</p>
 
-                <p>GeoGebra will create screenshots of demonstrations in tikz/<latex /> code.  For a static version, we use this as a figure.</p>
+                <p>GeoGebra will create screenshots of demonstrations in TikZ/<latex /> code.  For a static version, we use this as a figure.</p>
 
                <!-- 1. Build a GeoGebra applet                            -->
                <!-- 2. Save it as an HTML page                            -->
@@ -387,7 +1899,9 @@
                     <ggbBase64>UEsDBBQACAAIAAdcL0QAAAAAAAAAAAAAAAASAAAAZ2VvZ2VicmFfbWFjcm8ueG1s7VhNb9s4ED1vfwXBu2V9WLYTRCkcB4sGSDcLJIe9FRTFyNxKpCrRiZ1fv0NSSuXIcho3QZ1FfbAofgyH73EeOTr5uMozdMfKiksRYc9xMWKCyoSLNMJLdTuY4o+nH05SJlMWlwTdyjInKsIjx8ffx8GbM3b1YLSq+LGQf5GcVQWh7JouWE4uJSXK9FwoVRwPh/f3905j05FlOkxT5ayqBCPwR1QRrgvHYG5j0H1guvuu6w3/+XxpzQ+4qBQRlGEEvuaElhLRPNFORPj625KU0KKkzLo1n1hW6Nk4leJPnjFdrhby/kLcQOsZKSOsyiV0prJYz0mhV1HVdc1cF6JYKkTcCM8wIl6Ez/CwabtaqqaR2Mb4iwcFP8LUFIIIJ6YwinAhs7UuhhGew2Mc4XNjCXyrYEaqJ0eKK+smWaqFLHUpIUrXQE+WsZwJhdS6YNoeFwqjjMQs086dfvjjRC8OyfhfRlWztLrdvAx1H2iey0yWCKwDp6n5jyPshyFMmxULAjXAtumckTUr0R3JdK+6Bux9lgnbqCWC52YToEqxQhuApVYFYwnsO1x7DIUCDJrdd0uyqnaISlkmFVqBC44/xmith4+h8GD3rOlkVnvNH+ppg3atWmdtb06GNVDPQHb2f4Bs5BxNa8hG01eBjMo8JyJBwoYTS3W9gYpvDQWApx0Gxlpto0NAVVtrICbPUNBach8H7v4MfEcRsJ+6G7/QgOo7E3+j2u7KAWxUt93g1dNwwSy0asHpV8EqUBO/4dK1hU88SZiW40fwMs3vhVAguMzIQGXdbK3+K2PFDQy+EjclEZUWatun2aT9DF6VoCSpFCS7BPeeEHlmiSQdIuPdROqVPrIUd1m0rv94JL0Ki4NtdK172NWREjij8Kg1YrQ/jeybsEMq/R9hnhcZp1zt5mbOS5r1cDLrcEJ3cwIHCaePmNNfSspeEPKUiTvwVJYVXDXc+saydu386KGpWQE6A1O19uqqB68lfCCrJV+hWdN/1vSawcHsTZzwqP0D1ZwF9RQzOKcHVlJnoZkERHUrvyDUlN9yupvfx6B+QjGtbwv2ruB3mJ7vZnrzHJvvdY6Np4Zp/Yjt4+cDMHS8cTvMPBN+gbMZlN4bHFM7RW7WJ3LJC0QueaciN3Zcf3oYwtZ7a2AvETb2W9i2CtvAc6bTSSv+wuCpstn7da1scMN+A2VjluOkT9nOX6Js5wejbL4zCjZOjbCWtmAj6N5C2v6GvBGUrS+WDM5zm2ued+Bukk4tf01qGjepKW1SU52jPkOL9aEB3prdNx5e7b7vBS/hsz8v7KQlX7znROZ3ZrJPZrIb9ngb7L8kH+wcst72M3a8PY8YvyPQ6eGADvBONkR24hvYu2zYq82RMw78FiGTdwR7cjCw99wnt7OhJcbeKA9VYobt76n63Xyp1YXmk/Tpf1BLBwgvoJ72MAQAABgXAABQSwMEFAAIAAgAB1wvRAAAAAAAAAAAAAAAABYAAABnZW9nZWJyYV9qYXZhc2NyaXB0LmpzSyvNSy7JzM9TSE9P8s/zzMss0dBUqK7lAgBQSwcIRczeXRoAAAAYAAAAUEsDBBQACAAIAAdcL0QAAAAAAAAAAAAAAAAMAAAAZ2VvZ2VicmEueG1s1Vtbc9u4FX7O/goMH/oU08SFIJlK2XFu03SSTaZOO52+QSQkIaZILUnZkic/vucApERJvslxsoocGwSJ2/m+cwPEDH5fznJyqavalMXQo37gEV2kZWaKydBbNOOT2Pv95W+DiS4nelQpMi6rmWqGnvCZt+kHNV8G2NlkQy9UajwScnwiYqlOhBL6JOEBP0mTUPJxKnQ2Tj1ClrV5UZR/qJmu5yrV5+lUz9SHMlWNHXPaNPMXp6dXV1d+N7tfVpPTyWTkL+vMI7Dyoh567cULGG6r0xW3zVkQ0NP/fvzghj8xRd2oItUeQakW5uVvzwZXpsjKK3JlsmY69GJKPTLVZjIFMaXgHjnFRnOQda7TxlzqGrr2qlbmZjb3bDNV4PNn7orka3E8kplLk+lq6AU+E1IGCWUi5JEMosQjZWV00bRtaTvnaTfa4NLoKzcsXtkZRZBEQIGpzSjXQ2+s8hqkMsW4AkRhQdUCqnWzyvVIVV19sx76HH6ggbnWOBZQ52AYeux5kjyPguB5GAZuIf1ZPdKUZW6HDEiYkG/fCAtYQJ5jQV3BoJDSPQrcvYC7grlCuCJ0bYTrLlxT4doI1wYJuFXItr6Rsr2xJWYnJO8LSUE+/JXwa6XfkTPuyUlRiG+E4uptwQmum9r1YyHaqnTVyBY0cAVtH8b4x+Ilv1Mi/iiJaG9Wpwy3T7qnLN2MIerqQ2dkB8y4J+ZaSHaTkCy8RcjvxLablIa9SWEu+8/+7k3J2SFT3orsATNK8T12/4gJo2DL6juTdyVty7tgeLJFDU47TzhoF0TqKbZt9avRsxqXyBPrmwglIdiujMCVhIQmUERow4zQkIgQqjQmEsuIcDRbQTiJCbajnFgPFMbwR1iTliSEsfBm5GybcEFCTqj1W4IACsT6PsCEcWgRhiSETjg7xWm5JEJChcdEwALR60XoWTj0gzpMzginhGNfGhEmiWQkQs9JBTpUGePaYVBGZEAkdgXXCW7TuUzoEROO0sjW56Dj8si8rM0a56nO52uCLKSmmC+aLRjTWdZdNuVO66xML17twK5V3XTX0Aji1iY6uji2FTyfDXI10jmkGOeoEYRcqhwN3o4/LouGdNrA3L1JpeZTk9bnummgV02+qkv1QTV6+Q5a190C7dQ2pg/0Is1NZlTxH1AXHAIHJF2It16sC/EiTNwsaVlW2fmqBh0iy//pqgTfE8WY1KzaWhj5sv9BH5UqVHjOfd7/gDGsbnnUyqkv19KopV7LQCYVWlyv8r5+VeabW/PSFM1rNW8Wlc3RYA0VCnJWTHJt8bQ0Q7aTXozK5bkDkruxvqzmUAvcCkaT12VeVqRCyUJo0JYjV9o2uLR1q8C2CWyLoGPGZOvnNGG2hS1HrrStgGq3tFZU2olJg24aU1tPA4M7xepcMyoKJk+LwjQfukpj0ouNqNjhj8VsBDrWKuH2mPSpxhyc7qjV4EJXhc6d8hRA5qJc1E6b1xr5bLCo9WfVTM+K7F96Amb4WaFTbGBo13Sz5EynZgYd3f0WPIXE/huW6u5melLpTsTcpsUOWvs06Kvy3m071LuqnL0vLr+A1uwsdXDayTOo08rMUTvJCLz0hd7oX2ZqBT4+6/cD4WuQIkUnA0A2COLbRa4r8gGY94haNNMSFOSNKooVAflr6ABDgQWjyyf/VMVCVSvwn1R4aL25nkE2TBqrrlbj17Sd2TQb+SHl6Cv4lHU0cc83aMLjG1XXKrnK51OFqXgLTa5WsNw+WHa8j2W2CyEwZOUEPzF3ujLX2qmZWy9czGE4a509NbCc1GQ59E6Ej0tYwRX1Q0jir93Oy+0zUFq02i2v6O7uEAr66IC6B7JXvz5kDqcVzk7DHw7Y618fsBPmx4lFjPkRfxLE0nI2U0VGCpvSfS7z1aQsvE0GoQK0TqIoahxRDHF0IC2a7vkcelHXJnVtFBR86I3cbO0cN/DjZusYcONsx5YGUoQL2C/XdufRtKHOXvzDZJm2+c/p3cz2sOxTS0NuyQ1pG/w23NJDuL1dAWs9wdp6Iek9Knj4Qg9Uwp4qUT9iVpWkDxmZU6UoZmI3uD+cANCIHJX3fYFhUNvAsR84L7SeY8byqfhSqaLGo6ftiPlwONURwcn8MHbeX/hCWjyFH9FE/kJ4jo4HT+HzLpbKMOl/2sgq/SSM46MCd9uVfjSZiz/bvnS05z3f3Ock+0HszT5F2wnwzVFMxpYhLEaueAKV56jf/U/cBnO0hCcPTbfgqfbwfHsInm+PCM8A9qEWQeoL8fMQTPcQfHcIgu+OCEEALr5BIwHZyJ6brD/0B8B73nrTbXTfubxoP2nK7gZ51zdn98F8i3Pe3t4/jdmjdjrfLLZQDZzWnkBGcWyB7yFUvenS3F2q9GFU6WOhKvAF2zKHxBEX+ixxTAGDMv71mHrrmDrbY2p8GFPjY2GK++iSVta64m0X5vKdCIJqvHfwdkRErQfeoSpzVOk9qlKNPUpzjx/cDjabTo/Zyz865nwaj2vdIFEuoNCHukrYC7A4Ys7sIl/GXHSbLWA0CeUTxh88lXtlkIKyujfpnNyNem5P+FowJ8diJTftBVbtXuEajUjGtJeRxtHj7UX/WbgutTs9NrN5blLTPJqC/SxregAF02Oh4MSdFqzWBwg2igQ+59tp1/EAv79BMAcAb44FeHeqsFqfNFzjwY0M46gH+89G/TafP3E+f7rv802VLmboxKt7cqodt9/v9xd5fnfuGj/QTHjsUx5wvvZXjrvQ51KEYmMslkgGKbUM4ieMBa8BsFzvuqA+irckUBd305KWhUnXWF887rzoiWzjUXpuJrq4tG6iJmQZtC/HrQI3P7nu7iyp3TbiM9reuqa9HeNMNZVZkrOu/VnX6oxBxwgDFY9YJKKIMw6BiJzxdoozYQMZC1kUhwnjUcjtd85noX2HjMXQNU4YE2EUxzK62T7xe3czNundWvCpaqblpCxUbr+x29aG192B/a4KfD3APX49Fvd4c1xifpJQttmf8p/tIe9koP1aZT9A5QcwkB8LAzcEKCp9Jr7nG4UfAPorB/p+Rjw7APTZsYB+T0YMu0kW0u/YNj5tXvDVYZ/vYV8iY4enBf1uPzUruNMRUR8iPPjvzVEjMoInLSxa5wNx+IMi/w0q34fJ+fz+1nv77Bzf7zjAEFz7x2DfvZx0qDFsErJ2Vy3YQ02F80CGnFL8ljOhLTF46M6iSFIRhzGTQeDOW5jPqWAQu/FAWcLu5sfbkF7OKxgP3xDokNPLBlYJD4be3/5clM3fN+/fkDd6Zl/Qse8UuKd2xG22cAhve7y/Mmez7wHWujLjzVu0oPAfEfDA27wg2GHVdqsbVTWf0RBIe86f7B0822+ykcDNh/VP+ftQn/bfbbLvF7b/F+Hl/wFQSwcIHn8WWOwJAAA7MQAAUEsBAhQAFAAIAAgAB1wvRC+gnvYwBAAAGBcAABIAAAAAAAAAAAAAAAAAAAAAAGdlb2dlYnJhX21hY3JvLnhtbFBLAQIUABQACAAIAAdcL0RFzN5dGgAAABgAAAAWAAAAAAAAAAAAAAAAAHAEAABnZW9nZWJyYV9qYXZhc2NyaXB0LmpzUEsBAhQAFAAIAAgAB1wvRB5/FljsCQAAOzEAAAwAAAAAAAAAAAAAAAAAzgQAAGdlb2dlYnJhLnhtbFBLBQYAAAAAAwADAL4AAAD0DgAAAAA=</ggbBase64>
                    <figure>
                         <caption>GeoGebra demonstration of the Euler Line</caption>
-                        <tikz>
+                        <image xml:id="tikz-geogebra-euler">
+                            <latex-image-code>
+                            \begin{tikzpicture}
                             \definecolor{ffqqqq}{rgb}{1,0,0}
                             \definecolor{uuuuuu}{rgb}{0.27,0.27,0.27}
                             \definecolor{zzttqq}{rgb}{0.6,0.2,0}
@@ -413,7 +1927,9 @@
                             \fill [color=uuuuuu] (-2.53,1.39) circle (1.5pt);
                             \draw[color=uuuuuu] (-1.29,1.79) node {$orthocentre$};
                             \draw[color=ffqqqq] (-3.75,6.23) node {$Euler$};
-                        </tikz>
+                            \end{tikzpicture}
+                            </latex-image-code>
+                        </image>
                     </figure>
                 </geogebra-applet>
 
@@ -425,12 +1941,12 @@
 
             </subsection>
 
-
         </section>
-
 
         <section>
             <title>Video</title>
+
+            <p>First, a gratuitous reference to Exercise<nbsp /><xref ref="exercises-cosine-derivative" /> about the derivative of a cosine.</p>
 
             <p>Embedded videos can make sense for a web version of your document. This is a video promoting the University of Puget Sound to potential new students.  Support is limited to WebM format initially, mp4 support will be easy to add.  This may require an HTML5 capable browser, such as Chrome, to render properly.</p>
 
@@ -441,10 +1957,27 @@
 
         </section>
 
-        <section>
+        <exercises xml:id="exercises">
             <title>Exercises</title>
 
+            <introduction>
+                <p>Exercises in an <q>exercises</q> section are numbered automatically.  However, what if you have a busted problem and remove it?  Then a bunch of problem numbers change and your list of homework for your students changes as well.  What a mess.  Use auto-numbering while writing and refining.  Once stable, go ahead and hard-code problem numbers as you delete/add.  Notice the oddly numbered problem below.  Once you go down this road, you can't stop.  But instructors will thank you for it.</p>
+
+                <p>More precisely, once you hard-code a number for a problem, you will likely need to hard-code every subsequent problem number in that section of exercises.  This is because the automatic numbering is unlikely to be what you really want, or what you had before.</p>
+            </introduction>
+
             <exercise>
+                <title>An Exercise in a Section</title>
+                <statement>
+                    <p>Exercises can appear in a <q>section</q> of their own.  You need to give the section a title, even if it seems obvious what to call it.  Individual exercises may have titles, as you choose.  Problem: How should we hide solutions?</p>
+                </statement>
+                <solution>
+                    <p>Maybe a global switch should be used to supress solutions, while a separate processing regime could use them as part of a solutions manual.</p>
+                </solution>
+            </exercise>
+
+            <exercise number="42a" xml:id="exercise-with-hardcoded-number">
+                <title>An Exercise with a Hard-Coded Problem Number</title>
                 <statement>
                     <p>Compute the definite integral <m>\definiteintegral{2}{4}{x^2}{x}</m>, not as an approximate value from a Riemann sum, but as an exact value based of the limit by using the Fundamental Theorem.</p>
                 </statement>
@@ -455,19 +1988,19 @@
 
             <exercise>
                 <statement>
-                    <p>Can you prove Corollary<nbsp /><xref ref="corollary-FTC-derivative" /> directly?</p>
+                    <p>Can you prove Corollary<nbsp /><xref ref="corollary-FTC-derivative" /> directly?  If not consider that a problem could have several parts, which should be formatted as a second-level list, since the problems normally get numbered at the top level</p>
+                    <ol>
+                        <li>Why is this result a Corollary?</li>
+                        <li>Could you interchange the Theorem and Corollary?</li>
+                    </ol>
                 </statement>
                 <hint>
                     <p>Consider the definite integral as an area function and employ the Mean Value Theorem.</p>
                 </hint>
             </exercise>
 
-        <p>Generated: <today />, <timeofday /></p>
+         </exercises>
 
-        </section>
-
-        
-        
         <!--
         Various author tools are planned.  Note the embedded "todo"
         elements above.  An XSL transform in-testing will extract them
@@ -479,55 +2012,537 @@
         A "preview" XSL transform to HTML could be especially useful.
         -->
 
-    <!-- WARNING: Bibliographies are only minimally
-    functional now and subject to change. -->
+        <section xml:id="section-cross-referencing">
+            <title>Cross-Referencing</title>
 
-        <bibliography>
+            <p>Cross-references are easy, since that is a key reason for having a highly structured document.  Here is a useful feature if you elect to use it.  Any <c>&lt;xref&gt;</c> will <q>know</q> what it points to, so you can let it provide the name part.  You can turn this on globally with the command-line parameter <c>autoname</c> set to <c>'yes'</c>.  If you do that, you will see most of the names in this document doubled, since the names are written into the source already.  Try it and see: use <c>--stringparam autoname 'yes'</c> as an argument to <c>xsltproc</c>.</p>
 
-<biblio type="raw" xml:id="bib-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>, <volume>55</volume></biblio>
+            <p>Moreover, the names themselves will change with the use of the one language dependent file.  Notice that in HTML output there is a small difference between these two behaviors: you will get more to click on as a link when you use the autoname feature (we could change this for consistency?).  This switch makes no sense for <q>provisional</q> cross-references, since there is no information about what they point to.</p>
 
-            <book xml:id="bib-fcla">
-                <author>Robert A. Beezer</author>
-                <title>A First Course in Linear Algebra</title>
-                <edition>3rd Edition</edition>
-                <publisher>Congruent Press</publisher>
-                <year>2012</year>
-                <isbn>978-0984417551</isbn>
-                <!-- <url>linear.pugetsound.edu</url> -->
-            </book>
+            <p>Here is a reference that has no indication of its type in the source:  <xref ref="theorem-FTC" />.  So by default you will just see a number that you can click on.  If you use the <c>autoname="yes"</c> switch then you should see <q>Theorem</q> prepended.  Note that if you changed the theorem to a lemma, then that change would be reflected here automatically when autonaming is in effect.</p>
 
-            <book xml:id="bib-lay-book">
-                <author>David C. Lay</author>
-                <title>Linear Algebra and Its Applications</title>
-                <edition>4th Edition</edition>
-                <publisher>Pearson</publisher>
-                <year>2011</year>
-                <isbn>978-0321385178</isbn>
-            </book>
+            <p>If you set the autonaming behavior globally, or accept the default behavior, there will still be instances where you want to override that choice.  Simple: just say <c>autoname="yes"</c> or <c>autoname="no"</c> as part of the <c>xref</c>.  Each example below should look the same each time this article is processed, no matter how the global <c>autoname</c> is set.</p>
 
-            <article xml:id="bib-lay-article">
-                <author>David C. Lay</author>
-                <title>Subspaces and Echelon Forms</title>
-                <journal>The College Mathematics Journal</journal>
-                <year>1993</year>
-                <month>January</month>
-                <volume>24</volume>
-                <number>1</number>
-                <pages>57-62</pages>
-            </article>
+            <ul>
+                <li><p>No name ever: <xref ref="corollary-FTC-derivative" autoname="no" /></p></li>
+                <li><p>Always named: <xref ref="corollary-FTC-derivative" autoname="yes" /></p></li>
+            </ul>
 
-            <article xml:id="bib-fundamental">
-                <author>Gilbert Strang</author>
-                <title>The Fundamental Theorem of Linear Algebra</title>
-                <journal>The American Mathematical Monthly</journal>
-                <year>1993</year>
-                <month>November</month>
-                <volume>100</volume>
-                <number>9</number>
-                <pages>848-855</pages>
-            </article>
+            <p>Suppose you want to reference two theorems, so you might want to say something like <q>Theorems 4.6 and 5.2.</q>  With global autonaming on, you can override with <c>autoname="plural"</c> on the first <c>xref</c> and <c>autoname="no"</c> on the second <c>xref</c>.  (With global autonaming off, you just write what you want and only the numbers are links/knowls.) The <c>plural</c> option is implies the <c>yes</c> option.  Here is the test, which should look correct no matter what the global switch is:  <xref ref="section-cross-referencing" autoname="plural" /> and <xref ref="section-internationalization" autoname="no" />.  (But notice that it is up to you to be certain the type of the second one does not change without the first also changing.  The <q>author-tools</q> mode and careful choices of <c>xml:id</c> strings can help avoid this trap.)</p>
 
-        </bibliography>
+            <p>One final twist.  If you say <c>autoname="title"</c>, then the title you assigned to the theorem will prefix the number.  Here is a the final example, which should always refer to a fundamental theorem by name <xref ref="theorem-FTC" autoname="title" />.</p>
+
+            <p>Cross-references to exercises with hard-coded numbers should respect the supplied number.  Exercise<nbsp /><xref ref="exercise-with-hardcoded-number" /> should reference problem 42a.</p>
+
+            <p>Here we form a list to test pointing at various things:</p>
+
+            <ul>
+                <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" />.</p></li>
+                <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" />.</p></li>
+                <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" />.</p></li>
+                <li><p>Figures: An early plot, Figure<nbsp /><xref ref="figure-function-derivative" />.</p></li>
+            </ul>
+
+        </section>
+
+        <section xml:id="section-internationalization">
+            <title>Internationalization</title>
+
+            <p>Accented characters and different alphabets may be entered directly into your source file.  How you do this is dependent on your operating system and is outside the scope of our documentation.  You can cut/paste from the source of this document for initial testing and experimentation.  Likely you need the incantation <c latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c> as the first line of your source file. (Maybe don't cut/paste this one here, it may have weird characters in it, go back to the top of this source file.)</p>
+
+            <p>Usage is simple: process your <latex /> output with the <c>xelatex</c> executable rather than <c>pdflatex</c>.  Adjustment in your <latex /> preamble will take place automatically.  For HTML ouput, your browser will be responsible for displaying the characters.  None of this has been tested thoroughly, so please send reports of failures or successful modifications.</p>
+
+            <p>Here are some sample characters from Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url>, which seem to be available in a default TeXLive installation.  The sample entries below will mostly be empty if you do not process this file with <c>xelatex</c>.</p>
+
+            <table xml:id="table-unicode-samples">
+                <tabular top="major">
+                    <row bottom="minor"><cell>Name</cell><cell>Range</cell><cell>Samples</cell><cell>LaTeX</cell></row>
+                    <row>
+                        <cell>Latin Extended-A</cell>
+                        <cell><c>U+0100</c> <ndash /> <c>U+017F</c></cell>
+                        <cell>Ą ą Ĳ ĳ</cell>
+                        <cell>TeXLive</cell>
+                    </row>
+                    <row>
+                        <cell>Latin Extended Additional</cell>
+                        <cell><c>U+1E00</c> <ndash /> <c>U+1EFF</c></cell>
+                        <cell>Ḁ Ẁ Ặ ỳ</cell>
+                        <cell><m>\approx</m>TeXLive</cell>
+                    </row>
+                    <row>
+                        <cell>Cyrillic</cell>
+                        <cell><c>U+0400</c> <ndash /> <c>U+04FF</c></cell>
+                        <cell>Љ Щ щ Ӄ</cell>
+                        <cell>polyglossia</cell>
+                    </row>
+                    <row>
+                        <cell>Arabic</cell>
+                        <cell><c>U+0600</c> <ndash /> <c>U+06FF</c></cell>
+                        <cell>؟ ب حٍ ۳</cell>
+                        <cell>polyglossia</cell>
+                    </row>
+                    <row>
+                        <cell>General Punctuation</cell>
+                        <cell><c>U+2000</c> <ndash /> <c>U+206F</c></cell>
+                        <cell>— “ ‰ ※</cell>
+                        <cell>TeXLive</cell>
+                    </row>
+                    <row>
+                        <cell>Letterlike Symbols</cell>
+                        <cell><c>U+2100</c> <ndash /> <c>U+214F</c></cell>
+                        <cell>℀ ℃ № ™</cell>
+                        <cell><m>\approx</m>TeXLive</cell>
+                    </row>
+                </tabular>
+            <caption>Sample Unicode Characters</caption>
+            </table>
+
+            <paragraphs>
+                <title>Characters from Latin-1 Supplement</title>
+                <p>‘ ¡ ¢ £ ¤ ¥ ¦ § ¨ © ª « ¬ ® ¯ ° ± ² ³ ´ µ ¶ · ¸ ¹ º » ¼ ½ ¾ ¿ À Á Â Ã Ä Å Æ Ç È É Ê Ë Ì Í Î Ï Ð Ñ Ò Ó Ô Õ Ö × Ø Ù Ú Û Ü Ý Þ ß à á â ã ä å æ ç è é ê ë ì í î ï ð ñ ò ó ô õ ö ÷ ø ù ú û ü ý þ ÿ</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title>Characters from Latin Extended-A</title>
+                <p>Ā ā Ă ă Ą ą Ć ć Ĉ ĉ Ċ ċ Č č Ď ď Đ đ Ē ē Ĕ ĕ Ė ė Ę ę Ě ě Ĝ ĝ Ğ ğ Ġ ġ Ģ ģ Ĥ ĥ Ħ ħ Ĩ ĩ Ī ī Ĭ ĭ Į į İ ı Ĳ ĳ Ĵ ĵ Ķ ķ ĸ Ĺ ĺ Ļ ļ Ľ ľ Ŀ ŀ Ł ł Ń ń Ņ ņ Ň ň ŉ Ŋ ŋ Ō ō Ŏ ŏ Ő ő Œ œ Ŕ ŕ Ŗ ŗ Ř ř Ś ś Ŝ ŝ Ş ş Š š Ţ ţ Ť ť Ŧ ŧ Ũ ũ Ū ū Ŭ ŭ Ů ů Ű ű Ų ų Ŵ ŵ Ŷ ŷ Ÿ Ź ź Ż ż Ž ž ſ</p>
+                </paragraphs>
+
+            <paragraphs>
+                <title>Characters from Latin Extended-B</title>
+                <p>ƀ Ɓ Ƃ ƃ Ƅ ƅ Ɔ Ƈ ƈ Ɖ Ɗ Ƌ ƌ ƍ Ǝ Ə Ɛ Ƒ ƒ i Ɠ Ɣ ƕ Ɩ Ɨ Ƙ ƙ ƚ ƛ Ɯ Ɲ ƞ Ɵ Ơ ơ Ƣ ƣ Ƥ ƥ Ʀ Ƨ ƨ Ʃ ƪ ƫ Ƭ ƭ Ʈ Ư ư Ʊ Ʋ Ƴ ƴ Ƶ ƶ Ʒ Ƹ ƹ ƺ ƻ Ƽ ƽ ƾ ƿ ǀ ǁ ǂ ǃ Ǆ ǅ ǆ Ǉ ǈ ǉ Ǌ ǋ ǌ Ǎ ǎ Ǐ ǐ Ǒ ǒ Ǔ ǔ Ǖ ǖ Ǘ ǘ Ǚ ǚ Ǜ ǜ ǝ Ǟ ǟ Ǡ ǡ Ǣ ǣ Ǥ ǥ Ǧ ǧ Ǩ ǩ Ǫ ǫ Ǭ ǭ Ǯ ǯ ǰ Ǳ ǲ ǳ Ǵ ǵ Ƕ Ƿ Ǹ ǹ Ǻ ǻ Ǽ ǽ Ǿ ǿ Ȁ ȁ Ȃ ȃ Ȅ ȅ Ȇ ȇ Ȉ ȉ Ȋ ȋ Ȍ ȍ Ȏ ȏ Ȑ ȑ Ȓ ȓ Ȕ ȕ Ȗ ȗ Ș ș Ț ț Ȝ ȝ Ȟ ȟ Ƞ ȡ Ȣ ȣ Ȥ ȥ Ȧ ȧ Ȩ ȩ Ȫ ȫ Ȭ ȭ Ȯ ȯ Ȱ ȱ Ȳ ȳ ȴ ȵ ȶ ȷ ȸ ȹ Ⱥ Ȼ ȼ Ƚ Ⱦ ȿ ɀ Ɂ ɂ Ƀ Ʉ Ʌ Ɇ ɇ Ɉ ɉ Ɋ ɋ Ɍ ɍ Ɏ ɏ</p>
+            </paragraphs>
+
+            <p>More examples and more thorough explanations can be found in the sample article: <c>examples/fonts-and-characters.xml</c>.</p>
+
+        </section>
+
+        <section>
+            <title>Pre-Formatted Text</title>
+
+            <p>In Sage, if you wanted to build a matrix, then you would use the <c>matrix()</c> constructor.  Here is the matrix of second partials of <m>f(x,y)=x^3+8x^2y^3 + y^4</m>, as you would enter it in Sage.  Notice that <c>SR</c> is the ring of symbolic expressions, <c>Symbolic Ring</c>.</p>
+
+            <pre>
+            var('x', 'y')
+            J = matrix(SR, [
+                [6*x + 16*y^3, 48*x*y^2],
+                [48*x*y^2, 48*x^2*y + 12*y^2]
+                ])
+            </pre>
+
+            <p>That accomplished, Sage will easily and naturally provide a <latex /> representation of the matrix with the command <c>latex(J)</c>.</p>
+
+            <pre>
+            \left(\begin{array}{rr}
+            16 \, y^{3} + 6 \, x &amp; -48 \, x y^{2} \\
+            48 \, x y^{2} &amp; 48 \, x^{2} y + 12 \, y^{2}
+            \end{array}\right)
+            </pre>
+
+            <p>The realization of preformatted text should be robust enough that it can be cut from documents and pasted without any substitutions of <q>fancier</q> Unicode characters for generic ASCII characters.  Try the <q>minus</q> sign on the <m>48</m> above to see if it does not become a dash, or the single quotes on the Sage variables.</p>
+
+            <p>Authoring follows the same rules as for Sage input code, the first non-whitespace character sets the left margin.  If indentation is important, do not mix spaces and tabs.  For syntax highlighting of text representing computer programs, or parts of them, see Section<nbsp /><xref ref="section-programs" />.</p>
+
+            <p>The <c>&lt;c&gt;</c> element, for inline code snippets (or anything else in a monospace font) uses the question-mark character to tell <latex /> where the text begins and ends.  This will be a problem if the text has a question mark in it!  So there is the attribute <c>latexsep</c> that allows you to specify another character that does not appear in your text.  For example, XML directives use question-marks now and then, so writing about them in MathBook XML requires specifying a different separation character, as in:  <c latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c>.  The <c>&lt;pre&gt;</c> element does not suffer from this quirk.</p>
+
+            <p>Snippets should also be robust for cut/paste operations.  For example, you should not get <q>curly</q> <q>smart</q> quote marks in verbatim text: <c>this should have "dumb" quote marks</c>. Here are a few characters that should migrate through <latex /> to a PDF unmolested:  <c>'"----"'</c></p>
+
+            <p><c>If you write a very long snippet of inline code it can impinge on the right margin, especially if it were to begin close to that margin.  For output in LaTeX we allow line-breaking, but we do not get hyphenation and the font is fixed-width.  So not always perfect.  Consider a display (program listing as above with the pre element) or maybe reorganizing a sentence.  And it looks like a space after that left parenthesis just got ignored in the PDF created from the latex output.</c></p>
+
+        </section>
+
+        <section xml:id="section-programs">
+            <title>Program Listings</title>
+
+            <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt (in-browser Python) or the Python language argument to the Sage Cell Server.  To see examples of authoring Sace cells, have a look at Section<nbsp /><xref ref="section-sage-cells" />.</p>
+
+            <p>In the meantime, program listings, especially with syntax highlighting, is useful all by itself.  The <q>R</q> language might not be a bad stand-in for pseudo-code, as it supports assignment with a left arrow and has fairly generic procedural syntax for control structures and data structures.  Or maybe Pascal would be a good choice?  Here is an example of R.</p>
+
+            <!-- Output in knowls?? -->
+
+            <!-- Comments edited for length                                                         -->
+            <!-- http://connectmv.com/tutorials/r-tutorial/programming-in-r-loops-and-flow-control/ -->
+            <program language="r">
+                <input>
+                <![CDATA[n_loops <- 10
+                x.means <- numeric(n_loops)  # create a vector of zeros for results
+                for (i in 1:n_loops){
+                    x <- as.integer(runif(100, 1, 7))  # 1 to 6, uniformly
+                    x.means[i] <- mean(x)
+                }
+                x.means]]>
+                </input>
+            </program>
+
+            <p>And some self-referential XSL:</p>
+
+            <program language="xslt">
+                <input>
+                <![CDATA[<xsl:template match="biblio" mode="number">
+                    <xsl:apply-templates select="." mode="structural-number" />
+                    <xsl:text>.</xsl:text>
+                    <xsl:number from="references" level="any" count="biblio" />
+                </xsl:template>]]>
+                </input>
+            </program>
+
+            <p>Look in the <c>mathbook-common.xsl</c> file to see the strings to use to identify languages.  Always all-lowercase, no symbols, no punctuation.</p>
+
+            <p>If you are discussing algorithms in the abstract (or even concretely), you can set them off like a theorem, with a number, a title and a target for cross-references.  Sometimes you claim an algorithm produces something in particular, or has certain properties, such as a theoretical run time, so a proof maybe included.  See the discussion just preceding about (limited) options for pseudo-code.</p>
+
+            <algorithm xml:id="algorithm-sieve-eratosthenes">
+                <title>Sieve of Eratosthenes</title>
+                <statement>
+                    <p>On input of a positive integer <c>n</c> this algorithm will compute all the prime numbers up to, and including, <c>n</c>.  It was named for Eratosthenes of Cyrene (<circa /> 276 BC<ndash /><circa /> 195/194 BC) by Nicomachus (<circa /> 60<ndash /><circa /> 120 CE) in <booktitle>Introduction to Arithmetic</booktitle>. (<url href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Wikipedia</url>, 2015)</p>
+
+                    <ol>
+                        <li>Input: <c>n</c></li>
+                        <li>Form the list of all integers from <c>2</c> to <c>n</c></li>
+                        <li>Set <c>p = 2</c></li>
+                        <li>While <c>p &lt; sqrt(n)</c>
+                            <ol label="1.">
+                                <li>If present, remove from the list multiples <c>2p, 3p, ...</c></li>
+                                <li>If <c>p</c> is now the last element of the list, stop</li>
+                                <li>Otherwise, set <c>p</c> to the element of the list immediately after current <c>p</c></li>
+                            </ol></li>
+                    </ol>
+                </statement>
+
+                <proof>
+                    <p>Any element removed is a non-trivial product of two integers and hence composite.  So no prime is is ever removed from the list.</p>
+
+                    <p>Each composite number is a multiple of some prime, and since no prime is ever removed, each composite will be removed.  Hence the removed elements are precisely the set of composite numbers in the list and thus the remainder are precisely the primes on the list.</p>
+                </proof>
+            </algorithm>
+
+        </section>
+
+        <section>
+            <title>Units of Measure</title>
+
+            <p>Units of measure can be given xml treatment too with the <c>quantity</c> element. In <latex />, the <c>siunitx</c> package is loaded to achive unit handling. Since that package only offers SI units, some other common units will be added by MBX in the preamble. In HTML, the capabilities of <c>siunitx</c> are simulated, weakly. Note that at present, you should not attempt to use the <c>quantity</c> element within a math environment.</p>
+            <p>The value of gravitational constant <m>g</m> is <quantity><mag>9.8</mag><unit base="meter"/><per base="second" exp="2"/></quantity>. Force is measured in <quantity><unit prefix="kilo" base="gram"/><unit base="meter"/><per base="second" exp="2"/></quantity>, also known as one <quantity><unit base="newton"/></quantity>. A quantity with rather ridiculous units is <quantity><mag>23</mag><per base='degreeCelsius'/><per base='second' exp='2'/><unit prefix='micro' base='hectare' exp='23'/></quantity>. One <quantity><unit base="hertz"/></quantity> is the same as <quantity><per base='second'/></quantity>. You can have a unitless quantity, like <quantity><mag>42</mag></quantity>, which may help with consistency between such numbers and units in the <latex /> output. Some non-SI units are available, such as the absurd <quantity><unit base="degreeFahrenheit"/><unit base="foot"/><unit base="pound"/><per base="gallon"/></quantity>.</p>
+            <p>For a full list of the allowed units and prefixes, see <c>mathbook-units.xsl</c>. If you have a need for more units, they need to be added to <c>mathbook-units.xsl</c> in the section that deals with units which are not part of <c>siunitx</c> by default.</p>
+
+        </section>
+
+        <section xml:id="section-side-by-side">
+          <title>Side-By-Side Objects</title>
+        <subsection>
+          <title>Introduction</title>
+          <p>A variety of different objects can be put side-by-side using the <c>sidebyside</c> element.</p>
+        </subsection>
+        <subsection>
+          <title>Figures with Numbers Side-By-Side</title>
+        <p>Figures can be put side-by-side using the <c>sidebyside</c> element; if a <q>global</q>
+          caption is present, then the figures will be labelled as (a), (b), (c), etc; for example, see the subfigures in <xref ref="fig-sidebyside-global" autoname="yes"/>.
+          You can, of course, reference the subfigures individually, for example: <xref ref="fig-sidebyside-subfigure" autoname="yes"/>.</p>
+        <p>If a global caption is <emph>not</emph> present, then the figures will be labeled regularly, as for example, <xref ref="regular-figure" autoname="yes"/> and <xref ref="another-regular-figure" autoname="yes"/></p>
+        <p>The <c>width</c> can be specified for each child,
+          or omitted, in which case it will be calculated automatically based on the <emph>remaining</emph> width available; for 
+          finer control, it is generally best to specify the width.</p>
+          <sidebyside xml:id="fig-sidebyside-global">
+            <figure width="25.67%" xml:id="fig-sidebyside-subfigure">
+              <image source="images/trefoil.png"/>
+              <caption></caption>
+            </figure>
+            <figure width="25%">
+              <image source="images/trefoil.png"/>
+              <caption></caption>
+            </figure>
+          <caption>Side-by-side Figure, with subfigure children.</caption>
+          </sidebyside>
+          <sidebyside>
+            <figure width="50%">
+              <image source="images/trefoil.png"/>
+              <caption>width=50<percent/></caption>
+            </figure>
+            <figure width="25%">
+              <image source="images/trefoil.png"/>
+              <caption>width=25<percent/></caption>
+            </figure>
+          <caption>Side-by-side Figure, with subfigure children.</caption>
+          </sidebyside>
+          <sidebyside>
+            <figure>
+              <image source="images/trefoil.png"/>
+              <caption></caption>
+            </figure>
+            <figure>
+              <image source="images/trefoil.png"/>
+              <caption></caption>
+            </figure>
+            <figure>
+              <image source="images/trefoil.png"/>
+              <caption></caption>
+            </figure>
+          <caption>Widths can be calculated automatically</caption>
+          </sidebyside>
+          <sidebyside>
+            <figure xml:id="regular-figure">
+              <image source="images/trefoil.png"/>
+              <caption>Side-by-side Figures.</caption>
+            </figure>
+            <figure xml:id="another-regular-figure">
+              <image source="images/trefoil.png"/>
+              <caption>Regular numbering.</caption>
+            </figure>
+            <figure width="50%">
+              <image source="images/trefoil.png"/>
+              <caption>Regular numbering.</caption>
+            </figure>
+          </sidebyside>
+        </subsection>
+        <subsection>
+          <title>Images Without Captions</title>
+          <p>We can use the <c>sidebyside</c> element to put <c>images</c> next to each other; there's no
+            need to specify the <c>width</c>, unless you want to fine tune things.</p>
+          <sidebyside>
+              <image source="images/trefoil.png"/>
+              <image source="images/trefoil.png"/>
+          </sidebyside>
+          <sidebyside>
+              <image width="10%" source="images/trefoil.png"/>
+              <image width="30%" source="images/trefoil.png"/>
+              <image width="20%" source="images/trefoil.png"/>
+              <image width="20%" source="images/trefoil.png"/>
+              <image width="20%" source="images/trefoil.png"/>
+          </sidebyside>
+        </subsection>
+        <subsection>
+          <title>Vertical Alignment</title>
+          <p>Vertical alignment can be specified using the (optional) <c>valign</c> attribute which
+            can take values <c>top</c>, <c>middle</c>, and <c>bottom</c>; the default is <c>bottom</c>.</p>
+          <sidebyside>
+            <figure width="33%" valign="middle">
+              <image source="images/trefoil.png"/>
+              <caption>Middle</caption>
+            </figure>
+            <figure width="17%" valign="top">
+              <image source="images/trefoil.png"/>
+              <caption>Top</caption>
+            </figure>
+            <figure width="50%" valign="middle">
+              <image source="images/trefoil.png"/>
+              <caption>Middle</caption>
+            </figure>
+          </sidebyside>
+          <p>We may apply the same <c>valign</c> attribute to <c>images</c> without captions.</p>
+          <sidebyside>
+              <image width="10%" valign="top" source="images/trefoil.png"/>
+              <image width="10%" valign="bottom" source="images/trefoil.png"/>
+              <image width="20%" source="images/trefoil.png"/>
+              <image width="10%" valign="bottom" source="images/trefoil.png"/>
+              <image width="20%" source="images/trefoil.png"/>
+          </sidebyside>
+        </subsection>
+        <subsection>
+          <title>Text Next to Text and Images</title>
+          <p>Text can be put next to other blocks of text using either the <c>paragraphs</c> element,
+            which can contain multiple paragraphs using the <c>p</c> element.</p>
+          <p>If only one paragraph is required, simply use the <c>p</c> element on its own.</p>
+          <sidebyside>
+              <paragraphs width="20%" valign="middle">
+                <title>Sample title</title>
+                <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text</p>
+              </paragraphs>
+              <paragraphs width="20%" valign="top">
+                <p>here is some text here is some text here is some text here is some text here</p>
+                <p>here is some text here is some text here is some text here is some text here</p>
+                <p>here is some text here is some text here is some text here is some text here</p>
+              </paragraphs>
+              <p width="20%" valign="middle" halign="right">here is some text here is some text here is some text here is some text here</p>
+              <p width="20%" valign="bottom" halign="center">here is some text here is some text here is some text here is some text here</p>
+          </sidebyside>
+          <p>Similarly, text can be put next to images</p>
+          <sidebyside>
+              <paragraphs width="50%" valign="middle">
+                <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text</p>
+              </paragraphs>
+              <image width="20%" valign="top" source="images/trefoil.png"/>
+          </sidebyside>
+          <p>You can even place text next to numbered figures, as shown below in <xref ref="text-next-to-figure" autoname="yes"/>.</p>
+          <sidebyside>
+              <paragraphs width="50%" valign="middle">
+                <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text</p>
+              </paragraphs>
+              <figure width="20%" valign="top" xml:id="text-next-to-figure">
+              <image source="images/trefoil.png" height="30" />
+              <caption>Text next to a figure</caption>
+              </figure>
+          </sidebyside>
+        </subsection>
+        <subsection>
+          <title>Horizontal Alignment</title>
+          <p>Text can be horizontally aligned to the <c>left</c> (default), <c>center</c>, or <c>right</c> using the optional <c>halign</c> attribute. </p>
+          <sidebyside>
+              <paragraphs width="20%" halign="center" valign="bottom">
+                <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text</p>
+              </paragraphs>
+              <paragraphs width="20%" halign="left" valign="top">
+                <p>here is some text here is some text here is some text here is some text here </p>
+                <p>here is some text here is some text here is some text here is some text here </p>
+                <p>here is some text here is some text here is some text here is some text here </p>
+              </paragraphs>
+              <paragraphs width="20%" halign="right" valign="middle">
+                <p>here is some text here is some text here is some text here is some text here </p>
+                <p>here is some text here is some text here is some text here is some text here </p>
+              </paragraphs>
+          </sidebyside>
+        </subsection>
+        <subsection>
+          <title>Tables Side-By-Side</title>
+          <p>Tables can also be put side-by-side, as demonstrated below in <xref ref="tab-sidebyside-global" autoname="yes"/>; 
+            naturally, subtables can be referenced as in <xref ref="tab-sidebyside-subtable" autoname="yes"/>.</p>
+          <sidebyside xml:id="tab-sidebyside-global">
+            <caption>Side-by-side Table, with subtable children.</caption>
+            <table halign="left" width="50%" xml:id="tab-sidebyside-subtable">
+              <caption>width=50<percent/></caption>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+            </table>
+            <table width="25%">
+              <caption>width=25<percent/></caption>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+            </table>
+          </sidebyside>
+          <sidebyside>
+            <caption>Widths can be calculated automatically.</caption>
+            <table>
+              <caption></caption>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+            </table>
+            <table>
+              <caption></caption>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+            </table>
+          </sidebyside>
+          <p>If you put two <c>table</c> elements side-by-side without a <q>global</q> caption, then they will use regular numbering; see
+            <xref ref="tab-regular-fig1" autoname="plural"/> through <xref ref="tab-regular-fig3"/>.</p>
+          <sidebyside>
+            <table xml:id="tab-regular-fig1">
+              <caption></caption>
+              <tabular>
+              <row><cell>tabular body</cell><cell>tabular body</cell></row>
+              </tabular>
+            </table>
+            <table xml:id="tab-regular-fig2">
+              <caption></caption>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+            </table>
+            <table xml:id="tab-regular-fig3">
+              <caption></caption>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+            </table>
+          </sidebyside>
+        </subsection>
+        <subsection>
+            <title>Horizontal and Vertical Alignment</title>
+            <p>Tables within the <c>sidebyside</c> element can accept the <c>halign</c> and <c>valign</c> attributes; see <xref ref="tab-regular-halign-demo" autoname="plural"/> 
+            and <xref ref="tab-regular-valign-demo"/>. The <c>halign</c> attribute can take values <c>left</c>, <c>center</c> (default), and 
+            <c>right</c>; the <c>valign</c> attribute can take values <c>top</c>, <c>middle</c>, and <c>bottom</c> (default).</p>
+          <sidebyside>
+            <caption>Global Caption</caption>
+            <table>
+              <caption></caption>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+            </table>
+            <table xml:id="tab-regular-halign-demo" halign="right">
+              <caption>halign="right"</caption>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+            </table>
+            <table xml:id="tab-regular-valign-demo" valign="top">
+              <caption>valign="top"</caption>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+            </table>
+          </sidebyside>
+         </subsection>
+        <subsection>
+            <title>Tables Next to Figures</title>
+            <p>Tables and Figures can go next to each other, as demonstrated in <xref ref="table-next-figure" autoname="yes"/>
+              and <xref ref="figure-next-table" autoname="yes"/>.</p>
+          <sidebyside>
+            <table xml:id="table-next-figure">
+              <caption>Table next to a Figure</caption>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+            </table>
+            <figure xml:id="figure-next-table">
+              <image source="images/trefoil.png"/>
+              <caption>Figure next to a Table</caption>
+              </figure>
+            </sidebyside>
+        </subsection>
+        <subsection>
+          <title>Tables Next to Text</title>
+          <p>Tables can go next to text blocks.</p>
+          <sidebyside>
+            <table>
+              <caption>Table next to text</caption>
+              <tabular><row><cell>tabular body</cell><cell>tabular body</cell></row></tabular>
+            </table>
+            <paragraphs width="20%" halign="left" valign="top">
+              <p>here is some text here is some text here is some text here is some text here </p>
+              <p>here is some text here is some text here is some text here is some text here </p>
+              <p>here is some text here is some text here is some text here is some text here </p>
+            </paragraphs>
+            <paragraphs width="20%" halign="center" valign="middle">
+              <p>here is some text here is some text here is some text here is some text here </p>
+              <p>here is some text here is some text here is some text here is some text here </p>
+            </paragraphs>
+          </sidebyside>
+        </subsection>
+<!-- Removed 2015/03/17, exposing bugs in sidebyside/tabular, will return
+        <subsection>
+          <title>Tables Without Captions Next to Each Other</title>
+          <p>Tables can go next to each other without captions using the <c>tabular</c> element.</p>
+          <sidebyside>
+            <tabular>
+              <row><cell>tabular body</cell></row>
+            </tabular>
+            <tabular>
+              <row><cell>tabular body</cell></row>
+            </tabular>
+            <tabular>
+              <row><cell>tabular body</cell></row>
+            </tabular>
+            <tabular>
+              <row><cell>tabular body</cell></row>
+            </tabular>
+          </sidebyside>
+        </subsection>
+-->
+      </section>
+        <!-- Bibliography/References can appear anywhere -->
+
+        <references>
+            <title>References</title>
+
+            <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>.
+            <note><p>Another online, open-source offering.</p></note>
+            </biblio>
+
+            <biblio type="raw" xml:id="biblio-lay-article">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash />62.</biblio>
+
+            <conclusion>
+                <p>There is an index manufactured for the <latex /> verion, which contains a few entries.  Look at the source of this XML file to see how they are written.  They may be placed inside of paragraphs (<c>&lt;p&gt;</c>) and statements (<c>&lt;statements&gt;</c>), and probably other places as well <mdash /> this should be liberalized.  Look at the preamble of the generated <latex /> file for instructions on generating the index.  No other converters are producing an index.</p>
+
+                <p>There is an index entry about multicolumn lists which spans more than one page.  This requires doubly-linked index entries, the first has the index content and points to the <c>xml:id</c> of the second.  The second is an empty element, but points back to the <c>xml:id</c> of the first entry.  So each has a marker and a reference, which allows the span of the index topic to cut across XML boundaries in the source.  See the source of this article for syntax details.</p>
+            </conclusion>
+
+        </references>
+
+        <backmatter>
+            <title>Reference</title>
+
+            <section>
+                <title>Notation</title>
+                <notation-list />
+            </section>
+
+            <section>
+                <title>Solutions to Selected Exercises</title>
+                <solution-list />
+            </section>
+
+        </backmatter>
 
     </article>
 
