@@ -711,24 +711,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Multiple column, column-major lists&#xa;</xsl:text>
         <xsl:text>\usepackage{multicol}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//exercises or //references">
+    <xsl:if test="//ol or //ul or //dl or //exercises or //references">
         <xsl:text>%% More flexible list management, esp. for references and exercises&#xa;</xsl:text>
+        <xsl:text>%% But also for specifying labels (ie custom order) on nested lists&#xa;</xsl:text>
         <xsl:text>\usepackage{enumitem}&#xa;</xsl:text>
-        <xsl:if test="//references">
-            <xsl:text>%% Lists of references in their own section, maximum depth 1&#xa;</xsl:text>
-            <xsl:text>\newlist{referencelist}{description}{4}&#xa;</xsl:text>
-            <!-- labelindent defaults to 0, ! means computed -->
-            <xsl:text>\setlist[referencelist]{leftmargin=!,labelwidth=!,labelsep=0ex,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="//exercises">
-            <xsl:text>%% Lists of exercises in their own section, maximum depth 4&#xa;</xsl:text>
-            <xsl:text>\newlist{exerciselist}{description}{4}&#xa;</xsl:text>
-            <xsl:text>\setlist[exerciselist]{leftmargin=0pt,itemsep=-1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="//exercisegroup">
-            <xsl:text>%% Indented groups of exercises within an exercise section, maximum depth 4&#xa;</xsl:text>
-            <xsl:text>\newlist{exercisegroup}{description}{4}&#xa;</xsl:text>
-            <xsl:text>\setlist[exercisegroup]{leftmargin=2em,labelindent=2em,itemsep=-1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
+        <xsl:if test="//exercises or //references">
+            <xsl:if test="//references">
+                <xsl:text>%% Lists of references in their own section, maximum depth 1&#xa;</xsl:text>
+                <xsl:text>\newlist{referencelist}{description}{4}&#xa;</xsl:text>
+                <!-- labelindent defaults to 0, ! means computed -->
+                <xsl:text>\setlist[referencelist]{leftmargin=!,labelwidth=!,labelsep=0ex,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
+            </xsl:if>
+            <xsl:if test="//exercises">
+                <xsl:text>%% Lists of exercises in their own section, maximum depth 4&#xa;</xsl:text>
+                <xsl:text>\newlist{exerciselist}{description}{4}&#xa;</xsl:text>
+                <xsl:text>\setlist[exerciselist]{leftmargin=0pt,itemsep=-1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
+            </xsl:if>
+            <xsl:if test="//exercisegroup">
+                <xsl:text>%% Indented groups of exercises within an exercise section, maximum depth 4&#xa;</xsl:text>
+                <xsl:text>\newlist{exercisegroup}{description}{4}&#xa;</xsl:text>
+                <xsl:text>\setlist[exercisegroup]{leftmargin=2em,labelindent=2em,itemsep=-1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
+            </xsl:if>
         </xsl:if>
     </xsl:if>
     <xsl:if test="//index">
