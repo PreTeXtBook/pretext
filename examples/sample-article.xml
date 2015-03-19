@@ -1999,7 +1999,217 @@ the xsltproc executable.
                 </hint>
             </exercise>
 
-         </exercises>
+            <exercisegroup cols="4">
+                <introduction><p>An <c>exercisegroup</c> can have a <c>cols</c> attribute (which defaults to <q>1</q>). Exercises will progress downward in columns unless the <c>by</c> attribute is set to <q>row</q> (see a later example). The stringparam <c>exercisegroup.pregression</c> can be set to <q>row</q> to globally override all <c>exercisegroup</c>s that do not have a <c>by</c> attribute specified. So you can also just leave all <c>by</c> attributes unspecified and use <c>exercisegroup.pregression</c> to globally control this behavior.</p></introduction>
+
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,x</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,x^2</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,x^{23}</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,e^x</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,2^x</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,\ln(x)</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,\sin(x)</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,\arctan(x)</m></p>
+                    </statement>
+                </exercise>
+
+                <conclusion>This has been a collection of derivative calculations.</conclusion>
+
+            </exercisegroup>
+
+            <exercisegroup cols="3">
+                <introduction><p>Here are the same exercises in 3 columns.</p></introduction>
+
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,x</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,x^2</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,x^{23}</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,e^x</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,2^x</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,\ln(x)</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,\sin(x)</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,\arctan(x)</m></p>
+                    </statement>
+                </exercise>
+
+                <conclusion>This has been a collection of derivative calculations.</conclusion>
+
+            </exercisegroup>
+
+            <exercisegroup cols="4" by="row">
+                <introduction><p>An <c>exercisegroup</c> can also have a <c>by</c> attribute. If set to <q>row</q>, exercises will progress rightward in a row. The value of the <c>cols</c> attribute still controls how many columns there will be. If <c>by</c> is empty or set to anything other than <q>row</q>, you will have expansion by columns as the above examples.</p></introduction>
+
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,x</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,x^2</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,x^{23}</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,e^x</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,2^x</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,\ln(x)</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,\sin(x)</m></p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p><m>\frac{d}{dx}\,\arctan(x)</m></p>
+                    </statement>
+                </exercise>
+
+                <conclusion>This has been a collection of derivative calculations.</conclusion>
+
+            </exercisegroup>
+
+            <exercisegroup cols="3">
+                <introduction><p>Warning: In an <c>exercisegroup</c>, if <c>cols</c> is greater than <q>1</q>, then long exercises can lead to awkward spacing.</p></introduction>
+
+                <exercise>
+                    <statement>
+                        <p>A short exercise.</p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p>A long long long long long long long long long long long long long long exercise.</p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p>A short exercise.</p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p>A short exercise.</p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p>A short exercise.</p>
+                    </statement>
+                </exercise>
+
+                <conclusion>With expansion by columns, you can have things like this happen.</conclusion>
+            </exercisegroup>
+
+            <exercisegroup cols="3" by="row">
+                <introduction><p>And with expansion by rows<ellipsis/></p></introduction>
+
+                <exercise>
+                    <statement>
+                        <p>A short exercise.</p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p>A long long long long long long long long long long long long long long exercise.</p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p>A short exercise.</p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p>A short exercise.</p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p>A short exercise.</p>
+                    </statement>
+                </exercise>
+                
+                <conclusion><ellipsis />you can have things like this happen.</conclusion>
+            </exercisegroup>
+
+        </exercises>
+
+
 
         <!--
         Various author tools are planned.  Note the embedded "todo"

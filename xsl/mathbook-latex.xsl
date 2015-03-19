@@ -84,6 +84,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="latex.preamble.early" select="''" />
 <xsl:param name="latex.preamble.late" select="''" />
 <!--  -->
+<!-- Exercisegroup exercise progression     -->
+<!-- by column (default) or by row?         -->
+<!-- Anything not "row" is column.          -->
+<xsl:param name="exercisegroup.progression" select="''" />
+<!--  -->
 <!-- LaTeX ToC levels always have sections at level "1"     -->
 <!-- MBX has level "0" as the root, and gives "no contents" -->
 <!-- So we translate MBX level to LaTeX-speak for books     -->
@@ -707,7 +712,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usetikzlibrary{arrows,matrix}&#xa;</xsl:text>
     </xsl:if>
     <!-- TODO:  \showidx package as part of a draft mode, prints entries in margin -->
-     <xsl:if test="//ol[@cols] or //ul[@cols] or //dl[@cols]">
+     <xsl:if test="//ol[@cols] or //ul[@cols] or //dl[@cols] or //exercisegroup">
         <xsl:text>%% Multiple column, column-major lists&#xa;</xsl:text>
         <xsl:text>\usepackage{multicol}&#xa;</xsl:text>
     </xsl:if>
@@ -715,23 +720,78 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% More flexible list management, esp. for references and exercises&#xa;</xsl:text>
         <xsl:text>%% But also for specifying labels (ie custom order) on nested lists&#xa;</xsl:text>
         <xsl:text>\usepackage{enumitem}&#xa;</xsl:text>
-        <xsl:if test="//exercises or //references">
-            <xsl:if test="//references">
-                <xsl:text>%% Lists of references in their own section, maximum depth 1&#xa;</xsl:text>
-                <xsl:text>\newlist{referencelist}{description}{4}&#xa;</xsl:text>
-                <!-- labelindent defaults to 0, ! means computed -->
-                <xsl:text>\setlist[referencelist]{leftmargin=!,labelwidth=!,labelsep=0ex,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
-            </xsl:if>
-            <xsl:if test="//exercises">
-                <xsl:text>%% Lists of exercises in their own section, maximum depth 4&#xa;</xsl:text>
-                <xsl:text>\newlist{exerciselist}{description}{4}&#xa;</xsl:text>
-                <xsl:text>\setlist[exerciselist]{leftmargin=0pt,itemsep=-1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
-            </xsl:if>
-            <xsl:if test="//exercisegroup">
-                <xsl:text>%% Indented groups of exercises within an exercise section, maximum depth 4&#xa;</xsl:text>
-                <xsl:text>\newlist{exercisegroup}{description}{4}&#xa;</xsl:text>
-                <xsl:text>\setlist[exercisegroup]{leftmargin=2em,labelindent=2em,itemsep=-1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
-            </xsl:if>
+        <xsl:if test="//references">
+            <xsl:text>%% Lists of references in their own section, maximum depth 1&#xa;</xsl:text>
+            <xsl:text>\newlist{referencelist}{description}{4}&#xa;</xsl:text>
+            <!-- labelindent defaults to 0, ! means computed -->
+            <xsl:text>\setlist[referencelist]{leftmargin=!,labelwidth=!,labelsep=0ex,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//exercises">
+            <xsl:text>%% Lists of exercises in their own section, maximum depth 4&#xa;</xsl:text>
+            <xsl:text>\newlist{exerciselist}{description}{4}&#xa;</xsl:text>
+            <xsl:text>\setlist[exerciselist]{leftmargin=0em,itemsep=-1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
+        </xsl:if>
+        <!-- Group of exercises with something in common, or arranged in columns or rows -->
+        <xsl:if test="//exercisegroup">
+            <xsl:text>\newenvironment{exercisegroup}%&#xa;</xsl:text>
+            <xsl:text>{\medskip\noindent}%&#xa;</xsl:text>
+            <xsl:text>{\par\bigskip}%&#xa;</xsl:text>
+            <xsl:text>\usepackage{changepage}%&#xa;</xsl:text>
+            <xsl:text>\newlength{\exercisegroupindent}%&#xa;</xsl:text>
+            <xsl:text>\setlength{\exercisegroupindent}{2em}%&#xa;</xsl:text>
+            <xsl:text>\newlength{\exercisegroupitemwidth}%&#xa;</xsl:text>
+            <xsl:text>\newenvironment{exercisegrouplist}%&#xa;</xsl:text>
+            <xsl:text>{\vspace{-\partopsep}%&#xa;</xsl:text>
+            <xsl:text>\begin{adjustwidth}{\exercisegroupindent}{0em}}%&#xa;</xsl:text>
+            <xsl:text>{\end{adjustwidth}%&#xa;</xsl:text>
+            <xsl:text>\vspace{-\partopsep}%&#xa;</xsl:text>
+            <xsl:text>\vspace{\baselineskip}}%&#xa;</xsl:text>
+            <xsl:text>\newenvironment{exercisegroupbyrow}[1]%&#xa;</xsl:text>
+            <xsl:text>{\begin{exercisegrouplist}%&#xa;</xsl:text>
+            <xsl:text>\setlength{\parindent}{0em}%&#xa;</xsl:text>
+            <xsl:text>\setlength{\exercisegroupitemwidth}{\linewidth}%&#xa;</xsl:text>
+            <xsl:text>\addtolength{\exercisegroupitemwidth}{\columnsep}%&#xa;</xsl:text>
+            <xsl:text>\divide\exercisegroupitemwidth by #1%&#xa;</xsl:text>
+            <xsl:text>\addtolength{\exercisegroupitemwidth}{-\columnsep}}%&#xa;</xsl:text>
+            <xsl:text>{\end{exercisegrouplist}}%&#xa;</xsl:text>
+            <xsl:text>%% To allow for multicols to just have one column&#xa;</xsl:text>
+            <xsl:text>%% http://tex.stackexchange.com/questions/233866/one-column-multicol-environment#answer-233904&#xa;</xsl:text>
+            <xsl:text>\usepackage{xparse}%&#xa;</xsl:text>
+            <xsl:text>\let\multicolmulticols\multicols%&#xa;</xsl:text>
+            <xsl:text>\let\endmulticolmulticols\endmulticols%&#xa;</xsl:text>
+            <xsl:text>\RenewDocumentEnvironment{multicols}{mO{}}%&#xa;</xsl:text>
+            <xsl:text> {%&#xa;</xsl:text>
+            <xsl:text>  \ifnum#1=1%&#xa;</xsl:text>
+            <xsl:text>    \vspace{\multicolsep}#2%&#xa;</xsl:text>
+            <xsl:text>  \else % More than 1 column%&#xa;</xsl:text>
+            <xsl:text>    \multicolmulticols{#1}[#2]%&#xa;</xsl:text>
+            <xsl:text>  \fi%&#xa;</xsl:text>
+            <xsl:text> }%&#xa;</xsl:text>
+            <xsl:text> {%&#xa;</xsl:text>
+            <xsl:text>  \ifnum#1=1%&#xa;</xsl:text>
+            <xsl:text>    \vspace{\multicolsep}%&#xa;</xsl:text>
+            <xsl:text>  \else % More than 1 column%&#xa;</xsl:text>
+            <xsl:text>    \endmulticolmulticols%&#xa;</xsl:text>
+            <xsl:text>  \fi%&#xa;</xsl:text>
+            <xsl:text> }%&#xa;</xsl:text>
+            <xsl:text>\newenvironment{exercisegroupbycol}[1]%&#xa;</xsl:text>
+            <xsl:text>{\begin{exercisegrouplist}%&#xa;</xsl:text>
+            <xsl:text>\vspace{-\multicolsep}%&#xa;</xsl:text>
+            <xsl:text>\begin{multicols}{#1}%&#xa;</xsl:text>
+            <xsl:text>\setlength{\parindent}{0em}%&#xa;</xsl:text>
+            <xsl:text>\setlength{\exercisegroupitemwidth}{\linewidth}}%&#xa;</xsl:text>
+            <xsl:text>{\end{multicols}%&#xa;</xsl:text>
+            <xsl:text>\vspace{-\multicolsep}%&#xa;</xsl:text>
+            <xsl:text>\end{exercisegrouplist}}%&#xa;</xsl:text>
+            <xsl:text>\setlength{\fboxsep}{0pt}%&#xa;</xsl:text>
+            <xsl:text>\newenvironment{exercisegroupitem}[1]%&#xa;</xsl:text>
+            <xsl:text>{\begin{minipage}[t]{\exercisegroupitemwidth}&#xa;</xsl:text>
+            <xsl:text>\vspace{0pt}%&#xa;</xsl:text>
+            <xsl:text>{\bfseries#1}%&#xa;</xsl:text>
+            <xsl:text>\rule{0pt}{\baselineskip}}</xsl:text>
+            <xsl:text>{\strut%&#xa;</xsl:text>
+            <xsl:text>\end{minipage}%&#xa;</xsl:text>
+            <xsl:text>\hspace{\columnsep}}%&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
     <xsl:if test="//index">
@@ -1261,9 +1321,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="title" mode="environment-option" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="statement"/>
-    <xsl:apply-templates select="hint"/>
-    <xsl:apply-templates select="solution"/>
+    <xsl:call-template name="exercise-components"/>
     <xsl:text>\end{exercise}&#xa;</xsl:text>
 </xsl:template>
 
@@ -1271,27 +1329,103 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We interrupt a description list with short commentary, -->
 <!-- typically instructions for a list of similar exercises -->
 <!-- Commentary goes in an introduction and/or conclusion   -->
-<xsl:template match="exercisegroup">
+<xsl:template match="exercises/exercisegroup">
+    <xsl:variable name="cols">
+        <xsl:choose>
+            <xsl:when test="@cols">
+                <xsl:value-of select="@cols"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="'1'"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="by">
+        <xsl:choose>
+            <xsl:when test="@by">
+                <xsl:value-of select="@by"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$exercisegroup.progression"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <xsl:text>\begin{exercisegroup}%&#xa;</xsl:text>
     <xsl:apply-templates select="introduction" />
+    <xsl:choose>
+        <xsl:when test="$by='row'">
+            <xsl:text>\begin{exercisegroupbyrow}{</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\begin{exercisegroupbycol}{</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:value-of select="$cols"/>
+    <xsl:text>}%&#xa;</xsl:text>
     <xsl:apply-templates select="exercise"/>
+    <xsl:choose>
+        <xsl:when test="$by='row'">
+            <xsl:text>\end{exercisegroupbyrow}%&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\end{exercisegroupbycol}%&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:apply-templates select="conclusion" />
-    <xsl:text>\par\smallskip\noindent&#xa;</xsl:text>
+    <xsl:text>\end{exercisegroup}%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- An exercise in an "exercisesgroup"                    -->
+<!-- is a list item in a description list                  -->
+<!-- Horizontal progression when there is a cols attribute -->
+<!-- is achieved using minipages                           -->
+<xsl:template match="exercises/exercisegroup/exercise">
+    <xsl:variable name="cols">
+        <xsl:choose>
+            <xsl:when test="../@cols">
+                <xsl:value-of select="../@cols"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="'1'"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="by">
+        <xsl:choose>
+            <xsl:when test="../@by">
+                <xsl:value-of select="../@by"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$exercisegroup.progression"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:text>\begin{exercisegroupitem}{</xsl:text>
+    <xsl:apply-templates select="." mode="origin-id" />
+    <xsl:text>. }</xsl:text>
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:if test="title">
+        <xsl:text>(</xsl:text>
+        <xsl:apply-templates select="title" />
+        <xsl:text>)\space\space{}</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:call-template name="exercise-components"/>
+    <xsl:text>\end{exercisegroupitem}%&#xa;</xsl:text>
+    <xsl:if test="($by = 'row' and (position() mod $cols) = 0) or not($by = 'row')">
+        <xsl:text>\par%&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- An exercise in an "exercises" subdivision             -->
 <!-- is a list item in a description list                  -->
 <!-- TODO: parameterize as a backmatter item, new switches -->
-<!-- TODO: would an "exercisegrouplist" allow parameters to move to preamble? -->
-<xsl:template match="exercises/exercise|exercisegroup/exercise">
-    <!-- Start a list right before first exercise of subdivision, or of exercise group -->
-    <xsl:choose>
-        <xsl:when test="not(preceding-sibling::exercise) and parent::exercisegroup">
-            <xsl:text>\begin{exercisegroup}&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:when test="not(preceding-sibling::exercise) and parent::exercises">
-            <xsl:text>\begin{exerciselist}&#xa;</xsl:text>
-        </xsl:when>
-    </xsl:choose>
+<xsl:template match="exercises/exercise">
+    <!-- Start a list right before first exercise of subdivision -->
+    <xsl:if test="not(preceding-sibling::exercise)">
+        <xsl:text>\begin{exerciselist}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>\item[</xsl:text>
     <xsl:apply-templates select="." mode="origin-id" />
     <xsl:text>.]</xsl:text>
@@ -1301,10 +1435,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="title" />
         <xsl:text>)\space\space{}</xsl:text>
     </xsl:if>
-    <!-- Order enforced: statement, hint, answer, solution -->
+    <xsl:call-template name="exercise-components"/>
+    <xsl:text>\par\smallskip&#xa;</xsl:text>
+    <!-- close list if no more exercise in subdivision or in exercise group -->
+    <xsl:if test="not(following-sibling::exercise)">
+        <xsl:text>\end{exerciselist}&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- Common template for printing the parts of an exercise     -->
+<!-- Whether free-range, in an exercises or an exercisegroup   -->
+<!-- Order enforced: statement, hint, answer, solution         -->
+<xsl:template name="exercise-components">
     <xsl:if test="$exercise.text.statement='yes'">
         <xsl:apply-templates select="statement" />
-        <xsl:text>\par\smallskip&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="hint and $exercise.text.hint='yes'">
         <xsl:apply-templates select="hint" />
@@ -1315,15 +1459,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="solution and $exercise.text.solution='yes'">
         <xsl:apply-templates select="solution" />
     </xsl:if>
-    <!-- close list if no more exercise in subdivision or in exercise group -->
-    <xsl:choose>
-        <xsl:when test="not(following-sibling::exercise) and parent::exercisegroup">
-            <xsl:text>\end{exercisegroup}&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:when test="not(following-sibling::exercise) and parent::exercises">
-            <xsl:text>\end{exerciselist}&#xa;</xsl:text>
-        </xsl:when>
-    </xsl:choose>
 </xsl:template>
 
 <!-- An exercise statement is just a container -->
