@@ -647,7 +647,7 @@ the xsltproc executable.
             <p>Table can get quite complex.  Simple ones are simpler, such as this example of numerical computations for Euler's method.</p>
 
             <table xml:id="table-euler1">
-                <tabular top="major" halign="center" bottom="medium">
+                <tabular top="major" halign="center">
                     <row bottom="minor">
                         <cell>  <m>i</m></cell>
                         <cell><m>t_i</m></cell>
