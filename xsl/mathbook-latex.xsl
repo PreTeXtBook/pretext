@@ -930,8 +930,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="copyright-page" >
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:if test="frontmatter/biography" >
+        <!-- We kill the title, presuming placement is indicative enough -->
         <xsl:text>{\setlength{\parindent}{0pt}\setlength{\parskip}{4pt}</xsl:text>
-        <xsl:apply-templates select="frontmatter/biography" />}
+        <xsl:apply-templates select="frontmatter/biography/*[not(self::title)]" />}
         <xsl:text>\par\vspace*{\stretch{2}}</xsl:text>
     </xsl:if>
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>

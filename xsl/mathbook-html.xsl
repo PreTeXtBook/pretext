@@ -387,7 +387,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Sections which are "auto-titled" do not need to           -->
 <!-- display their type since that is the default title        -->
 <!-- The references and exercises are exceptions, see Headings -->
-<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|backmatter" mode="section-header">
+<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|backmatter" mode="section-header">
     <header>
         <h1 class="heading hide-type">
             <xsl:apply-templates select="." mode="header-content" />
@@ -448,9 +448,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Other subdivisions can be auto-titled with their type-name -->
-<!-- Synchronize with the header-content template above         -->
-<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|references|exercises|backmatter" mode="title">
+<!-- Other subdivisions can be auto-titled with their type-name          -->
+<!-- Synchronize with the section-header, header-content templates above -->
+<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter" mode="title">
     <xsl:param name="complexity" />
     <!-- Check if these subdivisions have been given a title -->
     <xsl:variable name="title">
