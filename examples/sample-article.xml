@@ -1873,6 +1873,8 @@ the xsltproc executable.
                 </tabular>
             </table>
 
+            <p>A bare minimum table (one row with one cell) to test edge cases: <tabular top="medium"><row bottom="medium" left="minor"><cell right="minor">One</cell></row></tabular>.</p>
+
         </section>
 
 
