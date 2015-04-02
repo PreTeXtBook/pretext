@@ -191,7 +191,7 @@
     <!-- </xsl:if> -->
     <!-- Create a complete Sage cell region -->
     <xsl:apply-templates select="." mode="inputbegin" />
-        <xsl:value-of select="$in" />
+        <xsl:value-of select="$in" disable-output-escaping="yes" />
     <xsl:apply-templates select="." mode="inputoutput" />
     <xsl:apply-templates select="." mode="outputend" />
     <!-- Start back in HTML mode, if last in a run (or last in subdivision) -->
