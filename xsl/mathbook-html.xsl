@@ -183,11 +183,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="dispatch">
     <xsl:variable name="structural"><xsl:apply-templates select="." mode="is-structural" /></xsl:variable>
     <xsl:if test="$structural='false'">
-        <xsl:message>MBX:BUG: Dispatching a node (<xsl:apply-templates  select="." mode="long-name"/>) that is not structural.</xsl:message>
+        <xsl:message>MBX:WARNING: A &lt;<xsl:value-of select="local-name(.)" />&gt; element is misplaced (structurally)</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
     </xsl:if>
     <xsl:variable name="summary"><xsl:apply-templates select="." mode="is-summary" /></xsl:variable>
     <xsl:variable name="webpage"><xsl:apply-templates select="." mode="is-webpage" /></xsl:variable>
-    <!-- <xsl:message>INFO: <xsl:value-of select="local-name(.)"/> Summary: <xsl:value-of select="$summary"/> Webpage: <xsl:value-of select="$webpage"/> Name: <xsl:apply-templates  select="." mode="long-name"/></xsl:message> -->
     <xsl:choose>
         <xsl:when test="$webpage='true'">
             <xsl:apply-templates select="." mode="webpage" />
@@ -196,8 +196,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="summary" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:BUG: Document node is considered both summary and webpage at <xsl:apply-templates  select="." mode="long-name"/>.</xsl:message>
-        </xsl:otherwise>
+            <xsl:message>MBX:BUG:     A &lt;<xsl:value-of select="local-name(.)" />&gt; element is neither a summary page nor a webpage</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+            </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 

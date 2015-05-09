@@ -140,6 +140,18 @@ systems.
 
         </section>
 
+        <section>
+            <title>A Badly Structured Section</title>
+
+            <p>This introductory paragraph should be inside an introduction, since it is followed by a sequence of subsections (well, just one anyway).</p>
+
+            <subsection>
+                <title>First Subsection</title>
+
+                <p>With a single paragraph.</p>
+            </subsection>
+        </section>
+
     </article>
 
 </mathbook>
