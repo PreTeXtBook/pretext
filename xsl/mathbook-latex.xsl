@@ -2730,7 +2730,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:choose>
                 <!-- end of column group and have never flushed -->
                 <!-- hence a uniform top border                 -->
-                <xsl:when test="not($next-col) and ($start-run = 1)">
+                <xsl:when test="not($the-col) and ($start-run = 1)">
                     <xsl:call-template name="hrule-specification">
                         <xsl:with-param name="width" select="$prior-top" />
                     </xsl:call-template>
@@ -2991,7 +2991,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:choose>
                 <!-- end of row and have never flushed -->
                 <!-- hence a uniform bottom border     -->
-                <xsl:when test="not($next-cell) and ($start-run = 1)">
+                <xsl:when test="not($the-cell) and ($start-run = 1)">
                     <xsl:call-template name="hrule-specification">
                         <xsl:with-param name="width" select="$prior-bottom" />
                     </xsl:call-template>
