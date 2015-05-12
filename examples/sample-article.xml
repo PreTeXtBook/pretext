@@ -1266,7 +1266,7 @@ the xsltproc executable.
             <exercises>
                 <title>Exercises</title>
 
-                <exercise>
+                <exercise xml:id="exercises-null-problem">
                     <statement>
                         <p>No problem here, but the next two are in an <q>exercise group</q> with an introduction and a conclusion.  The two problems of the exercise group should be indented some to indicate the grouping.</p>
                     </statement>
@@ -2043,6 +2043,7 @@ the xsltproc executable.
                 <li><p>Figures: An early plot, Figure<nbsp /><xref ref="figure-function-derivative" />.</p></li>
                 <li><p>Equations: single, first with no name: <xref ref="equation-alternate-FTC" />.  Then with an autoname: <xref ref="equation-alternate-FTC" autoname="yes" />.</p></li>
                 <li><p>Equations: multi-row, first with no name: <xref ref="equation-use-FTC" />.  Then with an autoname: <xref ref="equation-use-FTC" autoname="yes" />.  And two, exercising plural form: <xref ref="equation-alternate-FTC" autoname="plural" /> and <xref ref="equation-use-FTC" />.</p></li>
+                <li><p>A range of exercises, with plural and no autonaming: <xref ref="exercises-null-problem" autoname="plural" /><ndash /><xref ref="exercises-cosine-derivative" autoname="no" />.</p></li>
             </ul>
 
         </section>

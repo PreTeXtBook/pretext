@@ -3226,15 +3226,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- We do links to exercises manually since they may be hard-coded -->
-<!-- Show the fully-qualified number as a reference                 -->
+<!-- We show the fully-qualified number as a reference              -->
+<!-- This is similar to above, but not worth consolidating          -->
 <xsl:template match="exercises//exercise" mode="ref-id">
-    <xsl:if test="$autoname='yes'" >
-        <xsl:apply-templates select="." mode="type-name" />
-        <xsl:text>~</xsl:text>
-    </xsl:if>
+    <xsl:param name="autoname" />
+    <xsl:variable name="prefix">
+        <xsl:apply-templates select="." mode="ref-prefix">
+            <xsl:with-param name="local" select="$autoname" />
+        </xsl:apply-templates>
+    </xsl:variable>
     <xsl:text>\hyperlink{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}{</xsl:text>
+    <!-- Autonaming prefix perhaps -->
+    <xsl:if test="not($prefix='')">
+        <xsl:value-of select="$prefix" />
+        <xsl:text>~</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="." mode="number" />
     <xsl:text>}</xsl:text>
 </xsl:template>
