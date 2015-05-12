@@ -3165,9 +3165,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX does the numbering and visual formatting automatically -->
 <!-- Many components are built from common routines               -->
 
-<!-- Almost always, a \ref is good enough       -->
-<!-- Hyperref construction:                     -->
-<!-- \hyperref[a-label]{Section~\ref*{a-label}} -->
+<!-- Almost always, a \ref is good enough           -->
+<!-- But need \eqref for equations                  -->
+<!-- i.e. AMSmath equations (resp. MathJax)         -->
+<!-- Some guides suggest \ref* form in              -->
+<!-- hyperref construction to avoid nested links:   -->
+<!-- \hyperref[a-label]{Section~\ref*{a-label}}     -->
+<!-- but it seems unnecessary here (experimentally) -->
 <xsl:template match="*" mode="ref-id">
     <xsl:param name="autoname" />
     <xsl:variable name="prefix">
@@ -3178,7 +3182,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- No autonaming prefix: generic LaTeX cross-reference -->
         <xsl:when test="$prefix=''">
-            <xsl:text>\ref{</xsl:text>
+            <xsl:apply-templates select="." mode="latex-ref-command" />
+            <xsl:text>{</xsl:text>
             <xsl:apply-templates select="." mode="internal-id" />
             <xsl:text>}</xsl:text>
         </xsl:when>
@@ -3189,12 +3194,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>]{</xsl:text>
             <xsl:value-of select="$prefix" />
             <xsl:text>~</xsl:text>
-            <xsl:text>\ref*{</xsl:text>
+            <xsl:apply-templates select="." mode="latex-ref-command" />
+            <xsl:text>{</xsl:text>
             <xsl:apply-templates select="." mode="internal-id" />
             <xsl:text>}}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- The next two variants handle the difference   -->
+<!-- between  \ref  and  \eqref  forms, so we can  -->
+<!-- unify autonaming, generally and for equations -->
+<!-- "me"'s are explicitly un-numbered             -->
+<xsl:template match="*" mode="latex-ref-command"><text>\ref</text></xsl:template>
+<xsl:template match="men|mrow" mode="latex-ref-command"><text>\eqref</text></xsl:template>
 
 <!-- Referencing a biblio is a cite in LaTeX                     -->
 <!-- A cross-reference to a biblio may have "detail",            -->
@@ -3208,14 +3221,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>]</xsl:text>
     </xsl:if>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>}</xsl:text>
-</xsl:template>
-
-<!-- Referencing an AMSmath equation (resp. MathJax) is a \eqref{} -->
-<!-- TODO: will we allow me's to be numbered, or not?              -->
-<xsl:template match="me|men|mrow" mode="ref-id">
-    <xsl:text>\eqref{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}</xsl:text>
 </xsl:template>

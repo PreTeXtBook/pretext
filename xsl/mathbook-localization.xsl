@@ -65,6 +65,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='conjecture'><xsl:text>Conjecture</xsl:text></localization>
     <localization string-id='axiom'><xsl:text>Axiom</xsl:text></localization>
     <localization string-id='principle'><xsl:text>Principle</xsl:text></localization>
+    <!-- Equations, when referenced by number -->
+    <localization string-id='men'><xsl:text>Equation</xsl:text></localization>
+    <localization string-id='mrow'><xsl:text>Equation</xsl:text></localization>
     <!-- Types of documents, mostly for informational messages -->
     <localization string-id='volume'><xsl:text>Volume</xsl:text></localization>
     <localization string-id='book'><xsl:text>Book</xsl:text></localization>
@@ -149,6 +152,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='conjecture'><xsl:text>Conjectura</xsl:text></localization>
     <localization string-id='axiom'><xsl:text>Axioma</xsl:text></localization>
     <localization string-id='principle'><xsl:text>Princípio</xsl:text></localization>
+    <!-- Equations, when referenced by number -->
+    <!-- Translations needed for Brazilian Portugese -->
+    <!-- <localization string-id='men'><xsl:text>Equation</xsl:text></localization> -->
+    <!-- <localization string-id='mrow'><xsl:text>Equation</xsl:text></localization> -->
     <!-- Types of documents, mostly for informational messages -->
     <localization string-id='volume'><xsl:text>Volume</xsl:text></localization>
     <localization string-id='book'><xsl:text>Livro</xsl:text></localization>
@@ -233,6 +240,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='conjecture'><xsl:text>Conjetura</xsl:text></localization>
     <localization string-id='axiom'><xsl:text>Axioma</xsl:text></localization>
     <localization string-id='principle'><xsl:text>Principio</xsl:text></localization>
+    <!-- Equations, when referenced by number -->
+    <!-- Translations needed for Spain Spanish -->
+    <!-- <localization string-id='men'><xsl:text>Equation</xsl:text></localization> -->
+    <!-- <localization string-id='mrow'><xsl:text>Equation</xsl:text></localization> -->
     <!-- Types of documents, mostly for informational messages -->
     <localization string-id='volume'><xsl:text>Volumen</xsl:text></localization>
     <localization string-id='book'><xsl:text>Libro</xsl:text></localization>

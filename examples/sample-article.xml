@@ -2041,6 +2041,8 @@ the xsltproc executable.
                 <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" />.</p></li>
                 <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" />.</p></li>
                 <li><p>Figures: An early plot, Figure<nbsp /><xref ref="figure-function-derivative" />.</p></li>
+                <li><p>Equations: single, first with no name: <xref ref="equation-alternate-FTC" />.  Then with an autoname: <xref ref="equation-alternate-FTC" autoname="yes" />.</p></li>
+                <li><p>Equations: multi-row, first with no name: <xref ref="equation-use-FTC" />.  Then with an autoname: <xref ref="equation-use-FTC" autoname="yes" />.  And two, exercising plural form: <xref ref="equation-alternate-FTC" autoname="plural" /> and <xref ref="equation-use-FTC" />.</p></li>
             </ul>
 
         </section>

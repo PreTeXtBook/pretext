@@ -2057,11 +2057,27 @@ is just flat out on the page, as if printed there.
         <xsl:if test="ancestor::sidebyside[count(caption)>0]">
               <xsl:apply-templates select="ancestor::sidebyside" mode="number" />
         </xsl:if>
-        <xsl:apply-templates select="." mode="number" />
+        <xsl:apply-templates select="." mode="formatted-ref-number" />
     </xsl:variable>
     <xsl:apply-templates select="." mode="xref-hyperlink">
         <xsl:with-param name="content" select="$content" />
     </xsl:apply-templates>
+</xsl:template>
+
+<!-- The next two variants handle the difference -->
+<!-- between general items and equations         -->
+<xsl:template match="*" mode="formatted-ref-number">
+    <xsl:apply-templates select="." mode="number" />
+</xsl:template>
+
+<!-- Displayed equations have targets manufactured by MathJax, -->
+<!-- Elsewhere we number these just as MathJax/AMSMath would   -->
+<!-- For HTML we need to provide the parentheses               -->
+<!-- "me"'s are explicitly un-numbered                         -->
+<xsl:template match="men|mrow" mode="formatted-ref-number">
+    <xsl:text>(</xsl:text>
+    <xsl:apply-templates select="." mode="number" />
+    <xsl:text>)</xsl:text>
 </xsl:template>
 
 <!-- Citations get marked off in a pair of brackets              -->
@@ -2083,11 +2099,8 @@ is just flat out on the page, as if printed there.
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Displayed equations have targets manufactured by MathJax,                   -->
-<!-- Elsewhere we number these just as MathJax/AMSMath would                     -->
-<!-- For HTML we need to provide the parentheses, which LaTeX does automatically -->
 <!-- TODO: will we allow me's to be numbered, or not? -->
-<xsl:template match="me|men|mrow" mode="ref-id">
+<!-- <xsl:template match="me|men|mrow" mode="ref-id">
     <xsl:variable name="content">
         <xsl:text>(</xsl:text>
         <xsl:apply-templates select="." mode="number" />
@@ -2097,7 +2110,7 @@ is just flat out on the page, as if printed there.
         <xsl:with-param name="content" select="$content" />
     </xsl:apply-templates>
 </xsl:template>
-
+ -->
 <!-- TODO: trash escaping by building content with hex nbsp -->
 
 <!-- A cross-reference has a visual component,      -->
