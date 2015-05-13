@@ -1028,7 +1028,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- But we use starred version anyway, so chapter headings react properly  -->
 <!-- TODO: add dedication, other frontmatter, move in title handling        -->
 <!-- TODO: add to headers, currently just CONTENTS, check backmatter        -->
-<xsl:template match="preface|acknowledgement">
+<xsl:template match="preface|acknowledgement|foreword">
     <xsl:variable name="preface-title">
         <xsl:choose>
             <xsl:when test="title">
