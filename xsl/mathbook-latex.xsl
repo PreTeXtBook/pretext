@@ -176,6 +176,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\maketitle&#xa;</xsl:text>
     <xsl:text>\clearpage&#xa;</xsl:text>
     <xsl:call-template name="copyright-page" />
+    <xsl:if test="/mathbook/book/frontmatter/dedication">
+        <xsl:call-template name="dedication-page" />
+    </xsl:if>
     <xsl:if test="$latex-toc-level > -1">
         <xsl:text>\setcounter{tocdepth}{</xsl:text>
         <xsl:value-of select="$latex-toc-level" />
@@ -923,12 +926,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
     <xsl:text>\clearpage&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
+    <xsl:text>\null%&#xa;</xsl:text>
     <xsl:text>\clearpage&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Copyright page is obverse of title page  -->
 <!-- Lots of stuff here, much of it optional  -->
 <xsl:template name="copyright-page" >
+    <xsl:text>%% copyright-page&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:if test="frontmatter/biography" >
         <!-- We kill the title, presuming placement is indicative enough -->
@@ -961,6 +966,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 </xsl:template>
 
+<!-- Dedication page is very plain         -->
+<!-- It should react appropriately to      -->
+<!-- several paragraphs (multiple authors) -->
+<xsl:template name="dedication-page">
+    <xsl:text>%% begin: dedication-page&#xa;</xsl:text>
+    <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
+    <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
+    <xsl:apply-templates select="frontmatter/dedication" />
+    <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
+    <xsl:text>\clearpage&#xa;</xsl:text>
+    <xsl:text>%% end:   dedication-page&#xa;</xsl:text>
+    <xsl:text>%% begin: obverse-dedication-page (empty)&#xa;</xsl:text>
+    <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
+    <xsl:text>\null%&#xa;</xsl:text>
+    <xsl:text>\clearpage&#xa;</xsl:text>
+    <xsl:text>%% end:   obverse-dedication-page&#xa;</xsl:text>
+</xsl:template>
 
 <!-- Authors, editors, full info for titlepage -->
 <!-- http://stackoverflow.com/questions/2817664/xsl-how-to-tell-if-element-is-last-in-series -->
@@ -1019,8 +1041,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- We process the frontmatter piece-by-piece -->
 <!-- A DTD should enforce the proper order     -->
+<!-- Note: we temporarily bypass the dedications -->
 <xsl:template match="frontmatter">
-    <xsl:apply-templates />
+    <xsl:apply-templates select="*[not(self::dedication)]"/>
 </xsl:template>
 
 <!-- Preface, etc within \frontmatter is usually handled correctly by LaTeX -->
@@ -1055,6 +1078,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{abstract}&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\end{abstract}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Dedications are meant to be very short      -->
+<!-- so are each a single paragraph and          -->
+<!-- are centered on a page of their own         -->
+<!-- The "br" element may be used to break lines -->
+<!-- The center environment provides good        -->
+<!-- vertical break between multiple instances   -->
+<!-- The p[1] elsewhere is the default,          -->
+<!-- hence we use the priority mechanism (>0.5)  -->
+<xsl:template match="dedication/p|dedication/p[1]" priority="1">
+    <xsl:text>\begin{center}\Large%&#xa;</xsl:text>
+        <xsl:apply-templates />
+    <xsl:text>%&#xa;</xsl:text>
+    <xsl:text>\end{center}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ############ -->
@@ -2042,7 +2080,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="br">
     <xsl:text>\newline{}</xsl:text>
 </xsl:template>
-<xsl:template match="title/br|subtitle/br">
+<xsl:template match="title/br|subtitle/br|dedication/p/br">
     <xsl:text>\\</xsl:text>
 </xsl:template>
 
