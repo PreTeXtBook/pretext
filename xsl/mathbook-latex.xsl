@@ -1047,7 +1047,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\addcontentsline{toc}{chapter}{</xsl:text>
     <xsl:value-of select="$preface-title" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates select="*[not(self::title)]" />
 </xsl:template>
 
 <!-- Articles may have an abstract in the frontmatter -->
