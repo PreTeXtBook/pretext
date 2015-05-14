@@ -38,6 +38,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- http://www.tex.ac.uk/cgi-bin/texfaq2html?label=fixnam       -->
 <!--                                                             -->
 <!-- Contibutions of new languages are welcome and encouraged!   -->
+<!-- Search on "Translation needed" to see where you can help.   -->
 
 <!-- A general overview:                                                               -->
 <!-- http://www.w3.org/International/articles/language-tags/                           -->
@@ -85,6 +86,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='subsubsection'><xsl:text>Subsubsection</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Exercises</xsl:text></localization>
     <localization string-id='references'><xsl:text>References</xsl:text></localization>
+    <localization string-id='backmatter'><xsl:text>Back Matter</xsl:text></localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'><xsl:text>Paragraphs</xsl:text></localization>
     <localization string-id='paragraph'><xsl:text>Paragraph</xsl:text></localization>
@@ -141,7 +143,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id="theorem">Teorema</localization>
     <localization string-id="corollary">Corolário</localization>
     <localization string-id="lemma">Lema</localization>
-    <!-- Translation needed for algorithm -->
+    <!-- Translation needed for Brazilian Portugese -->
     <!-- <localization string-id='algorithm'><xsl:text>XX</xsl:text></localization> -->
     <localization string-id='proposition'><xsl:text>Proposição</xsl:text></localization>
     <localization string-id='claim'><xsl:text>Afirmação</xsl:text></localization>
@@ -153,7 +155,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='axiom'><xsl:text>Axioma</xsl:text></localization>
     <localization string-id='principle'><xsl:text>Princípio</xsl:text></localization>
     <!-- Equations, when referenced by number -->
-    <!-- Translations needed for Brazilian Portugese -->
+    <!-- Translation needed for Brazilian Portugese -->
     <!-- <localization string-id='men'><xsl:text>Equation</xsl:text></localization> -->
     <!-- <localization string-id='mrow'><xsl:text>Equation</xsl:text></localization> -->
     <!-- Types of documents, mostly for informational messages -->
@@ -173,6 +175,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='subsubsection'><xsl:text>Subsubseção</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Exercícios</xsl:text></localization>
     <localization string-id='references'><xsl:text>Referêcias</xsl:text></localization>
+    <!-- Translation needed for Brazilian Portugese -->
+    <!-- <localization string-id='backmatter'><xsl:text>Back Matter</xsl:text></localization> -->
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'><xsl:text>Parágrafo</xsl:text></localization>
     <localization string-id='paragraph'><xsl:text>Parágrafo</xsl:text></localization>
@@ -229,7 +233,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id="theorem">Teorema</localization>
     <localization string-id="corollary">Corolario</localization>
     <localization string-id="lemma">Lema</localization>
-    <!-- Translation needed for algorithm -->
+    <!-- Translation needed for Spain Spanish -->
     <!-- <localization string-id='algorithm'><xsl:text>XX</xsl:text></localization> -->
     <localization string-id='proposition'><xsl:text>Proposición</xsl:text></localization>
     <localization string-id='claim'><xsl:text>Postulado</xsl:text></localization>
@@ -241,7 +245,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='axiom'><xsl:text>Axioma</xsl:text></localization>
     <localization string-id='principle'><xsl:text>Principio</xsl:text></localization>
     <!-- Equations, when referenced by number -->
-    <!-- Translations needed for Spain Spanish -->
+    <!-- Translation needed for Spain Spanish -->
     <!-- <localization string-id='men'><xsl:text>Equation</xsl:text></localization> -->
     <!-- <localization string-id='mrow'><xsl:text>Equation</xsl:text></localization> -->
     <!-- Types of documents, mostly for informational messages -->
@@ -261,6 +265,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='subsubsection'><xsl:text>Subsubsección</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Ejercicios</xsl:text></localization>
     <localization string-id='references'><xsl:text>Referencias</xsl:text></localization>
+    <!-- Translation needed for Spain Spanish -->
+    <!-- <localization string-id='backmatter'><xsl:text>Back Matter</xsl:text></localization> -->
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'><xsl:text>Párrafo</xsl:text></localization>
     <localization string-id='paragraph'><xsl:text>Párrafo</xsl:text></localization>
