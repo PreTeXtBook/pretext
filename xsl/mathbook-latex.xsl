@@ -175,6 +175,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="half-title" />
     <xsl:text>\maketitle&#xa;</xsl:text>
     <xsl:text>\clearpage&#xa;</xsl:text>
+    <!-- Always write copyright page on obverse, possibly empty -->
     <xsl:call-template name="copyright-page" />
     <xsl:if test="/mathbook/book/frontmatter/dedication">
         <xsl:call-template name="dedication-page" />
@@ -932,8 +933,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Copyright page is obverse of title page  -->
 <!-- Lots of stuff here, much of it optional  -->
+<!-- But we always write something            -->
+<!-- as the obverse of title page             -->
 <xsl:template name="copyright-page" >
-    <xsl:text>%% copyright-page&#xa;</xsl:text>
+    <xsl:text>%% begin: copyright-page&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:if test="frontmatter/biography" >
         <!-- We kill the title, presuming placement is indicative enough -->
@@ -960,10 +963,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\par&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
-    <xsl:text>\clearpage&#xa;</xsl:text>
-
+    <!-- Something so page is not totally nothing -->
+    <xsl:text>\null\clearpage&#xa;</xsl:text>
     <!--ISBN, Cover Design, Publisher, canonicalsite -->
-
+    <xsl:text>%% end:   copyright-page&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Dedication page is very plain         -->
