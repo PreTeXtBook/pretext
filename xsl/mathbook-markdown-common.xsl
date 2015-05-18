@@ -21,7 +21,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Identify as a stylesheet -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
-    xmlns:xml="http://www.w3.org/XML/1998/namespace" 
+    xmlns:xml="http://www.w3.org/XML/1998/namespace"
 >
 
 
@@ -31,13 +31,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- So output methods here are just text -->
 <xsl:output method="text" />
 
-
-
-<!-- backticks for monospace font -->
+<!-- backticks for monospace font          -->
+<!-- 4 backticks allows up to three inside -->
+<!-- http://meta.stackexchange.com/questions/82718/how-do-i-escape-a-backtick-in-markdown -->
 <xsl:template match="c">
-    <xsl:text>`</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>`</xsl:text>
+    <xsl:variable name="content">
+        <xsl:apply-templates />
+    </xsl:variable>
+    <xsl:if test="contains($content, '````')">
+        <xsl:message>MBX:WARNING: 4 consecutive backticks in a "c" element will have unpredictable results</xsl:message>
+    </xsl:if>
+    <xsl:text>````</xsl:text>
+    <xsl:value-of select="$content" />
+    <xsl:text>````</xsl:text>
 </xsl:template>
 
 <!-- italics for emphasis, matches default LaTeX -->
@@ -45,6 +51,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>*</xsl:text>
     <xsl:apply-templates />
     <xsl:text>*</xsl:text>
+</xsl:template>
+
+<!-- Defined terms (bold) -->
+<xsl:template match="term">
+    <xsl:text>**</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>**</xsl:text>
 </xsl:template>
 
 <!-- two spaces, hard return -->
@@ -59,8 +72,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>"</xsl:text>
 </xsl:template>
 
-<!-- URLs, href mandatory, content  -->
-<!-- optional, defaults to href     -->
+<!-- External URL's -->
+<!-- URL in href is mandatory,                 -->
+<!-- link text is optional, defaults to href   -->
 <xsl:template match="url">
     <xsl:text>[</xsl:text>
     <xsl:choose>
@@ -83,11 +97,56 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>](mailto:</xsl:text>
     <xsl:value-of select="." />
     <xsl:text>)</xsl:text>
-</xsl:template>    
+</xsl:template>
+
+<!-- Section Headings -->
+<!-- A specified number of octothorpes          -->
+<!-- Followed by necessary space (not hash tag) -->
+<xsl:template name="heading-format">
+    <xsl:param name="count"/>
+    <xsl:choose>
+        <xsl:when test="$count = 1">
+            <xsl:text># </xsl:text>
+        </xsl:when>
+        <xsl:when test="$count > 1">
+            <xsl:text>#</xsl:text>
+            <xsl:call-template name="heading-format">
+                <xsl:with-param name="count" select="$count - 1" />
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message terminate="yes">MBX:BUG  Markdown heading-format template needs positive count</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 
+<!-- Images -->
 
-
+<!-- Markdown syntax for an image -->
+<!-- Not much control             -->
+<xsl:template name="image-wrap">
+    <xsl:param name="filename" />
+    <xsl:param name="alt-description" select="''" />
+    <xsl:param name="tooltip-title" select="''" />
+    <!-- exclamation mark mandatory -->
+    <xsl:text>!</xsl:text>
+    <!-- alt text is mandatory, but might be empty -->
+    <xsl:text>[</xsl:text>
+    <xsl:value-of select="$alt-description" />
+    <xsl:text>]</xsl:text>
+    <!-- parentheses for the main event -->
+    <xsl:text>(</xsl:text>
+    <!-- filename always -->
+    <xsl:value-of select="$filename" />
+    <!-- optional string for title, escape the quotes here -->
+    <xsl:if test="not($tooltip-title = '')">
+        <xsl:text> \"</xsl:text>
+        <xsl:value-of select="$tooltip-title" />
+        <xsl:text>\"</xsl:text>
+    </xsl:if>
+    <xsl:text>)</xsl:text>
+</xsl:template>
 
 
 <!-- Lists -->
