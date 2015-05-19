@@ -156,6 +156,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- A book, LaTeX structure -->
+<!-- The ordering of the frontmatter is from             -->
+<!-- "Bookmaking", 3rd Edition, Marshall Lee, Chapter 27 -->
 <xsl:template match="book">
     <xsl:call-template name="converter-blurb" />
     <xsl:text>\documentclass[</xsl:text>
@@ -172,17 +174,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="title-page-info-book" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
     <xsl:text>\frontmatter&#xa;</xsl:text>
-    <!-- title only, template includes blank obverse -->
-    <xsl:call-template name="half-title-pages" />
-    <!-- title page, one only - obverse is copyright -->
-    <!-- context is titlepage element                -->
+    <!-- first page, title only -->
+    <xsl:call-template name="half-title" />
+    <!-- Obverse of half-title is adcard -->
+    <xsl:call-template name="ad-card" />
+    <!-- title page -->
     <xsl:call-template name="title-page" />
-    <!-- Always write copyright page on obverse, possibly empty -->
+    <!-- title page obverse is copyright, possibly empty -->
     <xsl:call-template name="copyright-page" />
     <!-- dedication pages are optional, template includes blank obverse -->
     <xsl:if test="/mathbook/book/frontmatter/dedication">
         <xsl:call-template name="dedication-pages" />
     </xsl:if>
+    <xsl:apply-templates select="frontmatter/acknowledgement" />
+    <xsl:apply-templates select="frontmatter/foreword" /> 
+    <xsl:apply-templates select="frontmatter/preface" />
     <xsl:if test="$latex-toc-level > -1">
         <xsl:text>\setcounter{tocdepth}{</xsl:text>
         <xsl:value-of select="$latex-toc-level" />
@@ -194,7 +200,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\tableofcontents&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="frontmatter" />
+    <!-- list of illustrations -->
+    <!-- introduction -->
+    <!-- second half-title, first part-title -->
     <xsl:text>\mainmatter&#xa;</xsl:text>
     <xsl:apply-templates select="chapter" />
     <xsl:if test="appendix">
@@ -907,14 +915,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\date{</xsl:text><xsl:apply-templates select="frontmatter/titlepage/date" /><xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
-
-<!-- "half-title" is leading page with title only         -->
-<!-- at about 1:2 split, presumes in a book               -->
-<!-- Series information could go on obverse               -->
-<!-- and then do "thispagestyle" on both                  -->
-<!-- Template includes blank obverse              -->
-<!-- context is /mathbook/book                            -->
-<xsl:template name="half-title-pages" >
+<!-- "half-title" is leading page with -->
+<!-- title only, at about 1:2 split    -->
+<!-- context is /mathbook/book         -->
+<xsl:template name="half-title" >
     <xsl:text>%% begin: half-title&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:text>{\centering&#xa;</xsl:text>
@@ -931,11 +935,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text> <!-- finish centering -->
     <xsl:text>\clearpage&#xa;</xsl:text>
     <xsl:text>%% end:   half-title&#xa;</xsl:text>
-    <xsl:text>%% begin: obverse-half-title (empty)&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Ad card may contain list of other books        -->
+<!-- Or may be overridden to make title page spread -->
+<!-- Obverse of half-title                          -->
+<xsl:template name="ad-card">
+    <xsl:text>%% begin: adcard&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:text>\null%&#xa;</xsl:text>
     <xsl:text>\clearpage&#xa;</xsl:text>
-    <xsl:text>%% end:   obverse-half-title&#xa;</xsl:text>
+    <xsl:text>%% end:   adcard&#xa;</xsl:text>
 </xsl:template>
 
 <!-- LaTeX's title page is not very robust, so -->
@@ -993,7 +1003,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="credit" mode="title-page">
     <xsl:text>{\Large </xsl:text>
     <xsl:apply-templates select="title" />
-    <xsl:text>}\\[\baselineskip]&#xa;</xsl:text>
+    <xsl:text>}\\[0.5\baselineskip]&#xa;</xsl:text>
     <xsl:apply-templates select="author/personname" />
     <xsl:text>\\[0.25\baselineskip]&#xa;</xsl:text>
     <xsl:apply-templates select="author/institution" />
