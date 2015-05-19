@@ -172,13 +172,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="title-page-info-book" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
     <xsl:text>\frontmatter&#xa;</xsl:text>
-    <xsl:call-template name="half-title" />
-    <xsl:text>\maketitle&#xa;</xsl:text>
-    <xsl:text>\clearpage&#xa;</xsl:text>
+    <!-- title only, template includes blank obverse -->
+    <xsl:call-template name="half-title-pages" />
+    <!-- title page, one only - obverse is copyright -->
+    <!-- context is titlepage element                -->
+    <xsl:call-template name="title-page" />
     <!-- Always write copyright page on obverse, possibly empty -->
     <xsl:call-template name="copyright-page" />
+    <!-- dedication pages are optional, template includes blank obverse -->
     <xsl:if test="/mathbook/book/frontmatter/dedication">
-        <xsl:call-template name="dedication-page" />
+        <xsl:call-template name="dedication-pages" />
     </xsl:if>
     <xsl:if test="$latex-toc-level > -1">
         <xsl:text>\setcounter{tocdepth}{</xsl:text>
@@ -1042,9 +1045,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Dedication page is very plain         -->
+<!-- Includes a blank obverse              -->
 <!-- It should react appropriately to      -->
 <!-- several paragraphs (multiple authors) -->
-<xsl:template name="dedication-page">
+<xsl:template name="dedication-pages">
     <xsl:text>%% begin: dedication-page&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
