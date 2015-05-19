@@ -186,9 +186,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="/mathbook/book/frontmatter/dedication">
         <xsl:call-template name="dedication-pages" />
     </xsl:if>
+    <xsl:text>%% begin: acknowledgements&#xa;</xsl:text>
     <xsl:apply-templates select="frontmatter/acknowledgement" />
+    <xsl:text>%% end:   acknowledgements&#xa;</xsl:text>
+    <xsl:text>%% begin: forewords&#xa;</xsl:text>
     <xsl:apply-templates select="frontmatter/foreword" /> 
+    <xsl:text>%% end:   forewords&#xa;</xsl:text>
+    <xsl:text>%% begin: prefaces&#xa;</xsl:text>
     <xsl:apply-templates select="frontmatter/preface" />
+    <xsl:text>%% end:   prefaces&#xa;</xsl:text>
+    <xsl:text>%% begin: table of contents&#xa;</xsl:text>
     <xsl:if test="$latex-toc-level > -1">
         <xsl:text>\setcounter{tocdepth}{</xsl:text>
         <xsl:value-of select="$latex-toc-level" />
@@ -199,6 +206,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\tableofcontents&#xa;</xsl:text>
+        <xsl:text>%% end:   table of contents&#xa;</xsl:text>
     </xsl:if>
     <!-- list of illustrations -->
     <!-- introduction -->
