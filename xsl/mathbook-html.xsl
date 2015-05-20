@@ -551,10 +551,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <span class="subtitle"><xsl:apply-templates select="/mathbook/*/subtitle" /></span>
         </xsl:if>
     </h1>
+    <!-- We list full info for each author and editor in document order -->
+    <!-- Minor players (credits) come next                              -->
     <address class="contributors">
-        <xsl:apply-templates select="author|editor" mode="full-info"/>
+        <xsl:apply-templates select="author|editor" mode="full-info" />
+        <xsl:apply-templates select="credit" />
     </address>
     <xsl:apply-templates select="date" />
+</xsl:template>
+
+<!-- A "credit" can have a "title" followed by an author (or several)  -->
+<!-- Better CSS would have the title in the same size as author info   -->
+<!-- then name, etc in slightly smaller font (generally de-emphasised) -->
+<xsl:template match="titlepage/credit">
+    <xsl:if test="title">
+        <xsl:apply-templates select="title" />
+        <br />
+    </xsl:if>
+    <xsl:apply-templates select="author" mode="full-info" />
 </xsl:template>
 
 <!-- A template manages the date      -->
