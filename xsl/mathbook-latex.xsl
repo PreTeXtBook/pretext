@@ -2271,7 +2271,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>]&#xa;</xsl:text>
     <xsl:call-template name="sanitize-sage">
-        <xsl:with-param name="raw-sage-code" select="." />
+        <xsl:with-param name="raw-sage-code" select="input" />
     </xsl:call-template>
     <xsl:text>\end{lstlisting}&#xa;</xsl:text>
 </xsl:template>

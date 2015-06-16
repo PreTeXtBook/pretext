@@ -2160,7 +2160,7 @@ the xsltproc executable.
 
             <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt (in-browser Python) or the Python language argument to the Sage Cell Server.  To see examples of authoring Sace cells, have a look at Section<nbsp /><xref ref="section-sage-cells" />.</p>
 
-            <p>In the meantime, program listings, especially with syntax highlighting, is useful all by itself.  The <q>R</q> language might not be a bad stand-in for pseudo-code, as it supports assignment with a left arrow and has fairly generic procedural syntax for control structures and data structures.  Or maybe Pascal would be a good choice?  Here is an example of R.</p>
+            <p>In the meantime, program listings, especially with syntax highlighting, is useful all by itself.  The <q>R</q> language might not be a bad stand-in for pseudo-code, as it supports assignment with a left arrow and has fairly generic procedural syntax for control structures and data structures.  Or maybe Pascal would be a good choice?  Here is an example of R.  Note in the source that the entire block of code is wrapped in a CDATA section due to the four left angle brackets.</p>
 
             <!-- Output in knowls?? -->
 
@@ -2187,6 +2187,26 @@ the xsltproc executable.
                     <xsl:text>.</xsl:text>
                     <xsl:number from="references" level="any" count="biblio" />
                 </xsl:template>]]>
+                </input>
+            </program>
+
+            <p>You can write made-up pseudo-code and get reasonable syntax highlighting, but you might explain to a reader what your symbols all mean.  This routine takes the <m>m\times n</m> marix <m>A</m> to reduced row-echelon form.  Note in the source the use of escaped characters for the four angle brackets.</p>
+
+            <program>
+                <input>
+                input m, n and A
+                r := 0
+                for j := 1 to n
+                   i := r+1
+                   while i &lt;= m and A[i,j] == 0
+                       i := i+1
+                   if i &lt; m+1
+                       r := r+1
+                       swap rows i and r of A (row op 1)
+                       scale A[r,j] to a leading 1 (row op 2)
+                       for k := 1 to m, k &lt;&gt; r
+                           make A[k,j] zero (row op 3, employing row r)
+                output r and A
                 </input>
             </program>
 
