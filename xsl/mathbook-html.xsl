@@ -2276,9 +2276,19 @@ is just flat out on the page, as if printed there.
     <blockquote><xsl:apply-templates /></blockquote>
 </xsl:template>
 
+<!-- TODO: add CSS for attribution, div flush right         -->
+<!-- https://github.com/BooksHTML/mathbook-assets/issues/64 -->
+
 <!-- Use at the end of a blockquote -->
+<!-- Single line, preceded by a dash -->
 <xsl:template match="blockquote/attribution">
-    <br /><span class="attribution"><xsl:apply-templates /></span>
+    <cite class="attribution">&#8212; <xsl:apply-templates /></cite>
+</xsl:template>
+
+<!-- General-purpose attribution              -->
+<!-- At end of a preface or foreword, perhaps -->
+<xsl:template match="attribution">
+    <cite class="attribution"><xsl:apply-templates /></cite>
 </xsl:template>
 
 <!-- Defined terms (bold) -->

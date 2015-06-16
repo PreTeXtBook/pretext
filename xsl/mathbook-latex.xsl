@@ -1945,10 +1945,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{quote}</xsl:text>
 </xsl:template>
 
-<!-- Use at the end of a blockquote -->
+<!-- Use at the end of a blockquote  -->
+<!-- Single line, preceded by a dash -->
 <xsl:template match="blockquote/attribution">
     <xsl:text>\\\hspace*{\stretch{1}}\textemdash\space{}</xsl:text>
     <xsl:apply-templates />
+</xsl:template>
+
+<!-- General-purpose attribution                           -->
+<!-- At end of a preface or foreword, perhaps              -->
+<!-- A table, pushed right, with left-justification        -->
+<!-- <br> is overridden to be double-slash for tabular row -->
+<xsl:template match="attribution">
+    <xsl:text>\par\vspace{\baselineskip}&#xa;</xsl:text>
+    <xsl:text>\hfill\begin{tabular}{l@{}}&#xa;</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>&#xa;\end{tabular}\\\par&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Emphasis -->
@@ -2171,13 +2183,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Line Breaks -->
 <!-- \newline works best in table cells in paragraph mode       -->
 <!-- so as to not be confused with \\ at the end of a table row -->
-<!-- but \\ is definitley better for multi-line main titles     -->
+<!-- but \\ is definitely better for multi-line main titles     -->
 <!-- Use sparingly, e.g. for poetry, *not* in math environments -->
 <!-- Must be in TeX's paragraph mode                            -->
 <xsl:template match="br">
     <xsl:text>\newline{}</xsl:text>
 </xsl:template>
-<xsl:template match="title/br|subtitle/br|dedication/p/br">
+<xsl:template match="title/br|subtitle/br|dedication/p/br|attribution/br">
     <xsl:text>\\</xsl:text>
 </xsl:template>
 
