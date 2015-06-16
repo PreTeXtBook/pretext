@@ -768,7 +768,7 @@ the xsltproc executable.
 
                 <blockquote>The problem with writing a book in verse is, to be successful, it has to sound like you knocked it off on a rainy Friday afternoon. It has to sound easy. When you can do it, it helps tremendously because it's a thing that forces kids to read on. You have this unconsummated feeling if you stop.<attribution>Dr. Seuss</attribution></blockquote>
 
-                <p>Sometimes a quote may extend across several paragraphs.  Or a balanced pair of quotations marks crosses an XML boundary, so we need left, right, single and double versions.  Here they are in a haphazard order: <rq />, <lsq />, <lq />, <rsq />.  These should be a last resort, and <em>not</em> a replacement for the <c>q</c> and <c>sq</c> tags.  The left/right versions are used for the following quote from Abraham Lincoln, which we have edited into two paragraphs.</p>
+                <p>Sometimes a quote may extend across several paragraphs.  Or a balanced pair of quotations marks crosses an XML boundary, so we need left, right, single and double versions.  (For example, see Section<nbsp /><xref ref="poetry" /> on poetry.)  Here are all four in a haphazard order: <rq />, <lsq />, <lq />, <rsq />.  These should be a last resort, and <em>not</em> a replacement for the <c>q</c> and <c>sq</c> tags.  The left/right versions are used for the following quote from Abraham Lincoln, which we have edited into two paragraphs.</p>
 
                 <p><lq />I am not bound to win, but I am bound to be true. I am not bound to succeed, but I am bound to live by the light that I have.</p>
 
@@ -2867,6 +2867,42 @@ the xsltproc executable.
           </sidebyside>
         </subsection>
       </section>
+
+        <section xml:id="poetry">
+            <title>Poetry</title>
+
+            <p>There is support for basic poems via the <c>poem</c> tag, which can contain a <c>title</c>, <c>author</c> and multiple <c>stanza</c>, each containing multiple <c>line</c>.  See the source of the following poem for an example of the exact arrangement.  Note how the first quote crosses two <c>line</c> elements and how this is handled in the source.  Various enhancements are possible, send requests.</p>
+
+            <poem width="30">
+                <title>The Charge of the Light Brigade</title>
+                <author>Alfred Lord Tennyson</author>
+
+                <stanza>
+                    <line>Half a league, half a league,</line>
+                    <line>Half a league onward,</line>
+                    <line>All in the valley of Death</line>
+                    <line>Rode the six hundred.</line>
+                    <line><lq />Forward, the Light Brigade!</line>
+                    <line>Charge for the guns!<rq /> he said:</line>
+                    <line>Into the valley of Death</line>
+                    <line>Rode the six hundred.</line>
+                </stanza>
+
+                <stanza>
+                    <line><q>Forward, the Light Brigade!</q></line>
+                    <line>Was there a man dismay'd?</line>
+                    <line>Not tho' the soldier knew</line>
+                    <line>Someone had blunder'd:</line>
+                    <line>Theirs not to make reply,</line>
+                    <line>Theirs not to reason why,</line>
+                    <line>Theirs but to do and die:</line>
+                    <line>Into the valley of Death</line>
+                    <line>Rode the six hundred.</line>
+                </stanza>
+            </poem>
+
+        </section>
+
         <!-- Bibliography/References can appear anywhere -->
 
         <references>
