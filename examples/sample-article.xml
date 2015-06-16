@@ -755,6 +755,27 @@ the xsltproc executable.
 
             <p>It might be instructive to see how the paragraphs above about escape characters were written without inadvertenly using an escape character improperly.</p>
 
+            <subsection>
+                <title>Quotations</title>
+
+                <p>The <c>q</c> tag will provide beginning and ending double quotations, while the <c>sq</c> tag will behave similarly but provide single quotes.</p>
+
+                <p><q>The roots of education are bitter, but the fruit is sweet.</q> (Aristotle)</p>
+
+                <p><sq>It is always wise to look ahead, but difficult to look further than you can see.</sq> (Winston Churchill)</p>
+
+                <p>A large quote can be accomodated with the <c>blockquote</c> tag, which can carry within itself an <c>attribution</c> element.</p>
+
+                <blockquote>The problem with writing a book in verse is, to be successful, it has to sound like you knocked it off on a rainy Friday afternoon. It has to sound easy. When you can do it, it helps tremendously because it's a thing that forces kids to read on. You have this unconsummated feeling if you stop.<attribution>Dr. Seuss</attribution></blockquote>
+
+                <p>Sometimes a quote may extend across several paragraphs.  Or a balanced pair of quotations marks crosses an XML boundary, so we need left, right, single and double versions.  Here they are in a haphazard order: <rq />, <lsq />, <lq />, <rsq />.  These should be a last resort, and <em>not</em> a replacement for the <c>q</c> and <c>sq</c> tags.  The left/right versions are used for the following quote from Abraham Lincoln, which we have edited into two paragraphs.</p>
+
+                <p><lq />I am not bound to win, but I am bound to be true. I am not bound to succeed, but I am bound to live by the light that I have.</p>
+
+                <p>I must stand with anybody that stands right, and stand with him while he is right, and part with him when he goes wrong.<rq /></p>
+
+            </subsection>
+
         </section>
 
 

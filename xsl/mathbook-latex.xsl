@@ -1937,6 +1937,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>'</xsl:text>
 </xsl:template>
 
+<!-- Sometimes you need an "unbalanced" quotation make,    -->
+<!-- maybe because you are crossing some other XML element -->
+<!-- So here are left and right, single and double         -->
+<xsl:template match="lsq">
+    <xsl:text>`</xsl:text>
+</xsl:template>
+
+<xsl:template match="rsq">
+    <xsl:text>'</xsl:text>
+</xsl:template>
+
+<xsl:template match="lq">
+    <xsl:text>``</xsl:text>
+</xsl:template>
+
+<xsl:template match="rq">
+    <xsl:text>''</xsl:text>
+</xsl:template>
+
 <!-- Actual Quotations                -->
 <!-- TODO: <quote> element for inline -->
 <xsl:template match="blockquote">

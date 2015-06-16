@@ -2270,6 +2270,25 @@ is just flat out on the page, as if printed there.
     <xsl:text>&#x2018;</xsl:text><xsl:apply-templates /><xsl:text>&#x2019;</xsl:text>
 </xsl:template>
 
+<!-- Sometimes you need an "unbalanced" quotation make,    -->
+<!-- maybe because you are crossing some other XML element -->
+<!-- So here are left and right, single and double         -->
+<xsl:template match="lsq">
+    <xsl:text>&#x2018;</xsl:text>
+</xsl:template>
+
+<xsl:template match="rsq">
+    <xsl:text>&#x2019;</xsl:text>
+</xsl:template>
+
+<xsl:template match="lq">
+    <xsl:text>&#x201c;</xsl:text>
+</xsl:template>
+
+<xsl:template match="rq">
+    <xsl:text>&#x201d;</xsl:text>
+</xsl:template>
+
 <!-- Actual Quotations                -->
 <!-- TODO: <quote> element for inline to be <q> in HTML-->
 <xsl:template match="blockquote">
@@ -2282,7 +2301,7 @@ is just flat out on the page, as if printed there.
 <!-- Use at the end of a blockquote -->
 <!-- Single line, preceded by a dash -->
 <xsl:template match="blockquote/attribution">
-    <cite class="attribution">&#8212; <xsl:apply-templates /></cite>
+    <cite class="attribution"> &#8212; <xsl:apply-templates /></cite>
 </xsl:template>
 
 <!-- General-purpose attribution              -->
