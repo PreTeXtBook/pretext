@@ -2525,6 +2525,53 @@ is just flat out on the page, as if printed there.
 </xsl:template>
 
 
+<!--        -->
+<!-- Poetry -->
+<!--        -->
+<!-- https://github.com/BooksHTML/mathbook-assets/issues/65 -->
+
+<!-- "poem" element loads verse package         -->
+<!-- width attribute is for print, ignored here -->
+<xsl:template match="poem">
+    <div class="poem" style="margin: auto;">
+        <xsl:apply-templates select="title" />
+        <xsl:apply-templates select="stanza"/>
+        <xsl:apply-templates select="author" />
+    </div>
+</xsl:template>
+
+<!-- title -->
+<xsl:template match="poem/title">
+    <div class="poemtitle" style="padding-bottom: 20px; font-weight: bold; font-size: 121%">
+    <xsl:apply-templates />
+    </div>
+</xsl:template>
+
+<!-- Stanzas are sequences of lines -->
+<xsl:template match="stanza">
+    <div class="stanza" style="padding-bottom: 20px;">
+    <xsl:apply-templates select="line" />
+    </div>
+</xsl:template>
+
+<!-- The last line of a stanza gets no break -->
+<!-- Other lines are more normal             -->
+<xsl:template match="line">
+    <xsl:apply-templates />
+    <br />
+</xsl:template>
+
+<xsl:template match="line[not(following-sibling::*)]">
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- attribution style for author at end -->
+<xsl:template match="poem/author">
+    <cite class="attribution" style="padding-bottom: 20px;">
+        <xsl:apply-templates />
+    </cite>
+</xsl:template>
+
 <!-- Raw Bibliographic Entry Formatting              -->
 <!-- Markup really, not full-blown data preservation -->
 

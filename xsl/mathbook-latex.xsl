@@ -654,6 +654,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\makeatother&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
+    <xsl:if test="//poem">
+        <xsl:text>%% Poetry support&#xa;</xsl:text>
+        <xsl:text>\usepackage{verse}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>%% Raster graphics inclusion, wrapped figures in paragraphs&#xa;</xsl:text>
     <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
     <xsl:text>%% Colors for Sage boxes and author tools (red hilites)&#xa;</xsl:text>
@@ -3422,6 +3426,63 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}{\null}</xsl:text>
 </xsl:template>
+
+<!--        -->
+<!-- Poetry -->
+<!--        -->
+<!-- Basic support from the "verse" package -->
+
+<!-- "poem" element loads verse package -->
+<!-- width is percentage of text width -->
+<!-- ie, "length" of longest line      -->
+<xsl:template match="poem">
+    <xsl:apply-templates select="title" />
+    <xsl:text>\begin{verse}</xsl:text>
+    <xsl:if test="@width">
+        <xsl:text>[0.</xsl:text>
+        <xsl:value-of select="@width" />
+        <xsl:text>\linewidth]</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="stanza"/>
+    <xsl:apply-templates select="author" />
+    <xsl:text>\end{verse}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- title *precedes* environment -->
+<xsl:template match="poem/title">
+    <xsl:text>\poemtitle{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- End of a stanza is marked by last line   -->
+<!-- We just add a visual break in the source -->
+<xsl:template match="stanza">
+    <xsl:apply-templates select="line" />
+    <xsl:text>%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- The last line of a stanza gets marked specially -->
+<!-- Other lines are more normal                     -->
+<xsl:template match="line">
+    <xsl:apply-templates />
+    <xsl:text>\\&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="line[not(following-sibling::*)]">
+    <xsl:apply-templates />
+    <xsl:text>\\!&#xa;</xsl:text>
+</xsl:template>
+
+<!-- attribution style for author at end -->
+<!-- Abusing an extra stanza             -->
+<xsl:template match="poem/author">
+    <xsl:text>\nopagebreak{\hfill\footnotesize </xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}\\!&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- Footnotes               -->
 <!--   with no customization -->
