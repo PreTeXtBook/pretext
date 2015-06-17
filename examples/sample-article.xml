@@ -1995,7 +1995,7 @@ the xsltproc executable.
                     <p>Exercises can appear in a <q>section</q> of their own.  You need to give the section a title, even if it seems obvious what to call it.  Individual exercises may have titles, as you choose.  Problem: How should we hide solutions?</p>
                 </statement>
                 <solution>
-                    <p>Maybe a global switch should be used to supress solutions, while a separate processing regime could use them as part of a solutions manual.</p>
+                    <p>Maybe a global switch should be used to suppress solutions, while a separate processing regime could use them as part of a solutions manual.</p>
                 </solution>
             </exercise>
 
