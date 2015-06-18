@@ -1570,7 +1570,7 @@ the xsltproc executable.
 
             <p>A sequence of <c>col</c> elements may optionally be used.  But if one appears, then there must be the right number for the width of the table.  They are empty elements always, and just carry information about their respective column.</p>
 
-            <p>Where the body of the table below has an entry, it means the attribute may be used on the element, and effects the range of the tabular described by the element.  Employment of an attribute on elements to the right in the table will supersede use on elements to the left.  Generally, every cell has right and bottom borders, but only cells at the left side of the table have a left border and only cells across the top have a top border.  Only one cell has four borders.</p>
+            <p>Where the body of the table below has an entry, it means the attribute may be used on the element, and affects the range of the tabular described by the element.  Employment of an attribute on elements to the right in the table will supersede use on elements to the left.  Generally, every cell has right and bottom borders, but only cells at the left side of the table have a left border and only cells across the top have a top border.  Only one cell has four borders.</p>
 
             <table>
                 <caption>Tabular Elements and Attributes (p = planned)</caption>
