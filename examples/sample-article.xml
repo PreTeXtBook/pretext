@@ -644,7 +644,7 @@ the xsltproc executable.
                 <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
             </md></p>
 
-            <p>Table can get quite complex.  Simple ones are simpler, such as this example of numerical computations for Euler's method.</p>
+            <p>Tables can get quite complex.  Simple ones are simpler, such as this example of numerical computations for Euler's method.</p>
 
             <table xml:id="table-euler1">
                 <tabular top="major" halign="center">
