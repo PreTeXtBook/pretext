@@ -3449,9 +3449,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{verse}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- title *precedes* environment -->
+<!-- title *precedes* environment        -->
+<!-- Starred versio suppresses ToC entry -->
 <xsl:template match="poem/title">
-    <xsl:text>\poemtitle{</xsl:text>
+    <xsl:text>\poemtitle*{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
