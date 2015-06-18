@@ -693,7 +693,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% Global, document-wide options apply to \lstinline&#xa;</xsl:text>
             <xsl:text>%% Search/replace \lstinline by \verb to remove this dependency&#xa;</xsl:text>
             <xsl:text>%% (redefining \lstinline with \verb is unlikely to work)&#xa;</xsl:text>
-            <xsl:text>\lstset{basicstyle=\footnotesize\listingsfont,breaklines=true}&#xa;</xsl:text>
+            <!-- breakatwhitespace fixes commas moving to new lines, and other bad things       -->
+            <!-- http://tex.stackexchange.com/questions/64750/avoid-line-breaks-after-lstinline -->
+            <xsl:text>\lstset{basicstyle=\footnotesize\listingsfont,breaklines=true,breakatwhitespace=true}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="//program">
             <xsl:text>%% Generic input, listings package: boxed, white, line breaking, language per instance&#xa;</xsl:text>
