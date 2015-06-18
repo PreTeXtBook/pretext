@@ -348,7 +348,7 @@ the xsltproc executable.
                 <output>0.11736021338650582</output>
             </sage>
 
-            <p>While the next cell is random, the returned value will never be more than <m>0.01</m> away from <m>12</m>, since the <c>random()</c> function stays between <m>0</m> and <m>1</m>.  So we provide <m>12.005</m> as the expected answer, but test with an absoluute tolerance of <m>\epsilon=0.006</m>.</p>
+            <p>While the next cell is random, the returned value will never be more than <m>0.01</m> away from <m>12</m>, since the <c>random()</c> function stays between <m>0</m> and <m>1</m>.  So we provide <m>12.005</m> as the expected answer, but test with an absolute tolerance of <m>\epsilon=0.006</m>.</p>
 
             <sage doctest="absolute" tolerance="0.006">
                 <input>12 + 0.01*random()</input>
@@ -377,7 +377,7 @@ the xsltproc executable.
 
             <p>Our maximum width for text, designed for readability, suggests you should format your Sage code with a maximum of about 54 characters. On a mobile device, the number of displayed characters might be as low as 28 in portrait orintation, and again around 50 in landscape.  You can use a variety of techniques to shorten long lines, such as using intermediate variables.  Since Sage is just a huge Python library, you can use any of Python's facilities for handling long lines.  These include a continuation character (which I try to avoid using) or natural places where you can break long lines, such as between entries of a list.  Also, if writing loops or functions, you may wish to have your indentation be only two characters wide (rather than, say, four).</p>
 
-            <p>Sage output can sometimes be quite long, though this has improved with some changes in Sage's output routines.  Output code should be included primarly for doctesting purposes, and in this use, you may break at almost whitespace character and the doctesting framework will adjust accordingly.  You may wish to show sample output in a static format, like a PDF, so you can consider formatting your output to fit the width constraints of that medium.  Or you may even adjust exactly what is output, to keep it from being too verbose.  Sage doctesting also allows for a wild-card style syntax which allows you to skip over huge chunks of meaningless or unpredictable output, such as tracebacks on error messages.</p>
+            <p>Sage output can sometimes be quite long, though this has improved with some changes in Sage's output routines.  Output code should be included primarily for doctesting purposes, and in this use, you may break at almost whitespace character and the doctesting framework will adjust accordingly.  You may wish to show sample output in a static format, like a PDF, so you can consider formatting your output to fit the width constraints of that medium.  Or you may even adjust exactly what is output, to keep it from being too verbose.  Sage doctesting also allows for a wild-card style syntax which allows you to skip over huge chunks of meaningless or unpredictable output, such as tracebacks on error messages.</p>
 
         </section>
 
@@ -567,7 +567,7 @@ the xsltproc executable.
             </ul>
 
             <remark>
-                <p>You can gain a greater undestanding of derivatives by studying the graphs of functions with their derivatives.  Can you discern the derivative<ndash />antiderivative relationship in Figure<nbsp /><xref ref="figure-function-derivative" />?</p>
+                <p>You can gain a greater understanding of derivatives by studying the graphs of functions with their derivatives.  Can you discern the derivative<ndash />antiderivative relationship in Figure<nbsp /><xref ref="figure-function-derivative" />?</p>
             </remark>
 
             <!--
@@ -771,7 +771,7 @@ the xsltproc executable.
             <etc /><nbsp /><nbsp />
             <circa /><nbsp /><nbsp /></p>
 
-            <p>It might be instructive to see how the paragraphs above about escape characters were written without inadvertenly using an escape character improperly.</p>
+            <p>It might be instructive to see how the paragraphs above about escape characters were written without inadvertently using an escape character improperly.</p>
 
             <subsection>
                 <title>Quotations</title>
@@ -1588,7 +1588,7 @@ the xsltproc executable.
 
             <p>A sequence of <c>col</c> elements may optionally be used.  But if one appears, then there must be the right number for the width of the table.  They are empty elements always, and just carry information about their respective column.</p>
 
-            <p>Where the body of the table below has an entry, it means the attribute may be used on the element, and effects the range of the tabular described by the element.  Employment of an attribute on elements to the right in the table will supersede use on elements to the left.  Generally, every cell has right and bottom borders, but only cells at the left side of the table have a left border and only cells across the top have a top border.  Only one cell has four borders.</p>
+            <p>Where the body of the table below has an entry, it means the attribute may be used on the element, and affects the range of the tabular described by the element.  Employment of an attribute on elements to the right in the table will supersede use on elements to the left.  Generally, every cell has right and bottom borders, but only cells at the left side of the table have a left border and only cells across the top have a top border.  Only one cell has four borders.</p>
 
             <table>
                 <caption>Tabular Elements and Attributes (p = planned)</caption>
@@ -1717,7 +1717,7 @@ the xsltproc executable.
 
                 <p>One of the goals of MathBook XML is to gently guide authors towards good choices in the design of their documents, even if we do not claim to know it all ourselves.  Take a close look at that table about tables.  What's missing?  No vertical rules.  Try living without them, you will not really miss them.  If you think you need to divide a table into two halves, maybe you really need two tables (and then see the <q>side-by-side</q> capabilities, Section <xref ref="section-side-by-side" />).</p>
 
-                <p>In the documentation for his excellent <latex /> package, <url href="https://www.ctan.org/pkg/booktabs">booktabs</url>, Simon Fear, gives two rules for what he calls <q>formal tables</q>: (1) Never, ever use vertical rules, and (2) Never use double rules.  We have resisted the temptation to enforce the former and have provided an alternative to the second (three thicknesses).  He refers to using tables for layout as creating <q>tableau.</q>  If you are finicky about the look of your work, the first three pages of the documentation is recommended reading.</p>
+                <p>In the documentation for his excellent <latex /> package, <url href="https://www.ctan.org/pkg/booktabs">booktabs</url>, Simon Fear gives two rules for what he calls <q>formal tables</q>: (1) Never, ever use vertical rules, and (2) Never use double rules.  We have resisted the temptation to enforce the former and have provided an alternative to the second (three thicknesses).  He refers to using tables for layout as creating <q>tableau.</q>  If you are finicky about the look of your work, the first three pages of the documentation is recommended reading.</p>
 
                 <p>That all said, we now give several examples in order to stress and demonstrate our code.</p>
             </paragraphs>
@@ -2069,7 +2069,7 @@ the xsltproc executable.
                 <li><p>Always named: <xref ref="corollary-FTC-derivative" autoname="yes" /></p></li>
             </ul>
 
-            <p>Suppose you want to reference two theorems, so you might want to say something like <q>Theorems 4.6 and 5.2.</q>  With global autonaming on, you can override with <c>autoname="plural"</c> on the first <c>xref</c> and <c>autoname="no"</c> on the second <c>xref</c>.  (With global autonaming off, you just write what you want and only the numbers are links/knowls.) The <c>plural</c> option is implies the <c>yes</c> option.  Here is the test, which should look correct no matter what the global switch is:  <xref ref="section-cross-referencing" autoname="plural" /> and <xref ref="section-internationalization" autoname="no" />.  (But notice that it is up to you to be certain the type of the second one does not change without the first also changing.  The <q>author-tools</q> mode and careful choices of <c>xml:id</c> strings can help avoid this trap.)</p>
+            <p>Suppose you want to reference two theorems, so you might want to say something like <q>Theorems 4.6 and 5.2.</q>  With global autonaming on, you can override with <c>autoname="plural"</c> on the first <c>xref</c> and <c>autoname="no"</c> on the second <c>xref</c>.  (With global autonaming off, you just write what you want and only the numbers are links/knowls.) The <c>plural</c> option implies the <c>yes</c> option.  Here is the test, which should look correct no matter what the global switch is:  <xref ref="section-cross-referencing" autoname="plural" /> and <xref ref="section-internationalization" autoname="no" />.  (But notice that it is up to you to be certain the type of the second one does not change without the first also changing.  The <q>author-tools</q> mode and careful choices of <c>xml:id</c> strings can help avoid this trap.)</p>
 
             <p>One final twist.  If you say <c>autoname="title"</c>, then the title you assigned to the theorem will prefix the number.  Here is a the final example, which should always refer to a fundamental theorem by name <xref ref="theorem-FTC" autoname="title" />.</p>
 
@@ -2198,7 +2198,7 @@ the xsltproc executable.
         <section xml:id="section-programs">
             <title>Program Listings</title>
 
-            <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt (in-browser Python) or the Python language argument to the Sage Cell Server.  To see examples of authoring Sace cells, have a look at Section<nbsp /><xref ref="section-sage-cells" />.</p>
+            <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt (in-browser Python) or the Python language argument to the Sage Cell Server.  To see examples of authoring Sage cells, have a look at Section<nbsp /><xref ref="section-sage-cells" />.</p>
 
             <p>In the meantime, program listings, especially with syntax highlighting, is useful all by itself.  The <q>R</q> language might not be a bad stand-in for pseudo-code, as it supports assignment with a left arrow and has fairly generic procedural syntax for control structures and data structures.  Or maybe Pascal would be a good choice?  Here is an example of R.  Note in the source that the entire block of code is wrapped in a CDATA section due to the four left angle brackets.</p>
 
@@ -2252,7 +2252,7 @@ the xsltproc executable.
 
             <p>Look in the <c>mathbook-common.xsl</c> file to see the strings to use to identify languages.  Always all-lowercase, no symbols, no punctuation.</p>
 
-            <p>If you are discussing algorithms in the abstract (or even concretely), you can set them off like a theorem, with a number, a title and a target for cross-references.  Sometimes you claim an algorithm produces something in particular, or has certain properties, such as a theoretical run time, so a proof maybe included.  See the discussion just preceding about (limited) options for pseudo-code.</p>
+            <p>If you are discussing algorithms in the abstract (or even concretely), you can set them off like a theorem, with a number, a title and a target for cross-references.  Sometimes you claim an algorithm produces something in particular, or has certain properties, such as a theoretical run time, so a proof may be included.  See the discussion just preceding about (limited) options for pseudo-code.</p>
 
             <algorithm xml:id="algorithm-sieve-eratosthenes">
                 <title>Sieve of Eratosthenes</title>
@@ -2964,7 +2964,7 @@ the xsltproc executable.
             <biblio type="raw" xml:id="biblio-lay-article">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash />62.</biblio>
 
             <conclusion>
-                <p>There is an index manufactured for the <latex /> verion, which contains a few entries.  Look at the source of this XML file to see how they are written.  They may be placed inside of paragraphs (<c>&lt;p&gt;</c>) and statements (<c>&lt;statements&gt;</c>), and probably other places as well <mdash /> this should be liberalized.  Look at the preamble of the generated <latex /> file for instructions on generating the index.  No other converters are producing an index.</p>
+                <p>There is an index manufactured for the <latex /> version, which contains a few entries.  Look at the source of this XML file to see how they are written.  They may be placed inside of paragraphs (<c>&lt;p&gt;</c>) and statements (<c>&lt;statements&gt;</c>), and probably other places as well <mdash /> this should be liberalized.  Look at the preamble of the generated <latex /> file for instructions on generating the index.  No other converters are producing an index.</p>
 
                 <p>There is an index entry about multicolumn lists which spans more than one page.  This requires doubly-linked index entries, the first has the index content and points to the <c>xml:id</c> of the second.  The second is an empty element, but points back to the <c>xml:id</c> of the first entry.  So each has a marker and a reference, which allows the span of the index topic to cut across XML boundaries in the source.  See the source of this article for syntax details.</p>
             </conclusion>
