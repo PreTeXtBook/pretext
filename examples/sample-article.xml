@@ -330,7 +330,7 @@ the xsltproc executable.
                 <output>0.11736021338650582</output>
             </sage>
 
-            <p>While the next cell is random, the returned value will never be more than <m>0.01</m> away from <m>12</m>, since the <c>random()</c> function stays between <m>0</m> and <m>1</m>.  So we provide <m>12.005</m> as the expected answer, but test with an absoluute tolerance of <m>\epsilon=0.006</m>.</p>
+            <p>While the next cell is random, the returned value will never be more than <m>0.01</m> away from <m>12</m>, since the <c>random()</c> function stays between <m>0</m> and <m>1</m>.  So we provide <m>12.005</m> as the expected answer, but test with an absolute tolerance of <m>\epsilon=0.006</m>.</p>
 
             <sage doctest="absolute" tolerance="0.006">
                 <input>12 + 0.01*random()</input>
