@@ -2179,7 +2179,7 @@ the xsltproc executable.
         <section xml:id="section-programs">
             <title>Program Listings</title>
 
-            <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt (in-browser Python) or the Python language argument to the Sage Cell Server.  To see examples of authoring Sace cells, have a look at Section<nbsp /><xref ref="section-sage-cells" />.</p>
+            <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt (in-browser Python) or the Python language argument to the Sage Cell Server.  To see examples of authoring Sage cells, have a look at Section<nbsp /><xref ref="section-sage-cells" />.</p>
 
             <p>In the meantime, program listings, especially with syntax highlighting, is useful all by itself.  The <q>R</q> language might not be a bad stand-in for pseudo-code, as it supports assignment with a left arrow and has fairly generic procedural syntax for control structures and data structures.  Or maybe Pascal would be a good choice?  Here is an example of R.  Note in the source that the entire block of code is wrapped in a CDATA section due to the four left angle brackets.</p>
 
