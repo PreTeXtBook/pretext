@@ -103,6 +103,24 @@ the xsltproc executable.
             <url>not-implemented.html</url>
              <!-- <text>My Button Text</text>  -->
         </feedback>
+
+        <!--
+        "Names" for various parts of a document are determined exactly
+        once for each language, ensuring consistency and saving you the
+        bother of always typing them in.  These can be found in the
+        xsl/mathbook-localization.xsl file.
+
+        You can make a document-specific, global override.  Here we
+        decide we have no need for any "proposition"s and repurpose
+        that enviroment in US English as a "Conundrum."
+
+        See the localization file for more on language codes, and realize
+        that US English is the default if there is no "lang" attribute
+        given on the document.
+        -->
+        <rename element="proposition" lang="en-US">Conundrum</rename>
+
+
     </docinfo>
 
     <!--
@@ -2067,6 +2085,7 @@ the xsltproc executable.
                 <li><p>Equations: single, first with no name: <xref ref="equation-alternate-FTC" />.  Then with an autoname: <xref ref="equation-alternate-FTC" autoname="yes" />.</p></li>
                 <li><p>Equations: multi-row, first with no name: <xref ref="equation-use-FTC" />.  Then with an autoname: <xref ref="equation-use-FTC" autoname="yes" />.  And two, exercising plural form: <xref ref="equation-alternate-FTC" autoname="plural" /> and <xref ref="equation-use-FTC" />.</p></li>
                 <li><p>A range of exercises, with plural and no autonaming: <xref ref="exercises-null-problem" autoname="plural" /><ndash /><xref ref="exercises-cosine-derivative" autoname="no" />.</p></li>
+                <li><p>A link to a <c>proposition</c> element, while this document has globally renamed <c>proposition</c>s as <q>Conundrum</q>s, so this link should use the new name: <xref ref="proposition-as-conundrum" autoname="yes" /></p></li>
             </ul>
 
         </section>
@@ -2902,6 +2921,36 @@ the xsltproc executable.
             </poem>
 
         </section>
+
+        <section>
+            <title>Customizations</title>
+
+            <subsection>
+                <title>Renaming Document Parts</title>
+
+                <p><q>Names</q> for various parts of a document are determined exactly once for each language, ensuring consistency and saving you the bother of always typing them in.</p>
+
+                <p>However, you may want to have <q>Conundrum</q>s in your document and you have no use for any <q>Proposition</q>s.  So you can repurpose the <c>proposition</c> tag to render a different name.  Or you might have a Lab Manual and want to rename <c>subsection</c> as <q>Activity</q>.  See the <c>docinfo</c> portion of this sample article to see how this is done, in concert with the example below.</p>
+
+                <proposition xml:id="proposition-as-conundrum">
+                    <statement>
+                        <p>Aah, this <em>is</em> confusing!</p>
+                    </statement>
+                </proposition>
+
+                <paragraphs>
+                    <title>Important Notes</title>
+
+                    <p>If you are renaming many parts of your document, then you may not understand the design philosophy of MathBook XML.  In particular, you should not be doing a wholesale shuffle of <c>part</c>, <c>chapter</c>, <c>section</c>, <etc />  This feature is intended for very limited use and is <em>not considered best practice</em>.</p>
+
+                    <p>This feature could also be abused to provide a comprehensive suite of translations into a language not yet supported.  If so, please contact us about moving your translations into MathBook XML for the benefit of all.  Thanks.</p>
+                </paragraphs>
+
+            </subsection>
+
+        </section>
+
+
 
         <!-- Bibliography/References can appear anywhere -->
 

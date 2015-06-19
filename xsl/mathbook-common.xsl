@@ -851,9 +851,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="type-name">
     <xsl:param name="string-id" />
     <xsl:variable name="translation">
-        <xsl:for-each select="document('mathbook-localization.xsl')">
-            <xsl:value-of select="key('localization-key', concat($document-language,$string-id) )"/>
-        </xsl:for-each>
+        <xsl:choose>
+            <!-- First look in docinfo for document-specific rename -->
+            <xsl:when test="/mathbook/docinfo/rename[@element=$string-id and @lang=$document-language]">
+                <xsl:apply-templates select="/mathbook/docinfo/rename[@element=$string-id and @lang=$document-language]" />
+            </xsl:when>
+            <!-- default to a lookup from the localization file -->
+            <xsl:otherwise>
+                <xsl:for-each select="document('mathbook-localization.xsl')">
+                    <xsl:value-of select="key('localization-key', concat($document-language,$string-id) )"/>
+                </xsl:for-each>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$translation!=''"><xsl:value-of select="$translation" /></xsl:when>
