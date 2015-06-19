@@ -2250,6 +2250,7 @@ the xsltproc executable.
                                 <li>If <c>p</c> is now the last element of the list, stop</li>
                                 <li>Otherwise, set <c>p</c> to the element of the list immediately after current <c>p</c></li>
                             </ol></li>
+                        <li>Output: the remaining elements of the list</li>
                     </ol>
                 </statement>
 
