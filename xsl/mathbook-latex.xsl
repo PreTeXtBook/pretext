@@ -84,32 +84,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="latex.preamble.early" select="''" />
 <xsl:param name="latex.preamble.late" select="''" />
 <!--  -->
-<!-- LaTeX ToC levels always have sections at level "1"     -->
-<!-- MBX has level "0" as the root, and gives "no contents" -->
-<!-- So we translate MBX level to LaTeX-speak for books     -->
-<xsl:param name="latex-toc-level">
-    <xsl:choose>
-        <xsl:when test="/mathbook/book">
-            <xsl:value-of select="$toc-level - 1" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$toc-level" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:param>
-<!-- A LaTeX "section depth" is *always* 1 for a section        -->
-<!-- But our numbering begins at the root, we need to decrement -->
-<!-- for a <book> due to intervening chapters, etc.             -->
-<xsl:param name="latex-numbering-maxlevel">
-    <xsl:choose>
-        <xsl:when test="/mathbook/book">
-            <xsl:value-of select="$numbering-maxlevel - 1" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$numbering-maxlevel" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:param>
+<!-- LaTeX always puts sections at level "1"            -->
+<!-- MBX has sections at level "2", so off by one       -->
+<!-- Furthermore, param's are relative to document root -->
+<!-- So we translate MBX-speak to LaTeX-speak (twice)   -->
+ <xsl:variable name="latex-toc-level">
+    <xsl:value-of select="$root-level + $toc-level - 1" />
+</xsl:variable>
+<xsl:variable name="latex-numbering-maxlevel">
+    <xsl:value-of select="$root-level + $numbering-maxlevel - 1" />
+</xsl:variable>
 
 <!-- Entry template is in mathbook-common file -->
 
@@ -411,7 +395,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
     <xsl:text>[</xsl:text>
     <xsl:call-template name="level-number-to-latex-name">
-        <xsl:with-param name="level" select="$numbering-theorems" />
+        <xsl:with-param name="level" select="$numbering-theorems + $root-level" />
     </xsl:call-template>
     <xsl:text>]&#xa;</xsl:text>
     <!-- Localize "Proof" environment -->
@@ -500,7 +484,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Controlled by  numbering.equations.level  processing parameter&#xa;</xsl:text>
         <xsl:text>\numberwithin{equation}{</xsl:text>
         <xsl:call-template name="level-number-to-latex-name">
-            <xsl:with-param name="level" select="$numbering-equations" />
+            <xsl:with-param name="level" select="$numbering-equations + $root-level" />
         </xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
@@ -628,7 +612,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\SetupFloatingEnvironment{figure}{fileext=lof,placement={H},within=</xsl:text>
             <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
             <xsl:call-template name="level-number-to-latex-name">
-                <xsl:with-param name="level" select="$numbering-theorems" />
+                <xsl:with-param name="level" select="$numbering-theorems + $root-level" />
             </xsl:call-template>
             <xsl:text>,name=</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'figure'" /></xsl:call-template>
@@ -643,7 +627,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\SetupFloatingEnvironment{table}{fileext=lot,placement={H},within=</xsl:text>
             <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
             <xsl:call-template name="level-number-to-latex-name">
-                <xsl:with-param name="level" select="$numbering-theorems" />
+                <xsl:with-param name="level" select="$numbering-theorems + $root-level" />
             </xsl:call-template>
             <xsl:text>,name=</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'table'" /></xsl:call-template>

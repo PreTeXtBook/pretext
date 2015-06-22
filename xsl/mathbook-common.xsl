@@ -129,7 +129,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$toc.level" />
         </xsl:when>
         <xsl:when test="/mathbook/book">2</xsl:when>
-        <xsl:when test="/mathbook/article and /mathbook/article/section">1</xsl:when>
+        <xsl:when test="/mathbook/article/section">1</xsl:when>
         <xsl:when test="/mathbook/article">0</xsl:when>
         <xsl:when test="/mathbook/letter">0</xsl:when>
         <xsl:when test="/mathbook/memo">0</xsl:when>
@@ -147,7 +147,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$numbering.theorems.level" />
         </xsl:when>
         <xsl:when test="/mathbook/book">2</xsl:when>
-        <xsl:when test="/mathbook/article and /mathbook/article/section">1</xsl:when>
+        <xsl:when test="/mathbook/article/section">1</xsl:when>
         <xsl:when test="/mathbook/article">0</xsl:when>
         <xsl:when test="/mathbook/letter">0</xsl:when>
         <xsl:when test="/mathbook/memo">0</xsl:when>
@@ -165,7 +165,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$numbering.equations.level" />
         </xsl:when>
         <xsl:when test="/mathbook/book">2</xsl:when>
-        <xsl:when test="/mathbook/article and /mathbook/article/section">1</xsl:when>
+        <xsl:when test="/mathbook/article/section">1</xsl:when>
         <xsl:when test="/mathbook/article">0</xsl:when>
         <xsl:when test="/mathbook/letter">0</xsl:when>
         <xsl:when test="/mathbook/memo">0</xsl:when>
@@ -183,7 +183,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$numbering.footnotes.level" />
         </xsl:when>
         <xsl:when test="/mathbook/book">2</xsl:when>
-        <xsl:when test="/mathbook/article and /mathbook/article/section">1</xsl:when>
+        <xsl:when test="/mathbook/article/section">1</xsl:when>
         <xsl:when test="/mathbook/article">0</xsl:when>
         <xsl:when test="/mathbook/letter">0</xsl:when>
         <xsl:when test="/mathbook/memo">0</xsl:when>
@@ -199,7 +199,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="max-feasible">
         <xsl:choose>
             <xsl:when test="/mathbook/book">4</xsl:when>
-            <xsl:when test="/mathbook/article">3</xsl:when>
+            <xsl:when test="/mathbook/article/section">3</xsl:when>
+            <xsl:when test="/mathbook/article">0</xsl:when>
             <xsl:when test="/mathbook/letter">0</xsl:when>
             <xsl:when test="/mathbook/memo">0</xsl:when>
             <xsl:otherwise>
@@ -263,6 +264,76 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="docinfo" />
+
+<!--        -->
+<!-- Levels -->
+<!--        -->
+
+<!-- (Relative) Levels -->
+<!-- Chase any element up full XML tree,      -->
+<!-- but adjust for actual document root      -->
+<!-- XML document root is always -2           -->
+<!-- mathbook element is always -1            -->
+<!-- book, article, letter, memo, etc is 0    -->
+<!-- sectioning works its way down from there -->
+<!-- http://bytes.com/topic/net/answers/572365-how-compute-nodes-depth-xslt -->
+<!-- NB: a * instead of node() seems to break things, unsure why            -->
+<xsl:template match="*" mode="level">
+    <xsl:value-of select="count(ancestor::node())-2" />
+</xsl:template>
+
+<!-- Relative level offset -->
+<!-- Document root on absolute level scale (not XML root)            -->
+<!-- See "absolute" scale in use just below                          -->
+<!-- For example, article with sections has document root at level 1 -->
+<!-- So:  absolute-level = (relative-)level + root-level             -->
+<xsl:variable name="root-level">
+    <xsl:choose>
+        <xsl:when test="/mathbook/book/part">-1</xsl:when>
+        <xsl:when test="/mathbook/book/chapter">0</xsl:when>
+        <xsl:when test="/mathbook/article/section">1</xsl:when>
+        <xsl:when test="/mathbook/article">100</xsl:when> <!-- no sectioning? -->
+        <xsl:when test="/mathbook/letter">1</xsl:when>
+        <xsl:when test="/mathbook/memo">1</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:BUG: Level offset undefined for this document type</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Names for Levels -->
+<!-- Levels (ie depths in the tree) translate to MBX element           -->
+<!-- names and LaTeX sections, which are generally the same            -->
+<!-- This is useful for "new" sections (like exercises and references) -->
+<!-- used with standard LaTeX sectioning and numbering                 -->
+
+<!-- These are are the "absolute" level numbers        -->
+<!-- We convert a level to a LaTeX/MBX sectioning name -->
+<xsl:template name="level-number-to-latex-name">
+    <xsl:param name="level" />
+    <xsl:choose>
+        <xsl:when test="$level=0">part</xsl:when>
+        <xsl:when test="$level=1">chapter</xsl:when>
+        <xsl:when test="$level=2">section</xsl:when>
+        <xsl:when test="$level=3">subsection</xsl:when>
+        <xsl:when test="$level=4">subsubsection</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: Level computation is out-of-bounds (<xsl:value-of select="$level" />)</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Nodes to Subdivision Names -->
+<!-- Compute relative level of a node, adjust to absolute -->
+<!-- Subdivision name comes from named template above     -->
+<xsl:template match="*" mode="subdivision-name">
+    <xsl:variable name="relative-level">
+        <xsl:apply-templates select="." mode="level" />
+    </xsl:variable>
+    <xsl:call-template name="level-number-to-latex-name">
+        <xsl:with-param name="level" select="$relative-level + $root-level" />
+    </xsl:call-template>
+</xsl:template>
 
 <!-- ########################### -->
 <!-- Mathematics (LaTeX/MathJax) -->
@@ -735,15 +806,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> (</xsl:text>
     <xsl:value-of select="substring(date:date-time(),20)" />
     <xsl:text>)</xsl:text>
-</xsl:template>
-
-<!-- Levels -->
-<!-- root is -2, mathbook is -1    -->
-<!-- book, article, etc is 0       -->
-<!-- sectioning works its way down -->
-<!-- http://bytes.com/topic/net/answers/572365-how-compute-nodes-depth-xslt -->
-<xsl:template match="*" mode="level">
-    <xsl:value-of select="count(ancestor::node())-2" />
 </xsl:template>
 
 <!--                    -->
@@ -1335,58 +1397,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="0" />
 </xsl:template>
 
-<!-- ################ -->
-<!-- Names for Levels -->
-<!-- ################ -->
 
-<!-- Levels (ie depths in the tree) translate to            -->
-<!-- element names and LaTeX sections, which we keep the    -->
-<!-- same primarily.  So this is more general than it looks -->
-
-<!-- Level Numbers to LaTeX Names -->
-<!-- Convert a level (integer) to the corresponding LaTeX division name -->
-<xsl:template name="level-number-to-latex-name">
-    <xsl:param name="level" />
-    <xsl:choose>
-        <xsl:when test="/mathbook/book">
-            <xsl:choose>
-                <xsl:when test="$level=0">book</xsl:when>
-                <xsl:when test="$level=1">chapter</xsl:when>
-                <xsl:when test="$level=2">section</xsl:when>
-                <xsl:when test="$level=3">subsection</xsl:when>
-                <xsl:when test="$level=4">subsubsection</xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>MBX:ERROR: Level computation is out-of-bounds (<xsl:value-of select="$level" />)</xsl:message>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:when test="/mathbook/article">
-            <xsl:choose>
-                <xsl:when test="$level=0">article</xsl:when>
-                <xsl:when test="$level=1">section</xsl:when>
-                <xsl:when test="$level=2">subsection</xsl:when>
-                <xsl:when test="$level=3">subsubsection</xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>MBX:ERROR: Level computation is out-of-bounds (<xsl:value-of select="$level" />)</xsl:message>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Level computation only for books, articles</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- Nodes to Subdivision Names -->
-<!-- Compute level given a node, via this modal template -->
-<!-- Subdivision name comes from named template above    -->
-<xsl:template match="*" mode="subdivision-name">
-    <xsl:call-template name="level-number-to-latex-name">
-        <xsl:with-param name="level">
-            <xsl:apply-templates select="." mode="level" />
-        </xsl:with-param>
-    </xsl:call-template>
-</xsl:template>
 
 <!-- Programming Language Names -->
 <!-- Packages for listing and syntax highlighting             -->
