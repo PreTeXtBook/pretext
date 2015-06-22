@@ -331,7 +331,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A structural node may be one of many on a web page -->
 <!-- We make an HTML section, then a header, then       -->
 <!-- recurse into remaining content                     -->
-<xsl:template match="book|article|frontmatter|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|paragraphs|paragraph|exercises|references|backmatter">
+<xsl:template match="book|article|frontmatter|part|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|paragraphs|paragraph|exercises|references|backmatter">
     <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
     <section class="{local-name(.)}" id="{$ident}">
         <xsl:apply-templates select="." mode="section-header" />
@@ -442,7 +442,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Chapters, Sections, etc may be untitled, so may be empty, though unusual -->
 <!-- Environments could be untitled much of the time                          -->
-<xsl:template match="book|article|chapter|appendix|section|subsection|subsubsection|paragraphs|paragraph|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration" mode="title">
+<xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection|paragraphs|paragraph|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration" mode="title">
     <xsl:param name="complexity" />
     <xsl:apply-templates select="title" mode="title">
         <xsl:with-param name="complexity"><xsl:value-of select="$complexity" /></xsl:with-param>

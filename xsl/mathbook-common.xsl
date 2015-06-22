@@ -146,6 +146,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$numbering.theorems.level != ''">
             <xsl:value-of select="$numbering.theorems.level" />
         </xsl:when>
+        <xsl:when test="/mathbook/book/part">3</xsl:when>
         <xsl:when test="/mathbook/book">2</xsl:when>
         <xsl:when test="/mathbook/article/section">1</xsl:when>
         <xsl:when test="/mathbook/article">0</xsl:when>
@@ -164,6 +165,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$numbering.equations.level != ''">
             <xsl:value-of select="$numbering.equations.level" />
         </xsl:when>
+        <xsl:when test="/mathbook/book/part">3</xsl:when>
         <xsl:when test="/mathbook/book">2</xsl:when>
         <xsl:when test="/mathbook/article/section">1</xsl:when>
         <xsl:when test="/mathbook/article">0</xsl:when>
@@ -182,6 +184,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$numbering.footnotes.level != ''">
             <xsl:value-of select="$numbering.footnotes.level" />
         </xsl:when>
+        <xsl:when test="/mathbook/book/part">3</xsl:when>
         <xsl:when test="/mathbook/book">2</xsl:when>
         <xsl:when test="/mathbook/article/section">1</xsl:when>
         <xsl:when test="/mathbook/article">0</xsl:when>
@@ -198,6 +201,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="numbering-maxlevel">
     <xsl:variable name="max-feasible">
         <xsl:choose>
+            <xsl:when test="/mathbook/book/part">5</xsl:when>
             <xsl:when test="/mathbook/book">4</xsl:when>
             <xsl:when test="/mathbook/article/section">3</xsl:when>
             <xsl:when test="/mathbook/article">0</xsl:when>
@@ -1107,7 +1111,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Level 0 (book, article) is ignored                     -->
 <!-- TODO: need filter, if, to handle appendices formatting with letters-->
 <xsl:template match="*" mode="structural-number">
-    <xsl:number level="multiple" count="chapter|appendix|section|subsection|subsubsection|references|exercises" />
+    <xsl:number level="multiple" count="part|chapter|appendix|section|subsection|subsubsection|references|exercises" />
 </xsl:template>
 
 <!-- We truncate a structural number to a               -->
@@ -1153,7 +1157,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A structural node just gets its structural number,              -->
 <!-- there is no truncation (can just not number at lower levels)    -->
 <!-- The variable  number-maxlevel  controls absence at lower levels -->
-<xsl:template match="chapter|appendix|section|subsection|subsubsection|references|exercises" mode="number">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|references|exercises" mode="number">
     <xsl:variable name="level">
         <xsl:apply-templates select="." mode="level" />
     </xsl:variable>

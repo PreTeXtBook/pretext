@@ -196,7 +196,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- introduction -->
     <!-- second half-title, first part-title -->
     <xsl:text>\mainmatter&#xa;</xsl:text>
-    <xsl:apply-templates select="chapter" />
+    <xsl:apply-templates select="part|chapter" />
     <xsl:if test="appendix">
         <xsl:text>%&#xa;</xsl:text>
         <xsl:text>\appendix&#xa;</xsl:text>
@@ -794,6 +794,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- http://tex.stackexchange.com/questions/44088/when-do-i-need-to-invoke-phantomsection -->
     <xsl:text>%% If you manually remove hyperref, leave in this next command&#xa;</xsl:text>
     <xsl:text>\providecommand\phantomsection{}&#xa;</xsl:text>
+    <xsl:if test="//book/part">
+        <xsl:text>%% To match HTML, chapters reset within parts&#xa;</xsl:text>
+        <xsl:text>\makeatletter&#xa;</xsl:text>
+        <xsl:text>\@addtoreset{chapter}{part}&#xa;</xsl:text>
+        <xsl:text>\makeatother &#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="$latex.watermark">
         <xsl:text>\usepackage{draftwatermark}&#xa;</xsl:text>
         <xsl:text>\SetWatermarkText{</xsl:text>
@@ -1264,7 +1270,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (1) appendices are just chapters after \backmatter macro -->
 <!-- (2) exercises, references can appear at any depth,       -->
 <!--     so compute the subdivision name                      -->
-<xsl:template match="chapter|appendix|section|subsection|subsubsection|paragraphs|paragraph|exercises|references">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|paragraphs|paragraph|exercises|references">
     <xsl:variable name="level">
         <xsl:choose>
             <!-- TODO: appendix handling is only right for books, expand to articles -->
