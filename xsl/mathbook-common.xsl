@@ -746,27 +746,63 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="count(ancestor::node())-2" />
 </xsl:template>
 
+<!--                    -->
+<!-- Document Structure -->
+<!--                    -->
+
 <!-- Structural Nodes -->
-<!-- Some elements of the XML tree -->
-<!-- are part of the document tree -->
+<!-- Some elements of the XML tree are the           -->
+<!-- structural elements of the document tree        -->
+<!-- For example, these are eligible for chunking    -->
+<!-- NB: These need only be specified here, and next -->
+<xsl:template match="book|article|letter|memo|frontmatter|part|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references|backmatter" mode="is-structural">
+    <xsl:value-of select="true()" />
+</xsl:template>
 <xsl:template match="*" mode="is-structural">
-    <xsl:value-of select="self::book or self::article or self::frontmatter or self::chapter or self::appendix or self::preface or self::acknowledgement or self::biography or self::foreword or self::dedication or self::colophon or self::section or self::subsection or self::subsubsection or self::exercises or self::references or self::backmatter" />
+    <xsl:value-of select="false()" />
 </xsl:template>
 
 <!-- Structural Leaves -->
-<!-- Some elements of the document tree -->
-<!-- are the leaves of that tree        -->
+<!-- Some structural elements of the document tree -->
+<!-- are the leaves of that tree, meaning they do  -->
+<!-- not contain any structural nodes themselves   -->
+<!-- NB: specification here must match preceding   -->
+<xsl:template match="book|article|letter|memo|frontmatter|part|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references|backmatter" mode="is-leaf">
+    <xsl:call-template name="without-structural">
+        <xsl:with-param name="nodes" select="child::*" />
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="*" mode="is-leaf">
-    <xsl:variable name="structural"><xsl:apply-templates select="." mode="is-structural" /></xsl:variable>
+    <xsl:value-of select="false()" />
+</xsl:template>
+
+<!-- Given a list of nodes (children of another node)      -->
+<!-- we check the first one to see if it is structural.    -->
+<!-- If not, we recurse through the remainder of the nodes -->
+<xsl:template name="without-structural">
+    <xsl:param name="nodes" />
     <xsl:choose>
-        <xsl:when test="$structural='true'">
-            <xsl:value-of select="not(child::book or child::article or child::chapter or child::frontmatter or child::appendix or child::preface or child::acknowledgement or child::biography or child::foreword or child::dedication or child::colophon or child::section or child::subsection or child::subsubsection or child::exercises or child::references or child::backmatter)" />
+        <xsl:when test="not($nodes)">
+            <xsl:value-of select="true()" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="$structural" />
+            <xsl:variable name="structural">
+                <xsl:apply-templates select="$nodes[1]" mode="is-structural" />
+            </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="$structural='true'">
+                    <xsl:value-of select="false()" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="without-structural">
+                        <xsl:with-param name="nodes" select="$nodes[position() > 1]" />
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
 
 <!-- Names of Objects -->
 <!-- Ultimately translations are all contained in the           -->
