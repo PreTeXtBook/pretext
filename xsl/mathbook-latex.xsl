@@ -346,15 +346,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Controlled by  numbering.theorems.level  processing parameter&#xa;</xsl:text>
     <xsl:text>%% Always need a theorem environment to set base numbering scheme&#xa;</xsl:text>
     <xsl:text>%% even if document has no theorems (but has other environments)&#xa;</xsl:text>
+    <!-- http://tex.stackexchange.com/questions/155710/understanding-the-arguments-in-newtheorem-e-g-newtheoremtheoremtheoremsec/155714#155714 -->
     <xsl:text>\newtheorem{theorem}{</xsl:text>
     <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'theorem'" /></xsl:call-template>
     <xsl:text>}</xsl:text>
     <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
-    <xsl:text>[</xsl:text>
-    <xsl:call-template name="level-number-to-latex-name">
-        <xsl:with-param name="level" select="$numbering-theorems + $root-level" />
-    </xsl:call-template>
-    <xsl:text>]&#xa;</xsl:text>
+    <xsl:if test="not($numbering-theorems = 0)">
+        <xsl:text>[</xsl:text>
+        <xsl:call-template name="level-number-to-latex-name">
+            <xsl:with-param name="level" select="$numbering-theorems + $root-level" />
+        </xsl:call-template>
+        <xsl:text>]&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>%% Only variants actually used in document appear here&#xa;</xsl:text>
     <xsl:text>%% Numbering: all theorem-like numbered consecutively&#xa;</xsl:text>
     <xsl:text>%% i.e. Corollary 4.3 follows Theorem 4.2&#xa;</xsl:text>
@@ -600,9 +603,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>% Figure environment setup so that it no longer floats&#xa;</xsl:text>
             <xsl:text>\SetupFloatingEnvironment{figure}{fileext=lof,placement={H},within=</xsl:text>
             <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
-            <xsl:call-template name="level-number-to-latex-name">
-                <xsl:with-param name="level" select="$numbering-theorems + $root-level" />
-            </xsl:call-template>
+            <xsl:choose>
+                <xsl:when test="$numbering-theorems = 0">
+                    <xsl:text>none</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="level-number-to-latex-name">
+                        <xsl:with-param name="level" select="$numbering-theorems + $root-level" />
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:text>,name=</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'figure'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
@@ -615,9 +625,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>% Table environment setup so that it no longer floats&#xa;</xsl:text>
             <xsl:text>\SetupFloatingEnvironment{table}{fileext=lot,placement={H},within=</xsl:text>
             <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
-            <xsl:call-template name="level-number-to-latex-name">
-                <xsl:with-param name="level" select="$numbering-theorems + $root-level" />
-            </xsl:call-template>
+            <xsl:choose>
+                <xsl:when test="$numbering-theorems = 0">
+                    <xsl:text>none</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="level-number-to-latex-name">
+                        <xsl:with-param name="level" select="$numbering-theorems + $root-level" />
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:text>,name=</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'table'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>

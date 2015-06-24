@@ -2978,6 +2978,150 @@ the xsltproc executable.
 
         </section>
 
+        <section xml:id="advanced-numbering">
+            <title>Advanced Numbering</title>
+
+            <introduction>
+                <p>This section demonstrates the numbering patterns used throughout MathBook XML.  There are five subsections.  Two intermediate subsections each have two subsubsections.  This creates a total of seven divisions that are leaves of the document tree.  In each leaf we have placed two numbered theorems, for a total of fourteen.  There is no real content, this is just a demonstration.</p>
+
+                <p>Use values of <c>0</c> through <c>3</c> for the <c>numbering.theorems.level</c> parameter to see how these numbers change accordingly.  It is easiest to compare if you use <c>chunk.level &lt; 2</c> so the theorems all land on the same page if you are previewing in HTML.</p>
+            </introduction>
+
+            <subsection>
+                <title>One</title>
+
+                <introduction><p>A document leaf.</p></introduction>
+
+                <theorem xml:id="theorem-number-01">
+                    <title>First Theorem</title>
+                    <statement><p>No statement.</p></statement>
+                </theorem>
+
+                <theorem xml:id="theorem-number-02">
+                    <title>Second Theorem</title>
+                    <statement><p>No statement.</p></statement>
+                </theorem>
+
+            </subsection>
+
+            <subsection>
+                <title>Two</title>
+
+                <introduction><p>Further subdivided.</p></introduction>
+
+                <subsubsection>
+                    <title>Uno</title>
+
+                    <introduction><p>A document leaf.</p></introduction>
+
+                    <theorem xml:id="theorem-number-03">
+                        <title>First Theorem</title>
+                        <statement><p>No statement.</p></statement>
+                    </theorem>
+
+                    <theorem xml:id="theorem-number-04">
+                        <title>Second Theorem</title>
+                        <statement><p>No statement.</p></statement>
+                    </theorem>
+
+                </subsubsection>
+
+                <subsubsection>
+                    <title>Dos</title>
+
+                    <introduction><p>A document leaf.</p></introduction>
+
+                    <theorem xml:id="theorem-number-05">
+                        <title>First Theorem</title>
+                        <statement><p>No statement.</p></statement>
+                    </theorem>
+
+                    <theorem xml:id="theorem-number-06">
+                        <title>Second Theorem</title>
+                        <statement><p>No statement.</p></statement>
+                    </theorem>
+
+                </subsubsection>
+
+            </subsection>
+
+            <subsection>
+                <title>Three</title>
+
+                <introduction><p>A document leaf.</p></introduction>
+
+                <theorem xml:id="theorem-number-07">
+                    <title>First Theorem</title>
+                    <statement><p>No statement.</p></statement>
+                </theorem>
+
+                <theorem xml:id="theorem-number-08">
+                    <title>Second Theorem</title>
+                    <statement><p>No statement.</p></statement>
+                </theorem>
+
+            </subsection>
+
+            <subsection>
+                <title>Four</title>
+
+                <introduction><p>Further subdivided.</p></introduction>
+
+                <subsubsection>
+                    <title>Uno</title>
+
+                    <introduction><p>A document leaf.</p></introduction>
+
+                    <theorem xml:id="theorem-number-09">
+                        <title>First Theorem</title>
+                        <statement><p>No statement.</p></statement>
+                    </theorem>
+
+                    <theorem xml:id="theorem-number-10">
+                        <title>Second Theorem</title>
+                        <statement><p>No statement.</p></statement>
+                    </theorem>
+
+                </subsubsection>
+
+                <subsubsection>
+                    <title>Dos</title>
+
+                    <introduction><p>A document leaf.</p></introduction>
+
+                    <theorem xml:id="theorem-number-11">
+                        <title>First Theorem</title>
+                        <statement><p>No statement.</p></statement>
+                    </theorem>
+
+                    <theorem xml:id="theorem-number-12">
+                        <title>Second Theorem</title>
+                        <statement><p>No statement.</p></statement>
+                    </theorem>
+
+                    </subsubsection>
+
+            </subsection>
+
+            <subsection>
+                <title>Five</title>
+
+                <introduction><p>A document leaf.</p></introduction>
+
+                <theorem xml:id="theorem-number-13">
+                    <title>First Theorem</title>
+                    <statement><p>No statement.</p></statement>
+                </theorem>
+
+                <theorem xml:id="theorem-number-14">
+                    <title>Second Theorem</title>
+                    <statement><p>No statement.</p></statement>
+                </theorem>
+
+            </subsection>
+
+        </section>
+
         <section>
             <title>Customizations</title>
 

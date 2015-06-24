@@ -1861,19 +1861,30 @@ is just flat out on the page, as if printed there.
     </xsl:choose>
 </xsl:template>
 
-<!-- Caption of a figure or table                  -->
+<!-- ######## -->
+<!-- Captions -->
+<!-- ######## -->
+
+<!-- Caption of a numbered figure or table         -->
 <!-- All the relevant information is in the parent -->
 <xsl:template match="caption">
     <figcaption>
-        <!-- subfigure/subtable captions don't have 'Figure'/'Table' in the caption -->
-        <xsl:if test="not(ancestor::sidebyside[count(caption)>0]) or local-name(..)='sidebyside'">
-          <!-- regular figures, e.g Figure 1.3 or global captions for a collection of subfigures/subtables-->
-            <span class="heading">
-                <xsl:apply-templates select=".." mode="type-name"/>
-            </span>
-        </xsl:if>
+        <span class="heading">
+            <xsl:apply-templates select="parent::*" mode="type-name"/>
+        </span>
         <span class="codenumber">
-            <xsl:apply-templates select=".." mode="number"/>
+            <xsl:apply-templates select="parent::*" mode="number"/>
+        </span>
+        <xsl:apply-templates />
+    </figcaption>
+</xsl:template>
+
+<!-- Caption'ed sidebyside indicate subfigures and subtables are subsidiary -->
+<!-- so we number with just their serial number, a formatted (a), (b), (c), -->
+<xsl:template match="sidebyside[caption]/figure/caption|sidebyside[caption]/table/caption">
+    <figcaption>
+        <span class="codenumber">
+            <xsl:apply-templates select="parent::*" mode="serial-number"/>
         </span>
         <xsl:apply-templates />
     </figcaption>
@@ -1901,10 +1912,6 @@ is just flat out on the page, as if printed there.
         <xsl:value-of select="$prefix" />
         <xsl:if test="$prefix!=''">
             <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
-        </xsl:if>
-        <!-- subfigures/subtables need their parent figure's number, e.g Figure 21.1(a) -->
-        <xsl:if test="ancestor::sidebyside[count(caption)>0]">
-              <xsl:apply-templates select="ancestor::sidebyside" mode="number" />
         </xsl:if>
         <xsl:apply-templates select="." mode="formatted-ref-number" />
     </xsl:variable>
