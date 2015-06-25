@@ -662,7 +662,7 @@ the xsltproc executable.
                 <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
             </md></p>
 
-            <p>Table can get quite complex.  Simple ones are simpler, such as this example of numerical computations for Euler's method.</p>
+            <p>Tables can get quite complex.  Simple ones are simpler, such as this example of numerical computations for Euler's method.</p>
 
             <table xml:id="table-euler1">
                 <tabular top="major" halign="center">
@@ -1078,7 +1078,7 @@ the xsltproc executable.
                 <!-- http://asymptote.sourceforge.net/gallery/2D%20graphs/logimage.asy -->
 
                 <figure xml:id="figure-asymptote-contour-plot">
-                    <caption>Aymptote Contour Plot</caption>
+                    <caption>Asymptote Contour Plot</caption>
                     <image xml:id="asymptote-contour">
                         <asymptote>
                         import graph;
@@ -2269,6 +2269,7 @@ the xsltproc executable.
                                 <li>If <c>p</c> is now the last element of the list, stop</li>
                                 <li>Otherwise, set <c>p</c> to the element of the list immediately after current <c>p</c></li>
                             </ol></li>
+                        <li>Output: the remaining elements of the list</li>
                     </ol>
                 </statement>
 
