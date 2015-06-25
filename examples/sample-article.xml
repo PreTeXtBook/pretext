@@ -1078,7 +1078,7 @@ the xsltproc executable.
                 <!-- http://asymptote.sourceforge.net/gallery/2D%20graphs/logimage.asy -->
 
                 <figure xml:id="figure-asymptote-contour-plot">
-                    <caption>Aymptote Contour Plot</caption>
+                    <caption>Asymptote Contour Plot</caption>
                     <image xml:id="asymptote-contour">
                         <asymptote>
                         import graph;
