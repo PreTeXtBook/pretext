@@ -812,15 +812,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>)</xsl:text>
 </xsl:template>
 
-<!--                    -->
+<!-- ################## -->
 <!-- Document Structure -->
-<!--                    -->
+<!-- ################## -->
 
 <!-- Structural Nodes -->
-<!-- Some elements of the XML tree are the           -->
-<!-- structural elements of the document tree        -->
-<!-- For example, these are eligible for chunking    -->
-<!-- NB: These need only be specified here, and next -->
+<!-- Some elements of the XML tree are structural elements of the document tree  -->
+<!-- This is our logical overlay on the (finer, larger, more expansive) XML tree -->
+<!-- Example: <section> is structural, and ancestors are all structural          -->
+<!-- Example: <title> is not structural, but does have a structural ancestor     -->
+<!-- NB: These elements need only be specified here, and in leaf template (next) -->
 <xsl:template match="book|article|letter|memo|frontmatter|part|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references|backmatter" mode="is-structural">
     <xsl:value-of select="true()" />
 </xsl:template>
@@ -845,6 +846,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Given a list of nodes (children of another node)      -->
 <!-- we check the first one to see if it is structural.    -->
 <!-- If not, we recurse through the remainder of the nodes -->
+<!-- We quit (false) when a structural node is found       -->
+<!-- We quit (true) when the list of nodes is exhausted    -->
 <xsl:template name="without-structural">
     <xsl:param name="nodes" />
     <xsl:choose>
