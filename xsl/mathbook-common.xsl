@@ -872,6 +872,230 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- ####################### -->
+<!-- Chunking Document Nodes -->
+<!-- ####################### -->
+
+<!--
+When we break a document into pieces, known as "chunks,"
+there is a configurable level (the "chunk-level") where
+the document nodes at that level are always a chunk.
+At a lesser level, document nodes are "intermediate" nodes
+and so are output as summaries of their children.
+However, an intermediate node may have no children
+(is a "leaf") and hence is output as a chunk.
+
+Said differently, chunks are natural leaves of the document
+tree, or leaves (dead-ends) manufactured by an arbitrary
+cutoff given by the chunk-level variable
+-->
+
+<!--
+So we have three types of document nodes:
+Intermediate: structural node, not a document leaf, smaller level than chunk-level
+  Realization: some content (title, introduction, conclusion), links/includes to children
+Leaf: structural node, at chunk-level or a leaf at smaller level than chunk-level
+  Realization: a chunk will all content
+Neither: A structural node that is simply a (visual) subdivision of a chunk
+  Realization: usual presentation, but wtithin the enclosing chunk
+-->
+
+<!-- An intermediate node is at lesser level than chunk-level and is not a leaf -->
+ <xsl:template match="*" mode="is-intermediate">
+    <xsl:variable name="structural">
+        <xsl:apply-templates select="." mode="is-structural" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$structural='true'">
+            <xsl:variable name="current-level">
+                <xsl:apply-templates select="." mode="level" />
+            </xsl:variable>
+            <xsl:variable name="leaf">
+                <xsl:apply-templates select="." mode="is-leaf" />
+            </xsl:variable>
+            <xsl:value-of select="($leaf='false') and ($chunk-level > $current-level)" />
+        </xsl:when>
+        <xsl:when test="$structural='false'">
+            <xsl:value-of select="$structural" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:BUG: Structural determination (<xsl:value-of select="$structural" />) failed for is-intermediate at <xsl:apply-templates select="." mode="long-name"/></xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- A chunk node is at the chunk-level, or a leaf at a lesser level -->
+<xsl:template match="*" mode="is-chunk">
+    <xsl:variable name="structural">
+        <xsl:apply-templates select="." mode="is-structural" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$structural='true'">
+            <xsl:variable name="current-level">
+                <xsl:apply-templates select="." mode="level" />
+            </xsl:variable>
+            <xsl:variable name="leaf">
+                <xsl:apply-templates select="." mode="is-leaf" />
+            </xsl:variable>
+            <xsl:value-of select="($chunk-level = $current-level) or ( ($leaf='true') and ($chunk-level > $current-level) )" />
+        </xsl:when>
+        <xsl:when test="$structural='false'">
+            <xsl:value-of select="$structural" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:BUG: Structural determination (<xsl:value-of select="$structural" />) failed for is-chunk at <xsl:apply-templates select="." mode="long-name"/></xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- ################# -->
+<!-- Abstract Chunking -->
+<!-- ################# -->
+
+<!--
+** IMPORTANT **
+
+The next two templates are "abstract" since they require that they be
+imported by an XSL file which implements three modal templates.
+
+The internal templates defined here are
+
+(I)  "chunk" - this is called by the entry template on the document root
+
+(II) "structure-node" - recursive handling of structural nodes
+
+An enclosing XSL file then needs to implement three modal templates.
+These should all be implemented with  match="*"
+See note below about (a) versus (b).
+
+(a) file-wrap
+    parameter: content
+    All the infrastructure common to wrapping a chunk
+    For example, a web page, LaTeX file, Sage worksheet
+    Typically this will include a call to output a file, and
+    headers and footers necessary for the file to function,
+    such as HEAD and BODY elements for an HTML page
+    Typically, it does not include any displayed information 
+    unique to the content of the node, such as a title
+
+(b) content-wrap
+    parameter: content
+    Content unique to a particular structural node, exclusive
+    of its subsidiary elements.
+    Typically this would be headings, such as title.
+    This should be the same not matter when a structual node is
+    rendered: as the top-level of a chunk, subsidiary to a chunk,
+    or as an intermediate page.
+
+
+(c) structure-node-intermediate
+    The content of an intermediate node, providing its appearance 
+    inside of the  content-wrap  template.
+    This template should ignore the title, subtitle and author elements
+    (unless we have fixed this situation since writing this)
+    It should present non-structural elements and briefly summarize
+    structural elements, with navigation to the element's chunk.
+
+How do you tell the division between file-wrap and content-wrap?    
+Two things to realize
+(i)  a single file will typically be the application of a *single* file-wrap
+(ii) the content enclosed by a file-wrap typically will have several applications of content-wrap
+
+With these three templates in place, the next two routines will provide all
+of the logic of walking the document tree  and react appropriately for all
+values of the  chunk-level  variable and various scenarios for document organization
+
+See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontrivial examples
+-->
+
+<!-- This routine kills non-structural nodes automatically. -->
+<!-- TODO: consolidate file-wraps,                                  -->
+<!-- move recursion into chunk outside (with check on intermediate) -->
+<xsl:template match="*" mode="chunk">
+    <xsl:variable name="structural"><xsl:apply-templates select="." mode="is-structural" /></xsl:variable>
+    <xsl:if test="$structural='true'">
+        <xsl:variable name="intermediate"><xsl:apply-templates select="." mode="is-intermediate" /></xsl:variable>
+        <xsl:variable name="chunk"><xsl:apply-templates select="." mode="is-chunk" /></xsl:variable>
+        <xsl:choose>
+            <!-- file-wrap a chunk -->
+            <xsl:when test="$chunk='true'">
+                <xsl:apply-templates select="." mode="file-wrap">
+                    <xsl:with-param name="content">
+                        <xsl:apply-templates select="." mode="structure-node">
+                            <xsl:with-param name="complete" select="'true'" />
+                        </xsl:apply-templates>
+                    </xsl:with-param>
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:when test="$intermediate='true'">
+                <!-- not a leaf, not a chunk; file-wrap intermediate node -->
+                <!-- process children as potentially chunks themselves, outside file-wrap -->
+                <xsl:apply-templates select="." mode="file-wrap">
+                    <xsl:with-param name="content">
+                        <xsl:apply-templates select="." mode="structure-node">
+                            <xsl:with-param name="complete" select="'false'" />
+                        </xsl:apply-templates>
+                    </xsl:with-param>
+                </xsl:apply-templates>
+                <!-- now recurse back into this routine on each child within intermediate node -->
+                <xsl:apply-templates select="*" mode="chunk" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message>MBX:BUG:     A structural &lt;<xsl:value-of select="local-name(.)" />&gt; element is neither intermediate nor a chunk</xsl:message>
+                <xsl:apply-templates select="." mode="location-report" />
+                </xsl:otherwise>
+        </xsl:choose>
+    </xsl:if>
+</xsl:template>
+
+<!-- A structural node is "complete" if it is presented "normally."        -->
+<!-- It is either a leaf of the abbreviated, chunked document tree         -->
+<!-- or it appears within such a presentation.  Not complete implies       -->
+<!-- an intermediate node of the chunked document tree, which will         -->
+<!-- have a "plain" or "summary" presentation.                             -->
+
+<!-- This template handles *every* structural node (excepting the root document node). -->
+<!-- Non-structural nodes should have "plain" templates defined elsewhere.             -->
+<!-- TODO: maybe handle title/author/etc better  -->
+<xsl:template match="*" mode="structure-node">
+    <xsl:param name="complete" />
+    <xsl:apply-templates select="." mode="content-wrap">
+        <xsl:with-param name="content">
+            <xsl:choose>
+                <!-- writing a complete chunk, not intermediate    -->
+                <!-- content-wrap will handle titles, authors, etc -->
+                <xsl:when test="$complete = 'true'">
+                    <xsl:for-each select="*[not(self::title or self::subtitle or self::author)]">
+                        <xsl:variable name="structural">
+                            <xsl:apply-templates select="." mode="is-structural" />
+                        </xsl:variable>
+                        <xsl:choose>
+                            <xsl:when test="$structural='true'">
+                                <!-- recurse into structural child with present template -->
+                                <xsl:apply-templates select="." mode="structure-node">
+                                    <xsl:with-param name="complete" select="'true'" />
+                                </xsl:apply-templates>
+                            </xsl:when>
+                            <xsl:when test="$structural='false'">
+                                <!-- non-structural, so use a plain template defined elsewhere -->
+                                <xsl:apply-templates select="." />
+                            </xsl:when>
+                        </xsl:choose>
+                    </xsl:for-each>
+                </xsl:when>
+                <!-- writing an intermnediate node in an abbreviated fashion -->
+                <xsl:when test="$complete = 'false'">
+                    <!-- create content with summarized portions -->
+                    <xsl:apply-templates select="." mode="structure-node-intermediate" />
+                </xsl:when>
+                <xsl:otherwise>
+                <xsl:message>MBX:BUG:     Call to 'structural-node' template has a 'complete' parameter that is not 'true' or 'false'</xsl:message>
+                <xsl:apply-templates select="." mode="location-report" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
 
 <!-- Names of Objects -->
 <!-- Ultimately translations are all contained in the           -->
