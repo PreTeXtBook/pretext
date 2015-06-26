@@ -36,26 +36,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Parameters -->
 <!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
-<!-- See others in mathbook-common.xsl file                                   -->
+<!-- See more generally applicable parameters in mathbook-common.xsl file     -->
 <!--  -->
-<!-- Depth to which web pages are "chunked" -->
-<!-- Sentinel indicates no choice made      -->
-<xsl:param name="html.chunk.level" select="''" />
-
-<!-- Variables  -->
-<xsl:variable name="chunk-level">
-    <xsl:choose>
-        <xsl:when test="$html.chunk.level != ''">
-            <xsl:value-of select="$html.chunk.level" />
-        </xsl:when>
-        <xsl:when test="/mathbook/book">2</xsl:when>
-        <xsl:when test="/mathbook/article and /mathbook/article/section">1</xsl:when>
-        <xsl:when test="/mathbook/article">0</xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Chunk level not determined</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
 
 <!-- Content as Knowls -->
 <!-- These parameters control if content is -->
@@ -87,6 +69,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.css.file"   select="'mathbook-3.css'" />
 <!-- A space-separated list of CSS URLs (points to servers or local files) -->
 <xsl:param name="html.css.extra"  select="''" />
+
+<!-- ############## -->
+<!-- Entry Template -->
+<!-- ############## -->
+<!-- Main entry template is in  xsl/mathbook-common.html        -->
+<!-- It will employ templates which process structural document -->
+<!-- nodes into chunks, which in turn will call modal templates -->
+<!-- defined in this file                                       -->
+
 
 <!-- Authors, editors in serial lists for headers           -->
 <!-- Presumes authors get selected first, so editors follow -->
@@ -138,28 +129,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- ############################# -->
-<!-- Document Structure, version 3 -->
-<!-- ############################# -->
+<!-- ################ -->
+<!-- Structural Nodes -->
+<!-- ################ -->
 
 <!-- Read the code and documentation for "chunking" in xsl/mathbook-common.html -->
 <!-- This will explain document structure (not XML structure) and has the       -->
 <!-- routines which call the necessary realizations of two abstract templates.  -->
-
-<!-- Entry Point -->
-<!-- This is the entry point for this stylesheet                   -->
-<!-- The XML <mathbook> element has exactly one structural         -->
-<!-- element below it, for example a <book> or an <article>,       -->
-<!-- so we begin the "chunking" here.  The <docinfo> element will  -->
-<!-- just get killed automatically bu the "chunk" template.        -->
-<xsl:template match="/mathbook">
-    <xsl:apply-templates select="." mode="deprecation-warnings" />
-    <xsl:apply-templates select="*" mode="chunk" />
-</xsl:template>
-
-<!-- ################ -->
-<!-- Structural Nodes -->
-<!-- ################ -->
 
 <!-- Three modal templates accomodate all document structure nodes -->
 <!-- and all possibilities for chunking.  Read the description     -->
@@ -3176,7 +3152,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                         <xsl:attribute name="href">
                             <xsl:value-of select="$outer-url" />
                         </xsl:attribute>
-                        <xsl:if test="1 > html.chunk.level">
+                        <xsl:if test="1 > $chunk-level">
                             <xsl:attribute name="data-scroll">
                                 <xsl:value-of select="$outer-internal" />
                             </xsl:attribute>
@@ -3210,7 +3186,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                                     <xsl:attribute name="href">
                                         <xsl:value-of select="$inner-url" />
                                     </xsl:attribute>
-                                    <xsl:if test="2 > html.chunk.level">
+                                    <xsl:if test="2 > $chunk-level">
                                         <xsl:attribute name="data-scroll">
                                             <xsl:value-of select="$outer-internal" />
                                         </xsl:attribute>

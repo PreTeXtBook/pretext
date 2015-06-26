@@ -39,6 +39,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!-- These here are independent of the output format as well                  -->
 <!--                                                                          -->
+<!-- Depth to which a document is broken into smaller files/chunks -->
+<!-- Sentinel indicates no choice made                             -->
+<xsl:param name="chunk.level" select="''" />
+
+<!-- DO NOT USE -->
+<!-- HTML-specific deprecated 2015/06, but still functional -->
+<xsl:param name="html.chunk.level" select="''" />
+<!-- DO NOT USE -->
+
 <!-- An exercise has a statement, and may have a hint,     -->
 <!-- an answer and a solution.  An answer is just the      -->
 <!-- final number, expression, whatever; while a solution  -->
@@ -122,6 +131,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######### -->
 <!-- Variables -->
 <!-- ######### -->
+
+<!-- Variables  -->
+<xsl:variable name="chunk-level">
+    <xsl:choose>
+        <xsl:when test="$chunk.level != ''">
+            <xsl:value-of select="$chunk.level" />
+        </xsl:when>
+        <!-- HTML-specific deprecated 2015/06      -->
+        <!-- But still effective if not superseded -->
+        <xsl:when test="$html.chunk.level != ''">
+            <xsl:value-of select="$html.chunk.level" />
+        </xsl:when>
+        <xsl:when test="/mathbook/book">2</xsl:when>
+        <xsl:when test="/mathbook/article/section">1</xsl:when>
+        <xsl:when test="/mathbook/article">0</xsl:when>
+        <xsl:when test="/mathbook/letter">0</xsl:when>
+        <xsl:when test="/mathbook/memo">0</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: Chunk level not determined</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 
 <xsl:variable name="toc-level">
     <xsl:choose>
@@ -260,14 +291,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Entry template -->
 <!-- ############## -->
 
-<!-- docinfo is metadata, kill and retrieve as needed     -->
-<!-- Otherwise, processs book, article, letter, memo, etc -->
+<!-- Deprecation warnings are universal analysis of source and parameters   -->
+<!-- There is always a "document root" directly under the mathbook element, -->
+<!-- and we process it with the abstract chunking template defined below    -->
+<!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/mathbook">
     <xsl:apply-templates select="." mode="deprecation-warnings" />
-    <xsl:apply-templates />
+    <xsl:apply-templates mode="chunk" />
 </xsl:template>
-
-<xsl:template match="docinfo" />
 
 <!--        -->
 <!-- Levels -->
@@ -1917,6 +1948,13 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <xsl:template match="*" mode="deprecation-warnings">
     <!-- newer deprecations at the top of this list, user will see in this order -->
     <!--  -->
+    <xsl:if test="$html.chunk.level != ''">
+        <xsl:call-template name="deprecation-message">
+            <xsl:with-param name="date-string" select="'2015/06/26'" />
+            <xsl:with-param name="message" select="'the  html.chunk.level  parameter has been replaced by simply chunk.level  and now applies more generally'" />
+            <xsl:with-param name="occurences" select="'1'" />
+        </xsl:call-template>
+    </xsl:if>
     <!-- tables are radically different, tgroup element is a marker -->
     <xsl:if test="//tgroup">
         <xsl:call-template name="deprecation-message">
