@@ -22,8 +22,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Identify as a stylesheet -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
-    extension-element-prefixes="date"
+    extension-element-prefixes="exsl date"
 >
 
 <xsl:import href="./mathbook-common.xsl" />
@@ -83,7 +84,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- early or late                          -->
 <xsl:param name="latex.preamble.early" select="''" />
 <xsl:param name="latex.preamble.late" select="''" />
-<!--  -->
+
+<!-- Variables  -->
+<!-- Computed values of quantities affecting LaTeX output -->
+
 <!-- LaTeX always puts sections at level "1"            -->
 <!-- MBX has sections at level "2", so off by one       -->
 <!-- Furthermore, param's are relative to document root -->
@@ -97,10 +101,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Entry template is in mathbook-common file -->
 
+<!-- TODO: combine article and book templates -->
+<!-- with abstract templates for latex classes, page sides -->
+
 <!-- An article, LaTeX structure -->
 <!--     One page, full of sections (with abstract, references)                    -->
 <!--     Or, one page, totally unstructured, just lots of paragraphs, widgets, etc -->
-<xsl:template match="article">
+<xsl:template match="article" mode="content-wrap">
+    <xsl:param name="content" />
     <xsl:call-template name="converter-blurb" />
     <xsl:text>\documentclass[</xsl:text>
     <xsl:value-of select="$latex.font.size" />
@@ -113,28 +121,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
     <xsl:text>\geometry{letterpaper,total={5.0in,9.0in}}&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
+    <!-- parameterize preamble template with "page-geometry" template conditioned on self::article etc -->
     <xsl:call-template name="title-page-info-article" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
-    <xsl:if test="title or frontmatter/titlepage">
-        <xsl:text>\maketitle&#xa;</xsl:text>
-    </xsl:if>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
-    <!-- Likely only an abstract found in frontmatter -->
-    <xsl:apply-templates select="frontmatter" />
-    <xsl:if test="$latex-toc-level > 0">
-        <xsl:text>\setcounter{tocdepth}{</xsl:text>
-        <xsl:value-of select="$latex-toc-level" />
-        <xsl:text>}&#xa;</xsl:text>
-        <xsl:text>\renewcommand*\contentsname{</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'toc'" />
-        </xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
-        <xsl:text>\tableofcontents&#xa;</xsl:text>
-        <xsl:text>\clearpage&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="*[not(self::frontmatter or self::title or self::subtitle)]"/>
-    <!-- TODO: backmatter in an article? -->
+    <xsl:copy-of select="$content" />
     <xsl:call-template name="latex-postamble" />
    <xsl:text>\end{document}</xsl:text>
 </xsl:template>
@@ -142,7 +133,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A book, LaTeX structure -->
 <!-- The ordering of the frontmatter is from             -->
 <!-- "Bookmaking", 3rd Edition, Marshall Lee, Chapter 27 -->
-<xsl:template match="book">
+<xsl:template match="book" mode="content-wrap">
+    <xsl:param name="content" />
     <xsl:call-template name="converter-blurb" />
     <xsl:text>\documentclass[</xsl:text>
     <xsl:value-of select="$latex.font.size" />
@@ -157,58 +149,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="latex-preamble" />
     <xsl:call-template name="title-page-info-book" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
-    <xsl:text>\frontmatter&#xa;</xsl:text>
-    <!-- first page, title only -->
-    <xsl:call-template name="half-title" />
-    <!-- Obverse of half-title is adcard -->
-    <xsl:call-template name="ad-card" />
-    <!-- title page -->
-    <xsl:call-template name="title-page" />
-    <!-- title page obverse is copyright, possibly empty -->
-    <xsl:call-template name="copyright-page" />
-    <!-- dedication pages are optional, template includes blank obverse -->
-    <xsl:if test="/mathbook/book/frontmatter/dedication">
-        <xsl:call-template name="dedication-pages" />
-    </xsl:if>
-    <xsl:text>%% begin: acknowledgements&#xa;</xsl:text>
-    <xsl:apply-templates select="frontmatter/acknowledgement" />
-    <xsl:text>%% end:   acknowledgements&#xa;</xsl:text>
-    <xsl:text>%% begin: forewords&#xa;</xsl:text>
-    <xsl:apply-templates select="frontmatter/foreword" /> 
-    <xsl:text>%% end:   forewords&#xa;</xsl:text>
-    <xsl:text>%% begin: prefaces&#xa;</xsl:text>
-    <xsl:apply-templates select="frontmatter/preface" />
-    <xsl:text>%% end:   prefaces&#xa;</xsl:text>
-    <xsl:text>%% begin: table of contents&#xa;</xsl:text>
-    <xsl:if test="$latex-toc-level > -1">
-        <xsl:text>\setcounter{tocdepth}{</xsl:text>
-        <xsl:value-of select="$latex-toc-level" />
-        <xsl:text>}&#xa;</xsl:text>
-        <xsl:text>\renewcommand*\contentsname{</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'toc'" />
-        </xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
-        <xsl:text>\tableofcontents&#xa;</xsl:text>
-        <xsl:text>%% end:   table of contents&#xa;</xsl:text>
-    </xsl:if>
-    <!-- list of illustrations -->
-    <!-- introduction -->
-    <!-- second half-title, first part-title -->
-    <xsl:text>\mainmatter&#xa;</xsl:text>
-    <xsl:apply-templates select="part|chapter" />
-    <xsl:if test="appendix">
-        <xsl:text>%&#xa;</xsl:text>
-        <xsl:text>\appendix&#xa;</xsl:text>
-        <xsl:text>%&#xa;</xsl:text>
-        <xsl:apply-templates select="appendix" />
-    </xsl:if>
-    <!-- TODO: condition on backmatter, once bibliography set, move out postamble -->
-    <xsl:text>%&#xa;</xsl:text>
-    <xsl:text>\backmatter&#xa;</xsl:text>
-    <xsl:text>%&#xa;</xsl:text>
-    <xsl:apply-templates select="backmatter" />
-    <xsl:apply-templates select="bibliography" />
+    <xsl:copy-of select="$content" />
     <xsl:call-template name="latex-postamble" />
     <xsl:text>\end{document}</xsl:text>
 </xsl:template>
@@ -922,19 +863,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- "half-title" is leading page with -->
 <!-- title only, at about 1:2 split    -->
-<!-- context is /mathbook/book         -->
-<xsl:template name="half-title" >
+<xsl:template match="book" mode="half-title" >
     <xsl:text>%% begin: half-title&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:text>{\centering&#xa;</xsl:text>
     <xsl:text>\vspace*{0.28\textheight}&#xa;</xsl:text>
     <xsl:text>{\Huge </xsl:text>
-    <xsl:apply-templates select="title" />
+    <xsl:apply-templates select="/mathbook/book/title" />
     <xsl:text>}</xsl:text>
-    <xsl:if test="subtitle">
+    <xsl:if test="/mathbook/book/subtitle">
         <xsl:text>\\[2\baselineskip]&#xa;</xsl:text>
         <xsl:text>{\LARGE </xsl:text>
-        <xsl:apply-templates select="subtitle" />
+        <xsl:apply-templates select="/mathbook/book/subtitle" />
         <xsl:text>}\\&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>}&#xa;</xsl:text> <!-- finish centering -->
@@ -945,7 +885,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Ad card may contain list of other books        -->
 <!-- Or may be overridden to make title page spread -->
 <!-- Obverse of half-title                          -->
-<xsl:template name="ad-card">
+<xsl:template match="book" mode="ad-card">
     <xsl:text>%% begin: adcard&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:text>\null%&#xa;</xsl:text>
@@ -953,12 +893,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% end:   adcard&#xa;</xsl:text>
 </xsl:template>
 
-<!-- LaTeX's title page is not very robust, so -->
-<!-- we totally redo it, anticpating customization -->
-<!-- via custom XSL imports, book-by-book -->
-<!-- template is just a single page -->
-<!-- The context is  /mathbook/book -->
-<xsl:template name="title-page">
+<!-- LaTeX's title page is not very robust, so we totally redo it         -->
+<!-- Template produces a single page, followed by a \clearpage            -->
+<!-- Customize with an overide of this template in an imported stylesheet -->
+<!-- For a two-page spread, consider modifying the "ad-card" template     -->
+<xsl:template match="book" mode="title-page">
     <xsl:text>%% begin: title page&#xa;</xsl:text>
     <xsl:text>%% Inspired by Peter Wilson's "titleDB" in "titlepages" CTAN package&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
@@ -1025,7 +964,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Lots of stuff here, much of it optional  -->
 <!-- But we always write something            -->
 <!-- as the obverse of title page             -->
-<xsl:template name="copyright-page" >
+<xsl:template match="book" mode="copyright-page" >
     <xsl:text>%% begin: copyright-page&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:if test="frontmatter/biography" >
@@ -1123,29 +1062,106 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- ############ -->
-<!-- Front Matter -->
-<!-- ############ -->
+<!-- ###################### -->
+<!-- Front Matter, Articles -->
+<!-- ###################### -->
 
-<!-- The "titlepage" and "colophon" portions of  -->
-<!-- frontmatter generally gets mined to migrate -->
-<!-- various places, so we kill it as part of    -->
-<!-- processing the front matter element.        -->
-<xsl:template match="titlepage|colophon" />
-
-<!-- We process the frontmatter piece-by-piece -->
-<!-- A DTD should enforce the proper order     -->
-<!-- Note: we temporarily bypass the dedications -->
-<xsl:template match="frontmatter">
-    <xsl:apply-templates select="*[not(self::dedication)]"/>
+<!-- The DTD should enforce order(titlepage|abstract) -->
+<!-- An optional ToC follows and is final decoration  -->
+<xsl:template match="article/frontmatter" mode="content-wrap">
+    <xsl:param name="content" />
+    <xsl:copy-of select="$content" />
+    <xsl:if test="$latex-toc-level > 0">
+        <xsl:text>\setcounter{tocdepth}{</xsl:text>
+        <xsl:value-of select="$latex-toc-level" />
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>\renewcommand*\contentsname{</xsl:text>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'toc'" />
+        </xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>\tableofcontents&#xa;</xsl:text>
+        <xsl:text>\clearpage&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
+
+<!-- Title information handling is a bit ad-hoc                        -->
+<!-- We should perhaps roll-our-own here                               -->
+<!-- Instead we assume the title-page-info-article has set *something* -->
+<!-- NB: it is possible for there to be no article/title               -->
+<xsl:template match="article/frontmatter/titlepage">
+    <xsl:text>\maketitle&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Articles may have an abstract in the frontmatter -->
+<xsl:template match="article/frontmatter/abstract">
+    <xsl:text>\begin{abstract}&#xa;</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>\end{abstract}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- ################### -->
+<!-- Front Matter, Books -->
+<!-- ################### -->
+
+<!-- Note: we temporarily bypass the dedications of books-->
+<xsl:template match="book/frontmatter" mode="content-wrap">
+    <xsl:param name="content" />
+    <!-- DTD: does the next line presume <frontmatter> is required? -->
+    <xsl:text>\frontmatter&#xa;</xsl:text>
+    <xsl:copy-of select="$content" />
+    <xsl:text>%% begin: table of contents&#xa;</xsl:text>
+    <xsl:if test="$latex-toc-level > -1">
+        <xsl:text>\setcounter{tocdepth}{</xsl:text>
+        <xsl:value-of select="$latex-toc-level" />
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>\renewcommand*\contentsname{</xsl:text>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'toc'" />
+        </xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>\tableofcontents&#xa;</xsl:text>
+        <xsl:text>%% end:   table of contents&#xa;</xsl:text>
+    </xsl:if>
+    <!-- Potentially: list of illustrations, etc.     -->
+    <!-- Potentially: introduction, second half-title -->
+    <!-- if we have a \frontmatter, we must end it with \mainmatter -->
+    <xsl:text>\mainmatter&#xa;</xsl:text>
+</xsl:template>
+
+<!-- A huge decoration, spanning many pages -->
+<!-- Includes items from the colophon       -->
+<xsl:template match="book/frontmatter/titlepage">
+    <xsl:param name="content" />
+    <!-- first page, title only -->
+    <xsl:apply-templates select="/mathbook/book" mode="half-title" />
+    <!-- Obverse of half-title is adcard -->
+    <xsl:apply-templates select="/mathbook/book" mode="ad-card" />
+    <!-- title page -->
+    <xsl:apply-templates select="/mathbook/book" mode="title-page" />
+    <!-- title page obverse is copyright, possibly empty -->
+    <xsl:apply-templates select="/mathbook/book" mode="copyright-page" />
+    <!-- dedication pages are optional, template includes blank obverse -->
+    <!-- maybe as content-wrap/// -->
+    <xsl:if test="/mathbook/book/frontmatter/dedication">
+        <xsl:call-template name="dedication-pages" />
+    </xsl:if>
+</xsl:template>
+
+<!-- The "colophon" portion of <frontmatter>  -->
+<!-- generally gets mined to migrate          -->
+<!-- various places, so we kill it as part of -->
+<!-- processing the front matter element.     -->
+<xsl:template match="book/frontmatter/colophon" mode="content-wrap" />
 
 <!-- Preface, etc within \frontmatter is usually handled correctly by LaTeX -->
 <!-- Allow alternative titles, like "Preface to 2nd Edition"                -->
 <!-- But we use starred version anyway, so chapter headings react properly  -->
+<!-- DTD: enforce order: acknowledgements, forewords, prefaces -->
 <!-- TODO: add dedication, other frontmatter, move in title handling        -->
 <!-- TODO: add to headers, currently just CONTENTS, check backmatter        -->
-<xsl:template match="preface|acknowledgement|foreword">
+<xsl:template match="acknowledgement|foreword|preface" mode="content-wrap">
+    <xsl:param name="content" />
     <xsl:variable name="preface-title">
         <xsl:choose>
             <xsl:when test="title">
@@ -1156,6 +1172,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
+    <xsl:text>%% begin: </xsl:text>
+    <xsl:value-of select="local-name(.)" />
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>\chapter*{</xsl:text>
     <xsl:value-of select="$preface-title" />
     <xsl:text>}</xsl:text>
@@ -1164,14 +1183,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\addcontentsline{toc}{chapter}{</xsl:text>
     <xsl:value-of select="$preface-title" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::title)]" />
-</xsl:template>
-
-<!-- Articles may have an abstract in the frontmatter -->
-<xsl:template match="abstract">
-    <xsl:text>\begin{abstract}&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\end{abstract}&#xa;</xsl:text>
+    <!-- <xsl:apply-templates select="*[not(self::title)]" /> -->
+    <xsl:copy-of select="$content" />
+    <xsl:text>%% end:   </xsl:text>
+    <xsl:value-of select="local-name(.)" />
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Dedications are meant to be very short      -->
@@ -1193,11 +1209,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Back Matter -->
 <!-- ############ -->
 
-<!-- We process the backmatter piece-by-piece -->
-<!-- No real sectioning happens, so kill title-->
-<xsl:template match="backmatter">
-    <xsl:apply-templates select="*[not(self::title)]"/>
+<!-- <backmatter> is structural -->
+<!-- Noted in an book           -->
+<!-- But not in an article      -->
+<xsl:template match="article/backmatter" mode="content-wrap">
+    <xsl:param name="content" />
+    <xsl:copy-of select="$content" />
 </xsl:template>
+
+<xsl:template match="book/backmatter" mode="content-wrap">
+    <xsl:param name="content" />
+    <xsl:text>%&#xa;</xsl:text>
+    <xsl:text>\backmatter&#xa;</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
+    <xsl:copy-of select="$content" />
+</xsl:template>
+
+<!-- Notation list -->
 
 <!-- At location, we just drop a page marker -->
 <xsl:template match="notation">
@@ -1205,8 +1233,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-
-<!-- Notation list -->
 <!-- TODO: Localize/Internationalize header row -->
 <xsl:template match="notation-list">
     <xsl:text>\begin{longtable}[l]{llr}&#xa;</xsl:text>
@@ -1265,48 +1291,72 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}}}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Sectioning -->
-<!-- Subdivisions, Chapters down to Paragraphs                -->
+
+<!-- ################ -->
+<!-- Structural Nodes -->
+<!-- ################ -->
+
+<!-- Read the code and documentation for "chunking" in xsl/mathbook-common.html -->
+<!-- This will explain document structure (not XML structure) and has the       -->
+<!-- routines which call the necessary realizations of two abstract templates.  -->
+
+<!-- Three modal templates accomodate all document structure nodes -->
+<!-- and all possibilities for chunking.  Read the description     -->
+<!-- in  xsl/mathbook-common.xsl to understand these.              -->
+
+<xsl:template match="*" mode="structure-node-intermediate">
+    <xsl:apply-templates select="*[not(self::title or self::subtitle or self::author)]" mode="structure-node-child-summary" />
+</xsl:template>
+
+<xsl:template match="*" mode="structure-node-child-summary">
+    <xsl:variable name="structural"><xsl:apply-templates select="." mode="is-structural" /></xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$structural='true'">
+            <xsl:text>\input{</xsl:text>
+            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:text>}</xsl:text>
+            <!-- Annotate line with better information -->
+            <xsl:text>  %% </xsl:text><xsl:apply-templates select="." mode="long-name" />
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Historically, latex processing writes to standard output as        -->
+<!-- one entire file.  We can (and did briefly) define variants for     -->
+<!-- top-level structural elements in order to preserve this behavior.  -->
+<xsl:template match="*" mode="file-wrap">
+    <xsl:param name="content" />
+    <xsl:variable name="filename">
+        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:text>.tex</xsl:text>
+    </xsl:variable>
+    <exsl:document href="{$filename}" method="text">
+        <xsl:copy-of select="$content" />  <!-- below -->
+    </exsl:document>
+</xsl:template>
+
+<!-- Subdivisions, Parts down to Subsubsections               -->
 <!-- Mostly relies on element names echoing latex names       -->
 <!-- (1) appendices are just chapters after \backmatter macro -->
 <!-- (2) exercises, references can appear at any depth,       -->
 <!--     so compute the subdivision name                      -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|paragraphs|paragraph|exercises|references">
-    <xsl:variable name="level">
-        <xsl:choose>
-            <!-- TODO: appendix handling is only right for books, expand to articles -->
-            <!-- http://www.tex.ac.uk/cgi-bin/texfaq2html?label=appendix -->
-            <xsl:when test="local-name(.)='appendix'">
-                <xsl:text>chapter</xsl:text>
-            </xsl:when>
-            <!-- We implement the pseudo-structural paragraphs with LaTeX's paragraph       -->
-            <!-- Presuming we never go below susubsection in a hierarchy and bump into this -->
-            <xsl:when test="local-name(.)='paragraphs'">
-                <xsl:text>paragraph</xsl:text>
-            </xsl:when>
-            <!-- Collections of exercises and reference can happen at any level, so need correct LaTeX name -->
-            <xsl:when test="local-name(.)='exercises' or local-name(.)='references'">
-                <xsl:apply-templates select="." mode="subdivision-name" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="local-name(.)" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- Information to console for latex run -->
-    <xsl:text>\typeout{************************************************}&#xa;</xsl:text>
-    <xsl:text>\typeout{</xsl:text>
-    <xsl:apply-templates select="." mode="long-name" />
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\typeout{************************************************}&#xa;</xsl:text>
-    <!-- Warn about paragraph deprecation -->
-    <xsl:if test="local-name(.)='paragraph'">
-        <xsl:message>MBX:WARNING: the "paragraph" element is deprecated (2015/03/13), use "paragraphs" instead</xsl:message>
-        <xsl:apply-templates select="." mode="location-report" />
+<xsl:template match="*" mode="content-wrap">
+    <xsl:param name="content" />
+    <!-- appendices are peers of chapters (book) or sections (article) -->
+    <!-- so we need to slip this in once when we can                   -->
+    <xsl:if test="self::appendix and not(preceding-sibling::*[appendix])">
+        <xsl:text>%&#xa;</xsl:text>
+        <xsl:text>\appendix&#xa;</xsl:text>
+        <xsl:text>%&#xa;</xsl:text>
     </xsl:if>
+    <xsl:apply-templates select="." mode="console-typeout" />
     <!-- Construct the header of the subdivision -->
     <xsl:text>\</xsl:text>
-    <xsl:value-of select="$level" />
+    <xsl:apply-templates select="." mode="subdivision-name" />
     <!-- Handle section titles carefully.  Sanitized versions    -->
     <!-- as optional argument to table of contents, headers.     -->
     <!-- Starred sections for backmatter principal subdivisions. -->
@@ -1345,11 +1395,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="author" mode="name-list"/>
         <xsl:text>}}\par\bigskip&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="introduction" />
-    <!-- Process the remaining contents -->
-    <xsl:apply-templates select="*[not(self::title or self::author or self::introduction or self::conclusion)]"/>
-    <xsl:apply-templates select="conclusion" />
+    <xsl:copy-of select="$content" />
 </xsl:template>
+
+<!-- Information to console for latex run -->
+<xsl:template match="*" mode="console-typeout">
+    <xsl:text>\typeout{************************************************}&#xa;</xsl:text>
+    <xsl:text>\typeout{</xsl:text>
+    <xsl:apply-templates select="." mode="long-name" />
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\typeout{************************************************}&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- Introductions and Conclusions -->
 <!-- Simple containers, allowed before and after       -->
@@ -1357,6 +1414,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- No title allowed, typically just a few paragraphs -->
 <xsl:template match="introduction|conclusion">
     <xsl:apply-templates />
+</xsl:template>
+
+<!-- Paragraphs -->
+<!-- Non-structural, even if they appear to be -->
+<!-- Note: Presumes we never go below subsubsection  -->
+<!-- in our MBX hierarchy and bump into this level   -->
+<!-- Maybe then migrate to "subparagraph"?           -->
+<xsl:template match="paragraphs|paragraph">
+    <!-- Warn about paragraph deprecation -->
+    <xsl:if test="self::paragraph">
+        <xsl:message>MBX:WARNING: the "paragraph" element is deprecated (2015/03/13), use "paragraphs" instead</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+    <xsl:apply-templates select="." mode="console-typeout" />
+    <xsl:text>\paragraph</xsl:text>
+   <!-- TODO: adjust to use title/complexity templates -->
+    <xsl:text>[</xsl:text>
+    <xsl:apply-templates select="title/node()[not(self::fn)]" />
+    <xsl:text>]</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="title" />
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="*[not(self::title)]" />
 </xsl:template>
 
 <!-- Theorems, Proofs, Definitions, Examples, Exercises -->
