@@ -139,158 +139,66 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- ############################# -->
-<!-- Document Structure, version 2 -->
+<!-- Document Structure, version 3 -->
 <!-- ############################# -->
 
-<!-- Some XML nodes reflect the overall structure                 -->
-<!-- of the document, such as chapter, section, backmatter.       -->
-<!-- A routine in the common file describes precisely which ones. -->
-<!--                                                             -->
-<!-- Sometimes these nodes are a leaf of the structure tree,      -->
-<!-- with no children that are structural.  A routine in          -->
-<!-- the common file will identify this situation.                -->
-<!--                                                             -->
-<!-- Also in the common file, the "chunking" level is used to     -->
-<!-- decide which of these nodes is a summary of its children,    -->
-<!-- and which should comprise an entire HTML page (where the     -->
-<!-- structure is just evidenced typographically).                -->
-<!--                                                              -->
-<!-- The "dispatch" template decides which of these two cases     -->
-<!-- to handle.                                                   -->
-
+<!-- Read the code and documentation for "chunking" in xsl/mathbook-common.html -->
+<!-- This will explain document structure (not XML structure) and has the       -->
+<!-- routines which call the necessary realizations of two abstract templates.  -->
 
 <!-- Entry Point -->
-<!-- This is the entry point for this stylesheet          -->
-<!-- The root <mathbook> element has two children         -->
-<!-- typically.  We kill <docinfo> for use in an ad-hoc   -->
-<!-- fashion, and dispatch the other (book, article, etc) -->
+<!-- This is the entry point for this stylesheet                   -->
+<!-- The XML <mathbook> element has exactly one structural         -->
+<!-- element below it, for example a <book> or an <article>,       -->
+<!-- so we begin the "chunking" here.  The <docinfo> element will  -->
+<!-- just get killed automatically bu the "chunk" template.        -->
 <xsl:template match="/mathbook">
     <xsl:apply-templates select="." mode="deprecation-warnings" />
-    <xsl:apply-templates mode="dispatch" />
+    <xsl:apply-templates select="*" mode="chunk" />
 </xsl:template>
 
-<xsl:template match="docinfo" mode="dispatch" />
+<!-- ################ -->
+<!-- Structural Nodes -->
+<!-- ################ -->
 
-<!-- Dispatch -->
-<!-- This routine should only ever receive a         -->
-<!-- structual document node.  Anything at           -->
-<!-- chunking level, or leaves at lesser levels,     -->
-<!-- becomes a web page of its own.                  -->
-<!--                                                 -->
-<!-- Otherwise a node has structural children, so we -->
-<!-- create a page that is a summary of the node.    -->
-<!-- See below about page decorations.               -->
-<xsl:template match="*" mode="dispatch">
-    <xsl:variable name="structural"><xsl:apply-templates select="." mode="is-structural" /></xsl:variable>
-    <xsl:if test="$structural='false'">
-        <xsl:message>MBX:WARNING: A &lt;<xsl:value-of select="local-name(.)" />&gt; element is misplaced (structurally)</xsl:message>
-        <xsl:apply-templates select="." mode="location-report" />
-    </xsl:if>
-    <xsl:variable name="summary"><xsl:apply-templates select="." mode="is-summary" /></xsl:variable>
-    <xsl:variable name="webpage"><xsl:apply-templates select="." mode="is-webpage" /></xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$webpage='true'">
-            <xsl:apply-templates select="." mode="webpage" />
-        </xsl:when>
-        <xsl:when test="$summary='true'">
-            <xsl:apply-templates select="." mode="summary" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:BUG:     A &lt;<xsl:value-of select="local-name(.)" />&gt; element is neither a summary page nor a webpage</xsl:message>
-            <xsl:apply-templates select="." mode="location-report" />
-            </xsl:otherwise>
-    </xsl:choose>
+<!-- Three modal templates accomodate all document structure nodes -->
+<!-- and all possibilities for chunking.  Read the description     -->
+<!-- in  xsl/mathbook-common.xsl to understand these.              -->
+<!-- The  "file-wrap"  template is defined elsewhre in this file.  -->
+
+<!-- HTML markup common to every structural node. -->
+<!-- Both as outer-level of a page and as subsidiary to a page. -->
+<xsl:template match="*" mode="content-wrap">
+    <xsl:param name="content" />
+    <!-- Heading, div for subdivision that is this page -->
+    <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
+    <section class="{local-name(.)}" id="{$ident}">
+        <xsl:apply-templates select="." mode="section-header" />
+        <xsl:copy-of select="$content" />
+    </section>
 </xsl:template>
 
-<!-- Web Page -->
-<!-- When a structural node is the parent of an   -->
-<!-- entire web page, we build it here as content -->
-<!-- sent to the web page wrapping template       -->
-<xsl:template match="*" mode="webpage">
-    <xsl:apply-templates select="." mode="page-wrap">
-        <xsl:with-param name="title">
-            <xsl:apply-templates select="/mathbook/book/title|/mathbook/article/title" />
-        </xsl:with-param>
-        <xsl:with-param name="subtitle">
-            <xsl:apply-templates select="/mathbook/book/subtitle|/mathbook/article/subtitle" />
-        </xsl:with-param>
-        <!-- Serial list of authors, then editors, as names only -->
-         <xsl:with-param name="credits">
-            <xsl:apply-templates select="//frontmatter/titlepage/author" mode="name-list"/>
-            <xsl:apply-templates select="//frontmatter/titlepage/editor" mode="name-list"/>
-        </xsl:with-param>
-        <xsl:with-param name="content">
-            <!-- Heading, div for subdivision that is this page -->
-            <!-- frontmatter/titlepage is exceptional           -->
-            <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
-            <section class="{local-name(.)}" id="{$ident}">
-                <xsl:apply-templates select="." mode="section-header" />
-                <!-- Recurse through contents inside enclosing section, ignore title, author -->
-                <xsl:apply-templates select="./*[not(self::title or self::subtitle or self::author)]" />
-            </section>
-         </xsl:with-param>
-     </xsl:apply-templates>
+<!-- The HTML content of a page representing an intermediate node.                 -->
+<!-- Note: the necessity of the <nav> section creates two problems:                -->
+<!-- (i)  We implement a 3-pass hack which requires identifing, eg,                -->
+<!-- an introduction as preceding a conclusion, and eg, hiding the killing titles. -->
+<!-- (ii) We generally could have maybe just requied a modal template              -->
+<!-- for a summary of a structural node and moved processing all the page          -->
+<!-- elements into the  mathbook-common  routines                                  -->
+<xsl:template match="*" mode="structure-node-intermediate">
+    <xsl:apply-templates select="*" mode="summary-prenav" />
+    <nav class="summary-links">
+        <xsl:apply-templates select="*" mode="summary-nav" />
+    </nav>
+    <xsl:apply-templates select="*" mode="summary-postnav"/>
 </xsl:template>
 
-<!-- Page Decorations -->
-<!-- Even if we summarize a node, it has some    -->
-<!-- decorations we would like to ignore.  So    -->
-<!-- we do not dispatch these and just slide by. -->
-<xsl:template match="title|subtitle|author|introduction|todo|abstract|titlepage|conclusion" mode="dispatch" />
 
-<!-- Summary Page -->
-<!-- A summary page has some initial decorations,       -->
-<!-- such as title, author and introduction.  Then      -->
-<!-- the structural subnodes become links in a          -->
-<!-- navigation section, followed by some final         -->
-<!-- decorations like conclusions.                      -->
-<!--                                                    -->
-<!-- The webpage parameters below should be clear, while -->
-<!-- the content is a heading, followed by mostly a list -->
-<!-- of hyperlinks to the subsidiary document nodes.  So -->
-<!-- we can isolate the links, we hit everything on the  -->
-<!-- page three times, mostly doing nothing.             -->
-<!--                                                     -->
-<!-- Once concluded, we dispatch all the elements,       -->
-<!-- knowing some will get killed immediately.           -->
-<xsl:template match="*" mode="summary">
-    <xsl:apply-templates select="." mode="page-wrap">
-        <xsl:with-param name="title">
-            <xsl:apply-templates select="/mathbook/*" mode="title-simple" />
-        </xsl:with-param>
-        <xsl:with-param name="subtitle">
-            <xsl:apply-templates select="/mathbook/*/subtitle"/>
-        </xsl:with-param>
-        <!-- Serial list of authors, then editors, as names only -->
-         <xsl:with-param name="credits">
-            <xsl:apply-templates select="//frontmatter/titlepage/author" mode="name-list"/>
-            <xsl:apply-templates select="//frontmatter/titlepage/editor" mode="name-list"/>
-        </xsl:with-param>
-        <xsl:with-param name="content">
-            <!-- Heading, div for subdivision that is this page -->
-            <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
-            <section class="{local-name(.)}" id="{$ident}">
-                <xsl:apply-templates select="." mode="section-header" />
-                <!-- Summarize elements of the node (which could be verbatim) -->
-                <xsl:apply-templates select="*" mode="summary-prenav" />
-                <nav class="summary-links">
-                    <xsl:apply-templates select="*" mode="summary-nav" />
-                </nav>
-                <xsl:apply-templates select="*" mode="summary-postnav"/>
-            </section>
-         </xsl:with-param>
-     </xsl:apply-templates>
-     <!-- Summary-mode templates do not recurse,  -->
-     <!-- need to restart outside web page        -->
-     <!-- wrapper and dispatch everything         -->
-    <xsl:apply-templates mode="dispatch" />
-</xsl:template>
-
-<!-- Some elements inside a document node being summarized    -->
-<!-- appear as content on the summary page, or are otherwise  -->
-<!-- handled in an ad-hoc fashion (titles).  These can appear -->
-<!-- before, or after, a navigation section, which holds      -->
-<!-- links to the elements that are again structural.         -->
+<!-- A 3-pass hack to create presentations and summaries of  -->
+<!-- an intermediate node.  It is the <nav> section wrapping -->
+<!-- the summaries/links that makes this necessary.          -->
+<!-- Note: titles/authors etc are killed here                -->
+<!-- TODO: improve this somehow?                             -->
 
 <!-- Pre-Navigation -->
 <xsl:template match="introduction|titlepage|abstract" mode="summary-prenav">
@@ -327,19 +235,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Document Nodes -->
-<!-- A structural node may be one of many on a web page -->
-<!-- We make an HTML section, then a header, then       -->
-<!-- recurse into remaining content                     -->
-<xsl:template match="book|article|frontmatter|part|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|paragraphs|paragraph|exercises|references|backmatter">
-    <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
-    <section class="{local-name(.)}" id="{$ident}">
-        <xsl:apply-templates select="." mode="section-header" />
-        <!-- Now recurse through contents, ignoring title and author -->
-        <!-- Just applying templates right and left -->
-        <xsl:apply-templates  select="./*[not(self::title or self::subtitle or self::author)]"/>
-    </section>
-</xsl:template>
+
+<!-- Bits and Pieces -->
 
 <!-- Paragraphs -->
 <!-- Never structural, never named, somewhat distinct -->
@@ -3367,62 +3264,6 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         </xsl:call-template>
         <xsl:text> MathBook&#xa0;XML</xsl:text>
     </a>
-</xsl:template>
-
-<!-- ######## -->
-<!-- Chunking -->
-<!-- ######## -->
-
-<!-- Web Page Determination -->
-<!-- Three types of document nodes:                                                -->
-<!-- Summary: structural node, not a document leaf, smaller level than chunk level -->
-<!-- Webpage: structural node, at chunk-level or a document leaf at smaller level  -->
-<!-- Neither: Subsidiary to some Webpage node                                      -->
-<!-- See definition of document structure nodes in mathbook-common file            -->
-<xsl:template match="*" mode="is-summary">
-    <xsl:variable name="structural">
-        <xsl:apply-templates select="." mode="is-structural" />
-    </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$structural='true'">
-            <xsl:variable name="current-level">
-                <xsl:apply-templates select="." mode="level" />
-            </xsl:variable>
-            <xsl:variable name="leaf">
-                <xsl:apply-templates select="." mode="is-leaf" />
-            </xsl:variable>
-            <xsl:value-of select="($leaf='false') and ($chunk-level > $current-level)" />
-        </xsl:when>
-        <xsl:when test="$structural='false'">
-            <xsl:value-of select="$structural" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:BUG: Structural determination (<xsl:value-of select="$structural" />) failed for is-summary at <xsl:apply-templates select="." mode="long-name"/></xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<xsl:template match="*" mode="is-webpage">
-    <xsl:variable name="structural">
-        <xsl:apply-templates select="." mode="is-structural" />
-    </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$structural='true'">
-            <xsl:variable name="current-level">
-                <xsl:apply-templates select="." mode="level" />
-            </xsl:variable>
-            <xsl:variable name="leaf">
-                <xsl:apply-templates select="." mode="is-leaf" />
-            </xsl:variable>
-            <xsl:value-of select="($chunk-level = $current-level) or ( ($leaf='true') and ($chunk-level > $current-level) )" />
-        </xsl:when>
-        <xsl:when test="$structural='false'">
-            <xsl:value-of select="$structural" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:BUG: Structural determination (<xsl:value-of select="$structural" />) failed for is-webpage at <xsl:apply-templates select="." mode="long-name"/></xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
 </xsl:template>
 
 
