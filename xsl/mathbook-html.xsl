@@ -2654,7 +2654,7 @@ is just flat out on the page, as if printed there.
     <a href="{$url}" target="_blank" class="link">
         <xsl:apply-templates select="." mode="title-full" />
     </a>
-    <xsl:apply-templates select="." mode="simple-page-wrap" >
+    <xsl:apply-templates select="." mode="simple-file-wrap" >
         <xsl:with-param name="content">
             <xsl:apply-templates />
         </xsl:with-param>
@@ -2780,14 +2780,10 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- Web Page Infrastructure -->
 <!--                         -->
 
-<!-- An individual page:                                     -->
-<!-- Inputs:                                                 -->
-<!--     * strings for page title, subtitle, authors/editors -->
-<!--     * content (exclusive of banners, etc)               -->
-<xsl:template match="*" mode="page-wrap">
-    <xsl:param name="title" />
-    <xsl:param name="subtitle" />
-    <xsl:param name="credits" />
+<!-- An individual page:                                   -->
+<!-- Inputs:                                               -->
+<!-- * page content (exclusive of banners, navigation etc) -->
+<xsl:template match="*" mode="file-wrap">
     <xsl:param name="content" />
     <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
     <exsl:document href="{$url}" method="html">
@@ -2834,22 +2830,26 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:call-template name="latex-macros" />
              <header id="masthead">
                 <div class="banner">
-                        <div class="container">
-                            <xsl:call-template name="brand-logo" />
-                            <div class="title-container">
-                                <h1 class="heading">
-                                    <span class="title">
-                                        <xsl:value-of select="$title" />
+                    <div class="container">
+                        <xsl:call-template name="brand-logo" />
+                        <div class="title-container">
+                            <h1 class="heading">
+                                <span class="title">
+                                    <xsl:value-of select="/mathbook/book/title|/mathbook/article/title" />
+                                </span>
+                                <xsl:if test="normalize-space(/mathbook/book/subtitle|/mathbook/article/subtitle)">
+                                    <span class="subtitle">
+                                        <xsl:value-of select="/mathbook/book/subtitle|/mathbook/article/subtitle" />
                                     </span>
-                                    <xsl:if test="normalize-space($subtitle)">
-                                        <span class="subtitle">
-                                            <xsl:value-of select="$subtitle" />
-                                        </span>
-                                    </xsl:if>
-                                </h1>
-                                <p class="byline"><xsl:value-of select="$credits" /></p>
-                            </div>
+                                </xsl:if>
+                            </h1>
+                            <!-- Serial list of authors/editors -->
+                            <p class="byline">
+                                <xsl:apply-templates select="//frontmatter/titlepage/author" mode="name-list"/>
+                                <xsl:apply-templates select="//frontmatter/titlepage/editor" mode="name-list"/>
+                            </p>
                         </div>
+                    </div>
                 </div>
             <xsl:apply-templates select="." mode="primary-navigation" />
             </header>
@@ -2869,12 +2869,11 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 
 <!-- A minimal individual page:                              -->
 <!-- Inputs:                                                 -->
-<!--     * content (exclusive of banners, etc)               -->
+<!-- * page content (exclusive of banners, navigation etc)   -->
 <!-- Maybe a page title -->
-<xsl:template match="*" mode="simple-page-wrap">
+<xsl:template match="*" mode="simple-file-wrap">
     <xsl:param name="content" />
     <xsl:variable name="url"><xsl:apply-templates select="." mode="internal-id" />.html</xsl:variable>
-    <xsl:message>URL: <xsl:value-of select="$url" /></xsl:message>
     <exsl:document href="{$url}" method="html">
     <!-- Need to be careful for format of this initial string     -->
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
@@ -2963,18 +2962,19 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- Else, go up to parent and look sideways                      -->
 <!-- Else done and return empty url                               -->
 <xsl:template match="*" mode="next-linear-url">
-    <xsl:variable name="summary">
-        <xsl:apply-templates select="." mode="is-summary" />
+    <xsl:variable name="intermediate">
+        <xsl:apply-templates select="." mode="is-intermediate" />
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$summary='true'">
+        <xsl:when test="$intermediate='true'">
             <!-- Descend once, will always have a child that is structural -->
             <xsl:variable name="first-structural-child" select="*[not(self::title or self::subtitle or self::todo or self::introduction or self::conclusion or self::titlepage or self::author)][1]" />
             <xsl:variable name="structural">
                 <xsl:apply-templates select="$first-structural-child" mode="is-structural" />
             </xsl:variable>
             <xsl:if test="$structural='false'">
-                <xsl:message>MBX:ERROR: descending into first node of a summary page (<xsl:value-of select="local-name($first-structural-child)" />) that is non-structural</xsl:message>
+                <xsl:message>MBX:ERROR: descending into first node of an intermediate page (<xsl:value-of select="local-name($first-structural-child)" />) that is non-structural; maybe your source has incorrect structure</xsl:message>
+                <xsl:apply-templates select="." mode="location-report" />
             </xsl:if>
             <xsl:apply-templates select="$first-structural-child" mode="url" />
         </xsl:when>
@@ -3058,11 +3058,11 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- Descend recursively through summary pages -->
 <!-- to a leaf (content) and get URL           -->
 <xsl:template match="*" mode="previous-descent-url" >
-    <xsl:variable name="summary">
-        <xsl:apply-templates select="." mode="is-summary" />
+    <xsl:variable name="intermediate">
+        <xsl:apply-templates select="." mode="is-intermediate" />
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$summary='false'">
+        <xsl:when test="$intermediate='false'">
             <xsl:apply-templates select="." mode="url" />
         </xsl:when>
         <xsl:otherwise>
@@ -3071,7 +3071,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                 <xsl:apply-templates select="$last-structural-child" mode="is-structural" />
             </xsl:variable>
             <xsl:if test="$structural='false'">
-                <xsl:message>MBX:ERROR: descending into last node of a summary page (<xsl:value-of select="local-name($last-structural-child)" />) that is non-structural</xsl:message>
+                <xsl:message>MBX:ERROR: descending into last node of an intermediate page (<xsl:value-of select="local-name($last-structural-child)" />) that is non-structural</xsl:message>
             </xsl:if>
             <xsl:apply-templates select="$last-structural-child" mode="previous-descent-url" />
         </xsl:otherwise>
@@ -3434,10 +3434,10 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- This allows cross-references to point to the right page   -->
 <!-- when chunking the content into many subdivisions          -->
 <xsl:template match="*" mode="filename">
-    <xsl:variable name="summary"><xsl:apply-templates select="." mode="is-summary" /></xsl:variable>
-    <xsl:variable name="webpage"><xsl:apply-templates select="." mode="is-webpage" /></xsl:variable>
+    <xsl:variable name="intermediate"><xsl:apply-templates select="." mode="is-intermediate" /></xsl:variable>
+    <xsl:variable name="chunk"><xsl:apply-templates select="." mode="is-chunk" /></xsl:variable>
     <xsl:choose>
-        <xsl:when test="$summary='true' or $webpage='true'">
+        <xsl:when test="$intermediate='true' or $chunk='true'">
             <xsl:apply-templates select="." mode="internal-id" />
             <xsl:text>.html</xsl:text>
             <!-- DEPRECATION: May 2015, replace with terminate=yes if present without an xml:id -->
@@ -3455,10 +3455,10 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- Every node has a URL associated with it -->
 <!-- A filename, plus an optional anchor/id  -->
 <xsl:template match ="*" mode="url">
-    <xsl:variable name="summary"><xsl:apply-templates select="." mode="is-summary" /></xsl:variable>
-    <xsl:variable name="webpage"><xsl:apply-templates select="." mode="is-webpage" /></xsl:variable>
+    <xsl:variable name="intermediate"><xsl:apply-templates select="." mode="is-intermediate" /></xsl:variable>
+    <xsl:variable name="chunk"><xsl:apply-templates select="." mode="is-chunk" /></xsl:variable>
     <xsl:apply-templates select="." mode="filename" />
-    <xsl:if test="$summary='false' and $webpage='false'">
+    <xsl:if test="$intermediate='false' and $chunk='false'">
         <xsl:text>#</xsl:text>
         <xsl:apply-templates select="." mode="internal-id" />
     </xsl:if>
