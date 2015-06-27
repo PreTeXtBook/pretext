@@ -2519,7 +2519,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="sidebyside-subitem-halign"/>
     <xsl:apply-templates />
     <!-- \parbox needs closing-->
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>}%&#xa;</xsl:text>
     <!-- end the body of the paragraph -->
     <xsl:text>}% end body &#xa;{</xsl:text>
     <!-- add empty caption -->
@@ -2535,7 +2535,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="sidebyside-subitem-halign"/>
     <xsl:apply-templates />
     <!-- \parbox needs closing-->
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>}%&#xa;</xsl:text>
     <!-- end the body of the paragraph -->
     <xsl:text>}% end body &#xa;{</xsl:text>
     <!-- add empty caption -->
