@@ -751,8 +751,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="//index">
         <xsl:text>%% Support for index creation&#xa;</xsl:text>
         <xsl:if test="$author-tools='no'">
-            <xsl:text>%% Requires doing $ makeindex &lt;filename&gt;&#xa;</xsl:text>
-            <xsl:text>%% prior to second LaTeX pass&#xa;</xsl:text>
+            <xsl:text>%% Requires doing $ makeindex &lt;filename-base&gt;&#xa;</xsl:text>
+            <xsl:text>%% (NB: do not provide an extension on the filename, eg no ".tex")&#xa;</xsl:text>
+            <xsl:text>%% Do this prior to a second LaTeX pass&#xa;</xsl:text>
             <xsl:text>%% We provide language support for the "see" phrase&#xa;</xsl:text>
             <xsl:text>%% and for the title of the "Index" section&#xa;</xsl:text>
             <xsl:text>\usepackage{makeidx}&#xa;</xsl:text>
