@@ -135,22 +135,20 @@ the xsltproc executable.
 
         <!--
         The frontmatter contains a variety of items that precede
-        the actual content.  They tend to get placed in the "right"
-        place and order, and not necessarily the order they appear here.
+        the actual content.  They should be placed in the proper order,
+        here the title material should precede a table of contents.
         They differ from "docinfo" items in that they will be *content*
         that a reader will actually see.
 
-        The xml:id string is used to form a filename for the webpage.
+        The xml:id string is used to form a filename for a webpage.
         Setting this one to "index" makes for a good default page
         when you host your project on a server.
         -->
 
         <frontmatter xml:id="index">
             <!--
-            Items typically on the main title page, perhaps duplicated
-            in the half-title page, page headings, etc.
-            One exception - main title and (optional) subtitle follow
-            the scheme for titling any division of the work.
+            Items typically on the main title page of a book,
+            but here as an article they are handled more compactly
              -->
 
             <titlepage>
