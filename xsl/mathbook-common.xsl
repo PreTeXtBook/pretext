@@ -361,7 +361,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Nodes to Subdivision Names -->
 <!-- Compute relative level of a node, adjust to absolute -->
 <!-- Subdivision name comes from named template above     -->
+<!-- Note: frontmatter and backmatter are structural, so  -->
+<!-- get considered in level computation.  However, they  -->
+<!-- are just containers, so we subtractthem away         -->
 <xsl:template match="*" mode="subdivision-name">
+    <xsl:variable name="relative-level">
+        <xsl:apply-templates select="." mode="level" />
+    </xsl:variable>
+    <xsl:call-template name="level-number-to-latex-name">
+        <xsl:with-param name="level">
+            <xsl:choose>
+                <xsl:when test="ancestor::frontmatter or ancestor::backmatter">
+                    <xsl:value-of select="$relative-level + $root-level - 1" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$relative-level + $root-level" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- <xsl:template match="*" mode="subdivision-name">
     <xsl:variable name="relative-level">
         <xsl:apply-templates select="." mode="level" />
     </xsl:variable>
@@ -369,7 +390,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="level" select="$relative-level + $root-level" />
     </xsl:call-template>
 </xsl:template>
-
+ -->
 <!-- ########################### -->
 <!-- Mathematics (LaTeX/MathJax) -->
 <!-- ########################### -->
