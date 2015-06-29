@@ -14,8 +14,9 @@
 <!-- Entry point in mathbook-html.xsl is sufficient -->
 <!-- Call "dispatch" mode on /mathbook and kills docinfo -->
 
-<!-- Page-wrapping -->
-<xsl:template match="*" mode="page-wrap">
+<!-- File wrap -->
+<!-- Per file setup, macros, css, in/out SMC mode -->
+<xsl:template match="*" mode="file-wrap">
     <xsl:param name="content" />
     <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
     <exsl:document href="{$url}" method="html">
@@ -27,85 +28,55 @@
         <xsl:text>\(</xsl:text>
         <xsl:value-of select="/mathbook/docinfo/macros" />
         <xsl:text>\)</xsl:text>
+        <!-- top nav bar -->
+        <xsl:apply-templates select="." mode="crude-nav-bar" />
+        <!-- now the guts -->
         <xsl:copy-of select="$content" />
-        <!-- Totally done, finish HTML mode -->
+        <!-- fall out of SMC mode -->
         <xsl:apply-templates select="." mode="inputoutput" />
         <xsl:apply-templates select="." mode="outputend" />
+        <!-- bottom nav bar -->
+        <xsl:apply-templates select="." mode="crude-nav-bar" />
     </exsl:document>
 </xsl:template>
 
-<!-- Summary Page -->
-<!-- A summary page has some initial decorations,  -->
-<!-- such as title, author and introduction.  Then -->
-<!-- the structural subnodes become links in a     -->
-<!-- navigation section, followed by some final    -->
-<!-- decorations like conclusions.                 -->
-<!--                                               -->
-<!-- Once concluded, we dispatch all the elements, -->
-<!-- knowing some will get killed immediately.     -->
-<xsl:template match="*" mode="summary">
-    <xsl:apply-templates select="." mode="page-wrap">
-        <xsl:with-param name="content">
-            <xsl:apply-templates select="." mode="crude-nav-bar" />
-            <!-- Heading, div for subdivision that is this page     -->
-            <!-- If a top-level page, titlepage will accomplish this -->
-            <xsl:if test="not(/mathbook/article or /mathbook/book)">
-                <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
-                <section class="{local-name(.)}" id="{$ident}">
-                    <xsl:apply-templates select="." mode="section-header" />
-                </section>
-            </xsl:if>
-            <!-- Summarize elements of the node (which could be verbatim) -->
-            <xsl:apply-templates select="*" mode="summary-prenav" />
-            <nav class="summary-links">
-                <xsl:apply-templates select="*" mode="summary-nav" />
-            </nav>
-            <xsl:apply-templates select="*" mode="summary-postnav"/>
-            <xsl:apply-templates select="." mode="crude-nav-bar" />
-         </xsl:with-param>
-     </xsl:apply-templates>
-     <!-- Summary-mode templates do not recurse, -->
-     <!-- need to restart outside web page       -->
-     <!-- wrapper and dispatch everything        -->
-    <xsl:apply-templates mode="dispatch" />
+<!-- Content wrap -->
+<!-- per structural node: the whole page, or subsidiary -->
+<!-- TODO: identical to HTML???? -->
+<xsl:template match="*" mode="content-wrap">
+    <xsl:param name="content" />
+    <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
+    <!-- Assume we are in SMC HTML mode -->
+    <section class="{local-name(.)}" id="{$ident}">
+        <xsl:apply-templates select="." mode="section-header" />
+    </section>  <!-- NOT enclosing content, messes up in/out of SMC mode -->
+
+    <!-- now the guts -->
+    <xsl:copy-of select="$content" />
+
+    <!-- Hop out, back in, to SMC HTML mode -->
+    <xsl:apply-templates select="." mode="inputoutput" />
+    <xsl:apply-templates select="." mode="outputend" />
+    <xsl:apply-templates select="." mode="inputbegin-execute" />
+    <xsl:text>%html&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Add some spacing between links of a summary page -->
-<!-- This should be accomplished via CSS              -->
+<!-- Intermediate should use file-wrap and content-wrap, -->
+<!-- we just style links a bit here, but a CSS load -->
+<!-- could do this -->
 <xsl:template match="*" mode="summary-nav">
-    <xsl:apply-imports select="."/><br /><br />
+    <xsl:apply-imports select="."/>
+    <br />
+    <br />
 </xsl:template>
 
-<!-- Web Page -->
-<!-- When a structural node is the parent of an   -->
-<!-- entire web page, we build it here as content -->
-<!-- sent to the web page wrapping template       -->
-<xsl:template match="*" mode="webpage">
-    <xsl:apply-templates select="." mode="page-wrap">
-        <xsl:with-param name="content">
-            <xsl:apply-templates select="." mode="crude-nav-bar" />
-            <!-- Heading, div for subdivision that is this page     -->
-            <!-- If a top-level page or frontmatter, titlepage will accomplish this -->
-            <xsl:if test="not(/mathbook/article or /mathbook/book or //frontmatter)">
-                <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
-                <section class="{local-name(.)}" id="{$ident}">
-                    <xsl:apply-templates select="." mode="section-header" />
-                </section>
-            </xsl:if>
-            <!-- Recurse through contents inside enclosing section, ignore title, author -->
-            <xsl:apply-templates select="./*[not(self::title or self::subtitle or self::author)]" />
-            <xsl:apply-templates select="." mode="crude-nav-bar" />
-         </xsl:with-param>
-     </xsl:apply-templates>
-</xsl:template>
-
-<!-- Locate the containing file, need *.sagews here         -->
-<!-- Maybe this could be parameterized in mathbook-html.xsl -->
+<!-- Locate the containing file, need *.sagews here                  -->
+<!-- Maybe the file extension could be parameterized in mathbook-html.xsl -->
 <xsl:template match="*" mode="filename">
-    <xsl:variable name="summary"><xsl:apply-templates select="." mode="is-summary" /></xsl:variable>
-    <xsl:variable name="webpage"><xsl:apply-templates select="." mode="is-webpage" /></xsl:variable>
+    <xsl:variable name="intermediate"><xsl:apply-templates select="." mode="is-intermediate" /></xsl:variable>
+    <xsl:variable name="chunk"><xsl:apply-templates select="." mode="is-chunk" /></xsl:variable>
     <xsl:choose>
-        <xsl:when test="$summary='true' or $webpage='true'">
+        <xsl:when test="$intermediate='true' or $chunk='true'">
             <xsl:apply-templates select="." mode="internal-id" />
             <xsl:text>.sagews</xsl:text>
         </xsl:when>
@@ -154,25 +125,6 @@
             </td>
         </tr>
     </table>
-</xsl:template>
-
-<!-- We presume entire page is inside a %html cell -->
-<!-- In reality at the end of any subdivision,     -->
-<!-- we suspend and immediately restart            -->
-<xsl:template match="chapter|section|subsection|subsubsection|references|exercises">
-    <!-- Section element needed for CSS, apply-templates moved out -->
-    <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
-    <section class="{local-name(.)}" id="{$ident}">
-        <xsl:apply-templates select="." mode="section-header" />
-    </section>
-    <!-- Recurse through contents inside enclosing section, ignore title, author -->
-    <xsl:apply-templates select="./*[not(self::title or self::subtitle or self::author)]" />
-    <!-- <xsl:apply-imports select="." /> -->
-    <!-- Hop out, back in, to HTML mode -->
-    <xsl:apply-templates select="." mode="inputoutput" />
-    <xsl:apply-templates select="." mode="outputend" />
-    <xsl:apply-templates select="." mode="inputbegin-execute" />
-    <xsl:text>%html&#xa;</xsl:text>    
 </xsl:template>
 
 <!-- An abstract named template accepts input text and output    -->
