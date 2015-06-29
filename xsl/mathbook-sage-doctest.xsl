@@ -8,7 +8,6 @@
 >
 
 <xsl:import href="./mathbook-common.xsl" />
-<xsl:import href="./mathbook-html.xsl" />
 
 <!-- Intend output for Python docstring -->
 <xsl:output method="text" />
@@ -17,64 +16,64 @@
 <!-- Forcing newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
 <!-- Avoiding extra whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
 
-<xsl:template match="/mathbook">
-    <xsl:apply-templates mode="structural-to-files" />
+<!-- ############## -->
+<!-- Entry Template -->
+<!-- ############## -->
+<!-- Main entry template is in  xsl/mathbook-common.html        -->
+<!-- It will employ templates which process structural document -->
+<!-- nodes into chunks, which in turn will call modal templates -->
+<!-- defined in this file                                       -->
+
+<!-- ################ -->
+<!-- Structural Nodes -->
+<!-- ################ -->
+
+<!-- We override three templates, the first    -->
+<!-- two extract <sage> blocks throughout.     -->
+<!-- The third creates the file infrastructure -->
+
+<!-- Intermediate structural nodes may have -->
+<!-- an introduction and aconclusion        -->
+<!-- N.B.: maybe should be more careful and -->
+<!-- "for-each" with non-structural check   -->
+<xsl:template match="*" mode="structure-node-intermediate">
+    <xsl:apply-templates select="introduction//sage|conclusion//sage" />
 </xsl:template>
 
-<xsl:template match="*" mode="structural-to-files">
-    <xsl:variable name="structural">
-        <xsl:apply-templates select="." mode="is-structural" />
-    </xsl:variable>
-    <!-- If not structural, we can't expect a coherent selection of Sage cells -->
-    <xsl:if test="$structural='true'">
-        <!-- Investigate characteristics relative to chunking and webpage construction -->
-        <xsl:variable name="webpage">
-            <xsl:apply-templates select="." mode="is-webpage" />
+<!-- A non-structural child might be a sage element, -->
+<!-- or it is an environment containing one          -->
+<xsl:template match="*" mode="structure-node-child">
+    <xsl:apply-templates select="self::sage|.//sage" />
+</xsl:template>
+
+<!-- TODO: generalize filename creation, with variable extension -->
+<xsl:template match="*" mode="file-wrap">
+    <xsl:param name="content" />
+    <xsl:if test="$content!=''">
+        <xsl:variable name="filename">
+            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:text>.py</xsl:text>
         </xsl:variable>
-        <xsl:variable name="summary">
-            <xsl:apply-templates select="." mode="is-summary" />
-        </xsl:variable>
-        <xsl:if test="$webpage='true' or $summary='true'">
-            <!-- Construct the tests, if any -->
-            <xsl:variable name="tests">
-                <!-- Webpage nodes are big Sage sessions, delve as deep as necessary -->
-                <xsl:if test="$webpage='true'">
-                    <xsl:apply-templates select=".//sage" />
-                </xsl:if>
-                <!-- Examine non-structural parts of summary pages for Sage-->
-                <xsl:if test="$summary='true'">
-                    <xsl:apply-templates select="introduction/sage" mode="structural-to-files" />
-                </xsl:if>
-            </xsl:variable>
-            <!-- Write a file, if there is something to write -->
-            <xsl:if test="$tests!=''">
-                <xsl:variable name="filename">
-                    <xsl:apply-templates select="." mode="internal-id" />
-                    <xsl:text>.py</xsl:text>
-                </xsl:variable>
-                <exsl:document href="{$filename}" method="text">
-                    <xsl:call-template name="doctest-file-header" />
-                    <xsl:text>## </xsl:text>
-                    <xsl:apply-templates select="." mode="type-name" />
-                    <xsl:text> </xsl:text>
-                    <xsl:apply-templates select="." mode="number" />
-                    <xsl:text> </xsl:text>
-                    <xsl:apply-templates select="title" />
-                    <xsl:text>&#xa;</xsl:text>
-                    <xsl:text>##&#xa;</xsl:text>
-                    <xsl:text>r"""&#xa;</xsl:text>
-                    <xsl:value-of select="$tests" />
-                    <xsl:text>"""&#xa;</xsl:text>
-                </exsl:document>
-            </xsl:if>
-            <!-- Recurse into summary node subdivisions -->
-            <!-- Non-structural quickly get found out and no file is written -->
-            <xsl:if test="$summary='true'">
-                <xsl:apply-templates mode="structural-to-files" />
-            </xsl:if>
-        </xsl:if>
+        <exsl:document href="{$filename}" method="text">
+            <xsl:call-template name="doctest-file-header" />
+            <xsl:text>## </xsl:text>
+            <xsl:apply-templates select="." mode="type-name" />
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="." mode="number" />
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="title" />
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:text>##&#xa;</xsl:text>
+            <xsl:text>r"""&#xa;</xsl:text>
+            <xsl:value-of select="$content" />
+            <xsl:text>"""&#xa;</xsl:text>
+        </exsl:document>
     </xsl:if>
 </xsl:template>
+
+<!-- ##################### -->
+<!-- Sage Cell Conversions -->
+<!-- ##################### -->
 
 <!-- Just handle "copy" Sage blocks the same way as others -->
 <xsl:template match="sage[@copy]">
@@ -101,6 +100,7 @@
 <!-- A property of the Sage element,         -->
 <!-- but employed in processing input        -->
 <!-- Returns: necessary string, no adornment -->
+<!-- TODO: simplify repeated strings -->
 <xsl:template match="sage" mode="doctest-marker">
     <xsl:if test="@doctest">
         <xsl:choose>
@@ -249,6 +249,10 @@
         </xsl:call-template>
     </xsl:if>
 </xsl:template>
+
+<!-- ############# -->
+<!-- File Elements -->
+<!-- ############# -->
 
 <xsl:template name="doctest-file-header">
     <xsl:text>##          Sage Doctest File         ##&#xa;</xsl:text>
