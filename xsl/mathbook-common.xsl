@@ -995,12 +995,16 @@ The internal templates defined here are
 
 (II) "structure-node" - recursive handling of structural nodes
 
-An enclosing XSL file then needs to implement three modal templates.
-These should all be implemented with  match="*"
+An enclosing XSL file may then override four modal templates.
+These should all be implemented with  match="*".
+Default implementations are given here, which may be useful.
 See note below about (a) versus (b).
 
 (a) file-wrap
+    select/match: a structural node, intermediate or chunk
     parameter: content
+    default: copy content
+    Provides:
     All the infrastructure common to wrapping a chunk
     For example, a web page, LaTeX file, Sage worksheet
     Typically this will include a call to output a file, and
@@ -1010,7 +1014,10 @@ See note below about (a) versus (b).
     unique to the content of the node, such as a title
 
 (b) content-wrap
+    select/match: a structural node, intermediate or chunk
     parameter: content
+    default: copy content
+    Provides:
     Content unique to a particular structural node, exclusive
     of its subsidiary elements.
     Typically this would be headings, such as title.
@@ -1020,21 +1027,34 @@ See note below about (a) versus (b).
 
 
 (c) structure-node-intermediate
+    select/match: a structural node, intermediate
+    default: non-structural content, text versions of structural content
+    Provides:
     The content of an intermediate node, providing its appearance 
     inside of the  content-wrap  template.
     This template should ignore the title, subtitle and author elements
     (unless we have fixed this situation since writing this)
-    It should present non-structural elements and briefly summarize
-    structural elements, with navigation to the element's chunk.
+    It should present non-structural elements completely and briefly
+    summarize structural elements, with navigation to the element's chunk.
+
+(d) structure-node-child
+    select/match: a single non-structural child of a structural node
+    default: apply all templates to the child
+    Provides:
+    Each node of a structural node being displayed as a chunk
+    will be sent to this template.  The default action is
+    usually the desired one: apply templates to the node, yielding
+    their normal presentation.
 
 How do you tell the division between file-wrap and content-wrap?    
 Two things to realize
 (i)  a single file will typically be the application of a *single* file-wrap
 (ii) the content enclosed by a file-wrap typically will have several applications of content-wrap
 
-With these three templates in place, the next two routines will provide all
+With these four templates in place, the next two routines will provide all
 of the logic of walking the document tree  and react appropriately for all
-values of the  chunk-level  variable and various scenarios for document organization
+values of the  chunk-level  variable and various scenarios for document organization.
+See default implementations of the four modal templates following.
 
 See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontrivial examples
 -->
@@ -1108,8 +1128,9 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
                                 </xsl:apply-templates>
                             </xsl:when>
                             <xsl:when test="$structural='false'">
-                                <!-- non-structural, so use a plain template defined elsewhere -->
-                                <xsl:apply-templates select="." />
+                                <!-- non-structural, so apply template to this child               -->
+                                <!-- the default, and typically, is to just apply "plain" templates -->
+                                <xsl:apply-templates select="." mode="structure-node-child" />
                             </xsl:when>
                         </xsl:choose>
                     </xsl:for-each>
@@ -1127,6 +1148,67 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
+
+<!-- Four Structural Node Templates  -->
+<!-- See careful descriptions above -->
+
+<!-- (a) file-wrap -->
+<xsl:template match="*" mode="file-wrap">
+    <xsl:param name="content" />
+    <!-- file name, file header, exsl:document(), etc here -->
+    <xsl:copy-of select="$content" />
+    <!-- file footer, etc -->
+</xsl:template>
+
+<!-- (b) content-wrap -->
+<xsl:template match="*" mode="content-wrap">
+    <xsl:param name="content" />
+    <!-- subdivision header, per file format -->
+    <!-- handle title, subtitle, author here -->
+    <xsl:copy-of select="$content" />
+    <!-- Subdivision footer, etc -->
+</xsl:template>
+
+<!-- (c) structure-node-intermediate                    -->
+<!-- Implemented in two parts, study carefully          -->
+<!-- Override this entirely, or just "summary" template -->
+<xsl:template match="*" mode="structure-node-intermediate">
+    <xsl:for-each select="*"> <!-- loop over children -->
+        <xsl:variable name="structural"> <!-- identify structural -->
+            <xsl:apply-templates select="." mode="is-structural" />
+        </xsl:variable>
+        <xsl:choose>
+            <xsl:when test="$structural = 'true'">
+                <!-- Likely this stanza needs format-specific implementation      -->
+                <!-- Or overriding just this modal template would be one approach -->
+                <xsl:apply-templates select="." mode="intermediate-child-summary" />
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- Want to present non-structural components -->
+                <!-- (eg, introduction, conclusion)            -->
+                <xsl:apply-templates select="." />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:for-each>
+</xsl:template>
+
+<!-- This would normally be some sort of navigation       -->
+<!-- element to structural (chunked) children if the node -->
+<xsl:template match="*" mode="intermediate-child-summary">
+    <xsl:text>&#xa;* </xsl:text>
+    <xsl:apply-templates select="." mode="long-name" />
+    <xsl:text> *&#xa;</xsl:text>
+</xsl:template>
+
+<!-- (d) structure-node-child -->
+<!-- This works well generally, when you want all,  -->
+<!-- or most, of the content.  It can be overridden -->
+<!-- with a more restrictive scope as a filter      -->
+<xsl:template match="*" mode="structure-node-child">
+    <xsl:apply-templates select="." />
+</xsl:template>
+
+
 
 <!-- Names of Objects -->
 <!-- Ultimately translations are all contained in the           -->
