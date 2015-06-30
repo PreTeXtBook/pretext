@@ -519,7 +519,38 @@ the xsltproc executable.
                     <p>It is always a logical section of the document, but never gets a number.  It can be used within any subdivision, and thus cannot ever contain another subdivision, and so is always a leaf of the document tree.  It does not appear in the table of contents.  The title is inline with the first paragraph.  Vertical space usually sets it off slightly from its surroundings.</p>
                 </paragraphs>
             </subsection>
+            <subsection xml:id="subsection-intro-conclude">
+                <title>Introductions and Conclusions</title>
 
+                <introduction>
+                    <title>An Introductory Introduction</title>
+
+                    <p>Any subdivision may have a sequence of paragraphs within an <c>&lt;introduction&gt;</c> that precedes subsequent further subdivisions.  You are reading one now.  They are always leaves of the document structure, so are rendered on some pages that reference the following subdivisions.</p>
+
+                    <p>An introduction or conclusion is an extremely restrictive container with simple presentation.  A title is optional (and probably not advisable).  Content is meant to be short and unstructured, in particular, nothing that can be numbered is allowed.  If this feels <em>too</em> restrictive, then place your content in an initial numbered subdivision and perhaps title it <q>Introduction</q>.  Or make your entire subdivion unstructured and place whatever you want into it.</p>
+
+                    <p>This ends this introduction to introductions.</p>
+                </introduction>
+
+                <subsubsection>
+                    <title>Test One</title>
+
+                    <p>An intervening subsubsection just after an introduction.</p>
+                </subsubsection> 
+
+                <subsubsection>
+                    <title>Test Two</title>
+
+                    <p>An intervening subsubsection just before a conclusion.</p>
+                </subsubsection> 
+
+                <conclusion>
+                    <p>Entirely analogous to introductions are conclusions.  Any subdivision may have a sequence of paragraphs within a <c>&lt;conclusion&gt;</c> that follows previous further subdivisions.  You are reading one now.  They are always leaves of the document structure, so are rendered on some pages that reference the preceding subdivisions.</p>
+
+                   <p>This concludes this conclusion (and this subsection and this section).</p>
+                </conclusion>
+
+            </subsection>
         </section>
 
         <!--

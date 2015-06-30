@@ -315,7 +315,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Chapters, Sections, etc may be untitled, so may be empty, though unusual -->
 <!-- Environments could be untitled much of the time                          -->
-<xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection|paragraphs|paragraph|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration" mode="title">
+<xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration" mode="title">
     <xsl:param name="complexity" />
     <xsl:apply-templates select="title" mode="title">
         <xsl:with-param name="complexity"><xsl:value-of select="$complexity" /></xsl:with-param>
@@ -474,13 +474,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Introductions and Conclusions -->
-<!-- Simple containers, allowed before and after       -->
-<!-- explicit subdivisions, to introduce or summarize  -->
-<!-- No title allowed, typically just a few paragraphs -->
+<!-- Simple containers, allowed before and after      -->
+<!-- explicit subdivisions, to introduce or summarize -->
+<!-- Title optional (and discouraged),                -->
+<!-- typically just a few paragraphs                  -->
 <xsl:template match="introduction|conclusion">
     <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
     <article class="{local-name(.)}" id="{$ident}">
-        <xsl:apply-templates />
+        <h5 class="heading">
+            <xsl:apply-templates select="." mode="title-full" />
+        </h5>
+        <xsl:apply-templates  select="./*[not(self::title)]"/>
     </article>
 </xsl:template>
 

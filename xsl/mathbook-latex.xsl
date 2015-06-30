@@ -1420,11 +1420,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- Introductions and Conclusions -->
-<!-- Simple containers, allowed before and after       -->
-<!-- explicit subdivisions, to introduce or summarize  -->
-<!-- No title allowed, typically just a few paragraphs -->
-<xsl:template match="introduction|conclusion">
-    <xsl:apply-templates />
+<!-- Simple containers, allowed before and after      -->
+<!-- explicit subdivisions, to introduce or summarize -->
+<!-- Title optional (and discouraged),                -->
+<!-- typically just a few paragraphs                  -->
+<!-- TOD0: design a LaTeX environment to make this more semantic -->
+<xsl:template match="introduction[title]|conclusion[title]">
+    <xsl:apply-templates select="." mode="console-typeout" />
+    <xsl:text>\</xsl:text>
+    <xsl:apply-templates select="." mode="subdivision-name" />
+    <xsl:text>*{</xsl:text>
+    <xsl:apply-templates select="title" />
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:apply-templates select="*[not(self::title)]" />
+</xsl:template>
+
+<!-- Spacing comes from division header above, subdivision header below -->
+<xsl:template match="introduction">
+    <xsl:apply-templates select="." mode="console-typeout" />
+    <xsl:apply-templates select="*" />
+</xsl:template>
+
+<!-- Last subdivision just ends, presumably a \par is order -->
+<!-- Some visual separation is a necessity, with no title   -->
+<!-- "break" command is like also using a \par and encourages a page break     -->
+<!-- http://tex.stackexchange.com/questions/41476/lengths-and-when-to-use-them -->
+<xsl:template match="conclusion">
+    <xsl:apply-templates select="." mode="console-typeout" />
+    <xsl:text>\bigbreak&#xa;</xsl:text>
+    <xsl:apply-templates select="*" />
 </xsl:template>
 
 <!-- Paragraphs -->
