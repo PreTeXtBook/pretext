@@ -1129,8 +1129,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\mainmatter&#xa;</xsl:text>
 </xsl:template>
 
-<!-- A huge decoration, spanning many pages -->
-<!-- Includes items from the colophon       -->
+<!-- A huge decoration, spanning many pages             -->
+<!-- Not structural, titlepage element is just a signal -->
+<!-- Includes items from the colophon                   -->
 <xsl:template match="book/frontmatter/titlepage">
     <xsl:param name="content" />
     <!-- first page, title only -->
@@ -1148,11 +1149,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- The "colophon" portion of <frontmatter>  -->
+<!-- The <colophon> portion of <frontmatter>  -->
 <!-- generally gets mined to migrate          -->
 <!-- various places, so we kill it as part of -->
 <!-- processing the front matter element.     -->
+<!-- See the summary being killed elsewhere   -->
+<!-- NB: exsl:document() appears to not write -->
+<!-- an empty file at all. We will not rely   -->
+<!-- on this bad behavior, take no chances    -->
+<!-- and thus kill the file-wrap also         -->
 <xsl:template match="book/frontmatter/colophon" mode="content-wrap" />
+<xsl:template match="book/frontmatter/colophon" mode="file-wrap" />
 
 <!-- Preface, etc within \frontmatter is usually handled correctly by LaTeX -->
 <!-- Allow alternative titles, like "Preface to 2nd Edition"                -->
@@ -1324,6 +1331,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- <colophon> is structural, but never gets written directly -->
+<!-- See empty "content-wrap" elsewhere                        -->
+<xsl:template match="book/frontmatter/colophon" mode="structure-node-child-summary" />
 
 <!-- Historically, latex processing writes to standard output as        -->
 <!-- one entire file.  We can (and did briefly) define variants for     -->
