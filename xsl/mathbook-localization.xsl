@@ -49,8 +49,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   place  xml:lang="es-ES", or similar,       -->
 <!--   as an attribute on your <mathbook> element -->
 
+<!-- Current (partially) implemented language codes and contributors -->
+<!-- en-US, US English, Robert A. Beezer                             -->
+<!-- pt-BR, Brazilian Portugese, Igor Morgado                        -->
+<!-- es-ES, Spain Spanish, Juan José Torrens                         -->
+
 <!-- en-US, US English, Robert A. Beezer, 2014/08/11 -->
-<!-- This is the default if no @lang attribute is given on the mathbook element -->
+<!-- This is the default if no @xml:lang attribute is given on the mathbook element -->
 <xsl:variable name="en-US">
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id='theorem'><xsl:text>Theorem</xsl:text></localization>
