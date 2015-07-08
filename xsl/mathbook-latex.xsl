@@ -870,9 +870,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\vspace*{0.28\textheight}&#xa;</xsl:text>
     <xsl:text>{\Huge </xsl:text>
     <xsl:apply-templates select="/mathbook/book/title" />
-    <xsl:text>}</xsl:text>
+    <xsl:text>}\\</xsl:text> <!-- always end line inside centering -->
     <xsl:if test="/mathbook/book/subtitle">
-        <xsl:text>\\[2\baselineskip]&#xa;</xsl:text>
+        <xsl:text>[2\baselineskip]&#xa;</xsl:text> <!-- extend line break if subtitle -->
         <xsl:text>{\LARGE </xsl:text>
         <xsl:apply-templates select="/mathbook/book/subtitle" />
         <xsl:text>}\\&#xa;</xsl:text>
@@ -897,6 +897,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Template produces a single page, followed by a \clearpage            -->
 <!-- Customize with an overide of this template in an imported stylesheet -->
 <!-- For a two-page spread, consider modifying the "ad-card" template     -->
+<!-- For "\centering" to work properly, obey the following scheme:              -->
+<!-- Each group, but first, should begin with [<length>]&#xa; as vertical break -->
+<!-- Each group, should end with only \\ as prelude to vertical break           -->
 <xsl:template match="book" mode="title-page">
     <xsl:text>%% begin: title page&#xa;</xsl:text>
     <xsl:text>%% Inspired by Peter Wilson's "titleDB" in "titlepages" CTAN package&#xa;</xsl:text>
@@ -905,14 +908,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\vspace*{0.14\textheight}&#xa;</xsl:text>
     <xsl:text>{\Huge </xsl:text>
     <xsl:apply-templates select="title" />
-    <xsl:text>}</xsl:text>
+    <xsl:text>}\\</xsl:text> <!-- end line inside centering -->
     <xsl:if test="subtitle">
-        <xsl:text>\\[\baselineskip]&#xa;</xsl:text>  <!-- finish title -->
+        <xsl:text>[\baselineskip]&#xa;</xsl:text>  <!-- extend if subtitle -->
         <xsl:text>{\LARGE </xsl:text>
         <xsl:apply-templates select="subtitle" />
-        <xsl:text>}</xsl:text>
+        <xsl:text>}\\</xsl:text>
     </xsl:if>
-    <xsl:text>\\[2\baselineskip]&#xa;</xsl:text> <!-- finish title group -->
     <xsl:apply-templates select="frontmatter/titlepage/author" mode="title-page"/>
     <xsl:apply-templates select="frontmatter/titlepage/editor" mode="title-page" />
     <xsl:apply-templates select="frontmatter/titlepage/credit" mode="title-page" />
@@ -922,42 +924,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% end:   title page&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="author" mode="title-page">
+<xsl:template match="author|editor" mode="title-page">
+    <xsl:text>[3\baselineskip]&#xa;</xsl:text>
     <xsl:text>{\Large </xsl:text>
     <xsl:apply-templates select="personname" />
-    <xsl:text>}\\[0.5\baselineskip]&#xa;</xsl:text>
-    <xsl:text>{\Large </xsl:text>
-    <xsl:apply-templates select="institution" />
-    <xsl:text>}\\[3\baselineskip]&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="editor" mode="title-page">
-    <xsl:text>{\Large </xsl:text>
-    <xsl:apply-templates select="personname" />
-    <xsl:text>, </xsl:text>
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="'editor'" />
-    </xsl:call-template>
-    <xsl:text>}\\[\baselineskip]&#xa;</xsl:text>
-    <xsl:text>{\Large </xsl:text>
-    <xsl:apply-templates select="institution" />
-    <xsl:text>}\\[\baselineskip]&#xa;</xsl:text>
+    <xsl:if test="self::editor">
+        <xsl:text>, </xsl:text>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'editor'" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:text>}\\</xsl:text>
+    <xsl:if test="institution">
+        <xsl:text>[0.5\baselineskip]&#xa;</xsl:text>
+        <xsl:text>{\Large </xsl:text>
+        <xsl:apply-templates select="institution" />
+        <xsl:text>}\\</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="credit" mode="title-page">
+    <xsl:text>[3\baselineskip]&#xa;</xsl:text>
     <xsl:text>{\Large </xsl:text>
     <xsl:apply-templates select="title" />
     <xsl:text>}\\[0.5\baselineskip]&#xa;</xsl:text>
+    <xsl:text>{\normalsize </xsl:text>
     <xsl:apply-templates select="author/personname" />
-    <xsl:text>\\[0.25\baselineskip]&#xa;</xsl:text>
-    <xsl:apply-templates select="author/institution" />
-    <xsl:text>\\[3\baselineskip]&#xa;</xsl:text>
+    <xsl:text>}\\</xsl:text>
+    <xsl:if test="institution">
+        <xsl:text>[0.25\baselineskip]&#xa;</xsl:text>
+        <xsl:apply-templates select="author/institution" />
+        <xsl:text>\\</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="date" mode="title-page">
+    <xsl:text>[3\baselineskip]&#xa;</xsl:text>
     <xsl:text>{\Large </xsl:text>
     <xsl:apply-templates />
-    <xsl:text>}\\&#xa;</xsl:text>
+    <xsl:text>}\\</xsl:text>
 </xsl:template>
 
 <!-- Copyright page is obverse of title page  -->
