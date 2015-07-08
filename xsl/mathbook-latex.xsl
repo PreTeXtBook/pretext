@@ -1364,7 +1364,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="content" />
     <!-- appendices are peers of chapters (book) or sections (article) -->
     <!-- so we need to slip this in once when we can                   -->
-    <xsl:if test="self::appendix and not(preceding-sibling::*[appendix])">
+    <xsl:if test="self::appendix and not(preceding-sibling::appendix)">
         <xsl:text>%&#xa;</xsl:text>
         <xsl:text>\appendix&#xa;</xsl:text>
         <xsl:text>%&#xa;</xsl:text>
