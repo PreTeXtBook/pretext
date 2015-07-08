@@ -339,11 +339,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="level" select="$numbering-theorems + $root-level" />
     </xsl:call-template>
     <xsl:text>]&#xa;</xsl:text>
-    <!-- Localize "Proof" environment -->
-    <!-- http://tex.stackexchange.com/questions/62020/how-to-change-the-word-proof-in-the-proof-environment -->
-    <xsl:text>\renewcommand*{\proofname}{</xsl:text>
-    <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'proof'" /></xsl:call-template>
-    <xsl:text>}</xsl:text>
     <xsl:text>%% Only variants actually used in document appear here&#xa;</xsl:text>
     <xsl:text>%% Numbering: all theorem-like numbered consecutively&#xa;</xsl:text>
     <xsl:text>%% i.e. Corollary 4.3 follows Theorem 4.2&#xa;</xsl:text>
@@ -416,6 +411,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\newtheorem{remark}[theorem]{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'remark'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
+    <!-- Localize various standard names in use         -->
+    <!-- Many enviroments addressed upon creation above -->
+    <!-- Figure and Table addressed elsewhere           -->
+    <!-- Index, table of contents done elsewhere        -->
+    <!-- http://www.tex.ac.uk/FAQ-fixnam.html           -->
+    <!-- http://tex.stackexchange.com/questions/62020/how-to-change-the-word-proof-in-the-proof-environment -->
+    <xsl:text>%% Localize LaTeX supplied names (possibly none)&#xa;</xsl:text>
+    <!-- Localize AMS "proof" environment -->
+    <xsl:if test="//proof">
+        <xsl:text>\renewcommand*{\proofname}{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'proof'" /></xsl:call-template>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <xsl:if test="//appendix">
+        <xsl:text>\renewcommand*{\appendixname}{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'appendix'" /></xsl:call-template>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <xsl:if test="/mathbook/book">
+        <xsl:if test="//part">
+            <xsl:text>\renewcommand*{\partname}{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'part'" /></xsl:call-template>
+            <xsl:text>}</xsl:text>
+        </xsl:if>
+        <xsl:if test="//chapter">
+            <xsl:text>\renewcommand*{\chaptername}{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'chapter'" /></xsl:call-template>
+            <xsl:text>}</xsl:text>
+        </xsl:if>
+    </xsl:if>
+    <xsl:if test="/mathbook/article">
+        <xsl:if test="//abstract">
+            <xsl:text>\renewcommand*{\abstractname}{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'abstract'" /></xsl:call-template>
+            <xsl:text>}</xsl:text>
         </xsl:if>
     </xsl:if>
     <!-- Numbering Equations -->
