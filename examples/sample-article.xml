@@ -464,17 +464,29 @@ the xsltproc executable.
                 </subsubsection>
 
                 <subsubsection>
+
+                    <p>This subsubsection has not been given a title.  That's OK.</p>
+                </subsubsection>
+
+                <subsubsection>
+                    <title></title>
+
+                    <p>This subsubsection has a title in the source, but it is empty.  That's OK, too.</p>
+                </subsubsection>
+
+                <subsubsection>
                     <title>Advice</title>
 
                     <p>Using an <q>integral sign</q> for an antiderivative (aka indefinite integral) would seem to make the Fundamental Theorem a <foreign>fait accompli</foreign>.  So I would suggest not conflating the notation for two very different things until the Fundamental Theorem exposes them as being highly related.</p>
                 </subsubsection>
 
                 <exercises>
-                    <title>Exercises</title>
 
                     <exercise xml:id="exercise-test-number">
                         <statement>
                             <p>This is an exercise in an <q>Exercises</q> subdivision at the level of a subsubsection.  There is no question other than if the numbering is appropriate (it is not for <latex /> at the moment).  Here is a self-referential link: Exercise<nbsp /><xref ref="exercise-test-number" />.</p>
+
+                            <p>The subsubsection has no title in the source, so one is provided automatically, and will adjust according to the language of the document.</p>
                         </statement>
                     </exercise>
                 </exercises>
