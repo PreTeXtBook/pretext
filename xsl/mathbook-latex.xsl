@@ -983,7 +983,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{\normalsize </xsl:text>
     <xsl:apply-templates select="author/personname" />
     <xsl:text>}\\</xsl:text>
-    <xsl:if test="institution">
+    <xsl:if test="author/institution">
         <xsl:text>[0.25\baselineskip]&#xa;</xsl:text>
         <xsl:apply-templates select="author/institution" />
         <xsl:text>\\</xsl:text>
