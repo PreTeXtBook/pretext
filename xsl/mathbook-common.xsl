@@ -1230,6 +1230,118 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 </xsl:template>
 
 
+<!-- ###### -->
+<!-- Titles -->
+<!-- ###### -->
+
+
+<!-- Almost everything can have a title, and they       -->
+<!-- are important for navigation, so get recycled      -->
+<!-- in various uses.  They may be -->
+
+<!-- (a) user-supplied only, with absence translating -->
+<!-- to an empty string -->
+
+<!-- (b) user-supplied optionally, with absence being -->
+<!-- supplied by MBX via the localization strings -->
+
+<!-- The "full" version includes things like footnotes -->
+<!-- and is typically used at birth -->
+
+<!-- The "simple" version is sanitized and is typically -->
+<!-- used in some navigation element like headers and ToC -->
+
+<!-- We use modal templates, so we can kill the default -->
+<!-- template on *all* titles globally and ignore them -->
+<!-- in default "apply-templates" calls. -->
+
+<!-- The interface to all this is based on two modal  -->
+<!-- templates of the enclosing structure that has a title -->
+<!-- "full":   everything, typically at origin          -->
+<!-- "simple": sanitized, usually for navigation -->
+
+<xsl:template match="*" mode="title-full">
+    <xsl:apply-templates select="." mode="title">
+        <xsl:with-param name="complexity">full</xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="*" mode="title-simple">
+    <xsl:apply-templates select="." mode="title">
+        <xsl:with-param name="complexity">simple</xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- Some items have default titles that make sense      -->
+<!-- Typically these are one-off divisions (eg preface), -->
+<!-- or repeated generic divisions (eg exercises)        -->
+<!-- Anny element that could be titled should appear     -->
+<!-- in one of the two versions of this template         -->
+<!-- Later, we might replace the default by true/false   -->
+<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter" mode="has-default-title">
+    <xsl:text>true</xsl:text>
+</xsl:template>
+<xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|credit" mode="has-default-title">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+<xsl:template match="*" mode="has-default-title">
+    <xsl:message>MBX:BUG: <xsl:value-of select="local-name(.)" /> element is not characterized by "has-default-title" template</xsl:message>
+</xsl:template>
+
+
+<!-- We use a title, if discovered,                -->
+<!-- then check if a default title will suffice,   -->
+<!-- otherwise produce an empty title              -->
+<!-- NB: this match pattern should be the union of -->
+<!-- the two above,everything that can be titled   -->
+<xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|credit|frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter" mode="title">
+    <xsl:param name="complexity" />
+    <xsl:variable name="default-titled">
+        <xsl:apply-templates select="." mode="has-default-title" />
+    </xsl:variable>
+    <xsl:choose>
+        <!-- if title is supplied, use it, according to parameter -->
+        <xsl:when test="title">
+            <xsl:apply-templates select="title" mode="title">
+                <xsl:with-param name="complexity" select="$complexity" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- else, check if a default is appropriate              -->
+        <!-- ignore parameter, since "type-name" is never complex -->
+        <xsl:when test="$default-titled = 'true'">
+            <xsl:apply-templates select="." mode="type-name" />
+        </xsl:when>
+        <!-- otherwise, return empty -->
+        <xsl:otherwise>
+            <xsl:text></xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
+<!-- Once actually at a title element, we    -->
+<!-- process it or process without footnotes -->
+<xsl:template match="title|subtitle" mode="title" >
+    <xsl:param name="complexity" />
+    <xsl:choose>
+        <xsl:when test="$complexity='full'">
+            <xsl:apply-templates />
+        </xsl:when>
+        <xsl:when test="$complexity='simple'">
+            <xsl:apply-templates  select="./node()[not(self::fn)]" />
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Unhandled title requests, likely subdivisions or environments -->
+<xsl:template match="*" mode="title">
+    <xsl:message>MBX:BUG: asking for title of unhandled <xsl:value-of select="local-name(.)" /></xsl:message>
+</xsl:template>
+
+<!-- As a modal template above, we can eventually kill the default template -->
+<!-- Kill titles, once all are handled, then strip avoidances elsewhere -->
+<!-- <xsl:template match="*" select="title|subtitle" /> -->
+
 
 <!-- Names of Objects -->
 <!-- Ultimately translations are all contained in the           -->

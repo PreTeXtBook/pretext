@@ -763,7 +763,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\hypersetup{hidelinks}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\hypersetup{pdftitle={</xsl:text>
-    <xsl:apply-templates select="title" />
+    <xsl:apply-templates select="." mode="title-simple" />
     <xsl:text>}}&#xa;</xsl:text>
     <!-- http://tex.stackexchange.com/questions/44088/when-do-i-need-to-invoke-phantomsection -->
     <xsl:text>%% If you manually remove hyperref, leave in this next command&#xa;</xsl:text>
@@ -857,7 +857,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="title-page-info-book">
     <xsl:text>%% Title page information for book&#xa;</xsl:text>
     <xsl:text>\title{</xsl:text>
-    <xsl:apply-templates select="title" />
+    <xsl:apply-templates select="." mode="title-full" />
     <xsl:if test="subtitle">
         <xsl:text>\\&#xa;</xsl:text>
         <!-- Trying to match author fontsize -->
@@ -874,7 +874,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="title-page-info-article">
     <xsl:text>%% Title page information for article&#xa;</xsl:text>
     <xsl:text>\title{</xsl:text>
-    <xsl:apply-templates select="title" />
+    <xsl:apply-templates select="." mode="title-full" />
     <xsl:if test="subtitle">
         <xsl:text>\\&#xa;</xsl:text>
         <!-- Trying to match author fontsize -->
@@ -901,7 +901,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{\centering&#xa;</xsl:text>
     <xsl:text>\vspace*{0.28\textheight}&#xa;</xsl:text>
     <xsl:text>{\Huge </xsl:text>
-    <xsl:apply-templates select="/mathbook/book/title" />
+    <xsl:apply-templates select="/mathbook/book" mode="title-full"/>
     <xsl:text>}\\</xsl:text> <!-- always end line inside centering -->
     <xsl:if test="/mathbook/book/subtitle">
         <xsl:text>[2\baselineskip]&#xa;</xsl:text> <!-- extend line break if subtitle -->
@@ -939,7 +939,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{\centering&#xa;</xsl:text>
     <xsl:text>\vspace*{0.14\textheight}&#xa;</xsl:text>
     <xsl:text>{\Huge </xsl:text>
-    <xsl:apply-templates select="title" />
+    <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}\\</xsl:text> <!-- end line inside centering -->
     <xsl:if test="subtitle">
         <xsl:text>[\baselineskip]&#xa;</xsl:text>  <!-- extend if subtitle -->
@@ -978,7 +978,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="credit" mode="title-page">
     <xsl:text>[3\baselineskip]&#xa;</xsl:text>
     <xsl:text>{\Large </xsl:text>
-    <xsl:apply-templates select="title" />
+    <xsl:apply-templates  select="." mode="title-full" />
     <xsl:text>}\\[0.5\baselineskip]&#xa;</xsl:text>
     <xsl:text>{\normalsize </xsl:text>
     <xsl:apply-templates select="author/personname" />
@@ -1206,28 +1206,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: add to headers, currently just CONTENTS, check backmatter        -->
 <xsl:template match="acknowledgement|foreword|preface" mode="content-wrap">
     <xsl:param name="content" />
-    <xsl:variable name="preface-title">
-        <xsl:choose>
-            <xsl:when test="title">
-                <xsl:apply-templates select="title" /> <!-- footnotes dangerous here -->
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="." mode="type-name" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
     <xsl:text>%% begin: </xsl:text>
     <xsl:value-of select="local-name(.)" />
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>\chapter*{</xsl:text>
-    <xsl:value-of select="$preface-title" />
+    <xsl:apply-templates  select="." mode="title-full" />
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>\addcontentsline{toc}{chapter}{</xsl:text>
-    <xsl:value-of select="$preface-title" />
+    <xsl:apply-templates select="." mode="title-simple" />
     <xsl:text>}&#xa;</xsl:text>
-    <!-- <xsl:apply-templates select="*[not(self::title)]" /> -->
     <xsl:copy-of select="$content" />
     <xsl:text>%% end:   </xsl:text>
     <xsl:value-of select="local-name(.)" />
@@ -1416,22 +1405,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             ((/mathbook/book and self::chapter) or (/mathbook/article and self::section))" >
             <xsl:text>*</xsl:text>
             <xsl:text>{</xsl:text>
-            <xsl:apply-templates select="title" />
+            <xsl:apply-templates select="." mode="title-full" />
             <xsl:text>}</xsl:text>
             <xsl:apply-templates select="." mode="label" />
             <xsl:text>&#xa;</xsl:text>
             <xsl:text>\addcontentsline{toc}{</xsl:text>
             <xsl:value-of select="local-name(.)" />
             <xsl:text>}{</xsl:text>
-            <xsl:apply-templates select="title/node()[not(self::fn)]" />
+            <xsl:apply-templates select="." mode="title-simple" />
             <xsl:text>}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>[</xsl:text>
-            <xsl:apply-templates select="title/node()[not(self::fn)]" />
+            <xsl:apply-templates select="." mode="title-simple"/>
             <xsl:text>]</xsl:text>
             <xsl:text>{</xsl:text>
-            <xsl:apply-templates select="title" />
+            <xsl:apply-templates select="." mode="title-full"/>
             <xsl:text>}</xsl:text>
             <xsl:apply-templates select="." mode="label" />
         </xsl:otherwise>
@@ -1467,7 +1456,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\</xsl:text>
     <xsl:apply-templates select="." mode="subdivision-name" />
     <xsl:text>*{</xsl:text>
-    <xsl:apply-templates select="title" />
+    <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::title)]" />
 </xsl:template>
@@ -1501,12 +1490,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:apply-templates select="." mode="console-typeout" />
     <xsl:text>\paragraph</xsl:text>
-   <!-- TODO: adjust to use title/complexity templates -->
+    <!-- keep optional title if LaTeX source is re-purposed -->
     <xsl:text>[</xsl:text>
-    <xsl:apply-templates select="title/node()[not(self::fn)]" />
+    <xsl:apply-templates select="." mode="title-simple" />
     <xsl:text>]</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="title" />
+    <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>&#xa;</xsl:text>
