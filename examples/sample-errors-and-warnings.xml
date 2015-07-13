@@ -69,6 +69,10 @@ systems.
             <p>A cross-reference to nowhere (warnings): <xref ref="pointer-to-nowhere-as-test" /></p>
 
             <p>A cross-reference with a bad/missing attribute: <xref perversional="spelled-bad" />.</p>
+
+            <p>A cross-reference with a bad value for the autoname attribute: <xref ref="errors-and-warnings" autoname="maybe" />.</p>
+
+            <p>The <q>detail</q> attribute of a cross-reference is only implemented for a reference to a bibliographic item: <xref ref="errors-and-warnings" detail="blah" />.</p>
         </section>
 
         <section>

@@ -1890,114 +1890,90 @@ is just flat out on the page, as if printed there.
     </figcaption>
 </xsl:template>
 
-<!-- Visual Identifiers for Cross-References -->
-<!-- Format of visual identifiers, peculiar to HTML       -->
-<!-- This is complete HTML  code to make visual reference -->
-<!-- LaTeX does much of this semi-automatically           -->
-<!-- Many components are built from common routines       -->
 
-<!-- Most cross-references have targets that know -->
-<!-- their names, so we default to trying that,   -->
-<!-- subject to various customizations            -->
-<xsl:template match="*" mode="ref-id">
-    <!-- Parameter is the local @autoname of the calling xref -->
-    <xsl:param name="autoname" />
-    <xsl:variable name="prefix">
-        <xsl:apply-templates select="." mode="ref-prefix">
-            <xsl:with-param name="local" select="$autoname" />
-        </xsl:apply-templates>
-    </xsl:variable>
-    <xsl:variable name="content">
-        <!-- Autonaming prefix: add non-breaking space -->
-        <xsl:value-of select="$prefix" />
-        <xsl:if test="$prefix!=''">
-            <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
-        </xsl:if>
-        <xsl:apply-templates select="." mode="formatted-ref-number" />
-    </xsl:variable>
-    <xsl:apply-templates select="." mode="xref-hyperlink">
-        <xsl:with-param name="content" select="$content" />
-    </xsl:apply-templates>
-</xsl:template>
+<!-- ################ -->
+<!-- Cross-References -->
+<!-- ################ -->
 
-<!-- The next two variants handle the difference -->
-<!-- between general items and equations         -->
-<xsl:template match="*" mode="formatted-ref-number">
-    <xsl:apply-templates select="." mode="number" />
-</xsl:template>
+<!-- Much of the cross-reference mechanism is -->
+<!-- implemented in the common routines,      -->
+<!-- here we implement two abstract templates -->
+<!-- which are called from those routines     -->
 
-<!-- Displayed equations have targets manufactured by MathJax, -->
-<!-- Elsewhere we number these just as MathJax/AMSMath would   -->
-<!-- For HTML we need to provide the parentheses               -->
-<!-- "me"'s are explicitly un-numbered                         -->
-<xsl:template match="men|mrow" mode="formatted-ref-number">
-    <xsl:text>(</xsl:text>
-    <xsl:apply-templates select="." mode="number" />
-    <xsl:text>)</xsl:text>
-</xsl:template>
+<!-- The "text" of a cross-reference typically   -->
+<!-- includes a number and our numbering code is -->
+<!-- designed to sync with LaTeX's schemes       -->
 
-<!-- Citations get marked off in a pair of brackets              -->
-<!-- A cross-reference to a biblio may have "detail",            -->
-<!-- extra information about the location in the referenced work -->
-<xsl:template match="biblio" mode="ref-id">
-    <xsl:param name="detail" />
-    <xsl:variable name="content">
-        <xsl:text>[</xsl:text>
-        <xsl:apply-templates select="." mode="number" />
-        <xsl:if test="$detail != ''">
-            <xsl:text>, </xsl:text>
-            <xsl:apply-templates select="$detail" />
-       </xsl:if>
-        <xsl:text>]</xsl:text>
-    </xsl:variable>
-    <xsl:apply-templates select="." mode="xref-hyperlink">
-        <xsl:with-param name="content" select="$content" />
-    </xsl:apply-templates>
-</xsl:template>
+<!-- The xref-link template provides one of two types of links      -->
+<!--                                                                -->
+<!-- (a) a traditional HTML hyperlink, a jump to a new location     -->
+<!-- (b) a knowl, aka a transclusion, which appears within the text -->
+<!--                                                                -->
+<!-- A hyperlink is the default. For conversions to different       -->
+<!-- HTML outputs, the choice of targets appearing as knowls        -->
+<!-- can be adjusted by overriding the next template                -->
 
-<!-- TODO: will we allow me's to be numbered, or not? -->
-<!-- <xsl:template match="me|men|mrow" mode="ref-id">
-    <xsl:variable name="content">
-        <xsl:text>(</xsl:text>
-        <xsl:apply-templates select="." mode="number" />
-        <xsl:text>)</xsl:text>
-    </xsl:variable>
-    <xsl:apply-templates select="." mode="xref-hyperlink">
-        <xsl:with-param name="content" select="$content" />
-    </xsl:apply-templates>
-</xsl:template>
- -->
-<!-- TODO: trash escaping by building content with hex nbsp -->
+<!-- NB: these items must have their knowl content produced -->
+<!-- NB: this is just the behavior of cross-references      -->
 
-<!-- A cross-reference has a visual component,      -->
-<!-- formed above, and a realization as a hyperlink -->
-<!-- or as a knowl.  Default is a link              -->
-<xsl:template match="*" mode="xref-hyperlink">
-    <xsl:param name="content" />
-    <xsl:element name="a">
-        <xsl:attribute name="href">
-            <xsl:apply-templates select="." mode="url" />
-        </xsl:attribute>
-        <xsl:value-of  disable-output-escaping="yes" select="$content" />
-    </xsl:element>
-</xsl:template>
-<!-- Now, those items that are knowls -->
+<!-- Cross-references as knowls                                        -->
+<!-- Override to turn off cross-references as knowls                   -->
+<!-- NB: this device makes it easy to turn off knowlification entirely -->
 <!-- TODO: proof|figure|table|exercise|me|men|mrow (hint|answer|solution|note) -->
-<xsl:template match="fn|biblio|example|remark|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|axiom|conjecture|principle" mode="xref-hyperlink">
-    <xsl:param name="content" />
+<xsl:template match="fn|biblio|example|remark|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|axiom|conjecture|principle" mode="xref-as-knowl">
+    <xsl:value-of select="true()" />
+</xsl:template>
+<xsl:template match="*" mode="xref-as-knowl">
+    <xsl:value-of select="false()" />
+</xsl:template>
+
+<!-- This is the implementation of an abstract template, -->
+<!-- to accomodate hard-coded HTML numbers and for       -->
+<!-- LaTeX the \ref and \label mechanism                 -->
+<xsl:template match="*" mode="xref-number">
+    <xsl:apply-templates select="." mode="number" />
+</xsl:template>
+
+<!-- The second abstract template, we condition   -->
+<!-- on if the link is rendered as a knowl or not -->
+<xsl:template match="*" mode="xref-link">
+    <xsl:param name="autoname" />
+    <xsl:param name="detail" />
+    <xsl:variable name="knowl">
+        <xsl:apply-templates select="." mode="xref-as-knowl" />
+    </xsl:variable>
     <xsl:element name="a">
-        <xsl:attribute name="knowl">
-            <xsl:apply-templates select="." mode="xref-knowl-filename" />
-        </xsl:attribute>
-        <!-- TODO: check if this "knowl-id" is needed, knowl.js implies it is -->
-        <xsl:attribute name="knowl-id">
-            <xsl:text>xref-</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:choose>
+            <xsl:when test="$knowl='true'">
+                <!-- build a modern knowl -->
+                <xsl:attribute name="knowl">
+                    <xsl:apply-templates select="." mode="xref-knowl-filename" />
+                </xsl:attribute>
+                <!-- TODO: check if this "knowl-id" is needed, knowl.js implies it is -->
+                <xsl:attribute name="knowl-id">
+                    <xsl:text>xref-</xsl:text>
+                    <xsl:apply-templates select="." mode="internal-id" />
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- build traditional hyperlink -->
+                <xsl:attribute name="href">
+                    <xsl:apply-templates select="." mode="url" />
+                </xsl:attribute>
+            </xsl:otherwise>
+        </xsl:choose>
+        <!-- add HTML title and alt attributes to the link -->
+        <xsl:attribute name="alt">
+            <xsl:apply-templates select="." mode="tooltip-text" />
         </xsl:attribute>
         <xsl:attribute name="title">
-            <xsl:apply-templates select="title" />
+            <xsl:apply-templates select="." mode="tooltip-text" />
         </xsl:attribute>
-        <xsl:value-of  disable-output-escaping="yes" select="$content" />
+        <!-- link content from common template -->
+        <xsl:apply-templates select="." mode="xref-text">
+            <xsl:with-param name="autoname" select="$autoname" />
+            <xsl:with-param name="detail" select="$detail" />
+        </xsl:apply-templates>
     </xsl:element>
 </xsl:template>
 

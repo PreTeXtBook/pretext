@@ -644,6 +644,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\makeatother&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
+    <!-- Numbering Footnotes -->
+    <xsl:if test="($numbering-footnotes != 0) and //fn">
+        <xsl:text>%% Footnote Numbering&#xa;</xsl:text>
+        <xsl:text>%% We reset the footnote counter, as given by numbering.footnotes.level&#xa;</xsl:text>
+        <xsl:text>\makeatletter\@addtoreset{footnote}{</xsl:text>
+        <xsl:call-template name="level-number-to-latex-name">
+            <xsl:with-param name="level" select="$numbering-footnotes + $root-level" />
+        </xsl:call-template>
+        <xsl:text>}\makeatother&#xa;</xsl:text>
+    </xsl:if>
+    <!-- Poetry -->
     <xsl:if test="//poem">
         <xsl:text>%% Poetry support&#xa;</xsl:text>
         <xsl:text>\usepackage{verse}&#xa;</xsl:text>
@@ -1674,7 +1685,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercise/hint|exercise/answer|exercise/solution">
     <xsl:text>\par\smallskip&#xa;\noindent\textbf{</xsl:text>
     <xsl:apply-templates select="." mode="type-name" />
-    <xsl:text>.}\quad&#xa;</xsl:text>
+    <xsl:text>.}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>\quad&#xa;</xsl:text>
     <xsl:apply-templates />
 </xsl:template>
 
@@ -1756,7 +1769,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Proofs -->
 <!-- Conjectures, axioms, principles do not have proofs -->
 <xsl:template match="proof">
-    <xsl:text>\begin{proof}&#xa;</xsl:text>
+    <xsl:text>\begin{proof}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\end{proof}&#xa;</xsl:text>
 </xsl:template>
@@ -3527,100 +3542,110 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Visual Identifiers for Cross-References -->
-<!-- Format of visual identifiers, peculiar to LaTeX              -->
-<!-- This is complete LaTeX code to make visual reference         -->
-<!-- LaTeX does the numbering and visual formatting automatically -->
-<!-- Many components are built from common routines               -->
+<!-- ################ -->
+<!-- Cross-References -->
+<!-- ################ -->
 
-<!-- Almost always, a \ref is good enough           -->
-<!-- But need \eqref for equations                  -->
-<!-- i.e. AMSmath equations (resp. MathJax)         -->
-<!-- Some guides suggest \ref* form in              -->
-<!-- hyperref construction to avoid nested links:   -->
-<!-- \hyperref[a-label]{Section~\ref*{a-label}}     -->
-<!-- but it seems unnecessary here (experimentally) -->
-<xsl:template match="*" mode="ref-id">
-    <xsl:param name="autoname" />
-    <xsl:variable name="prefix">
-        <xsl:apply-templates select="." mode="ref-prefix">
-            <xsl:with-param name="local" select="$autoname" />
-        </xsl:apply-templates>
-    </xsl:variable>
-    <xsl:choose>
-        <!-- No autonaming prefix: generic LaTeX cross-reference -->
-        <xsl:when test="$prefix=''">
-            <xsl:apply-templates select="." mode="latex-ref-command" />
-            <xsl:text>{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
-            <xsl:text>}</xsl:text>
-        </xsl:when>
-        <!-- Autonaming prefix: hyperref enhanced cross-reference -->
-        <xsl:otherwise>
-            <xsl:text>\hyperref[</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
-            <xsl:text>]{</xsl:text>
-            <xsl:value-of select="$prefix" />
-            <xsl:text>~</xsl:text>
-            <xsl:apply-templates select="." mode="latex-ref-command" />
-            <xsl:text>{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
-            <xsl:text>}}</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
+<!-- Much of the cross-reference mechanism is -->
+<!-- implemented in the common routines,      -->
+<!-- here we implement two abstract templates -->
+<!-- which are called from those routines     -->
 
-<!-- The next two variants handle the difference   -->
-<!-- between  \ref  and  \eqref  forms, so we can  -->
-<!-- unify autonaming, generally and for equations -->
-<!-- "me"'s are explicitly un-numbered             -->
-<xsl:template match="*" mode="latex-ref-command"><text>\ref</text></xsl:template>
-<xsl:template match="men|mrow" mode="latex-ref-command"><text>\eqref</text></xsl:template>
+<!-- The "text" of a cross-reference typically includes  -->
+<!-- a number and for LaTeX we try as hard as possible   -->
+<!-- to use the automatic numbering system.  So the text -->
+<!-- is usually a command, "\ref{}".                     -->
 
-<!-- Referencing a biblio is a cite in LaTeX                     -->
-<!-- A cross-reference to a biblio may have "detail",            -->
-<!-- extra information about the location in the referenced work -->
-<xsl:template match="biblio" mode="ref-id">
-    <xsl:param name="detail" />
-    <xsl:text>\cite</xsl:text>
-    <xsl:if test="$detail != ''">
-        <xsl:text>[</xsl:text>
-        <xsl:apply-templates select="$detail" />
-        <xsl:text>]</xsl:text>
-    </xsl:if>
-    <xsl:text>{</xsl:text>
+<!-- We do not use \cite{} since we allow for multiple     -->
+<!-- bibliographies and we do not use AMSmath's \eqref{}.  -->
+<!-- Instead, we universally supply the enclosing brackets -->
+<!-- and parentheses provided by these LaTeX mechanisms.   -->
+<!-- Presumably, careful use of sed would allow these      -->
+<!-- distinctions to be recognized in the LaTeX output.    -->
+
+<!-- NB: see extensive discussion of a parallel numbering system -->
+<!-- with the hyperref package's hypertarget/hyperlink mechanism -->
+
+<!-- This is the implementation of an abstract template, -->
+<!-- using the LaTeX \ref and \label mechanism.          -->
+<xsl:template match="*" mode="xref-number">
+    <xsl:text>\ref{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- We do links to exercises manually since they may be hard-coded -->
-<!-- We show the fully-qualified number as a reference              -->
-<!-- This is similar to above, but not worth consolidating          -->
-<xsl:template match="exercises//exercise" mode="ref-id">
+<!-- We hard-code some numbers (sectional exercises) and    -->
+<!-- we institute some numberings that LaTeX does not do    -->
+<!-- naturally (references in extra sections, proofs,       -->
+<!-- hints, answers, solutions).  So for the text of a      -->
+<!-- cross-reference we use the actual number, not a \ref.  -->
+<!-- (See also modal templates for "label" and "xref-link") -->
+<!-- Exercises in sets may have hard-coded numbers, -->
+<!-- so we provide a hard-coded number              -->
+<xsl:template match="exercises//exercise|biblio|note|proof|hint|answer|solution" mode="xref-number">
+    <xsl:apply-templates select="." mode="number" />
+</xsl:template>
+
+<!-- Footnotes print serial-numbers only, but   -->
+<!-- as knowls/references we desire a fully     -->
+<!-- qualified number.  So we just override the -->
+<!-- visual version in a cross-reference,       -->
+<!-- leaving the label/ref mechanism in place.  -->
+<xsl:template match="fn" mode="xref-number">
+    <xsl:apply-templates select="." mode="number" />
+</xsl:template>
+
+<!-- We implement every cross-reference with hyperref. -->
+<!-- For pure print, we can turn off the actual links  -->
+<!-- in the PDF (and/or control color etc)             -->
+<!-- Mostly this is for consistency in the source      -->
+<xsl:template match="*" mode="xref-link">
     <xsl:param name="autoname" />
-    <xsl:variable name="prefix">
-        <xsl:apply-templates select="." mode="ref-prefix">
-            <xsl:with-param name="local" select="$autoname" />
-        </xsl:apply-templates>
-    </xsl:variable>
+    <xsl:param name="detail" />
+    <xsl:text>\hyperref[</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>]{</xsl:text>
+    <xsl:apply-templates select="." mode="xref-text">
+        <xsl:with-param name="autoname" select="$autoname" />
+        <xsl:with-param name="detail" select="$detail" />
+    </xsl:apply-templates>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- We hard-code some numbers (sectional exercises) and      -->
+<!-- we institute some numberings that LaTeX does not do      -->
+<!-- naturally (references in extra sections, proofs,         -->
+<!-- hints, answers, solutions). We make custom               -->
+<!-- anchors/labels below and then we must point to           -->
+<!-- them with \hyperlink{}{} (nee hyperref[]{}).             -->
+<!-- (See also modal templates for "label" and "xref-number") -->
+<xsl:template match="exercises//exercise|biblio|note|proof|hint|answer|solution" mode="xref-link">
+    <xsl:param name="autoname" />
+    <xsl:param name="detail" />
     <xsl:text>\hyperlink{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}{</xsl:text>
-    <!-- Autonaming prefix perhaps -->
-    <xsl:if test="not($prefix='')">
-        <xsl:value-of select="$prefix" />
-        <xsl:text>~</xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="." mode="number" />
+    <xsl:apply-templates select="." mode="xref-text">
+        <xsl:with-param name="autoname" select="$autoname" />
+        <xsl:with-param name="detail" select="$detail" />
+    </xsl:apply-templates>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- In some cases we supply our own cross-referencing via       -->
-<!-- hyperref's hypertarget mechanism, specifically for          -->
-<!-- exercises, which may have hard-coded numbers in the source  -->
-<!-- The target being null is necessary, up hard to environments -->
-<xsl:template match="exercises//exercise" mode="label">
-    <xsl:text>\phantomsection\hypertarget{</xsl:text>
+<!-- Labels -->
+<!-- The template to supply a LaTeX "\label{}" is provided -->
+<!-- in the common file since it is employed in MathJax's  -->
+<!-- equation labeling scheme, so find that there.         -->
+
+<!-- We hard-code some numbers (sectional exercises) and          -->
+<!-- we institute some numberings that LaTeX does not do          -->
+<!-- naturally (references in extra sections, proofs,             -->
+<!-- hints, answers, solutions).  For a "label"                   -->
+<!-- hyperref's hypertarget mechanism fits the bill.              -->
+<!-- The target being \null is necessary.                         -->
+<!-- (See also modal templates for "xref-link" and "xref-number") -->
+<xsl:template match="exercises//exercise|biblio|note|proof|hint|answer|solution" mode="label">
+    <xsl:text>\hypertarget{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}{\null}</xsl:text>
 </xsl:template>
@@ -3716,6 +3741,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id"/>
     <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
     <xsl:apply-templates />
     <xsl:text>&#xa;</xsl:text>
     <!-- end the list after last item -->
@@ -3769,7 +3795,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   Presumably just paragraphs, nothing too complicated -->
 <!--   We first close off the citation itself -->
 <xsl:template match="biblio/note">
-    <xsl:text>\par </xsl:text>
+    <xsl:text>\par</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
 </xsl:template>
 

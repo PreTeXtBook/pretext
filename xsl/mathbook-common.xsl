@@ -1509,10 +1509,6 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 
-<xsl:template match="*" mode="ref-id">
-    <xsl:apply-templates select="." mode="number" />
-</xsl:template>
-
 <!-- Exercises in lists are always in an enclosing       -->
 <!-- subdivision Their default numbers are hierarchical, -->
 <!-- so we strip the serial number for display           -->
@@ -2123,20 +2119,13 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- Cross-References -->
 <!-- ################ -->
 
-<!-- Cross-reference template -->
-<!-- Every (non-provisional) cross-reference comes through here            -->
-<!-- and is fact-checked before being dispatched to a "ref-id" template    -->
-<!-- Qualifiers of cross-references are passed to their templates          -->
-<!--                                                                       -->
-<!-- LaTeX has several schemes: \ref, \cite, \eqref                        -->
-<!-- HTML will do traditional hyperlinks or modern knowls                  -->
-<!-- The ref-id templates produce the code to create what a reader sees    -->
-<!-- to locate the referenced item                                         -->
-<!-- So see specialized routines for those constructions                   -->
+<!-- Every (non-provisional) cross-reference comes -->
+<!-- through here and is fact-checked before being -->
+<!-- dispatched to a specific "xref-link" template -->
 <xsl:template match="xref[@ref]">
     <xsl:variable name="target" select="id(@ref)" />
-    <!-- Check to see if the ref is any good              -->
-    <!-- Set off various alarms if target is non-existent -->
+    <!-- Check to see if the ref is any good, since this           -->
+    <!-- is common mistake and often hard to detect                -->
     <!-- http://www.stylusstudio.com/xsllist/200412/post20720.html -->
     <xsl:if test="not(exsl:node-set($target))">
         <xsl:message>MBX:WARNING: unresolved &lt;xref&gt; due to ref="<xsl:value-of select="@ref"/>"</xsl:message>
@@ -2156,29 +2145,23 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         </xsl:call-template>
     </xsl:if>
     <!-- Cross-references may have qualifiers of their targets, which -->
-    <!-- we pass to their ref-id templates to handle appropriately    -->
-    <!-- Default is to pass nothing extra, which is not a problem     -->
-    <xsl:choose>
-        <xsl:when test="@detail">
-            <xsl:apply-templates select="$target" mode="ref-id">
-                <xsl:with-param name="detail" select="@detail" />
-            </xsl:apply-templates>
-        </xsl:when>
-        <xsl:when test="@autoname">
-            <xsl:apply-templates  select="$target" mode="ref-id" >
-                <xsl:with-param name="autoname" select="@autoname" />
-            </xsl:apply-templates>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="$target" mode="ref-id" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <!-- we pass to their xref-link templates to handle appropriately -->
+    <!-- Default is to pass an empty string, which is not a problem   -->
+    <xsl:apply-templates select="$target" mode="xref-link">
+        <xsl:with-param name="detail" select="@detail" />
+        <xsl:with-param name="autoname" select="@autoname" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- This is an abstract template for call above -->
+<xsl:template match="*" mode="xref-link">
+    <xsl:text>[XREFLINK]</xsl:text>
 </xsl:template>
 
 <!-- Autonaming of Cross-References -->
 <!-- Some references get a prefix (eg Section, Theorem, Exercise), -->
 <!-- subject to global and local options, interpreted here         -->
-<xsl:template match="*" mode="ref-prefix">
+<xsl:template match="*" mode="autoname-prefix">
     <!-- Parameter is the local @autoname of the calling xref -->
     <!-- Five values: blank, yes/no, plural, title            -->
     <xsl:param name="local" />
@@ -2201,10 +2184,71 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
                 <xsl:text>s</xsl:text>
             </xsl:if>
         </xsl:when>
+        <!-- just makes error message effective -->
+        <xsl:when test="not($local != '')"></xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Some autonaming combination slipped through unhandled</xsl:message>
+            <xsl:message>MBX:WARNING: "autoname" attribute should be yes|no|plural|title, not <xsl:value-of select="$local" /></xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- For any cross-reference target we manufacture text        -->
+<!-- that includes the possible autoname'd prefix, various     -->
+<!-- visual hints as to the nature of the target (parentheses  -->
+<!-- on equations, brackets on citations) and possible extra   -->
+<!-- detail on a citation. This is general enough (but for the -->
+<!-- non-breaking space) to be common to all conversions.      -->
+<xsl:template match="*" mode="xref-text" >
+    <!-- autoname passed straight into prefix routine -->
+    <!-- detail flagged inside biblio construction    -->
+    <xsl:param name="autoname" />
+    <xsl:param name="detail" />
+    <xsl:variable name="prefix">
+        <xsl:apply-templates select="." mode="autoname-prefix">
+            <xsl:with-param name="local" select="$autoname" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:if test="not($prefix = '')">
+        <xsl:value-of select="$prefix" />
+        <!-- generic nbsp here via abstract template -->
+        <xsl:text> </xsl:text>
+    </xsl:if>
+    <!-- start visual clue for equation or bibliographic target -->
+    <xsl:choose>
+        <xsl:when test="self::biblio"><xsl:text>[</xsl:text></xsl:when>
+        <xsl:when test="self::men or self::mrow"><xsl:text>(</xsl:text></xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+    </xsl:choose>
+    <!-- call an abstract template for the actual number -->
+    <xsl:apply-templates select="." mode="xref-number" />
+    <!-- provide optional detail on bibliographic reference, only -->
+    <xsl:if test="$detail != ''">
+        <xsl:choose>
+            <xsl:when test="self::biblio">
+                <!-- non-breaking space here too -->
+                <xsl:text>, </xsl:text>
+                <xsl:apply-templates select="$detail" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message>MBX:WARNING: xref attribute detail="<xsl:value-of select="$detail" />" only implemented for references to biblio elements</xsl:message>
+                <xsl:apply-templates select="." mode="location-report" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:if>
+    <!-- finish visual clue for equation or bibliographic target -->
+    <xsl:choose>
+        <xsl:when test="self::biblio"><xsl:text>]</xsl:text></xsl:when>
+        <xsl:when test="self::men or self::mrow"><xsl:text>)</xsl:text></xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- This is an abstract template, to accomodate -->
+<!-- hard-coded HTML numbers and for LaTeX the   -->
+<!-- \ref and \label mechanism                   -->
+<xsl:template match="*" mode="xref-number">
+    <xsl:text>[XREFNUM]</xsl:text>
 </xsl:template>
 
 <!-- Provisional cross-references -->
