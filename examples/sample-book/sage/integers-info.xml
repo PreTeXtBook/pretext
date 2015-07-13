@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- This file is part of the book                 -->
+<!--                                               -->
+<!--   Abstract Algebra: Theory and Applications   -->
+<!--                                               -->
+<!-- Copyright (C) 2010-2014  Robert A. Beezer     -->
+<!-- See the file COPYING for copying conditions.  -->
+<remark>
+	<title>Sage</title>
+
+	<p>Sage's original purpose was to support research in number theory, so it is perfect for the types of computations with the integers that we have in this chapter.</p>
+</remark>

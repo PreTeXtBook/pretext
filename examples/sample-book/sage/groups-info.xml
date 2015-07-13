@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- This file is part of the book                 -->
+<!--                                               -->
+<!--   Abstract Algebra: Theory and Applications   -->
+<!--                                               -->
+<!-- Copyright (C) 2010-2014  Robert A. Beezer     -->
+<!-- See the file COPYING for copying conditions.  -->
+<remark>
+	<title>Sage</title>
+
+	<p>The first half of this text is about group theory.  Sage includes Groups, Algorithms and Programming (GAP), a program designed primarly for just group theory, and in continuous development since 1986.  Many of Sage's computations for groups ultimately are performed by GAP.</p>
+</remark>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- This file is part of the book                 -->
+<!--                                               -->
+<!--   Abstract Algebra: Theory and Applications   -->
+<!--                                               -->
+<!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
+<!-- See the file COPYING for copying conditions.  -->
+
+<backmatter xml:id="backmatter">
+    <title>Reference</title> <!-- mostly for HTML sectioning -->
+
+    <chapter>
+        <title>Hints and Solutions to Selected Exercises</title>
+        <solution-list />
+    </chapter>
+
+    <chapter>
+        <title>Notation</title>
+        <introduction>
+            <p>The following table defines the notation used in this book. Page numbers or references refer to the first appearance of each symbol.</p>
+        </introduction>
+        <notation-list />
+    </chapter>
+
+</backmatter>

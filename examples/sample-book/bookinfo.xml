@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<docinfo>
+
+    <brandlogo url="http://abstract.pugetsound.edu" source="images/cover_aata_2014.png" />
+
+    <website>
+        <title>abstract.pugetsound.edu</title>
+        <url>http://abstract.pugetsound.edu</url>
+    </website>
+
+    <!-- Prefix to enhance Sage notebook contents -->
+    <initialism>AATA</initialism>
+
+    <!-- Math-related macros from "macros.tex" in previous LaTeX version -->
+    <!-- \notdivide replaces \notmid to avoid conflict with tikz - TWJ 5/6/2010 -->
+    <!-- Added operator \gf  - TWJ 2/26/2013 -->
+    <!-- Added operator \inn - TWJ 4/6/2013  -->
+    <!-- Added operator \aut - TWJ 4/6/2013  -->
+    <!-- Added operator \Hom - TWJ 8/19/2010 -->
+    <macros>
+\newcommand{\notdivide}{{\not{\mid}}}
+\newcommand{\notsubset}{\not\subset}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\gf}{\operatorname{GF}}
+\newcommand{\inn}{\operatorname{Inn}}
+\newcommand{\aut}{\operatorname{Aut}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\cis}{\operatorname{cis}}
+\newcommand{\chr}{\operatorname{char}}
+\newcommand{\Null}{\operatorname{Null}}
+    </macros>
+
+    <!-- tikz package and libraries for images -->
+    <latex-image-preamble>
+    \usepackage{tikz}
+    \usetikzlibrary{backgrounds}
+    \usetikzlibrary{arrows,matrix}
+    \usetikzlibrary{snakes}
+    </latex-image-preamble>
+
+</docinfo>
