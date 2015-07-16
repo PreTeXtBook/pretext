@@ -236,9 +236,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- hit with templates.  This is the header.    -->
 <xsl:template match="*" mode="section-header">
     <header>
-        <h1 class="heading">
+        <!-- TODO: replicate tooltip on header (only) -->
+        <xsl:element name="h1">
+            <xsl:attribute name="class">
+                <xsl:text>heading</xsl:text>
+            </xsl:attribute>
+             <xsl:attribute name="alt">
+                <xsl:apply-templates select="." mode="tooltip-text" />
+            </xsl:attribute>
+             <xsl:attribute name="title">
+                <xsl:apply-templates select="." mode="tooltip-text" />
+            </xsl:attribute>
             <xsl:apply-templates select="." mode="header-content" />
-        </h1>
+        </xsl:element>
         <xsl:if test="author">
             <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
         </xsl:if>
@@ -3191,6 +3201,18 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <xsl:text>#</xsl:text>
         <xsl:apply-templates select="." mode="internal-id" />
     </xsl:if>
+</xsl:template>
+
+<!-- Tooltip Text -->
+<!-- text for an HTML title attribute -->
+<!-- TODO: be more careful about extraneous spaces -->
+<!-- TODO: captions from figures, tables, sbs? -->
+<xsl:template match="*" mode="tooltip-text">
+    <xsl:apply-templates select="." mode="type-name" />
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="number" />
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="title-simple" />
 </xsl:template>
 
 <!-- MathJax header                                             -->
