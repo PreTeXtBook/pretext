@@ -89,6 +89,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='section'><xsl:text>Section</xsl:text></localization>
     <localization string-id='subsection'><xsl:text>Subsection</xsl:text></localization>
     <localization string-id='subsubsection'><xsl:text>Subsubsection</xsl:text></localization>
+    <localization string-id='introduction'><xsl:text>Introduction</xsl:text></localization>
+    <localization string-id='conclusion'><xsl:text>Conclusion</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Exercises</xsl:text></localization>
     <localization string-id='references'><xsl:text>References</xsl:text></localization>
     <localization string-id='backmatter'><xsl:text>Back Matter</xsl:text></localization>
@@ -178,6 +180,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='section'><xsl:text>Seção</xsl:text></localization>
     <localization string-id='subsection'><xsl:text>Subseção</xsl:text></localization>
     <localization string-id='subsubsection'><xsl:text>Subsubseção</xsl:text></localization>
+    <!-- Translation needed for Brazilian Portugese -->
+    <!-- <localization string-id='introduction'><xsl:text>Introduction</xsl:text></localization> -->
+    <!-- <localization string-id='conclusion'><xsl:text>Conclusion</xsl:text></localization> -->
     <localization string-id='exercises'><xsl:text>Exercícios</xsl:text></localization>
     <localization string-id='references'><xsl:text>Referêcias</xsl:text></localization>
     <!-- Translation needed for Brazilian Portugese -->
@@ -268,6 +273,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='section'><xsl:text>Sección</xsl:text></localization>
     <localization string-id='subsection'><xsl:text>Subsección</xsl:text></localization>
     <localization string-id='subsubsection'><xsl:text>Subsubsección</xsl:text></localization>
+    <!-- Translation needed for Spain Spanish -->
+    <!-- <localization string-id='introduction'><xsl:text>Introduction</xsl:text></localization> -->
+    <!-- <localization string-id='conclusion'><xsl:text>Conclusion</xsl:text></localization> -->
     <localization string-id='exercises'><xsl:text>Ejercicios</xsl:text></localization>
     <localization string-id='references'><xsl:text>Referencias</xsl:text></localization>
     <!-- Translation needed for Spain Spanish -->
