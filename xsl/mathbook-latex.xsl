@@ -85,8 +85,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="latex.preamble.early" select="''" />
 <xsl:param name="latex.preamble.late" select="''" />
 
-<!-- Variables  -->
-<!-- Computed values of quantities affecting LaTeX output -->
+<!-- ######### -->
+<!-- Variables -->
+<!-- ######### -->
+
+<!-- Variables that affect LaTeX creation -->
+<!-- More in the common file              -->
+
+<!-- We generally want one large complete LaTeX file -->
+<xsl:variable name="chunk-level">
+    <xsl:choose>
+        <xsl:when test="$chunk.level != ''">
+            <xsl:value-of select="$chunk.level" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>0</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 
 <!-- LaTeX always puts sections at level "1"            -->
 <!-- MBX has sections at level "2", so off by one       -->

@@ -70,6 +70,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A space-separated list of CSS URLs (points to servers or local files) -->
 <xsl:param name="html.css.extra"  select="''" />
 
+<!-- ######### -->
+<!-- Variables -->
+<!-- ######### -->
+
+<!-- Variables that affect HTML creation -->
+<!-- More in the common file             -->
+
+<!-- We generally want to chunk longer HTML output -->
+<xsl:variable name="chunk-level">
+    <xsl:choose>
+        <xsl:when test="$chunk.level != ''">
+            <xsl:value-of select="$chunk.level" />
+        </xsl:when>
+        <!-- HTML-specific deprecated 2015/06      -->
+        <!-- But still effective if not superseded -->
+        <xsl:when test="$html.chunk.level != ''">
+            <xsl:value-of select="$html.chunk.level" />
+        </xsl:when>
+        <xsl:when test="/mathbook/book">2</xsl:when>
+        <xsl:when test="/mathbook/article/section">1</xsl:when>
+        <xsl:when test="/mathbook/article">0</xsl:when>
+        <xsl:when test="/mathbook/letter">0</xsl:when>
+        <xsl:when test="/mathbook/memo">0</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: HTML chunk level not determined</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
