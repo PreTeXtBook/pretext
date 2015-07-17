@@ -520,13 +520,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- Notation list -->
-<!-- TODO: Localize/Internationalize header row -->
+<!--               -->
+<!-- Notation List -->
+<!--               -->
+
 <xsl:template match="notation-list">
     <table>
         <tr>
-            <th style="text-align:left">Symbol</th>
-            <th style="text-align:left">Description</th>
+            <th style="text-align:left">
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'symbol'" />
+                </xsl:call-template>
+            </th>
+            <th style="text-align:left">
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'description'" />
+                </xsl:call-template>
+            </th>
         </tr>
         <xsl:apply-templates select="//notation" mode="backmatter" />
     </table>

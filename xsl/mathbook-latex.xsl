@@ -1274,7 +1274,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy-of select="$content" />
 </xsl:template>
 
-<!-- Notation list -->
+<!--               -->
+<!-- Notation List -->
+<!--               -->
 
 <!-- At location, we just drop a page marker -->
 <xsl:template match="notation">
@@ -1282,14 +1284,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- TODO: Localize/Internationalize header row -->
 <xsl:template match="notation-list">
     <xsl:text>\begin{longtable}[l]{llr}&#xa;</xsl:text>
-    <xsl:text>\textbf{Symbol}&amp;\textbf{Description}&amp;\textbf{Page}\\[1em]&#xa;</xsl:text>
+    <xsl:text>\textbf{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'symbol'" />
+    </xsl:call-template>
+    <xsl:text>}&amp;\textbf{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'description'" />
+    </xsl:call-template>
+    <xsl:text>}&amp;\textbf{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'page'" />
+    </xsl:call-template>
+    <xsl:text>}\\[1em]&#xa;</xsl:text>
     <xsl:text>\endfirsthead&#xa;</xsl:text>
-    <xsl:text>\textbf{Symbol}&amp;\textbf{Description}&amp;\textbf{Page}\\[1em]&#xa;</xsl:text>
+    <xsl:text>\textbf{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'symbol'" />
+    </xsl:call-template>
+    <xsl:text>}&amp;\textbf{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'description'" />
+    </xsl:call-template>
+    <xsl:text>}&amp;\textbf{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'page'" />
+    </xsl:call-template>
+    <xsl:text>}\\[1em]&#xa;</xsl:text>
     <xsl:text>\endhead&#xa;</xsl:text>
-    <xsl:text>\multicolumn{3}{r}{(Continued on next page)}\\&#xa;</xsl:text>
+    <xsl:text>\multicolumn{3}{r}{(</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'continued'" />
+    </xsl:call-template>
+    <xsl:text>)}\\&#xa;</xsl:text>
     <xsl:text>\endfoot&#xa;</xsl:text>
     <xsl:text>\endlastfoot&#xa;</xsl:text>
     <xsl:apply-templates select="//notation" mode="backmatter" />

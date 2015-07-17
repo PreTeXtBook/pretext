@@ -71,9 +71,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='conjecture'><xsl:text>Conjecture</xsl:text></localization>
     <localization string-id='axiom'><xsl:text>Axiom</xsl:text></localization>
     <localization string-id='principle'><xsl:text>Principle</xsl:text></localization>
-    <!-- Equations, when referenced by number -->
+    <!-- Single Line Mathematics -->
+    <localization string-id='me'><xsl:text>Equation</xsl:text></localization>
     <localization string-id='men'><xsl:text>Equation</xsl:text></localization>
     <localization string-id='mrow'><xsl:text>Equation</xsl:text></localization>
+    <!-- Display Mathematics -->
+    <localization string-id='md'><xsl:text>Display Mathematics</xsl:text></localization>
+    <localization string-id='mdn'><xsl:text>Display Mathematics</xsl:text></localization>
     <!-- Types of documents, mostly for informational messages -->
     <localization string-id='volume'><xsl:text>Volume</xsl:text></localization>
     <localization string-id='book'><xsl:text>Book</xsl:text></localization>
@@ -109,6 +113,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='hint'><xsl:text>Hint</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Answer</xsl:text></localization>
     <localization string-id='solution'><xsl:text>Solution</xsl:text></localization>
+    <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
+    <localization string-id='biblio'><xsl:text>Bibliographic Entry</xsl:text></localization>
+    <localization string-id='note'><xsl:text>Note</xsl:text></localization>
     <!-- Front matter components -->
     <localization string-id='toc'><xsl:text>Contents</xsl:text></localization>
     <localization string-id='abstract'><xsl:text>Abstract</xsl:text></localization>
@@ -122,6 +129,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='indexsection'><xsl:text>Index</xsl:text></localization>
     <localization string-id='see'><xsl:text>see</xsl:text></localization>
     <localization string-id='also'><xsl:text>see also</xsl:text></localization>
+    <!-- Notation List headings/foot -->
+    <localization string-id='symbol'><xsl:text>Symbol</xsl:text></localization>
+    <localization string-id='description'><xsl:text>Description</xsl:text></localization>
+    <localization string-id='page'><xsl:text>Page</xsl:text></localization>
+    <localization string-id='continued'><xsl:text>Continued on next page</xsl:text></localization>
     <!-- Navigation Interface elements -->
     <localization string-id='previous'><xsl:text>Previous</xsl:text></localization>
     <localization string-id='up'><xsl:text>Up</xsl:text></localization>
@@ -161,10 +173,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='conjecture'><xsl:text>Conjectura</xsl:text></localization>
     <localization string-id='axiom'><xsl:text>Axioma</xsl:text></localization>
     <localization string-id='principle'><xsl:text>Princípio</xsl:text></localization>
-    <!-- Equations, when referenced by number -->
     <!-- Translation needed for Brazilian Portugese -->
+    <!-- Single Line Mathematics -->
+    <!-- <localization string-id='me'><xsl:text>Equation</xsl:text></localization> -->
     <!-- <localization string-id='men'><xsl:text>Equation</xsl:text></localization> -->
     <!-- <localization string-id='mrow'><xsl:text>Equation</xsl:text></localization> -->
+    <!-- Display Mathematics -->
+    <!-- <localization string-id='md'><xsl:text>Display Mathematics</xsl:text></localization> -->
+    <!-- <localization string-id='mdn'><xsl:text>Display Mathematics</xsl:text></localization> -->
     <!-- Types of documents, mostly for informational messages -->
     <localization string-id='volume'><xsl:text>Volume</xsl:text></localization>
     <localization string-id='book'><xsl:text>Livro</xsl:text></localization>
@@ -202,7 +218,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='hint'><xsl:text>Dica</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Resposta</xsl:text></localization>
     <localization string-id='solution'><xsl:text>Solução</xsl:text></localization>
-     <!-- Front matter components -->
+    <!-- Translation needed for Brazilian Portugese -->
+    <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
+    <!-- <localization string-id='biblio'><xsl:text>Bibliographic Entry</xsl:text></localization> -->
+    <!-- <localization string-id='note'><xsl:text>Note</xsl:text></localization> -->
+    <!-- Front matter components -->
     <localization string-id='toc'><xsl:text>Sumário</xsl:text></localization>
     <localization string-id='abstract'><xsl:text>Resumo</xsl:text></localization>
     <localization string-id='preface'><xsl:text>Prefácio</xsl:text></localization>
@@ -215,6 +235,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='indexsection'><xsl:text>Índice</xsl:text></localization>
     <localization string-id='see'><xsl:text>veja</xsl:text></localization>
     <localization string-id='also'><xsl:text>veja também</xsl:text></localization>
+    <!-- Translation needed for Brazilian Portugese -->
+    <!-- Notation List headings/foot -->
+    <!-- <localization string-id='symbol'><xsl:text>Symbol</xsl:text></localization> -->
+    <!-- <localization string-id='description'><xsl:text>Description</xsl:text></localization> -->
+    <!-- <localization string-id='page'><xsl:text>Page</xsl:text></localization> -->
+    <!-- <localization string-id='continued'><xsl:text>Continued on next page</xsl:text></localization> -->
     <!-- Navigation Interface elements -->
     <localization string-id='previous'><xsl:text>Anterior</xsl:text></localization>
     <localization string-id='up'><xsl:text>Acima</xsl:text></localization>
@@ -254,10 +280,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='conjecture'><xsl:text>Conjetura</xsl:text></localization>
     <localization string-id='axiom'><xsl:text>Axioma</xsl:text></localization>
     <localization string-id='principle'><xsl:text>Principio</xsl:text></localization>
-    <!-- Equations, when referenced by number -->
     <!-- Translation needed for Spain Spanish -->
+    <!-- Single Line Mathematics -->
+    <!-- <localization string-id='me'><xsl:text>Equation</xsl:text></localization> -->
     <!-- <localization string-id='men'><xsl:text>Equation</xsl:text></localization> -->
     <!-- <localization string-id='mrow'><xsl:text>Equation</xsl:text></localization> -->
+    <!-- Display Mathematics -->
+    <!-- <localization string-id='md'><xsl:text>Display Mathematics</xsl:text></localization> -->
+    <!-- <localization string-id='mdn'><xsl:text>Display Mathematics</xsl:text></localization> -->
     <!-- Types of documents, mostly for informational messages -->
     <localization string-id='volume'><xsl:text>Volumen</xsl:text></localization>
     <localization string-id='book'><xsl:text>Libro</xsl:text></localization>
@@ -295,7 +325,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='hint'><xsl:text>Pista</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Respuesta</xsl:text></localization>
     <localization string-id='solution'><xsl:text>Solución</xsl:text></localization>
-     <!-- Front matter components -->
+    <!-- Translation needed for Spain Spanish -->
+    <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
+    <!-- <localization string-id='biblio'><xsl:text>Bibliographic Entry</xsl:text></localization> -->
+    <!-- <localization string-id='note'><xsl:text>Note</xsl:text></localization> -->
+    <!-- Front matter components -->
     <localization string-id='toc'><xsl:text>Índice</xsl:text></localization>
     <localization string-id='abstract'><xsl:text>Resumen</xsl:text></localization>
     <localization string-id='preface'><xsl:text>Prefacio</xsl:text></localization>
@@ -308,6 +342,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='indexsection'><xsl:text>Índice alfabético</xsl:text></localization>
     <localization string-id='see'><xsl:text>véase</xsl:text></localization>
     <localization string-id='also'><xsl:text>véase también</xsl:text></localization>
+    <!-- Translation needed for Spain Spanish -->
+    <!-- Notation List headings/foot -->
+    <!-- <localization string-id='symbol'><xsl:text>Symbol</xsl:text></localization> -->
+    <!-- <localization string-id='description'><xsl:text>Description</xsl:text></localization> -->
+    <!-- <localization string-id='page'><xsl:text>Page</xsl:text></localization> -->
+    <!-- <localization string-id='continued'><xsl:text>Continued on next page</xsl:text></localization> -->
     <!-- Navigation Interface elements -->
     <localization string-id='previous'><xsl:text>Anterior</xsl:text></localization>
     <localization string-id='up'><xsl:text>Arriba</xsl:text></localization>
