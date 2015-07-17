@@ -406,6 +406,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Displayed Math -->
+<!-- NB: We use default templates in HTML to produce           -->
+<!-- the visible version of displayed math and the knowl       -->
+<!-- file for cross-references.  Since these environments      -->
+<!-- have no interior structure, trying to write the knowl     -->
+<!-- file contents with the default template leads to circular -->
+<!-- references.  And "apply-imports" is not a solution, since -->
+<!-- the HTML enviroment scheme uses a modal "body" template   -->
+<!-- and that would require a "body" template here.  So the    -->
+<!-- solution is a set of "displaymath" templates that appear  -->
+<!-- unnecessary here.                                         -->
+
 <!-- Single displayed equation, unnumbered                         -->
 <!-- Output follows source line breaks                             -->
 <!-- MathJax: out-of-the-box support                               -->
@@ -413,6 +424,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX: without AMS-TEX, it is improved version of $$, $$      -->
 <!-- See: http://tex.stackexchange.com/questions/40492/what-are-the-differences-between-align-equation-and-displaymath -->
 <xsl:template match="me">
+    <xsl:apply-templates select="." mode="displaymath" />
+</xsl:template>
+<xsl:template match="me" mode="displaymath">
     <xsl:text>\[</xsl:text>
     <xsl:value-of select="." />
     <xsl:text>\]</xsl:text>
@@ -425,6 +439,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "tag" modal template is abstract, see specialized versions -->
 <!-- We do tag HTML, but not LaTeX.  See link above, also.      -->
 <xsl:template match="men">
+    <xsl:apply-templates select="." mode="displaymath" />
+</xsl:template>
+<xsl:template match="men" mode="displaymath">
     <xsl:text>\begin{equation}</xsl:text>
     <xsl:value-of select="." />
     <xsl:apply-templates select="." mode="label"/>
@@ -439,6 +456,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Output follows source line breaks                                           -->
 <!-- The intertext element is an abstract template, see specialized versions     -->
 <xsl:template match="md">
+    <xsl:apply-templates select="." mode="displaymath" />
+</xsl:template>
+<xsl:template match="md" mode="displaymath">
     <xsl:choose>
         <xsl:when test="contains(., '&amp;')">
             <xsl:text>\begin{align*}&#xa;</xsl:text>
@@ -454,6 +474,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="mdn">
+    <xsl:apply-templates select="." mode="displaymath" />
+</xsl:template>
+<xsl:template match="mdn" mode="displaymath">
     <xsl:choose>
         <xsl:when test="contains(., '&amp;')">
             <xsl:text>\begin{align}&#xa;</xsl:text>
@@ -466,6 +489,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\end{gather}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- Intertext -->
+<!-- This is an abstract template that must be overridden -->
+<xsl:template match="md/intertext|mdn/intertext">
+    <xsl:text>[INTERTEXT]</xsl:text>
 </xsl:template>
 
 <!-- Rows of a multi-line math display                 -->
