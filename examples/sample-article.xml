@@ -3094,7 +3094,20 @@ the xsltproc executable.
             <subsection>
                 <title>Four</title>
 
-                <introduction><p>Further subdivided.</p></introduction>
+                <introduction>
+                    <p>Further subdivided.  We include two theorems as numbered items in the introduction to test their numbers, which should always be logical.</p>
+
+                    <theorem xml:id="theorem-good-one">
+                        <title>Good Numbered Theorem One</title>
+                        <statement><p>No statement.</p></statement>
+                    </theorem>
+
+                    <theorem xml:id="theorem-good-two">
+                        <title>Good Numbered Theorem Two</title>
+                        <statement><p>No statement.</p></statement>
+                    </theorem>
+
+                </introduction>
 
                 <subsubsection>
                     <title>Uno</title>
@@ -3128,8 +3141,22 @@ the xsltproc executable.
                         <statement><p>No statement.</p></statement>
                     </theorem>
 
-                    </subsubsection>
+                </subsubsection>
 
+                <conclusion>
+                    <p>Conclusion now.  We include two theorems as numbered items in the conclusion to test their numbers, which are sometimes totally illogical and are inconsistent across output formats.  To see the effect, use <c>--stringparam numbering.theorems.level 3</c> in the <c>xsltproc</c> invocation. See this GitHub <url href="https://github.com/rbeezer/mathbook/issues/139">issue</url> for details.</p>
+
+                    <theorem xml:id="theorem-bad-one">
+                        <title>Bad Numbered Theorem One</title>
+                        <statement><p>No statement.</p></statement>
+                    </theorem>
+
+                    <theorem xml:id="theorem-bad-two">
+                        <title>Bad Numbered Theorem Two</title>
+                        <statement><p>No statement.</p></statement>
+                    </theorem>
+
+                </conclusion>
             </subsection>
 
             <subsection>
