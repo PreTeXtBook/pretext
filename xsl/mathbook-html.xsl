@@ -1510,26 +1510,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Figures and their captions -->
-<!-- TODO: class="wrap" is possible -->
-<xsl:template match="figure">
-    <xsl:element name="figure">
-        <xsl:variable name="ident">
-          <xsl:apply-templates select="." mode="internal-id" />
-        </xsl:variable>
-        <xsl:attribute name="id"><xsl:value-of select="$ident"/></xsl:attribute>
-        <!-- side by side figures can accept additional attributes -->
-        <xsl:if test="ancestor::sidebyside">
-            <xsl:call-template name="sidebysideCSS" select="."/>
-        </xsl:if>
-        <!-- regular figure, no subfigures -->
-        <xsl:apply-templates select="*[not(self::caption)]"/>
-        <xsl:apply-templates select="caption"/>
-    </xsl:element>
-    <xsl:if test="ancestor::sidebyside">
-       <xsl:text>&#xa;&#xa;</xsl:text>
-    </xsl:if>
-</xsl:template>
 
 <!-- Images -->
 <xsl:template match="image" >
@@ -1627,56 +1607,76 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="svg-wrapper" />
 </xsl:template>
 
-<!-- side by side objects -->
-<xsl:template match="sidebyside">
-  <!-- create div wrapper -->
-  <xsl:element name="div">
-    <xsl:variable name="ident">
-      <xsl:apply-templates select="." mode="internal-id" />
-    </xsl:variable>
-    <xsl:attribute name="id"><xsl:value-of select="$ident"/></xsl:attribute>
-    <xsl:attribute name="class">sidebyside</xsl:attribute>
-    <xsl:apply-templates select="*[not(self::caption)]"/>
-    <xsl:apply-templates select="caption"/>
-  </xsl:element>
+<!-- ################### -->
+<!-- Side-By-Side Panels -->
+<!-- ################### -->
+
+<!-- TODO: consolidate, rationalize, document -->
+
+<xsl:template match="sidebyside/figure">
+    <xsl:element name="figure">
+        <xsl:variable name="ident">
+          <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:variable>
+        <xsl:attribute name="id"><xsl:value-of select="$ident"/></xsl:attribute>
+        <!-- side by side figures accept additional attributes -->
+        <xsl:call-template name="sidebysideCSS" select="."/>
+        <xsl:apply-templates select="*[not(self::caption)]"/>
+        <xsl:apply-templates select="caption"/>
+    </xsl:element>
+    <xsl:text>&#xa;&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="sidebyside/tabular|sidebyside/p">
-    <xsl:choose>
-      <xsl:when test="self::p">
-        <xsl:element name="p">
-            <xsl:call-template name="sidebysideCSS" select="."/>
-            <xsl:apply-templates/>
-        </xsl:element>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:element name="figure">
-            <xsl:call-template name="sidebysideCSS" select="."/>
-            <xsl:element name="table">
-                <xsl:attribute name="class">center</xsl:attribute>
-                <xsl:apply-templates/>
-            </xsl:element>
-        </xsl:element>
-      </xsl:otherwise>
-    </xsl:choose>
+<xsl:template match="sidebyside/table">
+    <xsl:element name="figure">
+        <xsl:variable name="ident">
+          <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:variable>
+        <xsl:attribute name="id"><xsl:value-of select="$ident"/></xsl:attribute>
+        <xsl:call-template name="sidebysideCSS" select="."/>
+        <table class="center">
+            <xsl:apply-templates select="*[not(self::caption)]" />
+        </table>
+        <xsl:apply-templates select="caption" />
+    </xsl:element>
     <xsl:text>&#xa;&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="sidebyside/paragraphs">
- <xsl:element name="article">
-   <xsl:attribute name="class">paragraphs</xsl:attribute>
-   <xsl:call-template name="sidebysideCSS" select="."/>
-      <xsl:apply-templates/>
-  </xsl:element>
+    <xsl:element name="article">
+    <xsl:attribute name="class">paragraphs</xsl:attribute>
+    <xsl:call-template name="sidebysideCSS" select="."/>
+        <xsl:apply-templates/>
+    </xsl:element>
     <xsl:text>&#xa;&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="sidebyside/paragraphs/title">
-  <xsl:element name="h5">
-    <xsl:attribute name="class">heading</xsl:attribute>
-    <xsl:apply-templates/>
-  </xsl:element>
+    <xsl:element name="h5">
+        <xsl:attribute name="class">heading</xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
 </xsl:template>
+
+<xsl:template match="sidebyside/tabular">
+    <xsl:element name="figure">
+        <xsl:call-template name="sidebysideCSS" select="."/>
+        <xsl:element name="table">
+            <xsl:attribute name="class">center</xsl:attribute>
+            <xsl:apply-templates/>
+        </xsl:element>
+    </xsl:element>
+    <xsl:text>&#xa;&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="sidebyside/p">
+    <xsl:element name="p">
+        <xsl:call-template name="sidebysideCSS" select="."/>
+        <xsl:apply-templates/>
+    </xsl:element>
+    <xsl:text>&#xa;&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- this template adds class="left|middle|right" and, optionally, style="width=@width;vertical-align=@valign;text-align=@halign"
      to figure, table, image, p elements within a sidebyside tag -->
@@ -1829,33 +1829,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
-<!-- Tables -->
+<!-- ####### -->
+<!-- Tabular -->
+<!-- ####### -->
 
 <!-- Top-down organization -->
-
-<!-- MBX "table" is a displayed, captioned, numbered object      -->
-<!-- Implemented as an HTML figure, but caption will say "Table" -->
-<!-- Numbered in sequence with real figures and other tables     -->
-<!-- Contents should always be a "tabular" element               -->
-<xsl:template match="table">
-    <xsl:element name="figure">
-        <xsl:variable name="ident">
-          <xsl:apply-templates select="." mode="internal-id" />
-        </xsl:variable>
-        <xsl:attribute name="id"><xsl:value-of select="$ident"/></xsl:attribute>
-        <!-- side by side figures can accept additional attributes -->
-        <xsl:if test="ancestor::sidebyside">
-            <xsl:call-template name="sidebysideCSS" select="."/>
-        </xsl:if>
-        <table class="center">
-            <xsl:apply-templates select="*[not(self::caption)]" />
-        </table>
-        <xsl:apply-templates select="caption" />
-    </xsl:element>
-    <xsl:if test="ancestor::sidebyside">
-       <xsl:text>&#xa;&#xa;</xsl:text>
-    </xsl:if>
-</xsl:template>
 
 <!-- A tabular layout, a naked table -->
 <!-- Allowed to be placed various locations, but gets no              -->
