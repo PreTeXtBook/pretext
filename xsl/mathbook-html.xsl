@@ -3535,8 +3535,8 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
 <!-- TODO: internationalize button labels, strings below -->
 <!-- TODO: make an initialization cell which links with the sage-compute cells -->
 <xsl:template name="sagecell">
-    <script src="http://sagecell.sagemath.org/static/jquery.min.js"></script>
-    <script src="http://sagecell.sagemath.org/embedded_sagecell.js"></script>
+    <script type="text/javascript" src="http://sagecell.sagemath.org/static/jquery.min.js"></script>
+    <script type="text/javascript" src="http://sagecell.sagemath.org/embedded_sagecell.js"></script>
     <script>
 $(function () {
     // Make *any* div with class 'sage-compute' an executable Sage cell
