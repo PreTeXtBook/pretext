@@ -421,7 +421,7 @@ the xsltproc executable.
                         <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men></p>
                     </statement>
                     <todo>Should equation references come with parentheses?</todo>
-                    <proof>
+                    <proof xml:id="proof-FTC-corollary">
                         <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.</p>
                         <mdn>
                             <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
@@ -450,16 +450,19 @@ the xsltproc executable.
             <subsection>
                 <title>A Pedagogical Note</title>
 
-                <subsubsection>
+                <subsubsection xml:id="subsubsection-different-integrals">
                     <title>Symbolic and Numerical Integrals</title>
 
                     <p>The Fundamental Theorem explains why we use the same notation for a definite integral, which is a numerical calculation,<fn>Which I think sometimes students lose sight of.</fn> and an antiderivative, which is a symbolic expression.</p>
 
-                    <exercise>
+                    <exercise xml:id="exercise-essay">
                         <title>Essay Question: Compare and Contrast</title>
                         <statement>
                             <p>Write a short paragraph which compares, and contrasts, the definite and indefinite integral. This is an exercise which sits in the midst of the narrative, so is formatted more like an example or a remark.  It can have a hint and a solution, but this one does not.  It can have a title, which this one does.</p>
                         </statement>
+                        <hint>
+                            <p>Start writing!</p>
+                        </hint>
                     </exercise>
                 </subsubsection>
 
@@ -2077,7 +2080,7 @@ the xsltproc executable.
                 <statement>
                     <p>Compute the definite integral <m>\definiteintegral{2}{4}{x^2}{x}</m>, not as an approximate value from a Riemann sum, but as an exact value based of the limit by using the Fundamental Theorem.</p>
                 </statement>
-                <solution>
+                <solution xml:id="solution-antiderivative">
                     <p>An antiderivative of <m>x^2</m> is <m>F(x)=x^3/3</m>, so by the FTC,<me>\definiteintegral{2}{4}{x^2}{x}=F(4)-F(2)=\frac{1}{3}\left(4^3-2^3\right)=\frac{56}{3}.</me></p>
                 </solution>
             </exercise>
@@ -2090,9 +2093,25 @@ the xsltproc executable.
                         <li>Could you interchange the Theorem and Corollary?</li>
                     </ol>
                 </statement>
+                <!-- A hint is a push in the right direction -->
                 <hint>
                     <p>Consider the definite integral as an area function and employ the Mean Value Theorem.</p>
                 </hint>
+                <!-- You can provide several -->
+                <hint xml:id="exercise-complicated-second-hint">
+                    <p>Think harder!</p>
+                </hint>
+                <!-- The answer is just the end product -->
+                <answer xml:id="exercise-complicated-first-answer">
+                    <ol>
+                        <li>It follows easily.</li>
+                        <li>Yes.</li>
+                    </ol>
+                </answer>
+                <!-- A solution is everything that should be said -->
+                <solution>
+                    <p>We could prove either result first, then obtain the other as an easy consequence.</p>
+                </solution>
             </exercise>
 
          </exercises>
@@ -2130,18 +2149,28 @@ the xsltproc executable.
 
             <p>Cross-references to exercises with hard-coded numbers should respect the supplied number.  Exercise<nbsp /><xref ref="exercise-with-hardcoded-number" /> should reference problem 42a.</p>
 
-            <p>Here we form a list to test pointing at various things:</p>
+            <p>Here we form a list to test pointing at various structures.  Each of the following should open a knowl in the HTML version, otherwise it will be a traditional hyperlink (if possible).  Note that if a knowl opens, there will always be an <q>in-context</q> link which will take you to the actual location, should you have  wished instead to just go there.</p>
 
             <ul>
                 <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" />.</p></li>
+                <li><p>Citations: Judson's AATA with annotation at <xref ref="biblio-judson-AATA" /></p></li>
+                <li><p>Note: just the annotation of previous citation at <xref ref="note-judson-AATA" /></p></li>
                 <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" />.</p></li>
                 <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" />.</p></li>
-                <li><p>Figures: An early plot, Figure<nbsp /><xref ref="figure-function-derivative" />.</p></li>
-                <li><p>Equations: single, first with no name: <xref ref="equation-alternate-FTC" />.  Then with an autoname: <xref ref="equation-alternate-FTC" autoname="yes" />.</p></li>
-                <li><p>Equations: multi-row, first with no name: <xref ref="equation-use-FTC" />.  Then with an autoname: <xref ref="equation-use-FTC" autoname="yes" />.  And two, exercising plural form: <xref ref="equation-alternate-FTC" autoname="plural" /> and <xref ref="equation-use-FTC" />.</p></li>
-                <li><p>A range of exercises, with plural and no autonaming: <xref ref="exercises-null-problem" autoname="plural" /><ndash /><xref ref="exercises-cosine-derivative" autoname="no" />.</p></li>
                 <li><p>A link to a <c>proposition</c> element, while this document has globally renamed <c>proposition</c>s as <q>Conundrum</q>s, so this link should use the new name: <xref ref="proposition-as-conundrum" autoname="yes" /></p></li>
+                <li><p>Theorems: Fundamental Theorem of Calculus, with proof at <xref ref="theorem-FTC" /></p></li>
+                <li><p>Proof: of second version of FTC at <xref ref="proof-FTC-corollary" /></p></li>
+                <li><p>Figures: A plot with a derivative at <xref ref="figure-function-derivative" />.</p></li>
+                <li><p>Display Mathematics: single, first with no name: <xref ref="equation-alternate-FTC" />.  Then with an autoname: <xref ref="equation-alternate-FTC" autoname="yes" />.</p></li>
+                <li><p>Display Mathematics: multi-row, first with no name: <xref ref="equation-use-FTC" />.  Then with an autoname: <xref ref="equation-use-FTC" autoname="yes" />.  And two, exercising plural form: <xref ref="equation-alternate-FTC" autoname="plural" /> and <xref ref="equation-use-FTC" />.</p></li>
+                <li><p>Exercises (sectional), with plural and no autonaming: <xref ref="exercises-null-problem" autoname="plural" /><ndash /><xref ref="exercises-cosine-derivative" autoname="no" />.</p></li>
+                <li><p>Exercise (inline): with enclosed hint at <xref ref="exercise-essay" /></p></li>
+                <li><p>Solution: An autonamed portion of an exercise: <xref ref="solution-antiderivative" autoname="yes" /></p></li>
+                <li><p>Parts of a complicated exercise: <xref ref="exercise-complicated-second-hint" autoname="yes" /> <xref ref="exercise-complicated-first-answer" autoname="yes" /></p></li>
+                <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul>
+
+            <p>Cross-references to structural elements of the document will always take you there directly, since even in the HTML version these parts never get realized as knowls.  You will find such links sprinkled through this document, but here is an autonamed link to a subsubsection:  <xref ref="subsubsection-different-integrals" autoname="yes" />.</p>
 
         </section>
 
@@ -3158,7 +3187,7 @@ the xsltproc executable.
             <title>References</title>
 
             <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>.
-            <note><p>Another online, open-source offering.</p></note>
+            <note xml:id="note-judson-AATA"><p>Another online, open-source offering.</p></note>
             </biblio>
 
             <biblio type="raw" xml:id="biblio-lay-article">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash />62.</biblio>
