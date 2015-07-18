@@ -48,15 +48,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.chunk.level" select="''" />
 <!-- DO NOT USE -->
 
-<!-- An exercise has a statement, and may have a hint,     -->
-<!-- an answer and a solution.  An answer is just the      -->
+<!-- An exercise has a statement, and may have hints,      -->
+<!-- answers and solutions.  An answer is just the         -->
 <!-- final number, expression, whatever; while a solution  -->
 <!-- includes intermediate steps. Parameters here control  -->
-<!-- what is visible where.                                -->
+<!-- the *visibility* of these four parts                  -->
 <!--                                                       -->
 <!-- Parameters are:                                       -->
 <!--   'yes' - immediately visible                         -->
-<!--   'knowl' - adjacent, but requirres action to reveal  -->
+<!--   'knowl' - adjacent, but requires action to reveal   -->
+<!--    NB: HTML - 'knowl' not implemented or recognized   -->
+<!--       'yes' makes knowls for hints, etc *always*      -->
 <!--   'no' - not visible at all                           -->
 <!--                                                       -->
 <!-- First, an exercise in exercises section.              -->
@@ -66,7 +68,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="exercise.text.hint" select="'yes'" />
 <xsl:param name="exercise.text.answer" select="'yes'" />
 <xsl:param name="exercise.text.solution" select="'yes'" />
-<!-- Second, an exercise in solutions list in backmatter.  -->
+<!-- Second, an exercise in a solutions list in backmatter.-->
 <xsl:param name="exercise.backmatter.statement" select="'yes'" />
 <xsl:param name="exercise.backmatter.hint" select="'yes'" />
 <xsl:param name="exercise.backmatter.answer" select="'yes'" />
