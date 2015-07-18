@@ -487,7 +487,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <article class="exercise-like" id="{$xref}">
             <h5 class="heading hidden-type">
             <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-            <span class="codenumber"><xsl:apply-templates select="." mode="origin-id" /></span>
+            <span class="codenumber"><xsl:apply-templates select="." mode="serial-number" /></span>
             <xsl:if test="title">
                 <span class="title"><xsl:apply-templates select="title" /></span>
             </xsl:if>
@@ -1268,7 +1268,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <h5 class="heading">
     <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
     <xsl:text> </xsl:text>
-    <span class="codenumber"><xsl:apply-templates select="." mode="origin-id" /></span>
+    <span class="codenumber"><xsl:apply-templates select="." mode="serial-number" /></span>
     <xsl:if test="title">
         <xsl:text> </xsl:text>
         <span class="title"><xsl:apply-templates select="title" /></span>
@@ -1289,7 +1289,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Simpler head for sectional exercise -->
 <xsl:template match="exercises//exercise" mode="head">
     <h5 class="heading">
-    <span class="codenumber"><xsl:apply-templates select="." mode="origin-id" /></span>
+    <span class="codenumber"><xsl:apply-templates select="." mode="serial-number" /></span>
     <xsl:if test="title">
         <xsl:text> </xsl:text>
         <span class="title"><xsl:apply-templates select="title" /></span>

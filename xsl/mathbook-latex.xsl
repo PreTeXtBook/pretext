@@ -1643,7 +1643,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
     </xsl:choose>
     <xsl:text>\item[</xsl:text>
-    <xsl:apply-templates select="." mode="origin-id" />
+    <xsl:apply-templates select="." mode="serial-number" />
     <xsl:text>.]</xsl:text>
     <xsl:apply-templates select="." mode="label"/>
     <xsl:if test="title">
@@ -1723,7 +1723,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="hint or answer or solution">
         <!-- Lead with the problem number and some space -->
         <xsl:text>\noindent\textbf{</xsl:text>
-        <xsl:apply-templates select="." mode="origin-id" />
+        <xsl:apply-templates select="." mode="serial-number" />
         <xsl:text>.}\quad{}</xsl:text>
         <xsl:if test="$exercise.backmatter.statement='yes'">
             <!-- TODO: not a "backmatter" template - make one possibly? Or not necessary -->
@@ -3735,7 +3735,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- "label" (e.g. Jud99), or by default serial number -->
     <!-- LaTeX's bibitem will provide the visual brackets  -->
     <xsl:text>[</xsl:text>
-    <xsl:apply-templates select="." mode="origin-id" />
+    <xsl:apply-templates select="." mode="serial-number" />
     <xsl:text>]</xsl:text>
     <!-- "key" for cross-referencing -->
     <xsl:text>{</xsl:text>

@@ -1474,19 +1474,23 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     </xsl:choose>
 </xsl:template>
 
-<!-- ################## -->
-<!-- Identifiers        -->
-<!-- ################## -->
 
-<!-- Internal Identifier                        -->
-<!-- A unique text identifier for any element   -->
+<!-- ########### -->
+<!-- Identifiers        -->
+<!-- ########### -->
+
+<!--                     -->
+<!-- Internal Identifier -->
+<!--                     -->
+
+<!-- A *unique* text identifier for any element -->
 <!-- Uses:                                      -->
 <!--   HTML: filenames (pages and knowls)       -->
 <!--   HTML: anchors for references into pages  -->
 <!--   LaTeX: labels, ie cross-references       -->
-<!-- Format:                                            -->
-<!--   the content (text) of an xml:id if provided      -->
-<!--   otherwise, element_name-serial_number (doc-wide) -->
+<!-- Format:                                          -->
+<!--   the content (text) of an xml:id if provided    -->
+<!--   otherwise, elementname-serialnumber (doc-wide) -->
 <!-- MathJax:                                                   -->
 <!--   Can manufacture an HTML id= for equations, so            -->
 <!--   we configure MathJax to use the TeX \label contents      -->
@@ -1506,6 +1510,10 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     </xsl:choose>
 </xsl:template>
 
+<!--                                -->
+<!-- Label (cross-reference target) -->
+<!--                                -->
+
 <!-- LaTeX labels get used on MathJax content in HTML, so we -->
 <!-- put this template in the common file for universal use  -->
 <!-- Insert an identifier as a LaTeX label on anything       -->
@@ -1517,80 +1525,20 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Visual Identifiers -->
-<!-- What a reader sees in any cross-referencing system -->
-<!-- Two types: -->
-<!--     origin: what is displayed to mark the object -->
-<!--         - subdivisions: full hierarchical numbers -->
-<!--         - exercises: serial number in a list -->
-<!--         - and so on -->
-<!--     reference: what is displayed to guide to the object -->
-<!--         - subdivisions: ditto -->
-<!--         - exercises: full hierarchical numbers -->
-<!--         - citations: [number] -->
-<!--         - equations: (number) -->
-<!-- Normally, these are numbers.  But with overrides in a        -->
-<!-- customization layer, some objects could be known by          -->
-<!-- another system, such as acronyms.  So redirection through    -->
-<!-- here is a useful abstraction from simply plunking in numbers -->
-
-<!-- Default is the object's number            -->
-<!-- (which will report "[NUMBER]" on failure) -->
-<xsl:template match="*" mode="origin-id">
-    <xsl:apply-templates select="." mode="number" />
-</xsl:template>
-
-<!-- Exercises in lists are always in an enclosing       -->
-<!-- subdivision Their default numbers are hierarchical, -->
-<!-- so we strip the serial number for display           -->
-<xsl:template match="exercises/exercise|exercisegroup/exercise" mode="origin-id">
-    <xsl:call-template name="substring-after-last">
-        <xsl:with-param name="input">
-            <xsl:apply-templates select="." mode="number" />
-        </xsl:with-param>
-        <xsl:with-param name="substr" select="'.'" />
-    </xsl:call-template>
-</xsl:template>
-
-<!-- Bibliographic items are in lists in references section -->
-<!-- so we always have a hierarchical number, that we can strip -->
-<!-- Or we provide a label if one is given -->
-<!-- TODO: probably better to have a processing switch for label use? -->
-<xsl:template match="biblio" mode="origin-id">
-    <xsl:choose>
-        <xsl:when test="label">
-            <xsl:apply-templates select="label" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:call-template name="substring-after-last">
-                <xsl:with-param name="input">
-                    <xsl:apply-templates select="." mode="number" />
-                </xsl:with-param>
-                <xsl:with-param name="substr" select="'.'" />
-            </xsl:call-template>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
+<!--            -->
 <!-- Long Names -->
+<!--            -->
+
 <!-- Simple text representations of structural elements        -->
-<!-- Type, number, title typically                             -->
+<!-- Type, number (empty?), optional title typically           -->
 <!-- Ignore footnotes in these constructions                   -->
 <!-- Used for author's report, LaTeX typeout during processing -->
 <xsl:template match="*" mode="long-name">
     <xsl:apply-templates select="." mode="type-name" />
     <xsl:text> </xsl:text>
     <xsl:apply-templates select="." mode="number" />
-    <xsl:if test="title">
-        <xsl:text> </xsl:text>
-        <xsl:apply-templates select="title/node()[not(self::fn)]"/>
-    </xsl:if>
-</xsl:template>
-
-<!-- Some units don't have titles or numbers -->
-<xsl:template match="preface|abstract|acknowledgement|biography|foreword|dedication|colophon" mode="long-name">
-    <xsl:apply-templates select="." mode="type-name" />
     <xsl:text> </xsl:text>
+    <xsl:apply-templates select="title-simple"/>
 </xsl:template>
 
 
