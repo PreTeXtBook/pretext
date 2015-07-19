@@ -443,30 +443,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="//proof">
         <xsl:text>\renewcommand*{\proofname}{</xsl:text>
         <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'proof'" /></xsl:call-template>
-        <xsl:text>}</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//appendix">
         <xsl:text>\renewcommand*{\appendixname}{</xsl:text>
         <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'appendix'" /></xsl:call-template>
-        <xsl:text>}</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="/mathbook/book">
         <xsl:if test="//part">
             <xsl:text>\renewcommand*{\partname}{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'part'" /></xsl:call-template>
-            <xsl:text>}</xsl:text>
+            <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="//chapter">
             <xsl:text>\renewcommand*{\chaptername}{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'chapter'" /></xsl:call-template>
-            <xsl:text>}</xsl:text>
+            <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
     <xsl:if test="/mathbook/article">
         <xsl:if test="//abstract">
             <xsl:text>\renewcommand*{\abstractname}{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'abstract'" /></xsl:call-template>
-            <xsl:text>}</xsl:text>
+            <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
     <!-- Numbering Equations -->
@@ -499,7 +499,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Could condition \setlength debacle on the use of extpfeil       -->
         <!-- arrows (see discussion below)                                   -->
         <xsl:text>%% We preserve a copy of the \setlength package before other&#xa;</xsl:text>
-        <xsl:text>%% packages (extpfeil) get a change to load packages that redefine it&#xa;</xsl:text>
+        <xsl:text>%% packages (extpfeil) get a chance to load packages that redefine it&#xa;</xsl:text>
         <xsl:text>\let\oldsetlength\setlength&#xa;</xsl:text>
         <xsl:text>\newlength{\Oldarrayrulewidth}&#xa;</xsl:text>
         <xsl:text>\newcommand{\crulethin}[1]%&#xa;</xsl:text>
