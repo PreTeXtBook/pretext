@@ -1538,7 +1538,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:text> </xsl:text>
     <xsl:apply-templates select="." mode="number" />
     <xsl:text> </xsl:text>
-    <xsl:apply-templates select="title-simple"/>
+    <xsl:apply-templates select="." mode="title-simple"/>
 </xsl:template>
 
 
