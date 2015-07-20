@@ -50,6 +50,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- of similar items, for example the "theorem" -->
 <!-- switch will similarly affect corrolaries,   -->
 <!-- lemmas, etc - anything that can be proved   -->
+<!-- NB: figures and tables inside of            -->
+<!-- side-by-side panels are never born hidden,  -->
+<!-- no matter how the switches below are set.   -->
+<!-- You may elect to have entire side-by-side   -->
+<!-- panels born as knowls, using the switch.    -->
 <xsl:param name="html.knowl.theorem" select="'no'" />
 <xsl:param name="html.knowl.proof" select="'yes'" />
 <xsl:param name="html.knowl.definition" select="'no'" />
@@ -606,7 +611,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We show the full content of the item on the page (b)         -->
 <!-- Or, we build a hidden knowl and place a link on the page (c) -->
 <!-- NB: this template employs several modal templates, defined just below -->
-<xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|note|figure|table|sidebyside|me|men|md|mdn">
+<xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|note|figure|table|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn">
     <!-- Always build a knowl so we can point to it with a cross-reference -->
     <xsl:apply-templates select="." mode="xref-knowl-factory" />
     <xsl:variable name="hidden">
@@ -1113,8 +1118,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Figures, Tables, Side-By-Side Panels -->
-<!-- Individually customizable, but otherwise very similar-->
+<!-- Figures, Tables, entire Side-By-Side Panels     -->
+<!-- Figures, Tables from within Side-By-Side Panels -->
+<!-- Individually customizable, but otherwise very similar                 -->
+<!-- This includes figures and tables contained within side-by-side panels -->
+<!-- They are never born as knowls, but their content can be displayed     -->
+<!-- as a knowl when the target of a cross-reference                       -->
 <xsl:template match="figure" mode="is-hidden">
     <xsl:value-of select="$html.knowl.figure = 'yes'" />
 </xsl:template>
@@ -1123,6 +1132,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 <xsl:template match="sidebyside" mode="is-hidden">
     <xsl:value-of select="$html.knowl.sidebyside = 'yes'" />
+</xsl:template>
+<xsl:template match="sidebyside/figure|sidebyside/table" mode="is-hidden">
+    <xsl:value-of select="false()" />
 </xsl:template>
 <xsl:template match="figure|table|sidebyside" mode="is-block-env">
     <xsl:value-of select="true()" />
@@ -1141,6 +1153,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 <!-- There is no head, a caption always appears in the body -->
 <xsl:template match="figure|table|sidebyside" mode="head" />
+<!-- For tables or figures within a side-by-side: -->
+<!-- Born visible we need the extra CSS           -->
+<!-- In a knowl content file, we don't            -->
+<!-- We add it in both cases                      -->
+<xsl:template match="sidebyside/figure|sidebyside/table" mode="head">
+    <xsl:call-template name="sidebysideCSS" select="."/>
+</xsl:template>
 <!-- Body is just all content, followed by caption -->
 <!-- Figure: just contents, caption -->
 <!-- Table: wrapped in figure, tabular provides <table> -->
@@ -1611,36 +1630,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Side-By-Side Panels -->
 <!-- ################### -->
 
-<!-- TODO: consolidate, rationalize, document -->
-
-<xsl:template match="sidebyside/figure">
-    <xsl:element name="figure">
-        <xsl:variable name="ident">
-          <xsl:apply-templates select="." mode="internal-id" />
-        </xsl:variable>
-        <xsl:attribute name="id"><xsl:value-of select="$ident"/></xsl:attribute>
-        <!-- side by side figures accept additional attributes -->
-        <xsl:call-template name="sidebysideCSS" select="."/>
-        <xsl:apply-templates select="*[not(self::caption)]"/>
-        <xsl:apply-templates select="caption"/>
-    </xsl:element>
-    <xsl:text>&#xa;&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="sidebyside/table">
-    <xsl:element name="figure">
-        <xsl:variable name="ident">
-          <xsl:apply-templates select="." mode="internal-id" />
-        </xsl:variable>
-        <xsl:attribute name="id"><xsl:value-of select="$ident"/></xsl:attribute>
-        <xsl:call-template name="sidebysideCSS" select="."/>
-        <table class="center">
-            <xsl:apply-templates select="*[not(self::caption)]" />
-        </table>
-        <xsl:apply-templates select="caption" />
-    </xsl:element>
-    <xsl:text>&#xa;&#xa;</xsl:text>
-</xsl:template>
+<!-- sidebyside/figure, sidebyside/table are subsumed into general handling of environments and knowls -->
 
 <xsl:template match="sidebyside/paragraphs">
     <xsl:element name="article">
@@ -2159,9 +2149,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Cross-references as knowls                               -->
 <!-- Override to turn off cross-references as knowls          -->
+<!-- We explicitly include figures and tables from within     -->
+<!-- a sidebyside even though this is not necessary           -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|biblio|note|example|remark|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|figure|table|sidebyside|men|mrow" mode="xref-as-knowl">
+<xsl:template match="fn|biblio|note|example|remark|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|figure|table|sidebyside|sidebyside/figure|sidebyside/table|men|mrow" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">

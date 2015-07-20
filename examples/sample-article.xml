@@ -2161,6 +2161,9 @@ the xsltproc executable.
                 <li><p>Theorems: Fundamental Theorem of Calculus, with proof at <xref ref="theorem-FTC" /></p></li>
                 <li><p>Proof: of second version of FTC at <xref ref="proof-FTC-corollary" /></p></li>
                 <li><p>Figures: A plot with a derivative at <xref ref="figure-function-derivative" />.</p></li>
+                <li><p>A Figure within a side-by-side panel, with its own number: <xref ref="another-regular-figure" /></p></li>
+                <li><p>A Table within a side-by-side panel, with a subnumber: <xref ref="tab-sidebyside-subtable" /></p></li>
+                <li><p>A Side-By-Side Panel, in its entirety (a special Figure): <xref ref="fig-sidebyside-global" /></p></li>
                 <li><p>Display Mathematics: single, first with no name: <xref ref="equation-alternate-FTC" />.  Then with an autoname: <xref ref="equation-alternate-FTC" autoname="yes" />.</p></li>
                 <li><p>Display Mathematics: multi-row, first with no name: <xref ref="equation-use-FTC" />.  Then with an autoname: <xref ref="equation-use-FTC" autoname="yes" />.  And two, exercising plural form: <xref ref="equation-alternate-FTC" autoname="plural" /> and <xref ref="equation-use-FTC" />.</p></li>
                 <li><p>Exercises (sectional), with plural and no autonaming: <xref ref="exercises-null-problem" autoname="plural" /><ndash /><xref ref="exercises-cosine-derivative" autoname="no" />.</p></li>
@@ -2376,11 +2379,13 @@ the xsltproc executable.
         </section>
 
         <section xml:id="section-side-by-side">
-          <title>Side-By-Side Objects</title>
-        <subsection>
-          <title>Introduction</title>
-          <p>A variety of different objects can be put side-by-side using the <c>sidebyside</c> element.</p>
-        </subsection>
+          <title>Side-By-Side Panels</title>
+            <introduction>
+              <title>Introduction</title>
+
+              <p>A variety of different objects can be put side-by-side using the <c>sidebyside</c> element.  Specifically, <c>figure</c>, <c>table</c>, <c>paragraphs</c>, <c>image</c>, <c>tabular</c>, <c>p</c>.  The first three have some structure, the second three are atomic.  For HTML output, the entire <c>sidebyside</c> will be a knowl as a target of a cross reference, and may be born within a knowl (via the <c>html.knowl.sidebyside</c> switch).  Figures and tables (only) from within a side-by-side will be realized as knowls when the target of a cross-reference, but are never born as knowls within a side-by-side.</p>
+            </introduction>
+
         <subsection>
           <title>Figures with Numbers Side-By-Side</title>
         <p>Figures can be put side-by-side using the <c>sidebyside</c> element; if a <q>global</q>
