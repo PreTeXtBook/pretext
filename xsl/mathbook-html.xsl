@@ -256,7 +256,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Bits and Pieces -->
 
 <!-- Paragraphs -->
-<!-- Never structural, never named, somewhat distinct -->
+<!-- Never structural, never named, somewhat distinct  -->
+<!-- Extra CSS to position within a side-by-side panel -->
 <xsl:template match="paragraphs|paragraph">
     <xsl:if test="local-name(.)='paragraph'">
         <xsl:message>MBX:WARNING: the "paragraph" element is deprecated (2015/03/13), use "paragraphs" instead</xsl:message>
@@ -264,8 +265,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
     <article class="paragraphs" id="{$ident}">
+        <!-- within a side-by-side can carry positioning attributes -->
+        <xsl:if test="parent::sidebyside">
+            <xsl:call-template name="sidebysideCSS" select="."/>
+        </xsl:if>
         <h5 class="heading">
-            <xsl:apply-templates select="." mode="title-full" />
+            <span class="title">
+                <xsl:apply-templates select="." mode="title-full" />
+            </span>
         </h5>
         <xsl:apply-templates  select="./*[not(self::title)]"/>
     </article>
@@ -1369,12 +1376,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- HTML Markup -->
 <!-- ########### -->
 
-<!-- Wrap generic paragraphs in p tag -->
+<!-- Paragraph -->
+<!-- A single paragraph within a side-by-side -->
+<!-- panel will carry positioning CSS         -->
 <xsl:template match="p">
-<p><xsl:apply-templates /></p>
+    <xsl:element name="p">
+        <xsl:if test="parent::sidebyside">
+            <xsl:call-template name="sidebysideCSS" select="."/>
+        </xsl:if>
+        <xsl:apply-templates />
+    </xsl:element>
 </xsl:template>
 
+<!-- ##### -->
 <!-- Lists -->
+<!-- ##### -->
 
 <!-- Utility templates to translate MBX              -->
 <!-- enumeration style to HTML list-style-type       -->
@@ -1529,7 +1545,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-
 <!-- Images -->
 <xsl:template match="image" >
     <xsl:if test="@source">
@@ -1555,9 +1570,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:element>
     </xsl:if>
     <xsl:apply-templates select="tikz|asymptote|sageplot|latex-image-code" />
-    <xsl:if test="ancestor::sidebyside">
-       <xsl:text>&#xa;&#xa;</xsl:text>
-    </xsl:if>
 </xsl:template>
 
 <!-- Write an "alt" attribute as part    -->
@@ -1630,46 +1642,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Side-By-Side Panels -->
 <!-- ################### -->
 
-<!-- sidebyside/figure, sidebyside/table are subsumed into general handling of environments and knowls -->
+<!-- A side-by-side panel has objects aligned across a page. -->
+<!-- There are six elements which may be included within:    -->
+<!--                                                         -->
+<!-- (a) figures and tables: with/without captions, possibly -->
+<!--     targets of cross-references (carrying an xml:id),   -->
+<!--     and so are knowlized for cross-references, but      -->
+<!--     will never appear as knowls within a side-by-side   -->
+<!-- (b) paragraphs: exceptional, no caption, not knowlized  -->
+<!-- (c) image, tabular, p: more fundamental, no captions,   -->
+<!--     no numbers, etc., and so not knowlized              -->
+<!--                                                         -->
+<!-- The entire panel may be born as a knowl, and is         -->
+<!-- knowlized as a potential target of a cross-reference.   -->
 
-<xsl:template match="sidebyside/paragraphs">
-    <xsl:element name="article">
-    <xsl:attribute name="class">paragraphs</xsl:attribute>
-    <xsl:call-template name="sidebysideCSS" select="."/>
-        <xsl:apply-templates/>
-    </xsl:element>
-    <xsl:text>&#xa;&#xa;</xsl:text>
-</xsl:template>
+<!-- To position an item within a panel, the element may       -->
+<!-- have additional atributes.  This template *must* follow   -->
+<!-- an <xsl:element name="XYX"> statement for the outer-most  -->
+<!-- enclosing HTML of the panel's content.  You will see this -->
+<!-- template employed conditionally in a variety of places.   -->
+<!-- Adding:                                                   -->
+<!--   class="left|middle|right"                               -->
+<!--   style="width=@width;                                    -->
+<!--          vertical-align=@valign;                          -->
+<!--          ext-align=@halign"                               -->
 
-<xsl:template match="sidebyside/paragraphs/title">
-    <xsl:element name="h5">
-        <xsl:attribute name="class">heading</xsl:attribute>
-        <xsl:apply-templates/>
-    </xsl:element>
-</xsl:template>
-
-<xsl:template match="sidebyside/tabular">
-    <xsl:element name="figure">
-        <xsl:call-template name="sidebysideCSS" select="."/>
-        <xsl:element name="table">
-            <xsl:attribute name="class">center</xsl:attribute>
-            <xsl:apply-templates/>
-        </xsl:element>
-    </xsl:element>
-    <xsl:text>&#xa;&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="sidebyside/p">
-    <xsl:element name="p">
-        <xsl:call-template name="sidebysideCSS" select="."/>
-        <xsl:apply-templates/>
-    </xsl:element>
-    <xsl:text>&#xa;&#xa;</xsl:text>
-</xsl:template>
-
-
-<!-- this template adds class="left|middle|right" and, optionally, style="width=@width;vertical-align=@valign;text-align=@halign"
-     to figure, table, image, p elements within a sidebyside tag -->
+<!-- TODO: study "image" template and consolidate -->
+<!-- TODO: convert to a match="" template and break up conditionals -->
 <xsl:template name="sidebysideCSS">
   <!-- paragraphs have their own class -->
   <xsl:if test="not(self::paragraphs)">
@@ -1833,6 +1832,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="tabular">
     <xsl:element name="table">
         <xsl:apply-templates select="row" />
+    </xsl:element>
+</xsl:template>
+
+<!-- Slightly different handling within a side-by-side -->
+<!-- TODO: experiment with:                 -->
+<!-- (a) dropping figure element            -->
+<!-- (b) place CSS onto the table element -->
+<!-- (c) dropping the center class          -->
+<xsl:template match="sidebyside/tabular">
+    <xsl:element name="figure">
+        <xsl:call-template name="sidebysideCSS" select="."/>
+        <xsl:element name="table">
+            <xsl:attribute name="class">center</xsl:attribute>
+            <xsl:apply-templates select="row"/>
+        </xsl:element>
     </xsl:element>
 </xsl:template>
 
