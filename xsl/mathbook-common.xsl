@@ -2157,7 +2157,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         <!-- 2 combinations: global no, local yes/plural        -->
         <!-- 3 combinations: global yes, local blank/yes/plural -->
         <!-- TODO: migrate ugly English-centric hack to language files! -->
-        <xsl:when test="$local='yes' or $local='plural' or ($autoname='yes' and $local='')">
+        <xsl:when test="$local='yes' or $local='plural' or ($autoname='yes' and not($local!=''))">
             <xsl:apply-templates select="." mode="type-name" />
             <xsl:if test="$local='plural'">
                 <xsl:text>s</xsl:text>
