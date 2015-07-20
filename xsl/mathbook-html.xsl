@@ -1170,12 +1170,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 <!-- There is no head, a caption always appears in the body -->
 <xsl:template match="figure|table|sidebyside" mode="head" />
-<!-- For tables or figures within a side-by-side: -->
-<!-- Born visible we need the extra CSS           -->
-<!-- In a knowl content file, we don't            -->
-<!-- We add it in both cases                      -->
+<!-- For tables or figures within a side-by-side:              -->
+<!-- Born visible (ie within a side-by-side), we need some     -->
+<!-- extra positioning CSS. In a knowl content file, we don't  -->
+<!-- want the CSS in the way.  This is the motivating reason   -->
+<!-- for parameterizing the "head" template.  Conveniently the -->
+<!-- CSS lands just below the outer-most enclosing element.    -->
 <xsl:template match="sidebyside/figure|sidebyside/table" mode="head">
-    <xsl:call-template name="sidebysideCSS" select="."/>
+    <xsl:param name="type" />
+    <xsl:if test="$type='visible'">
+        <xsl:call-template name="sidebysideCSS" select="."/>
+    </xsl:if>
 </xsl:template>
 <!-- Body is just all content, followed by caption -->
 <!-- Figure: just contents, caption -->
