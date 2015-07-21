@@ -201,4 +201,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 	</acknowledgement>
 
+	<!-- A section of its own in HTML, migrates to copyright-page in LaTeX (sans a title)-->
+	<biography>
+		<p>Thomas W. Judson did his undergraduate work in Illinois, his graduate work in Oregon and presently teaches in Texas.</p>
+
+		 <p>He likes to ride his bicycle in France.</p>
+	</biography>
+
 </frontmatter>
