@@ -161,6 +161,10 @@ def latex_image_conversion(xml_source, dest_dir, outformat):
     _debug("tex executable: {}".format(tex_executable))
     pdfsvg_executable = get_executable(config, 'pdfsvg')
     _debug("pdfsvg executable: {}".format(pdfsvg_executable))
+    pdfpng_executable = get_executable(config, 'pdfpng')
+    _debug("pdfpng executable: {}".format(pdfpng_executable))
+    pdfeps_executable = get_executable(config, 'pdfeps')
+    _debug("pdfeps executable: {}".format(pdfeps_executable))
     # http://stackoverflow.com/questions/11269575/how-to-hide-output-of-subprocess-in-python-2-7
     devnull = open(os.devnull, 'w')
     convert_cmd = [xslt_executable,
@@ -181,16 +185,30 @@ def latex_image_conversion(xml_source, dest_dir, outformat):
             filebase, _ = os.path.splitext(latex_image)
             latex_image_pdf = "{}.pdf".format(filebase)
             latex_image_svg = "{}.svg".format(filebase)
+            latex_image_png = "{}.png".format(filebase)
+            latex_image_eps = "{}.eps".format(filebase)
             latex_cmd = [tex_executable, latex_image]
             _verbose("converting {} to {}".format(latex_image, latex_image_pdf))
             subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-            if outformat == 'svg':
+            if outformat == 'all':
+                shutil.copy2(latex_image, dest_dir)
+            if (outformat == 'pdf' or outformat == 'all'):
+                shutil.copy2(latex_image_pdf, dest_dir)
+            if (outformat == 'svg' or outformat == 'all'):
                 svg_cmd = [pdfsvg_executable, latex_image_pdf, latex_image_svg]
                 _verbose("converting {} to {}".format(latex_image_pdf, latex_image_svg))
                 subprocess.call(svg_cmd)
                 shutil.copy2(latex_image_svg, dest_dir)
-            if outformat == 'pdf':
-                shutil.copy2(latex_image_pdf, dest_dir)
+            if (outformat == 'png' or outformat == 'all'):
+                png_cmd = [pdfpng_executable, latex_image_pdf, latex_image_png]
+                _verbose("converting {} to {}".format(latex_image_pdf, latex_image_png))
+                subprocess.call(png_cmd)
+                shutil.copy2(latex_image_png, dest_dir)
+            if (outformat == 'eps' or outformat == 'all'):
+                eps_cmd = [pdfeps_executable, '-eps', latex_image_pdf, latex_image_eps]
+                _verbose("converting {} to {}".format(latex_image_pdf, latex_image_eps))
+                subprocess.call(eps_cmd)
+                shutil.copy2(latex_image_eps, dest_dir)
 
 #######################################
 #
@@ -516,10 +534,13 @@ def get_cli_arguments():
     format_info = [
         ('svg', 'Scalable Vector Graphicsfile(s)'),
         ('pdf', 'Portable Document Format file(s)'),
+        ('png', 'Portable Network Graphics file(s)'),
+        ('eps', 'Encapsulated Post Script file(s)'),
         ('source', 'Standalone source files'),
         ('latex', 'LaTeX source file'),
         ('html', 'HyperText Markup Language (web pages)'),
         ('sagenb', 'Sage *.sws archive of worksheets'),
+        ('all', 'All available output formats'),
     ]
     format_help = 'Output formats are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in format_info])
     parser.add_argument('-f', '--format', help=format_help, action="store", dest='format')
@@ -549,6 +570,8 @@ def get_config_info(script_dir):
     defaults['xslt'] = 'xsltproc'
     defaults['tex'] = 'xelatex'
     defaults['pdfsvg'] = 'pdf2svg'
+    defaults['pdfpng'] = 'convert'
+    defaults['pdfeps'] = 'pdftops'
     defaults['asy'] = 'asy'
     defaults['sage'] = 'sage'
     config_file = os.path.join(script_dir, "mbx.cfg")
@@ -615,6 +638,12 @@ elif args.component == 'latex-image':
         latex_image_conversion(args.xml_file, args.dir, 'svg')
     elif args.format == 'source':
         latex_image_conversion(args.xml_file, args.dir, 'source')
+    elif args.format == 'png':
+        latex_image_conversion(args.xml_file, args.dir, 'png')
+    elif args.format == 'eps':
+        latex_image_conversion(args.xml_file, args.dir, 'eps')
+    elif args.format == 'all':
+        latex_image_conversion(args.xml_file, args.dir, 'all')
     else:
         raise NotImplementedError('cannot make LaTeX pictures in "{}" format'.format(args.format))
 elif args.component == 'all':

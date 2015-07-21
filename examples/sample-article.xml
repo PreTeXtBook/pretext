@@ -858,7 +858,7 @@ the xsltproc executable.
             <subsection>
                 <title><latex /> images</title>
 
-                <p>There are several graphics engine packages that a <latex /> document can employ. Code from these packages renders diagrams automatically as part of normal processing of <latex /> files.  For HTML output the <c>mbx</c> script produces SVG versions of the pictures.  The packages should be loaded in docinfo/latex-image-preamble, which is also where global package settings should be made. These first examples are from the <url href="http://www.texample.net/tikz/examples/">TeXample.net</url> site.</p>
+                <p>There are several graphics engine packages that a <latex /> document can employ. Code from these packages renders diagrams automatically as part of normal processing of <latex /> files.  For HTML output the <c>mbx</c> script produces SVG versions of the pictures.  The script can also produce standalone TEX source files, PDFs, PNGs, and EPSs. The packages should be loaded in docinfo/latex-image-preamble, which is also where global package settings should be made. These first examples are from the <url href="http://www.texample.net/tikz/examples/">TeXample.net</url> site.</p>
 
                 <!-- http://www.texample.net/media/tikz/examples/TEX/noise-shaper.tex -->
                 <figure xml:id="figure-tikz-electronics">
