@@ -1268,6 +1268,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Author biography migrates to the obverse of the   -->
+<!-- copyright page in LaTeX, sans any provided title. -->
+<!-- So we kill this part of the front matter as       -->
+<!-- a section of its own.  (In HTML the material      -->
+<!-- is its own titled division).                      -->
+<xsl:template match="book/frontmatter/biography" mode="content-wrap" />
+<xsl:template match="book/frontmatter/biography" mode="file-wrap" />
+
 <!-- Dedications are meant to be very short      -->
 <!-- so are each a single paragraph and          -->
 <!-- are centered on a page of their own         -->
