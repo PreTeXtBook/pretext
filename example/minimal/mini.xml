@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<mathbook>
+
+<webwork>
+    <title>Integer Addition</title>
+
+    <setup>
+        $a = Compute(random(1, 9, 1));
+        $b = Compute(random(1, 9, 1));
+        $c = $a + $b;
+    </setup>
+
+    <statement>
+        <p>Compute the sum of $a and $b:  <m>a + b =</m> <answer var="$c" width="2" /></p>
+    </statement>
+
+</webwork>
+
+</mathbook>
