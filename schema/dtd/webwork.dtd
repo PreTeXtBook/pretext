@@ -1,0 +1,72 @@
+<!-- ********************************************************************* -->
+<!-- Copyright 2015                                                        -->
+<!-- Robert A. Beezer, Michael Gage, Geoff Goehle, Alex Jordan             -->
+<!--                                                                       -->
+<!-- This file is part of MathBook XML.                                    -->
+<!--                                                                       -->
+<!-- MathBook XML is free software: you can redistribute it and/or modify  -->
+<!-- it under the terms of the GNU General Public License as published by  -->
+<!-- the Free Software Foundation, either version 2 or version 3 of the    -->
+<!-- License (at your option).                                             -->
+<!--                                                                       -->
+<!-- MathBook XML is distributed in the hope that it will be useful,       -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of        -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         -->
+<!-- GNU General Public License for more details.                          -->
+<!--                                                                       -->
+<!-- You should have received a copy of the GNU General Public License     -->
+<!-- along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>. -->
+<!-- ********************************************************************* -->
+
+<!-- http://www.sagehill.net/docbookxsl/ValidXinclude.html -->
+<!-- * = zero or more, + = one or more, ? = zero or one -->
+
+<!-- #PCDATA *must* be used inside of (  )* as first part, can augment -->
+<!-- http://stackoverflow.com/questions/2803142/why-is-this-not-a-valid-xml-dtd-parameter-entity-and-pcdata -->
+
+
+<!-- #################### -->
+<!-- Convenience Entities -->
+<!-- #################### -->
+
+<!-- Titles and Captions -->
+<!-- Elements that could be inside a single line of text -->
+<!-- For example, an <ndash>, but not a <me>             -->
+<!-- Precede by a #PCDATA, wrap with ( )*                -->
+<!-- (2015/07/22) COPIED FROM mathbook.dtd, match up on merge -->
+<!ENTITY % line "xref|url|m|c|nbsp|ndash|mdash|ampersand|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|tilde|backslash|lq|rq|lsq|rsq|ellipsis|copyright|ie|eg|etc|circa|tex|latex|today|timeofday|em|q|sq|term|foreign">
+
+
+<!-- ######### -->
+<!-- Structure -->
+<!-- ######### -->
+
+<!-- a sequence of problems, grouped inside mathbook -->
+<!ELEMENT mathbook (webwork*) >
+
+<!-- top-level, no statement would be silly -->
+<!ELEMENT webwork (title?, setup?, statement, solution?) >
+    <!ATTLIST webwork xml:id ID #IMPLIED>
+
+<!ELEMENT title      (#PCDATA|%line;)* >
+
+<!ELEMENT setup      (var+, pg-code?) >
+
+<!ELEMENT statement  (p+) >
+
+<!ELEMENT solution   (p+) >
+
+<!-- ########## -->
+<!-- Components -->
+<!-- ########## -->
+
+<!ELEMENT pg-code    (#PCDATA) >
+
+<!ELEMENT var        (static*) >
+    <!ATTLIST var name  CDATA #IMPLIED>
+<!ELEMENT static     (#PCDATA) >
+
+<!ELEMENT answer      EMPTY >
+    <!ATTLIST answer var   CDATA #IMPLIED>
+    <!ATTLIST answer width CDATA #IMPLIED>
+
