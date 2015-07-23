@@ -65,8 +65,9 @@ include Makefile.paths
 # so relative paths work properly
 # MBXSL = $(MB)/xsl
 # MBSCRIPT = $(MB)/script
-# MBUSR = $(MB)/user
+MBUSR = $(MB)/user
 WWDTD = $(WWMBX)/schema/dtd
+WWXSL = $(WWMBX)/xsl
 
 # These are source and custom XSL subdirectories
 # for the two AATA repositories
@@ -99,3 +100,14 @@ check-mini:
 	-rm $(SCRATCH)/dtderrors.*
 	-xmllint --xinclude --noout --dtdvalid $(WWDTD)/webwork.dtd $(WWMBX)/example/minimal/mini.xml 2> $(SCRATCH)/dtderrors.txt
 	less $(SCRATCH)/dtderrors.txt
+
+##########
+## Testing
+##########
+
+minimal:
+	install -d $(PGOUT) $(MBUSR)
+	-rm $(PGOUT)/*.pg
+	cp $(WWXSL)/webwork-pg.xsl $(MBUSR)
+	cd $(PGOUT); \
+	xsltproc $(MBUSR)/webwork-pg.xsl $(WWMBX)/example/minimal/mini.xml
