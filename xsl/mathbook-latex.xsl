@@ -1376,7 +1376,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-
 <!-- Logos (images) -->
 <!-- Fine-grained placement of graphics files on pages      -->
 <!-- May be placed anywhere on current page                 -->
@@ -1828,7 +1827,141 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
+<!-- ########################### -->
+<!-- Mathematics (LaTeX/MathJax) -->
+<!-- ########################### -->
+
+<!-- Since MathJax interprets a large subset of LaTeX,   -->
+<!-- there are only subtle differences between LaTeX     -->
+<!-- and HTML output.  See LaTeX- and HTML-specific       -->
+<!-- templates for intertext elements and the numbering   -->
+<!-- of equations (automatic for LaTeX, managed for HTML) -->
+
+<!-- Numbering -->
+<!-- We do not tag equations with numbers in LaTeX output,               -->
+<!-- but instead let the LaTeX preamble's configuration                  -->
+<!-- options control the way numbers are generated and assigned.         -->
+<!-- The combination of starred/un-starred LaTeX environments,            -->
+<!-- and the presence of "\label{}", "\notag", or no such command,        -->
+<!-- control the numbering in response to the number of levels specified. -->
+
+<!-- NOTE -->
+<!-- The remainder should look very similar to that  -->
+<!-- of the HTML/MathJax version in terms of result. -->
+<!-- Notably, "intertext" elements are implemented   -->
+<!-- differently, and we need to be careful not to   -->
+<!-- place LaTeX "\label{}" in know'ed content.      -->
+
+<!-- Inline Math -->
+<!-- See the common file for the universal "m" template -->
+
+<!-- Displayed Math -->
+
+<!-- Single displayed equation, unnumbered                         -->
+<!-- Output follows source line breaks                             -->
+<!-- MathJax: out-of-the-box support                               -->
+<!-- LaTeX: with AMS-TeX, \[,\] tranlates to equation* environment -->
+<!-- LaTeX: without AMS-TEX, it is improved version of $$, $$      -->
+<!-- See: http://tex.stackexchange.com/questions/40492/what-are-the-differences-between-align-equation-and-displaymath -->
+<xsl:template match="me">
+    <xsl:text>\[</xsl:text>
+    <xsl:value-of select="." />
+    <xsl:text>\]</xsl:text>
+</xsl:template>
+
+<!-- Single displayed equation, numbered                  -->
+<!-- MathJax: out-of-the-box support                      -->
+<!-- LaTeX: with AMS-TeX, equation* environment supported -->
+<!-- LaTeX: without AMS-TEX, $$ with equation numbering   -->
+<!-- See link above, also.                                -->
+<xsl:template match="men">
+    <xsl:text>\begin{equation}</xsl:text>
+    <xsl:value-of select="." />
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>\end{equation}</xsl:text>
+</xsl:template>
+
+<!-- Multi-Line Math -->
+<!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
+<!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
+<!-- align environment if ampersands are present, gather environment otherwise   -->
+<!-- Output follows source line breaks                                           -->
+<xsl:template match="md">
+    <xsl:choose>
+        <xsl:when test="contains(., '&amp;')">
+            <xsl:text>\begin{align*}&#xa;</xsl:text>
+            <xsl:apply-templates select="mrow|intertext" />
+            <xsl:text>\end{align*}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\begin{gather*}&#xa;</xsl:text>
+            <xsl:apply-templates select="mrow" />
+            <xsl:text>\end{gather*}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="mdn">
+    <xsl:choose>
+        <xsl:when test="contains(., '&amp;')">
+            <xsl:text>\begin{align}&#xa;</xsl:text>
+            <xsl:apply-templates select="mrow|intertext" />
+            <xsl:text>\end{align}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\begin{gather}&#xa;</xsl:text>
+            <xsl:apply-templates select="mrow" />
+            <xsl:text>\end{gather}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Rows of a multi-line math display -->
+<!-- Numbering controlled here with \label{}, \notag, or nothing -->
+<!-- Last row different, has no line-break marker                -->
+<xsl:template match="md/mrow">
+    <xsl:value-of select="." />
+    <xsl:choose>
+        <xsl:when test="@number='yes'">
+            <xsl:apply-templates select="." mode="label" />
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="position()!=last()">
+       <xsl:text>\\</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="mdn/mrow">
+    <xsl:value-of select="." />
+    <xsl:choose>
+        <xsl:when test="@number='no'">
+            <xsl:text>\notag</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="label" />
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="position()!=last()">
+       <xsl:text>\\</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Intertext -->
+<!-- An <mrow> will provide trailing newline, so do the same here -->
+<xsl:template match="md/intertext|mdn/intertext">
+    <xsl:text>\intertext{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+
+<!-- ##### -->
 <!-- Index -->
+<!-- ##### -->
+
 <!-- LaTeX only, no companion for other conversions -->
 <xsl:template match="index">
     <xsl:text>\index{</xsl:text>
@@ -1868,24 +2001,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$start/see" />
     <xsl:apply-templates select="@start" />
     <xsl:text>}</xsl:text>
-</xsl:template>
-
-<!-- #### -->
-<!-- Math -->
-<!-- #### -->
-
-<!-- We do not "tag" numbered equations in LaTeX output, -->
-<!-- and instead let the preamble configuration control  -->
-<!-- the way numbers are generated and assigned          -->
-<xsl:template match="men|mrow" mode="tag" />
-
-<!-- Intertext -->
-<!-- A pure LaTeX construct, so we just do the right thing        -->
-<!-- An <mrow> will provide trailing newline, so do the same here -->
-<xsl:template match="md/intertext|mdn/intertext">
-    <xsl:text>\intertext{</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Lists -->

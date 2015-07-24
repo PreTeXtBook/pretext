@@ -1205,7 +1205,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>sidebyside</xsl:text>
 </xsl:template>
 
-
 <!-- Display Mathematics -->
 <!-- We make knowls of all four types of display mathematics        -->
 <!-- We likely will never reference an <me> (no xml:id, or number), -->
@@ -1215,7 +1214,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- mrow, it points to the enclosing display filename              -->
 <!-- NB: we could put an xml:id on a display, but it has no         -->
 <!-- title or number, so there is no way to reference it,           -->
-<!-- nor can LaTeX accomplish this                                  -->
+<!-- nor can LaTeX accomplish this (right?)                         -->
 <xsl:template match="me|men|md|mdn" mode="is-hidden">
     <xsl:value-of select="false()" />
 </xsl:template>
@@ -1223,12 +1222,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="true()" />
 </xsl:template>
 <!-- Never hidden so calling hidden-knowl-text raises error -->
-<!-- There is no head -->
+<!-- There is no head ever -->
 <xsl:template match="me|men|md|mdn" mode="head" />
-<!-- Body calls modal templates in common file -->
-<xsl:template match="me|men|md|mdn" mode="body">
-    <xsl:apply-templates select="." mode="displaymath" />
-</xsl:template>
+<!-- Bodies of display mathematics         -->
+<!--   More complicated, so isolated below -->
 <!-- There is no posterior -->
 <xsl:template match="me|men|md|mdn" mode="posterior" />
 <!-- HTML, CSS -->
@@ -1238,7 +1235,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="me|men|md|mdn" mode="environment-class">
     <xsl:text>displaymath</xsl:text>
 </xsl:template>
-
 
 <!-- Simple environments -->
 <!-- All subsidiary to some other environment  -->
@@ -1384,6 +1380,197 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 <xsl:template match="exercise" mode="environment-class">
     <xsl:text>exercise-like</xsl:text>
+</xsl:template>
+
+
+<!-- ########################## -->
+<!-- Mathematics (HTML/MathJax) -->
+<!-- ########################## -->
+
+<!-- Since MathJax interprets a large subset of LaTeX,   -->
+<!-- there are only subtle differences between LaTeX     -->
+<!-- and HTML output.  See LaTeX- and HTML-specific       -->
+<!-- templates for intertext elements and the numbering   -->
+<!-- of equations (automatic for LaTeX, managed for HTML) -->
+
+<!-- Numbering -->
+<!-- We manually "tag" numbered equations in HTML output,       -->
+<!-- with the exact same numbers that LaTeX would provide       -->
+<!-- automatically.  We also "\label{}" the equations where     -->
+<!-- they are born, and then the MathJax configuration          -->
+<!-- provides a predictable HTML anchor so our cross-reference  -->
+<!-- scheme can point to the right place.  The implies that we  -->
+<!-- do not need/want to "\label{}" equations in knowl files    -->
+<!-- serving as cross-references.  And indeed, including        -->
+<!-- labels in cross-reference knowls led to a serious bug.     -->
+<!-- https://github.com/rbeezer/mathbook/issues/143             -->
+
+<!-- NOTE -->
+<!-- The remainder should look very similar to that   -->
+<!-- of the LaTeX/MathJax version in terms of result. -->
+<!-- Notably, "intertext" elements are implemented    -->
+<!-- differently, and we need to be careful not to    -->
+<!-- place LaTeX "\label{}" in know'ed content.       -->
+
+<!-- Inline Math -->
+<!-- See the common file for the universal "m" template -->
+
+<!-- Bodies of Displayed Math -->
+<!-- These modal templates are called by -->
+<!-- the environment/knowl scheme above  -->
+
+<!-- Single displayed equation, unnumbered -->
+<!-- Output follows source line breaks     -->
+<!-- MathJax: out-of-the-box support       -->
+<xsl:template match="me" mode="body">
+    <xsl:text>\[</xsl:text>
+    <xsl:value-of select="." />
+    <xsl:text>\]</xsl:text>
+</xsl:template>
+
+<!-- Single displayed equation, numbered -->
+<!-- MathJax: out-of-the-box support     -->
+<!-- Requires a manual tag for number    -->
+<xsl:template match="men" mode="body">
+    <xsl:text>\begin{equation}</xsl:text>
+    <xsl:value-of select="." />
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:apply-templates select="." mode="tag"/>
+    <xsl:text>\end{equation}</xsl:text>
+</xsl:template>
+
+<!-- Multi-Line Math -->
+<!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
+<!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
+<!-- align environment if ampersands are present, gather environment otherwise   -->
+<!-- NB: *identical* to LaTeX version, but for mode and knowl-type parameter     -->
+<xsl:template match="md" mode="body">
+    <xsl:choose>
+        <xsl:when test="contains(., '&amp;')">
+            <xsl:text>\begin{align*}&#xa;</xsl:text>
+            <xsl:apply-templates select="mrow|intertext" />
+            <xsl:text>\end{align*}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\begin{gather*}&#xa;</xsl:text>
+            <xsl:apply-templates select="mrow" />
+            <xsl:text>\end{gather*}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="mdn" mode="body">
+    <xsl:choose>
+        <xsl:when test="contains(., '&amp;')">
+            <xsl:text>\begin{align}&#xa;</xsl:text>
+            <xsl:apply-templates select="mrow|intertext" />
+            <xsl:text>\end{align}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\begin{gather}&#xa;</xsl:text>
+            <xsl:apply-templates select="mrow" />
+            <xsl:text>\end{gather}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Rows of a multi-line math display                 -->
+<!-- (1) MathJax config above turns off all numbering  -->
+<!-- (2) Numbering supplied by \tag{}                  -->
+<!-- (3) MathJax config makes span id's predictable    -->
+<!-- (4) Last row special, has no line-break marker    -->
+<xsl:template match="md/mrow">
+    <xsl:value-of select="." />
+    <xsl:if test="@number='yes'">
+        <xsl:apply-templates select="." mode="label" />
+        <xsl:apply-templates select="." mode="tag"/>
+    </xsl:if>
+    <xsl:if test="position()!=last()">
+       <xsl:text>\\</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="mdn/mrow">
+    <xsl:value-of select="." />
+    <xsl:choose>
+        <xsl:when test="@number='no'">
+            <xsl:text>\notag</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="label" />
+            <xsl:apply-templates select="." mode="tag"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="position()!=last()">
+       <xsl:text>\\</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Math Utilities -->
+
+<!-- Manual Number Tagging -->
+<!-- We do "tag" numbered equations in MathJax output, -->
+<!-- because we want to control and duplicate the way  -->
+<!-- numbers are generated and assigned by LaTeX       -->
+<xsl:template match="men|mrow" mode="tag">
+    <xsl:text>\tag{</xsl:text>
+    <xsl:apply-templates select="." mode="number" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- Intertext -->
+<!-- A LaTeX construct really, we just jump in/out of             -->
+<!-- the align/gather environment and package the text            -->
+<!-- in an HTML paragraph, assuming it is just a snippet.         -->
+<!-- This breaks the alignment, but MathJax has no good           -->
+<!-- solution for this.                                           -->
+<!-- We need * (md=no numbers), and plain (mdn=numbers) variants, -->
+<!-- together with aligned (& present) or gather (no & present).  -->
+<!-- NB: we check the *parent* for ampersands                     -->
+<xsl:template match="md/intertext">
+    <xsl:choose>
+        <xsl:when test="contains(.., '&amp;')">
+        <xsl:text>\end{align*}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+        <xsl:text>\end{gather*}&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <p>
+        <xsl:apply-templates />
+    </p>
+    <xsl:choose>
+        <xsl:when test="contains(.., '&amp;')">
+        <xsl:text>\begin{align*}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+        <xsl:text>\begin{gather*}&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="mdn/intertext">
+    <xsl:choose>
+        <xsl:when test="contains(.., '&amp;')">
+        <xsl:text>\end{align}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+        <xsl:text>\end{gather}&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <p>
+        <xsl:apply-templates />
+    </p>
+    <xsl:choose>
+        <xsl:when test="contains(.., '&amp;')">
+        <xsl:text>\begin{align}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+        <xsl:text>\begin{gather}&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 
@@ -2693,39 +2880,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- makes sense, otherwise just kill it  -->
 <xsl:template match="index" />
 
-<!-- #### -->
-<!-- Math -->
-<!-- #### -->
-
-<!-- We do "tag" numbered equations in MathJax output, -->
-<!-- because we want to control and duplicate the way  -->
-<!-- numbers are generated and assigned by LaTeX       -->
-<xsl:template match="men|mrow" mode="tag">
-    <xsl:text>\tag{</xsl:text>
-    <xsl:apply-templates select="." mode="number" />
-    <xsl:text>}</xsl:text>
-</xsl:template>
-
-<!-- Intertext -->
-<!-- A LaTeX construct really, we just jump in/out of the align environment   -->
-<!-- And package the text in an HTML paragraph, assuming it is just a snippet -->
-<!-- This breaks the alignment, but MathJax has no good solution for this     -->
-<!-- We need * (no numbers, md), and plain (numbers, mdn) variants            -->
-<xsl:template match="md/intertext">
-    <xsl:text>\end{align*}&#xa;</xsl:text>
-    <p>
-    <xsl:apply-templates />
-    </p>
-    <xsl:text>\begin{align*}&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="mdn/intertext">
-    <xsl:text>\end{align}&#xa;</xsl:text>
-    <p>
-    <xsl:apply-templates />
-    </p>
-    <xsl:text>\begin{align}&#xa;</xsl:text>
-</xsl:template>
 
 <!-- Demonstrations -->
 <!-- A simple page with no constraints -->
