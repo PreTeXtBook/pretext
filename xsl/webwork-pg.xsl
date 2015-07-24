@@ -59,7 +59,6 @@
         <xsl:call-template   name="macros" />
         <xsl:apply-templates select="setup" />
         <xsl:apply-templates select="statement" />
-        <xsl:apply-templates select="statement" mode="answer-evaluation" />
         <xsl:apply-templates select="solution" />
         <xsl:call-template   name="end-problem" />
     </exsl:document>
@@ -78,40 +77,67 @@
 
 <!-- default template, for complete presentation -->
 <xsl:template match="statement">
-    <xsl:text>Context()->texStrings;&#xa;</xsl:text>
-    <xsl:text>BEGIN_TEXT&#xa;</xsl:text>
+    <xsl:text>BEGIN_PGML&#xa;</xsl:text>
     <xsl:apply-templates />
     <!-- unless we guarantee line feed, a break is needed -->
     <xsl:text>&#xa;</xsl:text>
-    <xsl:text>END_TEXT&#xa;</xsl:text>
+    <xsl:text>END_PGML&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="statement//var">
+    <xsl:text>[</xsl:text>
     <xsl:value-of select="@name" />
+    <xsl:text>]</xsl:text>
 </xsl:template>
 
 <!-- simple scalar answer checker     -->
 <!-- Example: \{$soln->ans_array(2)\} -->
 <!-- TODO: use different6 templates for different types -->
 <xsl:template match="answer">
-    <xsl:text>\{</xsl:text>
+    <xsl:variable name="width">
+        <xsl:choose>
+            <xsl:when test="@width">
+                 <xsl:value-of select="@width"/>
+            </xsl:when>
+            <xsl:otherwise>
+                 <xsl:text>5</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:text>[</xsl:text>
+    <xsl:call-template name="underscore">
+        <xsl:with-param name="total">
+            <xsl:value-of select="$width"/>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>]{</xsl:text>
     <xsl:value-of select="@var" />
-    <xsl:text>->ans_array(</xsl:text>
-    <xsl:value-of select="@width" />
-    <xsl:text>)\}</xsl:text>
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- modal template, for answer-checks -->
-<xsl:template match="statement" mode="answer-evaluation">
-    <xsl:text>Context()->normalStrings;&#xa;</xsl:text>
-    <xsl:apply-templates select=".//answer" mode="answer-evaluation" />
+<!-- Since we use XSLT 1, this is how we create n underscores -->
+<!-- for a PGML answer blank                                  -->
+<xsl:template name="underscore">
+    <xsl:param name="total">5</xsl:param>
+    <xsl:param name="counter">0</xsl:param>
+    <xsl:if test="not($counter = $total)">
+        <xsl:text>_</xsl:text>
+        <xsl:call-template name="underscore">
+            <xsl:with-param name="total">
+                <xsl:value-of select="$total"/>
+            </xsl:with-param>
+            <xsl:with-param name="counter">
+                <xsl:value-of select="$counter + 1"/>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
 </xsl:template>
 
-<!-- Exanple: ANS($soln->cmp()); -->
-<xsl:template match="answer" mode="answer-evaluation">
-    <xsl:text>ANS(</xsl:text>
-    <xsl:value-of select="@var" />
-    <xsl:text>->cmp());&#xa;</xsl:text>
+<!-- PGML inline math uses its own delimiters -->
+<xsl:template match= "m">
+    <xsl:text>[`</xsl:text>
+    <xsl:value-of select="." />
+    <xsl:text>`]</xsl:text>
 </xsl:template>
 
 <!-- Unimplemented, currently killed -->
@@ -132,10 +158,13 @@
 <!-- "macros" element if no additional macros are needed. -->
 <xsl:template name="macros">
     <!-- three standard macro files, order and placement is critical -->
-    <xsl:text>loadMacros("PGstandard.pl", "MathObjects.pl"</xsl:text>
-    <!-- TODO: add a for-each on macros/macro, lead with blank+space -->
-    <!-- TODO: could use more carriage returns to format properly    -->
-    <xsl:text>, "PGcourse.pl");&#xa;</xsl:text>
+    <xsl:text>loadMacros(&#xa;</xsl:text>
+    <xsl:text>    "PGstandard.pl",&#xa;</xsl:text>
+    <xsl:text>    "MathObjects.pl",&#xa;</xsl:text>
+    <xsl:text>    "PGML.pl",&#xa;</xsl:text>
+    <!-- TODO: add a for-each on macros/macro             -->
+    <xsl:text>    "PGcourse.pl",&#xa;</xsl:text>
+    <xsl:text>);&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template name="end-problem">
