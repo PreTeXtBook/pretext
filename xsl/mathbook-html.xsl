@@ -662,9 +662,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                <xsl:apply-templates select="." mode="environment-class" />
             </xsl:attribute>
             <xsl:apply-templates select="." mode="head">
-                <xsl:with-param name="type" select="'xref'" />
+                <xsl:with-param name="env-type" select="'xref'" />
             </xsl:apply-templates>
-            <xsl:apply-templates select="." mode="body" />
+            <xsl:apply-templates select="." mode="body">
+                <xsl:with-param name="env-type" select="'xref'" />
+            </xsl:apply-templates>
         </xsl:element>
         <xsl:apply-templates select="." mode="posterior" />
         <div class="context-link" style="text-align:right;">
@@ -700,9 +702,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="internal-id" />
         </xsl:attribute>
         <xsl:apply-templates select="." mode="head">
-            <xsl:with-param name="type" select="'visible'" />
+            <xsl:with-param name="env-type" select="'visible'" />
         </xsl:apply-templates>
-        <xsl:apply-templates select="." mode="body" />
+        <xsl:apply-templates select="." mode="body">
+            <xsl:with-param name="env-type" select="'visible'" />
+        </xsl:apply-templates>
     </xsl:element>
     <xsl:apply-templates select="." mode="posterior" />
 </xsl:template>
@@ -785,7 +789,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:attribute name="class">
                <xsl:apply-templates select="." mode="environment-class" />
             </xsl:attribute>
-            <xsl:apply-templates select="." mode="body" />
+            <xsl:apply-templates select="." mode="body">
+                <xsl:with-param name="env-type" select="'hidden'" />
+            </xsl:apply-templates>
         </xsl:element>
         <xsl:apply-templates select="." mode="posterior" />
     </xsl:element>
@@ -849,12 +855,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Head, Body, Posterior -->
 <!-- An environment had a head (header), a body (the actual content after   -->
 <!-- the head), and a posterior (to follow outside the structure, eg proof) -->
-<!-- The "head" template may *choose* to condition on a parameter,          -->
-<!-- imaginatively named "type" which takes two values: 'xref' or           -->
-<!-- 'visible' (hidden knowl content has its head in the knowl link text).  -->
-<!-- This device was added to allow CSS to position tables and figures      -->
+<!-- The "head" and "body" templates may *choose* to respect a parameter,   -->
+<!-- named "env-type" which takes the values: 'xref', 'visible' or 'hidden' -->
+<!-- (hidden knowl content has ho head, so one case of six never occurs).   -->
+<!-- This device was initiated to allow CSS to position tables and figures  -->
 <!-- inside of side-by-side, while allowing knowlized versions              -->
-<!-- to fill the knowl properly.                                            -->
+<!-- to fill the knowl properly, and to avoid "\label{}" in xref knowls.    -->
 <xsl:template match="*" mode="head">
     <xsl:message>MBX:ERROR: an environment  (<xsl:value-of select="local-name(.)" />) does not know its header</xsl:message>
 </xsl:template>
@@ -1177,8 +1183,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- for parameterizing the "head" template.  Conveniently the -->
 <!-- CSS lands just below the outer-most enclosing element.    -->
 <xsl:template match="sidebyside/figure|sidebyside/table" mode="head">
-    <xsl:param name="type" />
-    <xsl:if test="$type='visible'">
+    <xsl:param name="env-type" />
+    <xsl:if test="$env-type='visible'">
         <xsl:call-template name="sidebysideCSS" select="."/>
     </xsl:if>
 </xsl:template>
