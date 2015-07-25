@@ -709,6 +709,26 @@ the xsltproc executable.
                 <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
             </md></p>
 
+            <p><latex /> has a device where you can interrupt a sequence of equations with a small amout of text and preserve the equation alignment on eithr side.  Here are two tests of that device, with aligned equations and non-aligned equations.  Study the source to see use and differences.  (The math does not make sense.)  Aligned and numbered first.</p>
+
+            <mdn>
+                <mrow>{\mathcal L}(y')(s)  &amp;= s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
+                <mrow>{\mathcal L}(y'')(s) &amp;= s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
+                <intertext>And so it follows that,</intertext>
+                <mrow>{\mathcal L}(y')(s)^{++}  &amp;= s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
+                <mrow>{\mathcal L}(y'')(s)^{5} &amp;= s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
+            </mdn>
+
+            <p>Now with no numbers and no alignment.</p>
+
+            <md>
+                <mrow>{\mathcal L}(y')(s)  = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
+                <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
+                <intertext>And so it follows that,</intertext>
+                <mrow>{\mathcal L}(y')(s)^{++} = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
+                <mrow>{\mathcal L}(y'')(s)^{5} = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
+            </md>
+
             <p>Tables can get quite complex.  Simple ones are simpler, such as this example of numerical computations for Euler's method.</p>
 
             <table xml:id="table-euler1">
