@@ -113,6 +113,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='hint'><xsl:text>Hint</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Answer</xsl:text></localization>
     <localization string-id='solution'><xsl:text>Solution</xsl:text></localization>
+    <!-- A group of sectional exercises (with introduction and conclusion) -->
+    <localization string-id='exercisegroup'><xsl:text>Exercise Group</xsl:text></localization>
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
     <localization string-id='biblio'><xsl:text>Bibliographic Entry</xsl:text></localization>
     <localization string-id='note'><xsl:text>Note</xsl:text></localization>
@@ -219,6 +221,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='answer'><xsl:text>Resposta</xsl:text></localization>
     <localization string-id='solution'><xsl:text>Solução</xsl:text></localization>
     <!-- Translation needed for Brazilian Portugese -->
+    <!-- A group of sectional exercises (with introduction and conclusion) -->
+    <!-- <localization string-id='exercisegroup'><xsl:text>Exercise Group</xsl:text></localization> -->
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
     <!-- <localization string-id='biblio'><xsl:text>Bibliographic Entry</xsl:text></localization> -->
     <!-- <localization string-id='note'><xsl:text>Note</xsl:text></localization> -->
@@ -326,6 +330,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='answer'><xsl:text>Respuesta</xsl:text></localization>
     <localization string-id='solution'><xsl:text>Solución</xsl:text></localization>
     <!-- Translation needed for Spain Spanish -->
+    <!-- A group of sectional exercises (with introduction and conclusion) -->
+    <!-- <localization string-id='exercisegroup'><xsl:text>Exercise Group</xsl:text></localization> -->
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
     <!-- <localization string-id='biblio'><xsl:text>Bibliographic Entry</xsl:text></localization> -->
     <!-- <localization string-id='note'><xsl:text>Note</xsl:text></localization> -->

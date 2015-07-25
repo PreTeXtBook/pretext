@@ -618,7 +618,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We show the full content of the item on the page (b)         -->
 <!-- Or, we build a hidden knowl and place a link on the page (c) -->
 <!-- NB: this template employs several modal templates, defined just below -->
-<xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|note|figure|table|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn">
+<xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn">
     <!-- Always build a knowl so we can point to it with a cross-reference -->
     <xsl:apply-templates select="." mode="xref-knowl-factory" />
     <xsl:variable name="hidden">
@@ -1288,10 +1288,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We interrupt a list of exercises with short commentary, -->
 <!-- typically instructions for a list of similar exercises  -->
 <!-- Commentary goes in an introduction and/or conclusion    -->
-<xsl:template match="exercisegroup">
-    <div class="exercisegroup">
-        <xsl:apply-templates />
-    </div>
+<!-- Available as a xref knowl, but never born hidden        -->
+<xsl:template match="exercisegroup" mode="is-hidden">
+    <xsl:value-of select="false()" />
+</xsl:template>
+<xsl:template match="exercisegroup" mode="is-block-env">
+    <xsl:value-of select="true()" />
+</xsl:template>
+<!-- Never hidden so calling hidden-knowl-text raises error -->
+<!-- There is no head ever -->
+<xsl:template match="exercisegroup" mode="head" />
+<!-- Body is just all content             -->
+<!-- introducttion, exercises, conclusion -->
+<xsl:template match="exercisegroup" mode="body">
+    <xsl:apply-templates />
+</xsl:template>
+<!-- No posterior  -->
+<xsl:template match="exercisegroup" mode="posterior" />
+<!-- HTML, CSS -->
+<xsl:template match="exercisegroup" mode="environment-element">
+    <xsl:text>div</xsl:text>
+</xsl:template>
+<xsl:template match="exercisegroup" mode="environment-class">
+    <xsl:text>exercisegroup</xsl:text>
 </xsl:template>
 
 <!-- Exercises -->
@@ -2389,7 +2408,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a sidebyside even though this is not necessary           -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|biblio|note|example|remark|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|figure|table|sidebyside|sidebyside/figure|sidebyside/table|men|mrow" mode="xref-as-knowl">
+<xsl:template match="fn|biblio|note|example|remark|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|exercisegroup|figure|table|sidebyside|sidebyside/figure|sidebyside/table|men|mrow" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">
@@ -2401,6 +2420,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX the \ref and \label mechanism                 -->
 <xsl:template match="*" mode="xref-number">
     <xsl:apply-templates select="." mode="number" />
+</xsl:template>
+
+<!-- In common template, but have to point to it -->
+<xsl:template match="exercisegroup" mode="xref-number">
+    <xsl:apply-imports />
 </xsl:template>
 
 <!-- The second abstract template, we condition   -->

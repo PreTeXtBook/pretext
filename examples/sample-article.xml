@@ -1382,7 +1382,7 @@ the xsltproc executable.
                     </statement>
                 </exercise>
 
-                <exercisegroup>
+                <exercisegroup xml:id="exercisegroup-two-problems">
 
                     <introduction>
                         <p>In the next two problems compute the indicated derivative.</p>
@@ -2188,6 +2188,7 @@ the xsltproc executable.
                 <li><p>Display Mathematics: multi-row, first with no name: <xref ref="equation-use-FTC" />.  Then with an autoname: <xref ref="equation-use-FTC" autoname="yes" />.  And two, exercising plural form: <xref ref="equation-alternate-FTC" autoname="plural" /> and <xref ref="equation-use-FTC" />.</p></li>
                 <li><p>Exercises (sectional), with plural and no autonaming: <xref ref="exercises-null-problem" autoname="plural" /><ndash /><xref ref="exercises-cosine-derivative" autoname="no" />.</p></li>
                 <li><p>Exercise (inline): with enclosed hint at <xref ref="exercise-essay" /></p></li>
+                <li><p>A group of two exercises, with introduction, conclusion: <xref ref="exercisegroup-two-problems" autoname="yes" /></p></li>
                 <li><p>Solution: An autonamed portion of an exercise: <xref ref="solution-antiderivative" autoname="yes" /></p></li>
                 <li><p>Parts of a complicated exercise: <xref ref="exercise-complicated-second-hint" autoname="yes" /> <xref ref="exercise-complicated-first-answer" autoname="yes" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->

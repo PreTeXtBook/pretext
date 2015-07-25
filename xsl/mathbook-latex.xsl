@@ -1629,7 +1629,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We interrupt a description list with short commentary, -->
 <!-- typically instructions for a list of similar exercises -->
 <!-- Commentary goes in an introduction and/or conclusion   -->
+<!-- When we point to these, we use custom hypertarget, etc -->
 <xsl:template match="exercisegroup">
+    <xsl:apply-templates select="." mode="label" />
     <xsl:apply-templates select="introduction" />
     <xsl:apply-templates select="exercise"/>
     <xsl:apply-templates select="conclusion" />
@@ -3719,6 +3721,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 
+<!-- In common template, but have to point to it -->
+<xsl:template match="exercisegroup" mode="xref-number">
+    <xsl:apply-imports />
+</xsl:template>
+
+
 <!-- We implement every cross-reference with hyperref. -->
 <!-- For pure print, we can turn off the actual links  -->
 <!-- in the PDF (and/or control color etc)             -->
@@ -3739,11 +3747,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We hard-code some numbers (sectional exercises) and      -->
 <!-- we institute some numberings that LaTeX does not do      -->
 <!-- naturally (references in extra sections, proofs,         -->
-<!-- hints, answers, solutions). We make custom               -->
+<!-- hints, answers, solutions). For an exercise group we     -->
+<!-- point to the introduction.  We make custom               -->
 <!-- anchors/labels below and then we must point to           -->
 <!-- them with \hyperlink{}{} (nee hyperref[]{}).             -->
 <!-- (See also modal templates for "label" and "xref-number") -->
-<xsl:template match="exercises//exercise|biblio|note|proof|hint|answer|solution" mode="xref-link">
+<xsl:template match="exercises//exercise|biblio|note|proof|hint|answer|solution|exercisegroup" mode="xref-link">
     <xsl:param name="autoname" />
     <xsl:param name="detail" />
     <xsl:text>\hyperlink{</xsl:text>
@@ -3769,6 +3778,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The target being \null is necessary.                         -->
 <!-- (See also modal templates for "xref-link" and "xref-number") -->
 <xsl:template match="exercises//exercise|biblio|note|proof|hint|answer|solution" mode="label">
+    <xsl:text>\hypertarget{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}{\null}</xsl:text>
+</xsl:template>
+
+<!-- Exercise groups are not even really numbered.   -->
+<!-- (They inherit from their first/last exercises.) -->
+<!-- We want to point to their introductions.        -->
+<xsl:template match="exercisegroup" mode="label">
     <xsl:text>\hypertarget{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}{\null}</xsl:text>

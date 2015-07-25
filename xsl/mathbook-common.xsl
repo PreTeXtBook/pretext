@@ -1177,7 +1177,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter" mode="has-default-title">
     <xsl:text>true</xsl:text>
 </xsl:template>
-<xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|credit|figure|table|sidebyside|hint|answer|solution|biblio|note|me|men|md|mdn|mrow" mode="has-default-title">
+<xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|credit|figure|table|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow" mode="has-default-title">
     <xsl:text>false</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="has-default-title">
@@ -1190,7 +1190,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- otherwise produce an empty title              -->
 <!-- NB: this match pattern should be the union of -->
 <!-- the two above,everything that can be titled   -->
-<xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|figure|table|sidebyside|hint|answer|solution|biblio|note|me|men|md|mdn|mrow|credit|frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter" mode="title">
+<xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|figure|table|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|credit|frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter" mode="title">
     <xsl:param name="complexity" />
     <xsl:variable name="default-titled">
         <xsl:apply-templates select="." mode="has-default-title" />
@@ -1641,7 +1641,9 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 
 <!-- Serial Numbers: the unnumbered     -->
 <!-- Empty string signifies not numbered -->
-<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|paragraph|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|colophon|backmatter" mode="serial-number" />
+<!-- We do provide a "xref number" of an -->
+<!-- exercisegroup, but otherwise not    -->
+<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|paragraph|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|colophon|backmatter|exercisegroup" mode="serial-number" />
 
 <!-- A sidebyside without a caption *always*         -->
 <!-- indicates no number for the sidebyside.         -->
@@ -2105,6 +2107,15 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- \ref and \label mechanism                   -->
 <xsl:template match="*" mode="xref-number">
     <xsl:text>[XREFNUM]</xsl:text>
+</xsl:template>
+<!-- For an exercisegroup we meld the "xref-number"     -->
+<!-- for the first and last exercise of the group       -->
+<!-- An exercise group is only ever numbered for a xref -->
+<!-- TODO: abstract the ndash -->
+<xsl:template match="exercisegroup" mode="xref-number">
+    <xsl:apply-templates select="exercise[1]" mode="xref-number" />
+    <xsl:text>-</xsl:text>
+    <xsl:apply-templates select="exercise[last()]" mode="xref-number" />
 </xsl:template>
 
 <!-- Provisional cross-references -->
