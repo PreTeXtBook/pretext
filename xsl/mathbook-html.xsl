@@ -1438,10 +1438,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- MathJax: out-of-the-box support     -->
 <!-- Requires a manual tag for number    -->
 <xsl:template match="men" mode="body">
+    <xsl:param name="env-type" />
     <xsl:text>\begin{equation}</xsl:text>
     <xsl:value-of select="." />
-    <xsl:apply-templates select="." mode="label"/>
-    <xsl:apply-templates select="." mode="tag"/>
+    <!-- Needs label{} at birth, NOT in xref knowl -->
+    <xsl:if test="$env-type='visible' or $env-type='hidden'">
+        <xsl:apply-templates select="." mode="label" />
+    </xsl:if>
+    <xsl:apply-templates select="." mode="tag" />
     <xsl:text>\end{equation}</xsl:text>
 </xsl:template>
 
@@ -1486,9 +1490,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (3) MathJax config makes span id's predictable    -->
 <!-- (4) Last row special, has no line-break marker    -->
 <xsl:template match="md/mrow">
+    <xsl:param name="env-type" />
     <xsl:value-of select="." />
     <xsl:if test="@number='yes'">
-        <xsl:apply-templates select="." mode="label" />
+        <!-- Needs label{} at birth, NOT in xref knowl -->
+        <xsl:if test="$env-type='visible' or $env-type='hidden'">
+            <xsl:apply-templates select="." mode="label" />
+        </xsl:if>
         <xsl:apply-templates select="." mode="tag"/>
     </xsl:if>
     <xsl:if test="position()!=last()">
@@ -1498,13 +1506,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="mdn/mrow">
+    <xsl:param name="env-type" />
     <xsl:value-of select="." />
     <xsl:choose>
         <xsl:when test="@number='no'">
             <xsl:text>\notag</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="." mode="label" />
+            <!-- Needs label{} at birth, NOT in xref knowl -->
+            <xsl:if test="$env-type='visible' or $env-type='hidden'">
+                <xsl:apply-templates select="." mode="label" />
+            </xsl:if>
             <xsl:apply-templates select="." mode="tag"/>
         </xsl:otherwise>
     </xsl:choose>
@@ -1535,6 +1547,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We need * (md=no numbers), and plain (mdn=numbers) variants, -->
 <!-- together with aligned (& present) or gather (no & present).  -->
 <!-- NB: we check the *parent* for ampersands                     -->
+<!-- TODO: make an ampersand-test template to produce "align|gather" -->
+<!-- TODO: and md vs mdn templates to produce star/unstar            -->
 <xsl:template match="md/intertext">
     <xsl:choose>
         <xsl:when test="contains(.., '&amp;')">
