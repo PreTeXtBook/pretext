@@ -57,6 +57,7 @@
     <exsl:document href="{$filename}" method="text">
         <xsl:call-template   name="begin-problem" />
         <xsl:call-template   name="macros" />
+        <xsl:call-template   name="header" />
         <xsl:apply-templates select="setup" />
         <xsl:apply-templates select="statement" />
         <xsl:apply-templates select="solution" />
@@ -121,39 +122,11 @@
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Since we use XSLT 1, this is how we create n underscores -->
-<!-- for a PGML answer blank                                  -->
-<xsl:template name="underscore">
-    <xsl:param name="total">5</xsl:param>
-    <xsl:param name="counter">0</xsl:param>
-    <xsl:if test="not($counter = $total)">
-        <xsl:text>_</xsl:text>
-        <xsl:call-template name="underscore">
-            <xsl:with-param name="total">
-                <xsl:value-of select="$total"/>
-            </xsl:with-param>
-            <xsl:with-param name="counter">
-                <xsl:value-of select="$counter + 1"/>
-            </xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
-</xsl:template>
-
 <!-- PGML inline math uses its own delimiters -->
 <xsl:template match= "m">
     <xsl:text>[`</xsl:text>
     <xsl:value-of select="." />
     <xsl:text>`]</xsl:text>
-</xsl:template>
-
-<xsl:template name="begin-block">
-    <xsl:param name="title"/>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>############################################################&#xa;</xsl:text>
-    <xsl:text># </xsl:text>
-    <xsl:value-of select="$title"/>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>############################################################&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Unimplemented, currently killed -->
@@ -167,6 +140,13 @@
 
 <xsl:template name="begin-problem">
     <xsl:text>DOCUMENT();&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template name="header">
+    <xsl:call-template name="begin-block">
+        <xsl:with-param name="title">Header</xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>TEXT(beginproblem());&#xa;</xsl:text>
 </xsl:template>
 
 <!-- We kill default processing of "macros" and use       -->
@@ -191,6 +171,34 @@
         <xsl:with-param name="title">End Problem</xsl:with-param>
     </xsl:call-template>
     <xsl:text>ENDDOCUMENT();&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template name="begin-block">
+    <xsl:param name="title"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>############################################################&#xa;</xsl:text>
+    <xsl:text># </xsl:text>
+    <xsl:value-of select="$title"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>############################################################&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Since we use XSLT 1, this is how we create n underscores -->
+<!-- for a PGML answer blank                                  -->
+<xsl:template name="underscore">
+    <xsl:param name="total">5</xsl:param>
+    <xsl:param name="counter">0</xsl:param>
+    <xsl:if test="not($counter = $total)">
+        <xsl:text>_</xsl:text>
+        <xsl:call-template name="underscore">
+            <xsl:with-param name="total">
+                <xsl:value-of select="$total"/>
+            </xsl:with-param>
+            <xsl:with-param name="counter">
+                <xsl:value-of select="$counter + 1"/>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
 </xsl:template>
 
 
