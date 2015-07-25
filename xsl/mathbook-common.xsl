@@ -1643,6 +1643,11 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- Empty string signifies not numbered -->
 <xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|paragraph|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|colophon|backmatter" mode="serial-number" />
 
+<!-- A sidebyside without a caption *always*         -->
+<!-- indicates no number for the sidebyside.         -->
+<!-- (Relevant subcomponents get their own numbers.) -->
+<xsl:template match="sidebyside[not(caption)]" mode="serial-number" />
+
 <!-- Convert this to a warning?  Should not drop in here ever? -->
 <xsl:template match="*" mode="serial-number">
     <xsl:text>[NUM]</xsl:text>
