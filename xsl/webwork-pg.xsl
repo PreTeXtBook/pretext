@@ -91,7 +91,19 @@
     <xsl:text>END_PGML&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="statement//var">
+<!-- default template, for solution -->
+<xsl:template match="solution">
+    <xsl:call-template name="begin-block">
+        <xsl:with-param name="title">Solution</xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>BEGIN_PGML_SOLUTION&#xa;</xsl:text>
+    <xsl:apply-templates />
+    <!-- unless we guarantee line feed, a break is needed -->
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>END_PGML_SOLUTION&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="statement//var|solution//var">
     <xsl:text>[</xsl:text>
     <xsl:value-of select="@name" />
     <xsl:text>]</xsl:text>
@@ -131,7 +143,6 @@
 
 <!-- Unimplemented, currently killed -->
 <xsl:template match="title" />
-<xsl:template match="solution" />
 
 
 <!-- ####################### -->
