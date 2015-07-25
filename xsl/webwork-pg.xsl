@@ -109,10 +109,9 @@
     <xsl:text>]</xsl:text>
 </xsl:template>
 
-<!-- simple scalar answer checker     -->
-<!-- Example: \{$soln->ans_array(2)\} -->
-<!-- TODO: use different6 templates for different types -->
-<xsl:template match="answer">
+<!-- PGML answer blank               -->
+<!-- Example: [_____]{$ans}          -->
+<xsl:template match="statement//answer">
     <xsl:variable name="width">
         <xsl:choose>
             <xsl:when test="@width">
@@ -143,6 +142,7 @@
 
 <!-- Unimplemented, currently killed -->
 <xsl:template match="title" />
+<xsl:template match="hint" />
 
 
 <!-- ####################### -->
