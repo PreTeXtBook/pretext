@@ -66,6 +66,9 @@
 
 <xsl:template match="setup">
     <!-- ignore var for now -->
+    <xsl:call-template name="begin-block">
+        <xsl:with-param name="title">PG Setup</xsl:with-param>
+    </xsl:call-template>
     <xsl:apply-templates select="pg-code" />
 </xsl:template>
 
@@ -77,6 +80,9 @@
 
 <!-- default template, for complete presentation -->
 <xsl:template match="statement">
+    <xsl:call-template name="begin-block">
+        <xsl:with-param name="title">Body</xsl:with-param>
+    </xsl:call-template>
     <xsl:text>BEGIN_PGML&#xa;</xsl:text>
     <xsl:apply-templates />
     <!-- unless we guarantee line feed, a break is needed -->
@@ -140,6 +146,16 @@
     <xsl:text>`]</xsl:text>
 </xsl:template>
 
+<xsl:template name="begin-block">
+    <xsl:param name="title"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>############################################################&#xa;</xsl:text>
+    <xsl:text># </xsl:text>
+    <xsl:value-of select="$title"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>############################################################&#xa;</xsl:text>
+</xsl:template>
+
 <!-- Unimplemented, currently killed -->
 <xsl:template match="title" />
 <xsl:template match="solution" />
@@ -158,6 +174,9 @@
 <!-- "macros" element if no additional macros are needed. -->
 <xsl:template name="macros">
     <!-- three standard macro files, order and placement is critical -->
+    <xsl:call-template name="begin-block">
+        <xsl:with-param name="title">Load Macros</xsl:with-param>
+    </xsl:call-template>
     <xsl:text>loadMacros(&#xa;</xsl:text>
     <xsl:text>    "PGstandard.pl",&#xa;</xsl:text>
     <xsl:text>    "MathObjects.pl",&#xa;</xsl:text>
@@ -168,6 +187,9 @@
 </xsl:template>
 
 <xsl:template name="end-problem">
+    <xsl:call-template name="begin-block">
+        <xsl:with-param name="title">End Problem</xsl:with-param>
+    </xsl:call-template>
     <xsl:text>ENDDOCUMENT();&#xa;</xsl:text>
 </xsl:template>
 
