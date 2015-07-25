@@ -1895,7 +1895,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>\begin{gather*}&#xa;</xsl:text>
-            <xsl:apply-templates select="mrow" />
+            <xsl:apply-templates select="mrow|intertext" />
             <xsl:text>\end{gather*}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -1910,7 +1910,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>\begin{gather}&#xa;</xsl:text>
-            <xsl:apply-templates select="mrow" />
+            <xsl:apply-templates select="mrow|intertext" />
             <xsl:text>\end{gather}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>

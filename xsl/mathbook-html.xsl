@@ -1463,7 +1463,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>\begin{gather*}&#xa;</xsl:text>
-            <xsl:apply-templates select="mrow" />
+            <xsl:apply-templates select="mrow|intertext" />
             <xsl:text>\end{gather*}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -1478,7 +1478,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>\begin{gather}&#xa;</xsl:text>
-            <xsl:apply-templates select="mrow" />
+            <xsl:apply-templates select="mrow|intertext" />
             <xsl:text>\end{gather}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -1552,10 +1552,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="md/intertext">
     <xsl:choose>
         <xsl:when test="contains(.., '&amp;')">
-        <xsl:text>\end{align*}&#xa;</xsl:text>
+            <xsl:text>\end{align*}&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-        <xsl:text>\end{gather*}&#xa;</xsl:text>
+            <xsl:text>\end{gather*}&#xa;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
     <p>
@@ -1563,10 +1563,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </p>
     <xsl:choose>
         <xsl:when test="contains(.., '&amp;')">
-        <xsl:text>\begin{align*}&#xa;</xsl:text>
+            <xsl:text>\begin{align*}&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-        <xsl:text>\begin{gather*}&#xa;</xsl:text>
+            <xsl:text>\begin{gather*}&#xa;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -1574,10 +1574,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="mdn/intertext">
     <xsl:choose>
         <xsl:when test="contains(.., '&amp;')">
-        <xsl:text>\end{align}&#xa;</xsl:text>
+            <xsl:text>\end{align}&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-        <xsl:text>\end{gather}&#xa;</xsl:text>
+            <xsl:text>\end{gather}&#xa;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
     <p>
@@ -1585,10 +1585,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </p>
     <xsl:choose>
         <xsl:when test="contains(.., '&amp;')">
-        <xsl:text>\begin{align}&#xa;</xsl:text>
+            <xsl:text>\begin{align}&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-        <xsl:text>\begin{gather}&#xa;</xsl:text>
+            <xsl:text>\begin{gather}&#xa;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
