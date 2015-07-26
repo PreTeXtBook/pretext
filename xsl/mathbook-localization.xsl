@@ -54,7 +54,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- pt-BR, Brazilian Portugese, Igor Morgado                        -->
 <!-- es-ES, Spain Spanish, Juan José Torrens                         -->
 
-<!-- en-US, US English, Robert A. Beezer, 2014/08/11 -->
+<!-- en-US, English (United States), Robert A. Beezer, 2014/08/11 -->
 <!-- This is the default if no @xml:lang attribute is given on the mathbook element -->
 <xsl:variable name="en-US">
     <!-- Environments which have proofs, plus proofs themselves -->
@@ -266,7 +266,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='copyright'><xsl:text>Copyright</xsl:text></localization>
 </xsl:variable>
 
-<!-- pt-BR, Brazilian Portugese -->
+<!-- pt-BR, Portugese (Brazil)-->
 <!-- Igor Morgado, morgado.igor@gmail.com, 2014/08/11, 2014/08/14 -->
 <xsl:variable name="pt-BR">
     <!-- Environments which have proofs, plus proofs themselves -->
@@ -375,7 +375,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='copyright'><xsl:text>XXXCopyright</xsl:text></localization>
 </xsl:variable>
 
-<!-- es-ES, Spain Spanish -->
+<!-- es-ES, Spanish (Spain) -->
 <!-- Juan José Torrens, jjtorrens@unavarra.es, 2014/10/27 -->
 <xsl:variable name="es-ES">
     <!-- Environments which have proofs, plus proofs themselves -->
