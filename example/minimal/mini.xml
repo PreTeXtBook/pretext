@@ -26,6 +26,14 @@
 <webwork xml:id="integer-addition">
     <title>Integer Addition</title>
 
+    <!-- for testing extra macros
+         remove once we have bigger examples
+    <macros>
+        <macro>Test1.pl</macro>
+        <macro>Test2.pl</macro>
+    </macros>
+    -->
+
     <setup>
         <var name="$a">
             <static>5</static>

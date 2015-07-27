@@ -158,8 +158,10 @@
 </xsl:template>
 
 <!-- We kill default processing of "macros" and use       -->
-<!-- a named template.  This allows for their to be no    -->
+<!-- a named template.  This allows for there to be no    -->
 <!-- "macros" element if no additional macros are needed. -->
+<!-- Call from "webwork" context                          -->
+<xsl:template match="macros" />
 <xsl:template name="macros">
     <!-- three standard macro files, order and placement is critical -->
     <xsl:call-template name="begin-block">
@@ -169,9 +171,16 @@
     <xsl:text>    "PGstandard.pl",&#xa;</xsl:text>
     <xsl:text>    "MathObjects.pl",&#xa;</xsl:text>
     <xsl:text>    "PGML.pl",&#xa;</xsl:text>
-    <!-- TODO: add a for-each on macros/macro             -->
+    <xsl:apply-templates select="macros/macro" />
     <xsl:text>    "PGcourse.pl",&#xa;</xsl:text>
     <xsl:text>);&#xa;</xsl:text>
+</xsl:template>
+
+<!-- NB: final trailing comma controlled by "PGcourse.pl" -->
+<xsl:template match="macro">
+    <xsl:text>    "</xsl:text>
+    <xsl:value-of select="." />
+    <xsl:text>",&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template name="end-problem">
