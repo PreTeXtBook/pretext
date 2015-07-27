@@ -66,17 +66,14 @@
 </xsl:template>
 
 <xsl:template match="setup">
-    <!-- ignore var for now -->
     <xsl:call-template name="begin-block">
         <xsl:with-param name="title">PG Setup</xsl:with-param>
     </xsl:call-template>
-    <xsl:apply-templates select="pg-code" />
-</xsl:template>
-
-<xsl:template match="pg-code">
-    <!-- no processing -->
-    <!-- TODO: pump through indentation-cleaner -->
-    <xsl:value-of select="." />
+    <!-- TODO: ignore var for now -->
+    <!-- pg-code verbatim, but trim indentation -->
+    <xsl:call-template name="sanitize-code">
+        <xsl:with-param name="raw-code" select="pg-code" />
+    </xsl:call-template>
 </xsl:template>
 
 <!-- default template, for complete presentation -->
