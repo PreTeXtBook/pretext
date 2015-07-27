@@ -98,7 +98,7 @@ EPUBOUT    = $(SCRATCH)/epub
 check-mini:
 	install -d $(SCRATCH)
 	-rm $(SCRATCH)/dtderrors.*
-	-xmllint --xinclude --noout --dtdvalid $(WWDTD)/webwork.dtd $(WWMBX)/example/minimal/mini.xml 2> $(SCRATCH)/dtderrors.txt
+	-xmllint --xinclude --noout --dtdvalid $(WWDTD)/webwork.dtd $(WWMBX)/examples/minimal/mini.xml 2> $(SCRATCH)/dtderrors.txt
 	less $(SCRATCH)/dtderrors.txt
 
 ##########
@@ -110,4 +110,4 @@ minimal:
 	-rm $(PGOUT)/*.pg
 	cp $(WWXSL)/extract-webwork.xsl $(WWXSL)/webwork-pg.xsl $(MBUSR)
 	cd $(PGOUT); \
-	xsltproc $(MBUSR)/extract-webwork.xsl $(WWMBX)/example/minimal/mini.xml
+	xsltproc $(MBUSR)/extract-webwork.xsl $(WWMBX)/examples/minimal/mini.xml
