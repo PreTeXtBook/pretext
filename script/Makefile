@@ -108,6 +108,6 @@ check-mini:
 minimal:
 	install -d $(PGOUT) $(MBUSR)
 	-rm $(PGOUT)/*.pg
-	cp $(WWXSL)/webwork-pg.xsl $(MBUSR)
+	cp $(WWXSL)/extract-webwork.xsl $(WWXSL)/webwork-pg.xsl $(MBUSR)
 	cd $(PGOUT); \
-	xsltproc $(MBUSR)/webwork-pg.xsl $(WWMBX)/example/minimal/mini.xml
+	xsltproc $(MBUSR)/extract-webwork.xsl $(WWMBX)/example/minimal/mini.xml

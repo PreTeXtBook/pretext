@@ -41,8 +41,9 @@
 <!-- Structure -->
 <!-- ######### -->
 
-<!-- a sequence of problems, grouped inside mathbook -->
-<!ELEMENT mathbook (webwork*) >
+<!-- a sequence of problems, grouped inside mathbook/article -->
+<!ELEMENT mathbook (article) >
+<!ELEMENT article (webwork*) >
 
 <!-- top-level, no statement would be silly -->
 <!ELEMENT webwork (title?, setup?, statement, solution?) >

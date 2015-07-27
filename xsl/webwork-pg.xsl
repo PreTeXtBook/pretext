@@ -22,27 +22,13 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
-    xmlns:exsl="http://exslt.org/common"
-    xmlns:date="http://exslt.org/dates-and-times"
-    extension-element-prefixes="exsl date"
 >
 
 <!-- path assumes we place  webwork-pg.xsl in mathbook "user" directory -->
 <xsl:import href="../xsl/mathbook-common.xsl" />
 
-<!-- Intend output to be a PG/PGML problem -->
+<!-- Intend output to be a PGML problem -->
 <xsl:output method="text" />
-
-<!-- ############## -->
-<!-- Entry template -->
-<!-- ############## -->
-
-<!-- Override chunking routine from common file as entry template -->
-<!-- We are assuming a simple file full of webwork problems only, -->
-<!-- which we will need to generalize here eventually             -->
-<xsl:template match = "/mathbook">
-    <xsl:apply-templates select="webwork" />
-</xsl:template>
 
 <!-- ################## -->
 <!-- Top-Down Structure -->
@@ -51,18 +37,13 @@
 <!-- Basic outline of a simple problem -->
 <!-- TODO: Now extracted into its own file, this will be moved out -->
 <xsl:template match="webwork">
-    <xsl:variable name="filename">
-        <xsl:apply-templates select="." mode="pg-filename" />
-    </xsl:variable>
-    <exsl:document href="{$filename}" method="text">
-        <xsl:call-template   name="begin-problem" />
-        <xsl:call-template   name="macros" />
-        <xsl:call-template   name="header" />
-        <xsl:apply-templates select="setup" />
-        <xsl:apply-templates select="statement" />
-        <xsl:apply-templates select="solution" />
-        <xsl:call-template   name="end-problem" />
-    </exsl:document>
+    <xsl:call-template   name="begin-problem" />
+    <xsl:call-template   name="macros" />
+    <xsl:call-template   name="header" />
+    <xsl:apply-templates select="setup" />
+    <xsl:apply-templates select="statement" />
+    <xsl:apply-templates select="solution" />
+    <xsl:call-template   name="end-problem" />
 </xsl:template>
 
 <xsl:template match="setup">
@@ -212,16 +193,8 @@
     </xsl:if>
 </xsl:template>
 
-
 <!-- ######### -->
 <!-- Utilities -->
 <!-- ######### -->
-
-<!-- Construct a PG filename                -->
-<!-- From xml:id, or will be "webwork-N.pg" -->
-<xsl:template match="*" mode="pg-filename">
-    <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>.pg</xsl:text>
-</xsl:template>
 
 </xsl:stylesheet>

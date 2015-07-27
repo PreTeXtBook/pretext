@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE webwork SYSTEM "../../schema/dtd/webwork.dtd">
 
 <!-- ********************************************************************* -->
 <!-- Copyright 2015                                                        -->
@@ -21,54 +20,45 @@
 <!-- along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>. -->
 <!-- ********************************************************************* -->
 
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
+    xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:exsl="http://exslt.org/common"
+    xmlns:date="http://exslt.org/dates-and-times"
+    extension-element-prefixes="exsl date"
+>
 
-<!-- This is a skeleton file to hold any number of -->
-<!-- WeBWorK problems authored with MathBook XML.  -->
-<!-- mathbook/article structure needed for default -->
-<!-- variable assignments in  mathbook-common.xsl. -->
+<!-- paths assume we place  extract-webwork.xsl in mathbook "user" directory -->
+<!-- paths assume we place  webwork-pg.xsl      in mathbook "user" directory -->
+<xsl:import href="../xsl/mathbook-common.xsl" />
+<xsl:import href="./webwork-pg.xsl" />
 
-<mathbook>
-<article>
+<!-- Intend output to be a PG/PGML problem -->
+<xsl:output method="text" />
 
+<!-- ############## -->
+<!-- Entry template -->
+<!-- ############## -->
 
-<webwork xml:id="integer-addition">
-    <title>Integer Addition</title>
+<!-- Override chunking routine from common file as entry template -->
+<!-- We are simply extracting webwork problems at any level       -->
+<xsl:template match="/">
+    <xsl:apply-templates select="//webwork" />
+</xsl:template>
 
-    <!-- for testing extra macros
-         remove once we have bigger examples
-    <macros>
-        <macro>Test1.pl</macro>
-        <macro>Test2.pl</macro>
-    </macros>
-    -->
+<!-- ################## -->
+<!-- Extraction Wrapper -->
+<!-- ################## -->
 
-    <setup>
-        <var name="$a">
-            <static>5</static>
-        </var>
-        <var name="$b">
-            <static>8</static>
-        </var>
-        <var name="$c">
-            <static>13</static>
-        </var>
+<!-- Extracted a problem into its own file                -->
+<!-- This is a wrapper around the "normal" representation -->
+<xsl:template match="webwork">
+    <xsl:variable name="filename">
+        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:text>.pg</xsl:text>
+    </xsl:variable>
+    <exsl:document href="{$filename}" method="text">
+        <xsl:apply-imports />
+    </exsl:document>
+</xsl:template>
 
-        <pg-code>
-            $a = Compute(random(1, 9, 1));
-            $b = Compute(random(1, 9, 1));
-            $c = $a + $b;
-        </pg-code>
-    </setup>
-
-    <statement>
-        <p>Compute the sum of <m>a =</m> <var name="$a" /> and <m>b =</m> <var name="$b" />:  <m>a + b =</m> <answer var="$c" width="2" /></p>
-    </statement>
-
-    <solution>
-        <p><var name="$a" /> <m>+</m> <var name="$b" /> <m>=</m> <var name="$c" />.</p>
-    </solution>
-</webwork>
-
-
-</article>
-</mathbook>
+</xsl:stylesheet>
