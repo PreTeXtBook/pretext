@@ -63,8 +63,8 @@ include Makefile.paths
 # the Mathbook XML distribution
 # MBUSR is where extension files get copied
 # so relative paths work properly
-# MBXSL = $(MB)/xsl
 # MBSCRIPT = $(MB)/script
+MBXSL = $(MB)/xsl
 MBUSR = $(MB)/user
 WWDTD = $(WWMBX)/schema/dtd
 WWXSL = $(WWMBX)/xsl
@@ -111,3 +111,18 @@ minimal:
 	cp $(WWXSL)/extract-webwork.xsl $(WWXSL)/webwork-pg.xsl $(MBUSR)
 	cd $(PGOUT); \
 	xsltproc $(MBUSR)/extract-webwork.xsl $(WWMBX)/examples/minimal/mini.xml
+
+chapter:
+	install -d $(PGOUT) $(MBUSR)
+	-rm $(PGOUT)/*.pg
+	cp $(WWXSL)/extract-webwork.xsl $(WWXSL)/webwork-pg.xsl $(MBUSR)
+	cd $(PGOUT); \
+	xsltproc $(MBUSR)/extract-webwork.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml
+	#
+	install -d $(PDFOUT) $(MBUSR)
+	-rm $(PDFOUT)/*.tex
+	cp $(WWXSL)/webwork-latex.xsl $(MBUSR)
+	cd $(PDFOUT); \
+	xsltproc --stringparam toc.level 0 $(MBUSR)/webwork-latex.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml; \
+	xelatex sample-ww-chapter.tex; \
+	xelatex sample-ww-chapter.tex
