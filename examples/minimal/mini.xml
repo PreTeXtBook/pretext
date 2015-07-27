@@ -61,11 +61,11 @@
     </setup>
 
     <statement>
-        <p>Compute the sum of <m>a =</m> <var name="$a" /> and <m>b =</m> <var name="$b" />:  <m>a + b =</m> <answer var="$c" width="2" /></p>
+        <p>Compute the sum of <m>a = <var name="$a" /></m> and <m>b = <var name="$b" /></m>:<br /><m>a + b =</m> <answer var="$c" width="2" /></p>
     </statement>
 
     <solution>
-        <p><var name="$a" /> <m>+</m> <var name="$b" /> <m>=</m> <var name="$c" />.</p>
+        <p><m><var name="$a" /> + <var name="$b" /> = <var name="$c" /></m>.</p>
     </solution>
 </webwork>
 
