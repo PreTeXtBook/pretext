@@ -124,7 +124,7 @@
     </xsl:variable>
     <xsl:text>[</xsl:text>
     <xsl:call-template name="underscore">
-        <xsl:with-param name="total">
+        <xsl:with-param name="width">
             <xsl:value-of select="$width"/>
         </xsl:with-param>
     </xsl:call-template>
@@ -194,20 +194,14 @@
     <xsl:text>############################################################&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Since we use XSLT 1, this is how we create n underscores -->
-<!-- for a PGML answer blank                                  -->
+<!-- Since we use XSLT 1.0, this is how we create -->
+<!-- "width" underscores for a PGML answer blank  -->
 <xsl:template name="underscore">
-    <xsl:param name="total">5</xsl:param>
-    <xsl:param name="counter">0</xsl:param>
-    <xsl:if test="not($counter = $total)">
+    <xsl:param name="width" select="5" />
+    <xsl:if test="not($width = 0)">
         <xsl:text>_</xsl:text>
         <xsl:call-template name="underscore">
-            <xsl:with-param name="total">
-                <xsl:value-of select="$total"/>
-            </xsl:with-param>
-            <xsl:with-param name="counter">
-                <xsl:value-of select="$counter + 1"/>
-            </xsl:with-param>
+            <xsl:with-param name="width" select="$width - 1" />
         </xsl:call-template>
     </xsl:if>
 </xsl:template>
