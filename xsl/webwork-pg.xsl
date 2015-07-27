@@ -35,7 +35,6 @@
 <!-- ################## -->
 
 <!-- Basic outline of a simple problem -->
-<!-- TODO: Now extracted into its own file, this will be moved out -->
 <xsl:template match="webwork">
     <xsl:call-template   name="begin-problem" />
     <xsl:call-template   name="macros" />
@@ -43,6 +42,22 @@
     <xsl:apply-templates select="setup" />
     <xsl:apply-templates select="statement" />
     <xsl:apply-templates select="solution" />
+    <xsl:call-template   name="end-problem" />
+</xsl:template>
+
+<!-- Basic outline of a "scaffold" problem -->
+<xsl:template match="webwork[@type='scaffold']">
+    <xsl:call-template   name="begin-problem" />
+    <xsl:call-template   name="macros" />
+    <xsl:call-template   name="header" />
+    <xsl:apply-templates select="setup" />
+    <xsl:call-template name="begin-block">
+        <xsl:with-param name="title">Scaffold</xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>Scaffold::Begin();&#xa;</xsl:text>
+    <xsl:apply-templates select="platform" />
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>Scaffold::End();&#xa;</xsl:text>
     <xsl:call-template   name="end-problem" />
 </xsl:template>
 
@@ -56,6 +71,21 @@
         <xsl:with-param name="raw-code" select="pg-code" />
     </xsl:call-template>
 </xsl:template>
+
+<!-- A platform is part of a scaffold -->
+<xsl:template match="platform">
+    <xsl:call-template name="begin-block">
+        <xsl:with-param name="title">Section</xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>Section::Begin("</xsl:text>
+    <xsl:apply-templates select="title" />
+    <xsl:text>");&#xa;</xsl:text>
+    <xsl:apply-templates select="statement" />
+    <xsl:apply-templates select="solution" />
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>Section::End();&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- default template, for complete presentation -->
 <xsl:template match="statement">
@@ -81,6 +111,7 @@
     <xsl:text>END_PGML_SOLUTION&#xa;</xsl:text>
 </xsl:template>
 
+<!-- PGML markup for Perl variable in LaTeX expression -->
 <xsl:template match="statement//var|solution//var">
     <xsl:text>[</xsl:text>
     <xsl:value-of select="@name" />
@@ -111,15 +142,21 @@
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- PGML inline math uses its own delimiters -->
+<!-- PGML inline math uses its own delimiters  -->
+<!-- NB: we allow the "var" element as a child -->
 <xsl:template match= "m">
     <xsl:text>[`</xsl:text>
-    <xsl:value-of select="." />
+    <xsl:apply-templates select="text()|var" />
     <xsl:text>`]</xsl:text>
 </xsl:template>
 
+<!-- re-activate, since MBX kills all titles -->
+<xsl:template match="webwork//title">
+    <xsl:apply-templates />
+</xsl:template>
+
+
 <!-- Unimplemented, currently killed -->
-<xsl:template match="title" />
 <xsl:template match="hint" />
 
 
@@ -152,6 +189,9 @@
     <xsl:text>    "PGstandard.pl",&#xa;</xsl:text>
     <xsl:text>    "MathObjects.pl",&#xa;</xsl:text>
     <xsl:text>    "PGML.pl",&#xa;</xsl:text>
+    <xsl:if test="@type='scaffold'">
+        <xsl:text>    "scaffold.pl",&#xa;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="macros/macro" />
     <xsl:text>    "PGcourse.pl",&#xa;</xsl:text>
     <xsl:text>);&#xa;</xsl:text>
@@ -192,6 +232,18 @@
         </xsl:call-template>
     </xsl:if>
 </xsl:template>
+
+<!-- ###### -->
+<!-- Markup -->
+<!-- ###### -->
+
+<!-- http://webwork.maa.org/wiki/Introduction_to_PGML#Basic_Formatting -->
+
+<!-- two spaces at line-end is a newline -->
+<xsl:template match="br">
+    <xsl:text>  &#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- ######### -->
 <!-- Utilities -->
