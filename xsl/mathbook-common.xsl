@@ -449,8 +449,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="sage[@type='display']">
     <xsl:call-template name="sage-display-markup">
         <xsl:with-param name="in">
-            <xsl:call-template name="sanitize-sage">
-                <xsl:with-param name="raw-sage-code" select="input" />
+            <xsl:call-template name="sanitize-code">
+                <xsl:with-param name="raw-code" select="input" />
             </xsl:call-template>
         </xsl:with-param>
     </xsl:call-template>
@@ -461,8 +461,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="sage|sage[@type='full']">
     <xsl:call-template name="sage-active-markup">
         <xsl:with-param name="in">
-            <xsl:call-template name="sanitize-sage">
-                <xsl:with-param name="raw-sage-code" select="input" />
+            <xsl:call-template name="sanitize-code">
+                <xsl:with-param name="raw-code" select="input" />
             </xsl:call-template>
         </xsl:with-param>
         <xsl:with-param name="out">
@@ -476,7 +476,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Sanitize Sage code                 -->
+<!-- Sanitize Code -->
 <!-- No leading whitespace, no trailing -->
 <!-- http://stackoverflow.com/questions/1134318/xslt-xslstrip-space-does-not-work -->
 <xsl:variable name="whitespace"><xsl:text>&#x20;&#x9;&#xD;&#xA;</xsl:text></xsl:variable>
@@ -635,13 +635,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 4) Strip indentation from all lines
 5) Allow intermediate blank lines
 -->
-<xsl:template name="sanitize-sage">
-    <xsl:param name="raw-sage-code" />
+<xsl:template name="sanitize-code">
+    <xsl:param name="raw-code" />
     <xsl:variable name="trimmed-sage-code">
         <xsl:call-template name="trim-start-lines">
             <xsl:with-param name="text">
                 <xsl:call-template name="trim-end">
-                    <xsl:with-param name="text" select="$raw-sage-code" />
+                    <xsl:with-param name="text" select="$raw-code" />
                 </xsl:call-template>
             </xsl:with-param>
         </xsl:call-template>
@@ -657,11 +657,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
-<!-- Santitize Sage Output -->
+<!-- Santitize Text Output -->
 <!-- (1) Trim leading and ending blank lines -->
 <!-- (2) Scan *all* lines for left margin    -->
 <!-- (3) Remove left margin                  -->
-<!-- TODO: very similar to "sanitize-sage", but <BLANKLINE> is necessary -->
+<!-- TODO: very similar to "sanitize-code", but <BLANKLINE> is necessary -->
 <!-- TODO: sanitize <BLANKLINE> for print output -->
 <xsl:template name="sanitize-text-output">
     <xsl:param name="text" />

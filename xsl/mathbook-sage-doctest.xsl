@@ -164,8 +164,8 @@
     <xsl:variable name="input-block">
         <xsl:call-template name="prepend-prompt">
             <xsl:with-param name="text">
-                <xsl:call-template name="sanitize-sage" >
-                    <xsl:with-param name="raw-sage-code" select="." />
+                <xsl:call-template name="sanitize-code" >
+                    <xsl:with-param name="raw-code" select="." />
                 </xsl:call-template>
             </xsl:with-param>
         </xsl:call-template>

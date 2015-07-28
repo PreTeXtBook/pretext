@@ -41,21 +41,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <xsl:template match="image/sageplot">
     <!-- has one trailing newline, which we ignore later (?) -->
-    <xsl:variable name="raw-code">
-        <xsl:call-template name="sanitize-sage">
-            <xsl:with-param name="raw-sage-code" select="." />
+    <xsl:variable name="plot-code">
+        <xsl:call-template name="sanitize-code">
+            <xsl:with-param name="raw-code" select="." />
         </xsl:call-template>
     </xsl:variable>
     <!-- split on last newline -->
     <xsl:variable name="preamble">
         <xsl:call-template name="substring-before-last">
-            <xsl:with-param name="input" select="substring($raw-code,0,string-length($raw-code))" />
+            <xsl:with-param name="input" select="substring($plot-code,0,string-length($plot-code))" />
             <xsl:with-param name="substr" select="'&#xa;'" />
         </xsl:call-template>
     </xsl:variable>
     <xsl:variable name="plotcmd">
         <xsl:call-template name="substring-after-last">
-            <xsl:with-param name="input" select="substring($raw-code,0,string-length($raw-code))" />
+            <xsl:with-param name="input" select="substring($plot-code,0,string-length($plot-code))" />
             <xsl:with-param name="substr" select="'&#xa;'" />
         </xsl:call-template>
     </xsl:variable>
@@ -106,21 +106,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <xsl:template match="sageplot">
     <!-- has one trailing newline, which we ignore later (?) -->
-    <xsl:variable name="raw-code">
-        <xsl:call-template name="sanitize-sage">
-            <xsl:with-param name="raw-sage-code" select="." />
+    <xsl:variable name="plot-code">
+        <xsl:call-template name="sanitize-code">
+            <xsl:with-param name="raw-code" select="." />
         </xsl:call-template>
     </xsl:variable>
     <!-- split on last newline -->
     <xsl:variable name="preamble">
         <xsl:call-template name="substring-before-last">
-            <xsl:with-param name="input" select="substring($raw-code,0,string-length($raw-code))" />
+            <xsl:with-param name="input" select="substring($plot-code,0,string-length($plot-code))" />
             <xsl:with-param name="substr" select="'&#xa;'" />
         </xsl:call-template>
     </xsl:variable>
     <xsl:variable name="plotcmd">
         <xsl:call-template name="substring-after-last">
-            <xsl:with-param name="input" select="substring($raw-code,0,string-length($raw-code))" />
+            <xsl:with-param name="input" select="substring($plot-code,0,string-length($plot-code))" />
             <xsl:with-param name="substr" select="'&#xa;'" />
         </xsl:call-template>
     </xsl:variable>

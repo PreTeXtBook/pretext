@@ -2722,8 +2722,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Text is massaged just like Sage input code  -->
 <xsl:template match="pre">
     <xsl:element name="pre">
-        <xsl:call-template name="sanitize-sage">
-            <xsl:with-param name="raw-sage-code" select="." />
+        <xsl:call-template name="sanitize-code">
+            <xsl:with-param name="raw-code" select="." />
         </xsl:call-template>
     </xsl:element>
 </xsl:template>
@@ -2983,8 +2983,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
     </xsl:variable>
     <pre class="{$classes}" style="font-size:80%">
-    <xsl:call-template name="sanitize-sage">
-        <xsl:with-param name="raw-sage-code" select="input" />
+    <xsl:call-template name="sanitize-code">
+        <xsl:with-param name="raw-code" select="input" />
     </xsl:call-template>
     </pre>
 </xsl:template>

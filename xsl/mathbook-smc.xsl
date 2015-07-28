@@ -166,8 +166,8 @@
     <!-- Create a complete Sage cell region -->
     <xsl:apply-templates select="." mode="inputbegin-execute" />
     <xsl:text>%hide&#xa;</xsl:text>
-    <xsl:call-template name="sanitize-sage">
-        <xsl:with-param name="raw-sage-code" select="." />
+    <xsl:call-template name="sanitize-code">
+        <xsl:with-param name="raw-code" select="." />
     </xsl:call-template>
     <xsl:apply-templates select="." mode="inputoutput" />
     <xsl:apply-templates select="." mode="outputend" />
