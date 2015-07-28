@@ -111,6 +111,14 @@
     <xsl:text>END_PGML_SOLUTION&#xa;</xsl:text>
 </xsl:template>
 
+<!-- In PGML, paragraph breaks are just blank lines -->
+<xsl:template match="p">
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates />
+</xsl:template>
+
+
 <!-- PGML markup for Perl variable in LaTeX expression -->
 <xsl:template match="statement//var|solution//var">
     <xsl:text>[</xsl:text>
@@ -149,6 +157,12 @@
     <xsl:apply-templates select="text()|var" />
     <xsl:text>`]</xsl:text>
 </xsl:template>
+<xsl:template match="me">
+    <xsl:text>&#xa;&#xa;&gt;&gt; [``</xsl:text>
+    <xsl:apply-templates select="text()|var" />
+    <xsl:text>``] &lt;&lt;&#xa;&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- re-activate, since MBX kills all titles -->
 <xsl:template match="webwork//title">

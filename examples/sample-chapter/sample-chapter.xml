@@ -166,6 +166,10 @@
 
                 <webwork xml:id="quadratic-equation" context="numeric" showpartialcorrect="yes" type="scaffold">
 
+                    <macros>
+                        <macro>parserMultiAnswer.pl</macro>
+                    </macros>
+
                     <setup>
                         <var name="$a">
                             <static>2</static>
@@ -189,6 +193,10 @@
                             <static>-2</static>
                         </var>
 
+                        <var name="$multians">
+                            <static>1.5, 2</static>
+                        </var>
+
                         <!-- TODO: move out context shift -->
                         <pg-code>
                         Context()->variables->are(x => 'Real');
@@ -200,6 +208,22 @@
                         $quadratic = Formula("$a x^2 + $b x + $c");
                         $x1 = (-$b + sqrt($b**2-4*$a*$c))/(2*$a);
                         $x2 = (-$b - sqrt($b**2-4*$a*$c))/(2*$a);
+
+                        $multians1 = MultiAnswer($x1,$x2)->with(
+                            singleResult => 0,
+                            allowBlankAnswers => 1,
+                            checker => sub {
+                                my ($correct,$student,$self) = @_;
+                                my ($s1, $s2) = @{$student};
+                                my ($c1, $c2) = @{$correct};
+
+                                return (1,1) if ($c1 == $s1 and $c2 == $s2) or
+                                                ($c1 == $s2 and $c2 == $s1);
+                                return (1,0) if $c1 == $s1 or $c2 == $s1;
+                                return (0,1) if $c1 == $s2 or $c2 == $s2;
+                                return (0,0);
+                             }
+                          );
                         </pg-code>
                     </setup>
 
@@ -213,6 +237,22 @@
                         <solution>
                             <p> Take the coefficient of <m>x^2</m> for the value of <m>a</m>, the coefficient of <m>x</m> for <m>b</m>, and the constant for <m>c</m>.  In this case, they are <m>a = <var name="$a" /></m>, <m>b = <var name="$b" /></m>, <m>c = <var name="$c" /></m>.</p>
                         </solution>
+                    </platform>
+
+                    <platform>
+                        <title>Part 2: Solve using the quadratic formula</title>
+
+                        <statement>
+                            <p>Using the quadratic formula, solve <m><var name="$quadratic"/>=0</m>.</p>
+                            <p><m>x=</m> <answer var="$multians1" width="10"/> or <m>x=</m> <answer var="$multians1" width="10"/></p>
+                        </statement>
+
+                        <solution>
+                            <p>Recall that the quadratic formula is given in <xref ref="theorem-quadratic-equation" autoname="yes" />.</p>
+
+                            <p>You already identified <m>a = <var name="$a"/></m>, <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>, so the results are: <me>x = {-<var name="$b"/> + \sqrt{<var name="$b"/>^2 - 4(<var name="$a"/>)(<var name="$c"/>)} \over 2(<var name="$a"/>)} \approx <var name="$x1"/></me> or <me>x = {-<var name="$b"/> - \sqrt{<var name="$b"/>^2 - 4(<var name="$a"/>)(<var name="$c"/>)} \over 2(<var name="$a"/>)} \approx <var name="$x2"/></me></p>
+                        </solution>
+
                     </platform>
                 </webwork>
             </exercise>

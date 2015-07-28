@@ -72,6 +72,7 @@
 <xsl:template match="webwork//statement">
     <!-- <xsl:text>\textbf{Problem.}\quad </xsl:text> -->
     <xsl:apply-templates />
+    <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
 
 <!-- default template, for solution -->
@@ -79,6 +80,7 @@
     <xsl:text>\par\noindent%&#xa;</xsl:text>
     <xsl:text>\textbf{Solution.}\quad </xsl:text>
     <xsl:apply-templates />
+    <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="statement//var|solution//var">
@@ -90,7 +92,7 @@
 <!-- PGML answer blank               -->
 <!-- Example: [_____]{$ans}          -->
 <xsl:template match="statement//answer">
-    <xsl:text>\rule{</xsl:text>
+    <xsl:text>\rule[-.3\baselineskip]{</xsl:text>
     <xsl:value-of select="@width" />
     <xsl:text>em}{0.1ex}</xsl:text>
 </xsl:template>
@@ -100,6 +102,11 @@
     <xsl:text>\(</xsl:text>
     <xsl:apply-templates select="text()|var" />
     <xsl:text>\)</xsl:text>
+</xsl:template>
+<xsl:template match= "webwork//me">
+    <xsl:text>\[</xsl:text>
+    <xsl:apply-templates select="text()|var" />
+    <xsl:text>\]</xsl:text>
 </xsl:template>
 
 
