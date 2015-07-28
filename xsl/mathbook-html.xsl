@@ -305,7 +305,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The "type" is redundant at the top-level, -->
 <!-- so we hide it with a class specification  -->
-<xsl:template match="book|article" mode="section-header">
+<!-- We also hide it at lower levels, parallel -->
+<!-- to default LaTeX style behavior           -->
+<xsl:template match="book|article|subsection|subsubsection|exercises[ancestor::section]|references[ancestor::section]" mode="section-header">
     <header>
         <h1 class="heading hide-type">
             <xsl:apply-templates select="." mode="header-content" />
