@@ -1094,6 +1094,17 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
+                <title>Placing Images without a Caption</title>
+
+                <p>Figures, tables and side-by-sides that do not have a caption will automatically not receive a number.  So, in particular, a <c>figure</c> element can be used to place a centered <c>image</c>, with vertical breaks.  We interrupt this current list of figures to include a caption-less one, as a check that the numbering continues sequentially.</p>
+
+                <figure xml:id="figure-captionless-titleless-trefoil">
+                    <image source="images/trefoil.png" width="50" />
+                </figure>
+
+            </subsection>
+
+            <subsection>
                 <title>Asymptote</title>
 
                 <p>The Asymptote graphics language may be placed in your source to draw graphs, diagrams or pictures.  Rules for formatting code are identical to those for Sage code.  For more on Asymptote see <url href="http://asymptote.sourceforge.net/" />.</p>
@@ -1894,7 +1905,14 @@ the xsltproc executable.
                 </tabular>
             </table>
 
-            <p>Same example, but now with vertical rules.  See the source for comments.</p>
+
+            <p>Figures, tables and side-by-sides that do not have a caption will automatically not receive a number.  So, in particular, a <c>table</c> element can be used to place a centered <c>tabular</c>, with vertical breaks.  We interrupt this current list of tables to include a caption-less one, as a check that the numbering continues sequentially and as a check of a minimal example of a table, testing edge and corner cases.</p>
+
+            <table xml:id="table-captionless-titleless-minimal">
+                <tabular top="medium"><row bottom="medium" left="minor"><cell right="minor">One</cell></row></tabular>
+            </table>
+
+            <p>Same example as before, but now with vertical rules.  See the source for comments.</p>
 
             <table>
                 <caption>Vertical Rules Example</caption>
@@ -1989,8 +2007,6 @@ the xsltproc executable.
                     </row>
                 </tabular>
             </table>
-
-            <p>A bare minimum table (one row with one cell) to test edge cases: <tabular top="medium"><row bottom="medium" left="minor"><cell right="minor">One</cell></row></tabular>.</p>
 
         </section>
 

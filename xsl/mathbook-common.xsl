@@ -1531,6 +1531,12 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:value-of select="$raw-subtree-level + $root-level" />
 </xsl:template>
 
+<!-- Note on tables and figures:                                         -->
+<!-- no caption, no number (mirrors LaTeX behavior),                     -->
+<!-- caption on a sibling indicates a subitem of a sidebyside,           -->
+<!-- where the subitem is subnumbered due to caption/number on container -->
+<!-- TODO: investigate entities for "number='no'" upgrade -->
+<!-- http://pimpmyxslt.com/articles/entity-tricks-part1/  -->
 <xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table|sidebyside" mode="serial-number">
     <xsl:variable name="subtree-level">
         <xsl:apply-templates select="." mode="absolute-subtree-level">
@@ -1538,12 +1544,12 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$subtree-level=-1"><xsl:number select="." from="book|article|letter|memo" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[caption]"/></xsl:when>
-        <xsl:when test="$subtree-level=0"><xsl:number select="." from="part" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[caption]"/></xsl:when>
-        <xsl:when test="$subtree-level=1"><xsl:number select="." from="chapter|book/appendix" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[caption]"/></xsl:when>
-        <xsl:when test="$subtree-level=2"><xsl:number select="." from="section|article/appendix" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[caption]"/></xsl:when>
-        <xsl:when test="$subtree-level=3"><xsl:number select="." from="subsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[caption]"/></xsl:when>
-        <xsl:when test="$subtree-level=4"><xsl:number select="." from="subsubsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption)]|table[not(preceding-sibling::caption or following-sibling::caption)]|sidebyside[caption]"/></xsl:when>
+        <xsl:when test="$subtree-level=-1"><xsl:number select="." from="book|article|letter|memo" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=0"><xsl:number select="." from="part" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=1"><xsl:number select="." from="chapter|book/appendix" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=2"><xsl:number select="." from="section|article/appendix" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=3"><xsl:number select="." from="subsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=4"><xsl:number select="." from="subsubsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|sidebyside[caption]" /></xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for theorem number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>
@@ -1649,6 +1655,10 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- indicates no number for the sidebyside.         -->
 <!-- (Relevant subcomponents get their own numbers.) -->
 <xsl:template match="sidebyside[not(caption)]" mode="serial-number" />
+
+<!-- Figures and tables without captions do not get numbers either -->
+<!-- If they have a title, they can be referenced by that string   -->
+<xsl:template match="figure[not(caption)]|table[not(caption)]" mode="serial-number" />
 
 <!-- Convert this to a warning?  Should not drop in here ever? -->
 <xsl:template match="*" mode="serial-number">
