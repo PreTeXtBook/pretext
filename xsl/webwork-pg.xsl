@@ -161,11 +161,18 @@
     <xsl:text>}</xsl:text>
     <xsl:if test="$pg.answer.format.help">
         <xsl:variable name="category">
-            <xsl:variable name="varname" select="@var" />
-            <xsl:variable name="problem" select="ancestor::webwork" />
-            <xsl:for-each select="$problem/setup/var[@name=$varname]">
-                <xsl:value-of select="@category" />
-            </xsl:for-each>
+            <xsl:choose>
+                <xsl:when test="@category">
+                    <xsl:value-of select="@category"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:variable name="varname" select="@var" />
+                    <xsl:variable name="problem" select="ancestor::webwork" />
+                    <xsl:for-each select="$problem/setup/var[@name=$varname]">
+                        <xsl:value-of select="@category" />
+                    </xsl:for-each>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:variable>
         <xsl:variable name="format">
             <xsl:call-template name="category-to-format">
