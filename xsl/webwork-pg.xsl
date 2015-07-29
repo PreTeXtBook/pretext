@@ -22,6 +22,7 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:a="a"
 >
 
 <!-- path assumes we place  webwork-pg.xsl in mathbook "user" directory -->
@@ -148,6 +149,13 @@
     <xsl:text>]{</xsl:text>
     <xsl:value-of select="@var" />
     <xsl:text>}</xsl:text>
+    <xsl:if test="@format">
+        <xsl:text> [@ AnswerFormatHelp("</xsl:text>
+        <xsl:call-template name="pluralize">
+            <xsl:with-param name="singular" select="@format"/>
+        </xsl:call-template>
+        <xsl:text>") @]*</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- PGML inline math uses its own delimiters  -->
@@ -206,6 +214,9 @@
     <xsl:if test="@type='scaffold'">
         <xsl:text>    "scaffold.pl",&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="//answer[@format]">
+        <xsl:text>    "AnswerFormatHelp.pl",&#xa;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="macros/macro" />
     <xsl:text>    "PGcourse.pl",&#xa;</xsl:text>
     <xsl:text>);&#xa;</xsl:text>
@@ -262,5 +273,74 @@
 <!-- ######### -->
 <!-- Utilities -->
 <!-- ######### -->
+
+<xsl:key name="format-pluralization-key" match="a:format" use="a:singular"/>
+
+<xsl:template name="pluralize">
+    <xsl:param name="singular"/>
+    <xsl:for-each select="document('')">
+        <xsl:value-of select="key('format-pluralization-key',$singular)/a:plural"/>
+    </xsl:for-each>
+</xsl:template>
+
+
+<a:format-list>
+    <a:format>
+        <a:singular>angle</a:singular>
+        <a:plural>angles</a:plural>
+    </a:format>
+    <a:format>
+        <a:singular>decimal</a:singular>
+        <a:plural>decimals</a:plural>
+    </a:format>
+    <a:format>
+        <a:singular>exponent</a:singular>
+        <a:plural>exponents</a:plural>
+    </a:format>
+    <a:format>
+        <a:singular>formula</a:singular>
+        <a:plural>formulas</a:plural>
+    </a:format>
+    <a:format>
+        <a:singular>fraction</a:singular>
+        <a:plural>fractions</a:plural>
+    </a:format>
+    <a:format>
+        <a:singular>inequality</a:singular>
+        <a:plural>inequalities</a:plural>
+    </a:format>
+    <a:format>
+        <a:singular>interval</a:singular>
+        <a:plural>intervals</a:plural>
+    </a:format>
+    <a:format>
+        <a:singular>logarithm</a:singular>
+        <a:plural>logarithms</a:plural>
+    </a:format>
+    <a:format>
+        <a:singular>limit</a:singular>
+        <a:plural>limits</a:plural>
+    </a:format>
+    <a:format>
+        <a:singular>number</a:singular>
+        <a:plural>numbers</a:plural>
+    </a:format>
+    <a:format>
+        <a:singular>point</a:singular>
+        <a:plural>points</a:plural>
+    </a:format>
+    <a:format>
+        <a:singular>syntax</a:singular>
+        <a:plural>syntax</a:plural>
+    </a:format>
+    <a:format>
+        <a:singular>unit</a:singular>
+        <a:plural>units</a:plural>
+    </a:format>
+    <a:format>
+        <a:singular>vector</a:singular>
+        <a:plural>vectors</a:plural>
+    </a:format>
+</a:format-list>
 
 </xsl:stylesheet>
