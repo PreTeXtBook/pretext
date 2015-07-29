@@ -109,16 +109,16 @@
                 <webwork xml:id="number-or-function">
 
                     <setup>
-                        <var name="$a">
+                        <var name="$a" category="integer">
                             <static>5</static>
                         </var>
-                        <var name="$b">
+                        <var name="$b" category="integer">
                             <static>8</static>
                         </var>
-                        <var name="$answer1">
+                        <var name="$answer1" category="integer">
                             <static>5</static>
                         </var>
-                        <var name="$answer2">
+                        <var name="$answer2" category="formula">
                             <static>{5x^8+8}{x}</static>
                         </var>
 
@@ -136,7 +136,7 @@
                                 <p>Suppose the correct answer is <m><var name="$answer1"/></m>.</p>
                                 <ul label="square">
                                     <li>
-                                        <p><answer var="$answer1" width="15" format="number"/></p>
+                                        <p><answer var="$answer1" width="15"/></p>
                                     </li>
                                 </ul>
                             </li>
@@ -144,7 +144,7 @@
                                 <p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/></m>.</p>
                                 <ul label="square">
                                     <li>
-                                        <p><answer var="$answer2" width="15" format="formula"/></p>
+                                        <p><answer var="$answer2" width="15"/></p>
                                     </li>
                                 </ul>
                             </li>

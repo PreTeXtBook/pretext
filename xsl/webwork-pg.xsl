@@ -22,7 +22,6 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
-    xmlns:a="a"
 >
 
 <!-- path assumes we place  webwork-pg.xsl in mathbook "user" directory -->
@@ -30,6 +29,17 @@
 
 <!-- Intend output to be a PGML problem -->
 <xsl:output method="text" />
+
+
+<!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
+<!-- Or make a thin customization layer and use 'select' to provide overrides -->
+<!--  -->
+<!-- Enable answer format syntax help links                       -->
+<!-- Each variable has a "category", like "integer" or "formula". -->
+<!-- When an answer blank is expecting a variable, use category   -->
+<!-- to provide AnswerFormatHelp link.                            -->
+<xsl:param name="pg.answer.format.help" select="'yes'" />
+
 
 <!-- ################## -->
 <!-- Top-Down Structure -->
@@ -149,12 +159,24 @@
     <xsl:text>]{</xsl:text>
     <xsl:value-of select="@var" />
     <xsl:text>}</xsl:text>
-    <xsl:if test="@format">
-        <xsl:text> [@ AnswerFormatHelp("</xsl:text>
-        <xsl:call-template name="pluralize">
-            <xsl:with-param name="singular" select="@format"/>
-        </xsl:call-template>
-        <xsl:text>") @]*</xsl:text>
+    <xsl:if test="$pg.answer.format.help">
+        <xsl:variable name="category">
+            <xsl:variable name="varname" select="@var" />
+            <xsl:variable name="problem" select="ancestor::webwork" />
+            <xsl:for-each select="$problem/setup/var[@name=$varname]">
+                <xsl:value-of select="@category" />
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:variable name="format">
+            <xsl:call-template name="category-to-format">
+                <xsl:with-param name="category" select="$category"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="not($format='none')">
+            <xsl:text> [@ AnswerFormatHelp("</xsl:text>
+                <xsl:value-of select="$format"/>
+            <xsl:text>") @]*</xsl:text>
+        </xsl:if>
     </xsl:if>
 </xsl:template>
 
@@ -214,7 +236,9 @@
     <xsl:if test="@type='scaffold'">
         <xsl:text>    "scaffold.pl",&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//answer[@format]">
+    <!-- TODO: Make below check each <answer>'s var, to see if that var -->
+    <!-- has an approved category                                       -->
+    <xsl:if test="($pg.answer.format.help = 'yes')">
         <xsl:text>    "AnswerFormatHelp.pl",&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="macros/macro" />
@@ -258,6 +282,59 @@
     </xsl:if>
 </xsl:template>
 
+<!-- Convert a var's "category" to the right term for AnswerFormatHelp -->
+<xsl:template name="category-to-format">
+    <xsl:param name="category"/>
+    <xsl:choose>
+        <xsl:when test="$category='angle'">
+            <xsl:text>angles</xsl:text>
+        </xsl:when>
+        <xsl:when test="$category='decimal'">
+            <xsl:text>decimals</xsl:text>
+        </xsl:when>
+        <xsl:when test="$category='exponent'">
+            <xsl:text>exponents</xsl:text>
+        </xsl:when>
+        <xsl:when test="$category='formula'">
+            <xsl:text>formulas</xsl:text>
+        </xsl:when>
+        <xsl:when test="$category='fraction'">
+            <xsl:text>fractions</xsl:text>
+        </xsl:when>
+        <xsl:when test="$category='inequality'">
+            <xsl:text>inequalities</xsl:text>
+        </xsl:when>
+        <xsl:when test="$category='interval'">
+            <xsl:text>intervals</xsl:text>
+        </xsl:when>
+        <xsl:when test="$category='logarithm'">
+            <xsl:text>logarithms</xsl:text>
+        </xsl:when>
+        <xsl:when test="$category='limit'">
+            <xsl:text>limits</xsl:text>
+        </xsl:when>
+        <xsl:when test="$category='number' or $category='integer'">
+            <xsl:text>numbers</xsl:text>
+        </xsl:when>
+        <xsl:when test="$category='point'">
+            <xsl:text>points</xsl:text>
+        </xsl:when>
+        <xsl:when test="$category='syntax'">
+            <xsl:text>syntax</xsl:text>
+        </xsl:when>
+        <xsl:when test="$category='quantity'">
+            <xsl:text>units</xsl:text>
+        </xsl:when>
+        <xsl:when test="$category='vector'">
+            <xsl:text>vectors</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>none</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
 <!-- ###### -->
 <!-- Markup -->
 <!-- ###### -->
@@ -274,73 +351,6 @@
 <!-- Utilities -->
 <!-- ######### -->
 
-<xsl:key name="format-pluralization-key" match="a:format" use="a:singular"/>
 
-<xsl:template name="pluralize">
-    <xsl:param name="singular"/>
-    <xsl:for-each select="document('')">
-        <xsl:value-of select="key('format-pluralization-key',$singular)/a:plural"/>
-    </xsl:for-each>
-</xsl:template>
-
-
-<a:format-list>
-    <a:format>
-        <a:singular>angle</a:singular>
-        <a:plural>angles</a:plural>
-    </a:format>
-    <a:format>
-        <a:singular>decimal</a:singular>
-        <a:plural>decimals</a:plural>
-    </a:format>
-    <a:format>
-        <a:singular>exponent</a:singular>
-        <a:plural>exponents</a:plural>
-    </a:format>
-    <a:format>
-        <a:singular>formula</a:singular>
-        <a:plural>formulas</a:plural>
-    </a:format>
-    <a:format>
-        <a:singular>fraction</a:singular>
-        <a:plural>fractions</a:plural>
-    </a:format>
-    <a:format>
-        <a:singular>inequality</a:singular>
-        <a:plural>inequalities</a:plural>
-    </a:format>
-    <a:format>
-        <a:singular>interval</a:singular>
-        <a:plural>intervals</a:plural>
-    </a:format>
-    <a:format>
-        <a:singular>logarithm</a:singular>
-        <a:plural>logarithms</a:plural>
-    </a:format>
-    <a:format>
-        <a:singular>limit</a:singular>
-        <a:plural>limits</a:plural>
-    </a:format>
-    <a:format>
-        <a:singular>number</a:singular>
-        <a:plural>numbers</a:plural>
-    </a:format>
-    <a:format>
-        <a:singular>point</a:singular>
-        <a:plural>points</a:plural>
-    </a:format>
-    <a:format>
-        <a:singular>syntax</a:singular>
-        <a:plural>syntax</a:plural>
-    </a:format>
-    <a:format>
-        <a:singular>unit</a:singular>
-        <a:plural>units</a:plural>
-    </a:format>
-    <a:format>
-        <a:singular>vector</a:singular>
-        <a:plural>vectors</a:plural>
-    </a:format>
-</a:format-list>
 
 </xsl:stylesheet>
