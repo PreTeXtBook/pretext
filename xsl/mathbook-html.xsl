@@ -1383,6 +1383,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Body is statement (ignoring .text switch!) -->
 <xsl:template match="exercise" mode="body">
     <xsl:apply-templates select="statement"/>
+    <xsl:apply-templates select="webwork" mode="knowlized" />
         <!-- <xsl:apply-templates select="hint"/> -->
 </xsl:template>
 <!-- Posterior: links to information  -->
@@ -3094,6 +3095,9 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
             <xsl:call-template name="mathjax" />
             <xsl:call-template name="sagecell" />
+            <xsl:if test="//webwork">
+                <xsl:call-template name="webwork" />
+            </xsl:if>
             <xsl:if test="/mathbook//program">
                 <xsl:call-template name="goggle-code-prettifier" />
             </xsl:if>
