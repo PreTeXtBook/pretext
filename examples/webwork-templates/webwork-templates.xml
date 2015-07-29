@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE webwork SYSTEM "../../schema/dtd/webwork.dtd">
+
+<!-- ********************************************************************* -->
+<!-- Copyright 2015                                                        -->
+<!-- Robert A. Beezer, Michael Gage, Geoff Goehle, Alex Jordan             -->
+<!--                                                                       -->
+<!-- This file is part of MathBook XML.                                    -->
+<!--                                                                       -->
+<!-- MathBook XML is free software: you can redistribute it and/or modify  -->
+<!-- it under the terms of the GNU General Public License as published by  -->
+<!-- the Free Software Foundation, either version 2 or version 3 of the    -->
+<!-- License (at your option).                                             -->
+<!--                                                                       -->
+<!-- MathBook XML is distributed in the hope that it will be useful,       -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of        -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         -->
+<!-- GNU General Public License for more details.                          -->
+<!--                                                                       -->
+<!-- You should have received a copy of the GNU General Public License     -->
+<!-- along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>. -->
+<!-- ********************************************************************* -->
+
+<!-- This is a MathBook XML "article" to reproduce the subject area -->
+<!-- templates at                                                   -->
+<!-- http://webwork.maa.org/wiki/SubjectAreaTemplates#.Vbhb6EV4F8M  -->
+
+<mathbook>
+    <!-- Other languages can be used to internationalize parts of a document -->
+    <!-- <mathbook xml:lang="pt-BR"> -->
+
+    <!-- "docinfo" is like metadata, it is necessary technical -->
+    <!-- information which a reader mostly will never see. -->
+   
+    <docinfo>
+
+        <!-- In the HTML version there is room for a   -->
+        <!-- picture or logo in the upper left corner. -->
+        <brandlogo url="http://webwork.maa.org/" source="images/webwork-logo.jpg" />
+
+        <!--
+        TeX/LaTeX macros can be written in the usual way.
+        Whitespace and line breaks are irrelevant here.
+        These are "write once, use everywhere".
+        -->
+        <macros>
+        \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4}
+        \newcommand{\indefiniteintegral}[2]{\int#1\,d#2}
+        </macros>
+
+        <!-- An initialism is useful sometimes -->
+        <initialism>WWSC</initialism>
+        <!--
+        With a <feedback> element, in the HTML version, you get a button
+        for reporting typos and errors.  You might link to a Google Docs
+        spreadsheet or something similar.  Default is to get a button
+        labeled "Feedback", which will be localized to your target language.
+        You can override this with some text of your choosing, but then you
+        lose the localization feature.
+        -->
+        <feedback>
+            <url>not-implemented.html</url>
+             <!-- <text>My Button Text</text>  -->
+        </feedback>
+    </docinfo>
+
+    <article xml:id="webwork-templates">
+        <title>WeBWorK subject area templates</title>
+        <subtitle>Sample Exercises</subtitle>
+
+        <frontmatter xml:id="index">
+
+            <!-- Items typically at the top of the first page of an article -->
+            <titlepage>
+               <!-- There can be several authors here -->
+                <author>
+                    <personname>Robert Beezer</personname>
+                    <department>Department of Mathematics and Computer Science</department>
+                    <!-- Use "break" tag anywhere for forced line break -->
+                    <institution>University of Puget Sound<br />Tacoma, Washington, USA</institution>
+                    <email>beezer@pugetsound.edu</email>
+                </author>
+
+                <author>
+                    <personname>Alex Jordan</personname>
+                    <department>Department of Mathematics</department>
+                    <!-- Use "break" tag anywhere for forced line break -->
+                    <institution>Portland Community College<br />Portland, Oregon, USA</institution>
+                    <email>alex.jordan@pcc.edu</email>
+                </author>
+
+                <!-- Can set date manually or use the "today" element -->
+                <date><today /></date>
+
+            </titlepage>
+
+            <abstract>
+                <p>This is a sample of the subject area template problems found on the WeBWorK wiki at <url>http://webwork.maa.org/wiki/SubjectAreaTemplates<hash/>.Vbhb6EV4F8M</url>.  By writing these, I hope to identify issues with PG extraction.</p>
+            </abstract>
+
+        </frontmatter>
+
+        <section>
+            <title>Miscellaneous Templates</title>
+
+            <exercise>
+                <title>Answer is a number or a function.</title>
+
+                <webwork xml:id="number-or-function">
+
+                    <setup>
+                        <var name="$a">
+                            <static>5</static>
+                        </var>
+                        <var name="$b">
+                            <static>8</static>
+                        </var>
+                        <var name="$answer1">
+                            <static>5</static>
+                        </var>
+                        <var name="$answer2">
+                            <static>{5x^8+8}{x}</static>
+                        </var>
+
+                        <pg-code>
+                            $a = non_zero_random(-9,9,1);
+                            do { $b = random(2,9,1); } until ( $b != $a );
+                            $answer1 = Compute("$a");
+                            $answer2 = Compute("($a x^($b) + $b)/x")->reduce();
+                        </pg-code>
+                    </setup>
+
+                    <statement>
+                        <p><ol label="a">
+                            <li>
+                                <p>Suppose the correct answer is <m><var name="$answer1"/></m>.</p>
+                                <ul label="square">
+                                    <li>
+                                        <p><answer var="$answer1" width="15" format="number"/></p>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/></m>.</p>
+                                <ul label="square">
+                                    <li>
+                                        <p><answer var="$answer2" width="15" format="formula"/></p>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ol></p>
+                    </statement>
+
+                    <solution>
+                        <p>Solution explanation goes here.</p>
+                    </solution>
+                </webwork>
+            </exercise>
+        </section>
+        
+    </article>
+</mathbook>

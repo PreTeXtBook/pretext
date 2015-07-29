@@ -126,3 +126,19 @@ chapter:
 	xsltproc --stringparam toc.level 0 $(MBUSR)/webwork-latex.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml; \
 	xelatex sample-ww-chapter.tex; \
 	xelatex sample-ww-chapter.tex
+
+templates:
+	install -d $(PGOUT) $(MBUSR)
+	-rm $(PGOUT)/*.pg
+	cp $(WWXSL)/extract-webwork.xsl $(WWXSL)/webwork-pg.xsl $(MBUSR)
+	cd $(PGOUT); \
+	xsltproc $(MBUSR)/extract-webwork.xsl $(WWMBX)/examples/webwork-templates/webwork-templates.xml
+	#
+	install -d $(PDFOUT) $(MBUSR)
+	-rm $(PDFOUT)/*.tex
+	cp $(WWXSL)/webwork-latex.xsl $(MBUSR)
+	cd $(PDFOUT); \
+	xsltproc --stringparam toc.level 0 $(MBUSR)/webwork-latex.xsl $(WWMBX)/examples/webwork-templates/webwork-templates.xml; \
+	xelatex webwork-templates.tex; \
+	xelatex webwork-templates.tex
+
