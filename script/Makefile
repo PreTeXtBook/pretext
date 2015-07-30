@@ -126,6 +126,16 @@ chapter:
 	xsltproc --stringparam toc.level 0 $(MBUSR)/webwork-latex.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml; \
 	xelatex sample-ww-chapter.tex; \
 	xelatex sample-ww-chapter.tex
+	#
+	install -d $(HTMLOUT) $(MBUSR)
+	-rm $(HTMLOUT)/*.html
+	cp $(WWXSL)/webwork-pg.xsl $(WWXSL)/webwork-html.xsl $(MBUSR)
+	# xslt_base64: https://github.com/ilyakharlamov/xslt_base64
+	# recursion on entire problem content, up limits on  xsltproc
+	cp $(WWXSL)/xslt_base64/base64.xsl $(MBUSR)
+	cp $(WWXSL)/xslt_base64/base64_binarydatamap.xml $(MBUSR)
+	cd $(HTMLOUT); \
+	xsltproc --maxdepth 12000 --stringparam html.knowl.exercise.inline no $(MBUSR)/webwork-html.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml
 
 templates:
 	install -d $(PGOUT) $(MBUSR)
@@ -141,4 +151,3 @@ templates:
 	xsltproc --stringparam toc.level 0 $(MBUSR)/webwork-latex.xsl $(WWMBX)/examples/webwork-templates/webwork-templates.xml; \
 	xelatex webwork-templates.tex; \
 	xelatex webwork-templates.tex
-
