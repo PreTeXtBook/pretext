@@ -163,7 +163,7 @@
     <xsl:text>]{</xsl:text>
     <xsl:value-of select="@var" />
     <xsl:text>}</xsl:text>
-    <xsl:if test="$pg.answer.format.help">
+    <xsl:if test="$pg.answer.format.help = 'yes'">
         <xsl:variable name="category">
             <xsl:choose>
                 <xsl:when test="@category">
@@ -172,9 +172,7 @@
                 <xsl:otherwise>
                     <xsl:variable name="varname" select="@var" />
                     <xsl:variable name="problem" select="ancestor::webwork" />
-                    <xsl:for-each select="$problem/setup/var[@name=$varname]">
-                        <xsl:value-of select="@category" />
-                    </xsl:for-each>
+                    <xsl:value-of select="$problem/setup/var[@name=$varname]/@category" />
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
