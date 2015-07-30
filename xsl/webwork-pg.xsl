@@ -99,7 +99,8 @@
 
 
 <!-- default template, for complete presentation -->
-<xsl:template match="statement">
+<!-- TODO: fix match pattern to cover scaffolded problems once name firms up -->
+<xsl:template match="webwork//statement">
     <xsl:call-template name="begin-block">
         <xsl:with-param name="title">Body</xsl:with-param>
     </xsl:call-template>
@@ -111,7 +112,8 @@
 </xsl:template>
 
 <!-- default template, for solution -->
-<xsl:template match="solution">
+<!-- TODO: fix match pattern to cover scaffolded problems once name firms up -->
+<xsl:template match="webwork//solution">
     <xsl:call-template name="begin-block">
         <xsl:with-param name="title">Solution</xsl:with-param>
     </xsl:call-template>
@@ -123,10 +125,12 @@
 </xsl:template>
 
 <!-- In PGML, paragraph breaks are just blank lines -->
-<xsl:template match="p">
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
+<!-- End as normal with a line feed, then           -->
+<!-- issue a blank line to signify the break        -->
+<xsl:template match="webwork//p">
     <xsl:apply-templates />
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 
@@ -189,12 +193,13 @@
 
 <!-- PGML inline math uses its own delimiters  -->
 <!-- NB: we allow the "var" element as a child -->
-<xsl:template match= "m">
+<xsl:template match= "webwork//m">
     <xsl:text>[`</xsl:text>
     <xsl:apply-templates select="text()|var" />
     <xsl:text>`]</xsl:text>
 </xsl:template>
-<xsl:template match="me">
+
+<xsl:template match="webwork//me">
     <xsl:text>&#xa;&#xa;&gt;&gt; [``</xsl:text>
     <xsl:apply-templates select="text()|var" />
     <xsl:text>``] &lt;&lt;&#xa;&#xa;</xsl:text>
@@ -208,7 +213,7 @@
 
 
 <!-- Unimplemented, currently killed -->
-<xsl:template match="hint" />
+<xsl:template match="webwork//hint" />
 
 
 <!-- ####################### -->
