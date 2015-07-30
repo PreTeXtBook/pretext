@@ -110,15 +110,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
-<!-- Main entry template is in  xsl/mathbook-common.html        -->
-<!-- It will employ templates which process structural document -->
-<!-- nodes into chunks, which in turn will call modal templates -->
-<!-- defined in this file                                       -->
 
+<!-- Deprecation warnings are universal analysis of source and parameters   -->
+<!-- There is always a "document root" directly under the mathbook element, -->
+<!-- and we process it with the chunking template called below              -->
+<!-- Note that "docinfo" is at the same level and not structural, so killed -->
+<xsl:template match="/">
+    <xsl:apply-templates select="mathbook" mode="deprecation-warnings" />
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- We process structural nodes via chunking routine in   xsl/mathbook-common.html -->
+<!-- This in turn calls specific modal templates defined elsewhere in this file     -->
+<xsl:template match="/mathbook">
+    <xsl:apply-templates mode="chunk" />
+</xsl:template>
 
 <!-- Authors, editors in serial lists for headers           -->
 <!-- Presumes authors get selected first, so editors follow -->

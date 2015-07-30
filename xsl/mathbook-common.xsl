@@ -275,17 +275,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 <!-- ############## -->
-<!-- Entry template -->
+<!-- Entry Template -->
 <!-- ############## -->
 
-<!-- Deprecation warnings are universal analysis of source and parameters   -->
-<!-- There is always a "document root" directly under the mathbook element, -->
-<!-- and we process it with the abstract chunking template defined below    -->
-<!-- Note that "docinfo" is at the same level and not structural, so killed -->
-<xsl:template match="/mathbook">
-    <xsl:apply-templates select="." mode="deprecation-warnings" />
-    <xsl:apply-templates mode="chunk" />
-</xsl:template>
+<!-- We never process using just this file, and often want  -->
+<!-- to import it elsewhere for the utilities it contains.  -->
+<!-- So there is no entry template, nor should there be.    -->
+<!-- An importing file, designed for a specific conversion, -->
+<!-- can have an entry template and use the general         -->
+<!-- "chunking" templates defined below.                    -->
+
 
 <!--        -->
 <!-- Levels -->
