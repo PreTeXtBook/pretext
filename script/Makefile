@@ -130,6 +130,7 @@ chapter:
 	install -d $(HTMLOUT) $(MBUSR)
 	-rm $(HTMLOUT)/*.html
 	cp $(WWXSL)/webwork-pg.xsl $(WWXSL)/webwork-html.xsl $(MBUSR)
+	cp -a $(WWMBX)/examples/sample-chapter/images $(HTMLOUT)
 	# xslt_base64: https://github.com/ilyakharlamov/xslt_base64
 	# recursion on entire problem content, up limits on  xsltproc
 	cp $(WWXSL)/xslt_base64/base64.xsl $(MBUSR)

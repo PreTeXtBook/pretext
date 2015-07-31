@@ -36,7 +36,7 @@
 
         <!-- In the HTML version there is room for a   -->
         <!-- picture or logo in the upper left corner. -->
-        <brandlogo url="http://webwork.maa.org/" source="images/webwork-logo.jpg" />
+        <brandlogo url="http://webwork.maa.org/" source="images/webwork-logo.png" />
 
         <!--
         TeX/LaTeX macros can be written in the usual way.
