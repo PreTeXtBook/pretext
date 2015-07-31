@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?><datamap>
 	<asciibinary>
 		
+		<item><ascii>&#x09;</ascii><binary>00001001</binary></item>  <!-- MBX: horizontal tab -->
+		<item><ascii>&#x0a;</ascii><binary>00001010</binary></item>  <!-- MBX: line feed -->
+		<item><ascii>&#x0d;</ascii><binary>00001101</binary></item>  <!-- MBX: carriage return -->
 		<item><ascii> </ascii><binary>00100000</binary></item>
 		<item><ascii>!</ascii><binary>00100001</binary></item>
 		<item><ascii>"</ascii><binary>00100010</binary></item>

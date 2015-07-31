@@ -6,10 +6,14 @@
 		rzrbld
 	Released under the MIT license
 -->
+<!-- MBX: EXSLT str:replace() function for URLsafe relacements -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:local="http://localhost/base64.xsl"
 	xmlns:b64="https://github.com/ilyakharlamov/xslt_base64" 
-	xmlns:test="http://localhost/test">
+	xmlns:test="http://localhost/test"
+    xmlns:str="http://exslt.org/strings"
+    extension-element-prefixes="str"
+	>
 	<xsl:variable name="binarydatamap" select="document('base64_binarydatamap.xml')"/>
 	<xsl:key name="binaryToBase64" match="item" use="binary" />
 	<xsl:key name="asciiToBinary" match="item" use="ascii" />
@@ -32,7 +36,9 @@
 		</xsl:variable>
 		<xsl:choose>
 			<xsl:when test="$urlsafe">
-				<xsl:value-of select="translate($result,'+/','-_')"/>
+				<!-- <xsl:value-of select="translate($result,'+/','-_')"/> -->
+				<!-- MBX: Convert "+" and "/" to URL-encoded hex via EXSLT str:replace() -->
+				<xsl:value-of select="str:replace(str:replace($result, '+', '%2B'), '/', '%2F')"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="$result"/>
