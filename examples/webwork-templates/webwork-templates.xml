@@ -131,7 +131,7 @@
                     </setup>
 
                     <statement>
-                        <p><ol label="a">
+                        <ol label="a">
                             <li>
                                 <p>Suppose the correct answer is <m><var name="$answer1"/></m>.</p>
                                 <ul label="square">
@@ -148,7 +148,8 @@
                                     </li>
                                 </ul>
                             </li>
-                        </ol></p>
+                        </ol>
+
                     </statement>
 
                     <solution>

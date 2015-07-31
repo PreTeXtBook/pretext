@@ -41,6 +41,10 @@
 <xsl:param name="pg.answer.format.help" select="'yes'" />
 
 
+<!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
+<xsl:strip-space elements="li" />
+
+
 <!-- ################## -->
 <!-- Top-Down Structure -->
 <!-- ################## -->
@@ -127,9 +131,74 @@
 <!-- In PGML, paragraph breaks are just blank lines -->
 <!-- End as normal with a line feed, then           -->
 <!-- issue a blank line to signify the break        -->
+<!-- If p is inside a list, special handling        -->
 <xsl:template match="webwork//p">
+    <xsl:if test="preceding-sibling::p">
+        <xsl:call-template name="space">
+            <xsl:with-param name="blocksize" select="4"/>
+            <xsl:with-param name="repetitions" select="count(ancestor::ul) + count(ancestor::ol)"/>
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:apply-templates />
+    <xsl:if test="parent::li and not(../following-sibling::li) and not(../following::*[1][self::li])">
+        <xsl:call-template name="space">
+            <xsl:with-param name="blocksize" select="3"/>
+            <xsl:with-param name="repetitions" select="1"/>
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Implement PGML unordered lists                 -->
+<xsl:template match="webwork//ul|webwork//ol">
     <xsl:apply-templates />
     <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="ul/li[ancestor::webwork]">
+    <xsl:call-template name="space">
+        <xsl:with-param name="blocksize" select="4"/>
+        <xsl:with-param name="repetitions" select="count(ancestor::ul) + count(ancestor::ol) - 1"/>
+    </xsl:call-template>
+    <xsl:choose>
+        <xsl:when test="../@label='disc'">*</xsl:when>
+        <xsl:when test="../@label='circle'">o</xsl:when>
+        <xsl:when test="../@label='square'">+</xsl:when>
+        <xsl:otherwise>-</xsl:otherwise>
+    </xsl:choose>
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates />
+    <xsl:if test="not(child::p) and not(following-sibling::li) and not(following::*[1][self::li])">
+        <xsl:call-template name="space">
+            <xsl:with-param name="blocksize" select="3"/>
+            <xsl:with-param name="repetitions" select="1"/>
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="ol/li[ancestor::webwork]">
+    <xsl:call-template name="space">
+        <xsl:with-param name="blocksize" select="4"/>
+        <xsl:with-param name="repetitions" select="count(ancestor::ul) + count(ancestor::ol) - 1"/>
+    </xsl:call-template>
+    <xsl:choose>
+        <xsl:when test="contains(../@label,'1')">1</xsl:when>
+        <xsl:when test="contains(../@label,'a')">a</xsl:when>
+        <xsl:when test="contains(../@label,'A')">A</xsl:when>
+        <xsl:when test="contains(../@label,'i')">i</xsl:when>
+        <xsl:when test="contains(../@label,'I')">I</xsl:when>
+        <xsl:otherwise>1</xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>.  </xsl:text>
+    <xsl:apply-templates />
+    <xsl:if test="not(child::p) and not(following-sibling::li) and not(following::*[1][self::li])">
+        <xsl:call-template name="space">
+            <xsl:with-param name="blocksize" select="3"/>
+            <xsl:with-param name="repetitions" select="1"/>
+        </xsl:call-template>
+    </xsl:if>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
@@ -291,6 +360,21 @@
         </xsl:call-template>
     </xsl:if>
 </xsl:template>
+
+<!-- PGML relies on sequences of space characters for markup -->
+<xsl:template name="space">
+    <xsl:param name="blocksize" select="4" />
+    <xsl:param name="repetitions" select="1" />
+    <xsl:param name="width" select="$blocksize * $repetitions" />
+    <xsl:if test="not($width = 0)">
+        <xsl:text> </xsl:text>
+        <xsl:call-template name="space">
+            <xsl:with-param name="width" select="$width - 1" />
+        </xsl:call-template>
+    </xsl:if>
+</xsl:template>
+
+
 
 <!-- Convert a var's "category" to the right term for AnswerFormatHelp -->
 <xsl:template name="category-to-format">
