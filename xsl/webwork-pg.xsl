@@ -313,7 +313,7 @@
 <!-- Call from "webwork" context                          -->
 <xsl:template match="macros" />
 <xsl:template name="macros">
-    <xsl:param name="webwork" />
+    <!-- <xsl:param name="webwork" /> -->
     <!-- three standard macro files, order and placement is critical -->
     <xsl:call-template name="begin-block">
         <xsl:with-param name="title">Load Macros</xsl:with-param>
@@ -332,9 +332,11 @@
         <xsl:text>    "AnswerFormatHelp.pl",&#xa;</xsl:text>
     </xsl:if>
     <!-- targeted feedback messages for specific wrong answers       -->
+    <!--     
     <xsl:if test="$webwork//pg-code[text()[contains(.,'AnswerHints')]]">
         <xsl:text>    "answerHints.pl",&#xa;</xsl:text>
     </xsl:if>
+    -->    
     <xsl:apply-templates select="macros/macro" />
     <xsl:text>    "PGcourse.pl",&#xa;</xsl:text>
     <xsl:text>);&#xa;</xsl:text>
