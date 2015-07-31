@@ -157,6 +157,71 @@
                     </solution>
                 </webwork>
             </exercise>
+
+            <exercise>
+                <title>Answer is a function with domain issues.</title>
+
+                <webwork xml:id="function-with-domain-issues">
+
+                    <macros>
+                       <macro>answerHints.pl</macro>
+                       <!-- Tool for providing feedback to studnets for certain incorrect answers that you expect from students -->
+                    </macros>
+
+                    <setup>
+                        <var name="$a" category="integer">
+                            <static>2</static>
+                        </var>
+                        <var name="$answer1" category="formula">
+                            <static>\sqrt{x-2}</static>
+                        </var>
+                        <var name="$answer2" category="formula">
+                            <static>\ln\left(\left\lvert\frac{x}{x-2}\right\rvert\right)</static>
+                        </var>
+                        <var name="$answer2evaluator" category="formula">
+                            <static>\ln\left(\left\lvert\frac{x}{x-2}\right\rvert\right)</static>
+                        </var>
+
+                        <pg-code>
+                            $a = random(2,5,1);
+                            $answer1 = Compute("sqrt(x-$a)");
+                            $answer1->{limits} = [$a+1,$a+4];
+                            $answer2 = Compute("ln(abs( x / (x-$a) ))");
+                            $answer2->{test_points} = [[-5],[-4],[1],[$a-1],[7],[8]];
+                            $answer2evaluator = $answer2 -> cmp() -> withPostFilter( AnswerHints( [Compute("ln(abs((x-$a)/x))"),] => "This is the opposite of correct...",));
+                        </pg-code>
+                    </setup>
+
+                    <statement>
+                        <ol label="a">
+                            <li>
+                                <p>Suppose the correct answer is <m>\displaystyle <var name="$answer1"/></m>.</p>
+                                <ul label="square">
+                                    <li>
+                                        <p><answer var="$answer1" width="15"/></p>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/></m>.</p>
+                                <ul label="square">
+                                    <li>
+                                        <p><answer var="$answer2evaluator" width="15"/></p>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ol>
+
+                    </statement>
+
+                    <solution>
+                        <p>Solution explanation goes here.</p>
+                    </solution>
+                </webwork>
+            </exercise>
+
+           
+
         </section>
         
     </article>
