@@ -25,7 +25,7 @@
 >
 
 <!-- path assumes we place  webwork-pg.xsl in mathbook "user" directory -->
-<xsl:import href="../xsl/mathbook-common.xsl" />
+<!-- <xsl:import href="../xsl/mathbook-common.xsl" /> -->
 
 <!-- Intend output to be a PGML problem -->
 <xsl:output method="text" />
