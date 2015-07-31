@@ -257,5 +257,39 @@
                 </webwork>
             </exercise>
         </section>
+
+        <section>
+            <title>Antidifferentiation</title>
+
+            <p>The derivative, and antiderivative, of a function can be understood through study of their graphical relationships.</p>
+
+            <definition xml:id="definition-antiderivative">
+                <title>Antiderivative of a Function</title>
+
+                <statement>
+                    <p>Suppose that <m>f(x)</m> and <m>F(x)</m> are two functions such that <me>F^\prime(x) = f(x).</me>  Then we say <m>F</m> is an <term>antiderivative</term> of <m>f</m>.</p>
+                </statement>
+            </definition>
+
+            <paragraphs>
+                <title>Implementation Note</title>
+
+                <p>The other problems in this chapter have their source authored within the same document as the narrative.  However this problem is available in the <url href="http://webwork.maa.org/wiki/Open_Problem_Library">Open Problem Library</url>.  So everything about teh problem lives on WeBWorK server that we are polling.</p>
+
+                <p>One implication of this is that we might want to provide some commentary that connects the problem to the text, as we have suggested below.  We also need to decide how to represent the problem in a static setting (PDF/print), especially when the problem contains interactive features like this one.  So in the PDF version of this chapter, the problem is currently blank.</p>
+            </paragraphs>
+
+            <exercise xml:id="ww-graphical-antiderivatives">
+                <title>Graphical Antiderivatives</title>
+
+                <statement>
+                    <p>Consult <xref ref="definition-antiderivative" autoname="yes" /> and the Fundamental Theorem of Calculus to assist you with the following problem.</p>
+                </statement>
+
+                <webwork source="Library/FortLewis/Calc1/06-01-Antiderivatives-graphically/AF2/AF2.pg" height="750"/>
+            </exercise>
+
+        </section>
+
     </article>
 </mathbook>
