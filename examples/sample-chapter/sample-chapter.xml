@@ -108,7 +108,7 @@
             <exercise>
                 <title>Adding Single-Digit Integers</title>
 
-                <webwork xml:id="integer-addition">
+                <webwork xml:id="integer-addition" height="250">
                     <title>Integer Addition</title>
 
                     <!-- for testing extra macros
@@ -164,7 +164,7 @@
             <exercise>
                 <title>Solving Quadratic Equations</title>
 
-                <webwork xml:id="quadratic-equation" context="numeric" showpartialcorrect="yes" type="scaffold">
+                <webwork xml:id="quadratic-equation" context="numeric" showpartialcorrect="yes" type="scaffold" height="750">
 
                     <macros>
                         <macro>parserMultiAnswer.pl</macro>
