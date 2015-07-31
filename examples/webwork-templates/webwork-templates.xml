@@ -163,11 +163,6 @@
 
                 <webwork xml:id="function-with-domain-issues">
 
-                    <macros>
-                       <macro>answerHints.pl</macro>
-                       <!-- Tool for providing feedback to studnets for certain incorrect answers that you expect from students -->
-                    </macros>
-
                     <setup>
                         <var name="$a" category="integer">
                             <static>2</static>
@@ -176,9 +171,6 @@
                             <static>\sqrt{x-2}</static>
                         </var>
                         <var name="$answer2" category="formula">
-                            <static>\ln\left(\left\lvert\frac{x}{x-2}\right\rvert\right)</static>
-                        </var>
-                        <var name="$answer2evaluator" category="formula">
                             <static>\ln\left(\left\lvert\frac{x}{x-2}\right\rvert\right)</static>
                         </var>
 
@@ -206,7 +198,7 @@
                                 <p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/></m>.</p>
                                 <ul label="square">
                                     <li>
-                                        <p><answer var="$answer2evaluator" width="15"/></p>
+                                        <p><answer var="$answer2" width="15" evaluator="$answer2evaluator"/></p>
                                     </li>
                                 </ul>
                             </li>

@@ -52,7 +52,9 @@
 <!-- Basic outline of a simple problem -->
 <xsl:template match="webwork">
     <xsl:call-template   name="begin-problem" />
-    <xsl:call-template   name="macros" />
+    <xsl:call-template   name="macros">
+        <xsl:with-param name="webwork" select="." />
+    </xsl:call-template>
     <xsl:call-template   name="header" />
     <xsl:apply-templates select="setup" />
     <xsl:apply-templates select="statement" />
@@ -230,7 +232,14 @@
         </xsl:with-param>
     </xsl:call-template>
     <xsl:text>]{</xsl:text>
-    <xsl:value-of select="@var" />
+        <xsl:choose>
+            <xsl:when test="@evaluator">
+                <xsl:value-of select="@evaluator" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="@var" />
+            </xsl:otherwise>
+        </xsl:choose>
     <xsl:text>}</xsl:text>
     <xsl:if test="$pg.answer.format.help = 'yes'">
         <xsl:variable name="category">
@@ -304,6 +313,7 @@
 <!-- Call from "webwork" context                          -->
 <xsl:template match="macros" />
 <xsl:template name="macros">
+    <xsl:param name="webwork" />
     <!-- three standard macro files, order and placement is critical -->
     <xsl:call-template name="begin-block">
         <xsl:with-param name="title">Load Macros</xsl:with-param>
@@ -312,13 +322,18 @@
     <xsl:text>    "PGstandard.pl",&#xa;</xsl:text>
     <xsl:text>    "MathObjects.pl",&#xa;</xsl:text>
     <xsl:text>    "PGML.pl",&#xa;</xsl:text>
+    <!-- look for other macros to use automatically                  -->
+    <!-- scaffolded problems -->
     <xsl:if test="@type='scaffold'">
         <xsl:text>    "scaffold.pl",&#xa;</xsl:text>
     </xsl:if>
-    <!-- TODO: Make below check each <answer>'s var, to see if that var -->
-    <!-- has an approved category                                       -->
+    <!-- links to syntax help following answer blanks                -->
     <xsl:if test="($pg.answer.format.help = 'yes')">
         <xsl:text>    "AnswerFormatHelp.pl",&#xa;</xsl:text>
+    </xsl:if>
+    <!-- targeted feedback messages for specific wrong answers       -->
+    <xsl:if test="$webwork//pg-code[text()[contains(.,'AnswerHints')]]">
+        <xsl:text>    "answerHints.pl",&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="macros/macro" />
     <xsl:text>    "PGcourse.pl",&#xa;</xsl:text>
