@@ -52,9 +52,7 @@
 <!-- Basic outline of a simple problem -->
 <xsl:template match="webwork">
     <xsl:call-template   name="begin-problem" />
-    <xsl:call-template   name="macros">
-        <xsl:with-param name="webwork" select="." />
-    </xsl:call-template>
+    <xsl:call-template   name="macros" />
     <xsl:call-template   name="header" />
     <xsl:apply-templates select="setup" />
     <xsl:apply-templates select="statement" />
@@ -310,10 +308,12 @@
 <!-- We kill default processing of "macros" and use       -->
 <!-- a named template.  This allows for there to be no    -->
 <!-- "macros" element if no additional macros are needed. -->
+<!-- Calling context is "webwork" problem-root            -->
 <!-- Call from "webwork" context                          -->
+<!-- http://stackoverflow.com/questions/9936762/xslt-pass-current-context-in-call-template -->
 <xsl:template match="macros" />
+
 <xsl:template name="macros">
-    <!-- <xsl:param name="webwork" /> -->
     <!-- three standard macro files, order and placement is critical -->
     <xsl:call-template name="begin-block">
         <xsl:with-param name="title">Load Macros</xsl:with-param>
@@ -342,11 +342,9 @@
         <xsl:text>    "AnswerFormatHelp.pl",&#xa;</xsl:text>
     </xsl:if>
     <!-- targeted feedback messages for specific wrong answers       -->
-    <!--     
-    <xsl:if test="$webwork//pg-code[text()[contains(.,'AnswerHints')]]">
+    <xsl:if test="contains(./setup/pg-code,'AnswerHints')">
         <xsl:text>    "answerHints.pl",&#xa;</xsl:text>
     </xsl:if>
-    -->    
     <xsl:apply-templates select="macros/macro" />
     <xsl:text>    "PGcourse.pl",&#xa;</xsl:text>
     <xsl:text>);&#xa;</xsl:text>
