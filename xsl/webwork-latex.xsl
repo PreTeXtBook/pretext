@@ -92,9 +92,39 @@
 <!-- PGML answer blank               -->
 <!-- Example: [_____]{$ans}          -->
 <xsl:template match="statement//answer">
-    <xsl:text>\rule[-.3\baselineskip]{</xsl:text>
-    <xsl:value-of select="@width" />
-    <xsl:text>em}{0.1ex}</xsl:text>
+    <xsl:variable name="problem" select="ancestor::webwork" />
+    <xsl:variable name="varname" select="@var" />
+    <xsl:choose>
+        <xsl:when test="$problem/setup/var[@name=$varname][@category='popup']" >
+            <xsl:text>(/</xsl:text>
+            <xsl:for-each select="$problem/setup/var[@name=$varname]/choices/choice">
+                <xsl:apply-templates select='.' />
+                <xsl:text>/</xsl:text>
+            </xsl:for-each>
+            <xsl:text>)</xsl:text>
+        </xsl:when>
+        <xsl:when test="$problem/setup/var[@name=$varname][@category='buttons']" >
+            <xsl:text>\par&#xa;</xsl:text>
+            <xsl:text>\begin{itemize}[label=$\circ$,leftmargin=3em,]&#xa;</xsl:text>
+            <xsl:for-each select="$problem/setup/var[@name=$varname]/choices/choice">
+                <xsl:text>\item{}</xsl:text>
+                <xsl:apply-templates select='.' />
+            </xsl:for-each>
+            <xsl:text>\end{itemize}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\rule[-.3\baselineskip]{</xsl:text>
+            <xsl:choose>
+                <xsl:when test="@width">
+                    <xsl:value-of select="@width" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>5</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>em}{0.1ex}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- PGML suggests we allow the "var" element as a child -->

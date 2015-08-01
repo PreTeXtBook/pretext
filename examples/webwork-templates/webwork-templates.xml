@@ -36,7 +36,7 @@
 
         <!-- In the HTML version there is room for a   -->
         <!-- picture or logo in the upper left corner. -->
-        <brandlogo url="http://webwork.maa.org/" source="images/webwork-logo.jpg" />
+        <brandlogo url="http://webwork.maa.org/" source="images/webwork-logo.png" />
 
         <!--
         TeX/LaTeX macros can be written in the usual way.
@@ -209,6 +209,59 @@
                     <solution>
                         <p>Solution explanation goes here.</p>
                     </solution>
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <title>Multiple choice by popup or radio buttons.</title>
+
+                <webwork xml:id="multiple-choice-popup-or-radio-buttons">
+
+                    <setup>
+                        <var name="$color1" category="popup">
+                            <choices>
+                                <choice>Red</choice>
+                                <choice>Blue</choice>
+                                <choice>Green</choice>
+                            </choices>
+                            <static>Blue</static>
+                        </var>
+                        <var name="$color2" category="buttons">
+                            <choices>
+                                <choice>Red</choice>
+                                <choice>Blue</choice>
+                                <choice>Green</choice>
+                                <choice>None of these</choice>
+                            </choices>
+                            <static>Blue</static>
+                        </var>
+
+                        <pg-code>
+                            $color1 = PopUp(
+                                ["?","Red","Blue","Green"],
+                                "Blue",
+                            );
+
+                            $color2 = RadioButtons(
+                              ["Red","Blue","Green","None of these"],
+                              "Blue", # correct answer
+                              last => ["None of these"], # can be a list
+                            );
+                        </pg-code>
+                    </setup>
+
+                    <statement>
+                        <p>My favorite color is <answer var="$color1"/>.</p>
+
+                        <p>My favorite color is</p>
+                        <p><answer var="$color2"/></p>
+                    </statement>
+
+                    <solution>
+                        <p>The correct answer is <var name="$color1"/>.</p>
+                        <p>The correct answer is <var name="$color2"/></p>
+                    </solution>
+
                 </webwork>
             </exercise>
 

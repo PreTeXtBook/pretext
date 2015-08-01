@@ -323,6 +323,16 @@
     <xsl:text>    "MathObjects.pl",&#xa;</xsl:text>
     <xsl:text>    "PGML.pl",&#xa;</xsl:text>
     <!-- look for other macros to use automatically                  -->
+    <!-- popup menu multiple choice answers                          -->
+    <!-- What conditional???                                         -->
+    <xsl:if test="1=1">
+        <xsl:text>    "parserPopUp.pl",&#xa;</xsl:text>
+    </xsl:if>
+    <!-- radio buttons multiple choice answers                       -->
+    <!-- What conditional???                                         -->
+    <xsl:if test="1=1">
+        <xsl:text>    "parserRadioButtons.pl",&#xa;</xsl:text>
+    </xsl:if>
     <!-- scaffolded problems -->
     <xsl:if test="@type='scaffold'">
         <xsl:text>    "scaffold.pl",&#xa;</xsl:text>
