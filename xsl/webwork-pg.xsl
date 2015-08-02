@@ -324,13 +324,11 @@
     <xsl:text>    "PGML.pl",&#xa;</xsl:text>
     <!-- look for other macros to use automatically                  -->
     <!-- popup menu multiple choice answers                          -->
-    <!-- What conditional???                                         -->
-    <xsl:if test="1=1">
+    <xsl:if test="./setup/var[@category='popup']">
         <xsl:text>    "parserPopUp.pl",&#xa;</xsl:text>
     </xsl:if>
     <!-- radio buttons multiple choice answers                       -->
-    <!-- What conditional???                                         -->
-    <xsl:if test="1=1">
+    <xsl:if test="./setup/var[@category='buttons']">
         <xsl:text>    "parserRadioButtons.pl",&#xa;</xsl:text>
     </xsl:if>
     <!-- scaffolded problems -->
