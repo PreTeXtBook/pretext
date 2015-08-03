@@ -294,14 +294,22 @@
 <!-- Static, Named Templates -->
 <!-- ####################### -->
 
+<!-- Includes file header blurb promoting MBX -->
 <xsl:template name="begin-problem">
+    <xsl:call-template name="converter-blurb-perl" />
     <xsl:text>DOCUMENT();&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Includes (localized) PG "COMMENT" promoting MBX -->
 <xsl:template name="header">
     <xsl:call-template name="begin-block">
         <xsl:with-param name="title">Header</xsl:with-param>
     </xsl:call-template>
+    <xsl:text>COMMENT('</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'authored'" />
+    </xsl:call-template>
+    <xsl:text> MathBook XML');&#xa;</xsl:text>
     <xsl:text>TEXT(beginproblem());&#xa;</xsl:text>
 </xsl:template>
 
