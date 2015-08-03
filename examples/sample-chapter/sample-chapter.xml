@@ -271,24 +271,79 @@
                 </statement>
             </definition>
 
+            <p>The Fundamental Theorem of Calculus in one of the high points of a course in single-variable course.</p>
+
+            <theorem xml:id="theorem-FTC">
+                <title>The Fundamental Theorem of Calculus</title>
+                <statement><index><main>Fundamental Theorem of Calculus</main></index>
+                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me></p>
+                </statement>
+                <proof>
+                    <p>Left to the reader.</p>
+                </proof>
+            </theorem>
+
+            <p>We state an equivalent version of the FTC, which is less-suited for computation, but which perhaps is a more interesting theoretical statement.</p>
+
+            <corollary xml:id="corollary-FTC-derivative">
+                <statement>
+                    <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men></p>
+                </statement>
+                <todo>Should equation references come with parentheses?</todo>
+                <proof xml:id="proof-FTC-corollary">
+                    <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.</p>
+                    <mdn>
+                        <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
+                        <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
+                        <mrow>&amp;=f(x)-0 = f(x)</mrow>
+                    </mdn>
+                </proof>
+            </corollary>
+
             <paragraphs>
                 <title>Implementation Note</title>
 
-                <p>The other problems in this chapter have their source authored within the same document as the narrative.  However this problem is available in the <url href="http://webwork.maa.org/wiki/Open_Problem_Library">Open Problem Library</url>.  So everything about teh problem lives on WeBWorK server that we are polling.</p>
+                <p>The problems in this sample chapter have their source authored within the same document as the narrative.  However the first problem in the set below is drawn directly from the <url href="http://webwork.maa.org/wiki/Open_Problem_Library">Open Problem Library</url>.  So everything about the problem lives on a WeBWorK server that we are polling.</p>
 
                 <p>One implication of this is that we might want to provide some commentary that connects the problem to the text, as we have suggested below.  We also need to decide how to represent the problem in a static setting (PDF/print), especially when the problem contains interactive features like this one.  So in the PDF version of this chapter, the problem is currently blank.</p>
             </paragraphs>
 
-            <exercise xml:id="ww-graphical-antiderivatives">
-                <title>Graphical Antiderivatives</title>
+            <exercises>
+                <title>WeBWorK Exercises</title>
 
-                <statement>
-                    <p>Consult <xref ref="definition-antiderivative" autoname="yes" /> and the Fundamental Theorem of Calculus to assist you with the following problem.</p>
-                </statement>
+                <exercise xml:id="ww-graphical-antiderivatives">
+                    <title>Graphical Antiderivatives</title>
 
-                <webwork source="Library/FortLewis/Calc1/06-01-Antiderivatives-graphically/AF2/AF2.pg" height="750"/>
-            </exercise>
+                    <statement>
+                        <p>Consult <xref ref="definition-antiderivative" autoname="yes" /> and the <xref ref="theorem-FTC" autonmae="title" /> to assist you with the following problem.</p>
+                    </statement>
 
+                    <webwork source="Library/FortLewis/Calc1/06-01-Antiderivatives-graphically/AF2/AF2.pg" height="750"/>
+                </exercise>
+
+                <exercise xml:id="ww-discuss-always-antiderivative">
+                    <title>Every Continuous Function has an Antiderivative</title>
+
+                    <webwork height="500">
+                        <statement>
+                            <p>Explain how we can use <xref ref="corollary-FTC-derivative" autoname="yes" /> to say that every continuous function <em>always</em> has a derivative.</p>
+                            <answer category="essay" />
+                        </statement>
+                    </webwork>
+                </exercise>
+
+                <exercise xml:id="ww-discuss-inverse-processes">
+                    <title>Inverse Processes</title>
+
+                    <webwork height="500">
+                        <statement>
+                            <p><q>Differentiation and integration are inverse processes.</q>  Cite specific results from this section in an explanation of how they justify this (somewhat imprecise) claim.</p>
+                            <answer category="essay" width="40"/>
+                        </statement>
+                    </webwork>
+                </exercise>
+
+            </exercises>
         </section>
 
     </article>

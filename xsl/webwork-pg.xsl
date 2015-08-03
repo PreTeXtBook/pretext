@@ -265,6 +265,32 @@
     </xsl:if>
 </xsl:template>
 
+<!-- Essay answers -->
+<!-- Example: [@ ANS(essay_cmp); essay_box(6,76) @]*   -->
+<!-- Requires:  PGessaymacros.pl, automatically loaded -->
+<!-- http://webwork.maa.org/moodle/mod/forum/discuss.php?d=3370 -->
+<xsl:template match="answer[@category = 'essay']">
+    <xsl:text>[@ ANS(essay_cmp); essay_box(</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@height">
+            <xsl:value-of select="@height" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>6</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>,</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@width">
+            <xsl:value-of select="@width" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>76</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>) @]*</xsl:text>
+</xsl:template>
+
 <!-- PGML inline math uses its own delimiters  -->
 <!-- NB: we allow the "var" element as a child -->
 <xsl:template match= "webwork//m">
@@ -338,6 +364,10 @@
     <!-- radio buttons multiple choice answers                       -->
     <xsl:if test="./setup/var[@category='buttons']">
         <xsl:text>    "parserRadioButtons.pl",&#xa;</xsl:text>
+    </xsl:if>
+    <!-- essay answers, no var in setup, just answer                 -->
+    <xsl:if test="./statement//answer[@category='essay']">
+        <xsl:text>    "PGessaymacros.pl",&#xa;</xsl:text>
     </xsl:if>
     <!-- scaffolded problems -->
     <xsl:if test="@type='scaffold'">

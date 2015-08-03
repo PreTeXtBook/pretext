@@ -127,6 +127,12 @@
     </xsl:choose>
 </xsl:template>
 
+<!-- An essay answer has no associated variable              -->
+<!-- We simply indicate that this is an essay answer problem -->
+<xsl:template match="answer[@category='essay']">
+    <xsl:text>\quad\lbrack Essay Answer\rbrack</xsl:text>
+</xsl:template>
+
 <!-- PGML suggests we allow the "var" element as a child -->
 <xsl:template match= "webwork//m">
     <xsl:text>\(</xsl:text>
