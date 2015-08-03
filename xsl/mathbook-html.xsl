@@ -2318,46 +2318,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Table construction utilities -->
 <!-- ############################ -->
 
-<!-- Translate thickness attribute value to integer short name -->
-<xsl:template name="thickness-specification">
-    <xsl:param name="width" />
-    <xsl:choose>
-        <xsl:when test="$width='none'">
-            <xsl:text>0</xsl:text>
-        </xsl:when>
-        <xsl:when test="$width='minor'">
-            <xsl:text>1</xsl:text>
-        </xsl:when>
-        <xsl:when test="$width='medium'">
-            <xsl:text>2</xsl:text>
-        </xsl:when>
-        <xsl:when test="$width='major'">
-            <xsl:text>3</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:WARNING: tabular rule thickness not recognized: use none, minor, medium, major</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
+<!-- Utilities are defined in xsl/mathbook-common.xsl -->
 
-<!-- Translate horizontal alignment to CSS short name -->
-<xsl:template name="halign-specification">
-    <xsl:param name="align" />
-    <xsl:choose>
-        <xsl:when test="$align='left'">
-            <xsl:text>l</xsl:text>
-        </xsl:when>
-        <xsl:when test="$align='center'">
-            <xsl:text>c</xsl:text>
-        </xsl:when>
-        <xsl:when test="$align='right'">
-            <xsl:text>r</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:WARNING: tabular horizontal alignment attribute not recognized: use left, center, right</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
+<!-- "thickness-specification" : param "width"    -->
+<!--     none, minor, medium, major -> 0, 1, 2, 3 -->
+
+<!-- "halign-specification" : param "width"       -->
+<!--     left, right, center -> l, c, r           -->
 
 <!-- ######## -->
 <!-- Captions -->

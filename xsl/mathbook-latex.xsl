@@ -3589,24 +3589,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Typically use these at the last moment,             -->
 <!-- while outputting, and thus use MBX terms internally -->
 
-<!-- Translate horizontal alignment to standard LaTeX column specification -->
-<xsl:template name="halign-specification">
-    <xsl:param name="align" />
-    <xsl:choose>
-        <xsl:when test="$align='left'">
-            <xsl:text>l</xsl:text>
-        </xsl:when>
-        <xsl:when test="$align='center'">
-            <xsl:text>c</xsl:text>
-        </xsl:when>
-        <xsl:when test="$align='right'">
-            <xsl:text>r</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:WARNING: tabular horizontal alignment attribute not recognized: use left, center, right</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
+<!-- Some utilities are defined in xsl/mathbook-common.xsl -->
+
+<!-- "halign-specification" : param "width" -->
+<!--     left, right, center -> l, c, r     -->
 
 <!-- Translate vertical rule width to a LaTeX "new" column specification -->
 <xsl:template name="vrule-specification">
