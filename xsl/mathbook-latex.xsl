@@ -319,6 +319,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Semantic Macros&#xa;</xsl:text>
     <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
     <xsl:text>%% Only defined here if required in this document&#xa;</xsl:text>
+    <xsl:if test="/mathbook//alert">
+        <xsl:text>%% Used for warnings, typically bold and italic&#xa;</xsl:text>
+        <xsl:text>\newcommand{\alert}[1]{\textbf{\textit{#1}}}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="/mathbook//term">
         <xsl:text>%% Used for inline definitions of terms&#xa;</xsl:text>
         <xsl:text>\newcommand{\terminology}[1]{\textbf{#1}}&#xa;</xsl:text>
@@ -2350,7 +2354,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Defined terms (bold) -->
+<!-- Alert -->
+<!-- \alert{} defined in preamble as semantic macro -->
+<xsl:template match="alert">
+    <xsl:text>\alert{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- Term (defined terms) -->
 <!-- \terminology{} defined in preamble as semantic macro -->
 <xsl:template match="term">
     <xsl:text>\terminology{</xsl:text>

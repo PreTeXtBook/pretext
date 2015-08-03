@@ -2612,7 +2612,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Emphasis -->
 <xsl:template match="em">
+    <xsl:comment>Style me with CSS</xsl:comment>
     <em><xsl:apply-templates /></em>
+</xsl:template>
+
+<!-- Alert -->
+<xsl:template match="alert">
+    <b><i><xsl:apply-templates /></i></b>
 </xsl:template>
 
 <!-- Copyright symbol -->
