@@ -267,7 +267,7 @@
 
 <xsl:template name="doctest-file-header">
     <xsl:text>##          Sage Doctest File         ##&#xa;</xsl:text>
-    <xsl:call-template name="converter-blurb" />
+    <xsl:call-template name="converter-blurb-python" />
     <xsl:text>##&#xa;</xsl:text>
     <xsl:text>## To execute doctests in these files, run&#xa;</xsl:text>
     <xsl:text>##   $ $SAGE_ROOT/sage -t &lt;directory-of-these-files&gt;&#xa;</xsl:text>
@@ -280,17 +280,6 @@
     <xsl:text>## See: http://www.sagemath.org/doc/developer/doctesting.html&#xa;</xsl:text>
     <xsl:text>##   or run  $ $SAGE_ROOT/sage --advanced  for brief help&#xa;</xsl:text>
     <xsl:text>##&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template name="converter-blurb">
-    <xsl:text>##                                    ##&#xa;</xsl:text>
-    <xsl:text>## Generated from MathBook XML source ##&#xa;</xsl:text>
-    <xsl:text>##    on </xsl:text>
-    <xsl:value-of select="date:date-time()" />
-    <xsl:text>    ##&#xa;</xsl:text>
-    <xsl:text>##                                    ##&#xa;</xsl:text>
-    <xsl:text>##   http://mathbook.pugetsound.edu   ##&#xa;</xsl:text>
-    <xsl:text>##                                    ##&#xa;</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>

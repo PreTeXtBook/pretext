@@ -2389,4 +2389,54 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     </xsl:call-template>
 </xsl:template>
 
+<!-- Converter information for header, generic -->
+<!-- params are strings to make comment lines in target file    -->
+<!-- "copy-of" supresses output-escaping of HTML/XML characters -->
+<xsl:template name="converter-blurb">
+    <xsl:param name="lead-in" />
+    <xsl:param name="lead-out" />
+    <xsl:copy-of select="$lead-in" /><xsl:text>**************************************</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>* Generated from MathBook XML source *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*    on </xsl:text>  <xsl:value-of select="date:date-time()" />
+                                                                      <xsl:text>    *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*                                    *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*   http://mathbook.pugetsound.edu   *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*                                    *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>**************************************</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- We issue specialized blurbs with appropriate comment lines -->
+<xsl:template name="converter-blurb-latex">
+    <xsl:call-template name="converter-blurb">
+        <xsl:with-param name="lead-in"  select="'%'" />
+        <xsl:with-param name="lead-out" select="'%'" />
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="converter-blurb-html">
+    <xsl:call-template name="converter-blurb">
+        <xsl:with-param name="lead-in">
+            <xsl:text disable-output-escaping='yes'>&lt;!--</xsl:text>
+        </xsl:with-param>
+        <xsl:with-param name="lead-out">
+            <xsl:text disable-output-escaping='yes'>--&gt;</xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="converter-blurb-python">
+    <xsl:call-template name="converter-blurb">
+        <xsl:with-param name="lead-in"  select="'#'" />
+        <xsl:with-param name="lead-out" select="'#'" />
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="converter-blurb-perl">
+    <xsl:call-template name="converter-blurb">
+        <xsl:with-param name="lead-in"  select="'#'" />
+        <xsl:with-param name="lead-out" select="'#'" />
+    </xsl:call-template>
+</xsl:template>
+
+
 </xsl:stylesheet>

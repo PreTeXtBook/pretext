@@ -664,7 +664,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
     <exsl:document href="{$knowl-file}" method="html">
-        <xsl:call-template name="converter-blurb" />
+        <xsl:call-template name="converter-blurb-html" />
         <xsl:variable name="element">
             <xsl:apply-templates select="." mode="environment-element" />
         </xsl:variable>
@@ -3052,8 +3052,8 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <exsl:document href="{$url}" method="html">
     <!-- Need to be careful for format of this initial string     -->
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
+    <xsl:call-template name="converter-blurb-html" />
     <html> <!-- lang="", and/or dir="rtl" here -->
-        <xsl:call-template name="converter-blurb" />
         <head>
             <title>
                 <!-- Leading with initials is useful for small tabs -->
@@ -3143,8 +3143,8 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <exsl:document href="{$url}" method="html">
     <!-- Need to be careful for format of this initial string     -->
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
+    <xsl:call-template name="converter-blurb-html" />
     <html> <!-- lang="", and/or dir="rtl" here -->
-        <xsl:call-template name="converter-blurb" />
         <head>
             <meta name="Keywords" content="Authored in MathBook XML" />
             <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
@@ -3933,22 +3933,6 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
 </noscript>
 <xsl:comment>End: StatCounter code</xsl:comment>
 </xsl:template>
-
-<!-- Converter information for header -->
-<!-- TODO: add date, URL -->
-<xsl:template name="converter-blurb">
-    <xsl:comment>*                                    *</xsl:comment><xsl:text>&#xa;</xsl:text>
-    <xsl:comment>* Generated from MathBook XML source *</xsl:comment><xsl:text>&#xa;</xsl:text>
-    <xsl:comment>
-        <xsl:text>*    on </xsl:text>
-        <xsl:value-of select="date:date-time()" />
-        <xsl:text>    *</xsl:text>
-    </xsl:comment><xsl:text>&#xa;</xsl:text>
-    <xsl:comment>*                                    *</xsl:comment><xsl:text>&#xa;</xsl:text>
-    <xsl:comment>*   http://mathbook.pugetsound.edu   *</xsl:comment><xsl:text>&#xa;</xsl:text>
-    <xsl:comment>*                                    *</xsl:comment><xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
 
 <!-- Miscellaneous -->
 

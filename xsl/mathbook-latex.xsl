@@ -144,7 +144,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     Or, one page, totally unstructured, just lots of paragraphs, widgets, etc -->
 <xsl:template match="article" mode="content-wrap">
     <xsl:param name="content" />
-    <xsl:call-template name="converter-blurb" />
+    <xsl:call-template name="converter-blurb-latex" />
     <xsl:text>\documentclass[</xsl:text>
     <xsl:value-of select="$latex.font.size" />
     <xsl:text>,</xsl:text>
@@ -170,7 +170,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "Bookmaking", 3rd Edition, Marshall Lee, Chapter 27 -->
 <xsl:template match="book" mode="content-wrap">
     <xsl:param name="content" />
-    <xsl:call-template name="converter-blurb" />
+    <xsl:call-template name="converter-blurb-latex" />
     <xsl:text>\documentclass[</xsl:text>
     <xsl:value-of select="$latex.font.size" />
     <xsl:text>,</xsl:text>
@@ -191,7 +191,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- A letter, LaTeX structure -->
 <xsl:template match="letter">
-    <xsl:call-template name="converter-blurb" />
+    <xsl:call-template name="converter-blurb-latex" />
     <xsl:text>\documentclass[</xsl:text>
     <xsl:value-of select="$latex.font.size" />
     <xsl:text>,</xsl:text>
@@ -3988,19 +3988,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$warning" />
         <xsl:text>}}</xsl:text>
     </xsl:if>
-</xsl:template>
-
-<!-- Converter information for header -->
-<!-- TODO: add date, URL -->
-<xsl:template name="converter-blurb">
-    <xsl:text>%%                                    %%&#xa;</xsl:text>
-    <xsl:text>%% Generated from MathBook XML source %%&#xa;</xsl:text>
-    <xsl:text>%%    on </xsl:text>
-    <xsl:value-of select="date:date-time()" />
-    <xsl:text>    %%&#xa;</xsl:text>
-    <xsl:text>%%                                    %%&#xa;</xsl:text>
-    <xsl:text>%%   http://mathbook.pugetsound.edu   %%&#xa;</xsl:text>
-    <xsl:text>%%                                    %%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Uninteresting Code, aka the Bad Bank                    -->

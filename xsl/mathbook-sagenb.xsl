@@ -166,7 +166,7 @@
     <xsl:param name="content" />
     <xsl:variable name="file"><xsl:apply-templates select="." mode="filename" /></xsl:variable>
     <exsl:document href="{$file}" method="html">
-        <xsl:call-template name="converter-blurb" />
+        <xsl:call-template name="converter-blurb-html" />
         <xsl:call-template name="fonts" />
         <xsl:call-template name="css" />
         <xsl:call-template name="styling" />            
