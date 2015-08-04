@@ -2064,22 +2064,111 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     </xsl:if>
 </xsl:template>
 
-<!-- A single "ref" is the most common case of an "xref" -->
-<xsl:template match="xref[count(@ref) = 1]">
-    <!-- First, check that the @ref is good -->
-    <xsl:call-template name="check-ref">
-        <xsl:with-param name="ref" select="@ref" />
-    </xsl:call-template>
-    <xsl:variable name="target" select="id(@ref)" />
-    <!-- Send the target and text representation for link to a -->
-    <!-- format-specific and target-specific link manufacture. -->
-    <!-- LaTeX uses \hyperref and \hyperlink, while HTML uses  -->
-    <!-- traditional hyperlinks and also modern knowls.        -->
-    <xsl:apply-templates select="$target" mode="xref-link">
-        <xsl:with-param name="content">
-            <xsl:apply-templates select="." mode="xref-text-one" />
-        </xsl:with-param>
-    </xsl:apply-templates>
+<!-- A single "ref" is the most common case of an "xref"   -->
+<!-- and we also handle comma-separted lists of refs here. -->
+<!-- TODO: split these with a match on @ref with comma?    -->
+<xsl:template match="xref[@ref]">
+    <xsl:choose>
+        <xsl:when test="contains(@ref, ',')">
+            <!-- For multiple ref, we print an autoname           -->
+            <!-- outside of the link text, similarly any          -->
+            <!-- wrapping is done outside of the links.           -->
+            <!-- These behaviors are controlled by the first ref. -->
+            <xsl:variable name="first-ref" select="normalize-space(substring-before(@ref, ','))" />
+            <!-- check is repeated later, but best to verify now -->
+            <xsl:call-template name="check-ref">
+                <xsl:with-param name="ref" select="$first-ref" />
+            </xsl:call-template>
+            <!-- autoname outside links, wraps -->
+            <xsl:variable name="target" select="id($first-ref)" />
+            <!-- include autoname prefix in link text, since just one -->
+            <xsl:variable name="prefix">
+                <xsl:apply-templates select="$target" mode="autoname-prefix">
+                    <xsl:with-param name="local" select="@autoname" />
+                </xsl:apply-templates>
+            </xsl:variable>
+            <xsl:if test="not($prefix = '')">
+                <xsl:value-of select="$prefix" />
+                <!-- generic nbsp here via abstract template -->
+                <xsl:text> </xsl:text>
+            </xsl:if>
+            <!-- optionally wrap with parentheses, brackets -->
+            <xsl:apply-templates select="$target" mode="xref-wrap">
+                <xsl:with-param name="content">
+                    <!-- recurse through refs, making links in the process -->
+                    <xsl:call-template name="xref-text-multiple">
+                        <xsl:with-param name="refs-string" select="@ref" />
+                    </xsl:call-template>
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- First, check that the single @ref is good -->
+            <xsl:call-template name="check-ref">
+                <xsl:with-param name="ref" select="@ref" />
+            </xsl:call-template>
+            <xsl:variable name="target" select="id(@ref)" />
+            <!-- Send the target and text representation for link to a -->
+            <!-- format-specific and target-specific link manufacture. -->
+            <!-- LaTeX uses \hyperref and \hyperlink, while HTML uses  -->
+            <!-- traditional hyperlinks and also modern knowls.        -->
+            <xsl:apply-templates select="$target" mode="xref-link">
+                <xsl:with-param name="content">
+                    <xsl:apply-templates select="." mode="xref-text-one" />
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="xref-text-multiple">
+    <xsl:param name="refs-string" />
+    <xsl:variable name="first-char" select="substring($refs-string, 1, 1)" />
+    <xsl:choose>
+        <!-- leading spaces: repeat in output and strip -->
+        <xsl:when test="contains(' ', $first-char)">
+            <xsl:value-of select="$first-char" />
+            <xsl:call-template name="xref-text-multiple">
+                <xsl:with-param name="refs-string" select="substring($refs-string, 2)" />
+            </xsl:call-template>
+        </xsl:when>
+        <!-- no more separators, last one, process and quit-->
+        <xsl:when test="not(contains($refs-string, ','))">
+            <!-- <xsl:value-of select="$refs-string" /> -->
+            <!-- Check that refs-string is good -->
+            <xsl:call-template name="check-ref">
+                <xsl:with-param name="ref" select="$refs-string" />
+            </xsl:call-template>
+            <xsl:variable name="target" select="id($refs-string)" />
+            <!-- Send the target and number (only) for link manufacture -->
+            <xsl:apply-templates select="$target" mode="xref-link">
+                <xsl:with-param name="content">
+                    <xsl:apply-templates select="$target" mode="xref-number" />
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- break at comma, normalize head, process, duplicate comma, recurse on tail -->
+        <xsl:otherwise>
+            <xsl:variable name="next-ref" select="normalize-space(substring-before($refs-string, ','))" />
+            <!-- Check that next-ref is good -->
+            <xsl:call-template name="check-ref">
+                <xsl:with-param name="ref" select="$next-ref" />
+            </xsl:call-template>
+            <xsl:variable name="target" select="id($next-ref)" />
+            <!-- Send the target and number (only) for link manufacture -->
+            <xsl:apply-templates select="$target" mode="xref-link">
+                <xsl:with-param name="content">
+                    <xsl:apply-templates select="$target" mode="xref-number" />
+                </xsl:with-param>
+            </xsl:apply-templates>
+            <!-- duplicate comma from split -->
+            <xsl:text>,</xsl:text>
+            <!-- recurse, as there is more to come -->
+            <xsl:call-template name="xref-text-multiple">
+                <xsl:with-param name="refs-string" select="substring-after($refs-string, ',')" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- This is a base implementation for the xref-link -->
