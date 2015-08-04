@@ -3748,15 +3748,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- in the PDF (and/or control color etc)             -->
 <!-- Mostly this is for consistency in the source      -->
 <xsl:template match="*" mode="xref-link">
-    <xsl:param name="autoname" />
-    <xsl:param name="detail" />
+    <xsl:param name="content" />
     <xsl:text>\hyperref[</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>]{</xsl:text>
-    <xsl:apply-templates select="." mode="xref-text">
-        <xsl:with-param name="autoname" select="$autoname" />
-        <xsl:with-param name="detail" select="$detail" />
-    </xsl:apply-templates>
+    <xsl:value-of select="$content" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -3769,15 +3765,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- them with \hyperlink{}{} (nee hyperref[]{}).             -->
 <!-- (See also modal templates for "label" and "xref-number") -->
 <xsl:template match="exercises//exercise|biblio|note|proof|hint|answer|solution|exercisegroup" mode="xref-link">
-    <xsl:param name="autoname" />
-    <xsl:param name="detail" />
+    <xsl:param name="content" />
     <xsl:text>\hyperlink{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="." mode="xref-text">
-        <xsl:with-param name="autoname" select="$autoname" />
-        <xsl:with-param name="detail" select="$detail" />
-    </xsl:apply-templates>
+    <xsl:value-of select="$content" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 

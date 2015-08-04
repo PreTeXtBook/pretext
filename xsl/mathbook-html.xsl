@@ -2409,8 +2409,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The second abstract template, we condition   -->
 <!-- on if the link is rendered as a knowl or not -->
 <xsl:template match="*" mode="xref-link">
-    <xsl:param name="autoname" />
-    <xsl:param name="detail" />
+    <xsl:param name="content" />
     <xsl:variable name="knowl">
         <xsl:apply-templates select="." mode="xref-as-knowl" />
     </xsl:variable>
@@ -2442,10 +2441,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="tooltip-text" />
         </xsl:attribute>
         <!-- link content from common template -->
-        <xsl:apply-templates select="." mode="xref-text">
-            <xsl:with-param name="autoname" select="$autoname" />
-            <xsl:with-param name="detail" select="$detail" />
-        </xsl:apply-templates>
+        <xsl:value-of select="$content" />
     </xsl:element>
 </xsl:template>
 

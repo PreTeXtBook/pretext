@@ -2038,19 +2038,18 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- Cross-References -->
 <!-- ################ -->
 
-<!-- Every (non-provisional) cross-reference comes -->
-<!-- through here and is fact-checked before being -->
-<!-- dispatched to a specific "xref-link" template -->
-<xsl:template match="xref[@ref]">
-    <xsl:variable name="target" select="id(@ref)" />
-    <!-- Check to see if the ref is any good, since this           -->
-    <!-- is common mistake and often hard to detect                -->
-    <!-- http://www.stylusstudio.com/xsllist/200412/post20720.html -->
+<!-- Any cross-reference can be checked to see if     -->
+<!-- it points to something legitimate, since this is -->
+<!-- a common mistake and often hard to detect/locate -->
+<!-- http://www.stylusstudio.com/xsllist/200412/post20720.html -->
+<xsl:template name="check-ref">
+    <xsl:param name="ref" />
+    <xsl:variable name="target" select="id($ref)" />
     <xsl:if test="not(exsl:node-set($target))">
-        <xsl:message>MBX:WARNING: unresolved &lt;xref&gt; due to ref="<xsl:value-of select="@ref"/>"</xsl:message>
+        <xsl:message>MBX:WARNING: unresolved &lt;xref&gt; due to unknown reference "<xsl:value-of select="$ref"/>"</xsl:message>
         <xsl:variable name="inline-warning">
-            <xsl:text>Unresolved xref, ref="</xsl:text>
-            <xsl:value-of select="@ref"/>
+            <xsl:text>Unresolved xref, reference "</xsl:text>
+            <xsl:value-of select="$ref"/>
             <xsl:text>"; check spelling or use "provisional" attribute</xsl:text>
         </xsl:variable>
         <xsl:variable name="margin-warning">
@@ -2063,18 +2062,31 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
             <xsl:with-param name="warning" select="$margin-warning" />
         </xsl:call-template>
     </xsl:if>
-    <!-- Cross-references may have qualifiers of their targets, which -->
-    <!-- we pass to their xref-link templates to handle appropriately -->
-    <!-- Default is to pass an empty string, which is not a problem   -->
+</xsl:template>
+
+<!-- A single "ref" is the most common case of an "xref" -->
+<xsl:template match="xref[count(@ref) = 1]">
+    <!-- First, check that the @ref is good -->
+    <xsl:call-template name="check-ref">
+        <xsl:with-param name="ref" select="@ref" />
+    </xsl:call-template>
+    <xsl:variable name="target" select="id(@ref)" />
+    <!-- Send the target and text representation for link to a -->
+    <!-- format-specific and target-specific link manufacture. -->
+    <!-- LaTeX uses \hyperref and \hyperlink, while HTML uses  -->
+    <!-- traditional hyperlinks and also modern knowls.        -->
     <xsl:apply-templates select="$target" mode="xref-link">
-        <xsl:with-param name="detail" select="@detail" />
-        <xsl:with-param name="autoname" select="@autoname" />
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="." mode="xref-text-one" />
+        </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- This is an abstract template for call above -->
+<!-- This is a base implementation for the xref-link -->
+<!-- template, which just repeats the content        -->
 <xsl:template match="*" mode="xref-link">
-    <xsl:text>[XREFLINK]</xsl:text>
+    <xsl:param name="content" />
+    <xsl:value-of select="$content" />
 </xsl:template>
 
 <!-- Autonaming of Cross-References -->
@@ -2112,20 +2124,25 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     </xsl:choose>
 </xsl:template>
 
-<!-- For any cross-reference target we manufacture text        -->
-<!-- that includes the possible autoname'd prefix, various     -->
-<!-- visual hints as to the nature of the target (parentheses  -->
-<!-- on equations, brackets on citations) and possible extra   -->
-<!-- detail on a citation. This is general enough (but for the -->
-<!-- non-breaking space) to be common to all conversions.      -->
-<xsl:template match="*" mode="xref-text" >
+<!-- For cross-references, we manufacture text that         -->
+<!-- includes the possible autoname'd prefix, various       -->
+<!-- visual hints as to the nature of the target            -->
+<!-- (parentheses on equations, brackets on citations)      -->
+<!-- and possible extra detail on a citation.               -->
+<!-- These only manufacture generic text (but for the       -->
+<!-- non-breaking space) so can be used in all conversions. -->
+
+<!-- A single "ref" in a xref may have an autoname,         -->
+<!-- wrapping of the number, and detail for a bibliographic -->
+<!-- item.  We package up all of it as the link text.       -->
+<xsl:template match="*" mode="xref-text-one" >
     <!-- autoname passed straight into prefix routine -->
     <!-- detail flagged inside biblio construction    -->
-    <xsl:param name="autoname" />
-    <xsl:param name="detail" />
+    <xsl:variable name="target" select="id(@ref)" />
+    <!-- include autoname prefix in link text, since just one -->
     <xsl:variable name="prefix">
-        <xsl:apply-templates select="." mode="autoname-prefix">
-            <xsl:with-param name="local" select="$autoname" />
+        <xsl:apply-templates select="$target" mode="autoname-prefix">
+            <xsl:with-param name="local" select="@autoname" />
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:if test="not($prefix = '')">
@@ -2133,35 +2150,50 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         <!-- generic nbsp here via abstract template -->
         <xsl:text> </xsl:text>
     </xsl:if>
-    <!-- start visual clue for equation or bibliographic target -->
-    <xsl:choose>
-        <xsl:when test="self::biblio"><xsl:text>[</xsl:text></xsl:when>
-        <xsl:when test="self::men or self::mrow"><xsl:text>(</xsl:text></xsl:when>
-        <xsl:otherwise></xsl:otherwise>
-    </xsl:choose>
-    <!-- call an abstract template for the actual number -->
-    <xsl:apply-templates select="." mode="xref-number" />
-    <!-- provide optional detail on bibliographic reference, only -->
-    <xsl:if test="$detail != ''">
-        <xsl:choose>
-            <xsl:when test="self::biblio">
-                <!-- non-breaking space here too -->
-                <xsl:text>, </xsl:text>
-                <xsl:apply-templates select="$detail" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:message>MBX:WARNING: xref attribute detail="<xsl:value-of select="$detail" />" only implemented for references to biblio elements</xsl:message>
-                <xsl:apply-templates select="." mode="location-report" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:if>
-    <!-- finish visual clue for equation or bibliographic target -->
-    <xsl:choose>
-        <xsl:when test="self::biblio"><xsl:text>]</xsl:text></xsl:when>
-        <xsl:when test="self::men or self::mrow"><xsl:text>)</xsl:text></xsl:when>
-        <xsl:otherwise></xsl:otherwise>
-    </xsl:choose>
+    <!-- optionally wrap citations+detail or equations, with formatting -->
+    <xsl:apply-templates select="$target" mode="xref-wrap">
+        <xsl:with-param name="content">
+            <!-- call an abstract template for the actual number -->
+            <xsl:apply-templates select="$target" mode="xref-number" />
+            <!-- provide optional detail on bibliographic reference, only -->
+            <xsl:if test="@detail != ''">
+                <xsl:choose>
+                    <xsl:when test="local-name($target) = 'biblio'">
+                        <!-- non-breaking space here too -->
+                        <xsl:text>, </xsl:text>
+                        <xsl:apply-templates select="@detail" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:message>MBX:WARNING: xref attribute detail="<xsl:value-of select="$detail" />" only implemented for single references to biblio elements</xsl:message>
+                        <xsl:apply-templates select="." mode="location-report" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:if>
+        </xsl:with-param>
+    </xsl:apply-templates>
 </xsl:template>
+
+<!-- Some references, or lists of references -->
+<!-- get visual clues as to their nature.    -->
+<!-- Here we wrap those special cases and    -->
+<!-- pass-through the remainder              -->
+<xsl:template match="*" mode="xref-wrap">
+    <xsl:param name="content" />
+    <xsl:value-of select="$content" />
+</xsl:template>
+<xsl:template match="biblio" mode="xref-wrap">
+    <xsl:param name="content" />
+    <xsl:text>[</xsl:text>
+    <xsl:value-of select="$content" />
+    <xsl:text>]</xsl:text>
+</xsl:template>
+<xsl:template match="men|mrow" mode="xref-wrap">
+    <xsl:param name="content" />
+    <xsl:text>(</xsl:text>
+    <xsl:value-of select="$content" />
+    <xsl:text>)</xsl:text>
+</xsl:template>
+
 
 <!-- This is an abstract template, to accomodate -->
 <!-- hard-coded HTML numbers and for LaTeX the   -->
