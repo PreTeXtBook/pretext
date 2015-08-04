@@ -1992,6 +1992,8 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 
 <!-- Translate thickness attribute value to integer short name -->
 <!-- HTML: makes portion of CSS class names for cells          -->
+<!-- PG: makes portion of optional parameter for DataTable     -->
+<!-- macro from niceTable.pl for thickness of table cells      -->
 <xsl:template name="thickness-specification">
     <xsl:param name="width" />
     <xsl:choose>
@@ -2016,6 +2018,8 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- Translate horizontal alignment to CSS short name    -->
 <!-- HTML:  makes portion of CSS class names for cells   -->
 <!-- LaTeX: provides standard LaTeX horizontal alignment -->
+<!-- PG: provide LaTeX-style alignment string for        -->
+<!-- DataTable macro from niceTable.pl                   -->
 <xsl:template name="halign-specification">
     <xsl:param name="align" />
     <xsl:choose>
