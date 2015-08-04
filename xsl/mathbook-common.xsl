@@ -2171,6 +2171,49 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     </xsl:choose>
 </xsl:template>
 
+<xsl:template match="xref[@first and @last]">
+    <!-- check both refs -->
+    <xsl:call-template name="check-ref">
+        <xsl:with-param name="ref" select="@first" />
+    </xsl:call-template>
+    <xsl:call-template name="check-ref">
+        <xsl:with-param name="ref" select="@last" />
+    </xsl:call-template>
+    <!-- form both targets -->
+    <xsl:variable name="target-first" select="id(@first)" />
+    <xsl:variable name="target-last"  select="id(@last)" />
+    <!-- autoname outside links -->
+    <xsl:variable name="prefix">
+        <xsl:apply-templates select="$target-first" mode="autoname-prefix">
+            <xsl:with-param name="local" select="@autoname" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:if test="not($prefix = '')">
+        <xsl:value-of select="$prefix" />
+        <!-- generic nbsp here via abstract template -->
+        <xsl:text> </xsl:text>
+    </xsl:if>
+    <!-- optionally wrap with parentheses, brackets -->
+    <xsl:apply-templates select="$target-first" mode="xref-wrap">
+        <xsl:with-param name="content">
+            <!-- first link, number only -->
+            <xsl:apply-templates select="$target-first" mode="xref-link">
+                <xsl:with-param name="content">
+                    <xsl:apply-templates select="$target-first" mode="xref-number" />
+                </xsl:with-param>
+            </xsl:apply-templates>
+            <!-- a dash, replace with generic ndash -->
+            <xsl:text>-</xsl:text>
+            <!-- second link, number only -->
+            <xsl:apply-templates select="$target-last" mode="xref-link">
+                <xsl:with-param name="content">
+                    <xsl:apply-templates select="$target-last" mode="xref-number" />
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
 <!-- This is a base implementation for the xref-link -->
 <!-- template, which just repeats the content        -->
 <xsl:template match="*" mode="xref-link">
