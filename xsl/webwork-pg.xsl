@@ -499,18 +499,203 @@
     <xsl:text>WeBWorK</xsl:text>
 </xsl:template>
 
+<!-- Convenience: understood by MathJax and LaTeX -->
+<xsl:template match="webwork//latex">
+    <xsl:text>[`\LaTeX`]</xsl:text>
+</xsl:template>
+
 <!-- http://webwork.maa.org/wiki/Introduction_to_PGML#Basic_Formatting -->
 
 <!-- two spaces at line-end is a newline -->
-<xsl:template match="br">
+<xsl:template match="webwork//br">
     <xsl:text>  &#xa;</xsl:text>
+</xsl:template>
+
+<!-- Emphasis: underscores produce italic -->
+<!-- Foreign:  for phrases                -->
+<xsl:template match="webwork//em|webwork//foreign">
+    <xsl:text>_</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>_</xsl:text>
+</xsl:template>
+
+<!-- Booktitle: slanted normally, we italic here-->
+<xsl:template match="webwork//booktitle">
+    <xsl:text>_</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>_</xsl:text>
+</xsl:template>
+
+<!-- Alert: asterik-underscore produces bold-italic -->
+<xsl:template match="webwork//alert">
+    <xsl:text>*_</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>_*</xsl:text>
+</xsl:template>
+
+<!-- Quotes, double or single -->
+<!-- PGML will do the right thing with "dumb" quotes          -->
+<!-- in the source, so we implement these to allow for        -->
+<!-- direct/easy cut/paste to/from other MathBook XML sources -->
+<xsl:template match="webwork//q">
+    <xsl:text>"</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>"</xsl:text>
+</xsl:template>
+
+<xsl:template match="webwork//sq">
+    <xsl:text>'</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>'</xsl:text>
+</xsl:template>
+
+<!-- Sometimes you need an "unbalanced" quotation make,    -->
+<!-- maybe because you are crossing some other XML element -->
+<!-- So here are left and right, single and double         -->
+<xsl:template match="webwork//lsq">
+    <xsl:text>'</xsl:text>
+</xsl:template>
+
+<xsl:template match="webwork//rsq">
+    <xsl:text>'</xsl:text>
+</xsl:template>
+
+<xsl:template match="webwork//lq">
+    <xsl:text>"</xsl:text>
+</xsl:template>
+
+<xsl:template match="webwork//rq">
+    <xsl:text>"</xsl:text>
+</xsl:template>
+
+<!-- http://webwork.maa.org/wiki/Special_Characters_-_PGML -->
+<!-- suggests PGML understands the TeX special characters. -->
+<!-- There seems enough exceptions that we will routinely  -->
+<!-- escape them. We definitely need to author ampersands  -->
+<!-- and angle brackets with XML elements to avoid source  -->
+<!-- conflicts, the others are conveniences. \ is PGML's   -->
+<!-- escape character, thus is itself escaped              -->
+<!--   <, >, &, %, $, ^, _, #, ~, {, }                     -->
+
+<!-- NB: angle brackets as characters are not                 -->
+<!-- implemented throughout MBX.  But for math *only*         -->
+<!-- (ie LaTeX) the macros \lt, \gt are supported universally -->
+
+<!-- Ampersand -->
+<!-- Not for controlling mathematics -->
+<!-- or table formatting             -->
+<xsl:template match="webwork//ampersand">
+    <xsl:text>\&amp;</xsl:text>
+</xsl:template>
+
+<!-- Percent sign -->
+<xsl:template match="webwork//percent">
+    <xsl:text>\%</xsl:text>
+</xsl:template>
+
+<!-- Dollar sign -->
+<xsl:template match="webwork//dollar">
+    <xsl:text>\$</xsl:text>
+</xsl:template>
+
+<!-- Circumflex  -->
+<!-- 2015/01/28: there was a mismatch between HTML and LaTeX names -->
+<xsl:template match="webwork//circum">
+    <xsl:text>\^</xsl:text>
+    <xsl:message>MBX:WARNING: the "circum" element is deprecated (2015/01/28), use "circumflex"</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
+</xsl:template>
+
+<xsl:template match="webwork//circumflex">
+    <xsl:text>\^</xsl:text>
+</xsl:template>
+
+<!-- Text underscore -->
+<xsl:template match="webwork//underscore">
+    <xsl:text>\_</xsl:text>
+</xsl:template>
+
+<!-- Number Sign, Hash, Octothorpe -->
+<xsl:template match="webwork//hash">
+    <xsl:text>\#</xsl:text>
+</xsl:template>
+
+<!-- Tilde -->
+<xsl:template match="webwork//tilde">
+    <xsl:text>\~</xsl:text>
+</xsl:template>
+
+<!-- Braces -->
+<!-- Individually, or matched            -->
+<!-- All escaped to avoid conflicts with -->
+<!-- use after answer blanks, etc.       -->
+<xsl:template match="webwork//lbrace">
+    <xsl:text>\{</xsl:text>
+</xsl:template>
+<xsl:template match="webwork//rbrace">
+    <xsl:text>\}</xsl:text>
+</xsl:template>
+<xsl:template match="webwork//braces">
+    <xsl:text>\{</xsl:text>
+    <xsl:apply-templates />>
+    <xsl:text>\}</xsl:text>
+</xsl:template>
+
+<!-- Backslash -->
+<xsl:template match="webwork//backslash">
+    <xsl:text>\\</xsl:text>
+</xsl:template>
+
+<!-- Verbatim Snippets, Code -->
+<xsl:template match="webwork//c">
+    <xsl:choose>
+        <xsl:when test="contains(.,'[|') or contains(.,'|]')">
+            <xsl:message>MBX:ERROR:   the strings '[|' and '|]' are not supported within verbatim text in WeBWorK problems</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>[|</xsl:text>
+            <xsl:apply-templates />
+            <xsl:text>|]</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Preformatted Text -->
+<!-- "sanitize-text-output" analyzes *all* lines for left margin -->
+<!-- "prepend-string" adds colon and three spaces to each line   -->
+<xsl:template match="webwork//pre">
+    <xsl:call-template name="prepend-string">
+        <xsl:with-param name="text">
+            <xsl:call-template name="sanitize-text-output">
+                <xsl:with-param name="text" select="." />
+            </xsl:call-template>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Recursively prepend to multiple lines -->
+<!-- Presumes pre-processing with line-feed at very end                      -->
+<!-- Borrowed from more complicated routine in xsl/mathbook-sage-doctest.xsl -->
+<!-- Generalize: pass pre-pending string at invocation and each iteration    -->
+<xsl:template name="prepend-string">
+    <xsl:param name="text" />
+    <!-- Quit when string becomes empty -->
+    <xsl:if test="string-length($text)">
+        <xsl:variable name="first-line" select="substring-before($text, '&#xA;')" />
+        <xsl:text>:   </xsl:text> <!-- the string, yields PG pre-formatted -->
+        <xsl:value-of select="$first-line"/>
+        <xsl:text>&#xA;</xsl:text>
+        <!-- recursive call on remainder of string -->
+        <xsl:call-template name="prepend-string">
+            <xsl:with-param name="text" select="substring-after($text, '&#xA;')"/>
+        </xsl:call-template>
+    </xsl:if>
 </xsl:template>
 
 
 <!-- ######### -->
 <!-- Utilities -->
 <!-- ######### -->
-
-
 
 </xsl:stylesheet>

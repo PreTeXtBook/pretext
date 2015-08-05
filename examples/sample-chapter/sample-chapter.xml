@@ -235,7 +235,7 @@
                         </statement>
 
                         <solution>
-                            <p> Take the coefficient of <m>x^2</m> for the value of <m>a</m>, the coefficient of <m>x</m> for <m>b</m>, and the constant for <m>c</m>.  In this case, they are <m>a = <var name="$a" /></m>, <m>b = <var name="$b" /></m>, <m>c = <var name="$c" /></m>.</p>
+                            <p> Take the coefficient of <m>x^2</m> for the value of <m>a</m>, the coefficient of <m>x</m> for <m>b</m>, and the constant for <m>c</m>.  <em>In this case</em>, they are <m>a = <var name="$a" /></m>, <m>b = <var name="$b" /></m>, <m>c = <var name="$c" /></m>.</p>
                         </solution>
                     </platform>
 
@@ -337,13 +337,53 @@
 
                     <webwork height="500">
                         <statement>
-                            <p><q>Differentiation and integration are inverse processes.</q>  Cite specific results from this section in an explanation of how they justify this (somewhat imprecise) claim.</p>
+                            <p><q>Differentiation and integration are inverse processes.</q>  Cite <alert>specific results</alert> from this section in an explanation of how they justify this (somewhat imprecise) claim.</p>
                             <answer category="essay" width="40"/>
                         </statement>
                     </webwork>
                 </exercise>
 
             </exercises>
+        </section>
+
+        <section>
+            <title>PGML Formatting Calisthenics</title>
+
+            <p>This section has one exercise, designed to test various PGML formatting rules in an exercise with no purpose.</p>
+
+            <exercise xml:id="ww-PGML-format">
+                <title>PGML Formatting</title>
+
+                <webwork height="500">
+                    <statement>
+                        <p>Smart double quotes: <q>Life is about making an impact, not making an income.</q></p>
+                        <p>Smart single quotes: <sq>Whatever the mind of man can conceive and believe, it can achieve.</sq></p>
+                        <p>Emphasis: <em>very important</em></p>
+                        <p>Alert: <alert>do not</alert> do it</p>
+                        <p>Verbatim: code, <c>with special characters: a * , a \, and a #</c></p>
+                        <!-- uncomment next to test, will not activate generally in sample document -->
+                        <!-- <p>Verbatim: code, <c>with banned substring: [|</c></p>                -->
+                        <pre>
+                            Some pre-formatted text
+                                        with an indented line
+                        and an out-dented line
+                        </pre>
+
+                        <p>Some of <latex />'s special characters.</p>
+                        <p><hash /></p>
+                        <p><dollar /></p>
+                        <p><percent /></p>
+                        <p><circumflex /></p>
+                        <p><ampersand /></p>
+                        <p><underscore /></p>
+                        <p><lbrace /></p>
+                        <p><rbrace /></p>
+                        <p><tilde /></p>
+                        <p><backslash /></p>
+                    </statement>
+                </webwork>
+            </exercise>
+
         </section>
 
     </article>
