@@ -2420,14 +2420,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Chunks of Pre-Formatted Text                -->
-<!-- 100% analogue of LaTeX's verbatim           -->
-<!-- environment or HTML's <pre> element         -->
-<!-- Text is massaged just like Sage input code  -->
+<!-- Chunks of Pre-Formatted Text                 -->
+<!-- 100% analogue of LaTeX's verbatim            -->
+<!-- environment or HTML's <pre> element          -->
+<!-- Text is massaged just like Sage output code, -->
+<!-- examining *all* lines to find left margin    -->
 <xsl:template match="pre">
     <xsl:text>\begin{verbatim}&#xa;</xsl:text>
-        <xsl:call-template name="sanitize-code">
-            <xsl:with-param name="raw-code" select="." />
+        <xsl:call-template name="sanitize-text-output">
+            <xsl:with-param name="text" select="." />
         </xsl:call-template>
     <xsl:text>\end{verbatim}&#xa;</xsl:text>
 </xsl:template>
