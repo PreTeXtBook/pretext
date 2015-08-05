@@ -3097,7 +3097,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                         <div class="title-container">
                             <h1 class="heading">
                                 <span class="title">
-                                    <xsl:value-of select="/mathbook/book/title|/mathbook/article/title" />
+                                    <xsl:apply-templates select="/mathbook/book/title|/mathbook/article/title" mode="title-simple" />
                                 </span>
                                 <xsl:if test="normalize-space(/mathbook/book/subtitle|/mathbook/article/subtitle)">
                                     <span class="subtitle">
