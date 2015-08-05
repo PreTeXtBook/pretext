@@ -494,6 +494,11 @@
 <!-- Markup -->
 <!-- ###### -->
 
+<!-- Convenience: kern, etc. into LaTeX, HTML versions -->
+<xsl:template match="wbwk">
+    <xsl:text>WeBWorK</xsl:text>
+</xsl:template>
+
 <!-- http://webwork.maa.org/wiki/Introduction_to_PGML#Basic_Formatting -->
 
 <!-- two spaces at line-end is a newline -->

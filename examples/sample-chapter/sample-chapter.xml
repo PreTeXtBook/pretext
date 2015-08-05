@@ -65,7 +65,7 @@
     </docinfo>
 
     <article xml:id="sample-ww-chapter">
-        <title>Integrating WeBWorK into Textbooks</title>
+        <title>Integrating <wbwk /> into Textbooks</title>
         <subtitle>Sample Exercises</subtitle>
 
         <frontmatter xml:id="index">
@@ -95,7 +95,7 @@
             </titlepage>
 
             <abstract>
-                <p>This is a sample of integrating WeBWorK homework problems into content authored with MathBook XML.  While technically an example of MathBook's <c>article</c> format, it is intended to closely resemble a (first) chapter of a textbbok that is divided into sections.</p>
+                <p>This is a sample of integrating <wbwk /> homework problems into content authored with MathBook XML.  While technically an example of MathBook's <c>article</c> format, it is intended to closely resemble a (first) chapter of a textbbok that is divided into sections.</p>
             </abstract>
 
         </frontmatter>
@@ -303,13 +303,13 @@
             <paragraphs>
                 <title>Implementation Note</title>
 
-                <p>The problems in this sample chapter have their source authored within the same document as the narrative.  However the first problem in the set below is drawn directly from the <url href="http://webwork.maa.org/wiki/Open_Problem_Library">Open Problem Library</url>.  So everything about the problem lives on a WeBWorK server that we are polling.</p>
+                <p>The problems in this sample chapter have their source authored within the same document as the narrative.  However the first problem in the set below is drawn directly from the <url href="http://webwork.maa.org/wiki/Open_Problem_Library">Open Problem Library</url>.  So everything about the problem lives on a <wbwk /> server that we are polling.</p>
 
                 <p>One implication of this is that we might want to provide some commentary that connects the problem to the text, as we have suggested below.  We also need to decide how to represent the problem in a static setting (PDF/print), especially when the problem contains interactive features like this one.  So in the PDF version of this chapter, the problem is currently blank.</p>
             </paragraphs>
 
             <exercises>
-                <title>WeBWorK Exercises</title>
+                <title><wbwk /> Exercises</title>
 
                 <exercise xml:id="ww-graphical-antiderivatives">
                     <title>Graphical Antiderivatives</title>
