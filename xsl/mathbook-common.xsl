@@ -32,7 +32,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- MathBook XML common templates                        -->
 <!-- Text creation/manipulation common to HTML, TeX, Sage -->
 
-<!-- So output methods here are just text -->
+<!-- This collection of XSL routines is like a base library,          -->
+<!-- it has no entry template and hence used by itself almost         -->
+<!-- nothing should happen.  Typically the situation looks like this: -->
+<!-- (example is LaTeX-specific but generalizes easily)               -->
+<!--                                                                  -->
+<!-- your-book-latex .xsl                                             -->
+<!--   (a) is what you use on the command line                        -->
+<!--   (b) contains very specific, atomic overrides for your project  -->
+<!--   (c) imports xsl/mathbook-latex.xsl                             -->
+<!--                                                                  -->
+<!-- xsl/mathbook-latex.xsl                                           -->
+<!--   (a) general conversion from MBX to LaTeX                       -->
+<!--   (b) could be used at the command line for default conversion   -->
+<!--   (c) imports xsl/mathbook-common.xsl                            -->
+<!--                                                                  -->
+<!-- xsl/mathbook-common.xsl                                          -->
+<!--   (a) this file                                                  -->
+<!--   (b) ensures commonality, such as text versions                 -->
+<!--       of numbers for theorems, equations, etc                    -->
+<!--   (c) has some abstract routines that require implementation     -->
+<!--       in files above, such as file wrapping for a LaTeX file     -->
+<!--       in this case                                               -->
+<!--                                                                  -->
+<!-- This creates a linear sequence of imports, so overrides          -->
+<!-- behave as you might expect or predict.                           -->
+<!-- To do otherwise is to invite confusion.                          -->
+
+<!-- Output methods here are just pure text -->
 <xsl:output method="text" />
 
 <!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
