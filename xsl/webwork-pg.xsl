@@ -24,8 +24,24 @@
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
 >
 
-<!-- path assumes we place  webwork-pg.xsl in mathbook "user" directory -->
-<!-- <xsl:import href="../xsl/mathbook-common.xsl" /> -->
+<!-- This file is a library of routines to convert parts of      -->
+<!-- a webwork problem into PG and PGML code/markup.  It         -->
+<!-- depends on utility routines in xsl/mathbook-common.xsl,     -->
+<!-- such as routines to santize blocks of code.  However        -->
+<!-- the present file does not import mathbook-common.xsl,       -->
+<!-- nor should it, since imports will be applied                -->
+<!-- out-of-order that way.                                      -->
+<!--                                                             -->
+<!-- Instead, a conversion to some format, say HTML, should      -->
+<!-- import xsl/mathbook-html.xsl, for general HTML conversion,  -->
+<!-- but this will additionally import the common file.          -->
+<!-- Then the conversion file may import the present file,       -->
+<!-- webwork-pg.xsl, for its services in creating a well-formed  -->
+<!-- WeBWorK problem.                                            -->
+<!--                                                             -->
+<!-- This should change as development stabilizes and the        -->
+<!-- production of the content of a PG problem should move       -->
+<!-- to the common file (perhaps).                               -->
 
 <!-- Intend output to be a PGML problem -->
 <xsl:output method="text" />
