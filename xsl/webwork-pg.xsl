@@ -269,7 +269,7 @@
 <!-- Example: [@ ANS(essay_cmp); essay_box(6,76) @]*   -->
 <!-- Requires:  PGessaymacros.pl, automatically loaded -->
 <!-- http://webwork.maa.org/moodle/mod/forum/discuss.php?d=3370 -->
-<xsl:template match="answer[@category = 'essay']">
+<xsl:template match="answer[@format = 'essay']">
     <xsl:text>[@ ANS(essay_cmp); essay_box(</xsl:text>
     <xsl:choose>
         <xsl:when test="@height">
@@ -366,7 +366,7 @@
         <xsl:text>    "parserRadioButtons.pl",&#xa;</xsl:text>
     </xsl:if>
     <!-- essay answers, no var in setup, just answer                 -->
-    <xsl:if test="./statement//answer[@category='essay']">
+    <xsl:if test="./statement//answer[@format='essay']">
         <xsl:text>    "PGessaymacros.pl",&#xa;</xsl:text>
     </xsl:if>
     <!-- scaffolded problems -->

@@ -327,7 +327,7 @@
                     <webwork height="500">
                         <statement>
                             <p>Explain how we can use <xref ref="corollary-FTC-derivative" autoname="yes" /> to say that every continuous function <em>always</em> has a derivative.</p>
-                            <answer category="essay" />
+                            <answer format="essay" />
                         </statement>
                     </webwork>
                 </exercise>
@@ -338,7 +338,7 @@
                     <webwork height="500">
                         <statement>
                             <p><q>Differentiation and integration are inverse processes.</q>  Cite <alert>specific results</alert> from this section in an explanation of how they justify this (somewhat imprecise) claim.</p>
-                            <answer category="essay" width="40"/>
+                            <answer format="essay" width="40"/>
                         </statement>
                     </webwork>
                 </exercise>
