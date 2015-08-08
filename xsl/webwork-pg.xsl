@@ -776,21 +776,19 @@
     <xsl:if test="($pg.answer.format.help = 'yes') and not($format = 'none')">
         <xsl:choose>
             <xsl:when test="ancestor::tabular">
-                 <xsl:text>.</xsl:text>
+                 <xsl:text>$EmPtYsTrInG".AnswerFormatHelp('</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:text> [@</xsl:text>
+                <xsl:text> [@AnswerFormatHelp('</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
-        <xsl:text>AnswerFormatHelp("</xsl:text>
-            <xsl:value-of select="$format"/>
-        <xsl:text>")</xsl:text>
+        <xsl:value-of select="$format"/>
         <xsl:choose>
             <xsl:when test="ancestor::tabular">
-                 <xsl:text></xsl:text>
+                 <xsl:text>')."$EmPtYsTrInG </xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:text>@]*</xsl:text>
+                <xsl:text>')@]*</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:if>
