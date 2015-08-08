@@ -49,7 +49,7 @@
         </macros>
 
         <!-- An initialism is useful sometimes -->
-        <initialism>WWSC</initialism>
+        <initialism>WWSAT</initialism>
         <!--
         With a <feedback> element, in the HTML version, you get a button
         for reporting typos and errors.  You might link to a Google Docs
@@ -263,6 +263,72 @@
                     </solution>
 
                 </webwork>
+
+                <webwork xml:id="tables">
+
+                    <setup>
+                        <var name="$x" category="integer">
+                            <static>2</static>
+                        </var>
+
+                        <pg-code>
+                            $x = Real(5);
+                        </pg-code>
+                    </setup>
+
+                    <statement>
+                        <p>A table with minimal XML source.</p>
+
+                        <table>
+                            <tabular>
+                                <row>
+                                    <cell>A</cell>
+                                    <cell>B</cell>
+                                    <cell>C</cell>
+                                </row>
+                                <row>
+                                    <cell>D</cell>
+                                    <cell>E</cell>
+                                    <cell>F</cell>
+                                </row>
+                                <row>
+                                    <cell>G</cell>
+                                    <cell>H</cell>
+                                    <cell>I</cell>
+                                </row>
+                            </tabular>
+                        </table>
+                        <p>Finish this table.</p>
+
+                        <table>
+                            <caption>Some integers</caption>
+                            <tabular top="major" left="major" bottom="major" right="minor" halign="center">
+                                <col halign="right" top="minor"/>
+                                <col right="medium"/>
+                                <col halign="left"/>
+                                <row bottom="none" left="none">
+                                    <cell right="minor">1</cell>
+                                    <cell>two</cell>
+                                    <cell><m>\lfloor\pi\rfloor</m></cell>
+                                </row>
+                                <row>
+                                    <cell bottom="minor"><m>\text{I}+\text{I}+\text{I}+\text{I}</m></cell>
+                                    <cell><answer var="$x" format="none"/></cell>
+                                    <cell>six</cell>
+                                </row>
+                                <row halign="right">
+                                    <cell><m>2^3-1</m></cell>
+                                    <cell colspan="2" top="none" halign="center">VIII</cell>
+                                </row>
+                            </tabular>
+                        </table>
+                    </statement>
+
+                    <solution>
+                    </solution>
+
+                </webwork>
+
             </exercise>
 
            

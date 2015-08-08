@@ -218,6 +218,485 @@
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Tables                                            -->
+<xsl:template match="webwork//table">
+    <xsl:apply-templates select="*[not(self::caption)]" />
+</xsl:template>
+
+<xsl:template match="webwork//tabular">
+    <!-- All cell entries must be encased in double quotes. But math and answer blanks require PGML::Format  -->
+    <!-- which must be outside of quotes. So PGML::Format gets surrounding quotes. But this can lead to      -->
+    <!-- "".PGML::Format(...)."" and the empty strings are not liked by PGML. So create $EmPtYsTrInG to use  -->
+    <xsl:if test="descendant::m or descendant::answer">
+        <xsl:text>[@$EmPtYsTrInG = '';@]&#xa;</xsl:text>
+    </xsl:if>
+    <!-- MBX tabular attributes top, bottom, left, right, halign are essentially passed -->
+    <!-- down to cells, rather than used at the tabular level.                          -->
+    <xsl:text>[@DataTable(&#xa;  [&#xa;</xsl:text>
+    <xsl:apply-templates select="row"/>
+    <xsl:text>  ],&#xa;</xsl:text>
+    <xsl:if test="ancestor::table/caption">
+        <xsl:text>  caption   => '</xsl:text>
+            <xsl:apply-templates select="parent::*" mode="type-name"/>
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="parent::*" mode="number"/>
+            <xsl:text>: </xsl:text>
+            <xsl:value-of select="ancestor::table/caption"/>
+        <xsl:text>',&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:variable name="table-left">
+        <xsl:choose>
+            <xsl:when test="@left">
+                <xsl:value-of select="@left" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>none</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="table-right">
+        <xsl:choose>
+            <xsl:when test="@right">
+                <xsl:value-of select="@right" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>none</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="table-halign">
+        <xsl:choose>
+            <xsl:when test="@halign">
+                <xsl:value-of select="@halign" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>left</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Build latex column specification                         -->
+    <!--   vertical borders (left side, right side, three widths) -->
+    <!--   horizontal alignment (left, center, right)             -->
+    <xsl:text>  align     => '</xsl:text>
+        <!-- start with left vertical border -->
+        <xsl:call-template name="vrule-specification">
+            <xsl:with-param name="width" select="$table-left" />
+        </xsl:call-template>
+        <xsl:choose>
+            <!-- Potential for individual column overrides    -->
+            <!--   Deduce number of columns from col elements -->
+            <!--   Employ individual column overrides,        -->
+            <!--   or use global table-wide values            -->
+            <!--   write alignment (mandatory)                -->
+            <!--   follow with right border (optional)        -->
+            <xsl:when test="col">
+                <xsl:for-each select="col">
+                    <xsl:call-template name="halign-specification">
+                        <xsl:with-param name="align">
+                            <xsl:choose>
+                                <xsl:when test="@halign">
+                                    <xsl:value-of select="@halign" />
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="$table-halign" />
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:with-param>
+                    </xsl:call-template>
+                    <xsl:call-template name="vrule-specification">
+                        <xsl:with-param name="width">
+                            <xsl:choose>
+                                <xsl:when test="@right">
+                                    <xsl:value-of select="@right" />
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="$table-right" />
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:with-param>
+                    </xsl:call-template>
+                </xsl:for-each>
+            </xsl:when>
+            <!-- All columns specified identically so far   -->
+            <!--   so can repeat global, table-wide values  -->
+            <!--   use first row to determine number        -->
+            <!--   write alignment (mandatory)              -->
+            <!--   follow with right border (optional)      -->
+            <xsl:otherwise>
+                <xsl:for-each select="row[1]/cell">
+                    <xsl:call-template name="halign-specification">
+                        <xsl:with-param name="align" select="$table-halign" />
+                    </xsl:call-template>
+                    <xsl:call-template name="vrule-specification">
+                        <xsl:with-param name="width" select="$table-right" />
+                    </xsl:call-template>
+                </xsl:for-each>
+            </xsl:otherwise>
+        </xsl:choose>
+    <xsl:text>',&#xa;</xsl:text>
+    <!-- kill all of niceTable's column left/right border thickness in colgroup/col css; just let cellcss control border thickness -->
+    <xsl:variable name="columns-css">
+        <xsl:if test="col[@right] or @left">
+            <xsl:text>[</xsl:text>
+                <xsl:for-each select="col">
+                    <xsl:text>'</xsl:text>
+                    <xsl:if test="not($table-left='none') and (count(preceding-sibling::col)=0)">
+                        <xsl:text>border-left: </xsl:text>
+                        <xsl:call-template name="thickness-specification">
+                            <xsl:with-param name="width" select="'none'" />
+                        </xsl:call-template>
+                        <xsl:text>px solid;</xsl:text>
+                    </xsl:if>
+                    <xsl:if test="@right">
+                        <xsl:text>border-right: </xsl:text>
+                        <xsl:call-template name="thickness-specification">
+                            <xsl:with-param name="width" select="'none'" />
+                        </xsl:call-template>
+                        <xsl:text>px solid;</xsl:text>
+                    </xsl:if>
+                    <xsl:text> ',</xsl:text>
+                    <xsl:choose>
+                        <xsl:when test="following-sibling::col">
+                            <xsl:text>&#xa;                 </xsl:text>
+                        </xsl:when>
+                    </xsl:choose>
+                </xsl:for-each>
+            <xsl:text>]</xsl:text>
+        </xsl:if>
+    </xsl:variable>
+    <xsl:if test="not($columns-css='')">
+        <xsl:text>  columnscss => </xsl:text>
+        <xsl:value-of select="$columns-css"/>
+        <xsl:text>,&#xa;</xsl:text>
+    </xsl:if>
+    <!-- column specification done -->
+    <!-- remains to apply tabular/@top and tabular/@bottom -->
+    <!-- will handle these at cell level -->
+    <xsl:text>);@]*&#xa;&#xa;</xsl:text>
+    <xsl:if test=".//col/@top">
+        <xsl:message>MBX:WARNING: column-specific top border attributes are not implemented for the hardcopy output of a WeBWorK PG table</xsl:message>
+    </xsl:if>
+    <xsl:if test=".//cell/@bottom">
+        <xsl:message>MBX:WARNING: cell-specific bottom border attributes are not implemented for the hardcopy output of a WeBWorK PG table</xsl:message>
+    </xsl:if>
+    <xsl:if test=".//*[@top='medium'] or .//*[@top='major'] or .//*[@bottom='medium'] or .//*[@bottom='major'] or .//*[@left='medium'] or .//*[@left='major'] or .//*[@right='medium'] or .//*[@right='major']">
+        <xsl:message>MBX:WARNING: medium and major will come out as minor in the hardcopy output of a WeBWorK PG table</xsl:message>
+    </xsl:if>
+</xsl:template>
+
+
+<xsl:template match="webwork//tabular/row">
+    <xsl:text>    [</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>    ],&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="webwork//tabular/row/cell">
+    <xsl:variable name="this-cells-left-column" select="count(preceding-sibling::cell) + 1 + sum(preceding-sibling::cell[@colspan]/@colspan) - count(preceding-sibling::cell[@colspan])"/>
+    <xsl:variable name="this-cells-right-column" select="$this-cells-left-column + @colspan - 1"/>
+    <!-- $halign below is a full LaTeX tabular argument for one cell, with perhaps more info than just alignment -->
+    <xsl:variable name="halign">
+        <xsl:if test="@colspan or @halign or @right or parent::row/@halign or (parent::row/@left and (count(preceding-sibling::cell)=0))">
+            <xsl:if test="(count(preceding-sibling::cell) = 0) and (parent::row/@left or ancestor::tabular/@left)">
+                <xsl:choose>
+                    <xsl:when test="parent::row/@left">
+                        <xsl:call-template name="vrule-specification">
+                            <xsl:with-param name="width" select="parent::row/@left" />
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:when test="ancestor::tabular/@left">
+                        <xsl:call-template name="vrule-specification">
+                            <xsl:with-param name="width" select="ancestor::tabular/@left" />
+                        </xsl:call-template>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:if>
+            <xsl:call-template name="halign-specification">
+                <xsl:with-param name="align" >
+                    <xsl:choose>
+                        <xsl:when test="@halign">
+                            <xsl:value-of select="@halign" />
+                        </xsl:when>
+                        <!-- look to the row -->
+                        <xsl:when test="parent::row/@halign">
+                            <xsl:value-of select="parent::row/@halign" />
+                        </xsl:when>
+                        <!-- look to the col -->
+                        <xsl:when test="ancestor::tabular/col[$this-cells-left-column]/@halign">
+                            <xsl:value-of select="ancestor::tabular/col[$this-cells-left-column]/@halign" />
+                        </xsl:when>
+                        <!-- look to the tabular -->
+                        <xsl:when test="ancestor::tabular/@halign">
+                            <xsl:value-of select="ancestor::tabular/@halign" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="'left'" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:with-param>
+            </xsl:call-template>
+            <xsl:choose>
+                <xsl:when test="@right">
+                    <xsl:call-template name="vrule-specification">
+                        <xsl:with-param name="width" select="@right" />
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:when test="ancestor::tabular/col[$this-cells-right-column]/@right">
+                    <xsl:call-template name="vrule-specification">
+                        <xsl:with-param name="width" select="ancestor::tabular/col[$this-cells-right-column]/@right" />
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:when test="ancestor::tabular/@right">
+                    <xsl:call-template name="vrule-specification">
+                        <xsl:with-param name="width" select="ancestor::tabular/@right" />
+                    </xsl:call-template>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:if>
+    </xsl:variable>
+
+    <!-- bottom borders                                                                            -->
+    <!-- if there is a bottom border due to tabular or row, put midrule => 1 in first cell of row  -->
+    <!-- to get these horizontal rules in WeBWorK tex output; always omit last row for such output -->
+    <!-- additionally put rowcss with more specific thickness into first cell                      -->
+    <!-- if there is a bottom border due to cell, store some css to go into cellcss later          -->
+    <!-- but need to understand that cell-specific bottom borders are not implemented in TeX       -->
+    <!-- output from WeBWorK itself processing the PG                                              -->
+    <xsl:variable name="midrule">
+        <xsl:variable name="table-bottom-width">
+            <xsl:if test="ancestor::tabular/@bottom">
+                <xsl:call-template name="thickness-specification">
+                    <xsl:with-param name="width" select="ancestor::tabular/@bottom" />
+                </xsl:call-template>
+            </xsl:if>
+        </xsl:variable>
+        <xsl:variable name="row-bottom-width">
+            <xsl:if test="parent::row/@bottom">
+                <xsl:call-template name="thickness-specification">
+                    <xsl:with-param name="width" select="parent::row/@bottom" />
+                </xsl:call-template>
+            </xsl:if>
+        </xsl:variable>
+        <xsl:choose>
+            <xsl:when test="parent::row/@bottom and parent::row/following-sibling::row">
+                <xsl:choose>
+                    <xsl:when test="$row-bottom-width &gt; 0">
+                        <xsl:text>1</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>0</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:when test="ancestor::tabular/@bottom and parent::row/following-sibling::row">
+                <xsl:choose>
+                    <xsl:when test="$table-bottom-width &gt; 0">
+                        <xsl:text>1</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>0</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="rowcss">
+        <xsl:choose>
+            <xsl:when test="parent::row/@bottom">
+                <xsl:text>border-bottom: </xsl:text>
+                <xsl:call-template name="thickness-specification">
+                    <xsl:with-param name="width" select="parent::row/@bottom" />
+                </xsl:call-template>
+                <xsl:text>px solid;</xsl:text>
+            </xsl:when>
+            <xsl:when test="ancestor::tabular/@bottom">
+                <xsl:text>border-bottom: </xsl:text>
+                <xsl:call-template name="thickness-specification">
+                    <xsl:with-param name="width" select="ancestor::tabular/@bottom" />
+                </xsl:call-template>
+                <xsl:text>px solid;</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="cell-bottom-css">
+        <xsl:if test="@bottom">
+            <xsl:text>border-bottom: </xsl:text>
+            <xsl:call-template name="thickness-specification">
+                <xsl:with-param name="width" select="@bottom" />
+            </xsl:call-template>
+            <xsl:text>px solid; </xsl:text>
+        </xsl:if>
+    </xsl:variable>
+
+    <!-- top from tabular or col: implement in HMTL side only with string for cellcss -->
+    <xsl:variable name="cell-top-css">
+        <xsl:if test="count(parent::row/preceding-sibling::row) = 0">
+            <xsl:choose>
+                <xsl:when test="ancestor::tabular/col[$this-cells-left-column]/@top">
+                    <xsl:text>border-top: </xsl:text>
+                    <xsl:call-template name="thickness-specification">
+                        <xsl:with-param name="width" select="ancestor::tabular/col[$this-cells-left-column]/@top" />
+                    </xsl:call-template>
+                    <xsl:text>px solid; </xsl:text>
+                </xsl:when>
+                <xsl:when test="ancestor::tabular/@top">
+                    <xsl:text>border-top: </xsl:text>
+                    <xsl:call-template name="thickness-specification">
+                        <xsl:with-param name="width" select="ancestor::tabular/@top" />
+                    </xsl:call-template>
+                    <xsl:text>px solid; </xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:if>
+    </xsl:variable>
+
+    <!-- left from tabular or row: implement thickness in HMTL side with string for cellcss -->
+    <xsl:variable name="cell-left-css">
+        <xsl:if test="count(preceding-sibling::cell) = 0">
+            <xsl:choose>
+                <xsl:when test="parent::row/@left">
+                    <xsl:text>border-left: </xsl:text>
+                    <xsl:call-template name="thickness-specification">
+                        <xsl:with-param name="width" select="parent::row/@left" />
+                    </xsl:call-template>
+                    <xsl:text>px solid; </xsl:text>
+                </xsl:when>
+                <xsl:when test="ancestor::tabular/@left">
+                    <xsl:text>border-left: </xsl:text>
+                    <xsl:call-template name="thickness-specification">
+                        <xsl:with-param name="width" select="ancestor::tabular/@left" />
+                    </xsl:call-template>
+                    <xsl:text>px solid; </xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:if>
+    </xsl:variable>
+
+    <!-- right from tabular, col, or row: implement thickness in HMTL side with string for cellcss -->
+    <xsl:variable name="cell-right-css">
+        <xsl:choose>
+            <xsl:when test="@right">
+                <xsl:text>border-right: </xsl:text>
+                <xsl:call-template name="thickness-specification">
+                    <xsl:with-param name="width" select="@right" />
+                </xsl:call-template>
+                <xsl:text>px solid; </xsl:text>
+            </xsl:when>
+            <xsl:when test="ancestor::tabular/col[$this-cells-right-column]/@right">
+                <xsl:text>border-right: </xsl:text>
+                <xsl:call-template name="thickness-specification">
+                    <xsl:with-param name="width" select="ancestor::tabular/col[$this-cells-right-column]/@right" />
+                </xsl:call-template>
+                <xsl:text>px solid; </xsl:text>
+            </xsl:when>
+            <xsl:when test="ancestor::tabular/@right">
+                <xsl:text>border-right: </xsl:text>
+                <xsl:call-template name="thickness-specification">
+                    <xsl:with-param name="width" select="ancestor::tabular/@right" />
+                </xsl:call-template>
+                <xsl:text>px solid; </xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="cellcss">
+        <xsl:if test="not($cell-bottom-css='') or not($cell-top-css='') or not($cell-left-css='') or not($cell-right-css='')">
+            <xsl:if test="not($cell-bottom-css='')">
+                <xsl:value-of select="$cell-bottom-css"/>
+            </xsl:if>
+            <xsl:if test="not($cell-bottom-css='') and (not($cell-top-css='') or not($cell-left-css='') or not($cell-right-css=''))">
+                <xsl:text>&#xa;                   </xsl:text>
+            </xsl:if>
+            <xsl:if test="not($cell-top-css='')">
+                <xsl:value-of select="$cell-top-css"/>
+            </xsl:if>
+            <xsl:if test="not($cell-top-css='') and (not($cell-left-css='') or not($cell-right-css=''))">
+                <xsl:text>&#xa;                   </xsl:text>
+            </xsl:if>
+            <xsl:if test="not($cell-left-css='')">
+                <xsl:value-of select="$cell-left-css"/>
+            </xsl:if>
+            <xsl:if test="not($cell-left-css='') and not($cell-right-css='')">
+                <xsl:text>&#xa;                   </xsl:text>
+            </xsl:if>
+            <xsl:if test="not($cell-right-css='')">
+                <xsl:value-of select="$cell-right-css"/>
+            </xsl:if>
+        </xsl:if>
+    </xsl:variable>
+
+    <xsl:choose>
+        <xsl:when test="not(preceding-sibling::cell)">
+            <xsl:text> </xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>      </xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+
+    <xsl:choose>
+        <xsl:when test="($halign='') and ($midrule='') and ($rowcss='') and ($cellcss='') and not(descendant::m) and not(descendant::answer) and not(@colspan)">
+            <xsl:text>"</xsl:text>
+            <xsl:apply-templates/>
+            <xsl:text>",&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>["</xsl:text>
+            <xsl:apply-templates/>
+            <xsl:text>",</xsl:text>
+            <xsl:if test="@colspan">
+                <xsl:text>&#xa;           colspan => '</xsl:text>
+                <xsl:value-of select="@colspan"/>
+                <xsl:text>',</xsl:text>
+            </xsl:if>
+            <xsl:if test="not($halign='')">
+                <xsl:text>&#xa;           halign  => '</xsl:text>
+                <xsl:value-of select="$halign"/>
+                <xsl:text>',</xsl:text>
+            </xsl:if>
+            <xsl:if test="$midrule='1' and not(preceding-sibling::cell)">
+                <xsl:text>&#xa;           midrule => '</xsl:text>
+                <xsl:value-of select="$midrule"/>
+                <xsl:text>',</xsl:text>
+            </xsl:if>
+            <xsl:if test="not($rowcss='')">
+                <xsl:text>&#xa;           rowcss  => '</xsl:text>
+                <xsl:value-of select="$rowcss"/>
+                <xsl:text>',</xsl:text>
+            </xsl:if>
+            <xsl:if test="not($cellcss='')">
+                <xsl:text>&#xa;           cellcss => '</xsl:text>
+                <xsl:value-of select="$cellcss"/>
+                <xsl:text>',</xsl:text>
+            </xsl:if>
+            <xsl:text>],&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Translate vertical rule width to a LaTeX vertical rule -->
+<xsl:template name="vrule-specification">
+    <xsl:param name="width" />
+    <xsl:choose>
+        <xsl:when test="$width='none'">
+            <xsl:text></xsl:text>
+        </xsl:when>
+        <xsl:when test="$width='minor'">
+            <xsl:text>|</xsl:text>
+        </xsl:when>
+        <xsl:when test="$width='medium'">
+            <xsl:text>|</xsl:text>
+        </xsl:when>
+        <xsl:when test="$width='major'">
+            <xsl:text>|</xsl:text>
+        </xsl:when>
+        <xsl:when test="$width=''"/>
+        <xsl:otherwise>
+            <xsl:message>MBX:WARNING: tabular left or right attribute not recognized: use none, minor, medium, major</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- PGML markup for Perl variable in LaTeX expression -->
 <xsl:template match="statement//var|solution//var">
@@ -228,7 +707,7 @@
 
 <!-- PGML answer blank               -->
 <!-- Example: [_____]{$ans}          -->
-<xsl:template match="statement//answer">
+<xsl:template match="webwork//statement//answer">
     <xsl:variable name="width">
         <xsl:choose>
             <xsl:when test="@width">
@@ -239,13 +718,27 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
+    <!-- For answer blanks in tables (and possibly more things in the future) -->
+    <!-- we cannot simply insert PGML syntax. But otherwise, we do just that. -->
+    <xsl:if test="ancestor::tabular">
+        <xsl:text>$EmPtYsTrInG".PGML::Format('</xsl:text>
+    </xsl:if>
     <xsl:text>[</xsl:text>
-    <xsl:call-template name="underscore">
-        <xsl:with-param name="width">
-            <xsl:value-of select="$width"/>
-        </xsl:with-param>
-    </xsl:call-template>
-    <xsl:text>]{</xsl:text>
+    <!-- for small width, print underscores; otherwise, specify by number -->
+    <xsl:choose>
+        <xsl:when test="$width &lt; 13">
+            <xsl:call-template name="underscore">
+                <xsl:with-param name="width">
+                    <xsl:value-of select="$width"/>
+               </xsl:with-param>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>__</xsl:text> <!-- width specified after evaluator -->
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>]</xsl:text>
+    <xsl:text>{</xsl:text>
         <xsl:choose>
             <xsl:when test="@evaluator">
                 <xsl:value-of select="@evaluator" />
@@ -255,31 +748,54 @@
             </xsl:otherwise>
         </xsl:choose>
     <xsl:text>}</xsl:text>
-    <xsl:if test="$pg.answer.format.help = 'yes'">
-        <xsl:variable name="category">
-            <xsl:choose>
-                <xsl:when test="@category">
-                    <xsl:value-of select="@category"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:variable name="varname" select="@var" />
-                    <xsl:variable name="problem" select="ancestor::webwork" />
-                    <xsl:value-of select="$problem/setup/var[@name=$varname]/@category" />
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:variable name="format">
-            <xsl:call-template name="category-to-format">
-                <xsl:with-param name="category" select="$category"/>
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:if test="not($format='none')">
-            <xsl:text> [@ AnswerFormatHelp("</xsl:text>
-                <xsl:value-of select="$format"/>
-            <xsl:text>") @]*</xsl:text>
-        </xsl:if>
+    <xsl:if test="$width &gt; 12">
+        <xsl:text>{width => </xsl:text>
+        <xsl:value-of select="$width"/>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <xsl:if test="ancestor::tabular">
+        <xsl:text>')."$EmPtYsTrInG </xsl:text>
+    </xsl:if>
+    <xsl:variable name="category">
+        <xsl:variable name="varname" select="@var" />
+        <xsl:variable name="problem" select="ancestor::webwork" />
+        <xsl:value-of select="$problem/setup/var[@name=$varname]/@category" />
+    </xsl:variable>
+    <xsl:variable name="format">
+        <xsl:choose>
+            <xsl:when test="@format">
+                <xsl:value-of select="@format"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="category-to-format">
+                    <xsl:with-param name="category" select="$category"/>
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="($pg.answer.format.help = 'yes') and not($format = 'none')">
+        <xsl:choose>
+            <xsl:when test="ancestor::tabular">
+                 <xsl:text>.</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text> [@</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>AnswerFormatHelp("</xsl:text>
+            <xsl:value-of select="$format"/>
+        <xsl:text>")</xsl:text>
+        <xsl:choose>
+            <xsl:when test="ancestor::tabular">
+                 <xsl:text></xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>@]*</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:if>
 </xsl:template>
+
 
 <!-- Essay answers -->
 <!-- Example: [@ ANS(essay_cmp); essay_box(6,76) @]*   -->
@@ -313,6 +829,12 @@
     <xsl:text>[`</xsl:text>
     <xsl:apply-templates select="text()|var" />
     <xsl:text>`]</xsl:text>
+</xsl:template>
+
+<xsl:template match= "webwork//tabular//m">
+    <xsl:text>$EmPtYsTrInG".PGML::Format('[`</xsl:text>
+    <xsl:apply-templates select="text()|var" />
+    <xsl:text>`]')."$EmPtYsTrInG </xsl:text>
 </xsl:template>
 
 <xsl:template match="webwork//me">
@@ -373,6 +895,10 @@
     <xsl:text>    "MathObjects.pl",&#xa;</xsl:text>
     <xsl:text>    "PGML.pl",&#xa;</xsl:text>
     <!-- look for other macros to use automatically                  -->
+    <!-- tables                                                      -->
+    <xsl:if test=".//tabular">
+        <xsl:text>    "niceTables.pl",&#xa;</xsl:text>
+    </xsl:if>
     <!-- popup menu multiple choice answers                          -->
     <xsl:if test="./setup/var[@category='popup']">
         <xsl:text>    "parserPopUp.pl",&#xa;</xsl:text>
@@ -451,11 +977,9 @@
     </xsl:if>
 </xsl:template>
 
-
-
 <!-- Convert a var's "category" to the right term for AnswerFormatHelp -->
 <xsl:template name="category-to-format">
-    <xsl:param name="category"/>
+    <xsl:param name="category" select="none"/>
     <xsl:choose>
         <xsl:when test="$category='angle'">
             <xsl:text>angles</xsl:text>
