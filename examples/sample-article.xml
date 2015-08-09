@@ -1540,6 +1540,16 @@ the xsltproc executable.
                     <li>Level 1, third.</li>
                 </ol>
 
+                <p>A nested unordered list, with labels given as squares on the outer list and nothing (blank) on the inner lists.</p>
+
+                <ul label="square">
+                    <li>Level 1, first.</li>
+                    <li>Level 1, second.<ul label="">
+                        <li>Level 2, first.</li>
+                        <li>Level 2, second.</li>
+                    </ul></li>
+                    <li>Level 1, third.</li>
+                </ul>
 
                 <p>Exercises and References are specialized subdivisions you can put anywhere.  They are implemented as top-level lists, so should share behavior.  For example, an exercise may have many parts and when expressed as a list, should have the expected labels.</p>
 

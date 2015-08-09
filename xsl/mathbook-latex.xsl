@@ -2065,7 +2065,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="@label='disc'">\textbullet</xsl:when>
         <xsl:when test="@label='circle'">$\circ$</xsl:when>
         <xsl:when test="@label='square'">$\blacksquare$</xsl:when>
-        <xsl:when test="@label=''">none</xsl:when>
+        <xsl:when test="@label=''"></xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: unordered list label not found or not recognized</xsl:message>
         </xsl:otherwise>
