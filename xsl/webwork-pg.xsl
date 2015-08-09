@@ -756,11 +756,9 @@
     <xsl:if test="ancestor::tabular">
         <xsl:text>')."$EmPtYsTrInG </xsl:text>
     </xsl:if>
-    <xsl:variable name="category">
-        <xsl:variable name="varname" select="@var" />
-        <xsl:variable name="problem" select="ancestor::webwork" />
-        <xsl:value-of select="$problem/setup/var[@name=$varname]/@category" />
-    </xsl:variable>
+    <xsl:variable name="varname" select="@var" />
+    <xsl:variable name="problem" select="ancestor::webwork" />
+    <xsl:variable name="category" select="$problem/setup/var[@name=$varname]/@category" />
     <xsl:variable name="format">
         <xsl:choose>
             <xsl:when test="@format">
@@ -773,25 +771,9 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:if test="($pg.answer.format.help = 'yes') and not($format = 'none')">
-        <xsl:choose>
-            <xsl:when test="ancestor::tabular">
-                 <xsl:text>$EmPtYsTrInG".AnswerFormatHelp('</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text> [@AnswerFormatHelp('</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:value-of select="$format"/>
-        <xsl:choose>
-            <xsl:when test="ancestor::tabular">
-                 <xsl:text>')."$EmPtYsTrInG </xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>')@]*</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:if>
+    <xsl:call-template name="answer-format-help">
+        <xsl:with-param name="format" select="$format"/>
+    </xsl:call-template>
 </xsl:template>
 
 
@@ -972,6 +954,24 @@
         <xsl:call-template name="space">
             <xsl:with-param name="width" select="$width - 1" />
         </xsl:call-template>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template name="answer-format-help">
+    <xsl:param name="format" select="none"/>
+    <xsl:if test="($pg.answer.format.help = 'yes') and not($format = 'none')">
+        <xsl:choose>
+            <xsl:when test="ancestor::tabular">
+                 <xsl:text>$EmPtYsTrInG".AnswerFormatHelp('</xsl:text>
+                 <xsl:value-of select="$format"/>
+                 <xsl:text>')."$EmPtYsTrInG </xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text> [@AnswerFormatHelp('</xsl:text>
+                <xsl:value-of select="$format"/>
+                <xsl:text>')@]*</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:if>
 </xsl:template>
 
