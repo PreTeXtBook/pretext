@@ -96,6 +96,9 @@
     <xsl:call-template name="begin-block">
         <xsl:with-param name="title">PG Setup</xsl:with-param>
     </xsl:call-template>
+    <xsl:if test="not(preceding-sibling::setup) and not(contains(./pg-code,'Context('))">
+        <xsl:text>Context('Numeric');&#xa;</xsl:text>
+    </xsl:if>
     <!-- TODO: ignore var for now -->
     <!-- pg-code verbatim, but trim indentation -->
     <xsl:call-template name="sanitize-code">
