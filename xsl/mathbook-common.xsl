@@ -713,7 +713,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Substrings at last markers               -->
 <!-- XSLT Cookbook, 2nd Edition               -->
+<!-- Copyright 2006, O'Reilly Media, Inc.     -->
 <!-- Recipe 2.4, nearly verbatim, reformatted -->
+<!-- From the section of the Preface, Using Code Examples:   -->
+<!-- "You do not need to contact us for permission unless    -->
+<!-- you're reproducing a significant portion of the code.   -->
+<!-- For example, writing a program that uses several chunks -->
+<!-- of code from this book does not require permission."    -->
 <xsl:template name="substring-before-last">
     <xsl:param name="input" />
     <xsl:param name="substr" />
@@ -747,6 +753,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$temp"/>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- Duplicating Strings                      -->
+<!-- XSLT Cookbook, 2nd Edition               -->
+<!-- Copyright 2006, O'Reilly Media, Inc.     -->
+<!-- Recipe 2.5, nearly verbatim, reformatted -->
+<!-- From the section of the Preface, Using Code Examples:   -->
+<!-- "You do not need to contact us for permission unless    -->
+<!-- you're reproducing a significant portion of the code.   -->
+<!-- For example, writing a program that uses several chunks -->
+<!-- of code from this book does not require permission."    -->
+<xsl:template name="duplicate-string">
+     <xsl:param name="text" />
+     <xsl:param name="count" select="1" />
+     <xsl:choose>
+          <xsl:when test="not($count) or not($text)" />
+          <xsl:when test="$count = 1">
+               <xsl:value-of select="$text" />
+          </xsl:when>
+          <xsl:otherwise>
+               <!-- If $count is odd, append one copy of input -->
+               <xsl:if test="$count mod 2">
+                    <xsl:value-of select="$text" />
+               </xsl:if>
+               <!-- Recursively apply template, after -->
+               <!-- doubling input and halving count  -->
+               <xsl:call-template name="duplicate-string">
+                    <xsl:with-param name="text" select="concat($text,$text)" />
+                    <xsl:with-param name="count" select="floor($count div 2)" />
+               </xsl:call-template>
+          </xsl:otherwise>
+     </xsl:choose>
 </xsl:template>
 
 <!-- Date and Time Functions -->
