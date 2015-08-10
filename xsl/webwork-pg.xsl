@@ -735,10 +735,9 @@
     <!-- for small width, print underscores; otherwise, specify by number -->
     <xsl:choose>
         <xsl:when test="$width &lt; 13">
-            <xsl:call-template name="underscore">
-                <xsl:with-param name="width">
-                    <xsl:value-of select="$width"/>
-               </xsl:with-param>
+            <xsl:call-template name="duplicate-string">
+                <xsl:with-param name="count" select="$width" />
+                <xsl:with-param name="text"  select="'_'" />
             </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
@@ -938,18 +937,6 @@
     <xsl:value-of select="$title"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>############################################################&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Since we use XSLT 1.0, this is how we create -->
-<!-- "width" underscores for a PGML answer blank  -->
-<xsl:template name="underscore">
-    <xsl:param name="width" select="5" />
-    <xsl:if test="not($width = 0)">
-        <xsl:text>_</xsl:text>
-        <xsl:call-template name="underscore">
-            <xsl:with-param name="width" select="$width - 1" />
-        </xsl:call-template>
-    </xsl:if>
 </xsl:template>
 
 <!-- PGML relies on sequences of space characters for markup -->
