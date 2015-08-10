@@ -320,20 +320,25 @@
                     </xsl:call-template>
                 </xsl:for-each>
             </xsl:when>
-            <!-- All columns specified identically so far   -->
-            <!--   so can repeat global, table-wide values  -->
-            <!--   use first row to determine number        -->
-            <!--   write alignment (mandatory)              -->
-            <!--   follow with right border (optional)      -->
+            <!-- No col specification                                  -->
+            <!--   so default identically to global, table-wide values -->
+            <!--   first row determines the  number of columns         -->
+            <!--   write the alignment (mandatory)                     -->
+            <!--   follow with right border (optional)                 -->
+            <!-- TODO: error check each row for correct number of columns -->
             <xsl:otherwise>
-                <xsl:for-each select="row[1]/cell">
-                    <xsl:call-template name="halign-specification">
-                        <xsl:with-param name="align" select="$table-halign" />
-                    </xsl:call-template>
-                    <xsl:call-template name="vrule-specification">
-                        <xsl:with-param name="width" select="$table-right" />
-                    </xsl:call-template>
-                </xsl:for-each>
+                <xsl:variable name="ncols" select="count(row[1]/cell) + sum(row[1]/cell[@colspan]/@colspan) - count(row[1]/cell[@colspan])" />
+                <xsl:call-template name="duplicate-string">
+                    <xsl:with-param name="count" select="$ncols" />
+                    <xsl:with-param name="text">
+                        <xsl:call-template name="halign-specification">
+                            <xsl:with-param name="align" select="$table-halign" />
+                        </xsl:call-template>
+                        <xsl:call-template name="vrule-specification">
+                            <xsl:with-param name="width" select="$table-right" />
+                        </xsl:call-template>
+                    </xsl:with-param>
+                </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
     <xsl:text>',&#xa;</xsl:text>
