@@ -943,13 +943,10 @@
 <xsl:template name="space">
     <xsl:param name="blocksize" select="4" />
     <xsl:param name="repetitions" select="1" />
-    <xsl:param name="width" select="$blocksize * $repetitions" />
-    <xsl:if test="not($width = 0)">
-        <xsl:text> </xsl:text>
-        <xsl:call-template name="space">
-            <xsl:with-param name="width" select="$width - 1" />
-        </xsl:call-template>
-    </xsl:if>
+    <xsl:call-template name="duplicate-string">
+        <xsl:with-param name="count" select="$blocksize * $repetitions" />
+        <xsl:with-param name="text" select="' '" />
+    </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="answer-format-help">
