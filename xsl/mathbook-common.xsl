@@ -2342,18 +2342,18 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- pass-through the remainder              -->
 <xsl:template match="*" mode="xref-wrap">
     <xsl:param name="content" />
-    <xsl:value-of select="$content" />
+    <xsl:copy-of select="$content" />
 </xsl:template>
 <xsl:template match="biblio" mode="xref-wrap">
     <xsl:param name="content" />
     <xsl:text>[</xsl:text>
-    <xsl:value-of select="$content" />
+    <xsl:copy-of select="$content" />
     <xsl:text>]</xsl:text>
 </xsl:template>
 <xsl:template match="men|mrow" mode="xref-wrap">
     <xsl:param name="content" />
     <xsl:text>(</xsl:text>
-    <xsl:value-of select="$content" />
+    <xsl:copy-of select="$content" />
     <xsl:text>)</xsl:text>
 </xsl:template>
 
