@@ -2120,8 +2120,8 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
             </xsl:variable>
             <xsl:if test="not($prefix = '')">
                 <xsl:value-of select="$prefix" />
-                <!-- generic nbsp here via abstract template -->
-                <xsl:text> </xsl:text>
+                <xsl:variable name="nbsp"><nbsp /></xsl:variable>
+                <xsl:apply-templates select="exsl:node-set($nbsp)" />
             </xsl:if>
             <!-- optionally wrap with parentheses, brackets -->
             <xsl:apply-templates select="$target" mode="xref-wrap">
@@ -2221,8 +2221,8 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     </xsl:variable>
     <xsl:if test="not($prefix = '')">
         <xsl:value-of select="$prefix" />
-        <!-- generic nbsp here via abstract template -->
-        <xsl:text> </xsl:text>
+        <xsl:variable name="nbsp"><nbsp /></xsl:variable>
+        <xsl:apply-templates select="exsl:node-set($nbsp)" />
     </xsl:if>
     <!-- optionally wrap with parentheses, brackets -->
     <xsl:apply-templates select="$target-first" mode="xref-wrap">
@@ -2233,8 +2233,8 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
                     <xsl:apply-templates select="$target-first" mode="xref-number" />
                 </xsl:with-param>
             </xsl:apply-templates>
-            <!-- a dash, replace with generic ndash -->
-            <xsl:text>-</xsl:text>
+            <xsl:variable name="ndash"><ndash /></xsl:variable>
+            <xsl:apply-templates select="exsl:node-set($ndash)" />
             <!-- second link, number only -->
             <xsl:apply-templates select="$target-last" mode="xref-link">
                 <xsl:with-param name="content">
@@ -2292,8 +2292,10 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- visual hints as to the nature of the target            -->
 <!-- (parentheses on equations, brackets on citations)      -->
 <!-- and possible extra detail on a citation.               -->
-<!-- These only manufacture generic text (but for the       -->
-<!-- non-breaking space) so can be used in all conversions. -->
+<!-- These only manufacture generic text, modulo special    -->
+<!-- characters like non-breaking spaces provided by        -->
+<!-- importing stylesheets, and so can be employed in any   -->
+<!-- conversion that provides those characters.             -->
 
 <!-- A single "ref" in a xref may have an autoname,         -->
 <!-- wrapping of the number, and detail for a bibliographic -->
@@ -2310,8 +2312,8 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     </xsl:variable>
     <xsl:if test="not($prefix = '')">
         <xsl:value-of select="$prefix" />
-        <!-- generic nbsp here via abstract template -->
-        <xsl:text> </xsl:text>
+        <xsl:variable name="nbsp"><nbsp /></xsl:variable>
+        <xsl:apply-templates select="exsl:node-set($nbsp)" />
     </xsl:if>
     <!-- optionally wrap citations+detail or equations, with formatting -->
     <xsl:apply-templates select="$target" mode="xref-wrap">
@@ -2322,8 +2324,9 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
             <xsl:if test="@detail != ''">
                 <xsl:choose>
                     <xsl:when test="local-name($target) = 'biblio'">
-                        <!-- non-breaking space here too -->
-                        <xsl:text>, </xsl:text>
+                        <xsl:text>,</xsl:text>
+                        <xsl:variable name="nbsp"><nbsp /></xsl:variable>
+                        <xsl:apply-templates select="exsl:node-set($nbsp)" />
                         <xsl:apply-templates select="@detail" />
                     </xsl:when>
                     <xsl:otherwise>
@@ -2367,10 +2370,10 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- For an exercisegroup we meld the "xref-number"     -->
 <!-- for the first and last exercise of the group       -->
 <!-- An exercise group is only ever numbered for a xref -->
-<!-- TODO: abstract the ndash -->
 <xsl:template match="exercisegroup" mode="xref-number">
     <xsl:apply-templates select="exercise[1]" mode="xref-number" />
-    <xsl:text>-</xsl:text>
+    <xsl:variable name="ndash"><ndash /></xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($ndash)" />
     <xsl:apply-templates select="exercise[last()]" mode="xref-number" />
 </xsl:template>
 

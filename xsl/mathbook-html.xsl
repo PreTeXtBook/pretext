@@ -2788,10 +2788,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <i class="foreign"><xsl:apply-templates /></i>
 </xsl:template>
 
-<!-- Non-breaking space, which "joins" two words as a unit -->
+<!-- Non-breaking space, which "joins" two words as a unit            -->
+<!-- Using &nbsp; does not travel well into node-set() in common file -->
 <!-- http://stackoverflow.com/questions/31870/using-a-html-entity-in-xslt-e-g-nbsp -->
 <xsl:template match="nbsp">
-    <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
+    <xsl:text>&#xa0;</xsl:text>
 </xsl:template>
 
 <!-- Dashes, Hyphen -->
