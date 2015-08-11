@@ -106,7 +106,7 @@
             <exercise>
                 <title>Answer is a number or a function.</title>
 
-                <webwork xml:id="number-or-function">
+                <webwork xml:id="number-or-function" height="700">
 
                     <setup>
                         <var name="$a" category="integer">
@@ -161,7 +161,7 @@
             <exercise>
                 <title>Answer is a function with domain issues.</title>
 
-                <webwork xml:id="function-with-domain-issues">
+                <webwork xml:id="function-with-domain-issues" height="700">
 
                     <setup>
                         <var name="$a" category="integer">
@@ -213,27 +213,35 @@
             </exercise>
 
             <exercise>
-                <title>Multiple choice by popup or radio buttons.</title>
+                <title>Multiple choice by popup, radio buttons, or checkbox.</title>
 
-                <webwork xml:id="multiple-choice-popup-or-radio-buttons">
+                <webwork xml:id="multiple-choice-popup-or-radio-buttons" height="1400">
 
                     <setup>
                         <var name="$color1" category="popup">
                             <choices>
                                 <choice>Red</choice>
-                                <choice>Blue</choice>
+                                <choice correct="yes">Blue</choice>
                                 <choice>Green</choice>
                             </choices>
-                            <static>Blue</static>
                         </var>
                         <var name="$color2" category="buttons">
                             <choices>
                                 <choice>Red</choice>
-                                <choice>Blue</choice>
+                                <choice correct="yes">Blue</choice>
                                 <choice>Green</choice>
                                 <choice>None of these</choice>
                             </choices>
-                            <static>Blue</static>
+                        </var>
+                        <var name="$mc" category="checkboxes">
+                            <choices>
+                                <choice correct="yes"><m>e^{x^2}e^{1/x}</m></choice>
+                                <choice><m>\frac{e^{x^2}}{e^x}</m></choice>
+                                <choice correct="yes"><m>e^{x^2}e^{x^{-1}}}</m></choice>
+                                <choice correct="yes"><m>e^{(x^3+1)/x}</m></choice>
+                                <choice><m>e^{x^2}+e^{1/x}</m></choice>
+                                <choice>None of the above</choice>
+                            </choices>
                         </var>
 
                         <pg-code>
@@ -247,6 +255,20 @@
                               "Blue", # correct answer
                               last => ["None of these"], # can be a list
                             );
+
+                            $mc = new_checkbox_multiple_choice();
+                            $mc -> qa (
+                            "A question can go here, but MBX ignores this", 
+                            "\( e^{x^2} e^{1/x} \)$BR",
+                            "\( e^{x^2} e^{x^{-1}} \)$BR",                
+                            "\( e^{ (x^3+1) / x } \)$BR",
+                            );
+                            $mc -> extra(
+                            "\( \displaystyle \frac{ e^{x^2} }{ e^x } \)$BR",
+                            "\( e^{x^2} + e^{1/x} \)$BR",
+                            );
+                            $mc -> makeLast("None of the above"); 
+
                         </pg-code>
                     </setup>
 
@@ -255,16 +277,24 @@
 
                         <p>My favorite color is</p>
                         <p><answer var="$color2"/></p>
+
+                        <p>Select all expressions that are equivalent to <m>e^{x^2 + 1/x}</m>.  There may be more than one correct answer.</p>
+                        <p><answer var="$mc"/></p>
                     </statement>
 
                     <solution>
                         <p>The correct answer is <var name="$color1"/>.</p>
-                        <p>The correct answer is <var name="$color2"/></p>
+                        <p>The correct answer is <var name="$color2"/>.</p>
+                        <p>The correct answer is <var name="$mc"/>.</p>
                     </solution>
 
                 </webwork>
+            </exercise>
 
-                <webwork xml:id="tables">
+            <exercise>
+                <title>Tables</title>
+
+                <webwork xml:id="tables" height="700">
 
                     <setup>
                         <var name="$x" category="integer">
