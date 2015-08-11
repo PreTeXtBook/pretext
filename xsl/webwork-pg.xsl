@@ -707,7 +707,7 @@
 
 <!-- PGML markup for Perl variable in LaTeX expression -->
 <xsl:template match="statement//var|solution//var">
-    <xsl:variable name="varname" select="@var" />
+    <xsl:variable name="varname" select="@name" />
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="category" select="$problem/setup/var[@name=$varname]/@category" />
     <xsl:text>[</xsl:text> 
@@ -737,12 +737,8 @@
         </xsl:choose>
     </xsl:variable>
     <xsl:call-template name="answer-field">
-        <xsl:with-param name="varname" select="$varname"/>
         <xsl:with-param name="category" select="$category"/>
         <xsl:with-param name="format" select="$format"/>
-        <xsl:with-param name="evaluator" select="@evaluator"/>
-        <xsl:with-param name="height" select="@height"/>
-        <xsl:with-param name="width" select="@width"/>
     </xsl:call-template>
     <xsl:call-template name="answer-format-help">
         <xsl:with-param name="format" select="$format"/>
@@ -750,39 +746,33 @@
 </xsl:template>
 
 <xsl:template name="answer-field">
-    <xsl:param name="varname"/>
     <xsl:param name="category"/>
     <xsl:param name="format"/>
-    <xsl:param name="evaluator"/>
-    <xsl:param name="height"/>
-    <xsl:param name="width"/>
     <xsl:choose>
         <xsl:when test="$category='checkboxes'">
-            <xsl:call-template name="checkboxes-answer-field">
-                <xsl:with-param name="varname" select="$varname"/>
-            </xsl:call-template>
+            <xsl:call-template name="checkboxes-answer-field"/>
         </xsl:when>
         <xsl:when test="$format='essay'">
-            <xsl:call-template name="essay-answer-field">
-                <xsl:with-param name="height" select="$height"/>
-                <xsl:with-param name="width" select="$width"/>
-            </xsl:call-template>
+            <xsl:call-template name="essay-answer-field"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:call-template name="mathobject-answer-field">
-                <xsl:with-param name="width" select="$width"/>
-                <xsl:with-param name="varname" select="$varname"/>
-                <xsl:with-param name="evaluator" select="$evaluator"/>
-            </xsl:call-template>
+            <xsl:call-template name="mathobject-answer-field"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
 <!-- MathObject answers -->
 <xsl:template name="mathobject-answer-field">
-    <xsl:param name="width" />
-    <xsl:param name="varname" />
-    <xsl:param name="evaluator" />
+    <xsl:variable name="width">
+        <xsl:choose>
+            <xsl:when test="@width">
+                <xsl:value-of select="@width"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>5</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <!-- For answer blanks in tables (and possibly more things in the future) -->
     <!-- we cannot simply insert PGML syntax. But otherwise, we do just that. -->
     <xsl:if test="ancestor::tabular">
@@ -805,10 +795,10 @@
     <xsl:text>{</xsl:text>
     <xsl:choose>
         <xsl:when test="@evaluator">
-            <xsl:value-of select="$evaluator" />
+            <xsl:value-of select="@evaluator" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="$varname" />
+            <xsl:value-of select="@var" />
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>}</xsl:text>
@@ -824,11 +814,10 @@
 
 <!-- Checkbox answers -->
 <xsl:template name="checkboxes-answer-field">
-    <xsl:param name="varname"/>
     <xsl:text>    [@</xsl:text>
-    <xsl:value-of select="$varname"/>
+    <xsl:value-of select="@var"/>
     <xsl:text>->print_a() @]*&#xa;END_PGML&#xa;ANS(checkbox_cmp(</xsl:text>
-    <xsl:value-of select="$varname"/>
+    <xsl:value-of select="@var"/>
     <xsl:text>->correct_ans()));&#xa;BEGIN_PGML&#xa;</xsl:text>
 </xsl:template>
 
@@ -837,12 +826,24 @@
 <!-- Requires:  PGessaymacros.pl, automatically loaded -->
 <!-- http://webwork.maa.org/moodle/mod/forum/discuss.php?d=3370 -->
 <xsl:template name="essay-answer-field">
-    <xsl:param name="height" select="'6'"/>
-    <xsl:param name="width" select="'76'"/>
     <xsl:text>[@ ANS(essay_cmp); essay_box(</xsl:text>
-    <xsl:value-of select="$height"/>
+    <xsl:choose>
+        <xsl:when test="@height">
+            <xsl:value-of select="@height"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>6</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>,</xsl:text>
-    <xsl:value-of select="$width"/>
+    <xsl:choose>
+        <xsl:when test="@width">
+            <xsl:value-of select="@width"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>76</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>) @]*</xsl:text>
 </xsl:template>
 
@@ -993,10 +994,13 @@
     <xsl:param name="format" select="none"/>
     <xsl:if test="($pg.answer.format.help = 'yes') and not($format = 'none')">
         <xsl:choose>
+            <xsl:when test="$format='essay'">
+                <xsl:text> [@essay_help()@]*</xsl:text>
+            </xsl:when>
             <xsl:when test="ancestor::tabular">
-                 <xsl:text>$EmPtYsTrInG".AnswerFormatHelp('</xsl:text>
-                 <xsl:value-of select="$format"/>
-                 <xsl:text>')."$EmPtYsTrInG </xsl:text>
+                <xsl:text>$EmPtYsTrInG".AnswerFormatHelp('</xsl:text>
+                <xsl:value-of select="$format"/>
+                <xsl:text>')."$EmPtYsTrInG </xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text> [@AnswerFormatHelp('</xsl:text>
