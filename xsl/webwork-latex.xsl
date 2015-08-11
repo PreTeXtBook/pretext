@@ -30,6 +30,10 @@
 <!-- Intend output to be a LaTeX source -->
 <xsl:output method="text" />
 
+<!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
+<xsl:strip-space elements="li" />
+
+
 <!-- ################## -->
 <!-- Top-Down Structure -->
 <!-- ################## -->
@@ -88,6 +92,7 @@
     <xsl:variable name="varname" select="@name" />
     <xsl:choose>
         <xsl:when test="$problem/setup/var[@name=$varname and @category='checkboxes']">
+            <xsl:text>{\bfseries</xsl:text>
             <xsl:for-each select="$problem/setup/var[@name=$varname]/choices/choice">
                <xsl:if test="@correct='yes'">
                    <xsl:text>\makeatletter\@Alph{</xsl:text>
@@ -95,6 +100,7 @@
                    <xsl:text>}\makeatother</xsl:text>
                </xsl:if>
             </xsl:for-each>
+            <xsl:text>}</xsl:text>
         </xsl:when>
         <xsl:when test="$problem/setup/var[@name=$varname and (@category='popup' or @category='buttons')]">
             <xsl:value-of select="$problem/setup/var[@name=$varname]/choices/choice[@correct='yes'][1]"/>
@@ -139,6 +145,9 @@
             <xsl:text>\begin{itemize}[label=$\square$,leftmargin=3em,]&#xa;</xsl:text>
             <xsl:for-each select="$problem/setup/var[@name=$varname]/choices/choice">
                 <xsl:text>\item{}</xsl:text>
+                <xsl:text>{\makeatletter\textbf{\@Alph{</xsl:text>
+                <xsl:value-of select="position()"/>
+                <xsl:text>}.}\makeatother} </xsl:text>
                 <xsl:apply-templates select='.' />
                 <xsl:text>&#xa;</xsl:text>
             </xsl:for-each>
@@ -161,7 +170,7 @@
 
 <!-- An essay answer has no associated variable              -->
 <!-- We simply indicate that this is an essay answer problem -->
-<xsl:template match="answer[@category='essay']">
+<xsl:template match="answer[@format='essay']">
     <xsl:text>\quad\lbrack Essay Answer\rbrack</xsl:text>
 </xsl:template>
 
