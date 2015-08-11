@@ -104,7 +104,7 @@
             <title>Miscellaneous Templates</title>
 
             <exercise>
-                <title>Answer is a number or a function.</title>
+                <title>Answer is a number or a function</title>
 
                 <webwork xml:id="number-or-function" height="700">
 
@@ -131,7 +131,7 @@
                     </setup>
 
                     <statement>
-                        <ol label="a">
+                        <ol label="a.">
                             <li>
                                 <p>Suppose the correct answer is <m><var name="$answer1"/></m>.</p>
                                 <ul label="square">
@@ -159,7 +159,7 @@
             </exercise>
 
             <exercise>
-                <title>Answer is a function with domain issues.</title>
+                <title>Answer is a function with domain issues</title>
 
                 <webwork xml:id="function-with-domain-issues" height="700">
 
@@ -185,7 +185,7 @@
                     </setup>
 
                     <statement>
-                        <ol label="a">
+                        <ol label="a.">
                             <li>
                                 <p>Suppose the correct answer is <m>\displaystyle <var name="$answer1"/></m>.</p>
                                 <ul label="square">
@@ -213,7 +213,7 @@
             </exercise>
 
             <exercise>
-                <title>Multiple choice by popup, radio buttons, or checkbox.</title>
+                <title>Multiple choice by popup, radio buttons, or checkbox</title>
 
                 <webwork xml:id="multiple-choice-popup-or-radio-buttons" height="1400">
 
