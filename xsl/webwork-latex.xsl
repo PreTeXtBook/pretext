@@ -86,7 +86,23 @@
 <xsl:template match="statement//var|solution//var">
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="varname" select="@name" />
-    <xsl:value-of select="$problem/setup/var[@name=$varname]/static" />
+    <xsl:choose>
+        <xsl:when test="$problem/setup/var[@name=$varname and @category='checkboxes']">
+            <xsl:for-each select="$problem/setup/var[@name=$varname]/choices/choice">
+               <xsl:if test="@correct='yes'">
+                   <xsl:text>\makeatletter\@Alph{</xsl:text>
+                   <xsl:value-of select="position()"/>
+                   <xsl:text>}\makeatother</xsl:text>
+               </xsl:if>
+            </xsl:for-each>
+        </xsl:when>
+        <xsl:when test="$problem/setup/var[@name=$varname and (@category='popup' or @category='buttons')]">
+            <xsl:value-of select="$problem/setup/var[@name=$varname]/choices/choice[@correct='yes'][1]"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$problem/setup/var[@name=$varname]/static" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- PGML answer blank               -->
@@ -96,19 +112,35 @@
     <xsl:variable name="varname" select="@var" />
     <xsl:choose>
         <xsl:when test="$problem/setup/var[@name=$varname][@category='popup']" >
-            <xsl:text>(/</xsl:text>
+            <xsl:text>(Choose one: </xsl:text>
             <xsl:for-each select="$problem/setup/var[@name=$varname]/choices/choice">
+                <xsl:if test="position()=last()">
+                    <xsl:text>or </xsl:text>
+                </xsl:if>
                 <xsl:apply-templates select='.' />
-                <xsl:text>/</xsl:text>
+                <xsl:if test="not(position()=last())">
+                    <xsl:text>, </xsl:text>
+                </xsl:if>
             </xsl:for-each>
             <xsl:text>)</xsl:text>
         </xsl:when>
         <xsl:when test="$problem/setup/var[@name=$varname][@category='buttons']" >
             <xsl:text>\par&#xa;</xsl:text>
-            <xsl:text>\begin{itemize}[label=$\circ$,leftmargin=3em,]&#xa;</xsl:text>
+            <xsl:text>\begin{itemize}[label=$\circledcirc$,leftmargin=3em,]&#xa;</xsl:text>
             <xsl:for-each select="$problem/setup/var[@name=$varname]/choices/choice">
                 <xsl:text>\item{}</xsl:text>
                 <xsl:apply-templates select='.' />
+                <xsl:text>&#xa;</xsl:text>
+            </xsl:for-each>
+            <xsl:text>\end{itemize}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:when test="$problem/setup/var[@name=$varname][@category='checkboxes']" >
+            <xsl:text>\par&#xa;</xsl:text>
+            <xsl:text>\begin{itemize}[label=$\square$,leftmargin=3em,]&#xa;</xsl:text>
+            <xsl:for-each select="$problem/setup/var[@name=$varname]/choices/choice">
+                <xsl:text>\item{}</xsl:text>
+                <xsl:apply-templates select='.' />
+                <xsl:text>&#xa;</xsl:text>
             </xsl:for-each>
             <xsl:text>\end{itemize}&#xa;</xsl:text>
         </xsl:when>
@@ -144,6 +176,7 @@
     <xsl:apply-templates select="text()|var" />
     <xsl:text>\]</xsl:text>
 </xsl:template>
+
 
 
 <!-- KILLED -->

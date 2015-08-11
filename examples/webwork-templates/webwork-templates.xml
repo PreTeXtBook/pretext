@@ -31,7 +31,7 @@
 
     <!-- "docinfo" is like metadata, it is necessary technical -->
     <!-- information which a reader mostly will never see. -->
-   
+
     <docinfo>
 
         <!-- In the HTML version there is room for a   -->
@@ -237,7 +237,7 @@
                             <choices>
                                 <choice correct="yes"><m>e^{x^2}e^{1/x}</m></choice>
                                 <choice><m>\frac{e^{x^2}}{e^x}</m></choice>
-                                <choice correct="yes"><m>e^{x^2}e^{x^{-1}}}</m></choice>
+                                <choice correct="yes"><m>e^{x^2}e^{x^{-1}}</m></choice>
                                 <choice correct="yes"><m>e^{(x^3+1)/x}</m></choice>
                                 <choice><m>e^{x^2}+e^{1/x}</m></choice>
                                 <choice>None of the above</choice>
@@ -258,16 +258,16 @@
 
                             $mc = new_checkbox_multiple_choice();
                             $mc -> qa (
-                            "A question can go here, but MBX ignores this", 
+                            "A question can go here, but MBX ignores this",
                             "\( e^{x^2} e^{1/x} \)$BR",
-                            "\( e^{x^2} e^{x^{-1}} \)$BR",                
+                            "\( e^{x^2} e^{x^{-1}} \)$BR",
                             "\( e^{ (x^3+1) / x } \)$BR",
                             );
                             $mc -> extra(
                             "\( \displaystyle \frac{ e^{x^2} }{ e^x } \)$BR",
                             "\( e^{x^2} + e^{1/x} \)$BR",
                             );
-                            $mc -> makeLast("None of the above"); 
+                            $mc -> makeLast("None of the above");
 
                         </pg-code>
                     </setup>
@@ -298,7 +298,7 @@
 
                     <setup>
                         <var name="$x" category="integer">
-                            <static>2</static>
+                            <static>5</static>
                         </var>
 
                         <pg-code>
@@ -355,15 +355,14 @@
                     </statement>
 
                     <solution>
+                        <p>The missing number is <var name="$x"/>.</p>
                     </solution>
 
                 </webwork>
 
             </exercise>
 
-           
-
         </section>
-        
+
     </article>
 </mathbook>
