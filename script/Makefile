@@ -114,10 +114,10 @@ minimal:
 
 chapter:
 	install -d $(PGOUT) $(MBUSR)
-	-rm $(PGOUT)/*.pg
+	#-rm $(PGOUT)/*.pg
 	cp $(WWXSL)/extract-webwork.xsl $(WWXSL)/webwork-pg.xsl $(MBUSR)
 	cd $(PGOUT); \
-	xsltproc $(MBUSR)/extract-webwork.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml
+	xsltproc --stringparam chunk.level 1 $(MBUSR)/extract-webwork.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml
 	#
 	install -d $(PDFOUT) $(MBUSR)
 	-rm $(PDFOUT)/*.tex
