@@ -1211,14 +1211,18 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- The "simple" version is sanitized and is typically -->
 <!-- used in some navigation element like headers and ToC -->
 
+<!-- The "filesafe" version is heavily sanitized to be just letters, -->
+<!-- numbers, and underscores.  It is typically for filenames        -->
+
 <!-- We use modal templates, so we can kill the default -->
 <!-- template on *all* titles globally and ignore them -->
 <!-- in default "apply-templates" calls. -->
 
-<!-- The interface to all this is based on two modal  -->
-<!-- templates of the enclosing structure that has a title -->
-<!-- "full":   everything, typically at origin          -->
-<!-- "simple": sanitized, usually for navigation -->
+<!-- The interface to all this is based on two modal         -->
+<!-- templates of the enclosing structure that has a title   -->
+<!-- "full":   everything, typically at origin               -->
+<!-- "simple": sanitized, usually for navigation             -->
+<!-- "filesafe": usable in a filename, just letters, numbers -->
 
 <xsl:template match="*" mode="title-full">
     <xsl:apply-templates select="." mode="title">
@@ -1229,6 +1233,12 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <xsl:template match="*" mode="title-simple">
     <xsl:apply-templates select="." mode="title">
         <xsl:with-param name="complexity">simple</xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="*" mode="title-filesafe">
+    <xsl:apply-templates select="." mode="title">
+        <xsl:with-param name="complexity">filesafe</xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -1289,6 +1299,17 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         </xsl:when>
         <xsl:when test="$complexity='simple'">
             <xsl:apply-templates  select="./node()[not(self::fn)]" />
+        </xsl:when>
+        <!-- http://stackoverflow.com/questions/1267934/removing-non-alphanumeric-characters-from-string-in-xsl -->
+        <xsl:when test="$complexity='filesafe'">
+            <xsl:variable name="raw-title">
+                <xsl:apply-templates  select="./node()[not(self::fn)]" />
+            </xsl:variable>
+            <xsl:variable name="letter-title">
+                <xsl:value-of select="translate($raw-title, translate($raw-title,
+                'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ', ''), '')" />
+            </xsl:variable>
+            <xsl:value-of select="translate($letter-title, ' ', '_')" />
         </xsl:when>
     </xsl:choose>
 </xsl:template>
