@@ -2369,33 +2369,42 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
             <xsl:with-param name="local" select="@autoname" />
         </xsl:apply-templates>
     </xsl:variable>
-    <xsl:if test="not($prefix = '')">
-        <xsl:value-of select="$prefix" />
-        <xsl:variable name="nbsp"><nbsp /></xsl:variable>
-        <xsl:apply-templates select="exsl:node-set($nbsp)" />
-    </xsl:if>
-    <!-- optionally wrap citations+detail or equations, with formatting -->
-    <xsl:apply-templates select="$target" mode="xref-wrap">
-        <xsl:with-param name="content">
-            <!-- call an abstract template for the actual number -->
-            <xsl:apply-templates select="$target" mode="xref-number" />
-            <!-- provide optional detail on bibliographic reference, only -->
-            <xsl:if test="@detail != ''">
-                <xsl:choose>
-                    <xsl:when test="local-name($target) = 'biblio'">
-                        <xsl:text>,</xsl:text>
-                        <xsl:variable name="nbsp"><nbsp /></xsl:variable>
-                        <xsl:apply-templates select="exsl:node-set($nbsp)" />
-                        <xsl:apply-templates select="@detail" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:message>MBX:WARNING: xref attribute detail="<xsl:value-of select="$detail" />" only implemented for single references to biblio elements</xsl:message>
-                        <xsl:apply-templates select="." mode="location-report" />
-                    </xsl:otherwise>
-                </xsl:choose>
+    <xsl:choose>
+        <!-- no title, then construct more involved text -->
+        <xsl:when test="not(@autoname='title')">
+            <xsl:if test="not($prefix = '')">
+                <xsl:value-of select="$prefix" />
+                <xsl:variable name="nbsp"><nbsp /></xsl:variable>
+                <xsl:apply-templates select="exsl:node-set($nbsp)" />
             </xsl:if>
-        </xsl:with-param>
-    </xsl:apply-templates>
+            <!-- optionally wrap citations+detail or equations, with formatting -->
+            <xsl:apply-templates select="$target" mode="xref-wrap">
+                <xsl:with-param name="content">
+                    <!-- call an abstract template for the actual number -->
+                    <xsl:apply-templates select="$target" mode="xref-number" />
+                    <!-- provide optional detail on bibliographic reference, only -->
+                    <xsl:if test="@detail != ''">
+                        <xsl:choose>
+                            <xsl:when test="local-name($target) = 'biblio'">
+                                <xsl:text>,</xsl:text>
+                                <xsl:variable name="nbsp"><nbsp /></xsl:variable>
+                                <xsl:apply-templates select="exsl:node-set($nbsp)" />
+                                <xsl:apply-templates select="@detail" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:message>MBX:WARNING: xref attribute detail="<xsl:value-of select="$detail" />" only implemented for single references to biblio elements</xsl:message>
+                                <xsl:apply-templates select="." mode="location-report" />
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:if>
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- as title, simply return it -->
+        <xsl:otherwise>
+            <xsl:value-of select="$prefix" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Some references, or lists of references -->
