@@ -11,9 +11,27 @@
 <!-- Intend output for rendering by browsers-->
 <xsl:output method="html" indent="yes"/>
 
-<!-- ############## -->
-<!-- Entry Template -->
-<!-- ############## -->
+<!-- Content as Knowls -->
+<!-- Turn off all knowls, as incompatible -->
+<xsl:param name="html.knowl.theorem" select="'no'" />
+<xsl:param name="html.knowl.proof" select="'no'" />
+<xsl:param name="html.knowl.definition" select="'no'" />
+<xsl:param name="html.knowl.example" select="'no'" />
+<xsl:param name="html.knowl.remark" select="'no'" />
+<xsl:param name="html.knowl.figure" select="'no'" />
+<xsl:param name="html.knowl.table" select="'no'" />
+<xsl:param name="html.knowl.exercise" select="'no'" />
+
+<!-- Do not implement any cross-reference as a knowl -->
+<xsl:template match="*" mode="xref-as-knowl">
+    <xsl:value-of select="false()" />
+</xsl:template>
+
+<!-- And do not even build the knowls -->
+<xsl:template match="*" mode="xref-knowl-factory" />
+
+<!-- Entry point in mathbook-html.xsl is sufficient -->
+<!-- Call "dispatch" mode on /mathbook and kills docinfo -->
 
 <!-- Deprecation warnings are universal analysis of source and parameters   -->
 <!-- There is always a "document root" directly under the mathbook element, -->
