@@ -102,43 +102,49 @@
     </xsl:choose>
 </xsl:template>
 
-<!-- Could be improved by conditioning on empty URLs -->
+<!-- Mimics depth-first search, crudely styled -->
 <xsl:template match="*" mode="crude-nav-bar">
-    <table width="90%">
+    <xsl:variable name="prev">
+        <xsl:apply-templates select="." mode="previous-linear-url" />
+    </xsl:variable>
+    <xsl:variable name="up">
+        <xsl:apply-templates select="." mode="up-url" />
+    </xsl:variable>
+    <xsl:variable name="next">
+        <xsl:apply-templates select="." mode="next-linear-url" />
+    </xsl:variable>
+    <table width="90%" style="font-size: 200%;">
         <tr>
-            <td align="left">
-                <xsl:element name="a">
-                    <xsl:attribute name="href">
-                        <xsl:apply-templates select="." mode="previous-tree-url" />
-                    </xsl:attribute>
-                    <xsl:attribute name="style">
-                        <xsl:text>font-size: 200%;</xsl:text>
-                    </xsl:attribute>
-                    <xsl:text>Previous</xsl:text>
-                </xsl:element>
-            </td>
-            <td align="center">
-                <xsl:element name="a">
-                    <xsl:attribute name="href">
-                        <xsl:apply-templates select="." mode="up-url" />
-                    </xsl:attribute>
-                    <xsl:attribute name="style">
-                        <xsl:text>font-size: 200%;</xsl:text>
-                    </xsl:attribute>
-                    <xsl:text>Up</xsl:text>
-                </xsl:element>
-            </td>
-            <td align="right">
-                <xsl:element name="a">
-                    <xsl:attribute name="href">
-                        <xsl:apply-templates select="." mode="next-tree-url" />
-                    </xsl:attribute>
-                    <xsl:attribute name="style">
-                        <xsl:text>font-size: 200%;</xsl:text>
-                    </xsl:attribute>
-                    <xsl:text>Next</xsl:text>
-                </xsl:element>
-            </td>
+            <xsl:if test="not($prev = '')">
+                <td align="left">
+                    <xsl:element name="a">
+                        <xsl:attribute name="href">
+                            <xsl:value-of select="$prev" />
+                        </xsl:attribute>
+                        <xsl:text>Previous</xsl:text>
+                    </xsl:element>
+                </td>
+            </xsl:if>
+            <xsl:if test="not($up = '')">
+                <td align="center">
+                    <xsl:element name="a">
+                        <xsl:attribute name="href">
+                            <xsl:value-of select="$up" />
+                        </xsl:attribute>
+                        <xsl:text>Up</xsl:text>
+                    </xsl:element>
+                </td>
+            </xsl:if>
+            <xsl:if test="not($next = '')">
+                <td align="right">
+                    <xsl:element name="a">
+                        <xsl:attribute name="href">
+                            <xsl:value-of select="$next" />
+                        </xsl:attribute>
+                        <xsl:text>Next</xsl:text>
+                    </xsl:element>
+                </td>
+            </xsl:if>
         </tr>
     </table>
 </xsl:template>
