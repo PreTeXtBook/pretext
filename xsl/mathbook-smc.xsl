@@ -215,12 +215,21 @@
 </xsl:template>
 
 <!-- CSS -->
-<!-- A hidden cell, typically at the top of a page -->
 <xsl:template name="css-load">
+    <!-- Load CSS files                                -->
+    <!-- A hidden cell, typically at the top of a page -->
     <xsl:apply-templates select="." mode="inputbegin-execute" />
     <xsl:text>%hide&#xa;</xsl:text>
     <xsl:text>load("mathbook-content.css")&#xa;</xsl:text>
     <xsl:text>load("mathbook-add-on.css")&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="inputoutput" />
+    <xsl:apply-templates select="." mode="outputend" />
+    <!-- Blend background color for MathJax display math -->
+    <xsl:apply-templates select="." mode="inputbegin-execute" />
+    <xsl:text>%html&#xa;</xsl:text>
+    <xsl:element name="style">
+        <xsl:text>.MathJax_SVG_Display {background-color: inherit;}</xsl:text>
+    </xsl:element>
     <xsl:apply-templates select="." mode="inputoutput" />
     <xsl:apply-templates select="." mode="outputend" />
 </xsl:template>
