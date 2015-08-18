@@ -1,0 +1,2226 @@
+/*******************************************************************************
+ * MATHBOOK CONTENT STANDALONE STYLESHEET
+ *******************************************************************************
+ * Standalone content styling for Mathbook documents.
+ *
+ * Homepage: http://mathbook.pugetsound.edu
+ * Issue Tracker: https://github.com/BooksHTML/mathbook-assets/issues
+ * Repository: https://github.com/BooksHTML/mathbook-assets
+ *
+ * Authors: Michael DuBois, David Farmer, Rob Beezer
+ *
+ *******************************************************************************
+ */
+@import url("https://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic,700italic|Open+Sans:400italic,700italic,400,700");
+/* line 20, ../../../../../MathBook/mathbook-assets/scss/mathbook-content.scss */
+body {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+/* line 61, ../../../../../../../usr/local/rvm/gems/ruby-2.1.2/gems/compass-0.12.7/frameworks/compass/stylesheets/compass/typography/_vertical_rhythm.scss */
+body * html {
+  font-size: 100%;
+}
+/* line 64, ../../../../../../../usr/local/rvm/gems/ruby-2.1.2/gems/compass-0.12.7/frameworks/compass/stylesheets/compass/typography/_vertical_rhythm.scss */
+body html {
+  font-size: 16px;
+  line-height: 1.25em;
+}
+
+/*******************************************************************************
+ * Content
+ ******************************************************************************/
+/* line 5, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
+h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
+  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-weight: 700;
+  color: inherit;
+}
+
+/* line 9, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
+h1, .h1 {
+  font-size: 2em;
+  line-height: 1.25em;
+  margin-top: 0.625em;
+  margin-bottom: 0.3125em;
+}
+
+/* line 14, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
+h2, .h2 {
+  font-size: 1.75em;
+  line-height: 1.42857em;
+  margin-top: 0.71429em;
+  margin-bottom: 0.35714em;
+}
+
+/* line 19, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
+h3, .h3 {
+  font-size: 1.5em;
+  line-height: 1.25em;
+  margin-top: 0.83333em;
+  margin-bottom: 0.41667em;
+}
+
+/* line 24, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
+h4, .h4 {
+  font-size: 1.3125em;
+  line-height: 1.42857em;
+  margin-top: 0.95238em;
+  margin-bottom: 0.47619em;
+}
+
+/* line 29, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
+h5, .h5 {
+  font-size: 1.125em;
+  line-height: 1.66667em;
+  margin-top: 1.11111em;
+  margin-bottom: 0.55556em;
+}
+
+/* line 34, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
+h6, .h6 {
+  font-size: 1.125em;
+  line-height: 1.66667em;
+  margin-top: 1.11111em;
+  margin-bottom: 0.55556em;
+}
+
+/* line 40, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
+a:link, a:visited {
+  color: #3675cb;
+  color: #3675cb;
+  /**
+   * Better underlines using background gradients
+   * See http://bit.ly/1vTg7hr
+   */
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(50%, transparent), color-stop(50%, rgba(54, 117, 203, 0.5)));
+  background-image: -webkit-linear-gradient(top, transparent 50%, rgba(54, 117, 203, 0.5) 50%);
+  background-image: -moz-linear-gradient(top, transparent 50%, rgba(54, 117, 203, 0.5) 50%);
+  background-image: -o-linear-gradient(top, transparent 50%, rgba(54, 117, 203, 0.5) 50%);
+  background-image: linear-gradient(top, transparent 50%, rgba(54, 117, 203, 0.5) 50%);
+  background-repeat: repeat-x;
+  background-size: 0.1em 0.1em;
+  background-position: 0 1.2em;
+  text-decoration: none;
+}
+/* line 169, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.lt-ie10 a:link, .lt-ie10 a:visited {
+  background: none;
+  text-decoration: underline;
+}
+/* line 44, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
+a:hover, a:focus {
+  color: #2a5ea4;
+  /**
+   * Better underlines using background gradients
+   * See http://bit.ly/1vTg7hr
+   */
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(50%, transparent), color-stop(50%, #2a5ea4));
+  background-image: -webkit-linear-gradient(top, transparent 50%, #2a5ea4 50%);
+  background-image: -moz-linear-gradient(top, transparent 50%, #2a5ea4 50%);
+  background-image: -o-linear-gradient(top, transparent 50%, #2a5ea4 50%);
+  background-image: linear-gradient(top, transparent 50%, #2a5ea4 50%);
+  background-repeat: repeat-x;
+  background-size: 0.1em 0.1em;
+  background-position: 0 1.2em;
+  text-decoration: none;
+}
+/* line 169, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.lt-ie10 a:hover, .lt-ie10 a:focus {
+  background: none;
+  text-decoration: underline;
+}
+/* line 48, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
+a:active {
+  color: #28803f;
+  /**
+   * Better underlines using background gradients
+   * See http://bit.ly/1vTg7hr
+   */
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(50%, transparent), color-stop(50%, #28803f));
+  background-image: -webkit-linear-gradient(top, transparent 50%, #28803f 50%);
+  background-image: -moz-linear-gradient(top, transparent 50%, #28803f 50%);
+  background-image: -o-linear-gradient(top, transparent 50%, #28803f 50%);
+  background-image: linear-gradient(top, transparent 50%, #28803f 50%);
+  background-repeat: repeat-x;
+  background-size: 0.1em 0.1em;
+  background-position: 0 1.2em;
+  text-decoration: none;
+}
+/* line 169, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.lt-ie10 a:active {
+  background: none;
+  text-decoration: underline;
+}
+
+/* line 218, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+p {
+  /* Reset margins */
+  margin: 0;
+  font-size: 1em;
+  line-height: 1.25em;
+  /* We only want bottom margins on paragraphs */
+  margin-bottom: 1.25em;
+}
+
+/* line 249, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+blockquote .blockquote {
+  padding-left: 2.5em;
+  padding-right: 0.625em;
+}
+
+/* line 326, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+address, .address {
+  padding: 0;
+  margin: 0;
+  line-height: inherit;
+  font-style: inherit;
+}
+
+/* line 68, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
+ul,
+ol {
+  font-size: 1em;
+  line-height: 1.25em;
+  margin-top: 0;
+  margin-bottom: 1.25em;
+}
+/* line 75, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
+ul ul,
+ul ol,
+ol ul,
+ol ol {
+  margin-bottom: 0;
+}
+
+/* line 83, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
+.list-unstyled, .list-inline {
+  padding-left: 0;
+  list-style: none;
+}
+
+/* line 93, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
+.list-inline > li {
+  display: inline-block;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+/* line 98, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
+.list-inline > li:first-child {
+  padding-left: 0;
+}
+
+/* line 106, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
+dl {
+  margin-top: 0;
+  margin-bottom: 1.25em;
+}
+
+/* line 111, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
+dt,
+dd {
+  font-size: 1em;
+  line-height: 1.25em;
+}
+
+/* line 114, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
+dt {
+  font-weight: bold;
+}
+
+/* line 117, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
+dd {
+  margin-left: 0;
+}
+
+/* line 6, ../../../../../MathBook/mathbook-assets/scss/content/partials/_sections.scss */
+section, .section-like {
+  margin-bottom: 3.125em;
+}
+/* line 18, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section > .heading, section > header > .heading, .section-like > .heading, .section-like > header > .heading {
+  /* Support links in headings */
+  /* Support knowl links in headings */
+}
+/* line 104, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section > .heading, section > header > .heading, .section-like > .heading, .section-like > header > .heading {
+  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-weight: 700;
+  color: inherit;
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section > .heading:before, section > header > .heading:before, .section-like > .heading:before, .section-like > header > .heading:before {
+  display: none;
+}
+/* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section > .heading:after, section > header > .heading:after, .section-like > .heading:after, .section-like > header > .heading:after {
+  content: " ";
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section > .heading .type:before, section > header > .heading .type:before, .section-like > .heading .type:before, .section-like > header > .heading .type:before {
+  display: none;
+}
+/* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section > .heading .type:after, section > header > .heading .type:after, .section-like > .heading .type:after, .section-like > header > .heading .type:after {
+  content: " ";
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section > .heading .codenumber:before, section > header > .heading .codenumber:before, .section-like > .heading .codenumber:before, .section-like > header > .heading .codenumber:before {
+  display: none;
+}
+/* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section > .heading .codenumber:after, section > header > .heading .codenumber:after, .section-like > .heading .codenumber:after, .section-like > header > .heading .codenumber:after {
+  content: "\2002";
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section > .heading .title:before, section > header > .heading .title:before, .section-like > .heading .title:before, .section-like > header > .heading .title:before {
+  display: none;
+}
+/* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section > .heading .title:after, section > header > .heading .title:after, .section-like > .heading .title:after, .section-like > header > .heading .title:after {
+  content: " ";
+}
+/* line 124, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section > .heading .type, section > .heading .codenumber, section > .heading .title, section > header > .heading .type, section > header > .heading .codenumber, section > header > .heading .title, .section-like > .heading .type, .section-like > .heading .codenumber, .section-like > .heading .title, .section-like > header > .heading .type, .section-like > header > .heading .codenumber, .section-like > header > .heading .title {
+  /**
+   *  Hide the space after the last element,
+   * defer to .heading:after instead
+   */
+}
+/* line 129, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section > .heading .type:last-child:after, section > .heading .codenumber:last-child:after, section > .heading .title:last-child:after, section > header > .heading .type:last-child:after, section > header > .heading .codenumber:last-child:after, section > header > .heading .title:last-child:after, .section-like > .heading .type:last-child:after, .section-like > .heading .codenumber:last-child:after, .section-like > .heading .title:last-child:after, .section-like > header > .heading .type:last-child:after, .section-like > header > .heading .codenumber:last-child:after, .section-like > header > .heading .title:last-child:after {
+  display: none;
+}
+/* line 69, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section > .heading.hide-type .type, section > header > .heading.hide-type .type, .section-like > .heading.hide-type .type, .section-like > header > .heading.hide-type .type {
+  display: none;
+}
+/* line 76, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section > .heading.hide-codenumber .codenumber, section > header > .heading.hide-codenumber .codenumber, .section-like > .heading.hide-codenumber .codenumber, .section-like > header > .heading.hide-codenumber .codenumber {
+  display: none;
+}
+/* line 83, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section > .heading.hide-title .title, section > header > .heading.hide-title .title, .section-like > .heading.hide-title .title, .section-like > header > .heading.hide-title .title {
+  display: none;
+}
+/* line 26, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section > .heading a:link, section > .heading a:visited, section > header > .heading a:link, section > header > .heading a:visited, .section-like > .heading a:link, .section-like > .heading a:visited, .section-like > header > .heading a:link, .section-like > header > .heading a:visited {
+  color: #3675cb;
+  color: #3675cb;
+  /**
+   * Better underlines using background gradients
+   * See http://bit.ly/1vTg7hr
+   */
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(50%, transparent), color-stop(50%, rgba(54, 117, 203, 0.5)));
+  background-image: -webkit-linear-gradient(top, transparent 50%, rgba(54, 117, 203, 0.5) 50%);
+  background-image: -moz-linear-gradient(top, transparent 50%, rgba(54, 117, 203, 0.5) 50%);
+  background-image: -o-linear-gradient(top, transparent 50%, rgba(54, 117, 203, 0.5) 50%);
+  background-image: linear-gradient(top, transparent 50%, rgba(54, 117, 203, 0.5) 50%);
+  background-repeat: repeat-x;
+  background-size: 0.05em 0.05em;
+  background-position: 0 1.2em;
+  text-decoration: none;
+}
+/* line 169, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.lt-ie10 section > .heading a:link, .lt-ie10 section > .heading a:visited, .lt-ie10 section > header > .heading a:link, .lt-ie10 section > header > .heading a:visited, .lt-ie10 .section-like > .heading a:link, .lt-ie10 .section-like > .heading a:visited, .lt-ie10 .section-like > header > .heading a:link, .lt-ie10 .section-like > header > .heading a:visited {
+  background: none;
+  text-decoration: underline;
+}
+/* line 33, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section > .heading a:hover, section > .heading a:focus, section > header > .heading a:hover, section > header > .heading a:focus, .section-like > .heading a:hover, .section-like > .heading a:focus, .section-like > header > .heading a:hover, .section-like > header > .heading a:focus {
+  color: #2a5ea4;
+  /**
+   * Better underlines using background gradients
+   * See http://bit.ly/1vTg7hr
+   */
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(50%, transparent), color-stop(50%, #2a5ea4));
+  background-image: -webkit-linear-gradient(top, transparent 50%, #2a5ea4 50%);
+  background-image: -moz-linear-gradient(top, transparent 50%, #2a5ea4 50%);
+  background-image: -o-linear-gradient(top, transparent 50%, #2a5ea4 50%);
+  background-image: linear-gradient(top, transparent 50%, #2a5ea4 50%);
+  background-repeat: repeat-x;
+  background-size: 0.05em 0.05em;
+  background-position: 0 1.2em;
+  text-decoration: none;
+}
+/* line 169, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.lt-ie10 section > .heading a:hover, .lt-ie10 section > .heading a:focus, .lt-ie10 section > header > .heading a:hover, .lt-ie10 section > header > .heading a:focus, .lt-ie10 .section-like > .heading a:hover, .lt-ie10 .section-like > .heading a:focus, .lt-ie10 .section-like > header > .heading a:hover, .lt-ie10 .section-like > header > .heading a:focus {
+  background: none;
+  text-decoration: underline;
+}
+/* line 40, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section > .heading a:active, section > header > .heading a:active, .section-like > .heading a:active, .section-like > header > .heading a:active {
+  color: #28803f;
+  /**
+   * Better underlines using background gradients
+   * See http://bit.ly/1vTg7hr
+   */
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(50%, transparent), color-stop(50%, #28803f));
+  background-image: -webkit-linear-gradient(top, transparent 50%, #28803f 50%);
+  background-image: -moz-linear-gradient(top, transparent 50%, #28803f 50%);
+  background-image: -o-linear-gradient(top, transparent 50%, #28803f 50%);
+  background-image: linear-gradient(top, transparent 50%, #28803f 50%);
+  background-repeat: repeat-x;
+  background-size: 0.05em 0.05em;
+  background-position: 0 1.2em;
+  text-decoration: none;
+}
+/* line 169, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.lt-ie10 section > .heading a:active, .lt-ie10 section > header > .heading a:active, .lt-ie10 .section-like > .heading a:active, .lt-ie10 .section-like > header > .heading a:active {
+  background: none;
+  text-decoration: underline;
+}
+/* line 31, ../../../../../MathBook/mathbook-assets/scss/content/mixins/_section.scss */
+section > .heading *[knowl], section > header > .heading *[knowl], .section-like > .heading *[knowl], .section-like > header > .heading *[knowl] {
+  margin-left: -3px;
+}
+/* line 55, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+section > .heading *[knowl], section > .heading *[knowl]:hover, section > .heading *[knowl].active, section > header > .heading *[knowl], section > header > .heading *[knowl]:hover, section > header > .heading *[knowl].active, .section-like > .heading *[knowl], .section-like > .heading *[knowl]:hover, .section-like > .heading *[knowl].active, .section-like > header > .heading *[knowl], .section-like > header > .heading *[knowl]:hover, .section-like > header > .heading *[knowl].active {
+  position: relative;
+  color: #205cae;
+  background: transparent;
+  padding: 0px 3px;
+  margin: 0;
+  text-decoration: none;
+  /* add a bottom margin so the line
+   * doesn't jump onHover.
+   */
+  /*margin-bottom: 1px;*/
+  /*border-bottom: 1px dotted $color;*/
+  margin-bottom: 0;
+  border-bottom: none;
+  font-weight: 500;
+  white-space: nowrap;
+  -moz-border-radius-topleft: 3px;
+  -webkit-border-top-left-radius: 3px;
+  border-top-left-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -webkit-border-top-right-radius: 3px;
+  border-top-right-radius: 3px;
+  /* Prevent accidental text selection on click */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-transition-property: background-color;
+  -moz-transition-property: background-color;
+  -o-transition-property: background-color;
+  transition-property: background-color;
+  -webkit-transition-duration: 0ms;
+  -moz-transition-duration: 0ms;
+  -o-transition-duration: 0ms;
+  transition-duration: 0ms;
+  /**
+   * This gets us an underline that's a bit tighter with the baseline
+   * instead of awkwardly floating below like a border on the parent
+   */
+}
+/* line 87, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+section > .heading *[knowl]:after, section > .heading *[knowl]:hover:after, section > .heading *[knowl].active:after, section > header > .heading *[knowl]:after, section > header > .heading *[knowl]:hover:after, section > header > .heading *[knowl].active:after, .section-like > .heading *[knowl]:after, .section-like > .heading *[knowl]:hover:after, .section-like > .heading *[knowl].active:after, .section-like > header > .heading *[knowl]:after, .section-like > header > .heading *[knowl]:hover:after, .section-like > header > .heading *[knowl].active:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 1px;
+  right: 3px;
+  left: 3px;
+  /* Smooth out the transition from underline to border */
+  -webkit-transition-property: left, right;
+  -moz-transition-property: left, right;
+  -o-transition-property: left, right;
+  transition-property: left, right;
+  -webkit-transition-duration: 0ms;
+  -moz-transition-duration: 0ms;
+  -o-transition-duration: 0ms;
+  transition-duration: 0ms;
+  border-bottom: 1px dotted #205cae;
+  /*@include typography-underline(*/
+  /*$color,*/
+  /*$underline-style: dotted,*/
+  /*$underline-size: .1,*/
+  /*$underline-offset: $underline-offset);*/
+  /* Display under parent content, but above parent background */
+  z-index: 0;
+}
+/* line 110, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+section > .heading *[knowl]:hover, section > .heading *[knowl]:active, section > .heading *[knowl].active, section > header > .heading *[knowl]:hover, section > header > .heading *[knowl]:active, section > header > .heading *[knowl].active, .section-like > .heading *[knowl]:hover, .section-like > .heading *[knowl]:active, .section-like > .heading *[knowl].active, .section-like > header > .heading *[knowl]:hover, .section-like > header > .heading *[knowl]:active, .section-like > header > .heading *[knowl].active {
+  color: #003b8a;
+  background: #ebf3ff;
+  text-decoration: none;
+  /* See comment on default style's border/margin */
+  margin-bottom: 0;
+  /*border-bottom:2px solid darken($border-color, 15%);*/
+  /*border-bottom: none;*/
+}
+/* line 120, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+section > .heading *[knowl]:hover:after, section > .heading *[knowl]:active:after, section > .heading *[knowl].active:after, section > header > .heading *[knowl]:hover:after, section > header > .heading *[knowl]:active:after, section > header > .heading *[knowl].active:after, .section-like > .heading *[knowl]:hover:after, .section-like > .heading *[knowl]:active:after, .section-like > .heading *[knowl].active:after, .section-like > header > .heading *[knowl]:hover:after, .section-like > header > .heading *[knowl]:active:after, .section-like > header > .heading *[knowl].active:after {
+  border-bottom: 2px solid #8abcff;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /*@include typography-underline(*/
+  /*darken($border-color, 32.5%),*/
+  /*$underline-size: .1,*/
+  /*$underline-offset: $underline-offset);*/
+}
+/* line 132, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+section > .heading *[knowl]:active, section > header > .heading *[knowl]:active, .section-like > .heading *[knowl]:active, .section-like > header > .heading *[knowl]:active {
+  color: #28803f;
+  background: #d6ffe1;
+}
+/* line 136, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+section > .heading *[knowl]:active:after, section > header > .heading *[knowl]:active:after, .section-like > .heading *[knowl]:active:after, .section-like > header > .heading *[knowl]:active:after {
+  border-color: #28803f;
+}
+/* line 141, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+section > .heading *[knowl].active, section > header > .heading *[knowl].active, .section-like > .heading *[knowl].active, .section-like > header > .heading *[knowl].active {
+  background: #d6e8ff;
+}
+
+/* line 18, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section > .heading, section > header > .heading, .section-like > .heading, .section-like > header > .heading {
+  font-size: 1.75em;
+  line-height: 1.42857em;
+  margin-top: 0.71429em;
+  margin-bottom: 0.35714em;
+}
+/* line 18, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section section > .heading, section section > header > .heading, section .section-like > .heading, section .section-like > header > .heading, .section-like section > .heading, .section-like section > header > .heading, .section-like .section-like > .heading, .section-like .section-like > header > .heading {
+  font-size: 1.5em;
+  line-height: 1.25em;
+  margin-top: 0.83333em;
+  margin-bottom: 0.41667em;
+}
+/* line 18, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section section section > .heading, section section section > header > .heading, section section .section-like > .heading, section section .section-like > header > .heading, section .section-like section > .heading, section .section-like section > header > .heading, section .section-like .section-like > .heading, section .section-like .section-like > header > .heading, .section-like section section > .heading, .section-like section section > header > .heading, .section-like section .section-like > .heading, .section-like section .section-like > header > .heading, .section-like .section-like section > .heading, .section-like .section-like section > header > .heading, .section-like .section-like .section-like > .heading, .section-like .section-like .section-like > header > .heading {
+  font-size: 1.3125em;
+  line-height: 1.42857em;
+  margin-top: 0.95238em;
+  margin-bottom: 0.47619em;
+}
+/* line 18, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+section section section section > .heading, section section section section > header > .heading, section section section .section-like > .heading, section section section .section-like > header > .heading, section section .section-like section > .heading, section section .section-like section > header > .heading, section section .section-like .section-like > .heading, section section .section-like .section-like > header > .heading, section .section-like section section > .heading, section .section-like section section > header > .heading, section .section-like section .section-like > .heading, section .section-like section .section-like > header > .heading, section .section-like .section-like section > .heading, section .section-like .section-like section > header > .heading, section .section-like .section-like .section-like > .heading, section .section-like .section-like .section-like > header > .heading, .section-like section section section > .heading, .section-like section section section > header > .heading, .section-like section section .section-like > .heading, .section-like section section .section-like > header > .heading, .section-like section .section-like section > .heading, .section-like section .section-like section > header > .heading, .section-like section .section-like .section-like > .heading, .section-like section .section-like .section-like > header > .heading, .section-like .section-like section section > .heading, .section-like .section-like section section > header > .heading, .section-like .section-like section .section-like > .heading, .section-like .section-like section .section-like > header > .heading, .section-like .section-like .section-like section > .heading, .section-like .section-like .section-like section > header > .heading, .section-like .section-like .section-like .section-like > .heading, .section-like .section-like .section-like .section-like > header > .heading {
+  font-size: 1.125em;
+  line-height: 1.66667em;
+  margin-top: 1.11111em;
+  margin-bottom: 0.55556em;
+}
+
+/* line 38, ../../../../../MathBook/mathbook-assets/scss/content/partials/_sections.scss */
+.chapter {
+  /**
+   * In LaTeX, Chapter headings are broken onto two lines... so here we go...
+   */
+  /**
+   * Chapter heading in the <header> format
+   * This format supports a byline for anthology textbooks
+   * and journals with different chapter authors.
+   *
+   * The main difference is that the margin is applied to the header
+   * element instead of the heading element.
+   */
+}
+/* line 18, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.chapter > .heading, .chapter > header > .heading {
+  /*
+   * We use font-size-base so that ems are relative to base font size
+   * within this context
+   */
+  font-size: 16px;
+  margin-bottom: 1.25em;
+}
+/* line 54, ../../../../../MathBook/mathbook-assets/scss/content/partials/_sections.scss */
+.chapter > .heading .type, .chapter > .heading .codenumber, .chapter > header > .heading .type, .chapter > header > .heading .codenumber {
+  /* Chapter type prefix is smaller (as in LaTeX) */
+  font-size: 1.5em;
+  line-height: 1.25em;
+  margin-top: 0.83333em;
+  margin-bottom: 0.41667em;
+}
+/* line 59, ../../../../../MathBook/mathbook-assets/scss/content/partials/_sections.scss */
+.chapter > .heading .title, .chapter > header > .heading .title {
+  display: block;
+  font-size: 1.75em;
+  line-height: 1.42857em;
+  margin-top: 0.71429em;
+  margin-bottom: 0.35714em;
+  /* Force a half-line leader */
+  margin-top: 0.35714em;
+}
+/* line 78, ../../../../../MathBook/mathbook-assets/scss/content/partials/_sections.scss */
+.chapter > header {
+  font-size: 16px;
+  margin-bottom: 1.25em;
+}
+/* line 84, ../../../../../MathBook/mathbook-assets/scss/content/partials/_sections.scss */
+.chapter > header > .heading .title, .chapter > header > header > .heading .title {
+  display: block;
+  /* The margin goes on the header element instead */
+  margin-bottom: 0;
+}
+/* line 91, ../../../../../MathBook/mathbook-assets/scss/content/partials/_sections.scss */
+.chapter > header .byline {
+  font-size: inherit;
+  margin: 0;
+  margin-top: 0.625em;
+  color: #999999;
+}
+/* line 96, ../../../../../MathBook/mathbook-assets/scss/content/partials/_sections.scss */
+.chapter > header .byline:before {
+  content: "By ";
+}
+
+/* line 18, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.frontmatter > .heading, .frontmatter > header > .heading, .book > .heading, .book > header > .heading {
+  text-align: center;
+  font-size: 2em;
+  line-height: 1.25em;
+  margin-top: 0.625em;
+  margin-bottom: 0.3125em;
+  margin-bottom: 0.625em;
+}
+/* line 111, ../../../../../MathBook/mathbook-assets/scss/content/partials/_sections.scss */
+.frontmatter > .heading .subtitle, .frontmatter > header > .heading .subtitle, .book > .heading .subtitle, .book > header > .heading .subtitle {
+  display: block;
+  font-weight: normal;
+  /* Much classier */
+  color: #666666;
+  font-size: 0.875em;
+  line-height: 1.42857em;
+  margin-top: 0.35714em;
+}
+/* line 122, ../../../../../MathBook/mathbook-assets/scss/content/partials/_sections.scss */
+.frontmatter .header, .book .header {
+  margin-bottom: 2.5em;
+}
+/* line 126, ../../../../../MathBook/mathbook-assets/scss/content/partials/_sections.scss */
+.frontmatter .contributors, .book .contributors {
+  text-align: center;
+  font-style: normal;
+  color: #333333;
+}
+
+/*******************************************************************************
+ * Environments
+ ******************************************************************************/
+/* line 14, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
+.definition-like, .theorem-like, .remark-like, .example-like, .exercise-like, .aside-like {
+  margin-bottom: 1.25em;
+}
+/* line 18, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading, .theorem-like > .heading, .remark-like > .heading, .example-like > .heading, .exercise-like > .heading, .aside-like > .heading, .definition-like > header > .heading, .theorem-like > header > .heading, .remark-like > header > .heading, .example-like > header > .heading, .exercise-like > header > .heading, .aside-like > header > .heading {
+  font-size: 1.125em;
+  line-height: 1.66667em;
+  margin-top: 1.11111em;
+  margin-bottom: 0.55556em;
+  /* Support links in headings */
+  /* Support knowl links in headings */
+}
+/* line 104, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading, .theorem-like > .heading, .remark-like > .heading, .example-like > .heading, .exercise-like > .heading, .aside-like > .heading, .definition-like > header > .heading, .theorem-like > header > .heading, .remark-like > header > .heading, .example-like > header > .heading, .exercise-like > header > .heading, .aside-like > header > .heading {
+  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-weight: 700;
+  color: inherit;
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading:before, .theorem-like > .heading:before, .remark-like > .heading:before, .example-like > .heading:before, .exercise-like > .heading:before, .aside-like > .heading:before, .definition-like > header > .heading:before, .theorem-like > header > .heading:before, .remark-like > header > .heading:before, .example-like > header > .heading:before, .exercise-like > header > .heading:before, .aside-like > header > .heading:before {
+  display: none;
+}
+/* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading:after, .theorem-like > .heading:after, .remark-like > .heading:after, .example-like > .heading:after, .exercise-like > .heading:after, .aside-like > .heading:after, .definition-like > header > .heading:after, .theorem-like > header > .heading:after, .remark-like > header > .heading:after, .example-like > header > .heading:after, .exercise-like > header > .heading:after, .aside-like > header > .heading:after {
+  content: ". ";
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading .type:before, .theorem-like > .heading .type:before, .remark-like > .heading .type:before, .example-like > .heading .type:before, .exercise-like > .heading .type:before, .aside-like > .heading .type:before, .definition-like > header > .heading .type:before, .theorem-like > header > .heading .type:before, .remark-like > header > .heading .type:before, .example-like > header > .heading .type:before, .exercise-like > header > .heading .type:before, .aside-like > header > .heading .type:before {
+  display: none;
+}
+/* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading .type:after, .theorem-like > .heading .type:after, .remark-like > .heading .type:after, .example-like > .heading .type:after, .exercise-like > .heading .type:after, .aside-like > .heading .type:after, .definition-like > header > .heading .type:after, .theorem-like > header > .heading .type:after, .remark-like > header > .heading .type:after, .example-like > header > .heading .type:after, .exercise-like > header > .heading .type:after, .aside-like > header > .heading .type:after {
+  content: " ";
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading .codenumber:before, .theorem-like > .heading .codenumber:before, .remark-like > .heading .codenumber:before, .example-like > .heading .codenumber:before, .exercise-like > .heading .codenumber:before, .aside-like > .heading .codenumber:before, .definition-like > header > .heading .codenumber:before, .theorem-like > header > .heading .codenumber:before, .remark-like > header > .heading .codenumber:before, .example-like > header > .heading .codenumber:before, .exercise-like > header > .heading .codenumber:before, .aside-like > header > .heading .codenumber:before {
+  display: none;
+}
+/* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading .codenumber:after, .theorem-like > .heading .codenumber:after, .remark-like > .heading .codenumber:after, .example-like > .heading .codenumber:after, .exercise-like > .heading .codenumber:after, .aside-like > .heading .codenumber:after, .definition-like > header > .heading .codenumber:after, .theorem-like > header > .heading .codenumber:after, .remark-like > header > .heading .codenumber:after, .example-like > header > .heading .codenumber:after, .exercise-like > header > .heading .codenumber:after, .aside-like > header > .heading .codenumber:after {
+  content: "\2002";
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading .title:before, .theorem-like > .heading .title:before, .remark-like > .heading .title:before, .example-like > .heading .title:before, .exercise-like > .heading .title:before, .aside-like > .heading .title:before, .definition-like > header > .heading .title:before, .theorem-like > header > .heading .title:before, .remark-like > header > .heading .title:before, .example-like > header > .heading .title:before, .exercise-like > header > .heading .title:before, .aside-like > header > .heading .title:before {
+  display: none;
+}
+/* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading .title:after, .theorem-like > .heading .title:after, .remark-like > .heading .title:after, .example-like > .heading .title:after, .exercise-like > .heading .title:after, .aside-like > .heading .title:after, .definition-like > header > .heading .title:after, .theorem-like > header > .heading .title:after, .remark-like > header > .heading .title:after, .example-like > header > .heading .title:after, .exercise-like > header > .heading .title:after, .aside-like > header > .heading .title:after {
+  content: " ";
+}
+/* line 124, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading .type, .theorem-like > .heading .type, .remark-like > .heading .type, .example-like > .heading .type, .exercise-like > .heading .type, .aside-like > .heading .type, .definition-like > .heading .codenumber, .theorem-like > .heading .codenumber, .remark-like > .heading .codenumber, .example-like > .heading .codenumber, .exercise-like > .heading .codenumber, .aside-like > .heading .codenumber, .definition-like > .heading .title, .theorem-like > .heading .title, .remark-like > .heading .title, .example-like > .heading .title, .exercise-like > .heading .title, .aside-like > .heading .title, .definition-like > header > .heading .type, .theorem-like > header > .heading .type, .remark-like > header > .heading .type, .example-like > header > .heading .type, .exercise-like > header > .heading .type, .aside-like > header > .heading .type, .definition-like > header > .heading .codenumber, .theorem-like > header > .heading .codenumber, .remark-like > header > .heading .codenumber, .example-like > header > .heading .codenumber, .exercise-like > header > .heading .codenumber, .aside-like > header > .heading .codenumber, .definition-like > header > .heading .title, .theorem-like > header > .heading .title, .remark-like > header > .heading .title, .example-like > header > .heading .title, .exercise-like > header > .heading .title, .aside-like > header > .heading .title {
+  /**
+   *  Hide the space after the last element,
+   * defer to .heading:after instead
+   */
+}
+/* line 129, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading .type:last-child:after, .theorem-like > .heading .type:last-child:after, .remark-like > .heading .type:last-child:after, .example-like > .heading .type:last-child:after, .exercise-like > .heading .type:last-child:after, .aside-like > .heading .type:last-child:after, .definition-like > .heading .codenumber:last-child:after, .theorem-like > .heading .codenumber:last-child:after, .remark-like > .heading .codenumber:last-child:after, .example-like > .heading .codenumber:last-child:after, .exercise-like > .heading .codenumber:last-child:after, .aside-like > .heading .codenumber:last-child:after, .definition-like > .heading .title:last-child:after, .theorem-like > .heading .title:last-child:after, .remark-like > .heading .title:last-child:after, .example-like > .heading .title:last-child:after, .exercise-like > .heading .title:last-child:after, .aside-like > .heading .title:last-child:after, .definition-like > header > .heading .type:last-child:after, .theorem-like > header > .heading .type:last-child:after, .remark-like > header > .heading .type:last-child:after, .example-like > header > .heading .type:last-child:after, .exercise-like > header > .heading .type:last-child:after, .aside-like > header > .heading .type:last-child:after, .definition-like > header > .heading .codenumber:last-child:after, .theorem-like > header > .heading .codenumber:last-child:after, .remark-like > header > .heading .codenumber:last-child:after, .example-like > header > .heading .codenumber:last-child:after, .exercise-like > header > .heading .codenumber:last-child:after, .aside-like > header > .heading .codenumber:last-child:after, .definition-like > header > .heading .title:last-child:after, .theorem-like > header > .heading .title:last-child:after, .remark-like > header > .heading .title:last-child:after, .example-like > header > .heading .title:last-child:after, .exercise-like > header > .heading .title:last-child:after, .aside-like > header > .heading .title:last-child:after {
+  display: none;
+}
+/* line 69, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading.hide-type .type, .theorem-like > .heading.hide-type .type, .remark-like > .heading.hide-type .type, .example-like > .heading.hide-type .type, .exercise-like > .heading.hide-type .type, .aside-like > .heading.hide-type .type, .definition-like > header > .heading.hide-type .type, .theorem-like > header > .heading.hide-type .type, .remark-like > header > .heading.hide-type .type, .example-like > header > .heading.hide-type .type, .exercise-like > header > .heading.hide-type .type, .aside-like > header > .heading.hide-type .type {
+  display: none;
+}
+/* line 76, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading.hide-codenumber .codenumber, .theorem-like > .heading.hide-codenumber .codenumber, .remark-like > .heading.hide-codenumber .codenumber, .example-like > .heading.hide-codenumber .codenumber, .exercise-like > .heading.hide-codenumber .codenumber, .aside-like > .heading.hide-codenumber .codenumber, .definition-like > header > .heading.hide-codenumber .codenumber, .theorem-like > header > .heading.hide-codenumber .codenumber, .remark-like > header > .heading.hide-codenumber .codenumber, .example-like > header > .heading.hide-codenumber .codenumber, .exercise-like > header > .heading.hide-codenumber .codenumber, .aside-like > header > .heading.hide-codenumber .codenumber {
+  display: none;
+}
+/* line 83, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading.hide-title .title, .theorem-like > .heading.hide-title .title, .remark-like > .heading.hide-title .title, .example-like > .heading.hide-title .title, .exercise-like > .heading.hide-title .title, .aside-like > .heading.hide-title .title, .definition-like > header > .heading.hide-title .title, .theorem-like > header > .heading.hide-title .title, .remark-like > header > .heading.hide-title .title, .example-like > header > .heading.hide-title .title, .exercise-like > header > .heading.hide-title .title, .aside-like > header > .heading.hide-title .title {
+  display: none;
+}
+/* line 26, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading a:link, .theorem-like > .heading a:link, .remark-like > .heading a:link, .example-like > .heading a:link, .exercise-like > .heading a:link, .aside-like > .heading a:link, .definition-like > .heading a:visited, .theorem-like > .heading a:visited, .remark-like > .heading a:visited, .example-like > .heading a:visited, .exercise-like > .heading a:visited, .aside-like > .heading a:visited, .definition-like > header > .heading a:link, .theorem-like > header > .heading a:link, .remark-like > header > .heading a:link, .example-like > header > .heading a:link, .exercise-like > header > .heading a:link, .aside-like > header > .heading a:link, .definition-like > header > .heading a:visited, .theorem-like > header > .heading a:visited, .remark-like > header > .heading a:visited, .example-like > header > .heading a:visited, .exercise-like > header > .heading a:visited, .aside-like > header > .heading a:visited {
+  color: #3675cb;
+  color: #3675cb;
+  /**
+   * Better underlines using background gradients
+   * See http://bit.ly/1vTg7hr
+   */
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(50%, transparent), color-stop(50%, rgba(54, 117, 203, 0.5)));
+  background-image: -webkit-linear-gradient(top, transparent 50%, rgba(54, 117, 203, 0.5) 50%);
+  background-image: -moz-linear-gradient(top, transparent 50%, rgba(54, 117, 203, 0.5) 50%);
+  background-image: -o-linear-gradient(top, transparent 50%, rgba(54, 117, 203, 0.5) 50%);
+  background-image: linear-gradient(top, transparent 50%, rgba(54, 117, 203, 0.5) 50%);
+  background-repeat: repeat-x;
+  background-size: 0.05em 0.05em;
+  background-position: 0 1.2em;
+  text-decoration: none;
+}
+/* line 169, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.lt-ie10 .definition-like > .heading a:link, .lt-ie10 .theorem-like > .heading a:link, .lt-ie10 .remark-like > .heading a:link, .lt-ie10 .example-like > .heading a:link, .lt-ie10 .exercise-like > .heading a:link, .lt-ie10 .aside-like > .heading a:link, .lt-ie10 .definition-like > .heading a:visited, .lt-ie10 .theorem-like > .heading a:visited, .lt-ie10 .remark-like > .heading a:visited, .lt-ie10 .example-like > .heading a:visited, .lt-ie10 .exercise-like > .heading a:visited, .lt-ie10 .aside-like > .heading a:visited, .lt-ie10 .definition-like > header > .heading a:link, .lt-ie10 .theorem-like > header > .heading a:link, .lt-ie10 .remark-like > header > .heading a:link, .lt-ie10 .example-like > header > .heading a:link, .lt-ie10 .exercise-like > header > .heading a:link, .lt-ie10 .aside-like > header > .heading a:link, .lt-ie10 .definition-like > header > .heading a:visited, .lt-ie10 .theorem-like > header > .heading a:visited, .lt-ie10 .remark-like > header > .heading a:visited, .lt-ie10 .example-like > header > .heading a:visited, .lt-ie10 .exercise-like > header > .heading a:visited, .lt-ie10 .aside-like > header > .heading a:visited {
+  background: none;
+  text-decoration: underline;
+}
+/* line 33, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading a:hover, .theorem-like > .heading a:hover, .remark-like > .heading a:hover, .example-like > .heading a:hover, .exercise-like > .heading a:hover, .aside-like > .heading a:hover, .definition-like > .heading a:focus, .theorem-like > .heading a:focus, .remark-like > .heading a:focus, .example-like > .heading a:focus, .exercise-like > .heading a:focus, .aside-like > .heading a:focus, .definition-like > header > .heading a:hover, .theorem-like > header > .heading a:hover, .remark-like > header > .heading a:hover, .example-like > header > .heading a:hover, .exercise-like > header > .heading a:hover, .aside-like > header > .heading a:hover, .definition-like > header > .heading a:focus, .theorem-like > header > .heading a:focus, .remark-like > header > .heading a:focus, .example-like > header > .heading a:focus, .exercise-like > header > .heading a:focus, .aside-like > header > .heading a:focus {
+  color: #2a5ea4;
+  /**
+   * Better underlines using background gradients
+   * See http://bit.ly/1vTg7hr
+   */
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(50%, transparent), color-stop(50%, #2a5ea4));
+  background-image: -webkit-linear-gradient(top, transparent 50%, #2a5ea4 50%);
+  background-image: -moz-linear-gradient(top, transparent 50%, #2a5ea4 50%);
+  background-image: -o-linear-gradient(top, transparent 50%, #2a5ea4 50%);
+  background-image: linear-gradient(top, transparent 50%, #2a5ea4 50%);
+  background-repeat: repeat-x;
+  background-size: 0.05em 0.05em;
+  background-position: 0 1.2em;
+  text-decoration: none;
+}
+/* line 169, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.lt-ie10 .definition-like > .heading a:hover, .lt-ie10 .theorem-like > .heading a:hover, .lt-ie10 .remark-like > .heading a:hover, .lt-ie10 .example-like > .heading a:hover, .lt-ie10 .exercise-like > .heading a:hover, .lt-ie10 .aside-like > .heading a:hover, .lt-ie10 .definition-like > .heading a:focus, .lt-ie10 .theorem-like > .heading a:focus, .lt-ie10 .remark-like > .heading a:focus, .lt-ie10 .example-like > .heading a:focus, .lt-ie10 .exercise-like > .heading a:focus, .lt-ie10 .aside-like > .heading a:focus, .lt-ie10 .definition-like > header > .heading a:hover, .lt-ie10 .theorem-like > header > .heading a:hover, .lt-ie10 .remark-like > header > .heading a:hover, .lt-ie10 .example-like > header > .heading a:hover, .lt-ie10 .exercise-like > header > .heading a:hover, .lt-ie10 .aside-like > header > .heading a:hover, .lt-ie10 .definition-like > header > .heading a:focus, .lt-ie10 .theorem-like > header > .heading a:focus, .lt-ie10 .remark-like > header > .heading a:focus, .lt-ie10 .example-like > header > .heading a:focus, .lt-ie10 .exercise-like > header > .heading a:focus, .lt-ie10 .aside-like > header > .heading a:focus {
+  background: none;
+  text-decoration: underline;
+}
+/* line 40, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading a:active, .theorem-like > .heading a:active, .remark-like > .heading a:active, .example-like > .heading a:active, .exercise-like > .heading a:active, .aside-like > .heading a:active, .definition-like > header > .heading a:active, .theorem-like > header > .heading a:active, .remark-like > header > .heading a:active, .example-like > header > .heading a:active, .exercise-like > header > .heading a:active, .aside-like > header > .heading a:active {
+  color: #28803f;
+  /**
+   * Better underlines using background gradients
+   * See http://bit.ly/1vTg7hr
+   */
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(50%, transparent), color-stop(50%, #28803f));
+  background-image: -webkit-linear-gradient(top, transparent 50%, #28803f 50%);
+  background-image: -moz-linear-gradient(top, transparent 50%, #28803f 50%);
+  background-image: -o-linear-gradient(top, transparent 50%, #28803f 50%);
+  background-image: linear-gradient(top, transparent 50%, #28803f 50%);
+  background-repeat: repeat-x;
+  background-size: 0.05em 0.05em;
+  background-position: 0 1.2em;
+  text-decoration: none;
+}
+/* line 169, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.lt-ie10 .definition-like > .heading a:active, .lt-ie10 .theorem-like > .heading a:active, .lt-ie10 .remark-like > .heading a:active, .lt-ie10 .example-like > .heading a:active, .lt-ie10 .exercise-like > .heading a:active, .lt-ie10 .aside-like > .heading a:active, .lt-ie10 .definition-like > header > .heading a:active, .lt-ie10 .theorem-like > header > .heading a:active, .lt-ie10 .remark-like > header > .heading a:active, .lt-ie10 .example-like > header > .heading a:active, .lt-ie10 .exercise-like > header > .heading a:active, .lt-ie10 .aside-like > header > .heading a:active {
+  background: none;
+  text-decoration: underline;
+}
+/* line 27, ../../../../../MathBook/mathbook-assets/scss/content/mixins/_environment.scss */
+.definition-like > .heading *[knowl], .theorem-like > .heading *[knowl], .remark-like > .heading *[knowl], .example-like > .heading *[knowl], .exercise-like > .heading *[knowl], .aside-like > .heading *[knowl], .definition-like > header > .heading *[knowl], .theorem-like > header > .heading *[knowl], .remark-like > header > .heading *[knowl], .example-like > header > .heading *[knowl], .exercise-like > header > .heading *[knowl], .aside-like > header > .heading *[knowl] {
+  margin-left: -3px;
+}
+/* line 55, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.definition-like > .heading *[knowl], .theorem-like > .heading *[knowl], .remark-like > .heading *[knowl], .example-like > .heading *[knowl], .exercise-like > .heading *[knowl], .aside-like > .heading *[knowl], .definition-like > .heading *[knowl]:hover, .theorem-like > .heading *[knowl]:hover, .remark-like > .heading *[knowl]:hover, .example-like > .heading *[knowl]:hover, .exercise-like > .heading *[knowl]:hover, .aside-like > .heading *[knowl]:hover, .definition-like > .heading *[knowl].active, .theorem-like > .heading *[knowl].active, .remark-like > .heading *[knowl].active, .example-like > .heading *[knowl].active, .exercise-like > .heading *[knowl].active, .aside-like > .heading *[knowl].active, .definition-like > header > .heading *[knowl], .theorem-like > header > .heading *[knowl], .remark-like > header > .heading *[knowl], .example-like > header > .heading *[knowl], .exercise-like > header > .heading *[knowl], .aside-like > header > .heading *[knowl], .definition-like > header > .heading *[knowl]:hover, .theorem-like > header > .heading *[knowl]:hover, .remark-like > header > .heading *[knowl]:hover, .example-like > header > .heading *[knowl]:hover, .exercise-like > header > .heading *[knowl]:hover, .aside-like > header > .heading *[knowl]:hover, .definition-like > header > .heading *[knowl].active, .theorem-like > header > .heading *[knowl].active, .remark-like > header > .heading *[knowl].active, .example-like > header > .heading *[knowl].active, .exercise-like > header > .heading *[knowl].active, .aside-like > header > .heading *[knowl].active {
+  position: relative;
+  color: #205cae;
+  background: transparent;
+  padding: 0px 3px;
+  margin: 0;
+  text-decoration: none;
+  /* add a bottom margin so the line
+   * doesn't jump onHover.
+   */
+  /*margin-bottom: 1px;*/
+  /*border-bottom: 1px dotted $color;*/
+  margin-bottom: 0;
+  border-bottom: none;
+  font-weight: 500;
+  white-space: nowrap;
+  -moz-border-radius-topleft: 3px;
+  -webkit-border-top-left-radius: 3px;
+  border-top-left-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -webkit-border-top-right-radius: 3px;
+  border-top-right-radius: 3px;
+  /* Prevent accidental text selection on click */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-transition-property: background-color;
+  -moz-transition-property: background-color;
+  -o-transition-property: background-color;
+  transition-property: background-color;
+  -webkit-transition-duration: 0ms;
+  -moz-transition-duration: 0ms;
+  -o-transition-duration: 0ms;
+  transition-duration: 0ms;
+  /**
+   * This gets us an underline that's a bit tighter with the baseline
+   * instead of awkwardly floating below like a border on the parent
+   */
+}
+/* line 87, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.definition-like > .heading *[knowl]:after, .theorem-like > .heading *[knowl]:after, .remark-like > .heading *[knowl]:after, .example-like > .heading *[knowl]:after, .exercise-like > .heading *[knowl]:after, .aside-like > .heading *[knowl]:after, .definition-like > .heading *[knowl]:hover:after, .theorem-like > .heading *[knowl]:hover:after, .remark-like > .heading *[knowl]:hover:after, .example-like > .heading *[knowl]:hover:after, .exercise-like > .heading *[knowl]:hover:after, .aside-like > .heading *[knowl]:hover:after, .definition-like > .heading *[knowl].active:after, .theorem-like > .heading *[knowl].active:after, .remark-like > .heading *[knowl].active:after, .example-like > .heading *[knowl].active:after, .exercise-like > .heading *[knowl].active:after, .aside-like > .heading *[knowl].active:after, .definition-like > header > .heading *[knowl]:after, .theorem-like > header > .heading *[knowl]:after, .remark-like > header > .heading *[knowl]:after, .example-like > header > .heading *[knowl]:after, .exercise-like > header > .heading *[knowl]:after, .aside-like > header > .heading *[knowl]:after, .definition-like > header > .heading *[knowl]:hover:after, .theorem-like > header > .heading *[knowl]:hover:after, .remark-like > header > .heading *[knowl]:hover:after, .example-like > header > .heading *[knowl]:hover:after, .exercise-like > header > .heading *[knowl]:hover:after, .aside-like > header > .heading *[knowl]:hover:after, .definition-like > header > .heading *[knowl].active:after, .theorem-like > header > .heading *[knowl].active:after, .remark-like > header > .heading *[knowl].active:after, .example-like > header > .heading *[knowl].active:after, .exercise-like > header > .heading *[knowl].active:after, .aside-like > header > .heading *[knowl].active:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 1px;
+  right: 3px;
+  left: 3px;
+  /* Smooth out the transition from underline to border */
+  -webkit-transition-property: left, right;
+  -moz-transition-property: left, right;
+  -o-transition-property: left, right;
+  transition-property: left, right;
+  -webkit-transition-duration: 0ms;
+  -moz-transition-duration: 0ms;
+  -o-transition-duration: 0ms;
+  transition-duration: 0ms;
+  border-bottom: 1px dotted #205cae;
+  /*@include typography-underline(*/
+  /*$color,*/
+  /*$underline-style: dotted,*/
+  /*$underline-size: .1,*/
+  /*$underline-offset: $underline-offset);*/
+  /* Display under parent content, but above parent background */
+  z-index: 0;
+}
+/* line 110, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.definition-like > .heading *[knowl]:hover, .theorem-like > .heading *[knowl]:hover, .remark-like > .heading *[knowl]:hover, .example-like > .heading *[knowl]:hover, .exercise-like > .heading *[knowl]:hover, .aside-like > .heading *[knowl]:hover, .definition-like > .heading *[knowl]:active, .theorem-like > .heading *[knowl]:active, .remark-like > .heading *[knowl]:active, .example-like > .heading *[knowl]:active, .exercise-like > .heading *[knowl]:active, .aside-like > .heading *[knowl]:active, .definition-like > .heading *[knowl].active, .theorem-like > .heading *[knowl].active, .remark-like > .heading *[knowl].active, .example-like > .heading *[knowl].active, .exercise-like > .heading *[knowl].active, .aside-like > .heading *[knowl].active, .definition-like > header > .heading *[knowl]:hover, .theorem-like > header > .heading *[knowl]:hover, .remark-like > header > .heading *[knowl]:hover, .example-like > header > .heading *[knowl]:hover, .exercise-like > header > .heading *[knowl]:hover, .aside-like > header > .heading *[knowl]:hover, .definition-like > header > .heading *[knowl]:active, .theorem-like > header > .heading *[knowl]:active, .remark-like > header > .heading *[knowl]:active, .example-like > header > .heading *[knowl]:active, .exercise-like > header > .heading *[knowl]:active, .aside-like > header > .heading *[knowl]:active, .definition-like > header > .heading *[knowl].active, .theorem-like > header > .heading *[knowl].active, .remark-like > header > .heading *[knowl].active, .example-like > header > .heading *[knowl].active, .exercise-like > header > .heading *[knowl].active, .aside-like > header > .heading *[knowl].active {
+  color: #003b8a;
+  background: #ebf3ff;
+  text-decoration: none;
+  /* See comment on default style's border/margin */
+  margin-bottom: 0;
+  /*border-bottom:2px solid darken($border-color, 15%);*/
+  /*border-bottom: none;*/
+}
+/* line 120, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.definition-like > .heading *[knowl]:hover:after, .theorem-like > .heading *[knowl]:hover:after, .remark-like > .heading *[knowl]:hover:after, .example-like > .heading *[knowl]:hover:after, .exercise-like > .heading *[knowl]:hover:after, .aside-like > .heading *[knowl]:hover:after, .definition-like > .heading *[knowl]:active:after, .theorem-like > .heading *[knowl]:active:after, .remark-like > .heading *[knowl]:active:after, .example-like > .heading *[knowl]:active:after, .exercise-like > .heading *[knowl]:active:after, .aside-like > .heading *[knowl]:active:after, .definition-like > .heading *[knowl].active:after, .theorem-like > .heading *[knowl].active:after, .remark-like > .heading *[knowl].active:after, .example-like > .heading *[knowl].active:after, .exercise-like > .heading *[knowl].active:after, .aside-like > .heading *[knowl].active:after, .definition-like > header > .heading *[knowl]:hover:after, .theorem-like > header > .heading *[knowl]:hover:after, .remark-like > header > .heading *[knowl]:hover:after, .example-like > header > .heading *[knowl]:hover:after, .exercise-like > header > .heading *[knowl]:hover:after, .aside-like > header > .heading *[knowl]:hover:after, .definition-like > header > .heading *[knowl]:active:after, .theorem-like > header > .heading *[knowl]:active:after, .remark-like > header > .heading *[knowl]:active:after, .example-like > header > .heading *[knowl]:active:after, .exercise-like > header > .heading *[knowl]:active:after, .aside-like > header > .heading *[knowl]:active:after, .definition-like > header > .heading *[knowl].active:after, .theorem-like > header > .heading *[knowl].active:after, .remark-like > header > .heading *[knowl].active:after, .example-like > header > .heading *[knowl].active:after, .exercise-like > header > .heading *[knowl].active:after, .aside-like > header > .heading *[knowl].active:after {
+  border-bottom: 2px solid #8abcff;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /*@include typography-underline(*/
+  /*darken($border-color, 32.5%),*/
+  /*$underline-size: .1,*/
+  /*$underline-offset: $underline-offset);*/
+}
+/* line 132, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.definition-like > .heading *[knowl]:active, .theorem-like > .heading *[knowl]:active, .remark-like > .heading *[knowl]:active, .example-like > .heading *[knowl]:active, .exercise-like > .heading *[knowl]:active, .aside-like > .heading *[knowl]:active, .definition-like > header > .heading *[knowl]:active, .theorem-like > header > .heading *[knowl]:active, .remark-like > header > .heading *[knowl]:active, .example-like > header > .heading *[knowl]:active, .exercise-like > header > .heading *[knowl]:active, .aside-like > header > .heading *[knowl]:active {
+  color: #28803f;
+  background: #d6ffe1;
+}
+/* line 136, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.definition-like > .heading *[knowl]:active:after, .theorem-like > .heading *[knowl]:active:after, .remark-like > .heading *[knowl]:active:after, .example-like > .heading *[knowl]:active:after, .exercise-like > .heading *[knowl]:active:after, .aside-like > .heading *[knowl]:active:after, .definition-like > header > .heading *[knowl]:active:after, .theorem-like > header > .heading *[knowl]:active:after, .remark-like > header > .heading *[knowl]:active:after, .example-like > header > .heading *[knowl]:active:after, .exercise-like > header > .heading *[knowl]:active:after, .aside-like > header > .heading *[knowl]:active:after {
+  border-color: #28803f;
+}
+/* line 141, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.definition-like > .heading *[knowl].active, .theorem-like > .heading *[knowl].active, .remark-like > .heading *[knowl].active, .example-like > .heading *[knowl].active, .exercise-like > .heading *[knowl].active, .aside-like > .heading *[knowl].active, .definition-like > header > .heading *[knowl].active, .theorem-like > header > .heading *[knowl].active, .remark-like > header > .heading *[knowl].active, .example-like > header > .heading *[knowl].active, .exercise-like > header > .heading *[knowl].active, .aside-like > header > .heading *[knowl].active {
+  background: #d6e8ff;
+}
+/* line 18, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading, .theorem-like > .heading, .remark-like > .heading, .example-like > .heading, .exercise-like > .heading, .aside-like > .heading, .definition-like > header > .heading, .theorem-like > header > .heading, .remark-like > header > .heading, .example-like > header > .heading, .exercise-like > header > .heading, .aside-like > header > .heading {
+  display: inline;
+}
+/* line 152, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading + p, .theorem-like > .heading + p, .remark-like > .heading + p, .example-like > .heading + p, .exercise-like > .heading + p, .aside-like > .heading + p, .definition-like > header > .heading + p, .theorem-like > header > .heading + p, .remark-like > header > .heading + p, .example-like > header > .heading + p, .exercise-like > header > .heading + p, .aside-like > header > .heading + p {
+  display: inline;
+}
+/* line 155, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.definition-like > .heading + p:after, .theorem-like > .heading + p:after, .remark-like > .heading + p:after, .example-like > .heading + p:after, .exercise-like > .heading + p:after, .aside-like > .heading + p:after, .definition-like > header > .heading + p:after, .theorem-like > header > .heading + p:after, .remark-like > header > .heading + p:after, .example-like > header > .heading + p:after, .exercise-like > header > .heading + p:after, .aside-like > header > .heading + p:after {
+  /* Restore the inline paragraph's margin */
+  content: "";
+  display: block;
+  margin-bottom: 1.25em;
+}
+
+/* line 25, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
+.theorem-like p, .theorem-like ol, .theorem-like ul {
+  font-style: italic;
+}
+/* line 29, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
+.theorem-like .statement {
+  display: inline;
+}
+/* line 33, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
+.theorem-like .statement p:first-child {
+  display: inline;
+}
+/* line 37, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
+.theorem-like .statement:last-child, .theorem-like .statement:last-of-type {
+  margin-bottom: 0;
+}
+
+/* line 43, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
+.proof {
+  margin-bottom: 1.25em;
+}
+/* line 18, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading, .proof > header > .heading {
+  font-size: 1.125em;
+  line-height: 1.66667em;
+  margin-top: 1.11111em;
+  margin-bottom: 0.55556em;
+  /* Support links in headings */
+  /* Support knowl links in headings */
+}
+/* line 104, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading, .proof > header > .heading {
+  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-weight: 700;
+  color: inherit;
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading:before, .proof > header > .heading:before {
+  display: none;
+}
+/* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading:after, .proof > header > .heading:after {
+  content: ". ";
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading .type:before, .proof > header > .heading .type:before {
+  display: none;
+}
+/* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading .type:after, .proof > header > .heading .type:after {
+  content: " ";
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading .codenumber:before, .proof > header > .heading .codenumber:before {
+  display: none;
+}
+/* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading .codenumber:after, .proof > header > .heading .codenumber:after {
+  content: "\2002";
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading .title:before, .proof > header > .heading .title:before {
+  display: none;
+}
+/* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading .title:after, .proof > header > .heading .title:after {
+  content: " ";
+}
+/* line 124, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading .type, .proof > .heading .codenumber, .proof > .heading .title, .proof > header > .heading .type, .proof > header > .heading .codenumber, .proof > header > .heading .title {
+  /**
+   *  Hide the space after the last element,
+   * defer to .heading:after instead
+   */
+}
+/* line 129, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading .type:last-child:after, .proof > .heading .codenumber:last-child:after, .proof > .heading .title:last-child:after, .proof > header > .heading .type:last-child:after, .proof > header > .heading .codenumber:last-child:after, .proof > header > .heading .title:last-child:after {
+  display: none;
+}
+/* line 69, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading.hide-type .type, .proof > header > .heading.hide-type .type {
+  display: none;
+}
+/* line 76, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading.hide-codenumber .codenumber, .proof > header > .heading.hide-codenumber .codenumber {
+  display: none;
+}
+/* line 83, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading.hide-title .title, .proof > header > .heading.hide-title .title {
+  display: none;
+}
+/* line 26, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading a:link, .proof > .heading a:visited, .proof > header > .heading a:link, .proof > header > .heading a:visited {
+  color: #3675cb;
+  color: #3675cb;
+  /**
+   * Better underlines using background gradients
+   * See http://bit.ly/1vTg7hr
+   */
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(50%, transparent), color-stop(50%, rgba(54, 117, 203, 0.5)));
+  background-image: -webkit-linear-gradient(top, transparent 50%, rgba(54, 117, 203, 0.5) 50%);
+  background-image: -moz-linear-gradient(top, transparent 50%, rgba(54, 117, 203, 0.5) 50%);
+  background-image: -o-linear-gradient(top, transparent 50%, rgba(54, 117, 203, 0.5) 50%);
+  background-image: linear-gradient(top, transparent 50%, rgba(54, 117, 203, 0.5) 50%);
+  background-repeat: repeat-x;
+  background-size: 0.05em 0.05em;
+  background-position: 0 1.2em;
+  text-decoration: none;
+}
+/* line 169, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.lt-ie10 .proof > .heading a:link, .lt-ie10 .proof > .heading a:visited, .lt-ie10 .proof > header > .heading a:link, .lt-ie10 .proof > header > .heading a:visited {
+  background: none;
+  text-decoration: underline;
+}
+/* line 33, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading a:hover, .proof > .heading a:focus, .proof > header > .heading a:hover, .proof > header > .heading a:focus {
+  color: #2a5ea4;
+  /**
+   * Better underlines using background gradients
+   * See http://bit.ly/1vTg7hr
+   */
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(50%, transparent), color-stop(50%, #2a5ea4));
+  background-image: -webkit-linear-gradient(top, transparent 50%, #2a5ea4 50%);
+  background-image: -moz-linear-gradient(top, transparent 50%, #2a5ea4 50%);
+  background-image: -o-linear-gradient(top, transparent 50%, #2a5ea4 50%);
+  background-image: linear-gradient(top, transparent 50%, #2a5ea4 50%);
+  background-repeat: repeat-x;
+  background-size: 0.05em 0.05em;
+  background-position: 0 1.2em;
+  text-decoration: none;
+}
+/* line 169, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.lt-ie10 .proof > .heading a:hover, .lt-ie10 .proof > .heading a:focus, .lt-ie10 .proof > header > .heading a:hover, .lt-ie10 .proof > header > .heading a:focus {
+  background: none;
+  text-decoration: underline;
+}
+/* line 40, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading a:active, .proof > header > .heading a:active {
+  color: #28803f;
+  /**
+   * Better underlines using background gradients
+   * See http://bit.ly/1vTg7hr
+   */
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(50%, transparent), color-stop(50%, #28803f));
+  background-image: -webkit-linear-gradient(top, transparent 50%, #28803f 50%);
+  background-image: -moz-linear-gradient(top, transparent 50%, #28803f 50%);
+  background-image: -o-linear-gradient(top, transparent 50%, #28803f 50%);
+  background-image: linear-gradient(top, transparent 50%, #28803f 50%);
+  background-repeat: repeat-x;
+  background-size: 0.05em 0.05em;
+  background-position: 0 1.2em;
+  text-decoration: none;
+}
+/* line 169, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.lt-ie10 .proof > .heading a:active, .lt-ie10 .proof > header > .heading a:active {
+  background: none;
+  text-decoration: underline;
+}
+/* line 27, ../../../../../MathBook/mathbook-assets/scss/content/mixins/_environment.scss */
+.proof > .heading *[knowl], .proof > header > .heading *[knowl] {
+  margin-left: -3px;
+}
+/* line 55, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.proof > .heading *[knowl], .proof > .heading *[knowl]:hover, .proof > .heading *[knowl].active, .proof > header > .heading *[knowl], .proof > header > .heading *[knowl]:hover, .proof > header > .heading *[knowl].active {
+  position: relative;
+  color: #205cae;
+  background: transparent;
+  padding: 0px 3px;
+  margin: 0;
+  text-decoration: none;
+  /* add a bottom margin so the line
+   * doesn't jump onHover.
+   */
+  /*margin-bottom: 1px;*/
+  /*border-bottom: 1px dotted $color;*/
+  margin-bottom: 0;
+  border-bottom: none;
+  font-weight: 500;
+  white-space: nowrap;
+  -moz-border-radius-topleft: 3px;
+  -webkit-border-top-left-radius: 3px;
+  border-top-left-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -webkit-border-top-right-radius: 3px;
+  border-top-right-radius: 3px;
+  /* Prevent accidental text selection on click */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-transition-property: background-color;
+  -moz-transition-property: background-color;
+  -o-transition-property: background-color;
+  transition-property: background-color;
+  -webkit-transition-duration: 0ms;
+  -moz-transition-duration: 0ms;
+  -o-transition-duration: 0ms;
+  transition-duration: 0ms;
+  /**
+   * This gets us an underline that's a bit tighter with the baseline
+   * instead of awkwardly floating below like a border on the parent
+   */
+}
+/* line 87, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.proof > .heading *[knowl]:after, .proof > .heading *[knowl]:hover:after, .proof > .heading *[knowl].active:after, .proof > header > .heading *[knowl]:after, .proof > header > .heading *[knowl]:hover:after, .proof > header > .heading *[knowl].active:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 1px;
+  right: 3px;
+  left: 3px;
+  /* Smooth out the transition from underline to border */
+  -webkit-transition-property: left, right;
+  -moz-transition-property: left, right;
+  -o-transition-property: left, right;
+  transition-property: left, right;
+  -webkit-transition-duration: 0ms;
+  -moz-transition-duration: 0ms;
+  -o-transition-duration: 0ms;
+  transition-duration: 0ms;
+  border-bottom: 1px dotted #205cae;
+  /*@include typography-underline(*/
+  /*$color,*/
+  /*$underline-style: dotted,*/
+  /*$underline-size: .1,*/
+  /*$underline-offset: $underline-offset);*/
+  /* Display under parent content, but above parent background */
+  z-index: 0;
+}
+/* line 110, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.proof > .heading *[knowl]:hover, .proof > .heading *[knowl]:active, .proof > .heading *[knowl].active, .proof > header > .heading *[knowl]:hover, .proof > header > .heading *[knowl]:active, .proof > header > .heading *[knowl].active {
+  color: #003b8a;
+  background: #ebf3ff;
+  text-decoration: none;
+  /* See comment on default style's border/margin */
+  margin-bottom: 0;
+  /*border-bottom:2px solid darken($border-color, 15%);*/
+  /*border-bottom: none;*/
+}
+/* line 120, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.proof > .heading *[knowl]:hover:after, .proof > .heading *[knowl]:active:after, .proof > .heading *[knowl].active:after, .proof > header > .heading *[knowl]:hover:after, .proof > header > .heading *[knowl]:active:after, .proof > header > .heading *[knowl].active:after {
+  border-bottom: 2px solid #8abcff;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /*@include typography-underline(*/
+  /*darken($border-color, 32.5%),*/
+  /*$underline-size: .1,*/
+  /*$underline-offset: $underline-offset);*/
+}
+/* line 132, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.proof > .heading *[knowl]:active, .proof > header > .heading *[knowl]:active {
+  color: #28803f;
+  background: #d6ffe1;
+}
+/* line 136, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.proof > .heading *[knowl]:active:after, .proof > header > .heading *[knowl]:active:after {
+  border-color: #28803f;
+}
+/* line 141, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.proof > .heading *[knowl].active, .proof > header > .heading *[knowl].active {
+  background: #d6e8ff;
+}
+/* line 18, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading, .proof > header > .heading {
+  display: inline;
+}
+/* line 152, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading + p, .proof > header > .heading + p {
+  display: inline;
+}
+/* line 155, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading + p:after, .proof > header > .heading + p:after {
+  /* Restore the inline paragraph's margin */
+  content: "";
+  display: block;
+  margin-bottom: 1.25em;
+}
+/* line 55, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
+.proof {
+  position: relative;
+  /* dotted borders are just really ugly... */
+  /*border-right: 1px dotted #aaa;*/
+  /* Less use a light solid one */
+  border-right: 0.1em solid rgba(0, 0, 0, 0.1);
+  /* Cut the border up into the top margin */
+  margin-top: -rhythm(0.5);
+  padding-top: 0.625em;
+  /* Cut the border into the right margin */
+  padding-right: 1.25em;
+  margin-right: -1.35em;
+  /* Cut the tombstone into the standard margin-bottom */
+  margin-bottom: 2.5em;
+}
+/* line 18, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.proof > .heading, .proof > header > .heading {
+  font-style: italic;
+  font-weight: normal;
+  /* It helps to have a little bit of extra space after proof */
+  margin-right: .25em;
+}
+@media screen and (max-width: 1199px) {
+  /* line 55, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
+  .proof {
+    /* Bring border out of the right margin */
+    margin-right: 0;
+  }
+}
+@media screen and (max-width: 640px) {
+  /* line 55, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
+  .proof {
+    /* Remove the border */
+    padding: 0;
+    margin-right: 0;
+    border-right: 0;
+    padding-top: 0;
+    /* Make more space for tombstone */
+    padding-bottom: 1.25em;
+    margin-bottom: 1.25em;
+  }
+}
+/* line 102, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
+.proof:after {
+  content: "\220E";
+  position: absolute;
+  width: 1em;
+  right: 0;
+  bottom: 0;
+  margin: 0 0 -0.3em 0;
+  color: rgba(0, 0, 0, 0.5);
+  text-align: right;
+}
+@media screen and (max-width: 640px) {
+  /* line 102, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
+  .proof:after {
+    /* Center the tombstone */
+    right: 50%;
+    margin-right: -.5em;
+    text-align: center;
+  }
+}
+
+/* line 122, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
+.hiddenproof {
+  margin-bottom: 1.25em;
+}
+/* line 18, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading, .hiddenproof > header > .heading {
+  font-size: 1.125em;
+  line-height: 1.66667em;
+  margin-top: 1.11111em;
+  margin-bottom: 0.55556em;
+  /* Support links in headings */
+  /* Support knowl links in headings */
+}
+/* line 104, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading, .hiddenproof > header > .heading {
+  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-weight: 700;
+  color: inherit;
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading:before, .hiddenproof > header > .heading:before {
+  display: none;
+}
+/* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading:after, .hiddenproof > header > .heading:after {
+  content: ". ";
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading .type:before, .hiddenproof > header > .heading .type:before {
+  display: none;
+}
+/* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading .type:after, .hiddenproof > header > .heading .type:after {
+  content: " ";
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading .codenumber:before, .hiddenproof > header > .heading .codenumber:before {
+  display: none;
+}
+/* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading .codenumber:after, .hiddenproof > header > .heading .codenumber:after {
+  content: "\2002";
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading .title:before, .hiddenproof > header > .heading .title:before {
+  display: none;
+}
+/* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading .title:after, .hiddenproof > header > .heading .title:after {
+  content: " ";
+}
+/* line 124, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading .type, .hiddenproof > .heading .codenumber, .hiddenproof > .heading .title, .hiddenproof > header > .heading .type, .hiddenproof > header > .heading .codenumber, .hiddenproof > header > .heading .title {
+  /**
+   *  Hide the space after the last element,
+   * defer to .heading:after instead
+   */
+}
+/* line 129, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading .type:last-child:after, .hiddenproof > .heading .codenumber:last-child:after, .hiddenproof > .heading .title:last-child:after, .hiddenproof > header > .heading .type:last-child:after, .hiddenproof > header > .heading .codenumber:last-child:after, .hiddenproof > header > .heading .title:last-child:after {
+  display: none;
+}
+/* line 69, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading.hide-type .type, .hiddenproof > header > .heading.hide-type .type {
+  display: none;
+}
+/* line 76, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading.hide-codenumber .codenumber, .hiddenproof > header > .heading.hide-codenumber .codenumber {
+  display: none;
+}
+/* line 83, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading.hide-title .title, .hiddenproof > header > .heading.hide-title .title {
+  display: none;
+}
+/* line 26, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading a:link, .hiddenproof > .heading a:visited, .hiddenproof > header > .heading a:link, .hiddenproof > header > .heading a:visited {
+  color: #3675cb;
+  color: #3675cb;
+  /**
+   * Better underlines using background gradients
+   * See http://bit.ly/1vTg7hr
+   */
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(50%, transparent), color-stop(50%, rgba(54, 117, 203, 0.5)));
+  background-image: -webkit-linear-gradient(top, transparent 50%, rgba(54, 117, 203, 0.5) 50%);
+  background-image: -moz-linear-gradient(top, transparent 50%, rgba(54, 117, 203, 0.5) 50%);
+  background-image: -o-linear-gradient(top, transparent 50%, rgba(54, 117, 203, 0.5) 50%);
+  background-image: linear-gradient(top, transparent 50%, rgba(54, 117, 203, 0.5) 50%);
+  background-repeat: repeat-x;
+  background-size: 0.05em 0.05em;
+  background-position: 0 1.2em;
+  text-decoration: none;
+}
+/* line 169, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.lt-ie10 .hiddenproof > .heading a:link, .lt-ie10 .hiddenproof > .heading a:visited, .lt-ie10 .hiddenproof > header > .heading a:link, .lt-ie10 .hiddenproof > header > .heading a:visited {
+  background: none;
+  text-decoration: underline;
+}
+/* line 33, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading a:hover, .hiddenproof > .heading a:focus, .hiddenproof > header > .heading a:hover, .hiddenproof > header > .heading a:focus {
+  color: #2a5ea4;
+  /**
+   * Better underlines using background gradients
+   * See http://bit.ly/1vTg7hr
+   */
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(50%, transparent), color-stop(50%, #2a5ea4));
+  background-image: -webkit-linear-gradient(top, transparent 50%, #2a5ea4 50%);
+  background-image: -moz-linear-gradient(top, transparent 50%, #2a5ea4 50%);
+  background-image: -o-linear-gradient(top, transparent 50%, #2a5ea4 50%);
+  background-image: linear-gradient(top, transparent 50%, #2a5ea4 50%);
+  background-repeat: repeat-x;
+  background-size: 0.05em 0.05em;
+  background-position: 0 1.2em;
+  text-decoration: none;
+}
+/* line 169, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.lt-ie10 .hiddenproof > .heading a:hover, .lt-ie10 .hiddenproof > .heading a:focus, .lt-ie10 .hiddenproof > header > .heading a:hover, .lt-ie10 .hiddenproof > header > .heading a:focus {
+  background: none;
+  text-decoration: underline;
+}
+/* line 40, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading a:active, .hiddenproof > header > .heading a:active {
+  color: #28803f;
+  /**
+   * Better underlines using background gradients
+   * See http://bit.ly/1vTg7hr
+   */
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(50%, transparent), color-stop(50%, #28803f));
+  background-image: -webkit-linear-gradient(top, transparent 50%, #28803f 50%);
+  background-image: -moz-linear-gradient(top, transparent 50%, #28803f 50%);
+  background-image: -o-linear-gradient(top, transparent 50%, #28803f 50%);
+  background-image: linear-gradient(top, transparent 50%, #28803f 50%);
+  background-repeat: repeat-x;
+  background-size: 0.05em 0.05em;
+  background-position: 0 1.2em;
+  text-decoration: none;
+}
+/* line 169, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.lt-ie10 .hiddenproof > .heading a:active, .lt-ie10 .hiddenproof > header > .heading a:active {
+  background: none;
+  text-decoration: underline;
+}
+/* line 27, ../../../../../MathBook/mathbook-assets/scss/content/mixins/_environment.scss */
+.hiddenproof > .heading *[knowl], .hiddenproof > header > .heading *[knowl] {
+  margin-left: -3px;
+}
+/* line 55, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.hiddenproof > .heading *[knowl], .hiddenproof > .heading *[knowl]:hover, .hiddenproof > .heading *[knowl].active, .hiddenproof > header > .heading *[knowl], .hiddenproof > header > .heading *[knowl]:hover, .hiddenproof > header > .heading *[knowl].active {
+  position: relative;
+  color: #205cae;
+  background: transparent;
+  padding: 0px 3px;
+  margin: 0;
+  text-decoration: none;
+  /* add a bottom margin so the line
+   * doesn't jump onHover.
+   */
+  /*margin-bottom: 1px;*/
+  /*border-bottom: 1px dotted $color;*/
+  margin-bottom: 0;
+  border-bottom: none;
+  font-weight: 500;
+  white-space: nowrap;
+  -moz-border-radius-topleft: 3px;
+  -webkit-border-top-left-radius: 3px;
+  border-top-left-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -webkit-border-top-right-radius: 3px;
+  border-top-right-radius: 3px;
+  /* Prevent accidental text selection on click */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-transition-property: background-color;
+  -moz-transition-property: background-color;
+  -o-transition-property: background-color;
+  transition-property: background-color;
+  -webkit-transition-duration: 0ms;
+  -moz-transition-duration: 0ms;
+  -o-transition-duration: 0ms;
+  transition-duration: 0ms;
+  /**
+   * This gets us an underline that's a bit tighter with the baseline
+   * instead of awkwardly floating below like a border on the parent
+   */
+}
+/* line 87, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.hiddenproof > .heading *[knowl]:after, .hiddenproof > .heading *[knowl]:hover:after, .hiddenproof > .heading *[knowl].active:after, .hiddenproof > header > .heading *[knowl]:after, .hiddenproof > header > .heading *[knowl]:hover:after, .hiddenproof > header > .heading *[knowl].active:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 1px;
+  right: 3px;
+  left: 3px;
+  /* Smooth out the transition from underline to border */
+  -webkit-transition-property: left, right;
+  -moz-transition-property: left, right;
+  -o-transition-property: left, right;
+  transition-property: left, right;
+  -webkit-transition-duration: 0ms;
+  -moz-transition-duration: 0ms;
+  -o-transition-duration: 0ms;
+  transition-duration: 0ms;
+  border-bottom: 1px dotted #205cae;
+  /*@include typography-underline(*/
+  /*$color,*/
+  /*$underline-style: dotted,*/
+  /*$underline-size: .1,*/
+  /*$underline-offset: $underline-offset);*/
+  /* Display under parent content, but above parent background */
+  z-index: 0;
+}
+/* line 110, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.hiddenproof > .heading *[knowl]:hover, .hiddenproof > .heading *[knowl]:active, .hiddenproof > .heading *[knowl].active, .hiddenproof > header > .heading *[knowl]:hover, .hiddenproof > header > .heading *[knowl]:active, .hiddenproof > header > .heading *[knowl].active {
+  color: #003b8a;
+  background: #ebf3ff;
+  text-decoration: none;
+  /* See comment on default style's border/margin */
+  margin-bottom: 0;
+  /*border-bottom:2px solid darken($border-color, 15%);*/
+  /*border-bottom: none;*/
+}
+/* line 120, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.hiddenproof > .heading *[knowl]:hover:after, .hiddenproof > .heading *[knowl]:active:after, .hiddenproof > .heading *[knowl].active:after, .hiddenproof > header > .heading *[knowl]:hover:after, .hiddenproof > header > .heading *[knowl]:active:after, .hiddenproof > header > .heading *[knowl].active:after {
+  border-bottom: 2px solid #8abcff;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /*@include typography-underline(*/
+  /*darken($border-color, 32.5%),*/
+  /*$underline-size: .1,*/
+  /*$underline-offset: $underline-offset);*/
+}
+/* line 132, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.hiddenproof > .heading *[knowl]:active, .hiddenproof > header > .heading *[knowl]:active {
+  color: #28803f;
+  background: #d6ffe1;
+}
+/* line 136, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.hiddenproof > .heading *[knowl]:active:after, .hiddenproof > header > .heading *[knowl]:active:after {
+  border-color: #28803f;
+}
+/* line 141, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.hiddenproof > .heading *[knowl].active, .hiddenproof > header > .heading *[knowl].active {
+  background: #d6e8ff;
+}
+/* line 18, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading, .hiddenproof > header > .heading {
+  display: inline;
+}
+/* line 152, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading + p, .hiddenproof > header > .heading + p {
+  display: inline;
+}
+/* line 155, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading + p:after, .hiddenproof > header > .heading + p:after {
+  /* Restore the inline paragraph's margin */
+  content: "";
+  display: block;
+  margin-bottom: 1.25em;
+}
+/* line 130, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
+.hiddenproof {
+  position: relative;
+  /* Cut the border up into the top margin */
+  margin-top: -rhythm(0.5);
+  padding-top: 0;
+  margin-bottom: 1.25em;
+}
+/* line 18, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.hiddenproof > .heading, .hiddenproof > header > .heading {
+  font-style: italic;
+  font-weight: normal;
+  /* It helps to have a little bit of extra space after proof */
+  margin-right: .25em;
+}
+@media screen and (max-width: 1199px) {
+  /* line 130, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
+  .hiddenproof {
+    /* Bring border out of the right margin */
+    margin-right: 0;
+  }
+}
+@media screen and (max-width: 640px) {
+  /* line 130, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
+  .hiddenproof {
+    /* Remove the border */
+    padding: 0;
+    margin-right: 0;
+    border-right: 0;
+    padding-top: 0;
+  }
+}
+
+/* line 166, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
+.hiddenproof a > .heading {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+/* line 185, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
+.aside-like {
+  padding: 8px 15px 10px 15px;
+  margin: 5px 0px 5px 10px;
+  background-color: #f5faff;
+  border: 2px solid #dcebfa;
+}
+/* line 195, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
+.aside-like .aside-like {
+  background-color: #fafff5;
+  border: 1px dotted #aaa;
+}
+
+/* Links that open knowls */
+/* line 55, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+*[knowl], *[knowl]:hover, *[knowl].active {
+  position: relative;
+  color: #205cae;
+  background: transparent;
+  padding: 0px 3px;
+  margin: 0;
+  text-decoration: none;
+  /* add a bottom margin so the line
+   * doesn't jump onHover.
+   */
+  /*margin-bottom: 1px;*/
+  /*border-bottom: 1px dotted $color;*/
+  margin-bottom: 0;
+  border-bottom: none;
+  font-weight: 500;
+  white-space: nowrap;
+  -moz-border-radius-topleft: 3px;
+  -webkit-border-top-left-radius: 3px;
+  border-top-left-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -webkit-border-top-right-radius: 3px;
+  border-top-right-radius: 3px;
+  /* Prevent accidental text selection on click */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-transition-property: background-color;
+  -moz-transition-property: background-color;
+  -o-transition-property: background-color;
+  transition-property: background-color;
+  -webkit-transition-duration: 0ms;
+  -moz-transition-duration: 0ms;
+  -o-transition-duration: 0ms;
+  transition-duration: 0ms;
+  /**
+   * This gets us an underline that's a bit tighter with the baseline
+   * instead of awkwardly floating below like a border on the parent
+   */
+}
+/* line 87, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+*[knowl]:after, *[knowl]:hover:after, *[knowl].active:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 1px;
+  right: 3px;
+  left: 3px;
+  /* Smooth out the transition from underline to border */
+  -webkit-transition-property: left, right;
+  -moz-transition-property: left, right;
+  -o-transition-property: left, right;
+  transition-property: left, right;
+  -webkit-transition-duration: 0ms;
+  -moz-transition-duration: 0ms;
+  -o-transition-duration: 0ms;
+  transition-duration: 0ms;
+  border-bottom: 1px dotted #205cae;
+  /*@include typography-underline(*/
+  /*$color,*/
+  /*$underline-style: dotted,*/
+  /*$underline-size: .1,*/
+  /*$underline-offset: $underline-offset);*/
+  /* Display under parent content, but above parent background */
+  z-index: 0;
+}
+/* line 110, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+*[knowl]:hover, *[knowl]:active, *[knowl].active {
+  color: #003b8a;
+  background: #ebf3ff;
+  text-decoration: none;
+  /* See comment on default style's border/margin */
+  margin-bottom: 0;
+  /*border-bottom:2px solid darken($border-color, 15%);*/
+  /*border-bottom: none;*/
+}
+/* line 120, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+*[knowl]:hover:after, *[knowl]:active:after, *[knowl].active:after {
+  border-bottom: 2px solid #8abcff;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /*@include typography-underline(*/
+  /*darken($border-color, 32.5%),*/
+  /*$underline-size: .1,*/
+  /*$underline-offset: $underline-offset);*/
+}
+/* line 132, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+*[knowl]:active {
+  color: #28803f;
+  background: #d6ffe1;
+}
+/* line 136, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+*[knowl]:active:after {
+  border-color: #28803f;
+}
+/* line 141, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+*[knowl].active {
+  background: #d6e8ff;
+}
+
+/* line 22, ../../../../../MathBook/mathbook-assets/scss/content/partials/_knowl.scss */
+.knowl-output {
+  /* Since CodeMirror output contains a bunch of lines with their own padding */
+}
+/* line 155, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.knowl-output {
+  border: 12px solid #d6e8ff;
+  background: #fafcff;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+  margin-bottom: 1.25em;
+}
+/* line 188, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.knowl-output .knowl-footer {
+  font-size: x-small;
+  color: #0046a3;
+  background: #d6e8ff;
+  bottom: -12px;
+  padding: 1px 0px 1px 12px;
+}
+/* line 196, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.knowl-output .knowl-content {
+  /* Better to apply a margin, so that heading margins collapse */
+  padding: 0;
+  margin: 1.25em;
+}
+/* line 9, ../../../../../MathBook/mathbook-assets/scss/content/partials/_code.scss */
+.knowl-output .code {
+  position: relative;
+}
+/* line 3, ../../../../../MathBook/mathbook-assets/scss/shared/_css_message.scss */
+.knowl-output .code:after {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  padding: .5em;
+  content: "Markup Error: .code is deprecated. Use .code-inline or .code-block.";
+  color: white;
+  background: red;
+  opacity: .9;
+  z-index: 99999;
+  min-width: 200px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  -moz-border-radius-topleft: 0;
+  -webkit-border-top-left-radius: 0;
+  border-top-left-radius: 0;
+}
+/* line 264, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.knowl-output .code-block,
+.knowl-output .CodeMirror,
+.knowl-output .sagecell .CodeMirror {
+  font-family: "Source Code Pro", Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+  background: white;
+  color: inherit;
+  word-break: break-all;
+  word-wrap: break-word;
+  border-style: solid;
+  border-width: 0.0625em;
+  padding: 1.1875em;
+  border-color: #bdd9ff;
+  -webkit-border-radius: 0.2em;
+  -moz-border-radius: 0.2em;
+  -ms-border-radius: 0.2em;
+  -o-border-radius: 0.2em;
+  border-radius: 0.2em;
+}
+/* line 277, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.knowl-output .code-block code,
+.knowl-output .CodeMirror code,
+.knowl-output .sagecell .CodeMirror code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  white-space: pre-wrap;
+  background-color: transparent;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+}
+/* line 308, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.knowl-output .code-inline {
+  margin: 0 1px;
+  font-size: 0.9em;
+  line-height: 1.38889em;
+  white-space: nowrap;
+  color: inherit;
+  background: white;
+  border: 1px solid #bdd9ff;
+  padding: 0.0625em 0.25em;
+  -webkit-border-radius: 0.2em;
+  -moz-border-radius: 0.2em;
+  -ms-border-radius: 0.2em;
+  -o-border-radius: 0.2em;
+  border-radius: 0.2em;
+}
+/* line 29, ../../../../../MathBook/mathbook-assets/scss/content/partials/_code.scss */
+.knowl-output .CodeMirror, .knowl-output .sagecell .CodeMirror {
+  padding: 0;
+}
+
+/* line 33, ../../../../../MathBook/mathbook-assets/scss/content/partials/_knowl.scss */
+.knowl-output .knowl-output {
+  /* Since CodeMirror output contains a bunch of lines with their own padding */
+}
+/* line 155, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.knowl-output .knowl-output {
+  border: 6px solid #bdd9ff;
+  background: white;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+  margin-bottom: 1.25em;
+}
+/* line 188, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.knowl-output .knowl-output .knowl-footer {
+  font-size: x-small;
+  color: #003b8a;
+  background: #bdd9ff;
+  bottom: -6px;
+  padding: 1px 0px 1px 6px;
+}
+/* line 196, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.knowl-output .knowl-output .knowl-content {
+  /* Better to apply a margin, so that heading margins collapse */
+  padding: 0;
+  margin: 1.25em;
+}
+/* line 9, ../../../../../MathBook/mathbook-assets/scss/content/partials/_code.scss */
+.knowl-output .knowl-output .code {
+  position: relative;
+}
+/* line 3, ../../../../../MathBook/mathbook-assets/scss/shared/_css_message.scss */
+.knowl-output .knowl-output .code:after {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  padding: .5em;
+  content: "Markup Error: .code is deprecated. Use .code-inline or .code-block.";
+  color: white;
+  background: red;
+  opacity: .9;
+  z-index: 99999;
+  min-width: 200px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  -moz-border-radius-topleft: 0;
+  -webkit-border-top-left-radius: 0;
+  border-top-left-radius: 0;
+}
+/* line 264, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.knowl-output .knowl-output .code-block,
+.knowl-output .knowl-output .CodeMirror,
+.knowl-output .knowl-output .sagecell .CodeMirror {
+  font-family: "Source Code Pro", Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+  background: #fafcff;
+  color: inherit;
+  word-break: break-all;
+  word-wrap: break-word;
+  border-style: solid;
+  border-width: 0.0625em;
+  padding: 1.1875em;
+  border-color: #a3caff;
+  -webkit-border-radius: 0.2em;
+  -moz-border-radius: 0.2em;
+  -ms-border-radius: 0.2em;
+  -o-border-radius: 0.2em;
+  border-radius: 0.2em;
+}
+/* line 277, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.knowl-output .knowl-output .code-block code,
+.knowl-output .knowl-output .CodeMirror code,
+.knowl-output .knowl-output .sagecell .CodeMirror code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  white-space: pre-wrap;
+  background-color: transparent;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+}
+/* line 308, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.knowl-output .knowl-output .code-inline {
+  margin: 0 1px;
+  font-size: 0.9em;
+  line-height: 1.38889em;
+  white-space: nowrap;
+  color: inherit;
+  background: #fafcff;
+  border: 1px solid #a3caff;
+  padding: 0.0625em 0.25em;
+  -webkit-border-radius: 0.2em;
+  -moz-border-radius: 0.2em;
+  -ms-border-radius: 0.2em;
+  -o-border-radius: 0.2em;
+  border-radius: 0.2em;
+}
+/* line 29, ../../../../../MathBook/mathbook-assets/scss/content/partials/_code.scss */
+.knowl-output .knowl-output .CodeMirror, .knowl-output .knowl-output .sagecell .CodeMirror {
+  padding: 0;
+}
+
+/* line 49, ../../../../../MathBook/mathbook-assets/scss/content/partials/_knowl.scss */
+.knowl-output .knowl-output .knowl-output {
+  /* Since CodeMirror output contains a bunch of lines with their own padding */
+}
+/* line 155, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.knowl-output .knowl-output .knowl-output {
+  border: 6px solid #a3caff;
+  background: #fafcff;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+  margin-bottom: 1.25em;
+}
+/* line 188, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.knowl-output .knowl-output .knowl-output .knowl-footer {
+  font-size: x-small;
+  color: #003070;
+  background: #a3caff;
+  bottom: -6px;
+  padding: 1px 0px 1px 6px;
+}
+/* line 196, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+.knowl-output .knowl-output .knowl-output .knowl-content {
+  /* Better to apply a margin, so that heading margins collapse */
+  padding: 0;
+  margin: 1.25em;
+}
+/* line 9, ../../../../../MathBook/mathbook-assets/scss/content/partials/_code.scss */
+.knowl-output .knowl-output .knowl-output .code {
+  position: relative;
+}
+/* line 3, ../../../../../MathBook/mathbook-assets/scss/shared/_css_message.scss */
+.knowl-output .knowl-output .knowl-output .code:after {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  padding: .5em;
+  content: "Markup Error: .code is deprecated. Use .code-inline or .code-block.";
+  color: white;
+  background: red;
+  opacity: .9;
+  z-index: 99999;
+  min-width: 200px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  -moz-border-radius-topleft: 0;
+  -webkit-border-top-left-radius: 0;
+  border-top-left-radius: 0;
+}
+/* line 264, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.knowl-output .knowl-output .knowl-output .code-block,
+.knowl-output .knowl-output .knowl-output .CodeMirror,
+.knowl-output .knowl-output .knowl-output .sagecell .CodeMirror {
+  font-family: "Source Code Pro", Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+  background: white;
+  color: inherit;
+  word-break: break-all;
+  word-wrap: break-word;
+  border-style: solid;
+  border-width: 0.0625em;
+  padding: 1.1875em;
+  border-color: #8abcff;
+  -webkit-border-radius: 0.2em;
+  -moz-border-radius: 0.2em;
+  -ms-border-radius: 0.2em;
+  -o-border-radius: 0.2em;
+  border-radius: 0.2em;
+}
+/* line 277, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.knowl-output .knowl-output .knowl-output .code-block code,
+.knowl-output .knowl-output .knowl-output .CodeMirror code,
+.knowl-output .knowl-output .knowl-output .sagecell .CodeMirror code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  white-space: pre-wrap;
+  background-color: transparent;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+}
+/* line 308, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.knowl-output .knowl-output .knowl-output .code-inline {
+  margin: 0 1px;
+  font-size: 0.9em;
+  line-height: 1.38889em;
+  white-space: nowrap;
+  color: inherit;
+  background: white;
+  border: 1px solid #8abcff;
+  padding: 0.0625em 0.25em;
+  -webkit-border-radius: 0.2em;
+  -moz-border-radius: 0.2em;
+  -ms-border-radius: 0.2em;
+  -o-border-radius: 0.2em;
+  border-radius: 0.2em;
+}
+/* line 29, ../../../../../MathBook/mathbook-assets/scss/content/partials/_code.scss */
+.knowl-output .knowl-output .knowl-output .CodeMirror, .knowl-output .knowl-output .knowl-output .sagecell .CodeMirror {
+  padding: 0;
+}
+
+/* line 9, ../../../../../MathBook/mathbook-assets/scss/content/partials/_figure.scss */
+figure {
+  /* maintain vertical rhythym with line-height sized trailing margin */
+  margin-bottom: 1.25em;
+}
+/* line 14, ../../../../../MathBook/mathbook-assets/scss/content/partials/_figure.scss */
+figure.wrap {
+  float: right;
+  margin-right: 0;
+  /*margin-left:30px;*/
+  margin-left: 1.25em;
+}
+/* line 20, ../../../../../MathBook/mathbook-assets/scss/content/partials/_figure.scss */
+figure.wrap img {
+  width: 250px;
+}
+/* line 23, ../../../../../MathBook/mathbook-assets/scss/content/partials/_figure.scss */
+figure img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* line 28, ../../../../../MathBook/mathbook-assets/scss/content/partials/_figure.scss */
+figure img.wrap {
+  float: right;
+  margin: 0;
+}
+/* line 34, ../../../../../MathBook/mathbook-assets/scss/content/partials/_figure.scss */
+figure table {
+  margin-left: auto;
+  margin-right: auto;
+}
+/* line 39, ../../../../../MathBook/mathbook-assets/scss/content/partials/_figure.scss */
+figure figcaption {
+  /* We treat figcaptions just like headings */
+}
+/* line 104, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+figure figcaption > .heading, figure figcaption > header > .heading {
+  font-family: "PT Serif", "Times New Roman", Times, serif;
+  font-weight: 700;
+  color: inherit;
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+figure figcaption > .heading:before, figure figcaption > header > .heading:before {
+  display: none;
+}
+/* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+figure figcaption > .heading:after, figure figcaption > header > .heading:after {
+  content: ". ";
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+figure figcaption > .heading .type:before, figure figcaption > header > .heading .type:before {
+  display: none;
+}
+/* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+figure figcaption > .heading .type:after, figure figcaption > header > .heading .type:after {
+  content: " ";
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+figure figcaption > .heading .codenumber:before, figure figcaption > header > .heading .codenumber:before {
+  display: none;
+}
+/* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+figure figcaption > .heading .codenumber:after, figure figcaption > header > .heading .codenumber:after {
+  content: "\2002";
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+figure figcaption > .heading .title:before, figure figcaption > header > .heading .title:before {
+  display: none;
+}
+/* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+figure figcaption > .heading .title:after, figure figcaption > header > .heading .title:after {
+  content: " ";
+}
+/* line 124, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+figure figcaption > .heading .type, figure figcaption > .heading .codenumber, figure figcaption > .heading .title, figure figcaption > header > .heading .type, figure figcaption > header > .heading .codenumber, figure figcaption > header > .heading .title {
+  /**
+   *  Hide the space after the last element,
+   * defer to .heading:after instead
+   */
+}
+/* line 129, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+figure figcaption > .heading .type:last-child:after, figure figcaption > .heading .codenumber:last-child:after, figure figcaption > .heading .title:last-child:after, figure figcaption > header > .heading .type:last-child:after, figure figcaption > header > .heading .codenumber:last-child:after, figure figcaption > header > .heading .title:last-child:after {
+  display: none;
+}
+/* line 69, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+figure figcaption > .heading.hide-type .type, figure figcaption > header > .heading.hide-type .type {
+  display: none;
+}
+/* line 76, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+figure figcaption > .heading.hide-codenumber .codenumber, figure figcaption > header > .heading.hide-codenumber .codenumber {
+  display: none;
+}
+/* line 83, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+figure figcaption > .heading.hide-title .title, figure figcaption > header > .heading.hide-title .title {
+  display: none;
+}
+/* line 18, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+figure figcaption > .heading > .heading, figure figcaption > .heading > header > .heading, figure figcaption > header > .heading > .heading, figure figcaption > header > .heading > header > .heading {
+  display: inline;
+}
+/* line 152, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+figure figcaption > .heading > .heading + p, figure figcaption > .heading > header > .heading + p, figure figcaption > header > .heading > .heading + p, figure figcaption > header > .heading > header > .heading + p {
+  display: inline;
+}
+/* line 155, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+figure figcaption > .heading > .heading + p:after, figure figcaption > .heading > header > .heading + p:after, figure figcaption > header > .heading > .heading + p:after, figure figcaption > header > .heading > header > .heading + p:after {
+  /* Restore the inline paragraph's margin */
+  content: "";
+  display: block;
+  margin-bottom: 1.25em;
+}
+/* line 46, ../../../../../MathBook/mathbook-assets/scss/content/partials/_figure.scss */
+figure figcaption {
+  font-size: 1em;
+  line-height: 1.25em;
+  margin: 0 auto;
+  padding-left: 2em;
+  margin-top: 1.25em;
+}
+/* line 56, ../../../../../MathBook/mathbook-assets/scss/content/partials/_figure.scss */
+figure figcaption.wrap {
+  margin-left: 0.125em;
+  margin-right: 0.125em;
+  text-align: center;
+}
+
+/* line 3, ../../../../../MathBook/mathbook-assets/scss/content/partials/_table.scss */
+table {
+  border-collapse: collapse;
+}
+/* line 7, ../../../../../MathBook/mathbook-assets/scss/content/partials/_table.scss */
+.center table {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* line 13, ../../../../../MathBook/mathbook-assets/scss/content/partials/_table.scss */
+table td {
+  padding: 2px;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-size: 90%;
+}
+/* line 19, ../../../../../MathBook/mathbook-assets/scss/content/partials/_table.scss */
+table td.hline {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+/* line 24, ../../../../../MathBook/mathbook-assets/scss/content/partials/_table.scss */
+table td.hlinethick {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+/* line 29, ../../../../../MathBook/mathbook-assets/scss/content/partials/_table.scss */
+table td.hline hr {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: -1px;
+  margin-right: -1px;
+  border: 1px solid black;
+}
+/* line 37, ../../../../../MathBook/mathbook-assets/scss/content/partials/_table.scss */
+table td.hlinethick hr {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: -1px;
+  margin-right: -1px;
+  border: 2px solid black;
+}
+
+/* line 48, ../../../../../MathBook/mathbook-assets/scss/content/partials/_table.scss */
+table td.onesubject {
+  font-size: 120%;
+}
+
+/* line 9, ../../../../../MathBook/mathbook-assets/scss/content/partials/_code.scss */
+.code {
+  position: relative;
+}
+/* line 3, ../../../../../MathBook/mathbook-assets/scss/shared/_css_message.scss */
+.code:after {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  padding: .5em;
+  content: "Markup Error: .code is deprecated. Use .code-inline or .code-block.";
+  color: white;
+  background: red;
+  opacity: .9;
+  z-index: 99999;
+  min-width: 200px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  -moz-border-radius-topleft: 0;
+  -webkit-border-top-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+/* line 264, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.code-block,
+.CodeMirror,
+.sagecell .CodeMirror {
+  font-family: "Source Code Pro", Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+  background: #eeeeee;
+  color: inherit;
+  word-break: break-all;
+  word-wrap: break-word;
+  border-style: solid;
+  border-width: 0.0625em;
+  padding: 1.1875em;
+  border-color: #dddddd;
+  -webkit-border-radius: 0.2em;
+  -moz-border-radius: 0.2em;
+  -ms-border-radius: 0.2em;
+  -o-border-radius: 0.2em;
+  border-radius: 0.2em;
+}
+/* line 277, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.code-block code,
+.CodeMirror code,
+.sagecell .CodeMirror code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  white-space: pre-wrap;
+  background-color: transparent;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+}
+
+/* line 308, ../../../../../MathBook/mathbook-assets/scss/shared/_typography.scss */
+.code-inline {
+  margin: 0 1px;
+  font-size: 0.9em;
+  line-height: 1.38889em;
+  white-space: nowrap;
+  color: inherit;
+  background: #eeeeee;
+  border: 1px solid #dddddd;
+  padding: 0.0625em 0.25em;
+  -webkit-border-radius: 0.2em;
+  -moz-border-radius: 0.2em;
+  -ms-border-radius: 0.2em;
+  -o-border-radius: 0.2em;
+  border-radius: 0.2em;
+}
+
+/* Since CodeMirror output contains a bunch of lines with their own padding */
+/* line 29, ../../../../../MathBook/mathbook-assets/scss/content/partials/_code.scss */
+.CodeMirror, .sagecell .CodeMirror {
+  padding: 0;
+}
+
+/* line 4, ../../../../../MathBook/mathbook-assets/scss/content/partials/_bib.scss */
+.bib {
+  /*margin-bottom:10px;*/
+  margin-bottom: 1em;
+}
+
+/* line 10, ../../../../../MathBook/mathbook-assets/scss/content/partials/_bib.scss */
+.bibitem {
+  display: inline;
+  font-weight: bold;
+  margin-right: 1em;
+}
+
+/* line 16, ../../../../../MathBook/mathbook-assets/scss/content/partials/_bib.scss */
+.bibitem + .bibentry {
+  display: inline;
+}
+
+/*******************************************************************************
+ * END MATHBOOK CONTENT
+ ******************************************************************************/

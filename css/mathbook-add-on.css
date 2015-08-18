@@ -1,0 +1,400 @@
+
+/*
+.workgroup .work .title {
+    font-weight: normal;
+}
+*/
+
+.collectedworks .knowl-output {
+    border: 12px 
+    solid #D6E3FF;
+    background: none repeat scroll 0% 0% #FAFCFF;
+    border-radius: 4px;
+    margin-bottom: 1.25em;
+}
+
+.collectedworks .subjectwork {
+    max-width: 750px;
+}
+
+.collectedworks .bib {
+    margin-bottom: 1em;
+}
+
+.collectedworks .bibitem + .bibentry {
+    display: inline;
+}
+
+.collectedworks .bibitem {
+    display: inline;
+    font-weight: bold;
+    margin-right: 1em;
+}
+
+#primary-navbar .toolbar .toolbar-item a {
+    text-decoration: none;
+}
+
+.mathbook-content figure figcaption {
+    font-weight: normal;
+}
+
+.mathbook-content figure figcaption .heading, .mathbook-content figure figcaption .codenumber {
+    font-weight: 700;
+}
+
+.mathbook-content figure figcaption .heading:after {
+    content: " ";
+}
+
+.mathbook-content figure figcaption .codenumber:after {
+    content: ".\2002";  /* en space */
+}
+
+.mathbook-content figure figcaption .codenumber:last-child:after {
+    display: inline;
+    content: ". ";
+}
+
+.unprocessed {
+
+    padding: 8px;
+    background-color: rgb(255,230,230)
+}
+
+.unprocessed .unprocessed {
+
+    margin: 8px;
+    background-color: rgb(255,200,255)
+}
+
+.unprocessed .unprocessed .unprocessed {
+
+    margin: 8px;
+    background-color: rgb(205,205,255)
+}
+
+
+*[knowl] {
+  border-bottom: 1px dotted #00a;
+}
+
+#toc h2 + h2 {
+    margin-top: 0.3em;
+}
+
+.example-like, .exercise-like {
+  margin: 1.42857em 0;
+}
+
+.aside-like {
+   padding: 8px 15px 10px 15px;
+   margin: 5px 0px 5px 10px;
+}
+
+.aside-like {
+
+    background-color: rgb(245,250,255);
+    border: 2px solid rgb(220,235,250);
+}
+
+.aside-like .aside-like {
+
+    background-color: rgb(250,255,245);
+    border: 1px dotted #aaa;
+
+}
+
+.mathbook-content {
+    margin: 0;
+}
+
+.mathbook-content .paragraphs .heading {
+    display: inline;
+}
+
+.mathbook-content .paragraphs .heading:after {
+    content: ".\2002";  /* en space */
+}
+
+.mathbook-content .paragraphs .heading + p {
+    display: inline;
+}
+
+/*
+.mathbook-content .sidebyside > .paragraphs:after {
+    display:inline-block;
+    content:' x ';    
+}
+*/
+/* does not work:  appears below, not after */
+
+
+.mathbook-content .sidebyside > p, .mathbook-content .sidebyside > figure, .mathbook-content .sidebyside > img, .mathbook-content .sidebyside > table, .mathbook-content .sidebyside > tabular, .mathbook-content .sidebyside > .paragraphs {
+    display: inline-block;
+    margin: 0;
+}
+
+.mathbook-content .sidebyside > figure:after {
+     content:'';
+}
+
+.mathbook-content .sidebyside figcaption {
+    font-weight: normal;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 20px;
+}
+
+.mathbook-content .sidebyside figcaption .heading, .mathbook-content .sidebyside figcaption .codenumber {
+    font-weight: 700;
+}
+
+.mathbook-content .sidebyside figcaption .heading:after {
+    content: " ";
+}
+
+.mathbook-content .sidebyside figcaption .codenumber:after {
+    content: ".\2002";  /* en space */
+}
+
+.mathbook-content .sidebyside figcaption .codenumber:last-child:after {
+    display: inline;
+    content: ". ";
+}
+
+
+.mathbook-content .sidebyside > figure > figcaption {
+    margin: 0;
+    padding: 0;
+    max-width: 200px;
+    padding-left: 20%;
+}
+
+.mathbook-content .sidebyside > table > figcaption {
+    margin: 0;
+    padding: 0;
+    max-width: 200px;
+    padding-left: 20%;
+}
+
+.mathbook-content .sidebyside > p {
+    width: 25%;
+    margin-right: 7%;
+    vertical-align: top;
+}
+
+.mathbook-content .sidebyside > p.left, .mathbook-content .sidebyside > p.middle, .mathbook-content .sidebyside > p.right {
+    vertical-align: middle;
+}
+
+.mathbook-content .sidebyside > p + img {
+    vertical-align: middle;
+}
+
+.mathbook-content .sidebyside {
+    margin-bottom: 20px;
+}
+
+.mathbook-content .sidebyside {
+    text-align: justify;
+}
+
+.mathbook-content .sidebyside:after {
+    display:inline-block;
+    width:100%;
+    content:'';
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table tr td {
+    padding: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 90%;
+}
+
+.mathbook-content table tr td.l {
+    text-align: left;
+}
+.mathbook-content table tr td.c {
+    text-align: center;
+}
+.mathbook-content table tr td.r {
+    text-align: right;
+}
+
+
+.mathbook-content table tr td.t {
+    vertical-align: top;
+}
+.mathbook-content table tr td.b {
+    vertical-align: bottom;
+}
+.mathbook-content table tr td.m {
+    vertical-align: middle;
+}
+
+.vv {
+    border-left: 2px solid #000;
+    border-right: 2px solid #000;
+}
+
+.vcv {
+    border-left: 2px solid #000;
+    border-right: 2px solid #000;
+    text-align: center;
+}
+
+.vcvv {
+    border-left: 2px solid #000;
+    border-right: 4px solid #000;
+    text-align: center;
+}
+
+.vlv {
+    border-left: 2px solid #000;
+    border-right: 2px solid #000;
+    text-align: left;
+}
+
+.vrv {
+    border-left: 2px solid #000;
+    border-right: 2px solid #000;
+    text-align: right;
+}
+
+.rv {
+    border-right: 2px solid #000;
+    text-align: right;
+}
+
+.vr {
+    border-left: 2px solid #000;
+    text-align: right;
+}
+
+.lv {
+    border-right: 2px solid #000;
+    text-align: left;
+}
+
+.vl {
+    border-left: 2px solid #000;
+    text-align: left;
+}
+.cv {
+    border-right: 2px solid #000;
+    text-align: center;
+}
+
+.Xv {
+    border-right: 2px solid #000;
+    text-align: left;
+}
+.vc {
+    border-left: 2px solid #000;
+    text-align: center;
+}
+
+table td.hline {
+
+    padding-left: 0px;
+    padding-right: 0px;
+
+}
+
+table td.hlinethick {
+
+    padding-left: 0px;
+    padding-right: 0px;
+
+}
+
+td.hline hr  {
+
+    margin-top:0;
+    margin-bottom:0;
+    margin-left: -1px;
+    margin-right: -1px;
+    border: 1px solid rgb(0,0,0);
+
+}
+
+td.hlinethick hr  {
+
+    margin-top:0;
+    margin-bottom:0;
+    margin-left: -1px;
+    margin-right: -1px;
+    border: 2px solid rgb(0,0,0);
+
+}
+
+
+.center table { 
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.mathbook-content table tr td.b1 {
+    border-bottom: 1px solid #000;
+}
+.mathbook-content table tr td.b2 {
+    border-bottom: 2px solid #000;
+}
+.mathbook-content table tr td.b3 {
+    border-bottom: 3px solid #000;
+}
+.mathbook-content table tr td.b0 {
+    border-bottom: none;
+}
+
+.mathbook-content table tr td.t1 {
+    border-top: 1px solid #000;
+}
+.mathbook-content table tr td.t2 {
+    border-top: 2px solid #000;
+}
+.mathbook-content table tr td.t3 {
+    border-top: 3px solid #000;
+}
+.mathbook-content table tr td.t0 {
+    border-top: none;
+}
+
+.mathbook-content table tr td.r1 {
+    border-right: 1px solid #000;
+}
+.mathbook-content table tr td.r2 {
+    border-right: 2px solid #000;
+}
+.mathbook-content table tr td.r3 {
+    border-right: 3px solid #000;
+}
+.mathbook-content table tr td.r0 {
+    border-right: none;
+}
+
+
+.mathbook-content table tr td.l1 {
+    border-left: 1px solid #000;
+}
+.mathbook-content table tr td.l2 {
+    border-left: 2px solid #000;
+}
+.mathbook-content table tr td.l3 {
+    border-left: 3px solid #000;
+}
+.mathbook-content table tr td.l0 {
+    border-left: none;
+}
+
+.mathbook-content table + p {
+    margin-top: 20px;
+}
