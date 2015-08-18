@@ -238,16 +238,71 @@
 <!-- SageMathCloud Cell Markers -->
 <!-- ########################## -->
 
-<!-- Faux UUID -->
-<!-- http://code.google.com/p/public-contracts-ontology/source/browse/transformers/GB-notices/uuid.xslt -->
-<!-- Could use 14-digit random, 10-digit id, some low-order time, 14-digit random -->
+<!-- Version 4 UUID -->
+<!-- Improvements:                     -->
+<!-- Use EXSLT random:random-sequence  -->
+<!--   (1) Get a random number         -->
+<!--   (2) Get content id of object    -->
+<!--   (3) Mix to a new seed           -->
+<!--   (4) Generate sequence and adorn -->
+<!-- idpXXXXXXXX (universal format?)   -->
+<!-- <xsl:value-of select="substring(generate-id(.), 4, 8)" /> -->
 <xsl:template match="*" mode="uuid">
-    <!-- idpXXXXXXXX (universal format?) -->
-    <xsl:value-of select="substring(generate-id(.), 4, 8)" />
-    <!-- flag fauxness -->
-    <xsl:text>-ffff-ffff-ffff-</xsl:text>
-    <!-- 14 places, so only taking 12: 0.xxxxxxxxxxxxxx -->
-    <xsl:value-of select="substring(math:random(), 3, 12)" />
+    <xsl:call-template name="random-hex-digit" /> <!-- 1 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 2 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 3 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 4 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 5 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 6 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 7 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 8 -->
+    <xsl:text>-</xsl:text>
+    <xsl:call-template name="random-hex-digit" /> <!-- 1 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 2 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 3 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 4 -->
+    <xsl:text>-</xsl:text>
+    <xsl:text>4</xsl:text> <!-- Version 4 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 2 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 3 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 4 -->
+    <xsl:text>-</xsl:text>
+    <xsl:text>a</xsl:text> <!-- Variant: leading bits 10 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 2 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 3 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 4 -->
+    <xsl:text>-</xsl:text>
+    <xsl:call-template name="random-hex-digit" /> <!-- 1 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 2 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 3 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 4 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 5 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 6 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 7 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 8 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 9 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 0 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 1 -->
+    <xsl:call-template name="random-hex-digit" /> <!-- 2 -->
+</xsl:template>
+
+<xsl:template name="random-hex-digit">
+    <xsl:variable name="digit" select="floor(16*math:random())" />
+    <xsl:choose>
+        <xsl:when test="10 > $digit">
+            <xsl:value-of select="$digit" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:choose>
+                <xsl:when test="$digit = 10">a</xsl:when>
+                <xsl:when test="$digit = 11">b</xsl:when>
+                <xsl:when test="$digit = 12">c</xsl:when>
+                <xsl:when test="$digit = 13">d</xsl:when>
+                <xsl:when test="$digit = 14">e</xsl:when>
+                <xsl:when test="$digit = 15">f</xsl:when>
+            </xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- SMC codes for blocking cells          -->
