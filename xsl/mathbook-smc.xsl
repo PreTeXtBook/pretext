@@ -252,14 +252,13 @@
 
 <!-- SMC codes for blocking cells          -->
 <!-- carriage returns are carefully placed -->
-<!-- We are using %hide rather than i code -->
 <xsl:template match="*" mode="inputbegin">
     <xsl:text>&#xFE20;</xsl:text>
     <xsl:apply-templates select="." mode="uuid" />
     <xsl:text>&#xFE20;&#xa;</xsl:text>
 </xsl:template>
 
-<!-- "x" code after UUID to execute   -->
+<!-- "x" code after UUID to execute -->
 <xsl:template match="*" mode="inputbegin-execute">
     <xsl:text>&#xFE20;</xsl:text>
     <xsl:apply-templates select="." mode="uuid" />
@@ -267,7 +266,7 @@
     <xsl:text>&#xFE20;&#xa;</xsl:text>
 </xsl:template>
 
-<!-- "i" code after UUID to hide   -->
+<!-- "i" code after UUID to hide -->
 <xsl:template match="*" mode="inputbegin-hide">
     <xsl:text>&#xFE20;</xsl:text>
     <xsl:apply-templates select="." mode="uuid" />
@@ -275,14 +274,35 @@
     <xsl:text>&#xFE20;&#xa;</xsl:text>
 </xsl:template>
 
+<!-- End an input cell and begin subsequent output cell -->
 <xsl:template match="*" mode="inputoutput">
     <xsl:text>&#xa;&#xFE21;</xsl:text>
     <xsl:apply-templates select="." mode="uuid" />
     <xsl:text>&#xFE21;</xsl:text>
 </xsl:template>
 
+<!-- End an output cell -->
 <xsl:template match="*" mode="outputend">
     <xsl:text>&#xFE21;&#xa;</xsl:text>
 </xsl:template>
+
+<!-- We like to keep HTML cells short and manageable -->
+<!-- So we frequently drop out of HTML mode,         -->
+<!-- only to instantly restart back in HTML mode     -->
+<!-- This presumes                                   -->
+<!-- (1) Page begins in HTML mode                    -->
+<!-- (2) Page ending concludes HTML mode             -->
+<!-- (3) Sage cells drop out/in properly             -->
+<xsl:template match="*" mode="html-break">
+    <!-- End input, begin output -->
+    <xsl:apply-templates select="." mode="inputoutput" />
+    <!-- End ouput               -->
+    <xsl:apply-templates select="." mode="outputend" />
+    <!-- Start new HTML cell     -->
+    <xsl:apply-templates select="." mode="inputbegin-execute" />
+    <xsl:text>%html&#xa;</xsl:text>
+</xsl:template>
+
+
 
 </xsl:stylesheet>
