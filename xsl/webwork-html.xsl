@@ -68,6 +68,7 @@
 <!-- comes from deep within the environment/knowl  -->
 <!-- scheme in MBX's mathbook-html.xsl conversion  -->
 <xsl:template match="webwork" mode="knowlized">
+    <script type="text/javascript" src="/Users/alexjordan/iframe-resizer/js/iframeResizer.min.js"></script>
     <!-- Clickable, cribbed from "environment-hidden-factory" template -->
     <xsl:element name="div">
         <xsl:attribute name="class">
@@ -96,10 +97,9 @@
         <!-- Actual content of knowl -->
         <xsl:comment>use 'format=debug' on 'webwork' tag to debug problem</xsl:comment>
         <xsl:element name="iframe">
-            <xsl:attribute name="width">540</xsl:attribute> <!-- MBX specific -->
-            <xsl:attribute name="height"><xsl:value-of select="@height" /></xsl:attribute>
+            <xsl:attribute name="width">100%</xsl:attribute> <!-- MBX specific -->
             <xsl:attribute name="src">
-                <xsl:text>https://hosted2.webwork.rochester.edu/webwork2/html2xml?</xsl:text>
+                <xsl:text>https://webwork-dev.pcc.edu/webwork2/html2xml?</xsl:text>
                 <xsl:text>&amp;answersSubmitted=0</xsl:text>
                 <xsl:choose>
                     <xsl:when test="@source">
@@ -123,10 +123,10 @@
                 <xsl:text>&amp;courseID=</xsl:text>
                 <xsl:choose>
                     <xsl:when test="@course"><xsl:value-of select="@course" /></xsl:when>
-                    <xsl:otherwise><xsl:text>daemon_course</xsl:text></xsl:otherwise>
+                    <xsl:otherwise><xsl:text>anonymous</xsl:text></xsl:otherwise>
                 </xsl:choose>
-                <xsl:text>&amp;userID=daemon</xsl:text>
-                <xsl:text>&amp;password=daemon</xsl:text>
+                <xsl:text>&amp;userID=anonymous</xsl:text>
+                <xsl:text>&amp;password=anonymous</xsl:text>
                 <xsl:text>&amp;outputformat=</xsl:text>
                 <xsl:choose>
                     <xsl:when test="@format"><xsl:value-of select="@format" /></xsl:when>
@@ -139,6 +139,7 @@
                 <xsl:attribute name="uri"><xsl:text>1</xsl:text></xsl:attribute>
             </xsl:if>
         </xsl:element> <!-- end iframe -->
+        <script type="text/javascript">iFrameResize({log:true,inPageLinks:true,resizeFrom:'child'})</script>
     </exsl:document>
 </xsl:template>
 
@@ -194,10 +195,9 @@
         <!-- Actual content of knowl -->
         <xsl:comment>use 'format=debug' on 'webwork' tag to debug problem</xsl:comment>
         <xsl:element name="iframe">
-            <xsl:attribute name="width">540</xsl:attribute> <!-- MBX specific -->
-            <xsl:attribute name="height"><xsl:value-of select="@height" /></xsl:attribute>
+            <xsl:attribute name="width">100%</xsl:attribute> <!-- MBX specific -->
             <xsl:attribute name="src">
-                <xsl:text>https://hosted2.webwork.rochester.edu/webwork2/html2xml?</xsl:text>
+                <xsl:text>https://webwork-dev.pcc.edu/webwork2/html2xml?</xsl:text>
                 <xsl:text>&amp;answersSubmitted=0</xsl:text>
                 <xsl:choose>
                     <xsl:when test="@source">
@@ -221,10 +221,10 @@
                 <xsl:text>&amp;courseID=</xsl:text>
                 <xsl:choose>
                     <xsl:when test="@course"><xsl:value-of select="@course" /></xsl:when>
-                    <xsl:otherwise><xsl:text>daemon_course</xsl:text></xsl:otherwise>
+                    <xsl:otherwise><xsl:text>anonymous</xsl:text></xsl:otherwise>
                 </xsl:choose>
-                <xsl:text>&amp;userID=daemon</xsl:text>
-                <xsl:text>&amp;password=daemon</xsl:text>
+                <xsl:text>&amp;userID=anonymous</xsl:text>
+                <xsl:text>&amp;password=anonymous</xsl:text>
                 <xsl:text>&amp;outputformat=</xsl:text>
                 <xsl:choose>
                     <xsl:when test="@format"><xsl:value-of select="@format" /></xsl:when>
@@ -254,7 +254,7 @@
 <!-- Requires MBX to incorporate in page headers  -->
 <xsl:template name="webwork">
     <!-- <link href="https://hosted2.webwork.rochester.edu/webwork2_files/css/knowlstyle.css" rel="stylesheet" type="text/css" /> -->
-    <link href="https://hosted2.webwork.rochester.edu/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
+    <link href="https://webwork-dev.pcc.edu/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
 </xsl:template>
 
 </xsl:stylesheet>
