@@ -721,47 +721,12 @@
 <!-- PGML answer input               -->
 <!-- Example: [_____]{$ans}          -->
 <xsl:template match="webwork//statement//answer">
-    <xsl:variable name="varname" select="@var" />
-    <xsl:variable name="problem" select="ancestor::webwork" />
-    <xsl:variable name="category" select="$problem/setup/var[@name=$varname]/@category" />
-    <xsl:variable name="format">
-        <xsl:choose>
-            <xsl:when test="@format">
-                <xsl:value-of select="@format"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:call-template name="category-to-format">
-                    <xsl:with-param name="category" select="$category"/>
-                </xsl:call-template>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:call-template name="answer-field">
-        <xsl:with-param name="format" select="$format"/>
-    </xsl:call-template>
-    <xsl:call-template name="answer-format-help">
-        <xsl:with-param name="format" select="$format"/>
-    </xsl:call-template>
+    <xsl:apply-templates select="." mode="field"/>
+    <xsl:apply-templates select="." mode="format-help"/>
 </xsl:template>
 
-<xsl:template name="answer-field">
-    <xsl:param name="category"/>
-    <xsl:param name="format"/>
-    <xsl:choose>
-        <xsl:when test="$format='checkboxes'">
-            <xsl:call-template name="checkboxes-answer-field"/>
-        </xsl:when>
-        <xsl:when test="$format='essay'">
-            <xsl:call-template name="essay-answer-field"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:call-template name="mathobject-answer-field"/>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- MathObject answers -->
-<xsl:template name="mathobject-answer-field">
+<!-- (presumed) MathObject answers -->
+<xsl:template match="answer" mode="field">
     <xsl:variable name="width">
         <xsl:choose>
             <xsl:when test="@width">
@@ -772,11 +737,6 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <!-- For answer blanks in tables (and possibly more things in the future) -->
-    <!-- we cannot simply insert PGML syntax. But otherwise, we do just that. -->
-    <xsl:if test="ancestor::tabular">
-        <xsl:text>$EmPtYsTrInG".PGML::Format('</xsl:text>
-    </xsl:if>
     <xsl:text>    [</xsl:text>
     <!-- for small width, print underscores; otherwise, specify by number -->
     <xsl:choose>
@@ -806,13 +766,35 @@
         <xsl:value-of select="$width"/>
         <xsl:text>}</xsl:text>
     </xsl:if>
-    <xsl:if test="ancestor::tabular">
-        <xsl:text>')."$EmPtYsTrInG </xsl:text>
-    </xsl:if>
+</xsl:template>
+
+<!-- (presumed) MathObject answers inside a tabular                       -->
+<!-- For answer blanks in tables (and possibly more things in the future) -->
+<!-- we cannot simply insert PGML syntax. But otherwise, we do just that. -->
+<xsl:template match="answer[ancestor::tabular]" mode="field">
+    <xsl:text>$EmPtYsTrInG".PGML::Format('[__]{</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@evaluator">
+            <xsl:value-of select="@evaluator" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="@var" />
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>}{width => </xsl:text>
+    <xsl:choose>
+        <xsl:when test="@width">
+            <xsl:value-of select="@width"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>5</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>}')."$EmPtYsTrInG </xsl:text>
 </xsl:template>
 
 <!-- Checkbox answers -->
-<xsl:template name="checkboxes-answer-field">
+<xsl:template match="answer[@format='checkboxes']" mode="field">
     <xsl:text>    [@</xsl:text>
     <xsl:value-of select="@var"/>
     <xsl:text>->print_a() @]*&#xa;END_PGML&#xa;ANS(checkbox_cmp(</xsl:text>
@@ -824,7 +806,7 @@
 <!-- Example: [@ ANS(essay_cmp); essay_box(6,76) @]*   -->
 <!-- Requires:  PGessaymacros.pl, automatically loaded -->
 <!-- http://webwork.maa.org/moodle/mod/forum/discuss.php?d=3370 -->
-<xsl:template name="essay-answer-field">
+<xsl:template match="answer[@format='essay']" mode="field">
     <xsl:text>[@ ANS(essay_cmp); essay_box(</xsl:text>
     <xsl:choose>
         <xsl:when test="@height">
@@ -989,9 +971,23 @@
     </xsl:call-template>
 </xsl:template>
 
-<xsl:template name="answer-format-help">
-    <xsl:param name="format" select="none"/>
-    <xsl:if test="($pg.answer.format.help = 'yes') and not($format = 'none')">
+<xsl:template match="answer" mode="format-help">
+    <xsl:variable name="varname" select="@var" />
+    <xsl:variable name="problem" select="ancestor::webwork" />
+    <xsl:variable name="category" select="$problem/setup/var[@name=$varname]/@category" />
+    <xsl:variable name="format">
+        <xsl:choose>
+            <xsl:when test="@format">
+                <xsl:value-of select="@format"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="category-to-format">
+                    <xsl:with-param name="category" select="$category"/>
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="($pg.answer.format.help = 'yes')">
         <xsl:choose>
             <xsl:when test="($format='none') or ($format='popup')  or ($format='buttons') or ($format='checkboxes')"/>
             <xsl:when test="$format='essay'">
