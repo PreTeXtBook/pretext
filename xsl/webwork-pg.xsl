@@ -153,17 +153,14 @@
 <!-- If p is inside a list, special handling        -->
 <xsl:template match="webwork//p">
     <xsl:if test="preceding-sibling::p">
-        <xsl:call-template name="space">
-            <xsl:with-param name="blocksize" select="4"/>
-            <xsl:with-param name="repetitions" select="count(ancestor::ul) + count(ancestor::ol)"/>
+        <xsl:call-template name="duplicate-string">
+            <xsl:with-param name="count" select="4 * (count(ancestor::ul) + count(ancestor::ol))" />
+            <xsl:with-param name="text"  select="' '" />
         </xsl:call-template>
     </xsl:if>
     <xsl:apply-templates />
     <xsl:if test="parent::li and not(../following-sibling::li) and not(../following::*[1][self::li])">
-        <xsl:call-template name="space">
-            <xsl:with-param name="blocksize" select="3"/>
-            <xsl:with-param name="repetitions" select="1"/>
-        </xsl:call-template>
+        <xsl:text>   </xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>&#xa;</xsl:text>
@@ -176,9 +173,9 @@
 </xsl:template>
 
 <xsl:template match="ul/li[ancestor::webwork]">
-    <xsl:call-template name="space">
-        <xsl:with-param name="blocksize" select="4"/>
-        <xsl:with-param name="repetitions" select="count(ancestor::ul) + count(ancestor::ol) - 1"/>
+    <xsl:call-template name="duplicate-string">
+        <xsl:with-param name="count" select="4 * (count(ancestor::ul) + count(ancestor::ol) - 1)" />
+        <xsl:with-param name="text"  select="' '" />
     </xsl:call-template>
     <xsl:choose>
         <xsl:when test="../@label='disc'">*</xsl:when>
@@ -189,18 +186,15 @@
     <xsl:text> </xsl:text>
     <xsl:apply-templates />
     <xsl:if test="not(child::p) and not(following-sibling::li) and not(following::*[1][self::li])">
-        <xsl:call-template name="space">
-            <xsl:with-param name="blocksize" select="3"/>
-            <xsl:with-param name="repetitions" select="1"/>
-        </xsl:call-template>
+        <xsl:text>   </xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="ol/li[ancestor::webwork]">
-    <xsl:call-template name="space">
-        <xsl:with-param name="blocksize" select="4"/>
-        <xsl:with-param name="repetitions" select="count(ancestor::ul) + count(ancestor::ol) - 1"/>
+    <xsl:call-template name="duplicate-string">
+        <xsl:with-param name="count" select="4 * (count(ancestor::ul) + count(ancestor::ol) - 1)" />
+        <xsl:with-param name="text"  select="' '" />
     </xsl:call-template>
     <xsl:choose>
         <xsl:when test="contains(../@label,'1')">1</xsl:when>
@@ -213,10 +207,7 @@
     <xsl:text>.  </xsl:text>
     <xsl:apply-templates />
     <xsl:if test="not(child::p) and not(following-sibling::li) and not(following::*[1][self::li])">
-        <xsl:call-template name="space">
-            <xsl:with-param name="blocksize" select="3"/>
-            <xsl:with-param name="repetitions" select="1"/>
-        </xsl:call-template>
+        <xsl:text>   </xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
@@ -959,16 +950,6 @@
     <xsl:value-of select="$title"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>############################################################&#xa;</xsl:text>
-</xsl:template>
-
-<!-- PGML relies on sequences of space characters for markup -->
-<xsl:template name="space">
-    <xsl:param name="blocksize" select="4" />
-    <xsl:param name="repetitions" select="1" />
-    <xsl:call-template name="duplicate-string">
-        <xsl:with-param name="count" select="$blocksize * $repetitions" />
-        <xsl:with-param name="text" select="' '" />
-    </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="answer" mode="format-help">
