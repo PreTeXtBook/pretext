@@ -91,19 +91,21 @@
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="varname" select="@name" />
     <xsl:choose>
-        <xsl:when test="$problem/setup/var[@name=$varname and @category='checkboxes']">
-            <xsl:text>{\bfseries</xsl:text>
-            <xsl:for-each select="$problem/setup/var[@name=$varname]/choices/choice">
-               <xsl:if test="@correct='yes'">
-                   <xsl:text>\makeatletter\@Alph{</xsl:text>
-                   <xsl:value-of select="position()"/>
-                   <xsl:text>}\makeatother</xsl:text>
-               </xsl:if>
-            </xsl:for-each>
-            <xsl:text>}</xsl:text>
-        </xsl:when>
-        <xsl:when test="$problem/setup/var[@name=$varname and (@category='popup' or @category='buttons')]">
-            <xsl:value-of select="$problem/setup/var[@name=$varname]/choices/choice[@correct='yes'][1]"/>
+        <xsl:when test="$problem/setup/var[@name=$varname]/elements">
+        <xsl:for-each select="$problem/setup/var[@name=$varname]/elements/element[@correct='yes']">
+            <xsl:apply-templates select='.' />
+            <xsl:choose>
+                <xsl:when test="count(following-sibling::element[@correct='yes']) &gt; 1">
+                    <xsl:text>, </xsl:text>
+                </xsl:when>
+                <xsl:when test="(count(following-sibling::element[@correct='yes']) = 1) and preceding-sibling::element[@correct='yes']">
+                    <xsl:text>, and </xsl:text>
+                </xsl:when>
+                <xsl:when test="(count(following-sibling::element[@correct='yes']) = 1) and not(preceding-sibling::element[@correct='yes'])">
+                    <xsl:text> and </xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:for-each>
         </xsl:when>
         <xsl:otherwise>
             <xsl:value-of select="$problem/setup/var[@name=$varname]/static" />
@@ -117,37 +119,39 @@
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="varname" select="@var" />
     <xsl:choose>
-        <xsl:when test="$problem/setup/var[@name=$varname][@category='popup']" >
+        <xsl:when test="@format='popup'" >
             <xsl:text>(Choose one: </xsl:text>
-            <xsl:for-each select="$problem/setup/var[@name=$varname]/choices/choice">
-                <xsl:if test="position()=last()">
-                    <xsl:text>or </xsl:text>
-                </xsl:if>
+            <xsl:for-each select="$problem/setup/var[@name=$varname]/elements/element">
                 <xsl:apply-templates select='.' />
-                <xsl:if test="not(position()=last())">
-                    <xsl:text>, </xsl:text>
-                </xsl:if>
+                <xsl:choose>
+                    <xsl:when test="count(following-sibling::element) &gt; 1">
+                        <xsl:text>, </xsl:text>
+                    </xsl:when>
+                    <xsl:when test="(count(following-sibling::element) = 1) and preceding-sibling::element">
+                        <xsl:text>, or </xsl:text>
+                    </xsl:when>
+                    <xsl:when test="(count(following-sibling::element) = 1) and not(preceding-sibling::element)">
+                        <xsl:text> or </xsl:text>
+                    </xsl:when>
+                </xsl:choose>
             </xsl:for-each>
             <xsl:text>)</xsl:text>
         </xsl:when>
-        <xsl:when test="$problem/setup/var[@name=$varname][@category='buttons']" >
+        <xsl:when test="@format='buttons'" >
             <xsl:text>\par&#xa;</xsl:text>
-            <xsl:text>\begin{itemize}[label=$\circledcirc$,leftmargin=3em,]&#xa;</xsl:text>
-            <xsl:for-each select="$problem/setup/var[@name=$varname]/choices/choice">
+            <xsl:text>\begin{itemize}[label=$\bigcirc$,leftmargin=3em,]&#xa;</xsl:text>
+            <xsl:for-each select="$problem/setup/var[@name=$varname]/elements/element">
                 <xsl:text>\item{}</xsl:text>
                 <xsl:apply-templates select='.' />
                 <xsl:text>&#xa;</xsl:text>
             </xsl:for-each>
             <xsl:text>\end{itemize}&#xa;</xsl:text>
         </xsl:when>
-        <xsl:when test="$problem/setup/var[@name=$varname][@category='checkboxes']" >
+        <xsl:when test="@format='checkboxes'" >
             <xsl:text>\par&#xa;</xsl:text>
             <xsl:text>\begin{itemize}[label=$\square$,leftmargin=3em,]&#xa;</xsl:text>
-            <xsl:for-each select="$problem/setup/var[@name=$varname]/choices/choice">
+            <xsl:for-each select="$problem/setup/var[@name=$varname]/elements/element">
                 <xsl:text>\item{}</xsl:text>
-                <xsl:text>{\makeatletter\textbf{\@Alph{</xsl:text>
-                <xsl:value-of select="position()"/>
-                <xsl:text>}.}\makeatother} </xsl:text>
                 <xsl:apply-templates select='.' />
                 <xsl:text>&#xa;</xsl:text>
             </xsl:for-each>

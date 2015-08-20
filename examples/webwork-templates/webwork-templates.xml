@@ -218,30 +218,30 @@
                 <webwork xml:id="multiple-choice-popup-or-radio-buttons" height="1400">
 
                     <setup>
-                        <var name="$color1" category="popup">
-                            <choices>
-                                <choice>Red</choice>
-                                <choice correct="yes">Blue</choice>
-                                <choice>Green</choice>
-                            </choices>
+                        <var name="$color1">
+                            <elements>
+                                <element>Red</element>
+                                <element correct="yes">Blue</element>
+                                <element>Green</element>
+                            </elements>
                         </var>
-                        <var name="$color2" category="buttons">
-                            <choices>
-                                <choice>Red</choice>
-                                <choice correct="yes">Blue</choice>
-                                <choice>Green</choice>
-                                <choice>None of these</choice>
-                            </choices>
+                        <var name="$color2">
+                            <elements>
+                                <element>Red</element>
+                                <element correct="yes">Blue</element>
+                                <element>Green</element>
+                                <element>None of these</element>
+                            </elements>
                         </var>
-                        <var name="$mc" category="checkboxes">
-                            <choices>
-                                <choice correct="yes"><m>e^{x^2}e^{1/x}</m></choice>
-                                <choice><m>\frac{e^{x^2}}{e^x}</m></choice>
-                                <choice correct="yes"><m>e^{x^2}e^{x^{-1}}</m></choice>
-                                <choice correct="yes"><m>e^{(x^3+1)/x}</m></choice>
-                                <choice><m>e^{x^2}+e^{1/x}</m></choice>
-                                <choice>None of the above</choice>
-                            </choices>
+                        <var name="$mc">
+                            <elements>
+                                <element correct="yes"><m>e^{x^2}e^{1/x}</m></element>
+                                <element><m>\frac{e^{x^2}}{e^x}</m></element>
+                                <element correct="yes"><m>e^{x^2}e^{x^{-1}}</m></element>
+                                <element correct="yes"><m>e^{(x^3+1)/x}</m></element>
+                                <element><m>e^{x^2}+e^{1/x}</m></element>
+                                <element>None of the above</element>
+                            </elements>
                         </var>
 
                         <pg-code>
@@ -273,13 +273,13 @@
                     </setup>
 
                     <statement>
-                        <p>My favorite color is <answer var="$color1"/>.</p>
+                        <p>My favorite color is <answer var="$color1" format="popup"/>.</p>
 
                         <p>My favorite color is</p>
-                        <p><answer var="$color2"/></p>
+                        <p><answer var="$color2" format="buttons"/></p>
 
                         <p>Select all expressions that are equivalent to <m>e^{x^2 + 1/x}</m>.  There may be more than one correct answer.</p>
-                        <p><answer var="$mc"/></p>
+                        <p><answer var="$mc" format="checkboxes"/></p>
                     </statement>
 
                     <solution>

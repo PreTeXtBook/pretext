@@ -712,7 +712,7 @@
     <xsl:variable name="category" select="$problem/setup/var[@name=$varname]/@category" />
     <xsl:text>[</xsl:text> 
     <xsl:value-of select="@name" />
-    <xsl:if test="$category='checkboxes'">
+    <xsl:if test="$problem/statement//answer[@var=$varname and @format='checkboxes']">
         <xsl:text>->correct_ans()</xsl:text>
     </xsl:if>
     <xsl:text>]</xsl:text>
@@ -737,7 +737,6 @@
         </xsl:choose>
     </xsl:variable>
     <xsl:call-template name="answer-field">
-        <xsl:with-param name="category" select="$category"/>
         <xsl:with-param name="format" select="$format"/>
     </xsl:call-template>
     <xsl:call-template name="answer-format-help">
@@ -749,7 +748,7 @@
     <xsl:param name="category"/>
     <xsl:param name="format"/>
     <xsl:choose>
-        <xsl:when test="$category='checkboxes'">
+        <xsl:when test="$format='checkboxes'">
             <xsl:call-template name="checkboxes-answer-field"/>
         </xsl:when>
         <xsl:when test="$format='essay'">
@@ -924,19 +923,19 @@
         <xsl:text>    "niceTables.pl",&#xa;</xsl:text>
     </xsl:if>
     <!-- popup menu multiple choice answers                          -->
-    <xsl:if test="./setup/var[@category='popup']">
+    <xsl:if test=".//answer[@format='popup']">
         <xsl:text>    "parserPopUp.pl",&#xa;</xsl:text>
     </xsl:if>
     <!-- radio buttons multiple choice answers                       -->
-    <xsl:if test="./setup/var[@category='buttons']">
+    <xsl:if test=".//answer[@format='buttons']">
         <xsl:text>    "parserRadioButtons.pl",&#xa;</xsl:text>
     </xsl:if>
     <!-- checkboxes multiple choice answers                          -->
-    <xsl:if test="./setup/var[@category='checkboxes']">
+    <xsl:if test=".//answer[@format='checkboxes']">
         <xsl:text>    "PGchoicemacros.pl",&#xa;</xsl:text>
     </xsl:if>
     <!-- essay answers, no var in setup, just answer                 -->
-    <xsl:if test="./statement//answer[@format='essay']">
+    <xsl:if test=".//answer[@format='essay']">
         <xsl:text>    "PGessaymacros.pl",&#xa;</xsl:text>
     </xsl:if>
     <!-- scaffolded problems -->
@@ -994,6 +993,7 @@
     <xsl:param name="format" select="none"/>
     <xsl:if test="($pg.answer.format.help = 'yes') and not($format = 'none')">
         <xsl:choose>
+            <xsl:when test="($format='none') or ($format='popup')  or ($format='buttons') or ($format='checkboxes')"/>
             <xsl:when test="$format='essay'">
                 <xsl:text> [@essay_help()@]*</xsl:text>
             </xsl:when>
@@ -1017,6 +1017,12 @@
     <xsl:choose>
         <xsl:when test="$category='angle'">
             <xsl:text>angles</xsl:text>
+        </xsl:when>
+        <xsl:when test="$category='buttons'">
+            <xsl:text>none</xsl:text>
+        </xsl:when>
+        <xsl:when test="$category='checkboxes'">
+            <xsl:text>none</xsl:text>
         </xsl:when>
         <xsl:when test="$category='decimal'">
             <xsl:text>decimals</xsl:text>
@@ -1047,6 +1053,9 @@
         </xsl:when>
         <xsl:when test="$category='point'">
             <xsl:text>points</xsl:text>
+        </xsl:when>
+        <xsl:when test="$category='popup'">
+            <xsl:text>none</xsl:text>
         </xsl:when>
         <xsl:when test="$category='syntax'">
             <xsl:text>syntax</xsl:text>
