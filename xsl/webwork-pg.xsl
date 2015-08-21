@@ -731,6 +731,13 @@
         <xsl:text>->correct_ans()</xsl:text>
     </xsl:if>
     <xsl:text>]</xsl:text>
+    <xsl:if test="not($problem/setup/var[@name=$varname]/static) and not($problem/setup/var[@name=$varname]/elements/element)">
+        <xsl:message>
+            <xsl:text>MBX:WARNING: A WeBWorK problem body uses a var (name="</xsl:text>
+            <xsl:value-of select="$varname"/>
+            <xsl:text>") for which there is no static value declared</xsl:text>
+        </xsl:message>
+    </xsl:if>
 </xsl:template>
 
 <!-- PGML answer input               -->
@@ -738,6 +745,15 @@
 <xsl:template match="webwork//statement//answer">
     <xsl:apply-templates select="." mode="field"/>
     <xsl:apply-templates select="." mode="format-help"/>
+    <xsl:variable name="problem" select="ancestor::webwork" />
+    <xsl:variable name="varname" select="@var" />
+    <xsl:if test="not($problem/setup/var[@name=$varname]/static) and not($problem/setup/var[@name=$varname]/elements/element) and @var">
+        <xsl:message>
+            <xsl:text>MBX:WARNING: A WeBWorK problem body uses an answer field (var="</xsl:text>
+            <xsl:value-of select="$varname"/>
+            <xsl:text>") for which there is no static value declared</xsl:text>
+        </xsl:message>
+    </xsl:if>
 </xsl:template>
 
 <!-- (presumed) MathObject answers -->

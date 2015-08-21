@@ -170,6 +170,9 @@
                         <var name="$expression">
                             <static>x^5\cdot x^8</static>
                         </var>
+                        <var name="$answer">
+                            <static>x^{13}</static>
+                        </var>
 
                         <pg-code>
                             $a = Compute(random(1, 9, 1));
@@ -265,7 +268,7 @@
                             <static>-2</static>
                         </var>
 
-                        <var name="$multians">
+                        <var name="$multians1">
                             <static>1.5, 2</static>
                         </var>
 
