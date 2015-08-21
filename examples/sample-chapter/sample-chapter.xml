@@ -591,6 +591,110 @@
             </exercise>
 
         </section>
+        <section>
+            <title>Tables</title>
+
+            <p>Tables can be made using the existing syntax and options that MBX offers for table making, with a few exceptions. As of summer 2015, the exceptions are that individual cells cannot have <c>bottom</c> border attributes and individual columns cannot have <c>top</c> border attributes. Also, while MBX table borders are generally <c>minor</c>, <c>medium</c>, or <c>major</c>, when these borders are used in a WeBWorK problem that is rendered as a hard copy problem from within WeBWorK, the only thickness option corresponds to <c>minor</c>.</p>
+
+            <exercise>
+                <title>Complete this Table</title>
+
+                <webwork>
+                    <setup>
+                        <var name="$a1" category="integer">
+                            <static>2</static>
+                        </var>
+                        <var name="$a2" category="integer">
+                            <static>4</static>
+                        </var>
+                        <var name="$b1" category="integer">
+                            <static>5</static>
+                        </var>
+                        <var name="$b2" category="integer">
+                            <static>7</static>
+                        </var>
+                        <var name="$p11" category="integer">
+                            <static>10</static>
+                        </var>
+                        <var name="$p12" category="integer">
+                            <static>14</static>
+                        </var>
+                        <var name="$p21" category="integer">
+                            <static>20</static>
+                        </var>
+                        <var name="$p22" category="integer">
+                            <static>28</static>
+                        </var>
+
+                        <pg-code>
+                            $a1 = random(2,9,1);
+                            $a2 = random(2,9,1);
+                            $b1 = random(2,9,1);
+                            $b2 = random(2,9,1);
+                            $p11 = $a1*$b1;
+                            $p12 = $a1*$b2;
+                            $p21 = $a2*$b1;
+                            $p22 = $a2*$b2;
+                        </pg-code>
+                    </setup>
+
+                    <statement>
+                        <p>Complete this multiplication table.</p>
+
+                        <table>
+                            <tabular bottom="minor" right="minor" halign="center">
+                                <col halign="right" right="major"/>
+                                <col />
+                                <col />
+                                <row bottom="major">
+                                    <cell><m>\times</m></cell>
+                                    <cell><m><var name="$a1"/></m></cell>
+                                    <cell><m><var name="$a2"/></m></cell>
+                                </row>
+                                <row>
+                                    <cell><m><var name="$b1"/></m></cell>
+                                    <cell><answer var="$p11" format="none"/></cell>
+                                    <cell><answer var="$p21" format="none"/></cell>
+                                </row>
+                                <row>
+                                    <cell><m><var name="$b2"/></m></cell>
+                                    <cell><answer var="$p12" format="none"/></cell>
+                                    <cell><answer var="$p22" format="none"/></cell>
+                                </row>
+                            </tabular>
+                        </table>
+                    </statement>
+
+                    <solution>
+                        <table>
+                            <tabular bottom="minor" right="minor" halign="center">
+                                <col halign="right" right="major"/>
+                                <col />
+                                <col />
+                                <row bottom="major">
+                                    <cell><m>\times</m></cell>
+                                    <cell><m><var name="$a1"/></m></cell>
+                                    <cell><m><var name="$a2"/></m></cell>
+                                </row>
+                                <row>
+                                    <cell><m><var name="$b1"/></m></cell>
+                                    <cell><m><var name="$p11"/></m></cell>
+                                    <cell><m><var name="$p12"/></m></cell>
+                                </row>
+                                <row>
+                                    <cell><m><var name="$b2"/></m></cell>
+                                    <cell><m><var name="$p21"/></m></cell>
+                                    <cell><m><var name="$p22"/></m></cell>
+                                </row>
+                            </tabular>
+                        </table>
+
+                    </solution>
+                </webwork>
+
+            </exercise>
+ 
+        </section>
 
     </article>
 </mathbook>
