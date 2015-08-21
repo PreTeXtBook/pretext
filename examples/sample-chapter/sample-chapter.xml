@@ -31,7 +31,7 @@
 
     <!-- "docinfo" is like metadata, it is necessary technical -->
     <!-- information which a reader mostly will never see. -->
-   
+
     <docinfo>
 
         <!-- In the HTML version there is room for a   -->
@@ -43,6 +43,7 @@
         Whitespace and line breaks are irrelevant here.
         These are "write once, use everywhere".
         -->
+        <!-- not implemented yet for math within webwork-->
         <macros>
         \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4}
         \newcommand{\indefiniteintegral}[2]{\int#1\,d#2}
@@ -95,7 +96,7 @@
             </titlepage>
 
             <abstract>
-                <p>This is a sample of integrating <wbwk /> homework problems into content authored with MathBook XML.  While technically an example of MathBook's <c>article</c> format, it is intended to closely resemble a (first) chapter of a textbbok that is divided into sections.</p>
+                <p>This is a sample of integrating <wbwk /> homework problems into content authored with MathBook XML.  While technically an example of MathBook's <c>article</c> format, it is intended to closely resemble a (first) chapter of a MathBook <c>book</c> that is divided into sections.</p>
             </abstract>
 
         </frontmatter>
@@ -103,21 +104,17 @@
         <section>
             <title>Arithmetic</title>
 
-            <p>A simple, but functional example to begin.</p>
+            <p>Some questions with quantitative answers.</p>
 
             <exercise>
                 <title>Adding Single-Digit Integers</title>
 
+                <statement>
+                    <p>A simple, but functional example to begin.</p>
+                </statement>
+
                 <webwork xml:id="integer-addition" height="250">
                     <title>Integer Addition</title>
-
-                    <!-- for testing extra macros
-                         remove once we have bigger examples
-                    <macros>
-                        <macro>Test1.pl</macro>
-                        <macro>Test2.pl</macro>
-                    </macros>
-                    -->
 
                     <setup>
                         <var name="$a">
@@ -146,19 +143,94 @@
                     </solution>
                 </webwork>
             </exercise>
-        </section>
-        
-        <section>
-            <title>The Quadratic Equation</title>
 
-            <p>The next theorem gives us a formula for the solutions of a second-degree polynomial equation.</p>
-
-            <theorem xml:id="theorem-quadratic-equation">
-                <title>Quadratic Equation</title>
+            <exercise>
+                <title>Special Answer Checking</title>
 
                 <statement>
-                    <p>Given the second-degree polynomial equation <m>ax^2 + bx + c = 0</m>, solutions are given by <me>x = \frac{-b\pm\sqrt{b^2-4ac}}{2a}.</me></p>
+                    <p>In the following, try entering wrong answers, including an answer where you just repeat the statment without simplification, and another where you multiply the two exponents (instead of adding them, which would be correct.)</p>
                 </statement>
+
+                <webwork>
+                    <title>Multiplication with Exponents</title>
+                    <macros>
+                        <macro>contextLimitedPolynomial.pl</macro>
+                    </macros>
+
+                    <setup>
+                        <var name="$a">
+                            <static>5</static>
+                        </var>
+                        <var name="$b">
+                            <static>8</static>
+                        </var>
+                        <var name="$c">
+                            <static>13</static>
+                        </var>
+                        <var name="$expression">
+                            <static>x^5\cdot x^8</static>
+                        </var>
+
+                        <pg-code>
+                            $a = Compute(random(1, 9, 1));
+                            $b = Compute(random(1, 9, 1));
+                            $c = $a + $b;
+                            $expression = Formula("x^($a)*x^($b)");
+
+                            Context("LimitedPolynomial-Strict");
+                            # custom error message
+                            Context()->{error}{msg}{"A variable can appear only once in each term of a polynomial"}
+                                = "Your answer must be fully simplified";
+
+                            $answer = Formula("x^($c)");
+                            $product = $a*$b;
+                            $evaluator = $answer->cmp()->withPostFilter(AnswerHints(
+                                [Compute("x^($product)")] =>
+                                "When multiplying terms with the same base, you do not multiply the exponents."));
+                        </pg-code>
+                    </setup>
+
+                    <statement>
+                        <p>Use the properties of exponents to simplify <m><var name="$expression"/></m>.</p>
+
+                        <p halign="center"><m><var name="$expression"/>=</m><answer var="$answer" evaluator="$evaluator" width="8"/></p>
+
+                    </statement>
+
+                    <solution>
+                        <p>We <em>add</em> the exponents as follows:<md>
+                        <mrow>x^{<var name="$a"/>}\cdot x^{<var name="$b"/>}&amp;=x^{<var name="$a"/>+<var name="$b"/>}</mrow>
+                        <mrow>&amp;=x^{<var name="$c"/>}</mrow>
+                        </md></p>
+                    </solution>
+                </webwork>
+            </exercise>
+
+        </section>
+
+        <section>
+            <title>The Quadratic Formula</title>
+
+            <p>The next theorem gives us a formula for the solutions of a second-degree polynomial equation. Note how the WeBWorK problem references the theorem.</p>
+
+            <theorem xml:id="theorem-quadratic-formula">
+                <title>Quadratic Formula</title>
+
+                <statement>
+                    <p>Given the second-degree polynomial equation <m>ax^2 + bx + c = 0</m>, where <m>a\neq0</m>, solutions are given by <me>x = \frac{-b\pm\sqrt{b^2-4ac}}{2a}.</me></p>
+                </statement>
+                <proof>
+                    <p><md>
+                    <mrow>ax^2 + bx + c &amp;= 0</mrow>
+                    <mrow>ax^2 + bx &amp;= -c</mrow>
+                    <mrow>4ax^2 + 4bx &amp;= -4c</mrow>
+                    <mrow>4ax^2 + 4bx + b^2 &amp;= b^2 - 4ac</mrow>
+                    <mrow>(2ax + b)^2 &amp;= b^2 - 4ac</mrow>
+                    <mrow>2ax + b &amp;=\pm\sqrt{b^2 - 4ac}</mrow>
+                    <mrow>2ax &amp;=-b\pm\sqrt{b^2 - 4ac}</mrow>
+                    <mrow>x &amp;=\frac{-b\pm\sqrt{b^2 - 4ac}}{2a}</mrow>
+                    </md></p>
+                </proof>
             </theorem>
 
             <exercise>
@@ -231,7 +303,9 @@
                         <title>Part 1: Identify the coefficients</title>
 
                         <statement>
-                            <p>Consider the quadratic equation given by <m><var name="$quadratic" /> = 0</m>.  First, identify the coefficients for the quadratic using the standard form as used in <xref ref="theorem-quadratic-equation" autoname="yes" />, <m>ax^2 + bx + c = 0</m>:<br /><m>a=</m> <answer var="$a" width="4" />, <m>b=</m> <answer var="$b" width="4" />, <m>c=</m> <answer var="$c" width="4" /></p>
+                            <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic using the standard form as used in <xref ref="theorem-quadratic-formula" autoname="yes" />, <m>ax^2 + bx + c = 0</m>:</p>
+
+                            <p halign='center'><m>a=</m> <answer var="$a" width="4" />, <m>b=</m> <answer var="$b" width="4" />, <m>c=</m> <answer var="$c" width="4" /></p>
                         </statement>
 
                         <solution>
@@ -244,11 +318,11 @@
 
                         <statement>
                             <p>Using the quadratic formula, solve <m><var name="$quadratic"/>=0</m>.</p>
-                            <p><m>x=</m> <answer var="$multians1" width="10"/> or <m>x=</m> <answer var="$multians1" width="10"/></p>
+                            <p halign='center'><m>x=</m> <answer var="$multians1" width="10"/> or <m>x=</m> <answer var="$multians1" width="10"/></p>
                         </statement>
 
                         <solution>
-                            <p>Recall that the quadratic formula is given in <xref ref="theorem-quadratic-equation" autoname="yes" />.</p>
+                            <p>Recall that the quadratic formula is given in <xref ref="theorem-quadratic-formula" autoname="yes" />.</p>
 
                             <p>You already identified <m>a = <var name="$a"/></m>, <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>, so the results are: <me>x = {-<var name="$b"/> + \sqrt{<var name="$b"/>^2 - 4(<var name="$a"/>)(<var name="$c"/>)} \over 2(<var name="$a"/>)} \approx <var name="$x1"/></me> or <me>x = {-<var name="$b"/> - \sqrt{<var name="$b"/>^2 - 4(<var name="$a"/>)(<var name="$c"/>)} \over 2(<var name="$a"/>)} \approx <var name="$x2"/></me></p>
                         </solution>
@@ -315,14 +389,18 @@
                     <title>Graphical Antiderivatives</title>
 
                     <statement>
-                        <p>Consult <xref ref="definition-antiderivative" autoname="yes" /> and the <xref ref="theorem-FTC" autonmae="title" /> to assist you with the following problem.</p>
+                        <p>Consult <xref ref="definition-antiderivative" autoname="yes" /> and the <xref ref="theorem-FTC" autoname="title" /> to assist you with the following problem.</p>
                     </statement>
 
-                    <webwork source="Library/FortLewis/Calc1/06-01-Antiderivatives-graphically/AF2/AF2.pg" height="750"/>
+                    <webwork source="Library/Rochester/setIntegrals4FTC/S05.03.FundThmCalc.PTP01.pg" height="750"/>
                 </exercise>
 
                 <exercise xml:id="ww-discuss-always-antiderivative">
                     <title>Every Continuous Function has an Antiderivative</title>
+
+                    <statement>
+                        <p>WeBWorK problems can be written to allow open-ended essay responses meant to be assessed later by the instructor. For anonymous access, no test field is provided. But if this problem were used within WeBWorK as part of a homework set, users could submit an answer.</p>
+                    </statement>
 
                     <webwork height="500">
                         <statement>
@@ -381,6 +459,134 @@
                         <p><tilde /></p>
                         <p><backslash /></p>
                     </statement>
+                </webwork>
+            </exercise>
+
+        </section>
+
+        <section>
+            <title>Multiple Choice</title>
+
+            <p>While free-response questions are generally preferred, sometimes the nature of a question lends itself to multiple choice.</p>
+
+            <exercise>
+                <title>Yes or no?</title>
+
+                <statement>
+                    <p>Note also that the solution to this problem uses an external link.</p>
+                </statement>
+
+                <webwork>
+
+                    <setup>
+                        <var name="$rational">
+                            <elements>
+                                <element>is</element>
+                                <element correct="yes">is not</element>
+                            </elements>
+                        </var>
+
+                        <pg-code>
+                            $rational = PopUp(
+                                ["?","is","is not",],
+                                "is not",
+                            );
+
+                        </pg-code>
+                    </setup>
+
+                    <statement>
+                        <p>The number <m>\sqrt{2}</m> <answer var="$rational" format="popup"/> rational.</p>
+
+                    </statement>
+
+                    <solution>
+                        <p>If <m>\sqrt{2}</m> were rational, then <m>\sqrt{2}=\frac{p}{q}</m>, with <m>p</m> and <m>q</m> coprime. But then <m>2q^2=p^2</m>. By <url href="https://en.wikipedia.org/wiki/Fundamental_theorem_of_arithmetic#Canonical_representation_of_a_positive_integer">the Fundamental Theorem of Arithmetic</url>, the power of <m>2</m> dividing the left side is odd, while the power of <m>2</m> dividing the right side is even. This is a contradiction, so <m>\sqrt{2}</m> <var name="$rational"/> rational.</p>
+                    </solution>
+
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <title>Choose one</title>
+
+                <webwork>
+
+                    <setup>
+                        <var name="$theorem">
+                            <elements>
+                                <element>The Quadrtatic Formula</element>
+                                <element correct="yes">The Fundamental Theorem of Calculus</element>
+                                <element>The Fundamental Theorem of Arithmetic</element>
+                            </elements>
+                        </var>
+
+                        <pg-code>
+                            $theorem = RadioButtons(
+                              ["The Quadrtatic Formula","The Fundamental Theorem of Calculus","The Fundamental Theorem of Arithmetic","None of these"],
+                              "The Fundamental Theorem of Calculus", # correct answer
+                              last => ["None of these"], # can be a list
+                            );
+
+                        </pg-code>
+                    </setup>
+
+                    <statement>
+                        <p>Which of the following suggest that differentiation and integration are inverse processes?</p>
+                        <p><answer var="$theorem" format="buttons"/></p>
+
+                    </statement>
+
+                    <solution>
+                        <p>The correct answer is <var name="$theorem"/>.</p>
+                    </solution>
+
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <title>Choose several</title>
+
+                <webwork>
+
+                    <setup>
+                        <var name="$expressions">
+                            <elements>
+                                <element correct="yes"><m>e^{x^2}e^{1/x}</m></element>
+                                <element><m>\frac{e^{x^2}}{e^x}</m></element>
+                                <element correct="yes"><m>e^{x^2}e^{x^{-1}}</m></element>
+                                <element correct="yes"><m>e^{(x^3+1)/x}</m></element>
+                                <element><m>e^{x^2}+e^{1/x}</m></element>
+                                <element>None of the above</element>
+                            </elements>
+                        </var>
+
+                        <pg-code>
+                            $expressions = new_checkbox_multiple_choice();
+                            $expressions -> qa (
+                            "A question can go here, but MBX ignores this",
+                            "\( e^{x^2} e^{1/x} \)$BR",
+                            "\( e^{x^2} e^{x^{-1}} \)$BR",
+                            "\( e^{ (x^3+1) / x } \)$BR",
+                            );
+                            $expressions -> extra(
+                            "\( \displaystyle \frac{ e^{x^2} }{ e^x } \)$BR",
+                            "\( e^{x^2} + e^{1/x} \)$BR",
+                            );
+                            $expressions -> makeLast("None of the above");
+
+                        </pg-code>
+                    </setup>
+
+                    <statement>
+                        <p>Select all expressions that are equivalent to <m>e^{x^2 + 1/x}</m>.  There may be more than one correct answer.</p>
+                        <p><answer var="$expressions" format="checkboxes"/></p>
+                    </statement>
+
+                    <solution>
+                        <p>The correct answer is <var name="$expressions"/>.</p>
+                    </solution>
+
                 </webwork>
             </exercise>
 
