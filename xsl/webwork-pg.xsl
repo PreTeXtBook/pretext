@@ -863,6 +863,31 @@
     <xsl:text>``] &lt;&lt;&#xa;&#xa;</xsl:text>
 </xsl:template>
 
+<xsl:template match="webwork//md">
+    <xsl:text>&#xa;&#xa;&gt;&gt; </xsl:text>
+    <xsl:choose>
+        <xsl:when test="contains(., '&amp;')">
+            <xsl:text>[``\begin{aligned}&#xa;</xsl:text>
+            <xsl:apply-templates select="mrow" />
+            <xsl:text>\end{aligned}``]</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>[``\begin{gathered}&#xa;</xsl:text>
+            <xsl:apply-templates select="mrow" />
+            <xsl:text>\end{gathered}``]</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text> &lt;&lt;&#xa;&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="webwork//md/mrow">
+    <xsl:apply-templates select="text()|var" />
+    <xsl:if test="position()!=last()">
+       <xsl:text>\\</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- re-activate, since MBX kills all titles -->
 <xsl:template match="webwork//title">
