@@ -166,6 +166,30 @@
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<xsl:template match="webwork//p[@halign='center']">
+    <xsl:text>&gt;&gt; </xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>&lt;&lt;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="webwork//url">
+    <xsl:text>[@htmlLink("</xsl:text>
+    <xsl:value-of select="@href" />
+    <xsl:text>","</xsl:text>
+    <xsl:choose>
+        <xsl:when test="not(*) and not(normalize-space())">
+            <xsl:value-of select="@href" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates />
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>","TARGET='_blank'")@]*</xsl:text>
+</xsl:template>
+
+
 <!-- Implement PGML unordered lists                 -->
 <xsl:template match="webwork//ul|webwork//ol">
     <xsl:apply-templates />
@@ -1220,6 +1244,25 @@
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- Nonbreaking space -->
+<!-- contingent upon a pull request to WeBWorK -->
+<xsl:template match="webwork//nbsp">
+    <xsl:text>[$NBSP]*</xsl:text>
+</xsl:template>
+
+<!-- En dash           -->
+<!-- contingent upon a pull request to WeBWorK -->
+<xsl:template match="webwork//ndash">
+    <xsl:text>[$NDASH]*</xsl:text>
+</xsl:template>
+
+<!-- Em dash           -->
+<!-- contingent upon a pull request to WeBWorK -->
+<xsl:template match="webwork//mdash">
+    <xsl:text>[$MDASH]*</xsl:text>
+</xsl:template>
+
 
 <!-- Preformatted Text -->
 <!-- "sanitize-text-output" analyzes *all* lines for left margin -->
