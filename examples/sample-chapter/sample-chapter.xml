@@ -43,7 +43,7 @@
         Whitespace and line breaks are irrelevant here.
         These are "write once, use everywhere".
         -->
-        <!-- not implemented yet for math within webwork-->
+        <!-- requires each to be on its own line, and to use the structure \newcommand{<name>}{<command>} -->
         <macros>
         \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4}
         \newcommand{\indefiniteintegral}[2]{\int#1\,d#2}
@@ -407,7 +407,7 @@
 
                     <webwork height="500">
                         <statement>
-                            <p>Explain how we can use <xref ref="corollary-FTC-derivative" autoname="yes" /> to say that every continuous function <em>always</em> has a derivative.</p>
+                            <p>Explain how we can use <xref ref="corollary-FTC-derivative" autoname="yes" /> to say that every continuous function <em>always</em> has a derivative. (And we will demonstrate here that you can use a  macro from <c>docinfo</c>: <m>\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)</m>. It will work in the WeBWorK problem, regardelss of whether you are using images, MathJax, or hardcopy.)</p>
                             <answer format="essay" />
                         </statement>
                     </webwork>

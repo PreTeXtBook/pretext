@@ -725,7 +725,7 @@
     <xsl:variable name="varname" select="@name" />
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="category" select="$problem/setup/var[@name=$varname]/@category" />
-    <xsl:text>[</xsl:text> 
+    <xsl:text>[</xsl:text>
     <xsl:value-of select="@name" />
     <xsl:if test="$problem/statement//answer[@var=$varname and @format='checkboxes']">
         <xsl:text>->correct_ans()</xsl:text>
@@ -863,18 +863,21 @@
 <!-- NB: we allow the "var" element as a child -->
 <xsl:template match= "webwork//m">
     <xsl:text>[`</xsl:text>
+    <xsl:call-template name="write-macros"/>
     <xsl:apply-templates select="text()|var" />
     <xsl:text>`]</xsl:text>
 </xsl:template>
 
 <xsl:template match= "webwork//tabular//m">
     <xsl:text>$EmPtYsTrInG".PGML::Format('[`</xsl:text>
+    <xsl:call-template name="write-macros"/>
     <xsl:apply-templates select="text()|var" />
     <xsl:text>`]')."$EmPtYsTrInG </xsl:text>
 </xsl:template>
 
 <xsl:template match="webwork//me">
     <xsl:text>&#xa;&#xa;>> [``</xsl:text>
+    <xsl:call-template name="write-macros"/>
     <xsl:apply-templates select="text()|var" />
     <xsl:text>``] &lt;&lt;&#xa;&#xa;</xsl:text>
 </xsl:template>
@@ -883,12 +886,16 @@
     <xsl:text>&#xa;&#xa;&gt;&gt; </xsl:text>
     <xsl:choose>
         <xsl:when test="contains(., '&amp;')">
-            <xsl:text>[``\begin{aligned}&#xa;</xsl:text>
+            <xsl:text>[``</xsl:text>
+            <xsl:call-template name="write-macros"/>
+            <xsl:text>\begin{aligned}&#xa;</xsl:text>
             <xsl:apply-templates select="mrow" />
             <xsl:text>\end{aligned}``]</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>[``\begin{gathered}&#xa;</xsl:text>
+            <xsl:text>[``</xsl:text>
+            <xsl:call-template name="write-macros"/>
+            <xsl:text>\begin{gathered}&#xa;</xsl:text>
             <xsl:apply-templates select="mrow" />
             <xsl:text>\end{gathered}``]</xsl:text>
         </xsl:otherwise>
@@ -902,6 +909,34 @@
        <xsl:text>\\</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template name="write-macros">
+    <xsl:param name="macros" select="/mathbook/docinfo/macros"/>
+    <xsl:variable name="trimmed-start">
+        <xsl:if test="contains($macros,'\newcommand{')">
+            <xsl:value-of select="substring-after($macros,'\newcommand{')"/>
+        </xsl:if>
+    </xsl:variable>
+    <xsl:variable name="macro-name">
+        <xsl:if test="contains($trimmed-start,'}')">
+            <xsl:value-of select="substring-before($trimmed-start,'}')"/>
+        </xsl:if>
+    </xsl:variable>
+    <xsl:variable name="macro-command">
+        <xsl:value-of select="substring-before($macros,'&#xa;')"/>
+    </xsl:variable>
+    <xsl:variable name="next-lines">
+        <xsl:value-of select="substring-after($macros,'&#xa;')"/>
+    </xsl:variable>
+    <xsl:if test="contains(.,$macro-name)">
+        <xsl:value-of select="normalize-space($macro-command)"/>
+    </xsl:if>
+    <xsl:if test="not($next-lines = '')">
+        <xsl:call-template name="write-macros">
+            <xsl:with-param name="macros" select="$next-lines"/>
+        </xsl:call-template>
+    </xsl:if>
 </xsl:template>
 
 
