@@ -957,7 +957,65 @@
 <!-- Includes file header blurb promoting MBX -->
 <xsl:template name="begin-problem">
     <xsl:call-template name="converter-blurb-perl" />
+    <xsl:call-template name="metadata" />
     <xsl:text>DOCUMENT();&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template name="metadata">
+    <xsl:text>## DBsubject(</xsl:text>
+
+    <xsl:text>)&#xa;</xsl:text>
+    <xsl:text>## DBchapter(</xsl:text>
+    <xsl:text>)&#xa;</xsl:text>
+    <xsl:text>## DBsection(</xsl:text>
+    <xsl:text>)&#xa;</xsl:text>
+    <xsl:text>## Level(</xsl:text>
+    <xsl:text>)&#xa;</xsl:text>
+    <xsl:text>## KEYWORDS(</xsl:text>
+    <xsl:text>)&#xa;</xsl:text>
+    <xsl:text>## TitleText1(</xsl:text>
+        <xsl:choose>
+            <xsl:when test="/mathbook/book">
+                <xsl:apply-templates select="/mathbook/book" mode="title-full" />
+            </xsl:when>
+            <xsl:when test="/mathbook/article">
+                <xsl:apply-templates select="/mathbook/article" mode="title-full" />
+            </xsl:when>
+        </xsl:choose>
+    <xsl:text>)&#xa;</xsl:text>
+    <xsl:text>## EditionText1(</xsl:text>
+    <xsl:text>)&#xa;</xsl:text>
+    <xsl:text>## AuthorText1(</xsl:text>
+        <xsl:choose>
+            <xsl:when test="/mathbook/book">
+                <xsl:for-each select="/mathbook/book/frontmatter/titlepage/author">
+                    <xsl:value-of select="personname"/>
+                    <xsl:if test="not(position()=last())">
+                        <xsl:text>, </xsl:text>
+                    </xsl:if>
+                </xsl:for-each>
+            </xsl:when>
+            <xsl:when test="/mathbook/article">
+                <xsl:for-each select="/mathbook/article/frontmatter/titlepage/author">
+                    <xsl:value-of select="personname"/>
+                    <xsl:if test="not(position()=last())">
+                        <xsl:text>, </xsl:text>
+                    </xsl:if>
+                </xsl:for-each>
+            </xsl:when>
+        </xsl:choose>
+    <xsl:text>)&#xa;</xsl:text>
+    <xsl:text>## Section1(</xsl:text>
+    <xsl:text>)&#xa;</xsl:text>
+    <xsl:text>## Problem1(</xsl:text>
+    <xsl:text>)&#xa;</xsl:text>
+    <xsl:text>## Author(</xsl:text>
+    <xsl:text>)&#xa;</xsl:text>
+    <xsl:text>## Institution(</xsl:text>
+    <xsl:text>)&#xa;</xsl:text>
+    <xsl:text>## Language(</xsl:text>
+        <xsl:value-of select="$document-language"/>
+    <xsl:text>)&#xa;&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Includes (localized) PG "COMMENT" promoting MBX -->
