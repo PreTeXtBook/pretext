@@ -99,7 +99,7 @@
         <xsl:element name="iframe">
             <xsl:attribute name="width">100%</xsl:attribute> <!-- MBX specific -->
             <xsl:attribute name="src">
-                <xsl:text>https://webwork-dev.pcc.edu/webwork2/html2xml?</xsl:text>
+                <xsl:text>https://webwork.pcc.edu/webwork2/html2xml?</xsl:text>
                 <xsl:text>&amp;answersSubmitted=0</xsl:text>
                 <xsl:choose>
                     <xsl:when test="@source">
@@ -197,7 +197,7 @@
         <xsl:element name="iframe">
             <xsl:attribute name="width">100%</xsl:attribute> <!-- MBX specific -->
             <xsl:attribute name="src">
-                <xsl:text>https://webwork-dev.pcc.edu/webwork2/html2xml?</xsl:text>
+                <xsl:text>https://webwork.pcc.edu/webwork2/html2xml?</xsl:text>
                 <xsl:text>&amp;answersSubmitted=0</xsl:text>
                 <xsl:choose>
                     <xsl:when test="@source">
@@ -254,7 +254,7 @@
 <!-- Requires MBX to incorporate in page headers  -->
 <xsl:template name="webwork">
     <!-- <link href="https://hosted2.webwork.rochester.edu/webwork2_files/css/knowlstyle.css" rel="stylesheet" type="text/css" /> -->
-    <link href="https://webwork-dev.pcc.edu/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
+    <link href="https://webwork.pcc.edu/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
 </xsl:template>
 
 </xsl:stylesheet>
