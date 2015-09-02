@@ -213,7 +213,8 @@
             </exercise>
 
             <exercise>
-                <title>Multiple choice by popup, radio buttons, or checkbox</title>
+                <!--Checkbox not implemented yet; see note in webwork-pg.xsl  -->
+                <title>Multiple choice by popup, radio buttons<!--, or checkbox--></title>
 
                 <webwork xml:id="multiple-choice-popup-or-radio-buttons" height="1400">
 
@@ -233,7 +234,7 @@
                                 <element>None of these</element>
                             </elements>
                         </var>
-                        <var name="$mc">
+                        <!--<var name="$mc">
                             <elements>
                                 <element correct="yes"><m>e^{x^2}e^{1/x}</m></element>
                                 <element><m>\frac{e^{x^2}}{e^x}</m></element>
@@ -242,7 +243,7 @@
                                 <element><m>e^{x^2}+e^{1/x}</m></element>
                                 <element>None of the above</element>
                             </elements>
-                        </var>
+                        </var>-->
 
                         <pg-code>
                             $color1 = PopUp(
@@ -256,6 +257,9 @@
                               last => ["None of these"], # can be a list
                             );
 
+                        </pg-code>
+
+                        <!-- include below in pg-code once checkboxes implemented 
                             $mc = new_checkbox_multiple_choice();
                             $mc -> qa (
                             "A question can go here, but MBX ignores this",
@@ -268,8 +272,7 @@
                             "\( e^{x^2} + e^{1/x} \)$BR",
                             );
                             $mc -> makeLast("None of the above");
-
-                        </pg-code>
+                        -->
                     </setup>
 
                     <statement>
@@ -278,14 +281,14 @@
                         <p>My favorite color is</p>
                         <p><answer var="$color2" format="buttons"/></p>
 
-                        <p>Select all expressions that are equivalent to <m>e^{x^2 + 1/x}</m>.  There may be more than one correct answer.</p>
-                        <p><answer var="$mc" format="checkboxes"/></p>
+                        <!--<p>Select all expressions that are equivalent to <m>e^{x^2 + 1/x}</m>.  There may be more than one correct answer.</p>
+                        <p><answer var="$mc" format="checkboxes"/></p>-->
                     </statement>
 
                     <solution>
                         <p>The correct answer is <var name="$color1"/>.</p>
                         <p>The correct answer is <var name="$color2"/>.</p>
-                        <p>The correct answer is <var name="$mc"/>.</p>
+                        <!--<p>The correct answer is <var name="$mc"/>.</p>-->
                     </solution>
 
                 </webwork>

@@ -825,6 +825,10 @@
 </xsl:template>
 
 <!-- Checkbox answers -->
+<!-- TODO: not really supported yet. The checkbox handling in WeBWorK is technically broken. -->
+<!-- The issue is only surfacing when trying to do a checkbox problem from an iframe. Any    -->
+<!-- attempt to check multiple boxes and submit leads to only one box being seen as checked  -->
+<!-- by WeBWorK 2                                                                            --> 
 <xsl:template match="answer[@format='checkboxes']" mode="field">
     <xsl:text>    [@</xsl:text>
     <xsl:value-of select="@var"/>

@@ -518,7 +518,7 @@
                     <setup>
                         <var name="$theorem">
                             <elements>
-                                <element>The Quadrtatic Formula</element>
+                                <element>The Quadratic Formula</element>
                                 <element correct="yes">The Fundamental Theorem of Calculus</element>
                                 <element>The Fundamental Theorem of Arithmetic</element>
                             </elements>
@@ -526,7 +526,7 @@
 
                         <pg-code>
                             $theorem = RadioButtons(
-                              ["The Quadrtatic Formula","The Fundamental Theorem of Calculus","The Fundamental Theorem of Arithmetic","None of these"],
+                              ["The Quadratic Formula","The Fundamental Theorem of Calculus","The Fundamental Theorem of Arithmetic","None of these"],
                               "The Fundamental Theorem of Calculus", # correct answer
                               last => ["None of these"], # can be a list
                             );
@@ -547,7 +547,8 @@
                 </webwork>
             </exercise>
 
-            <exercise>
+            <!--Checkboxes not yet implemented fully. See note in webwork-pg.xsl -->
+            <!--<exercise>
                 <title>Choose several</title>
 
                 <webwork>
@@ -591,7 +592,7 @@
                     </solution>
 
                 </webwork>
-            </exercise>
+            </exercise>-->
 
         </section>
         <section>
