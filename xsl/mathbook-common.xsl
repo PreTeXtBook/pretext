@@ -24,7 +24,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xml="http://www.w3.org/XML/1998/namespace" 
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:exsl="http://exslt.org/common"
-    extension-element-prefixes="exsl date"
+    xmlns:str="http://exslt.org/strings"
+    extension-element-prefixes="exsl date str"
     xmlns:mb="http://mathbook.pugetsound.edu/"
     exclude-result-prefixes="mb"
 >
@@ -2702,6 +2703,21 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         <xsl:with-param name="lead-in"  select="'#'" />
         <xsl:with-param name="lead-out" select="'#'" />
     </xsl:call-template>
+</xsl:template>
+
+<!-- WeBWorK's editor is not monospaced, so the right border       -->
+<!-- looks ragged.  We effectively rubout the right margin,        -->
+<!-- then translate all asterisks to octothorpes.  The left margin -->
+<!-- becomes three octothorpes to not be confused with metadata    -->
+<!-- This can revert to  -perl  if the editor changes              -->
+<xsl:template name="converter-blurb-webwork">
+    <xsl:variable name="blurb">
+        <xsl:call-template name="converter-blurb">
+            <xsl:with-param name="lead-in"  select="'##'" />
+            <xsl:with-param name="lead-out" select="'XXX'" />
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="str:replace(str:replace($blurb, '*XXX', ''), '*', '#')" />
 </xsl:template>
 
 
