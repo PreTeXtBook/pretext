@@ -68,7 +68,7 @@
 <!-- comes from deep within the environment/knowl  -->
 <!-- scheme in MBX's mathbook-html.xsl conversion  -->
 <xsl:template match="webwork" mode="knowlized">
-    <script type="text/javascript" src="/Users/alexjordan/iframe-resizer/js/iframeResizer.min.js"></script>
+    <script type="text/javascript" src="https://webwork.pcc.edu/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
     <!-- Clickable, cribbed from "environment-hidden-factory" template -->
     <xsl:element name="div">
         <xsl:attribute name="class">
