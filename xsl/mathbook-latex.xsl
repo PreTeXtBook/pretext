@@ -1102,25 +1102,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% end:   copyright-page&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Dedication page is very plain         -->
-<!-- Includes a blank obverse              -->
-<!-- It should react appropriately to      -->
-<!-- several paragraphs (multiple authors) -->
-<xsl:template name="dedication-pages">
-    <xsl:text>%% begin: dedication-page&#xa;</xsl:text>
-    <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
-    <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
-    <xsl:apply-templates select="frontmatter/dedication" />
-    <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
-    <xsl:text>\clearpage&#xa;</xsl:text>
-    <xsl:text>%% end:   dedication-page&#xa;</xsl:text>
-    <xsl:text>%% begin: obverse-dedication-page (empty)&#xa;</xsl:text>
-    <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
-    <xsl:text>\null%&#xa;</xsl:text>
-    <xsl:text>\clearpage&#xa;</xsl:text>
-    <xsl:text>%% end:   obverse-dedication-page&#xa;</xsl:text>
-</xsl:template>
-
 <!-- Authors, editors, full info for titlepage -->
 <!-- http://stackoverflow.com/questions/2817664/xsl-how-to-tell-if-element-is-last-in-series -->
 <xsl:template match="author">
@@ -1208,7 +1189,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Front Matter, Books -->
 <!-- ################### -->
 
-<!-- Note: we temporarily bypass the dedications of books-->
 <xsl:template match="book/frontmatter" mode="content-wrap">
     <xsl:param name="content" />
     <!-- DTD: does the next line presume <frontmatter> is required? -->
@@ -1246,11 +1226,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="/mathbook/book" mode="title-page" />
     <!-- title page obverse is copyright, possibly empty -->
     <xsl:apply-templates select="/mathbook/book" mode="copyright-page" />
-    <!-- dedication pages are optional, template includes blank obverse -->
-    <!-- maybe as content-wrap/// -->
-    <xsl:if test="/mathbook/book/frontmatter/dedication">
-        <xsl:call-template name="dedication-pages" />
-    </xsl:if>
 </xsl:template>
 
 <!-- The <colophon> portion of <frontmatter>  -->
@@ -1268,8 +1243,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Preface, etc within \frontmatter is usually handled correctly by LaTeX -->
 <!-- Allow alternative titles, like "Preface to 2nd Edition"                -->
 <!-- But we use starred version anyway, so chapter headings react properly  -->
-<!-- DTD: enforce order: acknowledgements, forewords, prefaces -->
-<!-- TODO: add dedication, other frontmatter, move in title handling        -->
+<!-- DTD: enforce order: dedication, acknowledgements, forewords, prefaces -->
+<!-- TODO: add other frontmatter, move in title handling        -->
 <!-- TODO: add to headers, currently just CONTENTS, check backmatter        -->
 <xsl:template match="acknowledgement|foreword|preface" mode="content-wrap">
     <xsl:param name="content" />
@@ -1290,13 +1265,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Author biography migrates to the obverse of the   -->
-<!-- copyright page in LaTeX, sans any provided title. -->
-<!-- So we kill this part of the front matter as       -->
-<!-- a section of its own.  (In HTML the material      -->
-<!-- is its own titled division).                      -->
-<xsl:template match="book/frontmatter/biography" mode="content-wrap" />
-<xsl:template match="book/frontmatter/biography" mode="file-wrap" />
+<!-- Dedication page is very plain, with a blank obverse     -->
+<!-- Accomodates multiple recipient (eg if multiple authors) -->
+<xsl:template match="dedication" mode="content-wrap">
+    <xsl:param name="content" />
+    <xsl:text>%% begin: dedication-page&#xa;</xsl:text>
+    <xsl:text>\cleardoublepage&#xa;</xsl:text>
+    <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
+    <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
+    <!-- paragraphs only, one per dedication -->
+    <xsl:apply-templates select="p"/>
+    <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
+    <xsl:text>\clearpage&#xa;</xsl:text>
+    <xsl:text>%% end:   dedication-page&#xa;</xsl:text>
+    <xsl:text>%% begin: obverse-dedication-page (empty)&#xa;</xsl:text>
+    <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
+    <xsl:text>\null%&#xa;</xsl:text>
+    <xsl:text>\clearpage&#xa;</xsl:text>
+    <xsl:text>%% end:   obverse-dedication-page&#xa;</xsl:text>
+</xsl:template>
 
 <!-- Dedications are meant to be very short      -->
 <!-- so are each a single paragraph and          -->
@@ -1312,6 +1299,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%&#xa;</xsl:text>
     <xsl:text>\end{center}&#xa;</xsl:text>
 </xsl:template>
+
+<!-- Author biography migrates to the obverse of the   -->
+<!-- copyright page in LaTeX, sans any provided title. -->
+<!-- So we kill this part of the front matter as       -->
+<!-- a section of its own.  (In HTML the material      -->
+<!-- is its own titled division).                      -->
+<xsl:template match="book/frontmatter/biography" mode="content-wrap" />
+<xsl:template match="book/frontmatter/biography" mode="file-wrap" />
 
 <!-- ############ -->
 <!-- Back Matter -->
