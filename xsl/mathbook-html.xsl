@@ -84,11 +84,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Navigation -->
 <!-- Navigation may follow two different logical models:                     -->
 <!--   (a) Linear, Prev/Next - depth-first search, linear layout like a book -->
-<!--       No Up button, Previous and Next take you to the adjacent "page"   -->
+<!--       Previous and Next take you to the adjacent "page"                 -->
 <!--   (b) Tree, Prev/Up/Next - explicitly traverse the document tree        -->
 <!--       Prev and Next remain at same depth/level in tree                  -->
 <!--       Must follow a summary link to descend to finer subdivisions       -->
-<!-- 'linear' is the default, 'tree' is an option                           -->
+<!--   'linear' is the default, 'tree' is an option                          -->
 <xsl:param name="html.navigation.logic"  select="'linear'" />
 <!-- The "up" button is optional given the contents sidebar, default is to have it -->
 <xsl:param name="html.navigation.upbutton"  select="'yes'" />
@@ -98,7 +98,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######### -->
 <!-- Variables -->
 <!-- ######### -->
-
 <!-- Variables that affect HTML creation -->
 <!-- More in the common file             -->
 
@@ -155,7 +154,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 <xsl:variable name="nav-style">
-    <xsl:value-of select="$html.navigation.style" />
+    <xsl:choose>
+        <xsl:when test="$html.navigation.style='full'">
+            <xsl:text>full</xsl:text>
+        </xsl:when>
+        <xsl:when test="$html.navigation.style='compact'">
+            <xsl:text>compact</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message terminate='yes'>MBX:ERROR: 'html.navigation.style' must be 'full' or 'compact', not '<xsl:value-of select="$html.navigation.style" />.'  Quitting...</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:variable>
 
 <!-- ############## -->
@@ -3395,7 +3404,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- Navigation Sections -->
 <!--                     -->
 
-<!-- Button code, <a href=""> when active -->
+<!-- Button code, <a href=""> when active   -->
 <!-- <span> with "disabled" class otherwise -->
 <xsl:template match="*" mode="previous-button">
     <xsl:variable name="previous-url">
@@ -3493,38 +3502,111 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     </xsl:choose>
 </xsl:template>
 
-<!-- Primary Navigation Panel         -->
-<!-- For smaller modes, like phones   -->
-<!-- Includes ToC, Annotation buttons -->
+<!-- Compact Buttons -->
+<!-- These get smashed consecutively into a single "tool-bar" -->
+<xsl:template match="*" mode="compact-buttons">
+    <!-- URL formation, maybe this could be consolidated with above versions -->
+    <xsl:variable name="previous-url">
+        <xsl:choose>
+            <xsl:when test="$nav-logic='linear'">
+                <xsl:apply-templates select="." mode="previous-linear-url" />
+            </xsl:when>
+            <xsl:when test="$nav-logic='tree'">
+                <xsl:apply-templates select="." mode="previous-tree-url" />
+            </xsl:when>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="up-url">
+        <xsl:apply-templates select="." mode="up-url" />
+    </xsl:variable>
+    <xsl:variable name="next-url">
+        <xsl:choose>
+            <xsl:when test="$nav-logic='linear'">
+                <xsl:apply-templates select="." mode="next-linear-url" />
+            </xsl:when>
+            <xsl:when test="$nav-logic='tree'">
+                <xsl:apply-templates select="." mode="next-tree-url" />
+            </xsl:when>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- toolbar-item when aligned right, get placed right: first in, first right -->
+    <!-- so they apparently seem in the reversed order here and in HTML output    -->
+    <!-- Empty URL, then no button                                                -->
+    <xsl:if test="not($next-url = '')">
+        <div class="toolbar-item">
+            <a href="{$next-url}">
+                <svg height="50" width="60" viewBox="0 50 110 100" xmlns="https://www.w3.org/2000/svg" >
+                    <polygon points="110,100 75,75 0,75 0,125 75,125 " style="fill:darkred;stroke:maroon;stroke-width:1" />
+                    <text x="13" y="108" fill="blanchedalmond" font-size="32">next</text>
+                </svg>
+            </a>
+        </div>
+    </xsl:if>
+    <xsl:if test="not($up-url = '')">
+        <div class="toolbar-item">
+            <a href="{$up-url}">
+                <svg height="50" width="60" viewBox="0 50 80 100" xmlns="https://www.w3.org/2000/svg" >
+                    <polygon points="75,75 37,65 0,75 0,125 75,125 " style="fill:blanchedalmond;stroke:burlywood;stroke-width:1" />
+                    <text x="13" y="108" fill="maroon" font-size="32">up</text>
+                </svg>
+            </a>
+        </div>
+    </xsl:if>
+    <xsl:if test="not($previous-url = '')">
+        <div class="toolbar-item">
+            <a href="{$previous-url}">
+                <svg height="50" width="60" viewBox="-10 50 110 100" xmlns="https://www.w3.org/2000/svg" >
+                    <polygon points="-10,100 25,75 100,75 100,125 25,125 " style="fill:blanchedalmond;stroke:burlywood;stroke-width:1" />
+                    <text x="28" y="108" fill="maroon" font-size="32">prev</text>
+                </svg>
+            </a>
+        </div>
+    </xsl:if>
+</xsl:template>
+
+<!-- Primary Navigation Panels -->
+<!-- ToC, Prev/Up/Next/Annotation buttons  -->
+<!-- Also organized for small screen modes -->
 <xsl:template match="*" mode="primary-navigation">
     <nav id="primary-navbar">
         <div class="container">
             <!-- Several buttons across the top -->
             <div class="navbar-top-buttons">
-                <!-- "contents" button is uniform across logic -->
+                <!-- "contents" button is uniform across logic, style -->
                 <button class="sidebar-left-toggle-button button active">
                     <xsl:call-template name="type-name">
                         <xsl:with-param name="string-id" select="'toc'" />
                     </xsl:call-template>
                 </button>
-                <xsl:element name="div">
-                    <xsl:attribute name="class">
-                        <!-- 3 or 4 buttons, depending on Up Button choice -->
-                        <xsl:choose>
-                            <xsl:when test="$nav-upbutton='yes'">
-                                <xsl:text>tree-nav toolbar toolbar-divisor-3</xsl:text>
-                            </xsl:when>
-                            <xsl:when test="$nav-upbutton='no'">
-                                <xsl:text>tree-nav toolbar toolbar-divisor-2</xsl:text>
-                            </xsl:when>
-                        </xsl:choose>
-                    </xsl:attribute>
-                    <xsl:apply-templates select="." mode="previous-button" />
-                    <xsl:if test="$nav-upbutton='yes'">
-                        <xsl:apply-templates select="." mode="up-button" />
-                    </xsl:if>
-                    <xsl:apply-templates select="." mode="next-button" />
-                </xsl:element>
+                <!-- Prev/Up/Next buttons on top, according to options -->
+                <xsl:choose>
+                    <xsl:when test="$nav-style = 'full'">
+                        <xsl:element name="div">
+                            <xsl:attribute name="class">
+                                <!-- 3 or 4 buttons, depending on Up Button choice -->
+                                <xsl:choose>
+                                    <xsl:when test="$nav-upbutton='yes'">
+                                        <xsl:text>tree-nav toolbar toolbar-divisor-3</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test="$nav-upbutton='no'">
+                                        <xsl:text>tree-nav toolbar toolbar-divisor-2</xsl:text>
+                                    </xsl:when>
+                                </xsl:choose>
+                            </xsl:attribute>
+                            <xsl:apply-templates select="." mode="previous-button" />
+                            <xsl:if test="$nav-upbutton='yes'">
+                                <xsl:apply-templates select="." mode="up-button" />
+                            </xsl:if>
+                            <xsl:apply-templates select="." mode="next-button" />
+                        </xsl:element>
+                    </xsl:when>
+                    <xsl:when test="$nav-style = 'compact'">
+                        <div class="toolbar toolbar-align-right">
+                            <xsl:apply-templates select="." mode="compact-buttons" />
+                        </div>
+                    </xsl:when>
+                </xsl:choose>
+                <!-- right sidebar, not used currently -->
                 <button class="sidebar-right-toggle-button button active">
                     <xsl:call-template name="type-name">
                         <xsl:with-param name="string-id" select="'annotations'" />
@@ -3550,23 +3632,24 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                         <xsl:with-param name="string-id" select="'toc'" />
                     </xsl:call-template>
                 </button>
+                <!-- Prev/Up/Next buttons on top, according to options -->
                 <xsl:apply-templates select="." mode="previous-button" />
                 <xsl:if test="$nav-upbutton='yes'">
                     <xsl:apply-templates select="." mode="up-button" />
                 </xsl:if>
                 <xsl:apply-templates select="." mode="next-button" />
-                <!-- unused, increment to  toolbar-divisor-4/5  above
+                <!-- unused, increment the toolbar-divisor-4/5 above -->
+                <!--
                 <button class="sidebar-right-toggle-button button toolbar-item active">
                     <xsl:call-template name="type-name">
                         <xsl:with-param name="string-id" select="'annotations'" />
                     </xsl:call-template>
-                </button> -->
-            </xsl:element>
-            <!--  -->
+                </button>
+                -->
+             </xsl:element>
         </div>
     </nav>
 </xsl:template>
-
 
 <!-- Sidebars -->
 <!-- Two HTML aside's for ToC (left), Annotations (right)       -->
