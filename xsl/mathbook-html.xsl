@@ -3492,6 +3492,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                         <xsl:call-template name="feedback-link" />
                     </xsl:if>
                     <xsl:call-template name="mathbook-link" />
+                    <xsl:call-template name="powered-by-mathjax" />
                 </nav>
             </div>
         </div>
@@ -3630,6 +3631,13 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:with-param name="string-id" select="'authored'" />
         </xsl:call-template>
         <xsl:text> MathBook&#xa0;XML</xsl:text>
+    </a>
+</xsl:template>
+
+<!-- MathJax Logo for bottom of left sidebar -->
+<xsl:template name="powered-by-mathjax">
+    <a href="http://www.mathjax.org">
+        <img title="Powered by MathJax" src="http://cdn.mathjax.org/mathjax/badge/badge.gif" border="0" alt="Powered by MathJax" />
     </a>
 </xsl:template>
 
