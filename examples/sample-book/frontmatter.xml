@@ -61,6 +61,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 	</colophon>
 
+	<!-- A section of its own in HTML, migrates to copyright-page in LaTeX (sans a title)-->
+	<biography>
+		<p>Thomas W. Judson did his undergraduate work in Illinois, his graduate work in Oregon and presently teaches in Texas.</p>
+
+		 <p>He likes to ride his bicycle in France.</p>
+	</biography>
+
+	<!-- The following items must be placed in the desired/required order -->
+	<!-- This will be checked by a Document Type Definition eventually -->
+	<!-- Order: dedication, acknowledgements, forewords, prefaces -->
+
+	<!-- Each paragraph gets centered and has some vertical separatation -->
+	<!-- A line break may be used here to aid with intended formatting   -->
+	<dedication>
+		<p>To students of algebra everywhere <ndash /><br />they are the reason</p>
+		<p>And to those who teach them</p>
+	</dedication>
+
+	<acknowledgement>
+
+		<p>I would like to acknowledge the following reviewers for their helpful comments and suggestions. </p>
+
+		<ul>
+			<li><p>David Anderson, University of Tennessee, Knoxville</p></li>
+			<li><p>Robert Beezer, University of Puget Sound</p></li>
+			<li><p>Myron Hood, California Polytechnic State University</p></li>
+			<li><p>Herbert Kasube, Bradley University</p></li>
+			<li><p>John Kurtzke, University of Portland</p></li>
+			<li><p>Inessa Levi, University of Louisville</p></li>
+			<li><p>Geoffrey Mason, University of California, Santa Cruz</p></li>
+			<li><p>Bruce Mericle, Mankato State University</p></li>
+			<li><p>Kimmo Rosenthal, Union College</p></li>
+			<li><p>Mark Teply, University of Wisconsin</p></li>
+		</ul>
+
+		<p>I would also like to thank Steve Quigley, Marnie Pommett, Cathie Griffin, Kelle Karshick, and the rest of the staff at PWS Publishing for their guidance throughout this project. It has been a pleasure to work with them.</p>
+
+		<!-- Added NSF support statement.  TWJ 8/9/2012 -->
+		<p>Robert Beezer encouraged me to make <em>Abstract Algebra: Theory and Applications</em> available as an open source textbook, a decision that I have never regretted.  With his assistance, the book has been rewritten in MathBook XML (<url href="http://mathbook.pugetsound.edu">http://mathbook.pugetsound.edu</url>), making it possible to quickly output print, web, PDF versions and more from the same source.  The open source version of this book has received support from the National Science Foundation (Award <hash />DUE-1020957).</p>
+
+	</acknowledgement>
+
 	<preface>
 
 		<p>This text is intended for a one or two-semester undergraduate course in  abstract algebra. Traditionally, these courses have covered the theoretical aspects of groups, rings, and fields.  However, with the development of computing in the last several decades, applications that involve abstract algebra and discrete mathematics have become increasingly important, and many science, engineering, and computer science students are now electing to minor in mathematics. Though theory still occupies a central role in the subject of abstract algebra and no student should go through such a course without a good notion of what a proof is, the importance of applications such as coding theory and cryptography has grown significantly.</p>
@@ -176,36 +218,5 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 		</blockquote>
 
 	</preface>
-
-	<acknowledgement>
-
-		<p>I would like to acknowledge the following reviewers for their helpful comments and suggestions. </p>
-
-		<ul>
-			<li><p>David Anderson, University of Tennessee, Knoxville</p></li>
-			<li><p>Robert Beezer, University of Puget Sound</p></li>
-			<li><p>Myron Hood, California Polytechnic State University</p></li>
-			<li><p>Herbert Kasube, Bradley University</p></li>
-			<li><p>John Kurtzke, University of Portland</p></li>
-			<li><p>Inessa Levi, University of Louisville</p></li>
-			<li><p>Geoffrey Mason, University of California, Santa Cruz</p></li>
-			<li><p>Bruce Mericle, Mankato State University</p></li>
-			<li><p>Kimmo Rosenthal, Union College</p></li>
-			<li><p>Mark Teply, University of Wisconsin</p></li>
-		</ul>
-
-		<p>I would also like to thank Steve Quigley, Marnie Pommett, Cathie Griffin, Kelle Karshick, and the rest of the staff at PWS Publishing for their guidance throughout this project. It has been a pleasure to work with them.</p>
-
-		<!-- Added NSF support statement.  TWJ 8/9/2012 -->
-		<p>Robert Beezer encouraged me to make <em>Abstract Algebra: Theory and Applications</em> available as an open source textbook, a decision that I have never regretted.  With his assistance, the book has been rewritten in MathBook XML (<url href="http://mathbook.pugetsound.edu">http://mathbook.pugetsound.edu</url>), making it possible to quickly output print, web, PDF versions and more from the same source.  The open source version of this book has received support from the National Science Foundation (Award <hash />DUE-1020957).</p>
-
-	</acknowledgement>
-
-	<!-- A section of its own in HTML, migrates to copyright-page in LaTeX (sans a title)-->
-	<biography>
-		<p>Thomas W. Judson did his undergraduate work in Illinois, his graduate work in Oregon and presently teaches in Texas.</p>
-
-		 <p>He likes to ride his bicycle in France.</p>
-	</biography>
 
 </frontmatter>

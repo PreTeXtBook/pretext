@@ -43,7 +43,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <xi:include href="./bookinfo.xml" /> <!-- ISBN, website, other metadata -->
     
-    <book xml:id="mbx-sample-book">
+    <book xml:id="sample-book">
         <title>Abstract Algebra</title>
         <subtitle>Theory and Applications</subtitle>
 
