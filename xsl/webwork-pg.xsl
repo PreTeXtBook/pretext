@@ -960,7 +960,7 @@
 
 <!-- Includes file header blurb promoting MBX -->
 <xsl:template name="begin-problem">
-    <xsl:call-template name="converter-blurb-perl" />
+    <xsl:call-template name="converter-blurb-webwork" />
     <xsl:call-template name="metadata" />
     <xsl:text>DOCUMENT();&#xa;</xsl:text>
 </xsl:template>
