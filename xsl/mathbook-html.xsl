@@ -127,7 +127,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Local versions of navigation options -->
 <!-- Fatal errors if not recognized       -->
 <xsl:variable name="nav-logic">
-    <xsl:value-of select="$html.navigation.logic" />
+    <xsl:choose>
+        <xsl:when test="$html.navigation.logic='linear'">
+            <xsl:text>linear</xsl:text>
+        </xsl:when>
+        <xsl:when test="$html.navigation.logic='tree'">
+            <xsl:text>tree</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message terminate='yes'>MBX:ERROR: 'html.navigation.logic' must be 'linear' or 'tree', not '<xsl:value-of select="$html.navigation.logic" />.'  Quitting...</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:variable>
 
 <xsl:variable name="nav-upbutton">
@@ -3389,7 +3399,14 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- <span> with "disabled" class otherwise -->
 <xsl:template match="*" mode="previous-button">
     <xsl:variable name="previous-url">
-        <xsl:apply-templates select="." mode="previous-linear-url" />
+        <xsl:choose>
+            <xsl:when test="$nav-logic='linear'">
+                <xsl:apply-templates select="." mode="previous-linear-url" />
+            </xsl:when>
+            <xsl:when test="$nav-logic='tree'">
+                <xsl:apply-templates select="." mode="previous-tree-url" />
+            </xsl:when>
+        </xsl:choose>
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$previous-url!=''">
@@ -3416,7 +3433,14 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 
 <xsl:template match="*" mode="next-button">
     <xsl:variable name="next-url">
-        <xsl:apply-templates select="." mode="next-linear-url" />
+        <xsl:choose>
+            <xsl:when test="$nav-logic='linear'">
+                <xsl:apply-templates select="." mode="next-linear-url" />
+            </xsl:when>
+            <xsl:when test="$nav-logic='tree'">
+                <xsl:apply-templates select="." mode="next-tree-url" />
+            </xsl:when>
+        </xsl:choose>
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$next-url!=''">
@@ -3442,6 +3466,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 </xsl:template>
 
 <xsl:template match="*" mode="up-button">
+    <!-- up URL is identical for linear, tree logic -->
     <xsl:variable name="up-url">
         <xsl:apply-templates select="." mode="up-url" />
     </xsl:variable>
