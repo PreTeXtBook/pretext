@@ -148,7 +148,7 @@ def sage_conversion(xml_source, dest_dir, outformat):
             for f in glob.glob(sagepng):
                 shutil.copy2(f, dest_dir)
 
-def latex_image_conversion(xml_source, dest_dir, outformat):
+def latex_image_conversion(xml_source, data_dir, dest_dir, outformat):
     global config
     import tempfile, os, os.path, subprocess, shutil
     _verbose('converting latex-image pictures from {} to {} graphics in {}'.format(xml_source, outformat, dest_dir))
@@ -165,6 +165,9 @@ def latex_image_conversion(xml_source, dest_dir, outformat):
     _debug("pdfpng executable: {}".format(pdfpng_executable))
     pdfeps_executable = get_executable(config, 'pdfeps')
     _debug("pdfeps executable: {}".format(pdfeps_executable))
+    # NB: next command uses relative paths, so no chdir(), etc beforehand
+    if data_dir:
+        copy_data_directory(xml_source, data_dir, tmp_dir)
     # http://stackoverflow.com/questions/11269575/how-to-hide-output-of-subprocess-in-python-2-7
     devnull = open(os.devnull, 'w')
     convert_cmd = [xslt_executable,
@@ -178,7 +181,9 @@ def latex_image_conversion(xml_source, dest_dir, outformat):
     subprocess.call(convert_cmd)
     cwd = os.getcwd()
     os.chdir(tmp_dir)
-    for latex_image in os.listdir(tmp_dir):
+    # files *only*, from top-level
+    files = filter(os.path.isfile, os.listdir(tmp_dir))
+    for latex_image in files:
         if outformat == 'source':
             shutil.copy2(latex_image, dest_dir)
         else:
@@ -546,6 +551,7 @@ def get_cli_arguments():
     format_help = 'Output formats are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in format_info])
     parser.add_argument('-f', '--format', help=format_help, action="store", dest='format')
 
+    parser.add_argument('-i', '--include', help='external data directory, relative to source, latex-image only', action="store", dest='data_dir')
     parser.add_argument('-o', '--output', help='file for output', action="store", dest='out')
     parser.add_argument('-d', '--directory', help='directory for output', action="store", dest='dir')
 
@@ -581,6 +587,16 @@ def get_config_info(script_dir):
     config.read(config_file)
     return config
 
+def copy_data_directory(source_file, data_dir, tmp_dir):
+    """Stage directory from CLI argument into the working directory"""
+    import os.path, shutil
+    _verbose("formulating data directory location")
+    source_full_path, _ = os.path.split(os.path.abspath(source_file))
+    data_full_path = sanitize_directory(os.path.join(source_full_path, data_dir))
+    data_last_step = os.path.basename(os.path.normpath(data_full_path))
+    destination_root = os.path.join(tmp_dir, data_last_step)
+    _debug("copying data directory {} to working location {}".format(data_full_path, destination_root))
+    shutil.copytree(data_full_path, destination_root)
 
 ######
 #
@@ -634,17 +650,17 @@ elif args.component == 'sageplot':
         raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
 elif args.component == 'latex-image':
     if args.format == 'pdf':
-        latex_image_conversion(args.xml_file, args.dir, 'pdf')
+        latex_image_conversion(args.xml_file, args.data_dir, args.dir, 'pdf')
     elif args.format == 'svg':
-        latex_image_conversion(args.xml_file, args.dir, 'svg')
+        latex_image_conversion(args.xml_file, args.data_dir, args.dir, 'svg')
     elif args.format == 'source':
-        latex_image_conversion(args.xml_file, args.dir, 'source')
+        latex_image_conversion(args.xml_file, args.data_dir, args.dir, 'source')
     elif args.format == 'png':
-        latex_image_conversion(args.xml_file, args.dir, 'png')
+        latex_image_conversion(args.xml_file, args.data_dir, args.dir, 'png')
     elif args.format == 'eps':
-        latex_image_conversion(args.xml_file, args.dir, 'eps')
+        latex_image_conversion(args.xml_file, args.data_dir, args.dir, 'eps')
     elif args.format == 'all':
-        latex_image_conversion(args.xml_file, args.dir, 'all')
+        latex_image_conversion(args.xml_file, args.data_dir, args.dir, 'all')
     else:
         raise NotImplementedError('cannot make LaTeX pictures in "{}" format'.format(args.format))
 elif args.component == 'all':
