@@ -1054,7 +1054,7 @@ the xsltproc executable.
                     </image>
                 </figure>
 
-		<p>The pgfplots package was included in docinfo/latex-image-preamble. Here, it is used.</p>
+        <p>The pgfplots package was included in docinfo/latex-image-preamble. Here, it is used.</p>
 
                 <figure xml:id="figure-pgflots-demo">
                     <caption>Sample pgfplots plot</caption>
@@ -1088,7 +1088,33 @@ the xsltproc executable.
                         \end{tikzpicture}]]>
 
                         </latex-image-code>
-		    </image>
+                    </image>
+                </figure>
+
+                <p>A plot might use a graphics language to draw the axes and grid, but the data might be from an experiment and live in an external file that you do not wish to place in your source.  Place such a file in a subdirectory directly below the directory where your master source file resides.  In the example below <c>data</c> is the directory and <c>hodgkin-huxley-data.dat</c> is the file with the data points.  You <em>must</em> place the file in a subdirectory (it cannot reside next to your source file), but that directory may have subdirectories if you have many such files and want to organize them that way.  Then the <c>--include</c> command-line argument to the <c>mbx</c> script will manage the external files properly as it creates individual image files.</p>
+
+                <p>It is still your responsibility to be sure this directory of external data files follows your <latex /> output to whatever directory you use to convert to a PDF and is in the right location for the relative path given in the XML source.  The discussion above only applies to generating individual image files, such as you would need for the HTML output.</p>
+
+                <figure xml:id="figure-pgflots-data-demo">
+                    <caption>External data in a pgfplots plot</caption>
+                    <image xml:id="pgfplots-data-demo">
+                        <description>A pgfplots example, with external data plotted.</description>
+                        <latex-image-code>
+                        <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
+                        <![CDATA[\tikzset{%
+                        }
+                        \begin{tikzpicture}
+                        \begin{axis}[
+                            xmin=0,xmax=100,ymin=-20,ymax=100,
+                            ytick={-20,0,...,100},
+                            xlabel={time (ms)},
+                            ylabel={potential (V)},
+                        ]
+                        \addplot[blue] table {data/hodgkin-huxley-data.dat};
+                        \end{axis}
+                        \end{tikzpicture}]]>
+                        </latex-image-code>
+                    </image>
                 </figure>
 
             </subsection>
