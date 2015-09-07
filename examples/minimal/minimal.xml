@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2015 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- To process this file do                                                                      -->
+<!--                                                                                              -->
+<!-- (1) LaTeX/PDF:                                                                               -->
+<!--     xsltproc mathbook/xsl/mathbook-latex.xsl minimal.xml                                     -->
+<!--     pdflatex minimal.tex                                                                     -->
+<!--     xelatex minimal.tex                                                                      -->
+<!--                                                                                              -->
+<!-- (2) HTML:                                                                                    -->
+<!--     xsltproc mathbook/xsl/mathbook-html.xsl minimal.xml                                      -->
+<!--     <browswer>  minimal.html                                                                 -->
+<!--                                                                                              -->
+<!-- (3) SageMathCloud worksheet (parameter causes a single file for output)                      -->
+<!--     REMOVE the "X" in the double dash (which is not legal in an XML comment)                 -->
+<!--     xsltproc -X-stringparam chunk.level 0 mathbook/xsl/mathbook-smc.xsl minimal.xml          -->
+<!--     <SageMathCloud> minimal.sagews                                                           -->
+<!--                                                                                              -->
+<!-- (4) Sage doctesting                                                                          -->
+<!--     REMOVE the "X" in the double dash (which is not legal in an XML comment)                 -->
+<!--     xsltproc -X-stringparam chunk.level 0 mathbook/xsl/mathbook-sage-doctest.xsl minimal.xml -->
+<!--     <read further instructions in> minimal.py                                                -->
+
+ <mathbook>
+
+    <docinfo>
+        <macros>
+        \newcommand{\doubler}[1]{2#1}
+        </macros>
+    </docinfo>
+
+    <article xml:id="minimal">
+        <title>A Minimal Article</title>
+
+        <frontmatter>
+
+            <titlepage>
+                <author>
+                    <personname>Robert A. Beezer</personname>
+                    <institution>University of Puget Sound</institution>
+                </author>
+                <date><today /></date>
+            </titlepage>
+
+            <abstract>
+                <p>This is a very short article, but it still exercises some advanced features of MathBook XML.</p>
+            </abstract>
+
+        </frontmatter>
+
+        <introduction>
+            <p>This is a short paragraph to introduce the article (but it is not the abstract).  It is optional, in case it would be preferable to have the first section be titled an <q>Introduction.</q></p>
+        </introduction>
+
+        <section xml:id="section-textual">
+            <title>Just Some Text</title>
+
+            <p>Now a single paragraph inside a titled section of the article.</p>
+        </section>
+
+        <section xml:id="section-interesting">
+            <title>A Bit More Interesting</title>
+
+            <p>The previous section (<xref ref="section-textual" autoname="yes"/>) was a bit boring.</p>
+
+            <p>This paragraph has some inline math, a Diophantine equation, <m>x^2 + \doubler{y^2} = z^2</m>.  And some display math about infinite series: <me>\sum_{n=1}^\infty\,\frac{1}{n^2} = \frac{\pi^2}{6}.</me>  Look at the XML source to see how <latex /> macros are employed universally across all possible output formats.</p>
+        </section>
+
+        <section xml:id="section-computation">
+            <title>Computation</title>
+
+            <p>The following is a chunk of Sage code.  Your output format will dictate what you see next.  In print, you will see expected output.  In HTML you will have an executable, and editable, Sage Cell to work with.  In a SageMathCloud worksheet, you will be able to execute and edit the code with all the other features of SageMathCloud.  Note that if you include the expected output in your source, then you can test the example to verify that the behavior of Sage has not changed.</p> 
+
+            <sage>
+                <input>
+                A = matrix(4,5, srange(20))
+                A.rref()
+                </input>
+                <output>
+                [ 1  0 -1 -2 -3]
+                [ 0  1  2  3  4]
+                [ 0  0  0  0  0]
+                [ 0  0  0  0  0]
+                </output>
+            </sage>
+        </section>
+
+    </article>
+
+</mathbook>
