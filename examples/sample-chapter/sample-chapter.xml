@@ -147,6 +147,45 @@
             </exercise>
 
             <exercise>
+                <title>Choosing a Problem Seed</title>
+
+                <statement>
+                    <p>You can also declare a <c>seed</c> to specify a version of any problem that has randomization.</p>
+                </statement>
+
+                <webwork xml:id="integer-addition-with-seed" height="250" seed="923">
+                    <title>Integer Addition</title>
+
+                    <setup>
+                        <var name="$a">
+                            <static>2</static>
+                        </var>
+                        <var name="$b">
+                            <static>3</static>
+                        </var>
+                        <var name="$c" category="integer">
+                            <static>5</static>
+                        </var>
+
+                        <pg-code>
+                            $a = Compute(random(1, 9, 1));
+                            $b = Compute(random(1, 9, 1));
+                            $c = $a + $b;
+                        </pg-code>
+                    </setup>
+
+                    <statement>
+                        <p>Compute the sum of <m>a = <var name="$a" /></m> and <m>b = <var name="$b" /></m>:<br /><m>a + b =</m> <answer var="$c" width="2" /></p>
+                    </statement>
+
+                    <solution>
+                        <p><m><var name="$a" /> + <var name="$b" /> = <var name="$c" /></m>.</p>
+                    </solution>
+                </webwork>
+            </exercise>
+
+
+            <exercise>
                 <title>Special Answer Checking</title>
 
                 <statement>

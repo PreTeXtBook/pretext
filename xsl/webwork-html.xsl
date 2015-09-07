@@ -118,7 +118,15 @@
                         </xsl:message>
                     </xsl:otherwise>
                 </xsl:choose>
-                <xsl:text>&amp;problemSeed=123567890</xsl:text>
+                <xsl:text>&amp;problemSeed=</xsl:text>
+                <xsl:choose>
+                    <xsl:when test="@seed">
+                        <xsl:value-of select="@seed"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>123567890</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
                 <xsl:text>&amp;displayMode=MathJax</xsl:text>
                 <xsl:text>&amp;courseID=</xsl:text>
                 <xsl:choose>
