@@ -110,20 +110,20 @@ minimal:
 	-rm $(PGOUT)/*.pg
 	cp $(WWXSL)/extract-webwork.xsl $(WWXSL)/webwork-pg.xsl $(MBUSR)
 	cd $(PGOUT); \
-	xsltproc $(MBUSR)/extract-webwork.xsl $(WWMBX)/examples/minimal/mini.xml
+	xsltproc --stringparam webwork.server https://webwork.pcc.edu $(MBUSR)/extract-webwork.xsl $(WWMBX)/examples/minimal/mini.xml
 
 chapter:
 	install -d $(PGOUT) $(MBUSR)
 	#-rm $(PGOUT)/*.pg
 	cp $(WWXSL)/extract-webwork.xsl $(WWXSL)/webwork-pg.xsl $(MBUSR)
 	cd $(PGOUT); \
-	xsltproc --stringparam chunk.level 1 $(MBUSR)/extract-webwork.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml
+	xsltproc --stringparam webwork.server https://webwork.pcc.edu --stringparam chunk.level 1 $(MBUSR)/extract-webwork.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml
 	#
 	install -d $(PDFOUT) $(MBUSR)
 	-rm $(PDFOUT)/*.tex
 	cp $(WWXSL)/webwork-latex.xsl $(MBUSR)
 	cd $(PDFOUT); \
-	xsltproc --stringparam toc.level 0 $(MBUSR)/webwork-latex.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml; \
+	xsltproc --stringparam webwork.server https://webwork.pcc.edu --stringparam toc.level 0 $(MBUSR)/webwork-latex.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml; \
 	xelatex sample-ww-chapter.tex; \
 	xelatex sample-ww-chapter.tex
 	#
@@ -136,20 +136,20 @@ chapter:
 	cp $(WWXSL)/xslt_base64/base64.xsl $(MBUSR)
 	cp $(WWXSL)/xslt_base64/base64_binarydatamap.xml $(MBUSR)
 	cd $(HTMLOUT); \
-	xsltproc --maxdepth 12000 --stringparam html.knowl.exercise.inline no $(MBUSR)/webwork-html.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml
+	xsltproc --maxdepth 12000 --stringparam webwork.server https://webwork.pcc.edu --stringparam html.knowl.exercise.inline no $(MBUSR)/webwork-html.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml
 
 templates:
 	install -d $(PGOUT) $(MBUSR)
 	-rm $(PGOUT)/*.pg
 	cp $(WWXSL)/extract-webwork.xsl $(WWXSL)/webwork-pg.xsl $(MBUSR)
 	cd $(PGOUT); \
-	xsltproc $(MBUSR)/extract-webwork.xsl $(WWMBX)/examples/webwork-templates/webwork-templates.xml
+	xsltproc --stringparam webwork.server https://webwork.pcc.edu $(MBUSR)/extract-webwork.xsl $(WWMBX)/examples/webwork-templates/webwork-templates.xml
 	#
 	install -d $(PDFOUT) $(MBUSR)
 	-rm $(PDFOUT)/*.tex
 	cp $(WWXSL)/webwork-latex.xsl $(MBUSR)
 	cd $(PDFOUT); \
-	xsltproc --stringparam toc.level 0 $(MBUSR)/webwork-latex.xsl $(WWMBX)/examples/webwork-templates/webwork-templates.xml; \
+	xsltproc --stringparam webwork.server https://webwork.pcc.edu --stringparam toc.level 0 $(MBUSR)/webwork-latex.xsl $(WWMBX)/examples/webwork-templates/webwork-templates.xml; \
 	xelatex webwork-templates.tex; \
 	xelatex webwork-templates.tex
 	#
@@ -162,4 +162,4 @@ templates:
 	cp $(WWXSL)/xslt_base64/base64.xsl $(MBUSR)
 	cp $(WWXSL)/xslt_base64/base64_binarydatamap.xml $(MBUSR)
 	cd $(HTMLOUT); \
-	xsltproc --maxdepth 12000 --stringparam html.knowl.exercise.inline no $(MBUSR)/webwork-html.xsl $(WWMBX)/examples/webwork-templates/webwork-templates.xml
+	xsltproc --maxdepth 12000 --stringparam webwork.server https://webwork.pcc.edu --stringparam html.knowl.exercise.inline no $(MBUSR)/webwork-html.xsl $(WWMBX)/examples/webwork-templates/webwork-templates.xml

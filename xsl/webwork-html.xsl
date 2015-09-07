@@ -37,6 +37,13 @@
 <xsl:import href="../xsl/mathbook-html.xsl" />
 <xsl:import href="./webwork-pg.xsl" />
 
+<!-- WeBWorK params                             -->
+<xsl:param name="webwork.server" select="'not provided'"/>
+<xsl:param name="webwork.course" select="'anonymous'" />
+<xsl:param name="webwork.userID" select="'anonymous'" />
+<xsl:param name="webwork.password" select="'anonymous'" />
+
+
 <!-- Base 64 Library, MIT License -->
 <!-- For encoding a problem string, copy/place    -->
 <!-- base64.xsl *and* base64_binarydatamap.xml    -->
@@ -53,6 +60,11 @@
 <!-- ASCII Table:  http://www.rapidtables.com/code/text/ascii-table.htm -->
 <!-- Online Converter: http://www.freeformatter.com/base64-encoder.html -->
 <xsl:template match="webwork">
+    <xsl:if test="//webwork and $webwork.server='not provided'">
+        <xsl:message>
+            <xsl:text>MBX:WARNING: Provide a webwork server with --stringparam webwork.server</xsl:text>
+        </xsl:message>
+    </xsl:if>
     <xsl:variable name="pg-ascii">
         <xsl:apply-imports />
     </xsl:variable>
@@ -68,7 +80,7 @@
 <!-- comes from deep within the environment/knowl  -->
 <!-- scheme in MBX's mathbook-html.xsl conversion  -->
 <xsl:template match="webwork" mode="knowlized">
-    <script type="text/javascript" src="https://webwork.pcc.edu/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
+    <script type="text/javascript" src="{$webwork.server}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
     <!-- Clickable, cribbed from "environment-hidden-factory" template -->
     <xsl:element name="div">
         <xsl:attribute name="class">
@@ -99,7 +111,7 @@
         <xsl:element name="iframe">
             <xsl:attribute name="width">100%</xsl:attribute> <!-- MBX specific -->
             <xsl:attribute name="src">
-                <xsl:text>https://webwork.pcc.edu/webwork2/html2xml?</xsl:text>
+                <xsl:value-of select="concat($webwork.server,'/webwork2/html2xml?')"/>
                 <xsl:text>&amp;answersSubmitted=0</xsl:text>
                 <xsl:choose>
                     <xsl:when test="@source">
@@ -129,12 +141,11 @@
                 </xsl:choose>
                 <xsl:text>&amp;displayMode=MathJax</xsl:text>
                 <xsl:text>&amp;courseID=</xsl:text>
-                <xsl:choose>
-                    <xsl:when test="@course"><xsl:value-of select="@course" /></xsl:when>
-                    <xsl:otherwise><xsl:text>anonymous</xsl:text></xsl:otherwise>
-                </xsl:choose>
-                <xsl:text>&amp;userID=anonymous</xsl:text>
-                <xsl:text>&amp;password=anonymous</xsl:text>
+                <xsl:value-of select="$webwork.course"/>
+                <xsl:text>&amp;userID=</xsl:text>
+                <xsl:value-of select="$webwork.userID"/>
+                <xsl:text>&amp;password=</xsl:text>
+                <xsl:value-of select="$webwork.password"/>
                 <xsl:text>&amp;outputformat=</xsl:text>
                 <xsl:choose>
                     <xsl:when test="@format"><xsl:value-of select="@format" /></xsl:when>
@@ -205,7 +216,7 @@
         <xsl:element name="iframe">
             <xsl:attribute name="width">100%</xsl:attribute> <!-- MBX specific -->
             <xsl:attribute name="src">
-                <xsl:text>https://webwork.pcc.edu/webwork2/html2xml?</xsl:text>
+                <xsl:value-of select="concat($webwork.server,'/webwork2/html2xml?')"/>
                 <xsl:text>&amp;answersSubmitted=0</xsl:text>
                 <xsl:choose>
                     <xsl:when test="@source">
@@ -224,15 +235,22 @@
                         </xsl:message>
                     </xsl:otherwise>
                 </xsl:choose>
-                <xsl:text>&amp;problemSeed=123567890</xsl:text>
+                <xsl:text>&amp;problemSeed=</xsl:text>
+                <xsl:choose>
+                    <xsl:when test="@seed">
+                        <xsl:value-of select="@seed"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>123567890</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
                 <xsl:text>&amp;displayMode=MathJax</xsl:text>
                 <xsl:text>&amp;courseID=</xsl:text>
-                <xsl:choose>
-                    <xsl:when test="@course"><xsl:value-of select="@course" /></xsl:when>
-                    <xsl:otherwise><xsl:text>anonymous</xsl:text></xsl:otherwise>
-                </xsl:choose>
-                <xsl:text>&amp;userID=anonymous</xsl:text>
-                <xsl:text>&amp;password=anonymous</xsl:text>
+                <xsl:value-of select="$webwork.course"/>
+                <xsl:text>&amp;userID=</xsl:text>
+                <xsl:value-of select="$webwork.userID"/>
+                <xsl:text>&amp;password=</xsl:text>
+                <xsl:value-of select="$webwork.password"/>
                 <xsl:text>&amp;outputformat=</xsl:text>
                 <xsl:choose>
                     <xsl:when test="@format"><xsl:value-of select="@format" /></xsl:when>
@@ -262,7 +280,7 @@
 <!-- Requires MBX to incorporate in page headers  -->
 <xsl:template name="webwork">
     <!-- <link href="https://hosted2.webwork.rochester.edu/webwork2_files/css/knowlstyle.css" rel="stylesheet" type="text/css" /> -->
-    <link href="https://webwork.pcc.edu/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
+    <link href="{$webwork.server}/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
 </xsl:template>
 
 </xsl:stylesheet>
