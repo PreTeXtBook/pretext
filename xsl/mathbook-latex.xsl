@@ -116,7 +116,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$root-level + $numbering-maxlevel - 1" />
 </xsl:variable>
 
-<!-- ############## -->
+<!-- We override the default ToC structure    -->
+<!-- just to kill the ToC always for articles -->
+<xsl:variable name="toc-level">
+    <xsl:choose>
+        <xsl:when test="$toc.level != ''">
+            <xsl:value-of select="$toc.level" />
+        </xsl:when>
+        <xsl:when test="/mathbook/book">2</xsl:when>
+        <xsl:when test="/mathbook/article">0</xsl:when>
+        <xsl:when test="/mathbook/letter">0</xsl:when>
+        <xsl:when test="/mathbook/memo">0</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: Table of Contents level not determined</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- Entry Template -->
 <!-- ############## -->
 
