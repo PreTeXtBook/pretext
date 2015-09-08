@@ -91,6 +91,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   'linear' is the default, 'tree' is an option                          -->
 <xsl:param name="html.navigation.logic"  select="'linear'" />
 <!-- The "up" button is optional given the contents sidebar, default is to have it -->
+<!-- An up button is very desirable if you use the tree-like logic                 -->
 <xsl:param name="html.navigation.upbutton"  select="'yes'" />
 <!-- There are also "compact" versions of the navigation buttons in the top right -->
 <xsl:param name="html.navigation.style"  select="'full'" />
