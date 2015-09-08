@@ -1255,6 +1255,11 @@
     <xsl:text>_*</xsl:text>
 </xsl:template>
 
+<!-- LaTeX logo  -->
+<xsl:template match="webwork//latex">
+    <xsl:text>[@MODES(HTML =&gt; '\(\mathrm\LaTeX\)', TeX =&gt; '\LaTeX')@]*</xsl:text>
+</xsl:template>
+
 <!-- Quotes, double or single -->
 <!-- PGML will do the right thing with "dumb" quotes          -->
 <!-- in the source, so we implement these to allow for        -->
