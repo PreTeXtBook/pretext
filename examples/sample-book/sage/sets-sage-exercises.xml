@@ -26,15 +26,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Copyright (C) 2010-2014  Robert A. Beezer     -->
 
 <exercises xml:id="sets-sage-exercises">
-	<title>Sage Exercises</title>
+    <title>Sage Exercises</title>
 
-	<exercise number="1">
-		<statement>
-			<p>This exercise is just about making sure you know how to use Sage.  Login to a Sage Notebook server and create a new worksheet.  Do some non-trivial computation, maybe a pretty plot or some gruesome numerical computation to an insane precision.   Create an interesting list and experiment with it some.  Maybe include some nicely formatted text or <tex/> using the included mini-word-processor of the Sage Notebook (hover until a blue bar appears between cells and then shift-click).</p>
+    <exercise number="1">
+        <statement>
+            <p>This exercise is just about making sure you know how to use Sage.  Login to a Sage Notebook server and create a new worksheet.  Do some non-trivial computation, maybe a pretty plot or some gruesome numerical computation to an insane precision.   Create an interesting list and experiment with it some.  Maybe include some nicely formatted text or <tex/> using the included mini-word-processor of the Sage Notebook (hover until a blue bar appears between cells and then shift-click).</p>
 
-			<p>Use whatever mechanism your instructor has in place for submitting your work.  Or save your worksheet and then trade worksheets via email (or another electronic method) with a classmate.</p>
-		</statement>
-		
-	</exercise>
+            <p>Use whatever mechanism your instructor has in place for submitting your work.  Or save your worksheet and then trade worksheets via email (or another electronic method) with a classmate.</p>
+        </statement>
+    </exercise>
 
 </exercises>

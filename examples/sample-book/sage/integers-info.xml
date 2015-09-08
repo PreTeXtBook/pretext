@@ -26,7 +26,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Copyright (C) 2010-2014  Robert A. Beezer     -->
 
 <remark>
-	<title>Sage</title>
+    <title>Sage</title>
 
-	<p>Sage's original purpose was to support research in number theory, so it is perfect for the types of computations with the integers that we have in this chapter.</p>
+    <p>Sage's original purpose was to support research in number theory, so it is perfect for the types of computations with the integers that we have in this chapter.</p>
 </remark>
