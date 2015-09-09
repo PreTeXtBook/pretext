@@ -2455,11 +2455,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is the implementation of an abstract template, -->
 <!-- to accomodate hard-coded HTML numbers and for       -->
 <!-- LaTeX the \ref and \label mechanism                 -->
+<!-- NB: we do exactly the same thing in the webwork-pg.html -->
 <xsl:template match="*" mode="xref-number">
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 
-<!-- In common template, but have to point to it -->
+<!-- In common template, but have to point -->
+<!-- to it since it is a modal template    -->
 <xsl:template match="exercisegroup" mode="xref-number">
     <xsl:apply-imports />
 </xsl:template>
