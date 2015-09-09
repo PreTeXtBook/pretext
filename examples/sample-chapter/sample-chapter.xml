@@ -491,7 +491,7 @@
                         and an out-dented line
                         </pre>
 
-                        <p>Some of <latex />'s special characters.</p>
+                        <p>Some of <latex />'s special characters:</p>
                         <p><hash /></p>
                         <p><dollar /></p>
                         <p><percent /></p>
@@ -502,6 +502,13 @@
                         <p><rbrace /></p>
                         <p><tilde /></p>
                         <p><backslash /></p>
+
+                        <p>Some characters that need special handling for PG conversion to HTML or <latex />:</p>
+
+                        <p>A non<nbsp />breaking space (invisble where a hyphen should be)</p>
+                        <p>An ndash<ndash />right here.</p>
+                        <p>An mdash<mdash />right here.</p>
+
                     </statement>
                 </webwork>
             </exercise>

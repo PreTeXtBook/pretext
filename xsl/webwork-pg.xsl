@@ -1400,23 +1400,70 @@
     </xsl:choose>
 </xsl:template>
 
+<!-- The next three are macros that will format  -->
+<!-- properly for PGML realized as HTML or LaTeX -->
+
 <!-- Nonbreaking space -->
-<!-- contingent upon a pull request to WeBWorK -->
 <xsl:template match="webwork//nbsp">
     <xsl:text>[$NBSP]*</xsl:text>
 </xsl:template>
 
+<!-- Nonbreaking space -->
 <!-- En dash           -->
-<!-- contingent upon a pull request to WeBWorK -->
 <xsl:template match="webwork//ndash">
     <xsl:text>[$NDASH]*</xsl:text>
 </xsl:template>
 
 <!-- Em dash           -->
-<!-- contingent upon a pull request to WeBWorK -->
 <xsl:template match="webwork//mdash">
     <xsl:text>[$MDASH]*</xsl:text>
 </xsl:template>
+
+
+<!-- ################## -->
+<!-- Special Characters -->
+<!-- ################## -->
+
+<!-- These are specific instances of abstract templates        -->
+<!-- See the similar section of  mathbook-common.xsl  for more -->
+
+<!-- These templates react to their location, here we do a     -->
+<!-- WeBWorK version, but otherwise defer to the surroundings. -->
+<!-- This means this file must be the last one imported        -->
+<!-- that has versions of these templates                      -->
+
+<xsl:template match="*" mode="nbsp">
+    <xsl:choose>
+        <xsl:when test="ancestor::webwork">
+            <xsl:text>[$NBSP]*</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-imports />
+        </xsl:otherwise>
+    </xsl:choose>
+ </xsl:template>
+
+<xsl:template match="*" mode="ndash">
+    <xsl:choose>
+        <xsl:when test="ancestor::webwork">
+            <xsl:text>[$NDASH]*</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-imports />
+        </xsl:otherwise>
+    </xsl:choose>
+ </xsl:template>
+
+<xsl:template match="*" mode="mdash">
+    <xsl:choose>
+        <xsl:when test="ancestor::webwork">
+            <xsl:text>[$MDASH]*</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-imports />
+        </xsl:otherwise>
+    </xsl:choose>
+ </xsl:template>
 
 
 <!-- Preformatted Text -->
