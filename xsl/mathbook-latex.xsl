@@ -2627,6 +2627,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>''</xsl:text>
 </xsl:template>
 
+<!-- ################## -->
+<!-- Special Characters -->
+<!-- ################## -->
+
+<!-- These are specific instances of abstract templates        -->
+<!-- See the similar section of  mathbook-common.xsl  for more -->
+
+<xsl:template match="*" mode="nbsp">
+    <xsl:text>~</xsl:text>
+</xsl:template>
+
+<xsl:template match="*" mode="ndash">
+    <xsl:text>--</xsl:text>
+</xsl:template>
+
+<xsl:template match="*" mode="mdash">
+    <xsl:text>---</xsl:text>
+</xsl:template>
+
+
 <!-- Sage Cells -->
 
 <!-- An abstract named template accepts input text and               -->

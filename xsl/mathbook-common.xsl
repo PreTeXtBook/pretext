@@ -2180,8 +2180,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
             </xsl:variable>
             <xsl:if test="not($prefix = '')">
                 <xsl:value-of select="$prefix" />
-                <xsl:variable name="nbsp"><nbsp /></xsl:variable>
-                <xsl:apply-templates select="exsl:node-set($nbsp)" />
+                <xsl:apply-templates select="." mode="nbsp"/>
             </xsl:if>
             <!-- optionally wrap with parentheses, brackets -->
             <xsl:apply-templates select="$target" mode="xref-wrap">
@@ -2281,8 +2280,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     </xsl:variable>
     <xsl:if test="not($prefix = '')">
         <xsl:value-of select="$prefix" />
-        <xsl:variable name="nbsp"><nbsp /></xsl:variable>
-        <xsl:apply-templates select="exsl:node-set($nbsp)" />
+        <xsl:apply-templates select="." mode="nbsp"/>
     </xsl:if>
     <!-- optionally wrap with parentheses, brackets -->
     <xsl:apply-templates select="$target-first" mode="xref-wrap">
@@ -2293,8 +2291,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
                     <xsl:apply-templates select="$target-first" mode="xref-number" />
                 </xsl:with-param>
             </xsl:apply-templates>
-            <xsl:variable name="ndash"><ndash /></xsl:variable>
-            <xsl:apply-templates select="exsl:node-set($ndash)" />
+            <xsl:apply-templates select="." mode="ndash"/>
             <!-- second link, number only -->
             <xsl:apply-templates select="$target-last" mode="xref-link">
                 <xsl:with-param name="content">
@@ -2375,8 +2372,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         <xsl:when test="not(@autoname='title')">
             <xsl:if test="not($prefix = '')">
                 <xsl:value-of select="$prefix" />
-                <xsl:variable name="nbsp"><nbsp /></xsl:variable>
-                <xsl:apply-templates select="exsl:node-set($nbsp)" />
+                <xsl:apply-templates select="." mode="nbsp"/>
             </xsl:if>
             <!-- optionally wrap citations+detail or equations, with formatting -->
             <xsl:apply-templates select="$target" mode="xref-wrap">
@@ -2388,8 +2384,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
                         <xsl:choose>
                             <xsl:when test="local-name($target) = 'biblio'">
                                 <xsl:text>,</xsl:text>
-                                <xsl:variable name="nbsp"><nbsp /></xsl:variable>
-                                <xsl:apply-templates select="exsl:node-set($nbsp)" />
+                                <xsl:apply-templates select="." mode="nbsp"/>
                                 <xsl:apply-templates select="@detail" />
                             </xsl:when>
                             <xsl:otherwise>
@@ -2441,8 +2436,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- An exercise group is only ever numbered for a xref -->
 <xsl:template match="exercisegroup" mode="xref-number">
     <xsl:apply-templates select="exercise[1]" mode="xref-number" />
-    <xsl:variable name="ndash"><ndash /></xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($ndash)" />
+    <xsl:apply-templates select="." mode="ndash"/>
     <xsl:apply-templates select="exercise[last()]" mode="xref-number" />
 </xsl:template>
 
@@ -2483,6 +2477,27 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
             <xsl:text>xref, no attribute</xsl:text>
         </xsl:with-param>
     </xsl:call-template>
+</xsl:template>
+
+<!-- ################## -->
+<!-- Special Characters -->
+<!-- ################## -->
+
+<!-- We build modal templates for certain characters       -->
+<!-- so we can employ these templates in generic templates -->
+<!-- The defaults here are meant to be unattractive        -->
+<!-- The last importing stylesheet wins, so be careful     -->
+
+<xsl:template match="*" mode="nbsp">
+    <xsl:text>[NBSP]</xsl:text>
+</xsl:template>
+
+<xsl:template match="*" mode="ndash">
+    <xsl:text>[NDASH]</xsl:text>
+</xsl:template>
+
+<xsl:template match="*" mode="mdash">
+    <xsl:text>[MDASH]</xsl:text>
 </xsl:template>
 
 

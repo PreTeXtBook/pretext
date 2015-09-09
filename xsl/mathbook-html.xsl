@@ -2877,6 +2877,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- ################## -->
+<!-- Special Characters -->
+<!-- ################## -->
+
+<!-- These are specific instances of abstract templates        -->
+<!-- See the similar section of  mathbook-common.xsl  for more -->
+
+<xsl:template match="*" mode="nbsp">
+    <xsl:text>&#xa0;</xsl:text>
+</xsl:template>
+
+<xsl:template match="*" mode="ndash">
+    <xsl:text>&#8211;</xsl:text>
+</xsl:template>
+
+<xsl:template match="*" mode="mdash">
+    <xsl:text>&#8212;</xsl:text>
+</xsl:template>
+
+
 <!--        -->
 <!-- Poetry -->
 <!--        -->
