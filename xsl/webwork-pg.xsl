@@ -189,6 +189,18 @@
     <xsl:text>","TARGET='_blank'")@]*</xsl:text>
 </xsl:template>
 
+<!-- Cross-References -->
+<!-- In PG source we hard-code cross-references, -->
+<!-- so the number is just the number            -->
+<xsl:template match="*" mode="xref-number">
+    <xsl:apply-templates select="." mode="number" />
+</xsl:template>
+
+<!-- In common template, but have to point -->
+<!-- to it since it is a modal template    -->
+<xsl:template match="exercisegroup" mode="xref-number">
+    <xsl:apply-imports />
+</xsl:template>
 
 <!-- Implement PGML unordered lists                 -->
 <xsl:template match="webwork//ul|webwork//ol">
