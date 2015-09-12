@@ -780,7 +780,10 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:text>    [</xsl:text>
+    <xsl:if test="count(preceding-sibling::*)=0 and not(ancestor::li)">
+        <xsl:text>    </xsl:text>
+    </xsl:if>
+    <xsl:text>[</xsl:text>
     <!-- for small width, print underscores; otherwise, specify by number -->
     <xsl:choose>
         <xsl:when test="$width &lt; 13">
