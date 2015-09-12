@@ -195,7 +195,10 @@
                 <webwork>
                     <title>Multiplication with Exponents</title>
                     <macros>
+                        <macro>MathObjects.pl</macro>                <!-- Ignored, since MathObject.pl included automatically -->
                         <macro>contextLimitedPolynomial.pl</macro>
+                        <macro>contextLimitedPolynomial.pl</macro>   <!-- Ignored, since already included -->
+                        <macro>PGcourse.pl</macro>                   <!-- Ignored, since PGcourse.pl included automatically -->
                     </macros>
 
                     <setup>

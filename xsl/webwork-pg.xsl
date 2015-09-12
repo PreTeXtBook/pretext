@@ -1064,52 +1064,91 @@
         <xsl:with-param name="title">Load Macros</xsl:with-param>
     </xsl:call-template>
     <xsl:text>loadMacros(&#xa;</xsl:text>
-    <xsl:text>    "PGstandard.pl",&#xa;</xsl:text>
-    <xsl:text>    "MathObjects.pl",&#xa;</xsl:text>
-    <xsl:text>    "PGML.pl",&#xa;</xsl:text>
-    <!-- look for other macros to use automatically                  -->
-    <!-- tables                                                      -->
-    <xsl:if test=".//tabular">
-        <xsl:text>    "niceTables.pl",&#xa;</xsl:text>
-    </xsl:if>
-    <!-- popup menu multiple choice answers                          -->
-    <xsl:if test=".//answer[@format='popup']">
-        <xsl:text>    "parserPopUp.pl",&#xa;</xsl:text>
-    </xsl:if>
-    <!-- radio buttons multiple choice answers                       -->
-    <xsl:if test=".//answer[@format='buttons']">
-        <xsl:text>    "parserRadioButtons.pl",&#xa;</xsl:text>
-    </xsl:if>
-    <!-- checkboxes multiple choice answers                          -->
-    <xsl:if test=".//answer[@format='checkboxes']">
-        <xsl:text>    "PGchoicemacros.pl",&#xa;</xsl:text>
-    </xsl:if>
-    <!-- essay answers, no var in setup, just answer                 -->
-    <xsl:if test=".//answer[@format='essay']">
-        <xsl:text>    "PGessaymacros.pl",&#xa;</xsl:text>
-    </xsl:if>
-    <!-- scaffolded problems -->
-    <xsl:if test="@type='scaffold'">
-        <xsl:text>    "scaffold.pl",&#xa;</xsl:text>
-    </xsl:if>
-    <!-- links to syntax help following answer blanks                -->
-    <xsl:if test="($pg.answer.format.help = 'yes')">
-        <xsl:text>    "AnswerFormatHelp.pl",&#xa;</xsl:text>
-    </xsl:if>
-    <!-- targeted feedback messages for specific wrong answers       -->
-    <xsl:if test="contains(./setup/pg-code,'AnswerHints')">
-        <xsl:text>    "answerHints.pl",&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="macros/macro" />
-    <xsl:text>    "PGcourse.pl",&#xa;</xsl:text>
+    <xsl:call-template name="list-of-macros"/>
     <xsl:text>);&#xa;</xsl:text>
 </xsl:template>
 
-<!-- NB: final trailing comma controlled by "PGcourse.pl" -->
-<xsl:template match="macro">
-    <xsl:text>    "</xsl:text>
-    <xsl:value-of select="." />
-    <xsl:text>",&#xa;</xsl:text>
+<xsl:template name="list-of-macros">
+    <xsl:param name="macro-list-string" select="'    &quot;PGstandard.pl&quot;,&#xa;    &quot;MathObjects.pl&quot;,&#xa;    &quot;PGML.pl&quot;,&#xa;'"/>
+    <xsl:param name="count" select="count(macros/macro)"/>
+    <xsl:choose>
+        <!-- look for other macros to use automatically based on test following "and" -->
+        <!-- tables                                                      -->
+        <xsl:when test="not(contains($macro-list-string,'&quot;niceTables.pl&quot;'))         and .//tabular">
+            <xsl:call-template name="list-of-macros">
+                <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;niceTables.pl&quot;,&#xa;')"/>
+            </xsl:call-template>
+        </xsl:when>
+        <!-- popup menu multiple choice answers                          -->
+        <xsl:when test="not(contains($macro-list-string,'&quot;parserPopUp.pl&quot;'))        and .//answer[@format='popup']">
+            <xsl:call-template name="list-of-macros">
+                <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;parserPopUp.pl&quot;,&#xa;')"/>
+            </xsl:call-template>
+        </xsl:when>
+        <!-- radio buttons multiple choice answers                       -->
+        <xsl:when test="not(contains($macro-list-string,'&quot;parserRadioButtons.pl&quot;')) and .//answer[@format='buttons']">
+            <xsl:call-template name="list-of-macros">
+                <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;parserRadioButtons.pl&quot;,&#xa;')"/>
+            </xsl:call-template>
+        </xsl:when>
+        <!-- checkboxes multiple choice answers                          -->
+        <xsl:when test="not(contains($macro-list-string,'&quot;PGchoicemacros.pl&quot;'))     and .//answer[@format='checkboxes']">
+            <xsl:call-template name="list-of-macros">
+                <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;PGchoicemacros.pl&quot;,&#xa;')"/>
+            </xsl:call-template>
+        </xsl:when>
+        <!-- essay answers, no var in setup, just answer                 -->
+        <xsl:when test="not(contains($macro-list-string,'&quot;PGessaymacros.pl&quot;'))      and .//answer[@format='essay']">
+            <xsl:call-template name="list-of-macros">
+                <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;PGessaymacros.pl&quot;,&#xa;')"/>
+            </xsl:call-template>
+        </xsl:when>
+        <!-- scaffolded problems -->
+        <xsl:when test="not(contains($macro-list-string,'&quot;scaffold.pl&quot;'))           and (@type = 'scaffold')">
+            <xsl:call-template name="list-of-macros">
+                <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;scaffold.pl&quot;,&#xa;')"/>
+            </xsl:call-template>
+        </xsl:when>
+        <!-- links to syntax help following answer blanks                -->
+        <xsl:when test="not(contains($macro-list-string,'&quot;AnswerFormatHelp.pl&quot;'))   and ($pg.answer.format.help = 'yes')">
+            <xsl:call-template name="list-of-macros">
+                <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;AnswerFormatHelp.pl&quot;,&#xa;')"/>
+            </xsl:call-template>
+        </xsl:when>
+        <!-- targeted feedback messages for specific wrong answers       -->
+        <xsl:when test="not(contains($macro-list-string,'&quot;answerHints.pl&quot;'))        and contains(./setup/pg-code,'AnswerHints')">
+            <xsl:call-template name="list-of-macros">
+                <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;answerHints.pl&quot;,&#xa;')"/>
+            </xsl:call-template>
+        </xsl:when>
+        <!-- now run through macros/macro and add author-declared macros, but not if they have already been added or if they are PGcourse.pl-->
+        <xsl:when test="$count &gt; 0">
+            <xsl:variable name="index">
+                <xsl:value-of select="(1 + count(macros/macro)) - $count"/>
+            </xsl:variable>
+            <xsl:variable name="next-author-macro">
+                <xsl:value-of select="macros/macro[number($index)]"/>
+            </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="not(contains($macro-list-string,concat('&quot;',$next-author-macro,'&quot;'))) and not(contains($next-author-macro,'PGcourse.pl'))">
+                    <xsl:call-template name="list-of-macros">
+                        <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;',$next-author-macro,'&quot;,&#xa;')"/>
+                        <xsl:with-param name="count" select="$count - 1"/>
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>MBX:WARNING: the PG macro <xsl:value-of select="$next-author-macro"/> has either been called twice, or need not be called in source at all</xsl:message>
+                    <xsl:call-template name="list-of-macros">
+                        <xsl:with-param name="macro-list-string" select="$macro-list-string"/>
+                        <xsl:with-param name="count" select="$count - 1"/>
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="concat($macro-list-string,'    &quot;PGcourse.pl&quot;,&#xa;')"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template name="end-problem">
