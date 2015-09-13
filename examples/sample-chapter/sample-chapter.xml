@@ -115,7 +115,7 @@
                     <p>A simple, but functional example to begin.</p>
                 </statement>
 
-                <webwork xml:id="integer-addition" height="250">
+                <webwork xml:id="integer-addition">
                     <title>Integer Addition</title>
 
                     <setup>
@@ -153,7 +153,7 @@
                     <p>You can also declare a <c>seed</c> to specify a version of any problem that has randomization.</p>
                 </statement>
 
-                <webwork xml:id="integer-addition-with-seed" height="250" seed="923">
+                <webwork xml:id="integer-addition-with-seed" seed="510">
                     <title>Integer Addition</title>
 
                     <setup>
@@ -253,6 +253,66 @@
                 </webwork>
             </exercise>
 
+            <exercise>
+                <title>Using Hints</title>
+                <statement>
+                    <p>Hints can be inserted for exercises. Whether a hint is visible depends on the value of <c>$showHint</c> in <c>PGcourse.pl</c>.</p>
+                </statement>
+
+                <webwork>
+                    <title>Multiplication with Exponents</title>
+                    <macros>
+                        <macro>contextLimitedRadical.pl</macro>
+                    </macros>
+
+                    <setup>
+                        <var name="$a">
+                            <static>5</static>
+                        </var>
+                        <var name="$b">
+                            <static>3</static>
+                        </var>
+                        <var name="$c">
+                            <static>45</static>
+                        </var>
+                        <var name="$expression">
+                            <static>\sqrt{45}</static>
+                        </var>
+                        <var name="$answer" category="formula">
+                            <static>3\sqrt{5}</static>
+                        </var>
+
+                        <pg-code>
+                            do {
+                                $a = Compute(list_random(2,3,5,6));
+                                $b = Compute(random(1, 5, 1));
+                               } until (gcd($a,$b) == 1);
+                            $c = $a * $b**2;
+                            Context()->flags->set(reduceConstantFunctions=>0);
+                            $expression = Formula("sqrt($c)");
+
+                            Context("LimitedRadical");
+
+                            $answer = Formula("$b sqrt($a)");
+                        </pg-code>
+                    </setup>
+
+                    <statement>
+                        <p>Simplify the expression <m><var name="$expression"/></m>.</p>
+
+                        <p halign="center"><m><var name="$expression"/>=</m><answer var="$answer" width="10"/></p>
+                    </statement>
+
+                    <hint>
+                        <p>Factor the number inside the radical.</p>
+                    </hint>
+
+                    <solution>
+                        <p><me><var name="$expression"/>=\sqrt{<var name="$b"/>^2<var name="$a"/>}=<var name="$b"/>\sqrt{<var name="$a"/>}</me></p>
+                    </solution>
+                </webwork>
+            </exercise>
+
         </section>
 
         <section>
@@ -283,7 +343,7 @@
             <exercise>
                 <title>Solving Quadratic Equations</title>
 
-                <webwork xml:id="quadratic-equation" context="numeric" showpartialcorrect="yes" type="scaffold" height="750">
+                <webwork xml:id="quadratic-equation" context="numeric" showpartialcorrect="yes" type="scaffold" >
 
                     <macros>
                         <macro>parserMultiAnswer.pl</macro>
@@ -439,7 +499,7 @@
                         <p>Consult <xref ref="definition-antiderivative" autoname="yes" /> and the <xref ref="theorem-FTC" autoname="title" /> to assist you with the following problem.</p>
                     </statement>
 
-                    <webwork source="Library/Rochester/setIntegrals4FTC/S05.03.FundThmCalc.PTP01.pg" height="750"/>
+                    <webwork source="Library/Rochester/setIntegrals4FTC/S05.03.FundThmCalc.PTP01.pg" />
                 </exercise>
 
                 <exercise xml:id="ww-discuss-always-antiderivative">
@@ -449,7 +509,7 @@
                         <p>WeBWorK problems can be written to allow open-ended essay responses meant to be assessed later by the instructor. For anonymous access, no test field is provided. But if this problem were used within WeBWorK as part of a homework set, users could submit an answer.</p>
                     </statement>
 
-                    <webwork height="500">
+                    <webwork >
                         <statement>
                             <p>Explain how we can use <xref ref="corollary-FTC-derivative" autoname="yes" /> to say that every continuous function <em>always</em> has a derivative. (And we will demonstrate here that you can use a  macro from <c>docinfo</c>: <m>\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)</m>. It will work in the WeBWorK problem, regardelss of whether you are using images, MathJax, or hardcopy.)</p>
                             <answer format="essay" />
@@ -460,7 +520,7 @@
                 <exercise xml:id="ww-discuss-inverse-processes">
                     <title>Inverse Processes</title>
 
-                    <webwork height="500">
+                    <webwork >
                         <statement>
                             <p><q>Differentiation and integration are inverse processes.</q>  Cite <alert>specific results</alert> from this section in an explanation of how they justify this (somewhat imprecise) claim.</p>
                             <answer format="essay" width="40"/>
@@ -479,7 +539,7 @@
             <exercise xml:id="ww-PGML-format">
                 <title>PGML Formatting</title>
 
-                <webwork height="500">
+                <webwork >
                     <statement>
                         <p>Smart double quotes: <q>Life is about making an impact, not making an income.</q></p>
                         <p>Smart single quotes: <sq>Whatever the mind of man can conceive and believe, it can achieve.</sq></p>

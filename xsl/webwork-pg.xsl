@@ -72,6 +72,7 @@
     <xsl:call-template   name="header" />
     <xsl:apply-templates select="setup" />
     <xsl:apply-templates select="statement" />
+    <xsl:apply-templates select="hint" />
     <xsl:apply-templates select="solution" />
     <xsl:call-template   name="end-problem" />
 </xsl:template>
@@ -115,6 +116,7 @@
     <xsl:apply-templates select="title" />
     <xsl:text>");&#xa;</xsl:text>
     <xsl:apply-templates select="statement" />
+    <xsl:apply-templates select="hint" />
     <xsl:apply-templates select="solution" />
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>Section::End();&#xa;</xsl:text>
@@ -146,6 +148,21 @@
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>END_PGML_SOLUTION&#xa;</xsl:text>
 </xsl:template>
+
+<!-- default template, for hint -->
+<!-- TODO: fix match pattern to cover scaffolded problems once name firms up -->
+<xsl:template match="webwork//hint">
+    <xsl:call-template name="begin-block">
+        <xsl:with-param name="title">Hint</xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>#Set value of $showHint in PGcourse.pl for course-wide attempt threshhold for revealing hints&#xa;</xsl:text>
+    <xsl:text>BEGIN_PGML_HINT&#xa;</xsl:text>
+    <xsl:apply-templates />
+    <!-- unless we guarantee line feed, a break is needed -->
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>END_PGML_HINT&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- In PGML, paragraph breaks are just blank lines -->
 <!-- End as normal with a line feed, then           -->
@@ -733,7 +750,7 @@
 </xsl:template>
 
 <!-- PGML markup for Perl variable in LaTeX expression -->
-<xsl:template match="statement//var|solution//var">
+<xsl:template match="statement//var|hint//var|solution//var">
     <xsl:variable name="varname" select="@name" />
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="category" select="$problem/setup/var[@name=$varname]/@category" />
@@ -965,8 +982,6 @@
 </xsl:template>
 
 
-<!-- Unimplemented, currently killed -->
-<xsl:template match="webwork//hint" />
 
 
 <!-- ####################### -->

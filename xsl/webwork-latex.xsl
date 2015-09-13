@@ -57,6 +57,7 @@
 <!-- Basic outline of a simple problem -->
 <xsl:template match="webwork">
     <xsl:apply-templates select="statement" />
+    <xsl:apply-templates select="hint" />
     <xsl:apply-templates select="solution" />
 </xsl:template>
 
@@ -69,6 +70,7 @@
 <xsl:template match="platform">
     <!-- employ title here to identify different platforms -->
     <xsl:apply-templates select="statement" />
+    <xsl:apply-templates select="hint" />
     <xsl:apply-templates select="solution" />
 </xsl:template>
 
@@ -87,7 +89,15 @@
     <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="statement//var|solution//var">
+<!-- default template, for hint -->
+<xsl:template match="webwork//hint">
+    <xsl:text>\par\noindent%&#xa;</xsl:text>
+    <xsl:text>\textbf{Hint.}\quad </xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>\par&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="statement//var|hint//var|solution//var">
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="varname" select="@name" />
     <xsl:choose>
@@ -198,7 +208,6 @@
 
 <!-- Unimplemented, currently killed -->
 <xsl:template match="webwork/title" />
-<xsl:template match="webwork/hint" />
 
 
 <!-- ####################### -->
