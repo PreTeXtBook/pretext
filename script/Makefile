@@ -112,6 +112,17 @@ minimal:
 	cd $(PGOUT); \
 	xsltproc --stringparam webwork.server https://webwork.pcc.edu $(MBUSR)/extract-webwork.xsl $(WWMBX)/examples/minimal/mini.xml
 
+rip:
+	install -d $(PDFOUT) $(MBUSR)
+	-rm $(PDFOUT)/*.tex
+	cp $(WWXSL)/extract-webwork-tex.xsl $(MBXSL)
+	# cp $(MBXSL)/mathbook-common.xsl $(MBXSL)/extract-identity.xsl $(MBUSR)
+	cd $(PDFOUT); \
+	xsltproc $(MBUSR)/extract-webwork-tex.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml
+	#
+	install -d $(PDFOUT)/webwork-tex
+	$(MB)/script/mbx -v -c webwork-tex -s https://webwork.pcc.edu -d $(PDFOUT)/webwork-tex $(WWMBX)/examples/sample-chapter/sample-chapter.xml
+
 chapter:
 	install -d $(PGOUT) $(MBUSR)
 	#-rm $(PGOUT)/*.pg
@@ -122,8 +133,9 @@ chapter:
 	install -d $(PDFOUT) $(MBUSR)
 	-rm $(PDFOUT)/*.tex
 	cp $(WWXSL)/webwork-latex.xsl $(MBUSR)
+	# can experiment with   --stringparam exercise.text.solution no 
 	cd $(PDFOUT); \
-	xsltproc --stringparam webwork.server https://webwork.pcc.edu --stringparam toc.level 0 $(MBUSR)/webwork-latex.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml; \
+	xsltproc --stringparam webwork.server https://webwork.pcc.edu --stringparam webwork.server.latex "$(PDFOUT)/webwork-tex/" --stringparam toc.level 0 $(MBUSR)/webwork-latex.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml; \
 	xelatex sample-ww-chapter.tex; \
 	xelatex sample-ww-chapter.tex
 	#

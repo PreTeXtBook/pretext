@@ -440,6 +440,45 @@
         </section>
 
         <section>
+            <title>Open Problem Library</title>
+
+            <paragraphs>
+                <title>Implementation Note</title>
+
+                <p>The <url href="http://webwork.maa.org/wiki/Open_Problem_Library">Open Problem Library</url> (OPL) is a repository of curated <wbwk /> problems.</p>
+
+                <p>Most of the problems in this sample chapter have their source authored within the same document as the narrative.  However the problems in this section live on a server.  For HTML output we can connect to the server and render the problem here in an interactive fashion.  For print/PDF we use the <c>mbx</c> script to connect to the server to produce the LaTeX code for the problem.  We can use the <c>exercise.text.*</c> switches to control which parts of the problem (statements, solutions, hints) are incorporated.</p>
+
+                <p>Problems do not have to be in the OPL to reside on a server, so any problem located on any <wbwk /> server may be harvested and rendered into a <latex /> document.</p>
+
+                <p>One implication of this is that we might want to provide some commentary that connects the problem to the text.  An example of this happens in the next section in <xref ref="ww-graphical-antiderivatives" autoname="yes" />.</p>
+            </paragraphs>
+
+            <exercise xml:id="function-or-not">
+                <title>Functions or Not</title>
+
+                <webwork source="BasicAlgebra/FunctionBasics/FunctionOrNotByGraph10.pg" seed="8435" height="750"/>
+            </exercise>
+
+            <exercise xml:id="two-variable-inequality">
+                <title>Grandpa's Cat</title>
+
+                <webwork source="BasicAlgebra/EquationsAndInequalitiesInTwoVariables/GraphTwoVariableInequality110.pg" height="750"/>
+            </exercise>
+
+            <exercise xml:id="strictly-testing">
+                <title>A Mock Multi-Part WeBWorK Question</title>
+
+                <statement>
+                    <p>This problem has two problem statements, two solutions, each with a graphic (that are all the same), for testing purposes.</p>
+                </statement>
+
+                <webwork source="local/testing.pg" height="750"/>
+            </exercise>
+
+        </section>
+
+        <section>
             <title>Antidifferentiation</title>
 
             <p>The derivative, and antiderivative, of a function can be understood through study of their graphical relationships.</p>
@@ -481,13 +520,6 @@
                 </proof>
             </corollary>
 
-            <paragraphs>
-                <title>Implementation Note</title>
-
-                <p>The problems in this sample chapter have their source authored within the same document as the narrative.  However the first problem in the set below is drawn directly from the <url href="http://webwork.maa.org/wiki/Open_Problem_Library">Open Problem Library</url>.  So everything about the problem lives on a <wbwk /> server that we are polling.</p>
-
-                <p>One implication of this is that we might want to provide some commentary that connects the problem to the text, as we have suggested below.  We also need to decide how to represent the problem in a static setting (PDF/print), especially when the problem contains interactive features like this one.  So in the PDF version of this chapter, the problem is currently blank.</p>
-            </paragraphs>
 
             <exercises>
                 <title><wbwk /> Exercises</title>

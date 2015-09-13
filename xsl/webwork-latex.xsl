@@ -33,6 +33,15 @@
 <!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
 <xsl:strip-space elements="li" />
 
+<!-- We have to identify snippets of LaTeX from the server,   -->
+<!-- which we have stored in a directory, because XSLT 1.0    -->
+<!-- is unable/unwilling to figure out where the source file  -->
+<!-- lives (paths are relative to the stylesheet).  When this -->
+<!-- is needed a fatal message will warn if it is not set.    -->
+<!-- Path ends with a slash, anticipating appended filename   -->
+<!-- This could be overridden in a compatibility layer        -->
+<xsl:param name="webwork.server.latex" select="''" />
+
 
 <!-- ################## -->
 <!-- Top-Down Structure -->
@@ -47,8 +56,10 @@
     <xsl:apply-templates select="title" mode="environment-option" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
+    <!-- Allow an exercise to introduce/connect a problem     -->
+    <!-- (especially from server) to the text in various ways -->
+    <xsl:apply-templates select="statement"/>
     <xsl:apply-templates select="webwork" />
-    <!-- <xsl:apply-templates select="statement"/> -->
     <!-- <xsl:apply-templates select="hint"/> -->
     <!-- <xsl:apply-templates select="solution"/> -->
     <xsl:text>\end{exercise}&#xa;</xsl:text>
@@ -200,7 +211,73 @@
     <xsl:text>\]</xsl:text>
 </xsl:template>
 
+<!-- ############### -->
+<!-- Server Problems -->
+<!-- ############### -->
 
+<!-- @source in an empty "webwork" element indicates     -->
+<!-- the problem lives on a server.  HTML output has     -->
+<!-- no problem with that.  For LaTeX, the  mbx  script  -->
+<!-- fetches a LaTeX rending and associated image files. -->
+<!-- Here, we just provide a light wrapper, and drop an  -->
+<!-- include, since the base forthe filename has been    -->
+<!-- managed to be predictable.                          -->
+
+<xsl:template match="webwork[@source]">
+    <!-- directory of server LaTeX must be specified -->
+    <xsl:if test="$webwork.server.latex = ''">
+        <xsl:message terminate="yes">MBX:ERROR   For LaTeX versions of WeBWorK problems on a server, the mbx script will collect the LaTeX source and then this conversion must specify the location through the "webwork.server.latex" command line stringparam.  Quitting...</xsl:message>
+    </xsl:if>
+    <xsl:variable name="xml-filename">
+        <!-- assumes path has trailing slash -->
+        <xsl:value-of select="$webwork.server.latex" />
+        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:text>.xml</xsl:text>
+    </xsl:variable>
+    <xsl:variable name="server-tex" select="document($xml-filename)/webwork-tex" />
+    <!-- An enclosing exercise may introduce/connect the server-version problem. -->
+    <!-- Then formatting is OK.  Otherwise we need a faux sentence instead.      -->
+    <xsl:text>\mbox{}\\ % hack to move box after heading&#xa;</xsl:text>
+    <xsl:apply-templates select="introduction" /> <!-- before boxed problem -->
+    <xsl:text>\begin{mdframed}&#xa;</xsl:text>
+    <xsl:text>{</xsl:text> <!-- prophylactic wrapper -->
+    <xsl:value-of select="$server-tex/preamble" />
+    <!-- process in the order server produces them, may be several -->
+    <xsl:apply-templates select="$server-tex/statement|$server-tex/solution|$server-tex/hint" />
+    <xsl:text>}</xsl:text>
+    <xsl:text>\par\vspace*{2ex}\noindent\tiny{%&#xa;</xsl:text>
+    <xsl:text>\url{</xsl:text>
+    <xsl:value-of select="@source" />
+    <xsl:text>}\\</xsl:text>
+    <!-- seed will round-trip through mbx script, default -->
+    <!-- is hard-coded there.  It comes back as an        -->
+    <!-- attribute of the overall "webwork-tex" element   -->
+    <xsl:text>Seed: </xsl:text>
+    <xsl:value-of select="$server-tex/@seed" />
+    <xsl:text>\hfill</xsl:text>
+    <xsl:text>}</xsl:text>  <!-- end: \tiny -->
+    <xsl:text>\end{mdframed}&#xa;</xsl:text>
+    <xsl:apply-templates select="conclusion" /> <!-- after boxed problem -->
+</xsl:template>
+
+<!-- We respect switches by implementing templates     -->
+<!-- for each part of the problem that use the switch. -->
+<!-- This allows processing above in document order    -->
+<xsl:template match="webwork-tex/statement">
+    <xsl:if test="$exercise.text.statement = 'yes'">
+        <xsl:apply-templates />
+    </xsl:if>
+</xsl:template>
+<xsl:template match="webwork-tex/solution">
+    <xsl:if test="$exercise.text.solution = 'yes'">
+        <xsl:apply-templates />
+    </xsl:if>
+</xsl:template>
+<xsl:template match="webwork-tex/hint">
+    <xsl:if test="$exercise.text.hint = 'yes'">
+        <xsl:apply-templates />
+    </xsl:if>
+</xsl:template>
 
 <!-- KILLED -->
 <xsl:template match="macros" />
