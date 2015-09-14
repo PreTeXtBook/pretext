@@ -278,7 +278,7 @@
                         <var name="$expression">
                             <static>\sqrt{45}</static>
                         </var>
-                        <var name="$answer" category="formula">
+                        <var name="$answer" category="number">
                             <static>3\sqrt{5}</static>
                         </var>
 
