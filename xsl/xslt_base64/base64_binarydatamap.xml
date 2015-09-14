@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><datamap>
 	<asciibinary>
-		
 		<item><ascii>&#x09;</ascii><binary>00001001</binary></item>  <!-- MBX: horizontal tab -->
 		<item><ascii>&#x0a;</ascii><binary>00001010</binary></item>  <!-- MBX: line feed -->
 		<item><ascii>&#x0d;</ascii><binary>00001101</binary></item>  <!-- MBX: carriage return -->
@@ -99,70 +98,6 @@
 		<item><ascii>|</ascii><binary>01111100</binary></item>
 		<item><ascii>}</ascii><binary>01111101</binary></item>
 		<item><ascii>~</ascii><binary>01111110</binary></item>
-		<item><ascii>А</ascii><binary>1101000010010000</binary></item>
-		<item><ascii>Б</ascii><binary>1101000010010000</binary></item>
-		<item><ascii>В</ascii><binary>1101000010010010</binary></item>
-		<item><ascii>Г</ascii><binary>1101000010010011</binary></item>
-		<item><ascii>Д</ascii><binary>1101000010010100</binary></item>
-		<item><ascii>Е</ascii><binary>1101000010010101</binary></item>
-		<item><ascii>Ж</ascii><binary>1101000010010110</binary></item>
-		<item><ascii>З</ascii><binary>1101000010010111</binary></item>
-		<item><ascii>И</ascii><binary>1101000010011000</binary></item>
-		<item><ascii>Й</ascii><binary>1101000010011001</binary></item>
-		<item><ascii>К</ascii><binary>1101000010011010</binary></item>
-		<item><ascii>Л</ascii><binary>1101000010011011</binary></item>
-		<item><ascii>М</ascii><binary>1101000010011100</binary></item>
-		<item><ascii>Н</ascii><binary>1101000010011101</binary></item>
-		<item><ascii>О</ascii><binary>1101000010011110</binary></item>
-		<item><ascii>П</ascii><binary>1101000010011111</binary></item>
-		<item><ascii>Р</ascii><binary>1101000010100000</binary></item>
-		<item><ascii>С</ascii><binary>1101000010100001</binary></item>
-		<item><ascii>Т</ascii><binary>1101000010100010</binary></item>
-		<item><ascii>У</ascii><binary>1101000010100011</binary></item>
-		<item><ascii>Ф</ascii><binary>1101000010100100</binary></item>
-		<item><ascii>Х</ascii><binary>1101000010100101</binary></item>
-		<item><ascii>Ц</ascii><binary>1101000010100110</binary></item>
-		<item><ascii>Ч</ascii><binary>1101000010100111</binary></item>
-		<item><ascii>Ш</ascii><binary>1101000010101000</binary></item>
-		<item><ascii>Щ</ascii><binary>1101000010101001</binary></item>
-		<item><ascii>Ъ</ascii><binary>1101000010101010</binary></item>
-		<item><ascii>Ы</ascii><binary>1101000010101011</binary></item>
-		<item><ascii>Ь</ascii><binary>1101000010101100</binary></item>
-		<item><ascii>Э</ascii><binary>1101000010101101</binary></item>
-		<item><ascii>Ю</ascii><binary>1101000010101110</binary></item>
-		<item><ascii>Я</ascii><binary>1101000010101111</binary></item>
-		<item><ascii>а</ascii><binary>1101000010110000</binary></item>
-		<item><ascii>б</ascii><binary>1101000010110001</binary></item>
-		<item><ascii>в</ascii><binary>1101000010110010</binary></item>
-		<item><ascii>г</ascii><binary>1101000010110011</binary></item>
-		<item><ascii>д</ascii><binary>1101000010110100</binary></item>
-		<item><ascii>е</ascii><binary>1101000010110101</binary></item>
-		<item><ascii>ж</ascii><binary>1101000010110110</binary></item>
-		<item><ascii>з</ascii><binary>1101000010110111</binary></item>
-		<item><ascii>и</ascii><binary>1101000010111000</binary></item>
-		<item><ascii>й</ascii><binary>1101000010111001</binary></item>
-		<item><ascii>к</ascii><binary>1101000010111010</binary></item>
-		<item><ascii>л</ascii><binary>1101000010111011</binary></item>
-		<item><ascii>м</ascii><binary>1101000010111100</binary></item>
-		<item><ascii>н</ascii><binary>1101000010111101</binary></item>
-		<item><ascii>о</ascii><binary>1101000010111110</binary></item>
-		<item><ascii>п</ascii><binary>1101000010111111</binary></item>
-		<item><ascii>р</ascii><binary>1101000110000000</binary></item>
-		<item><ascii>с</ascii><binary>1101000110000001</binary></item>
-		<item><ascii>т</ascii><binary>1101000110000010</binary></item>
-		<item><ascii>у</ascii><binary>1101000110000011</binary></item>
-		<item><ascii>ф</ascii><binary>1101000110000100</binary></item>
-		<item><ascii>х</ascii><binary>1101000110000101</binary></item>
-		<item><ascii>ц</ascii><binary>1101000110000110</binary></item>
-		<item><ascii>ч</ascii><binary>1101000110000111</binary></item>
-		<item><ascii>ш</ascii><binary>1101000110001000</binary></item>
-		<item><ascii>щ</ascii><binary>1101000110001001</binary></item>
-		<item><ascii>ъ</ascii><binary>1101000110001010</binary></item>
-		<item><ascii>ы</ascii><binary>1101000110001011</binary></item>
-		<item><ascii>ь</ascii><binary>1101000110001100</binary></item>
-		<item><ascii>э</ascii><binary>1101000110001101</binary></item>
-		<item><ascii>ю</ascii><binary>1101000110001110</binary></item>
-		<item><ascii>я</ascii><binary>1101000110001111</binary></item>
 	</asciibinary>
 
 	<binarybase64>
@@ -230,7 +165,6 @@
 		<item><binary>111101</binary><base64>9</base64></item>
 		<item><binary>111110</binary><base64>+</base64></item>
 		<item><binary>111111</binary><base64>/</base64></item>
-		
 	</binarybase64>
 
 </datamap>

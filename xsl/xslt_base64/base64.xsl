@@ -24,19 +24,13 @@
 		<xsl:param name="padding" select="true()"/>
 		<xsl:param name="urlsafe" select="false()"/>
 		<xsl:variable name="result">
-			<xsl:variable name="binary">
-				<xsl:call-template name="local:asciiStringToBinary">
-					<xsl:with-param name="string" select="$asciiString"/>
-				</xsl:call-template>
-			</xsl:variable>
-			<xsl:call-template name="local:binaryToBase64">
-				<xsl:with-param name="binary" select="$binary"/>
+ 			<xsl:call-template name="local:asciiToBase64">
+				<xsl:with-param name="ascii" select="$asciiString"/>
 				<xsl:with-param name="padding" select="$padding"/>
 			</xsl:call-template>
 		</xsl:variable>
 		<xsl:choose>
 			<xsl:when test="$urlsafe">
-				<!-- <xsl:value-of select="translate($result,'+/','-_')"/> -->
 				<!-- MBX: Convert "+" and "/" to URL-encoded hex via EXSLT str:replace() -->
 				<xsl:value-of select="str:replace(str:replace($result, '+', '%2B'), '/', '%2F')"/>
 			</xsl:when>
@@ -45,50 +39,141 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	
-	<xsl:template name="local:binaryToBase64">
-		<xsl:param name="binary"/>
-		<xsl:param name="padding"/>
-		<xsl:call-template name="local:sixbitToBase64">
-			<xsl:with-param name="sixbit" select="substring($binary, 1, 6)"/>
-			<xsl:with-param name="padding" select="$padding"/>
-		</xsl:call-template>
-		<xsl:call-template name="local:sixbitToBase64">
-			<xsl:with-param name="sixbit" select="substring($binary, 7, 6)"/>
-			<xsl:with-param name="padding" select="$padding"/>
-		</xsl:call-template>
-		<xsl:call-template name="local:sixbitToBase64">
-			<xsl:with-param name="sixbit" select="substring($binary, 13, 6)"/>
-			<xsl:with-param name="padding" select="$padding"/>
-		</xsl:call-template>
-		<xsl:call-template name="local:sixbitToBase64">
-			<xsl:with-param name="sixbit" select="substring($binary, 19, 6)"/>
-			<xsl:with-param name="padding" select="$padding"/>
-		</xsl:call-template>
-		<xsl:variable name="remaining" select="substring($binary, 25)"/>
-		<xsl:if test="$remaining != ''">
-			<xsl:call-template name="local:binaryToBase64">
-				<xsl:with-param name="binary" select="$remaining"/>
-				<xsl:with-param name="padding" select="$padding"/>
-			</xsl:call-template>
-		</xsl:if>		
-	</xsl:template>
-	
-	<xsl:template name="local:sixbitToBase64">
-		<xsl:param name="sixbit"/>
-		<xsl:param name="padding"/>
-		<xsl:variable name="realsixbit">
-			<xsl:value-of select="$sixbit"/>
-			<xsl:if test="string-length($sixbit)=1">00000</xsl:if>
-			<xsl:if test="string-length($sixbit)=2">0000</xsl:if>
-			<xsl:if test="string-length($sixbit)=3">000</xsl:if>
-			<xsl:if test="string-length($sixbit)=4">00</xsl:if>
-			<xsl:if test="string-length($sixbit)=5">0</xsl:if>
-		</xsl:variable>
-		<xsl:for-each select="$binarydatamap">
-			<xsl:value-of select="key('binaryToBase64', $realsixbit)/base64"/>
-		</xsl:for-each>
-		<xsl:if test="string-length($realsixbit) = 0 and $padding">=</xsl:if>
+
+	<!-- MBX: Heavily re-written, better recursion, assumes no two-byte Cyrillic -->
+	<xsl:template name="local:asciiToBase64">
+		<xsl:param name="ascii" />
+		<xsl:param name="padding" />
+		<xsl:variable name="count" select="string-length($ascii)" />
+		<xsl:choose>
+			<!--                                                          -->
+			<!-- All but one or two characters of original string do not  -->
+			<!-- pass through next possibility, always in groups of three -->
+			<!-- The code is tedious and repetitive, but should have good -->
+			<!-- performance since we know exactly what to expect here    -->
+			<!--                                                          -->
+			<!-- 3 ASCII characters, 24 bits, 4 base64 characters         -->
+			<!--                                                          -->
+			<xsl:when test="$count = 3">
+				<xsl:variable name="binary">
+					<xsl:for-each select="$binarydatamap">
+						<xsl:value-of select="key('asciiToBinary', substring($ascii, 1, 1))/binary" />
+					</xsl:for-each>
+					<xsl:for-each select="$binarydatamap">
+						<xsl:value-of select="key('asciiToBinary', substring($ascii, 2, 1))/binary" />
+					</xsl:for-each>
+					<xsl:for-each select="$binarydatamap">
+						<xsl:value-of select="key('asciiToBinary', substring($ascii, 3, 1))/binary" />
+					</xsl:for-each>
+				</xsl:variable>
+				<xsl:for-each select="$binarydatamap">
+					<xsl:value-of select="key('binaryToBase64', substring($binary, 1, 6))/base64" />
+				</xsl:for-each>
+				<xsl:for-each select="$binarydatamap">
+					<xsl:value-of select="key('binaryToBase64', substring($binary, 7, 6))/base64" />
+				</xsl:for-each>
+				<xsl:for-each select="$binarydatamap">
+					<xsl:value-of select="key('binaryToBase64', substring($binary, 13, 6))/base64" />
+				</xsl:for-each>
+				<xsl:for-each select="$binarydatamap">
+					<xsl:value-of select="key('binaryToBase64', substring($binary, 19, 6))/base64" />
+				</xsl:for-each>
+			</xsl:when>
+			<!--                                                                                   -->
+			<!-- Recursion                                                                         -->
+			<!-- For longer strings, we cut in half and round up to closest multiple of three      -->
+			<!-- Left portion of split then subsequently always splits into two multiples of three -->
+			<!-- Or, said differently, right half always carries the same remainder mod 3          -->
+			<!-- So we recurse next, using divide and conquer to limit depth of recursion          -->
+			<!--                                                                                   -->
+			<xsl:when test="$count > 3">
+				<!-- take small half and round up -->
+				<xsl:variable name="short-half" select="floor($count div 2)" />
+				<!-- $split-triple is always a non-zero multiple of 3 -->
+				<xsl:variable name="mod-three" select="$short-half mod 3" />
+				<xsl:variable name="split-triple">
+					<xsl:choose>
+						<xsl:when test="$mod-three=0">
+							<xsl:value-of select="$short-half" />
+						</xsl:when>
+						<xsl:when test="$mod-three=1">
+							<xsl:value-of select="$short-half + 2" />
+						</xsl:when>
+						<xsl:when test="$mod-three=2">
+							<xsl:value-of select="$short-half + 1" />
+						</xsl:when>
+					</xsl:choose>
+				</xsl:variable>
+				<!-- recurse on the two "halves", mod 3 remainder always in second half -->
+				<xsl:call-template name="local:asciiToBase64">
+					<xsl:with-param name="ascii" select="substring($ascii, 1, $split-triple)" />
+					<xsl:with-param name="padding" select="$padding" />
+				</xsl:call-template>
+				<xsl:call-template name="local:asciiToBase64">
+					<xsl:with-param name="ascii" select="substring($ascii, $split-triple + 1)" />
+					<xsl:with-param name="padding" select="$padding" />
+				</xsl:call-template>
+			</xsl:when>
+			<!--                                                                   -->
+			<!-- Similar to  $count = 3  case, but only ever executed at most once -->
+			<!--                                                                   -->
+			<!-- 2 ASCII characters, 16+2 bits, 3 base64 characters, 1 padding     -->
+			<!--                                                                   -->
+			<xsl:when test="$count = 2">
+				<xsl:variable name="binary">
+					<xsl:for-each select="$binarydatamap">
+						<xsl:value-of select="key('asciiToBinary', substring($ascii, 1, 1))/binary"/>
+					</xsl:for-each>
+					<xsl:for-each select="$binarydatamap">
+						<xsl:value-of select="key('asciiToBinary', substring($ascii, 2, 1))/binary"/>
+					</xsl:for-each>
+					<!-- add two bits to get 18 total -->
+					<xsl:text>00</xsl:text>
+				</xsl:variable>
+				<xsl:for-each select="$binarydatamap">
+					<xsl:value-of select="key('binaryToBase64', substring($binary, 1, 6))/base64" />
+				</xsl:for-each>
+				<xsl:for-each select="$binarydatamap">
+					<xsl:value-of select="key('binaryToBase64', substring($binary, 7, 6))/base64" />
+				</xsl:for-each>
+				<xsl:for-each select="$binarydatamap">
+					<xsl:value-of select="key('binaryToBase64', substring($binary, 13, 6))/base64" />
+				</xsl:for-each>
+				<xsl:if test="$padding">
+					<xsl:text>=</xsl:text>
+				</xsl:if>
+			</xsl:when>
+			<!--                                                                   -->
+			<!-- Similar to  $count = 3  case, but only ever executed at most once -->
+			<!--                                                                   -->
+			<!-- 1 ASCII characters, 8+4 bits, 2 base64 characters, 2 padding     -->
+			<!--                                                                   -->
+			<xsl:when test="$count=1">
+				<xsl:variable name="binary">
+					<xsl:for-each select="$binarydatamap">
+						<xsl:value-of select="key('asciiToBinary', substring($ascii, 1, 1))/binary"/>
+					</xsl:for-each>
+					<xsl:for-each select="$binarydatamap">
+						<xsl:value-of select="key('asciiToBinary', substring($ascii, 2, 1))/binary"/>
+					</xsl:for-each>
+					<!-- add four bits to get 12 total -->
+					<xsl:text>0000</xsl:text>
+				</xsl:variable>
+				<xsl:for-each select="$binarydatamap">
+					<xsl:value-of select="key('binaryToBase64', substring($binary, 1, 6))/base64" />
+				</xsl:for-each>
+				<xsl:for-each select="$binarydatamap">
+					<xsl:value-of select="key('binaryToBase64', substring($binary, 7, 6))/base64" />
+				</xsl:for-each>
+				<xsl:if test="$padding">
+					<xsl:text>==</xsl:text>
+				</xsl:if>
+			</xsl:when>
+			<!-- should never land here -->
+			<xsl:otherwise>
+				<xsl:message>MBX:BUG   Something went very wrong with bse64 encoding</xsl:message>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 	<!-- Template to convert a binary number to decimal representation; this template calls template pow -->
@@ -136,23 +221,6 @@
 			</xsl:otherwise>			
 		</xsl:choose>
 		
-	</xsl:template>
-
-	<!-- Template to convert an ascii string to binary representation; this template calls template decimalToBinary -->
-	<xsl:template name="local:asciiStringToBinary">
-		<xsl:param name="string"/>
-		<xsl:variable name="char" select="substring($string, 1, 1)"/>
-		<xsl:if test="$char != ''">
-			<xsl:for-each select="$binarydatamap">
-				<xsl:value-of select="key('asciiToBinary', $char)/binary"/>
-			</xsl:for-each>
-		</xsl:if>
-		<xsl:variable name="remaining" select="substring($string, 2)"/>
-		<xsl:if test="$remaining != ''">
-			<xsl:call-template name="local:asciiStringToBinary">
-				<xsl:with-param name="string" select="$remaining"/>
-			</xsl:call-template>
-		</xsl:if>
 	</xsl:template>
 
 	<!-- Template to convert a decimal number to binary representation -->
