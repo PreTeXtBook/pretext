@@ -132,11 +132,12 @@ chapter:
 	cp $(WWXSL)/webwork-pg.xsl $(WWXSL)/webwork-html.xsl $(MBUSR)
 	cp -a $(WWMBX)/examples/sample-chapter/images $(HTMLOUT)
 	# xslt_base64: https://github.com/ilyakharlamov/xslt_base64
-	# recursion on entire problem content, up limits on  xsltproc
+	# heavily modified for MBX
 	cp $(WWXSL)/xslt_base64/base64.xsl $(MBUSR)
 	cp $(WWXSL)/xslt_base64/base64_binarydatamap.xml $(MBUSR)
+	# --maxdepth should not be needed for divide-and-conquer recursion
 	cd $(HTMLOUT); \
-	xsltproc --maxdepth 12000 --stringparam webwork.server https://webwork.pcc.edu --stringparam html.knowl.exercise.inline no $(MBUSR)/webwork-html.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml
+	xsltproc --stringparam webwork.server https://webwork.pcc.edu --stringparam html.knowl.exercise.inline no $(MBUSR)/webwork-html.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml
 
 templates:
 	install -d $(PGOUT) $(MBUSR)
