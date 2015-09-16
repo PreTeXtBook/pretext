@@ -762,6 +762,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\usepackage{showidx}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
+    <xsl:if test="//webwork[@source]">
+        <xsl:text>%% Package for breakable boxes on WeBWorK problems from server LaTeX&#xa;</xsl:text>
+        <xsl:text>\usepackage{mdframed}&#xa;</xsl:text>
+        <xsl:text>%% WeBWorK problem style&#xa;</xsl:text>
+        <xsl:text>\mdfdefinestyle{webwork-server}{framemethod=default, linewidth=2pt}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="//docinfo/logo">
         <xsl:text>%% Package for precise image placement (for logos on pages)&#xa;</xsl:text>
         <xsl:text>\usepackage{eso-pic}&#xa;</xsl:text>
