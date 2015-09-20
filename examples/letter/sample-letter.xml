@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2015 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- A sample letter -->
+<!-- (1) This example assumes 8.5 x 11 paper       -->
+<!-- (2) Requires customizing graphics files       -->
+<!-- (3) Conversion to LaTeX only                  -->
+<!-- (4) Many elements are optional                -->
+<!-- (5) pdflatex is superior for graphics formats -->
+<!-- (6) xelatex is superior for Unicode support   -->
+
+<!-- Copy sample letterhead graphic to the directory where you will compile LaTeX      -->
+<!--                                                                                   -->
+<!-- $ xsltproc /path/to/mathbook/xsl/mathbook-latex.xsl /path/to/this-source-file.xml -->
+<!--                                                                                   -->
+<!-- Look in current working directory for "john-public-job.tex" (see below)           -->
+
+<mathbook>
+    <!-- The docinfo element is like metadata, it mostly      -->
+    <!-- migrates various places, or gets used multiple times -->
+    <docinfo>
+        <!-- To customize your letter as letterhead, you can place scanned images   -->
+        <!-- anywhere on the page. PDF images seem to lead to the smallest files.   -->
+        <!-- pdflatex will automatically convert EPS files to PDF and leave         -->
+        <!-- the conversion behind, so you can harvest those, if desired            -->
+        <!--                                                                        -->
+        <!-- (llx, lly) is for placement:                                           -->
+        <!-- it is the desired lower-left corner of the image on the page, where    -->
+        <!-- (0, 0) is in the lower-left corner of the page and units are           -->
+        <!-- "true" points (72.27 points to the inch)                               -->
+        <!-- Specify a width, there is no provision for changing the aspect ratio   -->
+        <!--                                                                        -->
+        <!-- Graphics files need to live in the same directory as the source        -->
+        <!-- (or down a relative path), or can go into (any) directory of your      -->
+        <!-- personal texmf tree (be sure to run texhash or mktexlsr to index them) -->
+        
+        <!-- Example footer -->
+        <!-- Designed at 300dpi, 5 inches wide, 7/12 inches high, with a 60pt font  -->
+        <!-- Centered at 1.75 inch indent, equal to 126 points                      -->
+        <!-- 18 points gives a quarter-inch bottom margin                           -->
+        <!--   (1) where a laser printer may not print                              -->
+        <!--   (2) contained within 1-inch bottom margin, with 1/6 inch separation  -->
+        <logo source="letterhead-300dpi-1500x175.png" llx="126" lly= "18" width="5.0in" />
+        <!-- This variant will print the footer on every page,  -->
+        <!-- but page numbers should move to a running header   -->
+        <!-- <logo source="letterhead-300dpi-1500x175.png" pages="all" llx="126" lly= "18" width="5.0in" /> -->
+
+    </docinfo>
+
+    <!-- The letter element is the container          -->
+    <!-- for the content of the letter.               -->
+    <!-- The xml:id will be the base of the resulting -->
+    <!-- LaTeX file, here john-public-job.tex         -->
+    <letter xml:id="john-public-job">
+
+        <frontmatter>
+            <to>Jane Doe<br />Big State University</to>
+            <from>Department of Mathematics<br />and Computer Science<br />University of Puget Sound</from>
+            <date><today /></date>
+            <salutation>Dear Professor Doe,</salutation>
+        </frontmatter>
+
+        <p>It is a pleasure to write as part of John Q. Public's application for a position in your organization.  I have known John for a very long time now.  I am confident that he will work out very well in your department.</p>
+
+        <p>Of course, John has been a valued member of our department.  So much so, that I have every confidence he will work splendidly for you.  If I can provide more specific details, do not hesitate to contact me at your earliest convenience.</p>
+
+        <backmatter>
+            <closing>Sincerely,</closing>
+            <!-- Include a PDF or PNG scanned image of your         -->
+            <!-- signature, or remove/comment-out the next line     -->
+            <!-- By default the height is 24 points, about 1/3 inch -->
+            <!-- Or supply a length, with TeX units (in, cm, pt)    -->
+            <graphic-signature source="signature-300dpi-400x100.png" height="0.33in"/>
+            <signature>John Z. Smith<br />Associate Professor</signature>
+        </backmatter>
+
+    </letter>
+
+</mathbook>
