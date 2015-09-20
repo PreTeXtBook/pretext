@@ -133,6 +133,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
 
@@ -152,8 +153,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- TODO: combine article and book templates -->
-<!-- with abstract templates for latex classes, page sides -->
+<!-- TODO: combine article, book, letter, templates -->
+<!-- with abstract templates for latex classes, page sizes -->
 
 <!-- An article, LaTeX structure -->
 <!--     One page, full of sections (with abstract, references)                    -->

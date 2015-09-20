@@ -38,7 +38,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- nothing should happen.  Typically the situation looks like this: -->
 <!-- (example is LaTeX-specific but generalizes easily)               -->
 <!--                                                                  -->
-<!-- your-book-latex .xsl                                             -->
+<!-- your-book-latex.xsl                                              -->
 <!--   (a) is what you use on the command line                        -->
 <!--   (b) contains very specific, atomic overrides for your project  -->
 <!--   (c) imports xsl/mathbook-latex.xsl                             -->
@@ -1902,9 +1902,9 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- Full Numbers -->
 <!--              -->
 
-<!-- Now trivial, container stucture plus serial -->
-<!-- We condition on empty serial number in      -->
-<!-- order to create empty full numbers          -->
+<!-- Now trivial, container structure plus serial -->
+<!-- We condition on empty serial number in       -->
+<!-- order to create empty full numbers           -->
 <xsl:template match="*" mode="number">
     <xsl:variable name="serial">
         <xsl:apply-templates select="." mode="serial-number" />
