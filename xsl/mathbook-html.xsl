@@ -187,6 +187,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates mode="chunk" />
 </xsl:template>
 
+<!-- However, some MBX document types do not have    -->
+<!-- universal conversion, so these default warnings -->
+<!-- should be overridden by supported conversions   -->
+<xsl:template match="letter" mode="chunk">
+    <xsl:message terminate="yes">
+        <xsl:text>MBX:ERROR:  HTML conversion does not support the "letter" document type.  Quitting...</xsl:text>
+    </xsl:message>
+</xsl:template>
+
+
+
+
 <!-- Authors, editors in serial lists for headers           -->
 <!-- Presumes authors get selected first, so editors follow -->
 <!-- TODO: Move to common -->
