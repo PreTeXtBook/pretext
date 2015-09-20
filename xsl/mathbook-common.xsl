@@ -357,8 +357,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="/mathbook/book/part">-1</xsl:when>
         <xsl:when test="/mathbook/book/chapter">0</xsl:when>
-        <xsl:when test="/mathbook/article/section">1</xsl:when>
-        <xsl:when test="/mathbook/article">100</xsl:when> <!-- no sectioning? -->
+        <!-- An article is rooted just above sections, -->
+        <!-- on par with chapters of a book            -->
+        <xsl:when test="/mathbook/article">1</xsl:when>
         <xsl:when test="/mathbook/letter">1</xsl:when>
         <xsl:when test="/mathbook/memo">1</xsl:when>
         <xsl:otherwise>

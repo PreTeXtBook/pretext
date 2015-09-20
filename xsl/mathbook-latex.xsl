@@ -109,7 +109,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- MBX has sections at level "2", so off by one       -->
 <!-- Furthermore, param's are relative to document root -->
 <!-- So we translate MBX-speak to LaTeX-speak (twice)   -->
- <xsl:variable name="latex-toc-level">
+<xsl:variable name="latex-toc-level">
     <xsl:value-of select="$root-level + $toc-level - 1" />
 </xsl:variable>
 <xsl:variable name="latex-numbering-maxlevel">
