@@ -972,7 +972,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="/mathbook/docinfo/event" />
     </xsl:if>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\author{</xsl:text><xsl:apply-templates select="frontmatter/titlepage/author" /><xsl:apply-templates select="frontmatter/titlepage/editor" /><xsl:text>}&#xa;</xsl:text>
+    <xsl:if test="frontmatter/titlepage/author or frontmatter/titlepage/editor">
+        <xsl:text>\author{</xsl:text>
+        <xsl:apply-templates select="frontmatter/titlepage/author" />
+        <xsl:apply-templates select="frontmatter/titlepage/editor" />
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>\date{</xsl:text><xsl:apply-templates select="frontmatter/titlepage/date" /><xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
