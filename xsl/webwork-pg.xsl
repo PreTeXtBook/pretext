@@ -985,11 +985,11 @@
 <!-- Includes file header blurb promoting MBX -->
 <xsl:template name="begin-problem">
     <xsl:call-template name="converter-blurb-webwork" />
-    <xsl:call-template name="metadata" />
+    <xsl:call-template name="webwork-metadata" />
     <xsl:text>DOCUMENT();&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template name="metadata">
+<xsl:template name="webwork-metadata">
     <xsl:text>## DBsubject(</xsl:text>
 
     <xsl:text>)&#xa;</xsl:text>
