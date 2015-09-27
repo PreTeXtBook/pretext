@@ -991,7 +991,6 @@
 
 <xsl:template name="webwork-metadata">
     <xsl:text>## DBsubject(</xsl:text>
-
     <xsl:text>)&#xa;</xsl:text>
     <xsl:text>## DBchapter(</xsl:text>
     <xsl:text>)&#xa;</xsl:text>
@@ -1034,8 +1033,10 @@
         </xsl:choose>
     <xsl:text>)&#xa;</xsl:text>
     <xsl:text>## Section1(</xsl:text>
+        <xsl:apply-templates select="ancestor::exercise" mode="structure-number" />
     <xsl:text>)&#xa;</xsl:text>
     <xsl:text>## Problem1(</xsl:text>
+        <xsl:apply-templates select="ancestor::exercise" mode="serial-number" />
     <xsl:text>)&#xa;</xsl:text>
     <xsl:text>## Author(</xsl:text>
     <xsl:text>)&#xa;</xsl:text>
