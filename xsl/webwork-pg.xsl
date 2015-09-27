@@ -271,12 +271,6 @@
 </xsl:template>
 
 <xsl:template match="webwork//tabular">
-    <!-- All cell entries must be encased in double quotes. But math and answer blanks require PGML::Format  -->
-    <!-- which must be outside of quotes. So PGML::Format gets surrounding quotes. But this can lead to      -->
-    <!-- "".PGML::Format(...)."" and the empty strings are not liked by PGML. So create $EmPtYsTrInG to use  -->
-    <xsl:if test="descendant::m or descendant::answer">
-        <xsl:text>[@$EmPtYsTrInG = '';@]&#xa;</xsl:text>
-    </xsl:if>
     <!-- MBX tabular attributes top, bottom, left, right, halign are essentially passed -->
     <!-- down to cells, rather than used at the tabular level.                          -->
     <xsl:text>[@DataTable(&#xa;  [&#xa;</xsl:text>
@@ -835,7 +829,7 @@
 <!-- For answer blanks in tables (and possibly more things in the future) -->
 <!-- we cannot simply insert PGML syntax. But otherwise, we do just that. -->
 <xsl:template match="answer[ancestor::tabular]" mode="field">
-    <xsl:text>$EmPtYsTrInG".PGML::Format('[__]{</xsl:text>
+    <xsl:text>".PGML::Format('[__]{</xsl:text>
     <xsl:choose>
         <xsl:when test="@evaluator">
             <xsl:value-of select="@evaluator" />
@@ -853,7 +847,7 @@
             <xsl:text>5</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>}')."$EmPtYsTrInG </xsl:text>
+    <xsl:text>}')."</xsl:text>
 </xsl:template>
 
 <!-- Checkbox answers -->
@@ -905,10 +899,10 @@
 </xsl:template>
 
 <xsl:template match= "webwork//tabular//m">
-    <xsl:text>$EmPtYsTrInG".PGML::Format('[`</xsl:text>
+    <xsl:text>".PGML::Format('[`</xsl:text>
     <xsl:call-template name="write-macros"/>
     <xsl:apply-templates select="text()|var" />
-    <xsl:text>`]')."$EmPtYsTrInG </xsl:text>
+    <xsl:text>`]')."</xsl:text>
 </xsl:template>
 
 <xsl:template match="webwork//me">
@@ -1206,9 +1200,9 @@
                 <xsl:text> [@essay_help()@]*</xsl:text>
             </xsl:when>
             <xsl:when test="ancestor::tabular">
-                <xsl:text>$EmPtYsTrInG".AnswerFormatHelp('</xsl:text>
+                <xsl:text>".AnswerFormatHelp('</xsl:text>
                 <xsl:value-of select="$format"/>
-                <xsl:text>')."$EmPtYsTrInG </xsl:text>
+                <xsl:text>')."</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text> [@AnswerFormatHelp('</xsl:text>
