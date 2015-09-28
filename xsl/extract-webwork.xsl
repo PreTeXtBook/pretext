@@ -246,14 +246,16 @@
     <xsl:text>source_file = </xsl:text> <!-- PG file -->
     <xsl:apply-templates select="." mode="filename" />
     <xsl:text>&#xa;</xsl:text>
-    <xsl:text>value = 1&#xa;</xsl:text> <!-- default problem weight -->
-    <xsl:text>max_attempts = -1&#xa;</xsl:text> <!-- default max attempts is unlimited -->
-    <xsl:text>showMeAnother = -1&#xa;</xsl:text> <!-- default SMA is off -->
-    <xsl:text>problem_id = </xsl:text>
-    <xsl:apply-templates select="ancestor::exercise" mode="number" />
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>counts_parent_grade = 0&#xa;</xsl:text> <!-- for JIT sets only -->
-    <xsl:text>att_to_open_children = 0&#xa;</xsl:text> <!-- for JIT sets only -->
+    <!--Much of the following commented out until we decide we shoudl inclide them.   -->
+    <!--WeBWorK provides good default values, customizable by sysadmin or instructor. -->
+    <!--<xsl:text>value = 1&#xa;</xsl:text>--> <!-- default problem weight -->
+    <!--<xsl:text>max_attempts = -1&#xa;</xsl:text>--> <!-- default max attempts is unlimited -->
+    <!--<xsl:text>showMeAnother = -1&#xa;</xsl:text>--> <!-- default SMA is off -->
+    <!--<xsl:text>problem_id = </xsl:text>-->
+    <!--<xsl:apply-templates select="ancestor::exercise" mode="number" />-->
+    <!--<xsl:text>&#xa;</xsl:text>-->
+    <!--<xsl:text>counts_parent_grade = 0&#xa;</xsl:text>--> <!-- for JIT sets only -->
+    <!--<xsl:text>att_to_open_children = 0&#xa;</xsl:text>--> <!-- for JIT sets only -->
     <xsl:text>problem_end&#xa;</xsl:text>
 </xsl:template>
 
