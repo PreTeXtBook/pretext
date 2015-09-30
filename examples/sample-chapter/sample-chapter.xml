@@ -98,7 +98,7 @@
 
             <abstract>
                 <p>This is a sample of integrating <wbwk /> homework problems into content authored with MathBook XML.  While technically an example of MathBook's <c>article</c> format, it is intended to closely resemble a (first) chapter of a MathBook <c>book</c> that is divided into sections.</p>
-                <p>This work was funded with a grant from <url href="http://openoregon.org/">OpenOregon</url>.</p>
+                <p>This work was funded with grants from <url href="http://openoregon.org/">OpenOregon</url> and the <url href="http://pugetsound.edu">University of Puget Sound</url>.</p>
             </abstract>
 
         </frontmatter>
