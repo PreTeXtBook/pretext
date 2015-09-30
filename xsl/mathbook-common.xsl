@@ -138,6 +138,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="directory.images" select="'images'" />
 <xsl:param name="directory.media"  select="'media'" />
 <xsl:param name="directory.knowls" select="'knowls'" />
+<!-- Pointers to realizations of the actual document -->
+<xsl:param name="address.html" select="''" />
+<xsl:param name="address.pdf" select="''" />
+
 <!-- Strip whitespace text nodes from container elements                    -->
 <!-- Improve source readability with whitespace control in text output mode -->
 <!-- Newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
@@ -301,6 +305,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+
+<!-- Document may exist in a variety of formats in  -->
+<!-- various locations.  These parameters can be    -->
+<!-- hard-coded in the docinfo and/or specified on  -->
+<!-- the command line. Command line takes priority. -->
+<!-- TODO: More formats could be implemented.       -->
+<xsl:variable name="address-html">
+    <xsl:choose>
+        <xsl:when test="not($address.html = '')">
+            <xsl:value-of select="$address.html" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="/mathbook/docinfo/address/html" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="address-pdf">
+    <xsl:choose>
+        <xsl:when test="not($address.pdf = '')">
+            <xsl:value-of select="$address.pdf" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="/mathbook/docinfo/address/pdf" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 
 <!-- ############## -->
 <!-- Entry Template -->
