@@ -520,6 +520,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- website for the book -->
+<xsl:template match="colophon/website">
+    <p>
+        <xsl:text>Website: </xsl:text>
+        <xsl:element name="a">
+            <xsl:attribute name="href">
+                <xsl:apply-templates select="address" />
+            </xsl:attribute>
+            <xsl:apply-templates select="name" />
+        </xsl:element>
+    </p>
+</xsl:template>
+
 <!-- Introductions and Conclusions -->
 <!-- Simple containers, allowed before and after      -->
 <!-- explicit subdivisions, to introduce or summarize -->

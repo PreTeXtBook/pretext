@@ -1031,6 +1031,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- But we always write something            -->
 <!-- as the obverse of title page             -->
 <xsl:template match="book" mode="copyright-page" >
+    <!-- TODO: split out sections like "website" -->
+    <!-- ISBN, Cover Design, Publisher -->
     <xsl:text>%% begin: copyright-page&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:if test="frontmatter/biography" >
@@ -1042,10 +1044,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
     <xsl:if test="frontmatter/colophon/edition" >
         <xsl:text>\noindent{\bf Edition}: </xsl:text>
-        <xsl:apply-templates select="frontmatter/colophon/edition" />}
+        <xsl:apply-templates select="frontmatter/colophon/edition" />
         <xsl:text>\par&#xa;</xsl:text>
     </xsl:if>
-    <!-- TODO: split out copyright section as template -->
+    <xsl:apply-templates select="frontmatter/colophon/website" />
     <xsl:if test="frontmatter/colophon/copyright" >
         <xsl:text>\noindent\copyright\ </xsl:text>
         <xsl:apply-templates select="frontmatter/colophon/copyright/year" />
@@ -1060,8 +1062,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
     <!-- Something so page is not totally nothing -->
     <xsl:text>\null\clearpage&#xa;</xsl:text>
-    <!--ISBN, Cover Design, Publisher, canonicalsite -->
     <xsl:text>%% end:   copyright-page&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Information about canonical project website -->
+<xsl:template match="frontmatter/colophon/website" >
+    <xsl:text>\noindent Website:\ \ \href{</xsl:text>
+    <xsl:apply-templates select="address" />
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="name" />
+    <xsl:text>}</xsl:text>
+    <xsl:text>\par\medskip&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Authors, editors, full info for titlepage -->
