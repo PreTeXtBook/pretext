@@ -183,8 +183,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- We process structural nodes via chunking routine in   xsl/mathbook-common.html -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file     -->
+<!-- The xref-knowl templates run independently on the entire document tree         -->
 <xsl:template match="/mathbook">
     <xsl:apply-templates mode="chunk" />
+    <xsl:apply-templates mode="xref-knowl" />
 </xsl:template>
 
 <!-- However, some MBX document types do not have    -->
@@ -668,6 +670,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </tr>
 </xsl:template>
 
+<!-- ###################### -->
+<!-- Cross-Reference Knowls -->
+<!-- ###################### -->
+
+<!-- Many elements are candidates for cross-references       -->
+<!-- and many of those are nicely implemented as knowls.     -->
+<!-- We traverse the entire document tree with modal         -->
+<!-- "xref-knowl" templates.  When they encounter an element -->
+<!-- that needs a cross-reference target as a knowl file,    -->
+<!-- that file is built and the tree traversal continues.    -->
+
+<!-- See initiation in the entry template. We default -->
+<!-- to just recursing through children elements      -->
+<!-- Otherwise, see knowl creation in next section    -->
+<xsl:template match="*" mode="xref-knowl">
+    <xsl:apply-templates select="*" mode="xref-knowl" />
+</xsl:template>
 
 <!-- ####################### -->
 <!-- Environments and Knowls -->
@@ -695,9 +714,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- be revealed by a knowl.  We will refer to this as     -->
 <!-- "hidden" environment                                  -->
 <!--                                                       -->
-<!-- We *always* do (a) via "xref-knowl-factory" and       -->
-<!-- include a full header and an "in-context" link        -->
-<!--                                                       -->
 <!-- Options (b) and (c) are mutually exclusive.           -->
 <!-- Primarily, this choice is configurable, however       -->
 <!-- some (eg footnotes) are always born hidden and        -->
@@ -707,14 +723,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- content will always appear immediately below.         -->
 
 <!-- Entry Point to Process Environments -->
-<!-- This is the entry point for *all* environments               -->
-<!-- We *always* build a knowl to be target of a xref (a)         -->
-<!-- We show the full content of the item on the page (b)         -->
-<!-- Or, we build a hidden knowl and place a link on the page (c) -->
+<!-- This is the entry point for *all* environments, in default mode -->
+<!-- We *always* build a knowl to be target of a xref (a), but       -->
+<!-- this happens independently via the "xref-knowl" templates       -->
+<!-- We show the full content of the item on the page (b)            -->
+<!-- Or, we build a hidden knowl and place a link on the page (c)    -->
 <!-- NB: this template employs several modal templates, defined just below -->
 <xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn">
-    <!-- Always build a knowl so we can point to it with a cross-reference -->
-    <xsl:apply-templates select="." mode="xref-knowl-factory" />
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
@@ -740,9 +755,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (3) no id attribute (can't point to it)                 -->
 <!-- (4) a body                                              -->
 <!-- (5) posterior, outside structure                        -->
-<!-- (6) concluding "in-context" link                        -->
+<!-- (6) concluding "in-context" link always                 -->
 <!-- NB: this depends on multiple modal templates (below)    -->
-<xsl:template match="*" mode="xref-knowl-factory">
+<!-- NB: this list should contain the list at         -->
+<!--     the "xref-as-knowl" modal template           -->
+<!-- TODO: we need to process children in a way that no \label{}, nor ID's, are produced   -->
+<!--       This would perhaps obsolete the "env-type" device, and reorder explnation below -->
+<xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn" mode="xref-knowl">
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
@@ -772,6 +791,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:element>
         </div>
     </exsl:document>
+    <!-- recurse the tree outside of the file-writing -->
+    <xsl:apply-templates select="*" mode="xref-knowl" />
 </xsl:template>
 
 <!-- Environments born visible -->
