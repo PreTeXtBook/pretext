@@ -112,7 +112,7 @@
                 <title>Adding Single-Digit Integers</title>
 
                 <statement>
-                    <p>A simple, but functional example to begin.</p>
+                    <p>A simple, but functional example to begin with. If you were just learning how to add, you can test yourself here.</p>
                 </statement>
 
                 <webwork xml:id="integer-addition">
@@ -137,7 +137,7 @@
                     </setup>
 
                     <statement>
-                        <p>Compute the sum of <m>a = <var name="$a" /></m> and <m>b = <var name="$b" /></m>:<br /><m>a + b =</m> <answer var="$c" width="2" /></p>
+                        <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:<br /><m><var name="$a" /> + <var name="$b" /> =</m> <answer var="$c" width="2" /></p>
                     </statement>
 
                     <solution>
@@ -147,10 +147,10 @@
             </exercise>
 
             <exercise>
-                <title>Choosing a Problem Seed</title>
+                <title>Declaring a Problem Seed</title>
 
                 <statement>
-                    <p>You can also declare a <c>seed</c> to specify a version of any problem that has randomization.</p>
+                    <p>You can also declare a <c>seed</c> to specify a different random version of any problem that has randomization.</p>
                 </statement>
 
                 <webwork xml:id="integer-addition-with-seed" seed="510">
@@ -175,7 +175,7 @@
                     </setup>
 
                     <statement>
-                        <p>Compute the sum of <m>a = <var name="$a" /></m> and <m>b = <var name="$b" /></m>:<br /><m>a + b =</m> <answer var="$c" width="2" /></p>
+                        <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:<br /><m><var name="$a" /> + <var name="$b" /> =</m> <answer var="$c" width="2" /></p>
                     </statement>
 
                     <solution>
@@ -256,7 +256,7 @@
             <exercise>
                 <title>Using Hints</title>
                 <statement>
-                    <p>Hints can be inserted for exercises. Whether a hint is visible depends on the value of <c>$showHint</c> in <c>PGcourse.pl</c>.</p>
+                    <p>Hints can be inserted for exercises. Whether a hint is visible depends on the value of <c>$showHint</c> in <c>PGcourse.pl</c> in the <wbwk /> course that is hosting these exercises.</p>
                 </statement>
 
                 <webwork>
@@ -318,7 +318,7 @@
         <section>
             <title>The Quadratic Formula</title>
 
-            <p>The next theorem gives us a formula for the solutions of a second-degree polynomial equation. Note how the WeBWorK problem references the theorem.</p>
+            <p>The next theorem gives us a formula for the solutions of a second-degree polynomial equation. Note how the <wbwk /> problem references the theorem. This is a key feature to integrating <wbwk /> with MathBook XML.</p>
 
             <theorem xml:id="theorem-quadratic-formula">
                 <title>Quadratic Formula</title>
@@ -410,7 +410,7 @@
                         <title>Part 1: Identify the coefficients</title>
 
                         <statement>
-                            <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic using the standard form as used in <xref ref="theorem-quadratic-formula" autoname="yes" />, <m>ax^2 + bx + c = 0</m>:</p>
+                            <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" autoname="yes" />: <m>ax^2 + bx + c = 0</m>:</p>
 
                             <p halign='center'><m>a=</m> <answer var="$a" width="4" />, <m>b=</m> <answer var="$b" width="4" />, <m>c=</m> <answer var="$c" width="4" /></p>
                         </statement>
@@ -445,13 +445,12 @@
             <paragraphs>
                 <title>Implementation Note</title>
 
-                <p>The <url href="http://webwork.maa.org/wiki/Open_Problem_Library">Open Problem Library</url> (OPL) is a repository of curated <wbwk /> problems.</p>
+                <p>The <url href="http://webwork.maa.org/wiki/Open_Problem_Library">Open Problem Library</url> (OPL) is a repository of curated <wbwk /> problems. At last count it had something like 30,000 problems, searchable by topic.</p>
 
-                <p>Most of the problems in this sample chapter have their source authored within the same document as the narrative.  However the problems in this section live on a server.  For HTML output we can connect to the server and render the problem here in an interactive fashion.  For print/PDF we use the <c>mbx</c> script to connect to the server to produce the LaTeX code for the problem.  We can use the <c>exercise.text.*</c> switches to control which parts of the problem (statements, solutions, hints) are incorporated.</p>
+                <p>Most of the problems in this sample chapter have their source authored within the same document as the narrative.  However the problems in this section are from the OPL and elsewhere on the server that is hosting the <wbwk /> caclulations.  For HTML output we can connect to the server and render the problem here in an interactive fashion.  For print/PDF we use the <c>mbx</c> script to connect to the server to produce the LaTeX code for the problem.  We can use the <c>exercise.text.*</c> switches to control which parts of the problem (statements, solutions, hints) are incorporated.</p>
 
-                <p>Problems do not have to be in the OPL to reside on a server, so any problem located on any <wbwk /> server may be harvested and rendered into a <latex /> document.</p>
+                <p>Problems do not have to be in the OPL to reside on a server; any problem that is accessbile from the <wbwk /> course which is hosting the <wbwk /> computation may be used this way.</p>
 
-                <p>One implication of this is that we might want to provide some commentary that connects the problem to the text.  An example of this happens in the next section in <xref ref="ww-graphical-antiderivatives" autoname="yes" />.</p>
             </paragraphs>
 
             <exercise xml:id="function-or-not">
@@ -462,12 +461,13 @@
 
             <exercise xml:id="two-variable-inequality">
                 <title>Grandpa's Cat</title>
+                <p>Not all problems that come from outside of the MBX source will have been written to fit into MBX space, as this example illustrates. So an author should be careful using problems that originate from the <wbwk /> server.</p>
 
                 <webwork source="BasicAlgebra/EquationsAndInequalitiesInTwoVariables/GraphTwoVariableInequality110.pg" height="750"/>
             </exercise>
 
             <exercise xml:id="strictly-testing">
-                <title>A Mock Multi-Part WeBWorK Question</title>
+                <title>A Mock Multi-Part <wbwk /> Question</title>
 
                 <statement>
                     <p>This problem has two problem statements, two solutions, each with a graphic (that are all the same), for testing purposes.</p>
@@ -524,6 +524,8 @@
             <exercises>
                 <title><wbwk /> Exercises</title>
 
+                <p>This first problem is coming from the <wbwk /> Open problem Library. One implication of this is that we might want to provide some commentary that connects the problem to the text.</p>
+
                 <exercise xml:id="ww-graphical-antiderivatives">
                     <title>Graphical Antiderivatives</title>
 
@@ -538,12 +540,12 @@
                     <title>Every Continuous Function has an Antiderivative</title>
 
                     <statement>
-                        <p>WeBWorK problems can be written to allow open-ended essay responses meant to be assessed later by the instructor. For anonymous access, no test field is provided. But if this problem were used within WeBWorK as part of a homework set, users could submit an answer.</p>
+                        <p><wbwk /> problems can be written to allow open-ended essay responses meant to be assessed later by the instructor. For anonymous access, no text field is provided. But if this problem were used within <wbwk /> as part of a homework set, users could submit an answer.</p>
                     </statement>
 
                     <webwork >
                         <statement>
-                            <p>Explain how we can use <xref ref="corollary-FTC-derivative" autoname="yes" /> to say that every continuous function <em>always</em> has a derivative. (And we will demonstrate here that you can use a  macro from <c>docinfo</c>: <m>\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)</m>. It will work in the WeBWorK problem, regardelss of whether you are using images, MathJax, or hardcopy.)</p>
+                            <p>Explain how we can use <xref ref="corollary-FTC-derivative" autoname="yes" /> to say that every continuous function <em>always</em> has a derivative. (And we will demonstrate here that you can use a  macro from <c>docinfo</c>: <m>\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)</m>. It will work in the <wbwk /> problem, regardelss of whether you are using images, MathJax, or hardcopy.)</p>
                             <answer format="essay" />
                         </statement>
                     </webwork>
@@ -616,7 +618,7 @@
             <p>While free-response questions are generally preferred, sometimes the nature of a question lends itself to multiple choice.</p>
 
             <exercise>
-                <title>Yes or no?</title>
+                <title>Drop down (aka Popup)</title>
 
                 <statement>
                     <p>Note also that the solution to this problem uses an external link.</p>
@@ -741,7 +743,7 @@
         <section>
             <title>Tables</title>
 
-            <p>Tables can be made using the existing syntax and options that MBX offers for table making, with a few exceptions. As of summer 2015, the exceptions are that individual cells cannot have <c>bottom</c> border attributes and individual columns cannot have <c>top</c> border attributes. Also, while MBX table borders are generally <c>minor</c>, <c>medium</c>, or <c>major</c>, when these borders are used in a WeBWorK problem that is rendered as a hard copy problem from within WeBWorK, the only thickness option corresponds to <c>minor</c>.</p>
+            <p>Tables can be made using the existing syntax and options that MBX offers for table making, with a few exceptions. As of summer 2015, the exceptions are that individual cells cannot have <c>bottom</c> border attributes and individual columns cannot have <c>top</c> border attributes. Also, while MBX table borders are generally <c>minor</c>, <c>medium</c>, or <c>major</c>, when these borders are used in a <wbwk /> problem that is rendered as a hard copy problem from within <wbwk />, the only thickness option corresponds to <c>minor</c>.</p>
 
             <exercise>
                 <title>Complete this Table</title>
@@ -841,6 +843,46 @@
 
             </exercise>
  
+        </section>
+
+        <section>
+            <title>Graphics in Exercises</title>
+            <p>It is natural to want to write exercises that rely on graphics. For example, an exericse might produce a chart of some kind, and ask the reader to extract some information from that chart.</p>
+            <p>At present, this can be done using the same mechanism one would use to insert a graphic into a <wbwk /> problem when writing regular <wbwk /> problems. (And this is what is done below.) In the future, there will be a nicer option that will be able to make use of MBX's <code>latex-image-code</code>. This requires some <wbwk /> development first, whichis underway.</p>
+
+            <exercise>
+                <title>Solve using a graph</title>
+
+                <webwork>
+
+                    <setup>
+                        <var name="answer" category="number"/>
+                        <var name="gr" category="graph"/>
+
+                        <pg-code>
+                            $answer = random(1,3,1);
+                            $gr = init_graph(-1,-1,4,4,
+                            axes=>[0,0],
+                            grid=>[5,5],
+                            size=>[400,400]
+                            );
+
+                            add_functions($gr, "x^3/$ans^3 for x in &lt;-1,4&gt; using color:blue and weight:2");
+                        </pg-code>
+                    </setup>
+
+                    <statement>
+                        <p>The graph below is a graph of <m>y=f(x)</m>. Use the graph to solve the equation <m>f(x)=1</m>.</p>
+
+                        <p halign="center"><var name="gr"/></p>
+
+                        <p halign="center"><m>x=</m> <answer var="answer"/> </p> 
+
+                    </statement>
+            
+                </webwork>
+            </exercise>
+
         </section>
 
     </article>
