@@ -763,6 +763,10 @@
     </xsl:if>
 </xsl:template>
 
+<xsl:template match="description//var">
+    <xsl:value-of select="@name"/>
+</xsl:template>
+
 <!-- PGML answer input               -->
 <!-- Example: [_____]{$ans}          -->
 <xsl:template match="webwork//statement//answer">
@@ -1131,6 +1135,12 @@
                 <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;answerHints.pl&quot;,&#xa;')"/>
             </xsl:call-template>
         </xsl:when>
+        <!-- when there is a PGgraphmacros graph                         -->
+        <xsl:when test="not(contains($macro-list-string,'&quot;PGgraphmacros.pl&quot;'))        and statement//image[@pg-name]">
+            <xsl:call-template name="list-of-macros">
+                <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;PGgraphmacros.pl&quot;,&#xa;')"/>
+            </xsl:call-template>
+        </xsl:when>
         <!-- now run through macros/macro and add author-declared macros, but not if they have already been added or if they are PGcourse.pl-->
         <xsl:when test="$count &gt; 0">
             <xsl:variable name="index">
@@ -1274,6 +1284,45 @@
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<xsl:template match="webwork//image[@pg-name]">
+    <xsl:text>[@ image(insertGraph(</xsl:text>
+    <xsl:value-of select="@pg-name"/>
+    <xsl:text>), width=&gt;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@width">
+            <xsl:value-of select="@width"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>400</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>, height=&gt;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@height">
+            <xsl:value-of select="@height"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>400</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>, tex_size=&gt;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@tex_size">
+            <xsl:value-of select="@tex_size"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>800</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="description">
+        <xsl:text>, extra_html_tags=&gt;qq!alt="</xsl:text>
+        <xsl:apply-templates select="description"/>
+        <xsl:text>"!</xsl:text>
+    </xsl:if>
+    <xsl:text>)@]* </xsl:text>
+</xsl:template>
+
 
 
 <!-- ###### -->
