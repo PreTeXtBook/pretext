@@ -223,7 +223,7 @@
 <!-- include, since the base forthe filename has been    -->
 <!-- managed to be predictable.                          -->
 
-<xsl:template match="webwork[@source]">
+<xsl:template match="webwork[@source]|webwork[descendant::image[@pg-name]]">
     <!-- directory of server LaTeX must be specified -->
     <xsl:if test="$webwork.server.latex = ''">
         <xsl:message terminate="yes">MBX:ERROR   For LaTeX versions of WeBWorK problems on a server, the mbx script will collect the LaTeX source and then this conversion must specify the location through the "webwork.server.latex" command line stringparam.  Quitting...</xsl:message>
