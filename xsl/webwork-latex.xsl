@@ -153,7 +153,7 @@
                         <xsl:text>, or </xsl:text>
                     </xsl:when>
                     <xsl:when test="(count(following-sibling::element) = 1) and not(preceding-sibling::element)">
-                        <xsl:text> or </xsl:text>
+                        <xsl:text> / </xsl:text>
                     </xsl:when>
                 </xsl:choose>
             </xsl:for-each>
