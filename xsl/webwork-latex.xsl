@@ -67,6 +67,7 @@
 
 <!-- Basic outline of a simple problem -->
 <xsl:template match="webwork">
+    <xsl:text>\par&#xa;</xsl:text>
     <xsl:apply-templates select="statement" />
     <xsl:apply-templates select="hint" />
     <xsl:apply-templates select="solution" />
@@ -210,6 +211,19 @@
     <xsl:apply-templates select="text()|var" />
     <xsl:text>\]</xsl:text>
 </xsl:template>
+<xsl:template match="md/mrow">
+    <xsl:apply-templates select="text()|var" />
+    <xsl:choose>
+        <xsl:when test="@number='yes'">
+            <xsl:apply-templates select="." mode="label" />
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="position()!=last()">
+       <xsl:text>\\</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
 
 
 <!-- Shortcut for "WeBWorK" -->
@@ -251,17 +265,17 @@
     <!-- process in the order server produces them, may be several -->
     <xsl:apply-templates select="$server-tex/statement|$server-tex/solution|$server-tex/hint" />
     <xsl:text>}</xsl:text>
-    <xsl:text>\par\vspace*{2ex}\noindent\tiny{%&#xa;</xsl:text>
-    <xsl:text>\url{</xsl:text>
+    <xsl:text>\par\vspace*{2ex}%&#xa;</xsl:text>
+    <xsl:text>{\tiny\ttfamily\noindent&#xa;</xsl:text>
     <xsl:value-of select="@source" />
-    <xsl:text>}\\</xsl:text>
+    <xsl:text>\\</xsl:text>
     <!-- seed will round-trip through mbx script, default -->
     <!-- is hard-coded there.  It comes back as an        -->
     <!-- attribute of the overall "webwork-tex" element   -->
     <xsl:text>Seed: </xsl:text>
     <xsl:value-of select="$server-tex/@seed" />
     <xsl:text>\hfill</xsl:text>
-    <xsl:text>}</xsl:text>  <!-- end: \tiny -->
+    <xsl:text>}</xsl:text>  <!-- end: \tiny\ttfamily -->
     <xsl:text>\end{mdframed}&#xa;</xsl:text>
     <xsl:apply-templates select="conclusion" /> <!-- after boxed problem -->
 </xsl:template>
