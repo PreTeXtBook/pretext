@@ -97,8 +97,10 @@
 
 
             <abstract>
-                <p>This is a sample of integrating <wbwk /> homework problems into content authored with MathBook XML.  While technically an example of MathBook's <c>article</c> format, it is intended to closely resemble a (first) chapter of a MathBook <c>book</c> that is divided into sections.</p>
+                <p>This is a sample article to demonstrate integrating <wbwk /> homework problems into content authored with MathBook XML.  While technically an example of MathBook's <c>article</c> format, it is intended to closely resemble a chapter of a MathBook <c>book</c> that is divided into sections.</p>
                 <p>This work was funded with grants from <url href="http://openoregon.org/">OpenOregon</url> and the <url href="http://pugetsound.edu">University of Puget Sound</url>.</p>
+                <p>Rob and Alex worked on the MathBook XML enhancements that make this possible. Mike Gage (Univeristy of Rochester) and Geoff Goehle (Western Carolina University) made this possible by enhancing the WeBWorK end, and generally maintaining WeBWorK software.</p>
+                <p>This article assumes a mild familiarity with both <url href="http://mathbook.pugetsound.edu/">MathBook XML</url> and <url href="http://webwork.maa.org/wiki/Main_Page">WeBWorK</url>. For more information about either project, follow the links.</p>
             </abstract>
 
         </frontmatter>
@@ -112,7 +114,7 @@
                 <title>Adding Single-Digit Integers</title>
 
                 <statement>
-                    <p>A simple, but functional example to begin with. If you were just learning how to add, you can test yourself here.</p>
+                    <p>A simple, but functional example to begin with. If you are just learning how to add, you can test yourself here.</p>
                 </statement>
 
                 <webwork xml:id="integer-addition">
@@ -146,11 +148,13 @@
                 </webwork>
             </exercise>
 
+            <p>If you are familiar with <wbwk />, then it may be a surprise to you to be interacting with a <wbwk /> problem this way, without having logged in to <wbwk />.</p>
+
             <exercise>
                 <title>Declaring a Problem Seed</title>
 
                 <statement>
-                    <p>You can also declare a <c>seed</c> to specify a different random version of any problem that has randomization.</p>
+                    <p>You can also declare a <c>seed</c> to specify a different random version of any problem that has randomization. Here is the same problem, but with a <c>seed</c> sepcified.</p>
                 </statement>
 
                 <webwork xml:id="integer-addition-with-seed" seed="510">
@@ -189,16 +193,19 @@
                 <title>Special Answer Checking</title>
 
                 <statement>
-                    <p>In the following, try entering wrong answers, including an answer where you just repeat the statment without simplification, and another where you multiply the two exponents (instead of adding them, which would be correct.)</p>
+                    <p>One of the strengths of <wbwk /> is its ability to give intelligent feedback for incorrect answers.
+                        <ul>
+                            <li>There is general feedback for when the student's answer is in an entirely different ballpark from the correct answer. Try entering something like <q>y</q>.</li>
+                            <li>There is general feedback for when the student's answer is not in the right form. Try entering <q>x<circumflex/>2*x<circumflex/>3</q>, which, right or wrong, is unsimplified.</li>
+                            <li>And problems can be written to detect and respond to common mistakes. Try entering an answer where you multiply the two exponents (instead of adding them, which would be correct.)</li>
+                        </ul>
+                    </p>
                 </statement>
 
                 <webwork>
                     <title>Multiplication with Exponents</title>
                     <macros>
-                        <macro>MathObjects.pl</macro>                <!-- Ignored, since MathObject.pl included automatically -->
                         <macro>contextLimitedPolynomial.pl</macro>
-                        <macro>contextLimitedPolynomial.pl</macro>   <!-- Ignored, since already included -->
-                        <macro>PGcourse.pl</macro>                   <!-- Ignored, since PGcourse.pl included automatically -->
                     </macros>
 
                     <setup>
@@ -246,7 +253,7 @@
 
                     <solution>
                         <p>We <em>add</em> the exponents as follows:<md>
-                        <mrow>x^{<var name="$a"/>}\cdot x^{<var name="$b"/>}&amp;=x^{<var name="$a"/>+<var name="$b"/>}</mrow>
+                        <mrow><var name="$expression"/>&amp;=x^{<var name="$a"/>+<var name="$b"/>}</mrow>
                         <mrow>&amp;=x^{<var name="$c"/>}</mrow>
                         </md></p>
                     </solution>
@@ -256,7 +263,7 @@
             <exercise>
                 <title>Using Hints</title>
                 <statement>
-                    <p>Hints can be inserted for exercises. Whether a hint is visible depends on the value of <c>$showHint</c> in <c>PGcourse.pl</c> in the <wbwk /> course that is hosting these exercises.</p>
+                    <p>Hints can be inserted into exercises. Whether a hint is visible in the HTML depends on the value of <c>$showHint</c> in <c>PGcourse.pl</c> in the <wbwk /> course that is hosting these exercises. How the hint is displayed in the pdf output is controlled in the usual way that an MBX hint is controlled.</p>
                 </statement>
 
                 <webwork>
@@ -318,7 +325,9 @@
         <section>
             <title>The Quadratic Formula</title>
 
-            <p>The next theorem gives us a formula for the solutions of a second-degree polynomial equation. Note how the <wbwk /> problem references the theorem. This is a key feature to integrating <wbwk /> with MathBook XML.</p>
+            <p>In the previous section, we saw relatively simple <wbwk/> questions. This section demonstrates how even very complicated <wbwk/> problems still behave well.</p>
+
+            <p>Here is a theorem that gives us a formula for the solutions of a second-degree polynomial equation. Note later how the <wbwk /> problem references the theorem by its number. This seemingly minor detail demonstartes the degree to which <wbwk/> and MathBook XML have been integrated.</p>
 
             <theorem xml:id="theorem-quadratic-formula">
                 <title>Quadratic Formula</title>
@@ -347,6 +356,7 @@
 
                     <macros>
                         <macro>parserMultiAnswer.pl</macro>
+                        <macro>contextFraction.pl</macro>
                     </macros>
 
                     <setup>
@@ -366,10 +376,16 @@
                             <static>2x^2 + x - 6</static>
                         </var>
                         <var name="$x1">
-                            <static>1.5</static>
+                            <static>\frac{3}{2}</static>
                         </var>
                         <var name="$x2">
                             <static>-2</static>
+                        </var>
+                        <var name="$solnum1">
+                            <static>-1+\sqrt{1^2-4(2)(-6)}</static>
+                        </var>
+                        <var name="$solnum2">
+                            <static>-1-\sqrt{1^2-4(2)(-6)}</static>
                         </var>
 
                         <var name="$multians1">
@@ -378,17 +394,22 @@
 
                         <!-- TODO: move out context shift -->
                         <pg-code>
-                        Context()->variables->are(x => 'Real');
+                        Context("Fraction");
 
-                        $a = Compute(random(2,9,1));
-                        $c = Compute(random(1,9,1));
-                        $b = Compute(random(2,6,1));
-                        if ($a*$c > 0) {$b += floor(sqrt(4*$a*$c))}
-                        $quadratic = Formula("$a x^2 + $b x + $c");
-                        $x1 = (-$b + sqrt($b**2-4*$a*$c))/(2*$a);
-                        $x2 = (-$b - sqrt($b**2-4*$a*$c))/(2*$a);
+                        $a = Compute(random(2,6,1));
+                        do {$k = Compute(random(2,6,1))} until (gcd($a,$k)==1);
+                        $r = Compute(random(2,6,1));
+                        $c = $k*-$r;
+                        $b = $a*-$r+$k;
+                        $quadratic = Formula("$a x^2 + $b x + $c")->reduce;
+                        $x1 = Fraction($r,1);
+                        $x2 = Fraction(-$k,$a);
+                        Context()->flags->set(reduceConstants=>0,reduceConstantFunctions=>0);
+                        $solnum1 = Formula("-$b+sqrt(($b)**2-4($a)($c))");
+                        $solnum2 = Formula("-$b-sqrt(($b)**2-4($a)($c))");
 
-                        $multians1 = MultiAnswer($x1,$x2)->with(
+                        Context("LimitedFraction");
+                        $multians1 = MultiAnswer(Fraction("$x1"),Fraction("$x2"))->with(
                             singleResult => 0,
                             allowBlankAnswers => 1,
                             checker => sub {
@@ -403,6 +424,7 @@
                                 return (0,0);
                              }
                           );
+
                         </pg-code>
                     </setup>
 
@@ -425,13 +447,13 @@
 
                         <statement>
                             <p>Using the quadratic formula, solve <m><var name="$quadratic"/>=0</m>.</p>
-                            <p halign='center'><m>x=</m> <answer var="$multians1" width="10"/> or <m>x=</m> <answer var="$multians1" width="10"/></p>
+                            <p halign='center'><m>x=</m> <answer var="$multians1" width="15"/> or <m>x=</m> <answer var="$multians1" width="15"/></p>
                         </statement>
 
                         <solution>
                             <p>Recall that the quadratic formula is given in <xref ref="theorem-quadratic-formula" autoname="yes" />.</p>
 
-                            <p>You already identified <m>a = <var name="$a"/></m>, <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>, so the results are: <me>x = {-<var name="$b"/> + \sqrt{<var name="$b"/>^2 - 4(<var name="$a"/>)(<var name="$c"/>)} \over 2(<var name="$a"/>)} \approx <var name="$x1"/></me> or <me>x = {-<var name="$b"/> - \sqrt{<var name="$b"/>^2 - 4(<var name="$a"/>)(<var name="$c"/>)} \over 2(<var name="$a"/>)} \approx <var name="$x2"/></me></p>
+                            <p>You already identified <m>a = <var name="$a"/></m>, <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>, so the results are: <me>x = {<var name="$solnum1"/> \over 2(<var name="$a"/>)} = <var name="$x1"/></me> or <me>x = {<var name="$solnum2"/> \over 2(<var name="$a"/>)} = <var name="$x2"/></me></p>
                         </solution>
 
                     </platform>
@@ -442,8 +464,6 @@
         <section>
             <title>Open Problem Library</title>
 
-            <paragraphs>
-                <title>Implementation Note</title>
 
                 <p>The <url href="http://webwork.maa.org/wiki/Open_Problem_Library">Open Problem Library</url> (OPL) is a repository of curated <wbwk /> problems. At last count it had something like 30,000 problems, searchable by topic.</p>
 
@@ -451,37 +471,31 @@
 
                 <p>Problems do not have to be in the OPL to reside on a server; any problem that is accessbile from the <wbwk /> course which is hosting the <wbwk /> computation may be used this way.</p>
 
-            </paragraphs>
-
             <exercise xml:id="function-or-not">
                 <title>Functions or Not</title>
+                <statement>
+                    <p>This problem is one that PCC has donated to the OPL.</p>
+                </statement>
 
-                <webwork source="BasicAlgebra/FunctionBasics/FunctionOrNotByGraph10.pg" seed="8435" height="750"/>
+                <webwork source="BasicAlgebra/Geometry/CylinderVolume10.pg" seed="8435"/>
             </exercise>
 
             <exercise xml:id="two-variable-inequality">
                 <title>Grandpa's Cat</title>
-                <p>Not all problems that come from outside of the MBX source will have been written to fit into MBX space, as this example illustrates. So an author should be careful using problems that originate from the <wbwk /> server.</p>
-
-                <webwork source="BasicAlgebra/EquationsAndInequalitiesInTwoVariables/GraphTwoVariableInequality110.pg" height="750"/>
-            </exercise>
-
-            <exercise xml:id="strictly-testing">
-                <title>A Mock Multi-Part <wbwk /> Question</title>
-
                 <statement>
-                    <p>This problem has two problem statements, two solutions, each with a graphic (that are all the same), for testing purposes.</p>
+                    <p>Not all problems that come from the OPL were written with MBX in mind, and they don't all fit into MBX space. This example illustrates that this should be taken into consideration when using OPL problems. Some of the graphs here are not fully visible in the web version of the article.</p>
                 </statement>
 
-                <webwork source="local/testing.pg" height="750"/>
+                <webwork source="BasicAlgebra/EquationsAndInequalitiesInTwoVariables/GraphTwoVariableInequality110.pg" height="750"/>
             </exercise>
 
         </section>
 
         <section>
             <title>Antidifferentiation</title>
+            <p>This section demonstrates a few more features.</p>
 
-            <p>The derivative, and antiderivative, of a function can be understood through study of their graphical relationships.</p>
+            <p>The derivative and antiderivative of a function can be understood through study of their graphical relationships.</p>
 
             <definition xml:id="definition-antiderivative">
                 <title>Antiderivative of a Function</title>
@@ -540,7 +554,7 @@
                     <title>Every Continuous Function has an Antiderivative</title>
 
                     <statement>
-                        <p><wbwk /> problems can be written to allow open-ended essay responses meant to be assessed later by the instructor. For anonymous access, no text field is provided. But if this problem were used within <wbwk /> as part of a homework set, users could submit an answer.</p>
+                        <p><wbwk /> problems can allow for open-ended essay responses that are intended to be assessed later by the instructor. For anonymous access, no text field is provided. But if this problem were used within <wbwk /> as part of a homework set, users could submit an answer.</p>
                     </statement>
 
                     <webwork >
@@ -568,7 +582,7 @@
         <section>
             <title>PGML Formatting Calisthenics</title>
 
-            <p>This section has one exercise, designed to test various PGML formatting rules in an exercise with no purpose.</p>
+            <p>This section has one exercise, designed to test various PGML formatting rules in an exercise with no purpose. Consult the source to see how the special characters and formatting are realized.</p>
 
             <exercise xml:id="ww-PGML-format">
                 <title>PGML Formatting</title>
@@ -589,16 +603,7 @@
                         </pre>
 
                         <p>Some of <latex />'s special characters:</p>
-                        <p><hash /></p>
-                        <p><dollar /></p>
-                        <p><percent /></p>
-                        <p><circumflex /></p>
-                        <p><ampersand /></p>
-                        <p><underscore /></p>
-                        <p><lbrace /></p>
-                        <p><rbrace /></p>
-                        <p><tilde /></p>
-                        <p><backslash /></p>
+                        <p><hash /> <dollar /> <percent /> <circumflex /> <ampersand /> <underscore /> <lbrace /> <rbrace /> <tilde />  <backslash /></p>
 
                         <p>Some characters that need special handling for PG conversion to HTML or <latex />:</p>
 
