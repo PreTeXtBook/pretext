@@ -180,7 +180,7 @@
             <xsl:text>\end{itemize}&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>\rule[-.3\baselineskip]{</xsl:text>
+            <xsl:text> \framebox[</xsl:text>
             <xsl:choose>
                 <xsl:when test="@width">
                     <xsl:value-of select="@width" />
@@ -189,7 +189,7 @@
                     <xsl:text>5</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
-            <xsl:text>em}{0.1ex}</xsl:text>
+            <xsl:text>em]{\strut}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
