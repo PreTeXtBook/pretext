@@ -135,7 +135,7 @@ chapter:
 	cp $(WWXSL)/webwork-latex.xsl $(MBUSR)
 	# can experiment with   --stringparam exercise.text.solution no 
 	cd $(PDFOUT); \
-	xsltproc --stringparam webwork.server https://webwork.pcc.edu --stringparam webwork.server.latex "$(PDFOUT)/webwork-tex/" --stringparam toc.level 0 $(MBUSR)/webwork-latex.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml; \
+	xsltproc --stringparam webwork.server https://webwork.pcc.edu --stringparam webwork.server.latex "$(PDFOUT)/webwork-tex/" --stringparam toc.level 0 --stringparam latex.preamble.early "\setlength\parindent{0mm}\setlength\parskip{0.5pc}" $(MBUSR)/webwork-latex.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml; \
 	xelatex sample-ww-chapter.tex; \
 	xelatex sample-ww-chapter.tex
 	#
