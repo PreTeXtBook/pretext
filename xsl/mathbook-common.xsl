@@ -2538,6 +2538,17 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- Errors and Warnings -->
 <!-- ################### -->
 
+<!-- Sometimes we want a big warning as part of  -->
+<!-- every use of some conversion.  This is it.  -->
+<!-- Feed a linefeed in if you want line breaks. -->
+<!-- Designed for an 80 column terminal.         -->
+<xsl:template name="banner-warning">
+    <xsl:param name="warning" />
+    <xsl:message>********************************************************************************</xsl:message>
+        <xsl:message><xsl:value-of select="$warning" /></xsl:message>
+    <xsl:message>********************************************************************************</xsl:message>
+</xsl:template>
+
 <!-- We search up the tree, looking for something -->
 <!-- an author will recognize, and then report it -->
 <!-- Useful for warnings that do not contain any  -->
