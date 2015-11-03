@@ -444,8 +444,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
     </xsl:if>
     <!-- Numbering Equations -->
-    <!-- See numbering-equations variable being set in mathbook-common.xsl -->
-    <xsl:if test="//men|//md">
+    <!-- See numbering-equations variable being set in mathbook-common.xsl         -->
+    <!-- With number="yes|no" on mrow, we must allow for the possibility of an md  -->
+    <!-- variant having numbers (we could be more careful, but it is not critical) -->
+    <xsl:if test="//men|//mdn|//md">
         <xsl:text>%% Equation Numbering&#xa;</xsl:text>
         <xsl:text>%% Controlled by  numbering.equations.level  processing parameter&#xa;</xsl:text>
         <xsl:text>\numberwithin{equation}{</xsl:text>
