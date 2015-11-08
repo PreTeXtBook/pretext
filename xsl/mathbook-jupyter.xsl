@@ -102,13 +102,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="markdown-cell">
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />
-            <!-- <xsl:text>, "</xsl:text> -->
             <xsl:call-template name="heading-format">
                 <xsl:with-param name="count" select="$level + 1" />
             </xsl:call-template>
-            <xsl:apply-templates select="." mode="title-simple" />
+            <xsl:apply-templates select="." mode="number" />
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="." mode="title-full" />
             <xsl:call-template name="end-string" />
-            <!-- <xsl:text>"</xsl:text> -->
         </xsl:with-param>
     </xsl:call-template>
     <!-- content of subdivision as multiple cells -->
@@ -176,6 +176,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- Mark unimplemented parts with [NI-elementname] -->
+<!-- cell level first -->
+<xsl:template match="ul|ol|dl|tabular">
+    <xsl:call-template name="begin-markdown-cell" />
+    <xsl:call-template name="begin-string" />
+    <xsl:variable name="element-name" select="local-name(.)" />
+    <xsl:text>[NI-</xsl:text>
+    <xsl:value-of select="$element-name" />
+    <xsl:text>]</xsl:text>
+    <!-- <xsl:value-of select="." /> -->
+    <xsl:text>[NI-</xsl:text>
+    <xsl:value-of select="$element-name" />
+    <xsl:text>]</xsl:text>
+    <xsl:call-template name="end-string" />
+    <xsl:call-template name="end-markdown-cell" />
+</xsl:template>
+
+<!-- sentence level next -->
+<xsl:template match="fn">
+    <xsl:variable name="element-name" select="local-name(.)" />
+    <xsl:text>[NI-</xsl:text>
+    <xsl:value-of select="$element-name" />
+    <xsl:text>]</xsl:text>
+    <!-- <xsl:value-of select="." /> -->
+    <xsl:text>[NI-</xsl:text>
+    <xsl:value-of select="$element-name" />
+    <xsl:text>]</xsl:text>
+</xsl:template>
+
 
 
 <!-- Kill various parts temporarily -->
@@ -189,14 +218,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="margin-warning" />
 <xsl:template match="index" />
 
-<!-- Book length inactive -->
-<xsl:template match="/book">
-    <xsl:message terminate="yes">Book length documents do not yet convert to Jupyter notebooks.  Quitting...</xsl:message>
-</xsl:template>
-
-
-
-
 <!-- File Structure -->
 <!-- Gross structure of a Jupyter notebook -->
 <xsl:template match="*" mode="file-wrap">
@@ -205,112 +226,105 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="filename">
         <xsl:apply-templates select="." mode="filename" />
     </xsl:variable>
-    <!-- every cell added leads with comma-space, ends plain -->
     <xsl:variable name="cell-list">
         <!-- load LaTeX macros for MathJax -->
         <xsl:call-template name="load-macros" />
         <xsl:copy-of select="$content" />
     </xsl:variable>
     <exsl:document href="{$filename}" method="text">
-        <!-- TODO JSON COMMENT -->
         <!-- <xsl:call-template name="converter-blurb-html" /> -->
+        <!-- begin outermost group -->
         <xsl:text>{&#xa;</xsl:text>
+        <!-- cell list first, majority of notebook, metadata to finish -->
+        <xsl:text>"cells": [&#xa;</xsl:text>
+        <!-- Massage string delimiters, separators -->
+        <xsl:variable name="split-strings" select="str:replace($cell-list, $ESBS, '&quot;,&#xa;&quot;')" />
+        <xsl:variable name="finalize-strings" select="str:replace(str:replace($split-strings, $ES, '&quot;'), $BS, '&quot;')" />
+        <!-- Massage cell delimiters, separators -->
+        <!-- first, square inline headings to cell separators -->
+        <xsl:variable name="inline-headings" select="str:replace($finalize-strings, $EIBM, ',&#xa;')" />
+        <!-- now split cell separators -->
+        <xsl:variable name="split-cells" select="str:replace($inline-headings, $RBLB, $RBLB-comma)" />
+        <!-- now replace cell markers with actual wrappers -->
+        <xsl:variable name="markdown-cells" select="str:replace(str:replace($split-cells, $BM, $begin-markdown-wrap), $EM, $end-markdown-wrap)" />
+        <xsl:variable name="code-cells" select="str:replace(str:replace($markdown-cells, $BC, $begin-code-wrap), $EC, $end-code-wrap)" />
+        <!-- remove nect line by making previous a value-of, once stable -->
+        <xsl:value-of select="$code-cells" />
+        <!-- end cell list -->
+        <xsl:text>],&#xa;</xsl:text>
         <!-- version identifiers -->
-        <xsl:text>  "nbformat": 4,&#xa;</xsl:text>
-        <xsl:text>  "nbformat_minor": 0,&#xa;</xsl:text>
+        <xsl:text>"nbformat": 4,&#xa;</xsl:text>
+        <xsl:text>"nbformat_minor": 0,&#xa;</xsl:text>
         <!-- metadata copied from blank SMC notebook -->
-        <xsl:text>  "metadata": {&#xa;</xsl:text>
+        <xsl:text>"metadata": {&#xa;</xsl:text>
         <xsl:text>  "kernelspec": {&#xa;</xsl:text>
-        <xsl:text>   "display_name": "Sage 6.9",&#xa;</xsl:text>
-        <xsl:text>   "language": "",&#xa;</xsl:text>
-        <xsl:text>   "name": "sage-6.9"&#xa;</xsl:text>
+        <xsl:text>    "display_name": "Sage 6.9",&#xa;</xsl:text>
+        <xsl:text>    "language": "",&#xa;</xsl:text>
+        <xsl:text>    "name": "sage-6.9"&#xa;</xsl:text>
         <!-- <xsl:text>   "display_name": "Python 2",&#xa;</xsl:text> -->
         <!-- <xsl:text>   "language": "python",&#xa;</xsl:text> -->
         <!-- <xsl:text>   "name": "python2"&#xa;</xsl:text> -->
         <xsl:text>  },&#xa;</xsl:text>
         <xsl:text>  "language_info": {&#xa;</xsl:text>
-        <xsl:text>   "codemirror_mode": {&#xa;</xsl:text>
-        <xsl:text>    "name": "ipython",&#xa;</xsl:text>
-        <xsl:text>    "version": 2&#xa;</xsl:text>
-        <xsl:text>   },&#xa;</xsl:text>
-        <xsl:text>   "file_extension": ".py",&#xa;</xsl:text>
-        <xsl:text>   "mimetype": "text/x-python",&#xa;</xsl:text>
-        <xsl:text>   "name": "python",&#xa;</xsl:text>
-        <xsl:text>   "nbconvert_exporter": "python",&#xa;</xsl:text>
-        <xsl:text>   "pygments_lexer": "ipython2",&#xa;</xsl:text>
-        <xsl:text>   "version": "2.7.8"&#xa;</xsl:text>
+        <xsl:text>    "codemirror_mode": {&#xa;</xsl:text>
+        <xsl:text>      "name": "ipython",&#xa;</xsl:text>
+        <xsl:text>      "version": 2&#xa;</xsl:text>
+        <xsl:text>    },&#xa;</xsl:text>
+        <xsl:text>    "file_extension": ".py",&#xa;</xsl:text>
+        <xsl:text>    "mimetype": "text/x-python",&#xa;</xsl:text>
+        <xsl:text>    "name": "python",&#xa;</xsl:text>
+        <xsl:text>    "nbconvert_exporter": "python",&#xa;</xsl:text>
+        <xsl:text>    "pygments_lexer": "ipython2",&#xa;</xsl:text>
+        <xsl:text>    "version": "2.7.8"&#xa;</xsl:text>
         <xsl:text>  },&#xa;</xsl:text>
         <xsl:text>  "name": "</xsl:text>
         <xsl:value-of select="$filename" />
         <xsl:text>"&#xa;</xsl:text>
-        <xsl:text> },&#xa;</xsl:text>
-        <!-- cell list, majority of notebook -->
-        <xsl:text>   "cells": [</xsl:text>
-
-        <!-- A cell with no trailing comma -->
-        <!-- TODO maybe lead with macros or whitespace -->
-        <!-- <xsl:call-template name="empty-lead-cell" /> -->
-        <!-- Conditionally include necessary commands -->
-        <!-- <xsl:call-template name="load-sage-library" /> -->
-        <!-- The cells of the notebook -->
-        <!-- Strip leading ", " of first cell -->
-        <xsl:value-of select="substring($cell-list, 3)" />
-        <!-- end cell list -->
-        <xsl:text>&#xa;]&#xa;</xsl:text>
+        <xsl:text>  }&#xa;</xsl:text>
         <!-- end outermost group -->
         <xsl:text>}&#xa;</xsl:text>
     </exsl:document>
 </xsl:template>
 
-
 <!-- Macros, escape backslashes, join lines, -->
 <!-- wrap in string, dollars, wrap as a cell -->
 <!-- TODO: sanitize left margin              -->
 <xsl:template name="load-macros">
-    <xsl:call-template name="markdown-cell">
-        <xsl:with-param name="content">
-            <xsl:call-template name="begin-string" />
-            <xsl:text>$</xsl:text>
-            <xsl:call-template name="string-replace-all">
-                <xsl:with-param name="text">
-                    <xsl:call-template name="string-replace-all">
-                        <xsl:with-param name="text">
-                            <xsl:value-of select="/mathbook/docinfo/macros" />
-                        </xsl:with-param>
-                        <xsl:with-param name="replace" select="'\'" />
-                        <xsl:with-param name="by" select="'\\'" />
-                    </xsl:call-template>
-                </xsl:with-param>
-                <xsl:with-param name="replace" select="'&#xa;'" />
-                <xsl:with-param name="by" select="''" />
-            </xsl:call-template>
-            <xsl:text>$</xsl:text>
-            <xsl:call-template name="end-string" />
-        </xsl:with-param>
-    </xsl:call-template>
+    <xsl:if test="/mathbook/docinfo/macros">
+        <xsl:variable name="macros">
+            <xsl:value-of select="/mathbook/docinfo/macros" />
+        </xsl:variable>
+        <xsl:call-template name="markdown-cell">
+            <xsl:with-param name="content">
+                <xsl:call-template name="begin-string" />
+                <xsl:text>$</xsl:text>
+                <xsl:value-of select="str:replace(str:replace($macros, '\', '\\'), '&#xa;', '')" />
+                <xsl:text>$</xsl:text>
+                <xsl:call-template name="end-string" />
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
 </xsl:template>
-
-
 
 <!-- Make an initial header for an article -->
 <xsl:template match="article/frontmatter/titlepage">
-    <xsl:text>,&#xa;{"cell_type" : "markdown", "metadata": {}, "source": [&#xa;</xsl:text>
-    <!-- commas lead subsequent cells -->
-    <!-- cannot get -> <- to center   -->
-    <xsl:text>"# </xsl:text>
-        <xsl:value-of select="/mathbook/article/title" />
-    <xsl:text>\n"</xsl:text>
-    <xsl:text>,&#xa;"</xsl:text>
-        <xsl:apply-templates select="author/personname" />
-    <xsl:text>\n"</xsl:text>
-    <xsl:text>,&#xa;"</xsl:text>
-        <xsl:apply-templates select="event" />
-    <xsl:text>\n"</xsl:text>
-    <xsl:text>,&#xa;"</xsl:text>
-        <xsl:apply-templates select="date" />
-    <xsl:text>"</xsl:text>
-    <xsl:text>]&#xa;</xsl:text>
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:call-template name="markdown-cell">
+        <xsl:with-param name="content">
+            <!-- cannot get -> <- to center   -->
+            <xsl:text>"# </xsl:text>
+                <xsl:value-of select="/mathbook/article/title" />
+            <xsl:text>\n"</xsl:text>
+            <xsl:text>,&#xa;"</xsl:text>
+                <xsl:apply-templates select="author/personname" />
+            <xsl:text>\n"</xsl:text>
+            <xsl:text>,&#xa;"</xsl:text>
+                <xsl:apply-templates select="event" />
+            <xsl:text>\n"</xsl:text>
+            <xsl:text>,&#xa;"</xsl:text>
+                <xsl:apply-templates select="date" />
+            <xsl:text>"</xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- ################# -->
@@ -334,9 +348,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />
             <xsl:text>**</xsl:text>
-            <xsl:apply-templates select=".." mode="type-name" />
+            <xsl:apply-templates select="." mode="type-name" />
             <xsl:text> </xsl:text>
-            <xsl:apply-templates select=".." mode="number" />
+            <xsl:apply-templates select="." mode="number" />
             <!-- if title? -->
             <xsl:text>** </xsl:text>
             <xsl:call-template name="end-string" />
@@ -346,15 +360,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Drop a title in a cell and process remainder -->
-<xsl:template match="theorem|corollary|lemma|proposition|example|remark">
+<xsl:template match="theorem|corollary|lemma|proposition|example|remark|exercise">
     <xsl:call-template name="markdown-cell">
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />
             <xsl:text>**</xsl:text>
-            <xsl:apply-templates select=".." mode="type-name" />
+            <xsl:apply-templates select="." mode="type-name" />
             <xsl:text> </xsl:text>
-            <xsl:apply-templates select=".." mode="number" />
-            <!-- if title? -->
+            <xsl:apply-templates select="." mode="number" />
+            <xsl:if test="title">
+                <xsl:text> </xsl:text>
+                <xsl:apply-templates select="." mode="title-full" />
+            </xsl:if>
             <xsl:text>** </xsl:text>
             <xsl:call-template name="end-string" />
         </xsl:with-param>
@@ -370,15 +387,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Drop a "proof" header  -->
 <xsl:template match="proof">
-    <xsl:call-template name="markdown-cell">
+<!--     <xsl:call-template name="markdown-cell">
         <xsl:with-param name="content">
+ -->
+            <xsl:call-template name="begin-inline" />
             <xsl:call-template name="begin-string" />
             <xsl:text>**</xsl:text>
             <xsl:apply-templates select="." mode="type-name" />
             <xsl:text>** </xsl:text>
             <xsl:call-template name="end-string" />
-        </xsl:with-param>
+            <xsl:call-template name="end-inline" />
+<!--         </xsl:with-param>
     </xsl:call-template>
+ -->
     <xsl:apply-templates />
 </xsl:template>
 
@@ -409,10 +430,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="end-string" />
         </xsl:with-param>
     </xsl:call-template>
-    <xsl:apply-templates select="statement" />
+    <xsl:apply-templates />
 </xsl:template>
 
-<!-- Sage code, a bit hackish -->
+<xsl:template match="hint|answer|solution">
+    <xsl:call-template name="markdown-cell">
+        <xsl:with-param name="content">
+            <xsl:call-template name="begin-string" />
+            <xsl:text>**</xsl:text>
+            <xsl:apply-templates select="." mode="type-name" />
+            <xsl:text>**</xsl:text>
+            <xsl:call-template name="end-string" />
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:apply-templates />
+</xsl:template>
+
+
+
+<!-- Sage code -->
+<!-- Should evolve to accomodate gebneral template -->
 <xsl:template match="sage">
     <!-- formulate lines of code -->
     <xsl:variable name="loc">
@@ -431,15 +468,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="str:replace($loc-trim, '&#xa;', concat('\n', $ESBS))" />
         <xsl:call-template name="end-string" /> <!-- end last string -->
     </xsl:variable>
-    <!-- use codecell template to adjust no matter what? -->
-    <xsl:text>,&#xa;</xsl:text> <!-- end previous cell -->
-    <xsl:text>{"cell_type" : "code", "execution_count" : null, "metadata" : {}, "source": [&#xa;</xsl:text>
-    <xsl:variable name="split" select="str:replace($the-code, $ESBS, '&quot;,&#xa;&quot;')" />
-    <xsl:value-of select="str:replace(str:replace($split, $ES, '&quot;'), $BS, '&quot;')" />
-    <xsl:text>&#xa;],</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>"outputs" : []</xsl:text>
-    <xsl:text>}</xsl:text>
+    <xsl:call-template name="code-cell">
+        <xsl:with-param name="content">
+            <xsl:variable name="split" select="str:replace($the-code, $ESBS, '&quot;,&#xa;&quot;')" />
+            <xsl:value-of select="str:replace(str:replace($split, $ES, '&quot;'), $BS, '&quot;')" />
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- ################ -->
@@ -483,7 +517,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-
 <!-- This is a straight copy from HTML -->
 <!-- Maybe it belongs in common, despite being online only -->
 <!-- URL's -->
@@ -511,6 +544,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>(</xsl:text>
     <xsl:apply-templates select="." mode="url" />
     <xsl:text>)</xsl:text>
+</xsl:template>
+
+<!-- Straight copies, from mathbook-common, just double-slash-->
+<!-- LaTeX labels get used on MathJax content in HTML, so we -->
+<!-- put this template in the common file for universal use  -->
+<!-- Insert an identifier as a LaTeX label on anything       -->
+<!-- Calls to this template need come from where LaTeX likes -->
+<!-- a \label, generally someplace that can be numbered      -->
+<xsl:template match="*" mode="label">
+    <xsl:text>\\label{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="men|mrow" mode="tag">
+    <xsl:text>\\tag{</xsl:text>
+    <xsl:apply-templates select="." mode="number" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 
@@ -591,13 +642,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
-
-
-
-<!-- ########## -->
-<!-- Paragraphs -->
-<!-- ########## -->
-
 <!-- #### -->
 <!-- Math -->
 <!-- #### -->
@@ -616,6 +660,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\\begin{equation}</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\\end{equation}</xsl:text>
+</xsl:template>
+
+<!-- Now numbered   -->
+<xsl:template match="men">
+    <xsl:text>\\begin{equation}</xsl:text>
+    <xsl:apply-templates />
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:apply-templates select="." mode="tag"/>
+     <xsl:text>\\end{equation}</xsl:text>
 </xsl:template>
 
 <!-- TODO: Straight out of LaTeX, but sanitized some -->
@@ -641,23 +694,61 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="mdn">
-    <xsl:call-template name="string-replace-all">
-        <xsl:with-param name="text">
+    <xsl:choose>
+        <xsl:when test="contains(., '&amp;')">
+            <xsl:text>\\begin{align}\n</xsl:text>
+            <xsl:apply-templates select="mrow|intertext" />
+            <xsl:text>\\end{align}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\\begin{gather}\n</xsl:text>
+            <xsl:apply-templates select="mrow|intertext" />
+            <xsl:text>\\end{gather}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Duplicates above, but as block-level element -->
+<xsl:template match="mdn[not(parent::p)]">
+    <xsl:call-template name="markdown-cell">
+        <xsl:with-param name="content">
+            <xsl:call-template name="begin-string" />
             <xsl:choose>
                 <xsl:when test="contains(., '&amp;')">
-                    <xsl:text>\begin{align}\n</xsl:text>
+                    <xsl:text>\\begin{align}\n</xsl:text>
                     <xsl:apply-templates select="mrow|intertext" />
-                    <xsl:text>\end{align}</xsl:text>
+                    <xsl:text>\\end{align}</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:text>\begin{gather}\n</xsl:text>
+                    <xsl:text>\\begin{gather}\n</xsl:text>
                     <xsl:apply-templates select="mrow|intertext" />
-                    <xsl:text>\end{gather}</xsl:text>
+                    <xsl:text>\\end{gather}</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
+            <xsl:call-template name="end-string" />
         </xsl:with-param>
-        <xsl:with-param name="replace" select="string('\')" />
-        <xsl:with-param name="by" select="string('\\')" />
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Duplicates above, but as block-level element -->
+<xsl:template match="md[not(parent::p)]">
+    <xsl:call-template name="markdown-cell">
+        <xsl:with-param name="content">
+            <xsl:call-template name="begin-string" />
+            <xsl:choose>
+                <xsl:when test="contains(., '&amp;')">
+                    <xsl:text>\\begin{align}\n</xsl:text>
+                    <xsl:apply-templates select="mrow|intertext" />
+                    <xsl:text>\\end{align}</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>\\begin{gather}\n</xsl:text>
+                    <xsl:apply-templates select="mrow|intertext" />
+                    <xsl:text>\\end{gather}</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:call-template name="end-string" />
+        </xsl:with-param>
     </xsl:call-template>
 </xsl:template>
 
@@ -682,10 +773,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
     <xsl:choose>
         <xsl:when test="@number='no'">
-            <xsl:text>\notag</xsl:text>
+            <xsl:text>\\notag</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="." mode="label" />
+            <xsl:apply-templates select="." mode="tag"/>
         </xsl:otherwise>
     </xsl:choose>
     <!-- write newline for markdown source formatting -->
@@ -696,46 +788,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Intertext -->
 <!-- An <mrow> will provide trailing newline, so do the same here -->
+<!-- Added double slash for jupyter                               -->
 <xsl:template match="md/intertext|mdn/intertext">
-    <xsl:text>\intertext{</xsl:text>
+    <xsl:text>\\intertext{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\n</xsl:text>
 </xsl:template>
 
-
-
-
-
-<!-- Standard Sage cells -->
-<!-- TODO: plug into abstract cell infrastructure -->
-<!-- <xsl:template match="sage">
-    <xsl:text>,&#xa;{"cell_type": "code", "source": ["</xsl:text>
-    <xsl:call-template name="string-replace-all">
-        <xsl:with-param name="text">
-            <xsl:call-template name="sanitize-code">
-                <xsl:with-param name="raw-code" select="input" />
-            </xsl:call-template>
-        </xsl:with-param>
-        <xsl:with-param name="replace" select="string('&#xa;')" />
-        <xsl:with-param name="by" select="string('\n')" />
-    </xsl:call-template>
-    <xsl:text>"],&#xa;"metadata": {}, "outputs": [], "execution_count": null}</xsl:text>
+<xsl:template match="latex">
+    <xsl:text>$\\mathrm{LaTeX}$</xsl:text>
 </xsl:template>
- -->
-
-
-<!-- Build markdown, then sanitize -->
-<xsl:template match="c">
-    <!-- <xsl:message>in c</xsl:message> -->
-    <xsl:call-template name="escape-quotes">
-        <xsl:with-param name="text">
-            <xsl:apply-imports />
-        </xsl:with-param>
-    </xsl:call-template>
-</xsl:template>
-
-
-
 
 
 <!-- " in JSON is touchy -->
@@ -772,17 +834,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- <xsl:template match="text()">
-    <xsl:if test="contains(., '&#xa;')">
-        <xsl:message>CR: <xsl:value-of select="." /></xsl:message>
-    </xsl:if>
-    <xsl:value-of select="str:replace(., '&#xa;', '[CR]')" />
-    <xsl:if test="contains(., '&#xa;')">
-        <xsl:message>CR: <xsl:value-of select="str:replace(., '&#xa;', '')" /></xsl:message>
-    </xsl:if>
-</xsl:template>
- -->
-
 <!-- space          &#x20; -->
 <!-- tab             &#x9; -->
 <!-- carriage return &#xd; -->
@@ -807,46 +858,161 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Sanitize everything else -->
-<!-- newlines to warning now, maybe to "\n" eventually -->
 <xsl:template match="text()">
     <!-- long-term: remove variable for clean sources -->
     <xsl:variable name="escaped-string">
         <xsl:value-of select="str:replace(str:replace(., '\', '\\'), '&quot;', '\&quot;')" />
     </xsl:variable>
-    <!-- newlines, tabs -->
-    <xsl:value-of select="str:replace(str:replace($escaped-string, '&#xa;', '[CR]'), '&#x9;', '')" />
+    <!-- newlines to spaces  -->
+    <!-- tabs to empty string-->
+    <xsl:variable name="CR-sub" select="' '" />  <!-- use [CR] to make a point -->
+    <xsl:value-of select="str:replace(str:replace($escaped-string, '&#xa;', $CR-sub), '&#x9;', '')" />
 </xsl:template>
 
+<!-- A Jupyter notebook is a flat sequence of cells, either             -->
+<!-- "markdown" or "code."  The content is primarily a list of strings. -->
+<!-- This presents two fundamental problems:                            -->
+<!--                                                                    -->
+<!--   1.  Lists of cells, or lists of strings, with  n  items          -->
+<!--       need exactly  n-1  commas.  It is hard to predict/find       -->
+<!--       the first or last element of a list.                         -->
+<!--                                                                    -->
+<!--   2.  Cells cannot be nested and content should not lie            -->
+<!--       outside of cells                                             -->
+<!--                                                                    -->
+<!-- We use a sort of pseudo-markup.  Adjacency of items lets           -->
+<!-- us solve the comma problem.  We are also able to effectively       -->
+<!-- merge content into a cell, without knowing anything about          -->
+<!-- the following cell.                                                -->
+<!--                                                                    -->
+<!-- Marker language:                                                   -->
+<!--                                                                    -->
+<!-- LB, RB: left and right brackets - should be UUIDs eventually       -->
+<!--                                                                    -->
+<!-- BS, ES: begin and end string                                       -->
+<!--                                                                    -->
+<!-- BI, EI: begin and end inline heading                               -->
+<!--                                                                    -->
+<!-- BM, EM, BC, EC: begin and end, markdown and code, cells            -->
 
 
-<!-- MAYBE text() needs backslashes escaped universally, then quotes -->
-<!-- and no "value-of" so the template gets applied. -->
+<!-- ####### -->
+<!-- Markers -->
+<!-- ####### -->
 
-<xsl:template name="escape-quotes">
-    <xsl:param name="text" />
-    <!-- <xsl:message>in eq: <xsl:value-of select="$text" /></xsl:message> -->
-    <xsl:call-template name="string-replace-all">
-        <xsl:with-param name="text" select="$text" />
-        <xsl:with-param name="replace" select="string('&#x22;')" />
-        <xsl:with-param name="by" select="string('\&#x22;')" />
-    </xsl:call-template>
-</xsl:template>
+<!-- make these exceddingly unique -->
+<xsl:variable name="LB" select="'[[['" />
+<xsl:variable name="RB" select="']]]'" />
 
-<!-- ################# -->
-<!-- String Management -->
-<!-- ################# -->
-
+<!-- upgrade with brackets -->
 <xsl:variable name="BS">
     <xsl:text>[BS]</xsl:text>
 </xsl:variable>
 <xsl:variable name="ES">
     <xsl:text>[ES]</xsl:text>
 </xsl:variable>
-<!-- useful for chunking up verbatim text -->
+
+<xsl:variable name="BI">
+    <xsl:text>[BI]</xsl:text>
+</xsl:variable>
+<xsl:variable name="EI">
+    <xsl:text>[EI]</xsl:text>
+</xsl:variable>
+
+<xsl:variable name="BM">
+    <xsl:value-of select="$LB" />
+    <xsl:text>BM</xsl:text>
+    <xsl:value-of select="$RB" />
+</xsl:variable>
+
+<xsl:variable name="EM">
+    <xsl:value-of select="$LB" />
+    <xsl:text>EM</xsl:text>
+    <xsl:value-of select="$RB" />
+</xsl:variable>
+
+<xsl:variable name="BC">
+    <xsl:value-of select="$LB" />
+    <xsl:text>BC</xsl:text>
+    <xsl:value-of select="$RB" />
+</xsl:variable>
+
+<xsl:variable name="EC">
+    <xsl:value-of select="$LB" />
+    <xsl:text>EC</xsl:text>
+    <xsl:value-of select="$RB" />
+</xsl:variable>
+
+<!-- Combinations (to recognize) -->
+
+
 <xsl:variable name="ESBS">
     <xsl:value-of select="$ES" />
     <xsl:value-of select="$BS" />
 </xsl:variable>
+
+<xsl:variable name="RBLB">
+    <xsl:value-of select="$RB" />
+    <xsl:value-of select="$LB" />
+</xsl:variable>
+
+<xsl:variable name="EMBM">
+    <xsl:value-of select="$EM" />
+    <xsl:value-of select="$BM" />
+</xsl:variable>
+
+<xsl:variable name="ECBC">
+    <xsl:value-of select="$EC" />
+    <xsl:value-of select="$BC" />
+</xsl:variable>
+
+<xsl:variable name="ECBM">
+    <xsl:value-of select="$EC" />
+    <xsl:value-of select="$BM" />
+</xsl:variable>
+
+<xsl:variable name="EMBC">
+    <xsl:value-of select="$EM" />
+    <xsl:value-of select="$BC" />
+</xsl:variable>
+
+<!-- Fix up end of inline against a beginnning of either type of cell -->
+<xsl:variable name="EIBM">
+    <xsl:value-of select="$EI" />
+    <xsl:value-of select="$BM" />
+</xsl:variable>
+
+<xsl:variable name="EIBC">
+    <xsl:value-of select="$EI" />
+    <xsl:value-of select="$BC" />
+</xsl:variable>
+
+<!-- Substitutions -->
+
+<xsl:variable name="RBLB-comma">
+    <xsl:value-of select="$RB" />
+    <xsl:text>,&#xa;</xsl:text>
+    <xsl:value-of select="$LB" />
+</xsl:variable>
+
+<xsl:variable name="begin-markdown-wrap">
+    <xsl:text>{"cell_type": "markdown", "metadata": {}, "source": [&#xa;</xsl:text>
+</xsl:variable>
+
+<xsl:variable name="end-markdown-wrap">
+    <xsl:text>]}</xsl:text>
+</xsl:variable>
+
+<xsl:variable name="begin-code-wrap">
+    <xsl:text>{"cell_type" : "code", "execution_count" : null, "metadata" : {}, "source": [&#xa;</xsl:text>
+</xsl:variable>
+
+<xsl:variable name="end-code-wrap">
+    <xsl:text>],"outputs" : []}</xsl:text>
+</xsl:variable>
+
+
+<!-- Convenience templates -->
 
 <xsl:template name="begin-string">
     <xsl:value-of select="$BS" />
@@ -856,54 +1022,52 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$ES" />
 </xsl:template>
 
+<!-- Will be a start of a markdown cell eventually -->
+<xsl:template name="begin-inline">
+    <xsl:value-of select="$BM" />
+</xsl:template>
+
+<xsl:template name="end-inline">
+    <xsl:value-of select="$EI" />
+</xsl:template>
+
+<xsl:template name="begin-markdown-cell">
+    <xsl:value-of select="$BM" />
+</xsl:template>
+
+<xsl:template name="end-markdown-cell">
+    <xsl:value-of select="$EM" />
+</xsl:template>
+
+<xsl:template name="begin-code-cell">
+    <xsl:value-of select="$BC" />
+</xsl:template>
+
+<xsl:template name="end-code-cell">
+    <xsl:value-of select="$EC" />
+</xsl:template>
+
+
 <!-- ################# -->
 <!-- Cell Construction -->
 <!-- ################# -->
 
-<!-- Hack to avoid dealing with  n - 1 -->
-<!-- commas in a list of length  n     -->
-<!-- A cell with no comma to lead,     -->
-<!-- all subsequent lead w/ a comma    -->
-<!-- A single space squashes prompt to -->
-<!-- start typing someting in the cell -->
-<!-- <xsl:template name="empty-lead-cell">
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>{"cell_type" : "markdown", "metadata": {}, "source": [&#xa;</xsl:text>
-    <xsl:text>" "</xsl:text>
-    <xsl:text>&#xa;]}</xsl:text>
-</xsl:template>
- -->
-<!--
-<xsl:template name="markdown-cell">
-    <xsl:param name="content" />
-    <xsl:text>,&#xa;</xsl:text>
-    <xsl:text>{"cell_type" : "markdown", "metadata": {}, "source": [&#xa;</xsl:text>
-    <xsl:copy-of select="$content" />
-    <xsl:text>&#xa;]}</xsl:text>
-</xsl:template>
- -->
-<!-- Expects a list of strings, with n-1 commas -->
+<!-- These should be phased out in lieu of their two respective convenience templates -->
+
 <xsl:template name="markdown-cell">
     <xsl:param name="content" />
     <!--  -->
-    <xsl:text>,&#xa;</xsl:text> <!-- end previous cell -->
-    <xsl:text>{"cell_type": "markdown", "metadata": {}, "source": [&#xa;</xsl:text>
-    <xsl:variable name="split" select="str:replace($content, $ESBS, '&quot;,&#xa;&quot;')" />
-    <xsl:value-of select="str:replace(str:replace($split, $ES, '&quot;'), $BS, '&quot;')" />
-    <xsl:text>&#xa;]}</xsl:text>
+    <xsl:call-template name="begin-markdown-cell" />
+    <xsl:value-of select="$content" />
+    <xsl:call-template name="end-markdown-cell" />
 </xsl:template>
 
 <xsl:template name="code-cell">
     <xsl:param name="content" />
     <!--  -->
-    <xsl:text>,&#xa;</xsl:text> <!-- end previous cell -->
-    <xsl:text>{"cell_type" : "code", "execution_count" : null, "metadata" : {}, "source": [&#xa;</xsl:text>
-    <xsl:variable name="split" select="str:replace($content, $ESBS, '&quot;,&#xa;&quot;')" />
-    <xsl:value-of select="str:replace(str:replace($split, $ES, '&quot;'), $BS, '&quot;')" />
-    <xsl:text>&#xa;],</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>"outputs" : []</xsl:text>
-    <xsl:text>}</xsl:text>
+    <xsl:call-template name="begin-code-cell" />
+    <xsl:value-of select="$content" />
+    <xsl:call-template name="end-code-cell" />
 </xsl:template>
 
 </xsl:stylesheet>
