@@ -1599,6 +1599,34 @@ the xsltproc executable.
                 </exercise>
             </exercises>
 
+            <subsection>
+                <title>Description Lists</title>
+
+                <p>A <q>description</q> list has a short term or phrase that is prominent, followed by a short description.  It is modeled on the lists of similar structure in both <latex /> and HTML.  It makes for a nice medium-weight way to define terms, somewhere in-between the <c>term</c> tag which just makes a term prominent in a sentence, and a <c>definition</c>, which is set off, has a heading, a number, and a title.  This example is from Bob Plantz.</p>
+
+                <dl>
+                    <li>
+                        <title>Central Processing Unit (CPU)</title>
+                        <p>Controls most of the activities of the computer, performs the arithmetic and logical operations, and contains a small amount of very fast memory.</p>
+                    </li>
+
+                    <li>
+                        <title>Memory</title>
+                        <p>Provides storage for the instructions for the CPU and the data they manipulate.</p>
+                    </li>
+
+                    <li>
+                        <title>Input/Output (I/O)</title>
+                        <p>Communicates with the outside world and with mass storage devices (<eg />, disks).</p>
+                    </li>
+
+                    <li>
+                        <title>Bus</title>
+                        <p>A communication pathway with a protocol specifying exactly how the pathway is used.</p>
+                    </li>
+                </dl>
+
+            </subsection>
 
             <references>
                 <title>References (with lists in Annotations)</title>
