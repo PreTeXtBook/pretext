@@ -161,14 +161,6 @@ def latex_image_conversion(xml_source, data_dir, dest_dir, outformat):
     _debug("temporary directory: {}".format(tmp_dir))
     xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable: {}".format(xslt_executable))
-    tex_executable = get_executable(config,  'tex')
-    _debug("tex executable: {}".format(tex_executable))
-    pdfsvg_executable = get_executable(config, 'pdfsvg')
-    _debug("pdfsvg executable: {}".format(pdfsvg_executable))
-    pdfpng_executable = get_executable(config, 'pdfpng')
-    _debug("pdfpng executable: {}".format(pdfpng_executable))
-    pdfeps_executable = get_executable(config, 'pdfeps')
-    _debug("pdfeps executable: {}".format(pdfeps_executable))
     # NB: next command uses relative paths, so no chdir(), etc beforehand
     if data_dir:
         copy_data_directory(xml_source, data_dir, tmp_dir)
@@ -196,6 +188,8 @@ def latex_image_conversion(xml_source, data_dir, dest_dir, outformat):
             latex_image_svg = "{}.svg".format(filebase)
             latex_image_png = "{}.png".format(filebase)
             latex_image_eps = "{}.eps".format(filebase)
+            tex_executable = get_executable(config,  'tex')
+            _debug("tex executable: {}".format(tex_executable))
             latex_cmd = [tex_executable, latex_image]
             _verbose("converting {} to {}".format(latex_image, latex_image_pdf))
             subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
@@ -204,17 +198,23 @@ def latex_image_conversion(xml_source, data_dir, dest_dir, outformat):
             if (outformat == 'pdf' or outformat == 'all'):
                 shutil.copy2(latex_image_pdf, dest_dir)
             if (outformat == 'svg' or outformat == 'all'):
+                pdfsvg_executable = get_executable(config, 'pdfsvg')
+                _debug("pdfsvg executable: {}".format(pdfsvg_executable))
                 svg_cmd = [pdfsvg_executable, latex_image_pdf, latex_image_svg]
                 _verbose("converting {} to {}".format(latex_image_pdf, latex_image_svg))
                 subprocess.call(svg_cmd)
                 shutil.copy2(latex_image_svg, dest_dir)
             if (outformat == 'png' or outformat == 'all'):
                 # create high-quality png, presumes "convert" executable
+                pdfpng_executable = get_executable(config, 'pdfpng')
+                _debug("pdfpng executable: {}".format(pdfpng_executable))
                 png_cmd = [pdfpng_executable, "-density", "300",  latex_image_pdf, "-quality", "100", latex_image_png]
                 _verbose("converting {} to {}".format(latex_image_pdf, latex_image_png))
                 subprocess.call(png_cmd)
                 shutil.copy2(latex_image_png, dest_dir)
             if (outformat == 'eps' or outformat == 'all'):
+                pdfeps_executable = get_executable(config, 'pdfeps')
+                _debug("pdfeps executable: {}".format(pdfeps_executable))
                 eps_cmd = [pdfeps_executable, '-eps', latex_image_pdf, latex_image_eps]
                 _verbose("converting {} to {}".format(latex_image_pdf, latex_image_eps))
                 subprocess.call(eps_cmd)
