@@ -2502,6 +2502,24 @@ the xsltproc executable.
 
             <p>Look in the <c>mathbook-common.xsl</c> file to see the strings to use to identify languages.  Always all-lowercase, no symbols, no punctuation.</p>
 
+            <p>A <c>program</c> may be nested inside a <c>listing</c>, which behaves similar to a <c>figure</c>.  You can provide a <c>caption</c>, and the listing will be numbered along with tables and figures.  This then makes it possible to cross-reference the listing, such as <xref ref="listing-c-hello" autoname="yes" />.</p>
+
+            <listing xml:id="listing-c-hello">
+                <caption>C Version of <q>Hello, World!</q></caption>
+                <program language="c">
+                    <input>
+                    /* Hello World program */
+
+                    #include&lt;stdio.h&gt;
+
+                    main()
+                    {
+                        printf("Hello, World!");
+                    }
+                    </input>
+                </program>
+            </listing>
+
             <p>If you are discussing algorithms in the abstract (or even concretely), you can set them off like a theorem, with a number, a title and a target for cross-references.  Sometimes you claim an algorithm produces something in particular, or has certain properties, such as a theoretical run time, so a proof may be included.  See the discussion just preceding about (limited) options for pseudo-code.</p>
 
             <algorithm xml:id="algorithm-sieve-eratosthenes">

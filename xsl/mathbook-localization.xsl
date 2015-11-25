@@ -107,6 +107,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='remark'><xsl:text>Remark</xsl:text></localization>
     <localization string-id='figure'><xsl:text>Figure</xsl:text></localization>
     <localization string-id='table'><xsl:text>Table</xsl:text></localization>
+    <localization string-id='listing'><xsl:text>Listing</xsl:text></localization>
     <localization string-id='fn'><xsl:text>Footnote</xsl:text></localization>
     <!-- Parts of an exercise and it's solution -->
     <localization string-id='exercise'><xsl:text>Exercise</xsl:text></localization>
@@ -212,6 +213,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='remark'><xsl:text>Observação</xsl:text></localization>
     <localization string-id='figure'><xsl:text>Figura</xsl:text></localization>
     <localization string-id='table'><xsl:text>Tabela</xsl:text></localization>
+    <!-- Translation needed for Portugal Portugese -->
+    <!-- <localization string-id='listing'><xsl:text>Listing</xsl:text></localization> -->
     <localization string-id='fn'><xsl:text>Nota de rodapé</xsl:text></localization>
     <!-- Parts of an exercise and it's solution -->
     <localization string-id='exercise'><xsl:text>Exercício</xsl:text></localization>
@@ -323,6 +326,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='remark'><xsl:text>Observação</xsl:text></localization>
     <localization string-id='figure'><xsl:text>Figura</xsl:text></localization>
     <localization string-id='table'><xsl:text>Tabela</xsl:text></localization>
+    <!-- Translation needed for Brazilian Portugese -->
+    <!-- <localization string-id='listing'><xsl:text>Listing</xsl:text></localization> -->
     <localization string-id='fn'><xsl:text>Nota de rodapé</xsl:text></localization>
     <!-- Parts of an exercise and it's solution -->
     <localization string-id='exercise'><xsl:text>Exercício</xsl:text></localization>
@@ -432,6 +437,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='remark'><xsl:text>Nota</xsl:text></localization>
     <localization string-id='figure'><xsl:text>Figura</xsl:text></localization>
     <localization string-id='table'><xsl:text>Cuadro</xsl:text></localization>
+    <!-- Translation needed for Spain Spanish -->
+    <!-- <localization string-id='listing'><xsl:text>Listing</xsl:text></localization> -->
     <localization string-id='fn'><xsl:text>Nota a pie de página</xsl:text></localization>
     <!-- Parts of an exercise and it's solution -->
     <localization string-id='exercise'><xsl:text>Ejercicio</xsl:text></localization>

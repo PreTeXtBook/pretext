@@ -503,11 +503,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- New names are necessary to make "within" numbering possible -->
     <!-- http://tex.stackexchange.com/questions/127914/custom-counter-steps-twice-when-invoked-from-caption-using-caption-package -->
     <!-- http://tex.stackexchange.com/questions/160207/side-effect-of-caption-package-with-custom-counter                         -->
-    <xsl:if test="//figure or //table">
-        <xsl:text>%% Figures, Tables, Floats&#xa;</xsl:text>
+    <xsl:if test="//figure or //table or //listing">
+        <xsl:text>%% Figures, Tables, Listings, Floats&#xa;</xsl:text>
         <xsl:text>%% The [H]ere option of the float package fixes floats in-place,&#xa;</xsl:text>
         <xsl:text>%% in deference to web usage, where floats are totally irrelevant&#xa;</xsl:text>
-        <xsl:text>%% We redefine the figure and table environments, if used&#xa;</xsl:text>
+        <xsl:text>%% We re/define the figure, table and listing environments, if used&#xa;</xsl:text>
         <xsl:text>%%   1) New mbxfigure and/or mbxtable environments are defined with float package&#xa;</xsl:text>
         <xsl:text>%%   2) Standard LaTeX environments redefined to use new environments&#xa;</xsl:text>
         <xsl:text>%%   3) Standard LaTeX environments redefined to step theorem counter&#xa;</xsl:text>
@@ -617,6 +617,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>% tables have the same number as theorems: http://tex.stackexchange.com/questions/16195/how-to-make-equations-figures-and-theorems-use-the-same-numbering-scheme &#xa;</xsl:text>
             <xsl:text>\makeatletter&#xa;</xsl:text>
             <xsl:text>\let\c@table\c@theorem&#xa;</xsl:text>
+            <xsl:text>\makeatother&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//listing">
+            <xsl:text>% Listing environment declared as new floating environment&#xa;</xsl:text>
+            <xsl:text>\DeclareFloatingEnvironment[fileext=lol,placement={H},within=</xsl:text>
+            <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
+            <xsl:choose>
+                <xsl:when test="$numbering-theorems = 0">
+                    <xsl:text>none</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="level-number-to-latex-name">
+                        <xsl:with-param name="level" select="$numbering-theorems + $root-level" />
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>,name=</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'listing'" /></xsl:call-template>
+            <xsl:text>]{listing}&#xa;</xsl:text>
+            <xsl:text>% listings have the same number as theorems: http://tex.stackexchange.com/questions/16195/how-to-make-equations-figures-and-theorems-use-the-same-numbering-scheme &#xa;</xsl:text>
+            <xsl:text>\makeatletter&#xa;</xsl:text>
+            <xsl:text>\let\c@listing\c@theorem&#xa;</xsl:text>
             <xsl:text>\makeatother&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
@@ -2803,6 +2825,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*[not(self::caption)]"/>
     <xsl:apply-templates select="caption" />
     <xsl:text>\end{figure}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Listings -->
+<!-- Standard LaTeX figure environment redefined, see preamble comments -->
+<xsl:template match="listing">
+    <xsl:text>\begin{listing}&#xa;</xsl:text>
+    <xsl:text>\centering&#xa;</xsl:text>
+    <xsl:apply-templates select="*[not(self::caption)]"/>
+    <xsl:apply-templates select="caption" />
+    <xsl:text>\end{listing}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- The sidebyside template 'wrapping' environment will always be a figure; 

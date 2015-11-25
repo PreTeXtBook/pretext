@@ -158,7 +158,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="note" />  <!-- TODO: biblio, record, etc too -->
 <xsl:strip-space elements="ul ol dl" />
 <xsl:strip-space elements="md mdn" />
-<xsl:strip-space elements="sage figure index" />
+<xsl:strip-space elements="sage figure listing index" />
 <xsl:strip-space elements="sidebyside paragraphs" />
 <xsl:strip-space elements="table tabular col row" />
 
@@ -1285,7 +1285,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter" mode="has-default-title">
     <xsl:text>true</xsl:text>
 </xsl:template>
-<xsl:template match="book|article|letter|part|chapter|appendix|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|credit|figure|table|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow" mode="has-default-title">
+<xsl:template match="book|article|letter|part|chapter|appendix|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|credit|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow" mode="has-default-title">
     <xsl:text>false</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="has-default-title">
@@ -1298,7 +1298,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- otherwise produce an empty title              -->
 <!-- NB: this match pattern should be the union of -->
 <!-- the two above,everything that can be titled   -->
-<xsl:template match="book|article|letter|part|chapter|appendix|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|figure|table|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|credit|frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter" mode="title">
+<xsl:template match="book|article|letter|part|chapter|appendix|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|credit|frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter" mode="title">
     <xsl:param name="complexity" />
     <xsl:variable name="default-titled">
         <xsl:apply-templates select="." mode="has-default-title" />
@@ -1656,19 +1656,19 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- where the subitem is subnumbered due to caption/number on container -->
 <!-- TODO: investigate entities for "number='no'" upgrade -->
 <!-- http://pimpmyxslt.com/articles/entity-tricks-part1/  -->
-<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table|sidebyside" mode="serial-number">
+<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table|listing|sidebyside" mode="serial-number">
     <xsl:variable name="subtree-level">
         <xsl:apply-templates select="." mode="absolute-subtree-level">
             <xsl:with-param name="numbering-items" select="$numbering-theorems" />
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$subtree-level=-1"><xsl:number select="." from="book|article|letter|memo" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=0"><xsl:number select="." from="part" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=1"><xsl:number select="." from="chapter|book/appendix" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=2"><xsl:number select="." from="section|article/appendix" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=3"><xsl:number select="." from="subsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=4"><xsl:number select="." from="subsubsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=-1"><xsl:number select="." from="book|article|letter|memo" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=0"><xsl:number select="." from="part" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=1"><xsl:number select="." from="chapter|book/appendix" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=2"><xsl:number select="." from="section|article/appendix" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=3"><xsl:number select="." from="subsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=4"><xsl:number select="." from="subsubsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for theorem number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>
@@ -1775,9 +1775,9 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- (Relevant subcomponents get their own numbers.) -->
 <xsl:template match="sidebyside[not(caption)]" mode="serial-number" />
 
-<!-- Figures and tables without captions do not get numbers either -->
-<!-- If they have a title, they can be referenced by that string   -->
-<xsl:template match="figure[not(caption)]|table[not(caption)]" mode="serial-number" />
+<!-- Figures, tables, listings without captions do not get numbers either -->
+<!-- If they have a title, they can be referenced by that string          -->
+<xsl:template match="figure[not(caption)]|table[not(caption)]|listing[not(caption)]" mode="serial-number" />
 
 <!-- Convert this to a warning?  Should not drop in here ever? -->
 <xsl:template match="*" mode="serial-number">
@@ -1869,7 +1869,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 </xsl:template>
 
 <!-- Structure Numbers: Theorems, Examples, Inline Exercises, Figures -->
-<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table|sidebyside" mode="structure-number">
+<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table|listing|sidebyside" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-theorems" />
         <xsl:with-param name="pad" select="'yes'" />
