@@ -1340,7 +1340,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="false()" />
 </xsl:template>
 <xsl:template match="me|men|md|mdn" mode="is-block-env">
-    <xsl:value-of select="true()" />
+    <xsl:value-of select="false()" />
 </xsl:template>
 <!-- Never hidden so calling hidden-knowl-text raises error -->
 <!-- There is no head ever -->
@@ -1351,7 +1351,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="me|men|md|mdn" mode="posterior" />
 <!-- HTML, CSS -->
 <xsl:template match="me|men|md|mdn" mode="environment-element">
-    <xsl:text>article</xsl:text>
+    <xsl:text>span</xsl:text>
 </xsl:template>
 <xsl:template match="me|men|md|mdn" mode="environment-class">
     <xsl:text>displaymath</xsl:text>
