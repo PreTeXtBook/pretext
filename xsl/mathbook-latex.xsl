@@ -2186,7 +2186,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- but different in the fourth slot           -->
 <!-- disc, circle, square, disc                 -->
 <!-- TODO: cannot find text mode filled black square symbol -->
-<!-- TODO: textcomp package has \textopenbullet (unexamined) -->
+<!-- TODO: textcomp (now in main latex) has \textopenbullet (unexamined) -->
 <xsl:template match="*" mode="latex-unordered-list-label-default">
     <xsl:variable name="level">
         <xsl:apply-templates select="." mode="unordered-list-level" />
@@ -2631,8 +2631,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Copyright symbol -->
+<!-- http://tex.stackexchange.com/questions/1676/how-to-get-good-looking-copyright-and-registered-symbols -->
 <xsl:template match="copyright">
-    <xsl:text>\copyright{}</xsl:text>
+    <xsl:text>\textcopyright{}</xsl:text>
+</xsl:template>
+
+<!-- Registered symbol          -->
+<!-- \textsuperscript can raise -->
+<xsl:template match="registered">
+    <xsl:text>\textregistered{}</xsl:text>
+</xsl:template>
+
+<!-- Trademark symbol -->
+<xsl:template match="trademark">
+    <xsl:text>\texttrademark{}</xsl:text>
 </xsl:template>
 
 <!-- Implication Symbols -->

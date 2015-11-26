@@ -2733,6 +2733,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#169;</xsl:text>
 </xsl:template>
 
+<!-- Registered symbol    -->
+<!-- "sup" tag will raise -->
+<xsl:template match="registered">
+    <xsl:text>&#174;</xsl:text>
+</xsl:template>
+
+<!-- Trademark symbol -->
+<xsl:template match="trademark">
+    <xsl:text>&#x2122;</xsl:text>
+</xsl:template>
+
+
 <!-- exempli gratia, for example -->
 <xsl:template match="eg">
     <xsl:text>e.g.</xsl:text>
