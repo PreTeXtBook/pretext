@@ -667,15 +667,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Fonts and xelatex:  http://tex.stackexchange.com/questions/102525/use-type-1-fonts-with-xelatex -->
     <!--   http://tex.stackexchange.com/questions/179448/beramono-in-xetex -->
     <!-- http://tex.stackexchange.com/questions/25249/how-do-i-use-a-particular-font-for-a-small-section-of-text-in-my-document -->
+    <!-- Bitstream Vera Font names within: https://github.com/timfel/texmf/blob/master/fonts/map/vtex/bera.ali -->
     <!-- Coloring listings: http://tex.stackexchange.com/questions/18376/beautiful-listing-for-csharp -->
-    <xsl:if test="//c or //sage or //program">
-        <xsl:text>%% Program listing support, for inline code, Sage code or otherwise&#xa;</xsl:text>
+    <!-- Song and Dance for font changes: http://jevopi.blogspot.com/2010/03/nicely-formatted-listings-in-latex-with.html -->
+    <xsl:if test="//c or //sage or //program or //console">
+        <xsl:text>%% Program listing support, for inline code, Sage code, console or otherwise&#xa;</xsl:text>
         <xsl:text>\usepackage{listings}&#xa;</xsl:text>
         <xsl:text>%% We define \listingsfont to provide Bitstream Vera Mono font&#xa;</xsl:text>
         <xsl:text>%% for program listings, under both pdflatex and xelatex&#xa;</xsl:text>
         <xsl:text>%% If you remove this, define \listingsfont to be \ttfamily perhaps&#xa;</xsl:text>
         <xsl:text>\ifxetex&#xa;</xsl:text>
         <xsl:text>\usepackage{fontspec}\newfontface\listingsfont[Path]{fvmr8a.pfb}&#xa;</xsl:text>
+        <xsl:text>\usepackage{fontspec}\newfontface\listingsboldfont[Path]{fvmb8a.pfb}&#xa;</xsl:text>
         <xsl:text>\else&#xa;</xsl:text>
         <xsl:text>\edef\oldtt{\ttdefault}\usepackage[scaled]{beramono}\usepackage[T1]{fontenc}&#xa;</xsl:text>
         <xsl:text>\renewcommand*\ttdefault{\oldtt}\newcommand{\listingsfont}{\fontfamily{fvm}\selectfont}&#xa;</xsl:text>
@@ -726,6 +729,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% Sage output, similar, but not boxed, not colored&#xa;</xsl:text>
             <xsl:text>\lstdefinestyle{sageoutput}{language=Python,breaklines=true,breakatwhitespace=true,basicstyle=\footnotesize\listingsfont,columns=fixed,xleftmargin=4ex}&#xa;</xsl:text>
         </xsl:if>
+        <xsl:if test="//console">
+            <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
+            <xsl:text>%% Console input, listings package: Python syntax, boxed, colored, line breaking&#xa;</xsl:text>
+            <xsl:text>%% Indent from left margin, flush at right margin&#xa;</xsl:text>
+            <xsl:text>\lstdefinestyle{consoleinput}{language=bash,breaklines=true,breakatwhitespace=true,basicstyle=\footnotesize\listingsboldfont,columns=fixed,xleftmargin=4ex,aboveskip=0pt,belowskip=0pt}&#xa;</xsl:text>
+            <xsl:text>%% Console output, similar&#xa;</xsl:text>
+            <xsl:text>\lstdefinestyle{consoleoutput}{breaklines=true,breakatwhitespace=true,basicstyle=\footnotesize\listingsfont,columns=fixed,xleftmargin=4ex,aboveskip=0pt,belowskip=0.0\baselineskip}&#xa;</xsl:text>
+        </xsl:if>
+
     </xsl:if>
     <xsl:if test="//tikz">
         <xsl:message>MBX:WARNING: the "tikz" element is deprecated (2015/16/10), use "latex-image-code" tag inside an "image" tag, and include the tikz package and relevant libraries in docinfo/latex-image-preamble</xsl:message>
@@ -2789,6 +2801,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]&#xa;</xsl:text>
     <xsl:call-template name="sanitize-code">
         <xsl:with-param name="raw-code" select="input" />
+    </xsl:call-template>
+    <xsl:text>\end{lstlisting}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Console Session -->
+<!-- An interactive command-line session with a prompt, input and output -->
+<xsl:template match="console">
+    <!-- ignore prompt, and pick it up in trailing input -->
+    <xsl:apply-templates select="input|output" />
+</xsl:template>
+
+<!-- match immediately preceding, only if a prompt:                   -->
+<!-- https://www.oxygenxml.com/archives/xsl-list/199910/msg00541.html -->
+<xsl:template match="console/input">
+    <!-- newline after environment is necessary -->
+    <xsl:text>\begin{lstlisting}[style=consoleinput]&#xa;</xsl:text>
+    <xsl:apply-templates select="preceding-sibling::*[1][self::prompt]" />
+    <xsl:call-template name="sanitize-code">
+        <xsl:with-param name="raw-code" select="." />
+    </xsl:call-template>
+    <xsl:text>\end{lstlisting}&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="console/output">
+    <!-- newline after environment is necessary -->
+    <xsl:text>\begin{lstlisting}[style=consoleoutput]&#xa;</xsl:text>
+    <xsl:call-template name="sanitize-code">
+        <xsl:with-param name="raw-code" select="." />
     </xsl:call-template>
     <xsl:text>\end{lstlisting}&#xa;</xsl:text>
 </xsl:template>

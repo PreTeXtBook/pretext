@@ -3115,6 +3115,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </pre>
 </xsl:template>
 
+
+<!-- Console Session -->
+<!-- An interactive command-line session with a prompt, input and output -->
+<xsl:template match="console">
+    <!-- ignore prompt, and pick it up in trailing input -->
+    <xsl:element name="pre">
+        <xsl:attribute name="class">console</xsl:attribute>
+        <xsl:apply-templates select="input|output" />
+    </xsl:element>
+</xsl:template>
+
+<!-- match immediately preceding, only if a prompt:                   -->
+<!-- https://www.oxygenxml.com/archives/xsl-list/199910/msg00541.html -->
+<xsl:template match="console/input">
+    <xsl:apply-templates select="preceding-sibling::*[1][self::prompt]" />
+    <xsl:element name="b">
+        <xsl:call-template name="sanitize-code">
+            <xsl:with-param name="raw-code" select="." />
+        </xsl:call-template>
+    </xsl:element>
+</xsl:template>
+
+<xsl:template match="console/output">
+    <xsl:call-template name="sanitize-code">
+        <xsl:with-param name="raw-code" select="." />
+    </xsl:call-template>
+</xsl:template>
+
+
 <!-- Geogebra                               -->
 <!-- Empty cell for scribbling if empty tag -->
 <!-- From Bruce Cohen's Sage iFrame demo    -->

@@ -154,6 +154,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="definition axiom conjecture principle" />
 <xsl:strip-space elements="statement" />
 <xsl:strip-space elements="example remark exercise hint solution" />
+<xsl:strip-space elements="sage program console" />
 <xsl:strip-space elements="exercisegroup" />
 <xsl:strip-space elements="note" />  <!-- TODO: biblio, record, etc too -->
 <xsl:strip-space elements="ul ol dl" />
@@ -535,6 +536,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
+<!-- Console Session -->
+<!-- An interactive command-line session with a prompt, input and output -->
+<!-- Generic template here, specifics of input and output elsewhere      -->
+<xsl:template match="console">
+    <!-- ignore prompt, and pick it up in trailing input -->
+    <xsl:apply-templates select="input|output" />
+</xsl:template>
 
 <!-- Sanitize Code -->
 <!-- No leading whitespace, no trailing -->
