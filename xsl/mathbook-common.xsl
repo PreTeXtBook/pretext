@@ -1787,6 +1787,11 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- If they have a title, they can be referenced by that string          -->
 <xsl:template match="figure[not(caption)]|table[not(caption)]|listing[not(caption)]" mode="serial-number" />
 
+<!-- WeBWorK problems are never numbered, because they live    -->
+<!-- in (numbered) exercises.  But they have identically named -->
+<!-- components of exercises, so we might need to explicitly   -->
+<!-- make webwork/solution, etc to be unnumbered.              -->
+
 <!-- Convert this to a warning?  Should not drop in here ever? -->
 <xsl:template match="*" mode="serial-number">
     <xsl:text>[NUM]</xsl:text>

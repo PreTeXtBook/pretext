@@ -796,6 +796,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" mode="xref-knowl" />
 </xsl:template>
 
+<!-- WeBWorK exercises live inside generic exercises which would    -->
+<!-- typically be knowlized.  They have components (solution, hint) -->
+<!-- which are knowlized as part of generic exercises.  So we need  -->
+<!-- to dead-end the  xref-knowl  templates here and not blindly    -->
+<!-- descend into a  webwork  element                               -->
+<xsl:template match="webwork" mode="xref-knowl" />
+
 <!-- Environments born visible -->
 <!-- Option (b): "environment-visible-factory"   -->
 <!-- The environment                             -->
