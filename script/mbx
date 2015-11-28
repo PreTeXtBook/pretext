@@ -220,22 +220,33 @@ def latex_image_conversion(xml_source, data_dir, dest_dir, outformat):
                 subprocess.call(eps_cmd)
                 shutil.copy2(latex_image_eps, dest_dir)
 
-########################################################
+###############################
 #
-#  WeBWorK Server LaTeX Collection From a Server Problem
+#  WeBWorK to LaTeX on a Server
 #
-########################################################
+###############################
 
-def webwork_tex_server(xslt_exec, mbx_xsl_dir, xml_source, server_url, dest_dir):
+def webwork_to_tex(origin, xslt_exec, mbx_xsl_dir, xml_source, server_url, dest_dir):
     import subprocess, os.path, requests
     import re     # regular expressions for parsing
     from xml.sax.saxutils import escape    # sanitize string
 
 
     # execute XSL extraction for source problems
-    extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-ww-tex-server.xsl')
+    # origin is a flag for where the problem is born
+    #   'server' : lives on the server, only a URL is in MBX document
+    #   'mbx'    : authored in MBX document (and has PG code for images)
+    if origin == 'server':
+        xsl_transform = 'extract-ww-tex-server.xsl'
+        msg = 'analyzing source document for URLs of WeBWorK problems, to send to server for LaTeX version'
+    elif origin == 'mbx':
+        xsl_transform = 'extract-ww-tex-mbx.xsl'
+        msg = 'analyzing source document for WeBWorK problems with PG images, to send to server for LaTeX version'
+    else:
+        raise ValueError("flag sent to webwork_to_tex() should be 'server' or 'tex', not '{}'".format(origin))
+    extraction_xslt = os.path.join(mbx_xsl_dir, xsl_transform)
     cmd = [xslt_exec, '--xinclude', extraction_xslt, xml_source]
-    _verbose('extracting URLs from source document for WeBWorK problems on server')
+    _verbose(msg)
     try:
         problem_list = subprocess.check_output(cmd)
     except subprocess.CalledProcessError as e:
@@ -272,12 +283,26 @@ def webwork_tex_server(xslt_exec, mbx_xsl_dir, xml_source, server_url, dest_dir)
     start_marker = re.compile('<div class="problem-content">')
     end_marker = re.compile('</div>')
 
+    # WW server can react to a
+    #   URL stored there already
+    #   a base64 encoding of the problem
+    if origin == 'server':
+        ww_server_option = 'sourceFilePath'
+    elif origin == 'mbx':
+        ww_server_option = 'problemSource'
+
+    # each problem is a triple created by the XSL transform
+    # 0. "source", URL or base64 string (not URL encoded!)
+    # 1. seed for randomness control
+    # 2. the internal id string for coherence
     for problem in problems:
-        path, seed, internal_id = problem
-        msg = 'extracting {} from {} as {}/{}.tex...'
-        _verbose(msg.format(path, wwurl, dest_dir, internal_id))
-        server_params['sourceFilePath'] = path
+        source, seed, internal_id = problem
         server_params['problemSeed'] = seed
+        server_params[ww_server_option] = source
+
+        msg = "sending {} to server to save in {}: origin is '{}'"
+        _verbose(msg.format(internal_id, dest_dir, origin))
+        _debug('server-to-latex: {} {} {} {}'.format(source, wwurl, dest_dir, internal_id))
 
         # Ready, go out on the wire
         try:
@@ -289,216 +314,6 @@ def webwork_tex_server(xslt_exec, mbx_xsl_dir, xml_source, server_url, dest_dir)
         # Obtained, this is it
         # Could mine the title and other things
         content = response.text
-        # strip out actual TeX code between markers
-        start = start_marker.split(content, maxsplit=1)
-        content = start[1]
-        end = end_marker.split(content, maxsplit=1)
-        tex_only = end[0]
-
-        # There is a problem header we'd prefer not to see
-        # When enmeshed in some TeX macros, we need remove it
-        # Pattern is based on:
-        #
-        # {\bf 13. {\footnotesize (1 point) \path|Library/....pg|}}\newline
-        #
-        header_pattern = re.compile(r'{\\bf.*\\path\|.*\|}}\\newline')
-        head_match = header_pattern.search(tex_only)
-        if head_match:
-            tex_only = tex_only.replace(head_match.group(), '%mbx script removed problem header\n')
-
-        # Some tex that causes compilation errors
-        # Ends with comment, so no extra newline inserted
-        tex_only = tex_only.replace('\\vadjust{\kern3pt}%', 
-                                    '\\leavevmode\\vadjust{\kern3pt}% mbx script adjusted')
-
-        # need to loop through content looking for images with pattern:
-        #
-        #   \includegraphics[<width-spec>]{(base-graphic-filename).(file-extension)}
-        #
-        graphics_pattern = re.compile(r'\\includegraphics\[[^\]]*\]{([^\.]*)\.([^}]*)}')
-
-        # replace filenames, download images with new filenames
-        count = 0
-        for match in re.finditer(graphics_pattern, tex_only):
-            count += 1
-            ww_basename = match.group(1)
-            file_extension = '.' + match.group(2)
-            ww_filename = ww_basename + file_extension
-            # rename, eg, webwork-tex/webwork-5-image-3.png
-            mbx_basename =  internal_id + '-image-' + str(count)
-            mbx_filename = mbx_basename + file_extension
-            # URL of image on server starts two steps down
-            image_url = server_url + ww_filename.replace('/var/www/', '')
-            # modify LaTeX problem source to include local versions
-            tex_only = tex_only.replace(ww_filename, 'webwork-tex/' + mbx_filename)
-            # download actual image files
-            # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests
-            try:
-                response = session.get(image_url, verify=False)
-            except requests.exceptions.RequestException as e:
-                root_cause = str(e)
-                msg = "There was a problem downloading an image file,\n URL: {}\n"
-                raise ValueError(msg.format(image_url) + root_cause)
-            # and save the image itself
-            try:
-                image_file = open(os.path.join(dest_dir, mbx_filename), 'wb')
-                image_file.write(response.content)
-                image_file.close()
-            except Exception as e:
-                root_cause = str(e)
-                msg = "There was a problem saving an image file,\n Filename: {}\n"
-                raise ValueError(os.path.join(dest_dir, mbx_filename) + root_cause)
-
-        # various strings and patterns for XML-ification
-        # we pass the seed along for reliability/accuracy
-        problem_start = r'<webwork-tex seed="{}">'.format(seed)
-        problem_end = r'</webwork-tex>'
-
-        preamble_end_pattern = re.compile(r'%%% END beginproblem\(\)')
-        preamble_start = r'<preamble>'
-        preamble_end = r'</preamble>'
-
-        statement_start = r'<statement>'
-        statement_end = r'</statement>'
-
-        solution_begin_pattern = re.compile(r'%%% BEGIN SOLUTION')
-        solution_end_pattern = re.compile(r'%%% END SOLUTION')
-        solution_start = r'<solution>'
-        solution_end = r'</solution>'
-
-        hint_begin_pattern = re.compile(r'%%% BEGIN HINT')
-        hint_end_pattern = re.compile(r'%%% END HINT')
-        hint_start = r'<hint>'
-        hint_end = r'</hint>'
-
-        start_pattern = re.compile(r'<preamble>|<solution>|<hint>')
-        end_pattern = re.compile(r'<\/preamble>|<\/solution>|<\/hint>')
-
-        # the right time to escape problematic XML characters, <, >, &
-        # https://wiki.python.org/moin/EscapingXml
-        tex_only = escape(tex_only)
-
-        # is end of preamble marked?
-        # should only happen once
-        match = preamble_end_pattern.search(tex_only)
-        if match:
-            tex_only = preamble_start + '\n' + tex_only
-            tex_only = preamble_end_pattern.sub(preamble_end, tex_only, count=1)
-        # straightup replacements for solutions, hints
-        tex_only = solution_begin_pattern.sub(solution_start, tex_only)
-        tex_only = solution_end_pattern.sub(solution_end, tex_only)
-        tex_only = hint_begin_pattern.sub(hint_start, tex_only)
-        tex_only = hint_end_pattern.sub(hint_end, tex_only)
-
-        # problem statements appear as "text()"
-        # boolean "balanced" means previous line ends an XML element
-        xml_lines = [problem_start]
-        balanced = True
-        for line in iter(tex_only.splitlines()):
-            # throw out blank lines between XML elements
-            if balanced and line == '':
-                pass
-            # if a group does not start, then begin problem statement
-            elif balanced:
-                if not(start_pattern.search(line)):
-                    xml_lines.append(statement_start)
-                    balanced = False
-                else:
-                    balanced = False
-                xml_lines.append(line)
-            # if we encounter a start while unbalanced, close statement
-            # if we hit the end of an element, we flip to balanced
-            elif not(balanced):
-                if start_pattern.search(line):
-                    xml_lines.append(statement_end)
-                    balanced = False  # matching start line is reproduced
-                elif end_pattern.search(line):
-                    balanced = True
-                xml_lines.append(line)
-        xml_lines.append(problem_end)
-
-        # place modified LaTeX as XML in a file in destination directory
-        include_file_name = os.path.join(dest_dir, internal_id + ".xml")
-        try:
-            include_file = open(include_file_name, 'w')
-            include_file.write('\n'.join(xml_lines))
-            include_file.close()
-        except Exception as e:
-            root_cause = str(e)
-            msg = "There was a problem writing a problem to the file: {}\n"
-            raise ValueError(msg.format(include_file_name) + root_cause)
-
-
-######################################################
-#
-#  WeBWorK Server LaTeX Collection From an MBX Problem
-#
-######################################################
-
-def webwork_tex_mbx(xslt_exec, mbx_xsl_dir, xml_source, server_url, dest_dir):
-    import subprocess, os.path, requests
-    import re     # regular expressions for parsing
-    from xml.sax.saxutils import escape    # sanitize string
-
-
-    # execute XSL extraction for source problems
-    extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-ww-tex-mbx.xsl')
-    cmd = [xslt_exec, '--xinclude', extraction_xslt, xml_source]
-    _verbose('extracting URLs from source document for WeBWorK problems to be processed by server')
-    try:
-        problem_list = subprocess.check_output(cmd)
-    except subprocess.CalledProcessError as e:
-        root_cause = str(e)
-        msg = 'xsltproc command failed, tried: "{}"\n'.format(' '.join(cmd))
-        raise ValueError(msg + root_cause)
-    # "run" an assignment for the list of triples of strings
-    exec('problems = ' + problem_list)
-
-    # verify destination exists
-    sanitize_directory(dest_dir)
-
-    # verify, construct problem format requestor
-    server_url = sanitize_url(server_url)
-    wwurl = server_url + "webwork2/html2xml"
-
-    # using a "Session()" will pool connection information
-    # since we always hit the same server, this should increase performance
-    session = requests.Session()
-
-    # dictionary of values for URL request, these are fixed for each problem
-    # problemSource and problemSeed are set below, on per-problem basis
-    server_params = {
-        'answersSubmitted': '0',
-        'displayMode': 'tex',
-        'courseID': 'anonymous',
-        'userID': 'anonymous',
-        'password': 'anonymous',
-        'outputformat': 'simple'
-    }
-
-    # an entire web page comes back
-    # these appear to exactly delimit what we want
-    start_marker = re.compile('<div class="problem-content">')
-    end_marker = re.compile('</div>')
-
-    for problem in problems:
-        base64, seed, internal_id = problem
-        msg = 'extracting {} from {} as {}/{}.tex...'
-        _verbose(msg.format(internal_id, wwurl, dest_dir, internal_id))
-        # including the problemSource base64 string in the server_params dictionary causes problems from
-        # the % characters in the url-safe base64, so we append the base64 param directly
-        wwurl_with_problem_source = wwurl + '?problemSource=' + base64
-        server_params['problemSeed'] = seed
-        # Ready, go out on the wire
-        try:
-            response = session.get(wwurl_with_problem_source, params=server_params, verify=False)
-        except requests.exceptions.RequestException as e:
-            root_cause = str(e)
-            msg = "There was a problem collecting a problem,\n Server: {}\nRequest Parameters: {}\n"
-            raise ValueError(msg.format(wwurl, server_params) + root_cause)
-        # Obtained, this is it
-        # Could mine the title and other things
-        content = response.text.encode('utf-8')
         # strip out actual TeX code between markers
         start = start_marker.split(content, maxsplit=1)
         content = start[1]
@@ -1110,8 +925,8 @@ elif args.component == 'latex-image':
 elif args.component == 'webwork-tex':
     xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable command: {}".format(xslt_executable))
-    webwork_tex_server(xslt_executable, mbx_xsl_dir, args.xml_file, args.server, args.dir)
-    webwork_tex_mbx(xslt_executable, mbx_xsl_dir, args.xml_file, args.server, args.dir)
+    webwork_to_tex('server', xslt_executable, mbx_xsl_dir, args.xml_file, args.server, args.dir)
+    webwork_to_tex('mbx',    xslt_executable, mbx_xsl_dir, args.xml_file, args.server, args.dir)
 elif args.component == 'all':
     if args.format == 'sagenb':
         # initialize  the converter
