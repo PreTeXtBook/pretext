@@ -24,26 +24,34 @@
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
 >
 
-<!-- Paths below pesume this stylesheet is in mathbook/user -->
+<!-- For WW problems described simply as a URL for the problem -->
+<!-- on a server, this transform will extract the              -->
+<!--                                                           -->
+<!-- (a) URL                                                   -->
+<!-- (b) seed                                                  -->
+<!-- (c) internal-id string                                    -->
+<!--                                                           -->
+<!-- in a form that the Python  mbx  script can employ it to   -->
+<!-- query the server for a LaTeX version of the problem       -->
+
+<!-- Paths below presume this stylesheet is in mathbook/user -->
 
 <!-- Common needed for internal ID's -->
 <xsl:import href="../xsl/mathbook-common.xsl" />
 
-<!-- Walk the XML source tree, doing nothing -->
-<!-- Modifications below get what we need    -->
-<xsl:import href="../xsl/extract-identity.xsl" />
-
 <!-- Enclosing structure is a Python list -->
+<!-- Select WW problems with  @source     -->
 <xsl:template match="/">
     <xsl:text>[</xsl:text>
-    <xsl:apply-templates />
+    <xsl:apply-templates select="//webwork[@source]" />
     <xsl:text>]</xsl:text>
 </xsl:template>
 
-<!-- Python triple: ('URL', 'seed', 'internal-id') -->
-<!-- transmit items as strings for Python's exec() -->
-<!-- trailing space in Python list is fine         -->
-<xsl:template match="webwork[@source]">
+<!-- Python triple: ('URL', 'seed', 'internal-id')    -->
+<!-- transmit items as strings for Python's exec()    -->
+<!-- trailing space in Python list is fine            -->
+<!-- Only need to match "webwork" due to select above -->
+<xsl:template match="webwork">
     <!-- A Python triple with information -->
     <xsl:text>(</xsl:text>
     <xsl:text>'</xsl:text>

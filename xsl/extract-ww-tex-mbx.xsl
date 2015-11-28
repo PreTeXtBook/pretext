@@ -25,32 +25,40 @@
     xmlns:b64="https://github.com/ilyakharlamov/xslt_base64"
 >
 
+<!-- For WW problems described as MathBook XML source, but with    -->
+<!-- images authored in PG format, this transform will extract the -->
+<!--                                                               -->
+<!-- (a) base64 version of the problem                             -->
+<!-- (b) seed                                                      -->
+<!-- (c) internal-id string                                        -->
+<!--                                                               -->
+<!-- in a form that the Python  mbx  script can employ it to       -->
+<!-- query the server for a version of the problem with the images -->
+
 <!-- Paths below presume this stylesheet is in mathbook/user -->
 
-<!-- Common needed for internal ID's -->
-<!--<xsl:import href="../xsl/mathbook-common.xsl" />-->
-
-<!-- Walk the XML source tree, doing nothing -->
-<!-- Modifications below get what we need    -->
-<!--<xsl:import href="../xsl/extract-identity.xsl" />-->
-
+<!-- Common needed for internal ID's          -->
 <!-- Creation of PG and conversion to base 64 -->
-<xsl:import href="../xsl/mathbook-html.xsl" />
+<xsl:import href="../xsl/mathbook-common.xsl" />
 <xsl:import href="../../ww-mbx/xsl/webwork-pg.xsl" />
-<xsl:include href="../../ww-mbx/xsl/xslt_base64/base64.xsl"/>
-
+<xsl:import href="../../ww-mbx/xsl/xslt_base64/base64.xsl"/>
 
 <!-- Enclosing structure is a Python list -->
+<!-- Select WW problems with PG images    -->
 <xsl:template match="/">
     <xsl:text>[</xsl:text>
-    <xsl:apply-templates select="//webwork[descendant::image[@pg-name]]"/>
+    <xsl:apply-templates select="//webwork[descendant::image[@pg-name]]" />
     <xsl:text>]</xsl:text>
 </xsl:template>
 
-<!-- Python triple: ('base64', 'seed', 'internal-id') -->
-<!-- transmit items as strings for Python's exec() -->
-<!-- trailing space in Python list is fine         -->
-<xsl:template match="webwork[descendant::image[@pg-name]]">
+<!-- Python triple: ('base64-version', 'seed', 'internal-id') -->
+<!-- transmit items as strings for Python's exec()            -->
+<!-- trailing space in Python list is fine                    -->
+<!-- Only need to match "webwork" due to select above         -->
+<!-- We *do not* URL-encode the base64 string since the       -->
+<!-- Python  mbx  script uses the "requests" library which    -->
+<!-- seems to do the encoding automatically                   -->
+<xsl:template match="webwork">
     <!-- A Python triple with information -->
     <xsl:text>(</xsl:text>
     <xsl:text>'</xsl:text>
@@ -58,7 +66,7 @@
         <xsl:apply-imports />
     </xsl:variable>
     <xsl:call-template name="b64:encode">
-        <xsl:with-param name="urlsafe" select="true()" />
+        <xsl:with-param name="urlsafe" select="false()" />
         <xsl:with-param name="asciiString">
             <xsl:value-of select="$pg-ascii" />
         </xsl:with-param>
