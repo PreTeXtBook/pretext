@@ -677,11 +677,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% for program listings, under both pdflatex and xelatex&#xa;</xsl:text>
         <xsl:text>%% If you remove this, define \listingsfont to be \ttfamily perhaps&#xa;</xsl:text>
         <xsl:text>\ifxetex&#xa;</xsl:text>
-        <xsl:text>\usepackage{fontspec}\newfontface\listingsfont[Path]{fvmr8a.pfb}&#xa;</xsl:text>
-        <xsl:text>\usepackage{fontspec}\newfontface\listingsboldfont[Path]{fvmb8a.pfb}&#xa;</xsl:text>
+        <xsl:text>\usepackage{fontspec}&#xa;</xsl:text>
+        <xsl:text>\newfontface\listingsfont[Path]{fvmr8a.pfb}&#xa;</xsl:text>
+        <xsl:text>\newfontface\listingsboldfont[Path]{fvmb8a.pfb}&#xa;</xsl:text>
         <xsl:text>\else&#xa;</xsl:text>
         <xsl:text>\edef\oldtt{\ttdefault}\usepackage[scaled]{beramono}\usepackage[T1]{fontenc}&#xa;</xsl:text>
-        <xsl:text>\renewcommand*\ttdefault{\oldtt}\newcommand{\listingsfont}{\fontfamily{fvm}\selectfont}&#xa;</xsl:text>
+        <xsl:text>\renewcommand*\ttdefault{\oldtt}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\listingsfont}{\fontfamily{fvm}\selectfont}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\listingsboldfont}{\fontfamily{fvm}\fontseries{b}\selectfont}&#xa;</xsl:text>
         <xsl:text>\fi&#xa;</xsl:text>
         <xsl:text>%% To fix hyphens/dashes rendered in PDF as fancy minus signs by listing&#xa;</xsl:text>
         <xsl:text>%% http://tex.stackexchange.com/questions/33185/listings-package-changes-hyphens-to-minus-signs&#xa;</xsl:text>
