@@ -143,6 +143,7 @@ chapter:
 	-rm $(HTMLOUT)/*.html
 	cp $(WWXSL)/webwork-pg.xsl $(WWXSL)/webwork-html.xsl $(MBUSR)
 	cp -a $(WWMBX)/examples/sample-chapter/images $(HTMLOUT)
+	cp -a $(WWMBX)/examples/sample-chapter/video $(HTMLOUT)
 	# xslt_base64: https://github.com/ilyakharlamov/xslt_base64
 	# heavily modified for MBX
 	cp $(WWXSL)/xslt_base64/base64.xsl $(MBUSR)
