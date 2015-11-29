@@ -275,102 +275,59 @@
 </xsl:template>
 
 <!-- Header file content -->
-<!-- Generic per-set, some info changes with WW variables -->
-<!-- Verbatim from:                                       -->
-<!-- https://raw.githubusercontent.com/openwebwork/webwork2/master/snippets/ASimpleCombinedHeaderFile.pg -->
+<!-- Gives some information about where in the MBX project the set came from -->
+<!-- Some info changes with WW variables, such as due date -->
 <xsl:template match="*" mode="header-content">
     <!-- Inneficient: indented text in variable, then strip indentation -->
     <!-- Alternative: wrap each line in "text" with linefeeds           -->
     <xsl:variable name="header-text">
         <xsl:text>
-        # ASimpleCombinedHeaderFile.pg
+        # Header file for problem set </xsl:text><xsl:apply-templates select="." mode="numbered-title-filesafe" />
+        <xsl:text>
         # This header file can be used for both the screen and hardcopy output
-
 
         DOCUMENT();
 
         loadMacros(
             "PG.pl",
             "PGbasicmacros.pl",
+            "PGML.pl",
             "PGcourse.pl",
         );
 
         TEXT($BEGIN_ONE_COLUMN);
 
-        ####################################################
-        #
-        # The item below printed out only when a hardcopy is made.
-        #
-        ####################################################
-
-
-
-        TEXT(MODES(TeX =&gt;EV3(&lt;&lt;'EOT'),HTML=&gt;""));
-
-        \noindent {\large \bf $studentName}
-        \hfill
-        {\large \bf {\{protect_underbar($courseName)\}}}
-        % Uncomment the line below if this course has sections. Note that this is a comment in TeX mode since this is only processed by LaTeX
-        %   {\large \bf { Section: \{protect_underbar($sectionName)\} } }
-        \par
-        \noindent{\large \bf {Assignment \{protect_underbar($setNumber)\}  due $formatedDueDate}}
-        \par\noindent \bigskip
-        % Uncomment and edit the line below if this course has a web page. Note that this is a comment in TeX mode.
-        %See the course web page for information http://yoururl/yourcourse
-
-        EOT
+        $texTopLine = "\noindent {\large \bf $studentName}\hfill{\large \bf {".protect_underbar($courseName)."}}";
+        if (defined($sectionName) and ($sectionName ne '')) {$texTopLine .= "  {\large \bf { Section: ".protect_underbar($sectionName)." } }"}; 
+        $texTopLine .= "\par";
 
         ####################################################
         #
-        # End of hardcopy only output.
+        # MODES provides for distinct output for TeX and HTML
         #
         ####################################################
 
+        TEXT(MODES(
+            TeX =&gt;"$texTopLine",
+            HTML=&gt;"",
+        ));
 
-        ####################################################
-        #
-        # The items below are printed out only when set is displayed on screen
-        #
-        ####################################################
-        TEXT(MODES(TeX =&gt;"",HTML=&gt;EV3(&lt;&lt;'EOT')));
+        TEXT(MODES(
+            TeX =>"\noindent{\large \sc {Assignment ".protect_underbar($setNumber)." due $formatedDueDate}}\par".
+                  "\noindent \bigskip",
+            HTML=>"&lt;span style='font-variant: small-caps; font-size:large;'&gt;WeBWorK Assignment ".protect_underbar($setNumber)." is due: $formattedDueDate. &lt;/span&gt;$PAR",
+        ));
 
-        $BBOLD WeBWorK  Assignment \{ protect_underbar($setNumber) \}  is due :  $formattedDueDate. $EBOLD
-        $PAR
-        Here's the list of
-        \{ htmlLink(qq!http://webwork.maa.org/wiki/Available_Functions!,"functions and symbols") \}
-         which WeBWorK understands.
-        $BR
-        EOT
+        TEXT("This assignment contains exercises from</xsl:text><xsl:text>.");
 
-        ####################################################
-        # Uncomment and edit the lines below if this course has a web page. Note that this is comment in Perl mode.
-        # IMPORTANT: Make sure the EOT at the bottom is at the beginning of a line with no spaces preceeding it.
-        #TTEXT(MODES(TeX =&gt;"",HTML=&gt;EV3(&lt;&lt;'EOT')));
-        #See the course web page for information \{ htmlLink(qq!http://yoururl/yourcourse!,"your course name") \}
-        #EOT
-        ####################################################
-
-        ####################################################
-        #
-        # End of screen only output.
-        #
-        ####################################################
-
-        ####################################################
-        #
-        # Anything between the BEGIN_TEXT AND END_TEXT lines
-        # will be printed in both screen and hardcopy output
-        #
-        ####################################################
-
-        BEGIN_TEXT
-
-        END_TEXT
-
+        TEXT(MODES(
+            TeX =>"",
+            HTML=>"Here's the list of ".htmlLink(qq!http://webwork.maa.org/wiki/Available_Functions!,"functions and symbols")." which WeBWorK understands.",
+        ));
 
         TEXT($END_ONE_COLUMN);
 
-        ENDDOCUMENT();        # This should be the last executable line in the problem.
+        ENDDOCUMENT();
         </xsl:text>
     </xsl:variable>
     <xsl:call-template name="sanitize-code">
