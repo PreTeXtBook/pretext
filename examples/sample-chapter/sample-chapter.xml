@@ -63,6 +63,13 @@
             <url>not-implemented.html</url>
              <!-- <text>My Button Text</text>  -->
         </feedback>
+
+        <latex-image-preamble>
+        <![CDATA[
+        \usepackage{pgfplots}
+        ]]>
+        </latex-image-preamble>
+
     </docinfo>
 
     <article xml:id="sample-ww-chapter">
@@ -154,7 +161,7 @@
                 <title>Declaring a Problem Seed</title>
 
                 <statement>
-                    <p>You can also declare a <c>seed</c> to specify a different random version of any problem that has randomization. Here is the same problem, but with a <c>seed</c> sepcified.</p>
+                    <p>You can also declare a <c>seed</c> to specify a different random version of any problem that has randomization. Here is the same problem, but with a <c>seed</c> specified.</p>
                 </statement>
 
                 <webwork xml:id="integer-addition-with-seed" seed="510">
@@ -408,6 +415,16 @@
                         $solnum1 = Formula("-$b+sqrt(($b)**2-4($a)($c))");
                         $solnum2 = Formula("-$b-sqrt(($b)**2-4($a)($c))");
 
+                        $evaluatorfora = $a->cmp()->withPostFilter(AnswerHints(
+                            [-$a] =>
+                            "Do you have the sign correct?"));
+                        $evaluatorforb = $b->cmp()->withPostFilter(AnswerHints(
+                            [-$b] =>
+                            "Do you have the sign correct?"));
+                        $evaluatorforc = $c->cmp()->withPostFilter(AnswerHints(
+                            [-$c] =>
+                            "Do you have the sign correct?"));
+
                         Context("LimitedFraction");
                         $multians1 = MultiAnswer(Fraction("$x1"),Fraction("$x2"))->with(
                             singleResult => 0,
@@ -432,9 +449,9 @@
                         <title>Part 1: Identify the coefficients</title>
 
                         <statement>
-                            <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" autoname="yes" />: <m>ax^2 + bx + c = 0</m>:</p>
+                            <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" autoname="yes" /></p>
 
-                            <p halign='center'><m>a=</m> <answer var="$a" width="4" />, <m>b=</m> <answer var="$b" width="4" />, <m>c=</m> <answer var="$c" width="4" /></p>
+                            <p halign='center'><m>a=</m> <answer var="$a" width="4" evaluator="$evaluatorfora"/>, <m>b=</m> <answer var="$b" width="4" evaluator="$evaluatorforb"/>, <m>c=</m> <answer var="$c" width="4" evaluator="$evaluatorforc"/></p>
                         </statement>
 
                         <solution>
@@ -471,8 +488,8 @@
 
                 <p>Problems do not have to be in the OPL to reside on a server; any problem that is accessbile from the <wbwk /> course which is hosting the <wbwk /> computation may be used this way.</p>
 
-            <exercise xml:id="function-or-not">
-                <title>Functions or Not</title>
+            <exercise xml:id="cylinder-volume">
+                <title>Cylinder Volume</title>
                 <statement>
                     <p>This problem is one that PCC has donated to the OPL.</p>
                 </statement>
@@ -481,7 +498,7 @@
             </exercise>
 
             <exercise xml:id="two-variable-inequality">
-                <title>Grandpa's Cat</title>
+                <title>Grandpa's Cat: a Cautionary Tale</title>
                 <statement>
                     <p>Not all problems that come from the OPL were written with MBX in mind, and they don't all fit into MBX space. This example illustrates that this should be taken into consideration when using OPL problems. Some of the graphs here are not fully visible in the web version of the article.</p>
                 </statement>
@@ -847,7 +864,7 @@
                 </webwork>
 
             </exercise>
- 
+
         </section>
 
         <section>
@@ -894,7 +911,7 @@
                                 <description>a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$answer"/>,1) and (<var name="$second_x"/>,2) before leaving the graph moving more and more upward and to the right.</description>
                         </image></p>
 
-                        <p halign="center"><m>x=</m> <answer var="$answer"/> </p> 
+                        <p halign="center"><m>x=</m> <answer var="$answer"/> </p>
 
                     </statement>
 
@@ -907,9 +924,48 @@
                         </image></p>
 
                     </solution>
-            
+
                 </webwork>
             </exercise>
+
+        </section>
+
+        <section>
+            <title>Other MBX Goodies</title>
+
+            <p>As long as we have your attention, this section demonstrates some other features that can be used in a MathBook XML project.</p>
+
+            <subsection>
+                <title>Sage cells</title>
+
+                <p>Sage is an open-source Computer Algebra System based on Python. It's the open-source counterpart to software like Mathematica, Maple, and MatLab. An MBX projcet can have Sage cells like the one below. They can be pre-programmed with some Sage commands, but you are free to execute whatever Sage commands you like.</p>
+
+                <sage>
+                    <input>plot(abs(x)^x, (-2, 2), figsize=6)</input>
+                    <output>Graphics object consisting of 1 graphics primitive</output>
+                </sage>
+
+            </subsection>
+
+            <subsection>
+                <title>GeoGebra applets</title>
+
+                <p>GeoGebra is free open source graphing software. You can construct an interactive demonstration and export it as either an HTML5- or Java-based page. Then you can include it in MBX.</p>
+
+            </subsection>
+
+            <subsection>
+                <title>Videos</title>
+
+                <p>Videos are somewhat interactive elements as well, in that you can pause, jump back, <etc/>.</p>
+
+                <figure>
+                    <video source="video/Henrietta.webm" />
+                    <caption>Henrietta being silly</caption>
+                </figure>
+
+
+            </subsection>
 
         </section>
 
