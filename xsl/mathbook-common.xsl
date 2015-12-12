@@ -2505,7 +2505,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
                                 <xsl:apply-templates select="@detail" />
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:message>MBX:WARNING: xref attribute detail="<xsl:value-of select="$detail" />" only implemented for single references to biblio elements</xsl:message>
+                                <xsl:message>MBX:WARNING: xref attribute detail="<xsl:value-of select="@detail" />" only implemented for single references to biblio elements</xsl:message>
                                 <xsl:apply-templates select="." mode="location-report" />
                             </xsl:otherwise>
                         </xsl:choose>
