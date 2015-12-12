@@ -1552,13 +1552,13 @@ the xsltproc executable.
                     <li>Level 1, third.</li>
                 </ol>
 
-                <p>Now, nested lists with the defaults replaced by custom choices.  First, an ordered list, three deep, upper Roman numerals, then upper-case Latin, then no label on the three elements of the third level.  Note the adornments of the labels will be rendered in LaTeX, but not in HTML.</p>
+                <p>Now, nested lists with the defaults replaced by custom choices.  First, an ordered list, three deep, upper Roman numerals, then upper-case Latin, then more traditional Arabic numerals on the three elements of the third level.  Note the adornments of the labels will be rendered in LaTeX, but not in HTML.</p>
 
                 <ol label="*I*">
                     <li>Level 1, first.</li>
                     <li>Level 1, second.<ol label="++A">
                         <li>Level 2, first.</li>
-                        <li>Level 2, second.<ol label="">
+                        <li>Level 2, second.<ol label="1)">
                                 <li>Level 3, first.</li>
                                 <li>Level 3, second.</li>
                                 <li>Level 3, third.</li>

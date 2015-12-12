@@ -2698,6 +2698,14 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <xsl:template match="*" mode="deprecation-warnings">
     <!-- newer deprecations at the top of this list, user will see in this order -->
     <!--  -->
+    <xsl:if test="//ol/@label=''">
+        <xsl:call-template name="deprecation-message">
+            <xsl:with-param name="date-string" select="'2015/12-12'" />
+            <xsl:with-param name="message" select="'an ordered list (&lt;ol&gt;) may not have empty labels, and numbering will be unpredictable.  Switch to an unordered list  (&lt;ul&gt;)'" />
+            <xsl:with-param name="occurences" select="count(//ol[@label=''])" />
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
     <xsl:if test="$html.chunk.level != ''">
         <xsl:call-template name="deprecation-message">
             <xsl:with-param name="date-string" select="'2015/06/26'" />

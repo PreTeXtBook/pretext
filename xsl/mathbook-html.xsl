@@ -1771,7 +1771,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="contains(@label,'A')">upper-alpha</xsl:when>
         <xsl:when test="contains(@label,'i')">lower-roman</xsl:when>
         <xsl:when test="contains(@label,'I')">upper-roman</xsl:when>
-        <xsl:when test="@label=''">none</xsl:when>
+        <xsl:when test="@label=''">
+            <xsl:text>none</xsl:text>
+            <xsl:message>MBX:WARNING: empty labels on ordered list items are deprecated, switch to an unordered list (2015-12-12)</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: ordered list label not found or not recognized</xsl:message>
         </xsl:otherwise>

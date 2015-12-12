@@ -145,6 +145,26 @@ systems.
         </section>
 
         <section>
+            <title>Ordered Lists with No Labels</title>
+
+            <p>Once in the sample article, but now with two problems, not one.  What were we thinking?</p>
+
+            <ol label="">
+                <li>Level 1, first.</li>
+                <li>Level 1, second.<ol label="++A">
+                    <li>Level 2, first.</li>
+                    <li>Level 2, second.<ol label="">
+                            <li>Level 3, first.</li>
+                            <li>Level 3, second.</li>
+                            <li>Level 3, third.</li>
+                        </ol></li>
+                    <li>Level 2, third.</li>
+                </ol></li>
+                <li>Level 1, third.</li>
+            </ol>
+        </section>
+
+        <section>
             <title>A Badly Structured Section</title>
 
             <p>This introductory paragraph should be inside an introduction, since it is followed by a sequence of subsections (well, just one anyway).</p>

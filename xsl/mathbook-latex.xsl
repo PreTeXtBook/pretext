@@ -2157,7 +2157,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$code='A'">\Alph*</xsl:when>
         <xsl:when test="$code='i'">\roman*</xsl:when>
         <xsl:when test="$code='I'">\Roman*</xsl:when>
-        <xsl:when test="$code=''"></xsl:when>
+        <xsl:when test="$code=''">
+            <xsl:text />
+            <xsl:message>MBX:WARNING: empty labels on ordered list items are deprecated, switch to an unordered list (2015-12-12)</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:when>
     </xsl:choose>
     <xsl:value-of select="substring-after(@label, $code)" />
 </xsl:template>
