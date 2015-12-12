@@ -2225,6 +2225,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- If columns are specified, we        -->
 <!-- wrap in the multicolumn environment -->
 <xsl:template match="ol">
+    <xsl:if test="not(ancestor::ol or ancestor::ul or ancestor::dl)">
+        <xsl:text>\leavevmode%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="@cols">
         <xsl:text>\begin{multicols}{</xsl:text>
         <xsl:value-of select="@cols" />
@@ -2258,6 +2261,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- from LaTeX's so we write out a label  -->
 <!-- choice for each such list             -->
 <xsl:template match="ul">
+    <xsl:if test="not(ancestor::ol or ancestor::ul or ancestor::dl)">
+        <xsl:text>\leavevmode%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="@cols">
         <xsl:text>\begin{multicols}{</xsl:text>
         <xsl:value-of select="@cols" />
@@ -2281,6 +2287,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="dl">
+    <xsl:if test="not(ancestor::ol or ancestor::ul or ancestor::dl)">
+        <xsl:text>\leavevmode%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="@cols">
         <xsl:text>\begin{multicols}{</xsl:text>
         <xsl:value-of select="@cols" />
@@ -3254,6 +3263,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Standard LaTeX table environment is redefined, -->
 <!-- see preamble comments for details              -->
 <xsl:template match="table">
+    <xsl:text>\leavevmode%&#xa;</xsl:text>
     <xsl:text>\begin{table}&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]" />

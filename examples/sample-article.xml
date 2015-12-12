@@ -1579,6 +1579,22 @@ the xsltproc executable.
                     <li>Level 1, third.</li>
                 </ul>
 
+                <p>The next definition is very poorly worded.  It is meant to test leading off with a list (bad form), for which <latex /> normally begins right after the heading.</p>
+
+                <definition>
+                    <title>Group</title>
+                    <statement>
+                        <ol label="a)">
+                            <li><p>There is a binary operation, denoted <q><m>\cdot</m></q>.</p></li>
+                            <li><p>The operation is associative.</p></li>
+                            <li><p>There is an identity element, <m>e</m>.</p></li>
+                            <li><p>For every element <m>b</m>, there is an element <m>c</m> (the inverse), such that <me>b\cdot c=c\cdot b = e.</me></p></li>
+                        </ol>
+                        <p>If these conditions are met for a set <m>G</m>, then we say <m>G</m> is a <term>group</term>.</p>
+                    </statement>
+                </definition>
+
+
                 <p>Exercises and References are specialized subdivisions you can put anywhere.  They are implemented as top-level lists, so should share behavior.  For example, an exercise may have many parts and when expressed as a list, should have the expected labels.</p>
 
                 <p>Similarly, References may have lists in their annotations.  Unlikely?  But possible.</p>
@@ -1601,6 +1617,36 @@ the xsltproc executable.
                         </ol>
                     </statement>
                 </exercise>
+
+                <exercise>
+                    <statement>
+                        <table>
+                            <caption>Table Alignment Example</caption>
+                            <tabular top="minor" left="minor" halign="center">
+                                <col right="medium"/>
+                                <col right="major"/>
+                                <col />
+                                <!--  -->
+                                <row bottom="medium">
+                                    <cell colspan="2">1111, 2222</cell>
+                                    <cell right="minor">3333</cell>
+                                </row>
+                                <row bottom="major">
+                                    <cell>aaaa</cell>
+                                    <cell colspan="2" right="medium">bbbb,cccc</cell>
+                                </row>
+                                <row>
+                                    <cell bottom="minor">AAAA</cell>
+                                    <cell bottom="medium">BBBB</cell>
+                                    <cell bottom="major" right="major">CCCC</cell>
+                                </row>
+                            </tabular>
+                        </table>
+
+                        <p>This exercise (a list item really) has a <c>table</c> first.  Default <latex /> aligns it vertically above the exercise number.  Placement here tests correcting that alignment.</p>
+                    </statement>
+                </exercise>
+
 
                 <conclusion>
                     <p>A small test of cross-references to subsidiary parts of exercises.  Exercise 1, third part: <xref ref="exercise-one-three" />.  Exercise 1, second part, first refinement: <xref ref="exercise-one-two-one" />.</p>
