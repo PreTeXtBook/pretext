@@ -769,12 +769,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="//exercises">
                 <xsl:text>%% Lists of exercises in their own section, maximum depth 4&#xa;</xsl:text>
                 <xsl:text>\newlist{exerciselist}{description}{4}&#xa;</xsl:text>
-                <xsl:text>\setlist[exerciselist]{leftmargin=0pt,itemsep=-1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
+                <xsl:text>\setlist[exerciselist]{leftmargin=0pt,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
             </xsl:if>
             <xsl:if test="//exercisegroup">
                 <xsl:text>%% Indented groups of exercises within an exercise section, maximum depth 4&#xa;</xsl:text>
                 <xsl:text>\newlist{exercisegroup}{description}{4}&#xa;</xsl:text>
-                <xsl:text>\setlist[exercisegroup]{leftmargin=2em,labelindent=2em,itemsep=-1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
+                <xsl:text>\setlist[exercisegroup]{leftmargin=2em,labelindent=2em,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
             </xsl:if>
         </xsl:if>
     </xsl:if>
@@ -3973,12 +3973,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- naturally (references in extra sections, proofs,             -->
 <!-- hints, answers, solutions).  For a "label"                   -->
 <!-- hyperref's hypertarget mechanism fits the bill.              -->
-<!-- The target being \null is necessary.                         -->
+<!-- Removed the \null target text, as it was introducing         -->
+<!-- vertical space when used in list items and it seems          -->
+<!-- to now behave well without it  (2015-12-12)                  -->
 <!-- (See also modal templates for "xref-link" and "xref-number") -->
 <xsl:template match="exercises//exercise|biblio|note|proof|hint|answer|solution" mode="label">
     <xsl:text>\hypertarget{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>}{\null}</xsl:text>
+    <xsl:text>}{}</xsl:text>
 </xsl:template>
 
 <!-- Exercise groups are not even really numbered.   -->
@@ -3987,7 +3989,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercisegroup" mode="label">
     <xsl:text>\hypertarget{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>}{\null}</xsl:text>
+    <xsl:text>}{}</xsl:text>
 </xsl:template>
 
 <!--        -->
