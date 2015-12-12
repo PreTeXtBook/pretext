@@ -1772,11 +1772,62 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:text>)</xsl:text>
 </xsl:template>
 
+<!-- Serial Numbers: List Items -->
+
+<!-- First, the number of a list item within its own list -->
+<xsl:template match="ol/li" mode="item-number">
+    <xsl:variable name="code">
+        <xsl:choose>
+            <xsl:when test="../@label">
+                <xsl:choose>
+                    <xsl:when test="contains(../@label,'1')">1</xsl:when>
+                    <xsl:when test="contains(../@label,'a')">a</xsl:when>
+                    <xsl:when test="contains(../@label,'A')">A</xsl:when>
+                    <xsl:when test="contains(../@label,'i')">i</xsl:when>
+                    <xsl:when test="contains(../@label,'I')">I</xsl:when>
+                    <xsl:when test="../@label=''"></xsl:when>
+                    <xsl:otherwise>
+                        <xsl:message>MBX:ERROR: ordered list label not found or not recognized</xsl:message>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:variable name="level">
+                    <xsl:apply-templates select=".." mode="ordered-list-level" />
+                </xsl:variable>
+                <xsl:choose>
+                    <xsl:when test="$level='0'">1</xsl:when>
+                    <xsl:when test="$level='1'">a</xsl:when>
+                    <xsl:when test="$level='2'">i</xsl:when>
+                    <xsl:when test="$level='3'">A</xsl:when>
+                    <xsl:otherwise>
+                        <xsl:message>MBX:ERROR: ordered list is more than 4 levels deep (<xsl:value-of select="$level" /> levels)</xsl:message>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:number select="." format="{$code}" />
+</xsl:template>
+
+<!-- Second, the serial number computed recursively -->
+<xsl:template match="li" mode="serial-number">
+    <xsl:if test="ancestor::li">
+        <xsl:apply-templates select="ancestor::li[1]" mode="serial-number" />
+        <xsl:text>.</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="item-number" />
+</xsl:template>
+
 <!-- Serial Numbers: the unnumbered     -->
 <!-- Empty string signifies not numbered -->
 <!-- We do provide a "xref number" of an -->
 <!-- exercisegroup, but otherwise not    -->
 <xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|paragraph|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|colophon|backmatter|exercisegroup" mode="serial-number" />
+
+<!-- If a list item has any ancestor that is not  -->
+<!-- an ordered list, then it gets no number      -->
+<xsl:template match="ul//li|dl//li" mode="serial-number" />
 
 <!-- A sidebyside without a caption *always*         -->
 <!-- indicates no number for the sidebyside.         -->
@@ -1942,6 +1993,26 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         <xsl:with-param name="pad" select="'yes'" />
     </xsl:apply-templates>
 </xsl:template>
+
+<!-- Structure Numbers: Lists -->
+<!-- Lists themselves are not numbered, though     -->
+<!-- some individual list items are, so we just    -->
+<!-- provide an empty string to prefix list items. -->
+<!-- In effect, references are "local"             -->
+<xsl:template match="ol/li" mode="structure-number">
+    <xsl:text />
+</xsl:template>
+<!-- An exception is lists inside of exercises, so we     -->
+<!-- use the number of the exercise itself as a prefix    -->
+<!-- to the number within the list.  We provide the       -->
+<!-- separator here since the list item number is allowed -->
+<!-- to be local and has no leading symbol                -->
+<!-- NB: these templates have equal priority, so order matters -->
+<xsl:template match="exercise//ol/li" mode="structure-number">
+    <xsl:apply-templates select="ancestor::exercise[1]" mode="number" />
+    <xsl:text>.</xsl:text>
+</xsl:template>
+
 
 <!--              -->
 <!-- Full Numbers -->
