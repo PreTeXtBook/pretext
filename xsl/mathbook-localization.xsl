@@ -109,6 +109,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='table'><xsl:text>Table</xsl:text></localization>
     <localization string-id='listing'><xsl:text>Listing</xsl:text></localization>
     <localization string-id='fn'><xsl:text>Footnote</xsl:text></localization>
+    <!-- Lists and their items -->
+    <!-- TODO: <localization string-id='list'><xsl:text>List</xsl:text></localization> -->
+    <localization string-id='li'><xsl:text>Item</xsl:text></localization>
     <!-- Parts of an exercise and it's solution -->
     <localization string-id='exercise'><xsl:text>Exercise</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Hint</xsl:text></localization>
@@ -216,6 +219,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translation needed for Portugal Portugese -->
     <!-- <localization string-id='listing'><xsl:text>Listing</xsl:text></localization> -->
     <localization string-id='fn'><xsl:text>Nota de rodapé</xsl:text></localization>
+    <!-- Lists and their items -->
+    <!-- Translations needed for Portugal Portugese -->
+    <!-- TODO: <localization string-id='list'><xsl:text>List</xsl:text></localization> -->
+    <!-- <localization string-id='li'><xsl:text>Item</xsl:text></localization> -->
     <!-- Parts of an exercise and it's solution -->
     <localization string-id='exercise'><xsl:text>Exercício</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Dica</xsl:text></localization>
@@ -329,6 +336,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translation needed for Brazilian Portugese -->
     <!-- <localization string-id='listing'><xsl:text>Listing</xsl:text></localization> -->
     <localization string-id='fn'><xsl:text>Nota de rodapé</xsl:text></localization>
+    <!-- Lists and their items -->
+    <!-- Translations needed for Brazilian Portugese -->
+    <!-- TODO: <localization string-id='list'><xsl:text>List</xsl:text></localization> -->
+    <!-- <localization string-id='li'><xsl:text>Item</xsl:text></localization> -->
     <!-- Parts of an exercise and it's solution -->
     <localization string-id='exercise'><xsl:text>Exercício</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Dica</xsl:text></localization>
@@ -440,6 +451,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translation needed for Spain Spanish -->
     <!-- <localization string-id='listing'><xsl:text>Listing</xsl:text></localization> -->
     <localization string-id='fn'><xsl:text>Nota a pie de página</xsl:text></localization>
+    <!-- Lists and their items -->
+    <!-- Translations needed for Spain Spanish -->
+    <!-- TODO: <localization string-id='list'><xsl:text>List</xsl:text></localization> -->
+    <!-- <localization string-id='li'><xsl:text>Item</xsl:text></localization> -->
     <!-- Parts of an exercise and it's solution -->
     <localization string-id='exercise'><xsl:text>Ejercicio</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Pista</xsl:text></localization>

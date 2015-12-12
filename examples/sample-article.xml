@@ -1486,14 +1486,14 @@ the xsltproc executable.
 
                 <ol>
                     <li>Level 1, first.</li>
-                    <li>Level 1, second.<ol>
+                    <li xml:id="list-two">Level 1, second.<ol>
                         <li>Level 2, first.</li>
                         <li>Level 2, second.<ol>
                                 <li>Level 3, first.</li>
-                                    <li>Level 3, second.<ol>
+                                    <li xml:id="list-two-two-two">Level 3, second.<ol>
                                         <li>Level 4, first.</li>
                                         <li>Level 4, second.</li>
-                                        <li>Level 4, third.</li>
+                                        <li xml:id="list-two-two-two-three">Level 4, third.</li>
                                     </ol></li>
                                 <li>Level 3, third.</li>
                             </ol></li>
@@ -1501,6 +1501,8 @@ the xsltproc executable.
                     </ol></li>
                     <li>Level 1, third.</li>
                 </ol>
+
+                <p>Items in ordered lists may be be give an <c>xml:id</c> and then may be the target of an <c>xref</c>.  We test three here, referencing down into the hierarchy above.  Level 1, second: <xref ref="list-two" />.  Level 3, second: <xref ref="list-two-two-two" />.  Level 4, third: <xref ref="list-two-two-two-three" />.</p>
 
                 <p>And now a four-level deep unordered list with the default labels supplied by MBX (disc, circle, square, disc).</p>
 
@@ -1592,11 +1594,18 @@ the xsltproc executable.
                         <p>This exercise should have several parts, and labels should follow the defaults for second-level lists (since the exercise is numbered according to the top-level default).</p>
                         <ol>
                             <li>Exercise 1, first part.</li>
-                            <li>Exercise 1, second part.</li>
-                            <li>Exercise 1, third part.</li>
+                            <li>Exercise 1, second part.<ol>
+                                <li xml:id="exercise-one-two-one">Exercise 1, second part, first refinement.</li>
+                            </ol></li>
+                            <li xml:id="exercise-one-three">Exercise 1, third part.</li>
                         </ol>
                     </statement>
                 </exercise>
+
+                <conclusion>
+                    <p>A small test of cross-references to subsidiary parts of exercises.  Exercise 1, third part: <xref ref="exercise-one-three" />.  Exercise 1, second part, first refinement: <xref ref="exercise-one-two-one" />.</p>
+                </conclusion>
+
             </exercises>
 
             <subsection>
@@ -2309,6 +2318,8 @@ the xsltproc executable.
                 <li><p>A group of two exercises, with introduction, conclusion: <xref ref="exercisegroup-two-problems" autoname="yes" /></p></li>
                 <li><p>Solution: An autonamed portion of an exercise: <xref ref="solution-antiderivative" autoname="yes" /></p></li>
                 <li><p>Parts of a complicated exercise: <xref ref="exercise-complicated-second-hint" autoname="yes" /> <xref ref="exercise-complicated-first-answer" autoname="yes" /></p></li>
+                <li><p>An item buried in nested ordered lists (local reference): <xref ref="list-two-two-two-three" autoname="yes"/></p></li>
+                <li><p>A subsidary part of an exercise (fully-qualified reference): <xref ref="exercise-one-two-one" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul>
 

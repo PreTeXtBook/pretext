@@ -2294,7 +2294,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We assume content of list items  -->
 <!-- (typically paragraphs), end with -->
 <!-- non-blank line and a newline     -->
-<xsl:template match="ol/li|ul/li">
+
+<!-- In an ordered list, an item can be a target -->
+<xsl:template match="ol/li">
+    <xsl:text>\item</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- We seperate the item from the content -->
+<xsl:template match="ul/li">
     <xsl:text>\item{}</xsl:text>
     <xsl:apply-templates />
 </xsl:template>
@@ -3909,12 +3918,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We hard-code some numbers (sectional exercises) and    -->
 <!-- we institute some numberings that LaTeX does not do    -->
 <!-- naturally (references in extra sections, proofs,       -->
+<!-- items in ordered lists (alone or in an exercise),      -->
 <!-- hints, answers, solutions).  So for the text of a      -->
 <!-- cross-reference we use the actual number, not a \ref.  -->
 <!-- (See also modal templates for "label" and "xref-link") -->
 <!-- Exercises in sets may have hard-coded numbers, -->
 <!-- so we provide a hard-coded number              -->
-<xsl:template match="exercises//exercise|biblio|note|proof|hint|answer|solution" mode="xref-number">
+<xsl:template match="exercises//exercise|biblio|note|proof|ol/li|hint|answer|solution" mode="xref-number">
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 
@@ -3949,12 +3959,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We hard-code some numbers (sectional exercises) and      -->
 <!-- we institute some numberings that LaTeX does not do      -->
 <!-- naturally (references in extra sections, proofs,         -->
+<!-- items in ordered lists (alone or in an exercise),        -->
 <!-- hints, answers, solutions). For an exercise group we     -->
 <!-- point to the introduction.  We make custom               -->
 <!-- anchors/labels below and then we must point to           -->
 <!-- them with \hyperlink{}{} (nee hyperref[]{}).             -->
 <!-- (See also modal templates for "label" and "xref-number") -->
-<xsl:template match="exercises//exercise|biblio|note|proof|hint|answer|solution|exercisegroup" mode="xref-link">
+<xsl:template match="exercises//exercise|biblio|note|proof|ol/li|hint|answer|solution|exercisegroup" mode="xref-link">
     <xsl:param name="content" />
     <xsl:text>\hyperlink{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
@@ -3971,13 +3982,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We hard-code some numbers (sectional exercises) and          -->
 <!-- we institute some numberings that LaTeX does not do          -->
 <!-- naturally (references in extra sections, proofs,             -->
+<!-- items in ordered lists (alone or in an exercise),            -->
 <!-- hints, answers, solutions).  For a "label"                   -->
 <!-- hyperref's hypertarget mechanism fits the bill.              -->
 <!-- Removed the \null target text, as it was introducing         -->
 <!-- vertical space when used in list items and it seems          -->
 <!-- to now behave well without it  (2015-12-12)                  -->
 <!-- (See also modal templates for "xref-link" and "xref-number") -->
-<xsl:template match="exercises//exercise|biblio|note|proof|hint|answer|solution" mode="label">
+<xsl:template match="exercises//exercise|biblio|note|proof|ol/li|hint|answer|solution" mode="label">
     <xsl:text>\hypertarget{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}{}</xsl:text>

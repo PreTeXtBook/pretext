@@ -1897,8 +1897,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Pass-through regular list items    -->
 <!-- Allow paragraphs in larger items,  -->
 <!-- or just snippets for smaller items -->
+<!-- List items should migrate to knowlization framework -->
 <xsl:template match="li">
-    <li><xsl:apply-templates /></li>
+    <xsl:element name="li">
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:attribute>
+        <xsl:apply-templates />
+    </xsl:element>
 </xsl:template>
 
 <!-- List items in HTML need to float with fractional widths -->
@@ -1907,6 +1913,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:element name="li">
         <xsl:attribute name="style">
             <xsl:text>width:</xsl:text><xsl:value-of select="$percent-width" /><xsl:text>%; float:left;</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id" />
         </xsl:attribute>
        <xsl:apply-templates />
     </xsl:element>
