@@ -1764,92 +1764,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- enumeration style to HTML list-style-type       -->
 <!-- NB: this is currently inferior to latex version -->
 <!-- NB: all pre-, post-formatting is lost           -->
-<xsl:template match="*" mode="html-ordered-list-label">
-   <xsl:choose>
-        <xsl:when test="contains(@label,'1')">decimal</xsl:when>
-        <xsl:when test="contains(@label,'a')">lower-alpha</xsl:when>
-        <xsl:when test="contains(@label,'A')">upper-alpha</xsl:when>
-        <xsl:when test="contains(@label,'i')">lower-roman</xsl:when>
-        <xsl:when test="contains(@label,'I')">upper-roman</xsl:when>
-        <xsl:when test="@label=''">
-            <xsl:text>none</xsl:text>
-            <xsl:message>MBX:WARNING: empty labels on ordered list items are deprecated, switch to an unordered list (2015-12-12)</xsl:message>
-            <xsl:apply-templates select="." mode="location-report" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:ERROR: ordered list label not found or not recognized</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<xsl:template match="*" mode="html-unordered-list-label">
-   <xsl:choose>
-        <xsl:when test="@label='disc'">disc</xsl:when>
-        <xsl:when test="@label='circle'">circle</xsl:when>
-        <xsl:when test="@label='square'">square</xsl:when>
-        <xsl:when test="@label=''">none</xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:ERROR: unordered list label not found or not recognized</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- Utility template to translate ordered list    -->
-<!-- level to HTML list-style-type                 -->
-<!-- This mimics LaTeX's choice and order:         -->
-<!-- arabic, lower alpha, lower roman, upper alpha -->
-<xsl:template match="*" mode="html-ordered-list-label-default">
-    <xsl:variable name="level">
-        <xsl:apply-templates select="." mode="ordered-list-level" />
+<xsl:template match="ol" mode="html-list-label">
+    <xsl:variable name="mbx-format-code">
+        <xsl:apply-templates select="." mode="format-code" />
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$level='0'">decimal</xsl:when>
-        <xsl:when test="$level='1'">lower-alpha</xsl:when>
-        <xsl:when test="$level='2'">lower-roman</xsl:when>
-        <xsl:when test="$level='3'">upper-alpha</xsl:when>
+        <xsl:when test="$mbx-format-code = '1'">decimal</xsl:when>
+        <xsl:when test="$mbx-format-code = 'a'">lower-alpha</xsl:when>
+        <xsl:when test="$mbx-format-code = 'A'">upper-alpha</xsl:when>
+        <xsl:when test="$mbx-format-code = 'i'">lower-roman</xsl:when>
+        <xsl:when test="$mbx-format-code = 'I'">upper-roman</xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:ERROR: ordered list is more than 4 levels deep (<xsl:value-of select="$level" /> levels)</xsl:message>
+            <xsl:message>MBX:BUG: bad MBX ordered list label format code in HTML conversion</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-<!-- Utility template to translate unordered    -->
-<!-- list level to HTML list-style-type         -->
-<!-- This is similar to Firefox default choices -->
-<!-- but different in the fourth slot           -->
-<!-- disc, circle, square, disc                 -->
-<xsl:template match="*" mode="html-unordered-list-label-default">
-    <xsl:variable name="level">
-        <xsl:apply-templates select="." mode="unordered-list-level" />
+<xsl:template match="ul" mode="html-list-label">
+    <xsl:variable name="mbx-format-code">
+        <xsl:apply-templates select="." mode="format-code" />
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$level='0'">disc</xsl:when>
-        <xsl:when test="$level='1'">circle</xsl:when>
-        <xsl:when test="$level='2'">square</xsl:when>
-        <xsl:when test="$level='3'">disc</xsl:when>
+        <xsl:when test="$mbx-format-code = 'disc'">disc</xsl:when>
+        <xsl:when test="$mbx-format-code = 'circle'">circle</xsl:when>
+        <xsl:when test="$mbx-format-code = 'square'">square</xsl:when>
+        <xsl:when test="$mbx-format-code = 'none'">none</xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:ERROR: unordered list is more than 4 levels deep</xsl:message>
+            <xsl:message>MBX:BUG: bad MBX unordered list label format code in HTML conversion</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
 <!-- Lists themselves -->
-<!-- Use a style to create the symbol sets   -->
-<!-- When columns are specified, float items -->
-<!-- and clear afterwards                    -->
-
-<xsl:template match="ol">
-    <xsl:element name="ol">
+<!-- Hard-code the list style, trading on match -->
+<!-- in label templates. Use "copy" to handle   -->
+<!-- both ul and ol simultaneously              -->
+<!-- When columns are specified, float items    -->
+<!-- and clear afterwards                       -->
+<xsl:template match="ol|ul">
+    <xsl:copy>
         <xsl:attribute name="style">
             <xsl:text>list-style-type: </xsl:text>
-            <xsl:choose>
-                <xsl:when test="@label">
-                    <xsl:apply-templates select="." mode="html-ordered-list-label" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="html-ordered-list-label-default" />
-                </xsl:otherwise>
-            </xsl:choose>
+                <xsl:apply-templates select="." mode="html-list-label" />
             <xsl:text>;</xsl:text>
         </xsl:attribute>
         <xsl:choose>
@@ -1862,37 +1818,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="li" />
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:element>
-    <xsl:if test="@cols">
-        <div style="clear:both;"></div>
-    </xsl:if>
-</xsl:template>
-
-<xsl:template match="ul">
-    <xsl:element name="ul">
-        <xsl:attribute name="style">
-            <xsl:text>list-style-type: </xsl:text>
-            <xsl:choose>
-                <xsl:when test="@label">
-                    <xsl:apply-templates select="." mode="html-unordered-list-label" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="html-unordered-list-label-default" />
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>;</xsl:text>
-        </xsl:attribute>
-        <xsl:choose>
-            <xsl:when test="@cols">
-                <xsl:apply-templates select="li" mode="variable-width">
-                    <xsl:with-param name="percent-width" select="98 div @cols" />
-                </xsl:apply-templates>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="li" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:element>
+    </xsl:copy>
     <xsl:if test="@cols">
         <div style="clear:both;"></div>
     </xsl:if>

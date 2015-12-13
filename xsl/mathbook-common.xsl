@@ -1775,37 +1775,10 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- Serial Numbers: List Items -->
 
 <!-- First, the number of a list item within its own list -->
+<!-- This trades on the MBX format codes being identical to the XSLT codes -->
 <xsl:template match="ol/li" mode="item-number">
     <xsl:variable name="code">
-        <xsl:choose>
-            <xsl:when test="../@label">
-                <xsl:choose>
-                    <xsl:when test="contains(../@label,'1')">1</xsl:when>
-                    <xsl:when test="contains(../@label,'a')">a</xsl:when>
-                    <xsl:when test="contains(../@label,'A')">A</xsl:when>
-                    <xsl:when test="contains(../@label,'i')">i</xsl:when>
-                    <xsl:when test="contains(../@label,'I')">I</xsl:when>
-                    <xsl:when test="../@label=''"></xsl:when>
-                    <xsl:otherwise>
-                        <xsl:message>MBX:ERROR: ordered list label not found or not recognized</xsl:message>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:variable name="level">
-                    <xsl:apply-templates select=".." mode="ordered-list-level" />
-                </xsl:variable>
-                <xsl:choose>
-                    <xsl:when test="$level='0'">1</xsl:when>
-                    <xsl:when test="$level='1'">a</xsl:when>
-                    <xsl:when test="$level='2'">i</xsl:when>
-                    <xsl:when test="$level='3'">A</xsl:when>
-                    <xsl:otherwise>
-                        <xsl:message>MBX:ERROR: ordered list is more than 4 levels deep (<xsl:value-of select="$level" /> levels)</xsl:message>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates select=".." mode="format-code" />
     </xsl:variable>
     <xsl:number select="." format="{$code}" />
 </xsl:template>
@@ -2032,10 +2005,11 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 </xsl:template>
 
 
-<!-- ########### -->
-<!-- List Levels -->
-<!-- ########### -->
+<!-- ############## -->
+<!-- List Utilities -->
+<!-- ############## -->
 
+<!-- List Levels -->
 <!-- Utility templates to determine the depth      -->
 <!-- of a list, relative to nesting in other lists -->
 
@@ -2094,6 +2068,83 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:value-of select="0" />
 </xsl:template>
 
+<!-- Labels of ordered lists have formatting codes, which  -->
+<!-- we detect here and pass on to other more specialized  -->
+<!-- templates for implementation specifics                -->
+<!-- In order: Arabic, lower-case Latin, upper-case Latin, -->
+<!-- lower-case Roman numeral, upper-case Roman numeral    -->
+<!-- Absent a label attribute, defaults go 4 levels deep   -->
+<!-- (max for Latex) as: Arabic, lower-case Latin,         -->
+<!-- lower-case Roman numeral, upper-case Latin            -->
+<xsl:template match="ol" mode="format-code">
+    <xsl:choose>
+        <xsl:when test="@label">
+            <xsl:choose>
+                <xsl:when test="contains(@label,'1')">1</xsl:when>
+                <xsl:when test="contains(@label,'a')">a</xsl:when>
+                <xsl:when test="contains(@label,'A')">A</xsl:when>
+                <xsl:when test="contains(@label,'i')">i</xsl:when>
+                <xsl:when test="contains(@label,'I')">I</xsl:when>
+                <xsl:when test="@label=''">
+                    <xsl:message>MBX:WARNING: empty labels on ordered list items are deprecated, switch to an unordered list (2015-12-12)</xsl:message>
+                    <xsl:apply-templates select="." mode="location-report" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>MBX:ERROR: ordered list label (<xsl:value-of select="@label" />) not recognized</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:variable name="level">
+                <xsl:apply-templates select="." mode="ordered-list-level" />
+            </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="$level='0'">1</xsl:when>
+                <xsl:when test="$level='1'">a</xsl:when>
+                <xsl:when test="$level='2'">i</xsl:when>
+                <xsl:when test="$level='3'">A</xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>MBX:ERROR: ordered list is more than 4 levels deep (at level <xsl:value-of select="$level" />)</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Labels of unordered list have formatting codes, which -->
+<!-- we detect here and pass on to other more specialized  -->
+<!-- templates for implementation specifics                -->
+<!-- disc, circle, square or blank are the options         -->
+<!-- Default order: disc, circle, square, disc             -->
+<xsl:template match="ul" mode="format-code">
+    <xsl:choose>
+        <xsl:when test="@label">
+            <xsl:choose>
+                <xsl:when test="@label='disc'">disc</xsl:when>
+                <xsl:when test="@label='circle'">circle</xsl:when>
+                <xsl:when test="@label='square'">square</xsl:when>
+                <xsl:when test="@label=''">none</xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>MBX:ERROR: unordered list label (<xsl:value-of select="@label" />) not recognized</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:variable name="level">
+                <xsl:apply-templates select="." mode="unordered-list-level" />
+            </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="$level='0'">disc</xsl:when>
+                <xsl:when test="$level='1'">circle</xsl:when>
+                <xsl:when test="$level='2'">square</xsl:when>
+                <xsl:when test="$level='3'">disc</xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>MBX:ERROR: unordered list is more than 4 levels deep (at level <xsl:value-of select="$level" />)</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 
 <!-- Programming Language Names -->

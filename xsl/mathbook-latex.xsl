@@ -2134,70 +2134,61 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Utility templates to translate MBX @label specification -->
 <!-- for use with LaTeX enumitem package's label keyword     -->
-<xsl:template match="*" mode="latex-ordered-list-label">
-    <xsl:variable name="code">
-        <xsl:choose>
-            <xsl:when test="contains(@label,'1')">1</xsl:when>
-            <xsl:when test="contains(@label,'a')">a</xsl:when>
-            <xsl:when test="contains(@label,'A')">A</xsl:when>
-            <xsl:when test="contains(@label,'i')">i</xsl:when>
-            <xsl:when test="contains(@label,'I')">I</xsl:when>
-            <xsl:when test="@label=''"></xsl:when>
-            <xsl:otherwise>
-                <xsl:message>MBX:ERROR: ordered list label not found or not recognized</xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
+<xsl:template match="ol" mode="latex-list-label">
+    <xsl:variable name="mbx-format-code">
+        <xsl:apply-templates select="." mode="format-code" />
     </xsl:variable>
-    <!-- deconstruct the left, middle, right portions of code   -->
-    <!-- MBX codes translate to codes from the enumitem package -->
-    <xsl:value-of select="substring-before(@label, $code)" />
+    <!-- deconstruct the left and right adornments of the label   -->
+    <!-- or provide the default adornments, consistent with LaTeX -->
+    <!-- in the middle, translate MBX codes for enumitem package  -->
     <xsl:choose>
-        <xsl:when test="$code='1'">\arabic*</xsl:when>
-        <xsl:when test="$code='a'">\alph*</xsl:when>
-        <xsl:when test="$code='A'">\Alph*</xsl:when>
-        <xsl:when test="$code='i'">\roman*</xsl:when>
-        <xsl:when test="$code='I'">\Roman*</xsl:when>
-        <xsl:when test="$code=''">
-            <xsl:text />
-            <xsl:message>MBX:WARNING: empty labels on ordered list items are deprecated, switch to an unordered list (2015-12-12)</xsl:message>
-            <xsl:apply-templates select="." mode="location-report" />
+        <xsl:when test="@label">
+            <xsl:value-of select="substring-before(@label, $mbx-format-code)" />
         </xsl:when>
+        <xsl:when test="$mbx-format-code='a'">
+            <xsl:text>(</xsl:text>
+        </xsl:when>
+        <xsl:otherwise />
     </xsl:choose>
-    <xsl:value-of select="substring-after(@label, $code)" />
-</xsl:template>
-
-<xsl:template match="*" mode="latex-unordered-list-label">
-   <xsl:choose>
-        <xsl:when test="@label='disc'">\textbullet</xsl:when>
-        <xsl:when test="@label='circle'">$\circ$</xsl:when>
-        <xsl:when test="@label='square'">$\blacksquare$</xsl:when>
-        <xsl:when test="@label=''"></xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:ERROR: unordered list label not found or not recognized</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- Utility template to translate ordered list    -->
-<!-- level to HTML list-style-type                 -->
-<!-- This mimics LaTeX's choice and order:         -->
-<!-- arabic, lower alpha, lower roman, upper alpha -->
-<!-- NB: we need this for sublists in exercises, reference annotations -->
-<!-- othrwise, we try to avoid it, in hopes of cleaner LaTeX source    -->
-<xsl:template match="*" mode="latex-ordered-list-label-default">
-    <xsl:variable name="level">
-        <xsl:apply-templates select="." mode="ordered-list-level" />
-    </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$level='0'">\arabic*.</xsl:when>
-        <xsl:when test="$level='1'">(\alph*)</xsl:when>
-        <xsl:when test="$level='2'">\roman*.</xsl:when>
-        <xsl:when test="$level='3'">\Alph*.</xsl:when>
+        <xsl:when test="$mbx-format-code = '1'">\arabic*</xsl:when>
+        <xsl:when test="$mbx-format-code = 'a'">\alph*</xsl:when>
+        <xsl:when test="$mbx-format-code = 'A'">\Alph*</xsl:when>
+        <xsl:when test="$mbx-format-code = 'i'">\roman*</xsl:when>
+        <xsl:when test="$mbx-format-code = 'I'">\Roman*</xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:ERROR: ordered list is more than 4 levels deep (<xsl:value-of select="$level" /> levels)</xsl:message>
+            <xsl:message>MBX:BUG: bad MBX ordered list label format code in LaTeX conversion</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:choose>
+        <xsl:when test="@label">
+            <xsl:value-of select="substring-after(@label, $mbx-format-code)" />
+        </xsl:when>
+        <xsl:when test="$mbx-format-code='a'">
+            <xsl:text>)</xsl:text>
+        </xsl:when>
+        <xsl:when test="($mbx-format-code='a') or ($mbx-format-code='i') or ($mbx-format-code='A')">
+            <xsl:text>.</xsl:text>
+        </xsl:when>
+        <xsl:otherwise />
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="ul" mode="latex-list-label">
+    <xsl:variable name="mbx-format-code">
+        <xsl:apply-templates select="." mode="format-code" />
+    </xsl:variable>
+   <xsl:choose>
+        <xsl:when test="$mbx-format-code = 'disc'">\textbullet</xsl:when>
+        <xsl:when test="$mbx-format-code = 'circle'">$\circ$</xsl:when>
+        <xsl:when test="$mbx-format-code = 'square'">$\blacksquare$</xsl:when>
+        <xsl:when test="$mbx-format-code = 'none'"></xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:BUG: bad MBX unordered list label format code in LaTeX conversion</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
 
 <!-- Utility template to translate unordered    -->
 <!-- list level to HTML list-style-type         -->
@@ -2234,21 +2225,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\begin{enumerate}</xsl:text>
-    <xsl:choose>
-        <xsl:when test="@label">
-            <xsl:text>[label=</xsl:text>
-            <xsl:apply-templates select="." mode="latex-ordered-list-label" />
-            <xsl:text>]</xsl:text>
-        </xsl:when>
-        <xsl:when test="ancestor::exercises or ancestor::references">
-            <xsl:text>[label=</xsl:text>
-            <xsl:apply-templates select="." mode="latex-ordered-list-label-default" />
-            <xsl:text>]</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <!-- No-op: Allow LaTeX (or a style) to determine -->
-        </xsl:otherwise>
-    </xsl:choose>
+    <!-- override LaTeX defaults as indicated -->
+    <xsl:if test="@label or ancestor::exercises or ancestor::references">
+        <xsl:text>[label=</xsl:text>
+        <xsl:apply-templates select="." mode="latex-list-label" />
+        <xsl:text>]</xsl:text>
+    </xsl:if>
     <xsl:text>&#xa;</xsl:text>
      <xsl:apply-templates />
     <xsl:text>\end{enumerate}&#xa;</xsl:text>
@@ -2270,14 +2252,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\begin{itemize}[label=</xsl:text>
-    <xsl:choose>
-        <xsl:when test="@label">
-            <xsl:apply-templates select="." mode="latex-unordered-list-label" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="." mode="latex-unordered-list-label-default" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="latex-list-label" />
     <xsl:text>]&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\end{itemize}&#xa;</xsl:text>
