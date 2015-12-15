@@ -710,13 +710,17 @@ def _debug(msg):
 
 
 def get_mbx_path():
-    """Returns path of root MBX directory"""
+    """Returns path of root of MBX distribution"""
     import sys, os.path
-    _verbose("discovering MBX location from executable location")
-    # split path off executable
-    program_dir, _ = os.path.split(sys.argv[0])
-    # strip "script", remove trailing separator
-    return os.path.normpath(program_dir[:-6])
+    _verbose("discovering MBX root directory from mbx script location")
+    # full path to script itself
+    mbx_path = os.path.abspath(sys.argv[0])
+    # split "mbx" executable off path
+    script_dir, _ = os.path.split(mbx_path)
+    # split "script" path off executable
+    distribution_dir, _ = os.path.split(script_dir)
+    _verbose("MBX distribution root directory: {}".format(distribution_dir))
+    return distribution_dir
 
 
 def get_source_path(source_file):
