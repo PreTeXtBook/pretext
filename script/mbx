@@ -833,21 +833,20 @@ def sanitize_url(url):
         url = url + "/"
     return url
 
-def get_config_info(script_dir):
+def get_config_info(script_dir, user_dir):
     """Return configuation in object for querying"""
     import ConfigParser, os.path
-    defaults = {}
-    defaults['xslt'] = 'xsltproc'
-    defaults['tex'] = 'xelatex'
-    defaults['pdfsvg'] = 'pdf2svg'
-    defaults['pdfpng'] = 'convert'
-    defaults['pdfeps'] = 'pdftops'
-    defaults['asy'] = 'asy'
-    defaults['sage'] = 'sage'
-    config_file = os.path.join(script_dir, "mbx.cfg")
-    _verbose("reading configuration file at {}".format(config_file))
-    config = ConfigParser.SafeConfigParser(defaults)
-    config.read(config_file)
+    config_filename = "mbx.cfg"
+    default_config_file = os.path.join(script_dir, config_filename)
+    user_config_file = os.path.join(user_dir, config_filename)
+    config_file_list = [default_config_file, user_config_file]
+    config = ConfigParser.SafeConfigParser()
+    _verbose("parsing configuration files: {}".format(config_file_list))
+    files_read = config.read(config_file_list)
+    _debug("configuration files used/read: {}".format(files_read))
+    if not(user_config_file in files_read):
+        msg = "using default configuration only, custom configuration file not used at {}"
+        _verbose(msg.format(user_config_file))
     return config
 
 def copy_data_directory(source_file, data_dir, tmp_dir):
@@ -880,9 +879,10 @@ _debug("CLI args {}".format(vars(args)))
 mbx_dir = get_mbx_path()
 mbx_xsl_dir = os.path.join(mbx_dir, "xsl")
 mbx_script_dir = os.path.join(mbx_dir, "script")
-_debug("xsl, script dirs: {}, {}".format(mbx_xsl_dir, mbx_script_dir))
+mbx_user_dir = os.path.join(mbx_dir, "user")
+_debug("xsl, script, user dirs: {}".format([mbx_xsl_dir, mbx_script_dir, mbx_user_dir]))
 
-config = get_config_info(mbx_script_dir)
+config = get_config_info(mbx_script_dir, mbx_user_dir)
 
 if args.component == 'tikz':
     if args.format == 'pdf':
