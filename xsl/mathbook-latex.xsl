@@ -670,29 +670,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Bitstream Vera Font names within: https://github.com/timfel/texmf/blob/master/fonts/map/vtex/bera.ali -->
     <!-- Coloring listings: http://tex.stackexchange.com/questions/18376/beautiful-listing-for-csharp -->
     <!-- Song and Dance for font changes: http://jevopi.blogspot.com/2010/03/nicely-formatted-listings-in-latex-with.html -->
+    <xsl:if test="//c or //pre or //sage or //program or //console">
+        <xsl:text>%% New typewriter font if  c, sage, program, console, pre  tags present&#xa;</xsl:text>
+        <xsl:text>%% If only  email, url  tags, no change from default&#xa;</xsl:text>
+        <xsl:text>\usepackage{sourcecodepro}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="//c or //sage or //program or //console">
-        <xsl:text>%% Program listing support, for inline code, Sage code, console or otherwise&#xa;</xsl:text>
+        <xsl:text>%% Program listing support, for inline code, Sage code, console&#xa;</xsl:text>
         <xsl:text>\usepackage{listings}&#xa;</xsl:text>
-        <xsl:text>%% We define \listingsfont to provide Bitstream Vera Mono font&#xa;</xsl:text>
-        <xsl:text>%% for program listings, under both pdflatex and xelatex&#xa;</xsl:text>
-        <xsl:text>%% If you remove this, define \listingsfont to be \ttfamily perhaps&#xa;</xsl:text>
-        <xsl:text>\ifxetex&#xa;</xsl:text>
-        <xsl:text>\usepackage{fontspec}&#xa;</xsl:text>
-        <xsl:text>\newfontface\listingsfont[Path]{fvmr8a.pfb}&#xa;</xsl:text>
-        <xsl:text>\newfontface\listingsboldfont[Path]{fvmb8a.pfb}&#xa;</xsl:text>
-        <xsl:text>\else&#xa;</xsl:text>
-        <xsl:text>\edef\oldtt{\ttdefault}\usepackage[scaled]{beramono}\usepackage[T1]{fontenc}&#xa;</xsl:text>
-        <xsl:text>\renewcommand*\ttdefault{\oldtt}&#xa;</xsl:text>
-        <xsl:text>\newcommand{\listingsfont}{\fontfamily{fvm}\selectfont}&#xa;</xsl:text>
-        <xsl:text>\newcommand{\listingsboldfont}{\fontfamily{fvm}\fontseries{b}\selectfont}&#xa;</xsl:text>
-        <xsl:text>\fi&#xa;</xsl:text>
+        <xsl:text>%% We define the listings font style to be the default "ttfamily"&#xa;</xsl:text>
         <xsl:text>%% To fix hyphens/dashes rendered in PDF as fancy minus signs by listing&#xa;</xsl:text>
         <xsl:text>%% http://tex.stackexchange.com/questions/33185/listings-package-changes-hyphens-to-minus-signs&#xa;</xsl:text>
         <xsl:text>\makeatletter&#xa;</xsl:text>
         <xsl:text>\lst@CCPutMacro\lst@ProcessOther {"2D}{\lst@ttfamily{-{}}{-{}}}&#xa;</xsl:text>
         <xsl:text>\@empty\z@\@empty&#xa;</xsl:text>
         <xsl:text>\makeatother&#xa;</xsl:text>
-        <xsl:text>%% End of program listing font definition&#xa;</xsl:text>
+        <xsl:text>%% End of generic listing adjustments&#xa;</xsl:text>
         <xsl:if test="//c">
             <xsl:text>%% Inline code, typically from "c" element&#xa;</xsl:text>
             <xsl:text>%% Global, document-wide options apply to \lstinline&#xa;</xsl:text>
@@ -700,7 +693,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% (redefining \lstinline with \verb is unlikely to work)&#xa;</xsl:text>
             <!-- breakatwhitespace fixes commas moving to new lines, and other bad things       -->
             <!-- http://tex.stackexchange.com/questions/64750/avoid-line-breaks-after-lstinline -->
-            <xsl:text>\lstset{basicstyle=\footnotesize\listingsfont,breaklines=true,breakatwhitespace=true}&#xa;</xsl:text>
+            <xsl:text>\lstset{basicstyle=\small\ttfamily,breaklines=true,breakatwhitespace=true}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="//program">
             <xsl:text>%% Generic input, listings package: boxed, white, line breaking, language per instance&#xa;</xsl:text>
@@ -721,26 +714,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>\definecolor{keywords}{rgb}{0,0,0}&#xa;</xsl:text>
             </xsl:if>
             <xsl:text>\lstdefinestyle{genericinput}{breaklines=true,breakatwhitespace=true,columns=fixed,frame=single,xleftmargin=4ex,xrightmargin=4ex,&#xa;</xsl:text>
-            <xsl:text>basicstyle=\footnotesize\listingsfont,identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}}&#xa;</xsl:text>
+            <xsl:text>basicstyle=\small\ttfamily,identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="//sage">
             <xsl:text>%% Sage's blue is 50%, we go way lighter (blue!05 would work)&#xa;</xsl:text>
             <xsl:text>\definecolor{sageblue}{rgb}{0.95,0.95,1}&#xa;</xsl:text>
             <xsl:text>%% Sage input, listings package: Python syntax, boxed, colored, line breaking&#xa;</xsl:text>
             <xsl:text>%% Indent from left margin, flush at right margin&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{sageinput}{language=Python,breaklines=true,breakatwhitespace=true,basicstyle=\footnotesize\listingsfont,columns=fixed,frame=single,backgroundcolor=\color{sageblue},xleftmargin=4ex}&#xa;</xsl:text>
+            <xsl:text>\lstdefinestyle{sageinput}{language=Python,breaklines=true,breakatwhitespace=true,basicstyle=\small\ttfamily,columns=fixed,frame=single,backgroundcolor=\color{sageblue},xleftmargin=4ex}&#xa;</xsl:text>
             <xsl:text>%% Sage output, similar, but not boxed, not colored&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{sageoutput}{language=Python,breaklines=true,breakatwhitespace=true,basicstyle=\footnotesize\listingsfont,columns=fixed,xleftmargin=4ex}&#xa;</xsl:text>
+            <xsl:text>\lstdefinestyle{sageoutput}{language=Python,breaklines=true,breakatwhitespace=true,basicstyle=\small\ttfamily,columns=fixed,xleftmargin=4ex}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="//console">
             <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
             <xsl:text>%% Console input, listings package: Python syntax, boxed, colored, line breaking&#xa;</xsl:text>
             <xsl:text>%% Indent from left margin, flush at right margin&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{consoleinput}{language=bash,breaklines=true,breakatwhitespace=true,basicstyle=\footnotesize\listingsboldfont,columns=fixed,xleftmargin=4ex,aboveskip=0pt,belowskip=0pt}&#xa;</xsl:text>
+            <xsl:text>\lstdefinestyle{consoleinput}{language=bash,breaklines=true,breakatwhitespace=true,basicstyle=\footnotesize\bfseries\ttfamily,columns=fixed,xleftmargin=4ex,aboveskip=0pt,belowskip=0pt}&#xa;</xsl:text>
             <xsl:text>%% Console output, similar&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{consoleoutput}{breaklines=true,breakatwhitespace=true,basicstyle=\footnotesize\listingsfont,columns=fixed,xleftmargin=4ex,aboveskip=0pt,belowskip=0.0\baselineskip}&#xa;</xsl:text>
+            <xsl:text>\lstdefinestyle{consoleoutput}{breaklines=true,breakatwhitespace=true,basicstyle=\footnotesize\ttfamily,columns=fixed,xleftmargin=4ex,aboveskip=0pt,belowskip=0.0\baselineskip}&#xa;</xsl:text>
         </xsl:if>
-
     </xsl:if>
     <xsl:if test="//tikz">
         <xsl:message>MBX:WARNING: the "tikz" element is deprecated (2015/16/10), use "latex-image-code" tag inside an "image" tag, and include the tikz package and relevant libraries in docinfo/latex-image-preamble</xsl:message>
