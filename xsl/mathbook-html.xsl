@@ -1637,7 +1637,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (4) Last row special, has no line-break marker    -->
 <xsl:template match="md/mrow">
     <xsl:param name="env-type" />
-    <xsl:value-of select="." />
+    <xsl:apply-templates select="text()|xref" />
     <xsl:if test="@number='yes'">
         <!-- Needs label{} at birth, NOT in xref knowl -->
         <xsl:if test="$env-type='visible' or $env-type='hidden'">
@@ -1653,7 +1653,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="mdn/mrow">
     <xsl:param name="env-type" />
-    <xsl:value-of select="." />
+    <xsl:apply-templates select="text()|xref" />
     <xsl:choose>
         <xsl:when test="@number='no'">
             <xsl:text>\notag</xsl:text>
@@ -2500,6 +2500,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- link content from common template -->
         <xsl:value-of select="$content" />
     </xsl:element>
+</xsl:template>
+
+<!-- This is a third abstract template, which creates a    -->
+<!-- hyperlink or knowl (as possible) that can be realized -->
+<!-- as MathJax processes display math. It requires        -->
+<!-- http://aimath.org/mathbook/mathjaxknowl.js be loaded  -->
+<!-- as a MathJax extension for knowls to render           -->
+<xsl:template match="*" mode="xref-link-md">
+    <xsl:param name="content" />
+    <xsl:variable name="knowl">
+        <xsl:apply-templates select="." mode="xref-as-knowl" />
+    </xsl:variable>
+    <!-- MathJax expects similar constructions, variation is here -->
+    <xsl:choose>
+        <xsl:when test="$knowl='true'">
+            <xsl:text>\knowl{</xsl:text>
+            <xsl:apply-templates select="." mode="xref-knowl-filename" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\href{</xsl:text>
+            <xsl:apply-templates select="." mode="url" />
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>}{\text{</xsl:text>
+    <xsl:value-of select="$content" />
+    <xsl:text>}}</xsl:text>
 </xsl:template>
 
 
@@ -3942,10 +3968,10 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
     tex2jax: {
-        inlineMath: [['\\(','\\)']]
+        inlineMath: [['\\(','\\)']],
     },
     TeX: {
-        extensions: ["AMSmath.js", "AMSsymbols.js", "extpfeil.js", "autobold.js"],
+        extensions: ["AMSmath.js", "AMSsymbols.js", "extpfeil.js", "autobold.js", "http://aimath.org/mathbook/mathjaxknowl.js", ],
         equationNumbers: { autoNumber: "none",
                            useLabelIds: true,
                            formatID: function (n) {return String(n).replace(/[:'"&lt;&gt;&amp;]/g,"")},

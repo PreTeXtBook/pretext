@@ -2046,7 +2046,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Numbering controlled here with \label{}, \notag, or nothing -->
 <!-- Last row different, has no line-break marker                -->
 <xsl:template match="md/mrow">
-    <xsl:value-of select="." />
+    <xsl:apply-templates select="text()|xref" />
     <xsl:choose>
         <xsl:when test="@number='yes'">
             <xsl:apply-templates select="." mode="label" />
@@ -2060,7 +2060,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="mdn/mrow">
-    <xsl:value-of select="." />
+    <xsl:apply-templates select="text()|xref" />
     <xsl:choose>
         <xsl:when test="@number='no'">
             <xsl:text>\notag</xsl:text>
@@ -3944,6 +3944,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$content" />
     <xsl:text>}</xsl:text>
 </xsl:template>
+
+<!-- This is a nearly exact duplicate, which we could remove if we -->
+<!-- reorganized xref-link to match on the xref and not its target -->
+<!-- We wrap link text ($content) in \text{} since in math-mode    -->
+<xsl:template match="*" mode="xref-link-md">
+    <xsl:param name="content" />
+    <xsl:text>\hyperref[</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>]{\text{</xsl:text>
+    <xsl:value-of select="$content" />
+    <xsl:text>}}</xsl:text>
+</xsl:template>
+
 
 <!-- We hard-code some numbers (sectional exercises) and      -->
 <!-- we institute some numberings that LaTeX does not do      -->

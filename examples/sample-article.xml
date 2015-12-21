@@ -221,7 +221,7 @@ the xsltproc executable.
         so keep it wrapped tight.  Lots can go on in a paragraph.
         -->
 
-        <section>
+        <section xml:id="section-fundamental-theorem">
             <title>The Fundamental Theorem</title>
 
             <p>There is a remarkable theorem:<fn xml:id="footnote-fermat">And fortunately we do not need to try to write it in the margin!</fn></p>
@@ -2370,6 +2370,11 @@ the xsltproc executable.
             </ul>
 
             <p>Cross-references to structural elements of the document will always take you there directly, since even in the HTML version these parts never get realized as knowls.  You will find such links sprinkled through this document, but here is an autonamed link to a subsubsection:  <xref ref="subsubsection-different-integrals" autoname="yes" />.</p>
+
+            <p>Cross-references can be built into display mathematics, but they can only point to one item (<ie /> a comma-delimited list of targets is not supported).  Examples below should test the distinction in HTML output between a link that opens a knowl and a link that jumps to a larger chunk of content.  Notice that display mathematics is entirely <latex /> syntax, no matter which output format you create.  So if you do not use the <c>autoname</c> facility, you need to wrap non-math text in <c>\text{}</c> and perhaps use a tilde (<c>~</c>) as a non-breaking space (examine the source of this article).<md>
+                <mrow>x^2 + y^2 &amp;= z^2&amp;&amp;<xref ref="theorem-FTC" autoname="yes" /></mrow>
+                <mrow>a^2 + b^2 &amp;= c^2&amp;&amp;\text{Section}~<xref ref="section-fundamental-theorem" /></mrow>
+            </md></p>
 
             <p>Variations on the above include multiple <c>xml:id</c> as the value of a single <c>ref</c> attribute on an <c>xref</c>, in the form of a comma-separated list.  In this case, only the numbers are links/knowls and the autonaming attribute is based on the type of the first <c>ref</c>.  Wrapping with brackets (citations) or parentheses (equations) is also controlled by the type of the first <c>ref</c>.  And the <c>detail</c> attribute for a bibliographic reference is silently ignored.  So you can do silly things like have a reference to a theorem within a list of equation numbers and there will be no error message.  Handle with care.  Spaces after commas in the list will migrate to the output as spaces, so if you don't have any, you won't get any.</p>
 

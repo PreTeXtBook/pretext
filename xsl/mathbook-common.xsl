@@ -2470,6 +2470,37 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- A single "ref" in an md/mrow needs special treatment       -->
+<!-- We call a specialized template for use only within an "md" -->
+<!-- We restrict to the case of a single ref                    -->
+<xsl:template match="mrow/xref[@ref]">
+    <xsl:if test="contains(@ref, ',')">
+        <xsl:message>MBX:ERROR:   multiple cross-references in a math display (md/mrow, mdn/mrow) are not supported, results may be erratic</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+    <xsl:call-template name="check-ref">
+        <xsl:with-param name="ref" select="@ref" />
+    </xsl:call-template>
+    <xsl:variable name="target" select="id(@ref)" />
+    <!-- Send the target and text representation for link to a -->
+    <!-- format-specific and target-specific link manufacture. -->
+    <!-- Note the template used here is specific to md/mrow    -->
+    <!-- LaTeX uses \hyperref and \hyperlink, while HTML uses  -->
+    <!-- traditional hyperlinks and also modern knowls.        -->
+    <xsl:apply-templates select="$target" mode="xref-link-md">
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="." mode="xref-text-one" />
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- TODO: the xref-link should perhaps select/match on      -->
+<!-- the xref and not the target, then the location of       -->
+<!-- the xref can be accomodated (making the "-md" device    -->
+<!-- unnecessary and then just doing an override in the HTML -->
+<!-- code).  Presumably we can also determnine/analyze the   -->
+<!-- target upon reception and deal with it there.           -->
+
 <!-- This is a base implementation for the xref-link -->
 <!-- template, which just repeats the content        -->
 <xsl:template match="*" mode="xref-link">

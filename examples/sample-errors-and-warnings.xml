@@ -176,6 +176,17 @@ systems.
             </subsection>
         </section>
 
+        <section>
+            <title>Prohibited Cross-References in Display Mathematics</title>
+
+            <p>Cross-references can be built into display mathematics, but they can only point to one item (<ie /> a comma-delimited list of targets is not supported).<md>
+                <mrow>x^2 + y^2 &amp;= z^2&amp;&amp;<xref ref="table-euler1" /></mrow>
+                <mrow>x^2 + y^2 &amp;= z^2&amp;&amp;<xref ref="section-images" /></mrow>
+                <mrow>a^2 + b^2 &amp;= c^2&amp;&amp;<xref ref="table-euler1, table-euler1" /></mrow>
+            </md></p>
+
+        </section>
+
     </article>
 
 </mathbook>
