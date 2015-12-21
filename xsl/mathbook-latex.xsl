@@ -85,6 +85,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- early or late                          -->
 <xsl:param name="latex.preamble.early" select="''" />
 <xsl:param name="latex.preamble.late" select="''" />
+<!--  -->
+<!-- Console characters allow customization of how    -->
+<!-- LaTeX macros are recognized in the fancyvrb      -->
+<!-- package's Verbatim clone environment, "console"  -->
+<!-- The defaults are traditional LaTeX, we let any   -->
+<!-- other specification make a document-wide default -->
+<xsl:param name="latex.console.macro-char" select="'\'" />
+<xsl:param name="latex.console.begin-char" select="'{'" />
+<xsl:param name="latex.console.end-char" select="'}'" />
 
 <!-- ######### -->
 <!-- Variables -->
@@ -132,6 +141,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+
+<!-- Variables carry document-wide console LaTeX escape characters, -->
+<!-- which an author may override on a per-console basis            -->
+<xsl:variable name="console-macro" select="$latex.console.macro-char" />
+<xsl:variable name="console-begin" select="$latex.console.begin-char" />
+<xsl:variable name="console-end" select="$latex.console.end-char" />
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -675,8 +690,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% If only  email, url  tags, no change from default&#xa;</xsl:text>
         <xsl:text>\usepackage{sourcecodepro}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//c or //sage or //program or //console">
-        <xsl:text>%% Program listing support, for inline code, Sage code, console&#xa;</xsl:text>
+    <xsl:if test="//c or //sage or //program">
+        <xsl:text>%% Program listing support, for inline code, Sage code&#xa;</xsl:text>
         <xsl:text>\usepackage{listings}&#xa;</xsl:text>
         <xsl:text>%% We define the listings font style to be the default "ttfamily"&#xa;</xsl:text>
         <xsl:text>%% To fix hyphens/dashes rendered in PDF as fancy minus signs by listing&#xa;</xsl:text>
@@ -725,14 +740,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% Sage output, similar, but not boxed, not colored&#xa;</xsl:text>
             <xsl:text>\lstdefinestyle{sageoutput}{language=Python,breaklines=true,breakatwhitespace=true,basicstyle=\small\ttfamily,columns=fixed,xleftmargin=4ex}&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="//console">
-            <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
-            <xsl:text>%% Console input, listings package: Python syntax, boxed, colored, line breaking&#xa;</xsl:text>
-            <xsl:text>%% Indent from left margin, flush at right margin&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{consoleinput}{language=bash,breaklines=true,breakatwhitespace=true,basicstyle=\footnotesize\bfseries\ttfamily,columns=fixed,xleftmargin=4ex,aboveskip=0pt,belowskip=0pt}&#xa;</xsl:text>
-            <xsl:text>%% Console output, similar&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{consoleoutput}{breaklines=true,breakatwhitespace=true,basicstyle=\footnotesize\ttfamily,columns=fixed,xleftmargin=4ex,aboveskip=0pt,belowskip=0.0\baselineskip}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="//console">
+        <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
+        <xsl:text>%% Make a console environment from fancyvrb Verbatim environment&#xa;</xsl:text>
+        <xsl:text>%% with three command characters, to allow boldfacing input&#xa;</xsl:text>
+        <xsl:text>%% The command characters may be escaped here when specified&#xa;</xsl:text>
+        <xsl:text>%% (Verbatim environment allows for line numbers, make feature request)&#xa;</xsl:text>
+        <!-- perhaps use fancyverb more widely -->
+        <xsl:text>\usepackage{fancyvrb}&#xa;</xsl:text>
+        <xsl:text>\DefineVerbatimEnvironment{console}{Verbatim}%&#xa;</xsl:text>
+        <xsl:text>{fontsize=\small,commandchars=</xsl:text>
+        <xsl:variable name="latex-escaped" select="'&amp;%$#_{}~^\@'" />
+        <xsl:if test="contains($latex-escaped, $console-macro)">
+            <xsl:text>\</xsl:text>
         </xsl:if>
+        <xsl:value-of select="$console-macro" />
+        <xsl:if test="contains($latex-escaped, $console-begin)">
+            <xsl:text>\</xsl:text>
+        </xsl:if>
+        <xsl:value-of select="$console-begin" />
+        <xsl:if test="contains($latex-escaped, $console-end)">
+            <xsl:text>\</xsl:text>
+        </xsl:if>
+        <xsl:value-of select="$console-end" />
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>%% A semantic macro for the user input portion&#xa;</xsl:text>
+        <xsl:text>%% We define this in the traditional way,&#xa;</xsl:text>
+        <xsl:text>%% but may realize it with different LaTeX escape characters&#xa;</xsl:text>
+        <xsl:text>\newcommand{\consoleinput}[1]{\textbf{#1}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//tikz">
         <xsl:message>MBX:WARNING: the "tikz" element is deprecated (2015/16/10), use "latex-image-code" tag inside an "image" tag, and include the tikz package and relevant libraries in docinfo/latex-image-preamble</xsl:message>
@@ -2800,29 +2836,54 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Console Session -->
 <!-- An interactive command-line session with a prompt, input and output -->
 <xsl:template match="console">
+    <!-- Grab all the characters, look for problems and warn -->
+    <xsl:variable name="all-console-chars">
+        <xsl:for-each select="prompt|input|output">
+            <xsl:value-of select="." />
+        </xsl:for-each>
+    </xsl:variable>
+    <!-- Look for problems and warn -->
+    <xsl:if test="contains($all-console-chars, $console-macro)">
+        <xsl:message>MBX:ERROR:   a console session contains the LaTeX character in use for starting a macro ("<xsl:value-of select="$console-macro" />") and your LaTeX is unlikely to compile.  So use the "latex.console.macro-char" parameter to set a different character, one not in use in any console session</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+    <xsl:if test="contains($all-console-chars, $console-begin)">
+        <xsl:message>MBX:ERROR:   a console session contains the LaTeX character in use for starting a group ("<xsl:value-of select="$console-begin" />") and your LaTeX is unlikely to compile.  So use the "latex.console.begin-char" parameter to set a different character, one not in use in any console session</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+    <xsl:if test="contains($all-console-chars, $console-end)">
+        <xsl:message>MBX:ERROR:   a console session contains the LaTeX character in use for ending a group ("<xsl:value-of select="$console-end" />") and your LaTeX is unlikely to compile.  So use the "latex.console.end-char" parameter to set a different character, one not in use in any console session</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
     <!-- ignore prompt, and pick it up in trailing input -->
+    <xsl:text>\begin{console}&#xa;</xsl:text>
     <xsl:apply-templates select="input|output" />
+    <xsl:text>\end{console}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- match immediately preceding, only if a prompt:                   -->
 <!-- https://www.oxygenxml.com/archives/xsl-list/199910/msg00541.html -->
 <xsl:template match="console/input">
     <!-- newline after environment is necessary -->
-    <xsl:text>\begin{lstlisting}[style=consoleinput]&#xa;</xsl:text>
+    <!-- Assumes prompt does not exceed one line -->
     <xsl:apply-templates select="preceding-sibling::*[1][self::prompt]" />
-    <xsl:call-template name="sanitize-code">
-        <xsl:with-param name="raw-code" select="." />
-    </xsl:call-template>
-    <xsl:text>\end{lstlisting}&#xa;</xsl:text>
+    <!-- We substitute for the escape characters,    -->
+    <!-- either within this input element, or within -->
+    <!-- this console elemnet or document-wide       -->
+    <!-- consoleinput macro defined in preamble      -->
+    <xsl:value-of select="$console-macro" />
+    <xsl:text>consoleinput</xsl:text>
+    <xsl:value-of select="$console-begin" />
+    <xsl:apply-templates />
+    <xsl:value-of select="$console-end" />
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Output code gets massaged to remove a left margin, leading blank lines, etc. -->
 <xsl:template match="console/output">
-    <!-- newline after environment is necessary -->
-    <xsl:text>\begin{lstlisting}[style=consoleoutput]&#xa;</xsl:text>
     <xsl:call-template name="sanitize-code">
         <xsl:with-param name="raw-code" select="." />
     </xsl:call-template>
-    <xsl:text>\end{lstlisting}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Geogebra                                     -->

@@ -2619,7 +2619,7 @@ the xsltproc executable.
                 <caption>Console Session: <c>int</c> and <c>float</c></caption>
                 <console>
                     <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
-                    <input>gcc -Wall -o  intAndFloat intAndFloat.c</input>
+                    <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
                     <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
                     <input>./intAndFloat</input>
                     <output>
@@ -2630,6 +2630,11 @@ the xsltproc executable.
                 </console>
             </listing>
 
+            <p>There is one subtlety with a <c>console</c> session rendered as <latex /> output.  The user input is made bold by a <latex /> macro, which means that your code cannot contain the special <latex /> characters <q><backslash /></q>, <q><lbrace /></q>, and <q><rbrace /></q>, which are used to begin a macro, begin a group, and end a group (respectively).  You will get an error message if this condition exists, and there are parameters <c>latex.console.macro-char</c>, <c>latex.console.begin-char</c>, and <c>latex.console.end-char</c> that will allow you to specify alternatives (which need to be characters that do not appear in <em>any</em> of your console sessions, document-wide).  The characters <c>&amp; % $ # _ { } ~ ^ \</c> have special meaning in <latex /> but should be available for duty as these alternative characters (though not all have been tested).  The backslash used in pathnames for Windows is a highly likely case where this needs adjustment.</p>
+
+            <!-- & % $ # _ { } ~ ^ \ Add @ to this list as it is implemented, but need empty element to render it?-->
+
+            <p>There is no good way to provide an example of this situation, without making a document with an error in it, out-of-the-box.  So experiment by using <c>--stringparam</c> on the <c>xsltproc</c> command-line with alternative characters that will behave with the example above, and with characters that will cause the example above to raise errors.  In practice, you may want to specify alternative characters in a thin XSL extension file specific to your project.</p>
         </section>
 
         <section>
