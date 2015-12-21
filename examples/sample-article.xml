@@ -2366,6 +2366,7 @@ the xsltproc executable.
                 <li><p>Parts of a complicated exercise: <xref ref="exercise-complicated-second-hint" autoname="yes" /> <xref ref="exercise-complicated-first-answer" autoname="yes" /></p></li>
                 <li><p>An item buried in nested ordered lists (local reference): <xref ref="list-two-two-two-three" autoname="yes"/></p></li>
                 <li><p>A subsidary part of an exercise (fully-qualified reference): <xref ref="exercise-one-two-one" /></p></li>
+                <li><p>List item as knowls in HTML, including nested lists: <xref ref="list-two" />, <xref ref="list-two-two-two" autoname="yes" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul>
 

@@ -762,7 +762,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     the "xref-as-knowl" modal template           -->
 <!-- TODO: we need to process children in a way that no \label{}, nor ID's, are produced   -->
 <!--       This would perhaps obsolete the "env-type" device, and reorder explnation below -->
-<xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn" mode="xref-knowl">
+<xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|li" mode="xref-knowl">
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
@@ -1532,6 +1532,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 <xsl:template match="exercise" mode="environment-class">
     <xsl:text>exercise-like</xsl:text>
+</xsl:template>
+
+<!-- List Items -->
+<!-- Never born hidden -->
+<xsl:template match="li" mode="is-hidden">
+    <xsl:value-of select="false()" />
+</xsl:template>
+<xsl:template match="li" mode="is-block-env">
+    <xsl:value-of select="true()" />
+</xsl:template>
+<!-- List items are never born hidden -->
+<xsl:template match="proof" mode="hidden-knowl-text" />
+<!-- ??????? -->
+<xsl:template match="li" mode="head">
+    <h5 class="heading">
+    <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+    <xsl:text> </xsl:text>
+    <span class="codenumber"><xsl:apply-templates select="." mode="serial-number" /></span>
+    <xsl:if test="title">
+        <xsl:text> </xsl:text>
+        <span class="title"><xsl:apply-templates select="title" /></span>
+    </xsl:if>
+    </h5>
+</xsl:template>
+<!-- Body is everything, including nested lists -->
+<xsl:template match="li" mode="body">
+    <xsl:apply-templates />
+</xsl:template>
+<!-- No posterior  -->
+<xsl:template match="li" mode="posterior" />
+<!-- HTML, CSS -->
+<xsl:template match="li" mode="environment-element">
+    <xsl:text>article</xsl:text>
+</xsl:template>
+<xsl:template match="li" mode="environment-class">
+    <xsl:text>list</xsl:text>
 </xsl:template>
 
 
@@ -2442,7 +2478,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a sidebyside even though this is not necessary           -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|biblio|note|example|remark|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow" mode="xref-as-knowl">
+<xsl:template match="fn|biblio|note|example|remark|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow|li" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">
