@@ -1543,7 +1543,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="true()" />
 </xsl:template>
 <!-- List items are never born hidden -->
-<xsl:template match="proof" mode="hidden-knowl-text" />
+<xsl:template match="li" mode="hidden-knowl-text" />
 <!-- ??????? -->
 <xsl:template match="li" mode="head">
     <h5 class="heading">
