@@ -688,7 +688,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="//c or //pre or //sage or //program or //console">
         <xsl:text>%% New typewriter font if  c, sage, program, console, pre  tags present&#xa;</xsl:text>
         <xsl:text>%% If only  email, url  tags, no change from default&#xa;</xsl:text>
-        <xsl:text>\usepackage{sourcecodepro}&#xa;</xsl:text>
+        <xsl:text>%% Needs a bit of scaling down to match text&#xa;</xsl:text>
+        <xsl:text>\usepackage[scaled=.95]{sourcecodepro}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//c or //sage or //program">
         <xsl:text>%% Program listing support, for inline code, Sage code&#xa;</xsl:text>
