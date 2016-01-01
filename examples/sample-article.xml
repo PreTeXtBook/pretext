@@ -2127,43 +2127,49 @@ the xsltproc executable.
                 </tabular>
             </table>
 
-            <p>This next example checks that the total number of columns is correctly computed from the first row, which features several <c>colspan</c> attributes.</p>
+            <example>
+                <title>Example Environment with Leading Table</title>
 
-            <!-- Requires many right="minor" since no col attributes are used -->
-            <table>
-                <caption>Column Spans, No <c>col</c> Elements, Nine Columns</caption>
-                <tabular >
-                    <!--  -->
-                    <row left="minor">
-                        <cell right="minor">1</cell>
-                        <cell colspan="2" right="minor">2+3</cell>
-                        <cell right="minor">4</cell>
-                        <cell colspan="3" right="medium">5+6+7</cell>
-                        <cell colspan="2" right="major">8+9</cell>
-                    </row>
-                    <row left="minor">
-                        <cell right="minor">1</cell>
-                        <cell right="minor">2</cell>
-                        <cell right="minor">3</cell>
-                        <cell right="minor">4</cell>
-                        <cell right="minor">5</cell>
-                        <cell right="minor">6</cell>
-                        <cell colspan="2" right="minor">7+8</cell>
-                        <cell right="minor">9</cell>
-                    </row>
-                    <row left="minor">
-                        <cell right="minor">1</cell>
-                        <cell right="minor">2</cell>
-                        <cell right="minor">3</cell>
-                        <cell right="minor">4</cell>
-                        <cell right="minor">5</cell>
-                        <cell right="minor">6</cell>
-                        <cell right="minor">7</cell>
-                        <cell right="minor">8</cell>
-                        <cell right="minor">9</cell>
-                   </row>
-               </tabular>
-           </table>
+                <!-- Requires many right="minor" since no col attributes are used -->
+                <table>
+                    <caption>Column Spans, No <c>col</c> Elements, Nine Columns</caption>
+                    <tabular >
+                        <!--  -->
+                        <row left="minor">
+                            <cell right="minor">1</cell>
+                            <cell colspan="2" right="minor">2+3</cell>
+                            <cell right="minor">4</cell>
+                            <cell colspan="3" right="medium">5+6+7</cell>
+                            <cell colspan="2" right="major">8+9</cell>
+                        </row>
+                        <row left="minor">
+                            <cell right="minor">1</cell>
+                            <cell right="minor">2</cell>
+                            <cell right="minor">3</cell>
+                            <cell right="minor">4</cell>
+                            <cell right="minor">5</cell>
+                            <cell right="minor">6</cell>
+                            <cell colspan="2" right="minor">7+8</cell>
+                            <cell right="minor">9</cell>
+                        </row>
+                        <row left="minor">
+                            <cell right="minor">1</cell>
+                            <cell right="minor">2</cell>
+                            <cell right="minor">3</cell>
+                            <cell right="minor">4</cell>
+                            <cell right="minor">5</cell>
+                            <cell right="minor">6</cell>
+                            <cell right="minor">7</cell>
+                            <cell right="minor">8</cell>
+                            <cell right="minor">9</cell>
+                       </row>
+                   </tabular>
+               </table>
+
+               <p>This example tests several things.  In <latex /> output, figures, tables, listings and side-by-sides are <q>floats</q> whose placement can migrate, but we have tries to supress this behavior.  However, a float that is the first item of an <q>environment</q> (like a theorem or an example) can still float to a position <em>before</em> its title.  If that does not happen here, then our additional defenses are working.</p>
+
+               <p>This example also checks that the total number of columns is correctly computed from the first row, which features several <c>colspan</c> attributes.</p>
+           </example>
 
         </section>
 

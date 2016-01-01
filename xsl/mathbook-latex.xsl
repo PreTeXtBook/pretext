@@ -2246,7 +2246,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- wrap in the multicolumn environment -->
 <xsl:template match="ol">
     <xsl:if test="not(ancestor::ol or ancestor::ul or ancestor::dl)">
-        <xsl:text>\leavevmode%&#xa;</xsl:text>
+        <xsl:apply-templates select="." mode="leave-vertical-mode" />
     </xsl:if>
     <xsl:if test="@cols">
         <xsl:text>\begin{multicols}{</xsl:text>
@@ -2273,7 +2273,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- choice for each such list             -->
 <xsl:template match="ul">
     <xsl:if test="not(ancestor::ol or ancestor::ul or ancestor::dl)">
-        <xsl:text>\leavevmode%&#xa;</xsl:text>
+        <xsl:apply-templates select="." mode="leave-vertical-mode" />
     </xsl:if>
     <xsl:if test="@cols">
         <xsl:text>\begin{multicols}{</xsl:text>
@@ -2292,7 +2292,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="dl">
     <xsl:if test="not(ancestor::ol or ancestor::ul or ancestor::dl)">
-        <xsl:text>\leavevmode%&#xa;</xsl:text>
+        <xsl:apply-templates select="." mode="leave-vertical-mode" />
     </xsl:if>
     <xsl:if test="@cols">
         <xsl:text>\begin{multicols}{</xsl:text>
@@ -2923,9 +2923,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Figures, (SideBySide), Tables and Listings are floats            -->
+<!-- We try to fix their location with the [H] specifier, but         -->
+<!-- if the first item of an AMS environment, they may float up       -->
+<!-- Seems LaTeX is stacking boxes vertically, and we need to go to   -->
+<!-- horizontal mode before doing these floating layout-type elements -->
+<!-- http://tex.stackexchange.com/questions/22852/function-and-usage-of-leavevmode                       -->
+<!-- Potential alternate solution: write a leading "empty" \mbox{}                                       -->
+<!-- http://tex.stackexchange.com/questions/171220/include-non-floating-graphic-in-a-theorem-environment -->
+<xsl:template match="*" mode="leave-vertical-mode">
+    <xsl:text>\leavevmode%&#xa;</xsl:text>
+</xsl:template>
+
 <!-- Figures -->
 <!-- Standard LaTeX figure environment redefined, see preamble comments -->
 <xsl:template match="figure">
+    <xsl:apply-templates select="." mode="leave-vertical-mode" />
     <xsl:text>\begin{figure}&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]"/>
@@ -2936,6 +2949,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Listings -->
 <!-- Standard LaTeX figure environment redefined, see preamble comments -->
 <xsl:template match="listing">
+    <xsl:apply-templates select="." mode="leave-vertical-mode" />
     <xsl:text>\begin{listing}&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]"/>
@@ -2963,6 +2977,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
      
      -->
 <xsl:template match="sidebyside">
+    <xsl:apply-templates select="." mode="leave-vertical-mode" />
     <xsl:text>\begin{figure}&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]" mode="sidebyside"/>
@@ -3292,7 +3307,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Standard LaTeX table environment is redefined, -->
 <!-- see preamble comments for details              -->
 <xsl:template match="table">
-    <xsl:text>\leavevmode%&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="leave-vertical-mode" />
     <xsl:text>\begin{table}&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]" />
