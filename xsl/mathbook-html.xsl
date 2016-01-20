@@ -76,8 +76,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We just like #3 as the default                          -->
 <!-- N.B.:  This scheme is transitional and may change             -->
 <!-- N.B.:  without warning and without any deprecation indicators -->
-<xsl:param name="html.js.server"  select="'http://aimath.org'" />
-<xsl:param name="html.css.server" select="'http://aimath.org'" />
+<xsl:param name="html.js.server"  select="'https://aimath.org'" />
+<xsl:param name="html.css.server" select="'https://aimath.org'" />
 <xsl:param name="html.css.file"   select="'mathbook-3.css'" />
 <!-- A space-separated list of CSS URLs (points to servers or local files) -->
 <xsl:param name="html.css.extra"  select="''" />
@@ -3196,10 +3196,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <table border="0" width="750">
 <tr><td>
 <applet name="ggbApplet" code="geogebra.GeoGebraApplet" archive="geogebra.jar"
-        codebase="http://www.geogebra.org/webstart/3.2/"
+        codebase="https://www.geogebra.org/webstart/3.2/"
         width="750" height="550" mayscript="true">
         <param name="ggbBase64" value="UEsDBBQACAAIAMeAzj4AAAAAAAAAAAAAAAAMAAAAZ2VvZ2VicmEueG1srVQ9b9swEJ2bX0Fwb6yPuEgAyUGbLgGCdnCboRslnaWrKVIgKcfKr++RlGzHcyfq3j3evfugisdjL9kBjEWtSp7eJpyBqnWDqi356Haf7/nj5qZoQbdQGcF22vTClTy/zbjHR9zcfCpsp9+YkIHyivBW8p2QFjizgwHR2A7AfcDFeESJwkw/q79QO3t2xCDPahgpizMjYXXfvKBdzFVIOEh03/GADRgmdV3yL2uSTl+vYBzWQpb8LolIVvLsyklQ7r2dNviulfP0c3ApKpDUgK2bJDB28N48unZEZsziO1CzMo8Vq9CDAsZaYoNC+TqDRCIx9oaN60r+ELIBth2Vsb5LY7Raa9NsJ+ugZ8c/YDSJTnM/gyla2X2YiCXJlHCdBNelFcLAYQvOkWDLxBHOvWwNNh+MZ/tNyzM0aFTuSQxuNGHc+QyFuktOuYwX/FW1EmYspWl0UO8rfdzGJuQx9K9pCFeCoKp90lIbZnzn10SYzyqegeOVnlhJ4CSBMcfwQU/+9CELjHBW8YyjQhWlzZWnS9VpsqRByzzg20hbeio+DLnknI0K3cti0Hbsz6X6Cz/GvqLncbkfp5jp/4pZrK7Wp9iDUSDjkiia7ahHGzcx5gpCGqixJzM65pYIP67fJCCiDbQGFuHxccWGBW9yuYhXcLFaRHgNlrTWjv4SVI/ztUA/uIktPwb/pB09p5JXWHPWCEcU/4dYXd4Nz2W+sfkHUEsHCLTMTSIiAgAAfAQAAFBLAQIUABQACAAIAMeAzj60zE0iIgIAAHwEAAAMAAAAAAAAAAAAAAAAAAAAAABnZW9nZWJyYS54bWxQSwUGAAAAAAEAAQA6AAAAXAIAAAAA"/>
-        <param name="image" value="http://www.geogebra.org/webstart/loading.gif"  />
+        <param name="image" value="https://www.geogebra.org/webstart/loading.gif"  />
         <param name="boxborder" value="false"  />
         <param name="centerimage" value="true"  />
         <param name="java_arguments" value="-Xmx512m -Djnlp.packEnabled=true" />
@@ -3227,10 +3227,10 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <table border="0" width="750">
 <tr><td>
 <applet name="ggbApplet" code="geogebra.GeoGebraApplet" archive="geogebra.jar"
-        codebase="http://www.geogebra.org/webstart/3.2/unsigned/"
+        codebase="https://www.geogebra.org/webstart/3.2/unsigned/"
         width="750" height="441" mayscript="true">
         <param name="ggbBase64" value="{$ggbBase64}"/>
-        <param name="image" value="http://www.geogebra.org/webstart/loading.gif"  />
+        <param name="image" value="https://www.geogebra.org/webstart/loading.gif"  />
         <param name="boxborder" value="false"  />
         <param name="centerimage" value="true"  />
         <param name="java_arguments" value="-Xmx512m -Djnlp.packEnabled=true" />
@@ -3970,8 +3970,8 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 
 <!-- MathJax Logo for bottom of left sidebar -->
 <xsl:template name="powered-by-mathjax">
-    <a href="http://www.mathjax.org">
-        <img title="Powered by MathJax" src="http://cdn.mathjax.org/mathjax/badge/badge.gif" border="0" alt="Powered by MathJax" />
+    <a href="https://www.mathjax.org">
+        <img title="Powered by MathJax" src="https://cdn.mathjax.org/mathjax/badge/badge.gif" border="0" alt="Powered by MathJax" />
     </a>
 </xsl:template>
 
@@ -4044,7 +4044,7 @@ MathJax.Hub.Config({
         inlineMath: [['\\(','\\)']],
     },
     TeX: {
-        extensions: ["AMSmath.js", "AMSsymbols.js", "extpfeil.js", "autobold.js", "http://aimath.org/mathbook/mathjaxknowl.js", ],
+        extensions: ["AMSmath.js", "AMSsymbols.js", "extpfeil.js", "autobold.js", "https://aimath.org/mathbook/mathjaxknowl.js", ],
         equationNumbers: { autoNumber: "none",
                            useLabelIds: true,
                            formatID: function (n) {return String(n).replace(/[:'"&lt;&gt;&amp;]/g,"")},
@@ -4075,15 +4075,15 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
 });
     </xsl:if>
 </script>
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full" />
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full" />
 </xsl:template>
 
 <!-- Sage Cell header -->
 <!-- TODO: internationalize button labels, strings below -->
 <!-- TODO: make an initialization cell which links with the sage-compute cells -->
 <xsl:template name="sagecell">
-    <script type="text/javascript" src="http://sagecell.sagemath.org/static/jquery.min.js"></script>
-    <script type="text/javascript" src="http://sagecell.sagemath.org/embedded_sagecell.js"></script>
+    <script type="text/javascript" src="https://sagecell.sagemath.org/static/jquery.min.js"></script>
+    <script type="text/javascript" src="https://sagecell.sagemath.org/embedded_sagecell.js"></script>
     <script>
 $(function () {
     // Make *any* div with class 'sage-compute' an executable Sage cell
@@ -4108,9 +4108,9 @@ $(function () {
 
 <!-- Knowl header -->
 <xsl:template name="knowl">
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-<link href="http://aimath.org/knowlstyle.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="http://aimath.org/knowl.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
+<link href="https://aimath.org/knowlstyle.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="https://aimath.org/knowl.js"></script>
 
 </xsl:template>
 
@@ -4127,13 +4127,13 @@ $(function () {
 <!-- Text: Open Sans by default (was: Istok Web font, regular and italic (400), bold (700)) -->
 <!-- Code: Source Code Pro, regular (400) -->
 <xsl:template name="fonts">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic|Source+Code+Pro:400' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic|Source+Code+Pro:400' rel='stylesheet' type='text/css' />
 </xsl:template>
 
 <!-- CSS header -->
 <xsl:template name="css">
     <link href="{$html.css.server}/mathbook/stylesheets/{$html.css.file}" rel="stylesheet" type="text/css" />
-    <link href="http://aimath.org/mathbook/mathbook-add-on.css" rel="stylesheet" type="text/css" />
+    <link href="https://aimath.org/mathbook/mathbook-add-on.css" rel="stylesheet" type="text/css" />
     <xsl:call-template name="external-css">
         <xsl:with-param name="css-list" select="normalize-space($html.css.extra)" />
     </xsl:call-template>
@@ -4237,7 +4237,7 @@ _gaq.push(['_trackPageview']);
 
 (function() {
 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'https://www') + '.google-analytics.com/ga.js';
 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
 </script>
@@ -4253,11 +4253,11 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 var sc_project=<xsl:value-of select="./project" />;
 var sc_invisible=1;
 var sc_security="<xsl:value-of select="./security" />";
-var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "http://www.");
+var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "https://www.");
 <![CDATA[document.write("<sc"+"ript type='text/javascript' src='" + scJsHost+ "statcounter.com/counter/counter.js'></"+"script>");]]>
 </script>
 <xsl:variable name="noscript_url">
-    <xsl:text>http://c.statcounter.com/</xsl:text>
+    <xsl:text>https://c.statcounter.com/</xsl:text>
     <xsl:value-of select="./project" />
     <xsl:text>/0/</xsl:text>
     <xsl:value-of select="./security" />
@@ -4265,7 +4265,7 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
 </xsl:variable>
 <noscript>
 <div class="statcounter">
-<a title="web analytics" href="http://statcounter.com/" target="_blank">
+<a title="web analytics" href="https://statcounter.com/" target="_blank">
 <img class="statcounter" src="{$noscript_url}" alt="web analytics" /></a>
 </div>
 </noscript>
