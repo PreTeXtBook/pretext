@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE webwork SYSTEM "../../schema/dtd/webwork.dtd">
+
+<!-- ********************************************************************* -->
+<!-- Copyright 2015                                                        -->
+<!-- Robert A. Beezer, Michael Gage, Geoff Goehle, Alex Jordan             -->
+<!--                                                                       -->
+<!-- This file is part of MathBook XML.                                    -->
+<!--                                                                       -->
+<!-- MathBook XML is free software: you can redistribute it and/or modify  -->
+<!-- it under the terms of the GNU General Public License as published by  -->
+<!-- the Free Software Foundation, either version 2 or version 3 of the    -->
+<!-- License (at your option).                                             -->
+<!--                                                                       -->
+<!-- MathBook XML is distributed in the hope that it will be useful,       -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of        -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         -->
+<!-- GNU General Public License for more details.                          -->
+<!--                                                                       -->
+<!-- You should have received a copy of the GNU General Public License     -->
+<!-- along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>. -->
+<!-- ********************************************************************* -->
+
+<!-- This is a MathBook XML "article" to reproduce the subject area -->
+<!-- templates at                                                   -->
+<!-- http://webwork.maa.org/wiki/SubjectAreaTemplates#.Vbhb6EV4F8M  -->
+
+<mathbook>
+    <!-- Other languages can be used to internationalize parts of a document -->
+    <!-- <mathbook xml:lang="pt-BR"> -->
+
+    <!-- "docinfo" is like metadata, it is necessary technical -->
+    <!-- information which a reader mostly will never see. -->
+
+    <docinfo>
+
+        <!-- In the HTML version there is room for a   -->
+        <!-- picture or logo in the upper left corner. -->
+        <brandlogo url="http://webwork.maa.org/" source="images/webwork-logo.png" />
+
+        <!--
+        TeX/LaTeX macros can be written in the usual way.
+        Whitespace and line breaks are irrelevant here.
+        These are "write once, use everywhere".
+        -->
+        <macros>
+        \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4}
+        \newcommand{\indefiniteintegral}[2]{\int#1\,d#2}
+        </macros>
+
+        <!-- An initialism is useful sometimes -->
+        <initialism>WWSAT</initialism>
+        <!--
+        With a <feedback> element, in the HTML version, you get a button
+        for reporting typos and errors.  You might link to a Google Docs
+        spreadsheet or something similar.  Default is to get a button
+        labeled "Feedback", which will be localized to your target language.
+        You can override this with some text of your choosing, but then you
+        lose the localization feature.
+        -->
+        <feedback>
+            <url>not-implemented.html</url>
+             <!-- <text>My Button Text</text>  -->
+        </feedback>
+    </docinfo>
+
+    <article xml:id="webwork-templates">
+        <title>WeBWorK subject area templates</title>
+        <subtitle>Sample Exercises</subtitle>
+
+        <frontmatter xml:id="index">
+
+            <!-- Items typically at the top of the first page of an article -->
+            <titlepage>
+               <!-- There can be several authors here -->
+                <author>
+                    <personname>Robert Beezer</personname>
+                    <department>Department of Mathematics and Computer Science</department>
+                    <!-- Use "break" tag anywhere for forced line break -->
+                    <institution>University of Puget Sound<br />Tacoma, Washington, USA</institution>
+                    <email>beezer@pugetsound.edu</email>
+                </author>
+
+                <author>
+                    <personname>Alex Jordan</personname>
+                    <department>Department of Mathematics</department>
+                    <!-- Use "break" tag anywhere for forced line break -->
+                    <institution>Portland Community College<br />Portland, Oregon, USA</institution>
+                    <email>alex.jordan@pcc.edu</email>
+                </author>
+
+                <!-- Can set date manually or use the "today" element -->
+                <date><today /></date>
+
+            </titlepage>
+
+            <abstract>
+                <p>This is a sample of the subject area template problems found on the WeBWorK wiki at <url>http://webwork.maa.org/wiki/SubjectAreaTemplates<hash/>.Vbhb6EV4F8M</url>.  By writing these, I hope to identify issues with PG extraction.</p>
+            </abstract>
+
+        </frontmatter>
+
+        <section>
+            <title>Miscellaneous Templates</title>
+
+            <exercise>
+                <title>Answer is a number or a function</title>
+
+                <webwork xml:id="number-or-function" height="700">
+
+                    <setup>
+                        <var name="$a" category="integer">
+                            <static>5</static>
+                        </var>
+                        <var name="$b" category="integer">
+                            <static>8</static>
+                        </var>
+                        <var name="$answer1" category="integer">
+                            <static>5</static>
+                        </var>
+                        <var name="$answer2" category="formula">
+                            <static>{5x^8+8}{x}</static>
+                        </var>
+
+                        <pg-code>
+                            $a = non_zero_random(-9,9,1);
+                            do { $b = random(2,9,1); } until ( $b != $a );
+                            $answer1 = Compute("$a");
+                            $answer2 = Compute("($a x^($b) + $b)/x")->reduce();
+                        </pg-code>
+                    </setup>
+
+                    <statement>
+                        <ol label="a.">
+                            <li>
+                                <p>Suppose the correct answer is <m><var name="$answer1"/></m>.</p>
+                                <ul label="square">
+                                    <li>
+                                        <p><answer var="$answer1" width="15"/></p>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/></m>.</p>
+                                <ul label="square">
+                                    <li>
+                                        <p><answer var="$answer2" width="15"/></p>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ol>
+
+                    </statement>
+
+                    <solution>
+                        <p>Solution explanation goes here.</p>
+                    </solution>
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <title>Answer is a function with domain issues</title>
+
+                <webwork xml:id="function-with-domain-issues" height="700">
+
+                    <setup>
+                        <var name="$a" category="integer">
+                            <static>2</static>
+                        </var>
+                        <var name="$answer1" category="formula">
+                            <static>\sqrt{x-2}</static>
+                        </var>
+                        <var name="$answer2" category="formula">
+                            <static>\ln\left(\left\lvert\frac{x}{x-2}\right\rvert\right)</static>
+                        </var>
+
+                        <pg-code>
+                            $a = random(2,5,1);
+                            $answer1 = Compute("sqrt(x-$a)");
+                            $answer1->{limits} = [$a+1,$a+4];
+                            $answer2 = Compute("ln(abs( x / (x-$a) ))");
+                            $answer2->{test_points} = [[-5],[-4],[1],[$a-1],[7],[8]];
+                            $answer2evaluator = $answer2 -> cmp() -> withPostFilter( AnswerHints( [Compute("ln(abs((x-$a)/x))"),] => "This is the opposite of correct...",));
+                        </pg-code>
+                    </setup>
+
+                    <statement>
+                        <ol label="a.">
+                            <li>
+                                <p>Suppose the correct answer is <m>\displaystyle <var name="$answer1"/></m>.</p>
+                                <ul label="square">
+                                    <li>
+                                        <p><answer var="$answer1" width="15"/></p>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/></m>.</p>
+                                <ul label="square">
+                                    <li>
+                                        <p><answer var="$answer2" width="15" evaluator="$answer2evaluator"/></p>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ol>
+
+                    </statement>
+
+                    <solution>
+                        <p>Solution explanation goes here.</p>
+                    </solution>
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <!--Checkbox not implemented yet; see note in webwork-pg.xsl  -->
+                <title>Multiple choice by popup, radio buttons<!--, or checkbox--></title>
+
+                <webwork xml:id="multiple-choice-popup-or-radio-buttons" height="1400">
+
+                    <setup>
+                        <var name="$color1">
+                            <elements>
+                                <element>Red</element>
+                                <element correct="yes">Blue</element>
+                                <element>Green</element>
+                            </elements>
+                        </var>
+                        <var name="$color2">
+                            <elements>
+                                <element>Red</element>
+                                <element correct="yes">Blue</element>
+                                <element>Green</element>
+                                <element>None of these</element>
+                            </elements>
+                        </var>
+                        <!--<var name="$mc">
+                            <elements>
+                                <element correct="yes"><m>e^{x^2}e^{1/x}</m></element>
+                                <element><m>\frac{e^{x^2}}{e^x}</m></element>
+                                <element correct="yes"><m>e^{x^2}e^{x^{-1}}</m></element>
+                                <element correct="yes"><m>e^{(x^3+1)/x}</m></element>
+                                <element><m>e^{x^2}+e^{1/x}</m></element>
+                                <element>None of the above</element>
+                            </elements>
+                        </var>-->
+
+                        <pg-code>
+                            $color1 = PopUp(
+                                ["?","Red","Blue","Green"],
+                                "Blue",
+                            );
+
+                            $color2 = RadioButtons(
+                              ["Red","Blue","Green","None of these"],
+                              "Blue", # correct answer
+                              last => ["None of these"], # can be a list
+                            );
+
+                        </pg-code>
+
+                        <!-- include below in pg-code once checkboxes implemented 
+                            $mc = new_checkbox_multiple_choice();
+                            $mc -> qa (
+                            "A question can go here, but MBX ignores this",
+                            "\( e^{x^2} e^{1/x} \)$BR",
+                            "\( e^{x^2} e^{x^{-1}} \)$BR",
+                            "\( e^{ (x^3+1) / x } \)$BR",
+                            );
+                            $mc -> extra(
+                            "\( \displaystyle \frac{ e^{x^2} }{ e^x } \)$BR",
+                            "\( e^{x^2} + e^{1/x} \)$BR",
+                            );
+                            $mc -> makeLast("None of the above");
+                        -->
+                    </setup>
+
+                    <statement>
+                        <p>My favorite color is <answer var="$color1" format="popup"/>.</p>
+
+                        <p>My favorite color is</p>
+                        <p><answer var="$color2" format="buttons"/></p>
+
+                        <!--<p>Select all expressions that are equivalent to <m>e^{x^2 + 1/x}</m>.  There may be more than one correct answer.</p>
+                        <p><answer var="$mc" format="checkboxes"/></p>-->
+                    </statement>
+
+                    <solution>
+                        <p>The correct answer is <var name="$color1"/>.</p>
+                        <p>The correct answer is <var name="$color2"/>.</p>
+                        <!--<p>The correct answer is <var name="$mc"/>.</p>-->
+                    </solution>
+
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <title>Tables</title>
+
+                <webwork xml:id="tables" height="700">
+
+                    <setup>
+                        <var name="$x" category="integer">
+                            <static>5</static>
+                        </var>
+
+                        <pg-code>
+                            $x = Real(5);
+                        </pg-code>
+                    </setup>
+
+                    <statement>
+                        <p>A table with minimal XML source.</p>
+
+                        <table>
+                            <tabular>
+                                <row>
+                                    <cell>A</cell>
+                                    <cell>B</cell>
+                                    <cell>C</cell>
+                                </row>
+                                <row>
+                                    <cell>D</cell>
+                                    <cell>E</cell>
+                                    <cell>F</cell>
+                                </row>
+                                <row>
+                                    <cell>G</cell>
+                                    <cell>H</cell>
+                                    <cell>I</cell>
+                                </row>
+                            </tabular>
+                        </table>
+                        <p>Finish this table.</p>
+
+                        <table>
+                            <caption>Some integers</caption>
+                            <tabular top="major" left="major" bottom="major" right="minor" halign="center">
+                                <col halign="right" top="minor"/>
+                                <col right="medium"/>
+                                <col halign="left"/>
+                                <row bottom="none" left="none">
+                                    <cell right="minor">1</cell>
+                                    <cell>two</cell>
+                                    <cell><m>\lfloor\pi\rfloor</m></cell>
+                                </row>
+                                <row>
+                                    <cell bottom="minor"><m>\text{I}+\text{I}+\text{I}+\text{I}</m></cell>
+                                    <cell><answer var="$x" format="none"/></cell>
+                                    <cell>six</cell>
+                                </row>
+                                <row halign="right">
+                                    <cell><m>2^3-1</m></cell>
+                                    <cell colspan="2" top="none" halign="center">VIII</cell>
+                                </row>
+                            </tabular>
+                        </table>
+                    </statement>
+
+                    <solution>
+                        <p>The missing number is <var name="$x"/>.</p>
+                    </solution>
+
+                </webwork>
+
+            </exercise>
+
+        </section>
+
+    </article>
+</mathbook>
