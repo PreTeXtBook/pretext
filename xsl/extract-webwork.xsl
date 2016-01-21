@@ -27,9 +27,7 @@
     extension-element-prefixes="exsl date"
 >
 
-<!-- paths assume we place  extract-webwork.xsl in mathbook "user" directory -->
-<!-- paths assume we place  webwork-pg.xsl      in mathbook "user" directory -->
-<xsl:import href="../xsl/mathbook-common.xsl" />
+<xsl:import href="./mathbook-common.xsl" />
 <xsl:import href="./webwork-pg.xsl" />
 
 <!-- Intend output to be a PG/PGML problem -->
