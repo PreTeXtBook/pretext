@@ -45,9 +45,6 @@
 # MathBook XML distribution root
 MB = /home/rob/mathbook/mathbook
 
-# WW-MBX Bridge distribution root
-WWMBX = /home/rob/mathbook/ww-mbx
-
 # Products are built in subdirectories
 # of a "scratch" directory
 SCRATCH = /tmp/ww
