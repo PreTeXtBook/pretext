@@ -258,9 +258,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- metadata copied from blank SMC notebook -->
         <xsl:text>"metadata": {&#xa;</xsl:text>
         <xsl:text>  "kernelspec": {&#xa;</xsl:text>
-        <xsl:text>    "display_name": "Sage 6.9",&#xa;</xsl:text>
+        <!-- Display name seems totally irrelevant, it gets replaced by actual kernel -->
+        <xsl:text>    "display_name": "SageMath",&#xa;</xsl:text>
         <xsl:text>    "language": "",&#xa;</xsl:text>
-        <xsl:text>    "name": "sage-6.9"&#xa;</xsl:text>
+        <xsl:text>    "name": "sagemath"&#xa;</xsl:text>
+        <!-- Eventually make this  jupyter.kernel, perhaps defaulting on "sage" elements -->
         <!-- <xsl:text>   "display_name": "Python 2",&#xa;</xsl:text> -->
         <!-- <xsl:text>   "language": "python",&#xa;</xsl:text> -->
         <!-- <xsl:text>   "name": "python2"&#xa;</xsl:text> -->
