@@ -90,7 +90,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- in  xsl/mathbook-common.xsl to understand these.              -->
 <!-- The  "file-wrap"  template is defined elsewhre in this file.  -->
 
-<!-- HTML markup common to every structural node. -->
+<!-- Markup common to every structural node.                    -->
 <!-- Both as outer-level of a page and as subsidiary to a page. -->
 <xsl:template match="*" mode="content-wrap">
     <xsl:param name="content" />
@@ -111,6 +111,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="end-string" />
         </xsl:with-param>
     </xsl:call-template>
+    <!-- content of subdivision as multiple cells -->
+    <xsl:copy-of select="$content" />
+</xsl:template>
+
+<!-- Some structural nodes do not need their title,                -->
+<!-- (or subtitle) so we don't put a section heading there         -->
+<!-- Title(s) for an article are forced by a frontmatter/titlepage -->
+<xsl:template match="article|frontmatter" mode="content-wrap">
+    <xsl:param name="content" />
     <!-- content of subdivision as multiple cells -->
     <xsl:copy-of select="$content" />
 </xsl:template>
@@ -313,20 +322,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="markdown-cell">
         <xsl:with-param name="content">
             <!-- cannot get -> <- to center   -->
-            <xsl:text>"# </xsl:text>
+            <xsl:call-template name="begin-string" />
+                <xsl:text># </xsl:text>
                 <xsl:value-of select="/mathbook/article/title" />
-            <xsl:text>\n"</xsl:text>
-            <xsl:text>,&#xa;"</xsl:text>
-                <xsl:apply-templates select="author/personname" />
-            <xsl:text>\n"</xsl:text>
-            <xsl:text>,&#xa;"</xsl:text>
-                <xsl:apply-templates select="event" />
-            <xsl:text>\n"</xsl:text>
-            <xsl:text>,&#xa;"</xsl:text>
-                <xsl:apply-templates select="date" />
-            <xsl:text>"</xsl:text>
+            <xsl:call-template name="end-string" />
+            <!-- Remainder in order, as simple strings via template below -->
+            <!-- Note, if these are not present, no harm                  -->
+            <xsl:apply-templates select="author/personname" />
+            <xsl:apply-templates select="author/institution" />
+            <xsl:apply-templates select="event" />
+            <xsl:apply-templates select="date" />
         </xsl:with-param>
     </xsl:call-template>
+</xsl:template>
+
+<!-- Add blank line prior to each to effect a newline visually-->
+<xsl:template match="titlepage/author/personname|titlepage/author/institution|titlepage/event|titlepage/date">
+    <xsl:call-template name="begin-string" />
+        <xsl:text>\n\n</xsl:text>
+        <xsl:apply-templates />
+    <xsl:call-template name="end-string" />
 </xsl:template>
 
 <!-- ################# -->
