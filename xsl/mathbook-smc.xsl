@@ -220,6 +220,14 @@
     </table>
 </xsl:template>
 
+<!-- The title and subtitle will be top-level elements, but their -->
+<!-- use is triggered by a "frontmatter/titlepage" element.       -->
+<!-- So a "content-wrap" for an "article" makes this happen.      -->
+<xsl:template match="article" mode="content-wrap">
+    <xsl:apply-templates select="./*[not(self::title or self::subtitle)]" />
+    <xsl:apply-templates select="." mode="html-break" />
+</xsl:template>
+
 <!-- We presume entire page is inside a %html cell -->
 <!-- In reality at the end of any subdivision,     -->
 <!-- we suspend and immediately restart            -->
