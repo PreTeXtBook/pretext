@@ -788,23 +788,25 @@ the xsltproc executable.
             <title>Special, Reserved, and Escape Characters</title>
 
             <subsection>
-                <title>Individual Characters</title>
+                <title>Reserved Characters</title>
 
                 <p>One of the goals of MathBook XML is to relieve an author of managing the numerous conflicts when mixing languages that use different characters for special purposes.  But, of course, XML has its own special characters.</p>
 
-                <p>The left angle bracket (<c>&lt;</c>) of XML is the second most-dangerous, since it looks to the processor like the start of a new element.   Use the XML entity <c>&amp;lt;</c> for that character.  Similarly, use <c>&amp;gt;</c> for a right angle bracket.  These are likely to be necessary in source code, such as Sage code (think generators of field extensions) or TikZ code (think arrowheads).  Of course ampersands (<ampersand />) have their own meaning in <latex /> so the entities just described are problematic.  So in mathematics, if you need strict inequalities, use the macros <c>\lt</c> and <c>\gt</c>, which are pre-defined for both <latex />, and MathJax in HTML.</p>
+                <p>Everybody wants the ampersand, it is the most-dangerous character.  It is <em>the</em> escape character for XML, and <latex /> uses it to organize tables and arrays, and for aligning equations.  Consistently use the element <c>&lt;ampersand /&gt;</c> to make a literal ampersand in normal text, such as in <q>A<ampersand />P.</q>  In mathematics, and other places where you are using <latex /> syntax, use the pre-defined <c>\amp</c> macro.  For code listings and other verbatim text, use the escaped XML entity <c>&amp;amp;</c>.</p>
 
-                <p>Sage defines generators of algebraic structures with a syntax that might remind one of common notation for all <q>combinations</q> of some generators.  It is non-standard Python, but is instead pre-parsed by Sage.  No matter, at issue here is the left angle bracket used to specify generators.  Here is an example, which can be doctested by Sage to verify the example behaves correctly.</p>
+                <p>The left angle bracket (<c>&lt;</c>) is the second most-dangerous character in your source, since it looks to the XML processor like the start of a new XML element.  The right angle bracket (<c>&gt;</c>) is less dangerous, but for symmetry we treat it the same as the left.  Consistently use the elements <c>&lt;less /&gt;</c> and <c>&lt;greater /&gt;</c> to make left and right angle brackets in normal text.  In mathematics, and other places where you are using <latex /> syntax, use the pre-defined <c>\lt</c> and <c>\gt</c> macros.  For code listings and other verbatim text, use the XML entities <c>&amp;lt;</c> and <c>&amp;gt;</c>.</p>
+
+                <p>Sage defines generators of algebraic structures with a syntax that might remind one of common notation for all <q>combinations</q> of some generators.  It is non-standard Python, but is instead pre-parsed by Sage.  No matter, at issue here is the left angle bracket used to specify generators.  Here is an example, which can be doctested by Sage to verify the example behaves correctly.  Look at the source to see how the generator syntax is created with the XML entities.</p>
 
                 <sage>
                     <input>
-                    P.&lt;t> = ZZ[]
+                    P.&lt;t&gt; = ZZ[]
                     P
                     </input>
                     <output>Univariate Polynomial Ring in t over Integer Ring</output>
                 </sage>
 
-                <p>There is an alternate syntax, which avoids the angle brackets.</p>
+                <p>There is an alternate Sage syntax, which avoids the angle brackets.</p>
 
                 <sage>
                     <input>
@@ -815,9 +817,32 @@ the xsltproc executable.
                     <output>(u, Univariate Polynomial Ring in u over Integer Ring)</output>
                 </sage>
 
-                <p>Everybody wants the ampersand, it is the most-dangerous.  It is <em>the</em> escape character for XML, and <latex /> uses it in tables and arrays.  Use the element <c>&lt;ampersand /&gt;</c> to make a literal ampersand in text, such as in <q>A<ampersand />P.</q>  If you want an ampersand in code (Sage, TikZ) or in math (<latex />) use <c>&amp;amp;</c>.  As a convenience, if you have a big matrix, or a huge chunk of TikZ code, you can protect it all from the processor by wrapping it in <q><c>&lt;![CDATA[</c><nbsp /><nbsp /><nbsp /><c>]]&gt;</c>.</q>  It should be possible to write without ever using the <q>CDATA</q> mechanism, but it might get tedious in places.</p>
+                <p>Ampersands and angle brackets are likely to be necessary in source code, such as Sage code (think generators of field extensions) or TikZ code (think arrowheads), and in matrices (think separating entries).  If you have a big matrix, or a huge chunk of TikZ code, you can protect it all at once from the XML processor by wrapping it in <q><c>&lt;![CDATA[</c><nbsp /><nbsp /><nbsp /><c>]]&gt;</c>.</q>  It should be possible to write without ever using the <q>CDATA</q> mechanism, but it might get tedious in places to use the supplied macros or XML entities.</p>
 
-                <p>There are a handful of characters that might render just fine in HTML, but <latex /> reserves them for special purposes.  So if they appear unadorned in your source, they will wreak havoc with the <latex /> processing.  And if you escape them with backslashes for <latex />, then you will see those backslashes in your HTML.  You can't win.  Thus, if you intend to create both HTML and <latex /> output, then you need to be aware of these symbols and use the provided MathBook elements for them to get the right behavior in each type of output.  Here are the outputs, look at the source of this document to see the input elements.</p>
+                <p>The other XML reserved characters are the quotation marks, single and double, <c>'</c> and <c>"</c>.  Their use is only constrained in attributes and so do not present a problem elsewhere.  Here are the three XML reserved characters rendered as normal text, see the source to see how they were authored.</p>
+
+                <p><ampersand /><nbsp /><nbsp />
+                <less /><nbsp /><nbsp />
+                <greater /><nbsp /><nbsp /></p>
+
+                <p>So as a summary of how to avoid conflicts with XML's reserved characters:</p>
+
+                <dl>
+                    <li>
+                        <title><q>Normal</q> Text</title>
+                        <p>Use <c>&lt;ampersand /&gt;</c>, <c>&lt;less /&gt;</c>, <c>&lt;greater /&gt;</c>.</p>
+                    </li>
+                    <li>
+                        <title>Mathematics</title>
+                        <p>Within <c>m</c>, <c>me</c>, <c>men</c>, and <c>mrow</c> elements, use <c>\amp</c>, <c>\lt</c>, <c>\gt</c>.  Or use <c>CDATA</c> to enclose a large chunk of <latex /> with many of these characters.</p>
+                    </li>
+                    <li>
+                        <title>Verbatim, Code</title>
+                        <p>Within verbatim text (<c>c</c> and <c>pre</c> elements), Sage code, program listings, and console sessions, use the XML entitites <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c> to get exactly the characters desired.</p>
+                    </li>
+                </dl>
+
+                <p>There are a handful of characters that might render just fine in HTML, but <latex /> reserves them for special purposes.  So if they appear unadorned in your source, they will wreak havoc with the <latex /> processing.  And if you escape them with backslashes to migrate to the <latex /> output, then you will see those backslashes in your HTML.  And the backslash is the escape character for Markdown and JSON.  You can't win.  Thus, you need to be aware of these symbols and use the provided MathBook XML elements for each in order to get the right behavior in each type of output.  Here are the outputs, look at the source of this document to see the input elements.</p>
 
                 <!-- Carriage returns are unwise, but this is impossible to read otherwise -->
                 <p><hash /><nbsp /><nbsp />
@@ -830,11 +855,17 @@ the xsltproc executable.
                 <rbrace /><nbsp /><nbsp />
                 <tilde /><nbsp /><nbsp />
                 <backslash /><nbsp /><nbsp /></p>
+            </subsection>
 
-                <p>There are a few other constructions that can be achieved in HTML one way, and in <latex /> with a slightly different mechanism.  Some are due to <latex />'s treatment of a period (full stop), depending on its surroundings.  So not reserved characters, but just divergent treatment of common constructions.  Again, outputs here, see the source for inputs. If you are planning <latex /> output, and you are finicky about it, use the XML versions of these common abbreviations.  If you only care about HTML and friends, then just go ahead and type the abbreviations straightaway.  These are here for your use, but not necessarily mandatory.  See Will Robertson's informative and arcane <url href="http://latex-alive.tumblr.com/post/827168808/correct-punctuation-spaces">blog post</url> on the topic if you want the full story.</p>
+            <section>
+                <title>Pseudo-Characters and Constructions</title>
+
+                <p>There are a few other pseudo-characters and constructions that can be achieved in HTML one way, and in <latex /> with a slightly different mechanism.  Some are due to <latex />'s treatment of a period (full stop), depending on its surroundings.  So not reserved characters, but just divergent treatment of common constructions.  Again, outputs here, see the source for inputs.  Using these will lead to the best quality in all your outputs.  See Will Robertson's informative and arcane <url href="http://latex-alive.tumblr.com/post/827168808/correct-punctuation-spaces">blog post</url> on the topic if you want the full story for the treatment of a full stop in <latex />.</p>
 
                 <!-- Carriage returns are unwise, but this is impossible to read otherwise -->
                 <p><copyright /><nbsp /><nbsp />
+                <registered /><nbsp /><nbsp />
+                <trademark /><nbsp /><nbsp />
                 <ellipsis /><nbsp /><nbsp />
                 <eg /><nbsp /><nbsp />
                 <ie /><nbsp /><nbsp />
