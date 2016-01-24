@@ -148,6 +148,86 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>)</xsl:text>
 </xsl:template>
 
+<!-- ################### -->
+<!-- Reserved Characters -->
+<!-- ################### -->
+
+<!-- Across all possibilities                     -->
+<!-- See mathbook-common.xsl for discussion       -->
+
+<!--           -->
+<!-- XML, HTML -->
+<!--           -->
+
+<!-- & < > -->
+<!-- Ampersand -->
+<xsl:template match="ampersand">
+    <xsl:text>&amp;</xsl:text>
+</xsl:template>
+
+<!-- Less Than -->
+<xsl:template match="less">
+    <xsl:text>&lt;</xsl:text>
+</xsl:template>
+
+<!-- Greater Than -->
+<xsl:template match="greater">
+    <xsl:text>&gt;</xsl:text>
+</xsl:template>
+
+<!--       -->
+<!-- LaTeX -->
+<!--       -->
+
+<!-- # $ % ^ & _ { } ~ \ -->
+
+<!-- Number Sign, Hash, Octothorpe -->
+<xsl:template match="hash">
+    <xsl:text>\\#</xsl:text>
+</xsl:template>
+
+<!-- Dollar sign -->
+<xsl:template match="dollar">
+    <xsl:text>$</xsl:text>
+</xsl:template>
+
+<!-- Percent sign -->
+<xsl:template match="percent">
+    <xsl:text>%</xsl:text>
+</xsl:template>
+
+<!-- Circumflex  -->
+<xsl:template match="circumflex">
+    <xsl:text>^</xsl:text>
+</xsl:template>
+
+<!-- Ampersand -->
+<!-- Handled above -->
+
+<!-- Underscore -->
+<xsl:template match="underscore">
+    <xsl:text>_</xsl:text>
+</xsl:template>
+
+<!-- Left Brace -->
+<xsl:template match="lbrace">
+    <xsl:text>{</xsl:text>
+</xsl:template>
+
+<!-- Right  Brace -->
+<xsl:template match="rbrace">
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- Tilde -->
+<xsl:template match="tilde">
+    <xsl:text>~</xsl:text>
+</xsl:template>
+
+<!-- Backslash -->
+<xsl:template match="backslash">
+    <xsl:text>\\</xsl:text>
+</xsl:template>
 
 <!-- Lists -->
 <!--<xsl:template match="ul|ol|dl">

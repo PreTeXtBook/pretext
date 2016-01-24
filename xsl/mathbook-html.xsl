@@ -2841,14 +2841,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- Special Characters from TeX -->
-<!--    # $ % ^ & _ { } ~ \      -->
-<!-- These need special treatment, elements     -->
-<!-- here are for text mode, and are not for    -->
-<!-- use inside mathematics elements, e.g. <m>. -->
+
+<!-- ################### -->
+<!-- Reserved Characters -->
+<!-- ################### -->
+
+<!-- Across all possibilities                     -->
+<!-- See mathbook-common.xsl for discussion       -->
+
+<!--           -->
+<!-- XML, HTML -->
+<!--           -->
+
+<!-- & < > -->
+
+<!-- Ampersand -->
+<xsl:template match="ampersand">
+    <xsl:text>&amp;</xsl:text>
+</xsl:template>
+
+<!-- Less Than -->
+<xsl:template match="less">
+    <xsl:text>&lt;</xsl:text>
+</xsl:template>
+
+<!-- Greater Than -->
+<xsl:template match="greater">
+    <xsl:text>&gt;</xsl:text>
+</xsl:template>
+
+<!--       -->
+<!-- LaTeX -->
+<!--       -->
+
+<!-- # $ % ^ & _ { } ~ \ -->
 
 <!-- Number Sign, Hash, Octothorpe -->
-<!-- Also &#x23;                   -->
 <xsl:template match="hash">
     <xsl:text>#</xsl:text>
 </xsl:template>
@@ -2863,35 +2891,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%</xsl:text>
 </xsl:template>
 
-<!-- Circumflex (caret) -->
-<!-- Also &#x5e;        -->
+<!-- Circumflex  -->
 <xsl:template match="circumflex">
     <xsl:text>^</xsl:text>
 </xsl:template>
 
 <!-- Ampersand -->
-<!-- Not for controlling mathematics -->
-<!-- or table formatting             -->
-<xsl:template match="ampersand">
-    <xsl:text>&amp;</xsl:text>
-</xsl:template>
+<!-- Handled above -->
 
-<!-- Text underscore -->
+<!-- Underscore -->
 <xsl:template match="underscore">
     <xsl:text>_</xsl:text>
 </xsl:template>
 
-<!-- Braces -->
-<!-- Individually, or matched -->
+<!-- Left Brace -->
 <xsl:template match="lbrace">
     <xsl:text>{</xsl:text>
 </xsl:template>
+
+<!-- Right  Brace -->
 <xsl:template match="rbrace">
-    <xsl:text>}</xsl:text>
-</xsl:template>
-<xsl:template match="braces">
-    <xsl:text>{</xsl:text>
-    <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -2901,10 +2920,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Backslash -->
-<!-- See url element for comprehensive approach -->
 <xsl:template match="backslash">
     <xsl:text>\</xsl:text>
 </xsl:template>
+
 
 <!-- Other Miscellaneous Symbols, Constructions -->
 
@@ -2917,6 +2936,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Matches HTML5 specification -->
 <xsl:template match="foreign">
     <i class="foreign"><xsl:apply-templates /></i>
+</xsl:template>
+
+<!-- Braces -->
+<xsl:template match="braces">
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- Non-breaking space, which "joins" two words as a unit            -->
@@ -4161,15 +4187,19 @@ $(function () {
 </xsl:template>
 
 <!-- LaTeX Macros -->
-<!-- In a hidden div, for near the top of the page -->
+<!-- In a hidden div, for near the top of the page           -->
+<!-- MathJax automatically creates \lt, \gt, so as           -->
+<!-- to avoid escaping XML reserved characters               -->
+<!-- We add \amp to the mix to cover the other dangerous     -->
+<!-- XML reserved character We add it last with a            -->
+<!-- \newcommand to minimize author also defining this macro -->
 <xsl:template name="latex-macros">
-    <xsl:if test="/mathbook/docinfo/macros">
-        <div style="display:none;">
-        <xsl:text>\(</xsl:text>
-        <xsl:value-of select="/mathbook/docinfo/macros" />
-        <xsl:text>\)</xsl:text>
-        </div>
-    </xsl:if>
+    <div style="display:none;">
+    <xsl:text>\(</xsl:text>
+    <xsl:value-of select="/mathbook/docinfo/macros" />
+    <xsl:text>\newcommand{\amp}{&amp;}&#xa;</xsl:text>
+    <xsl:text>\)</xsl:text>
+    </div>
 </xsl:template>
 
 <!-- Brand Logo -->

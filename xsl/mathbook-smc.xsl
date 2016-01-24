@@ -59,9 +59,7 @@
         <!-- Start in HTML mode -->
         <xsl:apply-templates select="." mode="inputbegin-execute" />
         <xsl:text>%html&#xa;</xsl:text>
-        <xsl:text>\(</xsl:text>
-        <xsl:value-of select="/mathbook/docinfo/macros" />
-        <xsl:text>\)</xsl:text>
+        <xsl:call-template name="latex-macros" />
         <!-- top nav bar -->
         <xsl:apply-templates select="." mode="crude-nav-bar" />
         <!-- now the guts -->

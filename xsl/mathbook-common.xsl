@@ -2699,6 +2699,103 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:text>[MDASH]</xsl:text>
 </xsl:template>
 
+<!-- ################### -->
+<!-- Reserved Characters -->
+<!-- ################### -->
+
+<!-- If a markup languge reserves some characters,        -->
+<!-- then we have to provide special handling.            -->
+<!-- These are the *union* of all these characters        -->
+<!-- implemented in a totally ugly fashion so that if     -->
+<!-- these templates are not overridden we hear about it. -->
+<!-- These are just for "normal" text, not mathematics    -->
+<!-- in LaTeX syntax, nor to function as special          -->
+<!-- characters themselves                                -->
+
+<!--           -->
+<!-- XML, HTML -->
+<!--           -->
+
+<!-- & < > -->
+
+<!-- Ampersand -->
+<xsl:template match="ampersand">
+    <xsl:text>[AMPERSAND]</xsl:text>
+</xsl:template>
+
+<!-- Less Than -->
+<xsl:template match="less">
+    <xsl:text>[LESSTHAN]</xsl:text>
+</xsl:template>
+
+<!-- Greater Than -->
+<xsl:template match="greater">
+    <xsl:text>[GREATERTHAN]</xsl:text>
+</xsl:template>
+
+<!--       -->
+<!-- LaTeX -->
+<!--       -->
+
+<!-- # $ % ^ & _ { } ~ \ -->
+
+<!-- Number Sign, Hash, Octothorpe -->
+<xsl:template match="hash">
+    <xsl:text>[HASH]</xsl:text>
+</xsl:template>
+
+<!-- Dollar sign -->
+<xsl:template match="dollar">
+    <xsl:text>[DOLLAR]</xsl:text>
+</xsl:template>
+
+<!-- Percent sign -->
+<xsl:template match="percent">
+    <xsl:text>[PERCENT]</xsl:text>
+</xsl:template>
+
+<!-- Circumflex  -->
+<xsl:template match="circumflex">
+    <xsl:text>[CIRCUMFLEX]</xsl:text>
+</xsl:template>
+
+<!-- 2015/01/28: there was a mismatch between HTML and LaTeX names -->
+<!-- We only have this warning only here                           -->
+<xsl:template match="circum">
+    <xsl:text>\textasciicircum{}</xsl:text>
+    <xsl:message>MBX:WARNING: the "circum" element is deprecated (2015/01/28), use "circumflex"</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
+    <xsl:text>[CIRCUM-DEPRECATED]</xsl:text>
+</xsl:template>
+
+<!-- Ampersand -->
+<!-- Handled above -->
+
+<!-- Underscore -->
+<xsl:template match="underscore">
+    <xsl:text>[UNDERSCORE]</xsl:text>
+</xsl:template>
+
+<!-- Left Brace -->
+<xsl:template match="lbrace">
+    <xsl:text>[LEFTBRACE]</xsl:text>
+</xsl:template>
+
+<!-- Right  Brace -->
+<xsl:template match="rbrace">
+    <xsl:text>[RIGHTBRACE]</xsl:text>
+</xsl:template>
+
+<!-- Tilde -->
+<xsl:template match="tilde">
+    <xsl:text>[TILDE]</xsl:text>
+</xsl:template>
+
+<!-- Backslash -->
+<xsl:template match="backslash">
+    <xsl:text>[BACKSLASH]</xsl:text>
+</xsl:template>
+
 
 <!-- ################### -->
 <!-- Errors and Warnings -->

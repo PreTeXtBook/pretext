@@ -297,24 +297,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </exsl:document>
 </xsl:template>
 
-<!-- Macros, escape backslashes, join lines, -->
-<!-- wrap in string, dollars, wrap as a cell -->
+<!-- Macros, escape backslashes, join lines,                 -->
+<!-- wrap in string, dollars, wrap as a cell                 -->
+<!-- MathJax automatically creates \lt, \gt, so as           -->
+<!-- to avoid escaping XML reserved characters               -->
+<!-- We add \amp to the mix to cover the other dangerous     -->
+<!-- XML reserved character.  We add it last with a          -->
+<!-- \newcommand to minimize author also defining this macro -->
 <!-- TODO: sanitize left margin              -->
 <xsl:template name="load-macros">
-    <xsl:if test="/mathbook/docinfo/macros">
-        <xsl:variable name="macros">
-            <xsl:value-of select="/mathbook/docinfo/macros" />
-        </xsl:variable>
-        <xsl:call-template name="markdown-cell">
-            <xsl:with-param name="content">
-                <xsl:call-template name="begin-string" />
-                <xsl:text>$</xsl:text>
-                <xsl:value-of select="str:replace(str:replace($macros, '\', '\\'), '&#xa;', '')" />
-                <xsl:text>$</xsl:text>
-                <xsl:call-template name="end-string" />
-            </xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
+    <xsl:variable name="macros">
+        <xsl:value-of select="/mathbook/docinfo/macros" />
+        <xsl:text>\newcommand{\amp}{&amp;}</xsl:text>
+    </xsl:variable>
+    <xsl:call-template name="markdown-cell">
+        <xsl:with-param name="content">
+            <xsl:call-template name="begin-string" />
+            <xsl:text>$</xsl:text>
+            <xsl:value-of select="str:replace(str:replace($macros, '\', '\\'), '&#xa;', '')" />
+            <xsl:text>$</xsl:text>
+            <xsl:call-template name="end-string" />
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Make an initial header for an article -->
@@ -828,6 +832,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Strings in JSON like a split better                 -->
 <xsl:template match="br">
     <xsl:text>\n", "</xsl:text>
+</xsl:template>
+
+<!-- ################### -->
+<!-- Reserved Characters -->
+<!-- ################### -->
+
+<!-- Across all possibilities                 -->
+<!-- See mathbook-common.xsl for discussion   -->
+<!-- We just override/extend Markdown to JSON -->
+
+<!-- Number Sign, Hash, Octothorpe -->
+<xsl:template match="hash">
+    <xsl:text>\\#</xsl:text>
 </xsl:template>
 
 <!-- http://stackoverflow.com/questions/3067113/xslt-string-replace -->

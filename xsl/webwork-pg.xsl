@@ -945,8 +945,16 @@
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- MathJax automatically creates \lt, \gt, so as           -->
+<!-- to avoid escaping XML reserved characters               -->
+<!-- We add \amp to the mix to cover the other dangerous     -->
+<!-- XML reserved character.  We add it last with a          -->
+<!-- \newcommand to minimize author also defining this macro -->
 <xsl:template name="write-macros">
-    <xsl:param name="macros" select="/mathbook/docinfo/macros"/>
+    <xsl:variable name="macros">
+        <xsl:value-of select="/mathbook/docinfo/macros" />
+        <xsl:text>\newcommand{\amp}{&amp;}&#xa;</xsl:text>
+    </xsl:variable>
     <xsl:variable name="trimmed-start">
         <xsl:if test="contains($macros,'\newcommand{')">
             <xsl:value-of select="substring-after($macros,'\newcommand{')"/>

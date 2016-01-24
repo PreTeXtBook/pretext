@@ -270,14 +270,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% allow more columns to a matrix&#xa;</xsl:text>
     <xsl:text>%% can make this even bigger by overiding with  latex.preamble.late  processing option&#xa;</xsl:text>
     <xsl:text>\setcounter{MaxMatrixCols}{30}&#xa;</xsl:text>
-    <xsl:text>%% XML, MathJax Conflict Macros&#xa;</xsl:text>
-    <xsl:text>%% Two nonstandard macros that MathJax supports automatically&#xa;</xsl:text>
-    <xsl:text>%% so we always define them in order to allow their use and&#xa;</xsl:text>
-    <xsl:text>%% maintain source level compatibility&#xa;</xsl:text>
-    <xsl:text>%% This avoids using two XML entities in source mathematics&#xa;</xsl:text>
-    <!-- Need CDATA here to protect inequalities as part of an XML file -->
-    <xsl:text><![CDATA[\newcommand{\lt}{<}]]>&#xa;</xsl:text>
-    <xsl:text><![CDATA[\newcommand{\gt}{>}]]>&#xa;</xsl:text>
     <xsl:if test="//m[contains(text(),'sfrac')] or //md[contains(text(),'sfrac')] or //me[contains(text(),'sfrac')] or //mrow[contains(text(),'sfrac')]">
         <xsl:text>%% xfrac package for 'beveled fractions': http://tex.stackexchange.com/questions/3372/how-do-i-typeset-arbitrary-fractions-like-the-standard-symbol-for-5-%C2%BD&#xa;</xsl:text>
         <xsl:text>\usepackage{xfrac}&#xa;</xsl:text>
@@ -915,12 +907,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.preamble.late" />
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% Convenience macros&#xa;</xsl:text>
     <xsl:if test="/mathbook/docinfo/macros">
+        <xsl:text>%% Begin: Author-provided macros&#xa;</xsl:text>
+        <xsl:text>%% (From  docinfo/macros  element)&#xa;</xsl:text>
         <xsl:call-template name="sanitize-code">
             <xsl:with-param name="raw-code" select="/mathbook/docinfo/macros" />
         </xsl:call-template>
+        <xsl:text>%% End: Author-provided macros&#xa;</xsl:text>
     </xsl:if>
+    <xsl:text>%% XML Reserved Character Macros&#xa;</xsl:text>
+    <xsl:text>%% These come at the very end of the preamble as \newcommand&#xa;</xsl:text>
+    <xsl:text>%% so they will raise LaTeX errors if defined earlier by&#xa;</xsl:text>
+    <xsl:text>%% the author, and there is no easy way to redefine them&#xa;</xsl:text>
+    <xsl:text>%% First, two nonstandard macros that MathJax supports automatically&#xa;</xsl:text>
+    <xsl:text>%% so we need only define them for pure LaTeX use&#xa;</xsl:text>
+    <xsl:text>\newcommand{\lt}{&lt;}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\gt}{&gt;}&#xa;</xsl:text>
+    <xsl:text>%% A third macro is a convenience to avoid escaping ampersands in math mode&#xa;</xsl:text>
+    <xsl:text>\newcommand{\amp}{&amp;}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- LaTeX postamble is common for books, articles and letters      -->
@@ -2569,11 +2573,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}}</xsl:text>
 </xsl:template>
 
-<!-- Special Characters from TeX -->
-<!--    # $ % ^ & _ { } ~ \      -->
-<!-- These need special treatment, elements     -->
-<!-- here are for text mode, and are not for    -->
-<!-- use inside mathematics elements, e.g. <m>. -->
+
+<!-- ################### -->
+<!-- Reserved Characters -->
+<!-- ################### -->
+
+<!-- Across all possibilities                     -->
+<!-- See mathbook-common.xsl for discussion       -->
+<!-- See default LaTeX2e textcomp symbols at:     -->
+<!-- http://hevea.inria.fr/examples/test/sym.html -->
+
+<!--           -->
+<!-- XML, HTML -->
+<!--           -->
+
+<!-- & < > -->
+
+<!-- Ampersand -->
+<xsl:template match="ampersand">
+    <xsl:text>\&amp;</xsl:text>
+</xsl:template>
+
+<!-- Less Than -->
+<xsl:template match="less">
+    <xsl:text>\textless</xsl:text>
+</xsl:template>
+
+<!-- Greater Than -->
+<xsl:template match="greater">
+    <xsl:text>\textgreater</xsl:text>
+</xsl:template>
+
+<!--       -->
+<!-- LaTeX -->
+<!--       -->
+
+<!-- # $ % ^ & _ { } ~ \ -->
 
 <!-- Number Sign, Hash, Octothorpe -->
 <xsl:template match="hash">
@@ -2582,7 +2617,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Dollar sign -->
 <xsl:template match="dollar">
-    <xsl:text>\$</xsl:text>
+    <xsl:text>\textdollar{}</xsl:text>
 </xsl:template>
 
 <!-- Percent sign -->
@@ -2591,41 +2626,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Circumflex  -->
-<!-- 2015/01/28: there was a mismatch between HTML and LaTeX names -->
-<xsl:template match="circum">
-    <xsl:text>\textasciicircum{}</xsl:text>
-    <xsl:message>MBX:WARNING: the "circum" element is deprecated (2015/01/28), use "circumflex"</xsl:message>
-    <xsl:apply-templates select="." mode="location-report" />
-</xsl:template>
-
 <xsl:template match="circumflex">
     <xsl:text>\textasciicircum{}</xsl:text>
 </xsl:template>
 
 <!-- Ampersand -->
-<!-- Not for controlling mathematics -->
-<!-- or table formatting             -->
-<xsl:template match="ampersand">
-    <xsl:text>\&amp;</xsl:text>
-</xsl:template>
+<!-- Handled above -->
 
-<!-- Text underscore -->
+<!-- Underscore -->
 <xsl:template match="underscore">
-    <xsl:text>\_</xsl:text>
+    <xsl:text>\textunderscore{}</xsl:text>
 </xsl:template>
 
-<!-- Braces -->
-<!-- Individually, or matched -->
+<!-- Left Brace -->
 <xsl:template match="lbrace">
-    <xsl:text>\{</xsl:text>
+    <xsl:text>\textbraceleft{}</xsl:text>
 </xsl:template>
+
+<!-- Right  Brace -->
 <xsl:template match="rbrace">
-    <xsl:text>\}</xsl:text>
-</xsl:template>
-<xsl:template match="braces">
-    <xsl:text>\{</xsl:text>
-    <xsl:apply-templates />>
-    <xsl:text>\}</xsl:text>
+    <xsl:text>\textbraceright{}</xsl:text>
 </xsl:template>
 
 <!-- Tilde -->
@@ -2634,10 +2654,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Backslash -->
-<!-- See url element for comprehensive approach -->
 <xsl:template match="backslash">
     <xsl:text>\textbackslash{}</xsl:text>
 </xsl:template>
+
 
 <!-- Other Miscellaneous Symbols, Constructions -->
 
@@ -2712,6 +2732,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>
+
+<!-- Braces -->
+<!-- Matched, as grouping -->
+<xsl:template match="braces">
+    <xsl:text>\{</xsl:text>
+    <xsl:apply-templates />>
+    <xsl:text>\}</xsl:text>
+</xsl:template>
+
 
 <!-- Line Breaks -->
 <!-- \newline works best in table cells in paragraph mode       -->
