@@ -1930,7 +1930,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="png-fallback" />
     <xsl:element name="object">
         <xsl:attribute name="type">image/svg+xml</xsl:attribute>
-        <xsl:attribute name="style">width:90%; margin:auto;</xsl:attribute>
+        <xsl:attribute name="style">
+            <xsl:text>width:</xsl:text>
+            <xsl:choose>
+                <xsl:when test="../@width">
+                    <xsl:value-of select="../@width" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>90%</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>; margin:auto; display:block;</xsl:text>
+        </xsl:attribute>
         <xsl:attribute name="data">
             <xsl:value-of select="$directory.images" />
             <xsl:text>/</xsl:text>
