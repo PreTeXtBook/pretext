@@ -37,6 +37,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:str="http://exslt.org/strings"
+    exclude-result-prefixes="b64"
     extension-element-prefixes="exsl date str"
 >
 
@@ -458,10 +459,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:attribute name="class">
                 <xsl:text>heading</xsl:text>
             </xsl:attribute>
-             <xsl:attribute name="alt">
+<!--              <xsl:attribute name="alt">
                 <xsl:apply-templates select="." mode="tooltip-text" />
             </xsl:attribute>
-             <xsl:attribute name="title">
+ -->             <xsl:attribute name="title">
                 <xsl:apply-templates select="." mode="tooltip-text" />
             </xsl:attribute>
             <xsl:apply-templates select="." mode="header-content" />
