@@ -1156,7 +1156,7 @@ the xsltproc executable.
                 <p>Figures, tables and side-by-sides that do not have a caption will automatically not receive a number.  So, in particular, a <c>figure</c> element can be used to place a centered <c>image</c>, with vertical breaks.  We interrupt this current list of figures to include a caption-less one, as a check that the numbering continues sequentially.</p>
 
                 <figure xml:id="figure-captionless-titleless-trefoil">
-                    <image source="images/trefoil.png" width="50%" />
+                    <image source="images/trefoil.png" />
                 </figure>
 
             </subsection>
