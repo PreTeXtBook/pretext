@@ -825,6 +825,13 @@ the xsltproc executable.
                 <less /><nbsp /><nbsp />
                 <greater /><nbsp /><nbsp /></p>
 
+                <p>We test the three <latex /> macros for these characters with a pair of aligned equations:</p>
+
+                <md>
+                    <mrow>a^2 + b^2\amp\lt c^2</mrow>
+                    <mrow>c^2\amp\gt a^2 + b^2</mrow>
+                </md>
+
                 <p>So as a summary of how to avoid conflicts with XML's reserved characters:</p>
 
                 <dl>
@@ -1156,7 +1163,7 @@ the xsltproc executable.
                 <p>Figures, tables and side-by-sides that do not have a caption will automatically not receive a number.  So, in particular, a <c>figure</c> element can be used to place a centered <c>image</c>, with vertical breaks.  We interrupt this current list of figures to include a caption-less one, as a check that the numbering continues sequentially.</p>
 
                 <figure xml:id="figure-captionless-titleless-trefoil">
-                    <image source="images/trefoil.png" />
+                    <image source="images/trefoil.png" width="100"/>
                 </figure>
 
             </subsection>

@@ -468,6 +468,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\)</xsl:text>
 </xsl:template>
 
+<!-- Macros -->
+<!-- We pick up user-supplied macros, and     -->
+<!-- add three of our own that are useful     -->
+<!-- for avoiding conflicts with XML reserved -->
+<!-- characters.  Even though MathJax defines -->
+<!-- \lt  and  \gt  we go ahead and do it     -->
+<!-- anyway for completeness.  We add these   -->
+<!-- last with a \newcommand to minimize the  -->
+<!-- possibility author defines them earlier  -->
+<xsl:template name="latex-macro-list">
+    <xsl:call-template name="sanitize-code">
+        <xsl:with-param name="raw-code">
+            <xsl:value-of select="/mathbook/docinfo/macros" />
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>\newcommand{\lt}{ &lt; }&#xa;</xsl:text>
+    <xsl:text>\newcommand{\gt}{ &gt; }&#xa;</xsl:text>
+    <xsl:text>\newcommand{\amp}{ &amp; }</xsl:text>
+</xsl:template>
+
 <!-- Sage Cells -->
 <!-- Contents are text manipulations (below)     -->
 <!-- Two abstract named templates in other files -->

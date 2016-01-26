@@ -919,7 +919,7 @@
 <xsl:template match="webwork//md">
     <xsl:text>&#xa;&#xa;&gt;&gt; </xsl:text>
     <xsl:choose>
-        <xsl:when test="contains(., '&amp;')">
+        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
             <xsl:text>[``</xsl:text>
             <xsl:call-template name="write-macros"/>
             <xsl:text>\begin{aligned}&#xa;</xsl:text>
@@ -945,15 +945,10 @@
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- MathJax automatically creates \lt, \gt, so as           -->
-<!-- to avoid escaping XML reserved characters               -->
-<!-- We add \amp to the mix to cover the other dangerous     -->
-<!-- XML reserved character.  We add it last with a          -->
-<!-- \newcommand to minimize author also defining this macro -->
 <xsl:template name="write-macros">
     <xsl:variable name="macros">
-        <xsl:value-of select="/mathbook/docinfo/macros" />
-        <xsl:text>\newcommand{\amp}{&amp;}&#xa;</xsl:text>
+        <xsl:call-template name="latex-macros" />
+        <xsl:text>&#xa;</xsl:text>
     </xsl:variable>
     <xsl:variable name="trimmed-start">
         <xsl:if test="contains($macros,'\newcommand{')">

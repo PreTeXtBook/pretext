@@ -1638,7 +1638,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: *identical* to LaTeX version, but for mode and knowl-type parameter     -->
 <xsl:template match="md" mode="body">
     <xsl:choose>
-        <xsl:when test="contains(., '&amp;')">
+        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
             <xsl:text>\begin{align*}&#xa;</xsl:text>
             <xsl:apply-templates select="mrow|intertext" />
             <xsl:text>\end{align*}</xsl:text>
@@ -1653,7 +1653,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="mdn" mode="body">
     <xsl:choose>
-        <xsl:when test="contains(., '&amp;')">
+        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
             <xsl:text>\begin{align}&#xa;</xsl:text>
             <xsl:apply-templates select="mrow|intertext" />
             <xsl:text>\end{align}</xsl:text>
@@ -1733,7 +1733,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: and md vs mdn templates to produce star/unstar            -->
 <xsl:template match="md/intertext">
     <xsl:choose>
-        <xsl:when test="contains(.., '&amp;')">
+        <xsl:when test="contains(.., '&amp;') or contains(., '\amp')">
             <xsl:text>\end{align*}&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -1744,7 +1744,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates />
     </p>
     <xsl:choose>
-        <xsl:when test="contains(.., '&amp;')">
+        <xsl:when test="contains(.., '&amp;') or contains(., '\amp')">
             <xsl:text>\begin{align*}&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -1755,7 +1755,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="mdn/intertext">
     <xsl:choose>
-        <xsl:when test="contains(.., '&amp;')">
+        <xsl:when test="contains(.., '&amp;') or contains(., '\amp')">
             <xsl:text>\end{align}&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -1766,7 +1766,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates />
     </p>
     <xsl:choose>
-        <xsl:when test="contains(.., '&amp;')">
+        <xsl:when test="contains(.., '&amp;') or contains(., '\amp')">
             <xsl:text>\begin{align}&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -4198,17 +4198,11 @@ $(function () {
 </xsl:template>
 
 <!-- LaTeX Macros -->
-<!-- In a hidden div, for near the top of the page           -->
-<!-- MathJax automatically creates \lt, \gt, so as           -->
-<!-- to avoid escaping XML reserved characters               -->
-<!-- We add \amp to the mix to cover the other dangerous     -->
-<!-- XML reserved character We add it last with a            -->
-<!-- \newcommand to minimize author also defining this macro -->
+<!-- In a hidden div, for near the top of the page, as math -->
 <xsl:template name="latex-macros">
     <div style="display:none;">
     <xsl:text>\(</xsl:text>
-    <xsl:value-of select="/mathbook/docinfo/macros" />
-    <xsl:text>\newcommand{\amp}{&amp;}&#xa;</xsl:text>
+    <xsl:call-template name="latex-macro-list" />
     <xsl:text>\)</xsl:text>
     </div>
 </xsl:template>

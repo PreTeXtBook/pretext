@@ -907,24 +907,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.preamble.late" />
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="/mathbook/docinfo/macros">
-        <xsl:text>%% Begin: Author-provided macros&#xa;</xsl:text>
-        <xsl:text>%% (From  docinfo/macros  element)&#xa;</xsl:text>
-        <xsl:call-template name="sanitize-code">
-            <xsl:with-param name="raw-code" select="/mathbook/docinfo/macros" />
-        </xsl:call-template>
-        <xsl:text>%% End: Author-provided macros&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:text>%% XML Reserved Character Macros&#xa;</xsl:text>
-    <xsl:text>%% These come at the very end of the preamble as \newcommand&#xa;</xsl:text>
-    <xsl:text>%% so they will raise LaTeX errors if defined earlier by&#xa;</xsl:text>
-    <xsl:text>%% the author, and there is no easy way to redefine them&#xa;</xsl:text>
-    <xsl:text>%% First, two nonstandard macros that MathJax supports automatically&#xa;</xsl:text>
-    <xsl:text>%% so we need only define them for pure LaTeX use&#xa;</xsl:text>
-    <xsl:text>\newcommand{\lt}{&lt;}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\gt}{&gt;}&#xa;</xsl:text>
-    <xsl:text>%% A third macro is a convenience to avoid escaping ampersands in math mode&#xa;</xsl:text>
-    <xsl:text>\newcommand{\amp}{&amp;}&#xa;</xsl:text>
+    <xsl:text>%% Begin: Author-provided macros&#xa;</xsl:text>
+    <xsl:text>%% (From  docinfo/macros  element)&#xa;</xsl:text>
+    <xsl:text>%% Plus three from MBX for XML characters&#xa;</xsl:text>
+    <xsl:call-template name="latex-macro-list" />
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>%% End: Author-provided macros&#xa;</xsl:text>
 </xsl:template>
 
 <!-- LaTeX postamble is common for books, articles and letters      -->
@@ -2047,7 +2035,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Output follows source line breaks                                           -->
 <xsl:template match="md">
     <xsl:choose>
-        <xsl:when test="contains(., '&amp;')">
+        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
             <xsl:text>\begin{align*}&#xa;</xsl:text>
             <xsl:apply-templates select="mrow|intertext" />
             <xsl:text>\end{align*}</xsl:text>
@@ -2062,7 +2050,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="mdn">
     <xsl:choose>
-        <xsl:when test="contains(., '&amp;')">
+        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
             <xsl:text>\begin{align}&#xa;</xsl:text>
             <xsl:apply-templates select="mrow|intertext" />
             <xsl:text>\end{align}</xsl:text>

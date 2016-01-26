@@ -297,18 +297,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </exsl:document>
 </xsl:template>
 
-<!-- Macros, escape backslashes, join lines,                 -->
-<!-- wrap in string, dollars, wrap as a cell                 -->
-<!-- MathJax automatically creates \lt, \gt, so as           -->
-<!-- to avoid escaping XML reserved characters               -->
-<!-- We add \amp to the mix to cover the other dangerous     -->
-<!-- XML reserved character.  We add it last with a          -->
-<!-- \newcommand to minimize author also defining this macro -->
-<!-- TODO: sanitize left margin              -->
+<!-- Macros, escape backslashes, join lines, -->
+<!-- wrap in string, dollars, wrap as a cell -->
 <xsl:template name="load-macros">
     <xsl:variable name="macros">
-        <xsl:value-of select="/mathbook/docinfo/macros" />
-        <xsl:text>\newcommand{\amp}{&amp;}</xsl:text>
+        <xsl:call-template name="latex-macros" />
     </xsl:variable>
     <xsl:call-template name="markdown-cell">
         <xsl:with-param name="content">
@@ -701,7 +694,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Output follows source line breaks                                           -->
 <xsl:template match="md">
     <xsl:choose>
-        <xsl:when test="contains(., '&amp;')">
+        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
             <xsl:text>\\begin{align*}\n</xsl:text>
             <xsl:apply-templates select="mrow|intertext" />
             <xsl:text>\\end{align*}</xsl:text>
@@ -716,7 +709,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="mdn">
     <xsl:choose>
-        <xsl:when test="contains(., '&amp;')">
+        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
             <xsl:text>\\begin{align}\n</xsl:text>
             <xsl:apply-templates select="mrow|intertext" />
             <xsl:text>\\end{align}</xsl:text>
@@ -735,7 +728,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />
             <xsl:choose>
-                <xsl:when test="contains(., '&amp;')">
+                <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
                     <xsl:text>\\begin{align}\n</xsl:text>
                     <xsl:apply-templates select="mrow|intertext" />
                     <xsl:text>\\end{align}</xsl:text>
@@ -757,7 +750,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />
             <xsl:choose>
-                <xsl:when test="contains(., '&amp;')">
+                <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
                     <xsl:text>\\begin{align}\n</xsl:text>
                     <xsl:apply-templates select="mrow|intertext" />
                     <xsl:text>\\end{align}</xsl:text>
