@@ -301,7 +301,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- wrap in string, dollars, wrap as a cell -->
 <xsl:template name="load-macros">
     <xsl:variable name="macros">
-        <xsl:call-template name="latex-macros" />
+        <xsl:call-template name="latex-macro-list" />
     </xsl:variable>
     <xsl:call-template name="markdown-cell">
         <xsl:with-param name="content">
