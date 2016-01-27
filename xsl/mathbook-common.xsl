@@ -849,6 +849,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
      </xsl:choose>
 </xsl:template>
 
+<!-- Prepending Strings -->
+<!-- Add  count  copies of the string  pad  to  each line of  text -->
+<!-- Presumes  text  has a newline character at the very end       -->
+<!-- Note: this is not in use and has seen only limited testing    -->
+<xsl:template name="prepend-string">
+    <xsl:param name="text" />
+    <xsl:param name="pad" />
+    <xsl:param name="count" select="1" />
+    <xsl:variable name="bigpad">
+        <xsl:call-template name="duplicate-string">
+            <xsl:with-param name="text" select="$pad" />
+            <xsl:with-param name="count" select="$count" />
+        </xsl:call-template>
+    </xsl:variable>
+    <!-- Quit when string becomes empty -->
+    <xsl:if test="string-length($text)">
+        <xsl:variable name="first-line" select="substring-before($text, '&#xa;')" />
+        <xsl:value-of select="$bigpad" />
+        <xsl:value-of select="$first-line" />
+        <xsl:text>&#xa;</xsl:text>
+        <!-- recursive call on remaining lines -->
+        <xsl:call-template name="prepend-string">
+            <xsl:with-param name="text" select="substring-after($text, '&#xa;')" />
+            <xsl:with-param name="pad" select="$bigpad" />
+            <xsl:with-param name="count" select="1" />
+        </xsl:call-template>
+    </xsl:if>
+</xsl:template>
+
+
 <!-- Date and Time Functions -->
 <!-- http://stackoverflow.com/questions/1437995/how-to-convert-2009-09-18-to-18th-sept-in-xslt -->
 <!-- http://remysharp.com/2008/08/15/how-to-default-a-variable-in-xslt/ -->
