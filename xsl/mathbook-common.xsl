@@ -157,7 +157,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="sage program console" />
 <xsl:strip-space elements="exercisegroup" />
 <xsl:strip-space elements="note" />  <!-- TODO: biblio, record, etc too -->
-<xsl:strip-space elements="ul ol dl" />
+<xsl:strip-space elements="ul ol dl li" />
 <xsl:strip-space elements="md mdn" />
 <xsl:strip-space elements="sage figure listing index" />
 <xsl:strip-space elements="sidebyside paragraphs" />

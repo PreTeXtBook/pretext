@@ -57,10 +57,6 @@
 <xsl:param name="pg.answer.format.help" select="'yes'" />
 
 
-<!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
-<xsl:strip-space elements="li" />
-
-
 <!-- ################## -->
 <!-- Top-Down Structure -->
 <!-- ################## -->
