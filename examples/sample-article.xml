@@ -1520,101 +1520,157 @@ the xsltproc executable.
             <subsection>
                 <title>Lists, Generally</title>
 
-                <p>This section contains nested lists, to demonstrate how they get assigned labels (numbering, symbols).  First we have a list with no customization and multiple levels to test the defaults.  <latex /> allows a maximum of four levels of ordered/numbered lists, and a total of six levels if some unordered lists are mixed in.  The second-level defaults (lower-case Latin) are formatted slightly different in <latex /> versus HTML.  The HTML style is not easy to adjust, but you can  specify the <latex /> version to match if it is important.</p>
+                <p>This section contains nested lists, to demonstrate how they get assigned labels (numbering, symbols).  But we begin with two simple lists, demonstrating an ordered list and an unordered list.  Se the end of section for an example of a description list.  Since Jupyter notebooks use markdown syntax, their lists are less flexible.  So some assertions here may be wrong when viewed as a Jupyter notebook.</p>
 
                 <ol>
-                    <li>Level 1, first.</li>
-                    <li xml:id="list-two">Level 1, second.<ol>
-                        <li>Level 2, first.</li>
-                        <li>Level 2, second.<ol>
-                                <li>Level 3, first.</li>
-                                    <li xml:id="list-two-two-two">Level 3, second.<ol>
-                                        <li>Level 4, first.</li>
-                                        <li>Level 4, second.</li>
-                                        <li xml:id="list-two-two-two-three">Level 4, third.</li>
-                                    </ol></li>
-                                <li>Level 3, third.</li>
-                            </ol></li>
-                        <li>Level 2, third.</li>
-                    </ol></li>
-                    <li>Level 1, third.</li>
+                    <li><p>First.</p></li>
+                    <li><p>Second.</p></li>
+                    <li><p>Third.</p></li>
+                </ol>
+
+                <ul>
+                    <li><p>Red</p></li>
+                    <li><p>Green</p></li>
+                    <li><p>Yellow</p></li>
+                    <li><p>Purple</p></li>
+                </ul>
+
+                <p>Next, we have a list with no customization and multiple levels to test the defaults.  <latex /> allows a maximum of four levels of ordered/numbered lists, and a total of six levels if some unordered lists are mixed in.  The second-level defaults (lower-case Latin) are formatted slightly different in <latex /> versus HTML.  The HTML style is not easy to adjust, but you can  specify the <latex /> version to match if it is important.  The default order of the labels in Markdown/Jupyter (Arabic, Latin, latin, roman) is different than for <latex /> and HTML (Arabic, latin, roman, Latin), so cross-references are not correct.</p>
+
+                <ol>
+                    <li><p>Level 1, first.</p></li>
+                    <li xml:id="list-two">
+                        <p>Level 1, second.</p>
+                        <ol>
+                            <li><p>Level 2, first.</p></li>
+                            <li>
+                                <p>Level 2, second.</p>
+                                <ol>
+                                    <li><p>Level 3, first.</p></li>
+                                    <li xml:id="list-two-two-two">
+                                        <p>Level 3, second.</p>
+                                        <ol>
+                                            <li><p>Level 4, first.</p></li>
+                                            <li><p>Level 4, second.</p></li>
+                                            <li xml:id="list-two-two-two-three"><p>Level 4, third.</p></li>
+                                        </ol>
+                                    </li>
+                                    <li><p>Level 3, third.</p></li>
+                                </ol>
+                            </li>
+                        <li><p>Level 2, third.</p></li>
+                        </ol>
+                    </li>
+                    <li><p>Level 1, third.</p></li>
                 </ol>
 
                 <p>Items in ordered lists may be be give an <c>xml:id</c> and then may be the target of an <c>xref</c>.  We test three here, referencing down into the hierarchy above.  Level 1, second: <xref ref="list-two" />.  Level 3, second: <xref ref="list-two-two-two" />.  Level 4, third: <xref ref="list-two-two-two-three" />.</p>
 
-                <p>And now a four-level deep unordered list with the default labels supplied by MBX (disc, circle, square, disc).</p>
+                <p>And now a four-level deep unordered list with the default labels supplied by MBX (disc, circle, square, disc).  Again, the defalt order for Markdown/Jupyter (disc, square, circle, circle) is different than for <latex /> and HTML (disc, circle, square, disc)</p>
 
                 <ul>
-                    <li>Level 1, first.</li>
-                    <li>Level 1, second.<ul>
-                        <li>Level 2, first.</li>
-                        <li>Level 2, second.<ul>
-                                <li>Level 3, first.</li>
-                                    <li>Level 3, second.<ul>
-                                        <li>Level 4, first.</li>
-                                        <li>Level 4, second.</li>
-                                        <li>Level 4, third.</li>
-                                    </ul></li>
-                                <li>Level 3, third.</li>
-                            </ul></li>
-                        <li>Level 2, third.</li>
-                    </ul></li>
-                    <li>Level 1, third.</li>
+                    <li><p>Level 1, first.</p></li>
+                    <li>
+                        <p>Level 1, second.</p>
+                        <ul>
+                            <li><p>Level 2, first.</p></li>
+                            <li>
+                                <p>Level 2, second.</p>
+                                <ul>
+                                    <li><p>Level 3, first.</p></li>
+                                    <li>
+                                        <p>Level 3, second.</p>
+                                        <ul>
+                                            <li><p>Level 4, first.</p></li>
+                                            <li><p>Level 4, second.</p></li>
+                                            <li><p>Level 4, third.</p></li>
+                                        </ul>
+                                    </li>
+                                    <li><p>Level 3, third.</p></li>
+                                </ul>
+                            </li>
+                            <li><p>Level 2, third.</p></li>
+                        </ul>
+                    </li>
+                    <li><p>Level 1, third.</p></li>
                 </ul>
 
                 <p>And a total of six levels with a mix of ordered and unordered lists, the most that out-of-the-box-<latex /> is able to handle.</p>
 
                 <ol>
-                    <li>Level 1, first.</li>
-                    <li>Level 1, second.<ol>
-                        <li>Level 2, first.</li>
-                        <li>Level 2, second.<ul>
-                                <li>Level 3, first.</li>
-                                    <li>Level 3, second.<ol>
-                                        <li>Level 4, first.</li>
-                                        <li>Level 4, second.<ol>
-                                            <li>Level 5, first.</li>
-                                            <li>Level 5, second.<ul>
-                                                <li>Level 6, first.</li>
-                                                <li>Level 6, second.</li>
-                                                <li>Level 6, third.</li>
-                                            </ul></li>
-                                            <li>Level 5, third.</li>
-                                        </ol></li>
-                                        <li>Level 4, third.</li>
-                                    </ol></li>
-                                <li>Level 3, third.</li>
-                            </ul></li>
-                        <li>Level 2, third.</li>
-                    </ol></li>
-                    <li>Level 1, third.</li>
+                    <li><p>Level 1, first.</p></li>
+                    <li>
+                        <p>Level 1, second.</p>
+                        <ol>
+                            <li><p>Level 2, first.</p></li>
+                            <li>
+                                <p>Level 2, second.</p>
+                                <ul>
+                                    <li><p>Level 3, first.</p></li>
+                                    <li>
+                                        <p>Level 3, second.</p>
+                                        <ol>
+                                            <li><p>Level 4, first.</p></li>
+                                            <li>
+                                                <p>Level 4, second.</p>
+                                                <ol>
+                                                    <li><p>Level 5, first.</p></li>
+                                                    <li>
+                                                        <p>Level 5, second.</p>
+                                                        <ul>
+                                                            <li><p>Level 6, first.</p></li>
+                                                            <li><p>Level 6, second.</p></li>
+                                                            <li><p>Level 6, third.</p></li>
+                                                        </ul>
+                                                    </li>
+                                                    <li><p>Level 5, third.</p></li>
+                                                </ol>
+                                            </li>
+                                            <li><p>Level 4, third.</p></li>
+                                        </ol>
+                                    </li>
+                                    <li><p>Level 3, third.</p></li>
+                                </ul>
+                            </li>
+                            <li><p>Level 2, third.</p></li>
+                        </ol>
+                    </li>
+                    <li><p>Level 1, third.</p></li>
                 </ol>
 
-                <p>Now, nested lists with the defaults replaced by custom choices.  First, an ordered list, three deep, upper Roman numerals, then upper-case Latin, then more traditional Arabic numerals on the three elements of the third level.  Note the adornments of the labels will be rendered in LaTeX, but not in HTML.</p>
+                <p>Now, nested lists with the defaults replaced by custom choices.  First, an ordered list, three deep, upper Roman numerals, then upper-case Latin, then more traditional Arabic numerals on the three elements of the third level.  Note the adornments of the labels will be rendered in LaTeX, but not in HTML, and the label specifications have no effect in a Jupyter notebook.</p>
 
                 <ol label="*I*">
-                    <li>Level 1, first.</li>
-                    <li>Level 1, second.<ol label="++A">
-                        <li>Level 2, first.</li>
-                        <li>Level 2, second.<ol label="1)">
-                                <li>Level 3, first.</li>
-                                <li>Level 3, second.</li>
-                                <li>Level 3, third.</li>
-                            </ol></li>
-                        <li>Level 2, third.</li>
-                    </ol></li>
-                    <li>Level 1, third.</li>
+                    <li><p>Level 1, first.</p></li>
+                    <li>
+                        <p>Level 1, second.</p>
+                        <ol label="++A">
+                            <li><p>Level 2, first.</p></li>
+                            <li>
+                                <p>Level 2, second.</p>
+                                <ol label="1)">
+                                    <li><p>Level 3, first.</p></li>
+                                    <li><p>Level 3, second.</p></li>
+                                    <li><p>Level 3, third.</p></li>
+                                </ol>
+                            </li>
+                            <li><p>Level 2, third.</p></li>
+                        </ol>
+                    </li>
+                    <li><p>Level 1, third.</p></li>
                 </ol>
 
                 <p>A nested unordered list, with labels given as squares on the outer list and nothing (blank) on the inner lists.</p>
 
                 <ul label="square">
-                    <li>Level 1, first.</li>
-                    <li>Level 1, second.<ul label="">
-                        <li>Level 2, first.</li>
-                        <li>Level 2, second.</li>
-                    </ul></li>
-                    <li>Level 1, third.</li>
+                    <li><p>Level 1, first.</p></li>
+                    <li><p>Level 1, second.</p>
+                        <ul label="">
+                            <li><p>Level 2, first.</p></li>
+                            <li><p>Level 2, second.</p></li>
+                        </ul>
+                    </li>
+                    <li><p>Level 1, third.</p></li>
                 </ul>
 
                 <p>The next definition is very poorly worded.  It is meant to test leading off with a list (bad form), for which <latex /> normally begins right after the heading.</p>
