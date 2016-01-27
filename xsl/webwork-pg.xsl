@@ -942,10 +942,7 @@
 </xsl:template>
 
 <xsl:template name="write-macros">
-    <xsl:variable name="macros">
-        <xsl:call-template name="latex-macros" />
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:variable>
+    <xsl:param name="macros" select="/mathbook/docinfo/macros"/>
     <xsl:variable name="trimmed-start">
         <xsl:if test="contains($macros,'\newcommand{')">
             <xsl:value-of select="substring-after($macros,'\newcommand{')"/>
