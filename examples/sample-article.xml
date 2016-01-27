@@ -738,6 +738,7 @@ the xsltproc executable.
             <p>Tables can get quite complex.  Simple ones are simpler, such as this example of numerical computations for Euler's method.</p>
 
             <table xml:id="table-euler1">
+                <caption>Euler's approximation for Duffing's Equation with <m>h = 0.2</m></caption>
                 <tabular top="major" halign="center">
                     <row bottom="minor">
                         <cell>  <m>i</m></cell>
@@ -758,7 +759,6 @@ the xsltproc executable.
                     <row bottom="medium">
                           <cell>10</cell><cell>2.00</cell><cell>0.8123</cell><cell>0.3900</cell></row>
                 </tabular>
-            <caption>Euler's approximation for Duffing's Equation with <m>h = 0.2</m></caption>
             </table>
 
         </section>
@@ -2351,8 +2351,8 @@ the xsltproc executable.
             <p>Embedded videos can make sense for a web version of your document. This is a video promoting the University of Puget Sound to potential new students.  Support is limited to WebM format initially, mp4 support will be easy to add.  This may require an HTML5 capable browser, such as Chrome, to render properly.</p>
 
             <figure>
-                <video source="images/ups-visitor-guide-360.mp4" />
                 <caption>University of Puget Sound Promotional Video</caption>
+                <video source="images/ups-visitor-guide-360.mp4" />
             </figure>
 
         </section>
@@ -2515,6 +2515,7 @@ the xsltproc executable.
             <p>Here are some sample characters from Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url>, which seem to be available in a default TeXLive installation.  The sample entries below will mostly be empty if you do not process this file with <c>xelatex</c>.</p>
 
             <table xml:id="table-unicode-samples">
+                <caption>Sample Unicode Characters</caption>
                 <tabular top="major">
                     <row bottom="minor"><cell>Name</cell><cell>Range</cell><cell>Samples</cell><cell>LaTeX</cell></row>
                     <row>
@@ -2554,7 +2555,6 @@ the xsltproc executable.
                         <cell><m>\approx</m>TeXLive</cell>
                     </row>
                 </tabular>
-            <caption>Sample Unicode Characters</caption>
             </table>
 
             <paragraphs>
@@ -2769,64 +2769,64 @@ the xsltproc executable.
 
                 <p>Figures can be put side-by-side using the <c>sidebyside</c> element; if a <q>global</q> caption is present, then the figures will be labelled as (a), (b), (c), etc; for example, see the subfigures in <xref ref="fig-sidebyside-global" autoname="yes"/>. You can, of course, reference the subfigures individually, for example: <xref ref="fig-sidebyside-subfigure" autoname="yes"/>.</p>
 
-                <p>If a global caption is <emph>not</emph> present, then the figures will be labeled regularly, as for example, <xref ref="regular-figure" autoname="yes"/> and <xref ref="another-regular-figure" autoname="yes"/></p>
+                <p>If a global caption is <em>not</em> present, then the figures will be labeled regularly, as for example, <xref ref="regular-figure" autoname="yes"/> and <xref ref="another-regular-figure" autoname="yes"/></p>
 
-                <p>The <c>width</c> can be specified for each child, or omitted, in which case it will be calculated automatically based on the <emph>remaining</emph> width available; for finer control, it is generally best to specify the width.</p>
+                <p>The <c>width</c> can be specified for each child, or omitted, in which case it will be calculated automatically based on the <em>remaining</em> width available; for finer control, it is generally best to specify the width.</p>
 
                 <sidebyside xml:id="fig-sidebyside-global">
+                    <caption>Side-by-side Figure, with subfigure children.</caption>
                     <figure width="25.67%" xml:id="fig-sidebyside-subfigure">
+                        <caption></caption>
                         <image source="images/trefoil.png">
-                        <description>Trefoil image</description>
+                            <description>Trefoil image</description>
                         </image>
-                        <caption></caption>
                     </figure>
                     <figure width="25%">
-                        <image source="images/trefoil.png"/>
                         <caption></caption>
+                        <image source="images/trefoil.png"/>
                     </figure>
-                    <caption>Side-by-side Figure, with subfigure children.</caption>
                 </sidebyside>
 
                 <sidebyside>
+                    <caption>Side-by-side Figure, with subfigure children.</caption>
                     <figure width="50%">
-                        <image source="images/trefoil.png"/>
                         <caption>width=50<percent/></caption>
+                        <image source="images/trefoil.png"/>
                     </figure>
                     <figure width="25%">
-                        <image source="images/trefoil.png"/>
                         <caption>width=25<percent/></caption>
+                        <image source="images/trefoil.png"/>
                     </figure>
-                    <caption>Side-by-side Figure, with subfigure children.</caption>
                 </sidebyside>
 
                 <sidebyside>
+                    <caption>Widths can be calculated automatically</caption>
                     <figure>
-                        <image source="images/trefoil.png"/>
                         <caption></caption>
+                        <image source="images/trefoil.png"/>
                     </figure>
                     <figure>
-                        <image source="images/trefoil.png"/>
                         <caption></caption>
+                        <image source="images/trefoil.png"/>
                     </figure>
                     <figure>
-                    <image source="images/trefoil.png"/>
                     <caption></caption>
+                    <image source="images/trefoil.png"/>
                     </figure>
-                <caption>Widths can be calculated automatically</caption>
                 </sidebyside>
 
                 <sidebyside>
                     <figure xml:id="regular-figure">
+                        <caption>Side-by-side Figures</caption>
                         <image source="images/trefoil.png"/>
-                        <caption>Side-by-side Figures.</caption>
                     </figure>
                     <figure xml:id="another-regular-figure">
+                        <caption>Regular numbering</caption>
                         <image source="images/trefoil.png"/>
-                        <caption>Regular numbering.</caption>
                     </figure>
                     <figure width="50%">
+                        <caption>Regular numbering</caption>
                         <image source="images/trefoil.png"/>
-                        <caption>Regular numbering.</caption>
                     </figure>
                 </sidebyside>
             </subsection>
@@ -2856,16 +2856,16 @@ the xsltproc executable.
 
                 <sidebyside>
                     <figure width="33%" valign="middle">
-                        <image source="images/trefoil.png"/>
                         <caption>Middle</caption>
+                        <image source="images/trefoil.png"/>
                     </figure>
                     <figure width="17%" valign="top">
-                        <image source="images/trefoil.png"/>
                         <caption>Top</caption>
+                        <image source="images/trefoil.png"/>
                     </figure>
                     <figure width="50%" valign="middle">
-                        <image source="images/trefoil.png"/>
                         <caption>Middle</caption>
+                        <image source="images/trefoil.png"/>
                     </figure>
                 </sidebyside>
 
@@ -2915,8 +2915,8 @@ the xsltproc executable.
                         <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text; cross reference: <xref ref="text-next-to-figure" autoname="yes"/> and math: <m>x^2</m></p>
                     </paragraphs>
                     <figure width="20%" valign="top" xml:id="text-next-to-figure">
-                        <image source="images/trefoil.png" height="30" />
                         <caption>Text next to a figure</caption>
+                        <image source="images/trefoil.png" height="30" />
                     </figure>
                 </sidebyside>
             </subsection>
@@ -3210,8 +3210,8 @@ the xsltproc executable.
                     </table>
                     <!--  -->
                     <figure xml:id="figure-next-table">
+                        <caption>Figure next to a Table</caption>
                         <image source="images/trefoil.png"/>
-                            <caption>Figure next to a Table</caption>
                     </figure>
                 </sidebyside>
             </subsection>
