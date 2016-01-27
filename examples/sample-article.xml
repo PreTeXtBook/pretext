@@ -467,14 +467,9 @@ the xsltproc executable.
                 </subsubsection>
 
                 <subsubsection>
-
-                    <p>This subsubsection has not been given a title.  That's OK.</p>
-                </subsubsection>
-
-                <subsubsection>
                     <title></title>
 
-                    <p>This subsubsection has a title in the source, but it is empty.  That's OK, too.</p>
+                    <p>This subsubsection has a title in the source, but it is empty.  That's OK, but not advisable since titles get used lots of places (such as page headers and the table of contents).</p>
                 </subsubsection>
 
                 <subsubsection>
@@ -1499,10 +1494,15 @@ the xsltproc executable.
 
             </exercises>
 
-            <p>Another subsection of exercises, which begins and ends with an exercise group, and has two consecutive exercise groups.</p>
-
             <exercises>
                 <title>More Exercises</title>
+
+                <exercise>
+                    <statement>
+                        <p>This is not a real exercise, we just want to explain that this is another subsection of exercises, which has two consecutive exercise groups.</p>
+                    </statement>
+                </exercise>
+
                 <exercisegroup>
                     <introduction><p>Introduction to first exercise group.</p></introduction>
                     <exercise>
@@ -1510,6 +1510,7 @@ the xsltproc executable.
                     </exercise>
                     <conclusion><p>Conclusion to first exercise group.</p></conclusion>
                 </exercisegroup>
+
                 <exercisegroup>
                     <introduction><p>Introduction to second exercise group.</p></introduction>
                     <exercise>
@@ -1520,6 +1521,7 @@ the xsltproc executable.
                     </exercise>
                     <conclusion><p>Conclusion to second exercise group.</p></conclusion>
                 </exercisegroup>
+
             </exercises>
 
         </section>
@@ -2277,6 +2279,17 @@ the xsltproc executable.
                <p>This example also checks that the total number of columns is correctly computed from the first row, which features several <c>colspan</c> attributes.</p>
            </example>
 
+            <p>A bare minimum table (one row with one cell) to test edge cases:</p>
+
+            <table xml:id="table-minimal">
+                <caption>One entry table</caption>
+                <tabular top="medium">
+                    <row bottom="medium" left="minor">
+                        <cell right="minor">One</cell>
+                    </row>
+                </tabular>
+            </table>
+
         </section>
 
 
@@ -2756,8 +2769,8 @@ the xsltproc executable.
             <title>Units of Measure</title>
 
             <p>Units of measure can be given xml treatment too with the <c>quantity</c> element. In <latex />, the <c>siunitx</c> package is loaded to achive unit handling. Since that package only offers SI units, some other common units will be added by MBX in the preamble. In HTML, the capabilities of <c>siunitx</c> are simulated, weakly. Note that at present, you should not attempt to use the <c>quantity</c> element within a math environment.</p>
-            <p>The value of gravitational constant <m>g</m> is <quantity><mag>9.8</mag><unit base="meter"/><per base="second" exp="2"/></quantity>. Force is measured in <quantity><unit prefix="kilo" base="gram"/><unit base="meter"/><per base="second" exp="2"/></quantity>, also known as one <quantity><unit base="newton"/></quantity>. A quantity with rather ridiculous units is <quantity><mag>23</mag><per base='degreeCelsius'/><per base='second' exp='2'/><unit prefix='micro' base='hectare' exp='23'/></quantity>. One <quantity><unit base="hertz"/></quantity> is the same as <quantity><per base='second'/></quantity>. You can have a unitless quantity, like <quantity><mag>42</mag></quantity>, which may help with consistency between such numbers and units in the <latex /> output. Some non-SI units are available, such as the absurd <quantity><unit base="degreeFahrenheit"/><unit base="foot"/><unit base="pound"/><per base="gallon"/></quantity>.</p>
-            <p>For a full list of the allowed units and prefixes, see <c>mathbook-units.xsl</c>. If you have a need for more units, they need to be added to <c>mathbook-units.xsl</c> in the section that deals with units which are not part of <c>siunitx</c> by default.</p>
+            <p>The value of gravitational constant <m>g</m> is <quantity><mag>9.8</mag><unit base="meter"/><per base="second" exp="2"/></quantity>. Force is measured in <quantity><unit prefix="kilo" base="gram"/><unit base="meter"/><per base="second" exp="2"/></quantity>, also known as one <quantity><unit base="newton"/></quantity>. A quantity with rather ridiculous units is <quantity><mag>23</mag><unit prefix='micro' base='hectare' exp='23'/><per base='degreeCelsius'/><per base='second' exp='2'/></quantity>. One <quantity><unit base="hertz"/></quantity> is the same as <quantity><per base='second'/></quantity>. You can have a unitless quantity, like <quantity><mag>42</mag></quantity>, which may help with consistency between such numbers and units in the <latex /> output. Some non-SI units are available, such as the absurd <quantity><unit base="degreeFahrenheit"/><unit base="foot"/><unit base="pound"/><per base="gallon"/></quantity>.</p>
+            <p>For a full list of the allowed units and prefixes, see <c>mathbook-units.xsl</c>. If you have a need for more units, they need to be added to <c>mathbook-units.xsl</c> in the section that deals with units which are not part of <c>siunitx</c> by default.  Note that the <c>mag</c> element should come first, followed by the <c>unit</c> element, followed by the <c>per</c> element.</p>
 
         </section>
 
@@ -3370,7 +3383,7 @@ the xsltproc executable.
                     </paragraphs>
                 </sidebyside>
 
-                <p>You can even experiment with <emph>aligned</emph> equations in the <c>sidebyside</c> element.</p>
+                <p>You can even experiment with <em>aligned</em> equations in the <c>sidebyside</c> element.</p>
 
                 <sidebyside>
                     <paragraphs valign="middle">
@@ -3443,7 +3456,7 @@ the xsltproc executable.
             <subsection>
                 <title>One</title>
 
-                <introduction><p>A document leaf.</p></introduction>
+                <p>A document leaf.</p>
 
                 <theorem xml:id="theorem-number-01">
                     <title>First Theorem</title>
@@ -3465,7 +3478,7 @@ the xsltproc executable.
                 <subsubsection>
                     <title>Uno</title>
 
-                    <introduction><p>A document leaf.</p></introduction>
+                    <p>A document leaf.</p>
 
                     <theorem xml:id="theorem-number-03">
                         <title>First Theorem</title>
@@ -3482,7 +3495,7 @@ the xsltproc executable.
                 <subsubsection>
                     <title>Dos</title>
 
-                    <introduction><p>A document leaf.</p></introduction>
+                    <p>A document leaf.</p>
 
                     <theorem xml:id="theorem-number-05">
                         <title>First Theorem</title>
@@ -3501,7 +3514,7 @@ the xsltproc executable.
             <subsection>
                 <title>Three</title>
 
-                <introduction><p>A document leaf.</p></introduction>
+                <p>A document leaf.</p>
 
                 <theorem xml:id="theorem-number-07">
                     <title>First Theorem</title>
@@ -3536,7 +3549,7 @@ the xsltproc executable.
                 <subsubsection>
                     <title>Uno</title>
 
-                    <introduction><p>A document leaf.</p></introduction>
+                    <p>A document leaf.</p>
 
                     <theorem xml:id="theorem-number-09">
                         <title>First Theorem</title>
@@ -3553,7 +3566,7 @@ the xsltproc executable.
                 <subsubsection>
                     <title>Dos</title>
 
-                    <introduction><p>A document leaf.</p></introduction>
+                    <p>A document leaf.</p>
 
                     <theorem xml:id="theorem-number-11">
                         <title>First Theorem</title>
@@ -3586,7 +3599,7 @@ the xsltproc executable.
             <subsection>
                 <title>Five</title>
 
-                <introduction><p>A document leaf.</p></introduction>
+                <p>A document leaf.</p>
 
                 <theorem xml:id="theorem-number-13">
                     <title>First Theorem</title>
