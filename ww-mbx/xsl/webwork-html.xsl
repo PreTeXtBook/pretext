@@ -22,7 +22,6 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
-    xmlns:b64="https://github.com/ilyakharlamov/xslt_base64"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
     extension-element-prefixes="exsl date"
@@ -43,16 +42,6 @@
 <xsl:param name="webwork.userID" select="'anonymous'" />
 <xsl:param name="webwork.password" select="'anonymous'" />
 
-
-<!-- Base 64 Library, MIT License -->
-<!-- For encoding a problem string, copy/place    -->
-<!-- base64.xsl *and* base64_binarydatamap.xml    -->
-<!-- into mathbook "user" directory,              -->
-<!-- and use the "b64" name space                 -->
-<!-- https://github.com/ilyakharlamov/xslt_base64 -->
-<!-- Again, into mathbook "user" directory        -->
-<!-- Also copy   base64_binarydatamap.xml         -->
-<xsl:include href="./base64.xsl"/>
 
 <!-- Convert webwork problem content -->
 <!-- Apply imports to make content, then encode to base64               -->

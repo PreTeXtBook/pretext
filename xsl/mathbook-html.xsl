@@ -24,12 +24,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:b64="https://github.com/ilyakharlamov/xslt_base64"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
     extension-element-prefixes="exsl date"
 >
 
 <xsl:import href="./mathbook-common.xsl" />
+
+<!-- Base 64 Library, MIT License -->
+<!-- Used to encode WeBWork problems           -->
+<!-- Will also read  base64_binarydatamap.xml  -->
+<xsl:import href="./xslt_base64/base64.xsl"/>
 
 <!-- Intend output for rendering by a web browser -->
 <xsl:output method="xml" encoding="utf-8"/>
