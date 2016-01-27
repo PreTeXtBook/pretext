@@ -187,7 +187,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Mark unimplemented parts with [NI-elementname] -->
 <!-- cell level first -->
-<xsl:template match="ul|ol|dl|tabular">
+<xsl:template match="tabular">
     <xsl:call-template name="begin-markdown-cell" />
     <xsl:call-template name="begin-string" />
     <xsl:variable name="element-name" select="local-name(.)" />
@@ -460,6 +460,91 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
+<!-- Lists -->
+
+<!-- Note: maybe this goes into the markdown file, with adjustments? -->
+
+<!-- A top-level list goes into its own markdown cell -->
+<xsl:template match="ol[not(ancestor::ol or ancestor::ul or ancestor::dl)]|ul[not(ancestor::ol or ancestor::ul or ancestor::dl)]|dl[not(ancestor::ol or ancestor::ul or ancestor::dl)]">
+    <xsl:call-template name="markdown-cell">
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="li" />
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Nested lists get no infrastructure, -->
+<!-- we just process their items         -->
+<xsl:template match="ol|ul|dl">
+    <xsl:apply-templates select="li" />
+</xsl:template>
+
+<!-- Items of ordered lists, indented properly -->
+<xsl:template match="ol/li">
+    <xsl:call-template name="begin-string" />
+    <!-- indent 4 spaces per level, starting at zero -->
+    <xsl:variable name="level">
+        <xsl:apply-templates select="." mode="list-level" />
+    </xsl:variable>
+    <xsl:call-template name="duplicate-string">
+        <xsl:with-param name="text" select="'    '" />
+        <xsl:with-param name="count" select="$level - 1" />
+    </xsl:call-template>
+    <xsl:text>1.  </xsl:text>
+    <xsl:call-template name="end-string" />
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- Items of unordered lists, indented properly -->
+<xsl:template match="ul/li">
+    <xsl:call-template name="begin-string" />
+    <!-- indent 4 spaces per level -->
+    <xsl:variable name="level">
+        <xsl:apply-templates select="." mode="list-level" />
+    </xsl:variable>
+    <xsl:call-template name="duplicate-string">
+        <xsl:with-param name="text" select="'    '" />
+        <xsl:with-param name="count" select="$level - 1" />
+    </xsl:call-template>
+    <xsl:text>*   </xsl:text>
+    <xsl:call-template name="end-string" />
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- We write description lists items like unordered -->
+<!-- list items, but include the title in bold       -->
+<xsl:template match="dl/li">
+    <xsl:call-template name="begin-string" />
+    <!-- indent 4 spaces per level -->
+    <xsl:variable name="level">
+        <xsl:apply-templates select="." mode="list-level" />
+    </xsl:variable>
+    <xsl:call-template name="duplicate-string">
+        <xsl:with-param name="text" select="'    '" />
+        <xsl:with-param name="count" select="$level - 1" />
+    </xsl:call-template>
+    <xsl:text>*   </xsl:text>
+    <!-- bold, with trailing space -->
+    <xsl:text>**</xsl:text>
+    <xsl:apply-templates select="." mode="title-full" />
+    <xsl:text>** </xsl:text>
+    <xsl:call-template name="end-string" />
+    <xsl:apply-templates select="*[not(self::title)]" />
+</xsl:template>
+
+<!-- If list items only contain paragraphs and other lists, -->
+<!-- then every list will end with a paragraph (or the end  -->
+<!-- of a list, which is a paragraph).  The double newline  -->
+<!-- will interject a blank line between every list item    -->
+<!-- and between every paragraph, even if there are several -->
+<!-- in a list item.  We get one extra blank line at the    -->
+<!-- end of the cell, but that is no real problem.          -->
+<xsl:template match="li/p">
+    <xsl:call-template name="begin-string" />
+        <xsl:apply-templates />
+        <xsl:text>\n\n</xsl:text>
+    <xsl:call-template name="end-string" />
+</xsl:template>
 
 
 <!-- Sage code -->
