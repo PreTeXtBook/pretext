@@ -600,17 +600,23 @@ the xsltproc executable.
             -->
 
             <p>Because of the Fundamental Theorem, for every derivative we know, there is an antiderivative we might find useful.  Because of the Fundamental Theorem of Calculus, we recycle the <q><m>\int</m></q> symbol as notation for an antiderivative.</p>
+
             <ul cols="2">
-                <li><p>Derivatives<ol label="(a)">
-                    <li><p><m>\frac{d}{dx}x^n = nx^{n-1}</m></p></li>
-                    <li><p><m>\frac{d}{dx}e^x = e^x</m></p></li>
-                    <li><p><m>\frac{d}{dx}\cos(x) = -\sin(x)</m></p></li>
-                </ol></p></li>
-                <li><p>Antiderivatives<ol label="i)">
-                    <li><p><m>\indefiniteintegral{x^n}{x} = \displaystyle\frac{x^{n-1}}{n+1}\text{ if }n\neq -1</m></p></li>
-                    <li><p><m>\indefiniteintegral{e^x}{x} = e^x</m></p></li>
-                    <li><p><m>\indefiniteintegral{\sin(x)}{x} = -\cos(x)</m></p></li>
-                </ol></p></li>
+                <li>
+                    <p>Derivatives</p>
+                    <ol label="(a)">
+                        <li><p><m>\frac{d}{dx}x^n = nx^{n-1}</m></p></li>
+                        <li><p><m>\frac{d}{dx}e^x = e^x</m></p></li>
+                        <li><p><m>\frac{d}{dx}\cos(x) = -\sin(x)</m></p></li>
+                    </ol>
+                </li>
+                <li><p>Antiderivatives</p>
+                    <ol label="i)">
+                        <li><p><m>\indefiniteintegral{x^n}{x} = \displaystyle\frac{x^{n-1}}{n+1}\text{ if }n\neq -1</m></p></li>
+                        <li><p><m>\indefiniteintegral{e^x}{x} = e^x</m></p></li>
+                        <li><p><m>\indefiniteintegral{\sin(x)}{x} = -\cos(x)</m></p></li>
+                    </ol>
+                </li>
             </ul>
 
             <remark>
@@ -1703,11 +1709,13 @@ the xsltproc executable.
                     <statement>
                         <p>This exercise should have several parts, and labels should follow the defaults for second-level lists (since the exercise is numbered according to the top-level default).</p>
                         <ol>
-                            <li>Exercise 1, first part.</li>
-                            <li>Exercise 1, second part.<ol>
-                                <li xml:id="exercise-one-two-one">Exercise 1, second part, first refinement.</li>
-                            </ol></li>
-                            <li xml:id="exercise-one-three">Exercise 1, third part.</li>
+                            <li><p>Exercise 1, first part.</p></li>
+                            <li><p>Exercise 1, second part.</p>
+                                <ol>
+                                    <li xml:id="exercise-one-two-one"><p>Exercise 1, second part, first refinement.</p></li>
+                                </ol>
+                            </li>
+                            <li xml:id="exercise-one-three"><p>Exercise 1, third part.</p></li>
                         </ol>
                     </statement>
                 </exercise>
@@ -1785,9 +1793,9 @@ the xsltproc executable.
                     <note>
                         <p>Here is the annotation and an ordered list as part of that annotation.  (The lack of a space will be addressed with more work on references.)</p>
                         <ol>
-                            <li>Book 1, first part.</li>
-                            <li>Book 1, second part.</li>
-                            <li>Book 1, third part.</li>
+                            <li><p>Book 1, first part.</p></li>
+                            <li><p>Book 1, second part.</p></li>
+                            <li><p>Book 1, third part.</p></li>
                         </ol>
                     </note>
                 </biblio>
@@ -2382,8 +2390,8 @@ the xsltproc executable.
                 <statement>
                     <p>Can you prove Corollary<nbsp /><xref ref="corollary-FTC-derivative" /> directly?  If not consider that a problem could have several parts, which should be formatted as a second-level list, since the problems normally get numbered at the top level</p>
                     <ol>
-                        <li>Why is this result a Corollary?</li>
-                        <li>Could you interchange the Theorem and Corollary?</li>
+                        <li><p>Why is this result a Corollary?</p></li>
+                        <li><p>Could you interchange the Theorem and Corollary?</p></li>
                     </ol>
                 </statement>
                 <!-- A hint is a push in the right direction -->
@@ -2397,8 +2405,8 @@ the xsltproc executable.
                 <!-- The answer is just the end product -->
                 <answer xml:id="exercise-complicated-first-answer">
                     <ol>
-                        <li>It follows easily.</li>
-                        <li>Yes.</li>
+                        <li><p>It follows easily.</p></li>
+                        <li><p>Yes.</p></li>
                     </ol>
                 </answer>
                 <!-- A solution is everything that should be said -->
@@ -2691,16 +2699,17 @@ the xsltproc executable.
                     <p>On input of a positive integer <c>n</c> this algorithm will compute all the prime numbers up to, and including, <c>n</c>.  It was named for Eratosthenes of Cyrene (<circa /> 276 BC<ndash /><circa /> 195/194 BC) by Nicomachus (<circa /> 60<ndash /><circa /> 120 CE) in <booktitle>Introduction to Arithmetic</booktitle>. (<url href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Wikipedia</url>, 2015)</p>
 
                     <ol>
-                        <li>Input: <c>n</c></li>
-                        <li>Form the list of all integers from <c>2</c> to <c>n</c></li>
-                        <li>Set <c>p = 2</c></li>
-                        <li>While <c>p &lt; sqrt(n)</c>
+                        <li><p>Input: <c>n</c></p></li>
+                        <li><p>Form the list of all integers from <c>2</c> to <c>n</c></p></li>
+                        <li><p>Set <c>p = 2</c></p></li>
+                        <li><p>While <c>p &lt; sqrt(n)</c></p>
                             <ol label="1.">
-                                <li>If present, remove from the list multiples <c>2p, 3p, ...</c></li>
-                                <li>If <c>p</c> is now the last element of the list, stop</li>
-                                <li>Otherwise, set <c>p</c> to the element of the list immediately after current <c>p</c></li>
-                            </ol></li>
-                        <li>Output: the remaining elements of the list</li>
+                                <li><p>If present, remove from the list multiples <c>2p, 3p, ...</c></p></li>
+                                <li><p>If <c>p</c> is now the last element of the list, stop</p></li>
+                                <li><p>Otherwise, set <c>p</c> to the element of the list immediately after current <c>p</c></p></li>
+                            </ol>
+                        </li>
+                        <li><p>Output: the remaining elements of the list</p></li>
                     </ol>
                 </statement>
 
