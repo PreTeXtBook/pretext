@@ -2118,6 +2118,35 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:value-of select="0" />
 </xsl:template>
 
+<!-- To indent properly in markdown, we  -->
+<!-- need to count every type of list    -->
+<xsl:template match="*" mode="list-level">
+    <xsl:param name="level" select="0" />
+    <xsl:choose>
+        <xsl:when test="ancestor-or-self::ol or ancestor-or-self::ul or ancestor-or-self::dl">
+            <xsl:choose>
+                <!-- at a node to count -->
+                <xsl:when test="self::ol or self::ul or self::dl">
+                    <xsl:apply-templates select="parent::*" mode="list-level">
+                        <xsl:with-param name="level" select="$level + 1" />
+                    </xsl:apply-templates>
+                </xsl:when>
+                <!-- go up a level w/out incrementing-->
+                <xsl:otherwise>
+                    <xsl:apply-templates select="parent::*" mode="list-level">
+                        <xsl:with-param name="level" select="$level" />
+                    </xsl:apply-templates>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- now done, report level -->
+        <xsl:otherwise>
+            <xsl:value-of select="$level" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
 <!-- Labels of ordered lists have formatting codes, which  -->
 <!-- we detect here and pass on to other more specialized  -->
 <!-- templates for implementation specifics                -->
