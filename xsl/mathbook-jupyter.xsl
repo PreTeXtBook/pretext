@@ -718,9 +718,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- ####### -->
-<!-- Figures -->
-<!-- ####### -->
+<!-- ################## -->
+<!-- Figures and Tables-->
+<!-- ################## -->
 
 <xsl:template match="caption">
     <xsl:call-template name="begin-string" />
@@ -732,7 +732,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="end-string" />
 </xsl:template>
 
-<xsl:template match="figure">
+<xsl:template match="figure|table">
     <xsl:call-template name="markdown-cell">
         <xsl:with-param name="content">
             <xsl:apply-templates select="*[not(self::caption)]" />
