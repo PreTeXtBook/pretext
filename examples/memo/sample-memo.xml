@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2016 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- A sample memo -->
+<!-- (1) This example assumes 8.5 x 11 paper       -->
+<!-- (2) Requires customizing graphics files       -->
+<!-- (3) Conversion to LaTeX only                  -->
+<!-- (4) Many elements are optional                -->
+<!-- (5) pdflatex is superior for graphics formats -->
+<!-- (6) xelatex is superior for Unicode support   -->
+<!-- (7) no cc, typist in backmatter, send request -->
+<!-- (8) no running title on later pages yet       -->
+
+<!-- Copy sample graphics (masthead, intitals) to the directory where you compile LaTeX -->
+<!--                                                                                    -->
+<!-- $ xsltproc /path/to/mathbook/xsl/mathbook-latex.xsl /path/to/this-source-file.xml  -->
+<!--                                                                                    -->
+<!-- Look in current working directory for "organization-memo.tex" (see below)          -->
+
+<mathbook>
+    <!-- The docinfo element is like metadata, it mostly      -->
+    <!-- migrates various places, or gets used multiple times -->
+    <docinfo>
+        <!-- To customize your memo for your place, you can put scanned images      -->
+        <!-- anywhere on the page. PDF images seem to lead to the smallest files.   -->
+        <!-- pdflatex will automatically convert EPS files to PDF and leave         -->
+        <!-- the conversion behind, so you can harvest those, if desired            -->
+        <!--                                                                        -->
+        <!-- (llx, lly) is for placement:                                           -->
+        <!-- it is the desired lower-left corner of the image on the page, where    -->
+        <!-- (0, 0) is in the lower-left corner of the page and units are           -->
+        <!-- "true" points (72.27 points to the inch)                               -->
+        <!-- Specify a width, there is no provision for changing the aspect ratio   -->
+        <!--                                                                        -->
+        <!-- Graphics files need to live in the same directory as the source        -->
+        <!-- (or down a relative path), or can go into (any) directory of your      -->
+        <!-- personal texmf tree (be sure to run texhash or mktexlsr to index them) -->
+        
+        <!-- Example masthead -->
+        <!-- Designed at 300dpi, 4 inches wide, 5/12 inches high, with a 88px font  -->
+        <!-- Designed to be set flush left at similar margin to remainder           -->
+        <!-- (90, 720) will align on to/from info and subsequent paragraphs         -->
+        <logo source="fictional-masthead.png" llx="90" lly="720" width="4.0in" />
+    </docinfo>
+
+    <!-- specify base of output tex filename in xml:id on memo element -->
+    <memo xml:id="organization-memo">
+        <!-- title not printed, but does migrate to internal PDF title -->
+        <title>The Organization</title>
+
+        <frontmatter>
+            <!-- A graphics file with scanned initials can be placed anywhere                 -->
+            <!-- Ideal is just after sender's name, or after comma prefixing title            -->
+            <!-- The size of the printed initials is determined by scaling the height         -->
+            <!-- Small amounts of negative space (0.75ex) precede, and follow, its placement, -->
+            <!-- so you may need to insert extra horizontal LaTeX space directly (\, or \ )   -->
+            <to>The Provost</to>
+            <from>Professor Michael Smith,<initial source="ms-initials.pdf"/> Department of Institutional Organization</from>
+            <subject>Organizational Evaluation</subject>
+            <date><today /></date>
+        </frontmatter>
+
+        <p>It appears this place could be much better run.</p>
+
+        <paragraphs>
+            <!-- title is optional, either way "paragraphs" provides vertical separation -->
+            <title>Conclusion</title>
+
+            <p>In summary, I hope something will be done.</p>
+
+            <p>And for the sake of all of us who toil and labor here daily, I hope it is done soon.  Real soon.  Promptly.  Expeditiously.</p>
+            <p>Thank-you for your attention.</p>
+
+        </paragraphs>
+
+    </memo>
+
+</mathbook>
