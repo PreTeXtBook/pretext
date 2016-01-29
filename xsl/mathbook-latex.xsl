@@ -2811,7 +2811,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Matched, as grouping -->
 <xsl:template match="braces">
     <xsl:text>\{</xsl:text>
-    <xsl:apply-templates />>
+    <xsl:apply-templates />
     <xsl:text>\}</xsl:text>
 </xsl:template>
 
