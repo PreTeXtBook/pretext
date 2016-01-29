@@ -89,6 +89,17 @@ sample-chapter-extract:
 	cd $(PGOUT); \
 	xsltproc --stringparam chunk.level 2 $(MBXSL)/extract-webwork.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
 
+# HTML with WeBWorK exercises need a WW server
+# See example below for how to specify this
+# Output is:  $(HTMLOUT)/sample-ww-chapter.html
+sample-chapter-html:
+	install -d $(HTMLOUT)
+	-rm $(HTMLOUT)/*.html
+	-rm $(HTMLOUT)/knowl/*.html
+	cp -a $(WWEXAMPLE)/sample-chapter/images $(HTMLOUT)
+	cp -a $(WWEXAMPLE)/sample-chapter/video $(HTMLOUT)
+	cd $(HTMLOUT); \
+	xsltproc --stringparam webwork.server https://webwork.pcc.edu --stringparam html.knowl.exercise.inline no $(MBXSL)/mathbook-html.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
 
 
 ###################################
@@ -145,18 +156,6 @@ chapter-obsolete:
 	xelatex sample-ww-chapter.tex; \
 	xelatex sample-ww-chapter.tex
 	#
-	install -d $(HTMLOUT) $(MBUSR)
-	-rm $(HTMLOUT)/*.html
-	cp $(WWXSL)/webwork-pg.xsl $(WWXSL)/webwork-html.xsl $(MBUSR)
-	cp -a $(WWMBX)/examples/sample-chapter/images $(HTMLOUT)
-	cp -a $(WWMBX)/examples/sample-chapter/video $(HTMLOUT)
-	# xslt_base64: https://github.com/ilyakharlamov/xslt_base64
-	# heavily modified for MBX
-	cp $(WWXSL)/xslt_base64/base64.xsl $(MBUSR)
-	cp $(WWXSL)/xslt_base64/base64_binarydatamap.xml $(MBUSR)
-	# --maxdepth should not be needed for divide-and-conquer recursion
-	cd $(HTMLOUT); \
-	xsltproc --stringparam webwork.server https://webwork.pcc.edu --stringparam html.knowl.exercise.inline no $(MBUSR)/webwork-html.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml
 
 templates-obsolete:
 	install -d $(PGOUT) $(MBUSR)
