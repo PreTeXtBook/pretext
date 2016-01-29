@@ -28,7 +28,7 @@
 >
 
 <xsl:import href="./mathbook-common.xsl" />
-<xsl:import href="./webwork-pg.xsl" />
+<xsl:include href="./webwork-pg.xsl" />
 
 <!-- Intend output to be a PG/PGML problem -->
 <xsl:output method="text" />
@@ -207,7 +207,7 @@
         <xsl:apply-templates select="." mode="filename" />
     </xsl:variable>
     <exsl:document href="{$filename}" method="text">
-        <xsl:apply-templates select="." />
+        <xsl:apply-templates select="." mode="pg" />
     </exsl:document>
 </xsl:template>
 

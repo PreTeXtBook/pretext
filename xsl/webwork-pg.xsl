@@ -62,7 +62,7 @@
 <!-- ################## -->
 
 <!-- Basic outline of a simple problem -->
-<xsl:template match="webwork">
+<xsl:template match="webwork" mode="pg">
     <xsl:call-template   name="begin-problem" />
     <xsl:call-template   name="macros" />
     <xsl:call-template   name="header" />
@@ -74,7 +74,7 @@
 </xsl:template>
 
 <!-- Basic outline of a "scaffold" problem -->
-<xsl:template match="webwork[@type='scaffold']">
+<xsl:template match="webwork[@type='scaffold']" mode="pg">
     <xsl:call-template   name="begin-problem" />
     <xsl:call-template   name="macros" />
     <xsl:call-template   name="header" />
@@ -117,7 +117,6 @@
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>Section::End();&#xa;</xsl:text>
 </xsl:template>
-
 
 <!-- default template, for complete presentation -->
 <!-- TODO: fix match pattern to cover scaffolded problems once name firms up -->
@@ -1505,7 +1504,6 @@
     <xsl:text>[$NBSP]*</xsl:text>
 </xsl:template>
 
-<!-- Nonbreaking space -->
 <!-- En dash           -->
 <xsl:template match="webwork//ndash">
     <xsl:text>[$NDASH]*</xsl:text>
@@ -1516,6 +1514,25 @@
     <xsl:text>[$MDASH]*</xsl:text>
 </xsl:template>
 
+<!-- These same three characters have modal    -->
+<!-- templates in  xsl/mathbook-common.xsl     -->
+<!-- to allow for some generic routines        -->
+<!-- (eg, xref with autoname) that only depend -->
+<!-- on variants of these.  Here we recognize  -->
+<!-- that we are in PG mode and supply the     -->
+<!-- right representations.                    -->
+
+<xsl:template match="webwork//*" mode="nbsp">
+    <xsl:text>[$NBSP]*</xsl:text>
+</xsl:template>
+
+<xsl:template match="webwork//*" mode="ndash">
+    <xsl:text>[$NDASH]*</xsl:text>
+</xsl:template>
+
+<xsl:template match="webwork//*" mode="mdash">
+    <xsl:text>[$MDASH]*</xsl:text>
+</xsl:template>
 
 <!-- ################## -->
 <!-- Special Characters -->
