@@ -273,8 +273,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.preamble.early" />
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% Inline math delimiters, \(, \), made robust with next package&#xa;</xsl:text>
-    <xsl:text>\usepackage{fixltx2e}&#xa;</xsl:text>
+    <xsl:text>%% Inline math delimiters, \(, \), need to be robust&#xa;</xsl:text>
+    <xsl:text>%% 2016-01-31:  latexrelease.sty  supersedes  fixltx2e.sty&#xa;</xsl:text>
+    <xsl:text>%% If  latexrelease.sty  exists, bugfix is in kernel&#xa;</xsl:text>
+    <xsl:text>%% If not, bugfix is in  fixltx2e.sty&#xa;</xsl:text>
+    <xsl:text>%% See:  https://tug.org/TUGboat/tb36-3/tb114ltnews22.pdf&#xa;</xsl:text>
+    <xsl:text>%% and read "Fewer fragile commands" in distribution's  latexchanges.pdf&#xa;</xsl:text>
+    <xsl:text>\IfFileExists{latexrelease.sty}{}{\usepackage{fixltx2e}}&#xa;</xsl:text>
     <xsl:text>%% Page Layout Adjustments (latex.geometry)&#xa;</xsl:text>
     <xsl:if test="$latex.geometry != ''">
         <xsl:text>\geometry{</xsl:text>
