@@ -4053,7 +4053,11 @@ MathJax.Hub.Config({
         extensions: ["AMSmath.js", "AMSsymbols.js", "extpfeil.js", "autobold.js", "https://aimath.org/mathbook/mathjaxknowl.js", ],
         equationNumbers: { autoNumber: "none",
                            useLabelIds: true,
+                           // JS comment, XML CDATA protect XHTML quality of file
+                           // if removed in XSL, use entities
+                           //&lt;![CDATA[
                            formatID: function (n) {return String(n).replace(/[:'"&lt;&gt;&amp;]/g,"")},
+                           //]]&gt;
                          },
         TagSide: "right",
         TagIndent: ".8em",
