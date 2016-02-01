@@ -21,6 +21,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Identify as a stylesheet -->
 <xsl:stylesheet
+    xmlns="http://www.w3.org/1999/xhtml"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
@@ -31,7 +32,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:import href="./mathbook-common.xsl" />
 
 <!-- Intend output for rendering by a web browser -->
-<xsl:output method="html" encoding="utf-8"/>
+<xsl:output method="xml" encoding="utf-8"/>
 
 <!-- Parameters -->
 <!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
