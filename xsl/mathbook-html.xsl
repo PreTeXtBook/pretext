@@ -98,6 +98,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- There are also "compact" versions of the navigation buttons in the top right -->
 <xsl:param name="html.navigation.style"  select="'full'" />
 
+<!-- Permalinks -->
+<!-- Next to headings a "paragraph" symbol -->
+<!-- (a pilcrow) indicates a link to that  -->
+<!-- section.  It is useful if you want to -->
+<!-- click on it to capture a link for use -->
+<!-- somewhere else.  (Preliminary!)       -->
+<!-- Off by default presently              -->
+<xsl:param name="html.permalink"  select="'none'" />
+
+
 <!-- ######### -->
 <!-- Variables -->
 <!-- ######### -->
@@ -169,6 +179,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+
+<!-- Permalink display options, PRELIMINARY -->
+<xsl:variable name="permalink">
+    <xsl:choose>
+        <xsl:when test="$html.permalink='none'">
+            <xsl:text>none</xsl:text>
+        </xsl:when>
+        <xsl:when test="$html.permalink='all'">
+            <xsl:text>all</xsl:text>
+            <xsl:call-template name="banner-warning">
+                <xsl:with-param name="warning">Permalinks are experimental (and not always permanent)</xsl:with-param>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message terminate='yes'>MBX:ERROR: 'html.permalink' must be 'none' or 'all', not '<xsl:value-of select="$html.permalink" />.'  Quitting...</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -435,6 +464,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a "codenumber," and a "title."  We format these       -->
 <!-- consistently here with a modal template.  We can hide -->
 <!-- components with classes on the enclosing "heading"    -->
+<!-- Permalinks on section headings are configurable       -->
 <xsl:template match="*" mode="header-content">
     <span class="type">
         <xsl:apply-templates select="." mode="type-name" />
@@ -445,6 +475,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="title">
         <xsl:apply-templates select="." mode="title-full" />
     </span>
+    <xsl:if test="$permalink='all'">
+        <xsl:variable name="url">
+            <xsl:apply-templates select="." mode="url" />
+        </xsl:variable>
+        <a href="{$url}" style="color:blue;">&#xb6;</a>
+    </xsl:if>
 </xsl:template>
 
 <!-- References and Exercises are universal subdivisions       -->
