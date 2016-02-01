@@ -1839,13 +1839,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Lists themselves -->
-<!-- Hard-code the list style, trading on match -->
-<!-- in label templates. Use "copy" to handle   -->
-<!-- both ul and ol simultaneously              -->
-<!-- When columns are specified, float items    -->
-<!-- and clear afterwards                       -->
-<xsl:template match="ol|ul">
-    <xsl:copy>
+<!-- Hard-code the list style, trading on match  -->
+<!-- in label templates. When columns are        -->
+<!-- specified, float items and clear afterwards -->
+<!-- NB: an  xsl:copy  makes namespace confusion -->
+<xsl:template match="ol">
+    <ol>
         <xsl:attribute name="style">
             <xsl:text>list-style-type: </xsl:text>
                 <xsl:apply-templates select="." mode="html-list-label" />
@@ -1861,7 +1860,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="li" />
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:copy>
+    </ol>
+    <xsl:if test="@cols">
+        <div style="clear:both;"></div>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="ul">
+    <ul>
+        <xsl:attribute name="style">
+            <xsl:text>list-style-type: </xsl:text>
+                <xsl:apply-templates select="." mode="html-list-label" />
+            <xsl:text>;</xsl:text>
+        </xsl:attribute>
+        <xsl:choose>
+            <xsl:when test="@cols">
+                <xsl:apply-templates select="li" mode="variable-width">
+                    <xsl:with-param name="percent-width" select="98 div @cols" />
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="li" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </ul>
     <xsl:if test="@cols">
         <div style="clear:both;"></div>
     </xsl:if>
