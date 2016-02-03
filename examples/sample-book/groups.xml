@@ -43,7 +43,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </introduction>
 
-        <subsection number="no">
+        <subsection>
             <title>The Integers mod <m>n</m></title>
 
             <p>The integers mod <m>n</m> have become indispensable in the theory and applications of algebra.  In mathematics they are used in cryptography, coding theory, and the detection of errors in identification codes.</p>
@@ -148,7 +148,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </proposition>
         </subsection>
 
-        <subsection number="no">
+        <subsection>
             <title>Symmetries</title>
 
             <!-- Symmetries of a rectangle  Replaced diagram with a tikz figure - TWJ 5/4/2010 -->
@@ -491,7 +491,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </introduction>
 
-        <subsection number="no">
+        <subsection>
             <title>Basic Properties of Groups</title>
 
             <proposition>
@@ -598,7 +598,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <section xml:id="section-subgroups">
         <title>Subgroups</title>
 
-        <subsection number="no">
+        <subsection>
             <title>Definitions and Examples</title>
 
             <p>Sometimes we wish to investigate smaller groups sitting inside a larger group.   The set of even integers <m>2{\mathbb Z} = \{\ldots, -2, 0, 2, 4, \ldots \}</m> is a group  under the operation of addition. This smaller group sits naturally inside of the group of integers under addition.  We define a <term>subgroup</term><index><main>Subgroup</main><sub>definition of</sub></index> <m>H</m> of a group <m>G</m> to be a subset <m>H</m> of <m>G</m> such that when the group operation of <m>G</m> is restricted to <m>H</m>, <m>H</m> is a group in its own right. Observe that every group <m>G</m> with at least two elements will always have at least two subgroups, the subgroup consisting of the identity element alone and the entire group itself. The subgroup <m>H = \{ e \}</m> of a group <m>G</m> is called the <term>trivial subgroup</term><index><main>Subgroup</main><sub>trivial</sub></index>.  A subgroup that is a proper subset of <m>G</m> is called a <term>proper subgroup</term><index><main>Subgroup</main><sub>proper</sub></index>. In many of the examples that we have investigated up to this point, there exist other subgroups besides the trivial and improper subgroups.</p>
@@ -669,7 +669,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </subsection>
 
-        <subsection number="no">
+        <subsection>
             <title>Some Subgroup Theorems</title>
 
             <p>Let us examine some criteria for determining exactly when a subset of

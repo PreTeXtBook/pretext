@@ -78,7 +78,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </introduction>
 
-        <subsection number="no">
+        <subsection>
             <title>Some Cautions and Suggestions</title>
 
             <p>There are several different strategies for proving propositions.  In addition to using different methods of proof, students often make some common mistakes when they are first learning how to prove theorems. To aid students who are studying abstract mathematics for the first time, we list here some of the difficulties that they may encounter and some of the strategies of proof available to them. It is a good idea to keep referring back to this list as a reminder. (Other techniques of proof will become apparent throughout this chapter and the remainder of the text.)</p>
@@ -101,7 +101,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <section xml:id="section-sets-and-equivalence-relations">
         <title>Sets and Equivalence Relations</title>
 
-        <subsection number="no">
+        <subsection>
             <title>Set Theory</title>
 
             <p>A <term>set</term> is a well-defined collection of objects; that is, it is defined in such a manner that we can determine for any given object <m>x</m> whether or not <m>x</m> belongs to the set.  The objects that belong to a set are called its <term>elements</term> or <term>members</term>. We will denote sets by capital letters, such as <m>A</m> or <m>X</m>; if <m>a</m> is an element of the set <m>A</m>, we write <m>a \in A</m>.
@@ -249,7 +249,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     </subsection>
 
-    <subsection number="no">
+    <subsection>
         <title>Cartesian Products and Mappings</title>
 
             <p>Given sets <m>A</m> and <m>B</m>, we can define a new set <m>A \times B</m>, called the <term>Cartesian product</term>  of <m>A</m> and <m>B</m>, as a set of ordered pairs.  That is, <notation><usage>A \times B</usage><description>Cartesian product of sets <m>A</m> and <m>B</m></description></notation>
@@ -558,7 +558,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </subsection>
 
-        <subsection number="no">
+        <subsection>
             <title>Equivalence Relations and Partitions</title>
 
             <p>A fundamental notion in mathematics is that of equality.  We can generalize equality with equivalence relations and equivalence classes.  An <term>equivalence relation</term><index><main>Equivalence relation</main></index> on a set <m>X</m> is a relation <m>R \subset X \times X</m> such that</p>

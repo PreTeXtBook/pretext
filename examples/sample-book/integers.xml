@@ -53,7 +53,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>This method of proof is known as <term>mathematical induction</term>.  Instead of attempting to verify a statement about some subset <m>S</m> of the positive integers <m>{\mathbb N}</m> on a case-by-case basis, an impossible task if <m>S</m> is an infinite set, we give a specific proof for the smallest integer being considered, followed by a generic argument showing that if the statement holds for a given case, then it must also hold for the next  case in the sequence.  We summarize mathematical induction in the following axiom. </p>
 
-        <principle number="no">
+        <principle>
             <title>First Principle of Mathematical Induction</title>
             <index><main>Induction</main><sub>first principle of</sub></index>
             <statement>
@@ -114,7 +114,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>We have an equivalent statement of the Principle of Mathematical Induction that is often very useful.</p>
 
-        <principle number="no">
+        <principle>
             <title>Second Principle of Mathematical Induction</title>
             <index><main>Induction</main><sub>second principle of</sub></index>
             <statement>
@@ -126,7 +126,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>A  nonempty subset <m>S</m> of <m>{\mathbb Z}</m> is <term>well-ordered</term><index><main>Well-ordered set</main></index> if <m>S</m> contains a least element.  Notice that the set <m>{\mathbb Z}</m> is not well-ordered since it does not contain a smallest element.  However, the natural numbers are well-ordered.</p> 
 
-        <principle number="no">
+        <principle>
             <title>Principle of Well-Ordering</title>
             <statement>
                 <p>Every nonempty subset of the natural numbers is well-ordered.</p>
@@ -235,7 +235,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </introduction>
 
-        <subsection number="no">
+        <subsection>
             <title>The Euclidean Algorithm</title>
 
             <p>Among other things, Theorem<nbsp /><xref ref="theorem-integers-gcd" /> allows us to compute the greatest common divisor of two integers.</p>
@@ -290,7 +290,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </subsection>
 
-        <subsection number="no">
+        <subsection>
             <title>Prime Numbers</title>
 
             <p>Let <m>p</m> be an integer such that <m>p \gt 1</m>.  We say that <m>p</m> is a <term>prime number</term><index><main>Prime integer</main></index>, or simply <m>p</m> is <term>prime</term>, if the only positive numbers that divide <m>p</m> are 1 and <m>p</m> itself.  An integer <m>n \gt 1</m> that is not prime is said to be <term>composite</term><index><main>Composite integer</main></index>.</p>
@@ -350,7 +350,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </subsection>
 
-        <subsection number="no">
+        <subsection>
             <title>Historical Note</title>
 
             <p>Prime numbers were first studied by the ancient Greeks.  Two important results from antiquity are Euclid's proof that an infinite number of primes exist and the Sieve of Eratosthenes, a method of computing all of the prime numbers less than a fixed positive integer <m>n</m>.  One problem in number theory is to find a function <m>f</m> such that <m>f(n)</m> is prime for each integer <m>n</m>. Pierre Fermat (1601?<ndash />1665) conjectured that <m>2^{2^n} + 1</m> was prime for all <m>n</m>, but later it was shown by Leonhard Euler (1707<ndash />1783) that 
