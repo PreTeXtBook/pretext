@@ -39,13 +39,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             Describe each of the following sets.
                 <ol cols="2">
 
-                    <li><m>A \cap B</m></li>
+                    <li><p><m>A \cap B</m></p></li>
 
-                    <li><m>B \cap C</m></li>
+                    <li><p><m>B \cap C</m></p></li>
 
-                    <li><m>A \cup B</m></li>
+                    <li><p><m>A \cup B</m></p></li>
 
-                    <li><m>A \cap (B \cup C)</m></li>
+                    <li><p><m>A \cap (B \cup C)</m></p></li>
 
                 </ol></p>
         </statement>
@@ -59,13 +59,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>If <m>A = \{ a, b, c \}</m>, <m>B = \{ 1, 2, 3 \}</m>, <m>C = \{ x \}</m>, and <m>D = \emptyset</m>, list all of the elements in each of the following sets.
                 <ol cols="2">
 
-                    <li><m>A \times B</m></li>
+                    <li><p><m>A \times B</m></p></li>
 
-                    <li><m>B \times A</m></li>
+                    <li><p><m>B \times A</m></p></li>
 
-                    <li><m>A \times B \times C</m></li>
+                    <li><p><m>A \times B \times C</m></p></li>
 
-                    <li><m>A \times D</m></li>
+                    <li><p><m>A \times D</m></p></li>
 
                 </ol></p>
         </statement>
@@ -172,13 +172,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Which of the following relations <m>f: {\mathbb Q} \rightarrow {\mathbb Q}</m> define a mapping? In each case, supply a reason why <m>f</m> is or is not a mapping.
                 <ol cols="2">
 
-                    <li><m>\displaystyle f(p/q) = \frac{p+ 1}{p - 2}</m></li>
+                    <li><p><m>\displaystyle f(p/q) = \frac{p+ 1}{p - 2}</m></p></li>
 
-                    <li><m>\displaystyle f(p/q) = \frac{3p}{3q}</m></li>
+                    <li><p><m>\displaystyle f(p/q) = \frac{3p}{3q}</m></p></li>
 
-                    <li><m>\displaystyle f(p/q) = \frac{p+q}{q^2}</m></li>
+                    <li><p><m>\displaystyle f(p/q) = \frac{p+q}{q^2}</m></p></li>
 
-                    <li><m>\displaystyle f(p/q) = \frac{3 p^2}{7 q^2} - \frac{p}{q}</m></li>
+                    <li><p><m>\displaystyle f(p/q) = \frac{3 p^2}{7 q^2} - \frac{p}{q}</m></p></li>
 
                 </ol></p>
         </statement>
@@ -192,13 +192,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Determine which of the following functions are one-to-one and which are onto.  If the function is not onto, determine its range.
                 <ol>
 
-                    <li><m>f: {\mathbb R} \rightarrow {\mathbb R}</m> defined by <m>f(x) = e^x</m></li>
+                    <li><p><m>f: {\mathbb R} \rightarrow {\mathbb R}</m> defined by <m>f(x) = e^x</m></p></li>
 
-                    <li><m>f: {\mathbb Z} \rightarrow {\mathbb Z}</m> defined by <m>f(n) = n^2 + 3</m></li>
+                    <li><p><m>f: {\mathbb Z} \rightarrow {\mathbb Z}</m> defined by <m>f(n) = n^2 + 3</m></p></li>
 
-                    <li><m>f: {\mathbb R} \rightarrow {\mathbb R}</m> defined by <m>f(x) = \sin x</m></li>
+                    <li><p><m>f: {\mathbb R} \rightarrow {\mathbb R}</m> defined by <m>f(x) = \sin x</m></p></li>
 
-                    <li><m>f: {\mathbb Z} \rightarrow {\mathbb Z}</m> defined by <m>f(x) = x^2</m></li>
+                    <li><p><m>f: {\mathbb Z} \rightarrow {\mathbb Z}</m> defined by <m>f(x) = x^2</m></p></li>
 
                 </ol></p>
         </statement>
@@ -217,9 +217,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <statement>
             <p><ol>
 
-                <li>Define a function <m>f: {\mathbb N} \rightarrow {\mathbb N}</m> that is one-to-one but not onto.</li>
+                <li><p>Define a function <m>f: {\mathbb N} \rightarrow {\mathbb N}</m> that is one-to-one but not onto.</p></li>
 
-                 <li>Define a function <m>f: {\mathbb N} \rightarrow {\mathbb N}</m> that is onto but not one-to-one.</li>
+                 <li><p>Define a function <m>f: {\mathbb N} \rightarrow {\mathbb N}</m> that is onto but not one-to-one.</p></li>
 
             </ol></p>
         </statement>
@@ -239,15 +239,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Let <m>f : A \rightarrow B</m> and <m>g : B \rightarrow C</m> be maps.
                 <ol>
 
-                    <li>If <m>f</m> and <m>g</m> are both one-to-one functions, show that <m>g \circ f</m> is one-to-one.</li>
+                    <li><p>If <m>f</m> and <m>g</m> are both one-to-one functions, show that <m>g \circ f</m> is one-to-one.</p></li>
 
-                    <li>If <m>g \circ f</m> is onto, show that <m>g</m> is onto.</li>
+                    <li><p>If <m>g \circ f</m> is onto, show that <m>g</m> is onto.</p></li>
 
-                    <li>If <m>g \circ f</m> is one-to-one, show that <m>f</m> is one-to-one.</li>
+                    <li><p>If <m>g \circ f</m> is one-to-one, show that <m>f</m> is one-to-one.</p></li>
 
-                    <li>If <m>g \circ f</m> is one-to-one and <m>f</m> is onto, show that <m>g</m> is one-to-one.</li>
+                    <li><p>If <m>g \circ f</m> is one-to-one and <m>f</m> is onto, show that <m>g</m> is one-to-one.</p></li>
 
-                    <li>If <m>g \circ f</m> is onto and <m>g</m> is one-to-one, show that <m>f</m> is onto.</li>
+                    <li><p>If <m>g \circ f</m> is onto and <m>g</m> is one-to-one, show that <m>f</m> is onto.</p></li>
 
                 </ol></p>
         </statement>
@@ -272,16 +272,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Let <m>f: X \rightarrow Y</m> be a map with <m>A_1, A_2 \subset X</m> and <m>B_1, B_2 \subset Y</m>. 
                 <ol>
 
-                    <li>Prove <m>f( A_1 \cup A_2 ) = f( A_1) \cup f( A_2 )</m>.</li>
+                    <li><p>Prove <m>f( A_1 \cup A_2 ) = f( A_1) \cup f( A_2 )</m>.</p></li>
 
-                    <li>Prove <m>f( A_1 \cap A_2 ) \subset f( A_1) \cap f( A_2 )</m>.  Give an example in which equality fails.</li>
+                    <li><p>Prove <m>f( A_1 \cap A_2 ) \subset f( A_1) \cap f( A_2 )</m>.  Give an example in which equality fails.</p></li>
 
-                    <li>Prove <m>f^{-1}( B_1 \cup B_2 ) = f^{-1}( B_1) \cup f^{-1}(B_2 )</m>, where
-                        <me>f^{-1}(B) = \{ x \in X : f(x) \in B \}.</me></li>
+                    <li><p>Prove <m>f^{-1}( B_1 \cup B_2 ) = f^{-1}( B_1) \cup f^{-1}(B_2 )</m>, where
+                        <me>f^{-1}(B) = \{ x \in X : f(x) \in B \}.</me></p></li>
 
-                    <li>Prove <m>f^{-1}( B_1 \cap B_2 ) = f^{-1}( B_1) \cap f^{-1}( B_2 )</m>.</li>
+                    <li><p>Prove <m>f^{-1}( B_1 \cap B_2 ) = f^{-1}( B_1) \cap f^{-1}( B_2 )</m>.</p></li>
 
-                    <li>Prove <m>f^{-1}( Y \setminus B_1 ) = X \setminus f^{-1}( B_1)</m>.</li>
+                    <li><p>Prove <m>f^{-1}( Y \setminus B_1 ) = X \setminus f^{-1}( B_1)</m>.</p></li>
 
                 </ol></p>
         </statement>
@@ -295,13 +295,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Determine whether or not the following relations are equivalence relations on the given set.  If the relation is an equivalence relation, describe the partition given by it.  If the relation is not an equivalence relation, state why it fails to be one.
                 <ol cols="2">
 
-                    <li><m>x \sim y</m> in <m>{\mathbb R}</m> if <m>x \geq y</m></li>
+                    <li><p><m>x \sim y</m> in <m>{\mathbb R}</m> if <m>x \geq y</m></p></li>
 
-                    <li><m>m \sim n</m> in <m>{\mathbb Z}</m> if <m>mn &gt; 0</m></li>
+                    <li><p><m>m \sim n</m> in <m>{\mathbb Z}</m> if <m>mn &gt; 0</m></p></li>
 
-                    <li><m>x \sim y</m> in <m>{\mathbb R}</m> if <m>|x - y| \leq 4</m></li>
+                    <li><p><m>x \sim y</m> in <m>{\mathbb R}</m> if <m>|x - y| \leq 4</m></p></li>
 
-                    <li><m>m \sim n</m> in <m>{\mathbb Z}</m> if <m>m \equiv n \pmod{6}</m></li>
+                    <li><p><m>m \sim n</m> in <m>{\mathbb Z}</m> if <m>m \equiv n \pmod{6}</m></p></li>
 
                 </ol></p>
         </statement>

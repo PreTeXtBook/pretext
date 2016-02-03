@@ -94,31 +94,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <statement>
                     <p>Let <m>{\mathbb Z}_n</m> be the set of equivalence classes of the integers mod <m>n</m> and <m>a, b, c \in {\mathbb Z}_n</m>.
                         <ol>
-                            <li>Addition and multiplication are commutative:
+                            <li><p>Addition and multiplication are commutative:
                                 <md>
                                     <mrow> a + b  &amp; \equiv  b + a \pmod{ n}</mrow>
                                     <mrow> a  b   &amp; \equiv  b  a \pmod{ n}. </mrow>
-                                </md></li>
+                                </md></p></li>
 
-                            <li>Addition and multiplication are associative:
+                            <li><p>Addition and multiplication are associative:
                                 <md>
                                     <mrow> (a + b) + c  &amp; \equiv  a + (b + c)\pmod{ n}</mrow>
                                     <mrow> (a  b)  c    &amp; \equiv  a   (b  c) \pmod{ n}.</mrow>
-                                </md></li>
+                                </md></p></li>
 
-                            <li> There are both additive and multiplicative identities:
+                            <li><p> There are both additive and multiplicative identities:
                                 <md>
                                     <mrow> a + 0  &amp; \equiv  a \pmod{ n}</mrow>
                                     <mrow> a \cdot  1  &amp; \equiv  a \pmod{ n}.</mrow>
-                                </md></li>
+                                </md></p></li>
 
-                            <li>Multiplication distributes over addition: 
-                                <me>a  (b  + c)  \equiv a  b + a  c  \pmod{ n}.</me></li>
+                            <li><p>Multiplication distributes over addition: 
+                                <me>a  (b  + c)  \equiv a  b + a  c  \pmod{ n}.</me></p></li>
 
-                            <li>For every integer <m>a</m> there is an additive inverse <m>-a</m>: 
-                                <me> a + (-a)  \equiv 0 \pmod{ n}. </me></li>
+                            <li><p>For every integer <m>a</m> there is an additive inverse <m>-a</m>: 
+                                <me> a + (-a)  \equiv 0 \pmod{ n}. </me></p></li>
 
-                            <li>Let <m>a</m> be a nonzero integer.  Then <m>\gcd(a,n) = 1</m> if and only if there exists a multiplicative inverse <m>b</m> for <m>a \pmod{n}</m>; that is, a nonzero integer <m>b</m> such that <me> a  b  \equiv 1 \pmod{ n}.</me></li> 
+                            <li><p>Let <m>a</m> be a nonzero integer.  Then <m>\gcd(a,n) = 1</m> if and only if there exists a multiplicative inverse <m>b</m> for <m>a \pmod{n}</m>; that is, a nonzero integer <m>b</m> such that <me> a  b  \equiv 1 \pmod{ n}.</me></p></li> 
 
                         </ol></p>
                 </statement>
@@ -350,11 +350,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <introduction>
             <p>The integers mod <m>n</m> and the symmetries of a triangle or a rectangle are examples of groups.  A <term>binary operation</term><index><main>Binary operation</main></index> or <term>law of composition</term> on a set <m>G</m> is a function <m>G \times G \rightarrow G</m> that assigns to each pair <m>(a,b) \in G \times G</m> a unique element <m>a \circ b</m>, or <m>ab</m> in <m>G</m>, called the composition of <m>a</m> and <m>b</m>.  A <term>group</term><index><main>Group</main><sub>definition of</sub></index> <m>(G, \circ )</m> is a set <m>G</m> together with a law of composition <m>(a,b) \mapsto a \circ b</m> that satisfies the following axioms.
                 <ul>
-                    <li> The law of composition is <term>associative</term>. That is, <me> (a \circ b) \circ c = a \circ (b \circ c) </me> for <m>a, b, c \in G</m>.</li>
+                    <li><p> The law of composition is <term>associative</term>. That is, <me> (a \circ b) \circ c = a \circ (b \circ c) </me> for <m>a, b, c \in G</m>.</p></li>
 
-                    <li> There exists an element <m>e \in G</m>, called the <term>identity element</term><index><main>Element</main><sub>identity</sub></index>, such that for any element <m>a \in G</m> <me> e \circ a = a \circ e = a. </me></li>
+                    <li><p> There exists an element <m>e \in G</m>, called the <term>identity element</term><index><main>Element</main><sub>identity</sub></index>, such that for any element <m>a \in G</m> <me> e \circ a = a \circ e = a. </me></p></li>
 
-                    <li> For each element <m>a \in G</m>, there exists an <term>inverse element</term><index><main>Element</main><sub>inverse</sub></index> in G, denoted by <m>a^{-1}</m>, such that <me> a \circ a^{-1} = a^{-1} \circ a = e. </me></li> 
+                    <li><p> For each element <m>a \in G</m>, there exists an <term>inverse element</term><index><main>Element</main><sub>inverse</sub></index> in G, denoted by <m>a^{-1}</m>, such that <me> a \circ a^{-1} = a^{-1} \circ a = e. </me></p></li> 
                 </ul></p>
 
             <p>A group <m>G</m> with the property that <m>a \circ b = b \circ a</m> for all <m>a, b \in G</m> is called <term>abelian</term><index><main>Abelian group</main></index><index><main>Group</main><sub>abelian</sub></index> or <term>commutative</term><index><main>Group</main><sub>commutative</sub></index>.  Groups not satisfying this property are said to be  <term>nonabelian</term><index><main>Group</main><sub>nonabelian</sub></index> or <term>noncommutative</term><index><main>Group</main><sub>noncommutative</sub></index>.</p>
@@ -550,18 +550,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <statement>
                     <p>In a group, the usual laws of exponents hold; that is, for all <m>g, h \in G</m>, 
                         <ol>
-                            <li><m>g^mg^n = g^{m+n}</m> for all <m>m, n \in {\mathbb Z}</m>;</li>
-                            <li><m>(g^m)^n = g^{mn}</m> for all <m>m, n \in {\mathbb Z}</m>;</li>
-                            <li><m>(gh)^n = (h^{-1}g^{-1})^{-n}</m> for all <m>n \in {\mathbb Z}</m>. Furthermore, if <m>G</m> is abelian, then <m>(gh)^n = g^nh^n</m>.</li>
+                            <li><p><m>g^mg^n = g^{m+n}</m> for all <m>m, n \in {\mathbb Z}</m>;</p></li>
+                            <li><p><m>(g^m)^n = g^{mn}</m> for all <m>m, n \in {\mathbb Z}</m>;</p></li>
+                            <li><p><m>(gh)^n = (h^{-1}g^{-1})^{-n}</m> for all <m>n \in {\mathbb Z}</m>. Furthermore, if <m>G</m> is abelian, then <m>(gh)^n = g^nh^n</m>.</p></li>
                         </ol></p>
                 </statement> 
             </theorem>
 
                 <p>We will leave the proof of this theorem as an exercise. Notice that <m>(gh)^n \neq g^nh^n</m> in general, since the group may not be abelian. If the group is <m>{\mathbb Z}</m> or <m>{\mathbb Z}_n</m>, we write the group operation additively and the exponential operation multiplicatively; that is, we write <m>ng</m> instead of <m>g^n</m>. The laws of exponents now become 
                 <ol>
-                    <li><m>mg + ng = (m+n)g</m> for all <m>m, n \in {\mathbb Z}</m>;</li>
-                    <li><m>m(ng) = (mn)g</m> for all <m>m, n \in {\mathbb Z}</m>;</li>
-                    <li><m>m(g + h) = mg + mh</m> for all <m>n \in {\mathbb Z}</m>.</li>
+                    <li><p><m>mg + ng = (m+n)g</m> for all <m>m, n \in {\mathbb Z}</m>;</p></li>
+                    <li><p><m>m(ng) = (mn)g</m> for all <m>m, n \in {\mathbb Z}</m>;</p></li>
+                    <li><p><m>m(g + h) = mg + mh</m> for all <m>n \in {\mathbb Z}</m>.</p></li>
                 </ol></p>
 
             <p>It is important to realize that the last statement can be made only because <m>{\mathbb Z}</m> and  <m>{\mathbb Z}_n</m> are commutative groups.</p>
@@ -663,9 +663,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <proposition>
                 <statement>
                     <p>A subset <m>H</m> of <m>G</m> is a subgroup if and only if it satisfies the following conditions. <ol> 
-                        <li>The identity <m>e</m> of <m>G</m> is in <m>H</m>.</li>
-                        <li>If <m>h_1, h_2 \in H</m>, then <m>h_1h_2 \in H</m>.</li>
-                        <li>If <m>h \in H</m>, then <m>h^{-1} \in H</m>.</li>
+                        <li><p>The identity <m>e</m> of <m>G</m> is in <m>H</m>.</p></li>
+                        <li><p>If <m>h_1, h_2 \in H</m>, then <m>h_1h_2 \in H</m>.</p></li>
+                        <li><p>If <m>h \in H</m>, then <m>h^{-1} \in H</m>.</p></li>
                     </ol></p>
                 </statement> 
 
@@ -723,12 +723,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Universal Product Code<index><main>Universal Product Code</main></index> (UPC) symbols are found on most products in grocery and retail stores. The UPC symbol is a 12-digit code identifying the manufacturer of a product and the product itself (Figure<nbsp /><xref ref="figure-upc-codes" />). The first 11 digits contain information about the product; the twelfth digit is used for error detection. If <m>d_1 d_2 \cdots d_{12}</m> is a valid UPC number, then 
                 <me>3 \cdot d_1 + 1 \cdot d_2 + 3 \cdot d_3 + \cdots + 3 \cdot d_{11} + 1 \cdot d_{12} \equiv 0 \pmod{10}.</me>
                 <ol> 
-                    <li>Show that the UPC number  0-50000-30042-6, which appears in Figure<nbsp /><xref ref="figure-upc-codes" />, is a valid UPC number.</li>
-                    <li>Show that the number 0-50000-30043-6 is not a valid UPC number.</li>
-                    <li>Write a  formula to calculate the check digit, <m>d_{12}</m>, in the UPC number.</li>
-                    <li>The  UPC error detection scheme can detect most transposition errors; that is, it can determine if two digits have been interchanged.  Show that the transposition error 0-05000-30042-6 is not detected.  Find a transposition error that is detected.  Can you find a general rule for the types of transposition errors that can be detected? </li>
+                    <li><p>Show that the UPC number  0-50000-30042-6, which appears in Figure<nbsp /><xref ref="figure-upc-codes" />, is a valid UPC number.</p></li>
+                    <li><p>Show that the number 0-50000-30043-6 is not a valid UPC number.</p></li>
+                    <li><p>Write a  formula to calculate the check digit, <m>d_{12}</m>, in the UPC number.</p></li>
+                    <li><p>The  UPC error detection scheme can detect most transposition errors; that is, it can determine if two digits have been interchanged.  Show that the transposition error 0-05000-30042-6 is not detected.  Find a transposition error that is detected.  Can you find a general rule for the types of transposition errors that can be detected? </p></li>
                     <!-- % Corrected exercise. Suggested by John Watterlond. TWJ 8/24/2011 -->
-                    <li>Write a program that will determine whether or not a UPC number is valid.</li>
+                    <li><p>Write a program that will determine whether or not a UPC number is valid.</p></li>
                 </ol>
                 </p>
                 <figure xml:id="figure-upc-codes">
@@ -764,15 +764,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <me>(d_1, d_2, \ldots, d_{10} ) \cdot (10, 9, \ldots, 1 )  \equiv 0 \pmod{11}.</me>
                 One problem is that <m>d_{10}</m> might have to be a 10 to make the inner product zero; in this case, 11 digits would be  needed to make this scheme work.  Therefore, the character X is used for the eleventh digit.  So ISBN 3-540-96035-X is a valid ISBN code. <ol>
 
-                    <li>Is ISBN 0-534-91500-0 a valid ISBN code?  What about ISBN 0-534-91700-0 and ISBN 0-534-19500-0?</li>
+                    <li><p>Is ISBN 0-534-91500-0 a valid ISBN code?  What about ISBN 0-534-91700-0 and ISBN 0-534-19500-0?</p></li>
 
-                    <li>Does this method detect all single-digit errors?  What about all transposition errors?</li>
+                    <li><p>Does this method detect all single-digit errors?  What about all transposition errors?</p></li>
 
-                    <li>How many different ISBN codes are there?</li>
+                    <li><p>How many different ISBN codes are there?</p></li>
 
-                    <li>Write a computer program that will calculate the check digit for the first nine digits of an ISBN code.</li>
+                    <li><p>Write a computer program that will calculate the check digit for the first nine digits of an ISBN code.</p></li>
 
-                    <li>A publisher has houses in Germany and the United States.  Its German prefix is 3-540.  If its United States prefix will be 0-<title>abc</title>, find <title>abc</title> such that the rest of the ISBN code will be the same for a book printed in Germany and in the United States. Under the ISBN coding method the first digit identifies the language; German is  3 and English is  0.  The next group of numbers identifies the publisher, and the last group identifies the specific book.</li>
+                    <li><p>A publisher has houses in Germany and the United States.  Its German prefix is 3-540.  If its United States prefix will be 0-<title>abc</title>, find <title>abc</title> such that the rest of the ISBN code will be the same for a book printed in Germany and in the United States. Under the ISBN coding method the first digit identifies the language; German is  3 and English is  0.  The next group of numbers identifies the publisher, and the last group identifies the specific book.</p></li>
                 </ol></p>
             </statement>
         </exercise>

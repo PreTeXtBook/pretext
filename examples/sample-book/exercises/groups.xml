@@ -32,17 +32,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Find all <m>x \in {\mathbb Z}</m> satisfying each of the following equations.
                 <ol cols="2">
 
-                    <li><m>3x \equiv 2 \pmod{7}</m></li>
+                    <li><p><m>3x \equiv 2 \pmod{7}</m></p></li>
 
-                    <li><m>5x + 1 \equiv 13 \pmod{23}</m></li>
+                    <li><p><m>5x + 1 \equiv 13 \pmod{23}</m></p></li>
 
-                    <li><m>5x + 1 \equiv 13 \pmod{26}</m></li>
+                    <li><p><m>5x + 1 \equiv 13 \pmod{26}</m></p></li>
 
-                    <li><m>9x \equiv 3 \pmod{5}</m></li>
+                    <li><p><m>9x \equiv 3 \pmod{5}</m></p></li>
 
-                    <li><m>5x \equiv 1 \pmod{6}</m></li>
+                    <li><p><m>5x \equiv 1 \pmod{6}</m></p></li>
 
-                    <li><m>3x \equiv 1 \pmod{6}</m></li>
+                    <li><p><m>3x \equiv 1 \pmod{6}</m></p></li>
 
                 </ol></p>
         </statement>
@@ -56,41 +56,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>Which of the following multiplication tables defined on the set <m>G = \{ a, b, c, d \}</m> form a group? Support your answer in each case.
             <ol cols="2">
 
-                <li><me>\begin{array}{c|cccc}
+                <li><p><me>\begin{array}{c|cccc}
                 \circ &amp; a &amp; b &amp; c &amp; d \\
                 \hline
                 a &amp; a &amp; c &amp; d &amp; a \\
                 b &amp; b &amp; b &amp; c &amp; d \\
                 c &amp; c &amp; d &amp; a &amp; b \\
                 d &amp; d &amp; a &amp; b &amp; c
-                \end{array}</me></li>
+                \end{array}</me></p></li>
 
-                <li><me>\begin{array}{c|cccc}
+                <li><p><me>\begin{array}{c|cccc}
                 \circ &amp; a &amp; b &amp; c &amp; d \\
                 \hline
                 a &amp; a &amp; b &amp; c &amp; d \\
                 b &amp; b &amp; a &amp; d &amp; c \\
                 c &amp; c &amp; d &amp; a &amp; b \\
                 d &amp; d &amp; c &amp; b &amp; a
-                \end{array}</me></li>
+                \end{array}</me></p></li>
 
-                <li><me>\begin{array}{c|cccc}
+                <li><p><me>\begin{array}{c|cccc}
                 \circ &amp; a &amp; b &amp; c &amp; d \\
                 \hline
                 a &amp; a &amp; b &amp; c &amp; d \\
                 b &amp; b &amp; c &amp; d &amp; a \\
                 c &amp; c &amp; d &amp; a &amp; b \\
                 d &amp; d &amp; a &amp; b &amp; c
-                \end{array}</me></li>
+                \end{array}</me></p></li>
 
-                <li><me>\begin{array}{c|cccc}
+                <li><p><me>\begin{array}{c|cccc}
                 \circ &amp; a &amp; b &amp; c &amp; d \\
                 \hline
                 a &amp; a &amp; b &amp; c &amp; d \\
                 b &amp; b &amp; a &amp; c &amp; d \\
                 c &amp; c &amp; b &amp; a &amp; d \\
                 d &amp; d &amp; d &amp; b &amp; c
-                \end{array}</me></li>
+                \end{array}</me></p></li>
 
             </ol></p>
     </statement>

@@ -156,17 +156,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>For each of the following pairs of numbers <m>a</m> and <m>b</m>, calculate <m>\gcd(a,b)</m> and find integers <m>r</m> and <m>s</m> such that  <m>\gcd(a,b) = ra + sb</m>.
                 <ol cols="2">
 
-                    <li>14 and 39</li>
+                    <li><p>14 and 39</p></li>
 
-                    <li>234 and 165</li>
+                    <li><p>234 and 165</p></li>
 
-                    <li>1739 and 9923</li>
+                    <li><p>1739 and 9923</p></li>
 
-                    <li>471 and 562</li>
+                    <li><p>471 and 562</p></li>
 
-                    <li>23,771 and 19,945</li>
+                    <li><p>23,771 and 19,945</p></li>
 
-                    <li><m>-4357</m> and 3754</li>
+                    <li><p><m>-4357</m> and 3754</p></li>
 
                 </ol></p>
         </statement>
@@ -188,15 +188,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             We can define them inductively by <m>f_1 = 1</m>, <m>f_2 = 1</m>, and <m>f_{n + 2} = f_{n + 1} + f_n</m> for <m>n \in {\mathbb N}</m>. 
                 <ol>
 
-                    <li>Prove that <m>f_n \lt 2^n</m>.</li>
+                    <li><p>Prove that <m>f_n \lt 2^n</m>.</p></li>
 
-                    <li>Prove that <m>f_{n + 1} f_{n - 1} = f^2_n + (-1)^n</m>, <m>n \geq 2</m>.</li>
+                    <li><p>Prove that <m>f_{n + 1} f_{n - 1} = f^2_n + (-1)^n</m>, <m>n \geq 2</m>.</p></li>
 
-                    <li>Prove that <m>f_n = [(1 + \sqrt{5}\, )^n - (1 - \sqrt{5}\, )^n]/ 2^n \sqrt{5}</m>.</li>
+                    <li><p>Prove that <m>f_n = [(1 + \sqrt{5}\, )^n - (1 - \sqrt{5}\, )^n]/ 2^n \sqrt{5}</m>.</p></li>
 
-                    <li>Show that <m>\lim_{n \rightarrow \infty} f_n / f_{n + 1} = (\sqrt{5} - 1)/2</m>.</li>
+                    <li><p>Show that <m>\lim_{n \rightarrow \infty} f_n / f_{n + 1} = (\sqrt{5} - 1)/2</m>.</p></li>
 
-                    <li>Prove that <m>f_n</m> and <m>f_{n + 1}</m> are relatively prime.</li>
+                    <li><p>Prove that <m>f_n</m> and <m>f_{n + 1}</m> are relatively prime.</p></li>
                 </ol></p>
         </statement>
         <hint>

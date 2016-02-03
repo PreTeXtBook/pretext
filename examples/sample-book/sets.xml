@@ -47,17 +47,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>A <term>statement</term> in logic or mathematics is an assertion that is either true or false.  Consider the following examples:
                 <ul>
 
-                    <li><m>3 + 56 - 13 + 8/2 </m>.</li>
+                    <li><p><m>3 + 56 - 13 + 8/2 </m>.</p></li>
 
-                    <li>All cats are black.</li>
+                    <li><p>All cats are black.</p></li>
 
-                    <li><m>2 + 3 = 5</m>.</li>
+                    <li><p><m>2 + 3 = 5</m>.</p></li>
 
-                    <li><m>2x = 6</m> exactly when <m>x = 4</m>.</li>
+                    <li><p><m>2x = 6</m> exactly when <m>x = 4</m>.</p></li>
 
-                    <li>If <m>ax^2 + bx + c = 0</m> and <m>a \neq 0</m>, then <me>x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.</me></li>
+                    <li><p>If <m>ax^2 + bx + c = 0</m> and <m>a \neq 0</m>, then <me>x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.</me></p></li>
 
-                    <li><m>x^3 - 4x^2 + 5 x - 6</m>.</li>
+                    <li><p><m>x^3 - 4x^2 + 5 x - 6</m>.</p></li>
 
                 </ul>All but the first  and last examples are statements, and must be either true or false.</p> 
 
@@ -87,17 +87,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>There are several different strategies for proving propositions.  In addition to using different methods of proof, students often make some common mistakes when they are first learning how to prove theorems. To aid students who are studying abstract mathematics for the first time, we list here some of the difficulties that they may encounter and some of the strategies of proof available to them. It is a good idea to keep referring back to this list as a reminder. (Other techniques of proof will become apparent throughout this chapter and the remainder of the text.) 
                 <ul>
 
-                    <li>A theorem cannot be proved by example; however, the standard way to show that a statement is not a theorem is to provide a counterexample.</li>
+                    <li><p>A theorem cannot be proved by example; however, the standard way to show that a statement is not a theorem is to provide a counterexample.</p></li>
 
-                    <li>Quantifiers are important. Words and phrases such as <em>only</em>, <em>for all</em>, <em>for every</em>, and <em>for some</em> possess different meanings.</li>
+                    <li><p>Quantifiers are important. Words and phrases such as <em>only</em>, <em>for all</em>, <em>for every</em>, and <em>for some</em> possess different meanings.</p></li>
 
-                    <li>Never assume any hypothesis that is not explicitly stated in the theorem.  <em>You cannot take things for granted.</em></li>
+                    <li><p>Never assume any hypothesis that is not explicitly stated in the theorem.  <em>You cannot take things for granted.</em></p></li>
 
-                    <li>Suppose you wish to show that an object <em>exists</em> and is <em>unique</em>.  First show that there actually is such an object.  To show that it is unique, assume that there are two such objects, say <m>r</m> and <m>s</m>, and then show that <m>r = s</m>.</li>
+                    <li><p>Suppose you wish to show that an object <em>exists</em> and is <em>unique</em>.  First show that there actually is such an object.  To show that it is unique, assume that there are two such objects, say <m>r</m> and <m>s</m>, and then show that <m>r = s</m>.</p></li>
 
-                    <li>Sometimes it is easier to prove the contrapositive of a statement.  Proving the statement <q>If <m>p</m>, then <m>q</m></q> is exactly the same as proving the statement <q>If not <m>q</m>, then not <m>p</m>.</q></li>
+                    <li><p>Sometimes it is easier to prove the contrapositive of a statement.  Proving the statement <q>If <m>p</m>, then <m>q</m></q> is exactly the same as proving the statement <q>If not <m>q</m>, then not <m>p</m>.</q></p></li>
 
-                    <li>Although it is usually better to find a direct proof of a theorem, this task  can sometimes be difficult. It may be easier to assume that the theorem that you are trying to prove is false, and to hope that in the course of your argument you are forced to make some statement that cannot possibly be true.</li>
+                    <li><p>Although it is usually better to find a direct proof of a theorem, this task  can sometimes be difficult. It may be easier to assume that the theorem that you are trying to prove is false, and to hope that in the course of your argument you are forced to make some statement that cannot possibly be true.</p></li>
 
                 </ul>
             Remember that one of the main objectives of higher mathematics is proving theorems. Theorems are tools that make new and productive applications of mathematics possible.  We use examples to give insight  into existing theorems and to foster intuitions as to what new theorems might be true.  Applications, examples, and proofs are tightly interconnected<mdash />much more so than they may seem at first appearance.</p>
@@ -182,17 +182,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Let <m>A</m>, <m>B</m>, and <m>C</m> be sets. Then
                     <ol>
 
-                        <li><m>A \cup A = A</m>, <m>A \cap A = A</m>, and <m>A \setminus A = \emptyset</m>;</li>
+                        <li><p><m>A \cup A = A</m>, <m>A \cap A = A</m>, and <m>A \setminus A = \emptyset</m>;</p></li>
 
-                        <li><m>A \cup \emptyset = A</m> and <m>A \cap \emptyset = \emptyset</m>;</li>
+                        <li><p><m>A \cup \emptyset = A</m> and <m>A \cap \emptyset = \emptyset</m>;</p></li>
 
-                        <li><m>A \cup (B \cup C) = (A \cup B) \cup C</m> and  <m>A \cap (B \cap C) = (A \cap B) \cap C</m>;</li>
+                        <li><p><m>A \cup (B \cup C) = (A \cup B) \cup C</m> and  <m>A \cap (B \cap C) = (A \cap B) \cap C</m>;</p></li>
 
-                        <li><m>A \cup B = B \cup A</m> and <m>A \cap B = B \cap A</m>;</li>
+                        <li><p><m>A \cup B = B \cup A</m> and <m>A \cap B = B \cap A</m>;</p></li>
 
-                        <li><m>A \cup (B \cap C) = (A \cup B) \cap (A \cup C)</m>;</li>
+                        <li><p><m>A \cup (B \cap C) = (A \cup B) \cap (A \cup C)</m>;</p></li>
 
-                        <li><m>A \cap (B \cup C) = (A \cap B) \cup (A \cap C)</m>.</li>
+                        <li><p><m>A \cap (B \cup C) = (A \cap B) \cup (A \cap C)</m>.</p></li>
 
                     </ol></p>
             </statement>
@@ -231,9 +231,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Let <m>A</m> and <m>B</m> be sets. Then 
                     <ol>
 
-                        <li><m>(A \cup B)' = A' \cap B'</m>;</li>
+                        <li><p><m>(A \cup B)' = A' \cap B'</m>;</p></li>
 
-                        <li><m>(A \cap B)' = A' \cup B'</m>.</li>
+                        <li><p><m>(A \cap B)' = A' \cup B'</m>.</p></li>
 
                     </ol></p>
             </statement>
@@ -466,13 +466,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Let <m>f : A \rightarrow B</m>, <m>g : B \rightarrow C</m>, and <m>h : C \rightarrow D</m>. Then  
                     <ol>
 
-                        <li>The composition of mappings is associative; that is, <m>(h \circ g) \circ f = h \circ (g \circ f)</m>;</li>  
+                        <li><p>The composition of mappings is associative; that is, <m>(h \circ g) \circ f = h \circ (g \circ f)</m>;</p></li>  
 
-                        <li>If <m>f</m> and <m>g</m> are both one-to-one, then the mapping <m>g \circ f</m> is one-to-one;</li> 
+                        <li><p>If <m>f</m> and <m>g</m> are both one-to-one, then the mapping <m>g \circ f</m> is one-to-one;</p></li> 
 
-                        <li>If <m>f</m> and <m>g</m> are both onto, then the mapping <m>g \circ f</m> is onto;</li>  
+                        <li><p>If <m>f</m> and <m>g</m> are both onto, then the mapping <m>g \circ f</m> is onto;</p></li>  
 
-                        <li>If <m>f</m> and <m>g</m> are bijective, then so is <m>g \circ f</m>.</li>
+                        <li><p>If <m>f</m> and <m>g</m> are bijective, then so is <m>g \circ f</m>.</p></li>
 
                     </ol></p>
             </statement>
@@ -577,11 +577,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>A fundamental notion in mathematics is that of equality.  We can generalize equality with equivalence relations and equivalence classes.  An <term>equivalence relation</term><index><main>Equivalence relation</main></index> on a set <m>X</m> is a relation <m>R \subset X \times X</m> such that  
                 <ul>
 
-                    <li><m>(x, x) \in R</m> for all <m>x \in X</m> (<term>reflexive property</term>);</li>
+                    <li><p><m>(x, x) \in R</m> for all <m>x \in X</m> (<term>reflexive property</term>);</p></li>
 
-                    <li><m>(x, y) \in R</m> implies <m>(y, x) \in R</m> (<term>symmetric property</term>);</li>
+                    <li><p><m>(x, y) \in R</m> implies <m>(y, x) \in R</m> (<term>symmetric property</term>);</p></li>
 
-                    <li><m>(x, y)</m> and <m>(y, z) \in R</m> imply <m>(x, z) \in R</m> (<term>transitive property</term>).</li>
+                    <li><p><m>(x, y)</m> and <m>(y, z) \in R</m> imply <m>(x, z) \in R</m> (<term>transitive property</term>).</p></li>
 
             </ul>Given an equivalence relation <m>R</m>  on a set <m>X</m>, we usually write  <m>x \sim y</m> instead of <m>(x, y) \in R</m>. If the equivalence relation already has an associated notation such as <m>=</m>, <m>\equiv</m>, or <m>\cong</m>, we will use that notation.</p>
 
