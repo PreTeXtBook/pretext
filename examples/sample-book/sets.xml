@@ -44,22 +44,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Abstract mathematics is different from other sciences. In laboratory sciences such as chemistry and physics, scientists perform experiments to discover new principles and verify theories.  Although mathematics is often motivated by physical experimentation or by computer simulations, it is made rigorous through the use of logical arguments.  In studying abstract mathematics, we take what is called an  axiomatic approach; that is, we take a collection of objects <m>\mathcal S</m> and assume some rules about their structure.  These rules are called <term>axioms</term>.  Using the axioms for <m>\mathcal S</m>, we wish to derive other information about <m>\mathcal S</m> by using logical arguments.  We require that our axioms be consistent; that is, they should not contradict one another.  We also demand that there not be too many axioms. If a system of axioms is too restrictive,  there will be few examples of the mathematical structure.</p>  
 
-            <p>A <term>statement</term> in logic or mathematics is an assertion that is either true or false.  Consider the following examples:
+            <p>A <term>statement</term> in logic or mathematics is an assertion that is either true or false.  Consider the following examples:</p>
+
                 <ul>
-
                     <li><p><m>3 + 56 - 13 + 8/2 </m>.</p></li>
-
                     <li><p>All cats are black.</p></li>
-
                     <li><p><m>2 + 3 = 5</m>.</p></li>
-
                     <li><p><m>2x = 6</m> exactly when <m>x = 4</m>.</p></li>
-
                     <li><p>If <m>ax^2 + bx + c = 0</m> and <m>a \neq 0</m>, then <me>x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.</me></p></li>
-
                     <li><p><m>x^3 - 4x^2 + 5 x - 6</m>.</p></li>
+                </ul>
 
-                </ul>All but the first  and last examples are statements, and must be either true or false.</p> 
+            <p>All but the first  and last examples are statements, and must be either true or false.</p> 
 
             <p>A <term>mathematical proof</term> is nothing more than a convincing argument about the accuracy  of a statement. Such an argument should contain enough detail to convince the audience; for instance, we can see that the statement <q><m>2x = 6</m> exactly when <m>x = 4</m></q> is false by evaluating <m>2 \cdot 4</m> and noting that <m>6 \neq 8</m>, an argument that would satisfy anyone. Of course, audiences may vary widely: proofs can be addressed to another student, to a professor, or to the reader of a text.  If more detail than  needed is presented in the proof, then the  explanation will be either long-winded or poorly written.  If too much detail is omitted, then the proof may  not be convincing.  Again it is important to keep the audience in mind.  High school students require much more detail than do graduate students.  A good rule of thumb for an argument in an introductory abstract algebra course is that it should be written to convince one's peers, whether those peers be other students or other readers of the text.</p>
 
@@ -67,15 +63,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <me>x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.</me>
             The hypothesis is <m>ax^2 + bx + c = 0</m> and <m>a \neq 0</m>; the conclusion is 
                 <me>x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.</me>
-            Notice that the  statement says nothing about whether or not the hypothesis is true. However, if this entire statement is true and we can show that <m>ax^2 + bx + c = 0</m> with <m>a \neq 0</m> is true, then the conclusion <em>must</em> be true.  A proof of this statement might simply be a series of equations: 
-                <md>
-                    <mrow>ax^2 + bx + c &amp; =  0</mrow>
-                    <mrow>x^2 + \frac{b}{a}x &amp; =  - \frac{c}{a}</mrow>
-                    <mrow>x^2 + \frac{b}{a}x + \left( \frac{b}{2a} \right)^2 &amp; =  \left( \frac{b}{2a} \right)^2 - \frac{c}{a}</mrow>
-                    <mrow>\left(x + \frac{b}{2a} \right)^2 &amp; =  \frac{b^2 - 4ac}{4a^2}</mrow>
-                    <mrow>x + \frac{b}{2a}  &amp; =  \frac{ \pm \sqrt{ b^2 -4ac}}{2a}</mrow>
-                    <mrow>x &amp; =  \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.</mrow>
-                </md></p>
+            Notice that the  statement says nothing about whether or not the hypothesis is true. However, if this entire statement is true and we can show that <m>ax^2 + bx + c = 0</m> with <m>a \neq 0</m> is true, then the conclusion <em>must</em> be true.  A proof of this statement might simply be a series of equations:</p>
+
+            <md>
+                <mrow>ax^2 + bx + c &amp; =  0</mrow>
+                <mrow>x^2 + \frac{b}{a}x &amp; =  - \frac{c}{a}</mrow>
+                <mrow>x^2 + \frac{b}{a}x + \left( \frac{b}{2a} \right)^2 &amp; =  \left( \frac{b}{2a} \right)^2 - \frac{c}{a}</mrow>
+                <mrow>\left(x + \frac{b}{2a} \right)^2 &amp; =  \frac{b^2 - 4ac}{4a^2}</mrow>
+                <mrow>x + \frac{b}{2a}  &amp; =  \frac{ \pm \sqrt{ b^2 -4ac}}{2a}</mrow>
+                <mrow>x &amp; =  \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.</mrow>
+            </md>
 
             <p>If we can prove a statement true, then that statement is called a <term>proposition</term>.  A proposition of major importance is called a <term>theorem</term>.  Sometimes instead of proving a theorem or proposition all at once, we break the proof down into modules; that is, we prove several supporting propositions, which are called <term>lemmas</term>, and use the results of these propositions to prove the main result. If we can prove a proposition or a theorem, we will often, with very little effort, be able to derive other related propositions called <term>corollaries</term>.</p>
 
@@ -84,23 +81,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <subsection number="no">
             <title>Some Cautions and Suggestions</title>
 
-            <p>There are several different strategies for proving propositions.  In addition to using different methods of proof, students often make some common mistakes when they are first learning how to prove theorems. To aid students who are studying abstract mathematics for the first time, we list here some of the difficulties that they may encounter and some of the strategies of proof available to them. It is a good idea to keep referring back to this list as a reminder. (Other techniques of proof will become apparent throughout this chapter and the remainder of the text.) 
-                <ul>
+            <p>There are several different strategies for proving propositions.  In addition to using different methods of proof, students often make some common mistakes when they are first learning how to prove theorems. To aid students who are studying abstract mathematics for the first time, we list here some of the difficulties that they may encounter and some of the strategies of proof available to them. It is a good idea to keep referring back to this list as a reminder. (Other techniques of proof will become apparent throughout this chapter and the remainder of the text.)</p>
 
-                    <li><p>A theorem cannot be proved by example; however, the standard way to show that a statement is not a theorem is to provide a counterexample.</p></li>
+            <ul>
+                <li><p>A theorem cannot be proved by example; however, the standard way to show that a statement is not a theorem is to provide a counterexample.</p></li>
+                <li><p>Quantifiers are important. Words and phrases such as <em>only</em>, <em>for all</em>, <em>for every</em>, and <em>for some</em> possess different meanings.</p></li>
+                <li><p>Never assume any hypothesis that is not explicitly stated in the theorem.  <em>You cannot take things for granted.</em></p></li>
+                <li><p>Suppose you wish to show that an object <em>exists</em> and is <em>unique</em>.  First show that there actually is such an object.  To show that it is unique, assume that there are two such objects, say <m>r</m> and <m>s</m>, and then show that <m>r = s</m>.</p></li>
+                <li><p>Sometimes it is easier to prove the contrapositive of a statement.  Proving the statement <q>If <m>p</m>, then <m>q</m></q> is exactly the same as proving the statement <q>If not <m>q</m>, then not <m>p</m>.</q></p></li>
+                <li><p>Although it is usually better to find a direct proof of a theorem, this task  can sometimes be difficult. It may be easier to assume that the theorem that you are trying to prove is false, and to hope that in the course of your argument you are forced to make some statement that cannot possibly be true.</p></li>
+            </ul>
 
-                    <li><p>Quantifiers are important. Words and phrases such as <em>only</em>, <em>for all</em>, <em>for every</em>, and <em>for some</em> possess different meanings.</p></li>
-
-                    <li><p>Never assume any hypothesis that is not explicitly stated in the theorem.  <em>You cannot take things for granted.</em></p></li>
-
-                    <li><p>Suppose you wish to show that an object <em>exists</em> and is <em>unique</em>.  First show that there actually is such an object.  To show that it is unique, assume that there are two such objects, say <m>r</m> and <m>s</m>, and then show that <m>r = s</m>.</p></li>
-
-                    <li><p>Sometimes it is easier to prove the contrapositive of a statement.  Proving the statement <q>If <m>p</m>, then <m>q</m></q> is exactly the same as proving the statement <q>If not <m>q</m>, then not <m>p</m>.</q></p></li>
-
-                    <li><p>Although it is usually better to find a direct proof of a theorem, this task  can sometimes be difficult. It may be easier to assume that the theorem that you are trying to prove is false, and to hope that in the course of your argument you are forced to make some statement that cannot possibly be true.</p></li>
-
-                </ul>
-            Remember that one of the main objectives of higher mathematics is proving theorems. Theorems are tools that make new and productive applications of mathematics possible.  We use examples to give insight  into existing theorems and to foster intuitions as to what new theorems might be true.  Applications, examples, and proofs are tightly interconnected<mdash />much more so than they may seem at first appearance.</p>
+            <p>Remember that one of the main objectives of higher mathematics is proving theorems. Theorems are tools that make new and productive applications of mathematics possible.  We use examples to give insight  into existing theorems and to foster intuitions as to what new theorems might be true.  Applications, examples, and proofs are tightly interconnected<mdash />much more so than they may seem at first appearance.</p>
 
         </subsection>
 
@@ -125,7 +117,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <me>E = \{2, 4, 6, \ldots \} \quad \text{or} \quad E = \{ x : x \text{ is an even integer and } x \gt 0 \}.</me>
             We write <m>2 \in E</m> when we want to say that 2 is in the set <m>E</m>, and <m>-3 \notin E</m> to say that <m>-3</m> is not in the set <m>E</m>.</p>
 
-            <p>Some of the more important sets that we will consider are the following: 
+            <p>Some of the more important sets that we will consider are the following:</p>
+
             <md>
                 <mrow>{\mathbb N} = \{n: n \text{ is a natural number}\}  = \{1, 2, 3, \ldots \};</mrow>
                 <mrow>{\mathbb Z} = \{n : n \text{ is an integer} \} = \{\ldots, -1, 0, 1,  2, \ldots \};</mrow>
@@ -133,7 +126,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <mrow>{\mathbb R} = \{ x : x \text{ is a real number} \};</mrow>
                 <mrow>{\mathbb C} = \{z : z \text{ is a complex number}\}.</mrow>
             </md>
-            <notation><usage>{\mathbb N}</usage><description>the natural numbers</description></notation><notation><usage>{\mathbb Z}</usage><description>the integers</description></notation><notation><usage>{\mathbb Q}</usage><description>the rational numbers</description></notation><notation><usage>{\mathbb R}</usage><description>the real numbers</description></notation><notation><usage>{\mathbb C}</usage><description>the complex numbers</description></notation></p>
+
+            <notation><usage>{\mathbb N}</usage><description>the natural numbers</description></notation><notation><usage>{\mathbb Z}</usage><description>the integers</description></notation><notation><usage>{\mathbb Q}</usage><description>the rational numbers</description></notation><notation><usage>{\mathbb R}</usage><description>the real numbers</description></notation><notation><usage>{\mathbb C}</usage><description>the complex numbers</description></notation>
 
             <p>We can find various relations between sets as well as perform operations on sets.  A set <m>A</m> is a <term>subset</term> of <m>B</m>, written <m>A \subset B</m> or <m>B \supset A</m>, if every element of <m>A</m> is also an element of <m>B</m>.  <notation><usage>A \subset B</usage><description><m>A</m> is a subset of <m>B</m></description></notation> For example,  
                 <me>\{4,5,8\} \subset \{2, 3, 4, 5, 6, 7, 8, 9 \}</me>
@@ -168,59 +162,56 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <example xml:id="example-sets-operations">
             <p>Let <m>{\mathbb R}</m> be the universal set and suppose that
                 <me>A = \{ x \in {\mathbb R} : 0 \lt x \leq 3 \} \quad \text{and} \quad B = \{ x \in {\mathbb R} : 2 \leq x \lt 4 \}.</me>
-            Then
-                <md>
-                    <mrow>A \cap B &amp; =  \{ x \in {\mathbb R} : 2 \leq x \leq 3 \}</mrow>
-                    <mrow>A \cup B &amp; =  \{ x \in {\mathbb R} : 0 \lt x \lt 4 \}</mrow>
-                    <mrow>A \setminus B &amp; =  \{ x \in {\mathbb R} : 0 \lt x \lt 2  \}</mrow>
-                    <mrow>A' &amp; =  \{ x \in {\mathbb R} : x \leq 0 \text{ or } x \gt 3 \}.</mrow>
-                </md></p>
+            Then</p>
+
+            <md>
+                <mrow>A \cap B &amp; =  \{ x \in {\mathbb R} : 2 \leq x \leq 3 \}</mrow>
+                <mrow>A \cup B &amp; =  \{ x \in {\mathbb R} : 0 \lt x \lt 4 \}</mrow>
+                <mrow>A \setminus B &amp; =  \{ x \in {\mathbb R} : 0 \lt x \lt 2  \}</mrow>
+                <mrow>A' &amp; =  \{ x \in {\mathbb R} : x \leq 0 \text{ or } x \gt 3 \}.</mrow>
+            </md>
         </example>
 
         <proposition>
             <statement>
-                <p>Let <m>A</m>, <m>B</m>, and <m>C</m> be sets. Then
-                    <ol>
+                <p>Let <m>A</m>, <m>B</m>, and <m>C</m> be sets. Then</p>
 
-                        <li><p><m>A \cup A = A</m>, <m>A \cap A = A</m>, and <m>A \setminus A = \emptyset</m>;</p></li>
-
-                        <li><p><m>A \cup \emptyset = A</m> and <m>A \cap \emptyset = \emptyset</m>;</p></li>
-
-                        <li><p><m>A \cup (B \cup C) = (A \cup B) \cup C</m> and  <m>A \cap (B \cap C) = (A \cap B) \cap C</m>;</p></li>
-
-                        <li><p><m>A \cup B = B \cup A</m> and <m>A \cap B = B \cap A</m>;</p></li>
-
-                        <li><p><m>A \cup (B \cap C) = (A \cup B) \cap (A \cup C)</m>;</p></li>
-
-                        <li><p><m>A \cap (B \cup C) = (A \cap B) \cup (A \cap C)</m>.</p></li>
-
-                    </ol></p>
+                <ol>
+                    <li><p><m>A \cup A = A</m>, <m>A \cap A = A</m>, and <m>A \setminus A = \emptyset</m>;</p></li>
+                    <li><p><m>A \cup \emptyset = A</m> and <m>A \cap \emptyset = \emptyset</m>;</p></li>
+                    <li><p><m>A \cup (B \cup C) = (A \cup B) \cup C</m> and  <m>A \cap (B \cap C) = (A \cap B) \cap C</m>;</p></li>
+                    <li><p><m>A \cup B = B \cup A</m> and <m>A \cap B = B \cap A</m>;</p></li>
+                    <li><p><m>A \cup (B \cap C) = (A \cup B) \cap (A \cup C)</m>;</p></li>
+                    <li><p><m>A \cap (B \cup C) = (A \cap B) \cup (A \cap C)</m>.</p></li>
+                </ol>
             </statement>
             <proof>
                 <p>We will prove (1) and (3) and leave the remaining results to be proven in the exercises.</p>
 
-                <p>(1) Observe that
-                    <md>
-                        <mrow>A \cup A &amp; =  \{ x :  x \in A \text{ or } x \in A \}</mrow>
-                        <mrow>&amp; =  \{ x : x \in A \}</mrow>
-                        <mrow>&amp; =  A</mrow>
-                    </md>
-                and
-                    <md>
-                        <mrow>A \cap A &amp; =  \{ x : x \in A \text{ and } x \in A \}</mrow>
-                        <mrow>&amp; =  \{ x : x \in A  \}</mrow>
-                        <mrow>&amp; =  A.</mrow>
-                    </md>
-                Also, <m>A \setminus A = A \cap A' = \emptyset</m>.</p>
+                <p>(1) Observe that</p>
 
-                <p>(3) For sets <m>A</m>, <m>B</m>, and <m>C</m>,
-                    <md>
-                        <mrow>A \cup (B \cup C) &amp; = A \cup \{ x : x \in B \text{ or } x \in C \}</mrow>
-                        <mrow>&amp; = \{ x : x \in A \text{ or } x \in B, \text{ or } x \in C \}</mrow>
-                        <mrow>&amp; = \{ x : x \in A \text{ or } x \in B \} \cup C</mrow>
-                        <mrow>&amp; = (A \cup B) \cup C. </mrow>
-                    </md>
-                A  similar argument proves that  <m>A \cap (B \cap C) = (A \cap B) \cap C</m>.</p>
+                <md>
+                    <mrow>A \cup A &amp; =  \{ x :  x \in A \text{ or } x \in A \}</mrow>
+                    <mrow>&amp; =  \{ x : x \in A \}</mrow>
+                    <mrow>&amp; =  A</mrow>
+                    <intertext>and</intertext>
+                    <mrow>A \cap A &amp; =  \{ x : x \in A \text{ and } x \in A \}</mrow>
+                    <mrow>&amp; =  \{ x : x \in A  \}</mrow>
+                    <mrow>&amp; =  A.</mrow>
+                </md>
+
+                <p>Also, <m>A \setminus A = A \cap A' = \emptyset</m>.</p>
+
+                <p>(3) For sets <m>A</m>, <m>B</m>, and <m>C</m>,</p>
+
+                <md>
+                    <mrow>A \cup (B \cup C) &amp; = A \cup \{ x : x \in B \text{ or } x \in C \}</mrow>
+                    <mrow>&amp; = \{ x : x \in A \text{ or } x \in B, \text{ or } x \in C \}</mrow>
+                    <mrow>&amp; = \{ x : x \in A \text{ or } x \in B \} \cup C</mrow>
+                    <mrow>&amp; = (A \cup B) \cup C. </mrow>
+                </md>
+
+                <p>A similar argument proves that  <m>A \cap (B \cap C) = (A \cap B) \cap C</m>.</p>
             </proof>
         </proposition>
 
@@ -228,14 +219,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>De Morgan's Laws</title>
             <index><main>De Morgan's laws</main><sub>for sets</sub></index>
             <statement>
-                <p>Let <m>A</m> and <m>B</m> be sets. Then 
-                    <ol>
+                <p>Let <m>A</m> and <m>B</m> be sets. Then</p>
 
-                        <li><p><m>(A \cup B)' = A' \cap B'</m>;</p></li>
-
-                        <li><p><m>(A \cap B)' = A' \cup B'</m>.</p></li>
-
-                    </ol></p>
+                <ol>
+                    <li><p><m>(A \cup B)' = A' \cap B'</m>;</p></li>
+                    <li><p><m>(A \cap B)' = A' \cup B'</m>.</p></li>
+                </ol>
             </statement>
             <proof>
                 <p>(1) We must show that <m>(A \cup B)' \subset A' \cap B'</m> and <m>(A \cup B)' \supset A' \cap B'</m>. Let <m>x \in (A \cup B)'</m>.  Then <m>x \notin A \cup B</m>. So <m>x</m> is neither in <m>A</m> nor in <m>B</m>, by the definition of the union of sets.  By the definition of the complement, <m>x \in A'</m> and <m>x \in B'</m>.  Therefore, <m>x \in A' \cap B'</m> and we have <m>(A \cup B)' \subset A' \cap B'</m>.</p>
@@ -249,12 +238,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <example xml:id="example-sets-other-relations">
             <p>Other relations between sets often hold true. For example,
                 <me>( A \setminus B) \cap (B \setminus A) = \emptyset.</me>
-            To see that this is true, observe that
-                <md>
-                    <mrow>( A \setminus B) \cap (B \setminus A) &amp; = ( A \cap B') \cap (B \cap A')</mrow>
-                    <mrow>&amp; = A \cap A' \cap B \cap B'</mrow>
-                    <mrow>&amp; = \emptyset.</mrow>
-                </md></p>
+            To see that this is true, observe that</p>
+
+            <md>
+                <mrow>( A \setminus B) \cap (B \setminus A) &amp; = ( A \cap B') \cap (B \cap A')</mrow>
+                <mrow>&amp; = A \cap A' \cap B \cap B'</mrow>
+                <mrow>&amp; = \emptyset.</mrow>
+            </md>
         </example>
 
     </subsection>
@@ -463,31 +453,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <theorem>
             <statement>
-                <p>Let <m>f : A \rightarrow B</m>, <m>g : B \rightarrow C</m>, and <m>h : C \rightarrow D</m>. Then  
-                    <ol>
+                <p>Let <m>f : A \rightarrow B</m>, <m>g : B \rightarrow C</m>, and <m>h : C \rightarrow D</m>. Then</p>
 
-                        <li><p>The composition of mappings is associative; that is, <m>(h \circ g) \circ f = h \circ (g \circ f)</m>;</p></li>  
-
-                        <li><p>If <m>f</m> and <m>g</m> are both one-to-one, then the mapping <m>g \circ f</m> is one-to-one;</p></li> 
-
-                        <li><p>If <m>f</m> and <m>g</m> are both onto, then the mapping <m>g \circ f</m> is onto;</p></li>  
-
-                        <li><p>If <m>f</m> and <m>g</m> are bijective, then so is <m>g \circ f</m>.</p></li>
-
-                    </ol></p>
+                <ol>
+                    <li><p>The composition of mappings is associative; that is, <m>(h \circ g) \circ f = h \circ (g \circ f)</m>;</p></li>
+                    <li><p>If <m>f</m> and <m>g</m> are both one-to-one, then the mapping <m>g \circ f</m> is one-to-one;</p></li> 
+                    <li><p>If <m>f</m> and <m>g</m> are both onto, then the mapping <m>g \circ f</m> is onto;</p></li>  
+                    <li><p>If <m>f</m> and <m>g</m> are bijective, then so is <m>g \circ f</m>.</p></li>
+                </ol>
             </statement>
             <proof>
                 <p>We will prove (1) and (3). Part (2) is left as an exercise.  Part (4) follows directly from (2) and (3).</p> 
 
                 <p>(1) We must show that
                     <me>h \circ (g \circ f) = (h \circ g) \circ f.</me>
-                For <m>a \in A</m> we have
-                    <md>
-                        <mrow>(h \circ (g \circ f))(a) &amp; = h((g \circ f)(a))</mrow>
-                        <mrow>&amp; = h(g(f(a))) </mrow>
-                        <mrow>&amp; = (h \circ g)(f(a))</mrow>
-                        <mrow>&amp; = ((h \circ g) \circ f)(a).</mrow>
-                </md></p>
+                For <m>a \in A</m> we have</p>
+
+                <md>
+                    <mrow>(h \circ (g \circ f))(a) &amp; = h((g \circ f)(a))</mrow>
+                    <mrow>&amp; = h(g(f(a))) </mrow>
+                    <mrow>&amp; = (h \circ g)(f(a))</mrow>
+                    <mrow>&amp; = ((h \circ g) \circ f)(a).</mrow>
+                </md>
 
                 <p>(3) Assume that <m>f</m> and <m>g</m> are both onto functions. Given <m>c \in C</m>, we must show that there exists an <m>a \in A</m> such that <m>(g \circ f)(a) = g(f(a)) = c</m>. However, since <m>g</m> is onto, there is an element <m>b \in B</m> such that <m>g(b) = c</m>. Similarly, there is an <m>a \in A</m> such that <m>f(a) = b</m>. Accordingly, 
                     <me>(g \circ f)(a) = g(f(a)) = g(b) = c.</me></p>
@@ -574,16 +561,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <subsection number="no">
             <title>Equivalence Relations and Partitions</title>
 
-            <p>A fundamental notion in mathematics is that of equality.  We can generalize equality with equivalence relations and equivalence classes.  An <term>equivalence relation</term><index><main>Equivalence relation</main></index> on a set <m>X</m> is a relation <m>R \subset X \times X</m> such that  
-                <ul>
+            <p>A fundamental notion in mathematics is that of equality.  We can generalize equality with equivalence relations and equivalence classes.  An <term>equivalence relation</term><index><main>Equivalence relation</main></index> on a set <m>X</m> is a relation <m>R \subset X \times X</m> such that</p>
 
-                    <li><p><m>(x, x) \in R</m> for all <m>x \in X</m> (<term>reflexive property</term>);</p></li>
+            <ul>
+                <li><p><m>(x, x) \in R</m> for all <m>x \in X</m> (<term>reflexive property</term>);</p></li>
+                <li><p><m>(x, y) \in R</m> implies <m>(y, x) \in R</m> (<term>symmetric property</term>);</p></li>
+                <li><p><m>(x, y)</m> and <m>(y, z) \in R</m> imply <m>(x, z) \in R</m> (<term>transitive property</term>).</p></li>
+            </ul>
 
-                    <li><p><m>(x, y) \in R</m> implies <m>(y, x) \in R</m> (<term>symmetric property</term>);</p></li>
-
-                    <li><p><m>(x, y)</m> and <m>(y, z) \in R</m> imply <m>(x, z) \in R</m> (<term>transitive property</term>).</p></li>
-
-            </ul>Given an equivalence relation <m>R</m>  on a set <m>X</m>, we usually write  <m>x \sim y</m> instead of <m>(x, y) \in R</m>. If the equivalence relation already has an associated notation such as <m>=</m>, <m>\equiv</m>, or <m>\cong</m>, we will use that notation.</p>
+            <p>Given an equivalence relation <m>R</m>  on a set <m>X</m>, we usually write  <m>x \sim y</m> instead of <m>(x, y) \in R</m>. If the equivalence relation already has an associated notation such as <m>=</m>, <m>\equiv</m>, or <m>\cong</m>, we will use that notation.</p>
 
             <example xml:id="example-sets-equivalent-fractions">
                 <p>Let <m>p</m>, <m>q</m>, <m>r</m>, and <m>s</m> be integers, where <m>q</m> and <m>s</m> are nonzero.  Define <m>p/q \sim r/s</m> if <m>ps = qr</m>.  Clearly <m>\sim</m> is reflexive and symmetric.  To show that it is also transitive, suppose that <m>p/q \sim r/s</m> and <m>r/s \sim t/u</m>, with <m>q</m>, <m>s</m>, and <m>u</m> all nonzero.  Then <m>ps = qr</m> and <m>ru = st</m>. Therefore, 
@@ -673,13 +659,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
-                <p>If we consider the equivalence relation established by the integers modulo 3, then 
-                    <md>
-                        <mrow>{[0]} &amp; = \{ \ldots, -3, 0, 3, 6, \ldots \},</mrow>
-                        <mrow>{[1]} &amp; = \{ \ldots, -2, 1, 4, 7, \ldots \},</mrow>
-                        <mrow>{[2]} &amp; = \{ \ldots, -1, 2, 5, 8, \ldots \}.</mrow>
-                    </md>
-                Notice that <m>[0] \cup [1] \cup [2] = {\mathbb Z}</m> and also that the sets are disjoint.  The sets <m>[0]</m>, <m>[1]</m>, and <m>[2]</m> form a partition of the integers.</p>
+                <p>If we consider the equivalence relation established by the integers modulo 3, then</p>
+
+                <md>
+                    <mrow>{[0]} &amp; = \{ \ldots, -3, 0, 3, 6, \ldots \},</mrow>
+                    <mrow>{[1]} &amp; = \{ \ldots, -2, 1, 4, 7, \ldots \},</mrow>
+                    <mrow>{[2]} &amp; = \{ \ldots, -1, 2, 5, 8, \ldots \}.</mrow>
+                </md>
+
+                <p>Notice that <m>[0] \cup [1] \cup [2] = {\mathbb Z}</m> and also that the sets are disjoint.  The sets <m>[0]</m>, <m>[1]</m>, and <m>[2]</m> form a partition of the integers.</p>
 
                 <p>The integers modulo <m>n</m> are a very important example in the study of abstract algebra and will become quite useful in our investigation of various algebraic structures such as groups and rings.  In our discussion of the integers modulo <m>n</m> we have actually assumed a result known as the division algorithm, which will be stated and proved in Chapter<nbsp /><xref ref="integers" />.</p>
             </example>
