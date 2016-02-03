@@ -36,12 +36,20 @@
 <!-- Titles, Captions and simple text -->
 <!-- Elements that could be inside a single line of text -->
 <!-- For example, an <ndash>, but not a <me>             -->
-<!-- Precede by a #PCDATA, wrap with ( )*                -->
-<!ENTITY % characters "nbsp|ndash|mdash|ampersand|less|greater|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|tilde|backslash|lq|rq|lsq|rsq|br|ellipsis|copyright|ie|eg|etc|circa|tex|latex|trademark|registered|today|timeofday">
+<!-- Precede these by a #PCDATA, wrap with ( )*          -->
+<!ENTITY % characters "nbsp|ndash|mdash|ampersand|less|greater|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|tilde|backslash|lq|rq|lsq|rsq|ellipsis|copyright|ie|eg|etc|circa|tex|latex|trademark|registered|today|timeofday">
 <!ENTITY % markup "xref|url|m|c|em|alert|q|sq|term|foreign|quantity|acro|booktitle">
 <!ENTITY % line "%characters; | %markup;">
 
-<!-- Multiple Sentences, Paragraph Content -->
+<!-- Multiline Content -->
+<!-- Addresses, attributions, other content     -->
+<!-- that is not a constituent of a paragraph,  -->
+<!-- but which always could be naturally broken -->
+<!-- into several lines.  We just add a         -->
+<!-- "hard break" to lines.                     -->
+<!ENTITY % multiline "%line;|br">
+
+<!-- Sentences, Paragraph Content -->
 <!-- Elements that can be contained in a typical paragraph  -->
 <!-- Everything that is title material, plus more (eg me)    -->
 <!-- Precede by a #PCDATA, wrap with ( )*                   -->
@@ -66,18 +74,17 @@
 <!-- ######### -->
 
 <!ELEMENT mathbook (docinfo, (book|article))>
+    <!ATTLIST mathbook xml:lang CDATA #IMPLIED>
 
-<!ELEMENT book (title, subtitle?, frontmatter, chapter+, appendix*, backmatter?)>
+<!-- A book may be a list of chapters or a list of parts -->
+<!ELEMENT book ((title, subtitle?, frontmatter, chapter+, appendix*, backmatter?)|(title, subtitle?, frontmatter, part+, appendix*, backmatter?))>
     <!ATTLIST book xml:id ID #IMPLIED>
-
-<!ELEMENT preface (title?, (p|todo|ol|ul)*)>
-    <!ATTLIST preface xml:id ID #IMPLIED>
 
 <!ELEMENT article (title, subtitle?, frontmatter, (section|exercises|references)+, backmatter)>
     <!ATTLIST article xml:id ID #IMPLIED>
 
-<!ELEMENT abstract (%para;)>
-    <!ATTLIST abstract xml:id ID #IMPLIED>
+<!ELEMENT part (title, chapter+)>
+    <!ATTLIST part xml:id ID #IMPLIED>
 
 <!ELEMENT chapter (title, author*, ((%block;)*|(introduction?,(section|exercises|references)+,conclusion?)))>
     <!ATTLIST chapter xml:id ID #IMPLIED>
@@ -170,6 +177,8 @@
 <!ELEMENT remark (title?, (%para;)*)>
     <!ATTLIST remark xml:id ID #IMPLIED>
 
+<!ELEMENT blockquote (p+, attribution*)>
+<!ELEMENT atribution (#PCDATA|%multiline;)*>
 
 <!-- #### -->
 <!-- Code -->
@@ -188,6 +197,7 @@
     <!ATTLIST sage copy      CDATA                             #IMPLIED>
     <!ATTLIST sage type      (full|display|practice|invisible) #IMPLIED>
     <!ATTLIST sage doctest   (random|absolute|relative)        #IMPLIED>
+    <!-- TODO: for doctest convert "not tested" to "not-tested" -->
     <!ATTLIST sage tolerance CDATA                             #IMPLIED>
 
 <!ELEMENT program (input, output?)>
@@ -201,6 +211,10 @@
 <!-- ############# -->
 
 <!ELEMENT todo (#PCDATA)>
+
+<!ELEMENT notation (usage,description)>
+<!ELEMENT usage (#PCDATA)>
+<!-- description is given for images -->
 
 
 <!-- ################## -->
@@ -296,7 +310,7 @@
 <!ELEMENT rbrace     EMPTY>
 <!ELEMENT tilde      EMPTY>
 <!ELEMENT backslash  EMPTY>
-<!ELEMENT copyright  EMPTY>
+<!-- see copyright symbol in frontmatter -->
 <!ELEMENT lq         EMPTY>
 <!ELEMENT rq         EMPTY>
 <!ELEMENT lsq        EMPTY>
@@ -392,7 +406,7 @@
 
 <!-- Inline and sectional -->
 
-<!ELEMENT exercises (title?, introduction?, (exercise|exercisegroup)*, conclusion?)>
+<!ELEMENT exercises (title?, introduction?, (exercise|exercisegroup|todo)*, conclusion?)>
     <!ATTLIST exercises xml:id ID    #IMPLIED>
 <!ELEMENT exercisegroup (introduction?, exercise+, conclusion?)>
     <!ATTLIST exercisegroup xml:id ID    #IMPLIED>
@@ -427,7 +441,7 @@
     <!ATTLIST image  halign   (left|center|right)   #IMPLIED>
     <!ATTLIST image  valign   (bottom|middle|top)   #IMPLIED>
 
-<!-- typically for accessibility -->
+<!-- typically for accessibility, also used in notation element -->
 <!ELEMENT description   (#PCDATA|%line;)*>
 
 <!ELEMENT latex-image-code   (#PCDATA)>
@@ -498,9 +512,50 @@
 <!-- There is variation as to what gets employed, across       -->
 <!-- book, article, letter, memo which we try to indicate here -->
 
-<!ELEMENT frontmatter   (titlepage?, biography*, colophon?, abstract?, dedication?, acknowledgement*, foreword*, preface*)>
+<!ELEMENT frontmatter   (titlepage?, colophon?, biography*, abstract?, dedication?, acknowledgement*, foreword*, preface*)>
+    <!ATTLIST frontmatter xml:id ID #IMPLIED>
+
+<!ELEMENT titlepage   (author*|editor*|credit*|date*)>
+
+<!ELEMENT author       (personname, department*, institution*, email*)>
+<!ELEMENT editor       (personname, department*, institution*, email*)>
+
+<!ELEMENT personname   (#PCDATA|%characters;)*>
+<!ELEMENT department   (#PCDATA|%characters;)*>
+<!ELEMENT institution  (#PCDATA|%characters;)*>
+<!ELEMENT email        (#PCDATA)>
+
+<!ELEMENT credit   (title?, (author|editor)*)>
+
+<!ELEMENT date        (#PCDATA|%characters;|today|timeofday)*>
 
 
+<!ELEMENT colophon   (copyright*)>
+
+<!ELEMENT copyright      (EMPTY|(year, holder, minilicense?, shortlicense?))>
+<!ELEMENT year           (#PCDATA|%line;)*>
+<!ELEMENT holder         (#PCDATA|%line;)*>
+<!ELEMENT minilicense    (#PCDATA|%line;)*>
+<!ELEMENT shortlicense   (#PCDATA|%line;)*>
+
+
+<!ELEMENT biography (title?, (%block;)*)>
+    <!ATTLIST biography xml:id ID #IMPLIED>
+
+<!ELEMENT abstract (title?, (%block;)*)>
+    <!ATTLIST abstract xml:id ID #IMPLIED>
+
+<!ELEMENT dedication   (title?, p*)>
+    <!ATTLIST dedication xml:id ID #IMPLIED>
+
+<!ELEMENT acknowledgement (title?, (%block;)*)>
+    <!ATTLIST acknowledgement xml:id ID #IMPLIED>
+
+<!ELEMENT foreword (title?, (%block;)*)>
+    <!ATTLIST foreword xml:id ID #IMPLIED>
+
+<!ELEMENT preface (title?, (%block;)*)>
+    <!ATTLIST preface xml:id ID #IMPLIED>
 
 
 <!-- ######################## -->
@@ -513,10 +568,10 @@
     <!ATTLIST biblio xml:id ID    #IMPLIED>
     <!ATTLIST biblio type   (raw) #REQUIRED>
 <!ELEMENT ibid  EMPTY>
-<!ELEMENT author   (#PCDATA|%line;)*>
+<!-- <!ELEMENT author   (#PCDATA|%line;)*> -->
 <!-- title defined above, could conflict -->
 <!ELEMENT journal  (#PCDATA|%line;)*>
-<!ELEMENT year     (#PCDATA|%line;)*>
+<!-- <!ELEMENT year     (#PCDATA|%line;)*> -->
 <!ELEMENT volume   (#PCDATA|%line;)*>
 <!ELEMENT number   (#PCDATA|%line;)*>
 <!ELEMENT note     (%para;)*>
