@@ -31,7 +31,7 @@
 def tikz_conversion(xml_source, dest_dir, outformat):
     global config
     import tempfile, os, os.path, subprocess, shutil
-    _verbose('converting tikz pictures from {} to {} graphics in {}'.format(xml_source, outformat, dest_dir))
+    _verbose('converting tikz pictures from {} to {} graphics for placement in {}'.format(xml_source, outformat, dest_dir))
     dest_dir = sanitize_directory(dest_dir)
     tmp_dir = tempfile.mkdtemp()
     _debug("temporary directory: {}".format(tmp_dir))
@@ -76,7 +76,7 @@ def tikz_conversion(xml_source, dest_dir, outformat):
 def asymptote_conversion(xml_source, dest_dir, outformat):
     global config
     import tempfile, os, os.path, subprocess, shutil, glob
-    _verbose('converting Asymptote diagrams from {} to {} graphics in {}'.format(xml_source, outformat.upper(), dest_dir))
+    _verbose('converting Asymptote diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
     dest_dir = sanitize_directory(dest_dir)
     tmp_dir = tempfile.mkdtemp()
     _debug("temporary directory: {}".format(tmp_dir))
@@ -115,7 +115,7 @@ def asymptote_conversion(xml_source, dest_dir, outformat):
 def sage_conversion(xml_source, dest_dir, outformat):
     global config
     import tempfile, os, os.path, subprocess, shutil, glob
-    _verbose('converting Sage diagrams from {} to {} graphics in {}'.format(xml_source, outformat.upper(), dest_dir))
+    _verbose('converting Sage diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
     dest_dir = sanitize_directory(dest_dir)
     tmp_dir = tempfile.mkdtemp()
     _debug("temporary directory: {}".format(tmp_dir))
@@ -155,7 +155,7 @@ def latex_image_conversion(xml_source, data_dir, dest_dir, outformat):
     global config
     import tempfile, os, os.path, subprocess, shutil
 
-    _verbose('converting latex-image pictures from {} to {} graphics in {}'.format(xml_source, outformat, dest_dir))
+    _verbose('converting latex-image pictures from {} to {} graphics for placement in {}'.format(xml_source, outformat, dest_dir))
     dest_dir = sanitize_directory(dest_dir)
     tmp_dir = tempfile.mkdtemp()
     _debug("temporary directory: {}".format(tmp_dir))
@@ -873,64 +873,70 @@ def copy_data_directory(source_file, data_dir, tmp_dir):
 
 import os.path
 
+# grab command line arguments
 args = get_cli_arguments()
 _debug("CLI args {}".format(vars(args)))
 
+# directory locations relative to MathBook XML installation
 mbx_dir = get_mbx_path()
 mbx_xsl_dir = os.path.join(mbx_dir, "xsl")
 mbx_script_dir = os.path.join(mbx_dir, "script")
 mbx_user_dir = os.path.join(mbx_dir, "user")
 _debug("xsl, script, user dirs: {}".format([mbx_xsl_dir, mbx_script_dir, mbx_user_dir]))
 
+# directory location for outputs
+output_dir = os.path.abspath(args.dir)
+_debug("output dir: {}".format(output_dir))
+
 config = get_config_info(mbx_script_dir, mbx_user_dir)
 
 if args.component == 'tikz':
     if args.format == 'pdf':
-        tikz_conversion(args.xml_file, args.dir, 'pdf')
+        tikz_conversion(args.xml_file, output_dir, 'pdf')
     elif args.format == 'svg':
-        tikz_conversion(args.xml_file, args.dir, 'svg')
+        tikz_conversion(args.xml_file, output_dir, 'svg')
     elif args.format == 'source':
-        tikz_conversion(args.xml_file, args.dir, 'source')
+        tikz_conversion(args.xml_file, output_dir, 'source')
     else:
         raise NotImplementedError('cannot make TikZ pictures in "{}" format'.format(args.format))
 elif args.component == 'asy':
     if args.format == 'pdf':
-        asymptote_conversion(args.xml_file, args.dir, 'pdf')
+        asymptote_conversion(args.xml_file, output_dir, 'pdf')
     elif args.format == 'svg':
-        asymptote_conversion(args.xml_file, args.dir, 'svg')
+        asymptote_conversion(args.xml_file, output_dir, 'svg')
     elif args.format == 'source':
-        asymptote_conversion(args.xml_file, args.dir, 'source')
+        asymptote_conversion(args.xml_file, output_dir, 'source')
     else:
         raise NotImplementedError('cannot make Asymptote diagrams in "{}" format'.format(args.format))
 elif args.component == 'sageplot':
     if args.format == 'pdf':
-        sage_conversion(args.xml_file, args.dir, 'pdf')
+        sage_conversion(args.xml_file, output_dir, 'pdf')
     elif args.format == 'svg':
-        sage_conversion(args.xml_file, args.dir, 'svg')
+        sage_conversion(args.xml_file, output_dir, 'svg')
     elif args.format == 'source':
-        sage_conversion(args.xml_file, args.dir, 'source')
+        sage_conversion(args.xml_file, output_dir, 'source')
     else:
         raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
 elif args.component == 'latex-image':
     if args.format == 'pdf':
-        latex_image_conversion(args.xml_file, args.data_dir, args.dir, 'pdf')
+        latex_image_conversion(args.xml_file, args.data_dir, output_dir, 'pdf')
     elif args.format == 'svg':
-        latex_image_conversion(args.xml_file, args.data_dir, args.dir, 'svg')
+        latex_image_conversion(args.xml_file, args.data_dir, output_dir, 'svg')
     elif args.format == 'source':
-        latex_image_conversion(args.xml_file, args.data_dir, args.dir, 'source')
+        latex_image_conversion(args.xml_file, args.data_dir, output_dir, 'source')
     elif args.format == 'png':
-        latex_image_conversion(args.xml_file, args.data_dir, args.dir, 'png')
+        latex_image_conversion(args.xml_file, args.data_dir, output_dir, 'png')
     elif args.format == 'eps':
-        latex_image_conversion(args.xml_file, args.data_dir, args.dir, 'eps')
+        latex_image_conversion(args.xml_file, args.data_dir, output_dir, 'eps')
     elif args.format == 'all':
-        latex_image_conversion(args.xml_file, args.data_dir, args.dir, 'all')
+        latex_image_conversion(args.xml_file, args.data_dir, output_dir, 'all')
     else:
         raise NotImplementedError('cannot make LaTeX pictures in "{}" format'.format(args.format))
 elif args.component == 'webwork-tex':
     xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable command: {}".format(xslt_executable))
-    webwork_to_tex('server', xslt_executable, mbx_xsl_dir, args.xml_file, args.server, args.dir)
-    webwork_to_tex('mbx',    xslt_executable, mbx_xsl_dir, args.xml_file, args.server, args.dir)
+    webwork_to_tex('server', xslt_executable, mbx_xsl_dir, args.xml_file, args.server, output_dir)
+    webwork_to_tex('mbx',    xslt_executable, mbx_xsl_dir, args.xml_file, args.server, output_dir)
 elif args.component == 'all':
     if args.format == 'sagenb':
         # initialize  the converter
