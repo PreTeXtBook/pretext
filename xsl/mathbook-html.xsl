@@ -117,13 +117,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="webwork.password" select="'anonymous'" />
 
 <!-- Permalinks -->
-<!-- Next to headings a "paragraph" symbol -->
-<!-- (a pilcrow) indicates a link to that  -->
-<!-- section.  It is useful if you want to -->
-<!-- click on it to capture a link for use -->
-<!-- somewhere else.  (Preliminary!)       -->
-<!-- Off by default presently              -->
-<xsl:param name="html.permalink"  select="'none'" />
+<!-- Next to subdivision headings a "paragraph" symbol     -->
+<!-- (a pilcrow) along with internationalized text         -->
+<!-- ("permalink") indicates a link to that section.       -->
+<!-- It is useful if you want to right-click on it to      -->
+<!-- capture a link for use somewhere else.  (Similar      -->
+<!-- behavior for theorems, examples, etc is planned.)     -->
+<!--                                                       -->
+<!-- "Permalink" is a bit of an exaggeration.  Site        -->
+<!-- domain name is relative to wherever content is        -->
+<!-- hosted.  We say a link is "stable" if there is        -->
+<!-- an  xml:id  on the enclosing page AND an  xml:id      -->
+<!-- on the subdivision (which could be the same).         -->
+<!-- If you change the chunking level, then the enclosing  -->
+<!-- page could change and these links will be affected.   -->
+<!--                                                       -->
+<!-- 'none' - no permalinks anywhere                       -->
+<!-- 'stable' - only stable links (see paragraph above)    -->
+<!-- 'all' - every section heading, even if links are poor -->
+<xsl:param name="html.permalink"  select="'stable'" />
 
 <!-- ######### -->
 <!-- Variables -->
@@ -207,8 +219,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$webwork.server" />
 </xsl:variable>
 
-
-<!-- Permalink display options, PRELIMINARY -->
+<!-- Permalink display options -->
 <xsl:variable name="permalink">
     <xsl:choose>
         <xsl:when test="$html.permalink='none'">
@@ -216,12 +227,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="$html.permalink='all'">
             <xsl:text>all</xsl:text>
-            <xsl:call-template name="banner-warning">
-                <xsl:with-param name="warning">Permalinks are experimental (and not always permanent)</xsl:with-param>
-            </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="$html.permalink='stable'">
+            <xsl:text>stable</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message terminate='yes'>MBX:ERROR: 'html.permalink' must be 'none' or 'all', not '<xsl:value-of select="$html.permalink" />.'  Quitting...</xsl:message>
+            <xsl:message terminate='yes'>MBX:ERROR: 'html.permalink' must be 'none', 'stable' or 'all', not '<xsl:value-of select="$html.permalink" />.'  Quitting...</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -492,7 +503,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a "codenumber," and a "title."  We format these       -->
 <!-- consistently here with a modal template.  We can hide -->
 <!-- components with classes on the enclosing "heading"    -->
-<!-- Permalinks on section headings are configurable       -->
 <xsl:template match="*" mode="header-content">
     <span class="type">
         <xsl:apply-templates select="." mode="type-name" />
@@ -503,12 +513,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="title">
         <xsl:apply-templates select="." mode="title-full" />
     </span>
-    <xsl:if test="$permalink='all'">
-        <xsl:variable name="url">
-            <xsl:apply-templates select="." mode="url" />
-        </xsl:variable>
-        <a href="{$url}" style="color:blue;">&#xb6;</a>
-    </xsl:if>
+    <xsl:apply-templates select="." mode="permalink" />
 </xsl:template>
 
 <!-- References and Exercises are universal subdivisions       -->
@@ -527,6 +532,69 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="title">
         <xsl:apply-templates select="." mode="title-full" />
     </span>
+    <xsl:apply-templates select="." mode="permalink" />
+</xsl:template>
+
+<!-- Permalinks on section headings are configurable              -->
+<!-- "stable" implies there is an xml:id on the element. However, -->
+<!-- the filename will change with different chunking levels      -->
+<xsl:template match="*" mode="permalink">
+    <xsl:variable name="has-permalink">
+        <xsl:choose>
+            <xsl:when test="$permalink='none'">
+                <xsl:value-of select="false()" />
+            </xsl:when>
+            <xsl:when test="$permalink='all'">
+                <xsl:value-of select="true()" />
+            </xsl:when>
+            <!-- now in case of $permalink='stable' due to input sanitation -->
+            <xsl:when test="not(@xml:id)">
+                <xsl:value-of select="false()" />
+            </xsl:when>
+            <!-- now just need xml:id for the page URL, or not      -->
+            <!-- NOTE: the element and the enclosure might be equal -->
+            <!--       but double 'true' is not a problem           -->
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="has-id-on-enclosure" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="$has-permalink='true'">
+        <xsl:variable name="url">
+            <xsl:apply-templates select="." mode="url" />
+        </xsl:variable>
+        <!-- pilchrow plus internationalized string  -->
+        <a href="{$url}" class="permalink">
+            <xsl:text>&#xb6; </xsl:text>
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'permalink'" />
+            </xsl:call-template>
+        </a>
+    </xsl:if>
+</xsl:template>
+
+<!-- Recursively finds enclosing structural node -->
+<!-- and reports if it has an xml:id on it       -->
+<!-- Note: from mode="filename", can we return a node-set? -->
+<xsl:template match="*" mode="has-id-on-enclosure">
+    <xsl:variable name="intermediate"><xsl:apply-templates select="." mode="is-intermediate" /></xsl:variable>
+    <xsl:variable name="chunk"><xsl:apply-templates select="." mode="is-chunk" /></xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$intermediate='true' or $chunk='true'">
+            <!-- found it, is there an xml:id? -->
+            <xsl:choose>
+                <xsl:when test="@xml:id">
+                    <xsl:value-of select="true()" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="false()" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select=".." mode="has-id-on-enclosure" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 
