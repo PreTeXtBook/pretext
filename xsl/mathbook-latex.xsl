@@ -2147,32 +2147,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\quad\lbrack Essay Answer\rbrack</xsl:text>
 </xsl:template>
 
-<!-- PGML suggests we allow the "var" element as a child -->
-<xsl:template match= "webwork//m">
-    <xsl:text>\(</xsl:text>
-    <xsl:apply-templates select="text()|var" />
-    <xsl:text>\)</xsl:text>
-</xsl:template>
-<xsl:template match= "webwork//me">
-    <xsl:text>\[</xsl:text>
-    <xsl:apply-templates select="text()|var" />
-    <xsl:text>\]</xsl:text>
-</xsl:template>
-<xsl:template match="md/mrow">
-    <xsl:apply-templates select="text()|var" />
-    <xsl:choose>
-        <xsl:when test="@number='yes'">
-            <xsl:apply-templates select="." mode="label" />
-        </xsl:when>
-        <xsl:otherwise></xsl:otherwise>
-    </xsl:choose>
-    <xsl:if test="position()!=last()">
-       <xsl:text>\\</xsl:text>
-    </xsl:if>
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
-
 
 <!-- Theorem Environments/Statements -->
 <!-- Statements are the place to generate environment -->
@@ -2287,10 +2261,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- MathJax: out-of-the-box support                               -->
 <!-- LaTeX: with AMS-TeX, \[,\] tranlates to equation* environment -->
 <!-- LaTeX: without AMS-TEX, it is improved version of $$, $$      -->
+<!-- WeBWorK: allow for "var" element                              -->
 <!-- See: http://tex.stackexchange.com/questions/40492/what-are-the-differences-between-align-equation-and-displaymath -->
 <xsl:template match="me">
     <xsl:text>\[</xsl:text>
-    <xsl:value-of select="." />
+    <xsl:choose>
+        <xsl:when test="ancestor::webwork">
+            <xsl:apply-templates select="text()|var" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="text()" />
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>\]</xsl:text>
 </xsl:template>
 
@@ -2344,8 +2326,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Rows of a multi-line math display -->
 <!-- Numbering controlled here with \label{}, \notag, or nothing -->
 <!-- Last row different, has no line-break marker                -->
+<!-- Limited exceptions to raw text only:                        -->
+<!--     xref's allow for "reasons" in proofs                    -->
+<!--     var is part of WeBWorK problems only                    -->
 <xsl:template match="md/mrow">
-    <xsl:apply-templates select="text()|xref" />
+    <xsl:choose>
+        <xsl:when test="ancestor::webwork">
+            <xsl:apply-templates select="text()|xref|var" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="text()|xref" />
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:choose>
         <xsl:when test="@number='yes'">
             <xsl:apply-templates select="." mode="label" />
@@ -2359,7 +2351,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="mdn/mrow">
-    <xsl:apply-templates select="text()|xref" />
+    <xsl:choose>
+        <xsl:when test="ancestor::webwork">
+            <xsl:apply-templates select="text()|xref|var" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="text()|xref" />
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:choose>
         <xsl:when test="@number='no'">
             <xsl:text>\notag</xsl:text>

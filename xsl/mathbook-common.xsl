@@ -465,9 +465,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- MathJax: needs to be specified in the tex2jax/inlineMath configuration list -->
 <!-- LaTeX: these are not "robust", hence break moving itmes (titles, index), so -->
 <!-- use the "fixltx2e" package, which declares \MakeRobust\( and \MakeRobust\)  -->
+<!-- WeBWorK: allow the "var" element                                            -->
 <xsl:template match= "m">
     <xsl:text>\(</xsl:text>
-    <xsl:value-of select="." />
+    <xsl:choose>
+        <xsl:when test="ancestor::webwork">
+            <xsl:apply-templates select="text()|var" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="text()" />
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>\)</xsl:text>
 </xsl:template>
 
