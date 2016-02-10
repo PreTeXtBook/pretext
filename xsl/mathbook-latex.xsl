@@ -2005,11 +2005,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- WeBWorK variants -->
+<!-- WeBWorK exercises, LaTeX representation -->
+<!-- Conversion of MBX-authored parts of a   -->
+<!-- WW problem, with usual MBX elements     -->
+<!-- mixed in, to LaTeX representations      -->
 
 <!-- Top-down structure -->
 <!-- Basic outline of a simple problem -->
-<xsl:template match="webwork">
+<xsl:template match="webwork[statement]">
     <xsl:text>\par&#xa;</xsl:text>
     <xsl:apply-templates select="statement" />
     <xsl:apply-templates select="hint" />
@@ -2017,21 +2020,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Basic outline of a "scaffold" problem -->
-<xsl:template match="webwork[@type='scaffold']">
+<xsl:template match="webwork[statement and @type='scaffold']">
     <xsl:apply-templates select="platform" />
 </xsl:template>
 
 <!-- A platform is part of a scaffold -->
-<xsl:template match="platform">
+<xsl:template match="webwork/platform">
     <!-- employ title here to identify different platforms -->
     <xsl:apply-templates select="statement" />
     <xsl:apply-templates select="hint" />
     <xsl:apply-templates select="solution" />
 </xsl:template>
 
-<!-- KILLED -->
-<xsl:template match="macros" />
-<xsl:template match="setup" />
+<!-- WW macros and setup do not need processing,  -->
+<!-- though we do examine static values of "var"s -->
+<xsl:template match="webwork/macros" />
+<xsl:template match="webwork/setup" />
 
 <!-- default template, for complete presentation -->
 <xsl:template match="webwork//statement">
@@ -2056,7 +2060,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="statement//var|hint//var|solution//var">
+<!-- A "var" in setup will never be processed,  -->
+<!-- since we kill "setup" and do not descend  -->
+<!-- into it, so this match should be sufficient -->
+<xsl:template match="webwork//var">
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="varname" select="@name" />
     <xsl:choose>
@@ -2084,7 +2091,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- PGML answer blank               -->
 <!-- Example: [_____]{$ans}          -->
-<xsl:template match="statement//answer">
+<xsl:template match="webwork//statement//answer">
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="varname" select="@var" />
     <xsl:choose>
@@ -2144,9 +2151,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- An essay answer has no associated variable              -->
-<!-- We simply indicate that this is an essay answer problem -->
-<xsl:template match="answer[@format='essay']">
+<!-- An essay answer has no variable associated with the textbox,  -->
+<!-- so we simply indicate that this problem has an essay answer   -->
+<xsl:template match="webwork//answer[@format='essay']">
     <xsl:text>\quad\lbrack Essay Answer\rbrack</xsl:text>
 </xsl:template>
 
