@@ -142,8 +142,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="address.html" select="''" />
 <xsl:param name="address.pdf" select="''" />
 
-<!-- Strip whitespace text nodes from container elements                    -->
-<!-- Improve source readability with whitespace control in text output mode -->
+<!-- Whitespace discussion: http://www.xmlplease.com/whitespace               -->
+<!-- Describes source expectations, DO NOT override in subsequent conversions -->
+<!-- Strip whitespace text nodes from container elements                      -->
+<!-- Improve source readability with whitespace control in text output mode   -->
 <!-- Newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
 <!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
 <xsl:strip-space elements="mathbook book article memo letter" />
@@ -162,6 +164,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="sage figure listing index" />
 <xsl:strip-space elements="sidebyside paragraphs" />
 <xsl:strip-space elements="table tabular col row" />
+<xsl:strip-space elements="webwork setup" />
 
 <!-- ######### -->
 <!-- Variables -->

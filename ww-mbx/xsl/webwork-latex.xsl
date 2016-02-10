@@ -30,9 +30,6 @@
 <!-- Intend output to be a LaTeX source -->
 <xsl:output method="text" />
 
-<!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
-<xsl:strip-space elements="li" />
-
 <!-- We have to identify snippets of LaTeX from the server,   -->
 <!-- which we have stored in a directory, because XSLT 1.0    -->
 <!-- is unable/unwilling to figure out where the source file  -->
