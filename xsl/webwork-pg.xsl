@@ -1324,12 +1324,7 @@
 <!-- Markup -->
 <!-- ###### -->
 
-<!-- Convenience: kern, etc. into LaTeX, HTML versions -->
-<xsl:template match="wbwk">
-    <xsl:text>WeBWorK</xsl:text>
-</xsl:template>
-
-<!-- Convenience: understood by MathJax and LaTeX -->
+<!-- Convenience: PGML, understood by MathJax and LaTeX renderings -->
 <xsl:template match="webwork//latex">
     <xsl:text>[`\LaTeX`]</xsl:text>
 </xsl:template>

@@ -225,12 +225,6 @@
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-
-<!-- Shortcut for "WeBWorK" -->
-<xsl:template match="wbwk">
-    <xsl:text>WeBWorK</xsl:text>
-</xsl:template>
-
 <!-- ############### -->
 <!-- Server Problems -->
 <!-- ############### -->

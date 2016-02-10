@@ -2875,6 +2875,15 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:text>[BACKSLASH]</xsl:text>
 </xsl:template>
 
+<!-- ############ -->
+<!-- Conveniences -->
+<!-- ############ -->
+
+<!-- Conveniences, which can be overridden in format-specific conversions -->
+<!-- TODO: kern, etc. into LaTeX, HTML versions -->
+<xsl:template match="webwork[not(child::node() or @*)]">
+    <xsl:text>WeBWorK</xsl:text>
+</xsl:template>
 
 <!-- ################### -->
 <!-- Errors and Warnings -->

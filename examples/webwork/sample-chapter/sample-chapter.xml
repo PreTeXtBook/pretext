@@ -72,7 +72,7 @@
     </docinfo>
 
     <article xml:id="sample-ww-chapter">
-        <title>Integrating <wbwk /> into Textbooks</title>
+        <title>Integrating <webwork /> into Textbooks</title>
         <subtitle>Sample Exercises</subtitle>
 
         <frontmatter xml:id="index">
@@ -103,7 +103,7 @@
 
 
             <abstract>
-                <p>This is a sample article to demonstrate integrating <wbwk /> homework problems into content authored with MathBook XML.  While technically an example of MathBook's <c>article</c> format, it is intended to closely resemble a chapter of a MathBook <c>book</c> that is divided into sections.</p>
+                <p>This is a sample article to demonstrate integrating <webwork /> homework problems into content authored with MathBook XML.  While technically an example of MathBook's <c>article</c> format, it is intended to closely resemble a chapter of a MathBook <c>book</c> that is divided into sections.</p>
                 <p>This work was funded with grants from <url href="http://openoregon.org/">OpenOregon</url> and the <url href="http://pugetsound.edu">University of Puget Sound</url>.</p>
                 <p>Rob and Alex worked on the MathBook XML enhancements that make this possible. Mike Gage (Univeristy of Rochester) and Geoff Goehle (Western Carolina University) made this possible by enhancing the WeBWorK end, and generally maintaining WeBWorK software.</p>
                 <p>This article assumes a mild familiarity with both <url href="http://mathbook.pugetsound.edu/">MathBook XML</url> and <url href="http://webwork.maa.org/wiki/Main_Page">WeBWorK</url>. For more information about either project, follow the links.</p>
@@ -154,7 +154,7 @@
                 </webwork>
             </exercise>
 
-            <p>If you are familiar with <wbwk />, then it may be a surprise to you to be interacting with a <wbwk /> problem this way, without having logged in to <wbwk />.</p>
+            <p>If you are familiar with <webwork />, then it may be a surprise to you to be interacting with a <webwork /> problem this way, without having logged in to <webwork />.</p>
 
             <exercise>
                 <title>Declaring a Problem Seed</title>
@@ -199,7 +199,7 @@
                 <title>Special Answer Checking</title>
 
                 <statement>
-                    <p>One of the strengths of <wbwk /> is its ability to give intelligent feedback for incorrect answers.
+                    <p>One of the strengths of <webwork /> is its ability to give intelligent feedback for incorrect answers.
                         <ul>
                             <li>There is general feedback for when the student's answer is in an entirely different ballpark from the correct answer. Try entering something like <q>y</q>.</li>
                             <li>There is general feedback for when the student's answer is not in the right form. Try entering <q>x<circumflex/>2*x<circumflex/>3</q>, which, right or wrong, is unsimplified.</li>
@@ -269,7 +269,7 @@
             <exercise>
                 <title>Using Hints</title>
                 <statement>
-                    <p>Hints can be inserted into exercises. Whether a hint is visible in the HTML depends on the value of <c>$showHint</c> in <c>PGcourse.pl</c> in the <wbwk /> course that is hosting these exercises. How the hint is displayed in the pdf output is controlled in the usual way that an MBX hint is controlled.</p>
+                    <p>Hints can be inserted into exercises. Whether a hint is visible in the HTML depends on the value of <c>$showHint</c> in <c>PGcourse.pl</c> in the <webwork /> course that is hosting these exercises. How the hint is displayed in the pdf output is controlled in the usual way that an MBX hint is controlled.</p>
                 </statement>
 
                 <webwork>
@@ -333,7 +333,7 @@
 
             <p>In the previous section, we saw relatively simple <wbwk/> questions. This section demonstrates how even very complicated <wbwk/> problems still behave well.</p>
 
-            <p>Here is a theorem that gives us a formula for the solutions of a second-degree polynomial equation. Note later how the <wbwk /> problem references the theorem by its number. This seemingly minor detail demonstartes the degree to which <wbwk/> and MathBook XML have been integrated.</p>
+            <p>Here is a theorem that gives us a formula for the solutions of a second-degree polynomial equation. Note later how the <webwork /> problem references the theorem by its number. This seemingly minor detail demonstartes the degree to which <wbwk/> and MathBook XML have been integrated.</p>
 
             <theorem xml:id="theorem-quadratic-formula">
                 <title>Quadratic Formula</title>
@@ -481,11 +481,11 @@
             <title>Open Problem Library</title>
 
 
-                <p>The <url href="http://webwork.maa.org/wiki/Open_Problem_Library">Open Problem Library</url> (OPL) is a repository of curated <wbwk /> problems. At last count it had something like 30,000 problems, searchable by topic.</p>
+                <p>The <url href="http://webwork.maa.org/wiki/Open_Problem_Library">Open Problem Library</url> (OPL) is a repository of curated <webwork /> problems. At last count it had something like 30,000 problems, searchable by topic.</p>
 
-                <p>Most of the problems in this sample chapter have their source authored within the same document as the narrative.  However the problems in this section are from the OPL and elsewhere on the server that is hosting the <wbwk /> caclulations.  For HTML output we can connect to the server and render the problem here in an interactive fashion.  For print/PDF we use the <c>mbx</c> script to connect to the server to produce the LaTeX code for the problem.  We can use the <c>exercise.text.*</c> switches to control which parts of the problem (statements, solutions, hints) are incorporated.</p>
+                <p>Most of the problems in this sample chapter have their source authored within the same document as the narrative.  However the problems in this section are from the OPL and elsewhere on the server that is hosting the <webwork /> caclulations.  For HTML output we can connect to the server and render the problem here in an interactive fashion.  For print/PDF we use the <c>mbx</c> script to connect to the server to produce the LaTeX code for the problem.  We can use the <c>exercise.text.*</c> switches to control which parts of the problem (statements, solutions, hints) are incorporated.</p>
 
-                <p>Problems do not have to be in the OPL to reside on a server; any problem that is accessbile from the <wbwk /> course which is hosting the <wbwk /> computation may be used this way.</p>
+                <p>Problems do not have to be in the OPL to reside on a server; any problem that is accessbile from the <webwork /> course which is hosting the <webwork /> computation may be used this way.</p>
 
             <exercise xml:id="cylinder-volume">
                 <title>Cylinder Volume</title>
@@ -552,9 +552,9 @@
 
 
             <exercises>
-                <title><wbwk /> Exercises</title>
+                <title><webwork /> Exercises</title>
 
-                <p>This first problem is coming from the <wbwk /> Open problem Library. One implication of this is that we might want to provide some commentary that connects the problem to the text.</p>
+                <p>This first problem is coming from the <webwork /> Open problem Library. One implication of this is that we might want to provide some commentary that connects the problem to the text.</p>
 
                 <exercise xml:id="ww-graphical-antiderivatives">
                     <title>Graphical Antiderivatives</title>
@@ -570,12 +570,12 @@
                     <title>Every Continuous Function has an Antiderivative</title>
 
                     <statement>
-                        <p><wbwk /> problems can allow for open-ended essay responses that are intended to be assessed later by the instructor. For anonymous access, no text field is provided. But if this problem were used within <wbwk /> as part of a homework set, users could submit an answer.</p>
+                        <p><webwork /> problems can allow for open-ended essay responses that are intended to be assessed later by the instructor. For anonymous access, no text field is provided. But if this problem were used within <webwork /> as part of a homework set, users could submit an answer.</p>
                     </statement>
 
                     <webwork >
                         <statement>
-                            <p>Explain how we can use <xref ref="corollary-FTC-derivative" autoname="yes" /> to say that every continuous function <em>always</em> has a derivative. (And we will demonstrate here that you can use a  macro from <c>docinfo</c>: <m>\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)</m>. It will work in the <wbwk /> problem, regardelss of whether you are using images, MathJax, or hardcopy.)</p>
+                            <p>Explain how we can use <xref ref="corollary-FTC-derivative" autoname="yes" /> to say that every continuous function <em>always</em> has a derivative. (And we will demonstrate here that you can use a  macro from <c>docinfo</c>: <m>\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)</m>. It will work in the <webwork /> problem, regardelss of whether you are using images, MathJax, or hardcopy.)</p>
                             <answer format="essay" />
                         </statement>
                     </webwork>
@@ -764,7 +764,7 @@
         <section>
             <title>Tables</title>
 
-            <p>Tables can be made using the existing syntax and options that MBX offers for table making, with a few exceptions. As of summer 2015, the exceptions are that individual cells cannot have <c>bottom</c> border attributes and individual columns cannot have <c>top</c> border attributes. Also, while MBX table borders are generally <c>minor</c>, <c>medium</c>, or <c>major</c>, when these borders are used in a <wbwk /> problem that is rendered as a hard copy problem from within <wbwk />, the only thickness option corresponds to <c>minor</c>.</p>
+            <p>Tables can be made using the existing syntax and options that MBX offers for table making, with a few exceptions. As of summer 2015, the exceptions are that individual cells cannot have <c>bottom</c> border attributes and individual columns cannot have <c>top</c> border attributes. Also, while MBX table borders are generally <c>minor</c>, <c>medium</c>, or <c>major</c>, when these borders are used in a <webwork /> problem that is rendered as a hard copy problem from within <webwork />, the only thickness option corresponds to <c>minor</c>.</p>
 
             <exercise>
                 <title>Complete this Table</title>
@@ -869,7 +869,7 @@
         <section>
             <title>Graphics in Exercises</title>
             <p>It is natural to want to write exercises that rely on graphics. For example, an exericse might produce a chart of some kind, and ask the reader to extract some information from that chart.</p>
-            <p>At present, this can be done using the same mechanism one would use to insert a graphic into a <wbwk /> problem when writing regular <wbwk /> problems. (And this is what is done below.) In the future, there will be a nicer option that will be able to make use of MBX's <c>latex-image-code</c>. This requires some <wbwk /> development first, which is underway.</p>
+            <p>At present, this can be done using the same mechanism one would use to insert a graphic into a <webwork /> problem when writing regular <webwork /> problems. (And this is what is done below.) In the future, there will be a nicer option that will be able to make use of MBX's <c>latex-image-code</c>. This requires some <webwork /> development first, which is underway.</p>
 
             <exercise>
                 <title>Solve using a graph</title>
