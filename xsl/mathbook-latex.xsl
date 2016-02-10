@@ -2106,9 +2106,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:for-each>
             <xsl:text>)</xsl:text>
         </xsl:when>
+        <!-- TODO: make semantic list style in preamble -->
         <xsl:when test="@format='buttons'" >
             <xsl:text>\par&#xa;</xsl:text>
-            <xsl:text>\begin{itemize}[label=$\bigcirc$,leftmargin=3em,]&#xa;</xsl:text>
+            <xsl:text>\begin{itemize}[label=$\odot$,leftmargin=3em,]&#xa;</xsl:text>
             <xsl:for-each select="$problem/setup/var[@name=$varname]/elements/element">
                 <xsl:text>\item{}</xsl:text>
                 <xsl:apply-templates select='.' />
@@ -2136,7 +2137,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>5</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
-            <xsl:text>em]{\strut}</xsl:text>
+            <xsl:text>em]</xsl:text>
+            <!-- on baseline, height proportional to font -->
+            <xsl:text>{\raisebox{1ex}{}}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
