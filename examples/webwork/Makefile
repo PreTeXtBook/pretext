@@ -66,6 +66,7 @@ include Makefile.paths
 MBXSL = $(MB)/xsl
 MBUSR = $(MB)/user
 WWEXAMPLE = $(MB)/examples/webwork
+DTD = $(MB)/schema/dtd
 
 # These paths are subdirectories of
 # the scratch directory
@@ -101,10 +102,25 @@ sample-chapter-html:
 	cd $(HTMLOUT); \
 	xsltproc --stringparam webwork.server https://webwork.pcc.edu --stringparam html.knowl.exercise.inline no $(MBXSL)/mathbook-html.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
 
+# a one-time prerequisite for LaTeX conversion
+# problems living on a server, and image construction at server
+# our "webwork-tex" is a subdirectory of where the PDF is compiled
+# -s specifies an existing WW server to use (ignore security warnings)
+sample-chapter-server-tex:
+	install -d $(PDFOUT)/webwork-tex
+	$(MB)/script/mbx -v -c webwork-tex -s https://webwork.pcc.edu -d $(PDFOUT)/webwork-tex $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
 
-###################################
-# Everything below here is OBSOLETE
-###################################
+# LaTeX version of the sanple chapter
+# see prerequisite just above
+# the "webwork-tex" directory must be given here
+# [note trailing slash (subject to change)]
+sample-chapter-latex:
+	install -d $(PDFOUT)
+	-rm $(PDFOUT)/*.tex
+	cd $(PDFOUT); \
+	xsltproc --stringparam webwork.server.latex $(PDFOUT)/webwork-tex/ $(MBXSL)/mathbook-latex.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml; \
+	xelatex sample-ww-chapter.tex; \
+	xelatex sample-ww-chapter.tex
 
 ###########
 # Utilities
@@ -112,21 +128,28 @@ sample-chapter-html:
 
 # Verify Source integrity
 #   Leaves "dtderrors.txt" in SCRATCH
-#   can then grep on, eg
+#   can then grep on, e.g.
 #     "element XXX:"
 #     "does not follow"
 #     "Element XXXX content does not follow"
 #     "No declaration for"
 #   Automatically invokes the "less" pager, could configure as $(PAGER)
-check-mini-obsolete:
+sample-chapter-check:
 	install -d $(SCRATCH)
 	-rm $(SCRATCH)/dtderrors.*
-	-xmllint --xinclude --noout --dtdvalid $(WWDTD)/webwork.dtd $(WWMBX)/examples/minimal/mini.xml 2> $(SCRATCH)/dtderrors.txt
-	less $(SCRATCH)/dtderrors.txt
+	-xmllint --xinclude --noout --dtdvalid $(DTD)/mathbook.dtd $(WWEXAMPLE)/sample-chapter/sample-chapter.xml 2> $(SCRATCH)/dtderrors.txt
+	# less $(SCRATCH)/dtderrors.txt
 
-##########
-## Testing
-##########
+# 2016-02-10: no serious effort yet to make thie check below pass
+template-check:
+	install -d $(SCRATCH)
+	-rm $(SCRATCH)/dtderrors.*
+	-xmllint --xinclude --noout --dtdvalid $(DTD)/mathbook.dtd $(WWEXAMPLE)/webwork-templates/webwork-templates.xml 2> $(SCRATCH)/dtderrors.txt
+	# less $(SCRATCH)/dtderrors.txt
+
+###################################
+# Everything below here is OBSOLETE
+###################################
 
 minimal-obsolete:
 	install -d $(PGOUT) $(MBUSR)
@@ -134,28 +157,6 @@ minimal-obsolete:
 	cp $(WWXSL)/extract-webwork.xsl $(WWXSL)/webwork-pg.xsl $(MBUSR)
 	cd $(PGOUT); \
 	xsltproc --stringparam webwork.server https://webwork.pcc.edu $(MBUSR)/extract-webwork.xsl $(WWMBX)/examples/minimal/mini.xml
-
-rip-obsolete:
-	install -d $(PDFOUT) $(MBUSR)
-	-rm $(PDFOUT)/*.tex
-	cp $(WWXSL)/extract-webwork-tex.xsl $(MBXSL)
-	# cp $(MBXSL)/mathbook-common.xsl $(MBXSL)/extract-identity.xsl $(MBUSR)
-	cd $(PDFOUT); \
-	xsltproc $(MBUSR)/extract-webwork-tex.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml
-	#
-	install -d $(PDFOUT)/webwork-tex
-	$(MB)/script/mbx -v -c webwork-tex -s https://webwork.pcc.edu -d $(PDFOUT)/webwork-tex $(WWMBX)/examples/sample-chapter/sample-chapter.xml
-
-chapter-obsolete:
-	install -d $(PDFOUT) $(MBUSR)
-	-rm $(PDFOUT)/*.tex
-	cp $(WWXSL)/webwork-latex.xsl $(MBUSR)
-	# can experiment with   --stringparam exercise.text.solution no 
-	cd $(PDFOUT); \
-	xsltproc --stringparam webwork.server https://webwork.pcc.edu --stringparam webwork.server.latex "$(PDFOUT)/webwork-tex/" --stringparam toc.level 0 --stringparam latex.preamble.early "\setlength\parindent{0mm}\setlength\parskip{0.5pc}" $(MBUSR)/webwork-latex.xsl $(WWMBX)/examples/sample-chapter/sample-chapter.xml; \
-	xelatex sample-ww-chapter.tex; \
-	xelatex sample-ww-chapter.tex
-	#
 
 templates-obsolete:
 	install -d $(PGOUT) $(MBUSR)
