@@ -37,7 +37,7 @@
 <!-- Elements that could be inside a single line of text -->
 <!-- For example, an <ndash>, but not a <me>             -->
 <!-- Precede these by a #PCDATA, wrap with ( )*          -->
-<!ENTITY % characters "nbsp|ndash|mdash|ampersand|less|greater|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|tilde|backslash|lq|rq|lsq|rsq|ellipsis|copyright|ie|eg|etc|circa|tex|latex|trademark|registered|today|timeofday">
+<!ENTITY % characters "nbsp|ndash|mdash|ampersand|less|greater|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|tilde|backslash|lq|rq|lsq|rsq|ellipsis|copyright|ie|eg|etc|circa|tex|latex|webwork|trademark|registered|today|timeofday">
 <!ENTITY % markup "xref|url|m|c|em|alert|q|sq|term|foreign|quantity|acro|booktitle">
 <!ENTITY % line "%characters; | %markup;">
 
@@ -59,14 +59,14 @@
 <!-- Elements that can mix anywhere with a paragraph, -->
 <!-- such as in the statement of a theorem or a proof -->
 <!-- For example <md> yes, but <theorem> no           -->
-<!-- <todo> is banned from interior of paragraphs     -->
-<!ENTITY % para "p|md|mdn|ul|ol|dl|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|image|tabular|todo|notation|index">
+<!ENTITY % para "p|md|mdn|ul|ol|dl|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|image|tabular|notation|index">
 
 <!-- Blocks -->
 <!-- Top-level descendents of structural elements                             -->
 <!-- Everything like a paragraph, but also more substantial                   -->
 <!-- These items cannot be contained in anything but a structural subdivision -->
-<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|example|exercise">
+<!-- Note: the "todo" element is in this list                                 -->
+<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|example|exercise|todo">
 
 
 <!-- ######### -->
@@ -80,7 +80,7 @@
 <!ELEMENT book ((title, subtitle?, frontmatter, chapter+, appendix*, backmatter?)|(title, subtitle?, frontmatter, part+, appendix*, backmatter?))>
     <!ATTLIST book xml:id ID #IMPLIED>
 
-<!ELEMENT article (title, subtitle?, frontmatter, (section|exercises|references)+, backmatter)>
+<!ELEMENT article (title, subtitle?, frontmatter?, (section|exercises|references)+, backmatter?)>
     <!ATTLIST article xml:id ID #IMPLIED>
 
 <!ELEMENT part (title, chapter+)>
@@ -249,7 +249,8 @@
     <!ATTLIST row left          (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST row halign        (left|center|right)        #IMPLIED>
 
-<!ELEMENT cell    (#PCDATA|%sentence;)*>
+<!-- answer is just for WW problems -->
+<!ELEMENT cell    (#PCDATA|%sentence;|answer)*>
     <!ATTLIST cell bottom       (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST cell right        (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST cell halign       (left|center|right)        #IMPLIED>
@@ -310,7 +311,7 @@
 <!ELEMENT rbrace     EMPTY>
 <!ELEMENT tilde      EMPTY>
 <!ELEMENT backslash  EMPTY>
-<!-- see copyright symbol in frontmatter -->
+<!-- see copyright possibly EMPTY in frontmatter description-->
 <!ELEMENT lq         EMPTY>
 <!ELEMENT rq         EMPTY>
 <!ELEMENT lsq        EMPTY>
@@ -327,6 +328,7 @@
 <!ELEMENT circa       EMPTY>
 <!ELEMENT tex         EMPTY>
 <!ELEMENT latex       EMPTY>
+<!-- see webwork possibly EMPTY in larger definition -->
 <!ELEMENT trademark   EMPTY>
 <!ELEMENT registered  EMPTY>
 <!ELEMENT today       EMPTY>
@@ -384,16 +386,19 @@
 <!-- Math -->
 <!-- #### -->
 
-<!ELEMENT m   (#PCDATA)>
-<!ELEMENT me  (#PCDATA)>
-<!ELEMENT men (#PCDATA)>
+<!-- var is allowed only within a webwork problem         -->
+<!-- xref is allowed only on mrows to allow for "reasons" -->
+<!-- TODO: warn on use of var outside of webwork          -->
+<!ELEMENT m   (#PCDATA|var)*>
+<!ELEMENT me  (#PCDATA|var)*>
+<!ELEMENT men (#PCDATA|var)*>
     <!ATTLIST men xml:id ID #IMPLIED>
 
 <!ELEMENT md   (mrow, (mrow|intertext)*)>
 <!ELEMENT mdn  (mrow, (mrow|intertext)*)>
 
 <!-- <xref> may occur in an <mrow> as a "reason" -->
-<!ELEMENT mrow (#PCDATA|xref)*>
+<!ELEMENT mrow (#PCDATA|var|xref)*>
     <!ATTLIST mrow xml:id ID #IMPLIED>
     <!ATTLIST mrow number (yes|no) #IMPLIED>
 
@@ -411,7 +416,7 @@
 <!ELEMENT exercisegroup (introduction?, exercise+, conclusion?)>
     <!ATTLIST exercisegroup xml:id ID    #IMPLIED>
 
-<!ELEMENT exercise (title?, statement, hint*, answer*, solution*)>
+<!ELEMENT exercise (title?, ((statement, hint*, answer*, solution*)|(introduction?, webwork, conclusion?)))>
     <!ATTLIST exercise xml:id ID    #IMPLIED>
     <!ATTLIST exercise number CDATA #IMPLIED>
 <!-- title, statement described elsewhere -->    
@@ -419,8 +424,35 @@
     <!ATTLIST hint xml:id ID #IMPLIED>
 <!ELEMENT answer   (%para;)*>
     <!ATTLIST answer xml:id ID #IMPLIED>
+    <!-- see other attributes for WW answer blanks -->
 <!ELEMENT solution (%para;)*>
     <!ATTLIST solution xml:id ID #IMPLIED>
+
+<!-- WeBWorK exercises -->
+<!ELEMENT webwork (title?, macros?, setup?, statement, hint*, solution*)?>
+    <!ATTLIST webwork xml:id ID     #IMPLIED>
+    <!ATTLIST webwork source CDATA  #IMPLIED>
+    <!ATTLIST webwork seed   CDATA  #IMPLIED>
+
+<!-- <!ELEMENT macros (macro+)> -->  <!-- FIXME -->
+<!ELEMENT macro (#PCDATA)>
+
+<!ELEMENT setup (var*,pg-code)>
+
+<!ELEMENT var (static?)>
+    <!ATTLIST var name       CDATA #IMPLIED>
+    <!ATTLIST var category   CDATA #IMPLIED>
+<!ELEMENT static (#PCDATA)>
+
+<!ELEMENT pg-code (#PCDATA)>
+
+<!-- <!ELEMENT answer EMPTY> defined above for generic exercise -->
+<!-- attributes here are WW-specific     -->
+<!-- TODO: warn on content in WW answer? -->
+    <!ATTLIST answer var          CDATA #IMPLIED>
+    <!ATTLIST answer format       CDATA #IMPLIED>
+    <!ATTLIST answer evaluator    CDATA #IMPLIED>
+    <!ATTLIST answer width        CDATA #IMPLIED>
 
 
 <!-- Video -->
@@ -442,7 +474,9 @@
     <!ATTLIST image  valign   (bottom|middle|top)   #IMPLIED>
 
 <!-- typically for accessibility, also used in notation element -->
-<!ELEMENT description   (#PCDATA|%line;)*>
+<!-- var is only active/usable within a webwork problem         -->
+<!-- TODO: warn on var used elsewhere?                          -->
+<!ELEMENT description   (#PCDATA|%line;|var)*>
 
 <!ELEMENT latex-image-code   (#PCDATA)>
 <!ELEMENT asymptote   (#PCDATA)>
@@ -515,14 +549,14 @@
 <!ELEMENT frontmatter   (titlepage?, colophon?, biography*, abstract?, dedication?, acknowledgement*, foreword*, preface*)>
     <!ATTLIST frontmatter xml:id ID #IMPLIED>
 
-<!ELEMENT titlepage   (author*|editor*|credit*|date*)>
+<!ELEMENT titlepage   (author*,editor*,credit*,date?)>
 
 <!ELEMENT author       (personname, department*, institution*, email*)>
 <!ELEMENT editor       (personname, department*, institution*, email*)>
 
 <!ELEMENT personname   (#PCDATA|%characters;)*>
-<!ELEMENT department   (#PCDATA|%characters;)*>
-<!ELEMENT institution  (#PCDATA|%characters;)*>
+<!ELEMENT department   (#PCDATA|%multiline;)*>
+<!ELEMENT institution  (#PCDATA|%multiline;)*>
 <!ELEMENT email        (#PCDATA)>
 
 <!ELEMENT credit   (title?, (author|editor)*)>
@@ -532,7 +566,7 @@
 
 <!ELEMENT colophon   (copyright*)>
 
-<!ELEMENT copyright      (EMPTY|(year, holder, minilicense?, shortlicense?))>
+<!ELEMENT copyright      (year, holder, minilicense?, shortlicense?)?>
 <!ELEMENT year           (#PCDATA|%line;)*>
 <!ELEMENT holder         (#PCDATA|%line;)*>
 <!ELEMENT minilicense    (#PCDATA|%line;)*>
