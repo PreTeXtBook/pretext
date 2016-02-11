@@ -968,15 +968,6 @@
     </xsl:if>
 </xsl:template>
 
-
-<!-- re-activate, since MBX kills all titles -->
-<xsl:template match="webwork//title">
-    <xsl:apply-templates />
-</xsl:template>
-
-
-
-
 <!-- ####################### -->
 <!-- Static, Named Templates -->
 <!-- ####################### -->
@@ -1606,10 +1597,5 @@
         </xsl:call-template>
     </xsl:if>
 </xsl:template>
-
-
-<!-- ######### -->
-<!-- Utilities -->
-<!-- ######### -->
 
 </xsl:stylesheet>
