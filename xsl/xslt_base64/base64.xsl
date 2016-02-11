@@ -171,7 +171,7 @@
 			</xsl:when>
 			<!-- should never land here -->
 			<xsl:otherwise>
-				<xsl:message>MBX:BUG   Something went very wrong with bse64 encoding</xsl:message>
+				<xsl:message>MBX:BUG   Something went very wrong with base64 encoding</xsl:message>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
