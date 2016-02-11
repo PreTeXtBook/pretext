@@ -185,7 +185,7 @@
                     </setup>
 
                     <statement>
-                        <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:<br /><m><var name="$a" /> + <var name="$b" /> =</m> <answer var="$c" width="2" /></p>
+                        <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>: <m><var name="$a" /> + <var name="$b" /> =</m> <answer var="$c" width="2" /></p>
                     </statement>
 
                     <solution>
@@ -201,9 +201,9 @@
                 <statement>
                     <p>One of the strengths of <webwork /> is its ability to give intelligent feedback for incorrect answers.
                         <ul>
-                            <li>There is general feedback for when the student's answer is in an entirely different ballpark from the correct answer. Try entering something like <q>y</q>.</li>
-                            <li>There is general feedback for when the student's answer is not in the right form. Try entering <q>x<circumflex/>2*x<circumflex/>3</q>, which, right or wrong, is unsimplified.</li>
-                            <li>And problems can be written to detect and respond to common mistakes. Try entering an answer where you multiply the two exponents (instead of adding them, which would be correct.)</li>
+                            <li><p>There is general feedback for when the student's answer is in an entirely different ballpark from the correct answer. Try entering something like <q>y</q>.</p></li>
+                            <li><p>There is general feedback for when the student's answer is not in the right form. Try entering <q>x<circumflex />2*x<circumflex />3</q>, which, right or wrong, is unsimplified.</p></li>
+                            <li><p>And problems can be written to detect and respond to common mistakes. Try entering an answer where you multiply the two exponents (instead of adding them, which would be correct.)</p></li>
                         </ul>
                     </p>
                 </statement>
@@ -251,17 +251,18 @@
                     </setup>
 
                     <statement>
-                        <p>Use the properties of exponents to simplify <m><var name="$expression"/></m>.</p>
+                        <p>Use the properties of exponents to simplify <m><var name="$expression" /></m>.</p>
 
-                        <p halign="center"><m><var name="$expression"/>=</m><answer var="$answer" evaluator="$evaluator" width="8"/></p>
+                        <p><m><var name="$expression" />=</m><answer var="$answer" evaluator="$evaluator" width="8" /></p>
 
                     </statement>
 
                     <solution>
-                        <p>We <em>add</em> the exponents as follows:<md>
-                        <mrow><var name="$expression"/>&amp;=x^{<var name="$a"/>+<var name="$b"/>}</mrow>
-                        <mrow>&amp;=x^{<var name="$c"/>}</mrow>
-                        </md></p>
+                        <p>We <em>add</em> the exponents as follows:</p>
+                        <md>
+                            <mrow><var name="$expression" />&amp;=x^{<var name="$a" />+<var name="$b" />}</mrow>
+                            <mrow>&amp;=x^{<var name="$c" />}</mrow>
+                        </md>
                     </solution>
                 </webwork>
             </exercise>
@@ -321,7 +322,7 @@
                     </hint>
 
                     <solution>
-                        <p><me><var name="$expression"/>=\sqrt{<var name="$b"/>^2<var name="$a"/>}=<var name="$b"/>\sqrt{<var name="$a"/>}</me></p>
+                        <p><me><var name="$expression"/>=\sqrt{<var name="$b"/>^2\cdot <var name="$a"/>}=<var name="$b"/>\sqrt{<var name="$a"/>}</me></p>
                     </solution>
                 </webwork>
             </exercise>
@@ -331,9 +332,9 @@
         <section>
             <title>The Quadratic Formula</title>
 
-            <p>In the previous section, we saw relatively simple <wbwk/> questions. This section demonstrates how even very complicated <wbwk/> problems still behave well.</p>
+            <p>In the previous section, we saw relatively simple <webwork /> questions. This section demonstrates how even very complicated <webwork /> problems still behave well.</p>
 
-            <p>Here is a theorem that gives us a formula for the solutions of a second-degree polynomial equation. Note later how the <webwork /> problem references the theorem by its number. This seemingly minor detail demonstartes the degree to which <wbwk/> and MathBook XML have been integrated.</p>
+            <p>Here is a theorem that gives us a formula for the solutions of a second-degree polynomial equation. Note later how the <webwork /> problem references the theorem by its number. This seemingly minor detail demonstartes the degree to which <webwork /> and MathBook XML have been integrated.</p>
 
             <theorem xml:id="theorem-quadratic-formula">
                 <title>Quadratic Formula</title>
@@ -358,7 +359,7 @@
             <exercise>
                 <title>Solving Quadratic Equations</title>
 
-                <webwork xml:id="quadratic-equation" context="numeric" showpartialcorrect="yes" type="scaffold" >
+                <webwork xml:id="quadratic-equation" type="scaffold" >
 
                     <macros>
                         <macro>parserMultiAnswer.pl</macro>
@@ -502,59 +503,66 @@
                     <p>Not all problems that come from the OPL were written with MBX in mind, and they don't all fit into MBX space. This example illustrates that this should be taken into consideration when using OPL problems. Some of the graphs here are not fully visible in the web version of the article.</p>
                 </statement>
 
-                <webwork source="BasicAlgebra/EquationsAndInequalitiesInTwoVariables/GraphTwoVariableInequality110.pg" height="750"/>
+                <webwork source="BasicAlgebra/EquationsAndInequalitiesInTwoVariables/GraphTwoVariableInequality110.pg" />
             </exercise>
 
         </section>
 
         <section>
             <title>Antidifferentiation</title>
-            <p>This section demonstrates a few more features.</p>
 
-            <p>The derivative and antiderivative of a function can be understood through study of their graphical relationships.</p>
+            <!-- with Exercises subdivision, we need to structure remainder -->
+            <!-- an introduction is a lightweight way to accomplish that    -->
+            <introduction>
+                <p>This section demonstrates a few more features.</p>
 
-            <definition xml:id="definition-antiderivative">
-                <title>Antiderivative of a Function</title>
+                <p>The derivative and antiderivative of a function can be understood through study of their graphical relationships.</p>
 
-                <statement>
-                    <p>Suppose that <m>f(x)</m> and <m>F(x)</m> are two functions such that <me>F^\prime(x) = f(x).</me>  Then we say <m>F</m> is an <term>antiderivative</term> of <m>f</m>.</p>
-                </statement>
-            </definition>
+                <definition xml:id="definition-antiderivative">
+                    <title>Antiderivative of a Function</title>
 
-            <p>The Fundamental Theorem of Calculus in one of the high points of a course in single-variable course.</p>
+                    <statement>
+                        <p>Suppose that <m>f(x)</m> and <m>F(x)</m> are two functions such that <me>F^\prime(x) = f(x).</me>  Then we say <m>F</m> is an <term>antiderivative</term> of <m>f</m>.</p>
+                    </statement>
+                </definition>
 
-            <theorem xml:id="theorem-FTC">
-                <title>The Fundamental Theorem of Calculus</title>
-                <statement><index><main>Fundamental Theorem of Calculus</main></index>
-                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me></p>
-                </statement>
-                <proof>
-                    <p>Left to the reader.</p>
-                </proof>
-            </theorem>
+                <p>The Fundamental Theorem of Calculus in one of the high points of a course in single-variable course.</p>
 
-            <p>We state an equivalent version of the FTC, which is less-suited for computation, but which perhaps is a more interesting theoretical statement.</p>
+                <theorem xml:id="theorem-FTC">
+                    <title>The Fundamental Theorem of Calculus</title>
+                    <statement><index><main>Fundamental Theorem of Calculus</main></index>
+                        <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me></p>
+                    </statement>
+                    <proof>
+                        <p>Left to the reader.</p>
+                    </proof>
+                </theorem>
 
-            <corollary xml:id="corollary-FTC-derivative">
-                <statement>
-                    <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men></p>
-                </statement>
+                <p>We state an equivalent version of the FTC, which is less-suited for computation, but which perhaps is a more interesting theoretical statement.</p>
+
                 <todo>Should equation references come with parentheses?</todo>
-                <proof xml:id="proof-FTC-corollary">
-                    <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.</p>
-                    <mdn>
-                        <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
-                        <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
-                        <mrow>&amp;=f(x)-0 = f(x)</mrow>
-                    </mdn>
-                </proof>
-            </corollary>
 
+                <corollary xml:id="corollary-FTC-derivative">
+                    <statement>
+                        <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men></p>
+                    </statement>
+                    <proof xml:id="proof-FTC-corollary">
+                        <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.</p>
+                        <mdn>
+                            <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
+                            <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
+                            <mrow>&amp;=f(x)-0 = f(x)</mrow>
+                        </mdn>
+                    </proof>
+                </corollary>
+            </introduction>
 
             <exercises>
                 <title><webwork /> Exercises</title>
 
-                <p>This first problem is coming from the <webwork /> Open problem Library. One implication of this is that we might want to provide some commentary that connects the problem to the text.</p>
+                <introduction>
+                    <p>This first problem in this list is coming from the <webwork /> Open problem Library. One implication of this is that we might want to provide some commentary that connects the problem to the text.  The other two ask for essay answers, which would be graded by an instructor, so there is no opportunity to provide answer.</p>
+                </introduction>
 
                 <exercise xml:id="ww-graphical-antiderivatives">
                     <title>Graphical Antiderivatives</title>
@@ -573,9 +581,9 @@
                         <p><webwork /> problems can allow for open-ended essay responses that are intended to be assessed later by the instructor. For anonymous access, no text field is provided. But if this problem were used within <webwork /> as part of a homework set, users could submit an answer.</p>
                     </statement>
 
-                    <webwork >
+                    <webwork>
                         <statement>
-                            <p>Explain how we can use <xref ref="corollary-FTC-derivative" autoname="yes" /> to say that every continuous function <em>always</em> has a derivative. (And we will demonstrate here that you can use a  macro from <c>docinfo</c>: <m>\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)</m>. It will work in the <webwork /> problem, regardelss of whether you are using images, MathJax, or hardcopy.)</p>
+                            <p>Explain how we can use <xref ref="corollary-FTC-derivative" autoname="yes" /> to say that every continuous function <em>always</em> has a derivative. (And we will demonstrate here that you can use a  macro from <c>docinfo</c>: <m>\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)</m>. It will work in the <webwork /> problem, regardless of whether you are using images, MathJax, or hardcopy.)</p>
                             <answer format="essay" />
                         </statement>
                     </webwork>
@@ -584,7 +592,7 @@
                 <exercise xml:id="ww-discuss-inverse-processes">
                     <title>Inverse Processes</title>
 
-                    <webwork >
+                    <webwork>
                         <statement>
                             <p><q>Differentiation and integration are inverse processes.</q>  Cite <alert>specific results</alert> from this section in an explanation of how they justify this (somewhat imprecise) claim.</p>
                             <answer format="essay" width="40"/>
@@ -603,7 +611,7 @@
             <exercise xml:id="ww-PGML-format">
                 <title>PGML Formatting</title>
 
-                <webwork >
+                <webwork>
                     <statement>
                         <p>Smart double quotes: <q>Life is about making an impact, not making an income.</q></p>
                         <p>Smart single quotes: <sq>Whatever the mind of man can conceive and believe, it can achieve.</sq></p>
@@ -660,7 +668,6 @@
                                 ["?","is","is not",],
                                 "is not",
                             );
-
                         </pg-code>
                     </setup>
 
@@ -696,14 +703,12 @@
                               "The Fundamental Theorem of Calculus", # correct answer
                               last => ["None of these"], # can be a list
                             );
-
                         </pg-code>
                     </setup>
 
                     <statement>
                         <p>Which of the following suggest that differentiation and integration are inverse processes?</p>
                         <p><answer var="$theorem" format="buttons"/></p>
-
                     </statement>
 
                     <solution>
@@ -906,21 +911,24 @@
                     <statement>
                         <p>The graph below is a graph of <m>y=f(x)</m>. Use the graph to solve the equation <m>f(x)=1</m>.</p>
 
-                        <p halign="center"><image pg-name="$gr">
+                        <figure>
+                            <image pg-name="$gr">
                                 <description>a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$answer"/>,1) and (<var name="$second_x"/>,2) before leaving the graph moving more and more upward and to the right.</description>
-                        </image></p>
+                            </image>
+                        </figure>
 
-                        <p halign="center"><m>x=</m> <answer var="$answer"/> </p>
-
+                        <p><m>x=</m> <answer var="$answer"/></p>
                     </statement>
 
                     <solution>
 
                         <p>The graph reveals that the only solution to <m>f(x)=1</m> is <m>x=<var name="$answer"/></m>.</p>
 
-                        <p halign="center"><image pg-name="$solgr">
+                        <figure>
+                            <image pg-name="$solgr">
                                 <description>a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points ($answer,1) and ($second_x,2) before leaving the graph moving more and more upward and to the right; a horizontal line segment moves rightward from y=1 on the y-axis until it reaches a point on the curve; a vertical line segment moves down from this point to x=$answer on the x-axis.</description>
-                        </image></p>
+                            </image>
+                        </figure>
 
                     </solution>
 
@@ -932,12 +940,14 @@
         <section>
             <title>Other MBX Goodies</title>
 
-            <p>As long as we have your attention, this section demonstrates some other features that can be used in a MathBook XML project.</p>
+            <introduction>
+                <p>As long as we have your attention, this section demonstrates some other features that can be used in a MathBook XML project.</p>
+            </introduction>
 
             <subsection>
                 <title>Sage cells</title>
 
-                <p>Sage is an open-source Computer Algebra System based on Python. It's the open-source counterpart to software like Mathematica, Maple, and MatLab. An MBX projcet can have Sage cells like the one below. They can be pre-programmed with some Sage commands, but you are free to execute whatever Sage commands you like.</p>
+                <p>Sage is an open-source Computer Algebra System based on Python. It's the open-source counterpart to software like Mathematica, Maple, and MatLab. An MBX project can have Sage cells like the one below. They can be pre-programmed with some Sage commands, but you are free to execute whatever Sage commands you like.</p>
 
                 <sage>
                     <input>plot(abs(x)^x, (-2, 2), figsize=6)</input>
@@ -959,8 +969,8 @@
                 <p>Videos are somewhat interactive elements as well, in that you can pause, jump back, <etc/>.</p>
 
                 <figure>
-                    <video source="video/Henrietta.webm" />
                     <caption>Henrietta being silly</caption>
+                    <video source="video/Henrietta.webm" />
                 </figure>
 
 
