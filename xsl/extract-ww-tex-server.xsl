@@ -34,10 +34,8 @@
 <!-- in a form that the Python  mbx  script can employ it to   -->
 <!-- query the server for a LaTeX version of the problem       -->
 
-<!-- Paths below presume this stylesheet is in mathbook/user -->
-
 <!-- Common needed for internal ID's -->
-<xsl:import href="../xsl/mathbook-common.xsl" />
+<xsl:import href="mathbook-common.xsl" />
 
 <!-- Enclosing structure is a Python list -->
 <!-- Select WW problems with  @source     -->

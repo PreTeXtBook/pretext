@@ -1916,20 +1916,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="title" />
         <xsl:text>)\space\space{}</xsl:text>
     </xsl:if>
-    <!-- Order enforced: statement, hint, answer, solution -->
-    <xsl:if test="$exercise.text.statement='yes'">
-        <xsl:apply-templates select="statement" />
-        <xsl:text>\par\smallskip&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="hint and $exercise.text.hint='yes'">
-        <xsl:apply-templates select="hint" />
-    </xsl:if>
-    <xsl:if test="answer and $exercise.text.answer='yes'">
-        <xsl:apply-templates select="answer" />
-    </xsl:if>
-    <xsl:if test="solution and $exercise.text.solution='yes'">
-        <xsl:apply-templates select="solution" />
-    </xsl:if>
+    <!-- condition on webwork wrapper or not -->
+    <xsl:choose>
+        <xsl:when test="webwork">
+            <xsl:apply-templates select="webwork" />
+        </xsl:when>
+        <xsl:otherwise>
+        <!-- Order enforced: statement, hint, answer, solution -->
+            <xsl:if test="$exercise.text.statement='yes'">
+                <xsl:apply-templates select="statement" />
+                <xsl:text>\par\smallskip&#xa;</xsl:text>
+            </xsl:if>
+            <xsl:if test="hint and $exercise.text.hint='yes'">
+                <xsl:apply-templates select="hint" />
+            </xsl:if>
+            <xsl:if test="answer and $exercise.text.answer='yes'">
+                <xsl:apply-templates select="answer" />
+            </xsl:if>
+            <xsl:if test="solution and $exercise.text.solution='yes'">
+                <xsl:apply-templates select="solution" />
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
     <!-- close list if no more exercise in subdivision or in exercise group -->
     <xsl:choose>
         <xsl:when test="not(following-sibling::exercise) and parent::exercisegroup">
@@ -2030,7 +2038,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Basic outline of a "scaffold" problem -->
-<xsl:template match="webwork[statement and @type='scaffold']">
+<xsl:template match="webwork[@type='scaffold']">
     <xsl:apply-templates select="platform" />
 </xsl:template>
 
@@ -2049,14 +2057,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- default template, for complete presentation -->
 <xsl:template match="webwork//statement">
-    <!-- <xsl:text>\textbf{Problem.}\quad </xsl:text> -->
+    <xsl:text>\noindent%&#xa;</xsl:text>
+    <xsl:text>\textbf{Problem.}\quad </xsl:text>
     <xsl:apply-templates />
     <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
 
 <!-- default template, for solution -->
 <xsl:template match="webwork//solution">
-    <xsl:text>\par\noindent%&#xa;</xsl:text>
+    <xsl:text>\noindent%&#xa;</xsl:text>
     <xsl:text>\textbf{Solution.}\quad </xsl:text>
     <xsl:apply-templates />
     <xsl:text>\par&#xa;</xsl:text>
@@ -2064,7 +2073,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- default template, for hint -->
 <xsl:template match="webwork//hint">
-    <xsl:text>\par\noindent%&#xa;</xsl:text>
+    <xsl:text>\noindent%&#xa;</xsl:text>
     <xsl:text>\textbf{Hint.}\quad </xsl:text>
     <xsl:apply-templates />
     <xsl:text>\par&#xa;</xsl:text>
@@ -2171,14 +2180,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- WeBWork Problems from Servers -->
 <!-- ############################# -->
 
-<!-- @source in an empty "webwork" element indicates     -->
-<!-- the problem lives on a server.  HTML output has     -->
-<!-- no problem with that.  For LaTeX, the  mbx  script  -->
-<!-- fetches a LaTeX rending and associated image files. -->
-<!-- Here, we just provide a light wrapper, and drop an  -->
-<!-- include, since the base forthe filename has been    -->
-<!-- managed to be predictable.                          -->
-
+<!-- @source, in an otherwise empty "webwork" element,     -->
+<!-- indicates the problem lives on a server.  HTML        -->
+<!-- output has no problem with that (it is easier than    -->
+<!-- locally authored).  For LaTeX, the  mbx  script       -->
+<!-- fetches a LaTeX rendering and associated image files. -->
+<!-- Here, we just provide a light wrapper, and drop an    -->
+<!-- include, since the basename for the filenames has     -->
+<!-- been managed by the  mbx  script to be predictable.   -->
 <xsl:template match="webwork[@source]|webwork[descendant::image[@pg-name]]">
     <!-- directory of server LaTeX must be specified -->
     <xsl:if test="$webwork.server.latex = ''">

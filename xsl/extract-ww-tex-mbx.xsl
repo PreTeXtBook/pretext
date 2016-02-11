@@ -35,13 +35,16 @@
 <!-- in a form that the Python  mbx  script can employ it to       -->
 <!-- query the server for a version of the problem with the images -->
 
-<!-- Paths below presume this stylesheet is in mathbook/user -->
+<xsl:import href="./mathbook-common.xsl" />
 
-<!-- Common needed for internal ID's          -->
-<!-- Creation of PG and conversion to base 64 -->
-<xsl:import href="../xsl/mathbook-common.xsl" />
-<xsl:import href="../../ww-mbx/xsl/webwork-pg.xsl" />
-<xsl:import href="../../ww-mbx/xsl/xslt_base64/base64.xsl"/>
+<!-- Base 64 Library, MIT License -->
+<!-- Used to encode WeBWork problems           -->
+<!-- Will also read  base64_binarydatamap.xml  -->
+<xsl:include href="./xslt_base64/base64.xsl"/>
+
+<!-- Routines specific to converting a "webwork"  -->
+<!-- element into a problem in the PGML language -->
+<xsl:include href="./webwork-pg.xsl" />
 
 <!-- Enclosing structure is a Python list -->
 <!-- Select WW problems with PG images    -->
@@ -54,16 +57,18 @@
 <!-- Python triple: ('base64-version', 'seed', 'internal-id') -->
 <!-- transmit items as strings for Python's exec()            -->
 <!-- trailing space in Python list is fine                    -->
-<!-- Only need to match "webwork" due to select above         -->
 <!-- We *do not* URL-encode the base64 string since the       -->
 <!-- Python  mbx  script uses the "requests" library which    -->
 <!-- seems to do the encoding automatically                   -->
-<xsl:template match="webwork">
+<xsl:template match="webwork[descendant::image[@pg-name]]">
     <!-- A Python triple with information -->
     <xsl:text>(</xsl:text>
     <xsl:text>'</xsl:text>
+    <!-- formulate PG version with included routine  -->
+    <!-- form base64 version for URL transmission    -->
+    <!-- NB: not URL-safe, Python library handles it -->
     <xsl:variable name="pg-ascii">
-        <xsl:apply-imports />
+        <xsl:apply-templates select="." mode="pg" />
     </xsl:variable>
     <xsl:call-template name="b64:encode">
         <xsl:with-param name="urlsafe" select="false()" />
