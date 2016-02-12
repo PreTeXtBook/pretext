@@ -3476,6 +3476,9 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                         <xsl:variable name="pg-ascii">
                             <xsl:apply-templates select="." mode="pg" />
                         </xsl:variable>
+                        <!-- A useful debugging message if WW problems misbehave            -->
+                        <!-- Redirect output with 2> if there is too much at the console    -->
+                        <!-- <xsl:message><xsl:value-of select="$pg-ascii" /></xsl:message> -->
                         <xsl:call-template name="b64:encode">
                             <xsl:with-param name="urlsafe" select="true()" />
                             <xsl:with-param name="asciiString">
