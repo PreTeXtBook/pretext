@@ -1303,13 +1303,17 @@
     </xsl:choose>
     <xsl:if test="description">
         <xsl:text>, extra_html_tags=&gt;qq!alt="</xsl:text>
-        <xsl:apply-templates select="description"/>
+        <xsl:apply-templates select="description" mode="pg" />
         <xsl:text>"!</xsl:text>
     </xsl:if>
     <xsl:text>)@]* </xsl:text>
 </xsl:template>
 
-
+<!-- We need to override the HTML template that  -->
+<!-- puts the description into an "alt" tag -->
+<xsl:template match="description" mode="pg">
+    <xsl:apply-templates />
+</xsl:template>
 
 <!-- ###### -->
 <!-- Markup -->
