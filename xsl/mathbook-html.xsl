@@ -19,9 +19,18 @@ You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
+<!-- XSLT Cookbook, 2nd Edition                                     -->
+<!-- Copyright 2006, O'Reilly Media, Inc.                           -->
+<!-- Declaration and entity definition format from Recipe 2.8       -->
+<!-- Unicode strings from http://stackoverflow.com/questions/586231 -->
+<!DOCTYPE stylesheet [
+     <!ENTITY UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ">
+     <!ENTITY LOWERCASE "abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ">
+]>
+
 <!-- Identify as a stylesheet -->
+    <!-- xmlns="http://www.w3.org/1999/xhtml" -->
 <xsl:stylesheet
-    xmlns="http://www.w3.org/1999/xhtml"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:b64="https://github.com/ilyakharlamov/xslt_base64"
@@ -698,6 +707,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Back Colophon -->
 <!-- Nothing special, so just process similarly to front -->
 
+
+<xsl:template match="index-list">
+    <xsl:call-template name="print-index" />
+</xsl:template>
+
+
+
 <!-- Solutions List -->
 <!-- We construct one huge list of solutions, organized      -->
 <!-- as divisions, one per "exercises" section.  Seperate    -->
@@ -921,6 +937,226 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- into environment manufacture       -->
 <xsl:template match="contributors">
     <xsl:apply-templates select="contributor" />
+</xsl:template>
+
+<!-- ############## -->
+<!-- Index Creation -->
+<!-- ############## -->
+
+<xsl:template name="print-index">
+    <!-- <index> and identified <term> with simple content index entry             -->
+    <!-- start attribute is actual end of a "page range", goodies are at other end -->
+    <xsl:variable name="unstructured-index">
+        <xsl:for-each select="//index[not(child::*) and not(@start)]|//term[@index='yes']">
+            <xsl:variable name="content">
+                <xsl:apply-templates select="*|text()" />
+            </xsl:variable>
+            <index>
+                <xsl:apply-templates select="." mode="index-enclosure" />
+                <text>
+                    <xsl:value-of select="$content" />
+                </text>
+                <key>
+                    <xsl:value-of select="translate($content, 'ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ', 'abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ')" />
+                </key>
+            </index>
+        </xsl:for-each>
+    </xsl:variable>
+    <!-- index entries with structure, cant't be end of a "page range" -->
+    <xsl:variable name="structured-index">
+        <xsl:for-each select="//index[child::*]">
+            <index>
+                <!-- write/preserve info about the location's surroundings -->
+                <!-- as "knowl" and "typename" temporary elements          -->
+                <xsl:apply-templates select="." mode="index-enclosure" />
+                 <xsl:for-each select="main|sub">
+                    <xsl:variable name="content">
+                        <xsl:apply-templates select="*|text()" />
+                    </xsl:variable>
+                    <text>
+                        <xsl:value-of select="$content" />
+                    </text>
+                    <key>
+                        <xsl:value-of select="translate($content, 'ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ', 'abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ')" />
+                    </key>
+                </xsl:for-each>
+            </index>
+        </xsl:for-each>
+    </xsl:variable>
+    <!-- sort now that info from document tree ordering is recorded -->
+    <xsl:variable name="sorted-index">
+        <xsl:for-each select="exsl:node-set($unstructured-index)/*|exsl:node-set($structured-index)/*">
+            <xsl:sort select="./key[1]" />
+            <xsl:sort select="./key[2]" />
+            <xsl:sort select="./key[3]" />
+            <xsl:copy-of select="." />
+        </xsl:for-each>
+    </xsl:variable>
+    <!-- work out if each new entry needs some material in      -->
+    <!-- the index prior to simply making a knowl for the entry -->
+    <xsl:for-each select="exsl:node-set($sorted-index)/*">
+        <!-- strings for comparisons, this item first -->
+        <xsl:variable name="key1"><xsl:value-of select="key[1]" /></xsl:variable>
+        <xsl:variable name="key2"><xsl:value-of select="key[2]" /></xsl:variable>
+        <xsl:variable name="key3"><xsl:value-of select="key[3]" /></xsl:variable>
+        <!-- strings for second item -->
+        <xsl:variable name="previous" select="preceding-sibling::*[1]" />
+        <xsl:variable name="prev1"><xsl:value-of select="$previous/key[1]" /></xsl:variable>
+        <xsl:variable name="prev2"><xsl:value-of select="$previous/key[2]" /></xsl:variable>
+        <xsl:variable name="prev3"><xsl:value-of select="$previous/key[3]" /></xsl:variable>
+        <!-- flatten the sorted structure, with breaks -->
+        <xsl:choose>
+            <!-- new key1, so finish knowl list and start new level one list -->
+            <!-- (if not dimply starting out)                                -->
+            <!-- Extraordinary: perhaps time for a new prominent letter      -->
+            <xsl:when test="not($key1 = $prev1)">
+                <xsl:if test="not($prev1='')">
+                    <xsl:call-template name="end-index-knowl-list" />
+                </xsl:if>
+                <!-- Compare lower-cased leading letters, break if changed -->
+                <xsl:if test="not(substring($prev1, 1,1) = substring($key1, 1,1))">
+                    <div class="indexletter">
+                        <xsl:value-of select="translate(substring($key1, 1, 1), 'abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ', 'ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ')" />
+                    </div>
+                </xsl:if>
+                <!--  -->
+                <xsl:text disable-output-escaping="yes">&lt;div class="indexitem"></xsl:text>
+                <!-- <xsl:value-of select="$key1" /> -->
+                <xsl:value-of select="text[1]" />
+                <xsl:choose>
+                    <xsl:when test="not($key2='')">
+                        <!-- no links yet, so close index item w/o links (?), open subitem -->
+                        <xsl:text disable-output-escaping="yes">&lt;/div></xsl:text>
+                        <xsl:text disable-output-escaping="yes">&lt;div class="subindexitem"></xsl:text>
+                        <xsl:value-of select="text[2]" />
+                        <xsl:choose>
+                            <xsl:when test="not($key3='')">
+                                <!-- no links yet, so close subindex item w/o links, open subsubitem -->
+                                <xsl:text disable-output-escaping="yes">&lt;/div></xsl:text>
+                                <xsl:text disable-output-escaping="yes">&lt;div class="subsubindexitem"></xsl:text>
+                                <xsl:value-of select="'*'" />
+                                <xsl:value-of select="text[3]" />
+                                <!-- terminal so start knowl list -->
+                                <xsl:call-template name="begin-index-knowl-list" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <!-- no subsubitems, so start knowl span -->
+                                <xsl:call-template name="begin-index-knowl-list" />
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!-- no subitems, so start knowl span -->
+                        <xsl:call-template name="begin-index-knowl-list" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <!-- key1 unchanged, but new key2 -->
+            <!-- so finish knowl list and start new level two list -->
+            <xsl:when test="not($key2 = $prev2)">
+                <xsl:call-template name="end-index-knowl-list" />
+                <xsl:text disable-output-escaping="yes">&lt;div class="subindexitem"></xsl:text>
+                <xsl:value-of select="text[2]" />
+                <xsl:choose>
+                    <xsl:when test="not($key3='')">
+                        <!-- no links yet, so close subindex item w/o links, open subsubitem -->
+                        <xsl:text disable-output-escaping="yes">&lt;/div></xsl:text>
+                        <xsl:text disable-output-escaping="yes">&lt;div class="subsubindexitem"></xsl:text>
+                        <xsl:value-of select="'*'" />
+                        <xsl:value-of select="text[3]" />
+                        <!-- terminal so start knowl list -->
+                        <xsl:call-template name="begin-index-knowl-list" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!-- no subsubitems, so start knowl span -->
+                        <xsl:call-template name="begin-index-knowl-list" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <!-- key1 and key 2 unchanged, but new key3              -->
+            <!-- so finish knowl list and start new level three list -->
+            <xsl:when test="not($key3 = $prev3)">
+                <xsl:call-template name="end-index-knowl-list" />
+                <xsl:text disable-output-escaping="yes">&lt;div class="subsubindexitem"></xsl:text>
+                <xsl:value-of select="'*'" />
+                <xsl:value-of select="text[3]" />
+                <xsl:call-template name="begin-index-knowl-list" />
+            </xsl:when>
+            <!-- if here then key1, key2, key3 all unchanged, so just drop a link -->
+        </xsl:choose>
+        <!-- every item has a link, above we just place breaks into the list -->
+        <xsl:text> </xsl:text>
+        <xsl:element name="a">
+            <!-- knowl or traditional hyperlink     -->
+            <!-- mutually exclusive by construction -->
+            <xsl:if test="knowl">
+                <xsl:attribute name="knowl">
+                    <xsl:value-of select="knowl" />
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="hyperlink">
+                <xsl:attribute name="href">
+                    <xsl:value-of select="hyperlink" />
+                </xsl:attribute>
+            </xsl:if>
+            <!-- content: replace with localized short-names -->
+            <xsl:value-of select="typename" />
+        </xsl:element>
+    </xsl:for-each>
+    <!-- we fall out with one unbalanced item -->
+    <xsl:call-template name="end-index-knowl-list" />
+</xsl:template>
+
+<!-- Climb the tree looking for an enclosing structure of        -->
+<!-- interest and preserve the knowl-url, plus clickable text    -->
+<!-- One notable case: paragraph must be "top-level", just below -->
+<!-- a structural document node                                  -->
+<!-- Recursion always halts, since "mathbook" is structural      -->
+<!-- TODO: save knowl or section link                            -->
+<xsl:template match="*" mode="index-enclosure">
+    <xsl:variable name="structural">
+        <xsl:apply-templates select="." mode="is-structural" />
+    </xsl:variable>
+    <xsl:variable name="block">
+        <xsl:apply-templates select="." mode="is-block" />
+    </xsl:variable>
+    <xsl:choose>
+        <!-- found a structural parent first           -->
+        <!-- collect a url for a traditional hyperlink -->
+        <xsl:when test="$structural='true'">
+            <hyperlink>
+                <xsl:apply-templates select="." mode="url" />
+            </hyperlink>
+            <typename>
+                <xsl:apply-templates select="." mode="type-name" />
+            </typename>
+        </xsl:when>
+        <!-- found a block parent     -->
+        <!-- collect a knowl filename -->
+        <xsl:when test="$block='true'">
+            <knowl>
+                <xsl:apply-templates select="." mode="xref-knowl-filename" />
+            </knowl>
+            <typename>
+                <xsl:apply-templates select="." mode="type-name" />
+            </typename>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="parent::*" mode="index-enclosure" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Start markup for a list of knowls representing entries -->
+<xsl:template name="begin-index-knowl-list">
+    <xsl:text disable-output-escaping="yes">&lt;span class="indexknowl"></xsl:text>
+</xsl:template>
+
+<!-- End markup for a list of knowls representing entries -->
+<!-- End markup for the actual index entry text           -->
+<xsl:template name="end-index-knowl-list">
+    <xsl:text disable-output-escaping="yes">&lt;/span></xsl:text>
+    <xsl:text disable-output-escaping="yes">&lt;/div></xsl:text>
 </xsl:template>
 
 <!-- ###################### -->

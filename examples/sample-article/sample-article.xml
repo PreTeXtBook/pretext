@@ -235,9 +235,9 @@ the xsltproc executable.
             -->
             <theorem xml:id="theorem-FTC">
                 <title>The Fundamental Theorem of Calculus</title>
-                <index><main>Fundamental Theorem of Calculus</main></index>
+                <index>Fundamental Theorem of Calculus</index>
                 <statement>
-                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me></p>
+                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me><index>Buried in p/statement/theorem</index></p>
                 </statement>
                 <proof>
                     <p>Left to the reader.</p>
@@ -307,6 +307,10 @@ the xsltproc executable.
             <title>Computing Integrals with Sage (<m>\int</m>)</title>
 
             <index><main>Sage</main><sub>integration</sub></index>
+            <index><main>Sage</main><sub>integration</sub><sub>cell</sub></index>
+            <index><main>Sage</main><sub>integration</sub><sub>numerical</sub></index>
+            <index><main>Numerical integration</main></index>
+            <index><main>Numerical integration</main><sub>Sage</sub><sub>cell</sub></index>
             <index><main>Numerical integration</main><see>Sage integration</see></index>
 
             <p>Sage can compute definite integrals.  The output contains the approximate numerical value of the definite integral, followed by an upper bound  of the error in the approximation.</p>
@@ -644,10 +648,10 @@ the xsltproc executable.
                 <li><p>Black</p></li>
                 <li><p>Orange</p></li>
                 <li><p>Pink</p></li>
-                <li><p>Salmon</p></li>
+                <li><p>Salmon<index>Strange Colors</index></p></li>
                 <li><p>Aqua</p></li>
                 <li><p>Cyan</p></li>
-                <li><p>Puce</p></li>
+                <li><p>Puce<index>Strange Colors</index></p></li>
             </ol>
 
             <ul cols="2">
@@ -1688,7 +1692,7 @@ the xsltproc executable.
                             <li><p>There is an identity element, <m>e</m>.</p></li>
                             <li><p>For every element <m>b</m>, there is an element <m>c</m> (the inverse), such that <me>b\cdot c=c\cdot b = e.</me></p></li>
                         </ol>
-                        <p>If these conditions are met for a set <m>G</m>, then we say <m>G</m> is a <term>group</term>.</p>
+                        <p>If these conditions are met for a set <m>G</m>, then we say <m>G</m> is a <term index="yes">group</term>.</p>
                     </statement>
                 </definition>
 
@@ -3693,6 +3697,10 @@ the xsltproc executable.
 
         <backmatter xml:id="backmatter">
             <title>Reference</title>
+
+            <section>
+                <title>Index</title>
+            </section>
 
             <section>
                 <title>Notation</title>

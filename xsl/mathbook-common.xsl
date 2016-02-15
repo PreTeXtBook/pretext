@@ -19,6 +19,26 @@ You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
+<!-- Indicated basic utilities are from:                      -->
+<!-- XSLT Cookbook, 2nd Edition                               -->
+<!-- Copyright 2006, O'Reilly Media, Inc.                     -->
+<!--                                                          -->
+<!-- From the section of the Preface, "Using Code Examples"   -->
+<!-- "You do not need to contact us for permission unless     -->
+<!-- you're reproducing a significant portion of the code.    -->
+<!-- For example, writing a program that uses several chunks  -->
+<!-- of code from this book does not require permission."     -->
+
+
+<!-- XSLT Cookbook, 2nd Edition                                     -->
+<!-- Copyright 2006, O'Reilly Media, Inc.                           -->
+<!-- Declaration and entity definition format from Recipe 2.8       -->
+<!-- Unicode strings from http://stackoverflow.com/questions/586231 -->
+<!DOCTYPE stylesheet [
+     <!ENTITY UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ">
+     <!ENTITY LOWERCASE "abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ">
+]>
+
 <!-- Identify as a stylesheet -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace" 
@@ -810,11 +830,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- XSLT Cookbook, 2nd Edition               -->
 <!-- Copyright 2006, O'Reilly Media, Inc.     -->
 <!-- Recipe 2.4, nearly verbatim, reformatted -->
-<!-- From the section of the Preface, Using Code Examples:   -->
-<!-- "You do not need to contact us for permission unless    -->
-<!-- you're reproducing a significant portion of the code.   -->
-<!-- For example, writing a program that uses several chunks -->
-<!-- of code from this book does not require permission."    -->
 <xsl:template name="substring-before-last">
     <xsl:param name="input" />
     <xsl:param name="substr" />
@@ -854,11 +869,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- XSLT Cookbook, 2nd Edition               -->
 <!-- Copyright 2006, O'Reilly Media, Inc.     -->
 <!-- Recipe 2.5, nearly verbatim, reformatted -->
-<!-- From the section of the Preface, Using Code Examples:   -->
-<!-- "You do not need to contact us for permission unless    -->
-<!-- you're reproducing a significant portion of the code.   -->
-<!-- For example, writing a program that uses several chunks -->
-<!-- of code from this book does not require permission."    -->
 <xsl:template name="duplicate-string">
      <xsl:param name="text" />
      <xsl:param name="count" select="1" />
@@ -1906,7 +1916,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- Empty string signifies not numbered -->
 <!-- We do provide a "xref number" of an -->
 <!-- exercisegroup, but otherwise not    -->
-<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|paragraph|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|colophon|backmatter|exercisegroup|p" mode="serial-number" />
+<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|paragraph|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|index-part|colophon|backmatter|exercisegroup|p" mode="serial-number" />
 
 <!-- If a list item has any ancestor that is not  -->
 <!-- an ordered list, then it gets no number      -->
