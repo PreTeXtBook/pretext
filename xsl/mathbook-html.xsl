@@ -1882,7 +1882,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (4) Last row special, has no line-break marker    -->
 <xsl:template match="md/mrow">
     <xsl:param name="env-type" />
-    <xsl:apply-templates select="text()|xref" />
+    <xsl:apply-templates select="text()|xref|var" />
     <xsl:if test="@number='yes'">
         <!-- Needs label{} at birth, NOT in xref knowl -->
         <xsl:if test="$env-type='visible' or $env-type='hidden'">
@@ -1898,7 +1898,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="mdn/mrow">
     <xsl:param name="env-type" />
-    <xsl:apply-templates select="text()|xref" />
+    <xsl:apply-templates select="text()|xref|var" />
     <xsl:choose>
         <xsl:when test="@number='no'">
             <xsl:text>\notag</xsl:text>
