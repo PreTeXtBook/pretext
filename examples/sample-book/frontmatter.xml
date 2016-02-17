@@ -36,8 +36,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <email>judsontw@sfasu.edu</email>
         </author>
 
-        <date><today /></date>
-
         <credit>
             <title>Sage Exercises for Abstract Algebra</title>
             <author>
@@ -47,6 +45,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <email>beezer@pugetsound.edu</email>
             </author>
         </credit>
+
+        <date><today /></date>
 
     </titlepage>
 
@@ -75,7 +75,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Each paragraph gets centered and has some vertical separatation -->
     <!-- A line break may be used here to aid with intended formatting   -->
     <dedication>
-        <p>To students of algebra everywhere <ndash /><br />they are the reason</p>
+        <p>To students of algebra everywhere<ndash />they are the reason</p>
         <p>And to those who teach them</p>
     </dedication>
 
@@ -212,10 +212,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>Sage (<url href="http://sagemath.org">sagemath.org</url>) is a free, open source, software system for advanced mathematics, which is ideal for assisting with a study of abstract algebra. Sage can be used either on your own computer, a local server, or on SageMathCloud (<url href="https://cloud.sagemath.com">https://cloud.sagemath.com</url>). Robert Beezer has written a comprehensive introduction to Sage and a selection of relevant exercises that appear at the end of each chapter, including live Sage cells in the web version of the book.</p>
 
         <!-- RAB 2014/08/18 Should move flush right with some vertical spacing -->
-        <blockquote>
-            Thomas W. Judson <br />
-            Nacogdoches, Texas 2015
-        </blockquote>
+        <attribution>Thomas W. Judson <br />Nacogdoches, Texas 2015</attribution>
 
     </preface>
 

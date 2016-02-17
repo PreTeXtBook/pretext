@@ -117,7 +117,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <me>E = \{2, 4, 6, \ldots \} \quad \text{or} \quad E = \{ x : x \text{ is an even integer and } x \gt 0 \}.</me>
             We write <m>2 \in E</m> when we want to say that 2 is in the set <m>E</m>, and <m>-3 \notin E</m> to say that <m>-3</m> is not in the set <m>E</m>.</p>
 
-            <p>Some of the more important sets that we will consider are the following:</p>
+            <p>Some of the more important sets that we will consider are the following:<notation><usage>{\mathbb N}</usage><description>the natural numbers</description></notation><notation><usage>{\mathbb Z}</usage><description>the integers</description></notation><notation><usage>{\mathbb Q}</usage><description>the rational numbers</description></notation><notation><usage>{\mathbb R}</usage><description>the real numbers</description></notation><notation><usage>{\mathbb C}</usage><description>the complex numbers</description></notation></p>
 
             <md>
                 <mrow>{\mathbb N} = \{n: n \text{ is a natural number}\}  = \{1, 2, 3, \ldots \};</mrow>
@@ -126,8 +126,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <mrow>{\mathbb R} = \{ x : x \text{ is a real number} \};</mrow>
                 <mrow>{\mathbb C} = \{z : z \text{ is a complex number}\}.</mrow>
             </md>
-
-            <notation><usage>{\mathbb N}</usage><description>the natural numbers</description></notation><notation><usage>{\mathbb Z}</usage><description>the integers</description></notation><notation><usage>{\mathbb Q}</usage><description>the rational numbers</description></notation><notation><usage>{\mathbb R}</usage><description>the real numbers</description></notation><notation><usage>{\mathbb C}</usage><description>the complex numbers</description></notation>
 
             <p>We can find various relations between sets as well as perform operations on sets.  A set <m>A</m> is a <term>subset</term> of <m>B</m>, written <m>A \subset B</m> or <m>B \supset A</m>, if every element of <m>A</m> is also an element of <m>B</m>.  <notation><usage>A \subset B</usage><description><m>A</m> is a subset of <m>B</m></description></notation> For example,  
                 <me>\{4,5,8\} \subset \{2, 3, 4, 5, 6, 7, 8, 9 \}</me>
@@ -273,6 +271,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         is called the <term>range</term><index><main>Function</main><sub>range of</sub></index> or <term>image</term> of <m>f</m>.  We can think of the elements in the function's domain as input values and the elements in the function's range as output values.</p>
 
         <figure xml:id="figure-sets-mappings">
+            <caption>Mappings and relations</caption>
 
              <!-- Changed the figure to a tikz diagram - TWJ 5/4/2010 -->
             <image xml:id="sets-mappings">
@@ -310,7 +309,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     \end{tikzpicture}]]>
                 </latex-image-code>
             </image>
-            <caption>Mappings and relations</caption> 
         <!-- Changed the caption to avoid confusion -->
         <!--  Suggested by B. Torrence.  TWJ 10/1/2014 -->
         </figure>
@@ -334,6 +332,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>Given two functions, we can construct a new function by using the range of the first function as the domain of the second function.  Let <m>f : A \rightarrow B</m> and <m>g : B \rightarrow C</m> be mappings.  Define a new map, the <term>composition</term><index><main>Function</main><sub>composition of</sub></index> of <m>f</m> and <m>g</m> from <m>A</m> to <m>C</m>, by <m>(g \circ f)(x) = g(f(x))</m>.</p>
 
         <figure xml:id="figure-sets-composition">
+            <caption>Composition of maps</caption>
 
             <!-- Changed the figure to a tikz diagram - TWJ 5/4/2010 -->
             <image xml:id="sets-composition">
@@ -386,7 +385,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     \end{tikzpicture}]]>
                 </latex-image-code>
             </image>
-            <caption>Composition of maps</caption>
         </figure>
 
         <example xml:id="example-sets-composition">

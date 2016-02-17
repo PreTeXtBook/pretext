@@ -65,19 +65,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <md>
                     <mrow>7 + 4  &amp; \equiv  1 \pmod{ 5}   &amp; 7 \cdot 3 &amp; \equiv 1 \pmod{ 5}</mrow> 
                     <mrow>3 + 5  &amp; \equiv  0 \pmod{ 8}   &amp; 3 \cdot 5 &amp; \equiv 7 \pmod{ 8}</mrow>
-                    <mrow>3 + 4  &amp; \equiv  7 \pmod{ 12}  &amp; 3 \cdot 4 &amp; \equiv 0 \pmod{ 12}</mrow>.
+                    <mrow>3 + 4  &amp; \equiv  7 \pmod{ 12}  &amp; 3 \cdot 4 &amp; \equiv 0 \pmod{ 12}.</mrow>
                 </md>
 
-                <p>In particular, notice that it is possible that the product of two nonzero numbers modulo <m>n</m> can be equivalent to <m>0 </m> modulo <m>n</m>. 
-                </p>
+                <p>In particular, notice that it is possible that the product of two nonzero numbers modulo <m>n</m> can be equivalent to <m>0 </m> modulo <m>n</m>.</p>
             </example>
 
             <example xml:id="example-groups-zn-arithmetic-laws">
-                <p>Most, but not all, of the usual laws of arithmetic hold for addition and multiplication in <m>{\mathbb Z}_n</m>.  For instance, it is not necessarily true that there is a multiplicative inverse.  Consider the multiplication table for <m>{\mathbb Z}_8</m> in Table<nbsp /><xref ref="table-z8-mult" />.  Notice that 2, 4, and 6 do not have multiplicative inverses; that is, for <m>n = 2</m>, 4, or 6, there is no integer <m>k</m> such that <m>k n \equiv 1 \pmod{ 8}</m>.</p>
+                <p>Most, but not all, of the usual laws of arithmetic hold for addition and multiplication in <m>{\mathbb Z}_n</m>.  For instance, it is not necessarily true that there is a multiplicative inverse.  Consider the multiplication table for <m>{\mathbb Z}_8</m> in Figure<nbsp /><xref ref="figure-z8-mult" />.  Notice that 2, 4, and 6 do not have multiplicative inverses; that is, for <m>n = 2</m>, 4, or 6, there is no integer <m>k</m> such that <m>k n \equiv 1 \pmod{ 8}</m>.</p>
             </example>
 
-            <table xml:id="table-z8-mult">
-
+            <figure xml:id="figure-z8-mult">
+                <caption>Multiplication table for <m>{\mathbb Z_8}</m></caption>
                 <p><me>\begin{array}{c|cccccccc}
                     <![CDATA[\cdot & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
                     \hline
@@ -90,9 +89,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     6       & 0 & 6 & 4 & 2 & 0 & 6 & 4 & 2 \\
                     7       & 0 & 7 & 6 & 5 & 4 & 3 & 2 & 1 ]]>
                     \end{array}</me></p>
-
-            <caption>Multiplication table for <m>{\mathbb Z_8}</m></caption>
-            </table>
+            </figure>
 
             <proposition xml:id="proposition-zn-equiv-classes">
                 <statement>
@@ -133,9 +130,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </ol>
                 </statement>
 
-                <todo>RAB: consider cases in proofs for mathBook XML</todo>
-                <todo>See if id/ref works on items in ordered lists</todo>
-
                 <proof>
                     <p>We will prove (1) and (6) and leave the remaining properties to be proven in the exercises.</p>
 
@@ -153,6 +147,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <!-- Symmetries of a rectangle  Replaced diagram with a tikz figure - TWJ 5/4/2010 -->
             <figure xml:id="figure-groups-rectangle">
+                <caption>Rigid motions of a rectangle</caption>
                 <image xml:id="groups-rectangle">
                     <latex-image-code><![CDATA[
                         \begin{tikzpicture}[scale=1.2]
@@ -214,13 +209,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         \end{tikzpicture}]]>
                     </latex-image-code>
                 </image>
-                <caption>Rigid motions of a rectangle</caption>
             </figure>
 
             <p>A <term>symmetry</term> of a geometric figure is a rearrangement of the figure preserving the arrangement of its sides and vertices as well as its distances and angles.  A map from the plane to itself preserving the symmetry of an object is called a <term>rigid motion</term><index><main>Rigid motion</main></index>.  For example, if we look at the rectangle in Figure<nbsp /><xref ref="figure-groups-rectangle" />, it is easy to see that a rotation of <m>180^{\circ}</m> or <m>360^{\circ}</m> returns a rectangle in the plane with the same orientation as the original rectangle and the same relationship among the vertices.  A reflection of the rectangle across either the vertical axis or the horizontal axis can also be seen to be a symmetry.  However, a <m>90^{\circ}</m> rotation in either direction cannot be a symmetry unless the rectangle is a square.</p>
 
             <!-- Replaced diagram with a tikz figure - TWJ 5/5/2010 -->
             <figure xml:id="figure-s3-symmetry">
+                <caption>Symmetries of a triangle</caption>
                 <image xml:id="groups-s3-symmetry">
                     <latex-image-code><![CDATA[
                         \begin{tikzpicture}[scale=0.7]
@@ -312,7 +307,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         \end{tikzpicture}]]>
                     </latex-image-code>
                 </image>
-                <caption>Symmetries of a triangle</caption>
             </figure>
 
             <p>Let us find the symmetries of the equilateral triangle <m>\bigtriangleup ABC</m>.  To find a symmetry of <m>\bigtriangleup ABC</m>, we must first examine the permutations of the vertices <m>A</m>, <m>B</m>, and <m>C</m> and then ask if a permutation extends to a symmetry of the triangle.  Recall that a <term>permutation</term> of a set <m>S</m> is a one-to-one and onto map <m>\pi :S \rightarrow S</m>.  The three vertices have <m>3! = 6</m> permutations, so the triangle has at most six symmetries.  To see that there are six permutations, observe there are three different possibilities for the first vertex, and two for the second, and the remaining vertex is determined by the placement of the first two.  So we have <m>3 \cdot 2 \cdot 1 = 3! = 6</m> different arrangements.  To denote the permutation of the vertices of an equilateral triangle that sends <m>A</m> to <m>B</m>, <m>B</m> to <m>C</m>, and <m>C</m> to <m>A</m>, we write the array
@@ -330,11 +324,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <mrow>(\mu_1 \rho_1)(C) &amp; = \mu_1( \rho_1( C ) ) = \mu_1( A ) = A.</mrow>
                 </md>
 
-            <p>This is the same symmetry as <m>\mu_2</m>. Suppose we do these motions in the opposite order, <m>\rho_1</m> then <m>\mu_1</m>.  It is easy to determine that this is the same as the symmetry <m>\mu_3</m>; hence, <m>\rho_1 \mu_1 \neq \mu_1 \rho_1</m>.  A multiplication table for the symmetries of an equilateral triangle <m>\bigtriangleup ABC</m> is given in Table<nbsp /><xref ref="table-s3" />.</p>
+            <p>This is the same symmetry as <m>\mu_2</m>. Suppose we do these motions in the opposite order, <m>\rho_1</m> then <m>\mu_1</m>.  It is easy to determine that this is the same as the symmetry <m>\mu_3</m>; hence, <m>\rho_1 \mu_1 \neq \mu_1 \rho_1</m>.  A multiplication table for the symmetries of an equilateral triangle <m>\bigtriangleup ABC</m> is given in Figure<nbsp /><xref ref="figure-s3" />.</p>
 
             <p>Notice that in the multiplication table for the symmetries of an equilateral triangle, for every motion of the triangle <m>\alpha</m> there is another motion <m>\beta</m> such that <m>\alpha \beta = id</m>; that is, for every motion there is another  motion that takes the triangle back to its original orientation.</p>
 
-            <table xml:id="table-s3">
+            <figure xml:id="figure-s3">
+                <caption>Symmetries of an equilateral triangle</caption>
 
                 <p><me>\begin{array}{c|cccccc}
                     <![CDATA[\circ  & id     & \rho_1 & \rho_2 & \mu_1 & \mu_2 & \mu_3 \\
@@ -346,9 +341,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     \mu_2  & \mu_2  & \mu_3  & \mu_1  & \rho_2 & id    & \rho_1\\
                     \mu_3  & \mu_3  & \mu_1  & \mu_2  & \rho_1 & \rho_2& id]]>
                     \end{array}</me></p>
-
-                <caption>Symmetries of an equilateral triangle</caption>
-            </table>
+            </figure>
 
         </subsection>
     </section>
@@ -379,10 +372,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>It is often convenient to describe a group in terms of an addition or multiplication table.  Such a table is called a <term>Cayley table</term><index><main>Cayley table</main></index>.</p>
 
             <example xml:id="example-groups-z5">
-                <p>The integers mod <m>n</m> form a group under addition modulo <m>n</m>.  Consider <m>{\mathbb Z}_5</m>, consisting of the equivalence classes of the integers 0, 1, 2, 3, and 4.  We define the group operation on <m>{\mathbb Z}_5</m> by modular addition.  We write the binary operation on the group additively; that is, we write <m>m + n</m>.  The element 0 is the identity of the group and each element in <m>{\mathbb Z}_5</m> has an inverse. For instance, <m>2 + 3 = 3 + 2 = 0</m>.  Table<nbsp /><xref ref="table-z5-cayley" /> is a Cayley table for <m>{\mathbb Z}_5</m>.  By Proposition<nbsp /><xref ref="proposition-zn-equiv-classes" />, <m>{\mathbb Z}_n = \{0, 1, \ldots, n-1 \}</m> is a group under the binary operation of addition mod <m>n</m>.</p>
+                <p>The integers mod <m>n</m> form a group under addition modulo <m>n</m>.  Consider <m>{\mathbb Z}_5</m>, consisting of the equivalence classes of the integers 0, 1, 2, 3, and 4.  We define the group operation on <m>{\mathbb Z}_5</m> by modular addition.  We write the binary operation on the group additively; that is, we write <m>m + n</m>.  The element 0 is the identity of the group and each element in <m>{\mathbb Z}_5</m> has an inverse. For instance, <m>2 + 3 = 3 + 2 = 0</m>.  Figure<nbsp /><xref ref="figure-z5-cayley" /> is a Cayley table for <m>{\mathbb Z}_5</m>.  By Proposition<nbsp /><xref ref="proposition-zn-equiv-classes" />, <m>{\mathbb Z}_n = \{0, 1, \ldots, n-1 \}</m> is a group under the binary operation of addition mod <m>n</m>.</p>
             </example>
 
-            <table xml:id="table-z5-cayley">
+            <figure xml:id="figure-z5-cayley">
+                <caption>Cayley table for <m>({\mathbb Z_5}, +)</m></caption>
 
                 <p><me>\begin{array}{c|ccccc}
                     <![CDATA[+ & 0 & 1 & 2 & 3 & 4 \\
@@ -394,8 +388,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                       4 & 4 & 0 & 1 & 2 & 3]]>
                     \end{array}</me></p>
 
-                <caption>Cayley table for <m>({\mathbb Z_5}, +)</m></caption>
-            </table>
+            </figure>
 
             <example xml:id="example-groups-z6-mult">
                 <p>Not every set with a binary operation is a group.  For example, if we let modular multiplication be the binary operation on <m>{\mathbb Z}_n</m>, then <m>{\mathbb Z}_n</m> fails to be a group.  The element 1 acts as a group identity since <m>1 \cdot k = k \cdot 1 = k</m> for any <m>k \in {\mathbb Z}_n</m>; however, a multiplicative inverse for <m>0</m> does not exist since <m>0 \cdot k = k \cdot 0 = 0</m> for every <m>k</m> in <m>{\mathbb Z}_n</m>.  Even if we consider the set <m>{\mathbb Z}_n \setminus \{0 \}</m>, we still may not have a group.  For instance, let <m>2 \in {\mathbb Z}_6</m>. Then 2 has no multiplicative inverse since</p>
@@ -406,11 +399,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <mrow> 4 \cdot 2 &amp; = 2 \qquad 5 \cdot 2 = 4.</mrow>
                 </md>
 
-                <p>By Proposition<nbsp /><xref ref="proposition-zn-equiv-classes" />, every nonzero <m>k</m> does have an inverse in <m>{\mathbb Z}_n</m> if <m>k</m> is relatively prime to <m>n</m>.  Denote the set of all such nonzero elements in <m>{\mathbb Z}_n</m> by <m>U(n)</m>. <notation><usage>U(n)</usage><description>group of units in <m>\mathbb Z_n</m></description></notation>  Then <m>U(n)</m> is a group called the <term>group of units</term><index><main>Group</main><sub>of units</sub></index> of <m>{\mathbb Z}_n</m>.  Table<nbsp /><xref ref="table-cayley-u8" /> is a Cayley table for the group <m>U(8)</m>.</p>
+                <p>By Proposition<nbsp /><xref ref="proposition-zn-equiv-classes" />, every nonzero <m>k</m> does have an inverse in <m>{\mathbb Z}_n</m> if <m>k</m> is relatively prime to <m>n</m>.  Denote the set of all such nonzero elements in <m>{\mathbb Z}_n</m> by <m>U(n)</m>. <notation><usage>U(n)</usage><description>group of units in <m>\mathbb Z_n</m></description></notation>  Then <m>U(n)</m> is a group called the <term>group of units</term><index><main>Group</main><sub>of units</sub></index> of <m>{\mathbb Z}_n</m>.  Figure<nbsp /><xref ref="figure-cayley-u8" /> is a Cayley table for the group <m>U(8)</m>.</p>
             </example>
 
-            <table xml:id="table-cayley-u8">
-
+            <figure xml:id="figure-cayley-u8">
+                <caption>Multiplication table for <m>U(8)</m></caption>
                 <p><me>\begin{array}{c|cccc}
                     <![CDATA[\cdot & 1 & 3 & 5 & 7 \\
                     \hline
@@ -419,12 +412,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     5       & 5 & 7 & 1 & 3 \\
                     7       & 7 & 5 & 3 & 1]]>
                     \end{array}</me></p>
-
-            <caption>Multiplication table for <m>U(8)</m></caption>
-            </table>
+            </figure>
 
             <example xml:id="example-groups-nonabelian">
-                <p>The symmetries of an equilateral triangle described in Section<nbsp /><xref ref="section-mod-n-sym" /> form a nonabelian group. As we observed, it is not necessarily true that <m>\alpha \beta = \beta \alpha</m> for two symmetries <m>\alpha</m> and <m>\beta</m>.  Using Table<nbsp /><xref ref="table-s3" />, which is a Cayley table for this group, we can easily check that the symmetries of an equilateral triangle are indeed a group. We will denote this group by either <m>S_3</m> or <m>D_3</m>, for reasons that will be explained later.</p>
+                <p>The symmetries of an equilateral triangle described in Section<nbsp /><xref ref="section-mod-n-sym" /> form a nonabelian group. As we observed, it is not necessarily true that <m>\alpha \beta = \beta \alpha</m> for two symmetries <m>\alpha</m> and <m>\beta</m>.  Using Figure<nbsp /><xref ref="figure-s3" />, which is a Cayley table for this group, we can easily check that the symmetries of an equilateral triangle are indeed a group. We will denote this group by either <m>S_3</m> or <m>D_3</m>, for reasons that will be explained later.</p>
             </example>
 
             <example xml:id="example-groups-gl2">
@@ -590,7 +581,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Joseph-Louis Lagrange<index><main>Lagrange, Joseph-Louis</main></index> used group-theoretic methods in a 1770<ndash />1771 memoir to study methods of solving polynomial equations.  Later, Évariste Galois<index><main>Galois, Évariste</main></index> (1811<ndash />1832) succeeded in developing the mathematics necessary to determine exactly which polynomial equations could be  solved in terms of the polynomials'coefficients. Galois' primary tool was group theory.</p>
 
-            <p>The study of geometry was revolutionized in 1872 when Felix Klein<index><main>Klein, Felix</main></index> proposed that geometric spaces should be studied by examining those properties that are invariant under a transformation of the space. Sophus Lie<index><main>Lie, Sophus</main></index>, a contemporary of Klein, used group theory to study solutions of partial differential equations.  One of the first modern treatments of group theory appeared in William Burnside's<index><main>Burnside, William</main></index> <title>The Theory of Groups of Finite Order</title> [1], first published in 1897.</p>
+            <p>The study of geometry was revolutionized in 1872 when Felix Klein<index><main>Klein, Felix</main></index> proposed that geometric spaces should be studied by examining those properties that are invariant under a transformation of the space. Sophus Lie<index><main>Lie, Sophus</main></index>, a contemporary of Klein, used group theory to study solutions of partial differential equations.  One of the first modern treatments of group theory appeared in William Burnside's<index><main>Burnside, William</main></index> <booktitle>The Theory of Groups of Finite Order</booktitle> [1], first published in 1897.</p>
         </subsection>
 
     </section>
@@ -650,10 +641,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </example>
 
             <example xml:id="example-groups-z2xz2">
-                <p>One way of telling whether or not two groups are the same is by examining their subgroups.  Other than the trivial subgroup and the group itself, the group <m>{\mathbb Z}_4</m> has a single subgroup consisting of the elements 0 and 2. From the group <m>{\mathbb Z}_2</m>, we can form another group of four elements as follows.  As a set this group is <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>. We perform the group operation coordinatewise; that is, <m>(a,b) + (c,d) = (a+c, b+d)</m>. Table<nbsp /><xref ref="table-z2xz2" /> is an addition table for <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>. Since there are three nontrivial proper subgroups of <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>, <m>H_1 = \{ (0,0), (0,1) \}</m>, <m>H_2 = \{ (0,0), (1,0) \}</m>, and <m>H_3 = \{ (0,0), (1,1) \}</m>, <m>{\mathbb Z}_4</m> and <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m> must be different groups.</p>
+                <p>One way of telling whether or not two groups are the same is by examining their subgroups.  Other than the trivial subgroup and the group itself, the group <m>{\mathbb Z}_4</m> has a single subgroup consisting of the elements 0 and 2. From the group <m>{\mathbb Z}_2</m>, we can form another group of four elements as follows.  As a set this group is <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>. We perform the group operation coordinatewise; that is, <m>(a,b) + (c,d) = (a+c, b+d)</m>. Figure<nbsp /><xref ref="figure-z2xz2" /> is an addition table for <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>. Since there are three nontrivial proper subgroups of <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>, <m>H_1 = \{ (0,0), (0,1) \}</m>, <m>H_2 = \{ (0,0), (1,0) \}</m>, and <m>H_3 = \{ (0,0), (1,1) \}</m>, <m>{\mathbb Z}_4</m> and <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m> must be different groups.</p>
             </example>
 
-            <table xml:id="table-z2xz2">
+            <figure xml:id="figure-z2xz2">
+                <caption>Addition table for <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m></caption>
 
                 <p><me>\begin{array}{c|cccc}
                 <![CDATA[+     & (0,0) & (0,1) & (1,0) & (1,1) \\
@@ -663,9 +655,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 (1,0) & (1,0) & (1,1) & (0,0) & (0,1) \\
                 (1,1) & (1,1) & (1,0) & (0,1) & (0,0)]]>
                 \end{array}</me></p>
-
-            <caption>Addition table for <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m></caption>
-            </table>
+            </figure>
 
         </subsection>
 
@@ -749,9 +739,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </ol>
 
                 <figure xml:id="figure-upc-codes">
+                    <caption>A UPC code</caption>
                     <!-- image width measured in points for latex, pixels for HTML -->
                     <image width="144" source="images/UPCcode.png" />
-                    <caption>A UPC code</caption>
                 </figure>
             </statement>
         </exercise>
@@ -774,9 +764,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </exercise>
 
         <exercise>
-            <statement>
-                <title>ISBN Codes</title>
+            <title>ISBN Codes</title>
 
+            <statement>
                 <p>Every book has an International Standard Book Number<index><main>International standard book number</main></index> (ISBN) code.  This is a 10-digit code indicating the book's publisher and title.  The tenth digit is a check digit satisfying 
                     <me>(d_1, d_2, \ldots, d_{10} ) \cdot (10, 9, \ldots, 1 )  \equiv 0 \pmod{11}.</me>
                 One problem is that <m>d_{10}</m> might have to be a 10 to make the inner product zero; in this case, 11 digits would be  needed to make this scheme work.  Therefore, the character X is used for the eleventh digit.  So ISBN 3-540-96035-X is a valid ISBN code.</p>
@@ -786,7 +776,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <li><p>Does this method detect all single-digit errors?  What about all transposition errors?</p></li>
                     <li><p>How many different ISBN codes are there?</p></li>
                     <li><p>Write a computer program that will calculate the check digit for the first nine digits of an ISBN code.</p></li>
-                    <li><p>A publisher has houses in Germany and the United States.  Its German prefix is 3-540.  If its United States prefix will be 0-<title>abc</title>, find <title>abc</title> such that the rest of the ISBN code will be the same for a book printed in Germany and in the United States. Under the ISBN coding method the first digit identifies the language; German is  3 and English is  0.  The next group of numbers identifies the publisher, and the last group identifies the specific book.</p></li>
+                    <li><p>A publisher has houses in Germany and the United States.  Its German prefix is <c>3-540</c>.  If its United States prefix will be <c>0-abc</c>, find <c>abc</c> such that the rest of the ISBN code will be the same for a book printed in Germany and in the United States. Under the ISBN coding method the first digit identifies the language; German is <c>3</c> and English is <c>0</c>.  The next group of numbers identifies the publisher, and the last group identifies the specific book.</p></li>
                 </ol>
             </statement>
         </exercise>

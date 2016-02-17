@@ -149,9 +149,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>It is easy to comment on your work when you use the Sage Notebook. (The following only applies if you are reading this within a Sage Notebook.  If you are not, then perhaps you can go open up a worksheet in the Sage Notebook and experiment there.)  You can open up a small word-processor by hovering your mouse until you get a skinny blue bar again, but now when you click, also hold the SHIFT key at the same time.  Experiment with fonts, colors, bullet lists, etc and then click the <q>Save changes</q> button to exit.  Double-click on your text if you need to go back and edit it later.</p>
 
-        <p>Open the word-processor again to create a new bit of text (maybe next to the empty compute cell just below).  Type all of the following <em>exactly</em>:
+        <p>Open the word-processor again to create a new bit of text (maybe next to the empty compute cell just below).  Type all of the following <em>exactly</em>:</p>
+
         <blockquote><p><c>Pythagorean Theorem: $c^2=a^2+b^2$</c></p></blockquote>
-        and save your changes.  The symbols between the dollar signs are written according to the mathematical typesetting language known as <tex /> <mdash /> cruise the internet to learn more about this very popular tool. (Well, it is extremely popular among mathematicians and physical scientists.)</p>
+
+        <p>and save your changes.  The symbols between the dollar signs are written according to the mathematical typesetting language known as <tex /> <mdash /> cruise the internet to learn more about this very popular tool. (Well, it is extremely popular among mathematicians and physical scientists.)</p>
 
         <sage />
 
