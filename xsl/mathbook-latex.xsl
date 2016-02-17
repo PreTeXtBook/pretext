@@ -1559,6 +1559,67 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\\&#xa;</xsl:text>
 </xsl:template>
 
+<!-- ############### -->
+<!-- Arbitrary Lists -->
+<!-- ############### -->
+
+<!-- See general routine in  xsl/mathbook-common.xsl -->
+<!-- which expects the two named templates and the  -->
+<!-- two division'al and element'al templates below,  -->
+<!-- it contains the logic of constructing such a list -->
+
+<!-- List-of entry/exit hooks   -->
+<!-- Long table, two columns    -->
+<!-- Just "continued" adornment -->
+<xsl:template name="list-of-begin">
+    <xsl:text>\noindent&#xa;</xsl:text>
+    <xsl:text>\begin{longtable}[l]{ll}&#xa;</xsl:text>
+    <xsl:text>\endfirsthead&#xa;</xsl:text>
+    <xsl:text>\endhead&#xa;</xsl:text>
+    <xsl:text>\multicolumn{2}{r}{(</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'continued'" />
+    </xsl:call-template>
+    <xsl:text>)}\\&#xa;</xsl:text>
+    <xsl:text>\endfoot&#xa;</xsl:text>
+    <xsl:text>\endlastfoot&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Done -->
+<xsl:template name="list-of-end">
+    <xsl:text>\end{longtable}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Some insulating space around headings    -->
+<!-- All in one, so not part of table columns -->
+<xsl:template match="*" mode="list-of-header">
+    <xsl:text>\multicolumn{2}{l}{\null}\\[1.5ex] </xsl:text>
+    <xsl:text>\multicolumn{2}{l}{\large </xsl:text>
+    <xsl:apply-templates select="." mode="type-name" />
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="number" />
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="title-full" />
+    <xsl:text>}\\[0.5ex]&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Hyperlink with type, number, then a title -->
+<xsl:template match="*" mode="list-of-element">
+    <xsl:apply-templates select="." mode="xref-link">
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="." mode="type-name" />
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="." mode="number" />
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <!-- title plain, separated -->
+    <xsl:text>&amp;</xsl:text>
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="title-full" />
+    <xsl:text>\\&#xa;</xsl:text>
+</xsl:template>
+
+
 <!-- #################### -->
 <!-- Back Matter, Letters -->
 <!-- #################### -->

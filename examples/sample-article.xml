@@ -3613,6 +3613,13 @@ the xsltproc executable.
 
             </subsection>
 
+            <subsection xml:id="subsection-local-theorems">
+                <title>Theorems in This Section</title>
+
+                <p>We have a lot of theorems in this section, so we illustrate including an automatic list of these here.  We use the <c>elements</c> attribute to limit the list to <c>theorem</c> elements, and we use the <c>scope</c> attribute to limit the list to this <c>section</c>.  You can use an introductory <c>p</c> like this one, or not.  The list gets no title or visual separation, so use the usual subdivision elements to make that happen.  The <c>elements</c> attribute can be a space-delimited list of many different elements.  This list should not include the Fundamental Theorem of Calculus, Theorem<nbsp /><xref ref="theorem-FTC" />.  See a slightly different example in <xref ref="section-results" autoname="yes" />.</p>
+
+                <list-of elements="theorem" scope="section" />
+            </subsection>
         </section>
 
         <section>
@@ -3664,7 +3671,7 @@ the xsltproc executable.
 
         </references>
 
-        <backmatter>
+        <backmatter xml:id="backmatter">
             <title>Reference</title>
 
             <section>
@@ -3675,6 +3682,14 @@ the xsltproc executable.
             <section>
                 <title>Solutions to Selected Exercises</title>
                 <solution-list />
+            </section>
+
+            <section xml:id="section-results">
+                <title>List of Results</title>
+
+                <p>We had an automatic list of theorems for just one section, back in <xref ref="subsection-local-theorems" autoname="yes" />.  Here we expand to include <c>corollary</c> in our space-delimited list of <c>elements</c> and we request <c>divisions</c> (headings) at each <c>subsection</c> and <c>section</c>.  The default <c>scope</c> is the entire document, which is appropriate here in the backmatter.  There are many subsections with no results, so we set the <c>empty</c> attribute to <c>no</c> to suppress them, though this is the default behavior (<c>yes</c> being the other option to see divisions with no list items).  These lists are most valuable if you are in the practice of giving items titles.</p>
+
+                <list-of elements="  theorem corollary" divisions="section    subsection " empty="no" />
             </section>
 
         </backmatter>

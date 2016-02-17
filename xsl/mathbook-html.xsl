@@ -810,6 +810,70 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </tr>
 </xsl:template>
 
+<!-- ############### -->
+<!-- Arbitrary Lists -->
+<!-- ############### -->
+
+<!-- See general routine in  xsl/mathbook-common.xsl -->
+<!-- which expects the two named templates and the  -->
+<!-- two division'al and element'al templates below,  -->
+<!-- it contains the logic of constructing such a list -->
+
+<!-- List-of entry/exit hooks -->
+<!-- No ops for HTML          -->
+<xsl:template name="list-of-begin" />
+<xsl:template name="list-of-end" />
+
+<!-- Subdivision headings in list-of's -->
+<!-- Amalgamation of "section-header" and "header-content" -->
+<!--   (1) No author credit                                -->
+<!--   (2) No permalink                                    -->
+<xsl:template match="*" mode="list-of-header">
+    <header>
+        <xsl:element name="h1">
+            <xsl:attribute name="class">
+                <xsl:text>heading</xsl:text>
+            </xsl:attribute>
+             <xsl:attribute name="alt">
+                <xsl:apply-templates select="." mode="tooltip-text" />
+            </xsl:attribute>
+             <xsl:attribute name="title">
+                <xsl:apply-templates select="." mode="tooltip-text" />
+            </xsl:attribute>
+            <span class="type">
+                <xsl:apply-templates select="." mode="type-name" />
+            </span>
+            <span class="codenumber">
+                <xsl:apply-templates select="." mode="number" />
+            </span>
+            <span class="title">
+                <xsl:apply-templates select="." mode="title-full" />
+            </span>
+        </xsl:element>
+    </header>
+</xsl:template>
+
+<!-- Entries in list-of's -->
+<!-- Partly borrowed from common routines -->
+<!-- TODO: CSS styling of the div forcing the knowl to open in the right place -->
+<!-- And spacing should be done with .type, .codenumber, .title                -->
+<xsl:template match="*" mode="list-of-element">
+    <!-- Name and number as a knowl/link, div to open against -->
+    <div>
+        <xsl:apply-templates select="." mode="xref-link">
+            <xsl:with-param name="content">
+                <xsl:apply-templates select="." mode="type-name" />
+                <xsl:text> </xsl:text>
+                <xsl:apply-templates select="." mode="number" />
+            </xsl:with-param>
+        </xsl:apply-templates>
+        <!-- title plain, separated -->
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="title-full" />
+    </div>
+</xsl:template>
+
+
 <!-- ###################### -->
 <!-- Cross-Reference Knowls -->
 <!-- ###################### -->

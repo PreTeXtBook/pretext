@@ -2236,6 +2236,101 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     </xsl:choose>
 </xsl:template>
 
+<!-- ############### -->
+<!-- Arbitrary Lists -->
+<!-- ############### -->
+
+<!-- Format-independent construction of a list of    -->
+<!-- intermediate elements, in order of appearance,  -->
+<!-- with headers from indicated divisions           -->
+<!--                                                 -->
+<!-- Implementation requires four abstract templates -->
+<!--                                                 -->
+<!-- 1.  name="list-of-begin"                        -->
+<!-- hook for start of list                          -->
+<!--                                                 -->
+<!-- 2.  mode="list-of-header"                       -->
+<!-- Format/output per division                      -->
+<!--                                                 -->
+<!-- 3.  mode="list-of-element"                      -->
+<!-- Format/output per element                       -->
+<!--                                                 -->
+<!-- 4. name="list-of-end"                           -->
+<!-- hook for end of list                            -->
+
+<xsl:template match="list-of">
+    <!-- Ring-fence terms so matches are not mistaken substrings -->
+    <xsl:variable name="elements">
+        <xsl:text>|</xsl:text>
+        <xsl:value-of select="str:replace(normalize-space(@elements), ' ', '|')" />
+        <xsl:text>|</xsl:text>
+    </xsl:variable>
+    <xsl:variable name="divisions">
+        <xsl:text>|</xsl:text>
+        <xsl:value-of select="str:replace(normalize-space(@divisions), ' ', '|')" />
+        <xsl:text>|</xsl:text>
+    </xsl:variable>
+    <!-- display subdivision headers with empty contents? -->
+    <xsl:variable name="empty">
+        <xsl:choose>
+            <xsl:when test="not(@empty)">
+                <xsl:text>no</xsl:text>
+            </xsl:when>
+            <!-- DTD should restrict to 'yes'|'no' -->
+            <xsl:otherwise>
+                <xsl:value-of select="@empty" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- root of the document subtree for list formation     -->
+    <!-- defaults to document-wide                           -->
+    <!-- DTD should enforce subdivisions as values for scope -->
+    <!-- TODO: perhaps use @ref to indicate $subroot,  -->
+    <!-- and protect against both a @scope and a @ref  -->
+    <xsl:variable name="scope">
+        <xsl:choose>
+            <xsl:when test="not(@scope)">
+                <xsl:choose>
+                    <xsl:when test="//mathbook/book"><xsl:text>book</xsl:text></xsl:when>
+                    <xsl:when test="//mathbook/article"><xsl:text>article</xsl:text></xsl:when>
+                    <xsl:when test="//mathbook/letter"><xsl:text>letter</xsl:text></xsl:when>
+                    <xsl:when test="//mathbook/memo"><xsl:text>memo</xsl:text></xsl:when>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="@scope" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="subroot" select="ancestor-or-self::*[local-name() = $scope]" />
+    <!-- variable behavior set, now setup -->
+    <xsl:call-template name="list-of-begin" />
+    <!-- traverse entire document tree, stopping at desired headers or elements -->
+    <!-- <xsl:for-each select="/mathbook/article//*|/mathbook/book//*"> -->
+    <xsl:for-each select="$subroot//*">
+        <!-- write a division header, perhaps              -->
+        <!-- check if desired, check if empty and unwanted -->
+        <xsl:if test="contains($divisions, concat(concat('|', name(.)), '|'))">
+            <xsl:choose>
+                <xsl:when test="$empty='no'">
+                    <!-- probe subtree, even if we found empty super-tree earlier -->
+                    <xsl:variable name="all-elements" select=".//*[contains($elements, concat(concat('|', name(.)), '|'))]" />
+                    <xsl:if test="$all-elements">
+                        <xsl:apply-templates select="." mode="list-of-header" />
+                    </xsl:if>
+                </xsl:when>
+                <xsl:when test="$empty='yes'">
+                    <xsl:apply-templates select="." mode="list-of-header" />
+                </xsl:when>
+            </xsl:choose>
+        </xsl:if>
+        <!-- if a desired element, write out summary/link -->
+        <xsl:if test="contains($elements, concat(concat('|', name(.)), '|'))='true'">
+            <xsl:apply-templates select="." mode="list-of-element" />
+        </xsl:if>
+    </xsl:for-each>
+    <xsl:call-template name="list-of-end" />
+</xsl:template>
 
 <!-- Programming Language Names -->
 <!-- Packages for listing and syntax highlighting             -->

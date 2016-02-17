@@ -66,7 +66,7 @@
 <!-- Everything like a paragraph, but also more substantial                   -->
 <!-- These items cannot be contained in anything but a structural subdivision -->
 <!-- Note: the "todo" element is in this list                                 -->
-<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|example|exercise|todo">
+<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|example|exercise|list-of|todo">
 
 
 <!-- ######### -->
@@ -178,7 +178,19 @@
     <!ATTLIST remark xml:id ID #IMPLIED>
 
 <!ELEMENT blockquote (p+, attribution*)>
-<!ELEMENT atribution (#PCDATA|%multiline;)*>
+<!ELEMENT attribution (#PCDATA|%multiline;)*>
+
+<!-- automatic lists, with options -->
+<!ELEMENT list-of EMPTY>
+    <!-- could restrict these, but allow space-delimited -->
+    <!ATTLIST list-of elements      CDATA      #IMPLIED>
+    <!ATTLIST list-of divisions     CDATA      #IMPLIED>
+    <!ATTLIST list-of scope         CDATA      #IMPLIED>
+    <!ATTLIST list-of empty         (yes|no)   #IMPLIED>
+
+<!-- specialized lists, SUBJECT TO CHANGE -->
+<!ELEMENT solution-list EMPTY>
+<!ELEMENT notation-list EMPTY>
 
 <!-- #### -->
 <!-- Code -->
