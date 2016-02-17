@@ -119,9 +119,9 @@
             <exercise>
                 <title>Adding Single-Digit Integers</title>
 
-                <statement>
+                <introduction>
                     <p>A simple, but functional example to begin with. If you are just learning how to add, you can test yourself here.</p>
-                </statement>
+                </introduction>
 
                 <webwork xml:id="integer-addition">
                     <title>Integer Addition</title>
@@ -153,6 +153,10 @@
                         <p><m><var name="$a" /> + <var name="$b" /> = <var name="$c" /></m>.</p>
                     </solution>
                 </webwork>
+
+                <conclusion>
+                    <p>That was a simple problem.  Let's move on.</p>
+                </conclusion>
             </exercise>
 
             <p>If you are familiar with <webwork />, then it may be a surprise to you to be interacting with a <webwork /> problem this way, without having logged in to <webwork />.</p>
@@ -160,9 +164,9 @@
             <exercise>
                 <title>Declaring a Problem Seed</title>
 
-                <statement>
+                <introduction>
                     <p>You can also declare a <c>seed</c> to specify a different random version of any problem that has randomization. Here is the same problem, but with a <c>seed</c> specified.</p>
-                </statement>
+                </introduction>
 
                 <webwork xml:id="integer-addition-with-seed" seed="510">
                     <title>Integer Addition</title>
@@ -199,14 +203,14 @@
             <exercise>
                 <title>Special Answer Checking</title>
 
-                <statement>
+                <introduction>
                     <p>One of the strengths of <webwork /> is its ability to give intelligent feedback for incorrect answers.</p>
                     <ul>
                         <li><p>There is general feedback for when the student's answer is in an entirely different ballpark from the correct answer. Try entering something like <q>y</q>.</p></li>
                         <li><p>There is general feedback for when the student's answer is not in the right form. Try entering <q>x<circumflex />2*x<circumflex />3</q>, which, right or wrong, is unsimplified.</p></li>
                         <li><p>And problems can be written to detect and respond to common mistakes. Try entering an answer where you multiply the two exponents (instead of adding them, which would be correct.)</p></li>
                     </ul>
-                </statement>
+                </introduction>
 
                 <webwork>
                     <title>Multiplication with Exponents</title>
@@ -269,9 +273,9 @@
 
             <exercise>
                 <title>Using Hints</title>
-                <statement>
+                <introduction>
                     <p>Hints can be inserted into exercises. Whether a hint is visible in the HTML depends on the value of <c>$showHint</c> in <c>PGcourse.pl</c> in the <webwork /> course that is hosting these exercises. How the hint is displayed in the pdf output is controlled in the usual way that an MBX hint is controlled.</p>
-                </statement>
+                </introduction>
 
                 <webwork>
                     <title>Multiplication with Exponents</title>
@@ -490,18 +494,20 @@
 
             <exercise xml:id="cylinder-volume">
                 <title>Cylinder Volume</title>
-                <statement>
-                    <p>This problem is one that PCC has donated to the OPL.</p>
-                </statement>
+
+                <introduction>
+                    <p>This problem is one that Portland Community College has donated to the Open Problem Library.</p>
+                </introduction>
 
                 <webwork source="BasicAlgebra/Geometry/CylinderVolume10.pg" seed="8435"/>
             </exercise>
 
             <exercise xml:id="two-variable-inequality">
                 <title>Grandpa's Cat: a Cautionary Tale</title>
-                <statement>
+
+                <introduction>
                     <p>Not all problems that come from the OPL were written with MBX in mind, and they don't all fit into MBX space. This example illustrates that this should be taken into consideration when using OPL problems. Some of the graphs here are not fully visible in the web version of the article.</p>
-                </statement>
+                </introduction>
 
                 <webwork source="BasicAlgebra/EquationsAndInequalitiesInTwoVariables/GraphTwoVariableInequality110.pg" />
             </exercise>
@@ -568,9 +574,9 @@
                 <exercise xml:id="ww-graphical-antiderivatives">
                     <title>Graphical Antiderivatives</title>
 
-                    <statement>
+                    <introduction>
                         <p>Consult <xref ref="definition-antiderivative" autoname="yes" /> and the <xref ref="theorem-FTC" autoname="title" /> to assist you with the following problem.</p>
-                    </statement>
+                    </introduction>
 
                     <webwork source="Library/Rochester/setIntegrals4FTC/S05.03.FundThmCalc.PTP01.pg" />
                 </exercise>
@@ -578,9 +584,9 @@
                 <exercise xml:id="ww-discuss-always-antiderivative">
                     <title>Every Continuous Function has an Antiderivative</title>
 
-                    <statement>
+                    <introduction>
                         <p><webwork /> problems can allow for open-ended essay responses that are intended to be assessed later by the instructor. For anonymous access, no text field is provided. But if this problem were used within <webwork /> as part of a homework set, users could submit an answer.</p>
-                    </statement>
+                    </introduction>
 
                     <webwork>
                         <statement>
@@ -650,9 +656,9 @@
             <exercise>
                 <title>Drop down (aka Popup)</title>
 
-                <statement>
+                <introduction>
                     <p>Note also that the solution to this problem uses an external link.</p>
-                </statement>
+                </introduction>
 
                 <webwork>
 

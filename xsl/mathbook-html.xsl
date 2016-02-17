@@ -1698,11 +1698,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     </h5>
 </xsl:template>
-<!-- Body is statement (ignoring .text switch!) -->
-<xsl:template match="exercise" mode="body">
+<!-- Body is statement normally, but for WeBWorK -->
+<!-- body is introduction, webwork, conclusion   -->
+<!-- (ignoring .text switches for WW!)           -->
+<xsl:template match="exercise[child::statement]" mode="body">
     <xsl:apply-templates select="statement"/>
+</xsl:template>
+<xsl:template match="exercise[child::webwork]" mode="body">
+    <xsl:apply-templates select="statement"/>
+    <xsl:apply-templates select="introduction"/>
     <xsl:apply-templates select="webwork" mode="knowlized" />
-        <!-- <xsl:apply-templates select="hint"/> -->
+    <xsl:apply-templates select="conclusion"/>
 </xsl:template>
 <!-- Posterior: links to information  -->
 <xsl:template match="exercise" mode="posterior">

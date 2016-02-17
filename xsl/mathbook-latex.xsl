@@ -1935,9 +1935,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
     <!-- Allow an exercise to introduce/connect a problem     -->
     <!-- (especially from server) to the text in various ways -->
-    <!-- TODO: change statement to introduction, add conclusion -->
-    <xsl:apply-templates select="statement"/>
+    <xsl:apply-templates select="introduction"/>
     <xsl:apply-templates select="webwork" />
+    <xsl:apply-templates select="conclusion"/>
     <xsl:text>\end{exercise}&#xa;</xsl:text>
 </xsl:template>
 
@@ -1980,7 +1980,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- condition on webwork wrapper or not -->
     <xsl:choose>
         <xsl:when test="webwork">
+            <xsl:apply-templates select="introduction" />
             <xsl:apply-templates select="webwork" />
+            <xsl:apply-templates select="conclusion" />
         </xsl:when>
         <xsl:otherwise>
         <!-- Order enforced: statement, hint, answer, solution -->
