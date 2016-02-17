@@ -199,12 +199,10 @@ the xsltproc executable.
             example near the discussion of Asymptote.
             -->
 
-            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me> This is also a demonstration of the capabilities of <url href="http://mathbook.pugetsound.edu">MathBook XML</url>.</p>
-
-            <notation>
+            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me> This is also a demonstration of the capabilities of <url href="http://mathbook.pugetsound.edu">MathBook XML</url>.<notation>
                 <usage>\int_a^b\,f(x)\,dx</usage>
                 <description>definite integral of <m>f(x)</m></description>
-            </notation>
+            </notation></p>
 
             <p>Generated: <today />, <timeofday /></p>
 
@@ -237,7 +235,8 @@ the xsltproc executable.
             -->
             <theorem xml:id="theorem-FTC">
                 <title>The Fundamental Theorem of Calculus</title>
-                <statement><index><main>Fundamental Theorem of Calculus</main></index>
+                <index><main>Fundamental Theorem of Calculus</main></index>
+                <statement>
                     <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me></p>
                 </statement>
                 <proof>
