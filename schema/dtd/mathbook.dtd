@@ -66,7 +66,7 @@
 <!-- Everything like a paragraph, but also more substantial                   -->
 <!-- These items cannot be contained in anything but a structural subdivision -->
 <!-- Note: the "todo" element is in this list                                 -->
-<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|example|exercise|list-of|todo">
+<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|example|exercise|list-of|solution-list|notation-list|todo">
 
 
 <!-- ######### -->
@@ -188,7 +188,8 @@
     <!ATTLIST list-of scope         CDATA      #IMPLIED>
     <!ATTLIST list-of empty         (yes|no)   #IMPLIED>
 
-<!-- specialized lists, SUBJECT TO CHANGE -->
+<!-- specialized lists, SUBJECT TO CHANGE  -->
+<!-- TODO: adjust allowed placements above -->
 <!ELEMENT solution-list EMPTY>
 <!ELEMENT notation-list EMPTY>
 
@@ -373,7 +374,7 @@
 
 <!-- External References -->
 <!ELEMENT url       (#PCDATA)>
-    <!ATTLIST url href CDATA #REQUIRED>
+    <!ATTLIST url href CDATA #IMPLIED>
 
 <!-- Internal Cross-References -->
 <!ELEMENT xref EMPTY>
@@ -546,7 +547,8 @@
 <!-- <!ELEMENT url   (#PCDATA)> -->
 
 <!-- repurpose elements, a change in source -->
-<!ELEMENT rename    EMPTY>
+<!-- TODO:  lang  should be  xml:lang, as on main element? -->
+<!ELEMENT rename    (#PCDATA)>
     <!ATTLIST rename   element  CDATA   #IMPLIED>
     <!ATTLIST rename   lang     CDATA   #IMPLIED>
 
@@ -608,8 +610,10 @@
 <!-- Bibliographic References -->
 <!-- ######################## -->
 
-<!-- This needs serious work - this is 100% provisional           -->
+<!-- This needs serious work - this is 100% PROVISIONAL           -->
 <!-- As-is, this needs more structure to accomodate note properly -->
+<!ELEMENT references (title?, introduction?, biblio*, conclusion?)>
+
 <!ELEMENT biblio  (#PCDATA|%line;|ibid|author|title|journal|year|volume|number|note)*>
     <!ATTLIST biblio xml:id ID    #IMPLIED>
     <!ATTLIST biblio type   (raw) #REQUIRED>
@@ -621,4 +625,5 @@
 <!ELEMENT volume   (#PCDATA|%line;)*>
 <!ELEMENT number   (#PCDATA|%line;)*>
 <!ELEMENT note     (%para;)*>
+    <!ATTLIST note xml:id ID #IMPLIED>
 
