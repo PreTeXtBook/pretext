@@ -416,11 +416,12 @@ the xsltproc executable.
             <subsection>
                 <title>Second Version of FTC</title>
 
+                <todo>Should equation references come with parentheses?</todo>
+
                 <corollary xml:id="corollary-FTC-derivative">
                     <statement>
                         <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men></p>
                     </statement>
-                    <todo>Should equation references come with parentheses?</todo>
                     <proof xml:id="proof-FTC-corollary">
                         <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.</p>
                         <mdn>
@@ -898,7 +899,10 @@ the xsltproc executable.
 
                 <p>A large quote can be accomodated with the <c>blockquote</c> tag, which can carry within itself an <c>attribution</c> element.</p>
 
-                <blockquote>The problem with writing a book in verse is, to be successful, it has to sound like you knocked it off on a rainy Friday afternoon. It has to sound easy. When you can do it, it helps tremendously because it's a thing that forces kids to read on. You have this unconsummated feeling if you stop.<attribution>Dr. Seuss</attribution></blockquote>
+                <blockquote>
+                    <p>The problem with writing a book in verse is, to be successful, it has to sound like you knocked it off on a rainy Friday afternoon. It has to sound easy. When you can do it, it helps tremendously because it's a thing that forces kids to read on. You have this unconsummated feeling if you stop.</p>
+                    <attribution>Dr. Seuss</attribution>
+                </blockquote>
 
                 <p>Sometimes a quote may extend across several paragraphs.  Or a balanced pair of quotations marks crosses an XML boundary, so we need left, right, single and double versions.  (For example, see Section<nbsp /><xref ref="poetry" /> on poetry.)  Here are all four in a haphazard order: <rq />, <lsq />, <lq />, <rsq />.  These should be a last resort, and <em>not</em> a replacement for the <c>q</c> and <c>sq</c> tags.  The left/right versions are used for the following quote from Abraham Lincoln, which we have edited into two paragraphs.</p>
 
@@ -1830,9 +1834,9 @@ the xsltproc executable.
                 </tabular>
             </table>
 
-            <p>Tables can be used many ways.  We describe long division of polynomials by using vertical and horizontal borders on individual entries of a table.  The division lines are slightly thicker than the subtraction lines.  This is a good example of the typical abuse of tables for horizontal and vertical layout.</p>
+            <p>Tables can be used many ways.  We describe long division of polynomials by using vertical and horizontal borders on individual entries of a table.  The division lines are slightly thicker than the subtraction lines.  This is a good example of the typical abuse of tables for horizontal and vertical layout.  Also indicative of this abuse is that it might make more sense to call this a <q>Figure,</q> not a <q>Table</q>.</p>
 
-            <figure>
+            <table>
                 <caption>Polynomial Long Division</caption>
                 <tabular halign="right">
                     <row>
@@ -1896,7 +1900,7 @@ the xsltproc executable.
                         <cell><m>2</m></cell>
                     </row>
                 </tabular>
-            </figure>
+            </table>
 
             <p>The next table describes how to construct tables via the <c>tabular</c> element.  The <c>table</c> element may be used to enclose the raw table, so as to associate a caption and get vertical separation with horizontal centering.</p>
 
