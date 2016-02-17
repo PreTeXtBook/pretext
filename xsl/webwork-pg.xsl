@@ -62,7 +62,7 @@
 <!-- ################## -->
 
 <!-- Basic outline of a simple problem -->
-<xsl:template match="webwork" mode="pg">
+<xsl:template match="webwork[child::statement]" mode="pg">
     <xsl:call-template   name="begin-problem" />
     <xsl:call-template   name="macros" />
     <xsl:call-template   name="header" />
@@ -73,8 +73,10 @@
     <xsl:call-template   name="end-problem" />
 </xsl:template>
 
-<!-- Basic outline of a "scaffold" problem -->
-<xsl:template match="webwork[@type='scaffold']" mode="pg">
+<!-- Basic outline of a multi-stage problem  -->
+<!-- Known in WeBWorK as a"scaffold" problem -->
+<!-- Indicated by <stages> as children       -->
+<xsl:template match="webwork[child::stage]" mode="pg">
     <xsl:call-template   name="begin-problem" />
     <xsl:call-template   name="macros" />
     <xsl:call-template   name="header" />
@@ -83,7 +85,7 @@
         <xsl:with-param name="title">Scaffold</xsl:with-param>
     </xsl:call-template>
     <xsl:text>Scaffold::Begin();&#xa;</xsl:text>
-    <xsl:apply-templates select="platform" />
+    <xsl:apply-templates select="stage" />
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>Scaffold::End();&#xa;</xsl:text>
     <xsl:call-template   name="end-problem" />
@@ -103,8 +105,10 @@
     </xsl:call-template>
 </xsl:template>
 
-<!-- A platform is part of a scaffold -->
-<xsl:template match="platform">
+<!-- A stage is part of a multi-stage problem -->
+<!-- WeBWorK calls these "scaffold" problems, -->
+<!-- which have "section"s                    -->
+<xsl:template match="stage">
     <xsl:call-template name="begin-block">
         <xsl:with-param name="title">Section</xsl:with-param>
     </xsl:call-template>

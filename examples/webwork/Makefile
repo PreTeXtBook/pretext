@@ -137,14 +137,14 @@ sample-chapter-latex:
 sample-chapter-check:
 	install -d $(SCRATCH)
 	-rm $(SCRATCH)/dtderrors.*
-	-xmllint --xinclude --noout --dtdvalid $(DTD)/mathbook.dtd $(WWEXAMPLE)/sample-chapter/sample-chapter.xml 2> $(SCRATCH)/dtderrors.txt
+	-xmllint --xinclude --postvalid --noout --dtdvalid $(DTD)/mathbook.dtd $(WWEXAMPLE)/sample-chapter/sample-chapter.xml 2> $(SCRATCH)/dtderrors.txt
 	# less $(SCRATCH)/dtderrors.txt
 
 # 2016-02-10: no serious effort yet to make thie check below pass
 template-check:
 	install -d $(SCRATCH)
 	-rm $(SCRATCH)/dtderrors.*
-	-xmllint --xinclude --noout --dtdvalid $(DTD)/mathbook.dtd $(WWEXAMPLE)/webwork-templates/webwork-templates.xml 2> $(SCRATCH)/dtderrors.txt
+	-xmllint --xinclude --postvalid --noout --dtdvalid $(DTD)/mathbook.dtd $(WWEXAMPLE)/webwork-templates/webwork-templates.xml 2> $(SCRATCH)/dtderrors.txt
 	# less $(SCRATCH)/dtderrors.txt
 
 ###################################

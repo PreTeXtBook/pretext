@@ -450,10 +450,13 @@
     <!ATTLIST solution xml:id ID #IMPLIED>
 
 <!-- WeBWorK exercises -->
-<!ELEMENT webwork (title?, index*, macros?, setup?, statement, hint*, solution*)?>
+<!ELEMENT webwork ((EMPTY)*|(title?, index*, macros?, setup?, ((statement, hint?, solution?)|(stage+))))>
     <!ATTLIST webwork xml:id ID     #IMPLIED>
     <!ATTLIST webwork source CDATA  #IMPLIED>
     <!ATTLIST webwork seed   CDATA  #IMPLIED>
+
+<!-- Multistage problems have the usual lead-in, but then are organized with stages -->
+<!ELEMENT stage (title?, statement, hint?, solution?)>
 
 <!-- <!ELEMENT macros (macro+)> -->  <!-- FIXME -->
 <!ELEMENT macro (#PCDATA)>

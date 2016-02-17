@@ -445,7 +445,7 @@
                         </pg-code>
                     </setup>
 
-                    <platform>
+                    <stage>
                         <title>Part 1: Identify the coefficients</title>
 
                         <statement>
@@ -457,9 +457,9 @@
                         <solution>
                             <p> Take the coefficient of <m>x^2</m> for the value of <m>a</m>, the coefficient of <m>x</m> for <m>b</m>, and the constant for <m>c</m>.  <em>In this case</em>, they are <m>a = <var name="$a" /></m>, <m>b = <var name="$b" /></m>, <m>c = <var name="$c" /></m>.</p>
                         </solution>
-                    </platform>
+                    </stage>
 
-                    <platform>
+                    <stage>
                         <title>Part 2: Solve using the quadratic formula</title>
 
                         <statement>
@@ -473,7 +473,7 @@
                             <p>You already identified <m>a = <var name="$a"/></m>, <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>, so the results are: <me>x = {<var name="$solnum1"/> \over 2(<var name="$a"/>)} = <var name="$x1"/></me> or <me>x = {<var name="$solnum2"/> \over 2(<var name="$a"/>)} = <var name="$x2"/></me></p>
                         </solution>
 
-                    </platform>
+                    </stage>
                 </webwork>
             </exercise>
         </section>

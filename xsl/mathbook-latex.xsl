@@ -2091,21 +2091,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Top-down structure -->
 <!-- Basic outline of a simple problem -->
-<xsl:template match="webwork[statement]">
+<xsl:template match="webwork[child::statement]">
     <xsl:text>\par&#xa;</xsl:text>
     <xsl:apply-templates select="statement" />
     <xsl:apply-templates select="hint" />
     <xsl:apply-templates select="solution" />
 </xsl:template>
 
-<!-- Basic outline of a "scaffold" problem -->
-<xsl:template match="webwork[@type='scaffold']">
-    <xsl:apply-templates select="platform" />
+<!-- Basic outline of a multistage problem    -->
+<!-- Known in WeBWorK as a "scaffold" problem -->
+<xsl:template match="webwork[child::stage]">
+    <xsl:apply-templates select="stage" />
 </xsl:template>
 
-<!-- A platform is part of a scaffold -->
-<xsl:template match="webwork/platform">
-    <!-- employ title here to identify different platforms -->
+<!-- A stage is a subproblem in a multistage problem -->
+<!-- Implemented as as "section" in WeBWorK          -->
+<xsl:template match="webwork/stage">
+    <!-- employ title here to identify different stages -->
     <xsl:apply-templates select="statement" />
     <xsl:apply-templates select="hint" />
     <xsl:apply-templates select="solution" />
@@ -2117,9 +2119,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="webwork/setup" />
 
 <!-- default template, for complete presentation -->
+<!-- TODO: internationalize Problem/Part         -->
 <xsl:template match="webwork//statement">
     <xsl:text>\noindent%&#xa;</xsl:text>
-    <xsl:text>\textbf{Problem.}\quad </xsl:text>
+    <xsl:choose>
+        <xsl:when test="parent::webwork">
+            <xsl:text>\textbf{Problem.}\quad </xsl:text>
+        </xsl:when>
+        <xsl:when test="parent::stage">
+            <xsl:text>\textbf{Part </xsl:text>
+            <xsl:number count="stage" from="webwork" />
+            <xsl:text>.}\quad </xsl:text>
+        </xsl:when>
+    </xsl:choose>
     <xsl:apply-templates />
     <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
