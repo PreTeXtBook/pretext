@@ -53,13 +53,13 @@
 <!-- Elements that can be contained in a typical paragraph  -->
 <!-- Everything that is title material, plus more (eg me)    -->
 <!-- Precede by a #PCDATA, wrap with ( )*                   -->
-<!ENTITY % sentence "%line;|me|men|fn|notation|index">
+<!ENTITY % sentence "%line;|me|men|fn|index|notation">
 
 <!-- Paragraphs -->
 <!-- Elements that can mix anywhere with a paragraph, -->
 <!-- such as in the statement of a theorem or a proof -->
 <!-- For example <md> yes, but <theorem> no           -->
-<!ENTITY % para "p|md|mdn|ul|ol|dl|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|image|tabular|notation|index">
+<!ENTITY % para "p|md|mdn|ul|ol|dl|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|image|tabular">
 
 <!-- Blocks -->
 <!-- Top-level descendents of structural elements                             -->
@@ -77,32 +77,37 @@
     <!ATTLIST mathbook xml:lang CDATA #IMPLIED>
 
 <!-- A book may be a list of chapters or a list of parts -->
-<!ELEMENT book ((title, subtitle?, frontmatter, chapter+, appendix*, backmatter?)|(title, subtitle?, frontmatter, part+, appendix*, backmatter?))>
+<!ELEMENT book (title, subtitle?, frontmatter, ((chapter+, appendix*, backmatter?)|(part+, appendix*, backmatter?)))>
     <!ATTLIST book xml:id ID #IMPLIED>
 
 <!ELEMENT article (title, subtitle?, frontmatter?, (section|exercises|references)+, backmatter?)>
     <!ATTLIST article xml:id ID #IMPLIED>
 
-<!ELEMENT part (title, chapter+)>
-    <!ATTLIST part xml:id ID #IMPLIED>
+<!ELEMENT part (title, index*, chapter+)>
+    <!ATTLIST part xml:id   ID       #IMPLIED>
+    <!ATTLIST part xml:base CDATA    #IMPLIED>
 
-<!ELEMENT chapter (title, author*, ((%block;)*|(introduction?,(section|exercises|references)+,conclusion?)))>
-    <!ATTLIST chapter xml:id ID #IMPLIED>
+<!ELEMENT chapter (title, index*, author*, ((%block;)*|(introduction?,(section|exercises|references)+,conclusion?)))>
+    <!ATTLIST chapter xml:id   ID       #IMPLIED>
+    <!ATTLIST chapter xml:base CDATA    #IMPLIED>
 
-<!ELEMENT section (title, author*, ((%block;)*|(introduction?,(subsection|exercises|references)+,conclusion?)))>
-    <!ATTLIST section xml:id ID #IMPLIED>
+<!ELEMENT section (title, index*, author*, ((%block;)*|(introduction?,(subsection|exercises|references)+,conclusion?)))>
+    <!ATTLIST section xml:id   ID       #IMPLIED>
+    <!ATTLIST section xml:base CDATA    #IMPLIED>
 
-<!ELEMENT subsection (title, author*, ((%block;)*|(introduction?,(subsubsection|exercises|references)+,conclusion?)))>
-    <!ATTLIST subsection xml:id ID #IMPLIED>
+<!ELEMENT subsection (title, index*, author*, ((%block;)*|(introduction?,(subsubsection|exercises|references)+,conclusion?)))>
+    <!ATTLIST subsection xml:id   ID       #IMPLIED>
+    <!ATTLIST subsection xml:base CDATA    #IMPLIED>
 
-<!ELEMENT subsubsection (title,  author*, (%block;)*)>
-    <!ATTLIST subsubsection xml:id ID #IMPLIED>
+<!ELEMENT subsubsection (title, index*,  author*, (%block;)*)>
+    <!ATTLIST subsubsection xml:id   ID       #IMPLIED>
+    <!ATTLIST subsubsection xml:base CDATA    #IMPLIED>
 
 <!ELEMENT title    (#PCDATA|%line;)*>
 <!ELEMENT subtitle (#PCDATA|%line;)*>
 
-<!ELEMENT introduction (title?, (%block;)*)>
-<!ELEMENT conclusion   (title?, (%block;)*)>
+<!ELEMENT introduction (title?, index*, (%block;)*)>
+<!ELEMENT conclusion   (title?, index*, (%block;)*)>
 
 
 <!-- ##### -->
@@ -118,7 +123,7 @@
 <!ELEMENT dl (li+)>
     <!ATTLIST dl cols CDATA #IMPLIED>
 <!-- title on list item is only for within a description list, <dl> -->
-<!ELEMENT li (title?, (p|ul|ol|dl)*)>
+<!ELEMENT li (title?, index*, (p|md|mdn|ul|ol|dl)*)>
     <!ATTLIST li xml:id ID #IMPLIED>
 
 
@@ -133,7 +138,7 @@
     <!ATTLIST p   valign  (bottom|middle|top)   #IMPLIED>
 
 <!-- attributes for use only in side-by-side -->
-<!ELEMENT paragraphs   (title?, (%para;)*) >
+<!ELEMENT paragraphs   (title?, index*, (%para;)*) >
     <!ATTLIST paragraphs   width    CDATA                 #IMPLIED>
     <!ATTLIST paragraphs   halign   (left|center|right)   #IMPLIED>
     <!ATTLIST paragraphs   valign   (bottom|middle|top)   #IMPLIED>
@@ -144,37 +149,37 @@
     <!ATTLIST proof xml:id ID #IMPLIED>
 
 <!-- definition might contain notation -->
-<!ELEMENT definition   (title?, statement, notation?)>
+<!ELEMENT definition   (title?, index*, notation*, statement)>
     <!ATTLIST definition xml:id ID #IMPLIED>
 
 <!-- theorem-like, ie with proof -->
-<!ELEMENT theorem   (title?, statement, proof*)>
+<!ELEMENT theorem   (title?, index*, statement, proof*)>
     <!ATTLIST theorem xml:id ID #IMPLIED>
-<!ELEMENT corollary (title?, statement, proof*)>
+<!ELEMENT corollary (title?, index*, statement, proof*)>
     <!ATTLIST corollary xml:id ID #IMPLIED>
-<!ELEMENT lemma     (title?, statement, proof*)>
+<!ELEMENT lemma     (title?, index*, statement, proof*)>
     <!ATTLIST lemma     xml:id ID #IMPLIED>
-<!ELEMENT algorithm     (title?, statement, proof*)>
+<!ELEMENT algorithm     (title?, index*, statement, proof*)>
     <!ATTLIST algorithm     xml:id ID #IMPLIED>
-<!ELEMENT proposition     (title?, statement, proof*)>
+<!ELEMENT proposition     (title?, index*, statement, proof*)>
     <!ATTLIST proposition     xml:id ID #IMPLIED>
-<!ELEMENT claim     (title?, statement, proof*)>
+<!ELEMENT claim     (title?, index*, statement, proof*)>
     <!ATTLIST claim     xml:id ID #IMPLIED>
-<!ELEMENT fact     (title?, statement, proof*)>
+<!ELEMENT fact     (title?, index*, statement, proof*)>
     <!ATTLIST fact     xml:id ID #IMPLIED>
 
 <!-- conjecture-like, ie no proof -->
-<!ELEMENT conjecture (title?, statement)>
+<!ELEMENT conjecture (title?, index*, statement)>
     <!ATTLIST conjecture xml:id ID #IMPLIED>
-<!ELEMENT axiom (title?, statement)>
+<!ELEMENT axiom (title?, index*, statement)>
     <!ATTLIST axiom xml:id ID #IMPLIED>
-<!ELEMENT principle (title?, statement)>
+<!ELEMENT principle (title?, index*, statement)>
     <!ATTLIST principle xml:id ID #IMPLIED>
 
 <!-- example-like, not very structured -->
-<!ELEMENT example (title?, (%para;)*)>
+<!ELEMENT example (title?, index*, (%para;)*)>
     <!ATTLIST example xml:id ID #IMPLIED>
-<!ELEMENT remark (title?, (%para;)*)>
+<!ELEMENT remark (title?, index*, (%para;)*)>
     <!ATTLIST remark xml:id ID #IMPLIED>
 
 <!ELEMENT blockquote (p+, attribution*)>
@@ -238,7 +243,7 @@
 <!ELEMENT caption  (#PCDATA|%line;)*>
 
 <!-- table attributes for use only in side-by-side -->
-<!ELEMENT table   (title?, caption?, tabular)>
+<!ELEMENT table   (title?, index*, caption?, tabular)>
     <!ATTLIST table xml:id ID #IMPLIED>
     <!ATTLIST table width     CDATA                 #IMPLIED>
     <!ATTLIST table halign    (left|center|right)   #IMPLIED>
@@ -269,15 +274,16 @@
     <!ATTLIST cell halign       (left|center|right)        #IMPLIED>
     <!ATTLIST cell colspan      CDATA                      #IMPLIED>
 
-<!-- figure attributes for use only in side-by-side -->
-<!ELEMENT figure  (title?, caption?, (image|video|latex-image-code)*)>
+<!-- figure attributes for use only in side-by-side           -->
+<!-- Allowing multiple p allows for things like math displays -->
+<!ELEMENT figure  (title?, index*, caption?, (image|video|latex-image-code|p*)*)>
     <!ATTLIST figure xml:id ID #IMPLIED>
     <!ATTLIST figure   width    CDATA                 #IMPLIED>
     <!ATTLIST figure   halign   (left|center|right)   #IMPLIED>
     <!ATTLIST figure   valign   (bottom|middle|top)   #IMPLIED>
 
 <!-- listing attributes for use only in side-by-side -->
-<!ELEMENT listing  (title?, caption?, (program|console)*)>
+<!ELEMENT listing  (title?, index*, caption?, (program|console)*)>
     <!ATTLIST listing xml:id ID #IMPLIED>
     <!ATTLIST listing   width    CDATA                 #IMPLIED>
     <!ATTLIST listing   halign   (left|center|right)   #IMPLIED>
@@ -295,7 +301,7 @@
 <!-- Poetry -->
 <!-- ###### -->
 
-<!ELEMENT poem      (title?, author?, (line+|stanza+))>
+<!ELEMENT poem      (title?, index*, author?, (line+|stanza+))>
     <!ATTLIST poem width CDATA #IMPLIED>
     <!ATTLIST poem xml:id ID #IMPLIED>
 <!ELEMENT stanza    (line+)>
@@ -424,12 +430,14 @@
 
 <!-- Inline and sectional -->
 
-<!ELEMENT exercises (title?, introduction?, (exercise|exercisegroup|todo)*, conclusion?)>
-    <!ATTLIST exercises xml:id ID    #IMPLIED>
+<!ELEMENT exercises (title?, index*, introduction?, (exercise|exercisegroup|todo)*, conclusion?)>
+    <!ATTLIST exercises xml:id   ID       #IMPLIED>
+    <!ATTLIST exercises xml:base CDATA    #IMPLIED>
+
 <!ELEMENT exercisegroup (introduction?, exercise+, conclusion?)>
     <!ATTLIST exercisegroup xml:id ID    #IMPLIED>
 
-<!ELEMENT exercise (title?, ((statement, hint*, answer*, solution*)|(introduction?, webwork, conclusion?)))>
+<!ELEMENT exercise (title?, index*, ((statement, hint*, answer*, solution*)|(introduction?, webwork, conclusion?)))>
     <!ATTLIST exercise xml:id ID    #IMPLIED>
     <!ATTLIST exercise number CDATA #IMPLIED>
 <!-- title, statement described elsewhere -->    
@@ -442,7 +450,7 @@
     <!ATTLIST solution xml:id ID #IMPLIED>
 
 <!-- WeBWorK exercises -->
-<!ELEMENT webwork (title?, macros?, setup?, statement, hint*, solution*)?>
+<!ELEMENT webwork (title?, index*, macros?, setup?, statement, hint*, solution*)?>
     <!ATTLIST webwork xml:id ID     #IMPLIED>
     <!ATTLIST webwork source CDATA  #IMPLIED>
     <!ATTLIST webwork seed   CDATA  #IMPLIED>
@@ -526,12 +534,16 @@
 
 <!-- A mini-database of relevant information with no natural home -->
 
-<!ELEMENT docinfo   (brandlogo|macros|latex-image-preamble|initialism|feedback|rename)*>
+<!ELEMENT docinfo   (brandlogo|website|macros|latex-image-preamble|initialism|feedback|rename)*>
 
 <!-- url and image for HTML pages -->
 <!ELEMENT brandlogo    EMPTY>
     <!ATTLIST brandlogo   url      CDATA   #IMPLIED>
     <!ATTLIST brandlogo   source   CDATA   #IMPLIED>
+
+<!-- TODO: maybe these should be reworked -->
+<!ELEMENT website    (title, url)>
+    <!-- title and url elements done elsewhere -->
 
 <!-- typically for short HTML titles on tabs, bookmarks, etc -->
 <!ELEMENT initialism                 (#PCDATA)>
@@ -587,24 +599,29 @@
 <!ELEMENT shortlicense   (#PCDATA|%line;)*>
 
 
-<!ELEMENT biography (title?, (%block;)*)>
+<!ELEMENT biography (title?, index*, (%block;)*)>
     <!ATTLIST biography xml:id ID #IMPLIED>
 
-<!ELEMENT abstract (title?, (%block;)*)>
+<!ELEMENT abstract (title?, index*, (%block;)*)>
     <!ATTLIST abstract xml:id ID #IMPLIED>
 
-<!ELEMENT dedication   (title?, p*)>
+<!ELEMENT dedication   (title?, index*, p*)>
     <!ATTLIST dedication xml:id ID #IMPLIED>
 
-<!ELEMENT acknowledgement (title?, (%block;)*)>
+<!ELEMENT acknowledgement (title?, index*, (%block;)*)>
     <!ATTLIST acknowledgement xml:id ID #IMPLIED>
 
-<!ELEMENT foreword (title?, (%block;)*)>
+<!ELEMENT foreword (title?, index*, (%block;)*, attribution*)>
     <!ATTLIST foreword xml:id ID #IMPLIED>
 
-<!ELEMENT preface (title?, (%block;)*)>
+<!ELEMENT preface (title?, index*, (%block;)*, attribution*)>
     <!ATTLIST preface xml:id ID #IMPLIED>
 
+<!-- ########### -->
+<!-- Back Matter -->
+<!-- ########### -->
+
+<!-- TODO:  include an afterword? -->
 
 <!-- ######################## -->
 <!-- Bibliographic References -->
@@ -612,7 +629,7 @@
 
 <!-- This needs serious work - this is 100% PROVISIONAL           -->
 <!-- As-is, this needs more structure to accomodate note properly -->
-<!ELEMENT references (title?, introduction?, biblio*, conclusion?)>
+<!ELEMENT references (title?, index*, introduction?, biblio*, conclusion?)>
 
 <!ELEMENT biblio  (#PCDATA|%line;|ibid|author|title|journal|year|volume|number|note)*>
     <!ATTLIST biblio xml:id ID    #IMPLIED>
