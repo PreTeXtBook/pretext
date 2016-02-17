@@ -145,7 +145,8 @@
                     </setup>
 
                     <statement>
-                        <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:<br /><m><var name="$a" /> + <var name="$b" /> =</m> <answer var="$c" width="2" /></p>
+                        <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
+                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <answer var="$c" width="2" /></p>
                     </statement>
 
                     <solution>
@@ -199,13 +200,12 @@
                 <title>Special Answer Checking</title>
 
                 <statement>
-                    <p>One of the strengths of <webwork /> is its ability to give intelligent feedback for incorrect answers.
-                        <ul>
-                            <li><p>There is general feedback for when the student's answer is in an entirely different ballpark from the correct answer. Try entering something like <q>y</q>.</p></li>
-                            <li><p>There is general feedback for when the student's answer is not in the right form. Try entering <q>x<circumflex />2*x<circumflex />3</q>, which, right or wrong, is unsimplified.</p></li>
-                            <li><p>And problems can be written to detect and respond to common mistakes. Try entering an answer where you multiply the two exponents (instead of adding them, which would be correct.)</p></li>
-                        </ul>
-                    </p>
+                    <p>One of the strengths of <webwork /> is its ability to give intelligent feedback for incorrect answers.</p>
+                    <ul>
+                        <li><p>There is general feedback for when the student's answer is in an entirely different ballpark from the correct answer. Try entering something like <q>y</q>.</p></li>
+                        <li><p>There is general feedback for when the student's answer is not in the right form. Try entering <q>x<circumflex />2*x<circumflex />3</q>, which, right or wrong, is unsimplified.</p></li>
+                        <li><p>And problems can be written to detect and respond to common mistakes. Try entering an answer where you multiply the two exponents (instead of adding them, which would be correct.)</p></li>
+                    </ul>
                 </statement>
 
                 <webwork>
@@ -343,7 +343,7 @@
                     <p>Given the second-degree polynomial equation <m>ax^2 + bx + c = 0</m>, where <m>a\neq0</m>, solutions are given by <me>x = \frac{-b\pm\sqrt{b^2-4ac}}{2a}.</me></p>
                 </statement>
                 <proof>
-                    <p><md>
+                    <md>
                     <mrow>ax^2 + bx + c &amp;= 0</mrow>
                     <mrow>ax^2 + bx &amp;= -c</mrow>
                     <mrow>4ax^2 + 4bx &amp;= -4c</mrow>
@@ -352,14 +352,14 @@
                     <mrow>2ax + b &amp;=\pm\sqrt{b^2 - 4ac}</mrow>
                     <mrow>2ax &amp;=-b\pm\sqrt{b^2 - 4ac}</mrow>
                     <mrow>x &amp;=\frac{-b\pm\sqrt{b^2 - 4ac}}{2a}</mrow>
-                    </md></p>
+                    </md>
                 </proof>
             </theorem>
 
             <exercise>
                 <title>Solving Quadratic Equations</title>
 
-                <webwork xml:id="quadratic-equation" type="scaffold" >
+                <webwork xml:id="quadratic-equation">
 
                     <macros>
                         <macro>parserMultiAnswer.pl</macro>
@@ -530,7 +530,8 @@
 
                 <theorem xml:id="theorem-FTC">
                     <title>The Fundamental Theorem of Calculus</title>
-                    <statement><index><main>Fundamental Theorem of Calculus</main></index>
+                    <index><main>Fundamental Theorem of Calculus</main></index>
+                    <statement>
                         <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me></p>
                     </statement>
                     <proof>
@@ -584,7 +585,7 @@
                     <webwork>
                         <statement>
                             <p>Explain how we can use <xref ref="corollary-FTC-derivative" autoname="yes" /> to say that every continuous function <em>always</em> has a derivative. (And we will demonstrate here that you can use a  macro from <c>docinfo</c>: <m>\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)</m>. It will work in the <webwork /> problem, regardless of whether you are using images, MathJax, or hardcopy.)</p>
-                            <answer format="essay" />
+                            <p><answer format="essay" /></p>
                         </statement>
                     </webwork>
                 </exercise>
@@ -595,7 +596,7 @@
                     <webwork>
                         <statement>
                             <p><q>Differentiation and integration are inverse processes.</q>  Cite <alert>specific results</alert> from this section in an explanation of how they justify this (somewhat imprecise) claim.</p>
-                            <answer format="essay" width="40"/>
+                            <p><answer format="essay" width="40"/></p>
                         </statement>
                     </webwork>
                 </exercise>

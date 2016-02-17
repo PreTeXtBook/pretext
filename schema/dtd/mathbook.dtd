@@ -50,10 +50,11 @@
 <!ENTITY % multiline "%line;|br">
 
 <!-- Sentences, Paragraph Content -->
-<!-- Elements that can be contained in a typical paragraph  -->
-<!-- Everything that is title material, plus more (eg me)    -->
-<!-- Precede by a #PCDATA, wrap with ( )*                   -->
-<!ENTITY % sentence "%line;|me|men|fn|index|notation">
+<!-- Elements that can be contained in a typical paragraph    -->
+<!-- Everything that is title material, plus more (eg me)     -->
+<!-- var and answer are exclusive to "p" in a WeBWorK problem -->
+<!-- Precede by a #PCDATA, wrap with ( )*                     -->
+<!ENTITY % sentence "%line;|me|men|fn|index|notation|var|answer">
 
 <!-- Paragraphs -->
 <!-- Elements that can mix anywhere with a paragraph, -->
@@ -450,7 +451,8 @@
     <!ATTLIST solution xml:id ID #IMPLIED>
 
 <!-- WeBWorK exercises -->
-<!ELEMENT webwork ((EMPTY)*|(title?, index*, macros?, setup?, ((statement, hint?, solution?)|(stage+))))>
+<!-- Outer one-or-none provides for empty element -->
+<!ELEMENT webwork ((title?, index*, macros?, setup?, ((statement, hint?, solution?)|(stage+)))?)>
     <!ATTLIST webwork xml:id ID     #IMPLIED>
     <!ATTLIST webwork source CDATA  #IMPLIED>
     <!ATTLIST webwork seed   CDATA  #IMPLIED>
@@ -489,6 +491,7 @@
 
 <!-- PROVISIONAL: may disable height attribute, even in side-by-side -->
 <!-- height and alignment attributes for use only in side-by-side -->
+<!-- Note: pg-name is exclusive to webwork                           -->
 <!ELEMENT image  (description?, (latex-image-code|asymptote|sageplot)?)>
     <!ATTLIST image  xml:id   ID                    #IMPLIED>
     <!ATTLIST image  source   CDATA                 #IMPLIED>
@@ -496,6 +499,7 @@
     <!ATTLIST image  height   CDATA                 #IMPLIED>
     <!ATTLIST image  halign   (left|center|right)   #IMPLIED>
     <!ATTLIST image  valign   (bottom|middle|top)   #IMPLIED>
+    <!ATTLIST image  pg-name  CDATA                 #IMPLIED>
 
 <!-- typically for accessibility, also used in notation element -->
 <!-- var is only active/usable within a webwork problem         -->
