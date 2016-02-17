@@ -2933,10 +2933,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Actual Quotations                -->
 <!-- TODO: <quote> element for inline to be <q> in HTML-->
 <xsl:template match="blockquote">
-    <blockquote><xsl:apply-templates /></blockquote>
+    <blockquote>
+        <xsl:apply-templates />
+    </blockquote>
 </xsl:template>
 
 <!-- TODO: add CSS for attribution, div flush right         -->
+<!-- And go slanted ("oblique"?)                            -->
 <!-- https://github.com/BooksHTML/mathbook-assets/issues/64 -->
 
 <!-- Use at the end of a blockquote -->

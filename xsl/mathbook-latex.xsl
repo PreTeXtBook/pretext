@@ -2881,14 +2881,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="blockquote">
     <xsl:text>\begin{quote}</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\end{quote}</xsl:text>
+    <xsl:text>\end{quote}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Use at the end of a blockquote  -->
-<!-- Single line, preceded by a dash -->
+<!-- Use at the end of a blockquote        -->
+<!-- Single line, preceded by a dash       -->
+<!-- A list of paragraphs inside the       -->
+<!-- blockquote should not end with a \par -->
 <xsl:template match="blockquote/attribution">
-    <xsl:text>\\\hspace*{\stretch{1}}\textemdash\space{}</xsl:text>
+    <xsl:text>\par\hspace*{\stretch{1}}\textemdash\space{}</xsl:text>
+    <xsl:text>\textsl{</xsl:text>
     <xsl:apply-templates />
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- General-purpose attribution                           -->

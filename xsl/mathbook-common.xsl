@@ -154,6 +154,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="titlepage preface acknowledgement biography foreword dedication colophon" />
 <xsl:strip-space elements="theorem corollary lemma algorithm proposition claim fact proof" />
 <xsl:strip-space elements="definition axiom conjecture principle" />
+<xsl:strip-space elements="blockquote" />
 <xsl:strip-space elements="statement" />
 <xsl:strip-space elements="example remark exercise hint solution" />
 <xsl:strip-space elements="sage program console" />
