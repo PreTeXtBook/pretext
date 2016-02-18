@@ -591,7 +591,7 @@
                     <webwork>
                         <statement>
                             <p>Explain how we can use <xref ref="corollary-FTC-derivative" autoname="yes" /> to say that every continuous function <em>always</em> has a derivative. (And we will demonstrate here that you can use a  macro from <c>docinfo</c>: <m>\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)</m>. It will work in the <webwork /> problem, regardless of whether you are using images, MathJax, or hardcopy.)</p>
-                            <p><answer format="essay" /></p>
+                            <p><answer form="essay" /></p>
                         </statement>
                     </webwork>
                 </exercise>
@@ -602,7 +602,7 @@
                     <webwork>
                         <statement>
                             <p><q>Differentiation and integration are inverse processes.</q>  Cite <alert>specific results</alert> from this section in an explanation of how they justify this (somewhat imprecise) claim.</p>
-                            <p><answer format="essay" width="40"/></p>
+                            <p><answer form="essay" width="40"/></p>
                         </statement>
                     </webwork>
                 </exercise>
@@ -679,7 +679,7 @@
                     </setup>
 
                     <statement>
-                        <p>The number <m>\sqrt{2}</m> <answer var="$rational" format="popup"/> rational.</p>
+                        <p>The number <m>\sqrt{2}</m> <answer var="$rational" form="popup"/> rational.</p>
 
                     </statement>
 
@@ -715,7 +715,7 @@
 
                     <statement>
                         <p>Which of the following suggest that differentiation and integration are inverse processes?</p>
-                        <p><answer var="$theorem" format="buttons"/></p>
+                        <p><answer var="$theorem" form="buttons"/></p>
                     </statement>
 
                     <solution>
@@ -762,7 +762,7 @@
 
                     <statement>
                         <p>Select all expressions that are equivalent to <m>e^{x^2 + 1/x}</m>.  There may be more than one correct answer.</p>
-                        <p><answer var="$expressions" format="checkboxes"/></p>
+                        <p><answer var="$expressions" form="checkboxes"/></p>
                     </statement>
 
                     <solution>
@@ -835,13 +835,13 @@
                                 </row>
                                 <row>
                                     <cell><m><var name="$b1"/></m></cell>
-                                    <cell><answer var="$p11" format="none"/></cell>
-                                    <cell><answer var="$p21" format="none"/></cell>
+                                    <cell><answer var="$p11" form="none"/></cell>
+                                    <cell><answer var="$p21" form="none"/></cell>
                                 </row>
                                 <row>
                                     <cell><m><var name="$b2"/></m></cell>
-                                    <cell><answer var="$p12" format="none"/></cell>
-                                    <cell><answer var="$p22" format="none"/></cell>
+                                    <cell><answer var="$p12" form="none"/></cell>
+                                    <cell><answer var="$p22" form="none"/></cell>
                                 </row>
                             </tabular>
                         </table>

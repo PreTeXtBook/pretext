@@ -54,7 +54,7 @@
 <!-- Each variable has a "category", like "integer" or "formula". -->
 <!-- When an answer blank is expecting a variable, use category   -->
 <!-- to provide AnswerFormatHelp link.                            -->
-<xsl:param name="pg.answer.format.help" select="'yes'" />
+<xsl:param name="pg.answer.form.help" select="'yes'" />
 
 
 <!-- ################## -->
@@ -749,7 +749,7 @@
     <xsl:variable name="category" select="$problem/setup/var[@name=$varname]/@category" />
     <xsl:text>[</xsl:text>
     <xsl:value-of select="@name" />
-    <xsl:if test="$problem/statement//answer[@var=$varname and @format='checkboxes']">
+    <xsl:if test="$problem/statement//answer[@var=$varname and @form='checkboxes']">
         <xsl:text>->correct_ans()</xsl:text>
     </xsl:if>
     <xsl:text>]</xsl:text>
@@ -770,7 +770,7 @@
 <!-- Example: [_____]{$ans}          -->
 <xsl:template match="webwork//statement//answer">
     <xsl:apply-templates select="." mode="field"/>
-    <xsl:apply-templates select="." mode="format-help"/>
+    <xsl:apply-templates select="." mode="form-help"/>
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="varname" select="@var" />
     <xsl:if test="not($problem/setup/var[@name=$varname]/static) and not($problem/setup/var[@name=$varname]/elements/element) and @var">
@@ -858,7 +858,7 @@
 <!-- The issue is only surfacing when trying to do a checkbox problem from an iframe. Any    -->
 <!-- attempt to check multiple boxes and submit leads to only one box being seen as checked  -->
 <!-- by WeBWorK 2                                                                            --> 
-<xsl:template match="answer[@format='checkboxes']" mode="field">
+<xsl:template match="answer[@form='checkboxes']" mode="field">
     <xsl:text>    [@</xsl:text>
     <xsl:value-of select="@var"/>
     <xsl:text>->print_a() @]*&#xa;END_PGML&#xa;ANS(checkbox_cmp(</xsl:text>
@@ -870,7 +870,7 @@
 <!-- Example: [@ ANS(essay_cmp); essay_box(6,76) @]*   -->
 <!-- Requires:  PGessaymacros.pl, automatically loaded -->
 <!-- http://webwork.maa.org/moodle/mod/forum/discuss.php?d=3370 -->
-<xsl:template match="answer[@format='essay']" mode="field">
+<xsl:template match="answer[@form='essay']" mode="field">
     <xsl:text>[@ ANS(essay_cmp); essay_box(</xsl:text>
     <xsl:choose>
         <xsl:when test="@height">
@@ -1077,19 +1077,19 @@
             <xsl:text>    "niceTables.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- popup menu multiple choice answers -->
-        <xsl:if test=".//answer[@format='popup']">
+        <xsl:if test=".//answer[@form='popup']">
             <xsl:text>    "parserPopUp.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- radio buttons multiple choice answers -->
-        <xsl:if test=".//answer[@format='buttons']">
+        <xsl:if test=".//answer[@form='buttons']">
             <xsl:text>    "parserRadioButtons.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- checkboxes multiple choice answers-->
-        <xsl:if test=".//answer[@format='checkboxes']">
+        <xsl:if test=".//answer[@form='checkboxes']">
             <xsl:text>    "PGchoicemacros.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- essay answers -->
-        <xsl:if test=".//answer[@format='essay']">
+        <xsl:if test=".//answer[@form='essay']">
             <xsl:text>    "PGessaymacros.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- multistage problems ("scaffolded") -->
@@ -1097,7 +1097,7 @@
             <xsl:text>    "scaffold.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- links to syntax help following answer blanks -->
-        <xsl:if test="$pg.answer.format.help = 'yes'">
+        <xsl:if test="$pg.answer.form.help = 'yes'">
             <xsl:text>    "AnswerFormatHelp.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- targeted feedback messages for specific wrong answers       -->
@@ -1180,36 +1180,36 @@
     <xsl:text>############################################################&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="answer" mode="format-help">
+<xsl:template match="answer" mode="form-help">
     <xsl:variable name="varname" select="@var" />
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="category" select="$problem/setup/var[@name=$varname]/@category" />
-    <xsl:variable name="format">
+    <xsl:variable name="form">
         <xsl:choose>
-            <xsl:when test="@format">
-                <xsl:value-of select="@format"/>
+            <xsl:when test="@form">
+                <xsl:value-of select="@form"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:call-template name="category-to-format">
+                <xsl:call-template name="category-to-form">
                     <xsl:with-param name="category" select="$category"/>
                 </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:if test="($pg.answer.format.help = 'yes')">
+    <xsl:if test="($pg.answer.form.help = 'yes')">
         <xsl:choose>
-            <xsl:when test="($format='none') or ($format='popup')  or ($format='buttons') or ($format='checkboxes')"/>
-            <xsl:when test="$format='essay'">
+            <xsl:when test="($form='none') or ($form='popup')  or ($form='buttons') or ($form='checkboxes')"/>
+            <xsl:when test="$form='essay'">
                 <xsl:text> [@essay_help()@]*</xsl:text>
             </xsl:when>
             <xsl:when test="ancestor::tabular">
                 <xsl:text>".AnswerFormatHelp('</xsl:text>
-                <xsl:value-of select="$format"/>
+                <xsl:value-of select="$form"/>
                 <xsl:text>')."</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text> [@AnswerFormatHelp('</xsl:text>
-                <xsl:value-of select="$format"/>
+                <xsl:value-of select="$form"/>
                 <xsl:text>')@]*</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
@@ -1217,7 +1217,7 @@
 </xsl:template>
 
 <!-- Convert a var's "category" to the right term for AnswerFormatHelp -->
-<xsl:template name="category-to-format">
+<xsl:template name="category-to-form">
     <xsl:param name="category" select="none"/>
     <xsl:choose>
         <xsl:when test="$category='angle'">

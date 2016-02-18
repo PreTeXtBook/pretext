@@ -476,7 +476,7 @@
 <!-- attributes here are WW-specific     -->
 <!-- TODO: warn on content in WW answer? -->
     <!ATTLIST answer var          CDATA #IMPLIED>
-    <!ATTLIST answer format       CDATA #IMPLIED>
+    <!ATTLIST answer form         CDATA #IMPLIED>
     <!ATTLIST answer evaluator    CDATA #IMPLIED>
     <!ATTLIST answer width        CDATA #IMPLIED>
 
