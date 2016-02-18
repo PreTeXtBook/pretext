@@ -214,9 +214,9 @@
 
                 <webwork>
                     <title>Multiplication with Exponents</title>
-                    <macros>
-                        <macro>contextLimitedPolynomial.pl</macro>
-                    </macros>
+                    <pg-macros>
+                        <macro-file>contextLimitedPolynomial.pl</macro-file>
+                    </pg-macros>
 
                     <setup>
                         <var name="$a">
@@ -279,9 +279,9 @@
 
                 <webwork>
                     <title>Multiplication with Exponents</title>
-                    <macros>
-                        <macro>contextLimitedRadical.pl</macro>
-                    </macros>
+                    <pg-macros>
+                        <macro-file>contextLimitedRadical.pl</macro-file>
+                    </pg-macros>
 
                     <setup>
                         <var name="$a">
@@ -365,10 +365,10 @@
 
                 <webwork xml:id="quadratic-equation">
 
-                    <macros>
-                        <macro>parserMultiAnswer.pl</macro>
-                        <macro>contextFraction.pl</macro>
-                    </macros>
+                    <pg-macros>
+                        <macro-file>parserMultiAnswer.pl</macro-file>
+                        <macro-file>contextFraction.pl</macro-file>
+                    </pg-macros>
 
                     <setup>
                         <var name="$a">

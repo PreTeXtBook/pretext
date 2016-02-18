@@ -452,18 +452,18 @@
 
 <!-- WeBWorK exercises -->
 <!-- Outer one-or-none provides for empty element -->
-<!ELEMENT webwork ((title?, index*, macros?, setup?, ((statement, hint?, solution?)|(stage+)))?)>
+<!ELEMENT webwork ((title?, index*, pg-macros?, setup?, ((statement, hint?, solution?)|(stage+)))?)>
     <!ATTLIST webwork xml:id ID     #IMPLIED>
     <!ATTLIST webwork source CDATA  #IMPLIED>
     <!ATTLIST webwork seed   CDATA  #IMPLIED>
 
-<!-- Multistage problems have the usual lead-in, but then are organized with stages -->
-<!ELEMENT stage (title?, statement, hint?, solution?)>
-
-<!-- <!ELEMENT macros (macro+)> -->  <!-- FIXME -->
-<!ELEMENT macro (#PCDATA)>
+<!ELEMENT pg-macros  (macro-file)*>
+<!ELEMENT macro-file (#PCDATA)>
 
 <!ELEMENT setup (var*,pg-code)>
+
+<!-- Multistage problems have the usual lead-in, but then are organized with stages -->
+<!ELEMENT stage (title?, statement, hint?, solution?)>
 
 <!ELEMENT var (static?)>
     <!ATTLIST var name       CDATA #IMPLIED>

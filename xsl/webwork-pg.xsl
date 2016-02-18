@@ -1113,7 +1113,7 @@
     <xsl:variable name="problem-root" select="." />
     <!-- accumulate new macros supplied by problem author, warn if not new -->
     <xsl:variable name="user-macros">
-        <xsl:for-each select=".//macros/macro">
+        <xsl:for-each select=".//pg-macros/macro-file">
             <!-- wrap in quotes to protect accidental matches -->
             <xsl:variable name="fenced-macro">
                 <xsl:text>"</xsl:text>
