@@ -64,7 +64,7 @@
 <!-- Basic outline of a simple problem -->
 <xsl:template match="webwork[child::statement]" mode="pg">
     <xsl:call-template   name="begin-problem" />
-    <xsl:call-template   name="macros" />
+    <xsl:call-template   name="pg-macros" />
     <xsl:call-template   name="header" />
     <xsl:apply-templates select="setup" />
     <xsl:apply-templates select="statement" />
@@ -78,7 +78,7 @@
 <!-- Indicated by <stages> as children       -->
 <xsl:template match="webwork[child::stage]" mode="pg">
     <xsl:call-template   name="begin-problem" />
-    <xsl:call-template   name="macros" />
+    <xsl:call-template   name="pg-macros" />
     <xsl:call-template   name="header" />
     <xsl:apply-templates select="setup" />
     <xsl:call-template name="begin-block">
@@ -1054,111 +1054,113 @@
     <xsl:text>TEXT(beginproblem());&#xa;</xsl:text>
 </xsl:template>
 
-<!-- We kill default processing of "macros" and use       -->
-<!-- a named template.  This allows for there to be no    -->
-<!-- "macros" element if no additional macros are needed. -->
-<!-- Calling context is "webwork" problem-root            -->
-<!-- Call from "webwork" context                          -->
-<!-- http://stackoverflow.com/questions/9936762/xslt-pass-current-context-in-call-template -->
-<xsl:template match="macros" />
+<!-- ############## -->
+<!-- Load PG Macros -->
+<!-- ############## -->
 
-<xsl:template name="macros">
-    <!-- three standard macro files, order and placement is critical -->
+<!-- call exactly once,        -->
+<!-- context is "webwork" root -->
+<xsl:template name="pg-macros">
     <xsl:call-template name="begin-block">
         <xsl:with-param name="title">Load Macros</xsl:with-param>
     </xsl:call-template>
-    <xsl:text>loadMacros(&#xa;</xsl:text>
-    <xsl:call-template name="list-of-macros"/>
-    <xsl:text>);&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template name="list-of-macros">
-    <xsl:param name="macro-list-string" select="'    &quot;PGstandard.pl&quot;,&#xa;    &quot;MathObjects.pl&quot;,&#xa;    &quot;PGML.pl&quot;,&#xa;'"/>
-    <xsl:param name="count" select="count(macros/macro)"/>
-    <xsl:choose>
-        <!-- look for other macros to use automatically based on test following "and" -->
-        <!-- tables                                                      -->
-        <xsl:when test="not(contains($macro-list-string,'&quot;niceTables.pl&quot;'))         and .//tabular">
-            <xsl:call-template name="list-of-macros">
-                <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;niceTables.pl&quot;,&#xa;')"/>
-            </xsl:call-template>
-        </xsl:when>
-        <!-- popup menu multiple choice answers                          -->
-        <xsl:when test="not(contains($macro-list-string,'&quot;parserPopUp.pl&quot;'))        and .//answer[@format='popup']">
-            <xsl:call-template name="list-of-macros">
-                <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;parserPopUp.pl&quot;,&#xa;')"/>
-            </xsl:call-template>
-        </xsl:when>
-        <!-- radio buttons multiple choice answers                       -->
-        <xsl:when test="not(contains($macro-list-string,'&quot;parserRadioButtons.pl&quot;')) and .//answer[@format='buttons']">
-            <xsl:call-template name="list-of-macros">
-                <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;parserRadioButtons.pl&quot;,&#xa;')"/>
-            </xsl:call-template>
-        </xsl:when>
-        <!-- checkboxes multiple choice answers                          -->
-        <xsl:when test="not(contains($macro-list-string,'&quot;PGchoicemacros.pl&quot;'))     and .//answer[@format='checkboxes']">
-            <xsl:call-template name="list-of-macros">
-                <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;PGchoicemacros.pl&quot;,&#xa;')"/>
-            </xsl:call-template>
-        </xsl:when>
-        <!-- essay answers, no var in setup, just answer                 -->
-        <xsl:when test="not(contains($macro-list-string,'&quot;PGessaymacros.pl&quot;'))      and .//answer[@format='essay']">
-            <xsl:call-template name="list-of-macros">
-                <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;PGessaymacros.pl&quot;,&#xa;')"/>
-            </xsl:call-template>
-        </xsl:when>
-        <!-- scaffolded problems -->
-        <xsl:when test="not(contains($macro-list-string,'&quot;scaffold.pl&quot;'))           and (@type = 'scaffold')">
-            <xsl:call-template name="list-of-macros">
-                <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;scaffold.pl&quot;,&#xa;')"/>
-            </xsl:call-template>
-        </xsl:when>
-        <!-- links to syntax help following answer blanks                -->
-        <xsl:when test="not(contains($macro-list-string,'&quot;AnswerFormatHelp.pl&quot;'))   and ($pg.answer.format.help = 'yes')">
-            <xsl:call-template name="list-of-macros">
-                <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;AnswerFormatHelp.pl&quot;,&#xa;')"/>
-            </xsl:call-template>
-        </xsl:when>
+    <!-- three standard macros always, order and placement is critical -->
+    <xsl:variable name="standard-macros">
+        <xsl:text>    "PGstandard.pl",&#xa;</xsl:text>
+        <xsl:text>    "MathObjects.pl",&#xa;</xsl:text>
+        <xsl:text>    "PGML.pl",&#xa;</xsl:text>
+    </xsl:variable>
+    <!-- accumulate macros evidenced by some aspect of problem design -->
+    <xsl:variable name="implied-macros">
+        <!-- tables -->
+        <xsl:if test=".//tabular">
+            <xsl:text>    "niceTables.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- popup menu multiple choice answers -->
+        <xsl:if test=".//answer[@format='popup']">
+            <xsl:text>    "parserPopUp.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- radio buttons multiple choice answers -->
+        <xsl:if test=".//answer[@format='buttons']">
+            <xsl:text>    "parserRadioButtons.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- checkboxes multiple choice answers-->
+        <xsl:if test=".//answer[@format='checkboxes']">
+            <xsl:text>    "PGchoicemacros.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- essay answers -->
+        <xsl:if test=".//answer[@format='essay']">
+            <xsl:text>    "PGessaymacros.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- multistage problems ("scaffolded") -->
+        <xsl:if test=".//stage">
+            <xsl:text>    "scaffold.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- links to syntax help following answer blanks -->
+        <xsl:if test="$pg.answer.format.help = 'yes'">
+            <xsl:text>    "AnswerFormatHelp.pl",&#xa;</xsl:text>
+        </xsl:if>
         <!-- targeted feedback messages for specific wrong answers       -->
-        <xsl:when test="not(contains($macro-list-string,'&quot;answerHints.pl&quot;'))        and contains(./setup/pg-code,'AnswerHints')">
-            <xsl:call-template name="list-of-macros">
-                <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;answerHints.pl&quot;,&#xa;')"/>
-            </xsl:call-template>
-        </xsl:when>
+        <xsl:if test="contains(./setup/pg-code,'AnswerHints')">
+            <xsl:text>    "answerHints.pl",&#xa;</xsl:text>
+        </xsl:if>
         <!-- when there is a PGgraphmacros graph                         -->
-        <xsl:when test="not(contains($macro-list-string,'&quot;PGgraphmacros.pl&quot;'))        and statement//image[@pg-name]">
-            <xsl:call-template name="list-of-macros">
-                <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;PGgraphmacros.pl&quot;,&#xa;')"/>
-            </xsl:call-template>
-        </xsl:when>
-        <!-- now run through macros/macro and add author-declared macros, but not if they have already been added or if they are PGcourse.pl-->
-        <xsl:when test="$count &gt; 0">
-            <xsl:variable name="index">
-                <xsl:value-of select="(1 + count(macros/macro)) - $count"/>
-            </xsl:variable>
-            <xsl:variable name="next-author-macro">
-                <xsl:value-of select="macros/macro[number($index)]"/>
+        <xsl:if test="./statement//image[@pg-name]">
+            <xsl:text>    "PGgraphmacros.pl",&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:variable>
+    <!-- capture problem root to use inside upcoming for-each -->
+    <xsl:variable name="problem-root" select="." />
+    <!-- accumulate new macros supplied by problem author, warn if not new -->
+    <xsl:variable name="user-macros">
+        <xsl:for-each select=".//macros/macro">
+            <!-- wrap in quotes to protect accidental matches -->
+            <xsl:variable name="fenced-macro">
+                <xsl:text>"</xsl:text>
+                <xsl:value-of select="." />
+                <xsl:text>"</xsl:text>
             </xsl:variable>
             <xsl:choose>
-                <xsl:when test="not(contains($macro-list-string,concat('&quot;',$next-author-macro,'&quot;'))) and not(contains($next-author-macro,'PGcourse.pl'))">
-                    <xsl:call-template name="list-of-macros">
-                        <xsl:with-param name="macro-list-string" select="concat($macro-list-string,'    &quot;',$next-author-macro,'&quot;,&#xa;')"/>
-                        <xsl:with-param name="count" select="$count - 1"/>
-                    </xsl:call-template>
+                <xsl:when test="contains($standard-macros, $fenced-macro)">
+                    <xsl:message>MBX:WARNING: the WeBWorK PG macro <xsl:value-of select="."/> is always included for every problem</xsl:message>
+                    <xsl:apply-templates select="." mode="location-report" />
+                </xsl:when>
+                <xsl:when test="contains($implied-macros, $fenced-macro)">
+                    <xsl:message>MBX:WARNING: the WeBWorK PG macro <xsl:value-of select="."/> is implied by the problem construction and already included</xsl:message>
+                    <xsl:apply-templates select="." mode="location-report" />
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>MBX:WARNING: the PG macro <xsl:value-of select="$next-author-macro"/> has either been called twice, or need not be called in source at all</xsl:message>
-                    <xsl:call-template name="list-of-macros">
-                        <xsl:with-param name="macro-list-string" select="$macro-list-string"/>
-                        <xsl:with-param name="count" select="$count - 1"/>
-                    </xsl:call-template>
+                    <xsl:text>    </xsl:text>
+                    <xsl:value-of select="$fenced-macro" />
+                    <xsl:text>,&#xa;</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="concat($macro-list-string,'    &quot;PGcourse.pl&quot;,&#xa;')"/>
-        </xsl:otherwise>
-    </xsl:choose>
+        </xsl:for-each>
+    </xsl:variable>
+    <!-- always finish with PG course macro -->
+    <xsl:variable name="course-macro">
+        <xsl:variable name="fenced-macro">
+            <xsl:text>"PGcourse.pl"</xsl:text>
+        </xsl:variable>
+        <xsl:choose>
+            <xsl:when test="contains($standard-macros, $fenced-macro)">
+                <xsl:message>MBX:WARNING: the WeBWorK PG macro PGcourse.pl is always included for every problem</xsl:message>
+                <xsl:apply-templates select="." mode="location-report" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>    </xsl:text>
+                <xsl:value-of select="$fenced-macro" />
+                <xsl:text>,&#xa;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- put them together with a wrapper -->
+    <xsl:text>loadMacros(&#xa;</xsl:text>
+    <xsl:value-of select="$standard-macros" />
+    <xsl:value-of select="$implied-macros" />
+    <xsl:value-of select="$user-macros" />
+    <xsl:value-of select="$course-macro" />
+    <xsl:text>);&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template name="end-problem">
