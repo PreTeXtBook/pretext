@@ -782,8 +782,10 @@
     </xsl:if>
 </xsl:template>
 
-<!-- (presumed) MathObject answers -->
-<xsl:template match="answer" mode="field">
+<!-- MathObject answers -->
+<!-- with variant for MathObjects like Matrix, Vector, ColumnVector      -->
+<!-- where the shape of the MathObject guides the array of answer blanks -->
+<xsl:template match="answer|answer[@form='array']" mode="field">
     <xsl:variable name="width">
         <xsl:choose>
             <xsl:when test="@width">
@@ -811,6 +813,10 @@
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>]</xsl:text>
+    <!-- multiplier for MathObjects like Matrix, Vector, ColumnVector -->
+    <xsl:if test="@form='array'">
+        <xsl:text>*</xsl:text>
+    </xsl:if>
     <xsl:text>{</xsl:text>
     <xsl:choose>
         <xsl:when test="@evaluator">
@@ -1198,7 +1204,8 @@
     </xsl:variable>
     <xsl:if test="($pg.answer.form.help = 'yes')">
         <xsl:choose>
-            <xsl:when test="($form='none') or ($form='popup')  or ($form='buttons') or ($form='checkboxes')"/>
+            <!-- first, formats we can't help with -->
+            <xsl:when test="($form='none') or ($form='popup')  or ($form='buttons') or ($form='checkboxes') or ($form='array')"/>
             <xsl:when test="$form='essay'">
                 <xsl:text> [@essay_help()@]*</xsl:text>
             </xsl:when>
