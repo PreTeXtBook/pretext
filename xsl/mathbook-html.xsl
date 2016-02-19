@@ -27,7 +27,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:b64="https://github.com/ilyakharlamov/xslt_base64"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
-    extension-element-prefixes="exsl date"
+    xmlns:str="http://exslt.org/strings"
+    extension-element-prefixes="exsl date str"
 >
 
 <xsl:import href="./mathbook-common.xsl" />
@@ -2844,10 +2845,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Magnitude                                      -->
 <xsl:template match="mag">
-    <xsl:if test="not(parent::quantity)">
-        <xsl:message>MBX:WARNING: mag element should have parent quantity element</xsl:message>
-    </xsl:if>
-    <xsl:apply-templates />
+    <xsl:variable name="mag">
+        <xsl:apply-templates />
+    </xsl:variable>
+    <xsl:value-of select="str:replace($mag,'\pi','\(\pi\)')"/>
 </xsl:template>
 
 <!-- unit and per children of a quantity element    -->
