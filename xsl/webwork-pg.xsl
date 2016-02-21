@@ -105,10 +105,10 @@
     <xsl:call-template name="begin-block">
         <xsl:with-param name="title">PG Setup</xsl:with-param>
     </xsl:call-template>
+    <!-- DTD does not allow multiple "setup," is this right? -->
     <xsl:if test="not(preceding-sibling::setup) and not(contains(./pg-code,'Context('))">
         <xsl:text>Context('Numeric');&#xa;</xsl:text>
     </xsl:if>
-    <!-- TODO: ignore var for now -->
     <!-- pg-code verbatim, but trim indentation -->
     <xsl:call-template name="sanitize-code">
         <xsl:with-param name="raw-code" select="pg-code" />
@@ -180,6 +180,7 @@
     <xsl:text>DOCUMENT();&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Mine various parts of the surrounding text -->
 <xsl:template name="webwork-metadata">
     <xsl:text>## DBsubject(</xsl:text>
     <xsl:text>)&#xa;</xsl:text>
@@ -717,6 +718,7 @@
 </xsl:template>
 
 <!-- This construction in not valid MBX, can we do better? -->
+<!-- TODO: add an error message?, terminate?               -->
 <xsl:template match="webwork//p[@halign='center']">
     <xsl:text>&gt;&gt; </xsl:text>
     <xsl:apply-templates />
@@ -799,6 +801,9 @@
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- This routine does not account for interspersed TeX comments        -->
+<!-- Maybe a more general macro-sanitizer would be a good precursor     -->
+<!-- TODO: rename with some indication these are LaTeX macros, not PERL -->
 <xsl:template name="write-macros">
     <xsl:param name="macros" select="/mathbook/docinfo/macros"/>
     <xsl:variable name="trimmed-start">
@@ -849,6 +854,8 @@
 <!-- http://webwork.maa.org/wiki/Introduction_to_PGML#Basic_Formatting -->
 
 <!-- two spaces at line-end is a newline -->
+<!-- TODO - an "attribution" is the only place this could happen -->
+<!-- make this much more restrictive?                            -->
 <xsl:template match="webwork//br">
     <xsl:text>  &#xa;</xsl:text>
 </xsl:template>
@@ -1652,6 +1659,7 @@
 <!-- Presumes pre-processing with line-feed at very end                      -->
 <!-- Borrowed from more complicated routine in xsl/mathbook-sage-doctest.xsl -->
 <!-- Generalize: pass pre-pending string at invocation and each iteration    -->
+<!-- TODO: perhaps consolidate with similar routine for Sage doctesting      -->
 <xsl:template name="prepend-string">
     <xsl:param name="text" />
     <!-- Quit when string becomes empty -->
