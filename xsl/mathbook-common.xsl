@@ -1418,6 +1418,28 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     </xsl:choose>
 </xsl:template>
 
+<!-- This comes from writing out WW problems to filenames    -->
+<!-- in some sort of reasonable numbering scheme             -->
+<!-- It is not integrated into the above complexity-scheme   -->
+<!-- (though does call the "title-filesafe" modal template)  -->
+<!-- Consider integration if there is a refactoring of above -->
+<xsl:template match="*" mode="numbered-title-filesafe">
+    <!-- traditional "dotted" number -->
+    <xsl:variable name="dotted-number">
+        <xsl:apply-templates select="." mode="number" />
+    </xsl:variable>
+    <xsl:variable name="title-string">
+        <xsl:apply-templates select="." mode="title-filesafe" />
+    </xsl:variable>
+    <!-- number output, with dot to dash conversion -->
+    <xsl:value-of select="translate($dotted-number, '.', '_')" />
+    <!-- separator, if needed -->
+    <xsl:if test="not($dotted-number = '' or $title-string = '')">
+        <xsl:text>-</xsl:text>
+    </xsl:if>
+    <xsl:value-of select="$title-string" />
+</xsl:template>
+
 <!-- Unhandled title requests, likely subdivisions or environments -->
 <xsl:template match="*" mode="title">
     <xsl:message>MBX:BUG: asking for title of unhandled <xsl:value-of select="local-name(.)" /></xsl:message>

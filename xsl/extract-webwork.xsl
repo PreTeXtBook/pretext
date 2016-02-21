@@ -257,21 +257,6 @@
     <xsl:text>problem_end&#xa;</xsl:text>
 </xsl:template>
 
-<!-- TODO: move in MBX common? -->
-<xsl:template match="*" mode="numbered-title-filesafe">
-    <!-- traditional "dotted" number -->
-    <xsl:variable name="dotted-number">
-        <xsl:apply-templates select="." mode="number" />
-    </xsl:variable>
-    <!-- dot to dash -->
-    <xsl:value-of select="translate($dotted-number, '.', '_')" />
-    <!-- separator, if needed -->
-    <xsl:if test="not($dotted-number = '')">
-        <xsl:text>-</xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="." mode="title-filesafe" />
-</xsl:template>
-
 <!-- Header file content -->
 <!-- Gives some information about where in the MBX project the set came from -->
 <!-- Some info changes with WW variables, such as due date -->
