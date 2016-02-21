@@ -92,7 +92,7 @@
     <xsl:call-template   name="header" />
     <xsl:apply-templates select="setup" />
     <xsl:call-template name="begin-block">
-        <xsl:with-param name="title">Scaffold</xsl:with-param>
+        <xsl:with-param name="block-title">Scaffold</xsl:with-param>
     </xsl:call-template>
     <xsl:text>Scaffold::Begin();&#xa;</xsl:text>
     <xsl:apply-templates select="stage" />
@@ -103,7 +103,7 @@
 
 <xsl:template match="setup">
     <xsl:call-template name="begin-block">
-        <xsl:with-param name="title">PG Setup</xsl:with-param>
+        <xsl:with-param name="block-title">PG Setup</xsl:with-param>
     </xsl:call-template>
     <!-- DTD does not allow multiple "setup," is this right? -->
     <xsl:if test="not(preceding-sibling::setup) and not(contains(./pg-code,'Context('))">
@@ -120,7 +120,7 @@
 <!-- which have "section"s                    -->
 <xsl:template match="stage">
     <xsl:call-template name="begin-block">
-        <xsl:with-param name="title">Section</xsl:with-param>
+        <xsl:with-param name="block-title">Section</xsl:with-param>
     </xsl:call-template>
     <xsl:text>Section::Begin("</xsl:text>
     <xsl:apply-templates select="title" />
@@ -135,7 +135,7 @@
 <!-- default template, for complete presentation -->
 <xsl:template match="webwork/stage/statement|webwork/statement">
     <xsl:call-template name="begin-block">
-        <xsl:with-param name="title">Body</xsl:with-param>
+        <xsl:with-param name="block-title">Body</xsl:with-param>
     </xsl:call-template>
     <xsl:text>BEGIN_PGML&#xa;</xsl:text>
     <xsl:apply-templates />
@@ -147,7 +147,7 @@
 <!-- default template, for solution -->
 <xsl:template match="webwork/stage/solution|webwork/solution">
     <xsl:call-template name="begin-block">
-        <xsl:with-param name="title">Solution</xsl:with-param>
+        <xsl:with-param name="block-title">Solution</xsl:with-param>
     </xsl:call-template>
     <xsl:text>BEGIN_PGML_SOLUTION&#xa;</xsl:text>
     <xsl:apply-templates />
@@ -159,7 +159,7 @@
 <!-- default template, for hint -->
 <xsl:template match="webwork/stage/hint|webwork/hint">
     <xsl:call-template name="begin-block">
-        <xsl:with-param name="title">Hint</xsl:with-param>
+        <xsl:with-param name="block-title">Hint</xsl:with-param>
     </xsl:call-template>
     <xsl:text>#Set value of $showHint in PGcourse.pl for course-wide attempt threshhold for revealing hints&#xa;</xsl:text>
     <xsl:text>BEGIN_PGML_HINT&#xa;</xsl:text>
@@ -245,7 +245,7 @@
 <!-- Includes (localized) PG "COMMENT" promoting MBX -->
 <xsl:template name="header">
     <xsl:call-template name="begin-block">
-        <xsl:with-param name="title">Header</xsl:with-param>
+        <xsl:with-param name="block-title">Header</xsl:with-param>
     </xsl:call-template>
     <xsl:text>COMMENT('</xsl:text>
     <xsl:call-template name="type-name">
@@ -261,7 +261,7 @@
 
 <xsl:template name="end-problem">
     <xsl:call-template name="begin-block">
-        <xsl:with-param name="title">End Problem</xsl:with-param>
+        <xsl:with-param name="block-title">End Problem</xsl:with-param>
     </xsl:call-template>
     <xsl:text>ENDDOCUMENT();&#xa;</xsl:text>
 </xsl:template>
@@ -274,7 +274,7 @@
 <!-- context is "webwork" root -->
 <xsl:template name="pg-macros">
     <xsl:call-template name="begin-block">
-        <xsl:with-param name="title">Load Macros</xsl:with-param>
+        <xsl:with-param name="block-title">Load Macros</xsl:with-param>
     </xsl:call-template>
     <!-- three standard macros always, order and placement is critical -->
     <xsl:variable name="standard-macros">
@@ -1646,11 +1646,11 @@
 <!-- ################# -->
 
 <xsl:template name="begin-block">
-    <xsl:param name="title"/>
+    <xsl:param name="block-title"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>############################################################&#xa;</xsl:text>
     <xsl:text># </xsl:text>
-    <xsl:value-of select="$title"/>
+    <xsl:value-of select="$block-title"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>############################################################&#xa;</xsl:text>
 </xsl:template>
