@@ -191,7 +191,7 @@
 <xsl:template match="webwork" mode="filename">
     <xsl:text>local/</xsl:text>
     <xsl:apply-templates select="." mode="directory-path" />
-    <xsl:apply-templates select="ancestor::exercise" mode="numbered-title-filesafe" />
+    <xsl:apply-templates select="parent::exercise" mode="numbered-title-filesafe" />
     <xsl:text>.pg</xsl:text>
 </xsl:template>
 

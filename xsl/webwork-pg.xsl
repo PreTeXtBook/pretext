@@ -205,9 +205,14 @@
     <xsl:text>","TARGET='_blank'")@]*</xsl:text>
 </xsl:template>
 
-<!-- Cross-References -->
-<!-- In PG source we hard-code cross-references, -->
-<!-- so the number is just the number            -->
+<!-- ######### -->
+<!-- Numbering -->
+<!-- ######### -->
+
+<!-- The cross-reference numbering scheme uses \ref, \hyperref -->
+<!-- for LaTeX and numbers elsewhere, so it is unimplmented in -->
+<!-- mathbook-common.xsl, hence we implement it here           -->
+
 <xsl:template match="*" mode="xref-number">
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
@@ -1032,11 +1037,14 @@
             </xsl:when>
         </xsl:choose>
     <xsl:text>)&#xa;</xsl:text>
-    <xsl:text>## Section1(</xsl:text>
-        <xsl:apply-templates select="ancestor::exercise" mode="structure-number" />
+    <!-- needs structural enclosure inline v. sectional          -->
+    <!-- do not use structure number, makes overrides impossible -->
+    <xsl:text>## Section1(not reported</xsl:text>
+        <!-- <xsl:apply-templates select="ancestor::exercise" mode="structure-number" /> -->
     <xsl:text>)&#xa;</xsl:text>
+    <!-- WW problem is always enclosed directly by an MBX exercise -->
     <xsl:text>## Problem1(</xsl:text>
-        <xsl:apply-templates select="ancestor::exercise" mode="serial-number" />
+        <xsl:apply-templates select="parent::exercise" mode="number" />
     <xsl:text>)&#xa;</xsl:text>
     <xsl:text>## Author(</xsl:text>
     <xsl:text>)&#xa;</xsl:text>
