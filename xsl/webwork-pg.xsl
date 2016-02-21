@@ -834,11 +834,6 @@
 <!-- Various Markup -->
 <!-- ############## -->
 
-<!-- Convenience: PGML, understood by MathJax and LaTeX renderings -->
-<xsl:template match="webwork//latex">
-    <xsl:text>[`\LaTeX`]</xsl:text>
-</xsl:template>
-
 <xsl:template match="webwork//url">
     <xsl:text>[@htmlLink("</xsl:text>
     <xsl:value-of select="@href" />
