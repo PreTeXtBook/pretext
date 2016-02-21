@@ -133,8 +133,7 @@
 </xsl:template>
 
 <!-- default template, for complete presentation -->
-<!-- TODO: fix match pattern to cover scaffolded problems once name firms up -->
-<xsl:template match="webwork//statement">
+<xsl:template match="webwork/stage/statement|webwork/statement">
     <xsl:call-template name="begin-block">
         <xsl:with-param name="title">Body</xsl:with-param>
     </xsl:call-template>
@@ -146,8 +145,7 @@
 </xsl:template>
 
 <!-- default template, for solution -->
-<!-- TODO: fix match pattern to cover scaffolded problems once name firms up -->
-<xsl:template match="webwork//solution">
+<xsl:template match="webwork/stage/solution|webwork/solution">
     <xsl:call-template name="begin-block">
         <xsl:with-param name="title">Solution</xsl:with-param>
     </xsl:call-template>
@@ -159,8 +157,7 @@
 </xsl:template>
 
 <!-- default template, for hint -->
-<!-- TODO: fix match pattern to cover scaffolded problems once name firms up -->
-<xsl:template match="webwork//hint">
+<xsl:template match="webwork/stage/hint|webwork/hint">
     <xsl:call-template name="begin-block">
         <xsl:with-param name="title">Hint</xsl:with-param>
     </xsl:call-template>
