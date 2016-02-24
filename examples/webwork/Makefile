@@ -75,6 +75,12 @@ HTMLOUT    = $(SCRATCH)/html
 PDFOUT     = $(SCRATCH)/pdf
 EPUBOUT    = $(SCRATCH)/epub
 
+# Some aspects of producing these examples require a WeBWorK server.
+# For all but trivial testing or examples, please look into setting
+# up your own WeBWorK server, or consult Alex Jordan about the use
+# of PCC's server in a nontrivial capacity.    <alex.jordan@pcc.edu>
+SERVER = https://webwork.pcc.edu
+
 #  Write out each WW problem of the "sample-chapter" as a
 #  standalone problem in PGML ready for use on a WW server.
 #  "def" files and "header" files are produced. Directories
@@ -100,7 +106,7 @@ sample-chapter-html:
 	cp -a $(WWEXAMPLE)/sample-chapter/images $(HTMLOUT)
 	cp -a $(WWEXAMPLE)/sample-chapter/video $(HTMLOUT)
 	cd $(HTMLOUT); \
-	xsltproc --stringparam webwork.server https://webwork.pcc.edu --stringparam html.knowl.exercise.inline no $(MBXSL)/mathbook-html.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
+	xsltproc --stringparam webwork.server $(SERVER) --stringparam html.knowl.exercise.inline no $(MBXSL)/mathbook-html.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
 
 # a one-time prerequisite for LaTeX conversion
 # problems living on a server, and image construction at server
@@ -108,9 +114,9 @@ sample-chapter-html:
 # -s specifies an existing WW server to use (ignore security warnings)
 sample-chapter-server-tex:
 	install -d $(PDFOUT)/webwork-tex
-	$(MB)/script/mbx -v -c webwork-tex -s https://webwork.pcc.edu -d $(PDFOUT)/webwork-tex $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
+	$(MB)/script/mbx -v -c webwork-tex -s $(SERVER) -d $(PDFOUT)/webwork-tex $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
 
-# LaTeX version of the sanple chapter
+# LaTeX version of the sample chapter
 # see prerequisite just above
 # the "webwork-tex" directory must be given here
 # [note trailing slash (subject to change)]
@@ -140,7 +146,7 @@ sample-chapter-check:
 	-xmllint --xinclude --postvalid --noout --dtdvalid $(DTD)/mathbook.dtd $(WWEXAMPLE)/sample-chapter/sample-chapter.xml 2> $(SCRATCH)/dtderrors.txt
 	# less $(SCRATCH)/dtderrors.txt
 
-# 2016-02-10: no serious effort yet to make thie check below pass
+# 2016-02-10: no serious effort yet to make this check below pass
 template-check:
 	install -d $(SCRATCH)
 	-rm $(SCRATCH)/dtderrors.*
