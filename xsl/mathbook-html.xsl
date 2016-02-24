@@ -4307,9 +4307,10 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     </a>
 </xsl:template>
 
-<!-- Branding in "extras", mostly hard-coded -->
+<!-- Branding in "extras", mostly hard-coded        -->
+<!-- HTTPS for authors delivering from secure sites -->
 <xsl:template name="mathbook-link">
-    <a class="mathbook-link" href="http://mathbook.pugetsound.edu">
+    <a class="mathbook-link" href="https://mathbook.pugetsound.edu">
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id" select="'authored'" />
         </xsl:call-template>
