@@ -975,7 +975,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     the "xref-as-knowl" modal template           -->
 <!-- TODO: we need to process children in a way that no \label{}, nor ID's, are produced   -->
 <!--       This would perhaps obsolete the "env-type" device, and reorder explnation below -->
-<xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|li|contributor" mode="xref-knowl">
+<xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|li|p|contributor" mode="xref-knowl">
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
@@ -1825,6 +1825,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 <xsl:template match="contributor" mode="environment-class">
     <xsl:text>contributor</xsl:text>
+</xsl:template>
+
+<!-- Paragraphs -->
+<!-- Never born hidden                      -->
+<!-- Necessary as targets of index entries  -->
+<!-- and stealth knowls for defined terms   -->
+<xsl:template match="p" mode="is-hidden">
+    <xsl:value-of select="false()" />
+</xsl:template>
+<xsl:template match="p" mode="is-block-env">
+    <xsl:value-of select="true()" />
+</xsl:template>
+<!-- List items are never born hidden -->
+<xsl:template match="p" mode="hidden-knowl-text" />
+<!-- ??????? -->
+<xsl:template match="p" mode="head">
+    <h5 class="heading">
+    <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+    </h5>
+</xsl:template>
+<!-- Body is everything, including nested lists -->
+<xsl:template match="p" mode="body">
+    <xsl:apply-templates />
+</xsl:template>
+<!-- No posterior  -->
+<xsl:template match="p" mode="posterior" />
+<!-- HTML, CSS -->
+<xsl:template match="p" mode="environment-element">
+    <xsl:text>article</xsl:text>
+</xsl:template>
+<xsl:template match="p" mode="environment-class">
+    <xsl:text>paragraph</xsl:text>
 </xsl:template>
 
 <!-- ########################## -->
