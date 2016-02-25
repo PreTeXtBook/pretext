@@ -874,6 +874,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
+<!-- ################ -->
+<!-- Contributor List -->
+<!-- ################ -->
+
+<!-- Not much happening here, will drop -->
+<!-- into environment manufacture       -->
+<xsl:template match="contributors">
+    <xsl:apply-templates select="contributor" />
+</xsl:template>
 
 <!-- ###################### -->
 <!-- Cross-Reference Knowls -->
@@ -934,7 +943,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We show the full content of the item on the page (b)            -->
 <!-- Or, we build a hidden knowl and place a link on the page (c)    -->
 <!-- NB: this template employs several modal templates, defined just below -->
-<xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn">
+<xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|contributor">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
@@ -966,7 +975,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     the "xref-as-knowl" modal template           -->
 <!-- TODO: we need to process children in a way that no \label{}, nor ID's, are produced   -->
 <!--       This would perhaps obsolete the "env-type" device, and reorder explnation below -->
-<xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|li" mode="xref-knowl">
+<xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|li|contributor" mode="xref-knowl">
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
@@ -1780,6 +1789,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>list</xsl:text>
 </xsl:template>
 
+<!-- Contributors -->
+<!-- Never born hidden -->
+<xsl:template match="contributor" mode="is-hidden">
+    <xsl:value-of select="false()" />
+</xsl:template>
+<!-- Always in a list -->
+<xsl:template match="contributor" mode="is-block-env">
+    <xsl:value-of select="false()" />
+</xsl:template>
+<!-- Never hidden so calling hidden-knowl-text raises error -->
+<!-- Side-By-Side divs -->
+<!-- http://stackoverflow.com/questions/17217766/two-divs-side-by-side-fluid-display -->
+<!-- There head is the person's name -->
+<xsl:template match="contributor" mode="head">
+    <xsl:comment>Style Me (contributor-name)</xsl:comment>
+    <div style="width:40%;float:left;">
+        <xsl:value-of select="personname" />
+    </div>
+</xsl:template>
+<!-- Body is the identifying info for the contributor -->
+<xsl:template match="contributor" mode="body">
+    <xsl:comment>Style Me (contributor-info)</xsl:comment>
+    <div style="margin-left:40%;">
+        <xsl:value-of select="department" />
+        <br />
+        <xsl:value-of select="institution" />
+    </div>
+</xsl:template>
+<!-- No posterior  -->
+<xsl:template match="contributor" mode="posterior" />
+<!-- HTML, CSS -->
+<xsl:template match="contributor" mode="environment-element">
+    <xsl:text>div</xsl:text>
+</xsl:template>
+<xsl:template match="contributor" mode="environment-class">
+    <xsl:text>contributor</xsl:text>
+</xsl:template>
 
 <!-- ########################## -->
 <!-- Mathematics (HTML/MathJax) -->
@@ -2721,7 +2767,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a sidebyside even though this is not necessary           -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|biblio|note|example|remark|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow|li" mode="xref-as-knowl">
+<xsl:template match="fn|biblio|note|example|remark|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">
@@ -2777,7 +2823,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="tooltip-text" />
         </xsl:attribute>
         <!-- link content from common template -->
-        <xsl:value-of select="$content" />
+        <!-- For a contributor we bypass autonaming, etc -->
+        <xsl:choose>
+            <xsl:when test="self::contributor">
+                <xsl:apply-templates select="personname" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$content" />
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:element>
 </xsl:template>
 
@@ -4354,7 +4408,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- URL's -->
 <!-- Every node has a URL associated with it -->
 <!-- A filename, plus an optional anchor/id  -->
-<xsl:template match ="*" mode="url">
+<xsl:template match="*" mode="url">
     <xsl:variable name="intermediate"><xsl:apply-templates select="." mode="is-intermediate" /></xsl:variable>
     <xsl:variable name="chunk"><xsl:apply-templates select="." mode="is-chunk" /></xsl:variable>
     <xsl:apply-templates select="." mode="filename" />

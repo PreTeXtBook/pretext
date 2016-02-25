@@ -67,7 +67,7 @@
 <!-- Everything like a paragraph, but also more substantial                   -->
 <!-- These items cannot be contained in anything but a structural subdivision -->
 <!-- Note: the "todo" element is in this list                                 -->
-<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|example|exercise|list-of|solution-list|notation-list|todo">
+<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|example|exercise|contributors|list-of|solution-list|notation-list|todo">
 
 
 <!-- ######### -->
@@ -185,6 +185,10 @@
 
 <!ELEMENT blockquote (p+, attribution*)>
 <!ELEMENT attribution (#PCDATA|%multiline;)*>
+
+<!-- Contributors -->
+<!ELEMENT contributors (contributor*)>
+<!-- contributor near author, editor -->
 
 <!-- automatic lists, with options -->
 <!ELEMENT list-of EMPTY>
@@ -586,6 +590,8 @@
 
 <!ELEMENT author       (personname, department*, institution*, email*)>
 <!ELEMENT editor       (personname, department*, institution*, email*)>
+<!ELEMENT contributor  (personname, department*, institution*, email*)>
+    <!ATTLIST contributor xml:id ID #IMPLIED>
 
 <!ELEMENT personname   (#PCDATA|%characters;)*>
 <!ELEMENT department   (#PCDATA|%multiline;)*>

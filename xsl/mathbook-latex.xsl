@@ -1619,6 +1619,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\\&#xa;</xsl:text>
 </xsl:template>
 
+<!-- ################ -->
+<!-- Contributor List -->
+<!-- ################ -->
+
+<xsl:template match="contributors">
+    <xsl:apply-templates select="contributor" />
+</xsl:template>
+
+<xsl:template match="contributor">
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>\noindent</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
+    <xsl:text>\parbox[t]{0.35\textwidth}{</xsl:text>
+    <xsl:value-of select="personname" />
+    <xsl:text>}%&#xa;</xsl:text>
+    <xsl:text>\parbox[t]{0.65\textwidth}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:if test="department">
+        <xsl:value-of select="department" />
+        <xsl:text>\\</xsl:text>
+    </xsl:if>
+    <xsl:if test="institution">
+        <xsl:value-of select="institution" />
+        <xsl:text>\\</xsl:text>
+    </xsl:if>
+    <xsl:text>}</xsl:text>
+    <xsl:text>\par&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- #################### -->
 <!-- Back Matter, Letters -->
@@ -4515,6 +4544,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
+<!-- We bypass autonaming, numbers and all that -->
+<!-- for cross-references to contributors       -->
+<!-- $content param is just ignored             -->
+<xsl:template match="contributor" mode="xref-link">
+    <xsl:text>\hyperlink{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}{</xsl:text>
+    <xsl:value-of select="personname" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
 <!-- Labels -->
 <!-- The template to supply a LaTeX "\label{}" is provided -->
 <!-- in the common file since it is employed in MathJax's  -->
@@ -4530,7 +4570,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- vertical space when used in list items and it seems          -->
 <!-- to now behave well without it  (2015-12-12)                  -->
 <!-- (See also modal templates for "xref-link" and "xref-number") -->
-<xsl:template match="exercises//exercise|biblio|note|proof|ol/li|hint|answer|solution" mode="label">
+<xsl:template match="exercises//exercise|biblio|note|proof|ol/li|hint|answer|solution|contributor" mode="label">
     <xsl:text>\hypertarget{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}{}</xsl:text>

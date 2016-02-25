@@ -32,6 +32,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>We begin our study of algebraic structures by investigating sets associated with single operations that satisfy certain reasonable axioms; that is, we want to define an operation on a set in a way that will generalize such familiar structures as the integers <m>{\mathbb Z}</m> together with the single operation of  addition, or invertible <m>2 \times 2</m> matrices together with the single operation of matrix multiplication.  The integers and the <m>2 \times 2</m> matrices, together with their respective single operations, are examples of algebraic structures known as groups.</p>
 
         <p>The theory of groups occupies a central position in mathematics.  Modern group theory arose from an attempt to find the roots of a polynomial in terms of its coefficients.  Groups now play a central role in such areas as coding theory, counting, and the study of  symmetries; many areas of biology, chemistry, and physics have benefited from group theory.</p>
+
+        <p><xref ref="ajordan" /> helped improve this chapter.</p>
+
     </introduction>
 
     <section xml:id="section-mod-n-sym">
@@ -372,7 +375,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>It is often convenient to describe a group in terms of an addition or multiplication table.  Such a table is called a <term>Cayley table</term><index><main>Cayley table</main></index>.</p>
 
             <example xml:id="example-groups-z5">
-                <p>The integers mod <m>n</m> form a group under addition modulo <m>n</m>.  Consider <m>{\mathbb Z}_5</m>, consisting of the equivalence classes of the integers 0, 1, 2, 3, and 4.  We define the group operation on <m>{\mathbb Z}_5</m> by modular addition.  We write the binary operation on the group additively; that is, we write <m>m + n</m>.  The element 0 is the identity of the group and each element in <m>{\mathbb Z}_5</m> has an inverse. For instance, <m>2 + 3 = 3 + 2 = 0</m>.  Figure<nbsp /><xref ref="figure-z5-cayley" /> is a Cayley table for <m>{\mathbb Z}_5</m>.  By Proposition<nbsp /><xref ref="proposition-zn-equiv-classes" />, <m>{\mathbb Z}_n = \{0, 1, \ldots, n-1 \}</m> is a group under the binary operation of addition mod <m>n</m>.</p>
+                <p>The integers mod <m>n</m> form a group under addition modulo <m>n</m>.  Consider <m>{\mathbb Z}_5</m>, consisting of the equivalence classes of the integers 0, 1, 2, 3, and 4.  We define the group operation on <m>{\mathbb Z}_5</m> by modular addition.  We write the binary operation on the group additively; that is, we write <m>m + n</m>.  The element 0 is the identity of the group and each element in <m>{\mathbb Z}_5</m> has an inverse. For instance, <m>2 + 3 = 3 + 2 = 0</m>.  Figure<nbsp /><xref ref="figure-z5-cayley" /> is a Cayley table for <m>{\mathbb Z}_5</m>  (Contributed by <xref ref="rbeezer" />).  By Proposition<nbsp /><xref ref="proposition-zn-equiv-classes" />, <m>{\mathbb Z}_n = \{0, 1, \ldots, n-1 \}</m> is a group under the binary operation of addition mod <m>n</m>.</p>
             </example>
 
             <figure xml:id="figure-z5-cayley">
@@ -492,7 +495,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </statement>
 
                 <proof>
-                    <p>Suppose that <m>e</m> and <m>e'</m> are both identities in <m>G</m>. Then <m>eg = ge = g</m> and <m>e'g = ge' = g</m> for all <m>g \in G</m>. We need to show that <m>e = e'</m>. If we think of <m>e</m> as the identity, then <m>ee' = e'</m>; but if <m>e'</m> is the identity, then <m>ee' = e</m>. Combining these two equations, we have <m>e = ee' = e'</m>.</p>
+                    <p>Suppose that <m>e</m> and <m>e'</m> are both identities in <m>G</m>. Then <m>eg = ge = g</m> and <m>e'g = ge' = g</m> for all <m>g \in G</m>. We need to show that <m>e = e'</m>. If we think of <m>e</m> as the identity, then <m>ee' = e'</m>; but if <m>e'</m> is the identity, then <m>ee' = e</m>. Combining these two equations, we have <m>e = ee' = e'</m>. (<xref ref="dfarmer" /> helped with this proof.)</p>
                 </proof>
             </proposition>
 

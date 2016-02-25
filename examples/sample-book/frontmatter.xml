@@ -216,4 +216,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     </preface>
 
+    <preface>
+        <title>Contributors to the 4<m>^\mathrm{th}</m> Edition</title>
+
+        <contributors>
+            <contributor xml:id="tjudson">
+                <personname>Thomas Judson</personname>
+                <department>Department of Mathematics and Statistics</department>
+                <institution>Stephen F. Austin State University</institution>
+                <email>judsontw@sfasu.edu</email>
+            </contributor>
+
+            <contributor xml:id="dfarmer">
+                <personname>David Farmer</personname>
+                <institution>American Institute of Mathematics</institution>
+                <email>farmer@aimath.org</email>
+            </contributor>
+
+            <contributor xml:id="rbeezer">
+                <personname>Robert Beezer</personname>
+                <department>Department of Mathematics and Computer Science</department>
+                <institution>University of Puget Sound</institution>
+                <email>beezer@pugetsound.edu</email>
+            </contributor>
+
+            <contributor xml:id="ajordan">
+                <personname>Alex Jordan</personname>
+                <department>Department of Mathematics</department>
+                <institution>Portland Community College</institution>
+                <email>alex.jordan@pcc.edu</email>
+            </contributor>
+        </contributors>
+
+    </preface>
+
 </frontmatter>

@@ -109,6 +109,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='table'><xsl:text>Table</xsl:text></localization>
     <localization string-id='listing'><xsl:text>Listing</xsl:text></localization>
     <localization string-id='fn'><xsl:text>Footnote</xsl:text></localization>
+    <localization string-id='contributor'><xsl:text>Contributor</xsl:text></localization>
     <!-- Lists and their items -->
     <!-- TODO: <localization string-id='list'><xsl:text>List</xsl:text></localization> -->
     <localization string-id='li'><xsl:text>Item</xsl:text></localization>
@@ -221,6 +222,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translation needed for Portugal Portugese -->
     <!-- <localization string-id='listing'><xsl:text>Listing</xsl:text></localization> -->
     <localization string-id='fn'><xsl:text>Nota de rodapé</xsl:text></localization>
+    <!-- Translation needed for Portugal Portugese -->
+    <!-- <localization string-id='contributor'><xsl:text>Contributor</xsl:text></localization> -->
     <!-- Lists and their items -->
     <!-- Translations needed for Portugal Portugese -->
     <!-- TODO: <localization string-id='list'><xsl:text>List</xsl:text></localization> -->
@@ -340,7 +343,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='table'><xsl:text>Tabela</xsl:text></localization>
     <!-- Translation needed for Brazilian Portugese -->
     <!-- <localization string-id='listing'><xsl:text>Listing</xsl:text></localization> -->
+    <!-- Translation needed for Brazilian Portugese -->
     <localization string-id='fn'><xsl:text>Nota de rodapé</xsl:text></localization>
+    <!-- <localization string-id='contributor'><xsl:text>Contributor</xsl:text></localization> -->
     <!-- Lists and their items -->
     <!-- Translations needed for Brazilian Portugese -->
     <!-- TODO: <localization string-id='list'><xsl:text>List</xsl:text></localization> -->
@@ -458,6 +463,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='table'><xsl:text>Cuadro</xsl:text></localization>
     <!-- Translation needed for Spain Spanish -->
     <!-- <localization string-id='listing'><xsl:text>Listing</xsl:text></localization> -->
+    <!-- Translation needed for Spain Spanish -->
+    <!-- <localization string-id='contributor'><xsl:text>Contributor</xsl:text></localization> -->
     <localization string-id='fn'><xsl:text>Nota a pie de página</xsl:text></localization>
     <!-- Lists and their items -->
     <!-- Translations needed for Spain Spanish -->
