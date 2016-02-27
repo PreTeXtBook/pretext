@@ -143,10 +143,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <base full='mile'              short='mi'       siunitx='none' />
 
     <!-- Speed                                                                      -->
+    <base full='kilometerperhour'  short='kph'      siunitx='none' />
+    <base full='kilometreperhour'  short='kph'      siunitx='none' />
     <base full='mileperhour'       short='mph'      siunitx='none' />
 
     <!-- Volume                                                                     -->
     <base full='gallon'            short='gal'      siunitx='none' />
+
+    <!-- Distance per Volume                                                        -->
+    <base full='milepergallon'     short='mpg'      siunitx='none' />
 
 </xsl:variable>
 
