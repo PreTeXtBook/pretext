@@ -162,6 +162,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='copyright'><xsl:text>Copyright</xsl:text></localization>
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'><xsl:text>permalink</xsl:text></localization>
+    <localization string-id='incontext'><xsl:text>in-context</xsl:text></localization>
 </xsl:variable>
 
 <!-- pt-PT, Portugese (Portugal) -->
@@ -282,6 +283,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- HTML clickables (lowercase strings to click on) -->
     <!-- Translation needed for Portugal Portugese -->
     <!-- <localization string-id='permalink'><xsl:text>permalink</xsl:text></localization> -->
+    <!-- <localization string-id='incontext'><xsl:text>in-context</xsl:text></localization> -->
 </xsl:variable>
 
 <!-- pt-BR, Portugese (Brazil)-->
@@ -402,6 +404,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- HTML clickables (lowercase strings to click on) -->
     <!-- Translation needed for Brazilian Portugese -->
     <!-- <localization string-id='permalink'><xsl:text>permalink</xsl:text></localization> -->
+    <!-- <localization string-id='incontext'><xsl:text>in-context</xsl:text></localization> -->
 </xsl:variable>
 
 <!-- es-ES, Spanish (Spain) -->
@@ -522,6 +525,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- HTML clickables (lowercase strings to click on) -->
     <!-- Translation needed for Spain Spanish -->
     <!-- <localization string-id='permalink'><xsl:text>permalink</xsl:text></localization> -->
+    <!-- <localization string-id='incontext'><xsl:text>in-context</xsl:text></localization> -->
 </xsl:variable>
 
 </xsl:stylesheet>

@@ -996,14 +996,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </xsl:element>
         <xsl:apply-templates select="." mode="posterior" />
-        <div class="context-link" style="text-align:right;">
+        <xsl:element name="span">
+            <xsl:attribute name="class">
+                <xsl:text>incontext</xsl:text>
+            </xsl:attribute>
             <xsl:element name="a">
                 <xsl:attribute name="href">
                     <xsl:apply-templates select="." mode="url" />
                 </xsl:attribute>
-                <xsl:text>(in-context)</xsl:text>
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'incontext'" />
+                </xsl:call-template>
             </xsl:element>
-        </div>
+        </xsl:element>
     </exsl:document>
     <!-- recurse the tree outside of the file-writing -->
     <xsl:apply-templates select="*" mode="xref-knowl" />
