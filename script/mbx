@@ -4,7 +4,7 @@
 #! /usr/bin/python
 
 # ********************************************************************
-# Copyright 2010-2014 Robert A. Beezer
+# Copyright 2010-2016 Robert A. Beezer
 #
 # This file is part of MathBook XML.
 #
@@ -28,7 +28,7 @@
 #
 ##############################################
 
-def tikz_conversion(xml_source, dest_dir, outformat):
+def tikz_conversion(xml_source, xmlid_root, dest_dir, outformat):
     global config
     import tempfile, os, os.path, subprocess, shutil
     _verbose('converting tikz pictures from {} to {} graphics for placement in {}'.format(xml_source, outformat, dest_dir))
@@ -45,6 +45,7 @@ def tikz_conversion(xml_source, dest_dir, outformat):
     devnull = open(os.devnull, 'w')
     convert_cmd = [xslt_executable,
         '--stringparam', 'scratch', tmp_dir,
+        '--stringparam', 'subtree', xmlid_root,
         '--xinclude',
         os.path.join(mbx_xsl_dir, 'extract-tikz.xsl'),
         xml_source
@@ -73,7 +74,7 @@ def tikz_conversion(xml_source, dest_dir, outformat):
                 shutil.copy2(tikzpdf, dest_dir)
 
 
-def asymptote_conversion(xml_source, dest_dir, outformat):
+def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
     global config
     import tempfile, os, os.path, subprocess, shutil, glob
     _verbose('converting Asymptote diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
@@ -86,6 +87,7 @@ def asymptote_conversion(xml_source, dest_dir, outformat):
     _debug("asy executable: {}".format(asy_executable))
     extract_cmd = [xslt_executable,
         '--stringparam', 'scratch', tmp_dir,
+        '--stringparam', 'subtree', xmlid_root,
         '--xinclude',
         os.path.join(mbx_xsl_dir, 'extract-asymptote.xsl'),
         xml_source
@@ -112,7 +114,7 @@ def asymptote_conversion(xml_source, dest_dir, outformat):
                 shutil.copy2(f, dest_dir)
 
 
-def sage_conversion(xml_source, dest_dir, outformat):
+def sage_conversion(xml_source, xmlid_root, dest_dir, outformat):
     global config
     import tempfile, os, os.path, subprocess, shutil, glob
     _verbose('converting Sage diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
@@ -125,6 +127,7 @@ def sage_conversion(xml_source, dest_dir, outformat):
     _debug("sage executable: {}".format(sage_executable))
     extract_cmd = [xslt_executable,
         '--stringparam', 'scratch', tmp_dir,
+        '--stringparam', 'subtree', xmlid_root,
         '--xinclude',
         os.path.join(mbx_xsl_dir, 'extract-sageplot.xsl'),
         xml_source
@@ -151,7 +154,7 @@ def sage_conversion(xml_source, dest_dir, outformat):
             for f in glob.glob(sagepng):
                 shutil.copy2(f, dest_dir)
 
-def latex_image_conversion(xml_source, data_dir, dest_dir, outformat):
+def latex_image_conversion(xml_source, xmlid_root, data_dir, dest_dir, outformat):
     global config
     import tempfile, os, os.path, subprocess, shutil
 
@@ -168,6 +171,7 @@ def latex_image_conversion(xml_source, data_dir, dest_dir, outformat):
     devnull = open(os.devnull, 'w')
     convert_cmd = [xslt_executable,
         '--stringparam', 'scratch', tmp_dir,
+        '--stringparam', 'subtree', xmlid_root,
         '--xinclude',
         os.path.join(mbx_xsl_dir, 'extract-latex-image.xsl'),
         xml_source
@@ -794,6 +798,10 @@ def get_cli_arguments():
     format_help = 'Output formats are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in format_info])
     parser.add_argument('-f', '--format', help=format_help, action="store", dest='format')
 
+    # default to an empty string, which signals root to XSL stylesheet
+    parser.add_argument('-r', '--restrict', help='restrict to subtree rooted at element with specified xml:id',
+                         action="store", dest='xmlid', default='')
+
     parser.add_argument('-s', '--server', help='base URL for server (webwork-tex only)', action="store", dest='server')
 
     parser.add_argument('-i', '--include', help='external data directory, relative to source, latex-image only', action="store", dest='data_dir')
@@ -892,44 +900,44 @@ config = get_config_info(mbx_script_dir, mbx_user_dir)
 
 if args.component == 'tikz':
     if args.format == 'pdf':
-        tikz_conversion(args.xml_file, output_dir, 'pdf')
+        tikz_conversion(args.xml_file, args.xmlid, output_dir, 'pdf')
     elif args.format == 'svg':
-        tikz_conversion(args.xml_file, output_dir, 'svg')
+        tikz_conversion(args.xml_file, args.xmlid, output_dir, 'svg')
     elif args.format == 'source':
-        tikz_conversion(args.xml_file, output_dir, 'source')
+        tikz_conversion(args.xml_file, args.xmlid, output_dir, 'source')
     else:
         raise NotImplementedError('cannot make TikZ pictures in "{}" format'.format(args.format))
 elif args.component == 'asy':
     if args.format == 'pdf':
-        asymptote_conversion(args.xml_file, output_dir, 'pdf')
+        asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'pdf')
     elif args.format == 'svg':
-        asymptote_conversion(args.xml_file, output_dir, 'svg')
+        asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'svg')
     elif args.format == 'source':
-        asymptote_conversion(args.xml_file, output_dir, 'source')
+        asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'source')
     else:
         raise NotImplementedError('cannot make Asymptote diagrams in "{}" format'.format(args.format))
 elif args.component == 'sageplot':
     if args.format == 'pdf':
-        sage_conversion(args.xml_file, output_dir, 'pdf')
+        sage_conversion(args.xml_file, args.xmlid, output_dir, 'pdf')
     elif args.format == 'svg':
-        sage_conversion(args.xml_file, output_dir, 'svg')
+        sage_conversion(args.xml_file, args.xmlid, output_dir, 'svg')
     elif args.format == 'source':
-        sage_conversion(args.xml_file, output_dir, 'source')
+        sage_conversion(args.xml_file, args.xmlid, output_dir, 'source')
     else:
         raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
 elif args.component == 'latex-image':
     if args.format == 'pdf':
-        latex_image_conversion(args.xml_file, args.data_dir, output_dir, 'pdf')
+        latex_image_conversion(args.xml_file, args.xmlid, args.data_dir, output_dir, 'pdf')
     elif args.format == 'svg':
-        latex_image_conversion(args.xml_file, args.data_dir, output_dir, 'svg')
+        latex_image_conversion(args.xml_file, args.xmlid, args.data_dir, output_dir, 'svg')
     elif args.format == 'source':
-        latex_image_conversion(args.xml_file, args.data_dir, output_dir, 'source')
+        latex_image_conversion(args.xml_file, args.xmlid, args.data_dir, output_dir, 'source')
     elif args.format == 'png':
-        latex_image_conversion(args.xml_file, args.data_dir, output_dir, 'png')
+        latex_image_conversion(args.xml_file, args.xmlid, args.data_dir, output_dir, 'png')
     elif args.format == 'eps':
-        latex_image_conversion(args.xml_file, args.data_dir, output_dir, 'eps')
+        latex_image_conversion(args.xml_file, args.xmlid, args.data_dir, output_dir, 'eps')
     elif args.format == 'all':
-        latex_image_conversion(args.xml_file, args.data_dir, output_dir, 'all')
+        latex_image_conversion(args.xml_file, args.xmlid, args.data_dir, output_dir, 'all')
     else:
         raise NotImplementedError('cannot make LaTeX pictures in "{}" format'.format(args.format))
 elif args.component == 'webwork-tex':

@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 
 <!--********************************************************************
-Copyright 2014 Robert A. Beezer
+Copyright 2014-2016 Robert A. Beezer
 
 This file is part of MathBook XML.
 
@@ -36,8 +36,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Get internal ID's for filenames, etc -->
 <xsl:import href="./mathbook-common.xsl" />
-<!-- Walk the XML source tree -->
+
+<!-- Get "scratch" directory        -->
+<!-- and a "subtree" xml:id value   -->
+<!-- Then walk the XML source tree  -->
+<!-- applying specializations below -->
 <xsl:import href="./extract-identity.xsl" />
+
+<!-- Output tikz/LaTeX as text -->
+<xsl:output method="text" />
 
 <!-- tikz graphics to standalone file        -->
 <!-- Default border of 0.5bp seems too small -->

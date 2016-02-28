@@ -1,7 +1,7 @@
 <?xml version='1.0'?> 
 
 <!--********************************************************************
-Copyright 2014 Robert A. Beezer
+Copyright 2014-2016 Robert A. Beezer
 
 This file is part of MathBook XML.
 
@@ -30,8 +30,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Get internal ID's for filenames, etc -->
 <xsl:import href="./mathbook-common.xsl" />
-<!-- Walk the XML source tree -->
+
+<!-- Get "scratch" directory        -->
+<!-- and a "subtree" xml:id value   -->
+<!-- Then walk the XML source tree  -->
+<!-- applying specializations below -->
 <xsl:import href="./extract-identity.xsl" />
+
+<!-- Output Asymptote code as text -->
+<xsl:output method="text" />
 
 <!-- Asymptote graphics to standalone file           -->
 <!-- Prepend document's macros, otherwise no changes -->
