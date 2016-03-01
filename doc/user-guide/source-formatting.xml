@@ -4,12 +4,12 @@
 <!--                                                          -->
 <!--    MathBook XML User's Guide                             -->
 <!--                                                          -->
-<!-- Copyright (C) 2013  Robert A. Beezer                     -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
 
-<chapter id="source-formatting" filebase="source-formatting">
+<chapter xml:id="source-formatting">
     <title>Formatting Your Source</title>
-    
+
     <section>
         <title>Structure</title>
 
@@ -27,11 +27,11 @@
 
         <p>For other elements, all whitespace gets carried through the conversion.  So I like to author these elements <q>tight</q>, with no line feeds at all (and let my editor wrap the lines while I edit).  The best example is the paragraph element, <tag>p</tag>.  And it is the same for many of the elements that are used in a paragraph, such as <tag>em</tag> for emphasis.  For mathematics, both <tag>m</tag> and <tag>me</tag> should be authored tight.  If an element is not in the <c>strip-space</c> lists mentioned above, then you should write it tight.  If <latex /> output is important, periodically check the output <c>*.tex</c> file for blank lines.  Pleae report any blank lines, with a minimal working example, that are not cured by careful formatting in your source.</p>
     </section>
-    
+
     <section>
         <title>Special Characters, XML</title>
-        
-        <p>XML has a very simple syntax.  There are just five reserved characters: &apos;, &quot;, &lt;, &gt; and &amp;.  The expressive power comes from the freedom to invent new elements (such as you see in MathBook!) and the processing power comes sophisticated tools for traversing a hierarchical structure.  Anytime you mix languages, such as when using one to write about another, you have to be careful about the special characters and the mechanisms for <q>escaping</q> them.  An advantage of XML is the limited number of reserved characters, and that only three require any caution.</p>
+
+        <p>XML has a very simple syntax.  There are just five reserved characters: &apos;, &quot;, <less />, <greater /> and <ampersand />.  The expressive power comes from the freedom to invent new elements (such as you see in MathBook!) and the processing power comes sophisticated tools for traversing a hierarchical structure.  Anytime you mix languages, such as when using one to write about another, you have to be careful about the special characters and the mechanisms for <q>escaping</q> them.  An advantage of XML is the limited number of reserved characters, and that only three require any caution.</p>
 
         <p>The apostrophe (&apos;) and quotation mark (&quot;) are important for delimiting XML attributes, and for specifying literal strings in attributes.  For MathBook source files, there are no special rules.  Though be aware of the <tag>q</tag> element which will give better results than a quotation mark.</p>
 
