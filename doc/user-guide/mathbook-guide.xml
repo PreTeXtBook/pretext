@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- This file is part of the documentation of MathBook XML   -->
+<!--                                                          -->
+<!--    MathBook XML User's Guide                             -->
+<!--                                                          -->
+<!-- Copyright (C) 2013  Robert A. Beezer                     -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<!-- USE XINCLUDE SWITCH ON XSLTPROC -->
+<mathbook xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <xi:include href="./guideinfo.xml" />
+
+    <book filebase="mathbook-guide">
+        <title>MathBook XML User's Guide</title>
+
+            <xi:include href="introduction.xml" />
+            <xi:include href="source-formatting.xml" />
+
+    </book>
+
+</mathbook>
