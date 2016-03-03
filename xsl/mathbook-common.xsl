@@ -654,9 +654,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Compute width of left margin        -->
 <!-- Assumes each line ends in a newline -->
-<!-- A blank line will cause 0 width,    -->
-<!-- which is OK for Sage doctesting but -->
-<!-- maybe not general enough            -->
+<!-- A blank line will not contribute    -->
 <xsl:template name="left-margin">
     <xsl:param name="text" />
     <xsl:param name="margin" select="32767" />  <!-- 2^15 - 1 as max? -->
@@ -672,10 +670,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="text" select="$text" />
                 </xsl:call-template>
             </xsl:variable>
+            <xsl:variable name="content-top-line" select="substring-before($text, '&#xa;')" />
             <!-- Compute margin as smaller of incoming and computed -->
+            <!-- Unless incoming is 0 due to blank line             -->
             <xsl:variable name="new-margin">
                 <xsl:choose>
-                    <xsl:when test="$margin > $pad-top-line">
+                    <xsl:when test="($margin > $pad-top-line) and not(string-length($content-top-line) = 0)">
                         <xsl:value-of select="$pad-top-line" />
                     </xsl:when>
                     <xsl:otherwise>
