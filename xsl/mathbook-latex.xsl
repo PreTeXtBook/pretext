@@ -202,6 +202,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="title-page-info-article" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
+    <!-- If no frontmatter/titlepage, then title is not printed       -->
+    <!-- so we make sure it happens here, else triggered by titlepage -->
+    <xsl:if test="title and not(frontmatter/titlepage)">
+        <xsl:text>\maketitle&#xa;</xsl:text>
+    </xsl:if>
     <xsl:copy-of select="$content" />
     <xsl:call-template name="latex-postamble" />
    <xsl:text>\end{document}</xsl:text>
