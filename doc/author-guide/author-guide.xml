@@ -9,13 +9,16 @@
 
 <mathbook xmlns:xi="http://www.w3.org/2001/XInclude">
 
-    <xi:include href="./guideinfo.xml" />
+    <book xml:id="mathbook-author-guide">
+        <title>MathBook XML Author's Guide</title>
 
-    <book xml:id="mathbook-guide">
-        <title>MathBook XML User's Guide</title>
-
-            <xi:include href="introduction.xml" />
-            <xi:include href="source-formatting.xml" />
+        <xi:include href="./frontmatter.xml" />
+        <xi:include href="start-here.xml" />
+        <xi:include href="quickstart-example.xml" />
+        <xi:include href="overview.xml" />
+        <xi:include href="topics.xml" />
+        <!-- <xi:include href="introduction.xml" /> -->
+        <!-- <xi:include href="source-formatting.xml" /> -->
 
     </book>
 

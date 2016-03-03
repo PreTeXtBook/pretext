@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file is part of the documentation of MathBook XML   -->
+<!--                                                          -->
+<!--    MathBook XML Author's Guide                           -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="topics">
+    <title>(*) Topics</title>
+
+    <introduction>
+        <p>Careful descriptions arranged into topics.  List here is an outline.</p>
+    </introduction>
+
+</chapter>
