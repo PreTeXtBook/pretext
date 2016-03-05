@@ -78,7 +78,7 @@
     <!ATTLIST mathbook xml:lang CDATA #IMPLIED>
 
 <!-- A book may be a list of chapters or a list of parts -->
-<!ELEMENT book (title, subtitle?, frontmatter, ((chapter+, appendix*, backmatter?)|(part+, appendix*, backmatter?)))>
+<!ELEMENT book (title, subtitle?, frontmatter, ((chapter+, backmatter?)|(part+, backmatter?)))>
     <!ATTLIST book xml:id ID #IMPLIED>
 
 <!ELEMENT article (title, subtitle?, frontmatter?, (section|exercises|references)+, backmatter?)>
@@ -602,9 +602,10 @@
 
 <!ELEMENT date        (#PCDATA|%characters;|today|timeofday)*>
 
+<!-- both "front" and "back" colophons -->
+<!ELEMENT colophon   (copyright*|p*)>
 
-<!ELEMENT colophon   (copyright*)>
-
+<!-- front colophon items -->
 <!ELEMENT copyright      (year, holder, minilicense?, shortlicense?)?>
 <!ELEMENT year           (#PCDATA|%line;)*>
 <!ELEMENT holder         (#PCDATA|%line;)*>
@@ -634,7 +635,21 @@
 <!-- Back Matter -->
 <!-- ########### -->
 
-<!-- TODO:  include an afterword? -->
+<!ELEMENT backmatter (title?, appendix*, index-part?, colophon?)>
+    <!ATTLIST backmatter xml:id ID #IMPLIED>
+
+<!-- Appendix is modeled closely on a book/chapter -->
+<!-- An article/section model may be added         -->
+<!-- Also, various "automatic" lists can go inside an appendix        -->
+<!ELEMENT appendix (title?, index*, author*, ((%block;)*|(introduction?, (section|exercises|references)*, conclusion?)))>
+    <!ATTLIST appendix xml:id   ID       #IMPLIED>
+    <!ATTLIST appendix xml:base CDATA    #IMPLIED>
+
+<!ELEMENT index-part (title?)>
+    <!ATTLIST index-part xml:id   ID       #IMPLIED>
+
+<!-- rear colophon items -->
+<!-- a sequence of "p" -->
 
 <!-- ######################## -->
 <!-- Bibliographic References -->

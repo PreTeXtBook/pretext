@@ -62,14 +62,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <!-- Many chapters removed from original AATA here -->
 
-        <part>
-            <title>Appendices</title>
-            <!-- Appendices go here, GFDL is one -->
-            <xi:include href="./gfdl-mathbook.xml" />           <!-- GFDL License text -->
-            <xi:include href="./appendix-two.xml" />             <!-- Second appendix for testing -->
-        </part>
+        <xi:include href="./backmatter.xml" />                  <!-- GFDL, Hints, Notation -->
 
-        <xi:include href="./backmatter.xml" />                  <!-- Hints, Notation -->
     </book>
 
 </mathbook>

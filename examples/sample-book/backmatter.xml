@@ -25,20 +25,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                               -->
 <!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
 
-<backmatter xml:id="backmatter">
-    <title>Reference</title> <!-- mostly for HTML sectioning -->
+<backmatter xml:id="backmatter" xmlns:xi="http://www.w3.org/2001/XInclude">
+    <title>Back Matter</title> <!-- mostly for HTML sectioning -->
 
-    <chapter>
-        <title>Hints and Solutions to Selected Exercises</title>
-        <solution-list />
-    </chapter>
-
-    <chapter>
+    <appendix>
         <title>Notation</title>
 
         <p>The following table defines the notation used in this book. Page numbers or references refer to the first appearance of each symbol.</p>
 
         <notation-list />
-    </chapter>
+    </appendix>
+
+    <appendix>
+        <title>Hints and Solutions to Selected Exercises</title>
+        <solution-list />
+    </appendix>
+
+    <xi:include href="./gfdl-mathbook.xml" />           <!-- GFDL License text -->
+
+    <colophon>
+        <p>This book was authored in MathBook XML.</p>
+    </colophon>
 
 </backmatter>

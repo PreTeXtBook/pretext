@@ -432,7 +432,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Subdivision name comes from named template above     -->
 <!-- Note: frontmatter and backmatter are structural, so  -->
 <!-- get considered in level computation.  However, they  -->
-<!-- are just containers, so we subtractthem away         -->
+<!-- are just containers, so we subtract them away        -->
 <xsl:template match="*" mode="subdivision-name">
     <xsl:variable name="relative-level">
         <xsl:apply-templates select="." mode="level" />
@@ -440,9 +440,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="level-number-to-latex-name">
         <xsl:with-param name="level">
             <xsl:choose>
+                <!-- With parts, the *matter is a peer of a part and +1 and -1 counteract -->
+                <xsl:when test="(ancestor::frontmatter or ancestor::backmatter) and /mathbook/book/part">
+                    <xsl:value-of select="$relative-level + $root-level" />
+                </xsl:when>
+                <!-- *matter is considered structural, but shouldn't be counted    -->
+                <!-- in building the right names at different levels, absent parts -->
                 <xsl:when test="ancestor::frontmatter or ancestor::backmatter">
                     <xsl:value-of select="$relative-level + $root-level - 1" />
                 </xsl:when>
+                <!-- in the body this is right -->
                 <xsl:otherwise>
                     <xsl:value-of select="$relative-level + $root-level" />
                 </xsl:otherwise>
@@ -1951,9 +1958,23 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <!-- when ancestor axis is saved as a variable "mathbook" -->
     <!-- occurs in first slot so on initialization we scrub   -->
     <!-- two elements: mathbook and MBX document root         -->
+    <!-- frontmatter and backmatter are irrelevant here,      -->
+    <!-- so we scrub three elements in that case              -->
+    <!-- NB: when parts become "decorative" or "structural"   -->
+    <!--     then this might be a place to slide by, or not   -->
     <xsl:variable name="hierarchy" select="ancestor::*" />
+    <xsl:variable name="nodes-scrubbed">
+        <xsl:choose>
+            <xsl:when test="$hierarchy[frontmatter] or $hierarchy[backmatter]">
+                <xsl:text>3</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>2</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:call-template name="one-multi-number">
-        <xsl:with-param name="nodes" select="$hierarchy[position() > 2]" />
+        <xsl:with-param name="nodes" select="$hierarchy[position() > $nodes-scrubbed]" />
         <xsl:with-param name="levels" select="$levels" />
         <xsl:with-param name="pad" select="$pad" />
     </xsl:call-template>

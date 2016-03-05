@@ -644,12 +644,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <p></p>
 </xsl:template>
 
-<!-- Colophon -->
+<!-- Front Colophon -->
 <!-- Licenses, ISBN, Cover Designer, etc -->
 <!-- We process pieces, in document order -->
 <!-- TODO: edition, publisher, production notes, cover design, etc -->
 <!-- TODO: revision control commit hash -->
-<xsl:template match="colophon/copyright">
+<xsl:template match="frontmatter/colophon/copyright">
     <p>
         <xsl:text>&#xa9;</xsl:text>
         <xsl:apply-templates select="year" />
@@ -664,7 +664,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- website for the book -->
-<xsl:template match="colophon/website">
+<xsl:template match="frontmatter/colophon/website">
     <p>
         <xsl:text>Website: </xsl:text>
         <xsl:element name="a">
@@ -694,6 +694,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ####################### -->
 <!-- Back Matter Components -->
 <!-- ####################### -->
+
+<!-- Back Colophon -->
+<!-- Nothing special, so just process similarly to front -->
 
 <!-- Solutions List -->
 <!-- We construct one huge list of solutions, organized      -->

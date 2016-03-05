@@ -1540,8 +1540,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="book/backmatter" mode="content-wrap">
     <xsl:param name="content" />
+    <!-- If no appendices, go straight to backmatter,           -->
+    <!-- which automatically produces divisions with no numbers -->
+    <!-- Otherwise \appendix,...\backmatter is handled in the   -->
+    <!-- content-wrap template for general subdivisions         -->
+    <xsl:if test="not(appendix)">
+        <xsl:text>%&#xa;</xsl:text>
+        <xsl:text>\backmatter&#xa;</xsl:text>
+        <xsl:text>%&#xa;</xsl:text>
+    </xsl:if>
+    <!-- Some vertical separation into backmatter contents is useful -->
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:text>\backmatter&#xa;</xsl:text>
+    <xsl:text>%% A lineskip in table of contents as transition to appendices, backmatter&#xa;</xsl:text>
+    <xsl:text>\addtocontents{toc}{\vspace{\normalbaselineskip}}&#xa;</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:copy-of select="$content" />
 </xsl:template>
@@ -1836,15 +1847,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </exsl:document>
 </xsl:template>
 
+<!-- TODO: split out an appendix-specific version of following? -->
+
 <!-- Subdivisions, Parts down to Subsubsections               -->
 <!-- Mostly relies on element names echoing latex names       -->
-<!-- (1) appendices are just chapters after \backmatter macro -->
+<!-- (1) appendices are just chapters after \appendix macro -->
 <!-- (2) exercises, references can appear at any depth,       -->
 <!--     so compute the subdivision name                      -->
 <xsl:template match="*" mode="content-wrap">
     <xsl:param name="content" />
-    <!-- appendices are peers of chapters (book) or sections (article) -->
-    <!-- so we need to slip this in once when we can                   -->
+    <!-- appendices are peers of chapters (book) or sections (article)  -->
+    <!-- so we need to slip this in first, with \backmatter later       -->
+    <!-- NB: if no appendices, the backmatter template does \backmatter -->
     <xsl:if test="self::appendix and not(preceding-sibling::appendix)">
         <xsl:text>%&#xa;</xsl:text>
         <xsl:text>\appendix&#xa;</xsl:text>
@@ -1856,35 +1870,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="subdivision-name" />
     <!-- Handle section titles carefully.  Sanitized versions    -->
     <!-- as optional argument to table of contents, headers.     -->
-    <!-- Starred sections for backmatter principal subdivisions. -->
     <!-- http://www.tex.ac.uk/cgi-bin/texfaq2html?label=ftnsect  -->
     <!-- TODO: get non-footnote title from "simple" title routines -->
     <!-- TODO: let author specify short versions (ToC, header) -->
-    <xsl:choose>
-        <xsl:when test="ancestor::backmatter and
-            ((/mathbook/book and self::chapter) or (/mathbook/article and self::section))" >
-            <xsl:text>*</xsl:text>
-            <xsl:text>{</xsl:text>
-            <xsl:apply-templates select="." mode="title-full" />
-            <xsl:text>}</xsl:text>
-            <xsl:apply-templates select="." mode="label" />
-            <xsl:text>&#xa;</xsl:text>
-            <xsl:text>\addcontentsline{toc}{</xsl:text>
-            <xsl:value-of select="local-name(.)" />
-            <xsl:text>}{</xsl:text>
-            <xsl:apply-templates select="." mode="title-simple" />
-            <xsl:text>}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>[</xsl:text>
-            <xsl:apply-templates select="." mode="title-simple"/>
-            <xsl:text>]</xsl:text>
-            <xsl:text>{</xsl:text>
-            <xsl:apply-templates select="." mode="title-full"/>
-            <xsl:text>}</xsl:text>
-            <xsl:apply-templates select="." mode="label" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:text>[</xsl:text>
+    <xsl:apply-templates select="." mode="title-simple"/>
+    <xsl:text>]</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
     <xsl:text>&#xa;</xsl:text>
     <!-- List the author of this division, if present -->
     <xsl:if test="author">
@@ -1893,6 +1888,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}}\par\bigskip&#xa;</xsl:text>
     </xsl:if>
     <xsl:copy-of select="$content" />
+    <!-- transition to backmatter, if done with last appendix -->
+    <xsl:if test="self::appendix and not(following-sibling::appendix)">
+        <xsl:text>%&#xa;</xsl:text>
+        <xsl:text>\backmatter&#xa;</xsl:text>
+        <xsl:text>%&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Information to console for latex run -->
