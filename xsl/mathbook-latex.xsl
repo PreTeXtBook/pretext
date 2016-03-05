@@ -3620,6 +3620,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="@source">
         <xsl:text>\includegraphics[</xsl:text>
         <xsl:text>width=\textwidth,</xsl:text>
+        <!-- TODO: deprecate, abandon @height (along with HTML code) -->
         <xsl:if test="@height">
             <xsl:text>height=</xsl:text><xsl:value-of select="@height" /><xsl:text>pt,</xsl:text>
         </xsl:if>
@@ -3700,6 +3701,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
           </xsl:otherwise>
         </xsl:choose>
+        <!-- TODO: deprecate, abandon @height (along with HTML code) -->
          <xsl:if test="@height">
              <xsl:text>height=</xsl:text><xsl:value-of select="@height" /><xsl:text>pt,</xsl:text>
          </xsl:if>

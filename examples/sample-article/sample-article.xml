@@ -1297,7 +1297,7 @@ the xsltproc executable.
 
                 <figure xml:id="figure-asymptote-surface">
                     <caption>Asymptote 3-D Surface</caption>
-                    <image xml:id="asymptote-surface">
+                    <image xml:id="asymptote-surface" width="40%">
                         <asymptote>
                         // Riemann surface of z^{1/n}
                         import graph3;

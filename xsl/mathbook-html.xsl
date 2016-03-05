@@ -2202,31 +2202,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-
+<!-- ###### -->
 <!-- Images -->
-<xsl:template match="image" >
-    <xsl:if test="@source">
-        <xsl:element name="img">
-          <xsl:if test="ancestor::sidebyside and not(ancestor::figure)"> 
-              <xsl:call-template name="sidebysideCSS" select="."/>
-          </xsl:if>
-          <xsl:choose>
-            <xsl:when test="ancestor::figure"> 
-                <xsl:attribute name="width">100%</xsl:attribute>
+<!-- ###### -->
+
+<!-- With a @source attribute we write an HTML img tag with attributes -->
+<xsl:template match="image[@source]" >
+    <xsl:element name="img">
+        <!-- width attribute, plus sided-by-side extras -->
+        <xsl:choose>
+            <!-- put CSS on bare image as a side-by-side panel -->
+            <!-- a width CSS rule that comes from this always  -->
+            <xsl:when test="ancestor::sidebyside and not(ancestor::figure)">
+                <xsl:call-template name="sidebysideCSS" select="."/>
+            </xsl:when>
+            <xsl:when test="@width">
+                <xsl:attribute name="width"><xsl:value-of select="@width" /></xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:if test="@width and not(ancestor::sidebyside)">
-                    <xsl:attribute name="width"><xsl:value-of select="@width" /></xsl:attribute>
-                </xsl:if>
+                <xsl:attribute name="width">100%</xsl:attribute>
             </xsl:otherwise>
-          </xsl:choose>
-            <xsl:if test="@height">
-                <xsl:attribute name="height"><xsl:value-of select="@height" /></xsl:attribute>
-            </xsl:if>
-            <xsl:attribute name="src"><xsl:value-of select="@source" /></xsl:attribute>
-            <xsl:apply-templates select="description" />
-        </xsl:element>
-    </xsl:if>
+        </xsl:choose>
+        <!-- TODO: abandon, deprecate height specification (along with LaTeX code) -->
+        <xsl:if test="@height">
+            <xsl:attribute name="height"><xsl:value-of select="@height" /></xsl:attribute>
+        </xsl:if>
+        <xsl:attribute name="src">
+            <xsl:value-of select="@source" />
+        </xsl:attribute>
+        <xsl:apply-templates select="description" />
+    </xsl:element>
+</xsl:template>
+
+<!-- A plain image is just a light wrapper and content         -->
+<!-- describes the image type and dictates result, this        -->
+<!-- skips over description, which we must pick up in wrappers -->
+<xsl:template match="image">
     <xsl:apply-templates select="tikz|asymptote|sageplot|latex-image-code" />
 </xsl:template>
 
@@ -2263,6 +2274,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select=".." mode="internal-id" />
             <xsl:text>.svg</xsl:text>
         </xsl:attribute>
+        <!-- pickup description that is a peer, as attribute -->
         <xsl:apply-templates select="../description" />
         <xsl:choose>
             <xsl:when test="$png-fallback = 'yes'">
@@ -2283,8 +2295,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Asymptote graphics language  -->
+<!-- LaTeX standalone images      -->
 <!-- SVG's produced by mbx script -->
-<xsl:template match="image/asymptote">
+<xsl:template match="image/asymptote|image/latex-image-code">
     <xsl:apply-templates select="." mode="svg-wrapper" />
 </xsl:template>
 
@@ -2297,13 +2310,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- LaTeX standalone image       -->
-<!-- SVG's produced by mbx script -->
+<!-- LaTeX standalone image              -->
+<!-- Deprecated when not inside an image -->
+<!-- But it gets processed anyway        -->
 <xsl:template match="latex-image-code">
-    <xsl:if test="not(parent::image)">
-        <xsl:message>MBX WARNING: latex-image-code element should be enclosed by an image element</xsl:message>
-        <xsl:apply-templates select="." mode="location-report" />
-    </xsl:if>
+    <xsl:message>MBX WARNING: latex-image-code element should be enclosed by an image element</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
     <xsl:apply-templates select="." mode="svg-wrapper" />
 </xsl:template>
 
