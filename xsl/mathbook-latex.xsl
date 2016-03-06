@@ -40,8 +40,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- N.B. This has no effect, and may never.  xelatex support is automatic -->
 <xsl:param name="latex.engine" select="'pdflatex'" />
 <!--  -->
-<!-- Fontsize: 10pt, 11pt, or 12pt           -->
-<!-- extsizes, memoir class offer more sizes -->
+<!-- Standard fontsizes: 10pt, 11pt, or 12pt       -->
+<!-- extsizes package: 8pt, 9pt, 14pt, 17pt, 20pt  -->
+<!-- memoir class offers more, but maybe other changes? -->
 <xsl:param name="latex.font.size" select="'10pt'" />
 <!--  -->
 <!-- Geometry: page shape, margins, etc            -->
@@ -152,6 +153,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- font-size also dictates document class for -->
+<!-- those provided by extsizes, but we can get -->
+<!-- these by just inserting the "ext" prefix   -->
+
+<!-- Default is 10pt above, this stupid template     -->
+<!-- provides an error message and also sets a value -->
+<!-- we can condition on for the extsizes package.   -->
+<!-- In predicted order, sort of, so fall out early  -->
+<xsl:variable name="font-size">
+    <xsl:choose>
+        <xsl:when test="$latex.font.size='10pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+        <xsl:when test="$latex.font.size='12pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+        <xsl:when test="$latex.font.size='11pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+        <xsl:when test="$latex.font.size='8pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+        <xsl:when test="$latex.font.size='9pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+        <xsl:when test="$latex.font.size='14pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+        <xsl:when test="$latex.font.size='17pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+        <xsl:when test="$latex.font.size='20pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+        <xsl:otherwise>
+            <xsl:message terminate="yes">MBX:ERROR   the latex.font.size parameter must be 8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, or 20pt, not "<xsl:value-of select="$latex.font.size" />"</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- A convenient shortcut/hack that might need expansion later   -->
+<!-- insert "ext" or nothing in front of "regular" document class -->
+<xsl:variable name="document-class-prefix">
+    <xsl:choose>
+        <xsl:when test="$font-size='10pt'"></xsl:when>
+        <xsl:when test="$font-size='12pt'"></xsl:when>
+        <xsl:when test="$font-size='11pt'"></xsl:when>
+        <xsl:otherwise>
+            <xsl:text>ext</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- Variables carry document-wide console LaTeX escape characters, -->
 <!-- which an author may override on a per-console basis            -->
 <xsl:variable name="console-macro" select="$latex.console.macro-char" />
@@ -188,12 +226,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="content" />
     <xsl:call-template name="converter-blurb-latex" />
     <xsl:text>\documentclass[</xsl:text>
-    <xsl:value-of select="$latex.font.size" />
+    <xsl:value-of select="$font-size" />
     <xsl:text>,</xsl:text>
     <xsl:if test="$latex.draft='yes'" >
         <xsl:text>draft,</xsl:text>
     </xsl:if>
-    <xsl:text>]{article}&#xa;</xsl:text>
+    <xsl:text>]{</xsl:text>
+    <xsl:value-of select="$document-class-prefix" />
+    <xsl:text>article}&#xa;</xsl:text>
     <xsl:text>%% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
     <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
     <xsl:text>\geometry{letterpaper,total={5.0in,9.0in}}&#xa;</xsl:text>
@@ -219,12 +259,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="content" />
     <xsl:call-template name="converter-blurb-latex" />
     <xsl:text>\documentclass[</xsl:text>
-    <xsl:value-of select="$latex.font.size" />
+    <xsl:value-of select="$font-size" />
     <xsl:text>,</xsl:text>
     <xsl:if test="$latex.draft='yes'" >
         <xsl:text>draft,</xsl:text>
     </xsl:if>
-    <xsl:text>]{book}&#xa;</xsl:text>
+    <xsl:text>]{</xsl:text>
+    <xsl:value-of select="$document-class-prefix" />
+    <xsl:text>book}&#xa;</xsl:text>
     <xsl:text>%% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
     <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
     <xsl:text>\geometry{letterpaper,total={5.0in,9.0in}}&#xa;</xsl:text>
@@ -241,12 +283,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="content" />
     <xsl:call-template name="converter-blurb-latex" />
     <xsl:text>\documentclass[</xsl:text>
-    <xsl:value-of select="$latex.font.size" />
+    <xsl:value-of select="$font-size" />
     <xsl:text>,</xsl:text>
     <xsl:if test="$latex.draft='yes'" >
         <xsl:text>draft,</xsl:text>
     </xsl:if>
-    <xsl:text>]{article}&#xa;</xsl:text>
+    <xsl:text>]{</xsl:text>
+    <xsl:value-of select="$document-class-prefix" />
+    <xsl:text>article}&#xa;</xsl:text>
     <xsl:text>%% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
     <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
     <xsl:text>\geometry{letterpaper,total={6.0in,9.0in}}&#xa;</xsl:text>
@@ -263,12 +307,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="content" />
     <xsl:call-template name="converter-blurb-latex" />
     <xsl:text>\documentclass[</xsl:text>
-    <xsl:value-of select="$latex.font.size" />
+    <xsl:value-of select="$font-size" />
     <xsl:text>,</xsl:text>
     <xsl:if test="$latex.draft='yes'" >
         <xsl:text>draft,</xsl:text>
     </xsl:if>
-    <xsl:text>]{article}&#xa;%&#xa;</xsl:text>
+    <xsl:text>]{</xsl:text>
+    <xsl:value-of select="$document-class-prefix" />
+    <xsl:text>article}&#xa;</xsl:text>
     <xsl:text>% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
     <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
     <xsl:text>\geometry{letterpaper,total={6.0in,9.0in}}&#xa;</xsl:text>
