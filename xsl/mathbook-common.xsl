@@ -489,6 +489,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- anyway for completeness.  We add these   -->
 <!-- last with a \newcommand to minimize the  -->
 <!-- possibility author defines them earlier  -->
+<!-- This should be the primary and only      -->
+<!-- interface to the macros list, though     -->
+<!-- it might need some extra                 -->
+<!-- conversion-specific wrapping in use      -->
 <xsl:template name="latex-macro-list">
     <xsl:call-template name="sanitize-code">
         <xsl:with-param name="raw-code">

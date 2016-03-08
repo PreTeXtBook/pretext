@@ -21,7 +21,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- This stylesheet locates <latex-image-code> elements   -->
 <!-- and wraps them for LaTeX processing                   -->
-<!-- This includes the document's docinfo/macros           -->
+<!-- This includes the LaTeX macros present in docinfo     -->
 <!-- and the document's docinfo/latex-image-preamble       -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
@@ -51,7 +51,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\documentclass[12pt,border=2pt]{standalone}&#xa;</xsl:text>
         <xsl:text>\usepackage{amsmath,amssymb}&#xa;</xsl:text>
         <xsl:value-of select="/mathbook/docinfo/latex-image-preamble"/>
-        <xsl:value-of select="/mathbook/docinfo/macros"/>
+        <xsl:call-template name="latex-macro-list" />
         <xsl:text>\begin{document}&#xa;</xsl:text>
         <xsl:value-of select="."/>
         <xsl:text>\end{document}&#xa;</xsl:text>

@@ -23,9 +23,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- New authors shouldn't be using "tikz" tags. But this can stay a while for backwards compat.      -->
 <!-- Once this is ready for removal, the body of the mbx script should be simplified too.             -->
 
-<!-- This stylesheet locates <tikz> elements -->
-<!-- and wraps them for LaTeX processing     -->
-<!-- This includes the document's macros     -->
+<!-- This stylesheet locates <tikz> elements           -->
+<!-- and wraps them for LaTeX processing               -->
+<!-- This includes the LaTeX macros present in docinfo -->
 <!-- TODO: integrate a tikz.preamble into this and main LaTeX processing (in common file) -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
@@ -56,7 +56,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exsl:document href="{$scratch}/{$filebase}.tex" method="text">
         <xsl:text>\documentclass[12pt,border=2pt]{standalone}&#xa;</xsl:text>
         <xsl:text>\usepackage{amsmath,amssymb}&#xa;</xsl:text>
-        <xsl:value-of select="/mathbook/docinfo/macros"/>
+        <xsl:call-template name="latex-macro-list" />
         <xsl:text>\usepackage{tikz}&#xa;</xsl:text>
         <xsl:text>\usetikzlibrary{backgrounds}&#xa;</xsl:text>
         <xsl:text>\usetikzlibrary{arrows,matrix}&#xa;</xsl:text>
@@ -77,7 +77,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exsl:document href="{$scratch}/{$filebase}.tex" method="text">
         <xsl:text>\documentclass[12pt,border=2pt]{standalone}&#xa;</xsl:text>
         <xsl:text>\usepackage{amsmath,amssymb}&#xa;</xsl:text>
-        <xsl:value-of select="/mathbook/docinfo/macros"/>
+        <xsl:call-template name="latex-macro-list" />
         <xsl:text>\usepackage{tikz}&#xa;</xsl:text>
         <xsl:text>\usetikzlibrary{backgrounds}&#xa;</xsl:text>
         <xsl:text>\usetikzlibrary{arrows,matrix}&#xa;</xsl:text>

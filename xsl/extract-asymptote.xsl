@@ -21,6 +21,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- This stylesheet locates <asymptote> elements          -->
 <!-- and wraps them for processing by the "asy" exectuable -->
+<!-- This includes the LaTeX macros present in docinfo     -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace" 
@@ -48,7 +49,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <exsl:document href="{$scratch}/{$filebase}.asy" method="text">
         <xsl:text>texpreamble("&#xa;</xsl:text>
-        <xsl:value-of select="/mathbook/docinfo/macros"/>
+        <xsl:call-template name="latex-macro-list" />
         <xsl:text>");&#xa;&#xa;</xsl:text>
         <xsl:value-of select="."/>
     </exsl:document>
@@ -64,7 +65,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <exsl:document href="{$scratch}/{$filebase}.asy" method="text">
         <xsl:text>texpreamble("&#xa;</xsl:text>
-        <xsl:value-of select="/mathbook/docinfo/macros"/>
+        <xsl:call-template name="latex-macro-list" />
         <xsl:text>");&#xa;&#xa;</xsl:text>
         <xsl:value-of select="."/>
     </exsl:document>
