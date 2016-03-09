@@ -20,6 +20,7 @@
         <!-- <xi:include href="introduction.xml" /> -->
         <!-- <xi:include href="source-formatting.xml" /> -->
 
+        <!-- Add backmatter info on text editors, like Sublime Text, solicit contributions -->
     </book>
 
 </mathbook>
