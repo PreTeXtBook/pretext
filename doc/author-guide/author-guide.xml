@@ -16,11 +16,13 @@
         <xi:include href="start-here.xml" />
         <xi:include href="quickstart-example.xml" />
         <xi:include href="overview.xml" />
+        <xi:include href="processing.xml" />
         <xi:include href="topics.xml" />
         <!-- <xi:include href="introduction.xml" /> -->
         <!-- <xi:include href="source-formatting.xml" /> -->
 
         <!-- Add backmatter info on text editors, like Sublime Text, solicit contributions -->
+        <!-- Provide an appendix about co-existing with git                                -->
     </book>
 
 </mathbook>

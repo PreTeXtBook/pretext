@@ -17,7 +17,7 @@
     <section xml:id="philosophy">
         <title>Philosophy</title>
 
-        <p>MathBook XML is a <term index="yes">markup language</term>, which means that you explicitly specify the logical parts of your document and not how these parts should be displayed.  This is very liberating for an author, since it frees you to concentrate on capturing your ideas to share with others, leaving the construction of the visual presentation to the software.  As an example, you might specify the content of the title of a chapter to be <c>Further Experiments</c>, but you will not be concerned if a 36 point sans-serif font in black will be used for this title in the print version of your book, or a CSS class specifying 18 pixel height in blue is used for title in an online web version of your book.  You can just trust that a reasonable choice has been made for displaying a title of a chapter in a way that a reader will recognize it as a name for a chapter.  (And if all that talk of fonts was unfamiliar, all the more reason to trust the design to software.)</p>
+        <p>MathBook XML is a <term index="yes">markup language</term>, which means that you explicitly specify the logical parts of your document and not how these parts should be displayed.  This is very liberating for an author, since it frees you to concentrate on capturing your ideas to share with others, leaving the construction of the visual presentation to the software.  As an example, you might specify the content of the title of a chapter to be <c>Further Experiments</c>, but you will not be concerned if a 36 point sans-serif font in black will be used for this title in the print version of your book, or a CSS class specifying 18 pixel height in blue is used for a title in an online web version of your book.  You can just trust that a reasonable choice has been made for displaying a title of a chapter in a way that a reader will recognize it as a name for a chapter.  (And if all that talk of fonts was unfamiliar, all the more reason to trust the design to software.)</p>
 
         <p>You are also freed from the technical details of presenting your ideas in the plethora of new formats available as a consequence of the advances in computers (including tablets and smartphones) and networks (global and wireless).  Your output <q>just works</q> and the software keeps up with technical advances and the introduction of new formats, while you concentrate on the content of your book (or article, or report, or proposal, or<nbsp /><ellipsis />).</p>
 
@@ -85,7 +85,7 @@
 
         <p>If you are impatient (sometimes a good quality!), then <xref ref="quickstart-example" /> should be next, where we construct and process a short example and then expand it slightly with several additions.</p>
 
-        <p>If you would like a more abstract, high-level overview skip ahead to <xref provisional="overview" />.</p>
+        <p>If you would like a general, high-level overview of features skip ahead to <xref ref="overview" />.</p>
     </section>
 
 </chapter>

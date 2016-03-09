@@ -31,6 +31,18 @@
     <xsl:apply-templates select="exsl:node-set($the-element)" />
 </xsl:template>
 
+<!-- An empty tag -->
+<xsl:template match="tage">
+    <xsl:variable name="the-element">
+        <c>
+            <text>&lt;</text>
+            <xsl:apply-templates />
+            <xsl:text> /&gt;</xsl:text>
+        </c>
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($the-element)" />
+</xsl:template>
+
 <xsl:template match="attribute">
     <xsl:variable name="the-attribute">
         <c>

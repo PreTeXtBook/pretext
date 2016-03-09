@@ -14,4 +14,7 @@
 <xsl:import href="../xsl/mathbook-html.xsl" />
 <xsl:import href="./author-guide-common.xsl" />
 
+<!-- Just go one-level deep in sidebar -->
+<xsl:param name="toc.level" select="'1'" />
+
 </xsl:stylesheet>

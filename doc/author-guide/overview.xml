@@ -8,10 +8,160 @@
 <!-- See the file COPYING for copying conditions.             -->
 
 <chapter xml:id="overview">
-    <title>(*) Overview of Features</title>
+    <title>Overview of Features</title>
 
     <introduction>
-        <p>A list of features, with some instruction and some vagueness.</p>
+        <p>This chapter is a high-level view of the important concepts, features and design decisions that go into the creation of MathBook XML.  For careful exact descriptions of details, we will direct you to one of the many sections in the <xref ref="topics" autoname="title" /> chapter.  So this chapter should make you aware of what is possible and expand on the philosophy described earlier in <xref ref="philosophy" />, while also giving you examples of many basic constructions you can use to get started quickly.</p>
     </introduction>
+
+    <section xml:id="overview-structure">
+        <title>Structure</title>
+
+        <p>A MathBook XML document is a nested sequence of <term>structural subdivisions</term>.  For a book, these would go <tag>part</tag>, <tag>chapter</tag>, <tag>section</tag>, <tag>subsection</tag>, and <tag>subsubsection</tag>.  Using <tag>part</tag> is optional, but a book must always use <tag>chapter</tag> (or else it is not a book!).  No skipping over subdivisions.  For example, you cannot subdivide a <tag>section</tag> directly into several <tag>subsubsection</tag> without intervening <tag>subsection</tag>.</p>
+
+        <p>An <tag>article</tag> starts subdivisions from <tag>section</tag>, though it may choose to have no subdivisions at all.  <tag>paragraphs</tag> are exceptional.  They lack a full set of features, but can be used to subdivide anything, in books or in articles, though they are always terminal since you cannot subdivide them further.  You will have noticed that we prefer the generic term <term>subdivision</term> (rather than <q>section</q>) since a <tag>section</tag> is a very particular subdivision.</p>
+
+        <p>A subdivision may be unstructured, in which case you fill it with paragraphs and lists and figures and theorems and so on.  But if you choose to structure a subdivision it must look like an optional <tag>introduction</tag>, followed by multiple subdivisions of the next finer granularity, with an optional <tag>conclusion</tag>.</p>
+
+        <p>Every subdivision tag can carry an <attribute>xml:id</attribute> attribute, and it is a good practice to (a) provide one, (b) use a very short list of words describing the content, and (c) adopt a consistent pattern of your choosing.  Do not use numbers, you may later regret it.  These are optional, and with practice you will learn how best to use them. See <xref ref="overview-cross-references" /> just below for more on this.</p>
+
+        <p>The <tag>exercises</tag> and <tag>references</tag> tags are special subdivisions, see <xref ref="topic-exercises" /> and <xref ref="topic-references" />.</p>
+    </section>
+
+    <section xml:id="overview-paragraphs">
+        <title>Paragraphs</title>
+
+        <p>Once you have subdivisions, what do you put into them?  Most likely, paragraphs.  We use long, exact names for tags that are used infrequently, like <tag>subsubsection</tag>.  But for frequently used elements, we use abbreviated tags, often identical to names used in HTML.  So a paragraph is delimited by simply the <tag>p</tag> tag.</p>
+
+        <p>Lots of things can happen in paragraphs, some things can <em>only</em> happen in a paragraph, and some things are <em>banned</em> in paragraphs.  Inside a paragraph, you can emphasize some text (<tag>em</tag>), you can quote some text (<tag>q</tag>), you can mark a phrase as being from another language (<tag>foreign</tag>), and much more.  You can use special characters like an ampersand (<ampersand />, <tage>ampersand</tage>) or an octothorpe, aka <q>hash tag</q> (<hash />, <tage>hash</tage>).  You cannot put a list inside a paragraph, you cannot put a table in a paragraph, and many other structured components are prohibited in paragraphs.</p>
+
+        <p>Paragraphs are also used as part of the structure of other parts of your document.  For example, a <tag>remark</tag> could be composed of several <tag>p</tag>.  As you get started with MathBook XML, remember that much of your writing will occur inside of a <tag>p</tag> and you will have a collection of tags you can use there to express your meaning to your readers.</p>
+    </section>
+
+    <section xml:id="overview-cross-references">
+        <title>Cross-References</title>
+
+        <p>Any element that you place a <attribute>xml:id</attribute> on can become the target of a cross-reference.  This could be a subdivision, a remark, a bibliographic entry, or a figure.  So for example, suppose your source had <c>&lt;subsection xml:id="subsection-flowers"&gt;</c> and someplace else you wrote <c>&lt;xref ref="subsection-flowers" /&gt;</c>.  Then at the latter location you would get a reference to the Subsection that discusses flowers.  In print this might just be the number for the subsection, but in various electronic output formats, these cross-references can be very powerful interactive ways to explore the content.  And the mechanism is always the same, pair up an <attribute>xml:id</attribute> on a target with a <attribute>ref</attribute> on an <tag>xref</tag> cross-reference.</p>
+
+        <p>For more, see <xref ref="topic-cross-referencing" /> because cross-references have many features. But first, two features you do not want to miss.  In the early stages of writing, you can author <c>&lt;xref provisional="subsection-flowers" /&gt;</c> to point to a subsection you are contemplating (but have not written yet) and you will get various polite reminders to get that straightened out eventually.  Also there is an <term>autoname</term> feature that will automatically provide the generic name of the target, so you will get something like <q>Subsection 4.3.2</q> without ever typing the <q>Subsection</q> part.  If you move the target, the generic name will adjust if necessary, and if you switch to to one of the supported languages, the generic name will switch language.</p>
+    </section>
+
+    <section xml:id="overview-title">
+        <title>Titles</title>
+
+        <p>Subdivisions always need titles, you accomplish this with a <tag>title</tag> tag first thing.  Almost everything that you can use in a paragraph can be used in a title, but a few constructions are banned, such as a displayed mathematical equation (for good reason).  Try to avoid using footnotes in titles, even if we have tried to make them possible.</p>
+
+        <p>Lots of other structures admit titles.  Experiment, or look at specific descriptions of the structure you are interested in.  Titles are very integral to MathBook XML, much like cross-references.  Titles migrate to the Table of Contents, get used in page headers for print output, can be used in lists (such as a List of Figures), and can be used as the text of a cross-reference, instead of a number.  You might not be inclined to give a <tag>remark</tag> a title, but it would be good practice to do so.  Your electronic outputs will be much more useful to your readers if you routinely title every structure that allows.</p>
+    </section>
+
+    <section xml:id="overview-math">
+        <title>Mathematics</title>
+
+        <p>A key design decision is that mathematical symbols, expressions and equations are authored using <latex /> syntax.  More precisely, we support the symbols and constructions provided by <url href="https://www.mathjax.org/">MathJax</url>, which quite closely follows the <c>amsmath</c> package maintained by the American Mathematical Society.  Neither you nor I want to write <url href="https://en.wikipedia.org/wiki/MathML">MathML</url> by hand!</p>
+
+        <p>For <term>inline</term> mathematics, use the short <tag>m</tag> within a <tag>p</tag> (or within a <tag>title</tag>).  For example, <c>&lt;m&gt;\alpha^2 + \beta^4&lt;/m&gt;</c> will do what you expect, in print and in electronic outputs.  To get a single equation, centered, with some vertical separation before and after, use the <tag>me</tag> tag (<q>math equation</q>) in the same way within a <tag>p</tag>, but do not try using it within a <tag>title</tag>.  For example, <c>&lt;me&gt;\rho = \alpha^2 + \beta^4&lt;/me&gt;</c>.  If you want your equation numbered, switch to the <tag>men</tag> tag.</p>
+
+        <p>There is a way to incorporate your own (simple) custom <latex /> macros within mathematics (only).  They will be effective in your print and electronic outputs, and can be employed in graphics languages like <c>tikz</c> and Asymptote.  You can also author multi-line <term>display mathematics</term> using the <tag>md</tag> tag surrounding a sequence of <tag>mrow</tag> elements (or the <tag>mdn</tag> variant for numbered equations).  We defer the details to <xref ref="topic-mathematics" />.</p>
+    </section>
+
+    <section xml:id="overview-images">
+        <title>Images</title>
+
+        <p>You can include an image via the <tag>image</tag> tag.  You can use the <attribute>source</attribute> attribute to provide a filename, likely prefixed by a relative path, that points at an image file.  It is your responsibility to locate that file properly relative to your output, and that the file format is compatible.  So, for example, suppose your source contained <c>&lt;image source="images/butterflies.jpg" /&gt;</c>.  Then you would want to have a directory named <c>images</c> below wherever you process your <latex /> output, or wherever you place your HTML output on a web server.  The <attribute>width</attribute> attribute can be used to control the size of the image. Specifying a percentage is easiest, such as <c>width="60%"</c>.</p>
+
+        <p>You will probably want to wrap your image in a <tag>figure</tag> to have it centered, and to have some vertical separation above and below.  Presence of a <tag>caption</tag> element will dictate whether or not the figure is numbered.  See <xref ref="overview-figures-tables" /> for more.  Note too, that the <tag>sidebyside</tag> tag provides some very flexible options for placing several images (<xref ref="overview-sidebyside" />) together.</p>
+
+        <p>If you wish to construct technical diagrams, with editable source, and perhaps including the use of <latex /> macros, MathBook XML provides support for graphics languages like PGF, TikZ, and Asymptote, in addition to using Sage code to describe a plot or image.  In most cases output can be obtained as smoothly-scalable SVG images, in addition to other formats like PDF or PNG.  Making all this happen is one of the more technical aspects of MathBook XML, so we save the discussion for one of the topics, <xref provisional="topic-image-languages" />.</p>
+    </section>
+
+    <section xml:id="overview-lists">
+        <title>Lists</title>
+
+        <p>Ordered lists (numbered), unordered lists (bullets) and description lists (defined terms) are all supported, and syntax generally follows HTML.  Lists live directly below a subdivision or most anywhere else a paragraph can go, such as in the statement of a theorem.  But they cannot be contained within a paragraph.  Their structure is given by the <tag>ol</tag>, <tag>ul</tag>, <tag>dl</tag> tags.  These can specify a variety of options for the labels via attributes, as described in <xref ref="topic-lists-and-labels" />.</p>
+
+        <p>List items, for any of the three types are delimited with the <tag>li</tag> tag.  What is different from HTML is that the contents of a list item need to be structured, with paragraphs (<tag>p</tag>) being the most likely.  The contents of a list item are rather restricted, though you <em>can</em> put another list inside of a list item, thereby creating nested lists.  For a description list, the list item should contain a <tag>title</tag>, which will become the text that is being described.</p>
+    </section>
+
+    <section xml:id="overview-exercises">
+        <title>Exercises</title>
+
+        <p>An exercise can appear in the narrative as an <term>inline exercise</term> or in a special <tag>exercises</tag> subdivision and is then known as a <term>sectional exercise</term>.  The syntax is the same in both cases, there are just some minor differences in their use and treatment.  The <tag>exercises</tag> subdivision can be used at any level.  In other words, it can be a peer of any other subdivision.</p>
+
+        <p>An <tag>exercise</tag> is a mandatory <tag>statement</tag> followed by possibly several optional <tag>hint</tag>, <tag>answer</tag> and/or <tag>solution</tag>.  Conceptually, an <tag>answer</tag> is a short final result, while a <tag>solution</tag> provides details about the route to the answer.  Each of these four components is structured further, with paragraph-like elements, and the exercise itself may have a <tag>title</tag>.</p>
+
+        <p>You need (and want) to have the hints, answers and solutions grouped with the statement, but there is a lot of flexibility on making these available at the location of the exercise, or in the backmatter.See <xref ref="topic-exercises-solutions" /> for more.</p>
+
+        <p>An inline exercise typically gets a fully qualified unique number and is rendered similar to an <tag>example</tag> or a <tag>remark</tag>.  A sectional exercise only gets a sequential number, though this can be overridden with the <attribute>number</attribute> attribute if you want to maintain stable numbering in response to edits.  (Be careful, once you override the sequential numbering, you probably need to manually specify every subsequent number, so save overrides for when your project matures.)</p>
+
+        <p>Within a run of sectional exercises a subgroup can be delimited as an <tag>exercisegroup</tag>, which allows an <tag>introduction</tag> and/or <tag>conclusion</tag> to explain some commonality.  An <tag>exercisegroup</tag> should be rendered in some way that makes it clear to the reader that they are a group.</p>
+    </section>
+
+    <section xml:id="overview-figures-tables">
+        <title>(*) Figures and Tables</title>
+
+    </section>
+
+    <section xml:id="overview-programs">
+        <title>(*) Programs and Consoles</title>
+
+    </section>
+
+    <section xml:id="overview-special-characters">
+        <title>(*) Special Characters</title>
+
+    </section>
+
+    <section xml:id="overview-verbatim-literal">
+        <title>(*) Verbatim and Literal Text</title>
+
+    </section>
+
+    <section xml:id="overview-sage">
+        <title>(*) Sage</title>
+
+    </section>
+
+    <section xml:id="overview-sidebyside">
+        <title>(*) Side-by-Side Layout</title>
+
+    </section>
+
+    <section xml:id="overview-math-results">
+        <title>(*) Mathematical Results</title>
+
+    </section>
+
+    <section xml:id="overview-frontmatter">
+        <title>(*) Front Matter</title>
+
+    </section>
+
+    <section xml:id="overview-backmatter">
+        <title>(*) Back Matter</title>
+
+    </section>
+
+    <section xml:id="overview-index-notation">
+        <title>(*) Index and Notation Entries</title>
+
+    </section>
+
+    <section xml:id="overview-webwork">
+        <title>(*) WeBWorK Exercises</title>
+
+    </section>
+
+    <section xml:id="overview-si-units">
+        <title>(*) Scientific Units</title>
+
+    </section>
+
+    <!--
+    <section xml:id="overview-">
+        <title>(*) </title>
+
+    </section>
+
+   -->
 
 </chapter>

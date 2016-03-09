@@ -11,7 +11,44 @@
     <title>(*) Topics</title>
 
     <introduction>
-        <p>Careful descriptions arranged into topics.  List here is an outline.</p>
+        <p>Careful descriptions arranged into topics.  List here is a temporary outline.</p>
     </introduction>
+
+    <section xml:id="topic-exercises">
+        <title>(*) Exercises, Inline and Sectional</title>
+
+    </section>
+
+    <section xml:id="topic-references">
+        <title>(*) References and Citations</title>
+
+    </section>
+
+    <section xml:id="topic-cross-referencing">
+        <title>(*) Cross-Referencing Information</title>
+
+    </section>
+
+    <section xml:id="topic-mathematics">
+        <title>(*) Mathematics</title>
+
+    </section>
+
+    <section xml:id="topic-lists-and-labels">
+        <title>(*) Lists and their Labels</title>
+
+    </section>
+
+    <section xml:id="topic-exercises-solutions">
+        <title>(*) Exercises and their Answers</title>
+
+    </section>
+
+    <!--
+    <section xml:id="topic-">
+        <title></title>
+
+    </section>
+   -->
 
 </chapter>
