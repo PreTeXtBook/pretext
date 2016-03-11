@@ -1833,16 +1833,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Paragraphs -->
-<!-- Never born hidden                      -->
-<!-- Necessary as targets of index entries  -->
-<!-- and stealth knowls for defined terms   -->
+<!-- Never born hidden                         -->
+<!-- Necessary as targets of index entries     -->
+<!-- and stealth knowls for defined terms      -->
+<!-- Following is just used for knowl creation -->
 <xsl:template match="p" mode="is-hidden">
     <xsl:value-of select="false()" />
 </xsl:template>
 <xsl:template match="p" mode="is-block-env">
     <xsl:value-of select="true()" />
 </xsl:template>
-<!-- List items are never born hidden -->
+<!-- Paragraphs are never born hidden -->
 <xsl:template match="p" mode="hidden-knowl-text" />
 <!-- ??????? -->
 <xsl:template match="p" mode="head">
@@ -1850,7 +1851,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
     </h5>
 </xsl:template>
-<!-- Body is everything, including nested lists -->
+<!-- Body is everything -->
 <xsl:template match="p" mode="body">
     <xsl:apply-templates />
 </xsl:template>
@@ -2074,10 +2075,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ########### -->
 
 <!-- Paragraph -->
-<!-- A single paragraph within a side-by-side -->
-<!-- panel will carry positioning CSS         -->
+<!-- An id is needed as target of in-context links  -->
+<!-- that arise from knowling paragraphs routinely  -->
+<!-- for notation, term index cross-references      -->
+<!-- A single paragraph within a side-by-side       -->
+<!-- panel will carry positioning CSS               -->
 <xsl:template match="p">
     <xsl:element name="p">
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:attribute>
         <xsl:if test="parent::sidebyside">
             <xsl:call-template name="sidebysideCSS" select="."/>
         </xsl:if>
@@ -2816,7 +2823,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a sidebyside even though this is not necessary           -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|biblio|note|example|remark|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|biblio|note|example|remark|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">

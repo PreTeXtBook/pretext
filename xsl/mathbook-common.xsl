@@ -992,6 +992,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- We also want to identify smaller pieces of a document,          -->
+<!-- such as when they contain an index element or defined term,     -->
+<!-- so we can reference back to them.  We call these "blocks" here, -->
+<!-- which mostly corresponds to the use of the term in the DTD.     -->
+<!-- The difference is that a paragraph is a "block" if and only if  -->
+<!-- it is a direct descendant of a structural node or a directly    -->
+<!-- descended introduction or conclusion .                          -->
+<!-- Also, list items are considered blocks.                         -->
+<xsl:template match="md|mdn|ul|ol|dl|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|image|tabular|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|example|exercise|li" mode="is-block">
+    <xsl:value-of select="true()" />
+</xsl:template>
+
+<xsl:template match="p" mode="is-block">
+    <xsl:choose>
+        <xsl:when test="parent::introduction or parent::conclusion">
+            <xsl:variable name="interloper" select="parent::*" />
+            <xsl:apply-templates select="$interloper/parent::*" mode="is-structural" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="parent::*" mode="is-structural" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="*" mode="is-block">
+    <xsl:value-of select="false()" />
+</xsl:template>
+
+
 <!-- ####################### -->
 <!-- Chunking Document Nodes -->
 <!-- ####################### -->
@@ -1359,7 +1388,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter" mode="has-default-title">
     <xsl:text>true</xsl:text>
 </xsl:template>
-<xsl:template match="book|article|letter|memo|part|chapter|appendix|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|credit|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|li|contributor" mode="has-default-title">
+<xsl:template match="book|article|letter|memo|part|chapter|appendix|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|p|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|credit|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|li|contributor" mode="has-default-title">
     <xsl:text>false</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="has-default-title">
@@ -1372,7 +1401,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- otherwise produce an empty title              -->
 <!-- NB: this match pattern should be the union of -->
 <!-- the two above,everything that can be titled   -->
-<xsl:template match="book|article|letter|memo|part|chapter|appendix|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|li|credit|frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter|contributor" mode="title">
+<xsl:template match="book|article|letter|memo|part|chapter|appendix|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|p|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|li|credit|frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter|contributor" mode="title">
     <xsl:param name="complexity" />
     <xsl:variable name="default-titled">
         <xsl:apply-templates select="." mode="has-default-title" />
@@ -1884,7 +1913,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- Empty string signifies not numbered -->
 <!-- We do provide a "xref number" of an -->
 <!-- exercisegroup, but otherwise not    -->
-<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|paragraph|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|colophon|backmatter|exercisegroup" mode="serial-number" />
+<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|paragraph|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|colophon|backmatter|exercisegroup|p" mode="serial-number" />
 
 <!-- If a list item has any ancestor that is not  -->
 <!-- an ordered list, then it gets no number      -->
