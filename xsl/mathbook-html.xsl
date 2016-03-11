@@ -760,19 +760,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- At location, we just drop a marker -->
-<xsl:template match="notation">
-    <xsl:element name="span">
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id" />
-        </xsl:attribute>
-    </xsl:element>
-</xsl:template>
-
 <!--               -->
 <!-- Notation List -->
 <!--               -->
 
+<!-- At actual location, we do nothing -->
+<xsl:template match="notation" />
+
+<!-- Build the table infrastructure, then    -->
+<!-- populate with all the notation entries, -->
+<!-- in order of appearance                  -->
 <xsl:template match="notation-list">
     <table>
         <tr>
@@ -786,11 +783,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="string-id" select="'description'" />
                 </xsl:call-template>
             </th>
+            <th style="text-align:left">
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'location'" />
+                </xsl:call-template>
+            </th>
         </tr>
         <xsl:apply-templates select="//notation" mode="backmatter" />
     </table>
 </xsl:template>
 
+<!-- We wrap the sample usage as mathematics       -->
+<!-- Duplicate the provided description            -->
+<!-- Create a cross-reference to enclosing content -->
 <xsl:template match="notation" mode="backmatter">
     <tr>
         <td>
@@ -800,15 +805,46 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </td>
         <td>
             <xsl:apply-templates select="description" />
-            <xsl:text> </xsl:text>
-            <xsl:element name="a">
-                <xsl:attribute name="href">
-                    <xsl:apply-templates select="." mode="url" />
-                </xsl:attribute>
-                <xsl:text>[*]</xsl:text>
-            </xsl:element>
+        </td>
+        <td>
+            <xsl:apply-templates select="." mode="enclosure-xref" />
         </td>
     </tr>
+</xsl:template>
+
+<!-- Experimental: maybe belongs in -common -->
+<!-- Not -md, know where the link lives     -->
+<xsl:template match="*" mode="enclosure-xref">
+    <xsl:variable name="structural">
+        <xsl:apply-templates select="." mode="is-structural" />
+    </xsl:variable>
+    <xsl:variable name="block">
+        <xsl:apply-templates select="." mode="is-block" />
+    </xsl:variable>
+    <xsl:choose>
+        <!-- found a structural or block parent -->
+        <!-- we fashion a cross-reference link  -->
+        <xsl:when test="$structural='true' or $block='true'">
+            <xsl:apply-templates select="." mode="xref-link">
+                <xsl:with-param name="content">
+                    <xsl:apply-templates select="." mode="type-name" />
+                    <xsl:variable name="enclosure-number">
+                        <xsl:apply-templates select="." mode="number" />
+                    </xsl:variable>
+                    <xsl:if test="not($enclosure-number = '')">
+                        <xsl:text> </xsl:text>
+                        <xsl:value-of select="$enclosure-number" />
+                    </xsl:if>
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- nothing interesting here, so step up a level -->
+        <!-- Eventually we find the top-level structure   -->
+        <!-- eg article, book, etc                        -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="parent::*" mode="enclosure-xref" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- ############### -->

@@ -141,6 +141,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Notation List headings/foot -->
     <localization string-id='symbol'><xsl:text>Symbol</xsl:text></localization>
     <localization string-id='description'><xsl:text>Description</xsl:text></localization>
+    <localization string-id='location'><xsl:text>Location</xsl:text></localization>
     <localization string-id='page'><xsl:text>Page</xsl:text></localization>
     <localization string-id='continued'><xsl:text>Continued on next page</xsl:text></localization>
     <!-- Navigation Interface elements -->
@@ -263,6 +264,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Notation List headings/foot -->
     <localization string-id='symbol'><xsl:text>Símbolo</xsl:text></localization>
     <localization string-id='description'><xsl:text>Descrição</xsl:text></localization>
+    <!-- Translation needed for Portugal Portugese -->
+    <!-- <localization string-id='location'><xsl:text>Location</xsl:text></localization> -->
     <localization string-id='page'><xsl:text>Página</xsl:text></localization>
     <localization string-id='continued'><xsl:text>Continua na página seguinte</xsl:text></localization>
     <!-- Navigation Interface elements -->
@@ -386,6 +389,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Notation List headings/foot -->
     <!-- <localization string-id='symbol'><xsl:text>Symbol</xsl:text></localization> -->
     <!-- <localization string-id='description'><xsl:text>Description</xsl:text></localization> -->
+    <!-- <localization string-id='location'><xsl:text>Location</xsl:text></localization> -->
     <!-- <localization string-id='page'><xsl:text>Page</xsl:text></localization> -->
     <!-- <localization string-id='continued'><xsl:text>Continued on next page</xsl:text></localization> -->
     <!-- Navigation Interface elements -->
@@ -509,6 +513,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Notation List headings/foot -->
     <!-- <localization string-id='symbol'><xsl:text>Symbol</xsl:text></localization> -->
     <!-- <localization string-id='description'><xsl:text>Description</xsl:text></localization> -->
+    <!-- <localization string-id='location'><xsl:text>Location</xsl:text></localization> -->
     <!-- <localization string-id='page'><xsl:text>Page</xsl:text></localization> -->
     <!-- <localization string-id='continued'><xsl:text>Continued on next page</xsl:text></localization> -->
     <!-- Navigation Interface elements -->
