@@ -1208,7 +1208,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:apply-templates select="frontmatter/colophon/website" />
     <xsl:if test="frontmatter/colophon/copyright" >
-        <xsl:text>\noindent\copyright\ </xsl:text>
+        <xsl:text>\noindent\textcopyright\ </xsl:text>
         <xsl:apply-templates select="frontmatter/colophon/copyright/year" />
         <xsl:text>\quad{}</xsl:text>
         <xsl:apply-templates select="frontmatter/colophon/copyright/holder" />
