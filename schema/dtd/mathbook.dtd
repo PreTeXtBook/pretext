@@ -401,9 +401,9 @@
     <!ATTLIST index xml:id ID #IMPLIED>
     <!ATTLIST index start CDATA #IMPLIED>
     <!ATTLIST index finish CDATA #IMPLIED>
-<!ELEMENT main (#PCDATA)>
-<!ELEMENT sub  (#PCDATA)>
-<!ELEMENT see  (#PCDATA)>
+<!ELEMENT main (#PCDATA|%line;)*>
+<!ELEMENT sub  (#PCDATA|%line;)*>
+<!ELEMENT see  (#PCDATA|%line;)*>
 
 
 <!-- #### -->
