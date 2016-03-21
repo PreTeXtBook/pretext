@@ -60,7 +60,7 @@
 <!-- Elements that can mix anywhere with a paragraph, -->
 <!-- such as in the statement of a theorem or a proof -->
 <!-- For example <md> yes, but <theorem> no           -->
-<!ENTITY % para "p|md|mdn|ul|ol|dl|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|image|tabular">
+<!ENTITY % para "p|md|mdn|ul|ol|dl|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|console|image|tabular">
 
 <!-- Blocks -->
 <!-- Top-level descendents of structural elements                             -->
