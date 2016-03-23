@@ -58,11 +58,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Current (partially) implemented language codes and contributors -->
 <!-- es-ES, Spanish (Spain), Juan José Torrens                       -->
 <!-- en-US, English (United States), Robert A. Beezer                -->
+<!-- fr-FR, French (France), Thomas W. Judson                        -->
 <!-- pt-BR, Portugese (Brazil), Igor Morgado                         -->
 <!-- pt-PT, Portugese( Portugal), António Pereira                    -->
 
 <xi:include href="./localizations/es-ES.xsl" />
 <xi:include href="./localizations/en-US.xsl" />
+<xi:include href="./localizations/fr-FR.xsl" />
 <xi:include href="./localizations/pt-BR.xsl" />
 <xi:include href="./localizations/pt-PT.xsl" />
 
