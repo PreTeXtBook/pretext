@@ -151,6 +151,7 @@
 
 <!-- attributes for use only in side-by-side -->
 <!ELEMENT paragraphs   (title?, index*, (%para;)*) >
+    <!ATTLIST paragraphs   xml:id   ID                    #IMPLIED>
     <!ATTLIST paragraphs   width    CDATA                 #IMPLIED>
     <!ATTLIST paragraphs   halign   (left|center|right)   #IMPLIED>
     <!ATTLIST paragraphs   valign   (bottom|middle|top)   #IMPLIED>
