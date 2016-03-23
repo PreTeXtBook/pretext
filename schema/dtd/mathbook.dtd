@@ -76,33 +76,44 @@
 
 <!ELEMENT mathbook (docinfo, (book|article))>
     <!ATTLIST mathbook xml:lang CDATA #IMPLIED>
+    <!ATTLIST mathbook xml:base CDATA    #IMPLIED>
+    <!ATTLIST mathbook xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
 <!-- A book may be a list of chapters or a list of parts -->
 <!ELEMENT book (title, subtitle?, frontmatter, ((chapter+, backmatter?)|(part+, backmatter?)))>
     <!ATTLIST book xml:id ID #IMPLIED>
+    <!ATTLIST book xml:base CDATA    #IMPLIED>
+    <!ATTLIST book xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
 <!ELEMENT article (title, subtitle?, frontmatter?, (section|exercises|references)+, backmatter?)>
     <!ATTLIST article xml:id ID #IMPLIED>
+    <!ATTLIST article xml:base CDATA    #IMPLIED>
+    <!ATTLIST article xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
 <!ELEMENT part (title, index*, chapter+)>
     <!ATTLIST part xml:id   ID       #IMPLIED>
     <!ATTLIST part xml:base CDATA    #IMPLIED>
+    <!ATTLIST part xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
 <!ELEMENT chapter (title, index*, author*, ((%block;)*|(introduction?,(section|exercises|references)+,conclusion?)))>
     <!ATTLIST chapter xml:id   ID       #IMPLIED>
     <!ATTLIST chapter xml:base CDATA    #IMPLIED>
+    <!ATTLIST chapter xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
 <!ELEMENT section (title, index*, author*, ((%block;)*|(introduction?,(subsection|exercises|references)+,conclusion?)))>
     <!ATTLIST section xml:id   ID       #IMPLIED>
     <!ATTLIST section xml:base CDATA    #IMPLIED>
+    <!ATTLIST section xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
 <!ELEMENT subsection (title, index*, author*, ((%block;)*|(introduction?,(subsubsection|exercises|references)+,conclusion?)))>
     <!ATTLIST subsection xml:id   ID       #IMPLIED>
     <!ATTLIST subsection xml:base CDATA    #IMPLIED>
+    <!ATTLIST subsection xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
 <!ELEMENT subsubsection (title, index*,  author*, (%block;)*)>
     <!ATTLIST subsubsection xml:id   ID       #IMPLIED>
     <!ATTLIST subsubsection xml:base CDATA    #IMPLIED>
+    <!ATTLIST subsubsection xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
 <!ELEMENT title    (#PCDATA|%line;)*>
 <!ELEMENT subtitle (#PCDATA|%line;)*>
@@ -182,6 +193,8 @@
     <!ATTLIST example xml:id ID #IMPLIED>
 <!ELEMENT remark (title?, index*, (%para;)*)>
     <!ATTLIST remark xml:id ID #IMPLIED>
+    <!ATTLIST remark xml:base CDATA    #IMPLIED>
+    <!ATTLIST remark xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
 <!ELEMENT blockquote (p+, attribution*)>
 <!ELEMENT attribution (#PCDATA|%multiline;)*>
@@ -497,13 +510,15 @@
 <!-- height and alignment attributes for use only in side-by-side -->
 <!-- Note: pg-name is exclusive to webwork                           -->
 <!ELEMENT image  (description?, (latex-image-code|asymptote|sageplot)?)>
-    <!ATTLIST image  xml:id   ID                    #IMPLIED>
-    <!ATTLIST image  source   CDATA                 #IMPLIED>
-    <!ATTLIST image  width    CDATA                 #IMPLIED>
-    <!ATTLIST image  height   CDATA                 #IMPLIED>
-    <!ATTLIST image  halign   (left|center|right)   #IMPLIED>
-    <!ATTLIST image  valign   (bottom|middle|top)   #IMPLIED>
-    <!ATTLIST image  pg-name  CDATA                 #IMPLIED>
+    <!ATTLIST image  xml:id    ID                    #IMPLIED>
+    <!ATTLIST image  xml:base  CDATA                 #IMPLIED>
+    <!ATTLIST image  xmlns:xi  CDATA                 #FIXED   "http://www.w3.org/2001/XInclude">
+    <!ATTLIST image  source    CDATA                 #IMPLIED>
+    <!ATTLIST image  width     CDATA                 #IMPLIED>
+    <!ATTLIST image  height    CDATA                 #IMPLIED>
+    <!ATTLIST image  halign    (left|center|right)   #IMPLIED>
+    <!ATTLIST image  valign    (bottom|middle|top)   #IMPLIED>
+    <!ATTLIST image  pg-name   CDATA                 #IMPLIED>
 
 <!-- typically for accessibility, also used in notation element -->
 <!-- var is only active/usable within a webwork problem         -->
@@ -511,6 +526,9 @@
 <!ELEMENT description   (#PCDATA|%line;|var)*>
 
 <!ELEMENT latex-image-code   (#PCDATA)>
+    <!ATTLIST latex-image-code xml:base CDATA    #IMPLIED>
+    <!ATTLIST latex-image-code xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
+
 <!ELEMENT asymptote   (#PCDATA)>
 <!ELEMENT sageplot    (#PCDATA)>
 
@@ -546,6 +564,8 @@
 <!-- A mini-database of relevant information with no natural home -->
 
 <!ELEMENT docinfo   (brandlogo|website|macros|latex-image-preamble|initialism|feedback|rename)*>
+    <!ATTLIST docinfo xml:base CDATA    #IMPLIED>
+    <!ATTLIST docinfo xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
 <!-- url and image for HTML pages -->
 <!ELEMENT brandlogo    EMPTY>
@@ -585,6 +605,8 @@
 
 <!ELEMENT frontmatter   (titlepage?, colophon?, biography*, abstract?, dedication?, acknowledgement*, foreword*, preface*)>
     <!ATTLIST frontmatter xml:id ID #IMPLIED>
+    <!ATTLIST frontmatter xml:base CDATA    #IMPLIED>
+    <!ATTLIST frontmatter xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
 <!ELEMENT titlepage   (author*,editor*,credit*,date?)>
 
@@ -637,6 +659,8 @@
 
 <!ELEMENT backmatter (title?, appendix*, index-part?, colophon?)>
     <!ATTLIST backmatter xml:id ID #IMPLIED>
+    <!ATTLIST backmatter xml:base CDATA    #IMPLIED>
+    <!ATTLIST backmatter xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
 <!-- Appendix is modeled closely on a book/chapter -->
 <!-- An article/section model may be added         -->
@@ -644,6 +668,7 @@
 <!ELEMENT appendix (title?, index*, author*, ((%block;)*|(introduction?, (section|exercises|references)*, conclusion?)))>
     <!ATTLIST appendix xml:id   ID       #IMPLIED>
     <!ATTLIST appendix xml:base CDATA    #IMPLIED>
+    <!ATTLIST appendix xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
 <!ELEMENT index-part (title?)>
     <!ATTLIST index-part xml:id   ID       #IMPLIED>
