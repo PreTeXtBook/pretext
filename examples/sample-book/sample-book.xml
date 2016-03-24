@@ -49,18 +49,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <xi:include href="./frontmatter.xml" />                <!-- Title Page, Preface, etc. -->
 
-        <part>
-            <title>Basics</title>
-            <xi:include href="./sets.xml" />                    <!-- Set Theory  -->
-            <xi:include href="./integers.xml" />                <!-- Integers -->
-        </part>
+        <!-- Parts are not full implemented yet                     -->
+        <!-- Once ready, make a new main-file like this, with parts -->
+        <!-- <part> <title>Basics</title> -->
+        <xi:include href="./sets.xml" />                    <!-- Set Theory  -->
+        <xi:include href="./integers.xml" />                <!-- Integers -->
 
-        <part>
-            <title>Algebra</title>
-            <xi:include href="./groups.xml" />                  <!-- Groups -->
-        </part>
+        <!-- <part> <title>Algebra</title> -->
+        <xi:include href="./groups.xml" />                  <!-- Groups -->
 
-        <!-- Many chapters removed from original AATA here -->
+        <!-- Many chapters removed from original AATA, here -->
 
         <xi:include href="./backmatter.xml" />                  <!-- GFDL, Hints, Notation -->
 
