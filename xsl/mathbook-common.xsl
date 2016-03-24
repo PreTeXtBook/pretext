@@ -1965,7 +1965,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:variable name="hierarchy" select="ancestor::*" />
     <xsl:variable name="nodes-scrubbed">
         <xsl:choose>
-            <xsl:when test="$hierarchy[frontmatter] or $hierarchy[backmatter]">
+            <xsl:when test="ancestor::frontmatter or ancestor::backmatter">
                 <xsl:text>3</xsl:text>
             </xsl:when>
             <xsl:otherwise>
