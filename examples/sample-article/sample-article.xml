@@ -3200,7 +3200,7 @@ the xsltproc executable.
             <subsection>
                 <title>Tables Next to Figures</title>
 
-                <p>Tables and Figures can go next to each other, as demonstrated in <xref ref="table-next-figure" autoname="yes"/> and <xref ref="figure-next-table" autoname="yes"/>.</p>
+                <p>Tables and Figures can go next to each other, as demonstrated in <xref ref="table-next-figure" autoname="yes"/> and <xref ref="figure-next-table" autoname="yes"/>, plus within an overall captioned figure, <xref ref="figure-table-captioned" autoname="yes"/>.</p>
 
                 <sidebyside>
                     <table xml:id="table-next-figure">
@@ -3226,6 +3226,36 @@ the xsltproc executable.
                     </table>
                     <!--  -->
                     <figure xml:id="figure-next-table">
+                        <caption>Figure next to a Table</caption>
+                        <image source="images/trefoil.png"/>
+                    </figure>
+                </sidebyside>
+
+                <sidebyside xml:id="figure-table-captioned">
+                    <caption>Figure and Table, Captioned, so Sublabeled</caption>
+                    <table xml:id="table-next-figure-sublabeled">
+                        <caption>Table next to a Figure</caption>
+                        <tabular top="minor" left="minor" halign="center">
+                            <col right="medium"/>
+                            <col right="major"/>
+                            <col />
+                            <!--  -->
+                            <row bottom="medium">
+                                <cell>1111</cell>
+                                <cell right="minor">2222</cell>
+                            </row>
+                            <row bottom="major">
+                                <cell>aaaa</cell>
+                                <cell right="medium">bbbb</cell>
+                            </row>
+                            <row>
+                                <cell bottom="minor">AAAA</cell>
+                                <cell bottom="major" right="major">BBBB</cell>
+                             </row>
+                        </tabular>
+                    </table>
+                    <!--  -->
+                    <figure xml:id="figure-next-table-sublabeled">
                         <caption>Figure next to a Table</caption>
                         <image source="images/trefoil.png"/>
                     </figure>

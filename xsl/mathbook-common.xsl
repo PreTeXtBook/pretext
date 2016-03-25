@@ -1885,14 +1885,9 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- *Always* with the parenthetical formatting        -->
 <!-- In this case the structure number is the          -->
 <!-- full number of the enclosing side-by-side         -->
-<xsl:template match="sidebyside[caption]/figure" mode="serial-number">
+<xsl:template match="sidebyside[caption]/figure|sidebyside[caption]/table" mode="serial-number">
     <xsl:text>(</xsl:text>
-    <xsl:number format="a" count="sidebyside/figure"/>
-    <xsl:text>)</xsl:text>
-</xsl:template>
-<xsl:template match="sidebyside[caption]/table" mode="serial-number">
-    <xsl:text>(</xsl:text>
-    <xsl:number format="a" count="sidebyside/table"/>
+    <xsl:number format="a" count="figure|table"/>
     <xsl:text>)</xsl:text>
 </xsl:template>
 
