@@ -149,7 +149,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
 <!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
 <xsl:strip-space elements="mathbook book article memo letter" />
-<xsl:strip-space elements="frontmatter chapter appendix section subsection subsubsection exercises references introduction conclusion paragraphs paragraph subparagraph backmatter" />
+<xsl:strip-space elements="frontmatter chapter appendix index-part section subsection subsubsection exercises references introduction conclusion paragraphs paragraph subparagraph backmatter" />
 <xsl:strip-space elements="docinfo author abstract" />
 <xsl:strip-space elements="titlepage preface acknowledgement biography foreword dedication colophon" />
 <xsl:strip-space elements="theorem corollary lemma algorithm proposition claim fact proof" />
@@ -959,7 +959,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Example: <section> is structural, and ancestors are all structural          -->
 <!-- Example: <title> is not structural, but does have a structural ancestor     -->
 <!-- NB: These elements need only be specified here, and in leaf template (next) -->
-<xsl:template match="book|article|letter|memo|frontmatter|part|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references|backmatter" mode="is-structural">
+<xsl:template match="book|article|letter|memo|frontmatter|part|chapter|appendix|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references|backmatter" mode="is-structural">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="is-structural">
@@ -974,7 +974,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- othewise, we look for definitive markers         -->
 <!-- Note: references and exercises are not markers   -->
 <!-- NB: specification here must match preceding      -->
-<xsl:template match="book|article|letter|memo|frontmatter|part|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references|backmatter" mode="is-leaf">
+<xsl:template match="book|article|letter|memo|frontmatter|part|chapter|appendix|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references|backmatter" mode="is-leaf">
     <xsl:choose>
         <xsl:when test="self::frontmatter or self::backmatter or child::part or child::chapter or child::section or child::subsection or child::subsubsection">
             <xsl:value-of select="false()" />
@@ -1384,7 +1384,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter" mode="has-default-title">
     <xsl:text>true</xsl:text>
 </xsl:template>
-<xsl:template match="book|article|letter|memo|part|chapter|appendix|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|p|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|credit|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|li|contributor" mode="has-default-title">
+<xsl:template match="book|article|letter|memo|part|chapter|appendix|index-part|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|p|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|credit|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|li|contributor" mode="has-default-title">
     <xsl:text>false</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="has-default-title">
@@ -1397,7 +1397,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- otherwise produce an empty title              -->
 <!-- NB: this match pattern should be the union of -->
 <!-- the two above,everything that can be titled   -->
-<xsl:template match="book|article|letter|memo|part|chapter|appendix|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|p|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|li|credit|frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter|contributor" mode="title">
+<xsl:template match="book|article|letter|memo|part|chapter|appendix|index-part|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|p|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|li|credit|frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter|contributor" mode="title">
     <xsl:param name="complexity" />
     <xsl:variable name="default-titled">
         <xsl:apply-templates select="." mode="has-default-title" />

@@ -248,7 +248,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\maketitle&#xa;</xsl:text>
     </xsl:if>
     <xsl:copy-of select="$content" />
-    <xsl:call-template name="latex-postamble" />
    <xsl:text>\end{document}</xsl:text>
 </xsl:template>
 
@@ -274,7 +273,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="title-page-info-book" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
     <xsl:copy-of select="$content" />
-    <xsl:call-template name="latex-postamble" />
     <xsl:text>\end{document}</xsl:text>
 </xsl:template>
 
@@ -298,7 +296,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{document}&#xa;</xsl:text>
     <!-- the body -->
     <xsl:copy-of select="$content" />
-    <xsl:call-template name="latex-postamble" />
     <xsl:text>\end{document}</xsl:text>
 </xsl:template>
 
@@ -322,7 +319,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
     <!-- process the body -->
     <xsl:copy-of select="$content" />
-    <xsl:call-template name="latex-postamble" />
     <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
 
@@ -887,22 +883,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="//index">
+    <xsl:if test="/mathbook/*/backmatter/index-part">
+        <!-- See http://tex.blogoverflow.com/2012/09/dont-forget-to-run-makeindex/ for "imakeidx" usage -->
         <xsl:text>%% Support for index creation&#xa;</xsl:text>
         <xsl:if test="$author-tools='no'">
-            <xsl:text>%% Requires doing $ makeindex &lt;filename-base&gt;&#xa;</xsl:text>
-            <xsl:text>%% (NB: do not provide an extension on the filename, eg no ".tex")&#xa;</xsl:text>
-            <xsl:text>%% Do this prior to a second LaTeX pass&#xa;</xsl:text>
-            <xsl:text>%% We provide language support for the "see" phrase&#xa;</xsl:text>
-            <xsl:text>%% and for the title of the "Index" section&#xa;</xsl:text>
-            <xsl:text>\usepackage{makeidx}&#xa;</xsl:text>
+            <xsl:text>%% imakeidx package does not require extra pass (as with makeidx)&#xa;</xsl:text>
+            <xsl:text>%% We set the title of the "Index" section via a keyword&#xa;</xsl:text>
+            <xsl:text>%% And we provide language support for the "see" phrase&#xa;</xsl:text>
+            <xsl:text>\usepackage{imakeidx}&#xa;</xsl:text>
+            <xsl:text>\makeindex[title=</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'indexsection'" /></xsl:call-template>
+            <xsl:text>, intoc=true]&#xa;</xsl:text>
             <xsl:text>\renewcommand{\seename}{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'see'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
-            <xsl:text>\renewcommand{\indexname}{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'indexsection'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-            <xsl:text>\makeindex&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="$author-tools='yes'">
             <xsl:text>%% author-tools = 'yes' activates marginal notes about index&#xa;</xsl:text>
@@ -1001,29 +995,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="latex-macro-list" />
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>%% End: Author-provided macros&#xa;</xsl:text>
-</xsl:template>
-
-<!-- LaTeX postamble is common for books, articles, memos and letters -->
-<!-- No index if in draft mode                                      -->
-<!-- Maybe make this elective as a backmatter item (HTML effect?)   -->
-<xsl:template name="latex-postamble">
-    <xsl:if test="//index and $author-tools='no'">
-        <xsl:text>%% Index goes here at very end&#xa;</xsl:text>
-        <xsl:text>\clearpage&#xa;</xsl:text>
-        <xsl:text>%% Help hyperref point to the right place&#xa;</xsl:text>
-        <xsl:text>\phantomsection&#xa;</xsl:text>
-        <xsl:if test="/mathbook/book">
-            <xsl:text>\addcontentsline{toc}{chapter}{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'indexsection'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="/mathbook/article">
-            <xsl:text>\addcontentsline{toc}{section}{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'indexsection'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:text>\printindex&#xa;</xsl:text>
-    </xsl:if>
 </xsl:template>
 
 <!-- Tack in a graphic with initials                   -->
@@ -1555,6 +1526,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\addtocontents{toc}{\vspace{\normalbaselineskip}}&#xa;</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:copy-of select="$content" />
+</xsl:template>
+
+<!-- Appendices are handled in the general subdivision template -->
+
+<!-- The index itself needs special handling    -->
+<!-- The "index-part" element signals an index, -->
+<!-- and the content is just an optional title  -->
+<!-- and a compulsory "index-list"              -->
+<!-- LaTeX does sectioning via \printindex      -->
+<!-- TODO: multiple indices, with different titles -->
+<xsl:template match="index-part" mode="content-wrap" >
+    <xsl:param name="content" />
+    <xsl:copy-of select="$content" />
+</xsl:template>
+
+<xsl:template match="index-list">
+    <xsl:text>%&#xa;</xsl:text>
+    <xsl:text>%% The index is here, setup is all in preamble&#xa;</xsl:text>
+    <xsl:text>\printindex&#xa;</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
 <!--               -->

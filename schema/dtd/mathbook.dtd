@@ -672,8 +672,12 @@
     <!ATTLIST appendix xml:base CDATA    #IMPLIED>
     <!ATTLIST appendix xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
-<!ELEMENT index-part (title?)>
+<!ELEMENT index-part (title?, index-list)>
     <!ATTLIST index-part xml:id   ID       #IMPLIED>
+
+<!-- index-list is just a marker to generate the actual index entries -->
+<!ELEMENT index-list EMPTY>
+
 
 <!-- rear colophon items -->
 <!-- a sequence of "p" -->
