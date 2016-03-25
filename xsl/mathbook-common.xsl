@@ -311,6 +311,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- We read the document language translation -->
+<!-- nodes out of the right file, which relies -->
+<!-- on filenames with country codes           -->
+<xsl:variable name="localization-file">
+    <xsl:text>localizations/</xsl:text>
+    <xsl:value-of select="$document-language" />
+    <xsl:text>.xsl</xsl:text>
+</xsl:variable>
+<xsl:variable name="translation-nodes" select="document($localization-file)" />
+
 <!-- Document may exist in a variety of formats in  -->
 <!-- various locations.  These parameters can be    -->
 <!-- hard-coded in the docinfo and/or specified on  -->
@@ -1491,10 +1501,10 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 
 
 <!-- Names of Objects -->
-<!-- Ultimately translations are all contained in the           -->
-<!-- mathbook-localization.xsl file, which provides upper-case, -->
-<!-- singular versions.  In this way, we only ever hardcode a   -->
-<!-- string (like "Chapter") once                               -->
+<!-- Ultimately translations are all contained in the files of  -->
+<!-- the xsl/localizations directory, which provides            -->
+<!-- upper-case, singular versions.  In this way, we only ever  -->
+<!-- hardcode a string (like "Chapter") once                    -->
 <!-- First template is modal, and calls subsequent named        -->
 <!-- template where translation with keys happens               -->
 <!-- This template allows a node to report its name             -->
@@ -1566,6 +1576,8 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- This template translates an string to an upper-case language-equivalent -->
 <!-- Sometimes we must call this directly, but usually better to apply the   -->
 <!-- template mode="type-name" to the node, which then calls this routine    -->
+<!-- NB: this key concatenation might appear more complicated than           -->
+<!--     necessary but may make supporting multiple languages easier?        -->
 <!-- TODO: perhaps allow mixed languages, so don't set document language globally,  -->
 <!-- but search up through parents until you find a lang tag                        -->
 <xsl:key name="localization-key" match="localization" use="concat(../@name, @string-id)"/>
@@ -1578,9 +1590,9 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
             <xsl:when test="/mathbook/docinfo/rename[@element=$string-id and @lang=$document-language]">
                 <xsl:apply-templates select="/mathbook/docinfo/rename[@element=$string-id and @lang=$document-language]" />
             </xsl:when>
-            <!-- default to a lookup from the localization file -->
+            <!-- default to a lookup from the localization file's nodes -->
             <xsl:otherwise>
-                <xsl:for-each select="document('mathbook-localization.xsl')">
+                <xsl:for-each select="$translation-nodes">
                     <xsl:value-of select="key('localization-key', concat($document-language,$string-id) )"/>
                 </xsl:for-each>
             </xsl:otherwise>
