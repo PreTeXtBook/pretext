@@ -54,13 +54,13 @@
 <!-- Everything that is title material, plus more (eg me)     -->
 <!-- var and answer are exclusive to "p" in a WeBWorK problem -->
 <!-- Precede by a #PCDATA, wrap with ( )*                     -->
-<!ENTITY % sentence "%line;|me|men|fn|index|notation|var|answer">
+<!ENTITY % sentence "%line;|me|men|md|mdn|fn|index|notation|var|answer">
 
 <!-- Paragraphs -->
 <!-- Elements that can mix anywhere with a paragraph, -->
 <!-- such as in the statement of a theorem or a proof -->
 <!-- For example <md> yes, but <theorem> no           -->
-<!ENTITY % para "p|md|mdn|ul|ol|dl|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|console|image|tabular">
+<!ENTITY % para "p|ul|ol|dl|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|console|image|tabular">
 
 <!-- Blocks -->
 <!-- Top-level descendents of structural elements                             -->
