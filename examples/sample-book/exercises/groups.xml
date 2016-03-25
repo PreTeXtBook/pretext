@@ -289,11 +289,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Let <m>a</m> and <m>b</m> be elements in a group <m>G</m>.  Prove that <m>ab^na^{-1} = (aba^{-1})^n</m> for <m>n \in \mathbb Z</m>. </p>
         </statement>
         <hint>
-            <md>
+            <p><md>
                 <mrow>(aba^{-1})^n &amp; = (aba^{-1})(aba^{-1}) \cdots (aba^{-1})</mrow>
                 <mrow>&amp; = ab(aa^{-1})b(aa^{-1})b \cdots b(aa^{-1})ba^{-1}</mrow>
                 <mrow>&amp; = ab^na^{-1}.</mrow>
-            </md>
+            </md></p>
         </hint>
     </exercise>
 

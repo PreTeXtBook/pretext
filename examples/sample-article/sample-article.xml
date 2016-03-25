@@ -422,12 +422,11 @@ the xsltproc executable.
                         <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men></p>
                     </statement>
                     <proof xml:id="proof-FTC-corollary">
-                        <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.</p>
-                        <mdn>
+                        <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.<mdn>
                             <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
                             <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
                             <mrow>&amp;=f(x)-0 = f(x)</mrow>
-                        </mdn>
+                        </mdn></p>
                     </proof>
                 </corollary>
 
@@ -705,32 +704,30 @@ the xsltproc executable.
 
             <todo>Move index-finish marker back once it is allowed other places</todo>
 
-            <p><index xml:id="index-finish-multicolumn" start="index-start-multicolumn" />The multi-row displayed mathematics in the proof of the Fundamental Theorem had equations aligned on the equals signs via the <ampersand /> character.  Sometimes you don't want that.  Here is an example with some differential equations, with each equation centered and unnumbered,</p>
-
-            <md>
+            <p><index xml:id="index-finish-multicolumn" start="index-start-multicolumn" />The multi-row displayed mathematics in the proof of the Fundamental Theorem had equations aligned on the equals signs via the <ampersand /> character.  Sometimes you don't want that.  Here is an example with some differential equations, with each equation centered and unnumbered,<md>
                 <mrow>{\mathcal L}(y')(s) = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
-            </md>
+            </md></p>
 
             <p><latex /> has a device where you can interrupt a sequence of equations with a small amout of text and preserve the equation alignment on eithr side.  Here are two tests of that device, with aligned equations and non-aligned equations.  Study the source to see use and differences.  (The math does not make sense.)  Aligned and numbered first.</p>
 
-            <mdn>
+            <p><mdn>
                 <mrow>{\mathcal L}(y')(s)  &amp;= s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s) &amp;= s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
                 <intertext>And so it follows that,</intertext>
                 <mrow>{\mathcal L}(y')(s)^{++}  &amp;= s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s)^{5} &amp;= s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
-            </mdn>
+            </mdn></p>
 
             <p>Now with no numbers and no alignment.</p>
 
-            <md>
+            <p><md>
                 <mrow>{\mathcal L}(y')(s)  = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
                 <intertext>And so it follows that,</intertext>
                 <mrow>{\mathcal L}(y')(s)^{++} = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s)^{5} = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
-            </md>
+            </md></p>
 
             <p>Tables can get quite complex.  Simple ones are simpler, such as this example of numerical computations for Euler's method.</p>
 
@@ -767,14 +764,12 @@ the xsltproc executable.
 
             <p>The following is from the MathJax <url href="http://www.mathjax.org/demos/tex-samples/">demonstration page</url>, an identity due to Ramanujan:<me>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</me></p>
 
-            <p>And again, from the MathJax demonstration page, Maxwell's equations:</p>
-
-            <md>
+            <p>And again, from the MathJax demonstration page, Maxwell's equations:<md>
                 <mrow>\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &amp; = \frac{4\pi}{c}\vec{\mathbf{j}}</mrow>
                 <mrow>\nabla \cdot \vec{\mathbf{E}} &amp; = 4 \pi \rho</mrow>
                 <mrow>\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}}</mrow>
                 <mrow>\nabla \cdot \vec{\mathbf{B}} &amp; = 0</mrow>
-            </md>
+            </md></p>
 
             <notation>
                 <usage>\nabla</usage>
@@ -830,12 +825,10 @@ the xsltproc executable.
                 <less /><nbsp /><nbsp />
                 <greater /><nbsp /><nbsp /></p>
 
-                <p>We test the three <latex /> macros for these characters with a pair of aligned equations:</p>
-
-                <md>
+                <p>We test the three <latex /> macros for these characters with a pair of aligned equations:<md>
                     <mrow>a^2 + b^2\amp\lt c^2</mrow>
                     <mrow>c^2\amp\gt a^2 + b^2</mrow>
-                </md>
+                </md></p>
 
                 <p>So as a summary of how to avoid conflicts with XML's reserved characters:</p>
 
@@ -2502,10 +2495,10 @@ the xsltproc executable.
 
             <p>Cross-references can be built into display mathematics, but they can only point to one item (<ie /> a comma-delimited list of targets is not supported).  Examples below should test the distinction in HTML output between a link that opens a knowl and a link that jumps to a larger chunk of content.  Notice that display mathematics is entirely <latex /> syntax, no matter which output format you create.  So if you do not use the <c>autoname</c> facility, you need to wrap non-math text in <c>\text{}</c> and perhaps use a tilde (<c>~</c>) as a non-breaking space (examine the source of this article).</p>
 
-            <md>
+            <p><md>
                 <mrow>x^2 + y^2 &amp;= z^2&amp;&amp;<xref ref="theorem-FTC" autoname="yes" /></mrow>
                 <mrow>a^2 + b^2 &amp;= c^2&amp;&amp;\text{Section}~<xref ref="section-fundamental-theorem" /></mrow>
-            </md>
+            </md></p>
 
             <p>Variations on the above include multiple <c>xml:id</c> as the value of a single <c>ref</c> attribute on an <c>xref</c>, in the form of a comma-separated list.  In this case, only the numbers are links/knowls and the autonaming attribute is based on the type of the first <c>ref</c>.  Wrapping with brackets (citations) or parentheses (equations) is also controlled by the type of the first <c>ref</c>.  And the <c>detail</c> attribute for a bibliographic reference is silently ignored.  So you can do silly things like have a reference to a theorem within a list of equation numbers and there will be no error message.  Handle with care.  Spaces after commas in the list will migrate to the output as spaces, so if you don't have any, you won't get any.</p>
 
@@ -3391,23 +3384,20 @@ the xsltproc executable.
 
                 <sidebyside>
                     <paragraphs valign="middle">
-                        <p>here is some text, and here is an equation that contains alignment.</p>
-                        <md>
+                        <p>here is some text, and here is an equation that contains alignment.<md>
                             <mrow>f(x)&amp;= x^2+3x+2</mrow>
-                        <mrow>&amp;=(x+2)(x+1)</mrow>
-                        </md>
+                            <mrow>&amp;=(x+2)(x+1)</mrow>
+                        </md></p>
                     </paragraphs>
                     <paragraphs>
-                        <p>here is some text, and here is an equation that contains alignment.</p>
-                        <md>
+                        <p>here is some text, and here is an equation that contains alignment.<md>
                             <mrow>f(x)&amp;= x^2+3x+2</mrow>
                             <mrow>&amp;=(x+2)(x+1)</mrow>
-                        </md>
-                        <p>here is some text, and here is an equation that contains alignment.</p>
-                        <md>
+                        </md></p>
+                        <p>here is some text, and here is an equation that contains alignment.<md>
                             <mrow>f(x)&amp;= x^2+3x+2</mrow>
                             <mrow>&amp;=(x+2)(x+1)</mrow>
-                        </md>
+                        </md></p>
                     </paragraphs>
                 </sidebyside>
             </subsection>

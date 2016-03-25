@@ -34,12 +34,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             for <m>n \in {\mathbb N}</m>.</p>
         </statement>
         <hint>
-            <p>The base case, <m>S(1): [1(1 + 1)(2(1) + 1)]/6 = 1 = 1^2</m> is true. Assume that <m>S(k): 1^2 + 2^2 + \cdots + k^2 = [k(k + 1)(2k + 1)]/6</m> is true. Then</p>
-            <md>
+            <p>The base case, <m>S(1): [1(1 + 1)(2(1) + 1)]/6 = 1 = 1^2</m> is true. Assume that <m>S(k): 1^2 + 2^2 + \cdots + k^2 = [k(k + 1)(2k + 1)]/6</m> is true. Then<md>
                 <mrow>1^2 + 2^2 + \cdots + k^2 + (k + 1)^2 &amp; = [k(k + 1)(2k + 1)]/6 + (k + 1)^2</mrow>
                 <mrow>&amp; = [(k + 1)((k + 1) + 1)(2(k + 1) + 1)]/6,</mrow>
-            </md>
-            <p>and so <m>S(k + 1)</m> is true. Thus, <m>S(n)</m> is true for all positive integers <m>n</m>.</p>
+            </md>and so <m>S(k + 1)</m> is true. Thus, <m>S(n)</m> is true for all positive integers <m>n</m>.</p>
         </hint>
 
     </exercise>
@@ -119,15 +117,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>If <m>x</m> is a nonnegative real number, then show that <m>(1 + x)^n - 1 \geq nx</m> for <m>n = 0, 1, 2, \ldots</m>.</p>
         </statement>
         <hint>
-            <p>The base case, <m>S(0): (1 + x)^0 - 1 = 0 \geq 0 = 0 \cdot x</m> is true. Assume <m>S(k): (1 + x)^k -1 \geq kx</m> is true. Then</p>
-            <md>
+            <p>The base case, <m>S(0): (1 + x)^0 - 1 = 0 \geq 0 = 0 \cdot x</m> is true. Assume <m>S(k): (1 + x)^k -1 \geq kx</m> is true. Then<md>
                 <mrow>(1 + x)^{k + 1} - 1 &amp; = (1 + x)(1 + x)^k -1</mrow>
                 <mrow>&amp; = (1 + x)^k + x(1 + x)^k - 1</mrow>
                 <mrow>&amp; \geq kx + x(1 + x)^k</mrow>
                 <mrow>&amp; \geq kx + x</mrow>
                 <mrow>&amp; = (k + 1)x,</mrow>
-            </md>
-            <p>so <m>S(k + 1)</m> is true. Therefore, <m>S(n)</m> is true for all positive integers <m>n</m>.</p>
+            </md>so <m>S(k + 1)</m> is true. Therefore, <m>S(n)</m> is true for all positive integers <m>n</m>.</p>
         </hint>
     </exercise>
 
@@ -217,11 +213,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <exercise number="21">
         <statement>
-            <p>Suppose that <m>a, b, r, s</m> are pairwise relatively prime and that</p>
-            <md>
+            <p>Suppose that <m>a, b, r, s</m> are pairwise relatively prime and that<md>
                 <mrow>a^2 + b^2 &amp; = r^2</mrow>
                 <mrow>a^2 - b^2 &amp; = s^2.</mrow>
-            </md>
+            </md></p>
             <p>Prove that <m>a</m>, <m>r</m>, and <m>s</m> are odd and <m>b</m> is even.</p>
         </statement>
     </exercise>

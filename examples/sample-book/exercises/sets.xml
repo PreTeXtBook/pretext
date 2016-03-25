@@ -30,12 +30,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <exercise number="1">
         <statement>
-            <p>Suppose that</p>
-            <md>
+            <p>Suppose that<md>
                 <mrow>A &amp; = \{ x : x \in \mathbb N \text{ and } x \text{ is even} \},</mrow>
                 <mrow>B &amp; = \{x : x \in \mathbb N \text{ and } x \text{ is prime}\},</mrow>
                 <mrow>C &amp; = \{ x : x \in \mathbb N \text{ and } x \text{ is a multiple of 5}\}.</mrow>
-            </md>
+            </md></p>
             <p>Describe each of the following sets.</p>
             <ol cols="2">
                 <li><p><m>A \cap B</m></p></li>
