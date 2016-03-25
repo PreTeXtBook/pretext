@@ -34,7 +34,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--    So it is never advisable to edit this file  -->
 
 <!-- Changing xml:lang causes many strings to change language -->
-<!-- See the xsl/mathbook-localization.xsl file for details   -->
+<!-- See the  xsl/localizations  directory for details        -->
 <!-- Note the use of the "xinclude" namespace in order to use multiple files -->
 <!-- Each included file must contain exactly one top-level element, -->
 <!-- such as a chapter or section -->

@@ -40,9 +40,9 @@ the  mathbook.pugetsound.edu  website for information on installing
 the xsltproc executable.
 -->
 
-<!-- Overall element for a Mathbook XML document; mandatory, always-->
-<!-- Experiment with the "xml:lang" attribute to see localization changes -->
-<!-- xsl/mathbook-localization.xsl will have relevant codes               -->
+<!-- Overall element for a Mathbook XML document; mandatory, always  -->
+<!-- Experiment with the "xml:lang" attribute to see localization    -->
+<!-- changes, the  xsl/localizations  directory has more information -->
 <mathbook>
 <!-- <mathbook xml:lang="pt-BR"> -->
 
@@ -111,7 +111,7 @@ the xsltproc executable.
         "Names" for various parts of a document are determined exactly
         once for each language, ensuring consistency and saving you the
         bother of always typing them in.  These can be found in the
-        xsl/mathbook-localization.xsl file.
+        files in the  xsl/localizations  directory.
 
         You can make a document-specific, global override.  Here we
         decide we have no need for any "proposition"s and repurpose

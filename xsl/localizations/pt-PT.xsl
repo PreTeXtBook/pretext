@@ -21,7 +21,7 @@ You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!-- See the  xsl/mathbook-localization.xsl  for an explanation of this file -->
+<!-- See  xsl/localizations/README.md  for an explanation of this file -->
 
 <!-- pt-PT, Portugese (Portugal) -->
 <!-- António Pereira, apereiraua@gmail.com, 2015-07-26 -->
