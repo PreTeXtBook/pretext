@@ -967,46 +967,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Structural Leaves -->
-<!-- Some structural elements of the document tree -->
-<!-- are the leaves of that tree, meaning they do  -->
-<!-- not contain any structural nodes themselves   -->
-<!-- NB: specification here must match preceding   -->
+<!-- Some structural elements of the document tree    -->
+<!-- are the leaves of that tree, meaning they do     -->
+<!-- not contain any structural nodes themselves      -->
+<!-- frontmatter and backmatter are always structured -->
+<!-- othewise, we look for definitive markers         -->
+<!-- Note: references and exercises are not markers   -->
+<!-- NB: specification here must match preceding      -->
 <xsl:template match="book|article|letter|memo|frontmatter|part|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references|backmatter" mode="is-leaf">
-    <xsl:call-template name="without-structural">
-        <xsl:with-param name="nodes" select="child::*" />
-    </xsl:call-template>
+    <xsl:choose>
+        <xsl:when test="self::frontmatter or self::backmatter or child::part or child::chapter or child::section or child::subsection or child::subsubsection">
+            <xsl:value-of select="false()" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="true()" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 <xsl:template match="*" mode="is-leaf">
     <xsl:value-of select="false()" />
-</xsl:template>
-
-<!-- Given a list of nodes (children of another node)      -->
-<!-- we check the first one to see if it is structural.    -->
-<!-- If not, we recurse through the remainder of the nodes -->
-<!-- We quit (false) when a structural node is found       -->
-<!-- We quit (true) when the list of nodes is exhausted    -->
-<xsl:template name="without-structural">
-    <xsl:param name="nodes" />
-    <xsl:choose>
-        <xsl:when test="not($nodes)">
-            <xsl:value-of select="true()" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:variable name="structural">
-                <xsl:apply-templates select="$nodes[1]" mode="is-structural" />
-            </xsl:variable>
-            <xsl:choose>
-                <xsl:when test="$structural='true'">
-                    <xsl:value-of select="false()" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:call-template name="without-structural">
-                        <xsl:with-param name="nodes" select="$nodes[position() > 1]" />
-                    </xsl:call-template>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:otherwise>
-    </xsl:choose>
 </xsl:template>
 
 <!-- We also want to identify smaller pieces of a document,          -->

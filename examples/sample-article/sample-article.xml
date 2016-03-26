@@ -1418,14 +1418,10 @@ the xsltproc executable.
 
         </section>
 
-
-
         <section>
             <title>Further Reading</title>
 
-            <introduction>
-                <p>In a longer work you might wish to have some references on a per-chapter basis, or similar.  You can make a <q>references</q> subdivision anywhere to hold bibliographic items, and you can reference the items like any other item.  For example, we can cite the article below <xref ref="biblio-beezer-fcla" detail="Chapter R" />, included an indication that a specific chapter may be relevant. Notice that the list may be prefaced with an introduction, and followed by a conclusion.</p>
-            </introduction>
+            <p>In a longer work you might wish to have some references on a per-chapter basis, or similar.  You can make a <q>references</q> subdivision anywhere to hold bibliographic items, and you can reference the items like any other item.  For example, we can cite the article below <xref ref="biblio-beezer-fcla" detail="Chapter R" />, included an indication that a specific chapter may be relevant.</p>
 
             <references>
                 <title>References</title>
