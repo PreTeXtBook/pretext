@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- This file is part of the book                 -->
+<!--                                               -->
+<!--   Abstract Algebra: Theory and Applications   -->
+<!--                                               -->
+<!-- Copyright (C) 2010-2014  Robert A. Beezer     -->
+<!-- See the file COPYING for copying conditions.  -->
+<paragraphs>
+	<title>Sage</title>
+
+	<p>Sage support for cyclic groups is a little spotty <mdash /> but we can still make effective use of Sage and perhaps this situation could change soon.</p>
+</paragraphs>

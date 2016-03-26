@@ -47,16 +47,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <title>Abstract Algebra</title>
         <subtitle>Theory and Applications</subtitle>
 
-        <xi:include href="./frontmatter.xml" />                <!-- Title Page, Preface, etc. -->
+        <xi:include href="./frontmatter.xml" />                 <!-- Title Page, Preface, etc. -->
 
         <!-- Parts are not full implemented yet                     -->
         <!-- Once ready, make a new main-file like this, with parts -->
         <!-- <part> <title>Basics</title> -->
-        <xi:include href="./sets.xml" />                    <!-- Set Theory  -->
-        <xi:include href="./integers.xml" />                <!-- Integers -->
+        <xi:include href="./sets.xml" />                        <!-- Set Theory  -->
+        <xi:include href="./integers.xml" />                    <!-- Integers -->
 
         <!-- <part> <title>Algebra</title> -->
-        <xi:include href="./groups.xml" />                  <!-- Groups -->
+        <xi:include href="./groups.xml" />                      <!-- Groups -->
+        <xi:include href="./cyclic.xml" />                      <!-- Cyclic Groups -->
 
         <!-- Many chapters removed from original AATA, here -->
 
