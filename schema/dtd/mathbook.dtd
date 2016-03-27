@@ -659,7 +659,7 @@
 <!-- Back Matter -->
 <!-- ########### -->
 
-<!ELEMENT backmatter (title?, appendix*, index-part?, colophon?)>
+<!ELEMENT backmatter (title?, appendix*, references?, index-part?, colophon?)>
     <!ATTLIST backmatter xml:id ID #IMPLIED>
     <!ATTLIST backmatter xml:base CDATA    #IMPLIED>
     <!ATTLIST backmatter xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
