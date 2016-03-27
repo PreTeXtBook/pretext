@@ -96,17 +96,17 @@
     <!ATTLIST part xml:base CDATA    #IMPLIED>
     <!ATTLIST part xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
-<!ELEMENT chapter (title, index*, author*, (((%block;),(%block;|references|exercises)*)|(introduction?,section,(section|references|exercises)*,conclusion?))) >
+<!ELEMENT chapter (title, index*, author*, (((%block;|references|exercises)*)|(introduction?,section,(section|references|exercises)*,conclusion?))) >
     <!ATTLIST chapter xml:id   ID       #IMPLIED>
     <!ATTLIST chapter xml:base CDATA    #IMPLIED>
     <!ATTLIST chapter xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
-<!ELEMENT section (title, index*, author*, (((%block;),(%block;|references|exercises)*)|(introduction?, subsection,(subsection|references|exercises)*,conclusion?))) >
+<!ELEMENT section (title, index*, author*, (((%block;|references|exercises)*)|(introduction?, subsection,(subsection|references|exercises)*,conclusion?))) >
     <!ATTLIST section xml:id   ID       #IMPLIED>
     <!ATTLIST section xml:base CDATA    #IMPLIED>
     <!ATTLIST section xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
-<!ELEMENT subsection (title, index*, author*, (((%block;),(%block;|references|exercises)*)|(introduction?,subsubsection,(subsubsection|references|exercises)*,conclusion?))) >
+<!ELEMENT subsection (title, index*, author*, (((%block;|references|exercises)*)|(introduction?,subsubsection,(subsubsection|references|exercises)*,conclusion?))) >
     <!ATTLIST subsection xml:id   ID       #IMPLIED>
     <!ATTLIST subsection xml:base CDATA    #IMPLIED>
     <!ATTLIST subsection xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
