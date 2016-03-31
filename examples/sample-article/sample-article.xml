@@ -3676,52 +3676,55 @@ the xsltproc executable.
 
 
 
-        <!-- Bibliography/References can appear anywhere -->
-
-        <references>
-            <title>References</title>
-
-            <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>.
-            <note xml:id="note-judson-AATA"><p>Another online, open-source offering.</p></note>
-            </biblio>
-
-            <biblio type="raw" xml:id="biblio-lay-article">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash />62.</biblio>
-
-            <conclusion>
-                <p>There is an index manufactured for the <latex /> version, which contains a few entries.  Look at the source of this XML file to see how they are written.  They may be placed inside of paragraphs (<c>&lt;p&gt;</c>) and statements (<c>&lt;statements&gt;</c>), and probably other places as well <mdash /> this should be liberalized.  Look at the preamble of the generated <latex /> file for instructions on generating the index.  No other converters are producing an index.</p>
-
-                <p>There is an index entry about multicolumn lists which spans more than one page.  This requires doubly-linked index entries, the first has the index content and points to the <c>xml:id</c> of the second.  The second is an empty element, but points back to the <c>xml:id</c> of the first entry.  So each has a marker and a reference, which allows the span of the index topic to cut across XML boundaries in the source.  See the source of this article for syntax details.</p>
-            </conclusion>
-
-        </references>
-
         <backmatter xml:id="backmatter">
             <title>Reference</title>
 
-            <section>
-                <title>Index</title>
-            </section>
-
-            <section>
+            <appendix>
                 <title>Notation</title>
+                <p>This is some notation introduced in the article.</p>
                 <notation-list />
-            </section>
+            </appendix>
 
-            <section>
+            <appendix>
                 <title>Solutions to Selected Exercises</title>
                 <solution-list />
-            </section>
+            </appendix>
 
-            <section xml:id="section-results">
+            <appendix xml:id="appendix-results">
                 <title>List of Results</title>
 
                 <p>We had an automatic list of theorems for just one section, back in <xref ref="subsection-local-theorems" autoname="yes" />.  Here we expand to include <c>corollary</c> in our space-delimited list of <c>elements</c> and we request <c>divisions</c> (headings) at each <c>subsection</c> and <c>section</c>.  The default <c>scope</c> is the entire document, which is appropriate here in the backmatter.  There are many subsections with no results, so we set the <c>empty</c> attribute to <c>no</c> to suppress them, though this is the default behavior (<c>yes</c> being the other option to see divisions with no list items).  These lists are most valuable if you are in the practice of giving items titles.</p>
 
                 <list-of elements="  theorem corollary" divisions="section    subsection " empty="no" />
-            </section>
+            </appendix>
 
+            <!-- Bibliography/References can appear anywhere, -->
+            <!-- but these are in the backmatter              -->
+
+            <references>
+                <title>References</title>
+
+                <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>.
+                <note xml:id="note-judson-AATA"><p>Another online, open-source offering.</p></note>
+                </biblio>
+
+                <biblio type="raw" xml:id="biblio-lay-article">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash />62.</biblio>
+
+                <conclusion>
+                    <p>There is an index manufactured for the <latex /> version, which contains a few entries.  Look at the source of this XML file to see how they are written.  They may be placed inside of paragraphs (<c>&lt;p&gt;</c>) and statements (<c>&lt;statements&gt;</c>), and probably other places as well <mdash /> this should be liberalized.  Look at the preamble of the generated <latex /> file for instructions on generating the index.  No other converters are producing an index.</p>
+
+                    <p>There is an index entry about multicolumn lists which spans more than one page.  This requires doubly-linked index entries, the first has the index content and points to the <c>xml:id</c> of the second.  The second is an empty element, but points back to the <c>xml:id</c> of the first entry.  So each has a marker and a reference, which allows the span of the index topic to cut across XML boundaries in the source.  See the source of this article for syntax details.</p>
+                </conclusion>
+            </references>
+
+            <index-part >
+                <title>Index</title>
+                <index-list />
+            </index-part>
+
+            <colophon>
+                <p>This article was authored in MathBook XML.</p>
+            </colophon>
         </backmatter>
-
     </article>
-
 </mathbook>
