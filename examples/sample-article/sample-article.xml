@@ -77,10 +77,9 @@ the xsltproc executable.
         Inserted in the preamble to each standalone latex-based image for HMTL SVG output.
         -->
         <latex-image-preamble>
-        \usepackage{pgfplots}
+        \usepackage{pgfplots}               % loads tikz package
         \pgfplotsset{axis x line = middle,
                      axis y line = middle}
-        \usepackage{tikz}
         \usetikzlibrary{backgrounds}
         \usetikzlibrary{arrows,matrix}
         </latex-image-preamble>
@@ -791,7 +790,7 @@ the xsltproc executable.
         <section>
             <title>Special, Reserved, and Escape Characters</title>
 
-            <subsection>
+            <subsection xml:id="subsection-reserved-characters">
                 <title>Reserved Characters</title>
 
                 <p>One of the goals of MathBook XML is to relieve an author of managing the numerous conflicts when mixing languages that use different characters for special purposes.  But, of course, XML has its own special characters.</p>
@@ -921,7 +920,7 @@ the xsltproc executable.
             <subsection>
                 <title><latex /> images</title>
 
-                <p>There are several graphics engine packages that a <latex /> document can employ. Code from these packages renders diagrams automatically as part of normal processing of <latex /> files.  For HTML output the <c>mbx</c> script produces SVG versions of the pictures.  The script can also produce standalone TEX source files, PDFs, PNGs, and EPSs. The packages should be loaded in docinfo/latex-image-preamble, which is also where global package settings should be made. These first examples are from the <url href="http://www.texample.net/tikz/examples/">TeXample.net</url> site.</p>
+                <p>There are several graphics engine packages that a <latex /> document can employ. Code from these packages renders diagrams automatically as part of normal processing of <latex /> files.  For HTML output the <c>mbx</c> script produces SVG versions of the pictures.  The script can also produce standalone TEX source files, PDFs, PNGs, and EPSs. The packages should be loaded in <c>docinfo/latex-image-preamble</c>, which is also where global package settings should be made. As mentioned in Subsection <xref ref="subsection-reserved-characters"/>, if any ampersands occur in your <latex /> code you should use the <c>\amp</c> macro. These first examples are from the <url href="http://www.texample.net/tikz/examples/">TeXample.net</url> site.</p>
 
                 <!-- http://www.texample.net/media/tikz/examples/TEX/noise-shaper.tex -->
                 <figure xml:id="figure-tikz-electronics">
@@ -1097,7 +1096,7 @@ the xsltproc executable.
                     </image>
                 </figure>
 
-        <p>The pgfplots package was included in docinfo/latex-image-preamble. Here, it is used.</p>
+        <p>The pgfplots package was included in <c>docinfo/latex-image-preamble</c>. Here, it is used. Also, here we demonstrate using <c>\amp</c> where you would normally use an ampersand in <latex />. There are known issues with <c>xelatex</c> processing any gradient shading in <c>tikz</c>. To (successfully) create the gradient shading in the 3D image here, you may need to use <c>pdflatex</c> until <latex /> developers resolve this issue.</p>
 
                 <figure xml:id="figure-pgflots-demo">
                     <caption>Sample pgfplots plot</caption>
@@ -1106,28 +1105,40 @@ the xsltproc executable.
                         <latex-image-code>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[\begin{tikzpicture}
-                        \begin{axis}[]
-                            \addplot[
-                                domain=0.1:10,
-                                <->,
-                                smooth,
-                                thin,
-                                color=blue,
-                            ]{4*ln(x)/ln(10)};
-                            \addplot[
-                                only marks,
-                            ]coordinates{
-                                (0,2)
-                                (4,3)
-                                (2,4)
-                                (3,4)};
-                            \addplot[
-                                variable=\t,
-                                domain=0:360,
-                                samples=200,
-                                color=orange,
-                            ]({3*sin(2*t)}, {2*cos(5*t)});
-                        \end{axis}
+                        \matrix{
+                            \begin{axis}[width = 0.5\linewidth]
+                                \addplot[
+                                    domain = 0.1:10,
+                                    <->,
+                                    smooth,
+                                    thin,
+                                    color = blue,
+                                ]{4*ln(x)/ln(10)};
+                                \addplot[
+                                    only marks,
+                                ]coordinates{
+                                    (0,2)
+                                    (4,3)
+                                    (2,4)
+                                    (3,4)};
+                                \addplot[
+                                    variable = \t,
+                                    domain = 0:360,
+                                    samples = 200,
+                                    color = orange,
+                                ]({3*sin(2*t)}, {2*cos(5*t)});
+                            \end{axis}
+                            \amp
+                            \begin{axis}[axis lines = box, width = 0.5\linewidth]
+                                \addplot3[
+                                    surf,
+                                    faceted color = blue,
+                                    samples = 15,
+                                    domain = 0:1,
+                                    y domain = -1:1
+                                ]{x^2 - y^2};
+                            \end{axis}\\
+                        };
                         \end{tikzpicture}]]>
 
                         </latex-image-code>
