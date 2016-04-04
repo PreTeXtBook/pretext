@@ -51,6 +51,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\documentclass[12pt,border=2pt]{standalone}&#xa;</xsl:text>
         <xsl:text>\usepackage{amsmath,amssymb}&#xa;</xsl:text>
         <xsl:value-of select="/mathbook/docinfo/latex-image-preamble"/>
+        <xsl:text>\ifdefined\tikzset&#xa;</xsl:text>
+        <xsl:text>    \tikzset{ampersand replacement = \amp}&#xa;</xsl:text>
+        <xsl:text>\fi&#xa;</xsl:text>
         <xsl:value-of select="$latex-macros" />
         <xsl:text>\begin{document}&#xa;</xsl:text>
         <xsl:value-of select="."/>
