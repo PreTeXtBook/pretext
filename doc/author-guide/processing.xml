@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file is part of the documentation of MathBook XML   -->
+<!--                                                          -->
+<!--    MathBook XML Author's Guide                           -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="processing">
+    <title>Processing, Tools and Workflow</title>
+
+    <introduction>
+        <p>This chapter explains in full detail how to combine your source file with an XSL stylesheet to produce output.  It expands on the simple example in <xref ref="quickstart-example" /> and should also be read in conjunction with the chapter on the <c>mbx</c> script (<xref ref="mbx-script" />).</p>
+    </introduction>
+
+    <section xml:id="processing-basic">
+        <title>Basic Processing</title>
+
+        <p>The executable program <c>xsltproc</c> implements Version 1.0 of the <term>eXtensible Stylesheet Language (XSL)</term>.  This is a declarative language that walks the hierachical tree of an XML source file, and for each element describes some output to produce before, and after, recursively processing the contained elements.  (That is a simplified description.)</p>
+
+        <p><c>xsltproc</c> is typically installed by default on Linux systems and as part of Mac OS.  See the MathBook XML website for details for Windows systems.  The most basic operation is to provide <c>xsltproc</c> with an XSL stylesheet from the MathBook XML distribution and an XML document of your creation that is valid MathBook XML.  This is done at the command-line, inside of a terminal or shell.  Describing command-line operations, along with file and directory management, is beyond the scope of this guide, so consult another resource if this is unfamiliar.  So here is a hypothetical simple example:</p>
+
+        <console>
+            <prompt>rob@lava:~/mathbook$ </prompt>
+            <input>xsltproc xsl/mathbook-html.xsl ~/books/aota/animals.xml</input>
+        </console>
+
+        <p>By default, <c>xsltproc</c> writes output to <c>stdout</c> (the screen), which you could redirect to a file, or you could use the <c>-o</c> switch to send the output to a named file.  However, MathBook XML automatically writes to a file whose name is derived from the <attribute>xml:id</attribute> attribute of the top-level <tag>book</tag> or <tag>article</tag> tag.  If no such attribute is given the filename will be derived from <c>book-1</c> or <c>article-1</c>.  All output is produced in whatever the current default directory is, so you will likely want to set this beforehand.</p>
+
+        <p>The <c>xsl</c> subdirectory of the MathBook XML distribution contains a variety of XSL stylesheets, which I will also refer to as <term>converters</term> or <term>conversions</term>.  The ones that you will use as an author all fave filenames of the form <c>xsl/mathbook-XXX.xsl</c>, where <c>XXX</c> is some indication of the output produced.  Conversions to <latex /> or HTML output are the two most mature converters.</p>
+
+        <p>Note that authors are not responsible for creating XSL stylesheets.  Stock conversions are part of the MathBook XML distribution, and anybody is welcome to assume a source document is valid mathBook XML and create new conversions to process it to existing, or as yet unimagined, formats.</p>
+    </section>
+
+    <section xml:id="processing-modular">
+        <title>Modular Source Files</title>
+
+        <p>For a large project, such as a book, you will likely want to split up your source into logical units, such as chapters and sections.  <c>xsltproc</c> supports an include mechanism that makes this possible.  Let us suppose that a section of your book on animals has a chapter on mammals with a section on monkeys.  Then you need to do the following:</p>
+
+        <ol>
+            <li><p>For the file containing the <tag>chapter</tag> tag for the chapter on mammals, place the attribute <c>xmlns:xi="http://www.w3.org/2001/XInclude"</c> on the outermost tag in the file.</p></li>
+            <li><p>Within the <tag>chapter</tag> element for the chapter on mammals, add the line <c>&lt;xi:include href="monkeys.xml" /&gt;</c> to <q>pull in</q> the section on monkeys at that location.  The <attribute>href</attribute> attribute can point to a file in a subdirectory, but will be interpreted relative to the location of the file containing the mammal chapter element.</p></li>
+            <li><p>Add the switch <c>--xinclude</c> to your invocation of <c>xsltproc</c>.</p></li>
+        </ol>
+
+        <p>Note that when you invoke <c>xsltproc</c> the default directory can be far away from your source, and the processor will locate all the component files of your project through the relative file locations in the <attribute>href</attribute> attribute.  Several comments are in order.</p>
+
+        <ul>
+            <li><p>Begin small and start a project <em>without</em> using modular files.  Modularizing seems to add a layer of complexity that sometimes obscures other beginner's errors.  So get comfortable with a single source file before branching out.</p></li>
+            <li><p>I am forever forgetting the <c>--xinclude</c> switch.  Empty output, or cryptic error messages, are your first clue to this simple, but common, mistake.</p></li>
+            <li><p>The XML specification requires that a source file only contain a single outer-most element.  So for example, two <tag>chapter</tag> cannot go into the same file.</p></li>
+            <li><p>  In practice, there is not a lot to be gained by creating a subdirectory structure mirroring your modularization<mdash />all your source files can go into one big directory and the XML hierarchy will take care of the organization.  I do sometimes like to name my files accordingly, so for example <c>chapter-mammals.xml</c> and <c>section-monkeys.xml</c>.</p></li>
+        </ul>
+
+        <p>The sample book in <c>examples/sample-book</c> amply demonstrates different ways to modularize parts of a project (but should not be taken as best practice in this regard).  This guide, in <c>doc/author-guide</c> is a simple example of modular source files, and might be a good template to follow for your book.</p>
+    </section>
+
+    <section xml:id="processing-dtd">
+        <title>(*) Verifying your Source</title>
+
+    </section>
+
+    <section xml:id="processing-stringparam">
+        <title>(*) Customizations, String Parameters</title>
+
+    </section>
+
+    <section xml:id="processing-thin-xsl">
+        <title>(*) Customizations, Thin XSL Stylesheets</title>
+
+        <!-- user directory -->
+
+    </section>
+
+    <section xml:id="processing-images-mbx">
+        <title>(*) Images and the <c>mbx</c> Script</title>
+
+    </section>
+
+    <section xml:id="processing-file-management">
+        <title>(*) File Management</title>
+
+    </section>
+
+    <section xml:id="processing-doctest-sage">
+        <title>(*) Doctesting Sage Code</title>
+
+    </section>
+
+    <section xml:id="processing-author-tools">
+        <title>(*) Author Tools</title>
+
+    </section>
+
+    <!--
+    <section xml:id="processing-">
+        <title>(*) </title>
+
+    </section>
+
+   -->
+
+
+</chapter>
