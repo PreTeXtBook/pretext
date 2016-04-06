@@ -18,6 +18,7 @@
         <xi:include href="overview.xml" />
         <xi:include href="processing.xml" />
         <xi:include href="topics.xml" />
+        <xi:include href="mbx-script.xml" />
         <xi:include href="backmatter.xml" />
 
     </book>

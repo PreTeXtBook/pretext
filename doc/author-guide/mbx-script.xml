@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file is part of the documentation of MathBook XML   -->
+<!--                                                          -->
+<!--    MathBook XML Author's Guide                           -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="mbx-script">
+    <title>The <c>mbx</c> Script</title>
+
+    <introduction>
+        <p>XSL is a very powerful language for text processing.  However, it cannot do everything.  The <c>mbx</c> script is a Swiss Army Knife of sorts to operate on parts of your document and manage processing that requires the application of external programs, such as <latex /> and Sage.</p>
+    </introduction>
+
+    <section xml:id="XYZ">
+        <title>Undetermined</title>
+    </section>
+
+    <!--
+    <section xml:id="processing-">
+        <title>(*) </title>
+
+    </section>
+
+   -->
+
+
+</chapter>
