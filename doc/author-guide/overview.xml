@@ -59,7 +59,7 @@
 
         <p>A key design decision is that mathematical symbols, expressions and equations are authored using <latex /> syntax.  More precisely, we support the symbols and constructions provided by <url href="https://www.mathjax.org/">MathJax</url>, which quite closely follows the <c>amsmath</c> package maintained by the American Mathematical Society.  Neither you nor I want to write <url href="https://en.wikipedia.org/wiki/MathML">MathML</url> by hand!</p>
 
-        <p>For <term>inline</term> mathematics, use the short <tag>m</tag> within a <tag>p</tag> (or within a <tag>title</tag>).  For example, <c>&lt;m&gt;\alpha^2 + \beta^4&lt;/m&gt;</c> will do what you expect, in print and in electronic outputs.  To get a single equation, centered, with some vertical separation before and after, use the <tag>me</tag> tag (<q>math equation</q>) in the same way within a <tag>p</tag>, but do not try using it within a <tag>title</tag>.  For example, <c>&lt;me&gt;\rho = \alpha^2 + \beta^4&lt;/me&gt;</c>.  If you want your equation numbered, switch to the <tag>men</tag> tag.</p>
+        <p>For <term>inline</term> mathematics, use the short <tag>m</tag> tag within a <tag>p</tag> (or within a <tag>title</tag>).  For example, <c>&lt;m&gt;\alpha^2 + \beta^4&lt;/m&gt;</c> will do what you expect, in print and in electronic outputs.  To get a single equation, centered, with some vertical separation before and after, use the <tag>me</tag> tag (<q>math equation</q>) in the same way within a <tag>p</tag>, but do not try using it within a <tag>title</tag>.  For example, <c>&lt;me&gt;\rho = \alpha^2 + \beta^4&lt;/me&gt;</c>.  If you want your equation numbered, switch to the <tag>men</tag> tag (<c>n</c> = <q>numbered</q>).</p>
 
         <p>There is a way to incorporate your own (simple) custom <latex /> macros within mathematics (only).  They will be effective in your print and electronic outputs, and can be employed in graphics languages like <c>tikz</c> and Asymptote.  You can also author multi-line <term>display mathematics</term> using the <tag>md</tag> tag surrounding a sequence of <tag>mrow</tag> elements (or the <tag>mdn</tag> variant for numbered equations).  We defer the details to <xref ref="topic-mathematics" />.</p>
     </section>
@@ -89,72 +89,161 @@
 
         <p>An <tag>exercise</tag> is a mandatory <tag>statement</tag> followed by possibly several optional <tag>hint</tag>, <tag>answer</tag> and/or <tag>solution</tag>.  Conceptually, an <tag>answer</tag> is a short final result, while a <tag>solution</tag> provides details about the route to the answer.  Each of these four components is structured further, with paragraph-like elements, and the exercise itself may have a <tag>title</tag>.</p>
 
-        <p>You need (and want) to have the hints, answers and solutions grouped with the statement, but there is a lot of flexibility on making these available at the location of the exercise, or in the backmatter.See <xref ref="topic-exercises-solutions" /> for more.</p>
+        <p>You need (and want) to have the hints, answers and solutions grouped with the statement, but there is a lot of flexibility on making these available at the location of the exercise, or in the back matter.  See <xref ref="topic-exercises-solutions" /> for more.</p>
 
         <p>An inline exercise typically gets a fully qualified unique number and is rendered similar to an <tag>example</tag> or a <tag>remark</tag>.  A sectional exercise only gets a sequential number, though this can be overridden with the <attribute>number</attribute> attribute if you want to maintain stable numbering in response to edits.  (Be careful, once you override the sequential numbering, you probably need to manually specify every subsequent number, so save overrides for when your project matures.)</p>
 
         <p>Within a run of sectional exercises a subgroup can be delimited as an <tag>exercisegroup</tag>, which allows an <tag>introduction</tag> and/or <tag>conclusion</tag> to explain some commonality.  An <tag>exercisegroup</tag> should be rendered in some way that makes it clear to the reader that they are a group.</p>
     </section>
 
-    <section xml:id="overview-figures-tables">
-        <title>(*) Figures and Tables</title>
+    <section xml:id="overview-references">
+        <title>References</title>
 
+        <p>Like <tag>exercises</tag>, a <tag>references</tag> subdivision may go anywhere a more typical subdivision could go.  This allows for things like a <q>Further Reading</q> list at the end of every chapter of a book.  These are populated with <tag>biblio</tag> items that are individual bibliographic entries.  Support is presently very minimal, but is planned to improve.</p>
+    </section>
+
+    <section xml:id="overview-figures-tables">
+        <title>Figures and Tables</title>
+
+        <p>Figures and tables have outer structures, <tag>figure</tag> and <tag>table</tag> which can contain a <tag>title</tag> (for cross-references, such as in a list of figures) and a <tag>caption</tag>.  The presence of a <tag>caption</tag> generates a number for the figure or table.  These outer structures also generate some vertical separation between surrounding elements.</p>
+
+        <p>A <tag>table</tag> may only contain a <tag>tabular</tag>, which is the structure containing the rows and columns of a table.  Details can be found in <xref ref="topic-tabular" />.</p>
+
+        <p>A <tag>figure</tag> is more liberal than a <tag>table</tag> and may contain a variety of items.  Most probably, you will include an <tag>image</tag> (see <xref ref="overview-images" />).</p>
     </section>
 
     <section xml:id="overview-programs">
-        <title>(*) Programs and Consoles</title>
+        <title>Programs and Consoles</title>
 
+        <p>If you are writing about scientific or engineering topics, you may wish to include sample computer programs, or command-line sessions.</p>
+
+        <p>A <tag>program</tag> will be treated as verbatim text (see <xref ref="overview-verbatim-literal" />), subject to all the exceptions for exceptional characters.  Indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.  So you can indent your code consistently along with your XML indentation.  For this reason it is best to indent with spaces, and not tabs.  A mix will almost surely end badly, and in some programming languages tabs are discouraged (<eg /> Python).</p>
+
+        <p>The <attribute>language</attribute> attribute may be used to get some degree of language-specific syntax highlighting.  See <xref ref="topic-program-listings" /> for details.</p>
+
+        <p>A <tag>console</tag> is a transcript of an interactive session in a terminal at a command-line.  It is a sequence of the following elements, in this order, possibly repeated many times as a group: <tag>prompt</tag>, <tag>input</tag>, and <tag>output</tag>.  The <tag>output</tag> is optional, and a <tag>prompt</tag> is only displayed when there is an immediately subsequent <tag>input</tag> (which could be empty).  The content is treated as verbatim text (see <xref ref="overview-verbatim-literal" />), subject to all the exceptions for exceptional characters.</p>
+
+        <p>A <tag>program</tag> or <tag>console</tag> may be wrapped in a <tag>listing</tag>, which is analogous to a <tag>figure</tag> or <tag>table</tag>.  A <tag>listing</tag> may contain a <tag>title</tag> for use in cross-references or lists.  A <tag>caption</tag> will be displayed and will generate a number.</p>
     </section>
 
     <section xml:id="overview-special-characters">
-        <title>(*) Special Characters</title>
+        <title>Special Characters</title>
 
+        <p>An advantage of XML syntax is that very few characters are reserved for the language's use, and thus very few characters need to be escaped.  Of course, there is always the need to escape the escape character.</p>
+
+        <p>The escape character for XML is the ampersand, <ampersand />.  The other dangerous character is the left angle bracket, the <q>less than,</q> <less />.  Mostly to be symmetric, we also handle the right angle bracket, the <q>greater than,</q> <greater />, similarly.  Single and double quotation marks are used to delimit attributes, so are part of the XML specification, but do not present difficulties in narrative text.</p>
+
+        <p>In normal writing, always use the empty elements <tage>ampersand</tage>, <tage>less</tage>, and <tage>greater</tage>.  Inside of mathematics elements, or code for images written in <latex />, always use the pre-defined macros, <c>\amp</c>, <c>\lt</c>, <c>\gt</c>.  In verbatim text (such as programs) always use the XML entities <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c>.</p>
+
+        <p>If you consistently follow the rules in the previous paragraph you will avoid a descent into escape-character hell and avoid a lot of head-scratching.  In particular, you should have no need of the <c>&lt;![CDATA[</c><nbsp /><c>]]&gt;</c> mechanism of XML, so just forget we even mentioned it.</p>
+
+        <p>Print and PDF output is generated via <latex />, which has a good many special characters.  So to preserve conversion to this format, you should consistently use provided empty elements for these characters.  Here are the characters and their corresponding elements.</p>
+
+        <table>
+            <!-- <title><latex />'s Reserved Characters</title> -->
+            <caption><latex />'s reserved characters and their elements</caption>
+
+            <tabular>
+                <row><cell><hash /></cell><cell><tage>hash</tage></cell></row>
+                <row><cell><dollar /></cell><cell><tage>dollar</tage></cell></row>
+                <row><cell><percent /></cell><cell><tage>percent</tage></cell></row>
+                <row><cell><circumflex /></cell><cell><tage>circumflex</tage></cell></row>
+                <row><cell><ampersand /></cell><cell><tage>ampersand</tage></cell></row>
+                <row><cell><underscore /></cell><cell><tage>underscore</tage></cell></row>
+                <row><cell><lbrace /></cell><cell><tage>lbrace</tage></cell></row>
+                <row><cell><rbrace /></cell><cell><tage>rbrace</tage></cell></row>
+                <row><cell><tilde /></cell><cell><tage>tilde</tage></cell></row>
+                <row><cell><backslash /></cell><cell><tage>backslash</tage></cell></row>
+            </tabular>
+        </table>
+
+        <p>There are some other empty elements, which are conveniences for certain characters, or sequences of characters, that are difficult or unusual in <latex /> and also somewhat obscure as Unicode characters.  Two examples are the copyright symbol, <copyright />, and constructions like the abbreviation <q><eg /></q> for <foreign>exempli gratia</foreign>.  We will document these later.</p>
     </section>
 
     <section xml:id="overview-verbatim-literal">
-        <title>(*) Verbatim and Literal Text</title>
+        <title>Verbatim and Literal Text</title>
 
+        <p>Typesetting literal text, usually in a monospace font, can sometimes be tricky.  For short bits of such text, as part of a sentence in a paragraph, use the <tag>c</tag> tag, which is short for <q>code.</q>  For much longer blocks of literal text, with line breaks that are to be preserved, use the <tag>pre</tag> tag, which is short for <q>pre-formatted</q>.</p>
+
+        <p>For the content of a <tag>pre</tag> element, the indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.</p>
+
+        <p>The behavior of these two tags is to preserve characters exactly.  Certainly the ASCII character set will behave as expected, and Unicode characters will migrate successfully to output formats based on HTML.  As mentioned in <xref ref="overview-special-characters" /> the ampersand and left angle bracket will confuse the initial XML processing.  So use the XML entities <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c> to represent these characters to the XML processor, <c>xsltproc</c>.  Now your verbatim text might possibly contain characters that will confuse <latex /> when converted to PDF for print output.  These characters are <q><backslash /></q>, <q><lbrace /></q>, and <q><rbrace /></q>, which are used to begin a macro, begin a group, and end a group (respectively).  (Need to document how these are handled.)</p>
     </section>
 
     <section xml:id="overview-sage">
-        <title>(*) Sage</title>
+        <title>Sage</title>
 
+        <p>Sage is an open source library of computational routines for symbolic, exact and numerical mathematics.  It is designed to be a <q>viable free open source alternative to Magma, Maple, Mathematica, and Matlab.</q>  MathBook XML contains extensive support for including example Sage into your document.</p>
+
+        <p>A typical use of the <tag>sage</tag> tag is to include an <tag>input</tag> element, followed by an <tag>output</tag> element.  The content of the <tag>input</tag> element may be presented statically in PDF output, or dynamically as a Sage Cell in an output format based on HTML.  Of course, for output as a SageMathCloud worksheet, the Sage code is presented in the worksheet's native format.</p>
+
+        <p>The content of the <tag>output</tag> element is included in PDF output, but not in dynamic instances, since it can be re-computed.  Notably, there is a conversion which pairs input and output into a single file in the format used by Sage's <c>doctest</c> framework.  So if expected output is provided, it becomes automatic to identify when Sage has diverged from your expectations, and you can adjust your examples accordingly.</p>
+
+        <p>Note that the dynamic formats (including the Sage Cell) will run Sage <q>interacts,</q> so that is possible to embed interactive demonstrations into your dynamic output formats.</p>
     </section>
 
     <section xml:id="overview-sidebyside">
-        <title>(*) Side-by-Side Layout</title>
+        <title>Side-by-Side Panels</title>
 
+        <p>A <tag>sidebyside</tag> is a useful organization of elements in a horizontal layout, and so begins to blur the line between content and presentation.  While we default to organizing information in a vertical sequence, it is often desirable to organize smaller elements adjacent to each other horizontally.  Specifically, images, tabular, figures, tables, paragraphs may all be combined and there is some control over vertical and horizontal alignment.  Captioning, both overall and individually, is especially flexible.  See <xref ref="topic-sidebyside" /> for details.</p>
     </section>
 
     <section xml:id="overview-math-results">
-        <title>(*) Mathematical Results</title>
+        <title>Mathematical Results</title>
 
+        <p>Definitions, theorems, corollaries, <etc /> are supported by the tags:  <tag>theorem</tag>, <tag>corollary</tag>, <tag>lemma</tag>, <tag>algorithm</tag>, <tag>proposition</tag>, <tag>claim</tag>, <tag>fact</tag>, <tag>definition</tag>, <tag>conjecture</tag>, <tag>axiom</tag>, and <tag>principle</tag>.  Each may have a <tag>title</tag> (strongly encouraged), and then contains a <tag>statement</tag> which is a sequence of paragraphs and other elements.  As appropriate, some of these elements (such as a <tag>lemma</tag>) may contain an optional <tag>proof</tag> (or several), while other elements may not have a <tag>proof</tag> (such as a <tag>conjecture</tag>).</p>
+
+        <p>A <tag>definition</tag> is a natural place to define notation as well (see <xref ref="overview-index-notation" />), and to use the <tag>term</tag> tag to identify the terminology being defined.</p>
+
+        <p>In order to assist readers locating numbered items, these items are all numbered consecutively in a group that includes <tag>example</tag>s, <tag>remark</tag>s and inline <tag>exercise</tag>s.</p>
     </section>
 
     <section xml:id="overview-frontmatter">
-        <title>(*) Front Matter</title>
+        <title>Front Matter</title>
+
+        <p>In the beginning of your <tag>book</tag> or <tag>article</tag> you can have a <tag>frontmatter</tag> element that contains various items that would precede your first <tag>chapter</tag> or <tag>section</tag> (respectively).  Possibilities include <tag>titlepage</tag>, <tag>colophon</tag>, <tag>biography</tag>, <tag>abstract</tag>, <tag>dedication</tag>, <tag>acknowledgement</tag>, <tag>foreword</tag>, and <tag>preface</tag>.  Some of these may be duplicated (<eg /> several prefaces for multiple editions), many of these items are restricted to books (<eg /> a foreword), and some items are restricted to articles (<eg /> an abstract).  The DTD (<xref provisional="dtd-info" />) will help you place them in the right order in your source.  See <xref ref="topic-front-back-matter" /> for details.</p>
 
     </section>
 
     <section xml:id="overview-backmatter">
-        <title>(*) Back Matter</title>
+        <title>Back Matter</title>
 
+        <p>Similar to front matter, there is material you might wish to include after your book's final <tag>chapter</tag> or your article's final <tag>section</tag>.  Possibilities to place in a <tag>backmatter</tag> include <tag>appendix</tag>, <tag>references</tag>, <tag>index-part</tag>, and <tag>colophon</tag>.  There are empty tags you can place into an appendix to generate lists of notation, or lists of particular elements of your choice, such as a list of figures.  A similar empty element actually generates the index, <tage>index-list</tage>.  See <xref ref="topic-front-back-matter" /> for details on the back matter generally, and <xref ref="topic-automatic-lists" /> for more on automatic lists.</p>
     </section>
 
     <section xml:id="overview-index-notation">
-        <title>(*) Index and Notation Entries</title>
+        <title>Index and Notation Entries</title>
 
+        <p>Construction of an index and a list of notation is accomplished by placing information into your text in the appropriate places in the right way.</p>
+
+        <p>The tags for an index entry will change soon, so we defer describing this precisely.  These should be placed within the element that they describe.  By this we mean that an <tag>index</tag> element can be placed within a <tag>theorem</tag> to refer to just that theorem, or it might be placed within a <tag>subsection</tag> to refer to that subsection.  In this way, electronic versions of your work can have an index that is more informative than a traditional index that uses just page numbers.</p>
+
+        <p>A similar device is used to create a list of notation for a technical (mathematical) work.  Place a <tag>notation</tag> element as close as possible to the place where notation is first introduced.  If you use the <tag>definition</tag> tag for your definitions, then this is a very natural place to also introduce notation.  Inside of <tag>notation</tag> use the <tag>usage</tag> tag to include a short example of the notation in use.  This will be treated as mathematics, so imagine that it will be wrapped in an <tag>m</tag> tag and use <latex /> syntax.  The <tag>description</tag> tag should contain a very short description in words of what the notation is for.  So <q>center of a group</q> would be a good description to accompany the usage <q><m>Z(G)</m>.</q></p>
     </section>
 
     <section xml:id="overview-webwork">
-        <title>(*) WeBWorK Exercises</title>
+        <title><webwork /> Exercises</title>
 
+        <p>It is possible to author <webwork /> automated homework problems directly within your source.  A static version will be rendered in your <latex />/PDF output, and a <q>live</q> version will be rendered into HTML output (though a student is not able to authenticate against a course).  However, you can also extract <em>all</em> of the <webwork /> questions from a textbook into a single archive suitable for uploading into a traditional <webwork /> server.  This is a big topic, so see the dedicated <xref ref="chapter-webwork" /> for details.</p>
     </section>
 
     <section xml:id="overview-si-units">
-        <title>(*) Scientific Units</title>
+        <title>Scientific Units</title>
 
+        <p>If you are writing about science or engineering, or even if you are not, there is extensive support for scientific units.  So, for example, you could author a force in metric units as</p>
+
+        <pre>
+        &lt;quantity&gt;
+            &lt;mag&gt;20.7&lt;/mag&gt;
+            &lt;unit prefix="kilo" base="gram" /&gt;
+            &lt;unit base="meter" /&gt;
+            &lt;per  base="second" exp="2" /&gt;
+        &lt;/quantity&gt;
+        </pre>
+
+        <p>This would be rendered as <quantity><mag>20.7</mag><unit prefix="kilo" base="gram"/><unit base="meter"/><per base="second" exp="2"/></quantity>.  More in <xref ref="topic-units-measure" />.</p>
     </section>
+
 
     <!--
     <section xml:id="overview-">

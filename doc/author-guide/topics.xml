@@ -44,11 +44,42 @@
 
     </section>
 
+    <section xml:id="topic-tabular">
+        <title>(*) Tables and Tabulars</title>
+
+    </section>
+
+    <section xml:id="topic-program-listings">
+        <title>(*) Program Listings</title>
+
+    </section>
+
+    <section xml:id="topic-sidebyside">
+        <title>(*) Side-by-Side Panels</title>
+
+    </section>
+
+    <section xml:id="topic-front-back-matter">
+        <title>(*) Front and Back Matter</title>
+
+    </section>
+
+    <section xml:id="topic-automatic-lists">
+        <title>(*) Automatic Lists</title>
+
+    </section>
+
+    <section xml:id="topic-units-measure">
+        <title>(*) Units of Measure</title>
+
+    </section>
+
     <!--
     <section xml:id="topic-">
         <title></title>
 
     </section>
+
    -->
 
 </chapter>
