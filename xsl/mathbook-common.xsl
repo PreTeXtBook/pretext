@@ -2772,7 +2772,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- subject to global and local options, interpreted here         -->
 <!-- Element is the  xref, $target  provides the autoname string   -->
 <xsl:template match="*" mode="xref-prefix">
-    <!-- We need the target to get its type-name, if autonaming -->
+    <!-- We need the target for autonaming with type-name or title -->
     <xsl:param name="target" />
     <!-- Variable is the local @autoname of the xref -->
     <!-- Local:  blank, yes/no, title                -->
@@ -2794,7 +2794,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         <xsl:when test="$autoname='yes' and $local='no'" />
         <!-- 2 combinations: global yes/no, local title option-->
         <xsl:when test="$local='title'">
-            <xsl:apply-templates select="title" />
+            <xsl:apply-templates select="$target" mode="title-simple" />
         </xsl:when>
         <!-- 1 combinations: global no, local yes        -->
         <!-- 2 combinations: global yes, local blank/yes -->
