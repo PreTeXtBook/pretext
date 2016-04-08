@@ -403,7 +403,7 @@
     <!ATTLIST url href CDATA #IMPLIED>
 
 <!-- Internal Cross-References -->
-<!ELEMENT xref EMPTY>
+<!ELEMENT xref (#PCDATA|%line;)*>
     <!ATTLIST xref provisional              CDATA #IMPLIED>
     <!ATTLIST xref ref                      CDATA #IMPLIED>
     <!ATTLIST xref detail                   CDATA #IMPLIED>

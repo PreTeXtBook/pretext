@@ -2600,8 +2600,8 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
             <xsl:variable name="target" select="id($first-ref)" />
             <!-- include autoname prefix in link text, since just one -->
             <xsl:variable name="prefix">
-                <xsl:apply-templates select="$target" mode="autoname-prefix">
-                    <xsl:with-param name="local" select="@autoname" />
+                <xsl:apply-templates select="." mode="xref-prefix">
+                    <xsl:with-param name="target" select="$target" />
                 </xsl:apply-templates>
             </xsl:variable>
             <xsl:if test="not($prefix = '')">
@@ -2700,8 +2700,8 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:variable name="target-last"  select="id(@last)" />
     <!-- autoname outside links -->
     <xsl:variable name="prefix">
-        <xsl:apply-templates select="$target-first" mode="autoname-prefix">
-            <xsl:with-param name="local" select="@autoname" />
+        <xsl:apply-templates select="." mode="xref-prefix">
+            <xsl:with-param name="target" select="$target-first" />
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:if test="not($prefix = '')">
@@ -2766,15 +2766,23 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:value-of select="$content" />
 </xsl:template>
 
-<!-- Autonaming of Cross-References -->
-<!-- Some references get a prefix (eg Section, Theorem, Exercise), -->
+<!-- Prefix, Autonaming of Cross-References -->
+<!-- Content in an xref becomes a prefix, no matter what           -->
+<!-- Some references get an autoname prefix (eg Section, Theorem), -->
 <!-- subject to global and local options, interpreted here         -->
-<xsl:template match="*" mode="autoname-prefix">
-    <!-- Parameter is the local @autoname of the calling xref -->
-    <!-- Five values: blank, yes/no, plural, title            -->
-    <xsl:param name="local" />
-    <!-- Global: yes/no, so 10 combinations -->
+<!-- Element is the  xref, $target  provides the autoname string   -->
+<xsl:template match="*" mode="xref-prefix">
+    <!-- We need the target to get its type-name, if autonaming -->
+    <xsl:param name="target" />
+    <!-- Variable is the local @autoname of the xref -->
+    <!-- Local:  blank, yes/no, plural, title        -->
+    <!-- Global: yes/no, so 10 combinations          -->
+    <xsl:variable name="local" select="@autoname" />
     <xsl:choose>
+        <!-- if xref has content, then use it, no matter what -->
+        <xsl:when test="normalize-space(.)">
+            <xsl:apply-templates />
+        </xsl:when>
         <!-- 2 combinations: global no, without local override -->
         <xsl:when test="$autoname='no' and ($local='' or $local='no')" />
         <!-- 1 combination: global yes, but local override -->
@@ -2787,7 +2795,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         <!-- 3 combinations: global yes, local blank/yes/plural -->
         <!-- TODO: migrate ugly English-centric hack to language files! -->
         <xsl:when test="$local='yes' or $local='plural' or ($autoname='yes' and not($local!=''))">
-            <xsl:apply-templates select="." mode="type-name" />
+            <xsl:apply-templates select="$target" mode="type-name" />
             <xsl:if test="$local='plural'">
                 <xsl:text>s</xsl:text>
             </xsl:if>
@@ -2820,8 +2828,8 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:variable name="target" select="id(@ref)" />
     <!-- include autoname prefix in link text, since just one -->
     <xsl:variable name="prefix">
-        <xsl:apply-templates select="$target" mode="autoname-prefix">
-            <xsl:with-param name="local" select="@autoname" />
+        <xsl:apply-templates select="." mode="xref-prefix">
+            <xsl:with-param name="target" select="$target" />
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:choose>
