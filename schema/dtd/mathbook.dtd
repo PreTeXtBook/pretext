@@ -409,7 +409,7 @@
     <!ATTLIST xref detail                   CDATA #IMPLIED>
     <!ATTLIST xref first                    CDATA #IMPLIED>
     <!ATTLIST xref last                     CDATA #IMPLIED>
-    <!ATTLIST xref autoname (yes|no|plural|title) #IMPLIED>
+    <!ATTLIST xref autoname        (yes|no|title) #IMPLIED>
 
 <!-- Index -->
 <!ELEMENT index (main?,sub*,see*)>

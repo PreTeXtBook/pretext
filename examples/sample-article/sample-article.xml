@@ -2444,7 +2444,7 @@ the xsltproc executable.
         <section xml:id="section-cross-referencing">
             <title>Cross-Referencing</title>
 
-            <p>Cross-references are easy, since that is a key reason for having a highly structured document.  Here is a useful feature if you elect to use it.  Any <c>&lt;xref&gt;</c> will <q>know</q> what it points to, so you can let it provide the <q>naming</q> part of the cross-refernce text.  You can turn this on globally with the command-line parameter <c>autoname</c> set to <c>'yes'</c>.  If you do that, you will see most of the names in this document doubled, since the names are written into the source already in most places outside of this section.  Try it and see: use <c>--stringparam autoname 'yes'</c> as an argument to <c>xsltproc</c>.</p>
+            <p>Cross-references are easy, since that is a key reason for having a highly structured document.  Here is a useful feature if you elect to use it.  Any <c>&lt;xref&gt;</c> will <q>know</q> what it points to, so you can let it provide the <q>naming</q> part of the cross-reference text.  You can turn this on globally with the command-line parameter <c>autoname</c> set to <c>'yes'</c>.  If you do that, you will see most of the names in this document doubled, since the names are written into the source already in most places outside of this section.  Try it and see: use <c>--stringparam autoname 'yes'</c> as an argument to <c>xsltproc</c>.</p>
 
             <p>Moreover, the names themselves will change with the use of the one language dependent file.  And another bonus is that with an autoname, you automatically get a <em>non-breaking</em> space between the name and the reference.  The autoname switch makes no sense for <q>provisional</q> cross-references, since there is no information about what they point to.</p>
 
@@ -2463,7 +2463,7 @@ the xsltproc executable.
                 <li><p>A grand result: <xref ref="corollary-FTC-derivative">Major Corollary</xref></p></li>
             </ul>
 
-            <p>Suppose you want to reference two theorems, so you might want to say something like <q>Theorems 4.6 and 5.2.</q>  With global autonaming on, you can override with <c>autoname="plural"</c> on the first <c>xref</c> and <c>autoname="no"</c> on the second <c>xref</c>.  (With global autonaming off, you just write what you want and only the numbers are links/knowls.) The <c>plural</c> option implies the <c>yes</c> option.  Here is the test, which should look correct no matter what the global switch is:  <xref ref="section-cross-referencing" autoname="plural" /> and <xref ref="section-internationalization" autoname="no" />.  (But notice that it is up to you to be certain the type of the second one does not change without the first also changing.  The <q>author-tools</q> mode and careful choices of <c>xml:id</c> strings can help avoid this trap.)</p>
+            <p>Suppose you want to reference two theorems, so you might want to say something like <q>Theorems 4.6 and 5.2.</q>  With global autonaming on, you can override the first <c>Theorem</c> by providing the content <c>Theorems</c> on the first <c>xref</c> and <c>autoname="no"</c> on the second <c>xref</c>.  (With global autonaming off, you will also get what you want/expect.)   Here is the test, which should look correct no matter what the global switch is:  <xref ref="section-cross-referencing">Sections</xref> and <xref ref="section-internationalization" autoname="no" />.  (But notice that it is up to you to be certain the types of these targets do not change without you changing the content of the first <c>xref</c>.  The <q>author-tools</q> mode and careful choices of <c>xml:id</c> strings can help avoid this trap.)</p>
 
             <p>One final twist.  If you say <c>autoname="title"</c>, then the title you assigned to the theorem will prefix the number.  Here is a the final example, which should always refer to a fundamental theorem by name <xref ref="theorem-FTC" autoname="title" />.</p>
 
@@ -2485,8 +2485,8 @@ the xsltproc executable.
                 <li><p>A Table within a side-by-side panel, with a subnumber: <xref ref="table-sidebyside-subtable" /></p></li>
                 <li><p>A Side-By-Side Panel, in its entirety (a special Figure): <xref ref="fig-sidebyside-global" /></p></li>
                 <li><p>Display Mathematics: single, first with no name: <xref ref="equation-alternate-FTC" />.  Then with an autoname: <xref ref="equation-alternate-FTC" autoname="yes" />.</p></li>
-                <li><p>Display Mathematics: multi-row, first with no name: <xref ref="equation-use-FTC" />.  Then with an autoname: <xref ref="equation-use-FTC" autoname="yes" />.  And two, exercising plural form: <xref ref="equation-alternate-FTC" autoname="plural" /> and <xref ref="equation-use-FTC" />.</p></li>
-                <li><p>Exercises (sectional), with plural and no autonaming: <xref ref="exercises-null-problem" autoname="plural" /><ndash /><xref ref="exercises-cosine-derivative" autoname="no" />.</p></li>
+                <li><p>Display Mathematics: multi-row, first with no name: <xref ref="equation-use-FTC" />.  Then with an autoname: <xref ref="equation-use-FTC" autoname="yes" />.  And two, with a plural form: <xref ref="equation-alternate-FTC">Equations</xref> and <xref ref="equation-use-FTC" autoname="no" />.</p></li>
+                <li><p>Exercises (sectional), a range, with plural form provided to override autonaming: <xref first="exercises-null-problem" last="exercises-cosine-derivative">Exercises</xref>.</p></li>
                 <li><p>Exercise (inline): with enclosed hint at <xref ref="exercise-essay" /></p></li>
                 <li><p>A group of two exercises, with introduction, conclusion: <xref ref="exercisegroup-two-problems" autoname="yes" /></p></li>
                 <li><p>Solution: An autonamed portion of an exercise: <xref ref="solution-antiderivative" autoname="yes" /></p></li>
@@ -3061,7 +3061,8 @@ the xsltproc executable.
                     </table>
                 </sidebyside>
 
-                <p>If you put two <c>table</c> elements side-by-side without a <q>global</q> caption, then they will use regular numbering; see <xref ref="table-regular-fig1" autoname="plural"/> through <xref ref="table-regular-fig3"/>.</p>
+                <!-- the "Tables" content interior to the xref will override any autonaming -->
+                <p>If you put two <c>table</c> elements side-by-side without a <q>global</q> caption, then they will use regular numbering; see <xref first="table-regular-fig1" last="table-regular-fig3">Tables</xref>.</p>
 
                 <sidebyside>
                     <table xml:id="table-regular-fig1">
@@ -3133,7 +3134,7 @@ the xsltproc executable.
             <subsection>
                 <title>Horizontal and Vertical Alignment</title>
 
-                <p>Tables within the <c>sidebyside</c> element can accept the <c>halign</c> and <c>valign</c> attributes; see <xref ref="table-regular-halign-demo" autoname="plural"/> and <xref ref="table-regular-valign-demo"/>. The <c>halign</c> attribute can take values <c>left</c>, <c>center</c> (default), and <c>right</c>; the <c>valign</c> attribute can take values <c>top</c>, <c>middle</c>, and <c>bottom</c> (default).</p>
+                <p>Tables within the <c>sidebyside</c> element can accept the <c>halign</c> and <c>valign</c> attributes; see <xref ref="table-regular-halign-demo" /> and <xref ref="table-regular-valign-demo" />. The <c>halign</c> attribute can take values <c>left</c>, <c>center</c> (default), and <c>right</c>; the <c>valign</c> attribute can take values <c>top</c>, <c>middle</c>, and <c>bottom</c> (default).</p>
 
                 <sidebyside>
                     <caption>Global Caption</caption>

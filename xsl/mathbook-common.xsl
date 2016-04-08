@@ -2698,7 +2698,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <!-- form both targets -->
     <xsl:variable name="target-first" select="id(@first)" />
     <xsl:variable name="target-last"  select="id(@last)" />
-    <!-- autoname outside links -->
+    <!-- content or autoname prefix consciously outside links -->
     <xsl:variable name="prefix">
         <xsl:apply-templates select="." mode="xref-prefix">
             <xsl:with-param name="target" select="$target-first" />
@@ -2775,9 +2775,14 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <!-- We need the target to get its type-name, if autonaming -->
     <xsl:param name="target" />
     <!-- Variable is the local @autoname of the xref -->
-    <!-- Local:  blank, yes/no, plural, title        -->
-    <!-- Global: yes/no, so 10 combinations          -->
+    <!-- Local:  blank, yes/no, title                -->
+    <!-- Global: yes/no, so 8 combinations           -->
     <xsl:variable name="local" select="@autoname" />
+    <!-- 2016-04-07 autoname="plural" never really was viable -->
+    <xsl:if test="$local='plural'">
+        <xsl:message>MBX:WARNING: "autoname" attribute with value "plural" is deprecated as of 2016-04-07, and there is no replacement</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
     <xsl:choose>
         <!-- if xref has content, then use it, no matter what -->
         <xsl:when test="normalize-space(.)">
@@ -2791,19 +2796,15 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         <xsl:when test="$local='title'">
             <xsl:apply-templates select="title" />
         </xsl:when>
-        <!-- 2 combinations: global no, local yes/plural        -->
-        <!-- 3 combinations: global yes, local blank/yes/plural -->
-        <!-- TODO: migrate ugly English-centric hack to language files! -->
-        <xsl:when test="$local='yes' or $local='plural' or ($autoname='yes' and not($local!=''))">
+        <!-- 1 combinations: global no, local yes        -->
+        <!-- 2 combinations: global yes, local blank/yes -->
+        <xsl:when test="$local='yes' or ($autoname='yes' and not($local!=''))">
             <xsl:apply-templates select="$target" mode="type-name" />
-            <xsl:if test="$local='plural'">
-                <xsl:text>s</xsl:text>
-            </xsl:if>
         </xsl:when>
         <!-- just makes error message effective -->
         <xsl:when test="not($local != '')"></xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:WARNING: "autoname" attribute should be yes|no|plural|title, not <xsl:value-of select="$local" /></xsl:message>
+            <xsl:message>MBX:WARNING: "autoname" attribute should be yes|no|title, not <xsl:value-of select="$local" /></xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:otherwise>
     </xsl:choose>
@@ -3152,9 +3153,17 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <xsl:template match="*" mode="deprecation-warnings">
     <!-- newer deprecations at the top of this list, user will see in this order -->
     <!--  -->
+    <xsl:if test="//xref/@autoname='plural'">
+        <xsl:call-template name="deprecation-message">
+            <xsl:with-param name="date-string" select="'2016-04-07'" />
+            <xsl:with-param name="message" select="'a cross-reference (&lt;xref&gt;) may not have an @autoname attribute set to plural.  There is no replacement, use content in the xref.'" />
+            <xsl:with-param name="occurences" select="count(//xref[@autoname='plural'])" />
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
     <xsl:if test="//ol/@label=''">
         <xsl:call-template name="deprecation-message">
-            <xsl:with-param name="date-string" select="'2015/12-12'" />
+            <xsl:with-param name="date-string" select="'2015-12-12'" />
             <xsl:with-param name="message" select="'an ordered list (&lt;ol&gt;) may not have empty labels, and numbering will be unpredictable.  Switch to an unordered list  (&lt;ul&gt;)'" />
             <xsl:with-param name="occurences" select="count(//ol[@label=''])" />
         </xsl:call-template>
