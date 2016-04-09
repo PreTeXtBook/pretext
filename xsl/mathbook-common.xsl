@@ -2087,6 +2087,10 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         <xsl:with-param name="pad" select="'yes'" />
     </xsl:apply-templates>
 </xsl:template>
+<!-- "main" bibliography gets unqualified numbers -->
+<xsl:template match="backmatter/references/biblio" mode="structure-number">
+    <xsl:text />
+</xsl:template>
 <!-- Notes get structure number from parent biblio's number -->
 <xsl:template match="note" mode="structure-number">
     <xsl:apply-templates select="parent::*" mode="number" />
