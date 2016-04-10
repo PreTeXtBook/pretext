@@ -963,11 +963,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% If fonts lack upright quotes, the textcomp package is employed&#xa;</xsl:text>
         <xsl:text>\usepackage{upquote}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% Graphics Preamble Entries&#xa;</xsl:text>
     <xsl:if test="/mathbook/docinfo/latex-image-preamble">
+        <xsl:text>%% Graphics Preamble Entries&#xa;</xsl:text>
         <xsl:call-template name="sanitize-code">
             <xsl:with-param name="raw-code" select="/mathbook/docinfo/latex-image-preamble" />
         </xsl:call-template>
+    </xsl:if>
+    <xsl:text>%% If tikz has been loaded, replace ampersand with \amp macro&#xa;</xsl:text>
+    <xsl:if test="//latex-image-code">
+        <xsl:text>\ifdefined\tikzset&#xa;</xsl:text>
+        <xsl:text>    \tikzset{ampersand replacement = \amp}&#xa;</xsl:text>
+        <xsl:text>\fi&#xa;</xsl:text>
     </xsl:if>
     <!-- We could use contains() on the 5 types of arrows  -->
     <!-- to really defend against this problematic package -->
