@@ -3755,15 +3755,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="@source">
         <xsl:text>\includegraphics[</xsl:text>
         <xsl:choose>
-          <xsl:when test="ancestor::sidebyside">
-            <xsl:text>width=\textwidth,</xsl:text>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:if test="@width">
-                <xsl:text>width=</xsl:text><xsl:value-of select="@width" /><xsl:text>pt,</xsl:text>
-            </xsl:if>
-          </xsl:otherwise>
+            <xsl:when test="ancestor::sidebyside">
+                <xsl:text>width=\textwidth</xsl:text>
+            </xsl:when>
+            <xsl:when test="@width">
+                <xsl:text>width=</xsl:text>
+                <xsl:choose>
+                    <!-- BUG: following will fail with non-integral percentages -->
+                    <xsl:when test="contains(@width, '%')">
+                        <xsl:text>0.</xsl:text>
+                        <xsl:value-of select="translate(@width, '%', '')" />
+                        <xsl:text>\textwidth</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="@width" />
+                        <xsl:text>pt</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:otherwise />
         </xsl:choose>
+        <xsl:text>,</xsl:text>
         <!-- TODO: deprecate, abandon @height (along with HTML code) -->
          <xsl:if test="@height">
              <xsl:text>height=</xsl:text><xsl:value-of select="@height" /><xsl:text>pt,</xsl:text>

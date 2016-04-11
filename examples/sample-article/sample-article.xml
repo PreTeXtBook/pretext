@@ -632,7 +632,7 @@ the xsltproc executable.
 
             <figure xml:id="figure-function-derivative">
                 <caption>A function and its derivative</caption>
-                <image width="350" source="images/cubic-function.png">
+                <image width="50%" source="images/cubic-function.png">
                     <description>A third degree polynomial with a local max and a local min, along with its second degree derivative plotted on the same axes</description>
                 </image>
             </figure>
