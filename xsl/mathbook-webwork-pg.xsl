@@ -36,8 +36,8 @@
 <!-- import xsl/mathbook-html.xsl, for general HTML conversion,  -->
 <!-- but this will additionally import the common file.          -->
 <!-- Then the conversion file may import the present file,       -->
-<!-- webwork-pg.xsl, for its services in creating a well-formed  -->
-<!-- WeBWorK problem.                                            -->
+<!-- mathbook-webwork-pg.xsl, for its services in creating       -->
+<!-- a well-formed WeBWorK problem.                              -->
 <!--                                                             -->
 <!-- This should change as development stabilizes and the        -->
 <!-- production of the content of a PG problem should move       -->

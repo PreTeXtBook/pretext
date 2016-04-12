@@ -28,7 +28,7 @@
 >
 
 <xsl:import href="./mathbook-common.xsl" />
-<xsl:include href="./webwork-pg.xsl" />
+<xsl:include href="./mathbook-webwork-pg.xsl" />
 
 <!-- Intend output to be a PG/PGML problem -->
 <xsl:output method="text" />

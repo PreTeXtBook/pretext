@@ -725,7 +725,7 @@
                 </webwork>
             </exercise>
 
-            <!--Checkboxes not yet implemented fully. See note in webwork-pg.xsl -->
+            <!--Checkboxes not yet implemented fully. See note in mathbook-webwork-pg.xsl -->
             <!--<exercise>
                 <title>Choose several</title>
 

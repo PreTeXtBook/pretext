@@ -160,14 +160,14 @@ template-check:
 minimal-obsolete:
 	install -d $(PGOUT) $(MBUSR)
 	-rm $(PGOUT)/*.pg
-	cp $(WWXSL)/extract-webwork.xsl $(WWXSL)/webwork-pg.xsl $(MBUSR)
+	cp $(WWXSL)/extract-webwork.xsl $(WWXSL)/mathbook-webwork-pg.xsl $(MBUSR)
 	cd $(PGOUT); \
 	xsltproc --stringparam webwork.server https://webwork.pcc.edu $(MBUSR)/extract-webwork.xsl $(WWMBX)/examples/minimal/mini.xml
 
 templates-obsolete:
 	install -d $(PGOUT) $(MBUSR)
 	-rm $(PGOUT)/*.pg
-	cp $(WWXSL)/extract-webwork.xsl $(WWXSL)/webwork-pg.xsl $(MBUSR)
+	cp $(WWXSL)/extract-webwork.xsl $(WWXSL)/mathbook-webwork-pg.xsl $(MBUSR)
 	cd $(PGOUT); \
 	xsltproc --stringparam webwork.server https://webwork.pcc.edu $(MBUSR)/extract-webwork.xsl $(WWMBX)/examples/webwork-templates/webwork-templates.xml
 	#
@@ -181,7 +181,7 @@ templates-obsolete:
 	#
 	install -d $(HTMLOUT) $(MBUSR)
 	-rm $(HTMLOUT)/*.html
-	cp $(WWXSL)/webwork-pg.xsl $(WWXSL)/webwork-html.xsl $(MBUSR)
+	cp $(WWXSL)/mathbook-webwork-pg.xsl $(WWXSL)/webwork-html.xsl $(MBUSR)
 	cp -a $(WWMBX)/examples/webwork-templates/images $(HTMLOUT)
 	# xslt_base64: https://github.com/ilyakharlamov/xslt_base64
 	# recursion on entire problem content, up limits on  xsltproc
