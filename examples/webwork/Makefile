@@ -94,7 +94,7 @@ SERVER = https://webwork.pcc.edu
 sample-chapter-extract:
 	install -d $(PGOUT)
 	cd $(PGOUT); \
-	xsltproc --stringparam chunk.level 2 $(MBXSL)/extract-webwork.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
+	xsltproc --stringparam chunk.level 2 $(MBXSL)/mathbook-webwork-archive.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
 
 # HTML with WeBWorK exercises need a WW server
 # See example below for how to specify this
@@ -160,16 +160,16 @@ template-check:
 minimal-obsolete:
 	install -d $(PGOUT) $(MBUSR)
 	-rm $(PGOUT)/*.pg
-	cp $(WWXSL)/extract-webwork.xsl $(WWXSL)/mathbook-webwork-pg.xsl $(MBUSR)
+	cp $(WWXSL)/mathbook-webwork-archive.xsl $(WWXSL)/mathbook-webwork-pg.xsl $(MBUSR)
 	cd $(PGOUT); \
-	xsltproc --stringparam webwork.server https://webwork.pcc.edu $(MBUSR)/extract-webwork.xsl $(WWMBX)/examples/minimal/mini.xml
+	xsltproc --stringparam webwork.server https://webwork.pcc.edu $(MBUSR)/mathbook-webwork-archive.xsl $(WWMBX)/examples/minimal/mini.xml
 
 templates-obsolete:
 	install -d $(PGOUT) $(MBUSR)
 	-rm $(PGOUT)/*.pg
-	cp $(WWXSL)/extract-webwork.xsl $(WWXSL)/mathbook-webwork-pg.xsl $(MBUSR)
+	cp $(WWXSL)/mathbook-webwork-archive.xsl $(WWXSL)/mathbook-webwork-pg.xsl $(MBUSR)
 	cd $(PGOUT); \
-	xsltproc --stringparam webwork.server https://webwork.pcc.edu $(MBUSR)/extract-webwork.xsl $(WWMBX)/examples/webwork-templates/webwork-templates.xml
+	xsltproc --stringparam webwork.server https://webwork.pcc.edu $(MBUSR)/mathbook-webwork-archive.xsl $(WWMBX)/examples/webwork-templates/webwork-templates.xml
 	#
 	install -d $(PDFOUT) $(MBUSR)
 	-rm $(PDFOUT)/*.tex
