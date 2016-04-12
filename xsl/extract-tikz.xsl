@@ -56,7 +56,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exsl:document href="{$scratch}/{$filebase}.tex" method="text">
         <xsl:text>\documentclass[12pt,border=2pt]{standalone}&#xa;</xsl:text>
         <xsl:text>\usepackage{amsmath,amssymb}&#xa;</xsl:text>
-        <xsl:call-template name="latex-macro-list" />
+        <xsl:value-of select="$latex-macros" />
         <xsl:text>\usepackage{tikz}&#xa;</xsl:text>
         <xsl:text>\usetikzlibrary{backgrounds}&#xa;</xsl:text>
         <xsl:text>\usetikzlibrary{arrows,matrix}&#xa;</xsl:text>
@@ -77,8 +77,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exsl:document href="{$scratch}/{$filebase}.tex" method="text">
         <xsl:text>\documentclass[12pt,border=2pt]{standalone}&#xa;</xsl:text>
         <xsl:text>\usepackage{amsmath,amssymb}&#xa;</xsl:text>
-        <xsl:call-template name="latex-macro-list" />
-        <xsl:text>\usepackage{tikz}&#xa;</xsl:text>
+        <xsl:value-of select="$latex-macros" />
         <xsl:text>\usetikzlibrary{backgrounds}&#xa;</xsl:text>
         <xsl:text>\usetikzlibrary{arrows,matrix}&#xa;</xsl:text>
         <xsl:text>\begin{document}&#xa;</xsl:text>

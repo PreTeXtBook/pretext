@@ -43,17 +43,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Added operator \aut - TWJ 4/6/2013  -->
     <!-- Added operator \Hom - TWJ 8/19/2010 -->
     <macros>
-\newcommand{\identity}{\mathrm{id}}
-\newcommand{\notdivide}{{\not{\mid}}}
-\newcommand{\notsubset}{\not\subset}
-\newcommand{\lcm}{\operatorname{lcm}}
-\newcommand{\gf}{\operatorname{GF}}
-\newcommand{\inn}{\operatorname{Inn}}
-\newcommand{\aut}{\operatorname{Aut}}
-\newcommand{\Hom}{\operatorname{Hom}}
-\newcommand{\cis}{\operatorname{cis}}
-\newcommand{\chr}{\operatorname{char}}
-\newcommand{\Null}{\operatorname{Null}}
+    \newcommand{\identity}{\mathrm{id}}
+    \newcommand{\notdivide}{{\not{\mid}}}
+    \newcommand{\notsubset}{\not\subset}
+    \newcommand{\lcm}{\operatorname{lcm}}
+    \newcommand{\gf}{\operatorname{GF}}
+    \newcommand{\inn}{\operatorname{Inn}}
+    \newcommand{\aut}{\operatorname{Aut}}
+    \newcommand{\Hom}{\operatorname{Hom}}
+    \newcommand{\cis}{\operatorname{cis}}
+    \newcommand{\chr}{\operatorname{char}}
+    \newcommand{\Null}{\operatorname{Null}}
     </macros>
 
     <!-- tikz package and libraries for images -->

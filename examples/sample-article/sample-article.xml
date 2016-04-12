@@ -68,8 +68,10 @@ the xsltproc executable.
         These are "write once, use everywhere".
         -->
         <macros>
-        \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4}
+        \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4} % this comment will be stripped
+        % comments anywhere get stripped, with or without faux % comment \% characters
         \newcommand{\indefiniteintegral}[2]{\int#1\,d#2}
+        \newcommand{\testingescapedpercent}{ \% } % just testing
         </macros>
         <!--
         Extra packages, package options, and package settings for latex-based images.

@@ -517,29 +517,91 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\)</xsl:text>
 </xsl:template>
 
-<!-- Macros -->
-<!-- We pick up user-supplied macros, and     -->
-<!-- add three of our own that are useful     -->
-<!-- for avoiding conflicts with XML reserved -->
-<!-- characters.  Even though MathJax defines -->
-<!-- \lt  and  \gt  we go ahead and do it     -->
-<!-- anyway for completeness.  We add these   -->
-<!-- last with a \newcommand to minimize the  -->
-<!-- possibility author defines them earlier  -->
-<!-- This should be the primary and only      -->
-<!-- interface to the macros list, though     -->
-<!-- it might need some extra                 -->
-<!-- conversion-specific wrapping in use      -->
-<xsl:template name="latex-macro-list">
-    <xsl:call-template name="sanitize-code">
-        <xsl:with-param name="raw-code">
-            <xsl:value-of select="/mathbook/docinfo/macros" />
+<!-- ############ -->
+<!-- LaTeX Macros -->
+<!-- ############ -->
+
+<!-- We pick up user-supplied macros, and         -->
+<!-- add three of our own that are useful         -->
+<!-- for avoiding conflicts with XML reserved     -->
+<!-- characters.  Even though MathJax defines     -->
+<!-- \lt  and  \gt  we go ahead and do it         -->
+<!-- anyway for completeness.  We add these       -->
+<!-- last with a \newcommand to minimize the      -->
+<!-- possibility author defines them earlier      -->
+<!-- This should be the primary and only          -->
+<!-- interface to the macros list, though         -->
+<!-- it might need some extra                     -->
+<!-- conversion-specific wrapping in use          -->
+<!-- and it may be necessary/desirable to replace -->
+<!-- newline line-endings with something like {}  -->
+<!-- First, we move left-margin as far left as    -->
+<!-- possible, then strip all comments,  without  -->
+<!-- stripping too much, such as useful \%        -->
+<!-- We save in a variable, so only here once     -->
+<xsl:variable name="latex-macros">
+    <xsl:variable name="latex-left-justified">
+        <xsl:call-template name="sanitize-code">
+            <xsl:with-param name="raw-code">
+                <xsl:value-of select="/mathbook/docinfo/macros" />
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:call-template name="latex-macro-first-percent">
+        <xsl:with-param name="latex-code">
+            <xsl:value-of select="$latex-left-justified" />
         </xsl:with-param>
     </xsl:call-template>
     <xsl:text>\newcommand{\lt}{ &lt; }&#xa;</xsl:text>
     <xsl:text>\newcommand{\gt}{ &gt; }&#xa;</xsl:text>
-    <xsl:text>\newcommand{\amp}{ &amp; }</xsl:text>
+    <xsl:text>\newcommand{\amp}{ &amp; }&#xa;</xsl:text>
+</xsl:variable>
+
+<!-- Recursively, line-by-line, find first %                             -->
+<!-- If preceded by \, then output and reform with rest of line          -->
+<!-- If a naked %, then drop rest of line, tidy up and move to next line -->
+<!-- Every output line ends with a newline                               -->
+<xsl:template name="latex-macro-first-percent">
+    <xsl:param name="latex-code" />
+    <xsl:variable name="first-line" select="concat(substring-before($latex-code, '&#xA;'), '&#xA;')" />
+    <xsl:variable name="remainder" select="substring-after($latex-code, '&#xA;')" />
+    <xsl:choose>
+        <!-- done, quit recursing -->
+        <xsl:when test="not($latex-code)" />
+        <!-- first potential comment character-->
+        <xsl:when test="contains($first-line, '%')">
+            <xsl:variable name="initial" select="substring-before($first-line, '%')" />
+            <xsl:choose>
+                <xsl:when test="substring($initial, string-length($initial))='\'">
+                    <!-- false positive, output symptom and reorganize -->
+                    <xsl:value-of select="concat($initial, '%')" />
+                    <xsl:call-template name="latex-macro-first-percent">
+                        <xsl:with-param name="latex-code" select="concat(substring-after($first-line, '%'), $remainder)" />
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                    <!-- comment character in first column is no line        -->
+                    <!-- else, content prior, with stripped newline restored -->
+                    <xsl:if test="$initial">
+                        <xsl:value-of select="concat($initial, '&#xA;')" />
+                    </xsl:if>
+                    <!-- move on to remaining lines -->
+                    <xsl:call-template name="latex-macro-first-percent">
+                        <xsl:with-param name="latex-code" select="$remainder" />
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- no action, just echo and work the rest -->
+            <xsl:value-of select="$first-line" />
+            <xsl:call-template name="latex-macro-first-percent">
+                <xsl:with-param name="latex-code" select="substring-after($latex-code, '&#xA;')" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
+
 
 <!-- Sage Cells -->
 <!-- Contents are text manipulations (below)     -->

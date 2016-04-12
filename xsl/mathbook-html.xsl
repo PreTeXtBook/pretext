@@ -4941,7 +4941,7 @@ $(function () {
 <xsl:template name="latex-macros">
     <div style="display:none;">
     <xsl:text>\(</xsl:text>
-    <xsl:call-template name="latex-macro-list" />
+    <xsl:value-of select="$latex-macros" />
     <xsl:text>\)</xsl:text>
     </div>
 </xsl:template>

@@ -992,8 +992,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Begin: Author-provided macros&#xa;</xsl:text>
     <xsl:text>%% (From  docinfo/macros  element)&#xa;</xsl:text>
     <xsl:text>%% Plus three from MBX for XML characters&#xa;</xsl:text>
-    <xsl:call-template name="latex-macro-list" />
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:value-of select="$latex-macros" />
     <xsl:text>%% End: Author-provided macros&#xa;</xsl:text>
 </xsl:template>
 
