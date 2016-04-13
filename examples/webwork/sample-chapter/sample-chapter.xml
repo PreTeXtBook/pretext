@@ -37,15 +37,13 @@
         <!-- picture or logo in the upper left corner. -->
         <brandlogo url="http://webwork.maa.org/" source="images/webwork-logo.png" />
 
-        <!--
-        TeX/LaTeX macros can be written in the usual way.
-        Whitespace and line breaks are irrelevant here.
-        These are "write once, use everywhere".
-        -->
-        <!-- requires each to be on its own line, and to use the structure \newcommand{<name>}{<command>} -->
+        <!-- For WeBWorK problems, these LaTeX macros must          -->
+        <!-- (a) be entirely on one line                            -->
+        <!-- (b) not employ a previous custom macro                 -->
+        <!-- (c) be defined only via \newcommand{<name>}{<command>} -->
         <macros>
         \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4}
-        \newcommand{\indefiniteintegral}[2]{\int#1\,d#2}
+        \newcommand{\indefiniteintegral}[2]{\int#1\,d#2} % comments get stripped
         </macros>
 
         <!-- An initialism is useful sometimes -->
