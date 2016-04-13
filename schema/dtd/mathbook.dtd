@@ -484,10 +484,13 @@
 <!-- Multistage problems have the usual lead-in, but then are organized with stages -->
 <!ELEMENT stage (title?, statement, hint?, solution?)>
 
-<!ELEMENT var (static?)>
+<!ELEMENT var (static?|set?)>
     <!ATTLIST var name       CDATA #IMPLIED>
     <!ATTLIST var category   CDATA #IMPLIED>
 <!ELEMENT static (#PCDATA)>
+<!ELEMENT set (member+)>
+<!ELEMENT member (#PCDATA)>
+    <!ATTLIST member correct   (yes|no)  #IMPLIED>
 
 <!ELEMENT pg-code (#PCDATA)>
 

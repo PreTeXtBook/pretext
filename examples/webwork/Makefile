@@ -144,7 +144,7 @@ sample-chapter-check:
 	install -d $(SCRATCH)
 	-rm $(SCRATCH)/dtderrors.*
 	-xmllint --xinclude --postvalid --noout --dtdvalid $(DTD)/mathbook.dtd $(WWEXAMPLE)/sample-chapter/sample-chapter.xml 2> $(SCRATCH)/dtderrors.txt
-	# less $(SCRATCH)/dtderrors.txt
+	less $(SCRATCH)/dtderrors.txt
 
 # 2016-02-10: no serious effort yet to make this check below pass
 template-check:

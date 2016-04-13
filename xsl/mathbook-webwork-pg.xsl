@@ -390,7 +390,7 @@
         <xsl:text>->correct_ans()</xsl:text>
     </xsl:if>
     <xsl:text>]</xsl:text>
-    <xsl:if test="not($problem/setup/var[@name=$varname]/static) and not($problem/setup/var[@name=$varname]/elements/element)">
+    <xsl:if test="not($problem/setup/var[@name=$varname]/static) and not($problem/setup/var[@name=$varname]/set/member)">
         <xsl:message>
             <xsl:text>MBX:WARNING: A WeBWorK problem body uses a var (name="</xsl:text>
             <xsl:value-of select="$varname"/>
@@ -414,7 +414,7 @@
     <xsl:apply-templates select="." mode="form-help"/>
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="varname" select="@var" />
-    <xsl:if test="not($problem/setup/var[@name=$varname]/static) and not($problem/setup/var[@name=$varname]/elements/element) and @var">
+    <xsl:if test="not($problem/setup/var[@name=$varname]/static) and not($problem/setup/var[@name=$varname]/set/member) and @var">
         <xsl:message>
             <xsl:text>MBX:WARNING: A WeBWorK problem body uses an answer field (var="</xsl:text>
             <xsl:value-of select="$varname"/>

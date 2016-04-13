@@ -659,10 +659,10 @@
 
                     <setup>
                         <var name="$rational">
-                            <elements>
-                                <element>is</element>
-                                <element correct="yes">is not</element>
-                            </elements>
+                            <set>
+                                <member>is</member>
+                                <member correct="yes">is not</member>
+                            </set>
                         </var>
 
                         <pg-code>
@@ -692,11 +692,11 @@
 
                     <setup>
                         <var name="$theorem">
-                            <elements>
-                                <element>The Quadratic Formula</element>
-                                <element correct="yes">The Fundamental Theorem of Calculus</element>
-                                <element>The Fundamental Theorem of Arithmetic</element>
-                            </elements>
+                            <set>
+                                <member>The Quadratic Formula</member>
+                                <member correct="yes">The Fundamental Theorem of Calculus</member>
+                                <member>The Fundamental Theorem of Arithmetic</member>
+                            </set>
                         </var>
 
                         <pg-code>
@@ -728,14 +728,14 @@
 
                     <setup>
                         <var name="$expressions">
-                            <elements>
-                                <element correct="yes"><m>e^{x^2}e^{1/x}</m></element>
-                                <element><m>\frac{e^{x^2}}{e^x}</m></element>
-                                <element correct="yes"><m>e^{x^2}e^{x^{-1}}</m></element>
-                                <element correct="yes"><m>e^{(x^3+1)/x}</m></element>
-                                <element><m>e^{x^2}+e^{1/x}</m></element>
-                                <element>None of the above</element>
-                            </elements>
+                            <set>
+                                <member correct="yes"><m>e^{x^2}e^{1/x}</m></member>
+                                <member><m>\frac{e^{x^2}}{e^x}</m></member>
+                                <member correct="yes"><m>e^{x^2}e^{x^{-1}}</m></member>
+                                <member correct="yes"><m>e^{(x^3+1)/x}</m></member>
+                                <member><m>e^{x^2}+e^{1/x}</m></member>
+                                <member>None of the above</member>
+                            </set>
                         </var>
 
                         <pg-code>

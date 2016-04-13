@@ -2288,16 +2288,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="@format='popup'" >
             <xsl:text>(Choose one: </xsl:text>
-            <xsl:for-each select="$problem/setup/var[@name=$varname]/elements/element">
+            <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
                 <xsl:apply-templates select='.' />
                 <xsl:choose>
-                    <xsl:when test="count(following-sibling::element) &gt; 1">
+                    <xsl:when test="count(following-sibling::member) &gt; 1">
                         <xsl:text>, </xsl:text>
                     </xsl:when>
-                    <xsl:when test="(count(following-sibling::element) = 1) and preceding-sibling::element">
+                    <xsl:when test="(count(following-sibling::member) = 1) and preceding-sibling::member">
                         <xsl:text>, or </xsl:text>
                     </xsl:when>
-                    <xsl:when test="(count(following-sibling::element) = 1) and not(preceding-sibling::element)">
+                    <xsl:when test="(count(following-sibling::member) = 1) and not(preceding-sibling::member)">
                         <xsl:text> / </xsl:text>
                     </xsl:when>
                 </xsl:choose>
@@ -2308,7 +2308,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="@format='buttons'" >
             <xsl:text>\par&#xa;</xsl:text>
             <xsl:text>\begin{itemize}[label=$\odot$,leftmargin=3em,]&#xa;</xsl:text>
-            <xsl:for-each select="$problem/setup/var[@name=$varname]/elements/element">
+            <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
                 <xsl:text>\item{}</xsl:text>
                 <xsl:apply-templates select='.' />
                 <xsl:text>&#xa;</xsl:text>
@@ -2318,7 +2318,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="@format='checkboxes'" >
             <xsl:text>\par&#xa;</xsl:text>
             <xsl:text>\begin{itemize}[label=$\square$,leftmargin=3em,]&#xa;</xsl:text>
-            <xsl:for-each select="$problem/setup/var[@name=$varname]/elements/element">
+            <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
                 <xsl:text>\item{}</xsl:text>
                 <xsl:apply-templates select='.' />
                 <xsl:text>&#xa;</xsl:text>
