@@ -104,7 +104,6 @@ sample-chapter-html:
 	-rm $(HTMLOUT)/*.html
 	-rm $(HTMLOUT)/knowl/*.html
 	cp -a $(WWEXAMPLE)/sample-chapter/images $(HTMLOUT)
-	cp -a $(WWEXAMPLE)/sample-chapter/video $(HTMLOUT)
 	cd $(HTMLOUT); \
 	xsltproc --stringparam webwork.server $(SERVER) --stringparam html.knowl.exercise.inline no $(MBXSL)/mathbook-html.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
 
@@ -146,13 +145,6 @@ sample-chapter-check:
 	-xmllint --xinclude --postvalid --noout --dtdvalid $(DTD)/mathbook.dtd $(WWEXAMPLE)/sample-chapter/sample-chapter.xml 2> $(SCRATCH)/dtderrors.txt
 	less $(SCRATCH)/dtderrors.txt
 
-# 2016-02-10: no serious effort yet to make this check below pass
-template-check:
-	install -d $(SCRATCH)
-	-rm $(SCRATCH)/dtderrors.*
-	-xmllint --xinclude --postvalid --noout --dtdvalid $(DTD)/mathbook.dtd $(WWEXAMPLE)/webwork-templates/webwork-templates.xml 2> $(SCRATCH)/dtderrors.txt
-	# less $(SCRATCH)/dtderrors.txt
-
 ###################################
 # Everything below here is OBSOLETE
 ###################################
@@ -163,29 +155,3 @@ minimal-obsolete:
 	cp $(WWXSL)/mathbook-webwork-archive.xsl $(WWXSL)/mathbook-webwork-pg.xsl $(MBUSR)
 	cd $(PGOUT); \
 	xsltproc --stringparam webwork.server https://webwork.pcc.edu $(MBUSR)/mathbook-webwork-archive.xsl $(WWMBX)/examples/minimal/mini.xml
-
-templates-obsolete:
-	install -d $(PGOUT) $(MBUSR)
-	-rm $(PGOUT)/*.pg
-	cp $(WWXSL)/mathbook-webwork-archive.xsl $(WWXSL)/mathbook-webwork-pg.xsl $(MBUSR)
-	cd $(PGOUT); \
-	xsltproc --stringparam webwork.server https://webwork.pcc.edu $(MBUSR)/mathbook-webwork-archive.xsl $(WWMBX)/examples/webwork-templates/webwork-templates.xml
-	#
-	install -d $(PDFOUT) $(MBUSR)
-	-rm $(PDFOUT)/*.tex
-	cp $(WWXSL)/webwork-latex.xsl $(MBUSR)
-	cd $(PDFOUT); \
-	xsltproc --stringparam webwork.server https://webwork.pcc.edu --stringparam toc.level 0 $(MBUSR)/webwork-latex.xsl $(WWMBX)/examples/webwork-templates/webwork-templates.xml; \
-	xelatex webwork-templates.tex; \
-	xelatex webwork-templates.tex
-	#
-	install -d $(HTMLOUT) $(MBUSR)
-	-rm $(HTMLOUT)/*.html
-	cp $(WWXSL)/mathbook-webwork-pg.xsl $(WWXSL)/webwork-html.xsl $(MBUSR)
-	cp -a $(WWMBX)/examples/webwork-templates/images $(HTMLOUT)
-	# xslt_base64: https://github.com/ilyakharlamov/xslt_base64
-	# recursion on entire problem content, up limits on  xsltproc
-	cp $(WWXSL)/xslt_base64/base64.xsl $(MBUSR)
-	cp $(WWXSL)/xslt_base64/base64_binarydatamap.xml $(MBUSR)
-	cd $(HTMLOUT); \
-	xsltproc --maxdepth 12000 --stringparam webwork.server https://webwork.pcc.edu --stringparam html.knowl.exercise.inline no $(MBUSR)/webwork-html.xsl $(WWMBX)/examples/webwork-templates/webwork-templates.xml
