@@ -36,8 +36,8 @@
 <!-- import xsl/mathbook-html.xsl, for general HTML conversion,  -->
 <!-- but this will additionally import the common file.          -->
 <!-- Then the conversion file may import the present file,       -->
-<!-- webwork-pg.xsl, for its services in creating a well-formed  -->
-<!-- WeBWorK problem.                                            -->
+<!-- mathbook-webwork-pg.xsl, for its services in creating       -->
+<!-- a well-formed WeBWorK problem.                              -->
 <!--                                                             -->
 <!-- This should change as development stabilizes and the        -->
 <!-- production of the content of a PG problem should move       -->
@@ -390,7 +390,7 @@
         <xsl:text>->correct_ans()</xsl:text>
     </xsl:if>
     <xsl:text>]</xsl:text>
-    <xsl:if test="not($problem/setup/var[@name=$varname]/static) and not($problem/setup/var[@name=$varname]/elements/element)">
+    <xsl:if test="not($problem/setup/var[@name=$varname]/static) and not($problem/setup/var[@name=$varname]/set/member)">
         <xsl:message>
             <xsl:text>MBX:WARNING: A WeBWorK problem body uses a var (name="</xsl:text>
             <xsl:value-of select="$varname"/>
@@ -414,7 +414,7 @@
     <xsl:apply-templates select="." mode="form-help"/>
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="varname" select="@var" />
-    <xsl:if test="not($problem/setup/var[@name=$varname]/static) and not($problem/setup/var[@name=$varname]/elements/element) and @var">
+    <xsl:if test="not($problem/setup/var[@name=$varname]/static) and not($problem/setup/var[@name=$varname]/set/member) and @var">
         <xsl:message>
             <xsl:text>MBX:WARNING: A WeBWorK problem body uses an answer field (var="</xsl:text>
             <xsl:value-of select="$varname"/>
@@ -753,21 +753,21 @@
 <!-- NB: we allow the "var" element as a child -->
 <xsl:template match= "webwork//m">
     <xsl:text>[`</xsl:text>
-    <xsl:call-template name="write-macros"/>
+    <xsl:call-template name="select-latex-macros"/>
     <xsl:apply-templates select="text()|var" />
     <xsl:text>`]</xsl:text>
 </xsl:template>
 
 <xsl:template match= "webwork//tabular//m">
     <xsl:text>".PGML::Format('[`</xsl:text>
-    <xsl:call-template name="write-macros"/>
+    <xsl:call-template name="select-latex-macros"/>
     <xsl:apply-templates select="text()|var" />
     <xsl:text>`]')."</xsl:text>
 </xsl:template>
 
 <xsl:template match="webwork//me">
     <xsl:text>&#xa;&#xa;>> [``</xsl:text>
-    <xsl:call-template name="write-macros"/>
+    <xsl:call-template name="select-latex-macros"/>
     <xsl:apply-templates select="text()|var" />
     <xsl:text>``] &lt;&lt;&#xa;&#xa;</xsl:text>
 </xsl:template>
@@ -777,14 +777,14 @@
     <xsl:choose>
         <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
             <xsl:text>[``</xsl:text>
-            <xsl:call-template name="write-macros"/>
+            <xsl:call-template name="select-latex-macros"/>
             <xsl:text>\begin{aligned}&#xa;</xsl:text>
             <xsl:apply-templates select="mrow" />
             <xsl:text>\end{aligned}``]</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>[``</xsl:text>
-            <xsl:call-template name="write-macros"/>
+            <xsl:call-template name="select-latex-macros"/>
             <xsl:text>\begin{gathered}&#xa;</xsl:text>
             <xsl:apply-templates select="mrow" />
             <xsl:text>\end{gathered}``]</xsl:text>
@@ -801,32 +801,37 @@
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- This routine does not account for interspersed TeX comments        -->
-<!-- Maybe a more general macro-sanitizer would be a good precursor     -->
-<!-- TODO: rename with some indication these are LaTeX macros, not PERL -->
-<xsl:template name="write-macros">
-    <xsl:param name="macros" select="/mathbook/docinfo/macros"/>
+<!-- This template assumes each LaTeX macro is entirely on its own line  -->
+<!-- And assumes they are defined with a \newcommand (not \renewcommand) -->
+<!-- It only outputs LaTeX macro definitions that are explicitly used,   -->
+<!-- so if they are chained, then precursors will be missed              -->
+<!-- Macros are jammed together, but maybe needs protection, like {}     -->
+<!-- The $latex-macros sanitized list assumes  mathbook-common.xsl  used -->
+<!-- TODO: This named template examines the current context              -->
+<!-- (see . in contains() below), so should be a match template          -->
+<xsl:template name="select-latex-macros">
+    <xsl:param name="macros" select="$latex-macros" />
     <xsl:variable name="trimmed-start">
-        <xsl:if test="contains($macros,'\newcommand{')">
-            <xsl:value-of select="substring-after($macros,'\newcommand{')"/>
+        <xsl:if test="contains($macros, '\newcommand{')">
+            <xsl:value-of select="substring-after($macros, '\newcommand{')"/>
         </xsl:if>
     </xsl:variable>
     <xsl:variable name="macro-name">
-        <xsl:if test="contains($trimmed-start,'}')">
-            <xsl:value-of select="substring-before($trimmed-start,'}')"/>
+        <xsl:if test="contains($trimmed-start, '}')">
+            <xsl:value-of select="substring-before($trimmed-start, '}')"/>
         </xsl:if>
     </xsl:variable>
     <xsl:variable name="macro-command">
-        <xsl:value-of select="substring-before($macros,'&#xa;')"/>
+        <xsl:value-of select="substring-before($macros, '&#xa;')"/>
     </xsl:variable>
     <xsl:variable name="next-lines">
-        <xsl:value-of select="substring-after($macros,'&#xa;')"/>
+        <xsl:value-of select="substring-after($macros, '&#xa;')"/>
     </xsl:variable>
-    <xsl:if test="contains(.,$macro-name)">
+    <xsl:if test="contains(., $macro-name)">
         <xsl:value-of select="normalize-space($macro-command)"/>
     </xsl:if>
     <xsl:if test="not($next-lines = '')">
-        <xsl:call-template name="write-macros">
+        <xsl:call-template name="select-latex-macros">
             <xsl:with-param name="macros" select="$next-lines"/>
         </xsl:call-template>
     </xsl:if>

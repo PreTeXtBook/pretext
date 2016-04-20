@@ -49,7 +49,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <exsl:document href="{$scratch}/{$filebase}.asy" method="text">
         <xsl:text>texpreamble("&#xa;</xsl:text>
-        <xsl:call-template name="latex-macro-list" />
+        <xsl:value-of select="$latex-macros" />
         <xsl:text>");&#xa;&#xa;</xsl:text>
         <xsl:value-of select="."/>
     </exsl:document>
@@ -65,7 +65,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <exsl:document href="{$scratch}/{$filebase}.asy" method="text">
         <xsl:text>texpreamble("&#xa;</xsl:text>
-        <xsl:call-template name="latex-macro-list" />
+        <xsl:value-of select="$latex-macros" />
         <xsl:text>");&#xa;&#xa;</xsl:text>
         <xsl:value-of select="."/>
     </exsl:document>

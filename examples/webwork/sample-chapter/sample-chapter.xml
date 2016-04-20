@@ -37,15 +37,13 @@
         <!-- picture or logo in the upper left corner. -->
         <brandlogo url="http://webwork.maa.org/" source="images/webwork-logo.png" />
 
-        <!--
-        TeX/LaTeX macros can be written in the usual way.
-        Whitespace and line breaks are irrelevant here.
-        These are "write once, use everywhere".
-        -->
-        <!-- requires each to be on its own line, and to use the structure \newcommand{<name>}{<command>} -->
+        <!-- For WeBWorK problems, these LaTeX macros must          -->
+        <!-- (a) be entirely on one line                            -->
+        <!-- (b) not employ a previous custom macro                 -->
+        <!-- (c) be defined only via \newcommand{<name>}{<command>} -->
         <macros>
         \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4}
-        \newcommand{\indefiniteintegral}[2]{\int#1\,d#2}
+        \newcommand{\indefiniteintegral}[2]{\int#1\,d#2} % comments get stripped
         </macros>
 
         <!-- An initialism is useful sometimes -->
@@ -262,11 +260,10 @@
                     </statement>
 
                     <solution>
-                        <p>We <em>add</em> the exponents as follows:</p>
-                        <md>
+                        <p>We <em>add</em> the exponents as follows:<md>
                             <mrow><var name="$expression" />&amp;=x^{<var name="$a" />+<var name="$b" />}</mrow>
                             <mrow>&amp;=x^{<var name="$c" />}</mrow>
-                        </md>
+                        </md></p>
                     </solution>
                 </webwork>
             </exercise>
@@ -347,16 +344,16 @@
                     <p>Given the second-degree polynomial equation <m>ax^2 + bx + c = 0</m>, where <m>a\neq0</m>, solutions are given by <me>x = \frac{-b\pm\sqrt{b^2-4ac}}{2a}.</me></p>
                 </statement>
                 <proof>
-                    <md>
-                    <mrow>ax^2 + bx + c &amp;= 0</mrow>
-                    <mrow>ax^2 + bx &amp;= -c</mrow>
-                    <mrow>4ax^2 + 4bx &amp;= -4c</mrow>
-                    <mrow>4ax^2 + 4bx + b^2 &amp;= b^2 - 4ac</mrow>
-                    <mrow>(2ax + b)^2 &amp;= b^2 - 4ac</mrow>
-                    <mrow>2ax + b &amp;=\pm\sqrt{b^2 - 4ac}</mrow>
-                    <mrow>2ax &amp;=-b\pm\sqrt{b^2 - 4ac}</mrow>
-                    <mrow>x &amp;=\frac{-b\pm\sqrt{b^2 - 4ac}}{2a}</mrow>
-                    </md>
+                    <p><md>
+                        <mrow>ax^2 + bx + c &amp;= 0</mrow>
+                        <mrow>ax^2 + bx &amp;= -c</mrow>
+                        <mrow>4ax^2 + 4bx &amp;= -4c</mrow>
+                        <mrow>4ax^2 + 4bx + b^2 &amp;= b^2 - 4ac</mrow>
+                        <mrow>(2ax + b)^2 &amp;= b^2 - 4ac</mrow>
+                        <mrow>2ax + b &amp;=\pm\sqrt{b^2 - 4ac}</mrow>
+                        <mrow>2ax &amp;=-b\pm\sqrt{b^2 - 4ac}</mrow>
+                        <mrow>x &amp;=\frac{-b\pm\sqrt{b^2 - 4ac}}{2a}</mrow>
+                    </md></p>
                 </proof>
             </theorem>
 
@@ -517,52 +514,48 @@
         <section>
             <title>Antidifferentiation</title>
 
-            <!-- with Exercises subdivision, we need to structure remainder -->
-            <!-- an introduction is a lightweight way to accomplish that    -->
-            <introduction>
-                <p>This section demonstrates a few more features.</p>
+            <!-- with only an Exercises subdivision, we do not need to structure remainder -->
+            <p>This section demonstrates a few more features.</p>
 
-                <p>The derivative and antiderivative of a function can be understood through study of their graphical relationships.</p>
+            <p>The derivative and antiderivative of a function can be understood through study of their graphical relationships.</p>
 
-                <definition xml:id="definition-antiderivative">
-                    <title>Antiderivative of a Function</title>
+            <definition xml:id="definition-antiderivative">
+                <title>Antiderivative of a Function</title>
 
-                    <statement>
-                        <p>Suppose that <m>f(x)</m> and <m>F(x)</m> are two functions such that <me>F^\prime(x) = f(x).</me>  Then we say <m>F</m> is an <term>antiderivative</term> of <m>f</m>.</p>
-                    </statement>
-                </definition>
+                <statement>
+                    <p>Suppose that <m>f(x)</m> and <m>F(x)</m> are two functions such that <me>F^\prime(x) = f(x).</me>  Then we say <m>F</m> is an <term>antiderivative</term> of <m>f</m>.</p>
+                </statement>
+            </definition>
 
-                <p>The Fundamental Theorem of Calculus in one of the high points of a course in single-variable course.</p>
+            <p>The Fundamental Theorem of Calculus in one of the high points of a course in single-variable course.</p>
 
-                <theorem xml:id="theorem-FTC">
-                    <title>The Fundamental Theorem of Calculus</title>
-                    <index><main>Fundamental Theorem of Calculus</main></index>
-                    <statement>
-                        <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me></p>
-                    </statement>
-                    <proof>
-                        <p>Left to the reader.</p>
-                    </proof>
-                </theorem>
+            <theorem xml:id="theorem-FTC">
+                <title>The Fundamental Theorem of Calculus</title>
+                <index><main>Fundamental Theorem of Calculus</main></index>
+                <statement>
+                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me></p>
+                </statement>
+                <proof>
+                    <p>Left to the reader.</p>
+                </proof>
+            </theorem>
 
-                <p>We state an equivalent version of the FTC, which is less-suited for computation, but which perhaps is a more interesting theoretical statement.</p>
+            <p>We state an equivalent version of the FTC, which is less-suited for computation, but which perhaps is a more interesting theoretical statement.</p>
 
-                <todo>Should equation references come with parentheses?</todo>
+            <todo>Should equation references come with parentheses?</todo>
 
-                <corollary xml:id="corollary-FTC-derivative">
-                    <statement>
-                        <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men></p>
-                    </statement>
-                    <proof xml:id="proof-FTC-corollary">
-                        <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.</p>
-                        <mdn>
-                            <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
-                            <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
-                            <mrow>&amp;=f(x)-0 = f(x)</mrow>
-                        </mdn>
-                    </proof>
-                </corollary>
-            </introduction>
+            <corollary xml:id="corollary-FTC-derivative">
+                <statement>
+                    <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men></p>
+                </statement>
+                <proof xml:id="proof-FTC-corollary">
+                    <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.<mdn>
+                        <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
+                        <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
+                        <mrow>&amp;=f(x)-0 = f(x)</mrow>
+                    </mdn></p>
+                </proof>
+            </corollary>
 
             <exercises>
                 <title><webwork /> Exercises</title>
@@ -664,10 +657,10 @@
 
                     <setup>
                         <var name="$rational">
-                            <elements>
-                                <element>is</element>
-                                <element correct="yes">is not</element>
-                            </elements>
+                            <set>
+                                <member>is</member>
+                                <member correct="yes">is not</member>
+                            </set>
                         </var>
 
                         <pg-code>
@@ -697,11 +690,11 @@
 
                     <setup>
                         <var name="$theorem">
-                            <elements>
-                                <element>The Quadratic Formula</element>
-                                <element correct="yes">The Fundamental Theorem of Calculus</element>
-                                <element>The Fundamental Theorem of Arithmetic</element>
-                            </elements>
+                            <set>
+                                <member>The Quadratic Formula</member>
+                                <member correct="yes">The Fundamental Theorem of Calculus</member>
+                                <member>The Fundamental Theorem of Arithmetic</member>
+                            </set>
                         </var>
 
                         <pg-code>
@@ -725,7 +718,7 @@
                 </webwork>
             </exercise>
 
-            <!--Checkboxes not yet implemented fully. See note in webwork-pg.xsl -->
+            <!--Checkboxes not yet implemented fully. See note in mathbook-webwork-pg.xsl -->
             <!--<exercise>
                 <title>Choose several</title>
 
@@ -733,14 +726,14 @@
 
                     <setup>
                         <var name="$expressions">
-                            <elements>
-                                <element correct="yes"><m>e^{x^2}e^{1/x}</m></element>
-                                <element><m>\frac{e^{x^2}}{e^x}</m></element>
-                                <element correct="yes"><m>e^{x^2}e^{x^{-1}}</m></element>
-                                <element correct="yes"><m>e^{(x^3+1)/x}</m></element>
-                                <element><m>e^{x^2}+e^{1/x}</m></element>
-                                <element>None of the above</element>
-                            </elements>
+                            <set>
+                                <member correct="yes"><m>e^{x^2}e^{1/x}</m></member>
+                                <member><m>\frac{e^{x^2}}{e^x}</m></member>
+                                <member correct="yes"><m>e^{x^2}e^{x^{-1}}</m></member>
+                                <member correct="yes"><m>e^{(x^3+1)/x}</m></member>
+                                <member><m>e^{x^2}+e^{1/x}</m></member>
+                                <member>None of the above</member>
+                            </set>
                         </var>
 
                         <pg-code>

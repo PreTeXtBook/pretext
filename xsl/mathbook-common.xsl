@@ -517,29 +517,91 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\)</xsl:text>
 </xsl:template>
 
-<!-- Macros -->
-<!-- We pick up user-supplied macros, and     -->
-<!-- add three of our own that are useful     -->
-<!-- for avoiding conflicts with XML reserved -->
-<!-- characters.  Even though MathJax defines -->
-<!-- \lt  and  \gt  we go ahead and do it     -->
-<!-- anyway for completeness.  We add these   -->
-<!-- last with a \newcommand to minimize the  -->
-<!-- possibility author defines them earlier  -->
-<!-- This should be the primary and only      -->
-<!-- interface to the macros list, though     -->
-<!-- it might need some extra                 -->
-<!-- conversion-specific wrapping in use      -->
-<xsl:template name="latex-macro-list">
-    <xsl:call-template name="sanitize-code">
-        <xsl:with-param name="raw-code">
-            <xsl:value-of select="/mathbook/docinfo/macros" />
+<!-- ############ -->
+<!-- LaTeX Macros -->
+<!-- ############ -->
+
+<!-- We pick up user-supplied macros, and         -->
+<!-- add three of our own that are useful         -->
+<!-- for avoiding conflicts with XML reserved     -->
+<!-- characters.  Even though MathJax defines     -->
+<!-- \lt  and  \gt  we go ahead and do it         -->
+<!-- anyway for completeness.  We add these       -->
+<!-- last with a \newcommand to minimize the      -->
+<!-- possibility author defines them earlier      -->
+<!-- This should be the primary and only          -->
+<!-- interface to the macros list, though         -->
+<!-- it might need some extra                     -->
+<!-- conversion-specific wrapping in use          -->
+<!-- and it may be necessary/desirable to replace -->
+<!-- newline line-endings with something like {}  -->
+<!-- First, we move left-margin as far left as    -->
+<!-- possible, then strip all comments,  without  -->
+<!-- stripping too much, such as useful \%        -->
+<!-- We save in a variable, so only here once     -->
+<xsl:variable name="latex-macros">
+    <xsl:variable name="latex-left-justified">
+        <xsl:call-template name="sanitize-code">
+            <xsl:with-param name="raw-code">
+                <xsl:value-of select="/mathbook/docinfo/macros" />
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:call-template name="latex-macro-first-percent">
+        <xsl:with-param name="latex-code">
+            <xsl:value-of select="$latex-left-justified" />
         </xsl:with-param>
     </xsl:call-template>
     <xsl:text>\newcommand{\lt}{ &lt; }&#xa;</xsl:text>
     <xsl:text>\newcommand{\gt}{ &gt; }&#xa;</xsl:text>
-    <xsl:text>\newcommand{\amp}{ &amp; }</xsl:text>
+    <xsl:text>\newcommand{\amp}{ &amp; }&#xa;</xsl:text>
+</xsl:variable>
+
+<!-- Recursively, line-by-line, find first %                             -->
+<!-- If preceded by \, then output and reform with rest of line          -->
+<!-- If a naked %, then drop rest of line, tidy up and move to next line -->
+<!-- Every output line ends with a newline                               -->
+<xsl:template name="latex-macro-first-percent">
+    <xsl:param name="latex-code" />
+    <xsl:variable name="first-line" select="concat(substring-before($latex-code, '&#xA;'), '&#xA;')" />
+    <xsl:variable name="remainder" select="substring-after($latex-code, '&#xA;')" />
+    <xsl:choose>
+        <!-- done, quit recursing -->
+        <xsl:when test="not($latex-code)" />
+        <!-- first potential comment character-->
+        <xsl:when test="contains($first-line, '%')">
+            <xsl:variable name="initial" select="substring-before($first-line, '%')" />
+            <xsl:choose>
+                <xsl:when test="substring($initial, string-length($initial))='\'">
+                    <!-- false positive, output symptom and reorganize -->
+                    <xsl:value-of select="concat($initial, '%')" />
+                    <xsl:call-template name="latex-macro-first-percent">
+                        <xsl:with-param name="latex-code" select="concat(substring-after($first-line, '%'), $remainder)" />
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                    <!-- comment character in first column is no line        -->
+                    <!-- else, content prior, with stripped newline restored -->
+                    <xsl:if test="$initial">
+                        <xsl:value-of select="concat($initial, '&#xA;')" />
+                    </xsl:if>
+                    <!-- move on to remaining lines -->
+                    <xsl:call-template name="latex-macro-first-percent">
+                        <xsl:with-param name="latex-code" select="$remainder" />
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- no action, just echo and work the rest -->
+            <xsl:value-of select="$first-line" />
+            <xsl:call-template name="latex-macro-first-percent">
+                <xsl:with-param name="latex-code" select="substring-after($latex-code, '&#xA;')" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
+
 
 <!-- Sage Cells -->
 <!-- Contents are text manipulations (below)     -->
@@ -2087,6 +2149,10 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         <xsl:with-param name="pad" select="'yes'" />
     </xsl:apply-templates>
 </xsl:template>
+<!-- "main" bibliography gets unqualified numbers -->
+<xsl:template match="backmatter/references/biblio" mode="structure-number">
+    <xsl:text />
+</xsl:template>
 <!-- Notes get structure number from parent biblio's number -->
 <xsl:template match="note" mode="structure-number">
     <xsl:apply-templates select="parent::*" mode="number" />
@@ -2600,8 +2666,8 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
             <xsl:variable name="target" select="id($first-ref)" />
             <!-- include autoname prefix in link text, since just one -->
             <xsl:variable name="prefix">
-                <xsl:apply-templates select="$target" mode="autoname-prefix">
-                    <xsl:with-param name="local" select="@autoname" />
+                <xsl:apply-templates select="." mode="xref-prefix">
+                    <xsl:with-param name="target" select="$target" />
                 </xsl:apply-templates>
             </xsl:variable>
             <xsl:if test="not($prefix = '')">
@@ -2698,10 +2764,10 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <!-- form both targets -->
     <xsl:variable name="target-first" select="id(@first)" />
     <xsl:variable name="target-last"  select="id(@last)" />
-    <!-- autoname outside links -->
+    <!-- content or autoname prefix consciously outside links -->
     <xsl:variable name="prefix">
-        <xsl:apply-templates select="$target-first" mode="autoname-prefix">
-            <xsl:with-param name="local" select="@autoname" />
+        <xsl:apply-templates select="." mode="xref-prefix">
+            <xsl:with-param name="target" select="$target-first" />
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:if test="not($prefix = '')">
@@ -2766,36 +2832,45 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:value-of select="$content" />
 </xsl:template>
 
-<!-- Autonaming of Cross-References -->
-<!-- Some references get a prefix (eg Section, Theorem, Exercise), -->
+<!-- Prefix, Autonaming of Cross-References -->
+<!-- Content in an xref becomes a prefix, no matter what           -->
+<!-- Some references get an autoname prefix (eg Section, Theorem), -->
 <!-- subject to global and local options, interpreted here         -->
-<xsl:template match="*" mode="autoname-prefix">
-    <!-- Parameter is the local @autoname of the calling xref -->
-    <!-- Five values: blank, yes/no, plural, title            -->
-    <xsl:param name="local" />
-    <!-- Global: yes/no, so 10 combinations -->
+<!-- Element is the  xref, $target  provides the autoname string   -->
+<xsl:template match="*" mode="xref-prefix">
+    <!-- We need the target for autonaming with type-name or title -->
+    <xsl:param name="target" />
+    <!-- Variable is the local @autoname of the xref -->
+    <!-- Local:  blank, yes/no, title                -->
+    <!-- Global: yes/no, so 8 combinations           -->
+    <xsl:variable name="local" select="@autoname" />
+    <!-- 2016-04-07 autoname="plural" never really was viable -->
+    <xsl:if test="$local='plural'">
+        <xsl:message>MBX:WARNING: "autoname" attribute with value "plural" is deprecated as of 2016-04-07, and there is no replacement</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
     <xsl:choose>
+        <!-- if xref has content, then use it, no matter what -->
+        <xsl:when test="normalize-space(.)">
+            <xsl:apply-templates />
+        </xsl:when>
         <!-- 2 combinations: global no, without local override -->
         <xsl:when test="$autoname='no' and ($local='' or $local='no')" />
         <!-- 1 combination: global yes, but local override -->
         <xsl:when test="$autoname='yes' and $local='no'" />
         <!-- 2 combinations: global yes/no, local title option-->
         <xsl:when test="$local='title'">
-            <xsl:apply-templates select="title" />
+            <xsl:apply-templates select="$target" mode="title-simple" />
         </xsl:when>
-        <!-- 2 combinations: global no, local yes/plural        -->
-        <!-- 3 combinations: global yes, local blank/yes/plural -->
-        <!-- TODO: migrate ugly English-centric hack to language files! -->
-        <xsl:when test="$local='yes' or $local='plural' or ($autoname='yes' and not($local!=''))">
-            <xsl:apply-templates select="." mode="type-name" />
-            <xsl:if test="$local='plural'">
-                <xsl:text>s</xsl:text>
-            </xsl:if>
+        <!-- 1 combinations: global no, local yes        -->
+        <!-- 2 combinations: global yes, local blank/yes -->
+        <xsl:when test="$local='yes' or ($autoname='yes' and not($local!=''))">
+            <xsl:apply-templates select="$target" mode="type-name" />
         </xsl:when>
         <!-- just makes error message effective -->
         <xsl:when test="not($local != '')"></xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:WARNING: "autoname" attribute should be yes|no|plural|title, not <xsl:value-of select="$local" /></xsl:message>
+            <xsl:message>MBX:WARNING: "autoname" attribute should be yes|no|title, not <xsl:value-of select="$local" /></xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:otherwise>
     </xsl:choose>
@@ -2820,8 +2895,8 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:variable name="target" select="id(@ref)" />
     <!-- include autoname prefix in link text, since just one -->
     <xsl:variable name="prefix">
-        <xsl:apply-templates select="$target" mode="autoname-prefix">
-            <xsl:with-param name="local" select="@autoname" />
+        <xsl:apply-templates select="." mode="xref-prefix">
+            <xsl:with-param name="target" select="$target" />
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:choose>
@@ -3144,9 +3219,17 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <xsl:template match="*" mode="deprecation-warnings">
     <!-- newer deprecations at the top of this list, user will see in this order -->
     <!--  -->
+    <xsl:if test="//xref/@autoname='plural'">
+        <xsl:call-template name="deprecation-message">
+            <xsl:with-param name="date-string" select="'2016-04-07'" />
+            <xsl:with-param name="message" select="'a cross-reference (&lt;xref&gt;) may not have an @autoname attribute set to plural.  There is no replacement, use content in the xref.'" />
+            <xsl:with-param name="occurences" select="count(//xref[@autoname='plural'])" />
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
     <xsl:if test="//ol/@label=''">
         <xsl:call-template name="deprecation-message">
-            <xsl:with-param name="date-string" select="'2015/12-12'" />
+            <xsl:with-param name="date-string" select="'2015-12-12'" />
             <xsl:with-param name="message" select="'an ordered list (&lt;ol&gt;) may not have empty labels, and numbering will be unpredictable.  Switch to an unordered list  (&lt;ul&gt;)'" />
             <xsl:with-param name="occurences" select="count(//ol[@label=''])" />
         </xsl:call-template>

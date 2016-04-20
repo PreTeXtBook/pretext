@@ -44,7 +44,7 @@
 
 <!-- Routines specific to converting a "webwork"  -->
 <!-- element into a problem in the PGML language -->
-<xsl:include href="./webwork-pg.xsl" />
+<xsl:include href="./mathbook-webwork-pg.xsl" />
 
 <!-- Enclosing structure is a Python list -->
 <!-- Select WW problems with PG images    -->

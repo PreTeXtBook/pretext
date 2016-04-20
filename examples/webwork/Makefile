@@ -94,7 +94,7 @@ SERVER = https://webwork.pcc.edu
 sample-chapter-extract:
 	install -d $(PGOUT)
 	cd $(PGOUT); \
-	xsltproc --stringparam chunk.level 2 $(MBXSL)/extract-webwork.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
+	xsltproc --stringparam chunk.level 2 $(MBXSL)/mathbook-webwork-archive.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
 
 # HTML with WeBWorK exercises need a WW server
 # See example below for how to specify this
@@ -144,7 +144,7 @@ sample-chapter-check:
 	install -d $(SCRATCH)
 	-rm $(SCRATCH)/dtderrors.*
 	-xmllint --xinclude --postvalid --noout --dtdvalid $(DTD)/mathbook.dtd $(WWEXAMPLE)/sample-chapter/sample-chapter.xml 2> $(SCRATCH)/dtderrors.txt
-	# less $(SCRATCH)/dtderrors.txt
+	less $(SCRATCH)/dtderrors.txt
 
 # 2016-02-10: no serious effort yet to make this check below pass
 template-check:
@@ -160,16 +160,16 @@ template-check:
 minimal-obsolete:
 	install -d $(PGOUT) $(MBUSR)
 	-rm $(PGOUT)/*.pg
-	cp $(WWXSL)/extract-webwork.xsl $(WWXSL)/webwork-pg.xsl $(MBUSR)
+	cp $(WWXSL)/mathbook-webwork-archive.xsl $(WWXSL)/mathbook-webwork-pg.xsl $(MBUSR)
 	cd $(PGOUT); \
-	xsltproc --stringparam webwork.server https://webwork.pcc.edu $(MBUSR)/extract-webwork.xsl $(WWMBX)/examples/minimal/mini.xml
+	xsltproc --stringparam webwork.server https://webwork.pcc.edu $(MBUSR)/mathbook-webwork-archive.xsl $(WWMBX)/examples/minimal/mini.xml
 
 templates-obsolete:
 	install -d $(PGOUT) $(MBUSR)
 	-rm $(PGOUT)/*.pg
-	cp $(WWXSL)/extract-webwork.xsl $(WWXSL)/webwork-pg.xsl $(MBUSR)
+	cp $(WWXSL)/mathbook-webwork-archive.xsl $(WWXSL)/mathbook-webwork-pg.xsl $(MBUSR)
 	cd $(PGOUT); \
-	xsltproc --stringparam webwork.server https://webwork.pcc.edu $(MBUSR)/extract-webwork.xsl $(WWMBX)/examples/webwork-templates/webwork-templates.xml
+	xsltproc --stringparam webwork.server https://webwork.pcc.edu $(MBUSR)/mathbook-webwork-archive.xsl $(WWMBX)/examples/webwork-templates/webwork-templates.xml
 	#
 	install -d $(PDFOUT) $(MBUSR)
 	-rm $(PDFOUT)/*.tex
@@ -181,7 +181,7 @@ templates-obsolete:
 	#
 	install -d $(HTMLOUT) $(MBUSR)
 	-rm $(HTMLOUT)/*.html
-	cp $(WWXSL)/webwork-pg.xsl $(WWXSL)/webwork-html.xsl $(MBUSR)
+	cp $(WWXSL)/mathbook-webwork-pg.xsl $(WWXSL)/webwork-html.xsl $(MBUSR)
 	cp -a $(WWMBX)/examples/webwork-templates/images $(HTMLOUT)
 	# xslt_base64: https://github.com/ilyakharlamov/xslt_base64
 	# recursion on entire problem content, up limits on  xsltproc

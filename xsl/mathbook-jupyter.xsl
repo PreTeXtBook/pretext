@@ -300,14 +300,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Macros, escape backslashes, join lines, -->
 <!-- wrap in string, dollars, wrap as a cell -->
 <xsl:template name="load-macros">
-    <xsl:variable name="macros">
-        <xsl:call-template name="latex-macro-list" />
-    </xsl:variable>
     <xsl:call-template name="markdown-cell">
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />
             <xsl:text>$</xsl:text>
-            <xsl:value-of select="str:replace(str:replace($macros, '\', '\\'), '&#xa;', '')" />
+            <xsl:value-of select="str:replace(str:replace($latex-macros, '\', '\\'), '&#xa;', '')" />
             <xsl:text>$</xsl:text>
             <xsl:call-template name="end-string" />
         </xsl:with-param>

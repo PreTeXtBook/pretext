@@ -51,7 +51,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\documentclass[12pt,border=2pt]{standalone}&#xa;</xsl:text>
         <xsl:text>\usepackage{amsmath,amssymb}&#xa;</xsl:text>
         <xsl:value-of select="/mathbook/docinfo/latex-image-preamble"/>
-        <xsl:call-template name="latex-macro-list" />
+        <xsl:value-of select="$latex-macros" />
         <xsl:text>\begin{document}&#xa;</xsl:text>
         <xsl:value-of select="."/>
         <xsl:text>\end{document}&#xa;</xsl:text>

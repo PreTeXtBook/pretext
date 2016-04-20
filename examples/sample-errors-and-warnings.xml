@@ -73,6 +73,8 @@ systems.
             <p>A cross-reference with a bad value for the autoname attribute: <xref ref="errors-and-warnings" autoname="maybe" />.</p>
 
             <p>The <q>detail</q> attribute of a cross-reference is only implemented for a reference to a bibliographic item: <xref ref="errors-and-warnings" detail="blah" />.</p>
+
+            <p>The <q>plural</q> attribute of a cross-reference is deprecated with no equivalent replacment: <xref ref="errors-and-warnings" autoname="plural" />.</p>
         </section>
 
         <section>

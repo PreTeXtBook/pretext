@@ -49,7 +49,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Routines specific to converting a "webwork"  -->
 <!-- element into a problem in the PGML language -->
-<xsl:include href="./webwork-pg.xsl" />
+<xsl:include href="./mathbook-webwork-pg.xsl" />
 
 <!-- Intend output for rendering by a web browser -->
 <xsl:output method="xml" encoding="utf-8"/>
@@ -3108,7 +3108,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is the implementation of an abstract template, -->
 <!-- to accomodate hard-coded HTML numbers and for       -->
 <!-- LaTeX the \ref and \label mechanism                 -->
-<!-- NB: we do exactly the same thing in the webwork-pg.html -->
+<!-- NB: we do exactly the same thing in the mathbook-webwork-pg.xsl -->
 <xsl:template match="*" mode="xref-number">
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
@@ -4941,7 +4941,7 @@ $(function () {
 <xsl:template name="latex-macros">
     <div style="display:none;">
     <xsl:text>\(</xsl:text>
-    <xsl:call-template name="latex-macro-list" />
+    <xsl:value-of select="$latex-macros" />
     <xsl:text>\)</xsl:text>
     </div>
 </xsl:template>

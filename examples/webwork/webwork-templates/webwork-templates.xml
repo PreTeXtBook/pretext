@@ -213,7 +213,7 @@
             </exercise>
 
             <exercise>
-                <!--Checkbox not implemented yet; see note in webwork-pg.xsl  -->
+                <!--Checkbox not implemented yet; see note in mathbook-webwork-pg.xsl  -->
                 <title>Multiple choice by popup, radio buttons<!--, or checkbox--></title>
 
                 <webwork xml:id="multiple-choice-popup-or-radio-buttons" height="1400">

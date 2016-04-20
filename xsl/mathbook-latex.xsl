@@ -914,7 +914,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Package for precise image placement (for logos on pages)&#xa;</xsl:text>
         <xsl:text>\usepackage{eso-pic}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//notation">
+    <xsl:if test="//notation or //list-of">
         <xsl:text>%% Package for tables spanning several pages&#xa;</xsl:text>
         <xsl:text>\usepackage{longtable}&#xa;</xsl:text>
     </xsl:if>
@@ -992,8 +992,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Begin: Author-provided macros&#xa;</xsl:text>
     <xsl:text>%% (From  docinfo/macros  element)&#xa;</xsl:text>
     <xsl:text>%% Plus three from MBX for XML characters&#xa;</xsl:text>
-    <xsl:call-template name="latex-macro-list" />
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:value-of select="$latex-macros" />
     <xsl:text>%% End: Author-provided macros&#xa;</xsl:text>
 </xsl:template>
 
@@ -1511,11 +1510,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="book/backmatter" mode="content-wrap">
     <xsl:param name="content" />
-    <!-- If no appendices, go straight to backmatter,           -->
+    <!-- If no appendices, go straight to book backmatter,      -->
     <!-- which automatically produces divisions with no numbers -->
     <!-- Otherwise \appendix,...\backmatter is handled in the   -->
     <!-- content-wrap template for general subdivisions         -->
-    <xsl:if test="not(appendix)">
+    <xsl:if test="ancestor::book and not(appendix)">
         <xsl:text>%&#xa;</xsl:text>
         <xsl:text>\backmatter&#xa;</xsl:text>
         <xsl:text>%&#xa;</xsl:text>
@@ -1848,7 +1847,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="content-wrap">
     <xsl:param name="content" />
     <!-- appendices are peers of chapters (book) or sections (article)  -->
-    <!-- so we need to slip this in first, with \backmatter later       -->
+    <!-- so we need to slip this in first, with book's \backmatter later-->
     <!-- NB: if no appendices, the backmatter template does \backmatter -->
     <xsl:if test="self::appendix and not(preceding-sibling::appendix)">
         <xsl:text>%&#xa;</xsl:text>
@@ -1864,14 +1863,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- http://www.tex.ac.uk/cgi-bin/texfaq2html?label=ftnsect  -->
     <!-- TODO: get non-footnote title from "simple" title routines -->
     <!-- TODO: let author specify short versions (ToC, header) -->
-    <xsl:text>[</xsl:text>
-    <xsl:apply-templates select="." mode="title-simple"/>
-    <xsl:text>]</xsl:text>
+    <!--                                                                   -->
+    <!-- There is no \backmatter macro for the article class               -->
+    <!-- A final references section and a back colophon need to have their -->
+    <!-- number suppressed and a table of contents entry manufactured      -->
+    <!-- This ad-hoc treatment seems preferable to a more general scheme,  -->
+    <!-- but maybe someday numbering will be on/off and this will be easy  -->
+    <xsl:choose>
+        <!-- starred for for no numbering -->
+        <xsl:when test="ancestor::article and parent::backmatter and (self::references or self::colophon)">
+            <xsl:text>*</xsl:text>
+        </xsl:when>
+        <!-- else ToC version -->
+        <xsl:otherwise>
+            <xsl:text>[</xsl:text>
+            <xsl:apply-templates select="." mode="title-simple"/>
+            <xsl:text>]</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>&#xa;</xsl:text>
+    <!-- references need a ToC entry, maybe if a real Bibliography, this won't be needed -->
+    <!-- We choose not to send the Colophon to the ToC of an article                     -->
+    <!-- TODO: maybe colophon should not be in ToC for book either (need to star it?)    -->
+    <xsl:if test="ancestor::article and parent::backmatter and self::references">
+        <xsl:text>\addcontentsline{toc}{</xsl:text>
+        <xsl:apply-templates select="." mode="subdivision-name" />
+        <xsl:text>}{</xsl:text>
+        <xsl:apply-templates select="." mode="title-simple" />
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
     <!-- List the author of this division, if present -->
     <xsl:if test="author">
         <xsl:text>\noindent{\Large\textbf{</xsl:text>
@@ -1879,8 +1903,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}}\par\bigskip&#xa;</xsl:text>
     </xsl:if>
     <xsl:copy-of select="$content" />
-    <!-- transition to backmatter, if done with last appendix -->
-    <xsl:if test="self::appendix and not(following-sibling::appendix)">
+    <!-- transition to book backmatter, if done with last appendix -->
+    <xsl:if test="ancestor::book and self::appendix and not(following-sibling::appendix)">
         <xsl:text>%&#xa;</xsl:text>
         <xsl:text>\backmatter&#xa;</xsl:text>
         <xsl:text>%&#xa;</xsl:text>
@@ -2263,16 +2287,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="@format='popup'" >
             <xsl:text>(Choose one: </xsl:text>
-            <xsl:for-each select="$problem/setup/var[@name=$varname]/elements/element">
+            <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
                 <xsl:apply-templates select='.' />
                 <xsl:choose>
-                    <xsl:when test="count(following-sibling::element) &gt; 1">
+                    <xsl:when test="count(following-sibling::member) &gt; 1">
                         <xsl:text>, </xsl:text>
                     </xsl:when>
-                    <xsl:when test="(count(following-sibling::element) = 1) and preceding-sibling::element">
+                    <xsl:when test="(count(following-sibling::member) = 1) and preceding-sibling::member">
                         <xsl:text>, or </xsl:text>
                     </xsl:when>
-                    <xsl:when test="(count(following-sibling::element) = 1) and not(preceding-sibling::element)">
+                    <xsl:when test="(count(following-sibling::member) = 1) and not(preceding-sibling::member)">
                         <xsl:text> / </xsl:text>
                     </xsl:when>
                 </xsl:choose>
@@ -2283,7 +2307,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="@format='buttons'" >
             <xsl:text>\par&#xa;</xsl:text>
             <xsl:text>\begin{itemize}[label=$\odot$,leftmargin=3em,]&#xa;</xsl:text>
-            <xsl:for-each select="$problem/setup/var[@name=$varname]/elements/element">
+            <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
                 <xsl:text>\item{}</xsl:text>
                 <xsl:apply-templates select='.' />
                 <xsl:text>&#xa;</xsl:text>
@@ -2293,7 +2317,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="@format='checkboxes'" >
             <xsl:text>\par&#xa;</xsl:text>
             <xsl:text>\begin{itemize}[label=$\square$,leftmargin=3em,]&#xa;</xsl:text>
-            <xsl:for-each select="$problem/setup/var[@name=$varname]/elements/element">
+            <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
                 <xsl:text>\item{}</xsl:text>
                 <xsl:apply-templates select='.' />
                 <xsl:text>&#xa;</xsl:text>
@@ -3730,15 +3754,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="@source">
         <xsl:text>\includegraphics[</xsl:text>
         <xsl:choose>
-          <xsl:when test="ancestor::sidebyside">
-            <xsl:text>width=\textwidth,</xsl:text>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:if test="@width">
-                <xsl:text>width=</xsl:text><xsl:value-of select="@width" /><xsl:text>pt,</xsl:text>
-            </xsl:if>
-          </xsl:otherwise>
+            <xsl:when test="ancestor::sidebyside">
+                <xsl:text>width=\textwidth</xsl:text>
+            </xsl:when>
+            <xsl:when test="@width">
+                <xsl:text>width=</xsl:text>
+                <xsl:choose>
+                    <!-- BUG: following will fail with non-integral percentages -->
+                    <xsl:when test="contains(@width, '%')">
+                        <xsl:text>0.</xsl:text>
+                        <xsl:value-of select="translate(@width, '%', '')" />
+                        <xsl:text>\textwidth</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="@width" />
+                        <xsl:text>pt</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:otherwise />
         </xsl:choose>
+        <xsl:text>,</xsl:text>
         <!-- TODO: deprecate, abandon @height (along with HTML code) -->
          <xsl:if test="@height">
              <xsl:text>height=</xsl:text><xsl:value-of select="@height" /><xsl:text>pt,</xsl:text>

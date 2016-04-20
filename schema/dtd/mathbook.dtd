@@ -403,13 +403,13 @@
     <!ATTLIST url href CDATA #IMPLIED>
 
 <!-- Internal Cross-References -->
-<!ELEMENT xref EMPTY>
+<!ELEMENT xref (#PCDATA|%line;)*>
     <!ATTLIST xref provisional              CDATA #IMPLIED>
     <!ATTLIST xref ref                      CDATA #IMPLIED>
     <!ATTLIST xref detail                   CDATA #IMPLIED>
     <!ATTLIST xref first                    CDATA #IMPLIED>
     <!ATTLIST xref last                     CDATA #IMPLIED>
-    <!ATTLIST xref autoname (yes|no|plural|title) #IMPLIED>
+    <!ATTLIST xref autoname        (yes|no|title) #IMPLIED>
 
 <!-- Index -->
 <!ELEMENT index (main?,sub*,see*)>
@@ -484,10 +484,13 @@
 <!-- Multistage problems have the usual lead-in, but then are organized with stages -->
 <!ELEMENT stage (title?, statement, hint?, solution?)>
 
-<!ELEMENT var (static?)>
+<!ELEMENT var (static?|set?)>
     <!ATTLIST var name       CDATA #IMPLIED>
     <!ATTLIST var category   CDATA #IMPLIED>
 <!ELEMENT static (#PCDATA)>
+<!ELEMENT set (member+)>
+<!ELEMENT member (#PCDATA)>
+    <!ATTLIST member correct   (yes|no)  #IMPLIED>
 
 <!ELEMENT pg-code (#PCDATA)>
 
