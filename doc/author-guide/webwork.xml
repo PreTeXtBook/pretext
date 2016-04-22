@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file is part of the documentation of MathBook XML   -->
+<!--                                                          -->
+<!--    MathBook XML Author's Guide                           -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="webwork">
+    <title>(*) <webwork /> Automated Homework Problems</title>
+
+    <p>An entire chapter on aspects of authoring and building with <webwork /> problems.</p>
+
+</chapter>
