@@ -3,16 +3,47 @@ Release Notes, MathBook XML
 ===========================
 
 ----------------
+0.03, 2016/04/23
+----------------
+
+'''''''
+Summary
+'''''''
+ * Stable release, many new features
+ * LaTeX, HTML conversions stable
+ * Preliminary conversions to EPUB, Sage Notebook, SageMathCloud, Jupyter Notebooks
+ * DTD (Document Type Definition)
+ * More examples (sample book)
+ * Author's Guide (documentation)
+ * WeBWorK homework problems
+
+'''''''
+Changes
+'''''''
+ * Improvements to front matter, back matter
+ * Initial support for poetry
+ * Improved chunking for all formats
+ * Localizations for Portugese, French
+ * More flexible cross-references
+ * Improvements to mbx script
+ * Letter and memo document types
+ * Improved program, console, verbatim text
+ * Index support for HTML
+ * Deprecated: `html.chunk.level` stringparam is now just `chunk.level`
+ * Deprecated: ordered lists can no longer have empty levels
+ * Deprecated: autonam'ed cross-references no longer have a plural form
+
+----------------
 0.02, 2015/03/18
 ----------------
 
 '''''''
 Summary
 '''''''
-Stable release, many new features, all anticipated deprecations in place
-Basic or preliminary support for most common document components
-LaTeX, HTML conversions stable
-Preliminary conversions to Sage Notebook and SageMathCloud
+ * Stable release, many new features, all anticipated deprecations in place
+ * Basic or preliminary support for most common document components
+ * LaTeX, HTML conversions stable
+ * Preliminary conversions to Sage Notebook and SageMathCloud
 
 '''''''
 Changes
