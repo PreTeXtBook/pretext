@@ -14,8 +14,36 @@
         <p>XSL is a very powerful language for text processing.  However, it cannot do everything.  The <c>mbx</c> script is a Swiss Army Knife of sorts to operate on parts of your document and manage processing that requires the application of external programs, such as <latex /> and Sage.</p>
     </introduction>
 
-    <section xml:id="XYZ">
-        <title>Undetermined</title>
+    <section>
+        <title>(*) Rough Quickstart</title>
+
+        <p>Some quick preliminary hints.  This section <em>will</em> be expanded.</p>
+
+        <ul>
+            <li><p><c>mbx -h</c>:  help message, command summary</p></li>
+            <li><p><c>mbx -v</c>:  progress indicators (verbose)</p></li>
+            <li><p><c>mbx -vv</c>: debugging information (doubly-verbose)</p></li>
+            <li><p>Provide complete debugging output with bug reports</p></li>
+        </ul>
+
+        <p>Much like the build advice at the end of <xref ref="processing-file-management" />, the <c>mbx</c> script collects necessary bits into a system-created temporary directory, does its work, and copies out the desired results.  Some insight into failures can be found in this directory (which we leave behind for the ssytem to clean-up later).  Early in the <c>-vv</c> doubly-verbose output, this directory is reported afer the string <c>temporary directory:</c>.</p>
+
+        <p>An example:</p>
+
+        <console>
+            <prompt>$ </prompt>
+            <input>~/mathbook/script/mbx -vv -c sageplot -f svg -d images ~/mathbook/examples/sample-article/sample-article.xml</input>
+        </console>
+
+        <p>This will extract every image described in <c>sample-article</c> by a <tag>sageplot</tag> element and produce output as SVG files (if possible), which will be deposited in the <c>images</c> subdirectory of the current working directory.</p>
+    </section>
+
+    <section>
+        <title>Restricting the Scope</title>
+
+        <p>The <c>-r</c> (<c>--restrict</c>) switch deserves special mention.  It is followed by the value of an <attribute>xml:id</attribute> attribute present in your source XML file.  Then whatever action the script is asked to perform, it will only act on a subtree of the hierarchy, rooted at the element with the given <attribute>xml:id</attribute> value.</p>
+
+        <p>So if your images are complex or numerous (or both!) and take a long time to process, you can restrict attention to whatever part of the document you are actively editing, and you can even restrict to a single <tag>image</tag> and so produce just a single graphics file.</p>
     </section>
 
     <!--

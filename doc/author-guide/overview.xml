@@ -173,7 +173,7 @@
     <section xml:id="overview-sage">
         <title>Sage</title>
 
-        <p>Sage is an open source library of computational routines for symbolic, exact and numerical mathematics.  It is designed to be a <q>viable free open source alternative to Magma, Maple, Mathematica, and Matlab.</q>  MathBook XML contains extensive support for including example Sage into your document.</p>
+        <p><url href="http://www.sagemath.org/">Sage</url> is an open source library of computational routines for symbolic, exact and numerical mathematics.  It is designed to be a <q>viable free open source alternative to Magma, Maple, Mathematica, and Matlab.</q>  MathBook XML contains extensive support for including example Sage into your document.</p>
 
         <p>A typical use of the <tag>sage</tag> tag is to include an <tag>input</tag> element, followed by an <tag>output</tag> element.  The content of the <tag>input</tag> element may be presented statically in PDF output, or dynamically as a Sage Cell in an output format based on HTML.  Of course, for output as a SageMathCloud worksheet, the Sage code is presented in the worksheet's native format.</p>
 
@@ -224,7 +224,7 @@
     <section xml:id="overview-webwork">
         <title><webwork /> Exercises</title>
 
-        <p>It is possible to author <webwork /> automated homework problems directly within your source.  A static version will be rendered in your <latex />/PDF output, and a <q>live</q> version will be rendered into HTML output (though a student is not able to authenticate against a course).  However, you can also extract <em>all</em> of the <webwork /> questions from a textbook into a single archive suitable for uploading into a traditional <webwork /> server.  This is a big topic, so see the dedicated <xref ref="chapter-webwork" /> for details.</p>
+        <p>It is possible to author <webwork /> automated homework problems directly within your source.  A static version will be rendered in your <latex />/PDF/print output, and a <q>live</q> version will be rendered into HTML output (though a student is not able to authenticate against a course).  However, you can also extract <em>all</em> of the <webwork /> questions from a textbook into a single archive suitable for uploading into a traditional <webwork /> server.  This is a big topic, so see the dedicated <xref ref="webwork" /> for details.</p>
     </section>
 
     <section xml:id="overview-si-units">

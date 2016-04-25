@@ -17,7 +17,7 @@
     <section xml:id="processing-basic">
         <title>Basic Processing</title>
 
-        <p>The executable program <c>xsltproc</c> implements Version 1.0 of the <term>eXtensible Stylesheet Language (XSL)</term>.  This is a declarative language that walks the hierachical tree of an XML source file, and for each element describes some output to produce before, and after, recursively processing the contained elements.  (That is a simplified description.)</p>
+        <p>The executable program <c>xsltproc</c> implements Version 1.0 of the <term>eXtensible Stylesheet Language (XSL)</term>.  This is a declarative language that walks the hierarchical tree of an XML source file, and for each element describes some output to produce before, and after, recursively processing the contained elements.  (That is a simplified description.)</p>
 
         <p><c>xsltproc</c> is typically installed by default on Linux systems and as part of Mac OS.  See the MathBook XML website for details for Windows systems.  The most basic operation is to provide <c>xsltproc</c> with an XSL stylesheet from the MathBook XML distribution and an XML document of your creation that is valid MathBook XML.  This is done at the command-line, inside of a terminal or shell.  Describing command-line operations, along with file and directory management, is beyond the scope of this guide, so consult another resource if this is unfamiliar.  So here is a hypothetical simple example:</p>
 
@@ -30,7 +30,7 @@
 
         <p>The <c>xsl</c> subdirectory of the MathBook XML distribution contains a variety of XSL stylesheets, which I will also refer to as <term>converters</term> or <term>conversions</term>.  The ones that you will use as an author all fave filenames of the form <c>xsl/mathbook-XXX.xsl</c>, where <c>XXX</c> is some indication of the output produced.  Conversions to <latex /> or HTML output are the two most mature converters.</p>
 
-        <p>Note that authors are not responsible for creating XSL stylesheets.  Stock conversions are part of the MathBook XML distribution, and anybody is welcome to assume a source document is valid mathBook XML and create new conversions to process it to existing, or as yet unimagined, formats.</p>
+        <p>Note that authors are not responsible for creating XSL stylesheets.  Stock conversions are part of the MathBook XML distribution, and anybody is welcome to assume a source document is valid MathBook XML and create new conversions to process it to existing, or as yet unimagined, formats.</p>
     </section>
 
     <section xml:id="processing-modular">
@@ -57,49 +57,147 @@
     </section>
 
     <section xml:id="processing-dtd">
-        <title>(*) Verifying your Source</title>
+        <title>Verifying your Source</title>
 
+        <p>A <term>Document Type Definition</term>, usually known as a <term>DTD</term> is a formal specification of an XML vocabulary (the allowed tags and attributes), and how they relate to each other.  So, for example, the restrictions that say you cannot nest a <tag>book</tag> inside of a <tag>chapter</tag>, nor can you nest a <tag>subsection</tag> in a <tag>chapter</tag> without an intervening <tag>section</tag>, are expressed and enforced by the DTD.  One of the beauties of the DTD is that it is written using a specific syntax and tools exist that use a DTD as input.  In particular, a source MathBook XML file that conforms to the MathBook XML DTD is said to be <term>valid</term>.  You should strive to always have valid source files and so you want to regularly verify that this is the case.</p>
+
+        <p>You can find the MathBook XML DTD in <pre>
+        schema/dtd/mathbook.dtd
+        </pre>  You can read this file, and may eventually become adept at translating the syntax.  (We plan to also create something very similar in the RELAX NG syntax, which is more expressive.)  Better is to use the <c>xmllint</c> program to validate a source XML file against a DTD.  If you have <c>xsltproc</c> on your system, then almost certainly you have <c>xmllint</c>, since they use the same underlying core library, <url href="http://xmlsoft.org/"><c>libxml2</c></url>.  Here is the command you want to use to validate a source file.  (The <c>--xinclude</c> switch is optional if you do not have modular files, <xref ref="processing-modular" />.)</p>
+
+        <console>
+            <prompt>$ </prompt>
+            <input>xmllint --xinclude --postvalid --noout --dtdvalid</input>
+            <input>   /path/to/schema/dtd/mathbook.dtd ~/books/aota/animals.xml 2> dtd-errors.txt</input>
+        </console>
+
+        <p>You will need to use a pager (<c>more</c>, or <c>less</c>), or your editor, to review the results in <c>dtd-errors.txt</c> (or whatever you choose to call that file).  Your goal is to have this output file always turn up empty.  But if not, you will eventually become skilled at interpreting the error output and fixing your source.</p>
+
+        <p>The other beauty of a DTD is that you can supply it to a text editor (<xref ref="introduction-to-source-formatting" />) and then you will get context-sensitive help that greatly assists you in using only the tags and attributes that are allowed in a given location of your source.  <url href="http://xml-copy-editor.sourceforge.net/">XML Copy Editor</url> is the one editor like this we have tried, but we do not have extensive experience.</p>
+
+        <p>Two caveats for your use of <c>xmllint</c>.  First, the filenames in the error messages are not always accurate, especially if you are using the <c>xinclude</c> mechanism and your files are organized in subdirectories.  In this case, or in the case of modular files and many, many errors, you can apply <c>xmllint</c> to just one file at a time and begin cleaning up errors that way.  Second, a DTD is not quite as expressive as we would like, and so it is not a perfect description of the ideal MathBook XML source file.  But if the DTD says something is <em>not</em> valid, than it almost certainly is.</p>
+
+        <p>You should regularly check that your source is valid (script the command above), and whenever <c>xsltproc</c> fails, or your output is not what you were expecting, check against the DTD first.</p>
     </section>
 
     <section xml:id="processing-stringparam">
-        <title>(*) Customizations, String Parameters</title>
+        <title>Customizations, String Parameters</title>
 
+        <p>There are some aspects of your output that are entirely divorced from the actual content, and are presumably all about how that content is presented.  Two good examples are the size of the font used in <latex />/PDF/print output, and the granularity of web pages in HTML output (by this we mean, is each web page a whole chapter, a whole section, a whole subsection?).  Producing output with varying values of these parameters does absolutely nothing to change your content in any way, and so should not be a part of your source.  Thus we provide values for these parameters on the command-line <em>at processing time</em>.  They have become known as <term>stringparam</term> for a soon-to-be obvious reason.</p>
+
+        <p>Suppose you want to make a large-font version of your textbook for a student who has limited vision.  Look inside the top of <c>xsl/mathbook-latex.xsl</c> and find the <c>latex.font.size</c> parameter.  The preceding comments in this file suggest <c>20pt</c> is the maximum supported.  So you would use a command-line like the following (possibly with <c>--xinclude</c>, <etc />).</p>
+
+        <console>
+            <prompt>$ </prompt>
+            <input>xsltproc --stringparam latex.font.size "20pt"</input>
+            <input>   /path/to/xsl/mathbook-latex.xsl ~/books/aota/animals.xml</input>
+        </console>
+
+        <p>You can use as many stringparam as you like on the command-line (or in your scripts).  The quotation marks are not strictly needed in this example, but if the value of the parameter has spaces, slashes, <etc />, then you need to quote-protect the string from the command-line processor, and either single or double quotes will work (and protect the other kind).</p>
+
+        <p>These parameters are documented in the XSL files themselves, principally <c>-common</c>, <c>-latex</c> and <c>-html</c>, and occur near the top.  They assume sensible defaults for beginners, and error-checking is careful and robust.  They will be easier to locate and use when we have the time to document them more carefully here in the Author's Guide.</p>
+
+        <p>One caveat for using these is that experience has taught us that some of the parameters we created early on really do affect your content.  A good example is the <c>autoname</c> switch, since what you type as source is greatly influenced by what assumptions you have for the value of this switch, and you are unlikely to get decent output if you change it.  So this decision should really be reflected in, and run with, the source.  We will change some of these, but always provide a smooth upgrade path through deprecations, with little or no disruption to your workflow.</p>
     </section>
 
     <section xml:id="processing-thin-xsl">
-        <title>(*) Customizations, Thin XSL Stylesheets</title>
+        <title>Customizations, Thin XSL Stylesheets</title>
 
-        <!-- user directory -->
+        <p>Stringparam (<xref ref="processing-stringparam" />) are an easy way to effect global changes in the presentation of your writing.  But putting ten of them on every command-line gets old and cumbersome fast.</p>
 
+        <p>You may also wish to customize your output in some stylistic way.  This might be especially true for <latex />/PDF/print output.  For example, you might wish to have every chapter heading of your book in a nice shade of light blue, with the title flush right to the margin, countered by a thick solid rule extending all the way right, to the edge of the paper.  Notice that this does not affect your content, it is strictly presentation.</p>
+
+        <p>We have done several things to encourage such customizations.  We have tried to put as much stylistic information as possible in the <latex /> preamble and keep as much as possible out of the body.  (There is always room for improvement on this score, please be in touch if you have a need.)  For small adjustments the <c>latex.preamble.early</c> and <c>latex.preamble.late</c> stringparam are possible vehicles, though all the <latex /> code to make light blue, flush-right rules is going to be messy on the command-line.</p>
+
+        <p>Instead, you can make a small XSL file, to use as input to <c>xsltproc</c>.  The first thing it should do is import the stock MathBook XML file for the type of output you want to create.  You can use an absolute path to the MathBook XML distribution (which will not be very portable), or utilize the <c>mathbook/user</c> directory and a relative path from there.  The easiest thing to put in this file is elements like<pre>
+        &lt;xsl:param name="latex.font.size" select="'20pt'" /&gt;
+        </pre>which is functionally equivalent to our example in <xref ref="processing-stringparam" />.  Values given on the command-line supersede those given in an XSL file this way.</p>
+
+        <p>You can augment the <latex /> preamble with as much <latex /> code as you like in the following way.</p>
+        <pre>
+        &lt;xsl:param name="latex.preamble.late"&gt;
+            &lt;xsl:text&gt;% Proof environment with heading in small caps&amp;#xa;&lt;/xsl:text&gt;
+            &lt;xsl:text&gt;\expandafter\let\expandafter\oldp\csname\string\proof\endcsname&amp;#xa;&lt;/xsl:text&gt;
+            &lt;xsl:text&gt;\let\oldep\endproof&amp;#xa;&lt;/xsl:text&gt;
+            &lt;xsl:text&gt;\renewenvironment{proof}[1][\proofname]{\oldp[\scshape #1]}{\oldep}&amp;#xa;&lt;/xsl:text&gt;
+        &lt;/xsl:param&gt;
+        </pre>
+        <p>There are a variety of things you can do generally, by overriding the imported XSL templates to change behavior, but such modifications are beyond the scope of this guide.</p>
     </section>
 
     <section xml:id="processing-images-mbx">
-        <title>(*) Images and the <c>mbx</c> Script</title>
+        <title>Images and the <c>mbx</c> Script</title>
 
+        <p>We believe it is important to preserve a record of how diagrams and other graphics are produced.  This can be easy when a graphics language is employed to describe the graphical elements, rather than creating a bit-mapped image with some other interface.  So we have <tag>asymptote</tag>, <tag>latex-image-code</tag>, and <tag>sageplot</tag> for elements holding code to produce diagrams or images.</p>
+
+        <p>The upside to this is that small edits to the code can easily accomplish minor changes or corrections necessary for the images.  The <latex /> macros provided by an author can be used in the text <em>and</em> in a diagram, leading to greater consistency between the two.  Finally, starting from source, we can do the best possible job of producing image formats that are compatible with the document output formats and which scale smoothly in PDFs and in web browsers.</p>
+
+        <p>The downside to this is that XSL is not a general purpose programming language, and so in particular, cannot call <q>helper</q> programs such as <c>asy</c>, <c>pdflatex</c>, and <c>sage</c>.  The general strategy is to use XSL to identify and isolate the parts of a document that lie in the elements designed for graphics languages.  A Python script, the <c>mbx</c> script, employs these XSL stylesheets and then feeds each image file to the appropriate helper program.</p>
+
+        <p>This script has a variety of options, so we document it fully in <xref ref="mbx-script" />.</p>
     </section>
 
     <section xml:id="processing-file-management">
-        <title>(*) File Management</title>
+        <title>File Management</title>
 
+        <p>MathBook XML, at its core, is the formal specification of the XML vocabulary, as expressed in the DTD (<xref ref="processing-dtd" />).  We have provided converters to process source files into useful output.  However, we have not yet built a point-and-click application for the production of a book.  So you need to take some responsibility in a large project for managing your files, both input and output.  We have tried to provide flexible tools to make an author's job easier. The following is advice and practices we have successfully employed in several book projects.</p>
+
+        <paragraphs>
+            <title>Source</title>
+
+            <p>I am fond of describing my own books with an initialism formed from the title.  So <booktitle>A First Course in Linear Algebra</booktitle> becomes <acronym>FCLA</acronym>, and in file and directory names becomes <c>fcla</c>.  So I have a top-level directory <c>books</c> and then <c>books/fcla</c>, but this directory is not the book itself, this is all the extra stuff that goes along with writing a book, much of it in <c>books/fcla/local</c>.  The actual book, the part everybody sees with an open license, lives in <c>books/fcla/fcla</c>.  This subdirectory has files like <c>COPYING</c>, which is a free software standard for license information, and <c>README.md</c> which is a file in the simplistic Markdown format that is picked up automatically by GitHub and displayed nicely at the book's repository's main page.  Subdirectories include <c>src</c> for the actual XML files, <c>xsl</c> for any customizing XSL (<xref ref="processing-thin-xsl" />), and <c>script</c> for shell scripts used to process the book (see below).</p>
+
+            <p>I do not use any additional directory structure below <c>src</c> to manage modular files for a book, since the XML and the <c>--xinclude</c> mechanism manage that just fine.  I see little benefit to extra subdirectories for organization and some resulting inconvenience.  I do typically have a single subdirectory <c>src/images</c> for raster images and other graphics files.</p>
+
+            <p>I believe it is critically important to put your project under revision control, and if licensed openly, in a public GitHub repository.  So the <c>books/fcla/fcla</c> directory and all of its contents and subdirectories is tracked as a <c>git</c> repository and hosted on GitHub.  Because this directory is <em>source</em> I try very hard to <em>never</em> have any temporary files in these directories since I do not want to accidentally incorporate them into the <c>git</c> repository.  As a general rule-of-thumb, only original material goes in this directory and anything that can be re-created belongs outside.</p>
+
+            <p>A tutorial on <c>git</c> would be way outside the scope of this guide, but Beezer and Farmer <em>have</em> written <booktitle>Git For Authors</booktitle>, so perhaps look for that.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Image Files</title>
+
+            <p>Some images are raster images (<eg /> photographs) that are not easily changed, and perhaps unlikely to be changed.  Other images will come from source-level languages via the <c>mbx</c> script.  For your convenience, this script has a command-line option that allows you to direct output (graphics files) to a directory of your choice.</p>
+
+            <p>In the early stages of writing a book, I put image files produced from source code in a directory outside of what is tracked by <c>git</c>. It is only when a project is very mature that I begin to include completed graphics files into the <c>src/images</c> directory for tracking by <c>git</c>.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Build Scripts</title>
+
+            <p>When you have a mature book project, the various files, processing options, and a desire for multiple outputs can all get a bit confusing.  Writing simple scripts is a good idea and the investment of time doing this early in a project will pay off through the course of further writing and editing.  The particular setup you employ is less important.</p>
+
+            <p>I have fallen into the habit of using the <c>make</c> program.  It allows me to define common variables upfront (such as paths to the MathBook XML distribution and the main directory for the project it applies to).  Then I can easily make <q>targets</q> for different outputs.  So, for example I typically go <c>make pdf</c> or <c>make html</c> to produce output, and have simple companion targets so that I can go <c>make viewpdf</c> or <c>make viewhtml</c>.  Other targets do things like checking my source against the DTD (<xref ref="processing-dtd" />).  I have split out the variable definitions in a way that a collaborator can join the project and simply edit the file of definitions just once to reflect their setup, and still participate in future upgrades to the script by pulling from GitHub and not overwrite their local information.</p>
+
+            <p>My use of <c>make</c> is a bit of an abuse, since it is really designed for large software projects, with the aim of reducing duplicative compilations and that is not at all the purpose.  You could likely have exactly the same effect with a shell script and a case (or switch) statement.</p>
+
+            <p>My general strategy is to assemble all the necessary files into a temporary directory (under <c>/tmp</c> in Linux) by copying them out of their permanent home, copy customizing XSL into the right place (typically <c>mathbook/user</c>), run the <c>mbx</c> script as necessary and direct the results to the right place, and finally copy results out of the temporary directory if they are meant to be permanent.  Interesting, an exception to staging all these files is the source of the book itself which is only read for each conversion and then not needed for the output.  So you can just point directly to a master file and the <c>xinclude</c> mechanism locates any other necessary source files.</p>
+
+            <p>A good example of this general strategy is the use and placement of image files for HTML output.  It is your responsibility to place images into the location your resulting HTML files expect to locate them.  By default, this is a subdirectory of the directory holding the HTML files, named <c>images</c>.  You will want to copy images, such as photographs, out of your main source directory (<c>src/images</c>?). But you may be actively modifying source code for diagrams, and you want to re-run the <c>mbx</c> script for each run, and make sure the output of the script is directed to the correct subdirectory for the HTML output.  Running the <c>mbx</c> script frequently can get tiresome, so maybe you have a makefile target <c>make diagrams</c> that updates a permanent directory, outside of your tracked files in the repository, and you copy those files into the correct subdirectory for the output.  That way, you can update images only when you are actively editing them, or when you are producing a draft that you want to be as up-to-date as possible.  As a project matures, you can add images into the directory tracked by <c>git</c> so they are available to others without getting involved with the <c>mbx</c> script.</p>
+
+            <p>We did not say it would be easy, but we feel much of this sort of project management is outside the scope of the MathBook XML project itself, while in its initial stages, and existing tools to manage the complexity are available and documented.  (We <em>have</em> been encouraged to create sample scripts, which we may do.)  Just remember the strategy: stage necessary components in a temporary directory, build output in that directory, copy out desired semi-permanent results, and limit additions to the source directory to that which is original, or mature and time-consuming to reproduce.</p>
+        </paragraphs>
     </section>
 
     <section xml:id="processing-doctest-sage">
-        <title>(*) Doctesting Sage Code</title>
+        <title>Doctesting Sage Code</title>
 
+        <p>Adding computer code to your textbook is a tricky proposition.  You can propose that it is merely an illustration, and not meant to have all the necessary details, or you can make it exact, correct and executable, and then risk inevitable changes to render your code obsolete.  At least you have the option of editing and reposting online versions quickly and easily.</p>
+
+        <p>One of our main motivations for this project was mixing in code from the powerful, open source, mathematical software project, Sage (<xref ref="overview-sage" />).  When you add example Sage code to illustrate mathematical ideas, you are then encouraged to also include expected output in the <tag>output</tag> element.  Here comes one of the powerful advantages of XML source and XSL processing.</p>
+
+        <p>The <c>mathbook/xsl/mathbook-sage-doctest.xsl</c> stylesheet, used in the usual way, will create one (or several, depending on the <c>chunk.level</c> stringparam) file(s), in <em>exactly</em> the format Sage expects for automated testing.  So all your words are gone, and all your Sage input and output is packaged so Sage can run all the <tag>input</tag> and compare the results to the expected <tag>output</tag>.</p>
+
+        <p>We have many years' experience testing hundreds of non-trivial Sage examples from textbooks, for linear algebra and abstract algebra.  Roughly every six months, we discover ten to twenty examples that fail.  Frequently the failures are trivial (usually output gets re-ordered), but some are significant changes in behavior that leads us to re-word surrounding guidance in the text, and in a few cases the failures have exposed bugs introduced into Sage.  It has been relatively easy to do this maintenance on a regular basis, and if it had not been done, the accumulated errors would be enough to greatly degrade confidence in the accuracy of the examples.</p>
+
+        <p>Exact details for this process can be found in <xref ref="topic-doctest-sage" />.  Note that Sage is really just a huge Python library, so it might be possible to test pure Python code with this facility, but we have not tested this at all.  Similar support for other languages can be considered if requested for use in serious project.</p>
     </section>
 
     <section xml:id="processing-author-tools">
-        <title>(*) Author Tools</title>
+        <title>Author Tools</title>
 
+        <p>The general stringparam <c>author-tools</c> may be set to <c>yes</c> to activate special handling of the <tag>todo</tag> element, the <attribute>provisional</attribute> attribute of an <tag>xref</tag> element, and notation and index entries.  The <latex />-specific stringparam <c>latex.draft</c> set to <c>yes</c> will automatically activate the previous features, in addition to a few others appropriate to the printed page.  We have an XSL stylesheet that dumps every <tag>todo</tag> and every <attribute>provisional</attribute> attribute to the screen as a simply-formatted text report, but it is not public now.</p>
+
+        <p>The intent here is to make a rough draft, for an author or collaborator only, reporting as much as possible that is incomplete, pending or hidden in the usual output.  But none of this is carefully supported.  Requests for improvements, and overall comments, from working authors are invited.  They will help to make this feature more useful for everybody.</p>
     </section>
-
-    <!--
-    <section xml:id="processing-">
-        <title>(*) </title>
-
-    </section>
-
-   -->
-
-
 </chapter>
