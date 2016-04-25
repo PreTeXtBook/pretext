@@ -17,7 +17,7 @@
     <section xml:id="overview-structure">
         <title>Structure</title>
 
-        <p>A MathBook XML document is a nested sequence of <term>structural subdivisions</term>.  For a book, these would go <tag>part</tag>, <tag>chapter</tag>, <tag>section</tag>, <tag>subsection</tag>, and <tag>subsubsection</tag>.  Using <tag>part</tag> is optional, but a book must always use <tag>chapter</tag> (or else it is not a book!).  No skipping over subdivisions.  For example, you cannot subdivide a <tag>section</tag> directly into several <tag>subsubsection</tag> without intervening <tag>subsection</tag>.</p>
+        <p>A MathBook XML document is a nested sequence of <term>structural subdivisions</term>.  For a book, these would go <tag>part</tag>, <tag>chapter</tag>, <tag>section</tag>, <tag>subsection</tag>, and <tag>subsubsection</tag>.  Using <tag>part</tag> is optional, but a book must always use <tag>chapter</tag> (or else it is not a book!).  No skipping over subdivisions.  For example, you cannot subdivide a <tag>section</tag> directly into several <tag>subsubsection</tag>s without an intervening <tag>subsection</tag>.</p>
 
         <p>An <tag>article</tag> starts subdivisions from <tag>section</tag>, though it may choose to have no subdivisions at all.  <tag>paragraphs</tag> are exceptional.  They lack a full set of features, but can be used to subdivide anything, in books or in articles, though they are always terminal since you cannot subdivide them further.  You will have noticed that we prefer the generic term <term>subdivision</term> (rather than <q>section</q>) since a <tag>section</tag> is a very particular subdivision.</p>
 
