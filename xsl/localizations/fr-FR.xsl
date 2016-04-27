@@ -72,6 +72,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='figure'><xsl:text>Figure</xsl:text></localization>
     <localization string-id='table'><xsl:text>Table</xsl:text></localization>
     <localization string-id='fn'><xsl:text>Note de bas de page</xsl:text></localization> <!--checked-->
+    <!-- Lists and their items -->
+    <!-- Translations needed for France French -->
+    <!-- <localization string-id='list'><xsl:text>List</xsl:text></localization> -->
+    <!-- <localization string-id='li'><xsl:text>Item</xsl:text></localization> -->
     <!-- Parts of an exercise and it's solution -->
     <localization string-id='exercise'><xsl:text>Exercice</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Indication</xsl:text></localization>

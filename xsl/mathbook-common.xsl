@@ -1456,7 +1456,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter" mode="has-default-title">
     <xsl:text>true</xsl:text>
 </xsl:template>
-<xsl:template match="book|article|letter|memo|part|chapter|appendix|index-part|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|p|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|credit|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|li|contributor" mode="has-default-title">
+<xsl:template match="book|article|letter|memo|part|chapter|appendix|index-part|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|p|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|credit|list|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|li|contributor" mode="has-default-title">
     <xsl:text>false</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="has-default-title">
@@ -1469,7 +1469,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- otherwise produce an empty title              -->
 <!-- NB: this match pattern should be the union of -->
 <!-- the two above,everything that can be titled   -->
-<xsl:template match="book|article|letter|memo|part|chapter|appendix|index-part|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|p|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|li|credit|frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter|contributor" mode="title">
+<xsl:template match="book|article|letter|memo|part|chapter|appendix|index-part|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|p|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|list|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|li|credit|frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter|contributor" mode="title">
     <xsl:param name="complexity" />
     <xsl:variable name="default-titled">
         <xsl:apply-templates select="." mode="has-default-title" />
