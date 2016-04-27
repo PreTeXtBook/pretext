@@ -186,6 +186,22 @@ systems.
                 <mrow>x^2 + y^2 &amp;= z^2&amp;&amp;<xref ref="section-images" /></mrow>
                 <mrow>a^2 + b^2 &amp;= c^2&amp;&amp;<xref ref="table-euler1, table-euler1" /></mrow>
             </md></p>
+        </section>
+
+        <section>
+            <title>WeBWorK</title>
+
+            <p>A WeBWorK problem will need a server.  You will get a warning if you do not specify one.  But you should not be warned just because you use the empty element to get the stylized version, like this: <webwork />.  So you can test warnings by commenting out one or the other instance.</p>
+
+            <exercise>
+                <title>Mock WW Exercise</title>
+
+                <webwork>
+                    <statement>
+                        <p>Very minimal.</p>
+                    </statement>
+                </webwork>
+            </exercise>
 
         </section>
 
