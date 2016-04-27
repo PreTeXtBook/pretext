@@ -3649,7 +3649,7 @@ the xsltproc executable.
             <subsection xml:id="subsection-local-theorems">
                 <title>Theorems in This Section</title>
 
-                <p>We have a lot of theorems in this section, so we illustrate including an automatic list of these here.  We use the <c>elements</c> attribute to limit the list to <c>theorem</c> elements, and we use the <c>scope</c> attribute to limit the list to this <c>section</c>.  You can use an introductory <c>p</c> like this one, or not.  The list gets no title or visual separation, so use the usual subdivision elements to make that happen.  The <c>elements</c> attribute can be a space-delimited list of many different elements.  This list should not include the Fundamental Theorem of Calculus, Theorem<nbsp /><xref ref="theorem-FTC" />.  See a slightly different example in <xref ref="section-results" autoname="yes" />.</p>
+                <p>We have a lot of theorems in this section, so we illustrate including an automatic list of these here.  We use the <c>elements</c> attribute to limit the list to <c>theorem</c> elements, and we use the <c>scope</c> attribute to limit the list to this <c>section</c>.  You can use an introductory <c>p</c> like this one, or not.  The list gets no title or visual separation, so use the usual subdivision elements to make that happen.  The <c>elements</c> attribute can be a space-delimited list of many different elements.  This list should not include the Fundamental Theorem of Calculus, Theorem<nbsp /><xref ref="theorem-FTC" />.  See a slightly different example in <xref ref="appendix-results" autoname="yes" />.</p>
 
                 <list-of elements="theorem" scope="section" />
             </subsection>
