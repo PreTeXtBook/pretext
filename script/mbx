@@ -1,8 +1,4 @@
 #!/usr/bin/env python
-
-
-#! /usr/bin/python
-
 # ********************************************************************
 # Copyright 2010-2016 Robert A. Beezer
 #
@@ -182,7 +178,7 @@ def latex_image_conversion(xml_source, xmlid_root, data_dir, dest_dir, outformat
     cwd = os.getcwd()
     os.chdir(tmp_dir)
     # files *only*, from top-level
-    files = filter(os.path.isfile, os.listdir(tmp_dir))
+    files = list(filter(os.path.isfile, os.listdir(tmp_dir)))
     for latex_image in files:
         if outformat == 'source':
             shutil.copy2(latex_image, dest_dir)
@@ -563,7 +559,7 @@ class MathBookXMLtoSWS(object):
         import time  # for last change in pickled worksheet info
         import tempfile
         import tarfile
-        import cPickle
+        import pickle
         import os
         import os.path  # join, split, splitext
         import glob     # find PNG's of SVg's
@@ -587,7 +583,7 @@ class MathBookXMLtoSWS(object):
         # Pickle configuration file
         # Write into temp file, add to sws file
         fd, configfile =  tempfile.mkstemp()
-        config = cPickle.dumps(basic)
+        config = pickle.dumps(basic)
         open(configfile, 'w').write(config)
         T.add(configfile, os.path.join(base_dir, 'worksheet_conf.pickle'))
         os.unlink(configfile)
@@ -703,14 +699,14 @@ def _verbose(msg):
     """Write a message to the console on program progress"""
     global args
     if args.verbose >= 1:
-        print 'MBX: {}'.format(msg)
+        print('MBX: {}'.format(msg))
 
 
 def _debug(msg):
     """Write a message to the console with some raw information"""
     global args
     if args.verbose >= 2:
-        print 'MBX-DEBUG: {}'.format(msg)
+        print('MBX-DEBUG: {}'.format(msg))
 
 
 def get_mbx_path():
@@ -753,7 +749,7 @@ def get_executable(config, exec_name):
     try:
         result_code = subprocess.call(['which', config_name], stdout=devnull, stderr=subprocess.STDOUT)
     except OSError:
-        print 'MBX:WARNING: executable existence-checking was not performed (e.g. on Windows)'
+        print('MBX:WARNING: executable existence-checking was not performed (e.g. on Windows)')
         result_code = 0  # perhaps a lie on Windows
     if result_code != 0:
         error_message = '\n'.join([
@@ -843,12 +839,17 @@ def sanitize_url(url):
 
 def get_config_info(script_dir, user_dir):
     """Return configuation in object for querying"""
-    import ConfigParser, os.path
+    import sys,os.path
     config_filename = "mbx.cfg"
     default_config_file = os.path.join(script_dir, config_filename)
     user_config_file = os.path.join(user_dir, config_filename)
     config_file_list = [default_config_file, user_config_file]
-    config = ConfigParser.SafeConfigParser()
+    # ConfigParser was renamed to configparser in Python 3
+    try:
+        import configparser
+    except ImportError:
+        import ConfigParser as configparser
+    config = configparser.SafeConfigParser()
     _verbose("parsing configuration files: {}".format(config_file_list))
     files_read = config.read(config_file_list)
     _debug("configuration files used/read: {}".format(files_read))
