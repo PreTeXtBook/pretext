@@ -33,6 +33,7 @@ Contibutions of new languages are always welcome and especially encouraged! Sear
 To test, or use: place  `xml:lang="es-ES"`, or similar, as an attribute on your `<mathbook>` element.  `en-US` is the default if no `@xml:lang` attribute is given on the `mathbook` element.
 
 Current (partially) implemented language codes and contributors
+* cs-CZ, Czech (Czechia), Jiří Lebl
 * es-ES, Spanish (Spain), Juan José Torrens
 * en-US, English (United States), Robert A. Beezer
 * fr-FR, French (France), Thomas W. Judson
