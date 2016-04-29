@@ -1342,7 +1342,7 @@
 
 <xsl:template match="webwork//tabular/row/cell">
     <xsl:variable name="this-cells-left-column" select="count(preceding-sibling::cell) + 1 + sum(preceding-sibling::cell[@colspan]/@colspan) - count(preceding-sibling::cell[@colspan])"/>
-    <xsl:variable name="this-cells-right-column" select="$this-cells-left-column + @colspan - 1"/>
+    <xsl:variable name="this-cells-right-column" select="$this-cells-left-column + sum(self::cell[@colspan]/@colspan) - count(self::cell[@colspan]/@colspan)"/>
     <!-- $halign below is a full LaTeX tabular argument for one cell, with perhaps more info than just alignment -->
     <xsl:variable name="halign">
         <xsl:if test="@colspan or @halign or @right or parent::row/@halign or (parent::row/@left and (count(preceding-sibling::cell)=0))">
