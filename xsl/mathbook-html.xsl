@@ -221,9 +221,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- WW problem presentation needs the assistance of a server -->
 <xsl:variable name="webwork-server">
-    <xsl:if test="//webwork and $webwork.server=''">
+    <xsl:if test="//webwork[@*|node] and $webwork.server=''">
         <xsl:message>
-            <xsl:text>MBX:WARNING: WeBWorK problems will not render with out the use of a configured server.  Provide a webwork server with --stringparam webwork.server as something like  https://webwork.bigstateu.edu</xsl:text>
+            <xsl:text>MBX:WARNING: WeBWorK problems will not render with out the use of a properly configured server.  Provide a webwork server with --stringparam webwork.server as something like  https://webwork.bigstateu.edu</xsl:text>
         </xsl:message>
     </xsl:if>
     <xsl:value-of select="$webwork.server" />
