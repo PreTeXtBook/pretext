@@ -3196,6 +3196,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\textbackslash{}</xsl:text>
 </xsl:template>
 
+<!-- Asterisk -->
+<!-- Centered as a character, not an exponent -->
+<xsl:template match="asterisk">
+    <xsl:text>\textasteriskcentered</xsl:text>
+</xsl:template>
+
 
 <!-- Other Miscellaneous Symbols, Constructions -->
 

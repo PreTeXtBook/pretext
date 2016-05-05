@@ -3556,6 +3556,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\</xsl:text>
 </xsl:template>
 
+<!-- Asterisk -->
+<!-- Centered as a character, not an exponent                    -->
+<!-- Unicode Character 'ASTERISK OPERATOR' (U+2217)              -->
+<!-- See raised asterisk for other options:                      -->
+<!-- http://www.fileformat.info/info/unicode/char/002a/index.htm -->
+<xsl:template match="asterisk">
+    <xsl:text>&#x2217;</xsl:text>
+</xsl:template>
+
 
 <!-- Other Miscellaneous Symbols, Constructions -->
 

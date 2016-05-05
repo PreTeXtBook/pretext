@@ -3129,6 +3129,12 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:text>[BACKSLASH]</xsl:text>
 </xsl:template>
 
+<!-- Asterisk -->
+<!-- Centered as a character, not an exponent -->
+<xsl:template match="asterisk">
+    <xsl:text>[ASTERISK]</xsl:text>
+</xsl:template>
+
 <!-- ############ -->
 <!-- Conveniences -->
 <!-- ############ -->

@@ -984,6 +984,12 @@
     <xsl:text>\~</xsl:text>
 </xsl:template>
 
+<!-- Asterisk -->
+<!-- Centered as a character, not an exponent -->
+<xsl:template match="asterisk">
+    <xsl:text>\*</xsl:text>
+</xsl:template>
+
 <!-- Braces -->
 <!-- Individually, or matched            -->
 <!-- All escaped to avoid conflicts with -->
