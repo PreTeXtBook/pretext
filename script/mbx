@@ -881,11 +881,15 @@ def copy_data_directory(source_file, data_dir, tmp_dir):
 # Read configuration file
 # Switch on command line
 
-import os.path
+import os.path, sys
 
 # grab command line arguments
 args = get_cli_arguments()
 _debug("CLI args {}".format(vars(args)))
+
+# Report Python version in debugging output
+msg = "Python version: {}.{} (expecting 2.7 or newer)"
+_debug(msg.format(sys.version_info[0], sys.version_info[1]))
 
 # directory locations relative to MathBook XML installation
 mbx_dir = get_mbx_path()
