@@ -256,7 +256,7 @@ def webwork_to_tex(origin, xslt_exec, mbx_xsl_dir, xml_source, server_url, dest_
         msg = 'xsltproc command failed, tried: "{}"\n'.format(' '.join(cmd))
         raise ValueError(msg + root_cause)
     # "run" an assignment for the list of triples of strings
-    exec('problems = ' + problem_list)
+    problems = eval(problem_list.decode('ascii'))
 
     # verify destination exists
     sanitize_directory(dest_dir)
@@ -529,11 +529,10 @@ class MathBookXMLtoSWS(object):
                        '--stringparam', 'purpose', 'info',
                        self._mathbook_xslt, self._xml_file
                       ]
-        # info will be a string that begins with "manifest = "
-        # A list, each element a pair
+        # info will be a list, each element a pair
         # first a filename, then a list of included files
         info = subprocess.check_output(info_cmd)
-        exec(info)
+        manifest = eval(info.decode('ascii'))
         _debug('Manifest, information list: {}'.format(manifest))
         return manifest
 

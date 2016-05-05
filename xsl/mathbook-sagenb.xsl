@@ -33,7 +33,7 @@
     </xsl:if>
     <!-- Determine filenames of chunks,             -->
     <!-- their titles and their assets within       -->
-    <!-- Creates a Python assignment, to be exec'ed -->
+    <!-- Creates a Python list, to be eval'ed -->
     <xsl:if test="$purpose='info'">
         <xsl:if test="not(//docinfo/initialism)">
             <xsl:message>MBX:WARNING: providing an &lt;initialism&gt; in the &lt;docinfo&gt; can make the Sage Notebook worksheet list more usable</xsl:message>
@@ -41,7 +41,7 @@
         <xsl:if test="//program">
             <xsl:message>MBX:WARNING: syntax highlighting of program listings is not possible in the Sage Notebook - though you will see a display with a black monospace font</xsl:message>
         </xsl:if>
-        <xsl:text>manifest = [</xsl:text>
+        <xsl:text>[</xsl:text>
         <xsl:apply-templates select="mathbook" mode="filenames"/>
         <xsl:text>]</xsl:text>
     </xsl:if>
