@@ -12,6 +12,7 @@
     <!-- Add backmatter info on text editors, like Sublime Text, solicit contributions -->
     <!-- Provide an appendix about co-existing with git                                -->
 
+    <xi:include href="faq.xml" />
     <xi:include href="gfdl-mathbook.xml" />
 
 </backmatter>

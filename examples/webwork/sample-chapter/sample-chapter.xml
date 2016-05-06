@@ -126,13 +126,13 @@
 
                     <setup>
                         <var name="$a">
-                            <static>5</static>
+                            <static>9</static>
                         </var>
                         <var name="$b">
                             <static>8</static>
                         </var>
                         <var name="$c" category="integer">
-                            <static>13</static>
+                            <static>17</static>
                         </var>
 
                         <pg-code>
@@ -171,13 +171,13 @@
 
                     <setup>
                         <var name="$a">
-                            <static>2</static>
+                            <static>5</static>
                         </var>
                         <var name="$b">
-                            <static>3</static>
+                            <static>8</static>
                         </var>
                         <var name="$c" category="integer">
-                            <static>5</static>
+                            <static>13</static>
                         </var>
 
                         <pg-code>
@@ -188,7 +188,8 @@
                     </setup>
 
                     <statement>
-                        <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>: <m><var name="$a" /> + <var name="$b" /> =</m> <answer var="$c" width="2" /></p>
+                        <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
+                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <answer var="$c" width="2" /></p>
                     </statement>
 
                     <solution>
@@ -938,43 +939,270 @@
         </section>
 
         <section>
-            <title>Other MBX Goodies</title>
+            <title>Subject Area Templates</title>
 
-            <introduction>
-                <p>As long as we have your attention, this section demonstrates some other features that can be used in a MathBook XML project.</p>
-            </introduction>
+            <p>This section samples the subject area template problems found on the WeBWorK wiki at <url href="http://webwork.maa.org/wiki/SubjectAreaTemplates"/>.</p>
 
-            <subsection>
-                <title>Sage cells</title>
+            <exercise>
+            <title>Answer is a number or a function</title>
 
-                <p>Sage is an open-source Computer Algebra System based on Python. It's the open-source counterpart to software like Mathematica, Maple, and MatLab. An MBX project can have Sage cells like the one below. They can be pre-programmed with some Sage commands, but you are free to execute whatever Sage commands you like.</p>
+                <webwork xml:id="number-or-function">
 
-                <sage>
-                    <input>plot(abs(x)^x, (-2, 2), figsize=6)</input>
-                    <output>Graphics object consisting of 1 graphics primitive</output>
-                </sage>
+                    <setup>
+                        <var name="$a" category="integer">
+                            <static>5</static>
+                        </var>
+                        <var name="$b" category="integer">
+                            <static>8</static>
+                        </var>
+                        <var name="$answer1" category="integer">
+                            <static>5</static>
+                        </var>
+                        <var name="$answer2" category="formula">
+                            <static>{5x^8+8}{x}</static>
+                        </var>
 
-            </subsection>
+                        <pg-code>
+                            $a = non_zero_random(-9,9,1);
+                            do { $b = random(2,9,1); } until ( $b != $a );
+                            $answer1 = Compute("$a");
+                            $answer2 = Compute("($a x^($b) + $b)/x")->reduce();
+                        </pg-code>
+                    </setup>
 
-            <subsection>
-                <title>GeoGebra applets</title>
+                    <statement>
+                        <ol label="a.">
+                            <li>
+                                <p>Suppose the correct answer is <m><var name="$answer1"/></m>.</p>
+                                <ul label="square">
+                                    <li>
+                                        <p><answer var="$answer1" width="15"/></p>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/></m>.</p>
+                                <ul label="square">
+                                    <li>
+                                        <p><answer var="$answer2" width="15"/></p>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ol>
 
-                <p>GeoGebra is free open source graphing software. You can construct an interactive demonstration and export it as either an HTML5- or Java-based page. Then you can include it in MBX.</p>
+                    </statement>
 
-            </subsection>
+                    <solution>
+                        <p>Solution explanation goes here.</p>
+                    </solution>
+                </webwork>
+            </exercise>
 
-            <subsection>
-                <title>Videos</title>
+            <exercise>
+                <title>Answer is a function with domain issues</title>
 
-                <p>Videos are somewhat interactive elements as well, in that you can pause, jump back, <etc/>.</p>
+                <webwork xml:id="function-with-domain-issues">
 
-                <figure>
-                    <caption>Henrietta being silly</caption>
-                    <video source="video/Henrietta.webm" />
-                </figure>
+                    <setup>
+                        <var name="$a" category="integer">
+                            <static>2</static>
+                        </var>
+                        <var name="$answer1" category="formula">
+                            <static>\sqrt{x-2}</static>
+                        </var>
+                        <var name="$answer2" category="formula">
+                            <static>\ln\left(\left\lvert\frac{x}{x-2}\right\rvert\right)</static>
+                        </var>
 
+                        <pg-code>
+                            $a = random(2,5,1);
+                            $answer1 = Compute("sqrt(x-$a)");
+                            $answer1->{limits} = [$a+1,$a+4];
+                            $answer2 = Compute("ln(abs( x / (x-$a) ))");
+                            $answer2->{test_points} = [[-5],[-4],[1],[$a-1],[7],[8]];
+                            $answer2evaluator = $answer2 -> cmp() -> withPostFilter( AnswerHints( [Compute("ln(abs((x-$a)/x))"),] => "This is the opposite of correct...",));
+                        </pg-code>
+                    </setup>
 
-            </subsection>
+                    <statement>
+                        <ol label="a.">
+                            <li>
+                                <p>Suppose the correct answer is <m>\displaystyle <var name="$answer1"/></m>.</p>
+                                <ul label="square">
+                                    <li>
+                                        <p><answer var="$answer1" width="15"/></p>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/></m>.</p>
+                                <ul label="square">
+                                    <li>
+                                        <p><answer var="$answer2" width="15" evaluator="$answer2evaluator"/></p>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ol>
+
+                    </statement>
+
+                    <solution>
+                        <p>Solution explanation goes here.</p>
+                    </solution>
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <!--Checkbox not implemented yet; see note in mathbook-webwork-pg.xsl  -->
+                <title>Multiple choice by popup, radio buttons<!--, or checkbox--></title>
+
+                <webwork xml:id="multiple-choice-popup-or-radio-buttons">
+
+                    <setup>
+                        <var name="$color1">
+                            <set>
+                                <member>Red</member>
+                                <member correct="yes">Blue</member>
+                                <member>Green</member>
+                            </set>
+                        </var>
+                        <var name="$color2">
+                            <set>
+                                <member>Red</member>
+                                <member correct="yes">Blue</member>
+                                <member>Green</member>
+                                <member>None of these</member>
+                            </set>
+                        </var>
+                        <!--<var name="$mc">
+                            <set>
+                                <member correct="yes">e^{x^2}e^{1/x}</member>
+                                <member>\frac{e^{x^2}}{e^x}</member>
+                                <member correct="yes">e^{x^2}e^{x^{-1}}</member>
+                                <member correct="yes">e^{(x^3+1)/x}</member>
+                                <member>e^{x^2}+e^{1/x}</member>
+                                <member>None of the above</member>
+                            </set>
+                        </var>-->
+
+                        <pg-code>
+                            $color1 = PopUp(
+                                ["?","Red","Blue","Green"],
+                                "Blue",
+                            );
+
+                            $color2 = RadioButtons(
+                              ["Red","Blue","Green","None of these"],
+                              "Blue", # correct answer
+                              last => ["None of these"], # can be a list
+                            );
+
+                        </pg-code>
+                     <!-- include below in pg-code once checkboxes implemented
+                            $mc = new_checkbox_multiple_choice();
+                            $mc -> qa (
+                            "A question can go here, but MBX ignores this",
+                            "\( e^{x^2} e^{1/x} \)$BR",
+                            "\( e^{x^2} e^{x^{-1}} \)$BR",
+                            "\( e^{ (x^3+1) / x } \)$BR",
+                            );
+                            $mc -> extra(
+                            "\( \displaystyle \frac{ e^{x^2} }{ e^x } \)$BR",
+                            "\( e^{x^2} + e^{1/x} \)$BR",
+                            );
+                            $mc -> makeLast("None of the above");
+                        -->
+                    </setup>
+
+                    <statement>
+                        <p>My favorite color is <answer var="$color1" form="popup"/>.</p>
+
+                        <p>My favorite color is</p>
+                        <p><answer var="$color2" form="buttons"/></p>
+
+                        <!--<p>Select all expressions that are equivalent to <m>e^{x^2 + 1/x}</m>.  There may be more than one correct answer.</p>
+                        <p><answer var="$mc" form="checkboxes"/></p>-->
+                    </statement>
+
+                    <solution>
+                        <p>The correct answer is <var name="$color1"/>.</p>
+                        <p>The correct answer is <var name="$color2"/>.</p>
+                        <!--<p>The correct answer is <var name="$mc"/>.</p>-->
+                    </solution>
+
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <title>Tables</title>
+
+                <webwork xml:id="tables">
+
+                    <setup>
+                        <var name="$x" category="integer">
+                            <static>5</static>
+                        </var>
+
+                        <pg-code>
+                            $x = Real(5);
+                        </pg-code>
+                    </setup>
+
+                    <statement>
+                        <p>A table with minimal XML source.</p>
+
+                        <table>
+                            <tabular>
+                                <row>
+                                    <cell>A</cell>
+                                    <cell>B</cell>
+                                    <cell>C</cell>
+                                </row>
+                                <row>
+                                    <cell>D</cell>
+                                    <cell>E</cell>
+                                    <cell>F</cell>
+                                </row>
+                                <row>
+                                    <cell>G</cell>
+                                    <cell>H</cell>
+                                    <cell>I</cell>
+                                </row>
+                            </tabular>
+                        </table>
+                        <p>Finish this table.</p>
+
+                        <table>
+                            <caption>Some integers</caption>
+                            <tabular top="major" left="major" bottom="major" right="minor" halign="center">
+                                <col halign="right" top="minor"/>
+                                <col right="medium"/>
+                                <col halign="left"/>
+                                <row bottom="none" left="none">
+                                <cell right="minor">1</cell>
+                                    <cell>two</cell>
+                                    <cell><m>\lfloor\pi\rfloor</m></cell>
+                                </row>
+                                <row>
+                                    <cell bottom="minor"><m>\text{I}+\text{I}+\text{I}+\text{I}</m></cell>
+                                    <cell><answer var="$x" form="none"/></cell>
+                                    <cell>six</cell>
+                                </row>
+                                <row halign="right">
+                                    <cell><m>2^3-1</m></cell>
+                                    <cell colspan="2" halign="center">VIII</cell>
+                                </row>
+                            </tabular>
+                        </table>
+                    </statement>
+
+                    <solution>
+                        <p>The missing number is <var name="$x"/>.</p>
+                    </solution>
+
+                </webwork>
+
+            </exercise>
 
         </section>
 

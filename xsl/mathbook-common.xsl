@@ -3129,6 +3129,12 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:text>[BACKSLASH]</xsl:text>
 </xsl:template>
 
+<!-- Asterisk -->
+<!-- Centered as a character, not an exponent -->
+<xsl:template match="asterisk">
+    <xsl:text>[ASTERISK]</xsl:text>
+</xsl:template>
+
 <!-- ############ -->
 <!-- Conveniences -->
 <!-- ############ -->
@@ -3215,6 +3221,26 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         <!-- <xsl:text>, set log.level to see more details</xsl:text> -->
     </xsl:message>
 </xsl:template>
+
+<!-- Using the modular  xinclude  scheme at the top level,      -->
+<!-- and forgetting the command-line switch is a common mistake -->
+<!-- The following is not perfect, but reasonably effective     -->
+<!-- Calling context should be "mathbook" element               -->
+<xsl:template match="*" mode="generic-warnings">
+    <xsl:if test="book and not(book/chapter)">
+        <xsl:message>
+            <xsl:text>MBX:WARNING:    </xsl:text>
+            <xsl:text>Your &lt;book&gt; does not have any chapters.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
+        </xsl:message>
+    </xsl:if>
+    <xsl:if test="article and not(article/p) and not(article/section)">
+        <xsl:message>
+            <xsl:text>MBX:WARNING:    </xsl:text>
+            <xsl:text>Your &lt;article&gt; does not have any sections, nor any top-level paragraphs.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
+        </xsl:message>
+    </xsl:if>
+</xsl:template>
+
 
 <xsl:template match="*" mode="deprecation-warnings">
     <!-- newer deprecations at the top of this list, user will see in this order -->

@@ -865,7 +865,8 @@ the xsltproc executable.
                 <lbrace /><nbsp /><nbsp />
                 <rbrace /><nbsp /><nbsp />
                 <tilde /><nbsp /><nbsp />
-                <backslash /><nbsp /><nbsp /></p>
+                <backslash /><nbsp /><nbsp />
+                <asterisk /><nbsp /><nbsp /></p>
             </subsection>
 
             <subsection>
