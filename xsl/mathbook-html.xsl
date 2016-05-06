@@ -2489,58 +2489,105 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Images -->
 <!-- ###### -->
 
-<!-- With a @source attribute we write an HTML img tag with attributes -->
+<!-- With a @source attribute, without an extension, -->
+<!--   we presume an SVG has been manufactured       -->
+<!-- With a @source attribute, with an extension,    -->
+<!--   we write an HTML "img" tag with attributes    -->
 <xsl:template match="image[@source]" >
-    <xsl:element name="img">
-        <!-- width attribute, plus sided-by-side extras -->
-        <xsl:choose>
-            <!-- put CSS on bare image as a side-by-side panel -->
-            <!-- a width CSS rule that comes from this always  -->
-            <xsl:when test="ancestor::sidebyside and not(ancestor::figure)">
-                <xsl:call-template name="sidebysideCSS" select="."/>
-            </xsl:when>
-            <xsl:when test="@width">
-                <xsl:attribute name="width"><xsl:value-of select="@width" /></xsl:attribute>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:attribute name="width">100%</xsl:attribute>
-            </xsl:otherwise>
-        </xsl:choose>
-        <!-- TODO: abandon, deprecate height specification (along with LaTeX code) -->
-        <xsl:if test="@height">
-            <xsl:attribute name="height"><xsl:value-of select="@height" /></xsl:attribute>
-        </xsl:if>
-        <xsl:attribute name="src">
-            <xsl:value-of select="@source" />
-        </xsl:attribute>
-        <xsl:apply-templates select="description" />
-    </xsl:element>
+    <!-- condition on file extension -->
+    <xsl:variable name="extension">
+        <xsl:call-template name="file-extension">
+            <xsl:with-param name="filename" select="@source" />
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:choose>
+        <!-- no extension, presume SVG manufactured -->
+        <xsl:when test="$extension=''">
+            <xsl:call-template name="svg-wrapper">
+                <xsl:with-param name="svg-filename">
+                    <xsl:value-of select="@source" />
+                    <xsl:text>.svg</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="png-fallback-filename" />
+                <xsl:with-param name="image-width">
+                    <xsl:choose>
+                        <xsl:when test="../@width">
+                            <xsl:value-of select="../@width" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>90%</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:with-param>
+                <xsl:with-param name="image-description">
+                    <xsl:apply-templates select="description" />
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:when>
+        <!-- with extension, just include it -->
+        <xsl:otherwise>
+            <xsl:element name="img">
+                <!-- side-by-side extras with width, or plain width attribute-->
+                <xsl:choose>
+                    <!-- put CSS on bare image as a side-by-side panel -->
+                    <!-- a width CSS rule that comes from this always  -->
+                    <xsl:when test="ancestor::sidebyside and not(ancestor::figure)">
+                        <xsl:call-template name="sidebysideCSS" select="."/>
+                    </xsl:when>
+                    <xsl:when test="@width">
+                        <xsl:attribute name="width">
+                            <xsl:value-of select="@width" />
+                        </xsl:attribute>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:attribute name="width">
+                            <xsl:text>90%</xsl:text>
+                        </xsl:attribute>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <!-- TODO: abandon, deprecate height specification (along with LaTeX code) -->
+                <xsl:if test="@height">
+                    <xsl:attribute name="height"><xsl:value-of select="@height" /></xsl:attribute>
+                </xsl:if>
+                <xsl:attribute name="src">
+                    <xsl:value-of select="@source" />
+                </xsl:attribute>
+                <!-- alt attribute for accessibility -->
+                <xsl:attribute name="alt">
+                    <xsl:apply-templates select="description" />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
-<!-- A plain image is just a light wrapper and content         -->
-<!-- describes the image type and dictates result, this        -->
-<!-- skips over description, which we must pick up in wrappers -->
+<!-- A plain image is just a light wrapper and content -->
+<!-- describes the image type and dictates result      -->
 <xsl:template match="image">
-    <xsl:apply-templates select="tikz|asymptote|sageplot|latex-image-code" />
+    <xsl:apply-templates select="asymptote|sageplot|latex-image-code" />
 </xsl:template>
 
-<!-- Write an "alt" attribute as part    -->
-<!-- of whatever element holds the image -->
-<xsl:template match="image/description">
-    <xsl:attribute name="alt">
-        <xsl:apply-templates />
-    </xsl:attribute>
-</xsl:template>
-
-<!-- A wrapper for SVG images w/ optional fallback -->
-<!-- object element seems fine for HTML            -->
-<!-- but SageMathCloud prefers img element         -->
-<xsl:template match="*" mode="svg-wrapper">
-    <xsl:param name="png-fallback" />
-    <xsl:element name="object">
-        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
-        <xsl:attribute name="style">
-            <xsl:text>width:</xsl:text>
+<!-- SVG's produced by mbx script                  -->
+<!--   Asymptote graphics language                 -->
+<!--   LaTeX source code images                    -->
+<!--   Sage graphics plots, w/ PNG fallback for 3D -->
+<xsl:template match="image/asymptote|image/latex-image-code|image/sageplot">
+    <xsl:call-template name="svg-wrapper">
+        <xsl:with-param name="svg-filename">
+            <xsl:value-of select="$directory.images" />
+            <xsl:text>/</xsl:text>
+            <xsl:apply-templates select=".." mode="internal-id" />
+            <xsl:text>.svg</xsl:text>
+        </xsl:with-param>
+        <xsl:with-param name="png-fallback-filename">
+            <xsl:if test="self::sageplot">
+                <xsl:value-of select="$directory.images" />
+                <xsl:text>/</xsl:text>
+                <xsl:apply-templates select=".." mode="internal-id" />
+                <xsl:text>.png</xsl:text>
+            </xsl:if>
+        </xsl:with-param>
+        <xsl:with-param name="image-width">
             <xsl:choose>
                 <xsl:when test="../@width">
                     <xsl:value-of select="../@width" />
@@ -2549,48 +2596,63 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>90%</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
-            <xsl:text>; margin:auto; display:block;</xsl:text>
+        </xsl:with-param>
+        <xsl:with-param name="image-description">
+            <xsl:apply-templates select="../description" />
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- A named template creates the infrastructure for an SVG image -->
+<!-- Parameters -->
+<!-- svg-filename: required, full relative path -->
+<!-- png-fallback-filename: optional -->
+<!-- image-width: required -->
+<!-- image-description: optional -->
+<xsl:template name="svg-wrapper">
+    <xsl:param name="svg-filename" />
+    <xsl:param name="png-fallback-filename" select="''" />
+    <xsl:param name="image-width" />
+    <xsl:param name="image-description" select="''" />
+    <xsl:element name="object">
+        <!-- type attribute for object element -->
+        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
+        <!-- style attribute, should be class + CSS -->
+        <xsl:attribute name="style">
+            <xsl:text>width:</xsl:text>
+            <xsl:value-of select="$image-width" />
+            <xsl:text>; </xsl:text>
+            <xsl:text>margin:auto; display:block;</xsl:text>
         </xsl:attribute>
+        <!-- data attribute for object element, the SVG image -->
         <xsl:attribute name="data">
-            <xsl:value-of select="$directory.images" />
-            <xsl:text>/</xsl:text>
-            <xsl:apply-templates select=".." mode="internal-id" />
-            <xsl:text>.svg</xsl:text>
+            <xsl:value-of select="$svg-filename" />
         </xsl:attribute>
-        <!-- pickup description that is a peer, as attribute -->
-        <xsl:apply-templates select="../description" />
+        <!-- alt attribute for accessibility -->
+        <xsl:attribute name="alt">
+            <xsl:value-of select="$image-description" />
+        </xsl:attribute>
+        <!-- content is PNG fallback, if available, else message -->
         <xsl:choose>
-            <xsl:when test="$png-fallback = 'yes'">
-                <xsl:element name="img">
-                    <xsl:attribute name="src">
-                        <xsl:value-of select="$directory.images" />
-                        <xsl:text>/</xsl:text>
-                        <xsl:apply-templates select=".." mode="internal-id" />
-                        <xsl:text>.png</xsl:text>
-                    </xsl:attribute>
-                </xsl:element>
+            <xsl:when test="$png-fallback-filename = ''">
+                <p style="margin:auto">&lt;&lt;SVG image is unavailable, or your browser cannot render it&gt;&gt;</p>
             </xsl:when>
             <xsl:otherwise>
-                <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
+                <xsl:element name="img">
+                    <xsl:attribute name="src">
+                        <xsl:value-of select="$png-fallback-filename" />
+                   </xsl:attribute>
+                    <xsl:attribute name="width">
+                        <xsl:value-of select="$image-width" />
+                    </xsl:attribute>
+                    <!-- alt attribute for accessibility -->
+                    <xsl:attribute name="alt">
+                        <xsl:value-of select="$image-description" />
+                    </xsl:attribute>
+                </xsl:element>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:element>
-</xsl:template>
-
-<!-- Asymptote graphics language  -->
-<!-- LaTeX standalone images      -->
-<!-- SVG's produced by mbx script -->
-<xsl:template match="image/asymptote|image/latex-image-code">
-    <xsl:apply-templates select="." mode="svg-wrapper" />
-</xsl:template>
-
-<!-- Sage graphics plots          -->
-<!-- SVG's produced by mbx script -->
-<!-- PNGs are fall back for 3D    -->
-<xsl:template match="image/sageplot">
-    <xsl:apply-templates select="." mode="svg-wrapper">
-        <xsl:with-param name="png-fallback" select="'yes'" />
-    </xsl:apply-templates>
 </xsl:template>
 
 <!-- LaTeX standalone image              -->
@@ -2599,7 +2661,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="latex-image-code">
     <xsl:message>MBX WARNING: latex-image-code element should be enclosed by an image element</xsl:message>
     <xsl:apply-templates select="." mode="location-report" />
-    <xsl:apply-templates select="." mode="svg-wrapper" />
 </xsl:template>
 
 <!-- ################### -->

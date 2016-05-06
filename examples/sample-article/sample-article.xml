@@ -1406,7 +1406,19 @@ the xsltproc executable.
                         </sageplot>
                     </image>
                 </figure>
+            </subsection>
 
+            <subsection>
+                <title>Images from External Sources</title>
+
+                <p>If you have raster images (photographs, etc) then they are specified with complete filenames, as above in Figure<nbsp /><xref ref="figure-function-derivative" />.  If you have existing images that are vector graphics, then PDF format works best for <latex /> output and SVG format works best for HTML.  The utility <c>pdf2svg</c> works well for converting PDF to SVG.  In this case, specify your source as a filenmae, but leave off the file extension, and the appropriate version will be used for the current output format.</p>
+
+                <p>The image below is provided from a PDF file for the <latex /> output, and was converted to an SVG for use with th HTML output.</p>
+
+                <figure xml:id="figure-complete-graph">
+                    <caption>Complete graph on <m>16</m> vertices, from <c>www.texample.net</c></caption>
+                    <image source="images/complete-graph" />
+                </figure>
             </subsection>
 
         </section>
