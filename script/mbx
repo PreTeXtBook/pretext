@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 # ********************************************************************
 # Copyright 2010-2016 Robert A. Beezer
 #
@@ -192,9 +193,14 @@ def latex_image_conversion(xml_source, xmlid_root, data_dir, dest_dir, outformat
             latex_image_eps = "{}.eps".format(filebase)
             tex_executable = get_executable(config,  'tex')
             _debug("tex executable: {}".format(tex_executable))
-            latex_cmd = [tex_executable, latex_image]
+            latex_cmd = [tex_executable, "-interaction=batchmode", latex_image]
             _verbose("converting {} to {}".format(latex_image, latex_image_pdf))
             subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            pdfcrop_executable = get_executable(config,  'pdfcrop')
+            _debug("pdfcrop executable: {}".format(pdfcrop_executable))
+            pdfcrop_cmd = [pdfcrop_executable, latex_image_pdf, latex_image_pdf]
+            _verbose("cropping {} to {}".format(latex_image_pdf, latex_image_pdf))
+            subprocess.call(pdfcrop_cmd, stdout=devnull, stderr=subprocess.STDOUT)
             if outformat == 'all':
                 shutil.copy2(latex_image, dest_dir)
             if (outformat == 'pdf' or outformat == 'all'):
