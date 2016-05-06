@@ -53,6 +53,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="/mathbook/docinfo/latex-image-preamble"/>
         <xsl:value-of select="$latex-macros" />
         <xsl:text>\begin{document}&#xa;</xsl:text>
+        <xsl:text>\pagestyle{empty}&#xa;</xsl:text>
         <xsl:value-of select="."/>
         <xsl:text>\end{document}&#xa;</xsl:text>
     </exsl:document>
