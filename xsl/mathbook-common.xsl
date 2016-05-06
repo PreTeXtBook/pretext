@@ -34,7 +34,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Copyright 2006, O'Reilly Media, Inc.                           -->
 <!-- Declaration and entity definition format from Recipe 2.8       -->
 <!-- Unicode strings from http://stackoverflow.com/questions/586231 -->
-<!DOCTYPE stylesheet [
+<!DOCTYPE xsl:stylesheet [
      <!ENTITY UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ">
      <!ENTITY LOWERCASE "abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ">
 ]>
@@ -981,6 +981,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="count" select="1" />
         </xsl:call-template>
     </xsl:if>
+</xsl:template>
+
+<!-- File Extension -->
+<!-- Input: full filename                       -->
+<!-- Output: extension (no period), lowercase'd -->
+<xsl:template name="file-extension">
+    <xsl:param name="filename" />
+    <xsl:variable name="extension">
+        <xsl:call-template name="substring-after-last">
+            <xsl:with-param name="input" select="$filename" />
+            <xsl:with-param name="substr" select="'.'" />
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="translate($extension, &UPPERCASE;, &LOWERCASE;)" />
 </xsl:template>
 
 

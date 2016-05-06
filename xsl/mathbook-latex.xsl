@@ -3694,9 +3694,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>height=</xsl:text><xsl:value-of select="@height" /><xsl:text>pt,</xsl:text>
         </xsl:if>
         <xsl:text>]</xsl:text>
-        <xsl:text>{</xsl:text><xsl:value-of select="@source" /><xsl:text>}</xsl:text>
+        <xsl:text>{</xsl:text>
+        <xsl:value-of select="@source" />
+        <!-- default to .pdf if no extension given -->
+        <xsl:variable name="extension">
+            <xsl:call-template name="file-extension">
+                <xsl:with-param name="filename" select="@source" />
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="$extension = ''">
+            <xsl:text>.pdf</xsl:text>
+        </xsl:if>
+        <xsl:text>}</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="tikz|asymptote|sageplot|latex-image-code" />
+    <xsl:apply-templates select="asymptote|sageplot|latex-image-code" />
     <!-- end the body of the image -->
     <xsl:text>}% end body &#xa;{</xsl:text>
     <!-- add empty caption -->
@@ -3784,12 +3795,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>,</xsl:text>
         <!-- TODO: deprecate, abandon @height (along with HTML code) -->
          <xsl:if test="@height">
-             <xsl:text>height=</xsl:text><xsl:value-of select="@height" /><xsl:text>pt,</xsl:text>
+             <xsl:text>height=</xsl:text>
+             <xsl:value-of select="@height" />
+             <xsl:text>pt,</xsl:text>
          </xsl:if>
         <xsl:text>]</xsl:text>
-        <xsl:text>{</xsl:text><xsl:value-of select="@source" /><xsl:text>}</xsl:text>
+        <xsl:text>{</xsl:text>
+        <xsl:value-of select="@source" />
+        <!-- default to .pdf if no extension given -->
+        <xsl:variable name="extension">
+            <xsl:call-template name="file-extension">
+                <xsl:with-param name="filename" select="@source" />
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="$extension = ''">
+            <xsl:text>.pdf</xsl:text>
+        </xsl:if>
+        <xsl:text>}</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="tikz|asymptote|sageplot|latex-image-code" />
+    <xsl:apply-templates select="asymptote|sageplot|latex-image-code" />
 </xsl:template>
 
 <!-- Asymptote graphics language  -->
