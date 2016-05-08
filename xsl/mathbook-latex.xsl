@@ -2969,40 +2969,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-
-<!-- Markup, typically within paragraphs            -->
-<!-- Quotes, double or single, see quotations below -->
-<xsl:template match="q">
-    <xsl:text>``</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>''</xsl:text>
-</xsl:template>
-
-<xsl:template match="sq">
-    <xsl:text>`</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>'</xsl:text>
-</xsl:template>
-
-<!-- Sometimes you need an "unbalanced" quotation make,    -->
-<!-- maybe because you are crossing some other XML element -->
-<!-- So here are left and right, single and double         -->
-<xsl:template match="lsq">
-    <xsl:text>`</xsl:text>
-</xsl:template>
-
-<xsl:template match="rsq">
-    <xsl:text>'</xsl:text>
-</xsl:template>
-
-<xsl:template match="lq">
-    <xsl:text>``</xsl:text>
-</xsl:template>
-
-<xsl:template match="rq">
-    <xsl:text>''</xsl:text>
-</xsl:template>
-
 <!-- Actual Quotations                -->
 <!-- TODO: <quote> element for inline -->
 <xsl:template match="blockquote">
@@ -3212,12 +3178,53 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\textbackslash{}</xsl:text>
 </xsl:template>
 
+<!-- Other characters -->
+
 <!-- Asterisk -->
 <!-- Centered as a character, not an exponent -->
 <xsl:template match="asterisk">
     <xsl:text>\textasteriskcentered</xsl:text>
 </xsl:template>
 
+<!-- Left Single Quote -->
+<xsl:template match="lsq">
+    <xsl:text>`</xsl:text>
+</xsl:template>
+
+<!-- Right Single Quote -->
+<xsl:template match="rsq">
+    <xsl:text>'</xsl:text>
+</xsl:template>
+
+<!-- Left (Double) Quote -->
+<xsl:template match="lq">
+    <xsl:text>``</xsl:text>
+</xsl:template>
+
+<!-- Right (Double) Quote -->
+<xsl:template match="rq">
+    <xsl:text>''</xsl:text>
+</xsl:template>
+
+<!-- Left Bracket -->
+<xsl:template match="lbracket">
+    <xsl:text>[</xsl:text>
+</xsl:template>
+
+<!-- Right Bracket -->
+<xsl:template match="rbracket">
+    <xsl:text>]</xsl:text>
+</xsl:template>
+
+<!-- Left Angle Bracket -->
+<xsl:template match="langle">
+    <xsl:text>\textlangle{}</xsl:text>
+</xsl:template>
+
+<!-- Right Angle Bracket -->
+<xsl:template match="rangle">
+    <xsl:text>\textrangle{}</xsl:text>
+</xsl:template>
 
 <!-- Other Miscellaneous Symbols, Constructions -->
 
@@ -3292,15 +3299,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>
-
-<!-- Braces -->
-<!-- Matched, as grouping -->
-<xsl:template match="braces">
-    <xsl:text>\{</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\}</xsl:text>
-</xsl:template>
-
 
 <!-- Line Breaks -->
 <!-- \newline works best in table cells in paragraph mode       -->

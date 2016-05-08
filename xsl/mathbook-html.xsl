@@ -3356,38 +3356,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Miscellaneous -->
-
-<!-- Markup, typically within paragraphs            -->
-<!-- Quotes, double or single, see quotations below -->
-<!-- HTML5 wants actual characters here -->
-<xsl:template match="q">
-    <xsl:text>&#x201c;</xsl:text><xsl:apply-templates /><xsl:text>&#x201d;</xsl:text>
-</xsl:template>
-
-<xsl:template match="sq">
-    <xsl:text>&#x2018;</xsl:text><xsl:apply-templates /><xsl:text>&#x2019;</xsl:text>
-</xsl:template>
-
-<!-- Sometimes you need an "unbalanced" quotation make,    -->
-<!-- maybe because you are crossing some other XML element -->
-<!-- So here are left and right, single and double         -->
-<xsl:template match="lsq">
-    <xsl:text>&#x2018;</xsl:text>
-</xsl:template>
-
-<xsl:template match="rsq">
-    <xsl:text>&#x2019;</xsl:text>
-</xsl:template>
-
-<xsl:template match="lq">
-    <xsl:text>&#x201c;</xsl:text>
-</xsl:template>
-
-<xsl:template match="rq">
-    <xsl:text>&#x201d;</xsl:text>
-</xsl:template>
-
 <!-- Actual Quotations                -->
 <!-- TODO: <quote> element for inline to be <q> in HTML-->
 <xsl:template match="blockquote">
@@ -3630,6 +3598,46 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x2217;</xsl:text>
 </xsl:template>
 
+<!-- Left Single Quote -->
+<xsl:template match="lsq">
+    <xsl:text>&#x2018;</xsl:text>
+</xsl:template>
+
+<!-- Right Single Quote -->
+<xsl:template match="rsq">
+    <xsl:text>&#x2019;</xsl:text>
+</xsl:template>
+
+<!-- Left (Double) Quote -->
+<xsl:template match="lq">
+    <xsl:text>&#x201c;</xsl:text>
+</xsl:template>
+
+<!-- Right (Double) Quote -->
+<xsl:template match="rq">
+    <xsl:text>&#x201d;</xsl:text>
+</xsl:template>
+
+<!-- Left Bracket -->
+<xsl:template match="lbracket">
+    <xsl:text>[</xsl:text>
+</xsl:template>
+
+<!-- Right Bracket -->
+<xsl:template match="rbracket">
+    <xsl:text>]</xsl:text>
+</xsl:template>
+
+<!-- Left Angle Bracket -->
+<xsl:template match="langle">
+    <xsl:text>&#x2329;</xsl:text>
+</xsl:template>
+
+<!-- Right Angle Bracket -->
+<xsl:template match="rangle">
+    <xsl:text>&#x232a;</xsl:text>
+</xsl:template>
+
 
 <!-- Other Miscellaneous Symbols, Constructions -->
 
@@ -3642,13 +3650,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Matches HTML5 specification -->
 <xsl:template match="foreign">
     <i class="foreign"><xsl:apply-templates /></i>
-</xsl:template>
-
-<!-- Braces -->
-<xsl:template match="braces">
-    <xsl:text>{</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- Non-breaking space, which "joins" two words as a unit            -->
@@ -3700,7 +3701,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="mdash">
     <xsl:text>&#8212;</xsl:text>
 </xsl:template>
-
 
 <!--        -->
 <!-- Poetry -->

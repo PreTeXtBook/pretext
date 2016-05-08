@@ -38,7 +38,7 @@
 <!-- For example, an <ndash>, but not a <me>             -->
 <!-- Precede these by a #PCDATA, wrap with ( )*          -->
 <!ENTITY % characters "nbsp|ndash|mdash|ampersand|less|greater|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|tilde|backslash|asterisk|lq|rq|lsq|rsq|ellipsis|copyright|ie|eg|etc|circa|tex|latex|webwork|trademark|registered|today|timeofday">
-<!ENTITY % markup "xref|url|m|c|em|alert|q|sq|term|foreign|quantity|acro|booktitle">
+<!ENTITY % markup "xref|url|m|c|em|alert|q|sq|braces|brackets|angles|term|foreign|quantity|acro|booktitle">
 <!ENTITY % line "%characters; | %markup;">
 
 <!-- Multiline Content -->
@@ -384,6 +384,7 @@
 <!ELEMENT alert     (#PCDATA|%line;)*>
 <!ELEMENT q         (#PCDATA|%line;)*>
 <!ELEMENT sq        (#PCDATA|%line;)*>
+<!ELEMENT braces    (#PCDATA|%line;)*>
 <!ELEMENT term      (#PCDATA|%line;)*>
 <!ELEMENT foreign   (#PCDATA|%line;)*>
 <!ELEMENT acro      (#PCDATA|%line;)*>

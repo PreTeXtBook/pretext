@@ -3149,10 +3149,109 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:text>[BACKSLASH]</xsl:text>
 </xsl:template>
 
+<!-- ################ -->
+<!-- Other Characters -->
+<!-- ################ -->
+
 <!-- Asterisk -->
 <!-- Centered as a character, not an exponent -->
 <xsl:template match="asterisk">
     <xsl:text>[ASTERISK]</xsl:text>
+</xsl:template>
+
+<!-- Left Single Quote -->
+<xsl:template match="lsq">
+    <xsl:text>[LEFTSINGLEQUOTE]</xsl:text>
+</xsl:template>
+
+<!-- Right Single Quote -->
+<xsl:template match="rsq">
+    <xsl:text>[RIGHTSINGLEQUOTE]</xsl:text>
+</xsl:template>
+
+<!-- Left (Double) Quote -->
+<xsl:template match="lq">
+    <xsl:text>[LEFTQUOTE]</xsl:text>
+</xsl:template>
+
+<!-- Right (Double) Quote -->
+<xsl:template match="rq">
+    <xsl:text>[RIGHTQUOTE]</xsl:text>
+</xsl:template>
+
+<!-- Left Bracket -->
+<xsl:template match="lbracket">
+    <xsl:text>[LEFTBRACKET]</xsl:text>
+</xsl:template>
+
+<!-- Right Bracket -->
+<xsl:template match="rbracket">
+    <xsl:text>[RIGHTBRACKET]</xsl:text>
+</xsl:template>
+
+<!-- Left Angle Bracket -->
+<xsl:template match="langle">
+    <xsl:text>[LEFTANGLEBRACKET]</xsl:text>
+</xsl:template>
+
+<!-- Right Angle Bracket -->
+<xsl:template match="rangle">
+    <xsl:text>[RIGHTANGLEBRACKET]</xsl:text>
+</xsl:template>
+
+
+<!-- ######### -->
+<!-- Groupings -->
+<!-- ######## -->
+
+<!-- Characters with left and right variants naturally  -->
+<!-- give rise to tags with begin and end variants      -->
+<!-- We implement these here with Result Tree Fragments -->
+<!-- using polymorphic techniques for the characters    -->
+
+<xsl:template match="q">
+    <xsl:variable name="q-rtf">
+        <lq />
+        <xsl:copy-of select="*|text()"/>
+        <rq />
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($q-rtf)" />
+</xsl:template>
+
+<xsl:template match="sq">
+    <xsl:variable name="sq-rtf">
+        <lsq />
+        <xsl:copy-of select="*|text()"/>
+        <rsq />
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($sq-rtf)" />
+</xsl:template>
+
+<xsl:template match="braces">
+    <xsl:variable name="braces-rtf">
+        <lbrace />
+        <xsl:copy-of select="*|text()"/>
+        <rbrace />
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($braces-rtf)" />
+</xsl:template>
+
+<xsl:template match="brackets">
+    <xsl:variable name="brackets-rtf">
+        <lbracket />
+        <xsl:copy-of select="*|text()"/>
+        <rbracket />
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($brackets-rtf)" />
+</xsl:template>
+
+<xsl:template match="angles">
+    <xsl:variable name="angles-rtf">
+        <langle />
+        <xsl:copy-of select="*|text()"/>
+        <rangle />
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($angles-rtf)" />
 </xsl:template>
 
 <!-- ############ -->

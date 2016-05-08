@@ -909,6 +909,13 @@ the xsltproc executable.
 
                 <p>I must stand with anybody that stands right, and stand with him while he is right, and part with him when he goes wrong.<rq /></p>
 
+                <p>And as a test, <q>we use <sq>single quotes inside of double quotes,</sq></q> which <latex /> gets wrong.  An ugly remedy is to insert a space, <q>we use <sq>single quotes inside of double quotes.</sq> </q></p>
+            </subsection>
+
+            <subsection>
+                <title>Groupings</title>
+
+                <p>It is possible to make some other groupings like quotations, such as <braces>some <em>emphasized text</em> grouped within braces</braces>, or <brackets>a <booktitle>Book Title</booktitle> inside brackets</brackets>, or <angles>some <foreign>foreign words</foreign> inside angle brackets</angles>.</p>
             </subsection>
 
         </section>
