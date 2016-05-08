@@ -1802,6 +1802,33 @@ the xsltproc executable.
 
             </subsection>
 
+            <subsection>
+                <title>Named Lists</title>
+
+                <p>A list can be wrapped with a <c>&lt;list&gt;</c> element, so that it earns a number, can be given a title and have an introduction and conclusion.  Cross-references to individual list items get a bit absurd as they are prefixed with the number of the list and then the number of the item, so conceivably you could get a number like <c>4.5.3:2.a.ii</c>.</p>
+
+                <list>
+                    <title>Colors of the Rainbow</title>
+
+                    <introduction>
+                        <p>Because the colors are always in the same order, an ordered list is natural here.  The colors change continuously, but are often divided up into large ranges that human perception can easily distinguish.</p>
+                    </introduction>
+
+                    <ol>
+                        <li><p>Red</p></li>
+                        <li xml:id="rainbow-orange"><p>Orange</p></li>
+                        <li><p>Yellow</p></li>
+                        <li><p>Green</p></li>
+                        <li><p>Blue</p></li>
+                        <li><p>Indigo</p></li>
+                        <li><p>Violet</p></li>
+                    </ol>
+
+                    <p>So some people use the acronym <acro>ROY-G-BIV</acro> to remember this sequence.</p>
+                </list>
+            </subsection>
+
+
             <references>
                 <title>References (with lists in Annotations)</title>
 
@@ -2509,6 +2536,7 @@ the xsltproc executable.
                 <li><p>An item buried in nested ordered lists (local reference): <xref ref="list-two-two-two-three" autoname="yes"/></p></li>
                 <li><p>A subsidary part of an exercise (fully-qualified reference): <xref ref="exercise-one-two-one" /></p></li>
                 <li><p>List item as knowls in HTML, including nested lists: <xref ref="list-two" />, <xref ref="list-two-two-two" autoname="yes" /></p></li>
+                <li><p>List item inside a named list, second color in rainbow list: <xref ref="rainbow-orange" autoname="yes" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul>
 

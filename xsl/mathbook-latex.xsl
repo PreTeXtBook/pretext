@@ -472,7 +472,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'principle'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//definition or //example or //exercise or //remark">
+    <xsl:if test="//definition or //example or //exercise or //remark or //list">
         <xsl:text>%% Definition-like environments, normal text&#xa;</xsl:text>
         <xsl:text>%% Numbering for definition, examples is in sync with theorems, etc&#xa;</xsl:text>
         <xsl:text>%% also for free-form exercises, not in exercise sections&#xa;</xsl:text>
@@ -495,6 +495,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="//remark">
             <xsl:text>\newtheorem{remark}[theorem]{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'remark'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//list">
+        <xsl:text>%% \list exists, so we peturb the natural choice&#xa;</xsl:text>
+            <xsl:text>\newtheorem{listwrapper}[theorem]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'list'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
@@ -2455,19 +2461,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{definition}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Examples and Remarks -->
+<!-- Examples, Remarks, List Wrapper -->
 <!-- Simpler than theorems, definitions, etc            -->
 <!-- Information comes from self, so slightly different -->
-<xsl:template match="example|remark">
+<xsl:template match="example|list|remark">
+    <xsl:variable name="env-name">
+        <xsl:choose>
+            <xsl:when test="local-name(.)='list'">
+                <xsl:text>listwrapper</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="local-name(.)" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:text>\begin{</xsl:text>
-        <xsl:value-of select="local-name(.)" />
+        <xsl:value-of select="$env-name" />
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="title" mode="environment-option" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::title)]"/>
     <xsl:text>\end{</xsl:text>
-        <xsl:value-of select="local-name(.)" />
+        <xsl:value-of select="$env-name" />
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
