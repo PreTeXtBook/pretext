@@ -3386,9 +3386,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <em class="terminology"><xsl:apply-templates /></em>
 </xsl:template>
 
-<!-- Acronyms (no-op) -->
+<!-- Acronyms, Initialisms, Abbreviations -->
+<!-- abbreviation: contracted form                                  -->
+<!-- acronym: initials, pronounced as a word (eg SCUBA, RADAR)      -->
+<!-- initialism: one letter at a time, (eg CIA, FBI)                -->
+<!-- All are marked as the HTML "abbr" tag, but classes distinguish -->
+<!-- Would a screen reader know the difference?                     -->
+<xsl:template match="abbr">
+    <abbr class="abbreviation">
+        <xsl:comment>Style me</xsl:comment>
+        <xsl:apply-templates />
+    </abbr>
+</xsl:template>
+
 <xsl:template match="acro">
-    <abbr class="acronym"><xsl:comment>Style me</xsl:comment><xsl:apply-templates /></abbr>
+    <abbr class="acronym">
+        <xsl:comment>Style me</xsl:comment>
+        <xsl:apply-templates />
+    </abbr>
+</xsl:template>
+
+<xsl:template match="init">
+    <abbr class="initialism">
+        <xsl:comment>Style me</xsl:comment>
+        <xsl:apply-templates />
+    </abbr>
 </xsl:template>
 
 <!-- Emphasis -->

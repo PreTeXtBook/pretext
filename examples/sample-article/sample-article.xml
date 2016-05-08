@@ -639,7 +639,7 @@ the xsltproc executable.
                 </image>
             </figure>
 
-            <p>Lists can have multiple columns.  With <acro>HTML</acro> items displayed in row-major order (horizontally first) and with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items <mdash /> derivatives and integrals <mdash /> where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.<index xml:id="index-start-multicolumn" finish="index-finish-multicolumn"><main>Lists</main><sub>multicolumn</sub></index></p>
+            <p>Lists can have multiple columns.  With <init>HTML</init> items displayed in row-major order (horizontally first) and with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items <mdash /> derivatives and integrals <mdash /> where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.<index xml:id="index-start-multicolumn" finish="index-finish-multicolumn"><main>Lists</main><sub>multicolumn</sub></index></p>
 
             <ol cols="5">
                 <li><p>Red</p></li>
@@ -885,6 +885,8 @@ the xsltproc executable.
                 <circa /><nbsp /><nbsp /></p>
 
                 <p>It might be instructive to see how the paragraphs above about escape characters were written without inadvertently using an escape character improperly.</p>
+
+                <p>We also distinguish between abbreviations (<abbr>vs.</abbr>), acronyms (<acro>SCUBA</acro>) and initialisms (<init>XML</init>).</p>
             </subsection>
 
             <subsection>

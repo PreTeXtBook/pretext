@@ -370,9 +370,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Used for inline definitions of terms&#xa;</xsl:text>
         <xsl:text>\newcommand{\terminology}[1]{\textbf{#1}}&#xa;</xsl:text>
     </xsl:if>
+    <!-- lower-casing macro from: http://tex.stackexchange.com/questions/114592/force-all-small-caps -->
+    <!-- Letter-spacing LaTeX: http://tex.stackexchange.com/questions/114578/tufte-running-headers-not-using-full-width-of-page -->
+    <xsl:if test="/mathbook//abbr">
+        <xsl:text>%% Used to markup abbreviations&#xa;</xsl:text>
+        <xsl:text>%% default is small caps (Bringhurst, 4e, 3.2.2, p. 48)&#xa;</xsl:text>
+        <xsl:text>\newcommand{\abbreviation}[1]{\textsc{\MakeLowercase{#1}}}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="/mathbook//acro">
-        <xsl:text>%% Used to markup acronyms, defaults is no effect&#xa;</xsl:text>
-        <xsl:text>\newcommand{\acronym}[1]{#1}&#xa;</xsl:text>
+        <xsl:text>%% Used to markup acronyms,&#xa;</xsl:text>
+        <xsl:text>%% default is small caps (Bringhurst, 4e, 3.2.2, p. 48)&#xa;</xsl:text>
+        <xsl:text>\newcommand{\acronym}[1]{\textsc{\MakeLowercase{#1}}}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="/mathbook//init">
+        <xsl:text>%% Used to markup initialisms&#xa;</xsl:text>
+        <xsl:text>%% default is small caps (Bringhurst, 4e, 3.2.2, p. 48)&#xa;</xsl:text>
+        <xsl:text>\newcommand{\initialism}[1]{\textsc{\MakeLowercase{#1}}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//quantity">
         <xsl:text>%% Used for units and number formatting&#xa;</xsl:text>
@@ -3022,10 +3035,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Acronyms (no-op) -->
-<!-- \acronym{} defined in preamble as semantic macro -->
+<!-- Acronyms, Initialisms, Abbreviations -->
+<!-- abbreviation: contracted form                             -->
+<!-- acronym: initials, pronounced as a word (eg SCUBA, RADAR) -->
+<!-- initialism: one letter at a time, (eg CIA, FBI)           -->
+<!-- All use (no-op) semantic macros, defined in preamble      -->
+<!-- TODO:  Test here for content ends in a period            -->
+<!-- if next char is space, use macro that accomplishes "\@." -->
+<!-- if next char is a char, use macro for .\@                -->
+<!-- BUT if new sentence, then just leave the period alone    -->
+<xsl:template match="abbr">
+    <xsl:text>\abbreviation{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
 <xsl:template match="acro">
     <xsl:text>\acronym{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="init">
+    <xsl:text>\initialism{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>

@@ -387,7 +387,9 @@
 <!ELEMENT braces    (#PCDATA|%line;)*>
 <!ELEMENT term      (#PCDATA|%line;)*>
 <!ELEMENT foreign   (#PCDATA|%line;)*>
+<!ELEMENT abbr      (#PCDATA|%line;)*>
 <!ELEMENT acro      (#PCDATA|%line;)*>
+<!ELEMENT init      (#PCDATA|%line;)*>
 <!ELEMENT fn        (#PCDATA|%line;)*>
     <!ATTLIST fn xml:id ID #IMPLIED>
 <!-- <c> is a bit different -->
