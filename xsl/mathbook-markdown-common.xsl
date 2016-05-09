@@ -229,6 +229,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\\</xsl:text>
 </xsl:template>
 
+<!-- Asterisk -->
+<!-- Centered as a character, not an exponent -->
+<xsl:template match="asterisk">
+    <xsl:text>\*</xsl:text>
+</xsl:template>
+
 <!-- Lists -->
 <!--<xsl:template match="ul|ol|dl">
     <xsl:variable name="new-indentation" select="concat($indentation, '    ')" />

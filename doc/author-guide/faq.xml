@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file is part of the documentation of MathBook XML   -->
+<!--                                                          -->
+<!--    MathBook XML Author's Guide                           -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<appendix xml:id="faq">
+    <title>FAQ: Frequently Asked Questions</title>
+
+     <p>This is a list of answers to frequent questions, in no particular order.</p>
+
+    <dl>
+        <li>
+            <title>Why is is there no tag for bold?</title>
+            <p>That would be presentation, not content.  I will answer that question with a question: <em>why</em> do you want to print something in bold?  Is it emphasis? (See <tag>em</tag>.)  Is it the volume number of a journal? (See <tag>journal</tag>.)  Do you want to SHOUT?  Try <tag>alert</tag>.  And so on. There are lots of good answers, some of which are not yet implemented.  We would love to hear about elements you need that are about expressing content, and not about altering presentation.</p>
+        </li>
+
+        <li>
+            <title>Why does your conversion to HTML use a fixed width for the text?</title>
+            <p>There is an optimal number of characters per line for human readers, based on research and centuries of book design.  So we set a fixed width such that that the default font comes close to achieving this optimal value.  We also use responsive design to accomodate the constraints of a small screen as best as possible.  A reader will not want to have to carefully resize a browser window to achieve the optimal width, nor should a line of text spread to many, many characters across a very expansive screen.</p>
+        </li>
+
+        <li>
+            <title>Everything looks right, but why do I get empty output and some warnings about bugs?</title>
+            <p>There is a good chance you have <q>modularized</q> your source files and have not included the <c>--xinclude</c> switch on the command-line when you ran <c>xsltproc</c>.  (See <xref ref="processing-modular" />.)  We can often recognize this mistake<mdash />did you not get a warning?  (If not, we can improve the warning if you tell us how your source was organized.  So please do, since we would love to hear about it.)</p>
+        </li>
+    </dl>
+</appendix>
+
+

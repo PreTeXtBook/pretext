@@ -865,7 +865,8 @@ the xsltproc executable.
                 <lbrace /><nbsp /><nbsp />
                 <rbrace /><nbsp /><nbsp />
                 <tilde /><nbsp /><nbsp />
-                <backslash /><nbsp /><nbsp /></p>
+                <backslash /><nbsp /><nbsp />
+                <asterisk /><nbsp /><nbsp /></p>
             </subsection>
 
             <subsection>
@@ -1405,7 +1406,19 @@ the xsltproc executable.
                         </sageplot>
                     </image>
                 </figure>
+            </subsection>
 
+            <subsection>
+                <title>Images from External Sources</title>
+
+                <p>If you have raster images (photographs, etc) then they are specified with complete filenames, as above in Figure<nbsp /><xref ref="figure-function-derivative" />.  If you have existing images that are vector graphics, then PDF format works best for <latex /> output and SVG format works best for HTML.  The utility <c>pdf2svg</c> works well for converting PDF to SVG.  In this case, specify your source as a filenmae, but leave off the file extension, and the appropriate version will be used for the current output format.</p>
+
+                <p>The image below is provided from a PDF file for the <latex /> output, and was converted to an SVG for use with th HTML output.</p>
+
+                <figure xml:id="figure-complete-graph">
+                    <caption>Complete graph on <m>16</m> vertices, from <c>www.texample.net</c></caption>
+                    <image source="images/complete-graph" />
+                </figure>
             </subsection>
 
         </section>
@@ -1787,6 +1800,34 @@ the xsltproc executable.
                     </li>
                 </dl>
 
+            </subsection>
+
+            <subsection>
+                <title>Named Lists</title>
+
+                <p>A list can be wrapped with a <c>&lt;list&gt;</c> element, so that it earns a number, can be given a title and have an introduction and conclusion.  Cross-references to individual list items get a bit absurd as they are prefixed with the number of the list and then the number of the item, so conceivably you could get a number like <c>4.5.3:2.a.ii</c>.</p>
+
+                <list xml:id="list-colors-rainbow">
+                    <title>Colors of the Rainbow</title>
+
+                    <introduction>
+                        <p>Because the colors are always in the same order, an ordered list is natural here.  The colors change continuously, but are often divided up into large ranges that human perception can easily distinguish.</p>
+                    </introduction>
+
+                    <ol>
+                        <li><p>Red</p></li>
+                        <li xml:id="rainbow-orange"><p>Orange</p></li>
+                        <li><p>Yellow</p></li>
+                        <li><p>Green</p></li>
+                        <li><p>Blue</p></li>
+                        <li><p>Indigo</p></li>
+                        <li><p>Violet</p></li>
+                    </ol>
+
+                    <conclusion>
+                        <p>So some people use the acronym <acro>ROY-G-BIV</acro> to remember this sequence.</p>
+                    </conclusion>
+                </list>
             </subsection>
 
             <references>
@@ -2496,6 +2537,8 @@ the xsltproc executable.
                 <li><p>An item buried in nested ordered lists (local reference): <xref ref="list-two-two-two-three" autoname="yes"/></p></li>
                 <li><p>A subsidary part of an exercise (fully-qualified reference): <xref ref="exercise-one-two-one" /></p></li>
                 <li><p>List item as knowls in HTML, including nested lists: <xref ref="list-two" />, <xref ref="list-two-two-two" autoname="yes" /></p></li>
+                <li><p>A titled list: <xref ref="list-colors-rainbow" /></p></li>
+                <li><p>List item inside a named list, second color in rainbow list: <xref ref="rainbow-orange" autoname="yes" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul>
 
@@ -3649,7 +3692,7 @@ the xsltproc executable.
             <subsection xml:id="subsection-local-theorems">
                 <title>Theorems in This Section</title>
 
-                <p>We have a lot of theorems in this section, so we illustrate including an automatic list of these here.  We use the <c>elements</c> attribute to limit the list to <c>theorem</c> elements, and we use the <c>scope</c> attribute to limit the list to this <c>section</c>.  You can use an introductory <c>p</c> like this one, or not.  The list gets no title or visual separation, so use the usual subdivision elements to make that happen.  The <c>elements</c> attribute can be a space-delimited list of many different elements.  This list should not include the Fundamental Theorem of Calculus, Theorem<nbsp /><xref ref="theorem-FTC" />.  See a slightly different example in <xref ref="section-results" autoname="yes" />.</p>
+                <p>We have a lot of theorems in this section, so we illustrate including an automatic list of these here.  We use the <c>elements</c> attribute to limit the list to <c>theorem</c> elements, and we use the <c>scope</c> attribute to limit the list to this <c>section</c>.  You can use an introductory <c>p</c> like this one, or not.  The list gets no title or visual separation, so use the usual subdivision elements to make that happen.  The <c>elements</c> attribute can be a space-delimited list of many different elements.  This list should not include the Fundamental Theorem of Calculus, Theorem<nbsp /><xref ref="theorem-FTC" />.  See a slightly different example in <xref ref="appendix-results" autoname="yes" />.</p>
 
                 <list-of elements="theorem" scope="section" />
             </subsection>

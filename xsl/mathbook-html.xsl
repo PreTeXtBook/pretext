@@ -80,6 +80,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.knowl.proof" select="'yes'" />
 <xsl:param name="html.knowl.definition" select="'no'" />
 <xsl:param name="html.knowl.example" select="'yes'" />
+<xsl:param name="html.knowl.list" select="'no'" />
 <xsl:param name="html.knowl.remark" select="'no'" />
 <xsl:param name="html.knowl.figure" select="'no'" />
 <xsl:param name="html.knowl.table" select="'no'" />
@@ -221,9 +222,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- WW problem presentation needs the assistance of a server -->
 <xsl:variable name="webwork-server">
-    <xsl:if test="//webwork and $webwork.server=''">
+    <xsl:if test="//webwork[@*|node()] and $webwork.server=''">
         <xsl:message>
-            <xsl:text>MBX:WARNING: WeBWorK problems will not render with out the use of a configured server.  Provide a webwork server with --stringparam webwork.server as something like  https://webwork.bigstateu.edu</xsl:text>
+            <xsl:text>MBX:WARNING: WeBWorK problems will not render with out the use of a properly configured server.  Provide a webwork server with --stringparam webwork.server as something like  https://webwork.bigstateu.edu</xsl:text>
         </xsl:message>
     </xsl:if>
     <xsl:value-of select="$webwork.server" />
@@ -257,6 +258,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and we process it with the chunking template called below              -->
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
+    <xsl:apply-templates select="mathbook" mode="generic-warnings" />
     <xsl:apply-templates select="mathbook" mode="deprecation-warnings" />
     <xsl:apply-templates />
 </xsl:template>
@@ -1218,7 +1220,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We show the full content of the item on the page (b)            -->
 <!-- Or, we build a hidden knowl and place a link on the page (c)    -->
 <!-- NB: this template employs several modal templates, defined just below -->
-<xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|contributor">
+<xsl:template match="fn|biblio|example|list|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|contributor">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
@@ -1250,7 +1252,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     the "xref-as-knowl" modal template           -->
 <!-- TODO: we need to process children in a way that no \label{}, nor ID's, are produced   -->
 <!--       This would perhaps obsolete the "env-type" device, and reorder explnation below -->
-<xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|li|p|contributor" mode="xref-knowl">
+<xsl:template match="fn|biblio|example|list|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|li|p|contributor" mode="xref-knowl">
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
@@ -1567,20 +1569,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Examples, Remarks -->
+<!-- Examples, Remarks, List Wrappers -->
 <!-- Individually customizable -->
 <!-- Similar, as just runs of paragraphs -->
 <xsl:template match="example" mode="is-hidden">
     <xsl:value-of select="$html.knowl.example = 'yes'" />
 </xsl:template>
+<xsl:template match="list" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.list = 'yes'" />
+</xsl:template>
 <xsl:template match="remark" mode="is-hidden">
     <xsl:value-of select="$html.knowl.remark = 'yes'" />
 </xsl:template>
-<xsl:template match="example|remark" mode="is-block-env">
+<xsl:template match="example|list|remark" mode="is-block-env">
     <xsl:value-of select="true()" />
 </xsl:template>
 <!-- Knowl-text is an article with heading -->
-<xsl:template match="example|remark" mode="hidden-knowl-text">
+<xsl:template match="example|list|remark" mode="hidden-knowl-text">
     <article class="example-like">
         <h5 class="heading">
             <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
@@ -1592,7 +1597,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </article>
 </xsl:template>
 <!-- Head is type, number, title -->  <!-- GENERALIZE -->
-<xsl:template match="example|remark" mode="head">
+<xsl:template match="example|list|remark" mode="head">
     <h5 class="heading">
         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
         <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
@@ -1602,16 +1607,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </h5>
 </xsl:template>
 <!-- Body is just all content, but no title -->
-<xsl:template match="example|remark" mode="body">
+<xsl:template match="example|list|remark" mode="body">
     <xsl:apply-templates select="*[not(self::title)]"/>
 </xsl:template>
 <!-- No posterior  -->
-<xsl:template match="example|remark" mode="posterior" />
+<xsl:template match="example|list|remark" mode="posterior" />
 <!-- HTML, CSS -->
-<xsl:template match="example|remark" mode="environment-element">
+<xsl:template match="example|list|remark" mode="environment-element">
     <xsl:text>article</xsl:text>
 </xsl:template>
-<xsl:template match="example|remark" mode="environment-class">
+<xsl:template match="example|list|remark" mode="environment-class">
     <xsl:text>example-like</xsl:text>
 </xsl:template>
 
@@ -2488,58 +2493,105 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Images -->
 <!-- ###### -->
 
-<!-- With a @source attribute we write an HTML img tag with attributes -->
+<!-- With a @source attribute, without an extension, -->
+<!--   we presume an SVG has been manufactured       -->
+<!-- With a @source attribute, with an extension,    -->
+<!--   we write an HTML "img" tag with attributes    -->
 <xsl:template match="image[@source]" >
-    <xsl:element name="img">
-        <!-- width attribute, plus sided-by-side extras -->
-        <xsl:choose>
-            <!-- put CSS on bare image as a side-by-side panel -->
-            <!-- a width CSS rule that comes from this always  -->
-            <xsl:when test="ancestor::sidebyside and not(ancestor::figure)">
-                <xsl:call-template name="sidebysideCSS" select="."/>
-            </xsl:when>
-            <xsl:when test="@width">
-                <xsl:attribute name="width"><xsl:value-of select="@width" /></xsl:attribute>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:attribute name="width">100%</xsl:attribute>
-            </xsl:otherwise>
-        </xsl:choose>
-        <!-- TODO: abandon, deprecate height specification (along with LaTeX code) -->
-        <xsl:if test="@height">
-            <xsl:attribute name="height"><xsl:value-of select="@height" /></xsl:attribute>
-        </xsl:if>
-        <xsl:attribute name="src">
-            <xsl:value-of select="@source" />
-        </xsl:attribute>
-        <xsl:apply-templates select="description" />
-    </xsl:element>
+    <!-- condition on file extension -->
+    <xsl:variable name="extension">
+        <xsl:call-template name="file-extension">
+            <xsl:with-param name="filename" select="@source" />
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:choose>
+        <!-- no extension, presume SVG manufactured -->
+        <xsl:when test="$extension=''">
+            <xsl:call-template name="svg-wrapper">
+                <xsl:with-param name="svg-filename">
+                    <xsl:value-of select="@source" />
+                    <xsl:text>.svg</xsl:text>
+                </xsl:with-param>
+                <xsl:with-param name="png-fallback-filename" />
+                <xsl:with-param name="image-width">
+                    <xsl:choose>
+                        <xsl:when test="../@width">
+                            <xsl:value-of select="../@width" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>90%</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:with-param>
+                <xsl:with-param name="image-description">
+                    <xsl:apply-templates select="description" />
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:when>
+        <!-- with extension, just include it -->
+        <xsl:otherwise>
+            <xsl:element name="img">
+                <!-- side-by-side extras with width, or plain width attribute-->
+                <xsl:choose>
+                    <!-- put CSS on bare image as a side-by-side panel -->
+                    <!-- a width CSS rule that comes from this always  -->
+                    <xsl:when test="ancestor::sidebyside and not(ancestor::figure)">
+                        <xsl:call-template name="sidebysideCSS" select="."/>
+                    </xsl:when>
+                    <xsl:when test="@width">
+                        <xsl:attribute name="width">
+                            <xsl:value-of select="@width" />
+                        </xsl:attribute>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:attribute name="width">
+                            <xsl:text>90%</xsl:text>
+                        </xsl:attribute>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <!-- TODO: abandon, deprecate height specification (along with LaTeX code) -->
+                <xsl:if test="@height">
+                    <xsl:attribute name="height"><xsl:value-of select="@height" /></xsl:attribute>
+                </xsl:if>
+                <xsl:attribute name="src">
+                    <xsl:value-of select="@source" />
+                </xsl:attribute>
+                <!-- alt attribute for accessibility -->
+                <xsl:attribute name="alt">
+                    <xsl:apply-templates select="description" />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
-<!-- A plain image is just a light wrapper and content         -->
-<!-- describes the image type and dictates result, this        -->
-<!-- skips over description, which we must pick up in wrappers -->
+<!-- A plain image is just a light wrapper and content -->
+<!-- describes the image type and dictates result      -->
 <xsl:template match="image">
-    <xsl:apply-templates select="tikz|asymptote|sageplot|latex-image-code" />
+    <xsl:apply-templates select="asymptote|sageplot|latex-image-code" />
 </xsl:template>
 
-<!-- Write an "alt" attribute as part    -->
-<!-- of whatever element holds the image -->
-<xsl:template match="image/description">
-    <xsl:attribute name="alt">
-        <xsl:apply-templates />
-    </xsl:attribute>
-</xsl:template>
-
-<!-- A wrapper for SVG images w/ optional fallback -->
-<!-- object element seems fine for HTML            -->
-<!-- but SageMathCloud prefers img element         -->
-<xsl:template match="*" mode="svg-wrapper">
-    <xsl:param name="png-fallback" />
-    <xsl:element name="object">
-        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
-        <xsl:attribute name="style">
-            <xsl:text>width:</xsl:text>
+<!-- SVG's produced by mbx script                  -->
+<!--   Asymptote graphics language                 -->
+<!--   LaTeX source code images                    -->
+<!--   Sage graphics plots, w/ PNG fallback for 3D -->
+<xsl:template match="image/asymptote|image/latex-image-code|image/sageplot">
+    <xsl:call-template name="svg-wrapper">
+        <xsl:with-param name="svg-filename">
+            <xsl:value-of select="$directory.images" />
+            <xsl:text>/</xsl:text>
+            <xsl:apply-templates select=".." mode="internal-id" />
+            <xsl:text>.svg</xsl:text>
+        </xsl:with-param>
+        <xsl:with-param name="png-fallback-filename">
+            <xsl:if test="self::sageplot">
+                <xsl:value-of select="$directory.images" />
+                <xsl:text>/</xsl:text>
+                <xsl:apply-templates select=".." mode="internal-id" />
+                <xsl:text>.png</xsl:text>
+            </xsl:if>
+        </xsl:with-param>
+        <xsl:with-param name="image-width">
             <xsl:choose>
                 <xsl:when test="../@width">
                     <xsl:value-of select="../@width" />
@@ -2548,48 +2600,63 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>90%</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
-            <xsl:text>; margin:auto; display:block;</xsl:text>
+        </xsl:with-param>
+        <xsl:with-param name="image-description">
+            <xsl:apply-templates select="../description" />
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- A named template creates the infrastructure for an SVG image -->
+<!-- Parameters -->
+<!-- svg-filename: required, full relative path -->
+<!-- png-fallback-filename: optional -->
+<!-- image-width: required -->
+<!-- image-description: optional -->
+<xsl:template name="svg-wrapper">
+    <xsl:param name="svg-filename" />
+    <xsl:param name="png-fallback-filename" select="''" />
+    <xsl:param name="image-width" />
+    <xsl:param name="image-description" select="''" />
+    <xsl:element name="object">
+        <!-- type attribute for object element -->
+        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
+        <!-- style attribute, should be class + CSS -->
+        <xsl:attribute name="style">
+            <xsl:text>width:</xsl:text>
+            <xsl:value-of select="$image-width" />
+            <xsl:text>; </xsl:text>
+            <xsl:text>margin:auto; display:block;</xsl:text>
         </xsl:attribute>
+        <!-- data attribute for object element, the SVG image -->
         <xsl:attribute name="data">
-            <xsl:value-of select="$directory.images" />
-            <xsl:text>/</xsl:text>
-            <xsl:apply-templates select=".." mode="internal-id" />
-            <xsl:text>.svg</xsl:text>
+            <xsl:value-of select="$svg-filename" />
         </xsl:attribute>
-        <!-- pickup description that is a peer, as attribute -->
-        <xsl:apply-templates select="../description" />
+        <!-- alt attribute for accessibility -->
+        <xsl:attribute name="alt">
+            <xsl:value-of select="$image-description" />
+        </xsl:attribute>
+        <!-- content is PNG fallback, if available, else message -->
         <xsl:choose>
-            <xsl:when test="$png-fallback = 'yes'">
-                <xsl:element name="img">
-                    <xsl:attribute name="src">
-                        <xsl:value-of select="$directory.images" />
-                        <xsl:text>/</xsl:text>
-                        <xsl:apply-templates select=".." mode="internal-id" />
-                        <xsl:text>.png</xsl:text>
-                    </xsl:attribute>
-                </xsl:element>
+            <xsl:when test="$png-fallback-filename = ''">
+                <p style="margin:auto">&lt;&lt;SVG image is unavailable, or your browser cannot render it&gt;&gt;</p>
             </xsl:when>
             <xsl:otherwise>
-                <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
+                <xsl:element name="img">
+                    <xsl:attribute name="src">
+                        <xsl:value-of select="$png-fallback-filename" />
+                   </xsl:attribute>
+                    <xsl:attribute name="width">
+                        <xsl:value-of select="$image-width" />
+                    </xsl:attribute>
+                    <!-- alt attribute for accessibility -->
+                    <xsl:attribute name="alt">
+                        <xsl:value-of select="$image-description" />
+                    </xsl:attribute>
+                </xsl:element>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:element>
-</xsl:template>
-
-<!-- Asymptote graphics language  -->
-<!-- LaTeX standalone images      -->
-<!-- SVG's produced by mbx script -->
-<xsl:template match="image/asymptote|image/latex-image-code">
-    <xsl:apply-templates select="." mode="svg-wrapper" />
-</xsl:template>
-
-<!-- Sage graphics plots          -->
-<!-- SVG's produced by mbx script -->
-<!-- PNGs are fall back for 3D    -->
-<xsl:template match="image/sageplot">
-    <xsl:apply-templates select="." mode="svg-wrapper">
-        <xsl:with-param name="png-fallback" select="'yes'" />
-    </xsl:apply-templates>
 </xsl:template>
 
 <!-- LaTeX standalone image              -->
@@ -2598,7 +2665,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="latex-image-code">
     <xsl:message>MBX WARNING: latex-image-code element should be enclosed by an image element</xsl:message>
     <xsl:apply-templates select="." mode="location-report" />
-    <xsl:apply-templates select="." mode="svg-wrapper" />
 </xsl:template>
 
 <!-- ################### -->
@@ -3098,7 +3164,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a sidebyside even though this is not necessary           -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|p|biblio|note|example|remark|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|biblio|note|example|list|remark|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">
@@ -3553,6 +3619,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Backslash -->
 <xsl:template match="backslash">
     <xsl:text>\</xsl:text>
+</xsl:template>
+
+<!-- Asterisk -->
+<!-- Centered as a character, not an exponent                    -->
+<!-- Unicode Character 'ASTERISK OPERATOR' (U+2217)              -->
+<!-- See raised asterisk for other options:                      -->
+<!-- http://www.fileformat.info/info/unicode/char/002a/index.htm -->
+<xsl:template match="asterisk">
+    <xsl:text>&#x2217;</xsl:text>
 </xsl:template>
 
 

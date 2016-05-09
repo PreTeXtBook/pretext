@@ -44,6 +44,57 @@
 
     </section>
 
+    <section xml:id="topic-images">
+        <title>Images</title>
+
+        <subsection xml:id="topic-images-raster">
+            <title>Raster Images</title>
+
+            <p>A <term>raster image</term> is an image described pixel-by-pixel, with different colors and intensities.  Photographs are good examples.  Common formats are Portable Network Graphics (PNG) and Joint Photographic Experts Group (JPEG, JPG), which will both work with <c>pdflatex</c> and modern browsers.  JPEG are a good choice for photographics since they are compressed on the assumption they will be viewed by a human, while PNG is a lossless format and good for line art, diagrams and similar images (if you do not have vector graphics versions, see below).</p>
+
+            <p>To use these images, you simply provide the filename, with a relative path.  A subdirectory such as <c>images</c> is a good choice for a place to put them.  It is your responsibility to place these images where the <latex /> output will find them or where the HTML output will find them.  The XML would look like:</p>
+
+            <pre>
+            <![CDATA[<image source="images/crocodiles.png" width="50%" />]]>
+            </pre>
+
+            <p>Typically you would wrap this in a <tag>figure</tag> that might have an <attribute>xml:id</attribute> attribute for cross-references, with or without a caption.  There is no <attribute>height</attribute> attribute, so the aspect ratio of your image is your responsibility outside of MathBook XML.  The <attribute>width</attribute> attribute is a percentage of the available width of the text (outside of a <tag>sidebyside</tag> panel).  Default width is typically 90<percent />.</p>
+
+            <p>You may also provide a <tag>description</tag> which will aid accessibility for electronic formats.  Keep such readers in mind and provide as much description as possible.  Keep the markup simple, since this will typically migrate to an HTML attribute that cannot contain any structure.  Be careful to avoid double-quotes.  For example,</p>
+
+            <pre>
+            <![CDATA[
+            <image source="images/crocodiles.jpeg" width="50%">
+                <description>Five crocodiles partially submerged in the shallows.</description>
+            </image>
+            ]]>
+            </pre>
+        </subsection>
+
+        <subsection xml:id="topic-images-vector">
+            <title>Vector Graphics</title>
+
+            <p>An image is a <term>vector graphic</term> if the file describes the geometric shapes that constitute the image.  So a simple diagram would be a good candidate, but a photograph would not.  Popular formats are Portable Document Format (PDF) and Scalable Vector Graphics (SVG).  You will get the best results with PDF images in <latex /> output and SVG images for HTML.  The principal advantage of these formats is that they scale (big or small) smoothly, along with fonts.  This is critical when you cannot predict the screen size for a reader of an electronic version.</p>
+
+            <p>Unless you describe these images with a language (see next subsection), you are responsible for providing the PDF and SVG versions.  The <c>pdf2svg</c> utility is very useful if you have PDF images only.  To use these images, you simply follow the instructions above, but do not include a file extension.  This alerts the conversion to use the best possible choice.  So presuming we had files <c>images/toad-life-cycle.pdf</c> and <c>images/toad-life-cycle.svg</c>, an example would be:</p>
+
+            <pre>
+            <![CDATA[
+            <image source="images/toad-life-cycle" width="85%">
+                <description>Diagram of the four stages of a toad's life.</description>
+            </image>
+            ]]>
+            </pre>
+        </subsection>
+
+        <subsection xml:id="topic-images-source">
+            <title>(*) Images Described by Source Code</title>
+
+            <p>To be written once elements and tags solidfy, see sample article for examples.</p>
+        </subsection>
+
+    </section>
+
     <section xml:id="topic-tabular">
         <title>(*) Tables and Tabulars</title>
 

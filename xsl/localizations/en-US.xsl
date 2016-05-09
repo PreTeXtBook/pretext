@@ -81,7 +81,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='fn'><xsl:text>Footnote</xsl:text></localization>
     <localization string-id='contributor'><xsl:text>Contributor</xsl:text></localization>
     <!-- Lists and their items -->
-    <!-- TODO: <localization string-id='list'><xsl:text>List</xsl:text></localization> -->
+    <localization string-id='list'><xsl:text>List</xsl:text></localization>
     <localization string-id='li'><xsl:text>Item</xsl:text></localization>
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Paragraph</xsl:text></localization>
@@ -104,6 +104,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='foreword'><xsl:text>Foreword</xsl:text></localization>
     <localization string-id='dedication'><xsl:text>Dedication</xsl:text></localization>
     <localization string-id='colophon'><xsl:text>Colophon</xsl:text></localization>
+    <!-- Back matter components -->
+    <!-- Following is temporary, "index-part" to be deprecated, only in en-US now -->
+    <!-- NB: repurpose translations, replace "indexsection below", maybe move appendix here -->
+    <localization string-id='index-part'><xsl:text>Index</xsl:text></localization>
     <!-- Parts of the Index -->
     <localization string-id='indexsection'><xsl:text>Index</xsl:text></localization>
     <localization string-id='see'><xsl:text>see</xsl:text></localization>

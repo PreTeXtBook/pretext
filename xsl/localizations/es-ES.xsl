@@ -88,7 +88,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='fn'><xsl:text>Nota a pie de página</xsl:text></localization>
     <!-- Lists and their items -->
     <!-- Translations needed for Spain Spanish -->
-    <!-- TODO: <localization string-id='list'><xsl:text>List</xsl:text></localization> -->
+    <!-- <localization string-id='list'><xsl:text>List</xsl:text></localization> -->
     <!-- <localization string-id='li'><xsl:text>Item</xsl:text></localization> -->
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Párrafo</xsl:text></localization>

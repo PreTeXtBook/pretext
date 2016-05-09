@@ -45,7 +45,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     
     <book xml:id="sample-book">
         <title>Abstract Algebra</title>
-        <subtitle>Theory and Applications</subtitle>
+        <subtitle>MATHBOOK XML SAMPLE ONLY</subtitle>
 
         <xi:include href="./frontmatter.xml" />                 <!-- Title Page, Preface, etc. -->
 

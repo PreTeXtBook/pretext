@@ -37,7 +37,7 @@
 <!-- Elements that could be inside a single line of text -->
 <!-- For example, an <ndash>, but not a <me>             -->
 <!-- Precede these by a #PCDATA, wrap with ( )*          -->
-<!ENTITY % characters "nbsp|ndash|mdash|ampersand|less|greater|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|tilde|backslash|lq|rq|lsq|rsq|ellipsis|copyright|ie|eg|etc|circa|tex|latex|webwork|trademark|registered|today|timeofday">
+<!ENTITY % characters "nbsp|ndash|mdash|ampersand|less|greater|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|tilde|backslash|asterisk|lq|rq|lsq|rsq|ellipsis|copyright|ie|eg|etc|circa|tex|latex|webwork|trademark|registered|today|timeofday">
 <!ENTITY % markup "xref|url|m|c|em|alert|q|sq|term|foreign|quantity|acro|booktitle">
 <!ENTITY % line "%characters; | %markup;">
 
@@ -67,7 +67,7 @@
 <!-- Everything like a paragraph, but also more substantial                   -->
 <!-- These items cannot be contained in anything but a structural subdivision -->
 <!-- Note: the "todo" element is in this list                                 -->
-<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|example|exercise|contributors|list-of|solution-list|notation-list|todo">
+<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|list|example|exercise|contributors|list-of|solution-list|notation-list|todo">
 
 
 <!-- ######### -->
@@ -193,6 +193,8 @@
 <!-- example-like, not very structured -->
 <!ELEMENT example (title?, index*, (%para;)*)>
     <!ATTLIST example xml:id ID #IMPLIED>
+<!ELEMENT list (title?, index*, introduction?, (ol|ul|dl), conclusion)>
+    <!ATTLIST list xml:id ID #IMPLIED>
 <!ELEMENT remark (title?, index*, (%para;)*)>
     <!ATTLIST remark xml:id ID #IMPLIED>
     <!ATTLIST remark xml:base CDATA    #IMPLIED>
@@ -350,6 +352,7 @@
 <!ELEMENT rbrace     EMPTY>
 <!ELEMENT tilde      EMPTY>
 <!ELEMENT backslash  EMPTY>
+<!ELEMENT asterisk   EMPTY>
 <!-- see copyright possibly EMPTY in frontmatter description-->
 <!ELEMENT lq         EMPTY>
 <!ELEMENT rq         EMPTY>

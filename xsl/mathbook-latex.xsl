@@ -205,6 +205,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and we process it with the chunking template called below              -->
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
+    <xsl:apply-templates select="mathbook" mode="generic-warnings" />
     <xsl:apply-templates select="mathbook" mode="deprecation-warnings" />
     <xsl:apply-templates />
 </xsl:template>
@@ -471,7 +472,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'principle'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//definition or //example or //exercise or //remark">
+    <xsl:if test="//definition or //example or //exercise or //remark or //list">
         <xsl:text>%% Definition-like environments, normal text&#xa;</xsl:text>
         <xsl:text>%% Numbering for definition, examples is in sync with theorems, etc&#xa;</xsl:text>
         <xsl:text>%% also for free-form exercises, not in exercise sections&#xa;</xsl:text>
@@ -494,6 +495,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="//remark">
             <xsl:text>\newtheorem{remark}[theorem]{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'remark'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//list">
+        <xsl:text>%% \list exists, so we peturb the natural choice&#xa;</xsl:text>
+            <xsl:text>\newtheorem{listwrapper}[theorem]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'list'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
@@ -2454,19 +2461,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{definition}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Examples and Remarks -->
+<!-- Examples, Remarks, List Wrapper -->
 <!-- Simpler than theorems, definitions, etc            -->
 <!-- Information comes from self, so slightly different -->
-<xsl:template match="example|remark">
+<xsl:template match="example|list|remark">
+    <xsl:variable name="env-name">
+        <xsl:choose>
+            <xsl:when test="local-name(.)='list'">
+                <xsl:text>listwrapper</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="local-name(.)" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:text>\begin{</xsl:text>
-        <xsl:value-of select="local-name(.)" />
+        <xsl:value-of select="$env-name" />
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="title" mode="environment-option" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::title)]"/>
     <xsl:text>\end{</xsl:text>
-        <xsl:value-of select="local-name(.)" />
+        <xsl:value-of select="$env-name" />
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
@@ -3195,6 +3212,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\textbackslash{}</xsl:text>
 </xsl:template>
 
+<!-- Asterisk -->
+<!-- Centered as a character, not an exponent -->
+<xsl:template match="asterisk">
+    <xsl:text>\textasteriskcentered</xsl:text>
+</xsl:template>
+
 
 <!-- Other Miscellaneous Symbols, Constructions -->
 
@@ -3687,9 +3710,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>height=</xsl:text><xsl:value-of select="@height" /><xsl:text>pt,</xsl:text>
         </xsl:if>
         <xsl:text>]</xsl:text>
-        <xsl:text>{</xsl:text><xsl:value-of select="@source" /><xsl:text>}</xsl:text>
+        <xsl:text>{</xsl:text>
+        <xsl:value-of select="@source" />
+        <!-- default to .pdf if no extension given -->
+        <xsl:variable name="extension">
+            <xsl:call-template name="file-extension">
+                <xsl:with-param name="filename" select="@source" />
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="$extension = ''">
+            <xsl:text>.pdf</xsl:text>
+        </xsl:if>
+        <xsl:text>}</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="tikz|asymptote|sageplot|latex-image-code" />
+    <xsl:apply-templates select="asymptote|sageplot|latex-image-code" />
     <!-- end the body of the image -->
     <xsl:text>}% end body &#xa;{</xsl:text>
     <!-- add empty caption -->
@@ -3777,12 +3811,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>,</xsl:text>
         <!-- TODO: deprecate, abandon @height (along with HTML code) -->
          <xsl:if test="@height">
-             <xsl:text>height=</xsl:text><xsl:value-of select="@height" /><xsl:text>pt,</xsl:text>
+             <xsl:text>height=</xsl:text>
+             <xsl:value-of select="@height" />
+             <xsl:text>pt,</xsl:text>
          </xsl:if>
         <xsl:text>]</xsl:text>
-        <xsl:text>{</xsl:text><xsl:value-of select="@source" /><xsl:text>}</xsl:text>
+        <xsl:text>{</xsl:text>
+        <xsl:value-of select="@source" />
+        <!-- default to .pdf if no extension given -->
+        <xsl:variable name="extension">
+            <xsl:call-template name="file-extension">
+                <xsl:with-param name="filename" select="@source" />
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="$extension = ''">
+            <xsl:text>.pdf</xsl:text>
+        </xsl:if>
+        <xsl:text>}</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="tikz|asymptote|sageplot|latex-image-code" />
+    <xsl:apply-templates select="asymptote|sageplot|latex-image-code" />
 </xsl:template>
 
 <!-- Asymptote graphics language  -->

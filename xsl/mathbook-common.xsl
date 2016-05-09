@@ -34,7 +34,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Copyright 2006, O'Reilly Media, Inc.                           -->
 <!-- Declaration and entity definition format from Recipe 2.8       -->
 <!-- Unicode strings from http://stackoverflow.com/questions/586231 -->
-<!DOCTYPE stylesheet [
+<!DOCTYPE xsl:stylesheet [
      <!ENTITY UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ">
      <!ENTITY LOWERCASE "abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ">
 ]>
@@ -176,7 +176,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="definition axiom conjecture principle" />
 <xsl:strip-space elements="blockquote" />
 <xsl:strip-space elements="statement" />
-<xsl:strip-space elements="example remark exercise hint solution" />
+<xsl:strip-space elements="example list remark exercise hint solution" />
 <xsl:strip-space elements="sage program console" />
 <xsl:strip-space elements="exercisegroup" />
 <xsl:strip-space elements="note" />  <!-- TODO: biblio, record, etc too -->
@@ -983,6 +983,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- File Extension -->
+<!-- Input: full filename                       -->
+<!-- Output: extension (no period), lowercase'd -->
+<xsl:template name="file-extension">
+    <xsl:param name="filename" />
+    <xsl:variable name="extension">
+        <xsl:call-template name="substring-after-last">
+            <xsl:with-param name="input" select="$filename" />
+            <xsl:with-param name="substr" select="'.'" />
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="translate($extension, &UPPERCASE;, &LOWERCASE;)" />
+</xsl:template>
+
 
 <!-- Date and Time Functions -->
 <!-- http://stackoverflow.com/questions/1437995/how-to-convert-2009-09-18-to-18th-sept-in-xslt -->
@@ -1068,7 +1082,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- it is a direct descendant of a structural node or a directly    -->
 <!-- descended introduction or conclusion .                          -->
 <!-- Also, list items are considered blocks.                         -->
-<xsl:template match="md|mdn|ul|ol|dl|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|image|tabular|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|example|exercise|li" mode="is-block">
+<xsl:template match="md|mdn|ul|ol|dl|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|image|tabular|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|example|list|exercise|li" mode="is-block">
     <xsl:value-of select="true()" />
 </xsl:template>
 
@@ -1456,7 +1470,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter" mode="has-default-title">
     <xsl:text>true</xsl:text>
 </xsl:template>
-<xsl:template match="book|article|letter|memo|part|chapter|appendix|index-part|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|p|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|credit|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|li|contributor" mode="has-default-title">
+<xsl:template match="book|article|letter|memo|part|chapter|appendix|index-part|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|p|exercise|example|list|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|credit|list|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|li|contributor" mode="has-default-title">
     <xsl:text>false</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="has-default-title">
@@ -1469,7 +1483,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- otherwise produce an empty title              -->
 <!-- NB: this match pattern should be the union of -->
 <!-- the two above,everything that can be titled   -->
-<xsl:template match="book|article|letter|memo|part|chapter|appendix|index-part|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|p|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|li|credit|frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter|contributor" mode="title">
+<xsl:template match="book|article|letter|memo|part|chapter|appendix|index-part|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|p|exercise|example|list|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|list|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|li|credit|frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter|contributor" mode="title">
     <xsl:param name="complexity" />
     <xsl:variable name="default-titled">
         <xsl:apply-templates select="." mode="has-default-title" />
@@ -1851,19 +1865,19 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- where the subitem is subnumbered due to caption/number on container -->
 <!-- TODO: investigate entities for "number='no'" upgrade -->
 <!-- http://pimpmyxslt.com/articles/entity-tricks-part1/  -->
-<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table|listing|sidebyside" mode="serial-number">
+<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise|figure|table|listing|sidebyside" mode="serial-number">
     <xsl:variable name="subtree-level">
         <xsl:apply-templates select="." mode="absolute-subtree-level">
             <xsl:with-param name="numbering-items" select="$numbering-theorems" />
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$subtree-level=-1"><xsl:number select="." from="book|article|letter|memo" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=0"><xsl:number select="." from="part" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=1"><xsl:number select="." from="chapter|book/appendix" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=2"><xsl:number select="." from="section|article/appendix" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=3"><xsl:number select="." from="subsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=4"><xsl:number select="." from="subsubsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=-1"><xsl:number select="." from="book|article|letter|memo" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=0"><xsl:number select="." from="part" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=1"><xsl:number select="." from="chapter|book/appendix" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=2"><xsl:number select="." from="section|article/appendix" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=3"><xsl:number select="." from="subsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=4"><xsl:number select="." from="subsubsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for theorem number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>
@@ -1965,8 +1979,14 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:number select="." format="{$code}" />
 </xsl:template>
 
-<!-- Second, the serial number computed recursively -->
+<!-- Second, the serial number computed recursively             -->
+<!-- We first check if the list is inside a named list and      -->
+<!-- prefix with that number, using a colon to help distinguish -->
 <xsl:template match="li" mode="serial-number">
+    <xsl:if test="not(ancestor::li) and ancestor::list">
+        <xsl:apply-templates select="ancestor::list" mode="number" />
+        <xsl:text>:</xsl:text>
+    </xsl:if>
     <xsl:if test="ancestor::li">
         <xsl:apply-templates select="ancestor::li[1]" mode="serial-number" />
         <xsl:text>.</xsl:text>
@@ -2102,7 +2122,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 </xsl:template>
 
 <!-- Structure Numbers: Theorems, Examples, Inline Exercises, Figures -->
-<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table|listing|sidebyside" mode="structure-number">
+<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise|figure|table|listing|sidebyside" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-theorems" />
         <xsl:with-param name="pad" select="'yes'" />
@@ -3129,6 +3149,12 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:text>[BACKSLASH]</xsl:text>
 </xsl:template>
 
+<!-- Asterisk -->
+<!-- Centered as a character, not an exponent -->
+<xsl:template match="asterisk">
+    <xsl:text>[ASTERISK]</xsl:text>
+</xsl:template>
+
 <!-- ############ -->
 <!-- Conveniences -->
 <!-- ############ -->
@@ -3215,6 +3241,26 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         <!-- <xsl:text>, set log.level to see more details</xsl:text> -->
     </xsl:message>
 </xsl:template>
+
+<!-- Using the modular  xinclude  scheme at the top level,      -->
+<!-- and forgetting the command-line switch is a common mistake -->
+<!-- The following is not perfect, but reasonably effective     -->
+<!-- Calling context should be "mathbook" element               -->
+<xsl:template match="*" mode="generic-warnings">
+    <xsl:if test="book and not(book/chapter)">
+        <xsl:message>
+            <xsl:text>MBX:WARNING:    </xsl:text>
+            <xsl:text>Your &lt;book&gt; does not have any chapters.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
+        </xsl:message>
+    </xsl:if>
+    <xsl:if test="article and not(article/p) and not(article/section)">
+        <xsl:message>
+            <xsl:text>MBX:WARNING:    </xsl:text>
+            <xsl:text>Your &lt;article&gt; does not have any sections, nor any top-level paragraphs.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
+        </xsl:message>
+    </xsl:if>
+</xsl:template>
+
 
 <xsl:template match="*" mode="deprecation-warnings">
     <!-- newer deprecations at the top of this list, user will see in this order -->

@@ -86,7 +86,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='contributor'><xsl:text>Contributor</xsl:text></localization> -->
     <!-- Lists and their items -->
     <!-- Translations needed for Portugal Portugese -->
-    <!-- TODO: <localization string-id='list'><xsl:text>List</xsl:text></localization> -->
+    <!-- <localization string-id='list'><xsl:text>List</xsl:text></localization> -->
     <!-- <localization string-id='li'><xsl:text>Item</xsl:text></localization> -->
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Parágrafo</xsl:text></localization>
