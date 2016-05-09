@@ -633,7 +633,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="xref-link">
     <xsl:param name="content" />
     <!-- text in square brackets -->
-    <xsl:text>[</xsl:text>
+    <xsl:text> [</xsl:text>
     <xsl:value-of select="$content" />
     <xsl:text>]</xsl:text>
     <!-- url in parentheses -->
