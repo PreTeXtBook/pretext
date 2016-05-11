@@ -1552,7 +1552,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="serial-number" />
         <xsl:text>]</xsl:text>
     </div>
-    <xsl:text disable-output-escaping="yes">&amp;nbsp;&amp;nbsp;</xsl:text>
+    <xsl:text>&#xa0;&#xa0;</xsl:text>
     <div class="bibentry">
         <xsl:apply-templates select="text()|*[not(self::note)]" />
     </div>
