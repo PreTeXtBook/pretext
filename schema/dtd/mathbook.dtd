@@ -385,6 +385,8 @@
 <!ELEMENT q         (#PCDATA|%line;)*>
 <!ELEMENT sq        (#PCDATA|%line;)*>
 <!ELEMENT braces    (#PCDATA|%line;)*>
+<!ELEMENT brackets  (#PCDATA|%line;)*>
+<!ELEMENT angles    (#PCDATA|%line;)*>
 <!ELEMENT term      (#PCDATA|%line;)*>
 <!ELEMENT foreign   (#PCDATA|%line;)*>
 <!ELEMENT abbr      (#PCDATA|%line;)*>
