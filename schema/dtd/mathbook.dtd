@@ -290,7 +290,7 @@
     <!ATTLIST row halign        (left|center|right)        #IMPLIED>
 
 <!-- answer is just for WW problems -->
-<!ELEMENT cell    (#PCDATA|%sentence;|answer)*>
+<!ELEMENT cell    (#PCDATA|%sentence;)*>
     <!ATTLIST cell bottom       (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST cell right        (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST cell halign       (left|center|right)        #IMPLIED>
@@ -631,7 +631,7 @@
 
 <!ELEMENT credit   (title?, (author|editor)*)>
 
-<!ELEMENT date        (#PCDATA|%characters;|today|timeofday)*>
+<!ELEMENT date        (#PCDATA|%characters;)*>
 
 <!-- both "front" and "back" colophons -->
 <!ELEMENT colophon   (copyright*|p*)>
