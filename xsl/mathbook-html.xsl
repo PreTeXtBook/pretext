@@ -2506,6 +2506,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:choose>
         <!-- no extension, presume SVG manufactured -->
+        <!-- TODO: pass along side-by-side CSS somehow -->
         <xsl:when test="$extension=''">
             <xsl:call-template name="svg-wrapper">
                 <xsl:with-param name="svg-filename">
@@ -2515,8 +2516,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="png-fallback-filename" />
                 <xsl:with-param name="image-width">
                     <xsl:choose>
-                        <xsl:when test="../@width">
-                            <xsl:value-of select="../@width" />
+                        <xsl:when test="@width">
+                            <xsl:value-of select="@width" />
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:text>90%</xsl:text>

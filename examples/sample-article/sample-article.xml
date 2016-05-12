@@ -1424,7 +1424,7 @@ the xsltproc executable.
 
                 <figure xml:id="figure-complete-graph">
                     <caption>Complete graph on <m>16</m> vertices, from <c>www.texample.net</c></caption>
-                    <image source="images/complete-graph" />
+                    <image source="images/complete-graph" width="65%"/>
                 </figure>
             </subsection>
 
