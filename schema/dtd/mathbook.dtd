@@ -166,7 +166,7 @@
 <!ELEMENT definition   (title?, index*, notation*, statement)>
     <!ATTLIST definition xml:id ID #IMPLIED>
 
-<!-- theorem-like, ie with proof -->
+<!-- theorem-like, i.e. with proof -->
 <!ELEMENT theorem   (title?, index*, statement, proof*)>
     <!ATTLIST theorem xml:id ID #IMPLIED>
 <!ELEMENT corollary (title?, index*, statement, proof*)>
@@ -182,7 +182,7 @@
 <!ELEMENT fact     (title?, index*, statement, proof*)>
     <!ATTLIST fact     xml:id ID #IMPLIED>
 
-<!-- conjecture-like, ie no proof -->
+<!-- conjecture-like, i.e. no proof -->
 <!ELEMENT conjecture (title?, index*, statement)>
     <!ATTLIST conjecture xml:id ID #IMPLIED>
 <!ELEMENT axiom (title?, index*, statement)>

@@ -26,7 +26,7 @@
             <li><p>Provide complete debugging output with bug reports</p></li>
         </ul>
 
-        <p>Much like the build advice at the end of <xref ref="processing-file-management" />, the <c>mbx</c> script collects necessary bits into a system-created temporary directory, does its work, and copies out the desired results.  Some insight into failures can be found in this directory (which we leave behind for the ssytem to clean-up later).  Early in the <c>-vv</c> doubly-verbose output, this directory is reported afer the string <c>temporary directory:</c>.</p>
+        <p>Much like the build advice at the end of <xref ref="processing-file-management" />, the <c>mbx</c> script collects necessary bits into a system-created temporary directory, does its work, and copies out the desired results.  Some insight into failures can be found in this directory (which we leave behind for the system to clean-up later).  Early in the <c>-vv</c> doubly-verbose output, this directory is reported after the string <c>temporary directory:</c>.</p>
 
         <p>An example:</p>
 
