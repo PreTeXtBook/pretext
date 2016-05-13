@@ -2024,10 +2024,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Theorems, Proofs, Definitions, Examples, Exercises -->
 
-<!-- Theorems have statement/proof structure               -->
-<!-- Definitions have notation, which is handled elsewhere -->
-<!-- Examples have no additional structure                 -->
-<!-- Exercises have solutions                              -->
+<!-- Theorems have statement/proof structure                    -->
+<!-- Definitions have notation, which is handled elsewhere      -->
+<!-- Examples have no structure, or have statement and solution -->
+<!-- Exercises have hints, answers and solutions                -->
 
 <!-- Titles are passed as options to environments -->
 <xsl:template match="title" mode="environment-option">
@@ -2526,6 +2526,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$env-name" />
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
+
+<!-- An example might have a statement/solution structure -->
+<xsl:template match="example/statement">
+    <xsl:apply-templates />
+    <xsl:text>\par\medskip&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="example/solution">
+    <xsl:text>\noindent%&#xa;</xsl:text>
+    <xsl:text>\textbf{Solution.}\quad </xsl:text>
+    <xsl:apply-templates />
+</xsl:template>
+
 
 <!-- Paragraphs                         -->
 <!-- \par separates paragraphs          -->

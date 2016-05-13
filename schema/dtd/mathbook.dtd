@@ -191,8 +191,8 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!ELEMENT principle (title?, index*, statement)>
     <!ATTLIST principle xml:id ID #IMPLIED>
 
-<!-- example-like, not very structured -->
-<!ELEMENT example (title?, index*, (%para;)*)>
+<!-- example-like, not very structured, or statement/solution -->
+<!ELEMENT example (title?, index*, ((%para;)*|(statement, solution)))>
     <!ATTLIST example xml:id ID #IMPLIED>
 <!ELEMENT list (title?, index*, introduction?, (ol|ul|dl), conclusion)>
     <!ATTLIST list xml:id ID #IMPLIED>

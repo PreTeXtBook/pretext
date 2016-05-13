@@ -480,6 +480,16 @@ the xsltproc executable.
                     <title>Advice</title>
 
                     <p>Using an <q>integral sign</q> for an antiderivative (aka indefinite integral) would seem to make the Fundamental Theorem a <foreign>fait accompli</foreign>.  So I would suggest not conflating the notation for two very different things until the Fundamental Theorem exposes them as being highly related.</p>
+
+                    <example xml:id="example-structured">
+                        <title>An Example of Structure</title>
+                        <statement>
+                            <p>This is an example of an example with a bit more structure.  Specifically, the example has a <c>title</c>, as usual, but then has a <c>statement</c>, which is separate from the <c>solution</c>.  Why did we implement an example in two ways?</p>
+                        </statement>
+                        <solution>
+                            <p>Authors asked for it and it seemed a very natural thing to do, even if we only had an unstructured version for a long time.</p>
+                        </solution>
+                    </example>
                 </subsubsection>
 
                 <exercises>
