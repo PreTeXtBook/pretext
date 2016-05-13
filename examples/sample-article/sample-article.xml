@@ -117,7 +117,7 @@ the xsltproc executable.
 
         You can make a document-specific, global override.  Here we
         decide we have no need for any "proposition"s and repurpose
-        that enviroment in US English as a "Conundrum."
+        that environment in US English as a "Conundrum."
 
         See the localization file for more on language codes, and realize
         that US English is the default if there is no "lang" attribute
@@ -499,7 +499,7 @@ the xsltproc executable.
             <subsection>
                 <title>Theorem-Like Environments</title>
 
-                <p>There are a variety of pre-defined enviroments in MathBook XML.  All take a title, and must have a statement.  Some have proofs (theorems, corollaries, <etc />), while some do not have proofs (conjectures, axioms, principles).</p>
+                <p>There are a variety of pre-defined environments in MathBook XML.  All take a title, and must have a statement.  Some have proofs (theorems, corollaries, <etc />), while some do not have proofs (conjectures, axioms, principles).</p>
 
                 <principle xml:id="principle-principle">
                     <title>The Title Principle</title>

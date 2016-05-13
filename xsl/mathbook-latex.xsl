@@ -353,7 +353,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
     <xsl:text>\usepackage{amssymb}&#xa;</xsl:text>
     <xsl:text>%% allow more columns to a matrix&#xa;</xsl:text>
-    <xsl:text>%% can make this even bigger by overiding with  latex.preamble.late  processing option&#xa;</xsl:text>
+    <xsl:text>%% can make this even bigger by overriding with  latex.preamble.late  processing option&#xa;</xsl:text>
     <xsl:text>\setcounter{MaxMatrixCols}{30}&#xa;</xsl:text>
     <xsl:if test="//m[contains(text(),'sfrac')] or //md[contains(text(),'sfrac')] or //me[contains(text(),'sfrac')] or //mrow[contains(text(),'sfrac')]">
         <xsl:text>%% xfrac package for 'beveled fractions': http://tex.stackexchange.com/questions/3372/how-do-i-typeset-arbitrary-fractions-like-the-standard-symbol-for-5-%C2%BD&#xa;</xsl:text>
@@ -418,7 +418,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
     <!-- Could condition following on existence of any amsthm environment -->
     <xsl:text>%% Environments with amsthm package&#xa;</xsl:text>
-    <xsl:text>%% Theorem-like enviroments in "plain" style, with or without proof&#xa;</xsl:text>
+    <xsl:text>%% Theorem-like environments in "plain" style, with or without proof&#xa;</xsl:text>
     <xsl:text>\usepackage{amsthm}&#xa;</xsl:text>
     <xsl:text>\theoremstyle{plain}&#xa;</xsl:text>
     <xsl:text>%% Numbering for Theorems, Conjectures, Examples, Figures, etc&#xa;</xsl:text>
@@ -518,7 +518,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
     </xsl:if>
     <!-- Localize various standard names in use         -->
-    <!-- Many enviroments addressed upon creation above -->
+    <!-- Many environments addressed upon creation above -->
     <!-- Figure and Table addressed elsewhere           -->
     <!-- Index, table of contents done elsewhere        -->
     <!-- http://www.tex.ac.uk/FAQ-fixnam.html           -->
@@ -622,7 +622,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%%   1) New mbxfigure and/or mbxtable environments are defined with float package&#xa;</xsl:text>
         <xsl:text>%%   2) Standard LaTeX environments redefined to use new environments&#xa;</xsl:text>
         <xsl:text>%%   3) Standard LaTeX environments redefined to step theorem counter&#xa;</xsl:text>
-        <xsl:text>%%   4) Counter for new enviroments is set to the theorem counter before caption&#xa;</xsl:text>
+        <xsl:text>%%   4) Counter for new environments is set to the theorem counter before caption&#xa;</xsl:text>
         <xsl:text>%% You can remove all this figure/table setup, to restore standard LaTeX behavior&#xa;</xsl:text>
         <xsl:text>%% HOWEVER, numbering of figures/tables AND theorems/examples/remarks, etc&#xa;</xsl:text>
         <xsl:text>%% WILL ALL de-synchronize with the numbering in the HTML version&#xa;</xsl:text>
@@ -882,7 +882,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="//ol or //ul or //dl or //exercises or //references">
         <xsl:text>%% More flexible list management, esp. for references and exercises&#xa;</xsl:text>
-        <xsl:text>%% But also for specifying labels (ie custom order) on nested lists&#xa;</xsl:text>
+        <xsl:text>%% But also for specifying labels (i.e. custom order) on nested lists&#xa;</xsl:text>
         <xsl:text>\usepackage{enumitem}&#xa;</xsl:text>
         <xsl:if test="//exercises or //references">
             <xsl:if test="//references">
@@ -1105,7 +1105,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- LaTeX's title page is not very robust, so we totally redo it         -->
 <!-- Template produces a single page, followed by a \clearpage            -->
-<!-- Customize with an overide of this template in an imported stylesheet -->
+<!-- Customize with an override of this template in an imported stylesheet -->
 <!-- For a two-page spread, consider modifying the "ad-card" template     -->
 <!-- For "\centering" to work properly, obey the following scheme:              -->
 <!-- Each group, but first, should begin with [<length>]&#xa; as vertical break -->

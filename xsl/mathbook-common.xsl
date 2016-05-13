@@ -1750,7 +1750,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!--                                                        -->
 <!-- There are six numbering schemes in place:              -->
 <!-- 1) divisions: sections, subsections, etc.              -->
-<!-- 2) enviroments: theorems, examples, exercises, figures -->
+<!-- 2) environments: theorems, examples, exercises, figures -->
 <!-- 3) equations: display mathematics                      -->
 <!-- 4) exercises: as part of a section of exercises        -->
 <!-- 5) bibliographic items: in multiple sections           -->
