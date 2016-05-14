@@ -76,6 +76,26 @@
 
     </section>
 
+    <section xml:id="topic-subdivisions">
+        <title>Subdivisions</title>
+
+        <p>A <term>subdivision</term> is a structured component of a book or article that would be recognized by most any reader.  They are essential to the organization of a MathBook XML project.  Notice that we use the generic term subdivision, since a <tag>section</tag> is just one example of a subdivision.</p>
+
+        <p>Subdivisions are <tag>book</tag>, <tag>article</tag>, <tag>part</tag>, <tag>chapter</tag>, <tag>section</tag>, <tag>subsection</tag>, <tag>subsubsection</tag>, and <tag>paragraphs</tag>.  Their use is fairly intuitive, though there are some restrictions, so please read on.</p>
+
+        <p>A <tag>book</tag> must contain at least one <tag>chapter</tag>, which may contain <tag>section</tag>, <tag>subsection</tag>, and <tag>subsubsection</tag>.  The tag <tag>part</tag> is planned for books, between <tag>book</tag> and <tag>chapter</tag>.  It will function in two user-selectable ways: structural (<eg /> numbering will reset), or decorative (merely inserting a decorative page between two chapters and sectioning the Table of Contents).</p>
+
+        <p>An <tag>article</tag> is simpler and shorter than a book.  It might be really simple and have no subdivisions at all, or it may have <tag>section</tag>s.  It cannot have <tag>chapter</tag>s, as that would be a <tag>book</tag>.  Within a <tag>section</tag>, <tag>subsection</tag>s and <tag>subsubsection</tag>s may follow.</p>
+
+        <p>Subdivisions must nest properly and may not be skipped.  So a <tag>section</tag> cannot contain a <tag>chapter</tag> and a <tag>subsection</tag> may not be contained in a <tag>chapter</tag> without an intervening <tag>section</tag>.</p>
+
+        <p>A subdivision <em>must</em> contain a <tag>title</tag>, and may contain one or more index entries (see <xref provisional="topic-index" />), which should appear before anything else.  Any subdivision may be unstructured, with just a sequence of <term>top-level content</term> such as paragraphs, figures, lists, theorems, <etc />  Or a subdivision may be structured, and in this case it must follow a prescribed pattern.  There may be a single, optional <tag>introduction</tag>, filled with top-level content, followed by a sequence of at least one of the appropriate subdivisions, ending with a single, optional <tag>conclusion</tag>, filled with top-level content.  It is an error to begin with a run of top-level content inside a subdivision and then begin to use subdivisions.  (The solution is to make the initial content an <tag>introduction</tag> and/or one or several subdivisions.)</p>
+
+        <p>There are exceptions to the above.  For one, <tag>paragraphs</tag> is an anomalous subdivision, as a sort of lightweight sectioning command.  It may appear in any subdivision, at any location within a subdivision, it may not be subdivided further (it is a leaf of the document tree), it never gets a number, and its title is formatted in a subsidiary way.  I especially like to use this in a two- or three-page <tag>article</tag> that has no other subdivisions at all.  Typical presentation has the title in bold, without much change in font size (if at all), inline with the first paragraph, and perhaps a bit of vertical space as it begins and ends.  Despite the name, it may contain more than just paragaphs, so may contain any top-level-content that would go in any other subdivision.</p>
+
+        <p>Two other anomalous subdivisions are <tag>exercises</tag> and <tag>references</tag>.  These can function as a further subdivision of any other subdivision.  So for example, an <tag>exercises</tag> could be a peer of several <tag>section</tag>s, contained within a structured <tag>chapter</tag>, and in this case would behave like the other <tag>section</tag>s with regard to numbering and presentation.  Detail on allowed content and its behavior are in <xref ref="topic-exercises" /> and <xref ref="topic-references" />, respectively.</p>
+    </section>
+
     <section xml:id="topic-mathematics">
         <title>(*) Mathematics</title>
 
