@@ -289,19 +289,19 @@
             <xsl:text>    "niceTables.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- popup menu multiple choice answers -->
-        <xsl:if test=".//answer[@form='popup']">
+        <xsl:if test=".//var[@form='popup']">
             <xsl:text>    "parserPopUp.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- radio buttons multiple choice answers -->
-        <xsl:if test=".//answer[@form='buttons']">
+        <xsl:if test=".//var[@form='buttons']">
             <xsl:text>    "parserRadioButtons.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- checkboxes multiple choice answers-->
-        <xsl:if test=".//answer[@form='checkboxes']">
+        <xsl:if test=".//var[@form='checkboxes']">
             <xsl:text>    "PGchoicemacros.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- essay answers -->
-        <xsl:if test=".//answer[@form='essay']">
+        <xsl:if test=".//var[@form='essay']">
             <xsl:text>    "PGessaymacros.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- multistage problems ("scaffolded") -->
@@ -386,7 +386,7 @@
     <xsl:variable name="category" select="$problem/setup/var[@name=$varname]/@category" />
     <xsl:text>[</xsl:text>
     <xsl:value-of select="@name" />
-    <xsl:if test="$problem/statement//answer[@var=$varname and @form='checkboxes']">
+    <xsl:if test="$problem/statement//var[@name=$varname and @form='checkboxes']">
         <xsl:text>->correct_ans()</xsl:text>
     </xsl:if>
     <xsl:text>]</xsl:text>
@@ -409,14 +409,14 @@
 
 <!-- PGML answer input               -->
 <!-- Example: [_____]{$ans}          -->
-<xsl:template match="webwork//statement//answer">
+<xsl:template match="webwork//statement//var[@width|@form]">
     <xsl:apply-templates select="." mode="field"/>
     <xsl:apply-templates select="." mode="form-help"/>
     <xsl:variable name="problem" select="ancestor::webwork" />
-    <xsl:variable name="varname" select="@var" />
-    <xsl:if test="not($problem/setup/var[@name=$varname]/static) and not($problem/setup/var[@name=$varname]/set/member) and @var and not($problem//image[@pg-name])">
+    <xsl:variable name="varname" select="@name" />
+    <xsl:if test="not($problem/setup/var[@name=$varname]/static) and not($problem/setup/var[@name=$varname]/set/member) and @name and not($problem//image[@pg-name])">
         <xsl:message>
-            <xsl:text>MBX:WARNING: A WeBWorK problem body uses an answer field (var="</xsl:text>
+            <xsl:text>MBX:WARNING: A WeBWorK problem body uses an answer field (name="</xsl:text>
             <xsl:value-of select="$varname"/>
             <xsl:text>") for which there is no static value declared</xsl:text>
         </xsl:message>
@@ -426,7 +426,7 @@
 <!-- MathObject answers -->
 <!-- with variant for MathObjects like Matrix, Vector, ColumnVector      -->
 <!-- where the shape of the MathObject guides the array of answer blanks -->
-<xsl:template match="answer|answer[@form='array']" mode="field">
+<xsl:template match="var[@width|@form]" mode="field">
     <xsl:variable name="width">
         <xsl:choose>
             <xsl:when test="@width">
@@ -464,7 +464,7 @@
             <xsl:value-of select="@evaluator" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="@var" />
+            <xsl:value-of select="@name" />
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>}</xsl:text>
@@ -478,14 +478,14 @@
 <!-- (presumed) MathObject answers inside a tabular                       -->
 <!-- For answer blanks in tables (and possibly more things in the future) -->
 <!-- we cannot simply insert PGML syntax. But otherwise, we do just that. -->
-<xsl:template match="answer[ancestor::tabular]" mode="field">
+<xsl:template match="var[(@width|@form) and ancestor::tabular]" mode="field">
     <xsl:text>".PGML::Format('[__]{</xsl:text>
     <xsl:choose>
         <xsl:when test="@evaluator">
             <xsl:value-of select="@evaluator" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="@var" />
+            <xsl:value-of select="@name" />
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>}{width => </xsl:text>
@@ -505,11 +505,11 @@
 <!-- The issue is only surfacing when trying to do a checkbox problem from an iframe. Any    -->
 <!-- attempt to check multiple boxes and submit leads to only one box being seen as checked  -->
 <!-- by WeBWorK 2                                                                            --> 
-<xsl:template match="answer[@form='checkboxes']" mode="field">
+<xsl:template match="var[@form='checkboxes']" mode="field">
     <xsl:text>    [@</xsl:text>
-    <xsl:value-of select="@var"/>
+    <xsl:value-of select="@name"/>
     <xsl:text>->print_a() @]*&#xa;END_PGML&#xa;ANS(checkbox_cmp(</xsl:text>
-    <xsl:value-of select="@var"/>
+    <xsl:value-of select="@name"/>
     <xsl:text>->correct_ans()));&#xa;BEGIN_PGML&#xa;</xsl:text>
 </xsl:template>
 
@@ -517,7 +517,7 @@
 <!-- Example: [@ ANS(essay_cmp); essay_box(6,76) @]*   -->
 <!-- Requires:  PGessaymacros.pl, automatically loaded -->
 <!-- http://webwork.maa.org/moodle/mod/forum/discuss.php?d=3370 -->
-<xsl:template match="answer[@form='essay']" mode="field">
+<xsl:template match="var[@form='essay']" mode="field">
     <xsl:text>[@ ANS(essay_cmp); essay_box(</xsl:text>
     <xsl:choose>
         <xsl:when test="@height">
@@ -539,8 +539,8 @@
     <xsl:text>) @]*</xsl:text>
 </xsl:template>
 
-<xsl:template match="answer" mode="form-help">
-    <xsl:variable name="varname" select="@var" />
+<xsl:template match="var[@width]|var[@form]" mode="form-help">
+    <xsl:variable name="varname" select="@name" />
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="category" select="$problem/setup/var[@name=$varname]/@category" />
     <xsl:variable name="form">
@@ -1590,7 +1590,7 @@
     </xsl:choose>
 
     <xsl:choose>
-        <xsl:when test="($halign='') and ($midrule='') and ($rowcss='') and ($cellcss='') and not(descendant::m) and not(descendant::answer) and not(@colspan)">
+        <xsl:when test="($halign='') and ($midrule='') and ($rowcss='') and ($cellcss='') and not(descendant::m) and not(descendant::var[@width|@form]) and not(@colspan)">
             <xsl:text>"</xsl:text>
             <xsl:apply-templates/>
             <xsl:text>",&#xa;</xsl:text>
