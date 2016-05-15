@@ -3669,6 +3669,58 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x2026;</xsl:text>
 </xsl:template>
 
+<!-- Midpoint -->
+<!-- A centered dot used sometimes like a decorative dash -->
+<xsl:template match="midpoint">
+    <xsl:text>&#xb7;</xsl:text>
+</xsl:template>
+
+<!-- Swung Dash -->
+<!-- A decorative dash, like a tilde, but bigger, and centered -->
+<xsl:template match="swungdash">
+    <xsl:text>&#x2053;</xsl:text>
+</xsl:template>
+
+<!-- Per Mille -->
+<!-- Or, per thousand, like a percent sign -->
+<xsl:template match="permille">
+    <xsl:text>&#x2030;</xsl:text>
+</xsl:template>
+
+<!-- Pilcrow -->
+<!-- Often used to mark the start of a paragraph -->
+<xsl:template match="pilcrow">
+    <xsl:text>&#xb6;</xsl:text>
+</xsl:template>
+
+<!-- Section Mark -->
+<!-- The stylized double-S to indicate section numbers -->
+<xsl:template match="section-mark">
+    <xsl:text>&#xa7;</xsl:text>
+</xsl:template>
+
+<!-- Dimension -->
+<!-- A "times" symbol for dimensions of physical objects -->
+<xsl:template match="dimension">
+    <xsl:text>&#xd7;</xsl:text>
+</xsl:template>
+
+<!-- Slash -->
+<!-- Forward slash, or virgule (see solidus) -->
+<xsl:template match="slash">
+    <xsl:text>&#x2f;</xsl:text>
+</xsl:template>
+
+<!-- Solidus -->
+<!-- Fraction bar, not as steep as a forward slash -->
+<xsl:template match="solidus">
+    <xsl:text>&#x2044;</xsl:text>
+</xsl:template>
+
+
+
+
+
 <!-- Foreign words/idioms        -->
 <!-- Matches HTML5 specification -->
 <xsl:template match="foreign">

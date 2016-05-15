@@ -856,6 +856,10 @@ the xsltproc executable.
                     </li>
                 </dl>
 
+                <p>It might be instructive to see how the paragraphs above about escape characters were written without inadvertently using an escape character improperly.</p>
+
+
+
                 <p>There are a handful of characters that might render just fine in HTML, but <latex /> reserves them for special purposes.  So if they appear unadorned in your source, they will wreak havoc with the <latex /> processing.  And if you escape them with backslashes to migrate to the <latex /> output, then you will see those backslashes in your HTML.  And the backslash is the escape character for Markdown and JSON.  You can't win.  Thus, you need to be aware of these symbols and use the provided MathBook XML elements for each in order to get the right behavior in each type of output.  Here are the outputs, look at the source of this document to see the input elements.</p>
 
                 <!-- Carriage returns are unwise, but this is impossible to read otherwise -->
@@ -875,19 +879,29 @@ the xsltproc executable.
             <subsection>
                 <title>Pseudo-Characters and Constructions</title>
 
-                <p>There are a few other pseudo-characters and constructions that can be achieved in HTML one way, and in <latex /> with a slightly different mechanism.  Some are due to <latex />'s treatment of a period (full stop), depending on its surroundings.  So not reserved characters, but just divergent treatment of common constructions.  Again, outputs here, see the source for inputs.  Using these will lead to the best quality in all your outputs.  See Will Robertson's informative and arcane <url href="http://latex-alive.tumblr.com/post/827168808/correct-punctuation-spaces">blog post</url> on the topic if you want the full story for the treatment of a full stop in <latex />.</p>
+                <p>There are a few other very common abbreviations of Latin phrases that can be achieved in HTML one way, and in <latex /> with a slightly different mechanism.  These are due to <latex />'s treatment of a period (full stop), depending on its surroundings.  So not reserved characters, but just divergent treatment.  Again, outputs here, see the source for inputs.  Using these will lead to the best quality in all your outputs.  See Will Robertson's informative and arcane <url href="http://latex-alive.tumblr.com/post/827168808/correct-punctuation-spaces">blog post</url> on the topic if you want the full story for the treatment of a full stop in <latex />.</p>
+
+                <p><eg /><nbsp /><nbsp />
+                <ie /><nbsp /><nbsp />
+                <etc /><nbsp /><nbsp />
+                <circa /></p>
+
+
+                <p>There are a few other characters and marks that get special treatment.  Some do not appear on your keyboard, such as the symbol for copright (and similar business or legal marks in common use).  Then there are some characters that do not appear on your keyboard but frequently a keyboard character is used as a substitute.  For example, a fraction bar and a forward slash (<c>solidus</c> and <c>slash</c>, respectively) have slightly different slopes.  Also, compare a <c>tilde</c> and a <c>swungdash</c>.  You can fake a <c>midpoint</c> in <latex /> by going to math mode, but the midpoint is really a text character. Again, outputs here, see the source for inputs.  Using these uniformly will lead to the best quality in all your outputs, though some of these are very infrequent, or the distinctions are not always that important.</p>
 
                 <!-- Carriage returns are unwise, but this is impossible to read otherwise -->
                 <p><copyright /><nbsp /><nbsp />
                 <registered /><nbsp /><nbsp />
                 <trademark /><nbsp /><nbsp />
                 <ellipsis /><nbsp /><nbsp />
-                <eg /><nbsp /><nbsp />
-                <ie /><nbsp /><nbsp />
-                <etc /><nbsp /><nbsp />
-                <circa /><nbsp /><nbsp /></p>
-
-                <p>It might be instructive to see how the paragraphs above about escape characters were written without inadvertently using an escape character improperly.</p>
+                <midpoint /><nbsp /><nbsp />
+                <swungdash /><nbsp /><nbsp />
+                <permille /><nbsp /><nbsp />
+                <pilcrow /><nbsp /><nbsp />
+                <section-mark /><nbsp /><nbsp />
+                <dimension /><nbsp /><nbsp />
+                <slash /><nbsp /><nbsp />
+                <solidus /></p>
 
                 <p>We also distinguish between abbreviations (<abbr>vs.</abbr>), acronyms (<acro>SCUBA</acro>) and initialisms (<init>XML</init>).</p>
             </subsection>

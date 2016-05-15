@@ -3199,7 +3199,63 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:text>[RIGHTANGLEBRACKET]</xsl:text>
 </xsl:template>
 
+<!-- Midpoint -->
+<!-- A centered dot used sometimes like a decorative dash -->
+<xsl:template match="midpoint">
+    <xsl:text>[MIDPOINT]</xsl:text>
+</xsl:template>
 
+<!-- Swung Dash -->
+<!-- A decorative dash, like a tilde, but bigger, and centered -->
+<xsl:template match="swungdash">
+    <xsl:text>[SWUNGDASH]</xsl:text>
+</xsl:template>
+
+<!-- Per Mille -->
+<!-- Or, per thousand, like a percent sign -->
+<xsl:template match="permille">
+    <xsl:text>[PERMILLE]</xsl:text>
+</xsl:template>
+
+<!-- Pilcrow -->
+<!-- Often used to mark the start of a paragraph -->
+<xsl:template match="pilcrow">
+    <xsl:text>[PILCROW]</xsl:text>
+</xsl:template>
+
+<!-- Section Mark -->
+<!-- The stylized double-S to indicate section numbers -->
+<xsl:template match="section-mark">
+    <xsl:text>[SECTION]</xsl:text>
+</xsl:template>
+
+<!-- Dimension -->
+<!-- A "times" symbol for dimensions of physical objects -->
+<xsl:template match="dimension">
+    <xsl:text>[DIMENSION]</xsl:text>
+</xsl:template>
+
+<!-- Slash -->
+<!-- Forward slash, or virgule (see solidus) -->
+<xsl:template match="slash">
+    <xsl:text>[SLASH]</xsl:text>
+</xsl:template>
+
+<!-- Solidus -->
+<!-- Fraction bar, not as steep as a forward slash -->
+<xsl:template match="solidus">
+    <xsl:text>[SOLIDUS]</xsl:text>
+</xsl:template>
+
+
+
+
+<!-- Dots
+http://tex.stackexchange.com/questions/19180/which-dot-character-to-use-in-which-context
+
+Swung Dash
+http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
+ -->
 <!-- ######### -->
 <!-- Groupings -->
 <!-- ######## -->

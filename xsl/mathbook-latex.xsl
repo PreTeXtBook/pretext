@@ -387,6 +387,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% default is small caps (Bringhurst, 4e, 3.2.2, p. 48)&#xa;</xsl:text>
         <xsl:text>\newcommand{\initialism}[1]{\textsc{\MakeLowercase{#1}}}&#xa;</xsl:text>
     </xsl:if>
+    <!-- http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/ -->
+    <xsl:if test="/mathbook//swungdash">
+        <xsl:text>%% A character like a tilde, but different&#xa;</xsl:text>
+        <xsl:text>\newcommand{\swungdash}{\raisebox{-2.25ex}{\scalebox{2}{\~{}}}}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="//quantity">
         <xsl:text>%% Used for units and number formatting&#xa;</xsl:text>
         <xsl:text>\usepackage[per-mode=fraction]{siunitx}&#xa;</xsl:text>
@@ -3269,6 +3274,58 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Ellipsis (dots), for text, not math -->
 <xsl:template match="ellipsis">
     <xsl:text>\dots{}</xsl:text>
+</xsl:template>
+
+<!-- Midpoint -->
+<!-- A centered dot used sometimes like a decorative dash -->
+<!-- http://tex.stackexchange.com/questions/19180/which-dot-character-to-use-in-which-context -->
+<xsl:template match="midpoint">
+    <xsl:text>\textperiodcentered{}</xsl:text>
+</xsl:template>
+
+<!-- Swung Dash -->
+<!-- A decorative dash, like a tilde, but bigger, and centered -->
+<!-- http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/  -->
+<xsl:template match="swungdash">
+    <xsl:text>\swungdash{}</xsl:text>
+</xsl:template>
+
+<!-- Per Mille -->
+<!-- Or, per thousand, like a percent sign -->
+<xsl:template match="permille">
+    <xsl:text>\textperthousand{}</xsl:text>
+</xsl:template>
+
+<!-- Pilcrow -->
+<!-- Often used to mark the start of a paragraph -->
+<xsl:template match="pilcrow">
+    <xsl:text>\textpilcrow{}</xsl:text>
+</xsl:template>
+
+<!-- Section Mark -->
+<!-- The stylized double-S to indicate section numbers -->
+<xsl:template match="section-mark">
+    <xsl:text>\textsection{}</xsl:text>
+</xsl:template>
+
+<!-- Dimension -->
+<!-- A "times" symbol for dimensions of physical objects -->
+<xsl:template match="dimension">
+    <xsl:text>\texttimes{}</xsl:text>
+</xsl:template>
+
+<!-- Slash -->
+<!-- Forward slash, or virgule (see solidus)   -->
+<!-- This should allow a linebreak, not tested -->
+<xsl:template match="slash">
+    <xsl:text>\slash{}</xsl:text>
+</xsl:template>
+
+<!-- Solidus -->
+<!-- Fraction bar, not as steep as a forward slash -->
+<!-- This should not allow a linebreak, not tested -->
+<xsl:template match="solidus">
+    <xsl:text>\textfractionsolidus{}</xsl:text>
 </xsl:template>
 
 <!-- \@ following a period makes it an abbreviation, not the end of a sentence -->
