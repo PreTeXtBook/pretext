@@ -2356,17 +2356,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="varname" select="@name" />
     <xsl:choose>
-        <xsl:when test="$problem/setup/var[@name=$varname]/elements">
-        <xsl:for-each select="$problem/setup/var[@name=$varname]/elements/element[@correct='yes']">
+        <xsl:when test="$problem/setup/var[@name=$varname]/set">
+        <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member[@correct='yes']">
             <xsl:apply-templates select='.' />
             <xsl:choose>
-                <xsl:when test="count(following-sibling::element[@correct='yes']) &gt; 1">
+                <xsl:when test="count(following-sibling::member[@correct='yes']) &gt; 1">
                     <xsl:text>, </xsl:text>
                 </xsl:when>
-                <xsl:when test="(count(following-sibling::element[@correct='yes']) = 1) and preceding-sibling::element[@correct='yes']">
+                <xsl:when test="(count(following-sibling::member[@correct='yes']) = 1) and preceding-sibling::member[@correct='yes']">
                     <xsl:text>, and </xsl:text>
                 </xsl:when>
-                <xsl:when test="(count(following-sibling::element[@correct='yes']) = 1) and not(preceding-sibling::element[@correct='yes'])">
+                <xsl:when test="(count(following-sibling::member[@correct='yes']) = 1) and not(preceding-sibling::member[@correct='yes'])">
                     <xsl:text> and </xsl:text>
                 </xsl:when>
             </xsl:choose>
