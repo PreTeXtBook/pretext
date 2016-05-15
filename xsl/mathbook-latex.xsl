@@ -2311,7 +2311,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="varname" select="@var" />
     <xsl:choose>
-        <xsl:when test="@format='popup'" >
+        <xsl:when test="@form='popup'" >
             <xsl:text>(Choose one: </xsl:text>
             <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
                 <xsl:apply-templates select='.' />
@@ -2330,7 +2330,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>)</xsl:text>
         </xsl:when>
         <!-- TODO: make semantic list style in preamble -->
-        <xsl:when test="@format='buttons'" >
+        <xsl:when test="@form='buttons'" >
             <xsl:text>\par&#xa;</xsl:text>
             <xsl:text>\begin{itemize}[label=$\odot$,leftmargin=3em,]&#xa;</xsl:text>
             <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
@@ -2340,7 +2340,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:for-each>
             <xsl:text>\end{itemize}&#xa;</xsl:text>
         </xsl:when>
-        <xsl:when test="@format='checkboxes'" >
+        <xsl:when test="@form='checkboxes'" >
             <xsl:text>\par&#xa;</xsl:text>
             <xsl:text>\begin{itemize}[label=$\square$,leftmargin=3em,]&#xa;</xsl:text>
             <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
@@ -2369,7 +2369,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- An essay answer has no variable associated with the textbox,  -->
 <!-- so we simply indicate that this problem has an essay answer   -->
-<xsl:template match="webwork//answer[@format='essay']">
+<xsl:template match="webwork//answer[@form='essay']">
     <xsl:text>\quad\lbrack Essay Answer\rbrack</xsl:text>
 </xsl:template>
 
