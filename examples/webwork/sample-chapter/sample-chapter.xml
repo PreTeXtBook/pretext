@@ -144,7 +144,7 @@
 
                     <statement>
                         <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
-                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <answer var="$c" width="2" /></p>
+                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" /></p>
                     </statement>
 
                     <solution>
@@ -189,7 +189,7 @@
 
                     <statement>
                         <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
-                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <answer var="$c" width="2" /></p>
+                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" /></p>
                     </statement>
 
                     <solution>
@@ -256,7 +256,7 @@
                     <statement>
                         <p>Use the properties of exponents to simplify <m><var name="$expression" /></m>.</p>
 
-                        <p><m><var name="$expression" />=</m><answer var="$answer" evaluator="$evaluator" width="8" /></p>
+                        <p><m><var name="$expression" />=</m><var name="$answer" evaluator="$evaluator" width="8" /></p>
 
                     </statement>
 
@@ -316,7 +316,7 @@
                     <statement>
                         <p>Simplify the expression <m><var name="$expression"/></m>.</p>
 
-                        <p halign="center"><m><var name="$expression"/>=</m><answer var="$answer" width="10"/></p>
+                        <p halign="center"><m><var name="$expression"/>=</m><var name="$answer" width="10"/></p>
                     </statement>
 
                     <hint>
@@ -453,7 +453,7 @@
                         <statement>
                             <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" autoname="yes" /></p>
 
-                            <p halign='center'><m>a=</m> <answer var="$a" width="4" evaluator="$evaluatorfora"/>, <m>b=</m> <answer var="$b" width="4" evaluator="$evaluatorforb"/>, <m>c=</m> <answer var="$c" width="4" evaluator="$evaluatorforc"/></p>
+                            <p halign='center'><m>a=</m> <var name="$a" width="4" evaluator="$evaluatorfora"/>, <m>b=</m> <var name="$b" width="4" evaluator="$evaluatorforb"/>, <m>c=</m> <var name="$c" width="4" evaluator="$evaluatorforc"/></p>
                         </statement>
 
                         <solution>
@@ -466,7 +466,7 @@
 
                         <statement>
                             <p>Using the quadratic formula, solve <m><var name="$quadratic"/>=0</m>.</p>
-                            <p halign='center'><m>x=</m> <answer var="$multians1" width="15"/> or <m>x=</m> <answer var="$multians1" width="15"/></p>
+                            <p halign='center'><m>x=</m> <var name="$multians1" width="15"/> or <m>x=</m> <var name="$multians1" width="15"/></p>
                         </statement>
 
                         <solution>
@@ -585,7 +585,7 @@
                     <webwork>
                         <statement>
                             <p>Explain how we can use <xref ref="corollary-FTC-derivative" autoname="yes" /> to say that every continuous function <em>always</em> has a derivative. (And we will demonstrate here that you can use a  macro from <c>docinfo</c>: <m>\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)</m>. It will work in the <webwork /> problem, regardless of whether you are using images, MathJax, or hardcopy.)</p>
-                            <p><answer form="essay" /></p>
+                            <p><var form="essay" /></p>
                         </statement>
                     </webwork>
                 </exercise>
@@ -596,7 +596,7 @@
                     <webwork>
                         <statement>
                             <p><q>Differentiation and integration are inverse processes.</q>  Cite <alert>specific results</alert> from this section in an explanation of how they justify this (somewhat imprecise) claim.</p>
-                            <p><answer form="essay" width="40"/></p>
+                            <p><var form="essay" width="40"/></p>
                         </statement>
                     </webwork>
                 </exercise>
@@ -673,7 +673,7 @@
                     </setup>
 
                     <statement>
-                        <p>The number <m>\sqrt{2}</m> <answer var="$rational" form="popup"/> rational.</p>
+                        <p>The number <m>\sqrt{2}</m> <var name="$rational" form="popup"/> rational.</p>
 
                     </statement>
 
@@ -709,7 +709,7 @@
 
                     <statement>
                         <p>Which of the following suggest that differentiation and integration are inverse processes?</p>
-                        <p><answer var="$theorem" form="buttons"/></p>
+                        <p><var name="$theorem" form="buttons"/></p>
                     </statement>
 
                     <solution>
@@ -756,7 +756,7 @@
 
                     <statement>
                         <p>Select all expressions that are equivalent to <m>e^{x^2 + 1/x}</m>.  There may be more than one correct answer.</p>
-                        <p><answer var="$expressions" form="checkboxes"/></p>
+                        <p><var name="$expressions" form="checkboxes"/></p>
                     </statement>
 
                     <solution>
@@ -829,13 +829,13 @@
                                 </row>
                                 <row>
                                     <cell><m><var name="$b1"/></m></cell>
-                                    <cell><answer var="$p11" form="none"/></cell>
-                                    <cell><answer var="$p21" form="none"/></cell>
+                                    <cell><var name="$p11" form="none"/></cell>
+                                    <cell><var name="$p21" form="none"/></cell>
                                 </row>
                                 <row>
                                     <cell><m><var name="$b2"/></m></cell>
-                                    <cell><answer var="$p12" form="none"/></cell>
-                                    <cell><answer var="$p22" form="none"/></cell>
+                                    <cell><var name="$p12" form="none"/></cell>
+                                    <cell><var name="$p22" form="none"/></cell>
                                 </row>
                             </tabular>
                         </table>
@@ -918,7 +918,7 @@
                             </image>
                         </figure>
 
-                        <p><m>x=</m> <answer var="$answer"/></p>
+                        <p><m>x=</m> <var name="$answer"/></p>
                     </statement>
 
                     <solution>
@@ -976,7 +976,7 @@
                                 <p>Suppose the correct answer is <m><var name="$answer1"/></m>.</p>
                                 <ul label="square">
                                     <li>
-                                        <p><answer var="$answer1" width="15"/></p>
+                                        <p><var name="$answer1" width="15"/></p>
                                     </li>
                                 </ul>
                             </li>
@@ -984,7 +984,7 @@
                                 <p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/></m>.</p>
                                 <ul label="square">
                                     <li>
-                                        <p><answer var="$answer2" width="15"/></p>
+                                        <p><var name="$answer2" width="15"/></p>
                                     </li>
                                 </ul>
                             </li>
@@ -1030,7 +1030,7 @@
                                 <p>Suppose the correct answer is <m>\displaystyle <var name="$answer1"/></m>.</p>
                                 <ul label="square">
                                     <li>
-                                        <p><answer var="$answer1" width="15"/></p>
+                                        <p><var name="$answer1" width="15"/></p>
                                     </li>
                                 </ul>
                             </li>
@@ -1038,7 +1038,7 @@
                                 <p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/></m>.</p>
                                 <ul label="square">
                                     <li>
-                                        <p><answer var="$answer2" width="15" evaluator="$answer2evaluator"/></p>
+                                        <p><var name="$answer2" width="15" evaluator="$answer2evaluator"/></p>
                                     </li>
                                 </ul>
                             </li>
@@ -1115,13 +1115,13 @@
                     </setup>
 
                     <statement>
-                        <p>My favorite color is <answer var="$color1" form="popup"/>.</p>
+                        <p>My favorite color is <var name="$color1" form="popup"/>.</p>
 
                         <p>My favorite color is</p>
-                        <p><answer var="$color2" form="buttons"/></p>
+                        <p><var name="$color2" form="buttons"/></p>
 
                         <!--<p>Select all expressions that are equivalent to <m>e^{x^2 + 1/x}</m>.  There may be more than one correct answer.</p>
-                        <p><answer var="$mc" form="checkboxes"/></p>-->
+                        <p><var name="$mc" form="checkboxes"/></p>-->
                     </statement>
 
                     <solution>
@@ -1185,7 +1185,7 @@
                                 </row>
                                 <row>
                                     <cell bottom="minor"><m>\text{I}+\text{I}+\text{I}+\text{I}</m></cell>
-                                    <cell><answer var="$x" form="none"/></cell>
+                                    <cell><var name="$x" form="none"/></cell>
                                     <cell>six</cell>
                                 </row>
                                 <row halign="right">

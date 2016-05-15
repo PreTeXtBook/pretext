@@ -2307,9 +2307,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- PGML answer blank               -->
 <!-- Example: [_____]{$ans}          -->
-<xsl:template match="webwork//statement//answer">
+<xsl:template match="webwork//statement//var[@width|@form]">
     <xsl:variable name="problem" select="ancestor::webwork" />
-    <xsl:variable name="varname" select="@var" />
+    <xsl:variable name="varname" select="@name" />
     <xsl:choose>
         <xsl:when test="@form='popup'" >
             <xsl:text>(Choose one: </xsl:text>
@@ -2369,7 +2369,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- An essay answer has no variable associated with the textbox,  -->
 <!-- so we simply indicate that this problem has an essay answer   -->
-<xsl:template match="webwork//answer[@form='essay']">
+<xsl:template match="webwork//var[@form='essay']">
     <xsl:text>\quad\lbrack Essay Answer\rbrack</xsl:text>
 </xsl:template>
 
