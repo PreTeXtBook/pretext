@@ -125,7 +125,7 @@
                 <!-- Process non-structural components -->
                 <!-- (eg, introduction, conclusion)    -->
                 <!-- Write out specific problem info   -->
-                <xsl:apply-templates select=".//webwork" mode="def-info-v2" />
+                <xsl:apply-templates select=".//webwork[@*|node()]" mode="def-info-v2" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:for-each>
@@ -134,7 +134,7 @@
 <!-- (d) For each child we want webwork info only  -->
 <!-- This presumes webwork is in an exercise       -->
 <xsl:template match="*" mode="structure-node-child">
-    <xsl:apply-templates select=".//webwork" mode="def-info-v2" />
+    <xsl:apply-templates select=".//webwork[@*|node()]" mode="def-info-v2" />
 </xsl:template>
 
 
@@ -221,7 +221,7 @@
 <!-- non-emptieness up the wrapping chain to ensure      -->
 <!--  no trivial problem definition files are created.   -->
 <!-- http://webwork.maa.org/wiki/Set_Definition_Files#Version_1 -->
-<xsl:template match="webwork" mode="def-info-v1">
+<xsl:template match="webwork[@*|node()]" mode="def-info-v1">
     <xsl:apply-templates select="." mode="filename" />
     <xsl:text>, </xsl:text>
     <xsl:text>1</xsl:text> <!-- default weight -->
@@ -239,7 +239,7 @@
 <!-- non-emptieness up the wrapping chain to ensure      -->
 <!--  no trivial problem definition files are created.   -->
 <!-- http://webwork.maa.org/wiki/Set_Definition_Files#Version_2 -->
-<xsl:template match="webwork" mode="def-info-v2">
+<xsl:template match="webwork[@*|node()]" mode="def-info-v2">
     <xsl:text>problem_start&#xa;</xsl:text>
     <xsl:text>source_file = </xsl:text> <!-- PG file -->
     <xsl:apply-templates select="." mode="filename" />
