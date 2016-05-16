@@ -3259,6 +3259,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]</xsl:text>
 </xsl:template>
 
+<!-- Left Double Bracket -->
+<xsl:template match="ldblbracket">
+    <xsl:text>\textlbrackdbl{}</xsl:text>
+</xsl:template>
+
+<!-- Right Double Bracket -->
+<xsl:template match="rdblbracket">
+    <xsl:text>\textrbrackdbl{}</xsl:text>
+</xsl:template>
+
 <!-- Left Angle Bracket -->
 <xsl:template match="langle">
     <xsl:text>\textlangle{}</xsl:text>

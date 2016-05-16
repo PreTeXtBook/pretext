@@ -37,7 +37,8 @@
 <!-- Elements that could be inside a single line of text -->
 <!-- For example, an <ndash>, but not a <me>             -->
 <!-- Precede these by a #PCDATA, wrap with ( )*          -->
-<!ENTITY % characters "nbsp|ndash|mdash|ampersand|less|greater|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|tilde|backslash|asterisk|lq|rq|lsq|rsq|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|dimension|slash|solidus|copyright|ie|eg|etc|circa|tex|latex|webwork|trademark|registered|today|timeofday">
+<!ENTITY % characters "nbsp|ndash|mdash|ampersand|less|greater|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|
+lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk|lq|rq|lsq|rsq|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|dimension|slash|solidus|copyright|ie|eg|etc|circa|tex|latex|webwork|trademark|registered|today|timeofday">
 <!ENTITY % markup "xref|url|m|c|em|alert|q|sq|braces|brackets|angles|term|foreign|quantity|acro|booktitle">
 <!ENTITY % line "%characters; | %markup;">
 

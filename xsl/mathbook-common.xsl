@@ -3189,6 +3189,16 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:text>[RIGHTBRACKET]</xsl:text>
 </xsl:template>
 
+<!-- Left Double Bracket -->
+<xsl:template match="ldblbracket">
+    <xsl:text>[LEFTDOUBLEBRACKET]</xsl:text>
+</xsl:template>
+
+<!-- Right Double Bracket -->
+<xsl:template match="rdblbracket">
+    <xsl:text>[RIGHTDOUBLEBRACKET]</xsl:text>
+</xsl:template>
+
 <!-- Left Angle Bracket -->
 <xsl:template match="langle">
     <xsl:text>[LEFTANGLEBRACKET]</xsl:text>
@@ -3310,6 +3320,17 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         </fakeroot>
     </xsl:variable>
     <xsl:apply-templates select="exsl:node-set($brackets-rtf)/fakeroot" />
+</xsl:template>
+
+<xsl:template match="dblbrackets">
+    <xsl:variable name="dblbrackets-rtf">
+        <fakeroot>
+            <ldblbracket />
+            <xsl:copy-of select="*|text()"/>
+            <rdblbracket />
+        </fakeroot>
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($dblbrackets-rtf)/fakeroot" />
 </xsl:template>
 
 <xsl:template match="angles">

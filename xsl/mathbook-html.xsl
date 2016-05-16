@@ -3651,6 +3651,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]</xsl:text>
 </xsl:template>
 
+<!-- Left Double Bracket -->
+<!-- MATHEMATICAL LEFT WHITE SQUARE BRACKET -->
+<xsl:template match="ldblbracket">
+    <xsl:text>&#x27e6;</xsl:text>
+</xsl:template>
+
+<!-- Right Double Bracket -->
+<!-- MATHEMATICAL RIGHT WHITE SQUARE BRACKET -->
+<xsl:template match="rdblbracket">
+    <xsl:text>&#x27e7;</xsl:text>
+</xsl:template>
+
 <!-- Left Angle Bracket -->
 <xsl:template match="langle">
     <xsl:text>&#x2329;</xsl:text>

@@ -934,7 +934,7 @@ the xsltproc executable.
             <subsection>
                 <title>Groupings</title>
 
-                <p>It is possible to make some other groupings like quotations, such as <braces>some <em>emphasized text</em> grouped within braces</braces>, or <brackets>a <booktitle>Book Title</booktitle> inside brackets</brackets>, or <angles>some <foreign>foreign words</foreign> inside angle brackets</angles>.</p>
+                <p>It is possible to make some other groupings like quotations, such as <braces>some <em>emphasized text</em> grouped within braces</braces>, or <brackets>a <booktitle>Book Title</booktitle> inside brackets</brackets>, <angles>some <foreign>foreign words</foreign> inside angle brackets</angles>, or <dblbrackets>just a bit of text within double brackets</dblbrackets>.  Some of these are used extensively by scholars who study texts to note various restorations or deletions.</p>
             </subsection>
 
         </section>
