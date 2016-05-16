@@ -583,12 +583,6 @@
         <xsl:when test="$category='angle'">
             <xsl:text>angles</xsl:text>
         </xsl:when>
-        <xsl:when test="$category='buttons'">
-            <xsl:text>none</xsl:text>
-        </xsl:when>
-        <xsl:when test="$category='checkboxes'">
-            <xsl:text>none</xsl:text>
-        </xsl:when>
         <xsl:when test="$category='decimal'">
             <xsl:text>decimals</xsl:text>
         </xsl:when>
@@ -618,9 +612,6 @@
         </xsl:when>
         <xsl:when test="$category='point'">
             <xsl:text>points</xsl:text>
-        </xsl:when>
-        <xsl:when test="$category='popup'">
-            <xsl:text>none</xsl:text>
         </xsl:when>
         <xsl:when test="$category='syntax'">
             <xsl:text>syntax</xsl:text>
