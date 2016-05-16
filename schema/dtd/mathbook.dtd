@@ -337,29 +337,43 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 
 <!-- Primarily owing to XML, TeX co-opting these -->
 
-<!ELEMENT nbsp       EMPTY>
-<!ELEMENT ndash      EMPTY>
-<!ELEMENT mdash      EMPTY>
-<!ELEMENT ampersand  EMPTY>
-<!ELEMENT less       EMPTY>
-<!ELEMENT greater    EMPTY>
-<!ELEMENT ellipsis   EMPTY>
-<!ELEMENT hash       EMPTY>
-<!ELEMENT dollar     EMPTY>
-<!ELEMENT percent    EMPTY>
-<!ELEMENT circumflex EMPTY>
-<!ELEMENT underscore EMPTY>
-<!ELEMENT lbrace     EMPTY>
-<!ELEMENT rbrace     EMPTY>
-<!ELEMENT tilde      EMPTY>
-<!ELEMENT backslash  EMPTY>
-<!ELEMENT asterisk   EMPTY>
+<!ELEMENT nbsp          EMPTY>
+<!ELEMENT ndash         EMPTY>
+<!ELEMENT mdash         EMPTY>
+<!ELEMENT ampersand     EMPTY>
+<!ELEMENT less          EMPTY>
+<!ELEMENT greater       EMPTY>
+<!ELEMENT ellipsis      EMPTY>
+<!ELEMENT hash          EMPTY>
+<!ELEMENT dollar        EMPTY>
+<!ELEMENT percent       EMPTY>
+<!ELEMENT circumflex    EMPTY>
+<!ELEMENT underscore    EMPTY>
+<!ELEMENT lbrace        EMPTY>
+<!ELEMENT rbrace        EMPTY>
+<!ELEMENT lbracket      EMPTY>
+<!ELEMENT rbracket      EMPTY>
+<!ELEMENT ldblbracket   EMPTY>
+<!ELEMENT rdblbracket   EMPTY>
+<!ELEMENT langle        EMPTY>
+<!ELEMENT rangle        EMPTY>
+<!ELEMENT tilde         EMPTY>
+<!ELEMENT backslash     EMPTY>
+<!ELEMENT asterisk      EMPTY>
 <!-- see copyright possibly EMPTY in frontmatter description-->
-<!ELEMENT lq         EMPTY>
-<!ELEMENT rq         EMPTY>
-<!ELEMENT lsq        EMPTY>
-<!ELEMENT rsq        EMPTY>
-<!ELEMENT br         EMPTY>
+<!ELEMENT lq            EMPTY>
+<!ELEMENT rq            EMPTY>
+<!ELEMENT lsq           EMPTY>
+<!ELEMENT rsq           EMPTY>
+<!ELEMENT br            EMPTY>
+<!ELEMENT midpoint      EMPTY>
+<!ELEMENT swungdash     EMPTY>
+<!ELEMENT permille      EMPTY>
+<!ELEMENT pilcrow       EMPTY>
+<!ELEMENT section-mark  EMPTY>
+<!ELEMENT dimension     EMPTY>
+<!ELEMENT slash         EMPTY>
+<!ELEMENT solidus       EMPTY>
 
 <!-- ############################ -->
 <!-- Abbreviations, Special Terms -->
@@ -381,19 +395,20 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- Simple Inline Markup -->
 <!-- #################### -->
 
-<!ELEMENT em        (#PCDATA|%line;)*>
-<!ELEMENT alert     (#PCDATA|%line;)*>
-<!ELEMENT q         (#PCDATA|%line;)*>
-<!ELEMENT sq        (#PCDATA|%line;)*>
-<!ELEMENT braces    (#PCDATA|%line;)*>
-<!ELEMENT brackets  (#PCDATA|%line;)*>
-<!ELEMENT angles    (#PCDATA|%line;)*>
-<!ELEMENT term      (#PCDATA|%line;)*>
-<!ELEMENT foreign   (#PCDATA|%line;)*>
-<!ELEMENT abbr      (#PCDATA|%line;)*>
-<!ELEMENT acro      (#PCDATA|%line;)*>
-<!ELEMENT init      (#PCDATA|%line;)*>
-<!ELEMENT fn        (#PCDATA|%line;)*>
+<!ELEMENT em           (#PCDATA|%line;)*>
+<!ELEMENT alert        (#PCDATA|%line;)*>
+<!ELEMENT q            (#PCDATA|%line;)*>
+<!ELEMENT sq           (#PCDATA|%line;)*>
+<!ELEMENT braces       (#PCDATA|%line;)*>
+<!ELEMENT brackets     (#PCDATA|%line;)*>
+<!ELEMENT dblbrackets  (#PCDATA|%line;)*>
+<!ELEMENT angles       (#PCDATA|%line;)*>
+<!ELEMENT term         (#PCDATA|%line;)*>
+<!ELEMENT foreign      (#PCDATA|%line;)*>
+<!ELEMENT abbr         (#PCDATA|%line;)*>
+<!ELEMENT acro         (#PCDATA|%line;)*>
+<!ELEMENT init         (#PCDATA|%line;)*>
+<!ELEMENT fn           (#PCDATA|%line;)*>
     <!ATTLIST fn xml:id ID #IMPLIED>
 <!-- <c> is a bit different -->
 <!ELEMENT c         (#PCDATA)>
@@ -555,7 +570,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 
 <!ENTITY % prefix "yocto|zepto|atto|femto|pico|nano|micro|milli|centi|deci|deca|deka|hecto|kilo|mega|giga|tera|peta|exa|zetta|yotta">
 
-<!ENTITY % base "ampere|candela|kelvin|gram|meter|metre|mole|second|becquerel|gray|sievert|degreeCelsius|celsius|coulomb|henry|ohm|siemens|tesla|volt|weber|hertz|katal|joule|newton|pascal|watt|lumen|lux|radian|steradian|degree|arcminute|arcsecond|day|hour|minute|hectare|liter|litre|percent|degreeFahrenheit|fahrenheit|pound|foot|inch|yard|mile|mileperhour|kilometerperhour|kilometreperhour|gallon|milepergallon">
+<!ENTITY % base "ampere|candela|kelvin|gram|meter|metre|mole|second|becquerel|gray|sievert|degreeCelsius|celsius|coulomb|henry|ohm|siemens|tesla|volt|weber|hertz|katal|joule|newton|pascal|watt|lumen|lux|radian|steradian|degree|arcminute|arcsecond|day|hour|minute|hectare|liter|litre|percent|degreeFahrenheit|fahrenheit|pound|foot|inch|yard|mile|mileperhour|gallon">
 
 <!ELEMENT quantity   (mag*, unit*, per*)>
 
