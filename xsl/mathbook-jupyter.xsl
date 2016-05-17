@@ -543,6 +543,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="end-string" />
 </xsl:template>
 
+<!-- ############### -->
+<!-- Arbitrary Lists -->
+<!-- ############### -->
+
+<!-- See general routine in  xsl/mathbook-common.xsl -->
+<!-- which expects the two named templates and the  -->
+<!-- two division'al and element'al templates below,  -->
+<!-- it contains the logic of constructing such a list -->
+
+<!-- List-of entry/exit hooks -->
+<!-- No ops for HTML (maybe blocking) -->
+<xsl:template name="list-of-begin" />
+<xsl:template name="list-of-end" />
 
 <!-- Sage code -->
 <!-- Should evolve to accomodate gebneral template -->
