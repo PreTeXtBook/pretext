@@ -2207,14 +2207,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Requires a manual tag for number    -->
 <xsl:template match="men" mode="body">
     <xsl:param name="env-type" />
-    <xsl:text>\begin{equation}</xsl:text>
+    <xsl:text>\begin{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
     <xsl:value-of select="." />
     <!-- Needs label{} at birth, NOT in xref knowl -->
     <xsl:if test="$env-type='visible' or $env-type='hidden'">
         <xsl:apply-templates select="." mode="label" />
     </xsl:if>
     <xsl:apply-templates select="." mode="tag" />
-    <xsl:text>\end{equation}</xsl:text>
+    <xsl:text>\end{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- Multi-Line Math -->
@@ -2222,34 +2226,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
 <!-- align environment if ampersands are present, gather environment otherwise   -->
 <!-- NB: *identical* to LaTeX version, but for mode and knowl-type parameter     -->
-<xsl:template match="md" mode="body">
-    <xsl:choose>
-        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
-            <xsl:text>\begin{align*}&#xa;</xsl:text>
-            <xsl:apply-templates select="mrow|intertext" />
-            <xsl:text>\end{align*}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\begin{gather*}&#xa;</xsl:text>
-            <xsl:apply-templates select="mrow|intertext" />
-            <xsl:text>\end{gather*}</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<xsl:template match="mdn" mode="body">
-    <xsl:choose>
-        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
-            <xsl:text>\begin{align}&#xa;</xsl:text>
-            <xsl:apply-templates select="mrow|intertext" />
-            <xsl:text>\end{align}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\begin{gather}&#xa;</xsl:text>
-            <xsl:apply-templates select="mrow|intertext" />
-            <xsl:text>\end{gather}</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+<xsl:template match="md|mdn" mode="body">
+    <xsl:text>\begin{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:apply-templates select="mrow|intertext" />
+    <xsl:text>\end{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- Rows of a multi-line math display                 -->
@@ -2307,58 +2291,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Intertext -->
-<!-- A LaTeX construct really, we just jump in/out of             -->
+<!-- A LaTeX construct really, we just jump out/in of             -->
 <!-- the align/gather environment and package the text            -->
 <!-- in an HTML paragraph, assuming it is just a snippet.         -->
 <!-- This breaks the alignment, but MathJax has no good           -->
 <!-- solution for this.                                           -->
 <!-- We need * (md=no numbers), and plain (mdn=numbers) variants, -->
 <!-- together with aligned (& present) or gather (no & present).  -->
-<!-- NB: we check the *parent* for ampersands                     -->
-<!-- TODO: make an ampersand-test template to produce "align|gather" -->
-<!-- TODO: and md vs mdn templates to produce star/unstar            -->
-<xsl:template match="md/intertext">
-    <xsl:choose>
-        <xsl:when test="contains(.., '&amp;') or contains(., '\amp')">
-            <xsl:text>\end{align*}&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\end{gather*}&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+<!-- NB: we check the *parent* for alignment                      -->
+<xsl:template match="md/intertext|mdn/intertext">
+    <xsl:text>\end{</xsl:text>
+    <xsl:apply-templates select=".." mode="displaymath-alignment" />
+    <xsl:text>}&#xa;</xsl:text>
     <p>
         <xsl:apply-templates />
     </p>
-    <xsl:choose>
-        <xsl:when test="contains(.., '&amp;') or contains(., '\amp')">
-            <xsl:text>\begin{align*}&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\begin{gather*}&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<xsl:template match="mdn/intertext">
-    <xsl:choose>
-        <xsl:when test="contains(.., '&amp;') or contains(., '\amp')">
-            <xsl:text>\end{align}&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\end{gather}&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <p>
-        <xsl:apply-templates />
-    </p>
-    <xsl:choose>
-        <xsl:when test="contains(.., '&amp;') or contains(., '\amp')">
-            <xsl:text>\begin{align}&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\begin{gather}&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:text>\begin{</xsl:text>
+    <xsl:apply-templates select=".." mode="displaymath-alignment" />
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 

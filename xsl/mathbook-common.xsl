@@ -517,6 +517,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\)</xsl:text>
 </xsl:template>
 
+<!-- We get some clues about the right LaTeX environment to        -->
+<!-- use for display mathematics, but some of this is guesswork.   -->
+<!-- But we can consolidate this textual analysis (input/output)   -->
+<!-- here in the common routines.                                  -->
+<!-- TODO: provide attribute for overrides                         -->
+
+<!-- Always an "equation" for an me-variant -->
+<!-- The equation* is AMS-Math-specific,    -->
+<!-- "displaymath" is base-LaTeX equivalent -->
+<xsl:template match="me" mode="displaymath-alignment">
+    <xsl:text>equation*</xsl:text>
+</xsl:template>
+
+<xsl:template match="men" mode="displaymath-alignment">
+    <xsl:text>equation</xsl:text>
+</xsl:template>
+
+<!-- We sniff around for ampersands, to decide between "align" -->
+<!-- and "gather", plus an asterisk for the unnumbered version -->
+<xsl:template match="md|mdn" mode="displaymath-alignment">
+    <xsl:choose>
+        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
+            <xsl:text>align</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>gather</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="self::md">
+        <xsl:text>*</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+
 <!-- ############ -->
 <!-- LaTeX Macros -->
 <!-- ############ -->

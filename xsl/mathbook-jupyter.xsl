@@ -771,11 +771,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Now numbered   -->
 <xsl:template match="men">
-    <xsl:text>\\begin{equation}</xsl:text>
+    <xsl:text>\\begin{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
     <xsl:apply-templates />
     <xsl:apply-templates select="." mode="label" />
     <xsl:apply-templates select="." mode="tag"/>
-     <xsl:text>\\end{equation}</xsl:text>
+    <xsl:text>\\end{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- TODO: Straight out of LaTeX, but sanitized some -->
@@ -785,78 +789,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
 <!-- align environment if ampersands are present, gather environment otherwise   -->
 <!-- Output follows source line breaks                                           -->
-<xsl:template match="md">
-    <xsl:choose>
-        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
-            <xsl:text>\\begin{align*}\n</xsl:text>
-            <xsl:apply-templates select="mrow|intertext" />
-            <xsl:text>\\end{align*}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\\begin{gather*}\n</xsl:text>
-            <xsl:apply-templates select="mrow|intertext" />
-            <xsl:text>\\end{gather*}</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<xsl:template match="mdn">
-    <xsl:choose>
-        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
-            <xsl:text>\\begin{align}\n</xsl:text>
-            <xsl:apply-templates select="mrow|intertext" />
-            <xsl:text>\\end{align}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\\begin{gather}\n</xsl:text>
-            <xsl:apply-templates select="mrow|intertext" />
-            <xsl:text>\\end{gather}</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- Duplicates above, but as block-level element -->
-<xsl:template match="mdn[not(parent::p)]">
-    <xsl:call-template name="markdown-cell">
-        <xsl:with-param name="content">
-            <xsl:call-template name="begin-string" />
-            <xsl:choose>
-                <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
-                    <xsl:text>\\begin{align}\n</xsl:text>
-                    <xsl:apply-templates select="mrow|intertext" />
-                    <xsl:text>\\end{align}</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>\\begin{gather}\n</xsl:text>
-                    <xsl:apply-templates select="mrow|intertext" />
-                    <xsl:text>\\end{gather}</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:call-template name="end-string" />
-        </xsl:with-param>
-    </xsl:call-template>
-</xsl:template>
-
-<!-- Duplicates above, but as block-level element -->
-<xsl:template match="md[not(parent::p)]">
-    <xsl:call-template name="markdown-cell">
-        <xsl:with-param name="content">
-            <xsl:call-template name="begin-string" />
-            <xsl:choose>
-                <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
-                    <xsl:text>\\begin{align}\n</xsl:text>
-                    <xsl:apply-templates select="mrow|intertext" />
-                    <xsl:text>\\end{align}</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>\\begin{gather}\n</xsl:text>
-                    <xsl:apply-templates select="mrow|intertext" />
-                    <xsl:text>\\end{gather}</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:call-template name="end-string" />
-        </xsl:with-param>
-    </xsl:call-template>
+<xsl:template match="md|mdn">
+    <xsl:text>\\begin{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}\n</xsl:text>
+    <xsl:apply-templates select="mrow|intertext" />
+    <xsl:text>\\end{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- Rows of a multi-line math display -->
