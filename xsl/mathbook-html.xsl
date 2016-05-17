@@ -2197,9 +2197,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Output follows source line breaks     -->
 <!-- MathJax: out-of-the-box support       -->
 <xsl:template match="me" mode="body">
-    <xsl:text>\[</xsl:text>
+    <xsl:text>\begin{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
     <xsl:value-of select="." />
-    <xsl:text>\]</xsl:text>
+    <xsl:text>\end{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- Single displayed equation, numbered -->

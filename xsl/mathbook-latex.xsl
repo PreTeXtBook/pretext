@@ -2589,7 +2589,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- WeBWorK: allow for "var" element                              -->
 <!-- See: http://tex.stackexchange.com/questions/40492/what-are-the-differences-between-align-equation-and-displaymath -->
 <xsl:template match="me">
-    <xsl:text>\[</xsl:text>
+    <xsl:text>\begin{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
     <xsl:choose>
         <xsl:when test="ancestor::webwork">
             <xsl:apply-templates select="text()|var" />
@@ -2598,7 +2600,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="text()" />
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>\]</xsl:text>
+    <xsl:text>\end{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- Single displayed equation, numbered                  -->

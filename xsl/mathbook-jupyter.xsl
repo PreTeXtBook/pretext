@@ -764,9 +764,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Single Displayed Equations      -->
 <!-- Write escaped TeX backslashes   -->
 <xsl:template match="me">
-    <xsl:text>\\begin{equation}</xsl:text>
+    <xsl:text>\\begin{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\\end{equation}</xsl:text>
+    <xsl:text>\\end{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- Now numbered   -->
