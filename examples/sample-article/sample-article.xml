@@ -418,7 +418,7 @@ the xsltproc executable.
             </introduction>
 
             <subsection>
-                <title>Second Version of FTC</title>
+                <title>Second Version of <acro>FTC</acro></title>
 
                 <todo>Should equation references come with parentheses?</todo>
 
@@ -435,7 +435,7 @@ the xsltproc executable.
                     </proof>
                 </corollary>
 
-                <p>The alternative version of the Fundamental Theorem in <xref ref="equation-alternate-FTC" /> is a compact way to express the result.</p>
+                <p>The alternative version of the Fundamental Theorem (<acro>FTC</acro>) in <xref ref="equation-alternate-FTC" /> is a compact way to express the result.</p>
 
                 <example xml:id="example-mysterious">
                     <title>A Mysterious Derivative</title>

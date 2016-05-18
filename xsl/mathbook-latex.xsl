@@ -372,20 +372,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- lower-casing macro from: http://tex.stackexchange.com/questions/114592/force-all-small-caps -->
     <!-- Letter-spacing LaTeX: http://tex.stackexchange.com/questions/114578/tufte-running-headers-not-using-full-width-of-page -->
+    <!-- PDF navigation panels has titles as simple strings,    -->
+    <!-- devoid of any formatting, so we just give up, as any   -->
+    <!-- attempt to use title-specific macros, \texorpdfstring, -->
+    <!-- \protect, \DeclareRobustCommand does not help get      -->
+    <!-- ToC, PDF navigation panel, text heading all correct    -->
+    <!-- Obstacle is that sc shape does not come in bold,       -->
+    <!-- http://tex.stackexchange.com/questions/17830/using-textsc-within-section -->
     <xsl:if test="/mathbook//abbr">
-        <xsl:text>%% Used to markup abbreviations&#xa;</xsl:text>
+        <xsl:text>%% Used to markup abbreviations, text or titles&#xa;</xsl:text>
         <xsl:text>%% default is small caps (Bringhurst, 4e, 3.2.2, p. 48)&#xa;</xsl:text>
+        <xsl:text>%% Titles are no-ops now, see comments in XSL source&#xa;</xsl:text>
         <xsl:text>\newcommand{\abbreviation}[1]{\textsc{\MakeLowercase{#1}}}&#xa;</xsl:text>
+        <xsl:text>\DeclareRobustCommand{\abbreviationintitle}[1]{\texorpdfstring{#1}{#1}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="/mathbook//acro">
-        <xsl:text>%% Used to markup acronyms,&#xa;</xsl:text>
+        <xsl:text>%% Used to markup acronyms, text or titles&#xa;</xsl:text>
         <xsl:text>%% default is small caps (Bringhurst, 4e, 3.2.2, p. 48)&#xa;</xsl:text>
+        <xsl:text>%% Titles are no-ops now, see comments in XSL source&#xa;</xsl:text>
         <xsl:text>\newcommand{\acronym}[1]{\textsc{\MakeLowercase{#1}}}&#xa;</xsl:text>
+        <xsl:text>\DeclareRobustCommand{\acronymintitle}[1]{\texorpdfstring{#1}{#1}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="/mathbook//init">
-        <xsl:text>%% Used to markup initialisms&#xa;</xsl:text>
+        <xsl:text>%% Used to markup initialisms, text or titles&#xa;</xsl:text>
         <xsl:text>%% default is small caps (Bringhurst, 4e, 3.2.2, p. 48)&#xa;</xsl:text>
+        <xsl:text>%% Titles are no-ops now, see comments in XSL source&#xa;</xsl:text>
         <xsl:text>\newcommand{\initialism}[1]{\textsc{\MakeLowercase{#1}}}&#xa;</xsl:text>
+        <xsl:text>\DeclareRobustCommand{\initialismintitle}[1]{\texorpdfstring{#1}{#1}}&#xa;</xsl:text>
     </xsl:if>
     <!-- http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/ -->
     <xsl:if test="/mathbook//swungdash">
@@ -3072,6 +3085,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>
+
+<!-- Titles migrate to PDF bookmarks/ToC and need to be handled  -->
+<!-- differently, even if we haven't quite figured out how       -->
+<xsl:template match="title//abbr">
+    <xsl:text>\abbreviationintitle{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="title//acro">
+    <xsl:text>\acronymintitle{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="title//init">
+    <xsl:text>\initialismintitle{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
 
 <!-- Code, inline -->
 <!-- A question mark is invalid Python, so a useful separator    -->
