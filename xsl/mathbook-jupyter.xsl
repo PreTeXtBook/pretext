@@ -815,7 +815,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise></xsl:otherwise>
     </xsl:choose>
     <!-- write newline for markdown source formatting -->
-    <xsl:if test="position()!=last()">
+    <xsl:if test="following-sibling::mrow">
        <xsl:text>\\\\\n</xsl:text>
     </xsl:if>
 </xsl:template>
@@ -832,7 +832,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <!-- write newline for markdown source formatting -->
-    <xsl:if test="position()!=last()">
+    <xsl:if test="following-sibling::mrow">
        <xsl:text>\\\\\n</xsl:text>
     </xsl:if>
 </xsl:template>

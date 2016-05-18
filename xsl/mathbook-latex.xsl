@@ -2657,7 +2657,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
     </xsl:choose>
-    <xsl:if test="position()!=last()">
+    <xsl:if test="following-sibling::mrow">
        <xsl:text>\\</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
@@ -2680,7 +2680,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="label" />
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:if test="position()!=last()">
+    <xsl:if test="following-sibling::mrow">
        <xsl:text>\\</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
