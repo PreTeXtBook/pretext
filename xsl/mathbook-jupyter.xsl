@@ -217,8 +217,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- Kill various parts temporarily -->
-<xsl:template match="title" />
-<xsl:template match="subtitle" />
 <xsl:template match="frontmatter" />
 <xsl:template match="notation" />
 

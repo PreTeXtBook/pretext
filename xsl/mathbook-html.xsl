@@ -443,7 +443,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
         </h5>
-        <xsl:apply-templates  select="./*[not(self::title)]"/>
+        <xsl:apply-templates  select="*"/>
     </article>
 </xsl:template>
 
@@ -620,9 +620,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We add other material prior to links to major subdivisions -->
 <xsl:template match="titlepage">
     <h1 class="heading">
-        <span class="title"><xsl:apply-templates select="/mathbook/*/title" /></span>
+        <span class="title">
+            <xsl:apply-templates select="/mathbook/*" mode="title-full" />
+        </span>
         <xsl:if test="/mathbook/*/subtitle">
-            <span class="subtitle"><xsl:apply-templates select="/mathbook/*/subtitle" /></span>
+            <span class="subtitle">
+                <xsl:apply-templates select="/mathbook/*" mode="subtitle" />
+            </span>
         </xsl:if>
     </h1>
     <!-- We list full info for each author and editor in document order -->
@@ -639,7 +643,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- then name, etc in slightly smaller font (generally de-emphasised) -->
 <xsl:template match="titlepage/credit">
     <xsl:if test="title">
-        <xsl:apply-templates select="title" />
+        <xsl:apply-templates select="." mode="title-full"/>
         <br />
     </xsl:if>
     <xsl:apply-templates select="author" mode="full-info" />
@@ -698,7 +702,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <h5 class="heading">
             <xsl:apply-templates select="." mode="title-full" />
         </h5>
-        <xsl:apply-templates  select="./*[not(self::title)]"/>
+        <xsl:apply-templates  select="*"/>
     </article>
 </xsl:template>
 
@@ -722,6 +726,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- parameters control visibility. We eventually appeal     -->
 <!-- to the environment/knowl code to realize each hint, etc -->
 <!-- as a knowl for decent page-loading time.                -->
+
+<!-- This is a hack that should go away when backmatter exercises are rethought -->
+<xsl:template match="title" mode="backmatter" />
 
 <xsl:template match="solution-list">
     <xsl:apply-templates select="//exercises" mode="backmatter" />
@@ -759,7 +766,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
             <span class="codenumber"><xsl:apply-templates select="." mode="serial-number" /></span>
             <xsl:if test="title">
-                <span class="title"><xsl:apply-templates select="title" /></span>
+                <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
             </xsl:if>
             </h5>
             <xsl:if test="$exercise.backmatter.statement='yes'">
@@ -1591,7 +1598,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
             <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
             <xsl:if test="title">
-                <span class="title"><xsl:apply-templates select="title" /></span>
+                <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
             </xsl:if>
         </h5>
     </article>
@@ -1602,13 +1609,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
         <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
         <xsl:if test="title">
-            <span class="title"><xsl:apply-templates select="title" /></span>
+            <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
         </xsl:if>
     </h5>
 </xsl:template>
 <!-- Body is just all content, but no title -->
 <xsl:template match="example|list|remark" mode="body">
-    <xsl:apply-templates select="*[not(self::title)]"/>
+    <xsl:apply-templates select="*"/>
 </xsl:template>
 <!-- No posterior  -->
 <xsl:template match="example|list|remark" mode="posterior" />
@@ -1636,7 +1643,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
             <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
             <xsl:if test="title">
-                <span class="title"><xsl:apply-templates select="title" /></span>
+                <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
             </xsl:if>
         </h5>
     </article>
@@ -1647,7 +1654,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
         <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
         <xsl:if test="title">
-            <span class="title"><xsl:apply-templates select="title" /></span>
+            <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
         </xsl:if>
     </h5>
 </xsl:template>
@@ -1685,7 +1692,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
             <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
             <xsl:if test="title">
-                <span class="title"><xsl:apply-templates select="title" /></span>
+                <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
             </xsl:if>
         </h5>
     </article>
@@ -1696,7 +1703,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
         <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
         <xsl:if test="title">
-            <span class="title"><xsl:apply-templates select="title" /></span>
+            <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
         </xsl:if>
     </h5>
 </xsl:template>
@@ -1793,7 +1800,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
             <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
             <xsl:if test="title">
-                <span class="title"><xsl:apply-templates select="title" /></span>
+                <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
             </xsl:if>
         </h5>
     </article>
@@ -1957,7 +1964,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="codenumber"><xsl:apply-templates select="." mode="serial-number" /></span>
     <xsl:if test="title">
         <xsl:text> </xsl:text>
-        <span class="title"><xsl:apply-templates select="title" /></span>
+        <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
     </xsl:if>
     </h5>
 </xsl:template>
@@ -1968,7 +1975,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
     <xsl:if test="title">
         <xsl:text> </xsl:text>
-        <span class="title"><xsl:apply-templates select="title" /></span>
+        <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
     </xsl:if>
     </h5>
 </xsl:template>
@@ -1978,7 +1985,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="codenumber"><xsl:apply-templates select="." mode="serial-number" /></span>
     <xsl:if test="title">
         <xsl:text> </xsl:text>
-        <span class="title"><xsl:apply-templates select="title" /></span>
+        <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
     </xsl:if>
     </h5>
 </xsl:template>
@@ -1989,7 +1996,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
     <xsl:if test="title">
         <xsl:text> </xsl:text>
-        <span class="title"><xsl:apply-templates select="title" /></span>
+        <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
     </xsl:if>
     </h5>
 </xsl:template>
@@ -2056,12 +2063,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="codenumber"><xsl:apply-templates select="." mode="serial-number" /></span>
     <xsl:if test="title">
         <xsl:text> </xsl:text>
-        <span class="title"><xsl:apply-templates select="title" /></span>
+        <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
     </xsl:if>
     </h5>
 </xsl:template>
 <!-- Body is everything, including nested lists -->
+<!-- TODO: maybe something is missing here, style of label, etc -->
 <xsl:template match="li" mode="body">
+    <!-- TODO: this needs formatting, insertion into first paragraph -->
+    <xsl:if test="parent::dl">
+        <xsl:apply-templates select="." mode="title-full" />
+    </xsl:if>
     <xsl:apply-templates />
 </xsl:template>
 <!-- No posterior  -->
@@ -2471,6 +2483,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="internal-id" />
         </xsl:attribute>
+        <!-- TODO: this needs formatting, insertion into first paragraph -->
+        <xsl:if test="parent::dl">
+            <xsl:apply-templates select="." mode="title-full" />
+        </xsl:if>
         <xsl:apply-templates />
     </xsl:element>
 </xsl:template>
@@ -2485,6 +2501,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="internal-id" />
         </xsl:attribute>
+        <!-- TODO: this needs formatting, insertion into first paragraph -->
+        <xsl:if test="parent::dl">
+            <xsl:apply-templates select="." mode="title-full" />
+        </xsl:if>
        <xsl:apply-templates />
     </xsl:element>
 </xsl:template>
@@ -3798,18 +3818,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- width attribute is for print, ignored here -->
 <xsl:template match="poem">
     <div class="poem" style="margin: auto;">
-        <xsl:apply-templates select="title" />
+        <div class="poemtitle" style="padding-bottom: 20px; font-weight: bold; font-size: 121%">
+            <xsl:apply-templates select="." mode="title-full"/>
+        </div>
         <xsl:apply-templates select="stanza"/>
         <xsl:apply-templates select="author" />
     </div>
 </xsl:template>
 
-<!-- title -->
-<xsl:template match="poem/title">
-    <div class="poemtitle" style="padding-bottom: 20px; font-weight: bold; font-size: 121%">
-    <xsl:apply-templates />
-    </div>
-</xsl:template>
 
 <!-- Stanzas are sequences of lines -->
 <xsl:template match="stanza">
@@ -4209,11 +4225,11 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                         <div class="title-container">
                             <h1 class="heading">
                                 <span class="title">
-                                    <xsl:apply-templates select="/mathbook/book/title|/mathbook/article/title" mode="title-simple" />
+                                    <xsl:apply-templates select="/mathbook/book|/mathbook/article" mode="title-simple" />
                                 </span>
                                 <xsl:if test="normalize-space(/mathbook/book/subtitle|/mathbook/article/subtitle)">
                                     <span class="subtitle">
-                                        <xsl:value-of select="/mathbook/book/subtitle|/mathbook/article/subtitle" />
+                                        <xsl:apply-templates select="/mathbook/book|/mathbook/article" mode="subtitle" />
                                     </span>
                                 </xsl:if>
                             </h1>
@@ -4345,7 +4361,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <xsl:choose>
         <xsl:when test="$intermediate='true'">
             <!-- Descend once, will always have a child that is structural -->
-            <xsl:variable name="first-structural-child" select="*[not(self::title or self::subtitle or self::todo or self::introduction or self::conclusion or self::titlepage or self::author)][1]" />
+            <xsl:variable name="first-structural-child" select="*[not(self::todo or self::introduction or self::conclusion or self::titlepage or self::author)][1]" />
             <xsl:variable name="structural">
                 <xsl:apply-templates select="$first-structural-child" mode="is-structural" />
             </xsl:variable>
@@ -4443,7 +4459,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:apply-templates select="." mode="url" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:variable name="last-structural-child" select="*[not(self::title or self::subtitle or self::todo or self::introduction or self::conclusion)][last()]" />
+            <xsl:variable name="last-structural-child" select="*[not(self::todo or self::introduction or self::conclusion)][last()]" />
             <xsl:variable name="structural">
                 <xsl:apply-templates select="$last-structural-child" mode="is-structural" />
             </xsl:variable>
