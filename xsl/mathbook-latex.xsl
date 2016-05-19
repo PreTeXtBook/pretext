@@ -1059,7 +1059,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\\&#xa;</xsl:text>
         <!-- Trying to match author fontsize -->
         <xsl:text>{\large </xsl:text>
-        <xsl:apply-templates select="subtitle" />
+        <xsl:apply-templates select="." mode="subtitle" />
         <xsl:text>}</xsl:text>
     </xsl:if>
     <xsl:text>}&#xa;</xsl:text>
@@ -1076,7 +1076,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\\&#xa;</xsl:text>
         <!-- Trying to match author fontsize -->
         <xsl:text>{\large </xsl:text>
-        <xsl:apply-templates select="subtitle" />
+        <xsl:apply-templates select="." mode="subtitle" />
         <xsl:text>}</xsl:text>
     </xsl:if>
     <xsl:if test="/mathbook/docinfo/event">
@@ -1108,7 +1108,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="/mathbook/book/subtitle">
         <xsl:text>[2\baselineskip]&#xa;</xsl:text> <!-- extend line break if subtitle -->
         <xsl:text>{\LARGE </xsl:text>
-        <xsl:apply-templates select="/mathbook/book/subtitle" />
+        <xsl:apply-templates select="/mathbook/book" mode="subtitle"/>
         <xsl:text>}\\&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>}&#xa;</xsl:text> <!-- finish centering -->
@@ -1146,7 +1146,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="subtitle">
         <xsl:text>[\baselineskip]&#xa;</xsl:text>  <!-- extend if subtitle -->
         <xsl:text>{\LARGE </xsl:text>
-        <xsl:apply-templates select="subtitle" />
+        <xsl:apply-templates select="." mode="subtitle" />
         <xsl:text>}\\</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="frontmatter/titlepage/author" mode="title-page"/>
@@ -1209,9 +1209,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% begin: copyright-page&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:if test="frontmatter/biography" >
-        <!-- We kill the title, presuming placement is indicative enough -->
+        <!-- We skip the title, presuming placement is indicative enough -->
         <xsl:text>{\setlength{\parindent}{0pt}\setlength{\parskip}{4pt}</xsl:text>
-        <xsl:apply-templates select="frontmatter/biography/*[not(self::title)]" />}
+        <xsl:apply-templates select="frontmatter/biography/*" />}
         <xsl:text>\par\vspace*{\stretch{2}}</xsl:text>
     </xsl:if>
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
@@ -1843,7 +1843,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- in  xsl/mathbook-common.xsl to understand these.              -->
 
 <xsl:template match="*" mode="structure-node-intermediate">
-    <xsl:apply-templates select="*[not(self::title or self::subtitle or self::author)]" mode="structure-node-child-summary" />
+    <xsl:apply-templates select="*[not(self::author)]" mode="structure-node-child-summary" />
 </xsl:template>
 
 <xsl:template match="*" mode="structure-node-child-summary">
@@ -1978,7 +1978,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>*{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::title)]" />
+    <xsl:apply-templates select="*" />
 </xsl:template>
 
 <!-- Spacing comes from division header above, subdivision header below -->
@@ -2019,7 +2019,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::title)]" />
+    <xsl:apply-templates select="*" />
 </xsl:template>
 
 <!-- Theorems, Proofs, Definitions, Examples, Exercises -->
@@ -2114,7 +2114,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="label"/>
     <xsl:if test="title">
         <xsl:text>(</xsl:text>
-        <xsl:apply-templates select="title" />
+        <xsl:apply-templates select="." mode="title-full"/>
         <xsl:text>)\space\space{}</xsl:text>
     </xsl:if>
     <!-- condition on webwork wrapper or not -->
@@ -2167,6 +2167,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
+<!-- This is a hack that should go away when backmatter exercises are rethought -->
+<xsl:template match="title" mode="backmatter" />
+
 <xsl:template match="solution-list">
     <!-- TODO: check here once for backmatter switches set to "knowl", which is unrealizable -->
     <xsl:apply-templates select="//exercises" mode="backmatter" />
@@ -2183,9 +2186,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>*{</xsl:text>
         <xsl:apply-templates select="." mode="number" />
         <xsl:text> </xsl:text>
-        <xsl:apply-templates select="title" />
+        <xsl:apply-templates select="." mode="title-full" />
         <xsl:text>}&#xa;</xsl:text>
-        <xsl:apply-templates select="*[not(self::title)]" mode="backmatter" />
+        <xsl:apply-templates select="*" mode="backmatter" />
     </xsl:if>
 </xsl:template>
 
@@ -2518,7 +2521,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="title" mode="environment-option" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::title)]"/>
+    <xsl:apply-templates select="*"/>
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="$env-name" />
     <xsl:text>}&#xa;</xsl:text>
@@ -4859,7 +4862,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- width is percentage of text width -->
 <!-- ie, "length" of longest line      -->
 <xsl:template match="poem">
-    <xsl:apply-templates select="title" />
+<!-- title *precedes* environment        -->
+<!-- Starred version suppresses ToC entry -->
+    <xsl:text>\poemtitle*{</xsl:text>
+    <xsl:apply-templates select="." mode="title-full" />
+    <xsl:text>}&#xa;</xsl:text>
     <xsl:text>\begin{verse}</xsl:text>
     <xsl:if test="@width">
         <xsl:text>[0.</xsl:text>
@@ -4870,14 +4877,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="stanza"/>
     <xsl:apply-templates select="author" />
     <xsl:text>\end{verse}&#xa;</xsl:text>
-</xsl:template>
-
-<!-- title *precedes* environment        -->
-<!-- Starred versio suppresses ToC entry -->
-<xsl:template match="poem/title">
-    <xsl:text>\poemtitle*{</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- End of a stanza is marked by last line   -->
