@@ -79,6 +79,10 @@
 <!-- We disable the ToC level to avoid any conflicts with chunk level -->
 <xsl:param name="toc.level" select="0" />
 
+<!-- XHTML files as output -->
+<xsl:variable name="file-extension" select="'.xhtml'" />
+
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
@@ -128,7 +132,7 @@
         <xsl:text>/</xsl:text>
         <xsl:value-of select="$xhtml-dir" />
         <xsl:text>/</xsl:text>
-        <xsl:apply-templates select="." mode="filename" />
+        <xsl:apply-templates select="." mode="containing-filename" />
     </xsl:variable>
     <!-- do not use "doctype-system" here        -->
     <!-- do not create faux <!DOCTYPE html> here -->
@@ -299,7 +303,7 @@
         <xsl:attribute name="href">
             <xsl:value-of select="$xhtml-dir" />
             <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="filename" />
+            <xsl:apply-templates select="." mode="containing-filename" />
         </xsl:attribute>
         <xsl:attribute name="media-type">
             <xsl:text>application/xhtml+xml</xsl:text>
@@ -383,7 +387,7 @@
                             <li>
                                 <xsl:element name="a">
                                     <xsl:attribute name="href">
-                                        <xsl:apply-templates select="." mode="filename" />
+                                        <xsl:apply-templates select="." mode="containing-filename" />
                                     </xsl:attribute>
                                     <xsl:apply-templates select="." mode="title-simple" />
                                 </xsl:element>
@@ -621,38 +625,6 @@
     <code>
         <xsl:apply-templates />
     </code>
-</xsl:template>
-
-
-<!-- ######### -->
-<!-- Utilities -->
-<!-- ######### -->
-
-<!-- Verbatim from HTML, but for extension, generalize !-->
-
-<!-- Filenames -->
-<!-- Every web page has a file name,                           -->
-<!-- and every node is subsidiary to some web page.            -->
-<!-- This template give the filename of the webpage enclosing  -->
-<!-- any node (or the webpage representing that node)          -->
-<!-- This allows cross-references to point to the right page   -->
-<!-- when chunking the content into many subdivisions          -->
-<xsl:template match="*" mode="filename">
-    <xsl:variable name="intermediate"><xsl:apply-templates select="." mode="is-intermediate" /></xsl:variable>
-    <xsl:variable name="chunk"><xsl:apply-templates select="." mode="is-chunk" /></xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$intermediate='true' or $chunk='true'">
-            <xsl:apply-templates select="." mode="internal-id" />
-            <xsl:text>.xhtml</xsl:text>
-            <!-- DEPRECATION: May 2015, replace with terminate=yes if present without an xml:id -->
-            <xsl:if test="@filebase">
-                <xsl:message>MBX:WARNING: filebase attribute (value=<xsl:value-of select="@filebase" />) is deprecated, use xml:id attribute instead</xsl:message>
-            </xsl:if>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select=".." mode="filename" />
-        </xsl:otherwise>
-    </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>
