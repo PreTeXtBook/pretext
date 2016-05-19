@@ -1413,124 +1413,75 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- Titles -->
 <!-- ###### -->
 
+<!-- Titles are like metadata, they are a useful property    -->
+<!-- of many things and they migrate many different places.  -->
+<!-- So principally, we kill them on sight.  But we provide  -->
+<!-- modal templates as interfaces to titles and derivatives -->
+<!-- of them for purposes where only a restricted subset of  -->
+<!-- their content is allowed.                               -->
+<!--                                                         -->
+<!-- Also, many subdivisions have natural default titles,    -->
+<!-- so we want to accomodate that option, and do so via     -->
+<!-- the localization routines.                              -->
 
-<!-- Almost everything can have a title, and they       -->
-<!-- are important for navigation, so get recycled      -->
-<!-- in various uses.  They may be -->
+<!-- With modal templates below, the default template does nothing -->
+<xsl:template match="title" />
+<xsl:template match="subtitle" />
 
-<!-- (a) user-supplied only, with absence translating -->
-<!-- to an empty string -->
-
-<!-- (b) user-supplied optionally, with absence being -->
-<!-- supplied by MBX via the localization strings -->
-
-<!-- The "full" version includes things like footnotes -->
-<!-- and is typically used at birth -->
-
-<!-- The "simple" version is sanitized and is typically -->
-<!-- used in some navigation element like headers and ToC -->
-
-<!-- The "filesafe" version is heavily sanitized to be just letters, -->
-<!-- numbers, and underscores.  It is typically for filenames        -->
-
-<!-- We use modal templates, so we can kill the default -->
-<!-- template on *all* titles globally and ignore them -->
-<!-- in default "apply-templates" calls. -->
-
-<!-- The interface to all this is based on two modal         -->
-<!-- templates of the enclosing structure that has a title   -->
-<!-- "full":   everything, typically at origin               -->
-<!-- "simple": sanitized, usually for navigation             -->
-<!-- "filesafe": usable in a filename, just letters, numbers -->
-
-<xsl:template match="*" mode="title-full">
-    <xsl:apply-templates select="." mode="title">
-        <xsl:with-param name="complexity">full</xsl:with-param>
-    </xsl:apply-templates>
-</xsl:template>
-
-<xsl:template match="*" mode="title-simple">
-    <xsl:apply-templates select="." mode="title">
-        <xsl:with-param name="complexity">simple</xsl:with-param>
-    </xsl:apply-templates>
-</xsl:template>
-
-<xsl:template match="*" mode="title-filesafe">
-    <xsl:apply-templates select="." mode="title">
-        <xsl:with-param name="complexity">filesafe</xsl:with-param>
-    </xsl:apply-templates>
-</xsl:template>
-
-<!-- Some items have default titles that make sense      -->
-<!-- Typically these are one-off divisions (eg preface), -->
-<!-- or repeated generic divisions (eg exercises)        -->
-<!-- Anny element that could be titled should appear     -->
-<!-- in one of the two versions of this template         -->
-<!-- Later, we might replace the default by true/false   -->
+<!-- Some items have default titles that make sense         -->
+<!-- Typically these are one-off subdivisions (eg preface), -->
+<!-- or repeated generic divisions (eg exercises)           -->
 <xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter" mode="has-default-title">
     <xsl:text>true</xsl:text>
 </xsl:template>
-<xsl:template match="book|article|letter|memo|part|chapter|appendix|index-part|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|p|exercise|example|list|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|credit|list|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|li|contributor" mode="has-default-title">
+<xsl:template match="*" mode="has-default-title">
     <xsl:text>false</xsl:text>
 </xsl:template>
-<xsl:template match="*" mode="has-default-title">
-    <xsl:message>MBX:BUG: <xsl:value-of select="local-name(.)" /> element is not characterized by "has-default-title" template</xsl:message>
-</xsl:template>
 
-
-<!-- We use a title, if discovered,                -->
-<!-- then check if a default title will suffice,   -->
-<!-- otherwise produce an empty title              -->
-<!-- NB: this match pattern should be the union of -->
-<!-- the two above,everything that can be titled   -->
-<xsl:template match="book|article|letter|memo|part|chapter|appendix|index-part|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|p|exercise|example|list|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|list|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|li|credit|frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter|contributor" mode="title">
-    <xsl:param name="complexity" />
-    <xsl:variable name="default-titled">
+<xsl:template match="*" mode="title-full">
+    <xsl:variable name="default-exists">
         <xsl:apply-templates select="." mode="has-default-title" />
     </xsl:variable>
     <xsl:choose>
-        <!-- if title is supplied, use it, according to parameter -->
+        <!-- node() matches text nodes and elements -->
         <xsl:when test="title">
-            <xsl:apply-templates select="title" mode="title">
-                <xsl:with-param name="complexity" select="$complexity" />
-            </xsl:apply-templates>
+            <xsl:apply-templates select="title/node()" />
         </xsl:when>
-        <!-- else, check if a default is appropriate              -->
-        <!-- ignore parameter, since "type-name" is never complex -->
-        <xsl:when test="$default-titled = 'true'">
+        <xsl:when test="$default-exists='true'">
             <xsl:apply-templates select="." mode="type-name" />
         </xsl:when>
-        <!-- otherwise, return empty -->
-        <xsl:otherwise>
-            <xsl:text></xsl:text>
-        </xsl:otherwise>
+        <xsl:otherwise></xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-
-<!-- Once actually at a title element, we    -->
-<!-- process it or process without footnotes -->
-<xsl:template match="title|subtitle" mode="title" >
-    <xsl:param name="complexity" />
+<!-- TODO: ban fn in titles, then maybe this is obsolete -->
+<!-- or maybe we should be careful about math            -->
+<xsl:template match="*" mode="title-simple">
+    <xsl:variable name="default-exists">
+        <xsl:apply-templates select="." mode="has-default-title" />
+    </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$complexity='full'">
-            <xsl:apply-templates />
+        <!-- node() matches text nodes and elements -->
+        <xsl:when test="title">
+            <xsl:apply-templates select="title/node()[not(self::fn)]"/>
         </xsl:when>
-        <xsl:when test="$complexity='simple'">
-            <xsl:apply-templates  select="./node()[not(self::fn)]" />
+        <xsl:when test="$default-exists='true'">
+            <xsl:apply-templates select="." mode="type-name" />
         </xsl:when>
-        <!-- http://stackoverflow.com/questions/1267934/removing-non-alphanumeric-characters-from-string-in-xsl -->
-        <xsl:when test="$complexity='filesafe'">
-            <xsl:variable name="raw-title">
-                <xsl:apply-templates  select="./node()[not(self::fn)]" />
-            </xsl:variable>
-            <xsl:variable name="letter-title">
-                <xsl:value-of select="translate($raw-title, translate($raw-title,
-                'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ', ''), '')" />
-            </xsl:variable>
-            <xsl:value-of select="translate($letter-title, ' ', '_')" />
-        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- A version of the title with all abnormal characters stripped --><!-- http://stackoverflow.com/questions/1267934/removing-non-alphanumeric-characters-from-string-in-xsl -->
+<xsl:template match="*" mode="title-filesafe">
+    <xsl:variable name="raw-title">
+        <xsl:apply-templates  select="./node()[not(self::fn)]" />
+    </xsl:variable>
+    <xsl:variable name="letter-only-title">
+        <xsl:value-of select="translate($raw-title, translate($raw-title,
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ', ''), '')" />
+    </xsl:variable>
+    <xsl:value-of select="translate($letter-only-title, ' ', '_')" />
 </xsl:template>
 
 <!-- This comes from writing out WW problems to filenames    -->
@@ -1555,14 +1506,10 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:value-of select="$title-string" />
 </xsl:template>
 
-<!-- Unhandled title requests, likely subdivisions or environments -->
-<xsl:template match="*" mode="title">
-    <xsl:message>MBX:BUG: asking for title of unhandled <xsl:value-of select="local-name(.)" /></xsl:message>
+<!-- We get subtitles the same way, but with no variations -->
+<xsl:template match="*" mode="subtitle">
+    <xsl:apply-templates select="subtitle/node()" />
 </xsl:template>
-
-<!-- As a modal template above, we can eventually kill the default template -->
-<!-- Kill titles, once all are handled, then strip avoidances elsewhere -->
-<!-- <xsl:template match="*" select="title|subtitle" /> -->
 
 
 <!-- Names of Objects -->
@@ -1584,6 +1531,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         <xsl:with-param name="string-id" select="'figure'" />
     </xsl:call-template>
 </xsl:template>
+
 
 <xsl:template name="printWidth">
     <xsl:variable name="existingWidths">
