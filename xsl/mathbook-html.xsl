@@ -249,6 +249,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- HTML files as output -->
+<xsl:variable name="file-extension" select="'.html'" />
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -588,7 +590,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Recursively finds enclosing structural node -->
 <!-- and reports if it has an xml:id on it       -->
-<!-- Note: from mode="filename", can we return a node-set? -->
+<!-- Note: from mode="containing-filename", can we return a node-set? -->
 <xsl:template match="*" mode="has-id-on-enclosure">
     <xsl:variable name="intermediate"><xsl:apply-templates select="." mode="is-intermediate" /></xsl:variable>
     <xsl:variable name="chunk"><xsl:apply-templates select="." mode="is-chunk" /></xsl:variable>
@@ -4127,8 +4129,10 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- * page content (exclusive of banners, navigation etc) -->
 <xsl:template match="*" mode="file-wrap">
     <xsl:param name="content" />
-    <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
-    <exsl:document href="{$url}" method="html">
+    <xsl:variable name="filename">
+        <xsl:apply-templates select="." mode="containing-filename" />
+    </xsl:variable>
+    <exsl:document href="{$filename}" method="html">
     <!-- Need to be careful for format of this initial string     -->
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
     <xsl:call-template name="converter-blurb-html" />
@@ -4218,8 +4222,11 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- Maybe a page title -->
 <xsl:template match="*" mode="simple-file-wrap">
     <xsl:param name="content" />
-    <xsl:variable name="url"><xsl:apply-templates select="." mode="internal-id" />.html</xsl:variable>
-    <exsl:document href="{$url}" method="html">
+    <xsl:variable name="filename">
+        <xsl:apply-templates select="." mode="internal-id" />
+        <text>.html</text>
+    </xsl:variable>
+    <exsl:document href="{$filename}" method="html">
     <!-- Need to be careful for format of this initial string     -->
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
     <xsl:call-template name="converter-blurb-html" />
@@ -4841,45 +4848,6 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <a href="https://www.mathjax.org">
         <img title="Powered by MathJax" src="https://cdn.mathjax.org/mathjax/badge/badge.gif" border="0" alt="Powered by MathJax" />
     </a>
-</xsl:template>
-
-
-<!-- Filenames -->
-<!-- Every web page has a file name,                           -->
-<!-- and every node is subsidiary to some web page.            -->
-<!-- This template give the filename of the webpage enclosing  -->
-<!-- any node (or the webpage representing that node)          -->
-<!-- This allows cross-references to point to the right page   -->
-<!-- when chunking the content into many subdivisions          -->
-<xsl:template match="*" mode="filename">
-    <xsl:variable name="intermediate"><xsl:apply-templates select="." mode="is-intermediate" /></xsl:variable>
-    <xsl:variable name="chunk"><xsl:apply-templates select="." mode="is-chunk" /></xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$intermediate='true' or $chunk='true'">
-            <xsl:apply-templates select="." mode="internal-id" />
-            <xsl:text>.html</xsl:text>
-            <!-- DEPRECATION: May 2015, replace with terminate=yes if present without an xml:id -->
-            <xsl:if test="@filebase">
-                <xsl:message>MBX:WARNING: filebase attribute (value=<xsl:value-of select="@filebase" />) is deprecated, use xml:id attribute instead</xsl:message>
-            </xsl:if>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select=".." mode="filename" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- URL's -->
-<!-- Every node has a URL associated with it -->
-<!-- A filename, plus an optional anchor/id  -->
-<xsl:template match="*" mode="url">
-    <xsl:variable name="intermediate"><xsl:apply-templates select="." mode="is-intermediate" /></xsl:variable>
-    <xsl:variable name="chunk"><xsl:apply-templates select="." mode="is-chunk" /></xsl:variable>
-    <xsl:apply-templates select="." mode="filename" />
-    <xsl:if test="$intermediate='false' and $chunk='false'">
-        <xsl:text>#</xsl:text>
-        <xsl:apply-templates select="." mode="internal-id" />
-    </xsl:if>
 </xsl:template>
 
 <!-- Tooltip Text -->

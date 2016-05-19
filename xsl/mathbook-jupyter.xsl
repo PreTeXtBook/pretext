@@ -55,6 +55,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- iPython files as output -->
+<xsl:variable name="file-extension" select="'.ipynb'" />
+
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
@@ -231,7 +235,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="content" />
     <!--  -->
     <xsl:variable name="filename">
-        <xsl:apply-templates select="." mode="filename" />
+        <xsl:apply-templates select="." mode="containing-filename" />
     </xsl:variable>
     <xsl:variable name="cell-list">
         <!-- load LaTeX macros for MathJax -->
@@ -596,47 +600,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- to it since it is a modal template    -->
 <xsl:template match="exercisegroup" mode="xref-number">
     <xsl:apply-imports />
-</xsl:template>
-
-<!-- straight copy - - - except for file ending -->
-<!-- Filenames -->
-<!-- Every web page has a file name,                           -->
-<!-- and every node is subsidiary to some web page.            -->
-<!-- This template give the filename of the webpage enclosing  -->
-<!-- any node (or the webpage representing that node)          -->
-<!-- This allows cross-references to point to the right page   -->
-<!-- when chunking the content into many subdivisions          -->
-<xsl:template match="*" mode="filename">
-    <xsl:variable name="intermediate"><xsl:apply-templates select="." mode="is-intermediate" /></xsl:variable>
-    <xsl:variable name="chunk"><xsl:apply-templates select="." mode="is-chunk" /></xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$intermediate='true' or $chunk='true'">
-            <xsl:apply-templates select="." mode="internal-id" />
-            <xsl:text>.ipynb</xsl:text>
-            <!-- DEPRECATION: May 2015, replace with terminate=yes if present without an xml:id -->
-            <xsl:if test="@filebase">
-                <xsl:message>MBX:WARNING: filebase attribute (value=<xsl:value-of select="@filebase" />) is deprecated, use xml:id attribute instead</xsl:message>
-            </xsl:if>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select=".." mode="filename" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- This is a straight copy from HTML -->
-<!-- Maybe it belongs in common, despite being online only -->
-<!-- URL's -->
-<!-- Every node has a URL associated with it -->
-<!-- A filename, plus an optional anchor/id  -->
-<xsl:template match="*" mode="url">
-    <xsl:variable name="intermediate"><xsl:apply-templates select="." mode="is-intermediate" /></xsl:variable>
-    <xsl:variable name="chunk"><xsl:apply-templates select="." mode="is-chunk" /></xsl:variable>
-    <xsl:apply-templates select="." mode="filename" />
-    <xsl:if test="$intermediate='false' and $chunk='false'">
-        <xsl:text>#</xsl:text>
-        <xsl:apply-templates select="." mode="internal-id" />
-    </xsl:if>
 </xsl:template>
 
 <!-- The second abstract template, we condition   -->

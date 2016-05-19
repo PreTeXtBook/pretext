@@ -22,6 +22,10 @@
 <xsl:param name="html.knowl.table" select="'no'" />
 <xsl:param name="html.knowl.exercise" select="'no'" />
 
+<!-- SageWS files as output -->
+<xsl:variable name="file-extension" select="'.sagews'" />
+
+
 <!-- Do not implement any cross-reference as a knowl -->
 <xsl:template match="*" mode="xref-as-knowl">
     <xsl:value-of select="false()" />
@@ -153,22 +157,6 @@
             <xsl:apply-templates select="." mode="crude-nav-bar" />
          </xsl:with-param>
      </xsl:apply-templates>
-</xsl:template>
-
-<!-- Locate the containing file, need *.sagews here                  -->
-<!-- Maybe the file extension could be parameterized in mathbook-html.xsl -->
-<xsl:template match="*" mode="filename">
-    <xsl:variable name="intermediate"><xsl:apply-templates select="." mode="is-intermediate" /></xsl:variable>
-    <xsl:variable name="chunk"><xsl:apply-templates select="." mode="is-chunk" /></xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$intermediate='true' or $chunk='true'">
-            <xsl:apply-templates select="." mode="internal-id" />
-            <xsl:text>.sagews</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select=".." mode="filename" />
-        </xsl:otherwise>
-    </xsl:choose>
 </xsl:template>
 
 <!-- Mimics depth-first search, crudely styled -->

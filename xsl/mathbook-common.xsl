@@ -368,6 +368,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- File extensions can be set globally for a conversion, -->
+<!-- we set it here to something outlandish                -->
+<!-- This should be overridden in an importing stylesheet  -->
+<xsl:variable name="file-extension" select="'.need-to-set-file-extension-variable'" />
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -1441,6 +1445,54 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <xsl:template match="*" mode="structure-node-child">
     <xsl:apply-templates select="." />
 </xsl:template>
+
+<!-- Containing Filenames, URLs -->
+<!-- Relative to the chunking in effect, every -->
+<!-- XML element is born within some file.     -->
+<!-- That filename will have a different       -->
+<!-- suffix in different conversions.          -->
+<!-- Parameter: $file-extension, set globally  -->
+<xsl:template match="*" mode="containing-filename">
+    <xsl:variable name="intermediate">
+        <xsl:apply-templates select="." mode="is-intermediate" />
+    </xsl:variable>
+    <xsl:variable name="chunk">
+        <xsl:apply-templates select="." mode="is-chunk" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$intermediate='true' or $chunk='true'">
+            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:value-of select="$file-extension" />
+            <!-- DEPRECATION: May 2015, replace with terminate=yes if present without an xml:id -->
+            <xsl:if test="@filebase">
+                <xsl:message>MBX:WARNING: filebase attribute (value=<xsl:value-of select="@filebase" />) is deprecated, use xml:id attribute instead</xsl:message>
+            </xsl:if>
+        </xsl:when>
+        <!-- Halts since "mathbook" element will be chunk (or earlier) -->
+        <xsl:otherwise>
+            <xsl:apply-templates select=".." mode="containing-filename" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Every XML element has a URL associated with it -->
+<!-- A containing filename, plus an optional anchor/id  -->
+<xsl:template match="*" mode="url">
+    <xsl:variable name="intermediate">
+        <xsl:apply-templates select="." mode="is-intermediate" />
+    </xsl:variable>
+    <xsl:variable name="chunk">
+        <xsl:apply-templates select="." mode="is-chunk" />
+    </xsl:variable>
+    <xsl:apply-templates select="." mode="containing-filename" />
+    <xsl:if test="$intermediate='false' and $chunk='false'">
+        <xsl:text>#</xsl:text>
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:if>
+</xsl:template>
+
+
+
 
 
 <!-- ###### -->
