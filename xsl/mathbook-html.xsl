@@ -4315,7 +4315,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <xsl:choose>
         <xsl:when test="$intermediate='true'">
             <!-- Descend once, will always have a child that is structural -->
-            <xsl:variable name="first-structural-child" select="*[not(self::todo or self::introduction or self::conclusion or self::titlepage or self::author)][1]" />
+            <xsl:variable name="first-structural-child" select="*[not(self::title or self::subtitle or self::todo or self::introduction or self::conclusion or self::titlepage or self::author)][1]" />
             <xsl:variable name="structural">
                 <xsl:apply-templates select="$first-structural-child" mode="is-structural" />
             </xsl:variable>
@@ -4413,7 +4413,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:apply-templates select="." mode="url" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:variable name="last-structural-child" select="*[not(self::todo or self::introduction or self::conclusion)][last()]" />
+            <xsl:variable name="last-structural-child" select="*[not(self::title or self::subtitle or self::todo or self::introduction or self::conclusion)][last()]" />
             <xsl:variable name="structural">
                 <xsl:apply-templates select="$last-structural-child" mode="is-structural" />
             </xsl:variable>
