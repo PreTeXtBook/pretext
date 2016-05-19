@@ -646,8 +646,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- then name, etc in slightly smaller font (generally de-emphasised) -->
 <xsl:template match="titlepage/credit">
     <xsl:if test="title">
+        <p>
         <xsl:apply-templates select="." mode="title-full"/>
-        <br />
+        </p>
     </xsl:if>
     <xsl:apply-templates select="author" mode="full-info" />
 </xsl:template>
@@ -704,6 +705,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <article class="{local-name(.)}" id="{$ident}">
         <h5 class="heading">
             <xsl:apply-templates select="." mode="title-full" />
+            <span> </span>
         </h5>
         <xsl:apply-templates  select="*"/>
     </article>
@@ -1870,7 +1872,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="me|men|md|mdn" mode="posterior" />
 <!-- HTML, CSS -->
 <xsl:template match="me|men|md|mdn" mode="environment-element">
-    <xsl:text>span</xsl:text>
+    <xsl:text>div</xsl:text>
 </xsl:template>
 <xsl:template match="me|men|md|mdn" mode="environment-class">
     <xsl:text>displaymath</xsl:text>

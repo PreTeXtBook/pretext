@@ -5,6 +5,7 @@
 # History
 #
 #  2016-05-10  Initiated
+#  2016-05-19  Published, improved
 
 shopt -s -o nounset
 
@@ -25,18 +26,25 @@ declare DEBUG=${SCRATCH}/debug
 
 # Sources
 # Assumes cover image is a PNG
+# And cover image is in "images" subdirectory
 
 # EPUB Sampler, test file
-declare SRC=${MB}/examples/epub
-declare SRCMASTER=${SRC}/epub-sampler.xml
-declare COVERIMAGE=${SRC}/Verne_Tour_du_Monde.png
-declare OUTFILE=sampler.epub
+# declare SRC=${MB}/examples/epub
+# declare SRCMASTER=${SRC}/epub-sampler.xml
+# declare COVERIMAGE=Verne_Tour_du_Monde.png
+# declare OUTFILE=sampler.epub
 
 # Judson's AATA, an entire book
 #declare SRC=${HOME}/books/aata/aata/src
 #declare SRCMASTER=${SRC}/aata.xml
-#declare COVERIMAGE=${SRC}/images/cover_aata_2014.png
+#declare COVERIMAGE=cover_aata_2014.png
 #declare OUTFILE=aata.epub
+
+# The MBX sample book
+declare SRC=${MB}/examples/sample-book
+declare SRCMASTER=${SRC}/sample-book.xml
+declare COVERIMAGE=cover_aata_2014.png
+declare OUTFILE=sample-book.epub
 
 # removal of detritus
 
@@ -45,9 +53,11 @@ install -d ${EPUBOUT} ${EPUBOUT}/EPUB/xhtml ${EPUBOUT}/EPUB/xhtml/images
 # debugging directory
 install -d ${DEBUG}
 
-# copy/place image files, fix up SVGs
-cp -a ${COVERIMAGE} ${EPUBOUT}/EPUB/xhtml/images/cover.png
+# copy/place image files
+# move cover image to stock name (fix this in XSL transform)
+# fix up SVGs
 cp -a ${SRC}/images ${EPUBOUT}/EPUB/xhtml
+mv ${EPUBOUT}/EPUB/xhtml/images/${COVERIMAGE} ${EPUBOUT}/EPUB/xhtml/images/cover.png
 for f in ${EPUBOUT}/EPUB/xhtml/images/*.svg; do 
     sed -i -f ${EPUBSCRIPT}/mbx-epub-images.sed $f
 done

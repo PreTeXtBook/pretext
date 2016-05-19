@@ -27,6 +27,20 @@
 <xsl:param name="html.knowl.table" select="'no'" />
 <xsl:param name="html.knowl.exercise" select="'no'" />
 
+<!-- Hints, solutions, etc are typically knowled   -->
+<!-- We temporarily kill them all as a convenience -->
+<xsl:param name="exercise.text.statement" select="'yes'" />
+<xsl:param name="exercise.text.hint" select="'no'" />
+<xsl:param name="exercise.text.answer" select="'no'" />
+<xsl:param name="exercise.text.solution" select="'no'" />
+<!-- Second, an exercise in a solutions list in backmatter.-->
+<xsl:param name="exercise.backmatter.statement" select="'no'" />
+<xsl:param name="exercise.backmatter.hint" select="'no'" />
+<xsl:param name="exercise.backmatter.answer" select="'no'" />
+<xsl:param name="exercise.backmatter.solution" select="'no'" />
+
+
+
 <!-- Output as well-formed xhtml -->
 <!-- This may have no practical effect -->
 <xsl:output method="xml" encoding="UTF-8" doctype-system="about:legacy-compat" indent="no" />
@@ -136,9 +150,9 @@
     </exsl:document>
 </xsl:template>
 
-<!-- The book and frontmatter elements get mined in various ways, -->
+<!-- The book get mined in various ways, -->
 <!-- but the "usual" HTML treatment can/should be thrown out      -->
-<xsl:template match="book|frontmatter" mode="file-wrap" />
+<xsl:template match="book" mode="file-wrap" />
 
 
 <!-- ##################### -->
@@ -257,9 +271,11 @@
 </xsl:template>
 
 <!-- Build an empty item element for each CHAPTER, -->
+<!-- FRONTMATTER, BACKMATTER, -->
 <!-- recurse into contents for image files, etc    -->
 <!-- See "Core Media Type Resources"               -->
-<xsl:template match="chapter" mode="manifest">
+<!-- Add to spine as appropriate                   -->
+<xsl:template match="frontmatter|chapter|backmatter" mode="manifest">
     <!-- Annotate manifest entries -->
     <xsl:comment>
         <xsl:apply-templates select="." mode="long-name" />
@@ -309,7 +325,7 @@
     <xsl:apply-templates select="*" mode="spine" />
 </xsl:template>
 
-<xsl:template match="chapter" mode="spine">
+<xsl:template match="frontmatter|chapter|backmatter" mode="spine">
     <xsl:element name="itemref" xmlns="http://www.idpf.org/2007/opf">
         <xsl:attribute name="idref">
             <xsl:apply-templates select="." mode="internal-id" />
@@ -541,6 +557,63 @@
 <!-- ######### -->
 <!-- OverRides -->
 <!-- ######### -->
+
+<!-- Section Headers -->
+<!-- Primitive for openers, and universal   -->
+<!-- Incorporates "header-content" template -->
+<!-- TODO: Hide type-name sometimes, vary h1, h2,... -->
+<xsl:template match="*" mode="section-header">
+    <header>
+        <xsl:element name="h1">
+            <!-- <xsl:apply-templates select="." mode="header-content" /> -->
+            <xsl:apply-templates select="." mode="type-name" />
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="." mode="number" />
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="." mode="title-full" />
+        </xsl:element>
+        <xsl:if test="author">
+            <p><xsl:apply-templates select="author" mode="name-list"/></p>
+        </xsl:if>
+    </header>
+</xsl:template>
+
+<!-- Knowls -->
+<!-- No cross-reference should be a knowl -->
+<xsl:template match="*" mode="xref-as-knowl">
+    <xsl:value-of select="false()" />
+</xsl:template>
+
+<!-- Cross-Reference Links -->
+<!-- Stripped down only to remove "alt" tags               -->
+<!-- Knowl links removed as template above is always false -->
+<!-- The second abstract template, we condition   -->
+<!-- on if the link is rendered as a knowl or not -->
+<xsl:template match="*" mode="xref-link">
+    <xsl:param name="content" />
+    <xsl:element name="a">
+        <!-- build traditional hyperlink -->
+        <xsl:attribute name="href">
+            <xsl:apply-templates select="." mode="url" />
+        </xsl:attribute>
+        <!-- link content from common template -->
+        <!-- For a contributor we bypass autonaming, etc -->
+        <xsl:choose>
+            <xsl:when test="self::contributor">
+                <xsl:apply-templates select="personname" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$content" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:element>
+</xsl:template>
+
+<!-- Index -->
+<!-- Has knowls by default, so we kill it -->
+<xsl:template match="index-list">
+    <p>Index intentionally blank, knowls inactive in EPUB</p>
+</xsl:template>
 
 <!-- Code, inline -->
 <!-- Validator does not like tt -->
