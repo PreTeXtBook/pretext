@@ -3928,6 +3928,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<xsl:template match="console/prompt">
+    <xsl:element name="span">
+        <xsl:attribute name="class">prompt unselectable</xsl:attribute>
+        <xsl:apply-templates />
+    </xsl:element>
+</xsl:template>
+
 <!-- match immediately preceding, only if a prompt:                   -->
 <!-- https://www.oxygenxml.com/archives/xsl-list/199910/msg00541.html -->
 <xsl:template match="console/input">
