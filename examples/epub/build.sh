@@ -15,7 +15,8 @@ declare MBXSL=${MB}/xsl
 declare EPUBSCRIPT=${MB}/examples/epub
 
 # mathjax-node paths
-# requires installation
+# requires installation, see
+# https://github.com/mathjax/MathJax-node
 declare MJNODE=/opt/node_modules/mathjax-node
 
 # Working areas
@@ -29,22 +30,22 @@ declare DEBUG=${SCRATCH}/debug
 # And cover image is in "images" subdirectory
 
 # EPUB Sampler, test file
-# declare SRC=${MB}/examples/epub
-# declare SRCMASTER=${SRC}/epub-sampler.xml
-# declare COVERIMAGE=Verne_Tour_du_Monde.png
-# declare OUTFILE=sampler.epub
+declare SRC=${MB}/examples/epub
+declare SRCMASTER=${SRC}/epub-sampler.xml
+declare COVERIMAGE=Verne_Tour_du_Monde.png
+declare OUTFILE=sampler.epub
+
+# The MBX sample book
+# declare SRC=${MB}/examples/sample-book
+# declare SRCMASTER=${SRC}/sample-book.xml
+# declare COVERIMAGE=cover_aata_2014.png
+# declare OUTFILE=sample-book.epub
 
 # Judson's AATA, an entire book
 #declare SRC=${HOME}/books/aata/aata/src
 #declare SRCMASTER=${SRC}/aata.xml
 #declare COVERIMAGE=cover_aata_2014.png
 #declare OUTFILE=aata.epub
-
-# The MBX sample book
-declare SRC=${MB}/examples/sample-book
-declare SRCMASTER=${SRC}/sample-book.xml
-declare COVERIMAGE=cover_aata_2014.png
-declare OUTFILE=sample-book.epub
 
 # removal of detritus
 
