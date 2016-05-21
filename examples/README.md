@@ -27,6 +27,10 @@ The bare minimum, about as little as you can do and still be valid MathBook XML.
 Several examples of how to author WeBWorK online homework problems within a MathBook XML book.  See the `Makefile` for guidance on how to build the examples.  (2016-02-20)
 
 
+### Jade (`jade`)
+
+Jade is a Javascript template engine, which can be employed easily to output MathBook XML source.  So if you prefer to format with whitespace, this could be a good choice.  "Normal" output is best, but using a `-P` flag provides better formatting of the XML output for human eyes.  Contributed by Harald Schilly.  (2016-05-21)
+
 ### Letters (`letter/`)
 
 A sample letter you can adapt to your needs.  See extensive comments in the source about using your letterhead.  (2016-02-20)
