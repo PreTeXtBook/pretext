@@ -1561,7 +1561,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- A version of the title with all abnormal characters stripped --><!-- http://stackoverflow.com/questions/1267934/removing-non-alphanumeric-characters-from-string-in-xsl -->
 <xsl:template match="*" mode="title-filesafe">
     <xsl:variable name="raw-title">
-        <xsl:apply-templates  select="./node()[not(self::fn)]" />
+        <xsl:apply-templates  select="title/node()[not(self::fn)]" />
     </xsl:variable>
     <xsl:variable name="letter-only-title">
         <xsl:value-of select="translate($raw-title, translate($raw-title,
