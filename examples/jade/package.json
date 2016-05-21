@@ -1,0 +1,11 @@
+{
+  "name": "mathbookxml-jade-demo",
+  "version": "1.0.0",
+  "description": "using the jade template engine to write the clunky xml",
+  "dependencies": {
+    "jade": "^1.11.0"
+  },
+  "devDependencies": {},
+  "author": "Harald Schilly",
+  "license": "GPL-3.0"
+}
