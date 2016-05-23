@@ -157,6 +157,8 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST paragraphs   width    CDATA                 #IMPLIED>
     <!ATTLIST paragraphs   halign   (left|center|right)   #IMPLIED>
     <!ATTLIST paragraphs   valign   (bottom|middle|top)   #IMPLIED>
+    <!ATTLIST paragraphs   xml:base  CDATA                #IMPLIED>
+
 
 <!-- components of mathematical objects -->
 <!ELEMENT statement (%para;)*>
