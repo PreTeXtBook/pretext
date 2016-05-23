@@ -176,7 +176,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="definition axiom conjecture principle" />
 <xsl:strip-space elements="blockquote" />
 <xsl:strip-space elements="statement" />
-<xsl:strip-space elements="example remark exercise hint solution" />
+<xsl:strip-space elements="example list remark exercise hint solution" />
 <xsl:strip-space elements="sage program console" />
 <xsl:strip-space elements="exercisegroup" />
 <xsl:strip-space elements="note" />  <!-- TODO: biblio, record, etc too -->
@@ -368,6 +368,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- File extensions can be set globally for a conversion, -->
+<!-- we set it here to something outlandish                -->
+<!-- This should be overridden in an importing stylesheet  -->
+<xsl:variable name="file-extension" select="'.need-to-set-file-extension-variable'" />
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -516,6 +520,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
     <xsl:text>\)</xsl:text>
 </xsl:template>
+
+<!-- We get some clues about the right LaTeX environment to        -->
+<!-- use for display mathematics, but some of this is guesswork.   -->
+<!-- But we can consolidate this textual analysis (input/output)   -->
+<!-- here in the common routines.                                  -->
+<!-- TODO: provide attribute for overrides                         -->
+
+<!-- Always an "equation" for an me-variant -->
+<!-- The equation* is AMS-Math-specific,    -->
+<!-- "displaymath" is base-LaTeX equivalent -->
+<xsl:template match="me" mode="displaymath-alignment">
+    <xsl:text>equation*</xsl:text>
+</xsl:template>
+
+<xsl:template match="men" mode="displaymath-alignment">
+    <xsl:text>equation</xsl:text>
+</xsl:template>
+
+<!-- We sniff around for ampersands, to decide between "align" -->
+<!-- and "gather", plus an asterisk for the unnumbered version -->
+<xsl:template match="md|mdn" mode="displaymath-alignment">
+    <xsl:choose>
+        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
+            <xsl:text>align</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>gather</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="self::md">
+        <xsl:text>*</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- ############ -->
 <!-- LaTeX Macros -->
@@ -1082,7 +1120,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- it is a direct descendant of a structural node or a directly    -->
 <!-- descended introduction or conclusion .                          -->
 <!-- Also, list items are considered blocks.                         -->
-<xsl:template match="md|mdn|ul|ol|dl|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|image|tabular|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|example|exercise|li" mode="is-block">
+<xsl:template match="md|mdn|ul|ol|dl|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|image|tabular|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|example|list|exercise|li" mode="is-block">
     <xsl:value-of select="true()" />
 </xsl:template>
 
@@ -1408,129 +1446,128 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:apply-templates select="." />
 </xsl:template>
 
+<!-- Containing Filenames, URLs -->
+<!-- Relative to the chunking in effect, every -->
+<!-- XML element is born within some file.     -->
+<!-- That filename will have a different       -->
+<!-- suffix in different conversions.          -->
+<!-- Parameter: $file-extension, set globally  -->
+<xsl:template match="*" mode="containing-filename">
+    <xsl:variable name="intermediate">
+        <xsl:apply-templates select="." mode="is-intermediate" />
+    </xsl:variable>
+    <xsl:variable name="chunk">
+        <xsl:apply-templates select="." mode="is-chunk" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$intermediate='true' or $chunk='true'">
+            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:value-of select="$file-extension" />
+            <!-- DEPRECATION: May 2015, replace with terminate=yes if present without an xml:id -->
+            <xsl:if test="@filebase">
+                <xsl:message>MBX:WARNING: filebase attribute (value=<xsl:value-of select="@filebase" />) is deprecated, use xml:id attribute instead</xsl:message>
+            </xsl:if>
+        </xsl:when>
+        <!-- Halts since "mathbook" element will be chunk (or earlier) -->
+        <xsl:otherwise>
+            <xsl:apply-templates select=".." mode="containing-filename" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Every XML element has a URL associated with it -->
+<!-- A containing filename, plus an optional anchor/id  -->
+<xsl:template match="*" mode="url">
+    <xsl:variable name="intermediate">
+        <xsl:apply-templates select="." mode="is-intermediate" />
+    </xsl:variable>
+    <xsl:variable name="chunk">
+        <xsl:apply-templates select="." mode="is-chunk" />
+    </xsl:variable>
+    <xsl:apply-templates select="." mode="containing-filename" />
+    <xsl:if test="$intermediate='false' and $chunk='false'">
+        <xsl:text>#</xsl:text>
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:if>
+</xsl:template>
+
+
+
+
 
 <!-- ###### -->
 <!-- Titles -->
 <!-- ###### -->
 
+<!-- Titles are like metadata, they are a useful property    -->
+<!-- of many things and they migrate many different places.  -->
+<!-- So principally, we kill them on sight.  But we provide  -->
+<!-- modal templates as interfaces to titles and derivatives -->
+<!-- of them for purposes where only a restricted subset of  -->
+<!-- their content is allowed.                               -->
+<!--                                                         -->
+<!-- Also, many subdivisions have natural default titles,    -->
+<!-- so we want to accomodate that option, and do so via     -->
+<!-- the localization routines.                              -->
 
-<!-- Almost everything can have a title, and they       -->
-<!-- are important for navigation, so get recycled      -->
-<!-- in various uses.  They may be -->
+<!-- With modal templates below, the default template does nothing -->
+<xsl:template match="title" />
+<xsl:template match="subtitle" />
 
-<!-- (a) user-supplied only, with absence translating -->
-<!-- to an empty string -->
-
-<!-- (b) user-supplied optionally, with absence being -->
-<!-- supplied by MBX via the localization strings -->
-
-<!-- The "full" version includes things like footnotes -->
-<!-- and is typically used at birth -->
-
-<!-- The "simple" version is sanitized and is typically -->
-<!-- used in some navigation element like headers and ToC -->
-
-<!-- The "filesafe" version is heavily sanitized to be just letters, -->
-<!-- numbers, and underscores.  It is typically for filenames        -->
-
-<!-- We use modal templates, so we can kill the default -->
-<!-- template on *all* titles globally and ignore them -->
-<!-- in default "apply-templates" calls. -->
-
-<!-- The interface to all this is based on two modal         -->
-<!-- templates of the enclosing structure that has a title   -->
-<!-- "full":   everything, typically at origin               -->
-<!-- "simple": sanitized, usually for navigation             -->
-<!-- "filesafe": usable in a filename, just letters, numbers -->
-
-<xsl:template match="*" mode="title-full">
-    <xsl:apply-templates select="." mode="title">
-        <xsl:with-param name="complexity">full</xsl:with-param>
-    </xsl:apply-templates>
-</xsl:template>
-
-<xsl:template match="*" mode="title-simple">
-    <xsl:apply-templates select="." mode="title">
-        <xsl:with-param name="complexity">simple</xsl:with-param>
-    </xsl:apply-templates>
-</xsl:template>
-
-<xsl:template match="*" mode="title-filesafe">
-    <xsl:apply-templates select="." mode="title">
-        <xsl:with-param name="complexity">filesafe</xsl:with-param>
-    </xsl:apply-templates>
-</xsl:template>
-
-<!-- Some items have default titles that make sense      -->
-<!-- Typically these are one-off divisions (eg preface), -->
-<!-- or repeated generic divisions (eg exercises)        -->
-<!-- Anny element that could be titled should appear     -->
-<!-- in one of the two versions of this template         -->
-<!-- Later, we might replace the default by true/false   -->
+<!-- Some items have default titles that make sense         -->
+<!-- Typically these are one-off subdivisions (eg preface), -->
+<!-- or repeated generic divisions (eg exercises)           -->
 <xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter" mode="has-default-title">
     <xsl:text>true</xsl:text>
 </xsl:template>
-<xsl:template match="book|article|letter|memo|part|chapter|appendix|index-part|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|p|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|credit|list|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|li|contributor" mode="has-default-title">
+<xsl:template match="*" mode="has-default-title">
     <xsl:text>false</xsl:text>
 </xsl:template>
-<xsl:template match="*" mode="has-default-title">
-    <xsl:message>MBX:BUG: <xsl:value-of select="local-name(.)" /> element is not characterized by "has-default-title" template</xsl:message>
-</xsl:template>
 
-
-<!-- We use a title, if discovered,                -->
-<!-- then check if a default title will suffice,   -->
-<!-- otherwise produce an empty title              -->
-<!-- NB: this match pattern should be the union of -->
-<!-- the two above,everything that can be titled   -->
-<xsl:template match="book|article|letter|memo|part|chapter|appendix|index-part|section|subsection|subsubsection|introduction|conclusion|paragraphs|paragraph|fn|p|exercise|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|demonstration|list|figure|table|listing|sidebyside|hint|answer|solution|exercisegroup|biblio|note|me|men|md|mdn|mrow|li|credit|frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter|contributor" mode="title">
-    <xsl:param name="complexity" />
-    <xsl:variable name="default-titled">
+<xsl:template match="*" mode="title-full">
+    <xsl:variable name="default-exists">
         <xsl:apply-templates select="." mode="has-default-title" />
     </xsl:variable>
     <xsl:choose>
-        <!-- if title is supplied, use it, according to parameter -->
+        <!-- node() matches text nodes and elements -->
         <xsl:when test="title">
-            <xsl:apply-templates select="title" mode="title">
-                <xsl:with-param name="complexity" select="$complexity" />
-            </xsl:apply-templates>
+            <xsl:apply-templates select="title/node()" />
         </xsl:when>
-        <!-- else, check if a default is appropriate              -->
-        <!-- ignore parameter, since "type-name" is never complex -->
-        <xsl:when test="$default-titled = 'true'">
+        <xsl:when test="$default-exists='true'">
             <xsl:apply-templates select="." mode="type-name" />
         </xsl:when>
-        <!-- otherwise, return empty -->
-        <xsl:otherwise>
-            <xsl:text></xsl:text>
-        </xsl:otherwise>
+        <xsl:otherwise></xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-
-<!-- Once actually at a title element, we    -->
-<!-- process it or process without footnotes -->
-<xsl:template match="title|subtitle" mode="title" >
-    <xsl:param name="complexity" />
+<!-- TODO: ban fn in titles, then maybe this is obsolete -->
+<!-- or maybe we should be careful about math            -->
+<xsl:template match="*" mode="title-simple">
+    <xsl:variable name="default-exists">
+        <xsl:apply-templates select="." mode="has-default-title" />
+    </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$complexity='full'">
-            <xsl:apply-templates />
+        <!-- node() matches text nodes and elements -->
+        <xsl:when test="title">
+            <xsl:apply-templates select="title/node()[not(self::fn)]"/>
         </xsl:when>
-        <xsl:when test="$complexity='simple'">
-            <xsl:apply-templates  select="./node()[not(self::fn)]" />
+        <xsl:when test="$default-exists='true'">
+            <xsl:apply-templates select="." mode="type-name" />
         </xsl:when>
-        <!-- http://stackoverflow.com/questions/1267934/removing-non-alphanumeric-characters-from-string-in-xsl -->
-        <xsl:when test="$complexity='filesafe'">
-            <xsl:variable name="raw-title">
-                <xsl:apply-templates  select="./node()[not(self::fn)]" />
-            </xsl:variable>
-            <xsl:variable name="letter-title">
-                <xsl:value-of select="translate($raw-title, translate($raw-title,
-                'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ', ''), '')" />
-            </xsl:variable>
-            <xsl:value-of select="translate($letter-title, ' ', '_')" />
-        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- A version of the title with all abnormal characters stripped --><!-- http://stackoverflow.com/questions/1267934/removing-non-alphanumeric-characters-from-string-in-xsl -->
+<xsl:template match="*" mode="title-filesafe">
+    <xsl:variable name="raw-title">
+        <xsl:apply-templates  select="title/node()[not(self::fn)]" />
+    </xsl:variable>
+    <xsl:variable name="letter-only-title">
+        <xsl:value-of select="translate($raw-title, translate($raw-title,
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ', ''), '')" />
+    </xsl:variable>
+    <xsl:value-of select="translate($letter-only-title, ' ', '_')" />
 </xsl:template>
 
 <!-- This comes from writing out WW problems to filenames    -->
@@ -1555,14 +1592,10 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:value-of select="$title-string" />
 </xsl:template>
 
-<!-- Unhandled title requests, likely subdivisions or environments -->
-<xsl:template match="*" mode="title">
-    <xsl:message>MBX:BUG: asking for title of unhandled <xsl:value-of select="local-name(.)" /></xsl:message>
+<!-- We get subtitles the same way, but with no variations -->
+<xsl:template match="*" mode="subtitle">
+    <xsl:apply-templates select="subtitle/node()" />
 </xsl:template>
-
-<!-- As a modal template above, we can eventually kill the default template -->
-<!-- Kill titles, once all are handled, then strip avoidances elsewhere -->
-<!-- <xsl:template match="*" select="title|subtitle" /> -->
 
 
 <!-- Names of Objects -->
@@ -1584,6 +1617,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         <xsl:with-param name="string-id" select="'figure'" />
     </xsl:call-template>
 </xsl:template>
+
 
 <xsl:template name="printWidth">
     <xsl:variable name="existingWidths">
@@ -1750,7 +1784,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!--                                                        -->
 <!-- There are six numbering schemes in place:              -->
 <!-- 1) divisions: sections, subsections, etc.              -->
-<!-- 2) enviroments: theorems, examples, exercises, figures -->
+<!-- 2) environments: theorems, examples, exercises, figures -->
 <!-- 3) equations: display mathematics                      -->
 <!-- 4) exercises: as part of a section of exercises        -->
 <!-- 5) bibliographic items: in multiple sections           -->
@@ -1865,19 +1899,19 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- where the subitem is subnumbered due to caption/number on container -->
 <!-- TODO: investigate entities for "number='no'" upgrade -->
 <!-- http://pimpmyxslt.com/articles/entity-tricks-part1/  -->
-<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table|listing|sidebyside" mode="serial-number">
+<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise|figure|table|listing|sidebyside" mode="serial-number">
     <xsl:variable name="subtree-level">
         <xsl:apply-templates select="." mode="absolute-subtree-level">
             <xsl:with-param name="numbering-items" select="$numbering-theorems" />
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$subtree-level=-1"><xsl:number select="." from="book|article|letter|memo" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=0"><xsl:number select="." from="part" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=1"><xsl:number select="." from="chapter|book/appendix" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=2"><xsl:number select="." from="section|article/appendix" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=3"><xsl:number select="." from="subsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=4"><xsl:number select="." from="subsubsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=-1"><xsl:number select="." from="book|article|letter|memo" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=0"><xsl:number select="." from="part" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=1"><xsl:number select="." from="chapter|book/appendix" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=2"><xsl:number select="." from="section|article/appendix" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=3"><xsl:number select="." from="subsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=4"><xsl:number select="." from="subsubsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for theorem number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>
@@ -1979,8 +2013,14 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:number select="." format="{$code}" />
 </xsl:template>
 
-<!-- Second, the serial number computed recursively -->
+<!-- Second, the serial number computed recursively             -->
+<!-- We first check if the list is inside a named list and      -->
+<!-- prefix with that number, using a colon to help distinguish -->
 <xsl:template match="li" mode="serial-number">
+    <xsl:if test="not(ancestor::li) and ancestor::list">
+        <xsl:apply-templates select="ancestor::list" mode="number" />
+        <xsl:text>:</xsl:text>
+    </xsl:if>
     <xsl:if test="ancestor::li">
         <xsl:apply-templates select="ancestor::li[1]" mode="serial-number" />
         <xsl:text>.</xsl:text>
@@ -2116,7 +2156,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 </xsl:template>
 
 <!-- Structure Numbers: Theorems, Examples, Inline Exercises, Figures -->
-<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|remark|exercise|figure|table|listing|sidebyside" mode="structure-number">
+<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise|figure|table|listing|sidebyside" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-theorems" />
         <xsl:with-param name="pad" select="'yes'" />
@@ -3143,10 +3183,199 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:text>[BACKSLASH]</xsl:text>
 </xsl:template>
 
+<!-- ################ -->
+<!-- Other Characters -->
+<!-- ################ -->
+
 <!-- Asterisk -->
 <!-- Centered as a character, not an exponent -->
 <xsl:template match="asterisk">
     <xsl:text>[ASTERISK]</xsl:text>
+</xsl:template>
+
+<!-- Left Single Quote -->
+<xsl:template match="lsq">
+    <xsl:text>[LEFTSINGLEQUOTE]</xsl:text>
+</xsl:template>
+
+<!-- Right Single Quote -->
+<xsl:template match="rsq">
+    <xsl:text>[RIGHTSINGLEQUOTE]</xsl:text>
+</xsl:template>
+
+<!-- Left (Double) Quote -->
+<xsl:template match="lq">
+    <xsl:text>[LEFTQUOTE]</xsl:text>
+</xsl:template>
+
+<!-- Right (Double) Quote -->
+<xsl:template match="rq">
+    <xsl:text>[RIGHTQUOTE]</xsl:text>
+</xsl:template>
+
+<!-- Left Bracket -->
+<xsl:template match="lbracket">
+    <xsl:text>[LEFTBRACKET]</xsl:text>
+</xsl:template>
+
+<!-- Right Bracket -->
+<xsl:template match="rbracket">
+    <xsl:text>[RIGHTBRACKET]</xsl:text>
+</xsl:template>
+
+<!-- Left Double Bracket -->
+<xsl:template match="ldblbracket">
+    <xsl:text>[LEFTDOUBLEBRACKET]</xsl:text>
+</xsl:template>
+
+<!-- Right Double Bracket -->
+<xsl:template match="rdblbracket">
+    <xsl:text>[RIGHTDOUBLEBRACKET]</xsl:text>
+</xsl:template>
+
+<!-- Left Angle Bracket -->
+<xsl:template match="langle">
+    <xsl:text>[LEFTANGLEBRACKET]</xsl:text>
+</xsl:template>
+
+<!-- Right Angle Bracket -->
+<xsl:template match="rangle">
+    <xsl:text>[RIGHTANGLEBRACKET]</xsl:text>
+</xsl:template>
+
+<!-- Midpoint -->
+<!-- A centered dot used sometimes like a decorative dash -->
+<xsl:template match="midpoint">
+    <xsl:text>[MIDPOINT]</xsl:text>
+</xsl:template>
+
+<!-- Swung Dash -->
+<!-- A decorative dash, like a tilde, but bigger, and centered -->
+<xsl:template match="swungdash">
+    <xsl:text>[SWUNGDASH]</xsl:text>
+</xsl:template>
+
+<!-- Per Mille -->
+<!-- Or, per thousand, like a percent sign -->
+<xsl:template match="permille">
+    <xsl:text>[PERMILLE]</xsl:text>
+</xsl:template>
+
+<!-- Pilcrow -->
+<!-- Often used to mark the start of a paragraph -->
+<xsl:template match="pilcrow">
+    <xsl:text>[PILCROW]</xsl:text>
+</xsl:template>
+
+<!-- Section Mark -->
+<!-- The stylized double-S to indicate section numbers -->
+<xsl:template match="section-mark">
+    <xsl:text>[SECTION]</xsl:text>
+</xsl:template>
+
+<!-- Dimension -->
+<!-- A "times" symbol for dimensions of physical objects -->
+<xsl:template match="dimension">
+    <xsl:text>[DIMENSION]</xsl:text>
+</xsl:template>
+
+<!-- Slash -->
+<!-- Forward slash, or virgule (see solidus) -->
+<xsl:template match="slash">
+    <xsl:text>[SLASH]</xsl:text>
+</xsl:template>
+
+<!-- Solidus -->
+<!-- Fraction bar, not as steep as a forward slash -->
+<xsl:template match="solidus">
+    <xsl:text>[SOLIDUS]</xsl:text>
+</xsl:template>
+
+
+
+
+<!-- Dots
+http://tex.stackexchange.com/questions/19180/which-dot-character-to-use-in-which-context
+
+Swung Dash
+http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
+ -->
+<!-- ######### -->
+<!-- Groupings -->
+<!-- ######## -->
+
+<!-- Characters with left and right variants naturally  -->
+<!-- give rise to tags with begin and end variants      -->
+<!-- We implement these here with Result Tree Fragments -->
+<!-- using polymorphic techniques for the characters    -->
+<!-- Be sure not add a temporary top-level element to   -->
+<!-- the result tree fragment, so default template can  -->
+<!-- process its contents                               -->
+
+<xsl:template match="q">
+    <xsl:variable name="q-rtf">
+        <fakeroot>
+            <lq />
+            <xsl:copy-of select="*|text()"/>
+            <rq />
+        </fakeroot>
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($q-rtf)/fakeroot" />
+</xsl:template>
+
+<xsl:template match="sq">
+    <xsl:variable name="sq-rtf">
+        <fakeroot>
+            <lsq />
+            <xsl:copy-of select="*|text()"/>
+            <rsq />
+        </fakeroot>
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($sq-rtf)/fakeroot" />
+</xsl:template>
+
+<xsl:template match="braces">
+    <xsl:variable name="braces-rtf">
+        <fakeroot>
+            <lbrace />
+            <xsl:copy-of select="*|text()"/>
+            <rbrace />
+        </fakeroot>
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($braces-rtf)/fakeroot" />
+</xsl:template>
+
+<xsl:template match="brackets">
+    <xsl:variable name="brackets-rtf">
+        <fakeroot>
+            <lbracket />
+            <xsl:copy-of select="*|text()"/>
+            <rbracket />
+        </fakeroot>
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($brackets-rtf)/fakeroot" />
+</xsl:template>
+
+<xsl:template match="dblbrackets">
+    <xsl:variable name="dblbrackets-rtf">
+        <fakeroot>
+            <ldblbracket />
+            <xsl:copy-of select="*|text()"/>
+            <rdblbracket />
+        </fakeroot>
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($dblbrackets-rtf)/fakeroot" />
+</xsl:template>
+
+<xsl:template match="angles">
+    <xsl:variable name="angles-rtf">
+        <fakeroot>
+            <langle />
+            <xsl:copy-of select="*|text()"/>
+            <rangle />
+            </fakeroot>
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($angles-rtf)/fakeroot" />
 </xsl:template>
 
 <!-- ############ -->

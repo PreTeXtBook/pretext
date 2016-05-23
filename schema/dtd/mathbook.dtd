@@ -37,8 +37,9 @@
 <!-- Elements that could be inside a single line of text -->
 <!-- For example, an <ndash>, but not a <me>             -->
 <!-- Precede these by a #PCDATA, wrap with ( )*          -->
-<!ENTITY % characters "nbsp|ndash|mdash|ampersand|less|greater|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|tilde|backslash|asterisk|lq|rq|lsq|rsq|ellipsis|copyright|ie|eg|etc|circa|tex|latex|webwork|trademark|registered|today|timeofday">
-<!ENTITY % markup "xref|url|m|c|em|alert|q|sq|term|foreign|quantity|acro|booktitle">
+<!ENTITY % characters "nbsp|ndash|mdash|ampersand|less|greater|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|
+lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk|lq|rq|lsq|rsq|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|dimension|slash|solidus|copyright|ie|eg|etc|circa|tex|latex|webwork|trademark|registered|today|timeofday">
+<!ENTITY % markup "xref|url|m|c|em|alert|q|sq|braces|brackets|angles|term|foreign|quantity|acro|booktitle">
 <!ENTITY % line "%characters; | %markup;">
 
 <!-- Multiline Content -->
@@ -67,7 +68,7 @@
 <!-- Everything like a paragraph, but also more substantial                   -->
 <!-- These items cannot be contained in anything but a structural subdivision -->
 <!-- Note: the "todo" element is in this list                                 -->
-<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|example|exercise|contributors|list-of|solution-list|notation-list|todo">
+<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|list|example|exercise|contributors|list-of|solution-list|notation-list|todo">
 
 
 <!-- ######### -->
@@ -166,7 +167,7 @@
 <!ELEMENT definition   (title?, index*, notation*, statement)>
     <!ATTLIST definition xml:id ID #IMPLIED>
 
-<!-- theorem-like, ie with proof -->
+<!-- theorem-like, i.e. with proof -->
 <!ELEMENT theorem   (title?, index*, statement, proof*)>
     <!ATTLIST theorem xml:id ID #IMPLIED>
 <!ELEMENT corollary (title?, index*, statement, proof*)>
@@ -182,7 +183,7 @@
 <!ELEMENT fact     (title?, index*, statement, proof*)>
     <!ATTLIST fact     xml:id ID #IMPLIED>
 
-<!-- conjecture-like, ie no proof -->
+<!-- conjecture-like, i.e. no proof -->
 <!ELEMENT conjecture (title?, index*, statement)>
     <!ATTLIST conjecture xml:id ID #IMPLIED>
 <!ELEMENT axiom (title?, index*, statement)>
@@ -190,9 +191,11 @@
 <!ELEMENT principle (title?, index*, statement)>
     <!ATTLIST principle xml:id ID #IMPLIED>
 
-<!-- example-like, not very structured -->
-<!ELEMENT example (title?, index*, (%para;)*)>
+<!-- example-like, not very structured, or statement/solution -->
+<!ELEMENT example (title?, index*, ((%para;)*|(statement, solution)))>
     <!ATTLIST example xml:id ID #IMPLIED>
+<!ELEMENT list (title?, index*, introduction?, (ol|ul|dl), conclusion)>
+    <!ATTLIST list xml:id ID #IMPLIED>
 <!ELEMENT remark (title?, index*, (%para;)*)>
     <!ATTLIST remark xml:id ID #IMPLIED>
     <!ATTLIST remark xml:base CDATA    #IMPLIED>
@@ -288,7 +291,7 @@
     <!ATTLIST row halign        (left|center|right)        #IMPLIED>
 
 <!-- answer is just for WW problems -->
-<!ELEMENT cell    (#PCDATA|%sentence;|answer)*>
+<!ELEMENT cell    (#PCDATA|%sentence;)*>
     <!ATTLIST cell bottom       (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST cell right        (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST cell halign       (left|center|right)        #IMPLIED>
@@ -334,29 +337,43 @@
 
 <!-- Primarily owing to XML, TeX co-opting these -->
 
-<!ELEMENT nbsp       EMPTY>
-<!ELEMENT ndash      EMPTY>
-<!ELEMENT mdash      EMPTY>
-<!ELEMENT ampersand  EMPTY>
-<!ELEMENT less       EMPTY>
-<!ELEMENT greater    EMPTY>
-<!ELEMENT ellipsis   EMPTY>
-<!ELEMENT hash       EMPTY>
-<!ELEMENT dollar     EMPTY>
-<!ELEMENT percent    EMPTY>
-<!ELEMENT circumflex EMPTY>
-<!ELEMENT underscore EMPTY>
-<!ELEMENT lbrace     EMPTY>
-<!ELEMENT rbrace     EMPTY>
-<!ELEMENT tilde      EMPTY>
-<!ELEMENT backslash  EMPTY>
-<!ELEMENT asterisk   EMPTY>
+<!ELEMENT nbsp          EMPTY>
+<!ELEMENT ndash         EMPTY>
+<!ELEMENT mdash         EMPTY>
+<!ELEMENT ampersand     EMPTY>
+<!ELEMENT less          EMPTY>
+<!ELEMENT greater       EMPTY>
+<!ELEMENT ellipsis      EMPTY>
+<!ELEMENT hash          EMPTY>
+<!ELEMENT dollar        EMPTY>
+<!ELEMENT percent       EMPTY>
+<!ELEMENT circumflex    EMPTY>
+<!ELEMENT underscore    EMPTY>
+<!ELEMENT lbrace        EMPTY>
+<!ELEMENT rbrace        EMPTY>
+<!ELEMENT lbracket      EMPTY>
+<!ELEMENT rbracket      EMPTY>
+<!ELEMENT ldblbracket   EMPTY>
+<!ELEMENT rdblbracket   EMPTY>
+<!ELEMENT langle        EMPTY>
+<!ELEMENT rangle        EMPTY>
+<!ELEMENT tilde         EMPTY>
+<!ELEMENT backslash     EMPTY>
+<!ELEMENT asterisk      EMPTY>
 <!-- see copyright possibly EMPTY in frontmatter description-->
-<!ELEMENT lq         EMPTY>
-<!ELEMENT rq         EMPTY>
-<!ELEMENT lsq        EMPTY>
-<!ELEMENT rsq        EMPTY>
-<!ELEMENT br         EMPTY>
+<!ELEMENT lq            EMPTY>
+<!ELEMENT rq            EMPTY>
+<!ELEMENT lsq           EMPTY>
+<!ELEMENT rsq           EMPTY>
+<!ELEMENT br            EMPTY>
+<!ELEMENT midpoint      EMPTY>
+<!ELEMENT swungdash     EMPTY>
+<!ELEMENT permille      EMPTY>
+<!ELEMENT pilcrow       EMPTY>
+<!ELEMENT section-mark  EMPTY>
+<!ELEMENT dimension     EMPTY>
+<!ELEMENT slash         EMPTY>
+<!ELEMENT solidus       EMPTY>
 
 <!-- ############################ -->
 <!-- Abbreviations, Special Terms -->
@@ -378,14 +395,20 @@
 <!-- Simple Inline Markup -->
 <!-- #################### -->
 
-<!ELEMENT em        (#PCDATA|%line;)*>
-<!ELEMENT alert     (#PCDATA|%line;)*>
-<!ELEMENT q         (#PCDATA|%line;)*>
-<!ELEMENT sq        (#PCDATA|%line;)*>
-<!ELEMENT term      (#PCDATA|%line;)*>
-<!ELEMENT foreign   (#PCDATA|%line;)*>
-<!ELEMENT acro      (#PCDATA|%line;)*>
-<!ELEMENT fn        (#PCDATA|%line;)*>
+<!ELEMENT em           (#PCDATA|%line;)*>
+<!ELEMENT alert        (#PCDATA|%line;)*>
+<!ELEMENT q            (#PCDATA|%line;)*>
+<!ELEMENT sq           (#PCDATA|%line;)*>
+<!ELEMENT braces       (#PCDATA|%line;)*>
+<!ELEMENT brackets     (#PCDATA|%line;)*>
+<!ELEMENT dblbrackets  (#PCDATA|%line;)*>
+<!ELEMENT angles       (#PCDATA|%line;)*>
+<!ELEMENT term         (#PCDATA|%line;)*>
+<!ELEMENT foreign      (#PCDATA|%line;)*>
+<!ELEMENT abbr         (#PCDATA|%line;)*>
+<!ELEMENT acro         (#PCDATA|%line;)*>
+<!ELEMENT init         (#PCDATA|%line;)*>
+<!ELEMENT fn           (#PCDATA|%line;)*>
     <!ATTLIST fn xml:id ID #IMPLIED>
 <!-- <c> is a bit different -->
 <!ELEMENT c         (#PCDATA)>
@@ -628,7 +651,7 @@
 
 <!ELEMENT credit   (title?, (author|editor)*)>
 
-<!ELEMENT date        (#PCDATA|%characters;|today|timeofday)*>
+<!ELEMENT date        (#PCDATA|%characters;)*>
 
 <!-- both "front" and "back" colophons -->
 <!ELEMENT colophon   (copyright*|p*)>

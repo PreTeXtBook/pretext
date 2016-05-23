@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2016 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<mathbook>
+
+    <docinfo>
+        <macros>
+        \newcommand{\doubler}[1]{2#1}
+        </macros>
+    </docinfo>
+
+    <book>
+
+        <frontmatter>
+            <titlepage>
+                <author>
+                    <personname>Rob Beezer</personname>
+                </author>
+            </titlepage>
+        </frontmatter>
+
+        <title>An EPUB Sampler</title>
+
+        <chapter>
+            <title>One</title>
+
+            <p>The quick brown fox jumps over the lazy dog.</p>
+        </chapter>
+
+        <chapter>
+            <title>Two</title>
+
+            <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ultricies purus sit amet rutrum dictum. Donec sit amet ligula quis orci vestibulum tempor id in erat. Ut ut placerat lacus, sit amet feugiat lorem. Pellentesque sodales risus at eros malesuada, eget ultrices est consectetur. Praesent fermentum, ligula sit amet fermentum varius, elit eros imperdiet lectus, tempus condimentum quam elit in elit. Sed molestie mauris sem, sed laoreet elit iaculis ut. In mattis blandit ex, nec rutrum purus ullamcorper eget. Nullam maximus magna non elit euismod, non ornare nisl porttitor. Pellentesque commodo tempus viverra.</p>
+
+            <p>Curabitur ac hendrerit ligula. Aenean vitae nunc id elit convallis efficitur. Sed ultricies ut justo quis elementum. Sed eget eros venenatis, pellentesque risus sed, fermentum mi. Proin ipsum arcu, porta nec sem sit amet, sollicitudin faucibus erat. Quisque lacus lectus, pellentesque ut imperdiet sed, euismod vitae nibh. Donec dolor diam, elementum ac pharetra vitae, volutpat mollis augue.</p>
+
+            <p>Maecenas ex enim, lobortis et blandit sit amet, pretium in ante. Sed mollis sollicitudin nibh non consectetur. Vestibulum eget tortor sit amet felis iaculis fermentum. Sed eu nisl a urna cursus congue at nec nulla. Mauris lacinia molestie tristique. Maecenas aliquet rutrum venenatis. Vivamus quis metus sit amet est feugiat facilisis quis et massa. Aenean dui sem, dapibus at imperdiet ac, auctor sit amet arcu. Vestibulum eget porttitor est. Aliquam id pellentesque quam, vitae rhoncus metus. In congue condimentum malesuada. Mauris in condimentum eros, eget mattis nibh. Praesent et ex porttitor, lobortis nibh sed, cursus ante. Suspendisse dapibus vel risus eu pellentesque. </p>
+        </chapter>
+
+        <chapter>
+            <title>A Bit of Math</title>
+
+            <p>This paragraph has some inline math, a Diophantine equation, <m>x^2 + \doubler{y^2} = z^2</m>.  And some display math about infinite series: <me>\sum_{n=1}^\infty\,\frac{1}{n^2} = \frac{\pi^2}{6}.</me>  Look at the XML source to see how <latex /> macros are employed.</p>
+
+            <p>Nice.</p>
+        </chapter>
+
+        <chapter>
+            <title>Some Images</title>
+
+            <p>A Portable Network Graphics (PNG) image created externally in Sage and then included directly here.</p>
+
+            <figure>
+                <caption>A cubic polynomial and its derivative</caption>
+                <image source="images/cubic-function.png" width="60%"/>
+            </figure>
+
+            <p>A Scalable Vector Graphics (SVG) image created externally in Sage and then included here as a vector image (no file extension given).</p>
+
+            <figure width="20%">
+                <caption>A complete graph on 16 vertices</caption>
+                <image source="images/complete-graph" width="70%"/>
+            </figure>
+
+            <p>A Scalable Vector Graphics (SVG) image described by Sage commands, which is produced by the <c>mbx</c> script.</p>
+
+            <figure xml:id="figure-sage-multigraph">
+                <caption>A Sage multigraph of a sentence</caption>
+                <image xml:id="sageplot-sentence-multigraph" width="50%">
+                    <sageplot>
+                    stnc = 'I am a cool multiedge graph with loops'
+                    g = DiGraph({}, loops=True, multiedges=True)
+                    for a,b in [(stnc[i], stnc[i+1]) for i in xrange(len(stnc)-1)]:
+                       g.add_edge(a, b, b)
+                    g.plot(color_by_label=True, edge_style='solid', figsize=(8,8))
+                    </sageplot>
+                </image>
+            </figure>
+
+            <!-- http://www.texample.net/media/tikz/examples/TEX/noise-shaper.tex -->
+            <figure xml:id="figure-tikz-electronics">
+                <caption>TikZ Electronics Diagram</caption>
+                <image xml:id="tikz-electronics">
+                    <description>A pile of electronic components wired together</description>
+                    <latex-image-code>
+                    <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
+                    <![CDATA[\tikzset{%
+                      block/.style    = {draw, thick, rectangle, minimum height = 3em,
+                        minimum width = 3em},
+                      sum/.style      = {draw, circle, node distance = 2cm}, % Adder
+                      input/.style    = {coordinate}, % Input
+                      output/.style   = {coordinate} % Output
+                    }
+                    % Defining string as labels of certain blocks.
+                    \newcommand{\suma}{\Large$+$}
+                    \newcommand{\inte}{$\displaystyle \int$}
+                    \newcommand{\derv}{\huge$\frac{d}{dt}$}
+
+                    \begin{tikzpicture}[auto, thick, node distance=2cm, >=triangle 45]
+                    \draw
+                        % Drawing the blocks of first filter :
+                        node at (0,0)[right=-3mm]{\Large \textbullet}
+                        node [input, name=input1] {}
+                        node [sum, right of=input1] (suma1) {\suma}
+                        node [block, right of=suma1] (inte1) {\inte}
+                             node at (6.8,0)[block] (Q1) {\Large $Q_1$}
+                             node [block, below of=inte1] (ret1) {\Large$T_1$};
+                        % Joining blocks.
+                        % Commands \draw with options like [->] must be written individually
+                        \draw[->](input1) -- node {$X(Z)$}(suma1);
+                        \draw[->](suma1) -- node {} (inte1);
+                        \draw[->](inte1) -- node {} (Q1);
+                        \draw[->](ret1) -| node[near end]{} (suma1);
+                        % Adder
+                    \draw
+                        node at (5.4,-4) [sum, name=suma2] {\suma}
+                            % Second stage of filter
+                        node at  (1,-6) [sum, name=suma3] {\suma}
+                        node [block, right of=suma3] (inte2) {\inte}
+                        node [sum, right of=inte2] (suma4) {\suma}
+                        node [block, right of=suma4] (inte3) {\inte}
+                        node [block, right of=inte3] (Q2) {\Large$Q_2$}
+                        node at (9,-8) [block, name=ret2] {\Large$T_2$}
+                    ;
+                        % Joining the blocks of second filter
+                        \draw[->] (suma3) -- node {} (inte2);
+                        \draw[->] (inte2) -- node {} (suma4);
+                        \draw[->] (suma4) -- node {} (inte3);
+                        \draw[->] (inte3) -- node {} (Q2);
+                        \draw[->] (ret2) -| (suma3);
+                        \draw[->] (ret2) -| (suma4);
+                             % Third stage of filter:
+                        % Defining nodes:
+                    \draw
+                        node at (11.5, 0) [sum, name=suma5]{\suma}
+                        node [output, right of=suma5]{}
+                        node [block, below of=suma5] (deriv1){\derv}
+                        node [output, right of=suma5] (sal2){}
+                    ;
+                        % Joining the blocks:
+                        \draw[->] (suma2) -| node {}(suma3);
+                        \draw[->] (Q1) -- (8,0) |- node {}(ret1);
+                        \draw[->] (8,0) |- (suma2);
+                        \draw[->] (5.4,0) -- (suma2);
+                        \draw[->] (Q1) -- node {}(suma5);
+                        \draw[->] (deriv1) -- node {}(suma5);
+                        \draw[->] (Q2) -| node {}(deriv1);
+                            \draw[<->] (ret2) -| node {}(deriv1);
+                            \draw[->] (suma5) -- node {$Y(Z)$}(sal2);
+                            % Drawing nodes with \textbullet
+                    \draw
+                        node at (8,0) {\textbullet}
+                        node at (8,-2){\textbullet}
+                        node at (5.4,0){\textbullet}
+                            node at (5,-8){\textbullet}
+                            node at (11.5,-6){\textbullet}
+                            ;
+                        % Boxing and labelling noise shapers
+                        \draw [color=gray,thick](-0.5,-3) rectangle (9,1);
+                        \node at (-0.5,1) [above=5mm, right=0mm] {\textsc{first-order noise shaper}};
+                        \draw [color=gray,thick](-0.5,-9) rectangle (12.5,-5);
+                        \node at (-0.5,-9) [below=5mm, right=0mm] {\textsc{second-order noise shaper}};
+                    \end{tikzpicture}]]>
+                    </latex-image-code>
+                </image>
+            </figure>
+            <p><q>There</q></p>
+
+        </chapter>
+
+    </book>
+</mathbook>
