@@ -1,0 +1,26 @@
+<!-- ********************************************************************* -->
+<!-- Copyright 2016                                                        -->
+<!-- Robert A. Beezer                                                      -->
+<!--                                                                       -->
+<!-- This file is part of MathBook XML.                                    -->
+<!--                                                                       -->
+<!-- MathBook XML is free software: you can redistribute it and/or modify  -->
+<!-- it under the terms of the GNU General Public License as published by  -->
+<!-- the Free Software Foundation, either version 2 or version 3 of the    -->
+<!-- License (at your option).                                             -->
+<!--                                                                       -->
+<!-- MathBook XML is distributed in the hope that it will be useful,       -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of        -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         -->
+<!-- GNU General Public License for more details.                          -->
+<!--                                                                       -->
+<!-- You should have received a copy of the GNU General Public License     -->
+<!-- along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>. -->
+<!-- ********************************************************************* -->
+
+<!-- XSLT Cookbook, 2nd Edition                                     -->
+<!-- Copyright 2006, O'Reilly Media, Inc.                           -->
+<!-- Declaration and entity definition format from Recipe 2.8       -->
+<!-- Unicode strings from http://stackoverflow.com/questions/586231 -->
+<!ENTITY UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ">
+<!ENTITY LOWERCASE "abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ">

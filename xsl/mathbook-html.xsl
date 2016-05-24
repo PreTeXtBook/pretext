@@ -19,13 +19,10 @@ You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!-- XSLT Cookbook, 2nd Edition                                     -->
-<!-- Copyright 2006, O'Reilly Media, Inc.                           -->
-<!-- Declaration and entity definition format from Recipe 2.8       -->
-<!-- Unicode strings from http://stackoverflow.com/questions/586231 -->
-<!DOCTYPE stylesheet [
-     <!ENTITY UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ">
-     <!ENTITY LOWERCASE "abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ">
+<!-- http://pimpmyxslt.com/articles/entity-tricks-part2/ -->
+<!DOCTYPE xsl:stylesheet [
+    <!ENTITY % entities SYSTEM "entities.ent">
+    %entities;
 ]>
 
 <!-- Identify as a stylesheet -->
@@ -993,7 +990,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:value-of select="$content" />
                 </text>
                 <key>
-                    <xsl:value-of select="translate($content, 'ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ', 'abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ')" />
+                    <xsl:value-of select="translate($content, &UPPERCASE;, &LOWERCASE;)" />
                 </key>
             </index>
         </xsl:for-each>
@@ -1013,7 +1010,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:value-of select="$content" />
                     </text>
                     <key>
-                        <xsl:value-of select="translate($content, 'ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ', 'abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ')" />
+                        <xsl:value-of select="translate($content, &UPPERCASE;, &LOWERCASE;)" />
                     </key>
                 </xsl:for-each>
             </index>
@@ -1052,7 +1049,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- Compare lower-cased leading letters, break if changed -->
                 <xsl:if test="not(substring($prev1, 1,1) = substring($key1, 1,1))">
                     <div class="indexletter">
-                        <xsl:value-of select="translate(substring($key1, 1, 1), 'abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ', 'ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ')" />
+                        <xsl:value-of select="translate(substring($key1, 1, 1), &UPPERCASE;, &LOWERCASE;)" />
                     </div>
                 </xsl:if>
                 <!--  -->

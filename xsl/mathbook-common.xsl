@@ -29,14 +29,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For example, writing a program that uses several chunks  -->
 <!-- of code from this book does not require permission."     -->
 
-
-<!-- XSLT Cookbook, 2nd Edition                                     -->
-<!-- Copyright 2006, O'Reilly Media, Inc.                           -->
-<!-- Declaration and entity definition format from Recipe 2.8       -->
-<!-- Unicode strings from http://stackoverflow.com/questions/586231 -->
+<!-- http://pimpmyxslt.com/articles/entity-tricks-part2/ -->
 <!DOCTYPE xsl:stylesheet [
-     <!ENTITY UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ">
-     <!ENTITY LOWERCASE "abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ">
+    <!ENTITY % entities SYSTEM "entities.ent">
+    %entities;
 ]>
 
 <!-- Identify as a stylesheet -->
