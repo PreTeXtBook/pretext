@@ -3443,24 +3443,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Line Breaks -->
-<!-- \newline works best in table cells in paragraph mode       -->
-<!-- so as to not be confused with \\ at the end of a table row -->
-<!-- but \\ is definitely better for multi-line main titles     -->
-<!-- Use sparingly, e.g. for poetry, *not* in math environments -->
-<!-- Must be in TeX's paragraph mode                            -->
-<xsl:template match="br">
-    <xsl:text>\newline{}</xsl:text>
-</xsl:template>
-<xsl:template match="title/br|subtitle/br|dedication/p/br|attribution/br">
-    <xsl:text>\\</xsl:text>
-</xsl:template>
-<!-- Letters and memos use tabular to layout some blocks -->
-<!-- these need a double-slash to cause a newline        -->
-<xsl:template match="letter/frontmatter/from/br|letter/backmatter/signature/br">
-    <xsl:text>\\</xsl:text>
-</xsl:template>
-
 <!-- Non-breaking space, which "joins" two words as a unit -->
 <xsl:template match="nbsp">
     <xsl:text>~</xsl:text>

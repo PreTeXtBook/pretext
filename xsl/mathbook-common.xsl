@@ -3488,6 +3488,22 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <xsl:template match="*" mode="deprecation-warnings">
     <!-- newer deprecations at the top of this list, user will see in this order -->
     <!--  -->
+    <xsl:if test="//br">
+        <xsl:call-template name="deprecation-message">
+            <xsl:with-param name="date-string" select="'2016-05-23'" />
+            <xsl:with-param name="message" select="'&lt;br&gt; can no longer be used to create multiline output; you may use &lt;line&gt; elements in select situations'" />
+            <xsl:with-param name="occurences" select="count(//br)" />
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <xsl:if test="//letter/frontmatter/from[not(line)]|//letter/frontmatter/to[not(line)]|//letter/backmatter/signature[not(line)]">
+        <xsl:call-template name="deprecation-message">
+            <xsl:with-param name="date-string" select="'2016-05-23'" />
+            <xsl:with-param name="message" select="'&lt;to&gt;, &lt;from&gt;, and &lt;signature&gt; of a letter must be structured as a sequence of &lt;line&gt;'" />
+            <xsl:with-param name="occurences" select="count(//letter/frontmatter/from[not(line)]|//letter/frontmatter/to[not(line)]|//letter/backmatter/signature[not(line)])" />
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
     <xsl:if test="//xref/@autoname='plural'">
         <xsl:call-template name="deprecation-message">
             <xsl:with-param name="date-string" select="'2016-04-07'" />
@@ -3586,6 +3602,12 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Some specific warnings that can go here  -->
 <!-- for items that are totally gone and not  -->
 <!-- useful anymore in their original context -->
+
+<xsl:template match="br">
+    <xsl:message>MBX:WARNING: the &lt;br&gt; element has been deprecated (2016/05/23); you may use &lt;line&gt; elements in select situations</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
+</xsl:template>
+
 <xsl:template match="tbody">
     <xsl:message>MBX:WARNING: tables are done very differently now (2015/03/17), the "tbody" element is indicative</xsl:message>
     <xsl:apply-templates select="." mode="location-report" />

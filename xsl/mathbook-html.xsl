@@ -3458,12 +3458,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\(\mathrm{\TeX}\)</xsl:text>
 </xsl:template>
 
-<!-- Line Breaks -->
-<!-- use sparingly, e.g. for poetry, not in math environments-->
-<xsl:template match="br">
-    <br />
-</xsl:template>
-
 <!-- Code, inline -->
 <!-- NB: "code-block" class otherwise -->
 <xsl:template match="c">
