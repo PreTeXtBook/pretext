@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
     <chapter xml:id="windows-install-notes">
         <title>Windows Installation Notes</title>
-<!--         <author>Dave Rosoff</author>
-        <frontmatter xml:id="index">
-            <titlepage>
-                <author>
-                    <personname>Dave Rosoff</personname>
-                    <department>Department of Mathematics and Physical Sciences</department>
-                    <institution>The College of Idaho,<br />Caldwell, Idaho, USA</institution>
-                    <email>drosoff@collegeofidaho.edu</email>
-                </author>
-                <date><today /></date>
-            </titlepage>
-            <abstract>
-                <p>This document explains the best known way to install the Mathbook XML toolchain in a Windows environment. It has been tested on Windows 7, 8, and 10. We assume that none of the listed tools or equivalents have been previously installed.</p>
-            </abstract>
-        </frontmatter> -->
         <introduction>
             <p>This document explains the best known way to install the Mathbook XML toolchain in a Windows environment. It has been tested on Windows 7, 8, and 10. We assume that none of the listed tools or equivalents have been previously installed. That may complicate matters. This is especially true if you use Cygwin, or if you have already installed Python on your machine. MBX compatibility with existing Python installations is addressed elsewhere in this document (future version?).</p>
         
@@ -147,16 +132,17 @@
                 <title>Changing the path with .bashrc</title>
                 <p>In <xref ref="change-path-environment-variable-xsltproc" autoname="yes" />, we promised that you could avoid messing with the Windows environment variables. If you install something else later that wants to use <c>xsltproc</c>, then this might not be the best idea. But if you are only going to use it from within Git Bash, then this will work fine.</p>
 
-                <p>From the Git Bash command prompt, enter this line of text and hit Enter. Don't make any typos. You should substitute your value of <c><less />xsltproc<greater /></c> where indicated, but make sure to conform to the conventions at the end of <xref ref="a-word-on-path-names" autoname="yes" />. (I warned you this was going to be annoying.)</p>
-                <p><c>echo <q>export PATH=/c/xsltproc:$PATH</q> | cat >> ~/.bashrc</c></p>
+                <p>From the Git Bash command prompt, enter this line of text and hit Enter. Don't make any typos. You should substitute your value of <c><less />xsltproc<greater /></c> where indicated, but make sure to conform to the conventions at the end of <xref ref="a-word-on-path-names" autoname="yes" /> regarding Windows path names in Git Bash. (I warned you this was going to be annoying.)</p>
+                <p><c>echo "export PATH=/c/xsltproc:$PATH" <greater /><greater /> ~/.bashrc</c></p>
                 <p>You may get a message from Git Bash the next time you run it about <c>.bash_profile</c>, which you may safely ignore.</p>
             </subsection>
         </section>
         <section xml:id="installing-anaconda">
             <title>Installing Anaconda</title>
             <p>Anaconda is a well-regulated development environment for Python under Windows, and I recommend it for users who do not already have Python installed. The essential <c>mbx</c> script has <url href="https://github.com/rbeezer/mathbook/pull/252">recently been updated</url> to support both Python 2 and Python 3. Therefore I make no recommendation about which Python version to choose, except to say that as of <today /> support for Python 3 should be regarded as experimental.</p>
+            <p>If you already have a working Python installation, skip to <xref ref="installing-imagemagick" autoname="yes"/>.</p>
             <p>Visit the <url href="https://www.continuum.io/downloads">Anaconda download page</url>.</p>
-            <p>You have some choice with your Anaconda installation. It actually supports the installation of several independent Pythons side-by-side (since both 2.7 and 3.x are in active use, this is more reasonable than it seems). If you don't need Python for anything else, Miniconda is also an option. Miniconda installs no packages, but these can be installed via the <c>conda</c> utility at the command line later.</p>
+            <p>You have some choice with your Anaconda installation. It actually supports the installation of several independent Pythons side-by-side (since both 2.7 and 3.x are in active use, this is more reasonable than it seems). If you don't need Python for anything else or are simply a minimalist, Miniconda is also an option. Miniconda installs no packages, but these can be installed via the <c>conda</c> utility at the command line later.</p>
             <p>Install either Miniconda, Python 2.7, or Python 3.5 from the <url href="https://www.continuum.io/downloads">Anaconda download page</url>.</p>
         </section>
         <section xml:id="installing-imagemagick">
