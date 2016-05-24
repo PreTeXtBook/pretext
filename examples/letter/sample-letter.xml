@@ -72,8 +72,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <letter xml:id="john-public-job">
 
         <frontmatter>
-            <to>Jane Doe<br />Big State University</to>
-            <from>Department of Mathematics<br />and Computer Science<br />University of Puget Sound</from>
+            <to>
+                <line>Jane Doe</line>
+                <line>Big State University</line>
+            </to>
+            <from>
+                <line>Department of Mathematics</line>
+                <line>and Computer Science</line>
+                <line>University of Puget Sound</line>
+            </from>
             <date><today /></date>
             <salutation>Dear Professor Doe,</salutation>
         </frontmatter>
@@ -89,7 +96,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- By default the height is 24 points, about 1/3 inch -->
             <!-- Or supply a length, with TeX units (in, cm, pt)    -->
             <graphic-signature source="signature-300dpi-400x100.png" height="0.33in"/>
-            <signature>John Z. Smith<br />Associate Professor</signature>
+            <signature>
+                <line>John Z. Smith</line>
+                <line>Associate Professor</line>
+            </signature>
         </backmatter>
 
     </letter>

@@ -160,9 +160,13 @@ the xsltproc executable.
                <!-- There can be several authors here -->
                 <author>
                     <personname>Robert Beezer</personname>
+                    <!-- department here is one line, so unstructured -->
                     <department>Department of Mathematics and Computer Science</department>
-                    <!-- Use "break" tag anywhere for forced line break -->
-                    <institution>University of Puget Sound<br />Tacoma, Washington, USA</institution>
+                    <!-- institution uses two lines, so structured as such -->
+                    <institution>
+                        <line>University of Puget Sound</line>
+                        <line>Tacoma, Washington, USA</line>
+                    </institution>
                     <email>beezer@pugetsound.edu</email>
                 </author>
 
@@ -930,6 +934,16 @@ the xsltproc executable.
                 <blockquote>
                     <p>The problem with writing a book in verse is, to be successful, it has to sound like you knocked it off on a rainy Friday afternoon. It has to sound easy. When you can do it, it helps tremendously because it's a thing that forces kids to read on. You have this unconsummated feeling if you stop.</p>
                     <attribution>Dr. Seuss</attribution>
+                </blockquote>
+
+                <p>We say that again, to test a multiline attribution of a block quotation.  Notice how the dash appears automatically, and that it is a <term>quotation dash</term> in HTML, distinct from other sorts of dashes.</p>
+
+                <blockquote>
+                    <p>The problem with writing a book in verse is, to be successful, it has to sound like you knocked it off on a rainy Friday afternoon. It has to sound easy. When you can do it, it helps tremendously because it's a thing that forces kids to read on. You have this unconsummated feeling if you stop.</p>
+                    <attribution>
+                        <line>Dr. Seuss</line>
+                        <line>Children's Author</line>
+                    </attribution>
                 </blockquote>
 
                 <p>Sometimes a quote may extend across several paragraphs.  Or a balanced pair of quotations marks crosses an XML boundary, so we need left, right, single and double versions.  (For example, see Section<nbsp /><xref ref="poetry" /> on poetry.)  Here are all four in a haphazard order: <rq />, <lsq />, <lq />, <rsq />.  These should be a last resort, and <em>not</em> a replacement for the <c>q</c> and <c>sq</c> tags.  The left/right versions are used for the following quote from Abraham Lincoln, which we have edited into two paragraphs.</p>
