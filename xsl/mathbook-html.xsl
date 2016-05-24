@@ -330,16 +330,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:if test="department|institution|email">
             <xsl:if test="department">
-                <br /><xsl:apply-templates select="department" />
+                <br />
+                <xsl:apply-templates select="department" />
             </xsl:if>
             <xsl:if test="institution">
-                <br /><xsl:apply-templates select="institution" />
+                <br />
+                <xsl:apply-templates select="institution" />
             </xsl:if>
             <xsl:if test="email">
-                <br /><xsl:apply-templates select="email" />
+                <br />
+                <xsl:apply-templates select="email" />
             </xsl:if>
         </xsl:if>
     </p>
+</xsl:template>
+
+<!-- Departments and Institutions are free-form, or sequences of lines -->
+<xsl:template match="department|institution">
+    <xsl:apply-templates />
+</xsl:template>
+
+<xsl:template match="department[line]|institution[line]">
+    <xsl:apply-templates select="line" />
+</xsl:template>
+
+<!-- Sneak in dedication line element here as well -->
+<xsl:template match="department/line|institution/line|dedication/p/line">
+    <xsl:apply-templates />
+    <!-- is there a next line to separate? -->
+    <xsl:if test="following-sibling::*">
+        <br />
+    </xsl:if>
 </xsl:template>
 
 
@@ -2115,9 +2136,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="contributor" mode="body">
     <xsl:comment>Style Me (contributor-info)</xsl:comment>
     <div style="margin-left:40%;">
-        <xsl:value-of select="department" />
+        <xsl:apply-templates select="department" />
         <br />
-        <xsl:value-of select="institution" />
+        <xsl:apply-templates select="institution" />
     </div>
 </xsl:template>
 <!-- No posterior  -->
@@ -3345,21 +3366,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </blockquote>
 </xsl:template>
 
+<!-- ############ -->
+<!-- Attributions -->
+<!-- ############ -->
+
+<!-- At end of: blockquote, preface, foreword       -->
+<!-- free-form for one line, or structured as lines -->
 <!-- TODO: add CSS for attribution, div flush right         -->
 <!-- And go slanted ("oblique"?)                            -->
+<!-- Maybe use CSS to right align as a block                -->
 <!-- https://github.com/BooksHTML/mathbook-assets/issues/64 -->
 
-<!-- Use at the end of a blockquote -->
-<!-- Single line, preceded by a dash -->
-<xsl:template match="blockquote/attribution">
-    <cite class="attribution"> &#8212; <xsl:apply-templates /></cite>
+<!-- Single line, mixed-content          -->
+<!-- Quotation dash if within blockquote -->
+<!-- Unicode Character 'HORIZONTAL BAR' aka 'QUOTATION DASH' -->
+<xsl:template match="attribution">
+    <cite class="attribution">
+        <xsl:if test="parent::blockquote">
+            <xsl:text>&#x2015;</xsl:text>
+        </xsl:if>
+        <xsl:apply-templates />
+    </cite>
 </xsl:template>
 
-<!-- General-purpose attribution              -->
-<!-- At end of a preface or foreword, perhaps -->
-<xsl:template match="attribution">
-    <cite class="attribution"><xsl:apply-templates /></cite>
+<!-- Multiple lines, structured by lines -->
+<xsl:template match="attribution[line]">
+    <cite class="attribution">
+        <xsl:apply-templates select="line" />
+    </cite>
 </xsl:template>
+
+<!-- General line of an attribution -->
+<xsl:template match="attribution/line">
+    <xsl:if test="parent::attribution/parent::blockquote and not(preceding-sibling::*)">
+        <xsl:text>&#x2015;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates />
+    <!-- is there a next line to separate? -->
+    <xsl:if test="following-sibling::*">
+        <br />
+    </xsl:if>
+</xsl:template>
+
 
 <!-- Defined terms (bold) -->
 <xsl:template match="term">
@@ -3790,12 +3838,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The last line of a stanza gets no break -->
 <!-- Other lines are more normal             -->
-<xsl:template match="line">
+<xsl:template match="poem/line|stanza/line">
     <xsl:apply-templates />
     <br />
 </xsl:template>
 
-<xsl:template match="line[not(following-sibling::*)]">
+<xsl:template match="poem/line[not(following-sibling::*)]|stanza/line[not(following-sibling::*)]">
     <xsl:apply-templates />
 </xsl:template>
 
