@@ -37,24 +37,26 @@
 <!-- Elements that could be inside a single line of text -->
 <!-- For example, an <ndash>, but not a <me>             -->
 <!-- Precede these by a #PCDATA, wrap with ( )*          -->
-<!ENTITY % characters "nbsp|ndash|mdash|ampersand|less|greater|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|tilde|backslash|asterisk|lq|rq|lsq|rsq|ellipsis|copyright|ie|eg|etc|circa|tex|latex|webwork|trademark|registered|today|timeofday">
-<!ENTITY % markup "xref|url|m|c|em|alert|q|sq|term|foreign|quantity|acro|booktitle">
-<!ENTITY % line "%characters; | %markup;">
+<!ENTITY % characters "nbsp|ndash|mdash|ampersand|less|greater|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|
+lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk|lq|rq|lsq|rsq|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|dimension|slash|solidus|copyright|ie|eg|etc|circa|tex|latex|webwork|trademark|registered|today|timeofday">
+<!ENTITY % markup "xref|url|m|c|em|alert|q|sq|braces|brackets|angles|term|foreign|quantity|acro|booktitle">
+<!ENTITY % linear "%characters; | %markup;">
 
 <!-- Multiline Content -->
-<!-- Addresses, attributions, other content     -->
-<!-- that is not a constituent of a paragraph,  -->
-<!-- but which always could be naturally broken -->
-<!-- into several lines.  We just add a         -->
-<!-- "hard break" to lines.                     -->
-<!ENTITY % multiline "%line;|br">
+<!-- Addresses, attributions, and other content        -->
+<!-- that is not a constituent of a paragraph may      -->
+<!-- be broken into a sequence of line elements.       -->
+<!-- It is not possibble to use this as an alternative -->
+<!-- to mixed-content, so some uses may be inaccurate. -->
+<!-- http://stackoverflow.com/questions/12261206/dtd-syntax-allow-sub-element-or-pcdata -->
+<!ELEMENT line (#PCDATA|%linear;)*>
 
 <!-- Sentences, Paragraph Content -->
 <!-- Elements that can be contained in a typical paragraph    -->
 <!-- Everything that is title material, plus more (eg me)     -->
 <!-- var and answer are exclusive to "p" in a WeBWorK problem -->
 <!-- Precede by a #PCDATA, wrap with ( )*                     -->
-<!ENTITY % sentence "%line;|me|men|md|mdn|fn|index|notation|var|answer">
+<!ENTITY % sentence "%linear;|me|men|md|mdn|fn|index|notation|var|answer">
 
 <!-- Paragraphs -->
 <!-- Elements that can mix anywhere with a paragraph, -->
@@ -67,7 +69,7 @@
 <!-- Everything like a paragraph, but also more substantial                   -->
 <!-- These items cannot be contained in anything but a structural subdivision -->
 <!-- Note: the "todo" element is in this list                                 -->
-<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|example|exercise|contributors|list-of|solution-list|notation-list|todo">
+<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|list|example|exercise|contributors|list-of|solution-list|notation-list|todo">
 
 
 <!-- ######### -->
@@ -116,8 +118,8 @@
     <!ATTLIST subsubsection xml:base CDATA    #IMPLIED>
     <!ATTLIST subsubsection xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
-<!ELEMENT title    (#PCDATA|%line;)*>
-<!ELEMENT subtitle (#PCDATA|%line;)*>
+<!ELEMENT title    (#PCDATA|%linear;)*>
+<!ELEMENT subtitle (#PCDATA|%linear;)*>
 
 <!ELEMENT introduction (title?, index*, (%block;)*)>
 <!ELEMENT conclusion   (title?, index*, (%block;)*)>
@@ -156,6 +158,8 @@
     <!ATTLIST paragraphs   width    CDATA                 #IMPLIED>
     <!ATTLIST paragraphs   halign   (left|center|right)   #IMPLIED>
     <!ATTLIST paragraphs   valign   (bottom|middle|top)   #IMPLIED>
+    <!ATTLIST paragraphs   xml:base  CDATA                #IMPLIED>
+
 
 <!-- components of mathematical objects -->
 <!ELEMENT statement (%para;)*>
@@ -166,7 +170,7 @@
 <!ELEMENT definition   (title?, index*, notation*, statement)>
     <!ATTLIST definition xml:id ID #IMPLIED>
 
-<!-- theorem-like, ie with proof -->
+<!-- theorem-like, i.e. with proof -->
 <!ELEMENT theorem   (title?, index*, statement, proof*)>
     <!ATTLIST theorem xml:id ID #IMPLIED>
 <!ELEMENT corollary (title?, index*, statement, proof*)>
@@ -182,7 +186,7 @@
 <!ELEMENT fact     (title?, index*, statement, proof*)>
     <!ATTLIST fact     xml:id ID #IMPLIED>
 
-<!-- conjecture-like, ie no proof -->
+<!-- conjecture-like, i.e. no proof -->
 <!ELEMENT conjecture (title?, index*, statement)>
     <!ATTLIST conjecture xml:id ID #IMPLIED>
 <!ELEMENT axiom (title?, index*, statement)>
@@ -190,16 +194,22 @@
 <!ELEMENT principle (title?, index*, statement)>
     <!ATTLIST principle xml:id ID #IMPLIED>
 
-<!-- example-like, not very structured -->
-<!ELEMENT example (title?, index*, (%para;)*)>
+<!-- example-like, not very structured, or statement/solution -->
+<!ELEMENT example (title?, index*, ((%para;)*|(statement, solution)))>
     <!ATTLIST example xml:id ID #IMPLIED>
+<!ELEMENT list (title?, index*, introduction?, (ol|ul|dl), conclusion)>
+    <!ATTLIST list xml:id ID #IMPLIED>
 <!ELEMENT remark (title?, index*, (%para;)*)>
     <!ATTLIST remark xml:id ID #IMPLIED>
     <!ATTLIST remark xml:base CDATA    #IMPLIED>
     <!ATTLIST remark xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
 <!ELEMENT blockquote (p+, attribution*)>
-<!ELEMENT attribution (#PCDATA|%multiline;)*>
+
+<!-- This is inaccurate, but will allow proper structures to pass    -->
+<!-- Either provide mixed content, or a seqeunce of lines,           -->
+<!-- so the final "or" here should be interpreted as an exclusive-or -->
+<!ELEMENT attribution (#PCDATA|%linear;|line)*>
 
 <!-- Contributors -->
 <!ELEMENT contributors (contributor*)>
@@ -260,7 +270,7 @@
 <!-- ################## -->
 
 <!-- Caption -->
-<!ELEMENT caption  (#PCDATA|%line;)*>
+<!ELEMENT caption  (#PCDATA|%linear;)*>
 
 <!-- table attributes for use only in side-by-side -->
 <!ELEMENT table   (title?, index*, caption?, tabular)>
@@ -288,7 +298,7 @@
     <!ATTLIST row halign        (left|center|right)        #IMPLIED>
 
 <!-- answer is just for WW problems -->
-<!ELEMENT cell    (#PCDATA|%sentence;|answer)*>
+<!ELEMENT cell    (#PCDATA|%sentence;)*>
     <!ATTLIST cell bottom       (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST cell right        (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST cell halign       (left|center|right)        #IMPLIED>
@@ -325,7 +335,8 @@
     <!ATTLIST poem width CDATA #IMPLIED>
     <!ATTLIST poem xml:id ID #IMPLIED>
 <!ELEMENT stanza    (line+)>
-<!ELEMENT line      (#PCDATA|%line;)*>
+<!-- line defined above in multline context   -->
+<!-- <!ELEMENT line      (#PCDATA|%linear;)*> -->
 
 
 <!-- ################## -->
@@ -334,29 +345,42 @@
 
 <!-- Primarily owing to XML, TeX co-opting these -->
 
-<!ELEMENT nbsp       EMPTY>
-<!ELEMENT ndash      EMPTY>
-<!ELEMENT mdash      EMPTY>
-<!ELEMENT ampersand  EMPTY>
-<!ELEMENT less       EMPTY>
-<!ELEMENT greater    EMPTY>
-<!ELEMENT ellipsis   EMPTY>
-<!ELEMENT hash       EMPTY>
-<!ELEMENT dollar     EMPTY>
-<!ELEMENT percent    EMPTY>
-<!ELEMENT circumflex EMPTY>
-<!ELEMENT underscore EMPTY>
-<!ELEMENT lbrace     EMPTY>
-<!ELEMENT rbrace     EMPTY>
-<!ELEMENT tilde      EMPTY>
-<!ELEMENT backslash  EMPTY>
-<!ELEMENT asterisk   EMPTY>
+<!ELEMENT nbsp          EMPTY>
+<!ELEMENT ndash         EMPTY>
+<!ELEMENT mdash         EMPTY>
+<!ELEMENT ampersand     EMPTY>
+<!ELEMENT less          EMPTY>
+<!ELEMENT greater       EMPTY>
+<!ELEMENT ellipsis      EMPTY>
+<!ELEMENT hash          EMPTY>
+<!ELEMENT dollar        EMPTY>
+<!ELEMENT percent       EMPTY>
+<!ELEMENT circumflex    EMPTY>
+<!ELEMENT underscore    EMPTY>
+<!ELEMENT lbrace        EMPTY>
+<!ELEMENT rbrace        EMPTY>
+<!ELEMENT lbracket      EMPTY>
+<!ELEMENT rbracket      EMPTY>
+<!ELEMENT ldblbracket   EMPTY>
+<!ELEMENT rdblbracket   EMPTY>
+<!ELEMENT langle        EMPTY>
+<!ELEMENT rangle        EMPTY>
+<!ELEMENT tilde         EMPTY>
+<!ELEMENT backslash     EMPTY>
+<!ELEMENT asterisk      EMPTY>
 <!-- see copyright possibly EMPTY in frontmatter description-->
-<!ELEMENT lq         EMPTY>
-<!ELEMENT rq         EMPTY>
-<!ELEMENT lsq        EMPTY>
-<!ELEMENT rsq        EMPTY>
-<!ELEMENT br         EMPTY>
+<!ELEMENT lq            EMPTY>
+<!ELEMENT rq            EMPTY>
+<!ELEMENT lsq           EMPTY>
+<!ELEMENT rsq           EMPTY>
+<!ELEMENT midpoint      EMPTY>
+<!ELEMENT swungdash     EMPTY>
+<!ELEMENT permille      EMPTY>
+<!ELEMENT pilcrow       EMPTY>
+<!ELEMENT section-mark  EMPTY>
+<!ELEMENT dimension     EMPTY>
+<!ELEMENT slash         EMPTY>
+<!ELEMENT solidus       EMPTY>
 
 <!-- ############################ -->
 <!-- Abbreviations, Special Terms -->
@@ -378,21 +402,27 @@
 <!-- Simple Inline Markup -->
 <!-- #################### -->
 
-<!ELEMENT em        (#PCDATA|%line;)*>
-<!ELEMENT alert     (#PCDATA|%line;)*>
-<!ELEMENT q         (#PCDATA|%line;)*>
-<!ELEMENT sq        (#PCDATA|%line;)*>
-<!ELEMENT term      (#PCDATA|%line;)*>
-<!ELEMENT foreign   (#PCDATA|%line;)*>
-<!ELEMENT acro      (#PCDATA|%line;)*>
-<!ELEMENT fn        (#PCDATA|%line;)*>
+<!ELEMENT em           (#PCDATA|%linear;)*>
+<!ELEMENT alert        (#PCDATA|%linear;)*>
+<!ELEMENT q            (#PCDATA|%linear;)*>
+<!ELEMENT sq           (#PCDATA|%linear;)*>
+<!ELEMENT braces       (#PCDATA|%linear;)*>
+<!ELEMENT brackets     (#PCDATA|%linear;)*>
+<!ELEMENT dblbrackets  (#PCDATA|%linear;)*>
+<!ELEMENT angles       (#PCDATA|%linear;)*>
+<!ELEMENT term         (#PCDATA|%linear;)*>
+<!ELEMENT foreign      (#PCDATA|%linear;)*>
+<!ELEMENT abbr         (#PCDATA|%linear;)*>
+<!ELEMENT acro         (#PCDATA|%linear;)*>
+<!ELEMENT init         (#PCDATA|%linear;)*>
+<!ELEMENT fn           (#PCDATA|%linear;)*>
     <!ATTLIST fn xml:id ID #IMPLIED>
 <!-- <c> is a bit different -->
 <!ELEMENT c         (#PCDATA)>
     <!ATTLIST c latexsep CDATA #IMPLIED>
 <!-- PROVISIONAL: I don't like this one, it may go away with better references -->
 <!-- Using just <title> could be really confusing                              -->
-<!ELEMENT booktitle        (#PCDATA|%line;)*>
+<!ELEMENT booktitle        (#PCDATA|%linear;)*>
 
 
 <!-- ################ -->
@@ -404,7 +434,7 @@
     <!ATTLIST url href CDATA #IMPLIED>
 
 <!-- Internal Cross-References -->
-<!ELEMENT xref (#PCDATA|%line;)*>
+<!ELEMENT xref (#PCDATA|%linear;)*>
     <!ATTLIST xref provisional              CDATA #IMPLIED>
     <!ATTLIST xref ref                      CDATA #IMPLIED>
     <!ATTLIST xref detail                   CDATA #IMPLIED>
@@ -417,9 +447,9 @@
     <!ATTLIST index xml:id ID #IMPLIED>
     <!ATTLIST index start CDATA #IMPLIED>
     <!ATTLIST index finish CDATA #IMPLIED>
-<!ELEMENT main (#PCDATA|%line;)*>
-<!ELEMENT sub  (#PCDATA|%line;)*>
-<!ELEMENT see  (#PCDATA|%line;)*>
+<!ELEMENT main (#PCDATA|%linear;)*>
+<!ELEMENT sub  (#PCDATA|%linear;)*>
+<!ELEMENT see  (#PCDATA|%linear;)*>
 
 
 <!-- #### -->
@@ -443,7 +473,7 @@
     <!ATTLIST mrow number (yes|no) #IMPLIED>
 
 <!-- simple text between rows of aligned equations -->
-<!ELEMENT intertext (#PCDATA|%line;)*>
+<!ELEMENT intertext (#PCDATA|%linear;)*>
 
 <!-- ######### -->
 <!-- Exercises -->
@@ -529,7 +559,7 @@
 <!-- typically for accessibility, also used in notation element -->
 <!-- var is only active/usable within a webwork problem         -->
 <!-- TODO: warn on var used elsewhere?                          -->
-<!ELEMENT description   (#PCDATA|%line;|var)*>
+<!ELEMENT description   (#PCDATA|%linear;|var)*>
 
 <!ELEMENT latex-image-code   (#PCDATA)>
     <!ATTLIST latex-image-code xml:base CDATA    #IMPLIED>
@@ -622,23 +652,23 @@
     <!ATTLIST contributor xml:id ID #IMPLIED>
 
 <!ELEMENT personname   (#PCDATA|%characters;)*>
-<!ELEMENT department   (#PCDATA|%multiline;)*>
-<!ELEMENT institution  (#PCDATA|%multiline;)*>
+<!ELEMENT department   (#PCDATA|%linear;|line)*>
+<!ELEMENT institution  (#PCDATA|%linear;|line)*>
 <!ELEMENT email        (#PCDATA)>
 
 <!ELEMENT credit   (title?, (author|editor)*)>
 
-<!ELEMENT date        (#PCDATA|%characters;|today|timeofday)*>
+<!ELEMENT date        (#PCDATA|%characters;)*>
 
 <!-- both "front" and "back" colophons -->
 <!ELEMENT colophon   (copyright*|p*)>
 
 <!-- front colophon items -->
 <!ELEMENT copyright      (year, holder, minilicense?, shortlicense?)?>
-<!ELEMENT year           (#PCDATA|%line;)*>
-<!ELEMENT holder         (#PCDATA|%line;)*>
-<!ELEMENT minilicense    (#PCDATA|%line;)*>
-<!ELEMENT shortlicense   (#PCDATA|%line;)*>
+<!ELEMENT year           (#PCDATA|%linear;)*>
+<!ELEMENT holder         (#PCDATA|%linear;)*>
+<!ELEMENT minilicense    (#PCDATA|%linear;)*>
+<!ELEMENT shortlicense   (#PCDATA|%linear;)*>
 
 
 <!ELEMENT biography (title?, index*, (%block;)*)>
@@ -647,6 +677,8 @@
 <!ELEMENT abstract (title?, index*, (%block;)*)>
     <!ATTLIST abstract xml:id ID #IMPLIED>
 
+<!-- The paragraphs of a dedication can be divided -->
+<!-- with "line", this needs adjustment            -->
 <!ELEMENT dedication   (title?, index*, p*)>
     <!ATTLIST dedication xml:id ID #IMPLIED>
 
@@ -694,16 +726,16 @@
 <!-- As-is, this needs more structure to accomodate note properly -->
 <!ELEMENT references (title?, index*, introduction?, biblio*, conclusion?)>
 
-<!ELEMENT biblio  (#PCDATA|%line;|ibid|author|title|journal|year|volume|number|note)*>
+<!ELEMENT biblio  (#PCDATA|%linear;|ibid|author|title|journal|year|volume|number|note)*>
     <!ATTLIST biblio xml:id ID    #IMPLIED>
     <!ATTLIST biblio type   (raw) #REQUIRED>
 <!ELEMENT ibid  EMPTY>
-<!-- <!ELEMENT author   (#PCDATA|%line;)*> -->
+<!-- <!ELEMENT author   (#PCDATA|%linear;)*> -->
 <!-- title defined above, could conflict -->
-<!ELEMENT journal  (#PCDATA|%line;)*>
-<!-- <!ELEMENT year     (#PCDATA|%line;)*> -->
-<!ELEMENT volume   (#PCDATA|%line;)*>
-<!ELEMENT number   (#PCDATA|%line;)*>
+<!ELEMENT journal  (#PCDATA|%linear;)*>
+<!-- <!ELEMENT year     (#PCDATA|%linear;)*> -->
+<!ELEMENT volume   (#PCDATA|%linear;)*>
+<!ELEMENT number   (#PCDATA|%linear;)*>
 <!ELEMENT note     (%para;)*>
     <!ATTLIST note xml:id ID #IMPLIED>
 

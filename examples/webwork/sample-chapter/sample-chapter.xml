@@ -81,16 +81,20 @@
                 <author>
                     <personname>Robert Beezer</personname>
                     <department>Department of Mathematics and Computer Science</department>
-                    <!-- Use "break" tag anywhere for forced line break -->
-                    <institution>University of Puget Sound<br />Tacoma, Washington, USA</institution>
+                    <institution>
+                        <line>University of Puget Sound</line>
+                        <line>Tacoma, Washington, USA</line>
+                    </institution>
                     <email>beezer@pugetsound.edu</email>
                 </author>
 
                 <author>
                     <personname>Alex Jordan</personname>
                     <department>Department of Mathematics</department>
-                    <!-- Use "break" tag anywhere for forced line break -->
-                    <institution>Portland Community College<br />Portland, Oregon, USA</institution>
+                    <institution>
+                        <line>Portland Community College</line>
+                        <line>Portland, Oregon, USA</line>
+                    </institution>
                     <email>alex.jordan@pcc.edu</email>
                 </author>
 

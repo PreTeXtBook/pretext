@@ -37,6 +37,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:str="http://exslt.org/strings"
+    exclude-result-prefixes="b64"
     extension-element-prefixes="exsl date str"
 >
 
@@ -80,6 +81,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.knowl.proof" select="'yes'" />
 <xsl:param name="html.knowl.definition" select="'no'" />
 <xsl:param name="html.knowl.example" select="'yes'" />
+<xsl:param name="html.knowl.list" select="'no'" />
 <xsl:param name="html.knowl.remark" select="'no'" />
 <xsl:param name="html.knowl.figure" select="'no'" />
 <xsl:param name="html.knowl.table" select="'no'" />
@@ -87,6 +89,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.knowl.sidebyside" select="'no'" />
 <xsl:param name="html.knowl.exercise.inline" select="'yes'" />
 <xsl:param name="html.knowl.exercise.sectional" select="'no'" />
+<!-- html.knowl.example.solution: always "yes", could be implemented -->
 
 <!-- CSS and Javascript Servers -->
 <!-- We allow processing paramteers to specify new servers   -->
@@ -247,6 +250,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- HTML files as output -->
+<xsl:variable name="file-extension" select="'.html'" />
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -325,16 +330,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:if test="department|institution|email">
             <xsl:if test="department">
-                <br /><xsl:apply-templates select="department" />
+                <br />
+                <xsl:apply-templates select="department" />
             </xsl:if>
             <xsl:if test="institution">
-                <br /><xsl:apply-templates select="institution" />
+                <br />
+                <xsl:apply-templates select="institution" />
             </xsl:if>
             <xsl:if test="email">
-                <br /><xsl:apply-templates select="email" />
+                <br />
+                <xsl:apply-templates select="email" />
             </xsl:if>
         </xsl:if>
     </p>
+</xsl:template>
+
+<!-- Departments and Institutions are free-form, or sequences of lines -->
+<xsl:template match="department|institution">
+    <xsl:apply-templates />
+</xsl:template>
+
+<xsl:template match="department[line]|institution[line]">
+    <xsl:apply-templates select="line" />
+</xsl:template>
+
+<!-- Sneak in dedication line element here as well -->
+<xsl:template match="department/line|institution/line|dedication/p/line">
+    <xsl:apply-templates />
+    <!-- is there a next line to separate? -->
+    <xsl:if test="following-sibling::*">
+        <br />
+    </xsl:if>
 </xsl:template>
 
 
@@ -442,7 +468,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
         </h5>
-        <xsl:apply-templates  select="./*[not(self::title)]"/>
+        <xsl:apply-templates  select="*"/>
     </article>
 </xsl:template>
 
@@ -586,7 +612,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Recursively finds enclosing structural node -->
 <!-- and reports if it has an xml:id on it       -->
-<!-- Note: from mode="filename", can we return a node-set? -->
+<!-- Note: from mode="containing-filename", can we return a node-set? -->
 <xsl:template match="*" mode="has-id-on-enclosure">
     <xsl:variable name="intermediate"><xsl:apply-templates select="." mode="is-intermediate" /></xsl:variable>
     <xsl:variable name="chunk"><xsl:apply-templates select="." mode="is-chunk" /></xsl:variable>
@@ -619,9 +645,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We add other material prior to links to major subdivisions -->
 <xsl:template match="titlepage">
     <h1 class="heading">
-        <span class="title"><xsl:apply-templates select="/mathbook/*/title" /></span>
+        <span class="title">
+            <xsl:apply-templates select="/mathbook/*" mode="title-full" />
+        </span>
         <xsl:if test="/mathbook/*/subtitle">
-            <span class="subtitle"><xsl:apply-templates select="/mathbook/*/subtitle" /></span>
+            <span class="subtitle">
+                <xsl:apply-templates select="/mathbook/*" mode="subtitle" />
+            </span>
         </xsl:if>
     </h1>
     <!-- We list full info for each author and editor in document order -->
@@ -638,8 +668,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- then name, etc in slightly smaller font (generally de-emphasised) -->
 <xsl:template match="titlepage/credit">
     <xsl:if test="title">
-        <xsl:apply-templates select="title" />
-        <br />
+        <p>
+        <xsl:apply-templates select="." mode="title-full"/>
+        </p>
     </xsl:if>
     <xsl:apply-templates select="author" mode="full-info" />
 </xsl:template>
@@ -696,8 +727,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <article class="{local-name(.)}" id="{$ident}">
         <h5 class="heading">
             <xsl:apply-templates select="." mode="title-full" />
+            <span> </span>
         </h5>
-        <xsl:apply-templates  select="./*[not(self::title)]"/>
+        <xsl:apply-templates  select="*"/>
     </article>
 </xsl:template>
 
@@ -721,6 +753,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- parameters control visibility. We eventually appeal     -->
 <!-- to the environment/knowl code to realize each hint, etc -->
 <!-- as a knowl for decent page-loading time.                -->
+
+<!-- This is a hack that should go away when backmatter exercises are rethought -->
+<xsl:template match="title" mode="backmatter" />
 
 <xsl:template match="solution-list">
     <xsl:apply-templates select="//exercises" mode="backmatter" />
@@ -758,7 +793,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
             <span class="codenumber"><xsl:apply-templates select="." mode="serial-number" /></span>
             <xsl:if test="title">
-                <span class="title"><xsl:apply-templates select="title" /></span>
+                <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
             </xsl:if>
             </h5>
             <xsl:if test="$exercise.backmatter.statement='yes'">
@@ -1219,7 +1254,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We show the full content of the item on the page (b)            -->
 <!-- Or, we build a hidden knowl and place a link on the page (c)    -->
 <!-- NB: this template employs several modal templates, defined just below -->
-<xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|contributor">
+<xsl:template match="fn|biblio|example|list|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|contributor">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
@@ -1251,7 +1286,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     the "xref-as-knowl" modal template           -->
 <!-- TODO: we need to process children in a way that no \label{}, nor ID's, are produced   -->
 <!--       This would perhaps obsolete the "env-type" device, and reorder explnation below -->
-<xsl:template match="fn|biblio|example|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|li|p|contributor" mode="xref-knowl">
+<xsl:template match="fn|biblio|example|list|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|li|p|contributor" mode="xref-knowl">
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
@@ -1551,7 +1586,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="serial-number" />
         <xsl:text>]</xsl:text>
     </div>
-    <xsl:text disable-output-escaping="yes">&amp;nbsp;&amp;nbsp;</xsl:text>
+    <xsl:text>&#xa0;&#xa0;</xsl:text>
     <div class="bibentry">
         <xsl:apply-templates select="text()|*[not(self::note)]" />
     </div>
@@ -1568,51 +1603,54 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Examples, Remarks -->
+<!-- Examples, Remarks, List Wrappers -->
 <!-- Individually customizable -->
 <!-- Similar, as just runs of paragraphs -->
 <xsl:template match="example" mode="is-hidden">
     <xsl:value-of select="$html.knowl.example = 'yes'" />
 </xsl:template>
+<xsl:template match="list" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.list = 'yes'" />
+</xsl:template>
 <xsl:template match="remark" mode="is-hidden">
     <xsl:value-of select="$html.knowl.remark = 'yes'" />
 </xsl:template>
-<xsl:template match="example|remark" mode="is-block-env">
+<xsl:template match="example|list|remark" mode="is-block-env">
     <xsl:value-of select="true()" />
 </xsl:template>
 <!-- Knowl-text is an article with heading -->
-<xsl:template match="example|remark" mode="hidden-knowl-text">
+<xsl:template match="example|list|remark" mode="hidden-knowl-text">
     <article class="example-like">
         <h5 class="heading">
             <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
             <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
             <xsl:if test="title">
-                <span class="title"><xsl:apply-templates select="title" /></span>
+                <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
             </xsl:if>
         </h5>
     </article>
 </xsl:template>
 <!-- Head is type, number, title -->  <!-- GENERALIZE -->
-<xsl:template match="example|remark" mode="head">
+<xsl:template match="example|list|remark" mode="head">
     <h5 class="heading">
         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
         <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
         <xsl:if test="title">
-            <span class="title"><xsl:apply-templates select="title" /></span>
+            <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
         </xsl:if>
     </h5>
 </xsl:template>
 <!-- Body is just all content, but no title -->
-<xsl:template match="example|remark" mode="body">
-    <xsl:apply-templates select="*[not(self::title)]"/>
+<xsl:template match="example|list|remark" mode="body">
+    <xsl:apply-templates select="*"/>
 </xsl:template>
 <!-- No posterior  -->
-<xsl:template match="example|remark" mode="posterior" />
+<xsl:template match="example|list|remark" mode="posterior" />
 <!-- HTML, CSS -->
-<xsl:template match="example|remark" mode="environment-element">
+<xsl:template match="example|list|remark" mode="environment-element">
     <xsl:text>article</xsl:text>
 </xsl:template>
-<xsl:template match="example|remark" mode="environment-class">
+<xsl:template match="example|list|remark" mode="environment-class">
     <xsl:text>example-like</xsl:text>
 </xsl:template>
 
@@ -1632,7 +1670,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
             <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
             <xsl:if test="title">
-                <span class="title"><xsl:apply-templates select="title" /></span>
+                <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
             </xsl:if>
         </h5>
     </article>
@@ -1643,7 +1681,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
         <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
         <xsl:if test="title">
-            <span class="title"><xsl:apply-templates select="title" /></span>
+            <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
         </xsl:if>
     </h5>
 </xsl:template>
@@ -1681,7 +1719,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
             <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
             <xsl:if test="title">
-                <span class="title"><xsl:apply-templates select="title" /></span>
+                <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
             </xsl:if>
         </h5>
     </article>
@@ -1692,7 +1730,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
         <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
         <xsl:if test="title">
-            <span class="title"><xsl:apply-templates select="title" /></span>
+            <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
         </xsl:if>
     </h5>
 </xsl:template>
@@ -1789,7 +1827,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
             <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
             <xsl:if test="title">
-                <span class="title"><xsl:apply-templates select="title" /></span>
+                <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
             </xsl:if>
         </h5>
     </article>
@@ -1856,7 +1894,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="me|men|md|mdn" mode="posterior" />
 <!-- HTML, CSS -->
 <xsl:template match="me|men|md|mdn" mode="environment-element">
-    <xsl:text>span</xsl:text>
+    <xsl:text>div</xsl:text>
 </xsl:template>
 <xsl:template match="me|men|md|mdn" mode="environment-class">
     <xsl:text>displaymath</xsl:text>
@@ -1953,7 +1991,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="codenumber"><xsl:apply-templates select="." mode="serial-number" /></span>
     <xsl:if test="title">
         <xsl:text> </xsl:text>
-        <span class="title"><xsl:apply-templates select="title" /></span>
+        <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
     </xsl:if>
     </h5>
 </xsl:template>
@@ -1964,7 +2002,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
     <xsl:if test="title">
         <xsl:text> </xsl:text>
-        <span class="title"><xsl:apply-templates select="title" /></span>
+        <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
     </xsl:if>
     </h5>
 </xsl:template>
@@ -1974,7 +2012,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="codenumber"><xsl:apply-templates select="." mode="serial-number" /></span>
     <xsl:if test="title">
         <xsl:text> </xsl:text>
-        <span class="title"><xsl:apply-templates select="title" /></span>
+        <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
     </xsl:if>
     </h5>
 </xsl:template>
@@ -1985,7 +2023,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
     <xsl:if test="title">
         <xsl:text> </xsl:text>
-        <span class="title"><xsl:apply-templates select="title" /></span>
+        <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
     </xsl:if>
     </h5>
 </xsl:template>
@@ -2052,12 +2090,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="codenumber"><xsl:apply-templates select="." mode="serial-number" /></span>
     <xsl:if test="title">
         <xsl:text> </xsl:text>
-        <span class="title"><xsl:apply-templates select="title" /></span>
+        <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
     </xsl:if>
     </h5>
 </xsl:template>
 <!-- Body is everything, including nested lists -->
+<!-- TODO: maybe something is missing here, style of label, etc -->
 <xsl:template match="li" mode="body">
+    <!-- TODO: this needs formatting, insertion into first paragraph -->
+    <xsl:if test="parent::dl">
+        <xsl:apply-templates select="." mode="title-full" />
+    </xsl:if>
     <xsl:apply-templates />
 </xsl:template>
 <!-- No posterior  -->
@@ -2093,9 +2136,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="contributor" mode="body">
     <xsl:comment>Style Me (contributor-info)</xsl:comment>
     <div style="margin-left:40%;">
-        <xsl:value-of select="department" />
+        <xsl:apply-templates select="department" />
         <br />
-        <xsl:value-of select="institution" />
+        <xsl:apply-templates select="institution" />
     </div>
 </xsl:template>
 <!-- No posterior  -->
@@ -2181,9 +2224,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Output follows source line breaks     -->
 <!-- MathJax: out-of-the-box support       -->
 <xsl:template match="me" mode="body">
-    <xsl:text>\[</xsl:text>
+    <xsl:text>\begin{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
     <xsl:value-of select="." />
-    <xsl:text>\]</xsl:text>
+    <xsl:text>\end{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- Single displayed equation, numbered -->
@@ -2191,14 +2238,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Requires a manual tag for number    -->
 <xsl:template match="men" mode="body">
     <xsl:param name="env-type" />
-    <xsl:text>\begin{equation}</xsl:text>
+    <xsl:text>\begin{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
     <xsl:value-of select="." />
     <!-- Needs label{} at birth, NOT in xref knowl -->
     <xsl:if test="$env-type='visible' or $env-type='hidden'">
         <xsl:apply-templates select="." mode="label" />
     </xsl:if>
     <xsl:apply-templates select="." mode="tag" />
-    <xsl:text>\end{equation}</xsl:text>
+    <xsl:text>\end{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- Multi-Line Math -->
@@ -2206,34 +2257,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
 <!-- align environment if ampersands are present, gather environment otherwise   -->
 <!-- NB: *identical* to LaTeX version, but for mode and knowl-type parameter     -->
-<xsl:template match="md" mode="body">
-    <xsl:choose>
-        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
-            <xsl:text>\begin{align*}&#xa;</xsl:text>
-            <xsl:apply-templates select="mrow|intertext" />
-            <xsl:text>\end{align*}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\begin{gather*}&#xa;</xsl:text>
-            <xsl:apply-templates select="mrow|intertext" />
-            <xsl:text>\end{gather*}</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<xsl:template match="mdn" mode="body">
-    <xsl:choose>
-        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
-            <xsl:text>\begin{align}&#xa;</xsl:text>
-            <xsl:apply-templates select="mrow|intertext" />
-            <xsl:text>\end{align}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\begin{gather}&#xa;</xsl:text>
-            <xsl:apply-templates select="mrow|intertext" />
-            <xsl:text>\end{gather}</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+<xsl:template match="md|mdn" mode="body">
+    <xsl:text>\begin{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:apply-templates select="mrow|intertext" />
+    <xsl:text>\end{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- Rows of a multi-line math display                 -->
@@ -2251,7 +2282,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:apply-templates select="." mode="tag"/>
     </xsl:if>
-    <xsl:if test="position()!=last()">
+    <xsl:if test="following-sibling::mrow">
        <xsl:text>\\</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
@@ -2272,7 +2303,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="tag"/>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:if test="position()!=last()">
+    <xsl:if test="following-sibling::mrow">
        <xsl:text>\\</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
@@ -2291,58 +2322,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Intertext -->
-<!-- A LaTeX construct really, we just jump in/out of             -->
+<!-- A LaTeX construct really, we just jump out/in of             -->
 <!-- the align/gather environment and package the text            -->
 <!-- in an HTML paragraph, assuming it is just a snippet.         -->
 <!-- This breaks the alignment, but MathJax has no good           -->
 <!-- solution for this.                                           -->
 <!-- We need * (md=no numbers), and plain (mdn=numbers) variants, -->
 <!-- together with aligned (& present) or gather (no & present).  -->
-<!-- NB: we check the *parent* for ampersands                     -->
-<!-- TODO: make an ampersand-test template to produce "align|gather" -->
-<!-- TODO: and md vs mdn templates to produce star/unstar            -->
-<xsl:template match="md/intertext">
-    <xsl:choose>
-        <xsl:when test="contains(.., '&amp;') or contains(., '\amp')">
-            <xsl:text>\end{align*}&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\end{gather*}&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+<!-- NB: we check the *parent* for alignment                      -->
+<xsl:template match="md/intertext|mdn/intertext">
+    <xsl:text>\end{</xsl:text>
+    <xsl:apply-templates select=".." mode="displaymath-alignment" />
+    <xsl:text>}&#xa;</xsl:text>
     <p>
         <xsl:apply-templates />
     </p>
-    <xsl:choose>
-        <xsl:when test="contains(.., '&amp;') or contains(., '\amp')">
-            <xsl:text>\begin{align*}&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\begin{gather*}&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<xsl:template match="mdn/intertext">
-    <xsl:choose>
-        <xsl:when test="contains(.., '&amp;') or contains(., '\amp')">
-            <xsl:text>\end{align}&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\end{gather}&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <p>
-        <xsl:apply-templates />
-    </p>
-    <xsl:choose>
-        <xsl:when test="contains(.., '&amp;') or contains(., '\amp')">
-            <xsl:text>\begin{align}&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\begin{gather}&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:text>\begin{</xsl:text>
+    <xsl:apply-templates select=".." mode="displaymath-alignment" />
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 
@@ -2467,6 +2464,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="internal-id" />
         </xsl:attribute>
+        <!-- TODO: this needs formatting, insertion into first paragraph -->
+        <xsl:if test="parent::dl">
+            <xsl:apply-templates select="." mode="title-full" />
+        </xsl:if>
         <xsl:apply-templates />
     </xsl:element>
 </xsl:template>
@@ -2481,6 +2482,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="internal-id" />
         </xsl:attribute>
+        <!-- TODO: this needs formatting, insertion into first paragraph -->
+        <xsl:if test="parent::dl">
+            <xsl:apply-templates select="." mode="title-full" />
+        </xsl:if>
        <xsl:apply-templates />
     </xsl:element>
 </xsl:template>
@@ -2502,6 +2507,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:choose>
         <!-- no extension, presume SVG manufactured -->
+        <!-- TODO: pass along side-by-side CSS somehow -->
         <xsl:when test="$extension=''">
             <xsl:call-template name="svg-wrapper">
                 <xsl:with-param name="svg-filename">
@@ -2511,8 +2517,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="png-fallback-filename" />
                 <xsl:with-param name="image-width">
                     <xsl:choose>
-                        <xsl:when test="../@width">
-                            <xsl:value-of select="../@width" />
+                        <xsl:when test="@width">
+                            <xsl:value-of select="@width" />
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:text>90%</xsl:text>
@@ -3160,7 +3166,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a sidebyside even though this is not necessary           -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|p|biblio|note|example|remark|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|biblio|note|example|list|remark|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">
@@ -3352,38 +3358,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Miscellaneous -->
-
-<!-- Markup, typically within paragraphs            -->
-<!-- Quotes, double or single, see quotations below -->
-<!-- HTML5 wants actual characters here -->
-<xsl:template match="q">
-    <xsl:text>&#x201c;</xsl:text><xsl:apply-templates /><xsl:text>&#x201d;</xsl:text>
-</xsl:template>
-
-<xsl:template match="sq">
-    <xsl:text>&#x2018;</xsl:text><xsl:apply-templates /><xsl:text>&#x2019;</xsl:text>
-</xsl:template>
-
-<!-- Sometimes you need an "unbalanced" quotation make,    -->
-<!-- maybe because you are crossing some other XML element -->
-<!-- So here are left and right, single and double         -->
-<xsl:template match="lsq">
-    <xsl:text>&#x2018;</xsl:text>
-</xsl:template>
-
-<xsl:template match="rsq">
-    <xsl:text>&#x2019;</xsl:text>
-</xsl:template>
-
-<xsl:template match="lq">
-    <xsl:text>&#x201c;</xsl:text>
-</xsl:template>
-
-<xsl:template match="rq">
-    <xsl:text>&#x201d;</xsl:text>
-</xsl:template>
-
 <!-- Actual Quotations                -->
 <!-- TODO: <quote> element for inline to be <q> in HTML-->
 <xsl:template match="blockquote">
@@ -3392,30 +3366,79 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </blockquote>
 </xsl:template>
 
+<!-- ############ -->
+<!-- Attributions -->
+<!-- ############ -->
+
+<!-- At end of: blockquote, preface, foreword       -->
+<!-- free-form for one line, or structured as lines -->
 <!-- TODO: add CSS for attribution, div flush right         -->
 <!-- And go slanted ("oblique"?)                            -->
+<!-- Maybe use CSS to right align as a block                -->
 <!-- https://github.com/BooksHTML/mathbook-assets/issues/64 -->
 
-<!-- Use at the end of a blockquote -->
-<!-- Single line, preceded by a dash -->
-<xsl:template match="blockquote/attribution">
-    <cite class="attribution"> &#8212; <xsl:apply-templates /></cite>
+<!-- Single line, mixed-content          -->
+<!-- Quotation dash if within blockquote -->
+<!-- Unicode Character 'HORIZONTAL BAR' aka 'QUOTATION DASH' -->
+<xsl:template match="attribution">
+    <cite class="attribution">
+        <xsl:if test="parent::blockquote">
+            <xsl:text>&#x2015;</xsl:text>
+        </xsl:if>
+        <xsl:apply-templates />
+    </cite>
 </xsl:template>
 
-<!-- General-purpose attribution              -->
-<!-- At end of a preface or foreword, perhaps -->
-<xsl:template match="attribution">
-    <cite class="attribution"><xsl:apply-templates /></cite>
+<!-- Multiple lines, structured by lines -->
+<xsl:template match="attribution[line]">
+    <cite class="attribution">
+        <xsl:apply-templates select="line" />
+    </cite>
 </xsl:template>
+
+<!-- General line of an attribution -->
+<xsl:template match="attribution/line">
+    <xsl:if test="parent::attribution/parent::blockquote and not(preceding-sibling::*)">
+        <xsl:text>&#x2015;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates />
+    <!-- is there a next line to separate? -->
+    <xsl:if test="following-sibling::*">
+        <br />
+    </xsl:if>
+</xsl:template>
+
 
 <!-- Defined terms (bold) -->
 <xsl:template match="term">
     <em class="terminology"><xsl:apply-templates /></em>
 </xsl:template>
 
-<!-- Acronyms (no-op) -->
+<!-- Acronyms, Initialisms, Abbreviations -->
+<!-- abbreviation: contracted form                                  -->
+<!-- acronym: initials, pronounced as a word (eg SCUBA, RADAR)      -->
+<!-- initialism: one letter at a time, (eg CIA, FBI)                -->
+<!-- All are marked as the HTML "abbr" tag, but classes distinguish -->
+<!-- Would a screen reader know the difference?                     -->
+<xsl:template match="abbr">
+    <abbr class="abbreviation">
+        <xsl:comment>Style me</xsl:comment>
+        <xsl:apply-templates />
+    </abbr>
+</xsl:template>
+
 <xsl:template match="acro">
-    <abbr class="acronym"><xsl:comment>Style me</xsl:comment><xsl:apply-templates /></abbr>
+    <abbr class="acronym">
+        <xsl:comment>Style me</xsl:comment>
+        <xsl:apply-templates />
+    </abbr>
+</xsl:template>
+
+<xsl:template match="init">
+    <abbr class="initialism">
+        <xsl:comment>Style me</xsl:comment>
+        <xsl:apply-templates />
+    </abbr>
 </xsl:template>
 
 <!-- Emphasis -->
@@ -3481,12 +3504,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 <xsl:template match="tex">
     <xsl:text>\(\mathrm{\TeX}\)</xsl:text>
-</xsl:template>
-
-<!-- Line Breaks -->
-<!-- use sparingly, e.g. for poetry, not in math environments-->
-<xsl:template match="br">
-    <br />
 </xsl:template>
 
 <!-- Code, inline -->
@@ -3626,6 +3643,58 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x2217;</xsl:text>
 </xsl:template>
 
+<!-- Left Single Quote -->
+<xsl:template match="lsq">
+    <xsl:text>&#x2018;</xsl:text>
+</xsl:template>
+
+<!-- Right Single Quote -->
+<xsl:template match="rsq">
+    <xsl:text>&#x2019;</xsl:text>
+</xsl:template>
+
+<!-- Left (Double) Quote -->
+<xsl:template match="lq">
+    <xsl:text>&#x201c;</xsl:text>
+</xsl:template>
+
+<!-- Right (Double) Quote -->
+<xsl:template match="rq">
+    <xsl:text>&#x201d;</xsl:text>
+</xsl:template>
+
+<!-- Left Bracket -->
+<xsl:template match="lbracket">
+    <xsl:text>[</xsl:text>
+</xsl:template>
+
+<!-- Right Bracket -->
+<xsl:template match="rbracket">
+    <xsl:text>]</xsl:text>
+</xsl:template>
+
+<!-- Left Double Bracket -->
+<!-- MATHEMATICAL LEFT WHITE SQUARE BRACKET -->
+<xsl:template match="ldblbracket">
+    <xsl:text>&#x27e6;</xsl:text>
+</xsl:template>
+
+<!-- Right Double Bracket -->
+<!-- MATHEMATICAL RIGHT WHITE SQUARE BRACKET -->
+<xsl:template match="rdblbracket">
+    <xsl:text>&#x27e7;</xsl:text>
+</xsl:template>
+
+<!-- Left Angle Bracket -->
+<xsl:template match="langle">
+    <xsl:text>&#x2329;</xsl:text>
+</xsl:template>
+
+<!-- Right Angle Bracket -->
+<xsl:template match="rangle">
+    <xsl:text>&#x232a;</xsl:text>
+</xsl:template>
+
 
 <!-- Other Miscellaneous Symbols, Constructions -->
 
@@ -3634,17 +3703,62 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x2026;</xsl:text>
 </xsl:template>
 
+<!-- Midpoint -->
+<!-- A centered dot used sometimes like a decorative dash -->
+<xsl:template match="midpoint">
+    <xsl:text>&#xb7;</xsl:text>
+</xsl:template>
+
+<!-- Swung Dash -->
+<!-- A decorative dash, like a tilde, but bigger, and centered -->
+<xsl:template match="swungdash">
+    <xsl:text>&#x2053;</xsl:text>
+</xsl:template>
+
+<!-- Per Mille -->
+<!-- Or, per thousand, like a percent sign -->
+<xsl:template match="permille">
+    <xsl:text>&#x2030;</xsl:text>
+</xsl:template>
+
+<!-- Pilcrow -->
+<!-- Often used to mark the start of a paragraph -->
+<xsl:template match="pilcrow">
+    <xsl:text>&#xb6;</xsl:text>
+</xsl:template>
+
+<!-- Section Mark -->
+<!-- The stylized double-S to indicate section numbers -->
+<xsl:template match="section-mark">
+    <xsl:text>&#xa7;</xsl:text>
+</xsl:template>
+
+<!-- Dimension -->
+<!-- A "times" symbol for dimensions of physical objects -->
+<xsl:template match="dimension">
+    <xsl:text>&#xd7;</xsl:text>
+</xsl:template>
+
+<!-- Slash -->
+<!-- Forward slash, or virgule (see solidus) -->
+<xsl:template match="slash">
+    <xsl:text>&#x2f;</xsl:text>
+</xsl:template>
+
+<!-- Solidus -->
+<!-- Fraction bar, not as steep as a forward slash -->
+<xsl:template match="solidus">
+    <xsl:text>&#x2044;</xsl:text>
+</xsl:template>
+
+
+
+
+
 <!-- Foreign words/idioms        -->
 <!-- Matches HTML5 specification -->
 <xsl:template match="foreign">
     <i class="foreign"><xsl:apply-templates /></i>
-</xsl:template>
-
-<!-- Braces -->
-<xsl:template match="braces">
-    <xsl:text>{</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- Non-breaking space, which "joins" two words as a unit            -->
@@ -3697,7 +3811,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#8212;</xsl:text>
 </xsl:template>
 
-
 <!--        -->
 <!-- Poetry -->
 <!--        -->
@@ -3707,18 +3820,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- width attribute is for print, ignored here -->
 <xsl:template match="poem">
     <div class="poem" style="margin: auto;">
-        <xsl:apply-templates select="title" />
+        <div class="poemtitle" style="padding-bottom: 20px; font-weight: bold; font-size: 121%">
+            <xsl:apply-templates select="." mode="title-full"/>
+        </div>
         <xsl:apply-templates select="stanza"/>
         <xsl:apply-templates select="author" />
     </div>
 </xsl:template>
 
-<!-- title -->
-<xsl:template match="poem/title">
-    <div class="poemtitle" style="padding-bottom: 20px; font-weight: bold; font-size: 121%">
-    <xsl:apply-templates />
-    </div>
-</xsl:template>
 
 <!-- Stanzas are sequences of lines -->
 <xsl:template match="stanza">
@@ -3729,12 +3838,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The last line of a stanza gets no break -->
 <!-- Other lines are more normal             -->
-<xsl:template match="line">
+<xsl:template match="poem/line|stanza/line">
     <xsl:apply-templates />
     <br />
 </xsl:template>
 
-<xsl:template match="line[not(following-sibling::*)]">
+<xsl:template match="poem/line[not(following-sibling::*)]|stanza/line[not(following-sibling::*)]">
     <xsl:apply-templates />
 </xsl:template>
 
@@ -3859,6 +3968,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:element name="pre">
         <xsl:attribute name="class">console</xsl:attribute>
         <xsl:apply-templates select="input|output" />
+    </xsl:element>
+</xsl:template>
+
+<xsl:template match="console/prompt">
+    <xsl:element name="span">
+        <xsl:attribute name="class">prompt unselectable</xsl:attribute>
+        <xsl:apply-templates />
     </xsl:element>
 </xsl:template>
 
@@ -4065,8 +4181,10 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- * page content (exclusive of banners, navigation etc) -->
 <xsl:template match="*" mode="file-wrap">
     <xsl:param name="content" />
-    <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
-    <exsl:document href="{$url}" method="html">
+    <xsl:variable name="filename">
+        <xsl:apply-templates select="." mode="containing-filename" />
+    </xsl:variable>
+    <exsl:document href="{$filename}" method="html">
     <!-- Need to be careful for format of this initial string     -->
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
     <xsl:call-template name="converter-blurb-html" />
@@ -4118,11 +4236,11 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                         <div class="title-container">
                             <h1 class="heading">
                                 <span class="title">
-                                    <xsl:apply-templates select="/mathbook/book/title|/mathbook/article/title" mode="title-simple" />
+                                    <xsl:apply-templates select="/mathbook/book|/mathbook/article" mode="title-simple" />
                                 </span>
                                 <xsl:if test="normalize-space(/mathbook/book/subtitle|/mathbook/article/subtitle)">
                                     <span class="subtitle">
-                                        <xsl:value-of select="/mathbook/book/subtitle|/mathbook/article/subtitle" />
+                                        <xsl:apply-templates select="/mathbook/book|/mathbook/article" mode="subtitle" />
                                     </span>
                                 </xsl:if>
                             </h1>
@@ -4156,8 +4274,11 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- Maybe a page title -->
 <xsl:template match="*" mode="simple-file-wrap">
     <xsl:param name="content" />
-    <xsl:variable name="url"><xsl:apply-templates select="." mode="internal-id" />.html</xsl:variable>
-    <exsl:document href="{$url}" method="html">
+    <xsl:variable name="filename">
+        <xsl:apply-templates select="." mode="internal-id" />
+        <text>.html</text>
+    </xsl:variable>
+    <exsl:document href="{$filename}" method="html">
     <!-- Need to be careful for format of this initial string     -->
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
     <xsl:call-template name="converter-blurb-html" />
@@ -4779,45 +4900,6 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <a href="https://www.mathjax.org">
         <img title="Powered by MathJax" src="https://cdn.mathjax.org/mathjax/badge/badge.gif" border="0" alt="Powered by MathJax" />
     </a>
-</xsl:template>
-
-
-<!-- Filenames -->
-<!-- Every web page has a file name,                           -->
-<!-- and every node is subsidiary to some web page.            -->
-<!-- This template give the filename of the webpage enclosing  -->
-<!-- any node (or the webpage representing that node)          -->
-<!-- This allows cross-references to point to the right page   -->
-<!-- when chunking the content into many subdivisions          -->
-<xsl:template match="*" mode="filename">
-    <xsl:variable name="intermediate"><xsl:apply-templates select="." mode="is-intermediate" /></xsl:variable>
-    <xsl:variable name="chunk"><xsl:apply-templates select="." mode="is-chunk" /></xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$intermediate='true' or $chunk='true'">
-            <xsl:apply-templates select="." mode="internal-id" />
-            <xsl:text>.html</xsl:text>
-            <!-- DEPRECATION: May 2015, replace with terminate=yes if present without an xml:id -->
-            <xsl:if test="@filebase">
-                <xsl:message>MBX:WARNING: filebase attribute (value=<xsl:value-of select="@filebase" />) is deprecated, use xml:id attribute instead</xsl:message>
-            </xsl:if>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select=".." mode="filename" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- URL's -->
-<!-- Every node has a URL associated with it -->
-<!-- A filename, plus an optional anchor/id  -->
-<xsl:template match="*" mode="url">
-    <xsl:variable name="intermediate"><xsl:apply-templates select="." mode="is-intermediate" /></xsl:variable>
-    <xsl:variable name="chunk"><xsl:apply-templates select="." mode="is-chunk" /></xsl:variable>
-    <xsl:apply-templates select="." mode="filename" />
-    <xsl:if test="$intermediate='false' and $chunk='false'">
-        <xsl:text>#</xsl:text>
-        <xsl:apply-templates select="." mode="internal-id" />
-    </xsl:if>
 </xsl:template>
 
 <!-- Tooltip Text -->

@@ -22,6 +22,9 @@
 <!-- We disable the ToC level to avoid any conflicts with chunk level -->
 <xsl:param name="toc.level" select="0" />
 
+<!-- HTML files as output -->
+<xsl:variable name="file-extension" select="'.html'" />
+
 <!-- Dual-purpose transform -->
 <!-- 'files': produces the relevant content                 -->
 <!-- 'info:': produces a sting mbx can use to locate assets -->
@@ -164,8 +167,10 @@
     <xsl:param name="subtitle" />
     <xsl:param name="credits" />
     <xsl:param name="content" />
-    <xsl:variable name="file"><xsl:apply-templates select="." mode="filename" /></xsl:variable>
-    <exsl:document href="{$file}" method="html">
+    <xsl:variable name="filename">
+        <xsl:apply-templates select="." mode="containing-filename" />
+    </xsl:variable>
+    <exsl:document href="{$filename}" method="html">
         <xsl:call-template name="converter-blurb-html" />
         <xsl:call-template name="fonts" />
         <xsl:call-template name="css" />
@@ -244,7 +249,7 @@
         <xsl:text>[</xsl:text>
         <!-- HTML filename, no path -->
         <xsl:text>'</xsl:text>
-        <xsl:apply-templates select="." mode="filename" />
+        <xsl:apply-templates select="." mode="containing-filename" />
         <xsl:text>'</xsl:text>
         <xsl:text>, </xsl:text>
         <!-- Title, prepended for Sage NB ToC sorting-->
