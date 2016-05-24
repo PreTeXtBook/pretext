@@ -1162,7 +1162,7 @@ the xsltproc executable.
 
         <p>The pgfplots package was included in <c>docinfo/latex-image-preamble</c>. Here, it is used. Also, here we demonstrate using <c>\amp</c> where you would normally use an ampersand in <latex />. There are known issues with <c>xelatex</c> processing any gradient shading in <c>tikz</c>. To (successfully) create the gradient shading in the 3D image here, you may need to use <c>pdflatex</c> until <latex /> developers resolve this issue.</p>
 
-                <figure xml:id="figure-pgflots-demo">
+                <figure xml:id="figure-pgfplots-demo">
                     <caption>Sample pgfplots plot</caption>
                     <image xml:id="pgfplots-demo">
                         <description>A pgfplots example, with a function, a parametric curve, and some points plotted.</description>
@@ -1213,7 +1213,7 @@ the xsltproc executable.
 
                 <p>It is still your responsibility to be sure this directory of external data files follows your <latex /> output to whatever directory you use to convert to a PDF and is in the right location for the relative path given in the XML source.  The discussion above only applies to generating individual image files, such as you would need for the HTML output.</p>
 
-                <figure xml:id="figure-pgflots-data-demo">
+                <figure xml:id="figure-pgfplots-data-demo">
                     <caption>External data in a pgfplots plot</caption>
                     <image xml:id="pgfplots-data-demo">
                         <description>A pgfplots example, with external data plotted.</description>
