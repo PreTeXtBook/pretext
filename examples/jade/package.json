@@ -1,9 +1,9 @@
 {
-  "name": "mathbookxml-jade-demo",
+  "name": "mathbookxml-pug-demo",
   "version": "1.0.0",
-  "description": "using the jade template engine to write the clunky xml",
+  "description": "using the pug template engine to write the clunky xml",
   "dependencies": {
-    "jade": "^1.11.0"
+    "pug": "^1.11.0"
   },
   "devDependencies": {},
   "author": "Harald Schilly",
