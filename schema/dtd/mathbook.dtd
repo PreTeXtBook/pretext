@@ -40,22 +40,23 @@
 <!ENTITY % characters "nbsp|ndash|mdash|ampersand|less|greater|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|
 lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk|lq|rq|lsq|rsq|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|dimension|slash|solidus|copyright|ie|eg|etc|circa|tex|latex|webwork|trademark|registered|today|timeofday">
 <!ENTITY % markup "xref|url|m|c|em|alert|q|sq|braces|brackets|angles|term|foreign|quantity|acro|booktitle">
-<!ENTITY % line "%characters; | %markup;">
+<!ENTITY % linear "%characters; | %markup;">
 
 <!-- Multiline Content -->
-<!-- Addresses, attributions, other content     -->
-<!-- that is not a constituent of a paragraph,  -->
-<!-- but which always could be naturally broken -->
-<!-- into several lines.  We just add a         -->
-<!-- "hard break" to lines.                     -->
-<!ENTITY % multiline "%line;|br">
+<!-- Addresses, attributions, and other content        -->
+<!-- that is not a constituent of a paragraph may      -->
+<!-- be broken into a sequence of line elements.       -->
+<!-- It is not possibble to use this as an alternative -->
+<!-- to mixed-content, so some uses may be inaccurate. -->
+<!-- http://stackoverflow.com/questions/12261206/dtd-syntax-allow-sub-element-or-pcdata -->
+<!ELEMENT line (#PCDATA|%linear;)*>
 
 <!-- Sentences, Paragraph Content -->
 <!-- Elements that can be contained in a typical paragraph    -->
 <!-- Everything that is title material, plus more (eg me)     -->
-<!-- var and answer are exclusive to "p" in a WeBWorK problem -->
+<!-- var is exclusive to "p" in a WeBWorK problem             -->
 <!-- Precede by a #PCDATA, wrap with ( )*                     -->
-<!ENTITY % sentence "%line;|me|men|md|mdn|fn|index|notation|var|answer">
+<!ENTITY % sentence "%linear;|me|men|md|mdn|fn|index|notation|var">
 
 <!-- Paragraphs -->
 <!-- Elements that can mix anywhere with a paragraph, -->
@@ -117,8 +118,8 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST subsubsection xml:base CDATA    #IMPLIED>
     <!ATTLIST subsubsection xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
-<!ELEMENT title    (#PCDATA|%line;)*>
-<!ELEMENT subtitle (#PCDATA|%line;)*>
+<!ELEMENT title    (#PCDATA|%linear;)*>
+<!ELEMENT subtitle (#PCDATA|%linear;)*>
 
 <!ELEMENT introduction (title?, index*, (%block;)*)>
 <!ELEMENT conclusion   (title?, index*, (%block;)*)>
@@ -157,6 +158,8 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST paragraphs   width    CDATA                 #IMPLIED>
     <!ATTLIST paragraphs   halign   (left|center|right)   #IMPLIED>
     <!ATTLIST paragraphs   valign   (bottom|middle|top)   #IMPLIED>
+    <!ATTLIST paragraphs   xml:base  CDATA                #IMPLIED>
+
 
 <!-- components of mathematical objects -->
 <!ELEMENT statement (%para;)*>
@@ -202,7 +205,11 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST remark xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
 <!ELEMENT blockquote (p+, attribution*)>
-<!ELEMENT attribution (#PCDATA|%multiline;)*>
+
+<!-- This is inaccurate, but will allow proper structures to pass    -->
+<!-- Either provide mixed content, or a seqeunce of lines,           -->
+<!-- so the final "or" here should be interpreted as an exclusive-or -->
+<!ELEMENT attribution (#PCDATA|%linear;|line)*>
 
 <!-- Contributors -->
 <!ELEMENT contributors (contributor*)>
@@ -263,7 +270,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- ################## -->
 
 <!-- Caption -->
-<!ELEMENT caption  (#PCDATA|%line;)*>
+<!ELEMENT caption  (#PCDATA|%linear;)*>
 
 <!-- table attributes for use only in side-by-side -->
 <!ELEMENT table   (title?, index*, caption?, tabular)>
@@ -290,7 +297,6 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST row left          (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST row halign        (left|center|right)        #IMPLIED>
 
-<!-- answer is just for WW problems -->
 <!ELEMENT cell    (#PCDATA|%sentence;)*>
     <!ATTLIST cell bottom       (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST cell right        (none|minor|medium|major)  #IMPLIED>
@@ -328,7 +334,8 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST poem width CDATA #IMPLIED>
     <!ATTLIST poem xml:id ID #IMPLIED>
 <!ELEMENT stanza    (line+)>
-<!ELEMENT line      (#PCDATA|%line;)*>
+<!-- line defined above in multline context   -->
+<!-- <!ELEMENT line      (#PCDATA|%linear;)*> -->
 
 
 <!-- ################## -->
@@ -365,7 +372,6 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!ELEMENT rq            EMPTY>
 <!ELEMENT lsq           EMPTY>
 <!ELEMENT rsq           EMPTY>
-<!ELEMENT br            EMPTY>
 <!ELEMENT midpoint      EMPTY>
 <!ELEMENT swungdash     EMPTY>
 <!ELEMENT permille      EMPTY>
@@ -395,27 +401,27 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- Simple Inline Markup -->
 <!-- #################### -->
 
-<!ELEMENT em           (#PCDATA|%line;)*>
-<!ELEMENT alert        (#PCDATA|%line;)*>
-<!ELEMENT q            (#PCDATA|%line;)*>
-<!ELEMENT sq           (#PCDATA|%line;)*>
-<!ELEMENT braces       (#PCDATA|%line;)*>
-<!ELEMENT brackets     (#PCDATA|%line;)*>
-<!ELEMENT dblbrackets  (#PCDATA|%line;)*>
-<!ELEMENT angles       (#PCDATA|%line;)*>
-<!ELEMENT term         (#PCDATA|%line;)*>
-<!ELEMENT foreign      (#PCDATA|%line;)*>
-<!ELEMENT abbr         (#PCDATA|%line;)*>
-<!ELEMENT acro         (#PCDATA|%line;)*>
-<!ELEMENT init         (#PCDATA|%line;)*>
-<!ELEMENT fn           (#PCDATA|%line;)*>
+<!ELEMENT em           (#PCDATA|%linear;)*>
+<!ELEMENT alert        (#PCDATA|%linear;)*>
+<!ELEMENT q            (#PCDATA|%linear;)*>
+<!ELEMENT sq           (#PCDATA|%linear;)*>
+<!ELEMENT braces       (#PCDATA|%linear;)*>
+<!ELEMENT brackets     (#PCDATA|%linear;)*>
+<!ELEMENT dblbrackets  (#PCDATA|%linear;)*>
+<!ELEMENT angles       (#PCDATA|%linear;)*>
+<!ELEMENT term         (#PCDATA|%linear;)*>
+<!ELEMENT foreign      (#PCDATA|%linear;)*>
+<!ELEMENT abbr         (#PCDATA|%linear;)*>
+<!ELEMENT acro         (#PCDATA|%linear;)*>
+<!ELEMENT init         (#PCDATA|%linear;)*>
+<!ELEMENT fn           (#PCDATA|%linear;)*>
     <!ATTLIST fn xml:id ID #IMPLIED>
 <!-- <c> is a bit different -->
 <!ELEMENT c         (#PCDATA)>
     <!ATTLIST c latexsep CDATA #IMPLIED>
 <!-- PROVISIONAL: I don't like this one, it may go away with better references -->
 <!-- Using just <title> could be really confusing                              -->
-<!ELEMENT booktitle        (#PCDATA|%line;)*>
+<!ELEMENT booktitle        (#PCDATA|%linear;)*>
 
 
 <!-- ################ -->
@@ -427,7 +433,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST url href CDATA #IMPLIED>
 
 <!-- Internal Cross-References -->
-<!ELEMENT xref (#PCDATA|%line;)*>
+<!ELEMENT xref (#PCDATA|%linear;)*>
     <!ATTLIST xref provisional              CDATA #IMPLIED>
     <!ATTLIST xref ref                      CDATA #IMPLIED>
     <!ATTLIST xref detail                   CDATA #IMPLIED>
@@ -440,9 +446,9 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST index xml:id ID #IMPLIED>
     <!ATTLIST index start CDATA #IMPLIED>
     <!ATTLIST index finish CDATA #IMPLIED>
-<!ELEMENT main (#PCDATA|%line;)*>
-<!ELEMENT sub  (#PCDATA|%line;)*>
-<!ELEMENT see  (#PCDATA|%line;)*>
+<!ELEMENT main (#PCDATA|%linear;)*>
+<!ELEMENT sub  (#PCDATA|%linear;)*>
+<!ELEMENT see  (#PCDATA|%linear;)*>
 
 
 <!-- #### -->
@@ -466,7 +472,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST mrow number (yes|no) #IMPLIED>
 
 <!-- simple text between rows of aligned equations -->
-<!ELEMENT intertext (#PCDATA|%line;)*>
+<!ELEMENT intertext (#PCDATA|%linear;)*>
 
 <!-- ######### -->
 <!-- Exercises -->
@@ -489,7 +495,6 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST hint xml:id ID #IMPLIED>
 <!ELEMENT answer   (%para;)*>
     <!ATTLIST answer xml:id ID #IMPLIED>
-    <!-- see other attributes for WW answer blanks -->
 <!ELEMENT solution (%para;)*>
     <!ATTLIST solution xml:id ID #IMPLIED>
 
@@ -511,21 +516,15 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!ELEMENT var (static?|set?)>
     <!ATTLIST var name       CDATA #IMPLIED>
     <!ATTLIST var category   CDATA #IMPLIED>
+    <!ATTLIST var form       CDATA #IMPLIED>
+    <!ATTLIST var evaluator  CDATA #IMPLIED>
+    <!ATTLIST var width      CDATA #IMPLIED>
 <!ELEMENT static (#PCDATA)>
 <!ELEMENT set (member+)>
 <!ELEMENT member (#PCDATA)>
     <!ATTLIST member correct   (yes|no)  #IMPLIED>
 
 <!ELEMENT pg-code (#PCDATA)>
-
-<!-- <!ELEMENT answer EMPTY> defined above for generic exercise -->
-<!-- attributes here are WW-specific     -->
-<!-- TODO: warn on content in WW answer? -->
-    <!ATTLIST answer var          CDATA #IMPLIED>
-    <!ATTLIST answer form         CDATA #IMPLIED>
-    <!ATTLIST answer evaluator    CDATA #IMPLIED>
-    <!ATTLIST answer width        CDATA #IMPLIED>
-
 
 <!-- Video -->
 <!ELEMENT video  EMPTY>
@@ -552,7 +551,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- typically for accessibility, also used in notation element -->
 <!-- var is only active/usable within a webwork problem         -->
 <!-- TODO: warn on var used elsewhere?                          -->
-<!ELEMENT description   (#PCDATA|%line;|var)*>
+<!ELEMENT description   (#PCDATA|%linear;|var)*>
 
 <!ELEMENT latex-image-code   (#PCDATA)>
     <!ATTLIST latex-image-code xml:base CDATA    #IMPLIED>
@@ -645,8 +644,8 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST contributor xml:id ID #IMPLIED>
 
 <!ELEMENT personname   (#PCDATA|%characters;)*>
-<!ELEMENT department   (#PCDATA|%multiline;)*>
-<!ELEMENT institution  (#PCDATA|%multiline;)*>
+<!ELEMENT department   (#PCDATA|%linear;|line)*>
+<!ELEMENT institution  (#PCDATA|%linear;|line)*>
 <!ELEMENT email        (#PCDATA)>
 
 <!ELEMENT credit   (title?, (author|editor)*)>
@@ -658,10 +657,10 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 
 <!-- front colophon items -->
 <!ELEMENT copyright      (year, holder, minilicense?, shortlicense?)?>
-<!ELEMENT year           (#PCDATA|%line;)*>
-<!ELEMENT holder         (#PCDATA|%line;)*>
-<!ELEMENT minilicense    (#PCDATA|%line;)*>
-<!ELEMENT shortlicense   (#PCDATA|%line;)*>
+<!ELEMENT year           (#PCDATA|%linear;)*>
+<!ELEMENT holder         (#PCDATA|%linear;)*>
+<!ELEMENT minilicense    (#PCDATA|%linear;)*>
+<!ELEMENT shortlicense   (#PCDATA|%linear;)*>
 
 
 <!ELEMENT biography (title?, index*, (%block;)*)>
@@ -670,6 +669,8 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!ELEMENT abstract (title?, index*, (%block;)*)>
     <!ATTLIST abstract xml:id ID #IMPLIED>
 
+<!-- The paragraphs of a dedication can be divided -->
+<!-- with "line", this needs adjustment            -->
 <!ELEMENT dedication   (title?, index*, p*)>
     <!ATTLIST dedication xml:id ID #IMPLIED>
 
@@ -717,16 +718,16 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- As-is, this needs more structure to accomodate note properly -->
 <!ELEMENT references (title?, index*, introduction?, biblio*, conclusion?)>
 
-<!ELEMENT biblio  (#PCDATA|%line;|ibid|author|title|journal|year|volume|number|note)*>
+<!ELEMENT biblio  (#PCDATA|%linear;|ibid|author|title|journal|year|volume|number|note)*>
     <!ATTLIST biblio xml:id ID    #IMPLIED>
     <!ATTLIST biblio type   (raw) #REQUIRED>
 <!ELEMENT ibid  EMPTY>
-<!-- <!ELEMENT author   (#PCDATA|%line;)*> -->
+<!-- <!ELEMENT author   (#PCDATA|%linear;)*> -->
 <!-- title defined above, could conflict -->
-<!ELEMENT journal  (#PCDATA|%line;)*>
-<!-- <!ELEMENT year     (#PCDATA|%line;)*> -->
-<!ELEMENT volume   (#PCDATA|%line;)*>
-<!ELEMENT number   (#PCDATA|%line;)*>
+<!ELEMENT journal  (#PCDATA|%linear;)*>
+<!-- <!ELEMENT year     (#PCDATA|%linear;)*> -->
+<!ELEMENT volume   (#PCDATA|%linear;)*>
+<!ELEMENT number   (#PCDATA|%linear;)*>
 <!ELEMENT note     (%para;)*>
     <!ATTLIST note xml:id ID #IMPLIED>
 

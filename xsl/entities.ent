@@ -1,9 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE webwork SYSTEM "../../schema/dtd/webwork.dtd">
-
 <!-- ********************************************************************* -->
-<!-- Copyright 2015                                                        -->
-<!-- Robert A. Beezer, Michael Gage, Geoff Goehle, Alex Jordan             -->
+<!-- Copyright 2016                                                        -->
+<!-- Robert A. Beezer                                                      -->
 <!--                                                                       -->
 <!-- This file is part of MathBook XML.                                    -->
 <!--                                                                       -->
@@ -21,46 +18,9 @@
 <!-- along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>. -->
 <!-- ********************************************************************* -->
 
-
-<!-- This is a skeleton file to hold any number of -->
-<!-- WeBWorK problems authored with MathBook XML.  -->
-<!-- mathbook/article structure needed for default -->
-<!-- variable assignments in  mathbook-common.xsl. -->
-
-<mathbook>
-<article>
-
-<webwork xml:id="integer-addition">
-    <title>Integer Addition</title>
-
-    <setup>
-        <var name="$a">
-            <static>9</static>
-        </var>
-        <var name="$b">
-            <static>8</static>
-        </var>
-        <var name="$c">
-            <static>13</static>
-        </var>
-
-        <pg-code>
-            $a = Compute(random(1, 9, 1));
-            $b = Compute(random(1, 9, 1));
-            $c = $a + $b;
-        </pg-code>
-    </setup>
-
-    <statement>
-        <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
-        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" /></p>
-    </statement>
-
-
-    <solution>
-        <p><m><var name="$a" /> + <var name="$b" /> = <var name="$c" /></m>.</p>
-    </solution>
-</webwork>
-
-</article>
-</mathbook>
+<!-- XSLT Cookbook, 2nd Edition                                     -->
+<!-- Copyright 2006, O'Reilly Media, Inc.                           -->
+<!-- Declaration and entity definition format from Recipe 2.8       -->
+<!-- Unicode strings from http://stackoverflow.com/questions/586231 -->
+<!ENTITY UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ">
+<!ENTITY LOWERCASE "abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ">

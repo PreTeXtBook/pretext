@@ -73,9 +73,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Order: dedication, acknowledgements, forewords, prefaces -->
 
     <!-- Each paragraph gets centered and has some vertical separatation -->
-    <!-- A line break may be used here to aid with intended formatting   -->
+    <!-- A line element may be used here with a single paragraph   -->
     <dedication>
-        <p>To students of algebra everywhere<ndash />they are the reason</p>
+        <p>
+            <line>To students of algebra everywhere</line>
+            <line>they are the reason</line>
+        </p>
         <p>And to those who teach them</p>
     </dedication>
 
@@ -211,8 +214,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- % Added Sage blurb, RAB 2011/07/28 -->
         <p>Sage (<url href="http://sagemath.org">sagemath.org</url>) is a free, open source, software system for advanced mathematics, which is ideal for assisting with a study of abstract algebra. Sage can be used either on your own computer, a local server, or on SageMathCloud (<url href="https://cloud.sagemath.com">https://cloud.sagemath.com</url>). Robert Beezer has written a comprehensive introduction to Sage and a selection of relevant exercises that appear at the end of each chapter, including live Sage cells in the web version of the book.</p>
 
-        <!-- RAB 2014/08/18 Should move flush right with some vertical spacing -->
-        <attribution>Thomas W. Judson <br />Nacogdoches, Texas 2015</attribution>
+        <attribution>
+            <line>Thomas W. Judson</line>
+            <line>Nacogdoches, Texas 2015</line>
+        </attribution>
 
     </preface>
 

@@ -131,9 +131,9 @@
 
             <p>For each perl variable (scalar, array, or hash) that is used in the <tag>pg-code</tag> and which will <em>also</em> be used in the <tag>statement</tag>, <tag>solution</tag>, or as an answer to an answer blank, there should be a <tag>var</tag>. These <tag>var</tag> tags are primarily to help MBX handle static output, but they also allow for some optimal leveraging of <webwork /> features.</p>
 
-            <p>A <tag>var</tag> always has a <attribute>name</attribute> attribute, which should match the variable's name in your <tag>pg-code</tag> (<eg /> <c>$x</c>, <c>@a</c>, <etc />). Each <tag>var</tag> should usually have a <tag>static</tag> tag with <latex /> code for the static version of the answer (possibly inside a <c>\text{}</c>). For PDF and other static output modes, this <latex /> code will be used to print <tag>var</tag> values, since the <webwork /> server will play no role.</p>
+            <p>A <tag>var</tag> in the <tag>setup</tag> always has a <attribute>name</attribute> attribute, which should match the variable's name in your <tag>pg-code</tag> (<eg /> <c>$x</c>, <c>@a</c>, <etc />). Each <tag>var</tag> should usually have a <tag>static</tag> tag with <latex /> code for the static version of the answer (possibly inside a <c>\text{}</c>). For PDF and other static output modes, this <latex /> code will be used to print <tag>var</tag> values, since the <webwork /> server will play no role.</p>
 
-            <p>Lastly, a <tag>var</tag> can have a <attribute>category</attribute> attribute. This is intended for variables which will be used as answers. Based on a <attribute>category</attribute>, an automatic help syntax link will be provided adjacent to an answer blank. For instance <attribute>category="point"</attribute> will provide a link explaining the syntax for typing a point.</p>
+            <p>Lastly, a <tag>var</tag> in the <tag>setup</tag> can have a <attribute>category</attribute> attribute. This is intended for variables which will be used as answers. Based on a <attribute>category</attribute>, an automatic help syntax link will be provided adjacent to an answer blank. For instance <attribute>category="point"</attribute> will provide a link explaining the syntax for typing a point.</p>
 
             <p>Here is a small example. Following the example, we'll continue discussing <tag>statement</tag> and <tag>solution</tag>.</p>
             <pre>
@@ -161,7 +161,7 @@
 
                 <statement>
                     <p>Compute <m><var name="$a" />+<var name="$b" /></m>.</p>
-                    <p>The sum is <answer var="$c" width="2" />.</p>
+                    <p>The sum is <var name="$c" width="2" />.</p>
                 </statement>
 
                 <solution>
@@ -173,16 +173,17 @@
 
             <p>Within a <tag>statement</tag>, <tag>hint</tag>, or <tag>solution</tag>, reference <tag>var</tag> tags by <attribute>name</attribute>. For HTML and PG output, the Perl variable will be used. For static output, the <tag>var</tag> tag's <var>static</var> child will be used.</p>
 
-            <p>Within the <tag>statement</tag>, an <tag>answer</tag> tag's <attribute>var</attribute> attribute declares what the answer will be. The value of the <attribute>var</attribute> should be the same as the corresponding <tag>var</tag> tag's <attribute>name</attribute> attribute. Additionally, the <tag>answer</tag> can specify a <attribute>width</attribute>. </p> 
-            <p>An <tag>answer</tag> can have <attribute>form="essay"</attribute>, in which case it need not have a <attribute>var</attribute> attribute. This is for open-ended questions that must be graded by a human. The form field will be an expandable input block if the question is served to an authenticated user within <webwork />. But for the <webwork /> cells in MBX HTML output, there will just be a message explaining that there is no place to enter an answer.</p>
+            <p>Within the <tag>statement</tag>, a <tag>var</tag> tag with either a <attribute>width</attribute> or <attribute>form</attribute> attribute creates an input field. The <attribute>name</attribute> attribute declares what the answer will be.</p> 
 
-            <p>An <tag>answer</tag> can have <attribute>form="array"</attribute> attribute. You would use this when the answer is a Matrix or Vector MathObject (a <webwork /> classification) to cause the answer form to be an array of smaller fields instead of one big field.</p> 
+            <p>An <tag>var</tag> can have <attribute>form="essay"</attribute>, in which case it need not have a <attribute>name</attribute> attribute. This is for open-ended questions that must be graded by a human. The form field will be an expandable input block if the question is served to an authenticated user within <webwork />. But for the <webwork /> cells in MBX HTML output, there will just be a message explaining that there is no place to enter an answer.</p>
 
-            <p>An <tag>answer</tag> can have <attribute>form="popup"</attribute> or <attribute>form="buttons"</attribute>. These are not necessary for HTML and PG output to behave, but are needed if you intend for PDF output to emulate these answer entry field types. The presence of all of these forms causes the appropriate PG macro libraries to be loaded.</p>
+            <p>An <tag>var</tag> can have <attribute>form="array"</attribute>. You would use this when the answer is a Matrix or Vector MathObject (a <webwork /> classification) to cause the input form to be an array of smaller fields instead of one big field.</p> 
 
-            <p>If you are writing a multiple choice question and using <attribute>form="popup"</attribute> or <attribute>form="buttons"</attribute> in your <tag>answer</tag>, instead of a <tag>static</tag> in the corresponding <tag>var</tag> from the <tag>setup</tag>, the <tag>var</tag> can have a <tag>set</tag>, with <tag>member</tag> children. The <tag>member</tag> tags would be the multiple choice options, and each can have a <attribute>correct="yes"</attribute> attribute to identify the correct choice(s). There is some unavoidable redundancy between listing these <tag>member</tag> tags in the <tag>setup</tag> and listing them again in the actual <tag>pg-code</tag>.</p> 
+            <p>An <tag>var</tag> can have <attribute>form="popup"</attribute> or <attribute>form="buttons"</attribute>. These are not necessary for HTML and PG output to behave, but are needed if you intend for PDF output to emulate these answer entry field types.</p>
 
-            <p>If you are familiar with PG, then in your <tag>pg-code</tag> you might write a custom evaluator (a combination of a custom answer checker, post filters, pre filters, <etc />). If you store this similar to</p><pre>$my_evaluator = $answer -> cmp(...);</pre><p>then the <tag>answer</tag> can have <attribute>evaluator="$my_evaluator"</attribute>.</p>
+            <p>If you are writing a multiple choice question and using <attribute>form="popup"</attribute> or <attribute>form="buttons"</attribute> in your <tag>var</tag>, instead of a <tag>static</tag> in the corresponding <tag>var</tag> from the <tag>setup</tag>, use a <tag>set</tag> tag, with <tag>member</tag> children. The <tag>member</tag> tags would be the multiple choice options, and each can have a <attribute>correct="yes"</attribute> attribute to identify the correct choice(s). There is some unavoidable redundancy between listing these <tag>member</tag> tags in the <tag>setup</tag> and listing them again in the actual <tag>pg-code</tag>.</p> 
+
+            <p>If you are familiar with PG, then in your <tag>pg-code</tag> you might write a custom evaluator (a combination of a custom answer checker, post filters, pre filters, <etc />). If you store this similar to</p><pre>$my_evaluator = $answer -> cmp(...);</pre><p>then the <tag>var</tag> can have <attribute>evaluator="$my_evaluator"</attribute>.</p>
 
         </subsection>
 

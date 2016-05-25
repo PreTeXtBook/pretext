@@ -1252,15 +1252,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- http://stackoverflow.com/questions/2817664/xsl-how-to-tell-if-element-is-last-in-series -->
 <xsl:template match="author">
     <xsl:apply-templates select="personname" />
-    <xsl:if test = "department">
+    <xsl:if test="department">
         <xsl:text>\\&#xa;</xsl:text>
         <xsl:apply-templates select="department" />
     </xsl:if>
-    <xsl:if test = "institution">
+    <xsl:if test="institution">
         <xsl:text>\\&#xa;</xsl:text>
         <xsl:apply-templates select="institution" />
     </xsl:if>
-    <xsl:if test = "email">
+    <xsl:if test="email">
         <xsl:text>\\&#xa;</xsl:text>
         <xsl:apply-templates select="email" />
     </xsl:if>
@@ -1275,15 +1275,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'editor'" />
     </xsl:call-template>
-    <xsl:if test = "department">
+    <xsl:if test="department">
         <xsl:text>\\&#xa;</xsl:text>
         <xsl:apply-templates select="department" />
     </xsl:if>
-    <xsl:if test = "institution">
+    <xsl:if test="institution">
         <xsl:text>\\&#xa;</xsl:text>
         <xsl:apply-templates select="institution" />
     </xsl:if>
-    <xsl:if test = "email">
+    <xsl:if test="email">
         <xsl:text>\\&#xa;</xsl:text>
         <xsl:apply-templates select="email" />
     </xsl:if>
@@ -1292,6 +1292,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
+
+<!-- Departments and Institutions are free-form, or sequences of lines -->
+<!-- Line breaks are inserted above, due to \and, etc,                 -->
+<!-- so do not end last line here                                      -->
+<xsl:template match="department|institution">
+    <xsl:apply-templates />
+</xsl:template>
+
+<xsl:template match="department[line]|institution[line]">
+    <xsl:apply-templates select="line" />
+</xsl:template>
+
+<xsl:template match="department/line|institution/line">
+    <xsl:apply-templates />
+    <!-- is there a next line to separate? -->
+    <xsl:if test="following-sibling::*">
+        <xsl:text>\\&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- ###################### -->
 <!-- Front Matter, Articles -->
@@ -1434,7 +1454,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Dedications are meant to be very short      -->
 <!-- so are each a single paragraph and          -->
 <!-- are centered on a page of their own         -->
-<!-- The "br" element may be used to break lines -->
 <!-- The center environment provides good        -->
 <!-- vertical break between multiple instances   -->
 <!-- The p[1] elsewhere is the default,          -->
@@ -1445,6 +1464,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%&#xa;</xsl:text>
     <xsl:text>\end{center}&#xa;</xsl:text>
 </xsl:template>
+
+<!-- General line of a dedication -->
+<xsl:template match="dedication/p/line">
+    <xsl:apply-templates />
+    <!-- is there a next line to separate? -->
+    <xsl:if test="following-sibling::*">
+        <xsl:text>\\</xsl:text>
+    </xsl:if>
+    <!-- always format source visually -->
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- Author biography migrates to the obverse of the   -->
 <!-- copyright page in LaTeX, sans any provided title. -->
@@ -1469,12 +1500,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Stretchy vertical space if page 1 does not fill -->
     <xsl:text>\vspace*{\stretch{1}}&#xa;%&#xa;</xsl:text>
     <!-- Sender's address, sans name typically -->
-    <!-- and if not already on letterhead -->
+    <!-- and if not already on letterhead      -->
+    <!-- Structured as lines, always           -->
     <!-- http://tex.stackexchange.com/questions/13542/flush-a-left-flushed-box-right -->
     <xsl:if test="from or date">
         <xsl:text>\hfill\begin{tabular}{l@{}}&#xa;</xsl:text>
         <xsl:if test="from">
-            <xsl:apply-templates select="from" />
+            <xsl:apply-templates select="from/line" />
             <xsl:if test="date">
                 <!-- end from -->
                 <xsl:text>\\&#xa;</xsl:text>
@@ -1489,9 +1521,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>&#xa;\end{tabular}\\\par&#xa;</xsl:text>
     </xsl:if>
     <!-- Destination address, flush left -->
+    <!-- Structured as lines, always     -->
     <xsl:if test="to">
         <xsl:text>\noindent{}</xsl:text>
-        <xsl:apply-templates select="to" />
+        <xsl:apply-templates select="to/line" />
         <xsl:text>\\\par</xsl:text>
         <!-- extra comment line before salutation/body -->
         <xsl:text>&#xa;%&#xa;</xsl:text>
@@ -1503,6 +1536,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="salutation" />
         <xsl:text>\\\par</xsl:text>
         <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- Final lines of from/to address get treated carefully above -->
+<xsl:template match="from/line|to/line">
+    <xsl:apply-templates />
+    <!-- is there a following line to separate? -->
+    <xsl:if test="following-sibling::*">
+        <xsl:text>\\&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 
@@ -1733,11 +1775,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\parbox[t]{0.65\textwidth}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:if test="department">
-        <xsl:value-of select="department" />
+        <xsl:apply-templates select="department" />
         <xsl:text>\\</xsl:text>
     </xsl:if>
     <xsl:if test="institution">
-        <xsl:value-of select="institution" />
+        <xsl:apply-templates select="institution" />
         <xsl:text>\\</xsl:text>
     </xsl:if>
     <xsl:text>}</xsl:text>
@@ -1777,13 +1819,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>\\[5.5ex]&#xa;</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
-        <xsl:apply-templates select="signature" />
+        <xsl:apply-templates select="signature/line" />
         <xsl:text>&#xa;\end{tabular}&#xa;</xsl:text>
         <xsl:text>\hspace{\stretch{1}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Stretchy vertical space, useful if still on page 1 -->
     <xsl:text>\par\vspace*{\stretch{2}}&#xa;%&#xa;</xsl:text>
 </xsl:template>
+
+<!-- Final line of signature get treated carefully above -->
+<xsl:template match="signature/line">
+    <xsl:apply-templates />
+    <!-- is there a following line to separate? -->
+    <xsl:if test="following-sibling::*">
+        <xsl:text>\\&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- ################## -->
 <!-- Back Matter, Memos -->
@@ -2304,17 +2356,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="varname" select="@name" />
     <xsl:choose>
-        <xsl:when test="$problem/setup/var[@name=$varname]/elements">
-        <xsl:for-each select="$problem/setup/var[@name=$varname]/elements/element[@correct='yes']">
+        <xsl:when test="$problem/setup/var[@name=$varname]/set">
+        <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member[@correct='yes']">
             <xsl:apply-templates select='.' />
             <xsl:choose>
-                <xsl:when test="count(following-sibling::element[@correct='yes']) &gt; 1">
+                <xsl:when test="count(following-sibling::member[@correct='yes']) &gt; 1">
                     <xsl:text>, </xsl:text>
                 </xsl:when>
-                <xsl:when test="(count(following-sibling::element[@correct='yes']) = 1) and preceding-sibling::element[@correct='yes']">
+                <xsl:when test="(count(following-sibling::member[@correct='yes']) = 1) and preceding-sibling::member[@correct='yes']">
                     <xsl:text>, and </xsl:text>
                 </xsl:when>
-                <xsl:when test="(count(following-sibling::element[@correct='yes']) = 1) and not(preceding-sibling::element[@correct='yes'])">
+                <xsl:when test="(count(following-sibling::member[@correct='yes']) = 1) and not(preceding-sibling::member[@correct='yes'])">
                     <xsl:text> and </xsl:text>
                 </xsl:when>
             </xsl:choose>
@@ -2328,11 +2380,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- PGML answer blank               -->
 <!-- Example: [_____]{$ans}          -->
-<xsl:template match="webwork//statement//answer">
+<xsl:template match="webwork//statement//var[@width|@form]">
     <xsl:variable name="problem" select="ancestor::webwork" />
-    <xsl:variable name="varname" select="@var" />
+    <xsl:variable name="varname" select="@name" />
     <xsl:choose>
-        <xsl:when test="@format='popup'" >
+        <xsl:when test="@form='popup'" >
             <xsl:text>(Choose one: </xsl:text>
             <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
                 <xsl:apply-templates select='.' />
@@ -2351,7 +2403,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>)</xsl:text>
         </xsl:when>
         <!-- TODO: make semantic list style in preamble -->
-        <xsl:when test="@format='buttons'" >
+        <xsl:when test="@form='buttons'" >
             <xsl:text>\par&#xa;</xsl:text>
             <xsl:text>\begin{itemize}[label=$\odot$,leftmargin=3em,]&#xa;</xsl:text>
             <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
@@ -2361,7 +2413,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:for-each>
             <xsl:text>\end{itemize}&#xa;</xsl:text>
         </xsl:when>
-        <xsl:when test="@format='checkboxes'" >
+        <xsl:when test="@form='checkboxes'" >
             <xsl:text>\par&#xa;</xsl:text>
             <xsl:text>\begin{itemize}[label=$\square$,leftmargin=3em,]&#xa;</xsl:text>
             <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
@@ -2390,7 +2442,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- An essay answer has no variable associated with the textbox,  -->
 <!-- so we simply indicate that this problem has an essay answer   -->
-<xsl:template match="webwork//answer[@format='essay']">
+<xsl:template match="webwork//var[@form='essay']">
     <xsl:text>\quad\lbrack Essay Answer\rbrack</xsl:text>
 </xsl:template>
 
@@ -3018,27 +3070,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{quote}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Use at the end of a blockquote        -->
-<!-- Single line, preceded by a dash       -->
-<!-- A list of paragraphs inside the       -->
-<!-- blockquote should not end with a \par -->
-<xsl:template match="blockquote/attribution">
-    <xsl:text>\par\hspace*{\stretch{1}}\textemdash\space{}</xsl:text>
-    <xsl:text>\textsl{</xsl:text>
+<!-- ############ -->
+<!-- Attributions -->
+<!-- ############ -->
+
+<!-- At end of: blockquote, preface, foreword       -->
+<!-- free-form for one line, or structured as lines -->
+<!-- LaTeX lacks a quotation dash, emdash instead   -->
+
+<!-- Single line, mixed-content                     -->
+<!-- Quotation dash if within blockquote            -->
+<!-- A table, pushed right, with left-justification -->
+<xsl:template match="attribution">
+    <xsl:text>\par\hfill\begin{tabular}{l@{}}&#xa;</xsl:text>
+    <xsl:if test="parent::blockquote">
+        <xsl:text>\textemdash{}</xsl:text>
+    </xsl:if>
     <xsl:apply-templates />
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>\end{tabular}\\\par&#xa;</xsl:text>
 </xsl:template>
 
-<!-- General-purpose attribution                           -->
-<!-- At end of a preface or foreword, perhaps              -->
-<!-- A table, pushed right, with left-justification        -->
-<!-- <br> is overridden to be double-slash for tabular row -->
-<xsl:template match="attribution">
-    <xsl:text>\par\vspace{\baselineskip}&#xa;</xsl:text>
-    <xsl:text>\hfill\begin{tabular}{l@{}}&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>&#xa;\end{tabular}\\\par&#xa;</xsl:text>
+<!-- Multiple lines, structured by lines -->
+<xsl:template match="attribution[line]">
+    <xsl:text>\par\hfill\begin{tabular}{l@{}}&#xa;</xsl:text>
+    <xsl:apply-templates select="line" />
+    <xsl:text>\end{tabular}\\\par&#xa;</xsl:text>
 </xsl:template>
+
+<!-- General line of an attribution -->
+<xsl:template match="attribution/line">
+    <xsl:if test="parent::attribution/parent::blockquote and not(preceding-sibling::*)">
+        <xsl:text>\textemdash{}</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates />
+    <!-- is there a next line to separate? -->
+    <xsl:if test="following-sibling::*">
+        <xsl:text>\\</xsl:text>
+    </xsl:if>
+    <!-- always format source visually -->
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- Emphasis -->
 <xsl:template match="em">
@@ -3441,24 +3514,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\textit{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
-</xsl:template>
-
-<!-- Line Breaks -->
-<!-- \newline works best in table cells in paragraph mode       -->
-<!-- so as to not be confused with \\ at the end of a table row -->
-<!-- but \\ is definitely better for multi-line main titles     -->
-<!-- Use sparingly, e.g. for poetry, *not* in math environments -->
-<!-- Must be in TeX's paragraph mode                            -->
-<xsl:template match="br">
-    <xsl:text>\newline{}</xsl:text>
-</xsl:template>
-<xsl:template match="title/br|subtitle/br|dedication/p/br|attribution/br">
-    <xsl:text>\\</xsl:text>
-</xsl:template>
-<!-- Letters and memos use tabular to layout some blocks -->
-<!-- these need a double-slash to cause a newline        -->
-<xsl:template match="letter/frontmatter/from/br|letter/backmatter/signature/br">
-    <xsl:text>\\</xsl:text>
 </xsl:template>
 
 <!-- Non-breaking space, which "joins" two words as a unit -->
@@ -4889,12 +4944,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The last line of a stanza gets marked specially -->
 <!-- Other lines are more normal                     -->
-<xsl:template match="line">
+<xsl:template match="stanza/line">
     <xsl:apply-templates />
     <xsl:text>\\&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="line[not(following-sibling::*)]">
+<!-- Special line ending gives new stanza -->
+<xsl:template match="stanza/line[not(following-sibling::*)]">
     <xsl:apply-templates />
     <xsl:text>\\!&#xa;</xsl:text>
 </xsl:template>
