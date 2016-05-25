@@ -2356,17 +2356,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="varname" select="@name" />
     <xsl:choose>
-        <xsl:when test="$problem/setup/var[@name=$varname]/elements">
-        <xsl:for-each select="$problem/setup/var[@name=$varname]/elements/element[@correct='yes']">
+        <xsl:when test="$problem/setup/var[@name=$varname]/set">
+        <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member[@correct='yes']">
             <xsl:apply-templates select='.' />
             <xsl:choose>
-                <xsl:when test="count(following-sibling::element[@correct='yes']) &gt; 1">
+                <xsl:when test="count(following-sibling::member[@correct='yes']) &gt; 1">
                     <xsl:text>, </xsl:text>
                 </xsl:when>
-                <xsl:when test="(count(following-sibling::element[@correct='yes']) = 1) and preceding-sibling::element[@correct='yes']">
+                <xsl:when test="(count(following-sibling::member[@correct='yes']) = 1) and preceding-sibling::member[@correct='yes']">
                     <xsl:text>, and </xsl:text>
                 </xsl:when>
-                <xsl:when test="(count(following-sibling::element[@correct='yes']) = 1) and not(preceding-sibling::element[@correct='yes'])">
+                <xsl:when test="(count(following-sibling::member[@correct='yes']) = 1) and not(preceding-sibling::member[@correct='yes'])">
                     <xsl:text> and </xsl:text>
                 </xsl:when>
             </xsl:choose>
@@ -2380,11 +2380,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- PGML answer blank               -->
 <!-- Example: [_____]{$ans}          -->
-<xsl:template match="webwork//statement//answer">
+<xsl:template match="webwork//statement//var[@width|@form]">
     <xsl:variable name="problem" select="ancestor::webwork" />
-    <xsl:variable name="varname" select="@var" />
+    <xsl:variable name="varname" select="@name" />
     <xsl:choose>
-        <xsl:when test="@format='popup'" >
+        <xsl:when test="@form='popup'" >
             <xsl:text>(Choose one: </xsl:text>
             <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
                 <xsl:apply-templates select='.' />
@@ -2403,7 +2403,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>)</xsl:text>
         </xsl:when>
         <!-- TODO: make semantic list style in preamble -->
-        <xsl:when test="@format='buttons'" >
+        <xsl:when test="@form='buttons'" >
             <xsl:text>\par&#xa;</xsl:text>
             <xsl:text>\begin{itemize}[label=$\odot$,leftmargin=3em,]&#xa;</xsl:text>
             <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
@@ -2413,7 +2413,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:for-each>
             <xsl:text>\end{itemize}&#xa;</xsl:text>
         </xsl:when>
-        <xsl:when test="@format='checkboxes'" >
+        <xsl:when test="@form='checkboxes'" >
             <xsl:text>\par&#xa;</xsl:text>
             <xsl:text>\begin{itemize}[label=$\square$,leftmargin=3em,]&#xa;</xsl:text>
             <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
@@ -2442,7 +2442,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- An essay answer has no variable associated with the textbox,  -->
 <!-- so we simply indicate that this problem has an essay answer   -->
-<xsl:template match="webwork//answer[@format='essay']">
+<xsl:template match="webwork//var[@form='essay']">
     <xsl:text>\quad\lbrack Essay Answer\rbrack</xsl:text>
 </xsl:template>
 

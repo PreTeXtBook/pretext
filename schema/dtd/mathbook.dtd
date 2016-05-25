@@ -54,9 +54,9 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- Sentences, Paragraph Content -->
 <!-- Elements that can be contained in a typical paragraph    -->
 <!-- Everything that is title material, plus more (eg me)     -->
-<!-- var and answer are exclusive to "p" in a WeBWorK problem -->
+<!-- var is exclusive to "p" in a WeBWorK problem             -->
 <!-- Precede by a #PCDATA, wrap with ( )*                     -->
-<!ENTITY % sentence "%linear;|me|men|md|mdn|fn|index|notation|var|answer">
+<!ENTITY % sentence "%linear;|me|men|md|mdn|fn|index|notation|var">
 
 <!-- Paragraphs -->
 <!-- Elements that can mix anywhere with a paragraph, -->
@@ -297,7 +297,6 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST row left          (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST row halign        (left|center|right)        #IMPLIED>
 
-<!-- answer is just for WW problems -->
 <!ELEMENT cell    (#PCDATA|%sentence;)*>
     <!ATTLIST cell bottom       (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST cell right        (none|minor|medium|major)  #IMPLIED>
@@ -496,7 +495,6 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST hint xml:id ID #IMPLIED>
 <!ELEMENT answer   (%para;)*>
     <!ATTLIST answer xml:id ID #IMPLIED>
-    <!-- see other attributes for WW answer blanks -->
 <!ELEMENT solution (%para;)*>
     <!ATTLIST solution xml:id ID #IMPLIED>
 
@@ -518,21 +516,15 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!ELEMENT var (static?|set?)>
     <!ATTLIST var name       CDATA #IMPLIED>
     <!ATTLIST var category   CDATA #IMPLIED>
+    <!ATTLIST var form       CDATA #IMPLIED>
+    <!ATTLIST var evaluator  CDATA #IMPLIED>
+    <!ATTLIST var width      CDATA #IMPLIED>
 <!ELEMENT static (#PCDATA)>
 <!ELEMENT set (member+)>
 <!ELEMENT member (#PCDATA)>
     <!ATTLIST member correct   (yes|no)  #IMPLIED>
 
 <!ELEMENT pg-code (#PCDATA)>
-
-<!-- <!ELEMENT answer EMPTY> defined above for generic exercise -->
-<!-- attributes here are WW-specific     -->
-<!-- TODO: warn on content in WW answer? -->
-    <!ATTLIST answer var          CDATA #IMPLIED>
-    <!ATTLIST answer form         CDATA #IMPLIED>
-    <!ATTLIST answer evaluator    CDATA #IMPLIED>
-    <!ATTLIST answer width        CDATA #IMPLIED>
-
 
 <!-- Video -->
 <!ELEMENT video  EMPTY>
