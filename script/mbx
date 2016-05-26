@@ -771,12 +771,12 @@ def get_cli_arguments():
     parser.add_argument('-v', '--verbose', help=verbose_help, action="count")
 
     component_info = [
-        ('tikz', 'tikz pictures'),
         ('asy', 'Asymptote diagrams'),
         ('sageplot', 'Sage graphics'),
         ('latex-image', 'LaTeX pictures'),
         ('webwork-tex', 'WeBWorK server problems as LaTeX'),
-        ('all', 'Complete document'),
+        ('all', 'Complete document (only SageNB format)'),
+        ('tikz', 'tikz pictures (obsolete)'),
     ]
     component_help = 'Possible components are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in component_info])
     parser.add_argument('-c', '--component', help=component_help, action="store", dest="component")
