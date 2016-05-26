@@ -242,11 +242,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- parameterize preamble template with "page-geometry" template conditioned on self::article etc -->
     <xsl:call-template name="title-page-info-article" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
-    <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <!-- If no frontmatter/titlepage, then title is not printed       -->
     <!-- so we make sure it happens here, else triggered by titlepage -->
+    <!-- If a title, we know it is page 1, so use empty style -->
     <xsl:if test="title and not(frontmatter/titlepage)">
         <xsl:text>\maketitle&#xa;</xsl:text>
+        <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     </xsl:if>
     <xsl:copy-of select="$content" />
    <xsl:text>\end{document}</xsl:text>
@@ -1342,6 +1343,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: it is possible for there to be no article/title               -->
 <xsl:template match="article/frontmatter/titlepage">
     <xsl:text>\maketitle&#xa;</xsl:text>
+    <!-- If a title, we know it is page 1, so use empty style -->
+    <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Articles may have an abstract in the frontmatter -->
