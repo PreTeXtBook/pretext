@@ -2824,17 +2824,23 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         <xsl:value-of select="$prefix" />
         <xsl:apply-templates select="." mode="nbsp"/>
     </xsl:if>
+    <!-- first link, number only                    -->
     <!-- optionally wrap with parentheses, brackets -->
     <xsl:apply-templates select="$target-first" mode="xref-wrap">
         <xsl:with-param name="content">
-            <!-- first link, number only -->
             <xsl:apply-templates select="$target-first" mode="xref-link">
                 <xsl:with-param name="content">
                     <xsl:apply-templates select="$target-first" mode="xref-number" />
                 </xsl:with-param>
             </xsl:apply-templates>
-            <xsl:apply-templates select="." mode="ndash"/>
-            <!-- second link, number only -->
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <!-- ndash as separator -->
+    <xsl:apply-templates select="." mode="ndash"/>
+    <!-- second link, number only                   -->
+    <!-- optionally wrap with parentheses, brackets -->
+    <xsl:apply-templates select="$target-first" mode="xref-wrap">
+        <xsl:with-param name="content">
             <xsl:apply-templates select="$target-last" mode="xref-link">
                 <xsl:with-param name="content">
                     <xsl:apply-templates select="$target-last" mode="xref-number" />

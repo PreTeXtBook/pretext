@@ -2639,6 +2639,7 @@ the xsltproc executable.
                 <li><p>A range of equations: <xref first="equation-alternate-FTC" last="equation-use-FTC" /></p></li>
                 <li><p>A system of equations, given as range from first to last: <xref first="equation-system-begin" last="equation-system-end" /></p></li>
                 <li><p>A range of sections, hand-named to be plural: Sections<nbsp /><xref first="section-sage-cells" last="section-cross-referencing" /></p></li>
+                <li><p>A range of bibliographic items: <xref first="biblio-judson-AATA" last="biblio-lay-article" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul>
 
