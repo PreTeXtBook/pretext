@@ -242,11 +242,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- parameterize preamble template with "page-geometry" template conditioned on self::article etc -->
     <xsl:call-template name="title-page-info-article" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
-    <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <!-- If no frontmatter/titlepage, then title is not printed       -->
     <!-- so we make sure it happens here, else triggered by titlepage -->
+    <!-- If a title, we know it is page 1, so use empty style -->
     <xsl:if test="title and not(frontmatter/titlepage)">
         <xsl:text>\maketitle&#xa;</xsl:text>
+        <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     </xsl:if>
     <xsl:copy-of select="$content" />
    <xsl:text>\end{document}</xsl:text>
@@ -1342,6 +1343,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: it is possible for there to be no article/title               -->
 <xsl:template match="article/frontmatter/titlepage">
     <xsl:text>\maketitle&#xa;</xsl:text>
+    <!-- If a title, we know it is page 1, so use empty style -->
+    <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Articles may have an abstract in the frontmatter -->
@@ -3533,6 +3536,55 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="hyphen">
     <xsl:text>-</xsl:text>
 </xsl:template>
+
+
+<!-- Single and Double Quote Groupings -->
+<!-- LaTeX is a bit brain-dead when a single quote        -->
+<!-- is up tight against a double quote, or vice-versa,   -->
+<!-- as the three consecutive single-quote characters are -->
+<!-- ambiguous.  So we protect single quotes anytime it   -->
+<!-- could be dangerous, even if precedence might do the  -->
+<!-- right thing.  Double quotes are unmolested since     -->
+<!-- they will work fine even in consecutive runs         -->
+<!-- We have to override the RTF routines here.           -->
+
+<xsl:template match="q">
+    <xsl:text>``</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>''</xsl:text>
+</xsl:template>
+
+<!-- We look left (up the tree) and right   -->
+<!-- (down the tree) for adjacent groupings -->
+<xsl:template match="sq">
+    <xsl:choose>
+        <!-- left quote, possibly protected in a group -->
+        <xsl:when test="(parent::q or parent::sq) and not(preceding-sibling::*) and not(preceding-sibling::text())">
+            <xsl:text>{`}</xsl:text>
+        </xsl:when>
+        <xsl:when test="child::node()[not(self::comment()) and not(self::processing-instruction())][1][self::q or self::sq]">
+            <xsl:text>{`}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>`</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- content -->
+    <xsl:apply-templates />
+    <!-- right quote, possibly protected in a group -->
+    <xsl:choose>
+        <xsl:when test="(parent::q or parent::sq) and not(following-sibling::*) and not(following-sibling::text())">
+            <xsl:text>{'}</xsl:text>
+        </xsl:when>
+        <xsl:when test="child::node()[not(self::comment()) and not(self::processing-instruction())][last()][self::q or self::sq]">
+            <xsl:text>{'}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>'</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- Titles of Books and Articles -->
 <xsl:template match="booktitle">

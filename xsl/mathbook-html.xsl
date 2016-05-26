@@ -498,7 +498,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- so we hide it with a class specification  -->
 <!-- We also hide it at lower levels, parallel -->
 <!-- to default LaTeX style behavior           -->
-<xsl:template match="book|article|subsection|subsubsection|exercises[ancestor::section]|references[ancestor::section]" mode="section-header">
+<!-- Only "chapter" ever gets shown            -->
+<xsl:template match="book|article|section|subsection|subsubsection|appendix|exercises|references|index-part" mode="section-header">
     <header>
         <h1 class="heading hide-type">
             <xsl:apply-templates select="." mode="header-content" />
