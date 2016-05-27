@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file is part of the documentation of MathBook XML   -->
+<!--                                                          -->
+<!--    MathBook XML Author's Guide                           -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="schema">
+    <title>MathBook XML Syntax Specification</title>
+    <author>
+        <personname>Mitchel T. Keller</personname>
+        <department>Department of Mathematics</department>
+        <institution>
+            <line>Department of Mathematics</line>
+            <line>Washington and Lee University</line>
+        </institution>
+        <email>kellermt@wlu.edu</email>
+    </author>
+
+    <introduction>
+        <p>This MathBook XML Author's Guide, along with the sample article and sample book distributed with the MathBook XML source, provide a wealth of examples of how to author in MathBook XML. However, at some point, you will undoubtedly encounter a situation where some of your text fails to appear in your output or <c>xsltproc</c> produces an error. Those are good moments to start investigating the formal specifcations of MathBook XML syntax, as most likely you tried to use something in a way incompatible with those specifications. This chapter will help you with the basics of reading these specifications.</p>
+    </introduction>
+
+    <section xml:id="schema-dtd">
+        <title>Document Type Definition (DTD)</title>
+        <introduction>
+            <p>A <term>document type definition</term> (usually abbreviated as <term>DTD</term>) is a way of specifying the formal structure of an XML document, such as a MathBook XML file. It describes things such as the elements (tags) that are defined, where they may be placed relative to one another, and attributes that may be applied. DTDs were developed early in the evolution of XML, and thus they are widely supported. However, they have some limitations. In particular, there are some subtelties to MathBook XML that a DTD cannot capture, so RAB intends to eventually produce a Relax NG schema (see <xref autoname="yes" ref="schema-rng" />) that will cover these cases. Until then, we've got the DTD.</p>
+        </introduction>
+        <subsection>
+            <title>Finding the DTD</title>
+            <p>The MathBook XML distribution contains the DTD in the <c>schema/dtd</c> directory. However, as a plain text file, it's rather hard to read. Thus, we suggest that you take a look at the <url href="http://mathbook.pugetsound.edu/doc/dtd/">version on the MathBook XML website</url> that's displayed using LiveDTD, since it provides some nice clickable features. The version you get with the MathBook XML distribution is useful, however, as you can run the program <c>xmllint</c> to check your MathBook XML file for validity. See the <xref autoname="yes" ref="processing-dtd" /> for more information.</p>
+        </subsection>
+
+        <subsection>
+            <title>Reading the DTD</title>
+            <p>Let's start by taking a look at how the DTD specifies the definition of a section, which is included below, but if you'd like a more interactive version of it, go to the <url href="http://mathbook.pugetsound.edu/doc/dtd/">LiveDTD version of the DTD</url>, scroll down to section in the left panel, and click on it.</p>
+            <program language="xml">
+                <input><![CDATA[
+                <!ELEMENT section (title, index*, author*, (((%block;|references|exercises)*)|(introduction?, subsection,(subsection|references|exercises)*,conclusion?))) >
+                    <!ATTLIST section xml:id   ID       #IMPLIED>
+                    <!ATTLIST section xml:base CDATA    #IMPLIED>
+                    <!ATTLIST section xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">]]>
+                </input>
+            </program>
+            <p>We'll start with the first line. It starts off by telling us that we're defining an element called <c>section</c>, and everything from there to the end of the line tells us the composition of a section. First we see <c>title, index*, author*,</c>. This is telling us that the section <em>must</em> have a title, and <c>&lt;title&gt;</c> <em>must</em> come immediately after <c>&lt;section&gt;</c>. The <c>*</c> on <c>index</c> and <c>author</c> mean that the section title may be followed by zero or more <c>&lt;index&gt;</c> tags and zero or more <c>&lt;author&gt;</c> tags. If you look at the source code for this chapter (which has a definition that begins identically to that for section), you'll see that I (MTK) added an author tag to claim responsibility for any mistakes in this chapter for the time being. However, RAB did not put author tags in the other chapters, since he wrote them all, and so the overall author tag covers that.</p>
+            <p>The next section of the specification of <c>section</c> is where things get interesting. Carefully examining the parentheses, you'll see that there are two groupings separated by <c>|</c>. This means that what comes after the title, index, and author must take one of two forms: <c>(%block;|references|exercises)*</c> or <c>introduction?, subsection,(subsection|references|exercises)*,conclusion?</c>.  The <c>*</c> on the first option tells us that we may have zero or more occurrences of what comes inside the parentheses. Thus, we could go straight to a <c>&lt;/section&gt;</c> tag, which might be a good idea when outlining a document before you start writing. However, assuming you want a positive number of the things in the parentheses, this part of the specification allows you to jumble up  <c>%block;</c>s (whatever they are), <c>&lt;references&gt;</c> tags, and <c>&lt;exercises&gt;</c> tags to your hearts content. What's a <c>%block;</c>? If you click on the link the Live DTD, it will jump you to the definition of the block entity, and you'll see that the things usuable here include theorem, corollary, fact, definition, exercise, etc. But there's also another mysterious thing beginning with a <percent />: <c>%para;</c>. One quick click jumps us up and shows us that <c>%para;</c> is shorthand for <c>p</c>, the various lists, and a number of other things including <c>figure</c> and <c>table</c>. Thus, you can shove lots and lots of things inside a <c>section</c>. However, there are some things <em>not</em> encapsulated by <c>(%block;|references|exercises)*</c>. For instance, it wouldn't make sense to put a <c>chapter</c> inside a <c>section</c>, so that's not allowed. On the other hand, a <c>subsection</c> inside a <c>subsection</c> makes perfect sense. To see how we can do that, we need to look at the second part of the specification of <c>section</c>. </p>
+            <p>
+            </p>
+        </subsection>
+    </section>
+
+    <section xml:id="schema-rng">
+        <title>(*) Relax NG</title>
+        <p>This will get written once we have a Relax NG schema for MathBook XML other than the one <c>trang</c> automatically generates for us from the DTD.</p>
+    </section>
+
+
+    <!--
+    <section xml:id="topic-">
+        <title></title>
+
+    </section>
+
+   -->
+
+</chapter>
