@@ -952,7 +952,17 @@ the xsltproc executable.
 
                 <p>I must stand with anybody that stands right, and stand with him while he is right, and part with him when he goes wrong.<rq /></p>
 
-                <p>And as a test, <q>we use <sq>single quotes inside of double quotes,</sq></q> which <latex /> gets wrong.  An ugly remedy is to insert a space, <q>we use <sq>single quotes inside of double quotes.</sq> </q></p>
+                <p>And as a tests, we try some crazy combinations of quotes, which would normally give <latex /> some trouble where the quotation marks are adjacent.</p>
+                <ul>
+                    <li><p><q>we use <sq>single quotes inside of double quotes</sq></q></p></li>
+                    <li><p><sq><q>double quotes inside of single quotes</q> with more</sq></p></li>
+                    <li><p><q><sq>single quotes tight inside of double quotes</sq></q></p></li>
+                    <li><p><sq><q>double quotes tight inside of single quotes</q></sq></p></li>
+                    <li><p>An <q><sq><sq><q>absurd test</q></sq></sq></q> of two adjacent single quotes inside a pair of double quotes</p></li>
+                    <li><p>you would never do this, but a <sq><sq>pair of single quotes</sq></sq></p></li>
+                </ul>
+
+                <p><abbr>N.B.</abbr> We have taken no special care to protect against interactions of the actual quote characters (described above) in <latex /> with themselves, or with the grouping tags.</p>
             </subsection>
 
             <subsection>
@@ -2629,6 +2639,7 @@ the xsltproc executable.
                 <li><p>A range of equations: <xref first="equation-alternate-FTC" last="equation-use-FTC" /></p></li>
                 <li><p>A system of equations, given as range from first to last: <xref first="equation-system-begin" last="equation-system-end" /></p></li>
                 <li><p>A range of sections, hand-named to be plural: Sections<nbsp /><xref first="section-sage-cells" last="section-cross-referencing" /></p></li>
+                <li><p>A range of bibliographic items: <xref first="biblio-judson-AATA" last="biblio-lay-article" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul>
 

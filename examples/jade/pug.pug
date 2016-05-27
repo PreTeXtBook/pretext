@@ -6,8 +6,8 @@ mathbook
         macros
             | \newcommand{\doubler}[1]{2#1}
 
-    article(xml:id="jade")
-        title Jade meets MathBook XML
+    article(xml:id="pug")
+        title Pug meets MathBook XML
 
         frontmatter
             titlepage
@@ -20,7 +20,7 @@ mathbook
             abstract
                 p.
                     This is a very short demo, how writing MathBook XML
-                    can be simplified by using Jade <xref ref="biblio-jade" />.
+                    can be simplified by using Pug <xref ref="biblio-pug" />.
 
         introduction
           p.
@@ -31,7 +31,7 @@ mathbook
               make the source of your documents look more like a tidy
               Python <xref ref="biblio-python"/> program.
           p.
-              Additionally, all this works well together with Jade's include statement,
+              Additionally, all this works well together with Pug's include statement,
               mixin <q>macros</q> and much more.
           p.
               ... and yes, inline XML tags do just <q>work</q>, too!
@@ -41,7 +41,7 @@ mathbook
 
             p.
                 This is just copied from the minimal demo.
-                The interesting thing to see here is the source of this in the <c>jade.jade</c> file.
+                The interesting thing to see here is the source of this in the <c>pug.pug</c> file.
 
             p.
                 Now a single paragraph inside a titled section of the article.
@@ -57,7 +57,7 @@ mathbook
 
                   p.
                     This is just copied from the minimal demo.
-                    The interesting thing to see here is the source of this in the &lt;c&gt;jade.jade&lt;/c&gt; file.
+                    The interesting thing to see here is the source of this in the &lt;c&gt;pug.pug&lt;/c&gt; file.
 
                   p.
                     Now a single paragraph inside a titled section of the article.
@@ -74,7 +74,7 @@ mathbook
                 | This paragraph has some inline math, a Diophantine equation, 
                 m x^2 + \doubler{y^2} = z^2
                 | , and some display math about infinite series: <me>\sum_{n=1}^\infty\,\frac{1}{n^2} = \frac{\pi^2}{6}.</me>
-                | Look at the Jade source to see how <latex /> macros are employed universally across all possible output formats.
+                | Look at the Pug source to see how <latex /> macros are employed universally across all possible output formats.
 
             p
                 | We could even write a formula
@@ -109,18 +109,18 @@ mathbook
                     | [ 0  0  0  0  0]
                     | [ 0  0  0  0  0]
 
-        section(xml:id="section-jade")
-            title Jade
+        section(xml:id="section-pug")
+            title Pug
 
             p.
-                Jade is a template engine for Node, see <xref ref="biblio-jade" />.
+                Pug is a template engine for Node, see <xref ref="biblio-pug" />.
 
-            include ./jade-include.jade
+            include ./pug-include.pug
 
         backmatter
             references
                 title References
-                biblio(type="raw" xml:id="biblio-jade").
-                    The magic behind all this is provided by the <url href="http://jade-lang.com/">Jade Template Engine</url>.
+                biblio(type="raw" xml:id="biblio-pug").
+                    The magic behind all this is provided by the <url href="http://pug-lang.com/">Pug Template Engine</url>.
                 biblio(type="raw" xml:id="biblio-python").
                     Python Programming Language.

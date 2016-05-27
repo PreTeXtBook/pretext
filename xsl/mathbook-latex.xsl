@@ -242,11 +242,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- parameterize preamble template with "page-geometry" template conditioned on self::article etc -->
     <xsl:call-template name="title-page-info-article" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
-    <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <!-- If no frontmatter/titlepage, then title is not printed       -->
     <!-- so we make sure it happens here, else triggered by titlepage -->
+    <!-- If a title, we know it is page 1, so use empty style -->
     <xsl:if test="title and not(frontmatter/titlepage)">
         <xsl:text>\maketitle&#xa;</xsl:text>
+        <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     </xsl:if>
     <xsl:copy-of select="$content" />
    <xsl:text>\end{document}</xsl:text>
@@ -1342,6 +1343,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: it is possible for there to be no article/title               -->
 <xsl:template match="article/frontmatter/titlepage">
     <xsl:text>\maketitle&#xa;</xsl:text>
+    <!-- If a title, we know it is page 1, so use empty style -->
+    <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Articles may have an abstract in the frontmatter -->
@@ -2356,17 +2359,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="varname" select="@name" />
     <xsl:choose>
-        <xsl:when test="$problem/setup/var[@name=$varname]/elements">
-        <xsl:for-each select="$problem/setup/var[@name=$varname]/elements/element[@correct='yes']">
+        <xsl:when test="$problem/setup/var[@name=$varname]/set">
+        <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member[@correct='yes']">
             <xsl:apply-templates select='.' />
             <xsl:choose>
-                <xsl:when test="count(following-sibling::element[@correct='yes']) &gt; 1">
+                <xsl:when test="count(following-sibling::member[@correct='yes']) &gt; 1">
                     <xsl:text>, </xsl:text>
                 </xsl:when>
-                <xsl:when test="(count(following-sibling::element[@correct='yes']) = 1) and preceding-sibling::element[@correct='yes']">
+                <xsl:when test="(count(following-sibling::member[@correct='yes']) = 1) and preceding-sibling::member[@correct='yes']">
                     <xsl:text>, and </xsl:text>
                 </xsl:when>
-                <xsl:when test="(count(following-sibling::element[@correct='yes']) = 1) and not(preceding-sibling::element[@correct='yes'])">
+                <xsl:when test="(count(following-sibling::member[@correct='yes']) = 1) and not(preceding-sibling::member[@correct='yes'])">
                     <xsl:text> and </xsl:text>
                 </xsl:when>
             </xsl:choose>
@@ -2380,11 +2383,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- PGML answer blank               -->
 <!-- Example: [_____]{$ans}          -->
-<xsl:template match="webwork//statement//answer">
+<xsl:template match="webwork//statement//var[@width|@form]">
     <xsl:variable name="problem" select="ancestor::webwork" />
-    <xsl:variable name="varname" select="@var" />
+    <xsl:variable name="varname" select="@name" />
     <xsl:choose>
-        <xsl:when test="@format='popup'" >
+        <xsl:when test="@form='popup'" >
             <xsl:text>(Choose one: </xsl:text>
             <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
                 <xsl:apply-templates select='.' />
@@ -2403,7 +2406,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>)</xsl:text>
         </xsl:when>
         <!-- TODO: make semantic list style in preamble -->
-        <xsl:when test="@format='buttons'" >
+        <xsl:when test="@form='buttons'" >
             <xsl:text>\par&#xa;</xsl:text>
             <xsl:text>\begin{itemize}[label=$\odot$,leftmargin=3em,]&#xa;</xsl:text>
             <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
@@ -2413,7 +2416,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:for-each>
             <xsl:text>\end{itemize}&#xa;</xsl:text>
         </xsl:when>
-        <xsl:when test="@format='checkboxes'" >
+        <xsl:when test="@form='checkboxes'" >
             <xsl:text>\par&#xa;</xsl:text>
             <xsl:text>\begin{itemize}[label=$\square$,leftmargin=3em,]&#xa;</xsl:text>
             <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
@@ -2442,7 +2445,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- An essay answer has no variable associated with the textbox,  -->
 <!-- so we simply indicate that this problem has an essay answer   -->
-<xsl:template match="webwork//answer[@format='essay']">
+<xsl:template match="webwork//var[@form='essay']">
     <xsl:text>\quad\lbrack Essay Answer\rbrack</xsl:text>
 </xsl:template>
 
@@ -3533,6 +3536,55 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="hyphen">
     <xsl:text>-</xsl:text>
 </xsl:template>
+
+
+<!-- Single and Double Quote Groupings -->
+<!-- LaTeX is a bit brain-dead when a single quote        -->
+<!-- is up tight against a double quote, or vice-versa,   -->
+<!-- as the three consecutive single-quote characters are -->
+<!-- ambiguous.  So we protect single quotes anytime it   -->
+<!-- could be dangerous, even if precedence might do the  -->
+<!-- right thing.  Double quotes are unmolested since     -->
+<!-- they will work fine even in consecutive runs         -->
+<!-- We have to override the RTF routines here.           -->
+
+<xsl:template match="q">
+    <xsl:text>``</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>''</xsl:text>
+</xsl:template>
+
+<!-- We look left (up the tree) and right   -->
+<!-- (down the tree) for adjacent groupings -->
+<xsl:template match="sq">
+    <xsl:choose>
+        <!-- left quote, possibly protected in a group -->
+        <xsl:when test="(parent::q or parent::sq) and not(preceding-sibling::*) and not(preceding-sibling::text())">
+            <xsl:text>{`}</xsl:text>
+        </xsl:when>
+        <xsl:when test="child::node()[not(self::comment()) and not(self::processing-instruction())][1][self::q or self::sq]">
+            <xsl:text>{`}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>`</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- content -->
+    <xsl:apply-templates />
+    <!-- right quote, possibly protected in a group -->
+    <xsl:choose>
+        <xsl:when test="(parent::q or parent::sq) and not(following-sibling::*) and not(following-sibling::text())">
+            <xsl:text>{'}</xsl:text>
+        </xsl:when>
+        <xsl:when test="child::node()[not(self::comment()) and not(self::processing-instruction())][last()][self::q or self::sq]">
+            <xsl:text>{'}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>'</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- Titles of Books and Articles -->
 <xsl:template match="booktitle">

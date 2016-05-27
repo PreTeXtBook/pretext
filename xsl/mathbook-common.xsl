@@ -29,14 +29,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For example, writing a program that uses several chunks  -->
 <!-- of code from this book does not require permission."     -->
 
-
-<!-- XSLT Cookbook, 2nd Edition                                     -->
-<!-- Copyright 2006, O'Reilly Media, Inc.                           -->
-<!-- Declaration and entity definition format from Recipe 2.8       -->
-<!-- Unicode strings from http://stackoverflow.com/questions/586231 -->
+<!-- http://pimpmyxslt.com/articles/entity-tricks-part2/ -->
 <!DOCTYPE xsl:stylesheet [
-     <!ENTITY UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ">
-     <!ENTITY LOWERCASE "abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ">
+    <!ENTITY % entities SYSTEM "entities.ent">
+    %entities;
 ]>
 
 <!-- Identify as a stylesheet -->
@@ -1517,7 +1513,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- Some items have default titles that make sense         -->
 <!-- Typically these are one-off subdivisions (eg preface), -->
 <!-- or repeated generic divisions (eg exercises)           -->
-<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter" mode="has-default-title">
+<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter|index-part" mode="has-default-title">
     <xsl:text>true</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="has-default-title">
@@ -2828,17 +2824,23 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         <xsl:value-of select="$prefix" />
         <xsl:apply-templates select="." mode="nbsp"/>
     </xsl:if>
+    <!-- first link, number only                    -->
     <!-- optionally wrap with parentheses, brackets -->
     <xsl:apply-templates select="$target-first" mode="xref-wrap">
         <xsl:with-param name="content">
-            <!-- first link, number only -->
             <xsl:apply-templates select="$target-first" mode="xref-link">
                 <xsl:with-param name="content">
                     <xsl:apply-templates select="$target-first" mode="xref-number" />
                 </xsl:with-param>
             </xsl:apply-templates>
-            <xsl:apply-templates select="." mode="ndash"/>
-            <!-- second link, number only -->
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <!-- ndash as separator -->
+    <xsl:apply-templates select="." mode="ndash"/>
+    <!-- second link, number only                   -->
+    <!-- optionally wrap with parentheses, brackets -->
+    <xsl:apply-templates select="$target-first" mode="xref-wrap">
+        <xsl:with-param name="content">
             <xsl:apply-templates select="$target-last" mode="xref-link">
                 <xsl:with-param name="content">
                     <xsl:apply-templates select="$target-last" mode="xref-number" />
