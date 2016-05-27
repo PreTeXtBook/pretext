@@ -71,7 +71,7 @@ chapter(xml:id="windows-install-notes")
 
             p.
                 An appallingly large fraction of the difficulties of using
-                Linux-based utilities with Windows come from the
+                GNU/Linux-based utilities with Windows come from the
                 differences in formatting path names. Windows path names
                 begin with a drive letter (usually <q>C</q>) and a colon.
                 Like all path names, they describe a path in a rooted tree.
@@ -124,14 +124,14 @@ chapter(xml:id="windows-install-notes")
                     <c>examples</c> and <c>sample-article</c> subdirectories,
                     and find the file <c>sample-article.xml</c>.
             p.
-                Path names that contain spaces are <term>evil</term>, and should
-                be avoided in many cases. Unfortunately, all Windows default program
-                installation locations contain at least one space (directory name
-                <q>Program Files</q>). This does not appear to cause problems, except
-                when installing ImageMagick 
-                (<xref ref="installing-imagemagick" autoname="yes"/>). To be extra careful,
-                you could always choose an installation location that is free of space
-                characters. 
+                Path names that contain spaces are <term>evil</term>, and
+                should be avoided in many cases. Unfortunately, all Windows
+                default program installation locations contain at least one
+                space (directory name <q>Program Files</q>). This does not
+                appear to cause problems, except when installing ImageMagick
+                (<xref ref="installing-imagemagick" autoname="yes"/>). To be
+                extra careful, you could always choose an installation location
+                that is free of space characters.
         
         subsection(xml:id="do-i-have-64-bit-windows")
             title Do I have 64-bit Windows?
@@ -165,7 +165,7 @@ chapter(xml:id="windows-install-notes")
                 zip archives from <url href="ftp://ftp.zlatkovic.com/libxml/">
                 Igor Zlatkovic's FTP site</url> that hosts the most recent 
                 Libxml binaries for Windows. At the time of this writing, the 
-                64-bit binaries are considered experimental. I have had no 
+                64-bit binaries were considered experimental. I have had no 
                 trouble using the 32-bit binaries on my 64-bit Windows 7 
                 system, so I suggest that all MBX users download the most 
                 recent 32-bit version of the following libraries:
@@ -199,23 +199,23 @@ chapter(xml:id="windows-install-notes")
             ol(xml:id="list-extracted-files-from-zips-xsltproc")
                 li: p From <c>iconv-*.win32.zip</c>:
                     ol
-                        li: pre iconv-*.win32\bin\iconv.dll
+                        li: p: pre iconv-*.win32\bin\iconv.dll
                 li: p From <c>libxml2-*.win32.zip</c>:
                     ol
-                        li: pre libxml2-*.win32\bin\libxml2.dll
-                        li: pre libxml2-*.win32\bin\xmllint.exe
+                        li: p: pre libxml2-*.win32\bin\libxml2.dll
+                        li: p: pre libxml2-*.win32\bin\xmllint.exe
                 li: p From <c>libxslt-*.win32.zip</c>:
                     ol
-                        li: pre libxslt-*.win32\bin\libexslt.dll
-                        li: pre libxslt-*.win32\bin\libxslt.dll
-                        li: pre libxslt-*.win32\bin\xsltproc.exe
+                        li: p: pre libxslt-*.win32\bin\libexslt.dll
+                        li: p: pre libxslt-*.win32\bin\libxslt.dll
+                        li: p: pre libxslt-*.win32\bin\xsltproc.exe
                 li: p From <c>zlib-*.win32.zip</c>:
                     ol
-                        li: pre zlib-*.win32\bin\zlib1.dll
+                        li: p: pre zlib-*.win32\bin\zlib1.dll
         
         subsection(xml:id="change-path-environment-variable-xsltproc")
             title Change PATH envronment variable
-            p.
+            p.u
                 <em>Note: if you prefer not to meddle with this, it can be
                 avoided. See <xref ref="installing-git" autoname="yes" />.
                 </em>
@@ -226,22 +226,27 @@ chapter(xml:id="windows-install-notes")
             ol(xml:id="steps-change-path-environment-variable-xsltproc")
                 li: p.
                         Open the Start menu and start typing <q>Edit
-                        environment variables for your account</q>. Select this
+                        the system environment variables</q>. Select this
                         option when it becomes visible.
+                li: p.
+                        Click the Environment Variables button near the bottom 
+                        of the dialog.
                 li 
                     p.
-                        In the top part of the dialog labeled <q>User variables
-                        for <less />username<greater /></q>, look for a
+                        In the bottom part of the dialog labeled <q>System environment variables</q>, look for a
                         variable named <c>PATH</c>. You may need to
                         scroll.
                     
                     ol
                         li: p.
                             If you don't find one, create it using the New...
-                            button. Make sure to use all capital letters.
+                            button. Make sure to use all capital letters. 
+                            (This really shouldn't happen. Make sure you are
+                            editing the <em>system</em> environment variables, 
+                            not the <em>user</em> environment variables.)
                         li: p.
-                            If you do find the <c>PATH</c> variable, select it and
-                            click the Edit... button.
+                            If you do find the <c>PATH</c> variable, select it 
+                            and click the Edit... button.
 
                 li: p.
                         Regardless of which of steps 1 and 2 you followed, now
@@ -260,7 +265,10 @@ chapter(xml:id="windows-install-notes")
                         <c>PATH</c> string is a <c>;</c>-delimited list of full
                         path names, so append the string <c><less
                         />xsltproc<greater />;</c> (note the semicolon) to the
-                        existing value.
+                        existing value. If you named 
+                        <less />xsltproc<greater /> as we suggested above, then
+                        the last part of your <c>PATH</c> variable is now
+                        <c>C:\xsltproc;</c>.
                 li: p.
                         Click OK to save changes.
 
