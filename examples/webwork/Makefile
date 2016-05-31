@@ -127,6 +127,16 @@ sample-chapter-latex:
 	xelatex sample-ww-chapter.tex; \
 	xelatex sample-ww-chapter.tex
 
+# HTML for a minimal WeBWorK cell
+# Useful for debugging
+# Output is:  $(HTMLOUT)/webwork-mini.html
+webwork-mini-html:
+	install -d $(HTMLOUT)
+	-rm $(HTMLOUT)/*.html
+	-rm $(HTMLOUT)/knowl/*.html
+	cd $(HTMLOUT); \
+	xsltproc --stringparam webwork.server $(SERVER) --stringparam html.knowl.exercise.inline no $(MBXSL)/mathbook-html.xsl $(WWEXAMPLE)/minimal/mini.xml
+
 ###########
 # Utilities
 ###########
@@ -145,13 +155,8 @@ sample-chapter-check:
 	-xmllint --xinclude --postvalid --noout --dtdvalid $(DTD)/mathbook.dtd $(WWEXAMPLE)/sample-chapter/sample-chapter.xml 2> $(SCRATCH)/dtderrors.txt
 	less $(SCRATCH)/dtderrors.txt
 
-###################################
-# Everything below here is OBSOLETE
-###################################
-
-minimal-obsolete:
-	install -d $(PGOUT) $(MBUSR)
-	-rm $(PGOUT)/*.pg
-	cp $(WWXSL)/mathbook-webwork-archive.xsl $(WWXSL)/mathbook-webwork-pg.xsl $(MBUSR)
-	cd $(PGOUT); \
-	xsltproc --stringparam webwork.server https://webwork.pcc.edu $(MBUSR)/mathbook-webwork-archive.xsl $(WWMBX)/examples/minimal/mini.xml
+webwork-mini-check:
+	install -d $(SCRATCH)
+	-rm $(SCRATCH)/dtderrors.*
+	-xmllint --xinclude --postvalid --noout --dtdvalid $(DTD)/mathbook.dtd $(WWEXAMPLE)/minimal/mini.xml 2> $(SCRATCH)/dtderrors.txt
+	less $(SCRATCH)/dtderrors.txt
