@@ -2,7 +2,7 @@ doctype xml
 
 chapter(xml:id="windows-install-notes")
     title Windows Installation Notes
-    introduction 
+    introduction
         p.
             This document explains the best known way to install the
             MathBook XML toolchain in a Windows environment. It has been
@@ -24,7 +24,7 @@ chapter(xml:id="windows-install-notes")
 
         subsection(xml:id="notation")
             title Notation
-            
+
             p.
                 Strings enclosed in <c><less />angle brackets<greater
                 /></c> are variables whose values you should substitute in
@@ -132,7 +132,7 @@ chapter(xml:id="windows-install-notes")
                 (<xref ref="installing-imagemagick" autoname="yes"/>). To be
                 extra careful, you could always choose an installation location
                 that is free of space characters.
-        
+
         subsection(xml:id="do-i-have-64-bit-windows")
             title Do I have 64-bit Windows?
             p Find out on Windows 7:
@@ -146,13 +146,13 @@ chapter(xml:id="windows-install-notes")
                         Read in the right-hand side of the pane to find the <q>System</q> heading.
                 li: p.
                         From the <q>System type</q> entry, read whether you have a 32- or a 64-bit OS.
-        
+
         conclusion
             p.
                Now you are ready to begin installing the various pieces
                of the MathBook XML puzzle. The first one,
-               <c>xsltproc</c> (<xref ref="installing-xsltproc"
-               autoname="yes" />), is the most annoying. You might want
+               <c>xsltproc</c> (<xref ref="installing-xsltproc" autoname="yes" />),
+               is the most annoying. You might want
                to go get a snack or another cup of coffee.
 
 
@@ -163,11 +163,11 @@ chapter(xml:id="windows-install-notes")
             p.
                 This is the most annoying part of the installation. Obtain four
                 zip archives from <url href="ftp://ftp.zlatkovic.com/libxml/">
-                Igor Zlatkovic's FTP site</url> that hosts the most recent 
-                Libxml binaries for Windows. At the time of this writing, the 
-                64-bit binaries were considered experimental. I have had no 
-                trouble using the 32-bit binaries on my 64-bit Windows 7 
-                system, so I suggest that all MBX users download the most 
+                Igor Zlatkovic's FTP site</url> that hosts the most recent
+                Libxml binaries for Windows. At the time of this writing, the
+                64-bit binaries were considered experimental. I have had no
+                trouble using the 32-bit binaries on my 64-bit Windows 7
+                system, so I suggest that all MBX users download the most
                 recent 32-bit version of the following libraries:
 
             ol(xml:id="list-zip-files-xsltproc")
@@ -212,7 +212,7 @@ chapter(xml:id="windows-install-notes")
                 li: p From <c>zlib-*.win32.zip</c>:
                     ol
                         li: p: pre zlib-*.win32\bin\zlib1.dll
-        
+
         subsection(xml:id="change-path-environment-variable-xsltproc")
             title Change PATH envronment variable
             p.u
@@ -229,23 +229,23 @@ chapter(xml:id="windows-install-notes")
                         the system environment variables</q>. Select this
                         option when it becomes visible.
                 li: p.
-                        Click the Environment Variables button near the bottom 
+                        Click the Environment Variables button near the bottom
                         of the dialog.
-                li 
+                li
                     p.
                         In the bottom part of the dialog labeled <q>System environment variables</q>, look for a
                         variable named <c>PATH</c>. You may need to
                         scroll.
-                    
+
                     ol
                         li: p.
                             If you don't find one, create it using the New...
-                            button. Make sure to use all capital letters. 
+                            button. Make sure to use all capital letters.
                             (This really shouldn't happen. Make sure you are
-                            editing the <em>system</em> environment variables, 
+                            editing the <em>system</em> environment variables,
                             not the <em>user</em> environment variables.)
                         li: p.
-                            If you do find the <c>PATH</c> variable, select it 
+                            If you do find the <c>PATH</c> variable, select it
                             and click the Edit... button.
 
                 li: p.
@@ -265,7 +265,7 @@ chapter(xml:id="windows-install-notes")
                         <c>PATH</c> string is a <c>;</c>-delimited list of full
                         path names, so append the string <c><less
                         />xsltproc<greater />;</c> (note the semicolon) to the
-                        existing value. If you named 
+                        existing value. If you named
                         <less />xsltproc<greater /> as we suggested above, then
                         the last part of your <c>PATH</c> variable is now
                         <c>C:\xsltproc;</c>.
@@ -302,7 +302,7 @@ chapter(xml:id="windows-install-notes")
         subsection(xml:id="changing-path-with-bashrc")
             title Changing the path with .bashrc
             p.
-                In <xref ref="change-path-environment-variable-xsltproc" autoname="yes" />, 
+                In <xref ref="change-path-environment-variable-xsltproc" autoname="yes" />,
                 we promised that you could avoid messing with the
                 Windows environment variables. If you install something else later
                 that wants to use <c>xsltproc</c>, then this might not be the best
@@ -312,9 +312,9 @@ chapter(xml:id="windows-install-notes")
                 From the Git Bash command prompt, enter this line of text and
                 hit Enter. Don't make any typos. You should substitute your
                 value of <c><less />xsltproc<greater /></c> where indicated, but
-                make sure to conform to the conventions at the end of 
-                <xref ref="a-word-on-path-names" autoname="yes" /> 
-                regarding Windows path names in Git Bash. (I warned you this was 
+                make sure to conform to the conventions at the end of
+                <xref ref="a-word-on-path-names" autoname="yes" />
+                regarding Windows path names in Git Bash. (I warned you this was
                 going to be annoying.)
             pre echo "export PATH=/c/xsltproc:$PATH" <greater /><greater /> ~/.bashrc
             p.
@@ -332,7 +332,7 @@ chapter(xml:id="windows-install-notes")
             to say that as of <today /> support for Python 3 should be regarded
             as experimental.
         p.
-            If you already have a working Python installation, skip to 
+            If you already have a working Python installation, skip to
             <xref ref="installing-imagemagick" autoname="yes" />.
         p.
             You have some choice with your Anaconda installation. It actually
@@ -344,27 +344,27 @@ chapter(xml:id="windows-install-notes")
             <c>conda</c> utility at the command line later.
 
         p.
-            Download either Miniconda, Python 2.7, or Python 3.5 from the 
+            Download either Miniconda, Python 2.7, or Python 3.5 from the
             <url href="https://www.continuum.io/downloads">Anaconda download
             page</url>. Run the installer and accept all the default suggestions.
 
         conclusion
             p.
-                Congratulations, you have successfully installed Python.    
-        
+                Congratulations, you have successfully installed Python.
+
             p.
                 If you don't care about images, you can stop here. Much of the
                 MBX functionality is already present. However, to use the
                 <c>mbx</c> script to create SVG images from sources like PDF/PNG
                 images, Sage, Asymptote, or Ti<em>k</em>Z, you need to install
-                ImageMagick and Ghostscript using the directions in 
-                <xref ref ="installing-imagemagick" autoname="yes" /> and 
+                ImageMagick and Ghostscript using the directions in
+                <xref ref ="installing-imagemagick" autoname="yes" /> and
                 <xref ref ="installing-ghostscript" autoname="yes" />.
-    
+
     section(xml:id="installing-imagemagick")
         title Installing ImageMagick
         p.
-            Visit the 
+            Visit the
             <url href="http://www.imagemagick.org/script/binary-releases.php">ImageMagick 
             downloads page</url> and grab a binary. If
             you have a <xref ref="do-i-have-64-bit-windows">64-bit Windows
@@ -379,18 +379,18 @@ chapter(xml:id="windows-install-notes")
         ol(xml:id="installing-imagemagick-steps")
             li: p Run the installer from your download location.
             li: p Accept the license agreement.
-            li  
+            li
                 p.
                     Choose a default installation location that has no spaces in its
                     folder name. The default choice <q>Program Files</q> causes problems
                     because of path name issues. I chose
                 pre c:\ImageMagick-7.0.1-Q16\
                 p.
-                    It matters because the ImageMagick utility <c>convert</c> is used by 
+                    It matters because the ImageMagick utility <c>convert</c> is used by
                     the <c>mbx</c> script to convert your images into different formats.
                     The <c>mbx</c> script will have a lot of trouble with path names that contain
                     spaces.
-            li 
+            li
                 p.
                     When confronted with <q>Select additional tasks</q>, make
                     sure that the boxes for <q>Add application directory to your
@@ -400,7 +400,7 @@ chapter(xml:id="windows-install-notes")
         conclusion
             p.
                 Congratulations, you have installed ImageMagick.
-    
+
     section(xml:id="installing-ghostscript")
         title Installing Ghostscript
         p.
@@ -413,11 +413,11 @@ chapter(xml:id="windows-install-notes")
         conclusion
             p.
                 Congratulations, you have successfully installed Ghostscript.
-    
+
     section(xml:id="whats-missing")
         title What's missing
         p.
-            Development of a Windows-compatible <c>mbx</c> script 
+            Development of a Windows-compatible <c>mbx</c> script
             (<xref ref="mbx-script" autoname="yes" />) is continuing.
             If you need help with <c>mbx</c> now, contact Dave Rosoff.
 
