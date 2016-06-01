@@ -3273,12 +3273,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Less Than -->
 <xsl:template match="less">
-    <xsl:text>\textless</xsl:text>
+    <xsl:text>\textless{}</xsl:text>
 </xsl:template>
 
 <!-- Greater Than -->
 <xsl:template match="greater">
-    <xsl:text>\textgreater</xsl:text>
+    <xsl:text>\textgreater{}</xsl:text>
 </xsl:template>
 
 <!--       -->
@@ -3340,7 +3340,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Asterisk -->
 <!-- Centered as a character, not an exponent -->
 <xsl:template match="asterisk">
-    <xsl:text>\textasteriskcentered</xsl:text>
+    <xsl:text>\textasteriskcentered{}</xsl:text>
 </xsl:template>
 
 <!-- Left Single Quote -->
