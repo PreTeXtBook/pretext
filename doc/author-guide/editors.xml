@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file is part of the documentation of MathBook XML   -->
+<!--                                                          -->
+<!--    MathBook XML Author's Guide                           -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<appendix xml:id="editors">
+    <title>(*) Text Editors</title>
+
+    <introduction>
+        <p>This appendix has information about using various text editors efficiently with MathBook XML source.</p>
+    </introduction>
+
+    <section xml:id="sublime-text">
+        <title>(*) Sublime Text</title>
+
+        <p></p>
+
+    </section>
+
+    <section xml:id="emacs">
+        <title>(*) Emacs</title>
+
+        <p></p>
+
+    </section>
+
+</appendix>
+
+
