@@ -27,9 +27,11 @@ The bare minimum, about as little as you can do and still be valid MathBook XML.
 Several examples of how to author WeBWorK online homework problems within a MathBook XML book.  See the `Makefile` for guidance on how to build the examples.  (2016-02-20)
 
 
-### Jade (`jade`)
+### Pug (`pug`)
 
-Jade is a Javascript template engine, which can be employed easily to output MathBook XML source.  So if you prefer to format with whitespace, this could be a good choice.  "Normal" output is best, but using a `-P` flag provides better formatting of the XML output for human eyes.  Contributed by Harald Schilly.  (2016-05-21)
+Pug (nee Jade) is a Javascript template engine, which can be employed easily to output MathBook XML source.  So if you prefer to format with whitespace, this could be a good choice.  "Normal" output is best, but using a `-P` flag provides better formatting of the XML output for human eyes.  Contributed by Harald Schilly.  (2016-05-21)
+
+A subdirectory contains the original file for the Windows Installation Notes of the Author's Guide, contributed by Dave Rosoff.  It needs a few fixes, and will not be maintained, but will give a good demonstration of how a substantial chunk of content could be authored with Pug.  (2016-05-31)
 
 ### Letters (`letter/`)
 
