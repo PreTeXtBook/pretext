@@ -57,9 +57,9 @@
       <p>An appallingly large fraction of the difficulties of using GNU/Linux-based utilities with Windows come from the differences in formatting path names. Windows path names begin with a drive letter (usually <q>C</q>) and a colon. Like all path names, they describe a path in a rooted tree. The root directory (folder) in Windows is called <c>\</c>, a backslash. Note the direction carefully. Children of the root node are either subdirectories or files in the root directory (leaves). The path to my downloads folder is:</p>
       <pre>C:\Users\drosoff\Downloads\</pre>
       <p>The trailing backslash is often unnecessary, but it is an easy way to see immediately if a path name refers to a file or to a directory. Windows path names are not case-sensitive.</p>
-      <p>Linux/Mac OS X path names are quite similar, but lack drive letters, start with an explicit reference to the root, use forward slashes, and are case-sensitive. A path to a typical Linux user's download folder might be</p>
+      <p>Linux/Mac OS X path names are quite similar, but lack drive letters, start with an explicit reference to the root, use forward slashes, and are case-sensitive (more or less so, in Mac's case). A path to a typical Linux user's download folder might be</p>
       <pre>/home/typical.username/Downloads</pre>
-      <p>Again, Linux/Mac OS X pathnames are case-sensitive. The Git Bash shell for Windows is an emulation of a Linux environment, and the utilities within it expect path names that follow Linux conventions. So we conform to this expectation as follows.</p>
+      <p>Again, Linux pathnames are case-sensitive and Mac OS X pathnames are typically <sq>case-preserving</sq>. The Git Bash shell for Windows is an emulation of a Linux environment, and the utilities within it expect path names that follow Linux conventions. So we conform to this expectation as follows.</p>
       <ol>
         <li><p>Remove the colon, but keep the drive letter.</p></li> 
         <li><p>All backslashes <c>\</c> become slashes <c>/</c>.</p></li>
