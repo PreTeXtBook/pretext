@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- This file is part of the documentation of MathBook XML   -->
+<!--                                                          -->
+<!--    MathBook XML Author's Guide                           -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<appendix xml:id="windows-subsystem-linux">
+    <title>Windows Subsystem for Linux</title>
+
+    <p>With Windows 10 you can install the <term>Windows Subsystem for Linux</term> (<init>WSL</init>).  This is basically Ubuntu Linux (one of the most popular versions of Linux) integrated into Windows 10 in a way that command-line Linux programs can be executed easily.  An early announcement is available at <url href="https://msdn.microsoft.com/commandline/wsl" />.  Michael Dood reports on 2016-06-01 that this works quite well for the programs necessary to author with MathBook XML.</p>
+
+    <p>Ubuntu Linux installs new programs using <c>apt</c> via a command such as:</p>
+
+    <console>
+        <prompt>rob@lava:~$ </prompt>
+        <input>apt-get install xsltproc</input>
+    </console>
+
+    <p>Possibly you will need to prefix the above with <c>sudo</c> to gain the right privileges to install new software.</p>
+
+    <p>This short description is far from complete, so feel free to contribute more details.  But Ubuntu and WSL should be well-documented on the Internet, so this should be enough to get you started.</p>
+</appendix>
