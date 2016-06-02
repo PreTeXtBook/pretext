@@ -5081,7 +5081,7 @@ $(function () {
 <!-- 2014/03/07: http://flowplayer.org/docs/setup.html#global-configuration -->
 <xsl:template name="video">
     <link rel="stylesheet" href="//releases.flowplayer.org/5.4.6/skin/minimalist.css" />
-    <script src="//releases.flowplayer.org/5.4.6/flowplayer.min.js"></script>
+    <script src="https://releases.flowplayer.org/5.4.6/flowplayer.min.js"></script>
     <script>flowplayer.conf = {
     };</script>
 
