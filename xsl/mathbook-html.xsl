@@ -4070,13 +4070,13 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- Incorporated only if "webwork" element is present -->
 <xsl:template name="webwork">
     <link href="{$webwork-server}/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
+    <script type="text/javascript" src="{$webwork-server}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
 </xsl:template>
 
 <!-- The request for a "knowlized" webwork problem comes       -->
 <!-- from deep within the environment/knowl scheme             -->
 <!-- Package as a knowl with a source URL or base64 version    -->
 <xsl:template match="webwork" mode="knowlized">
-    <script type="text/javascript" src="{$webwork-server}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
     <!-- Clickable, cribbed from "environment-hidden-factory" template -->
     <xsl:element name="div">
         <xsl:attribute name="class">
@@ -4199,11 +4199,14 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <meta name="Keywords" content="Authored in MathBook XML" />
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
             <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+            <!-- jquery used by sage, webwork, knowls -->
+            <xsl:call-template name="jquery" />
             <xsl:call-template name="mathjax" />
-            <xsl:call-template name="sagecell" />
-            <xsl:if test="//webwork">
+            <!-- webwork's iframeResizer needs to come before sage -->
+            <xsl:if test="//webwork[@*|node()]">
                 <xsl:call-template name="webwork" />
             </xsl:if>
+            <xsl:call-template name="sagecell" />
             <xsl:if test="/mathbook//program">
                 <xsl:call-template name="goggle-code-prettifier" />
             </xsl:if>
@@ -4284,11 +4287,15 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <head>
             <meta name="Keywords" content="Authored in MathBook XML" />
             <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+
+            <!-- jquery used by sage, webwork, knowls -->
+            <xsl:call-template name="jquery" />
             <xsl:call-template name="mathjax" />
-            <xsl:call-template name="sagecell" />
-            <xsl:if test="//webwork">
+            <!-- webwork's iframeResizer needs to come before sage -->
+            <xsl:if test="//webwork[@*|node()]">
                 <xsl:call-template name="webwork" />
             </xsl:if>
+            <xsl:call-template name="sagecell" />
             <xsl:call-template name="knowl" />
             <xsl:call-template name="fonts" />
             <xsl:call-template name="css" />
@@ -4968,11 +4975,17 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full" />
 </xsl:template>
 
+<!-- jQuery -->
+<!-- used by sage, webwork, knowls                  -->
+<!-- essential to use the version from sagemath.org -->
+<xsl:template name="jquery">
+    <script type="text/javascript" src="https://sagecell.sagemath.org/static/jquery.min.js"></script>
+</xsl:template>
+
 <!-- Sage Cell header -->
 <!-- TODO: internationalize button labels, strings below -->
 <!-- TODO: make an initialization cell which links with the sage-compute cells -->
 <xsl:template name="sagecell">
-    <script type="text/javascript" src="https://sagecell.sagemath.org/static/jquery.min.js"></script>
     <script type="text/javascript" src="https://sagecell.sagemath.org/embedded_sagecell.js"></script>
     <script>
 $(function () {
@@ -4998,7 +5011,6 @@ $(function () {
 
 <!-- Knowl header -->
 <xsl:template name="knowl">
-<script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
 <link href="https://aimath.org/knowlstyle.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="https://aimath.org/knowl.js"></script>
 
