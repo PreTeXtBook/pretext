@@ -2765,6 +2765,27 @@ the xsltproc executable.
 
             <p><c>If you write a very long snippet of inline code it can impinge on the right margin, especially if it were to begin close to that margin.  For output in LaTeX we allow line-breaking, but we do not get hyphenation and the font is fixed-width.  So not always perfect.  Consider a display (program listing as above with the pre element) or maybe reorganizing a sentence.  And it looks like a space after that left parenthesis just got ignored in the PDF created from the latex output.</c></p>
 
+            <p>An intermediate type of verbatim text can be accomplished with the <c>&lt;cd&gt;</c> tag, short for <q>code display.</q>  It allows for larger chunks of verbatim text to show up in the middle of a paragraph, but with some vertical space above and below.  It can be<cd>authored as a single line</cd>or if you wish to have multiple lines<cd>
+                <cline>there is the cline tag</cline>
+                <cline>meant to model the line tag</cline>
+                <cline>and short for "code line"</cline>
+            </cd>and you may even<cd>
+                <cline>use a single cline</cline>
+            </cd>if you like to have your source closely model the visual look of the output.</p>
+
+            <p>The <c>&lt;pre&gt;</c> tag is meant for use outside of paragraphs, but is otherwise very similar.  The source may also be structured as a sequence of <c>&lt;cline&gt;</c> as in the next example, recycling content from above.</p>
+
+            <pre>
+                <cline>If you write a very long snippet of inline </cline>
+                <cline>code it can impinge on the right margin,</cline>
+                <cline>especially if it were to begin close to that</cline>
+                <cline>margin.  For output in LaTeX we allow line-breaking,</cline>
+                <cline>but we do not get hyphenation and the font is</cline>
+                <cline>fixed-width.  So not always perfect.  Consider a</cline>
+                <cline>display (program listing as above with the pre element)</cline>
+                <cline>or maybe reorganizing a sentence.</cline>
+            </pre>
+
         </section>
 
         <section xml:id="section-programs">

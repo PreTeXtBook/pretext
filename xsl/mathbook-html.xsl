@@ -3504,12 +3504,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\(\mathrm{\TeX}\)</xsl:text>
 </xsl:template>
 
-<!-- Code, inline -->
-<!-- NB: "code-block" class otherwise -->
-<xsl:template match="c">
-    <tt class="code-inline"><xsl:apply-templates /></tt>
-</xsl:template>
-
 <!-- External URLs, Email        -->
 <!-- Open in new windows         -->
 <!-- URL itself, if content-less -->
@@ -3536,16 +3530,67 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- Chunks of Pre-Formatted Text                 -->
+
+<!-- ############# -->
+<!-- Verbatim Text -->
+<!-- ############# -->
+
+<!-- Code, inline -->
+<!-- PCDATA only, so drop non-text nodes -->
+<!-- NB: "code-block" class otherwise -->
+<xsl:template match="c">
+    <xsl:element name="tt">
+        <xsl:attribute name="class">
+            <xsl:text>code-inline tex2jax_ignore</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="text()" />
+    </xsl:element>
+</xsl:template>
+
+
 <!-- 100% analogue of LaTeX's verbatim            -->
 <!-- environment or HTML's <pre> element          -->
+<!-- TODO: center on page?                        -->
+
+<!-- cd is for use in paragraphs, inline            -->
+<!-- One line is mixed content, and should be tight -->
+<xsl:template match="cd">
+    <xsl:element name="pre">
+        <xsl:attribute name="class">
+            <xsl:text>code-block tex2jax_ignore</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="text()" />
+    </xsl:element>
+</xsl:template>
+
+<xsl:template match="cd[cline]">
+    <xsl:element name="pre">
+        <xsl:attribute name="class">
+            <xsl:text>code-block tex2jax_ignore</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="cline" />
+    </xsl:element>
+</xsl:template>
+
 <!-- Text is massaged just like Sage output code, -->
 <!-- examining *all* lines to find left margin    -->
 <xsl:template match="pre">
     <xsl:element name="pre">
+        <xsl:attribute name="class">
+            <xsl:text>code-block tex2jax_ignore</xsl:text>
+        </xsl:attribute>
         <xsl:call-template name="sanitize-text-output">
             <xsl:with-param name="text" select="." />
         </xsl:call-template>
+    </xsl:element>
+</xsl:template>
+
+<xsl:template match="pre[cline]">
+    <xsl:element name="pre">
+        <xsl:attribute name="class">
+            <xsl:text>code-block tex2jax_ignore</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="cline" />
     </xsl:element>
 </xsl:template>
 

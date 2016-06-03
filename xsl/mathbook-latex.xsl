@@ -3187,28 +3187,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Code, inline -->
-<!-- A question mark is invalid Python, so a useful separator    -->
-<!-- The latexsep attribute allows specifying a different symbol -->
-<!-- The lstinline macro is more robust than \verb,              -->
-<!-- for example when used in \multicolumn in a tabular          -->
-<xsl:template match="c">
-    <xsl:variable name="separator">
-        <xsl:choose>
-            <xsl:when test="@latexsep">
-                <xsl:value-of select="@latexsep" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>?</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:text>\lstinline</xsl:text>
-    <xsl:value-of select="$separator" />
-    <xsl:value-of select="." />
-    <xsl:value-of select="$separator" />
-</xsl:template>
-
 <!-- External URLs, Email        -->
 <!-- URL itself, if content-less -->
 <!-- http://stackoverflow.com/questions/9782021/check-for-empty-xml-element-using-xslt -->
@@ -3229,11 +3207,65 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Chunks of Pre-Formatted Text                 -->
+<!-- ############# -->
+<!-- Verbatim Text -->
+<!-- ############# -->
+
+<!-- Code, inline -->
+<!-- A question mark is invalid Python, so a useful separator    -->
+<!-- The latexsep attribute allows specifying a different symbol -->
+<!-- The lstinline macro is more robust than \verb,              -->
+<!-- for example when used in \multicolumn in a tabular          -->
+<!-- PCDATA only, so drop non-text nodes                         -->
+<xsl:template match="c">
+    <xsl:variable name="separator">
+        <xsl:choose>
+            <xsl:when test="@latexsep">
+                <xsl:value-of select="@latexsep" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>?</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:text>\lstinline</xsl:text>
+    <xsl:value-of select="$separator" />
+    <xsl:value-of select="text()" />
+    <xsl:value-of select="$separator" />
+</xsl:template>
+
+
 <!-- 100% analogue of LaTeX's verbatim            -->
 <!-- environment or HTML's <pre> element          -->
-<!-- Text is massaged just like Sage output code, -->
-<!-- examining *all* lines to find left margin    -->
+<!-- TODO: center on page with fancyvrb/BVerbatim -->
+<!-- and \centering in a custom semantic macro?   -->
+
+<!-- cd is for use in paragraphs, inline            -->
+<!-- One line is mixed content, and should be tight -->
+<!-- Formatted for visual appeal in LaTeX source    -->
+<!-- "cd" could be first in a paragraph, so do not  -->
+<!-- drop an empty line                             -->
+<xsl:template match="cd">
+    <xsl:text>%&#xa;</xsl:text>
+    <xsl:text>\begin{verbatim}&#xa;</xsl:text>
+    <xsl:apply-templates select="text()" />
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>\end{verbatim}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- With a "cline" element present, we assume   -->
+<!-- that is the entire structure (see the cline -->
+<!-- template in the mathbook-common.xsl file)   -->
+<xsl:template match="cd[cline]">
+    <xsl:text>%&#xa;</xsl:text>
+    <xsl:text>\begin{verbatim}&#xa;</xsl:text>
+    <xsl:apply-templates select="cline" />
+    <xsl:text>\end{verbatim}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- "pre" is analogous to HTML tag of the same name       -->
+<!-- We clean up line-broken text, just like for Sage code -->
+<!-- or we use cline to structure line-by-line             -->
 <xsl:template match="pre">
     <xsl:text>\begin{verbatim}&#xa;</xsl:text>
         <xsl:call-template name="sanitize-text-output">
@@ -3241,6 +3273,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
     <xsl:text>\end{verbatim}&#xa;</xsl:text>
 </xsl:template>
+
+<!-- With a "cline" element present, we assume    -->
+<!-- that is the entire structure (see the cline  -->
+<!-- template in the mathbook-common.xsl file)    -->
+<xsl:template match="pre[cline]">
+    <xsl:text>\begin{verbatim}&#xa;</xsl:text>
+    <xsl:apply-templates select="cline" />
+    <xsl:text>\end{verbatim}&#xa;</xsl:text>
+</xsl:template>
+
+
+
 
 <xsl:template match="email">
     <xsl:text>\href{mailto:</xsl:text>

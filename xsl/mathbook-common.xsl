@@ -713,6 +713,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="input|output" />
 </xsl:template>
 
+<!-- Code Lines -->
+<!-- A "cline" is used to (optionally) structure hunks     -->
+<!-- of verbatim text.  Due to its simplicity, it should   -->
+<!-- be universal and the only efffect is to add a newline -->
+<!-- character, which the output format should recognize   -->
+<!-- via its own devices.                                  -->
+<xsl:template match="cline">
+    <xsl:apply-templates select="text()" />
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
 <!-- Sanitize Code -->
 <!-- No leading whitespace, no trailing -->
 <!-- http://stackoverflow.com/questions/1134318/xslt-xslstrip-space-does-not-work -->

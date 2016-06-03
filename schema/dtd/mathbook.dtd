@@ -56,7 +56,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- Everything that is title material, plus more (eg me)     -->
 <!-- var is exclusive to "p" in a WeBWorK problem             -->
 <!-- Precede by a #PCDATA, wrap with ( )*                     -->
-<!ENTITY % sentence "%linear;|me|men|md|mdn|fn|index|notation|var">
+<!ENTITY % sentence "%linear;|me|men|md|mdn|cd|fn|index|notation|var">
 
 <!-- Paragraphs -->
 <!-- Elements that can mix anywhere with a paragraph, -->
@@ -237,9 +237,6 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!ELEMENT input   (#PCDATA)>
 <!ELEMENT output  (#PCDATA)>
 
-<!-- Preformatted text, not very structured -->
-<!ELEMENT pre  (#PCDATA)>
-
 <!ELEMENT sage (input?, output?)>
     <!ATTLIST sage xml:id    ID                                #IMPLIED>
     <!ATTLIST sage copy      CDATA                             #IMPLIED>
@@ -312,7 +309,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST figure   valign   (bottom|middle|top)   #IMPLIED>
 
 <!-- listing attributes for use only in side-by-side -->
-<!ELEMENT listing  (title?, index*, caption?, (program|console)*)>
+<!ELEMENT listing  (title?, index*, caption?, (pre|program|console)*)>
     <!ATTLIST listing xml:id ID #IMPLIED>
     <!ATTLIST listing   width    CDATA                 #IMPLIED>
     <!ATTLIST listing   halign   (left|center|right)   #IMPLIED>
@@ -416,12 +413,28 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!ELEMENT init         (#PCDATA|%linear;)*>
 <!ELEMENT fn           (#PCDATA|%linear;)*>
     <!ATTLIST fn xml:id ID #IMPLIED>
-<!-- <c> is a bit different -->
-<!ELEMENT c         (#PCDATA)>
-    <!ATTLIST c latexsep CDATA #IMPLIED>
 <!-- PROVISIONAL: I don't like this one, it may go away with better references -->
 <!-- Using just <title> could be really confusing                              -->
 <!ELEMENT booktitle        (#PCDATA|%linear;)*>
+
+<!-- ############# -->
+<!-- Verbatim Text -->
+<!-- ############# -->
+
+<!-- Short snippets -->
+<!ELEMENT c         (#PCDATA)>
+    <!ATTLIST c latexsep CDATA #IMPLIED>
+
+<!-- Longer, displayed snippets -->
+<!-- The | is exclusive-or in practice, DTD cannot express this -->
+<!ELEMENT cd        (#PCDATA|cline)*>
+
+<!-- Verbatim, outside paragraphs -->
+<!-- The | is exclusive-or in practice, DTD cannot express this -->
+<!ELEMENT pre       (#PCDATA|cline)*>
+
+<!-- Lines of raw characters -->
+<!ELEMENT cline     (#PCDATA)>
 
 
 <!-- ################ -->
