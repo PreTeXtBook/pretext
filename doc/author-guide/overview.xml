@@ -43,7 +43,7 @@
 
         <p>Any element that you place a <attribute>xml:id</attribute> on can become the target of a cross-reference.  This could be a subdivision, a remark, a bibliographic entry, or a figure.  So for example, suppose your source had <c>&lt;subsection xml:id="subsection-flowers"&gt;</c> and someplace else you wrote <c>&lt;xref ref="subsection-flowers" /&gt;</c>.  Then at the latter location you would get a reference to the Subsection that discusses flowers.  In print this might just be the number for the subsection, but in various electronic output formats, these cross-references can be very powerful interactive ways to explore the content.  And the mechanism is always the same, pair up an <attribute>xml:id</attribute> on a target with a <attribute>ref</attribute> on an <tag>xref</tag> cross-reference.</p>
 
-        <p>For more, see <xref ref="topic-cross-referencing" /> because cross-references have many features. But first, two features you do not want to miss.  In the early stages of writing, you can author <c>&lt;xref provisional="subsection-flowers" /&gt;</c> to point to a subsection you are contemplating (but have not written yet) and you will get various polite reminders to get that straightened out eventually.  Also there is an <term>autoname</term> feature that will automatically provide the generic name of the target, so you will get something like <q>Subsection 4.3.2</q> without ever typing the <q>Subsection</q> part.  If you move the target, the generic name will adjust if necessary, and if you switch to to one of the supported languages, the generic name will switch language.</p>
+        <p>For more, see <xref ref="topic-cross-referencing" /> because cross-references have many features. But first, here are two features you do not want to miss.  In the early stages of writing, you can author <c>&lt;xref provisional="subsection-flowers" /&gt;</c> to point to a subsection you are contemplating (but have not written yet) and you will get various polite reminders to get that straightened out eventually.  Also there is an <term>autoname</term> feature that will automatically provide the generic name of the target, so you will get something like <q>Subsection 4.3.2</q> without ever typing the <q>Subsection</q> part.  If you move the target, the generic name will adjust if necessary, and if you switch to to one of the supported languages, the generic name will switch language (see <xref provisional="topic-on-languages" />.</p>
     </section>
 
     <section xml:id="overview-title">
@@ -179,7 +179,7 @@
 
         <p>The content of the <tag>output</tag> element is included in PDF output, but not in dynamic instances, since it can be re-computed.  Notably, there is a conversion which pairs input and output into a single file in the format used by Sage's <c>doctest</c> framework.  So if expected output is provided, it becomes automatic to identify when Sage has diverged from your expectations, and you can adjust your examples accordingly.</p>
 
-        <p>Note that the dynamic formats (including the Sage Cell) will run Sage <q>interacts,</q> so that is possible to embed interactive demonstrations into your dynamic output formats.</p>
+        <p>Note that the dynamic formats (including the Sage Cell) may run Sage <q>interacts,</q> so that is possible to embed interactive demonstrations into your dynamic output formats.</p>
     </section>
 
     <section xml:id="overview-sidebyside">
