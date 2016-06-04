@@ -40,7 +40,9 @@
 
             <p>Typical presentation is a monospace font, perhaps of a slightly heavier weight.</p>
 
-            <p>There is one caveat for use when creating <latex /> output.  We have chosen to use the <c>?</c> character as a delimiter for the start and end of a run of verbatim text.  Unfortunately, such a choice is necessary.  But if your run of characters includes a question mark, then the run will end prematurely.  So we have an attribute, <attribute>latexsep</attribute> that can be set to some other character, such as <c>!</c> or <c>|</c>, that does not appear in your content.  This choice has no effect on other output formats.</p>
+            <p>There is two caveats for use when creating <latex /> output.  We have chosen to use the <c>?</c> character as a delimiter for the start and end of a run of verbatim text.  Unfortunately, such a choice is necessary.  But if your run of characters includes a question mark, then the run will end prematurely.  So we have an attribute, <attribute>latexsep</attribute> that can be set to some other character, such as <c>!</c> or <c>|</c>, that does not appear in your content.  This choice has no effect on other output formats.</p>
+
+            <p>The other caveat for <latex /> output is that you may use the <tag>c</tag> tag within a <tag>title</tag>, but you should avoid <latex />'s special characters (such as <c>\</c>, <c>#</c>, etc.).  Regular characters should migrate to titles as verbatim text just fine, but we do not guarantee all possibilities.</p>
         </subsection>
 
         <subsection xml:id="long-verbatim-text">

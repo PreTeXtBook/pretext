@@ -3234,6 +3234,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$separator" />
 </xsl:template>
 
+<!-- We need to be a bit more careful, and less general -->
+<!-- for verbatim text in a title.  We only wrap in a   -->
+<!-- \texttt so that font-scaling can happen            -->
+<xsl:template match="title//c">
+    <xsl:text>\texttt{</xsl:text>
+    <xsl:value-of select="text()" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
 
 <!-- 100% analogue of LaTeX's verbatim            -->
 <!-- environment or HTML's <pre> element          -->
