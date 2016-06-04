@@ -17,7 +17,55 @@
     <section xml:id="sublime-text">
         <title>(*) Sublime Text</title>
 
-        <p></p>
+        <introduction>
+            <p>Sublime Text is a fast cross-platform editor with thousands of user-contributed packages implemented in its Python API. It is not free or open-source, although most of the user-contributed packages are both. Development is active as of June 2016.</p>
+        </introduction>
+
+        <subsection xml:id="project-management">
+            <introduction>
+                <p>Like many modern editors, Sublime Text has good project management features. These allow files that are part of a larger project to work together. For example, Sublime's Goto Anything command allows quick access to any file in a project. The Find in Project command permits users to search and replace (with or without regular expressions) across an entire project.</p>
+            </introduction>
+            <p></p>
+            <conclusion>
+                <p></p>
+            </conclusion>
+        </subsection>
+        <subsection xml:id="package-control">
+            <introduction>
+                <p></p>
+            </introduction>
+            <p></p>
+            <conclusion>
+                <p></p>
+            </conclusion>
+        </subsection>
+        <subsection xml:id="multiple-cursors">
+            <introduction>
+                <p></p>
+            </introduction>
+            <p></p>
+            <conclusion>
+                <p></p>
+            </conclusion>
+        </subsection>
+        <subsection xml:id="emmet">
+            <introduction>
+                <p></p>
+            </introduction>
+            <p></p>
+            <conclusion>
+                <p></p>
+            </conclusion>
+        </subsection>
+        <subsection xml:id="mbxtools">
+            <introduction>
+                <p></p>
+            </introduction>
+            <p></p>
+            <conclusion>
+                <p></p>
+            </conclusion>
+        </subsection>
 
     </section>
 
