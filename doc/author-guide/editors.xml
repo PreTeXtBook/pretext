@@ -15,56 +15,70 @@
     </introduction>
 
     <section xml:id="sublime-text">
-        <title>(*) Sublime Text</title>
+        <title>Sublime Text</title>
 
         <introduction>
             <p>Sublime Text is a fast cross-platform editor with thousands of user-contributed packages implemented in its Python API. It is not free or open-source, although most of the user-contributed packages are both. Development is active as of June 2016.</p>
+            <p>Here, we outline several of the most important Sublime Text features that will help you to minimize your typing overhead and work more efficiently with your MathBook XML project.</p>
         </introduction>
 
-        <subsection xml:id="project-management">
-            <introduction>
-                <p>Like many modern editors, Sublime Text has good project management features. These allow files that are part of a larger project to work together. For example, Sublime's Goto Anything command allows quick access to any file in a project. The Find in Project command permits users to search and replace (with or without regular expressions) across an entire project.</p>
-            </introduction>
-            <p></p>
-            <conclusion>
+        <subsection xml:id="subsection-package-control">
+            <title>Package Control</title>
+            <!-- <introduction>
                 <p></p>
-            </conclusion>
+            </introduction> -->
+            <p>To be written.</p>
+            <!-- <conclusion>
+                <p></p>
+            </conclusion> -->
         </subsection>
-        <subsection xml:id="package-control">
+        <subsection xml:id="subsection-project-management">
+            <title>Project Management</title>
             <introduction>
-                <p></p>
+                <p>Like many modern editors, Sublime Text has good project management features. These allow files that are part of a larger project to work together. For example, Sublime's Goto Anything command allows quick access to any file in a project. The Find in Project command permits users to search and replace (with or without regular expressions) across an entire project. The sidebar provides a convenient view of all of the files and directories in a project<mdash />or, if you like, a filtered view, where files of your choice are excluded.</p>
             </introduction>
-            <p></p>
-            <conclusion>
+            <subsubsection xml:id="subsection-the-open-folder-command">
+                <title>The Open Folder Command</title>
+                <p>The easiest way to make use of the project management functionality is to store related files in a single directory and its subdirectories. If you then use the <c>File/Open Folder...</c> command, the entire directory is opened and all its subdirectories and files are shown in the sidebar. You can toggle the sidebar with either the command palette or directly with <c>Ctrl-K, Ctrl-B</c> (<c>Cmd-K, Cmd-B</c> on OS X).</p>
+            </subsubsection>
+            <subsection xml:id="subsection-using-the-sidebar">
+                <title>Using the Sidebar</title>
+                <p>The sidebar allows you to view the entire directory tree (rooted at the folder you opened with the Open Folder command (<xref ref="subsection-the-open-folder-command" />). You can use the sidebar to copy, move, rename, delete, and duplicate files, for example, as well as opening them.</p>
+                <p>The package <c>SideBarEnchancements</c> is highly recommended (install via Package Control).</p>
+            </subsection>
+            <!-- <conclusion>
                 <p></p>
-            </conclusion>
+            </conclusion> -->
         </subsection>
-        <subsection xml:id="multiple-cursors">
-            <introduction>
+        <subsection xml:id="subsection-multiple-cursors">
+            <title>(*) Multiple cursors</title>
+            <!-- <introduction>
                 <p></p>
-            </introduction>
-            <p></p>
-            <conclusion>
+            </introduction> -->
+            <p>To be written.</p>
+            <!-- <conclusion>
                 <p></p>
-            </conclusion>
+            </conclusion> -->
         </subsection>
-        <subsection xml:id="emmet">
-            <introduction>
+        <subsection xml:id="subsection-emmet">
+            <title>(*) Emmet</title>
+            <!-- <introduction>
                 <p></p>
-            </introduction>
-            <p></p>
-            <conclusion>
+            </introduction> -->
+            <p>To be written.</p>
+            <!-- <conclusion>
                 <p></p>
-            </conclusion>
+            </conclusion> -->
         </subsection>
-        <subsection xml:id="mbxtools">
-            <introduction>
+        <subsection xml:id="subsection-mbxtools">
+            <title>(*) MBXtools</title>
+            <!-- <introduction>
                 <p></p>
-            </introduction>
-            <p></p>
-            <conclusion>
+            </introduction> -->
+            <p>To be written.</p>
+            <!-- <conclusion>
                 <p></p>
-            </conclusion>
+            </conclusion> -->
         </subsection>
 
     </section>
