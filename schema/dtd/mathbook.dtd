@@ -666,7 +666,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!ELEMENT date        (#PCDATA|%characters;)*>
 
 <!-- both "front" and "back" colophons -->
-<!ELEMENT colophon   (copyright*|p*)>
+<!ELEMENT colophon   (title?, copyright?, p*)>
 
 <!-- front colophon items -->
 <!ELEMENT copyright      (year, holder, minilicense?, shortlicense?)?>
