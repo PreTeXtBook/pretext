@@ -575,8 +575,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We save in a variable, so only here once     -->
 <xsl:variable name="latex-macros">
     <xsl:variable name="latex-left-justified">
-        <xsl:call-template name="sanitize-code">
-            <xsl:with-param name="raw-code">
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text">
                 <xsl:value-of select="/mathbook/docinfo/macros" />
             </xsl:with-param>
         </xsl:call-template>
@@ -679,8 +679,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="sage[@type='display']">
     <xsl:call-template name="sage-display-markup">
         <xsl:with-param name="in">
-            <xsl:call-template name="sanitize-code">
-                <xsl:with-param name="raw-code" select="input" />
+            <xsl:call-template name="sanitize-text">
+                <xsl:with-param name="text" select="input" />
             </xsl:call-template>
         </xsl:with-param>
     </xsl:call-template>
@@ -691,13 +691,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="sage|sage[@type='full']">
     <xsl:call-template name="sage-active-markup">
         <xsl:with-param name="in">
-            <xsl:call-template name="sanitize-code">
-                <xsl:with-param name="raw-code" select="input" />
+            <xsl:call-template name="sanitize-text">
+                <xsl:with-param name="text" select="input" />
             </xsl:call-template>
         </xsl:with-param>
         <xsl:with-param name="out">
             <xsl:if test="output">
-                <xsl:call-template name="sanitize-text-output" >
+                <xsl:call-template name="sanitize-text" >
                     <xsl:with-param name="text" select="output" />
                 </xsl:call-template>
             </xsl:if>
@@ -876,42 +876,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!--
-1) Trim all trailing whitespace, add carriage return marker to last line
-2) Strip all totally blank leading lines
-3) Determine indentation of first line
-4) Strip indentation from all lines
-5) Allow intermediate blank lines
--->
-<xsl:template name="sanitize-code">
-    <xsl:param name="raw-code" />
-    <xsl:variable name="trimmed-sage-code">
-        <xsl:call-template name="trim-start-lines">
-            <xsl:with-param name="text">
-                <xsl:call-template name="trim-end">
-                    <xsl:with-param name="text" select="$raw-code" />
-                </xsl:call-template>
-            </xsl:with-param>
-        </xsl:call-template>
-    </xsl:variable>
-    <xsl:variable name="pad-length">
-        <xsl:call-template name="count-pad-length">
-            <xsl:with-param name="text" select="$trimmed-sage-code" />
-        </xsl:call-template>
-    </xsl:variable>
-    <xsl:call-template name="strip-indentation" >
-        <xsl:with-param name="text" select="$trimmed-sage-code" />
-        <xsl:with-param name="indent" select="$pad-length" />
-    </xsl:call-template>
-</xsl:template>
+<!-- Main template for cleaning up hunks of raw text      -->
+<!--                                                      -->
+<!-- 1) Trim all trailing whitespace                      -->
+<!-- 2) Add carriage return marker to last line           -->
+<!-- 3) Strip all totally blank leading lines             -->
+<!-- 4) Determine indentation of left-most non-blank line -->
+<!-- 5) Strip indentation from all lines                  -->
+<!-- 6) Allow intermediate blank lines                    -->
 
-<!-- Santitize Text Output -->
-<!-- (1) Trim leading and ending blank lines -->
-<!-- (2) Scan *all* lines for left margin    -->
-<!-- (3) Remove left margin                  -->
-<!-- TODO: very similar to "sanitize-code", but <BLANKLINE> is necessary -->
-<!-- TODO: sanitize <BLANKLINE> for print output -->
-<xsl:template name="sanitize-text-output">
+<xsl:template name="sanitize-text">
     <xsl:param name="text" />
     <xsl:variable name="trimmed-text">
         <xsl:call-template name="trim-start-lines">

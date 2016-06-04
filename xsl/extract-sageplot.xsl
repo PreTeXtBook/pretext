@@ -49,8 +49,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="image/sageplot">
     <!-- has one trailing newline, which we ignore later (?) -->
     <xsl:variable name="plot-code">
-        <xsl:call-template name="sanitize-code">
-            <xsl:with-param name="raw-code" select="." />
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="." />
         </xsl:call-template>
     </xsl:variable>
     <!-- split on last newline -->
@@ -114,8 +114,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="sageplot">
     <!-- has one trailing newline, which we ignore later (?) -->
     <xsl:variable name="plot-code">
-        <xsl:call-template name="sanitize-code">
-            <xsl:with-param name="raw-code" select="." />
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="." />
         </xsl:call-template>
     </xsl:variable>
     <!-- split on last newline -->

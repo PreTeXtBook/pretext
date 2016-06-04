@@ -175,8 +175,8 @@
     <xsl:variable name="input-block">
         <xsl:call-template name="prepend-prompt">
             <xsl:with-param name="text">
-                <xsl:call-template name="sanitize-code" >
-                    <xsl:with-param name="raw-code" select="." />
+                <xsl:call-template name="sanitize-text" >
+                    <xsl:with-param name="text" select="." />
                 </xsl:call-template>
             </xsl:with-param>
         </xsl:call-template>
@@ -222,7 +222,7 @@
 <xsl:template match="output">
     <xsl:call-template name="add-indentation">
         <xsl:with-param name="text">
-            <xsl:call-template name="sanitize-text-output" >
+            <xsl:call-template name="sanitize-text" >
                 <xsl:with-param name="text" select="." />
             </xsl:call-template>
         </xsl:with-param>

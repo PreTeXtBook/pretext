@@ -3579,7 +3579,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="class">
             <xsl:text>code-block tex2jax_ignore</xsl:text>
         </xsl:attribute>
-        <xsl:call-template name="sanitize-text-output">
+        <xsl:call-template name="sanitize-text">
             <xsl:with-param name="text" select="." />
         </xsl:call-template>
     </xsl:element>
@@ -3997,8 +3997,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
     </xsl:variable>
     <pre class="{$classes}" style="font-size:80%">
-    <xsl:call-template name="sanitize-code">
-        <xsl:with-param name="raw-code" select="input" />
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select="input" />
     </xsl:call-template>
     </pre>
 </xsl:template>
@@ -4026,15 +4026,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="console/input">
     <xsl:apply-templates select="preceding-sibling::*[1][self::prompt]" />
     <xsl:element name="b">
-        <xsl:call-template name="sanitize-code">
-            <xsl:with-param name="raw-code" select="." />
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="." />
         </xsl:call-template>
     </xsl:element>
 </xsl:template>
 
 <xsl:template match="console/output">
-    <xsl:call-template name="sanitize-code">
-        <xsl:with-param name="raw-code" select="." />
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select="." />
     </xsl:call-template>
 </xsl:template>
 

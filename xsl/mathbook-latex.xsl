@@ -1004,8 +1004,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="/mathbook/docinfo/latex-image-preamble">
         <xsl:text>%% Graphics Preamble Entries&#xa;</xsl:text>
-        <xsl:call-template name="sanitize-code">
-            <xsl:with-param name="raw-code" select="/mathbook/docinfo/latex-image-preamble" />
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="/mathbook/docinfo/latex-image-preamble" />
         </xsl:call-template>
     </xsl:if>
     <xsl:text>%% If tikz has been loaded, replace ampersand with \amp macro&#xa;</xsl:text>
@@ -3268,7 +3268,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- or we use cline to structure line-by-line             -->
 <xsl:template match="pre">
     <xsl:text>\begin{verbatim}&#xa;</xsl:text>
-        <xsl:call-template name="sanitize-text-output">
+        <xsl:call-template name="sanitize-text">
             <xsl:with-param name="text" select="." />
         </xsl:call-template>
     <xsl:text>\end{verbatim}&#xa;</xsl:text>
@@ -3709,8 +3709,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$language" />
     </xsl:if>
     <xsl:text>]&#xa;</xsl:text>
-    <xsl:call-template name="sanitize-code">
-        <xsl:with-param name="raw-code" select="input" />
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select="input" />
     </xsl:call-template>
     <xsl:text>\end{lstlisting}&#xa;</xsl:text>
 </xsl:template>
@@ -3763,8 +3763,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Output code gets massaged to remove a left margin, leading blank lines, etc. -->
 <xsl:template match="console/output">
-    <xsl:call-template name="sanitize-code">
-        <xsl:with-param name="raw-code" select="." />
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select="." />
     </xsl:call-template>
 </xsl:template>
 
@@ -4162,8 +4162,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- outer braces rein in the scope of any local graphics settings -->
     <xsl:text>{&#xa;</xsl:text>
-    <xsl:call-template name="sanitize-code">
-        <xsl:with-param name="raw-code" select="." />
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select="." />
     </xsl:call-template>
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
@@ -4177,8 +4177,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:message>MBX:WARNING: tikz element superceded by latex-image-code element</xsl:message>
     <xsl:message>MBX:WARNING: tikz package and necessary libraries should be included in docinfo/latex-image-preamble</xsl:message>
     <xsl:apply-templates select="." mode="location-report" />
-    <xsl:call-template name="sanitize-code">
-        <xsl:with-param name="raw-code" select="." />
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select="." />
     </xsl:call-template>
 </xsl:template>
 <!-- 2015/02/08: Deprecated, still functional but not maintained -->
