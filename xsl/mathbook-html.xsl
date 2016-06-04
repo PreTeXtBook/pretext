@@ -3504,12 +3504,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\(\mathrm{\TeX}\)</xsl:text>
 </xsl:template>
 
-<!-- Code, inline -->
-<!-- NB: "code-block" class otherwise -->
-<xsl:template match="c">
-    <tt class="code-inline"><xsl:apply-templates /></tt>
-</xsl:template>
-
 <!-- External URLs, Email        -->
 <!-- Open in new windows         -->
 <!-- URL itself, if content-less -->
@@ -3536,16 +3530,67 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- Chunks of Pre-Formatted Text                 -->
+
+<!-- ############# -->
+<!-- Verbatim Text -->
+<!-- ############# -->
+
+<!-- Code, inline -->
+<!-- PCDATA only, so drop non-text nodes -->
+<!-- NB: "code-block" class otherwise -->
+<xsl:template match="c">
+    <xsl:element name="tt">
+        <xsl:attribute name="class">
+            <xsl:text>code-inline tex2jax_ignore</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="text()" />
+    </xsl:element>
+</xsl:template>
+
+
 <!-- 100% analogue of LaTeX's verbatim            -->
 <!-- environment or HTML's <pre> element          -->
+<!-- TODO: center on page?                        -->
+
+<!-- cd is for use in paragraphs, inline            -->
+<!-- One line is mixed content, and should be tight -->
+<xsl:template match="cd">
+    <xsl:element name="pre">
+        <xsl:attribute name="class">
+            <xsl:text>code-block tex2jax_ignore</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="text()" />
+    </xsl:element>
+</xsl:template>
+
+<xsl:template match="cd[cline]">
+    <xsl:element name="pre">
+        <xsl:attribute name="class">
+            <xsl:text>code-block tex2jax_ignore</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="cline" />
+    </xsl:element>
+</xsl:template>
+
 <!-- Text is massaged just like Sage output code, -->
 <!-- examining *all* lines to find left margin    -->
 <xsl:template match="pre">
     <xsl:element name="pre">
-        <xsl:call-template name="sanitize-text-output">
+        <xsl:attribute name="class">
+            <xsl:text>code-block tex2jax_ignore</xsl:text>
+        </xsl:attribute>
+        <xsl:call-template name="sanitize-text">
             <xsl:with-param name="text" select="." />
         </xsl:call-template>
+    </xsl:element>
+</xsl:template>
+
+<xsl:template match="pre[cline]">
+    <xsl:element name="pre">
+        <xsl:attribute name="class">
+            <xsl:text>code-block tex2jax_ignore</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="cline" />
     </xsl:element>
 </xsl:template>
 
@@ -3952,8 +3997,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
     </xsl:variable>
     <pre class="{$classes}" style="font-size:80%">
-    <xsl:call-template name="sanitize-code">
-        <xsl:with-param name="raw-code" select="input" />
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select="input" />
     </xsl:call-template>
     </pre>
 </xsl:template>
@@ -3981,15 +4026,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="console/input">
     <xsl:apply-templates select="preceding-sibling::*[1][self::prompt]" />
     <xsl:element name="b">
-        <xsl:call-template name="sanitize-code">
-            <xsl:with-param name="raw-code" select="." />
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="." />
         </xsl:call-template>
     </xsl:element>
 </xsl:template>
 
 <xsl:template match="console/output">
-    <xsl:call-template name="sanitize-code">
-        <xsl:with-param name="raw-code" select="." />
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select="." />
     </xsl:call-template>
 </xsl:template>
 
@@ -4070,13 +4115,13 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- Incorporated only if "webwork" element is present -->
 <xsl:template name="webwork">
     <link href="{$webwork-server}/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
+    <script type="text/javascript" src="{$webwork-server}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
 </xsl:template>
 
 <!-- The request for a "knowlized" webwork problem comes       -->
 <!-- from deep within the environment/knowl scheme             -->
 <!-- Package as a knowl with a source URL or base64 version    -->
 <xsl:template match="webwork" mode="knowlized">
-    <script type="text/javascript" src="{$webwork-server}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
     <!-- Clickable, cribbed from "environment-hidden-factory" template -->
     <xsl:element name="div">
         <xsl:attribute name="class">
@@ -4199,11 +4244,14 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <meta name="Keywords" content="Authored in MathBook XML" />
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
             <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+            <!-- jquery used by sage, webwork, knowls -->
+            <xsl:call-template name="jquery" />
             <xsl:call-template name="mathjax" />
-            <xsl:call-template name="sagecell" />
-            <xsl:if test="//webwork">
+            <!-- webwork's iframeResizer needs to come before sage -->
+            <xsl:if test="//webwork[@*|node()]">
                 <xsl:call-template name="webwork" />
             </xsl:if>
+            <xsl:call-template name="sagecell" />
             <xsl:if test="/mathbook//program">
                 <xsl:call-template name="goggle-code-prettifier" />
             </xsl:if>
@@ -4284,11 +4332,15 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <head>
             <meta name="Keywords" content="Authored in MathBook XML" />
             <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+
+            <!-- jquery used by sage, webwork, knowls -->
+            <xsl:call-template name="jquery" />
             <xsl:call-template name="mathjax" />
-            <xsl:call-template name="sagecell" />
-            <xsl:if test="//webwork">
+            <!-- webwork's iframeResizer needs to come before sage -->
+            <xsl:if test="//webwork[@*|node()]">
                 <xsl:call-template name="webwork" />
             </xsl:if>
+            <xsl:call-template name="sagecell" />
             <xsl:call-template name="knowl" />
             <xsl:call-template name="fonts" />
             <xsl:call-template name="css" />
@@ -4968,11 +5020,17 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full" />
 </xsl:template>
 
+<!-- jQuery -->
+<!-- used by sage, webwork, knowls                  -->
+<!-- essential to use the version from sagemath.org -->
+<xsl:template name="jquery">
+    <script type="text/javascript" src="https://sagecell.sagemath.org/static/jquery.min.js"></script>
+</xsl:template>
+
 <!-- Sage Cell header -->
 <!-- TODO: internationalize button labels, strings below -->
 <!-- TODO: make an initialization cell which links with the sage-compute cells -->
 <xsl:template name="sagecell">
-    <script type="text/javascript" src="https://sagecell.sagemath.org/static/jquery.min.js"></script>
     <script type="text/javascript" src="https://sagecell.sagemath.org/embedded_sagecell.js"></script>
     <script>
 $(function () {
@@ -4998,7 +5056,6 @@ $(function () {
 
 <!-- Knowl header -->
 <xsl:template name="knowl">
-<script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
 <link href="https://aimath.org/knowlstyle.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="https://aimath.org/knowl.js"></script>
 
@@ -5081,7 +5138,7 @@ $(function () {
 <!-- 2014/03/07: http://flowplayer.org/docs/setup.html#global-configuration -->
 <xsl:template name="video">
     <link rel="stylesheet" href="//releases.flowplayer.org/5.4.6/skin/minimalist.css" />
-    <script src="//releases.flowplayer.org/5.4.6/flowplayer.min.js"></script>
+    <script src="https://releases.flowplayer.org/5.4.6/flowplayer.min.js"></script>
     <script>flowplayer.conf = {
     };</script>
 

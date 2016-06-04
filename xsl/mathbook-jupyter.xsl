@@ -564,8 +564,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="sage">
     <!-- formulate lines of code -->
     <xsl:variable name="loc">
-        <xsl:call-template name="sanitize-code">
-            <xsl:with-param name="raw-code">
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="raw-text">
                 <!-- use text() macro to fix backslashes, quotes -->
                 <xsl:apply-templates select="input" />
             </xsl:with-param>

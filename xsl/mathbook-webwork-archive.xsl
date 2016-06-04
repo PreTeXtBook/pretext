@@ -313,8 +313,8 @@
         ENDDOCUMENT();
         </xsl:text>
     </xsl:variable>
-    <xsl:call-template name="sanitize-code">
-        <xsl:with-param name="raw-code" select="$header-text" />
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select="$header-text" />
     </xsl:call-template>
 </xsl:template>
 

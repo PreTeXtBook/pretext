@@ -110,8 +110,8 @@
         <xsl:text>Context('Numeric');&#xa;</xsl:text>
     </xsl:if>
     <!-- pg-code verbatim, but trim indentation -->
-    <xsl:call-template name="sanitize-code">
-        <xsl:with-param name="raw-code" select="pg-code" />
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select="pg-code" />
     </xsl:call-template>
 </xsl:template>
 
@@ -1018,12 +1018,12 @@
 </xsl:template>
 
 <!-- Preformatted Text -->
-<!-- "sanitize-text-output" analyzes *all* lines for left margin -->
-<!-- "prepend-string" adds colon and three spaces to each line   -->
+<!-- Sanitization analyzes *all* lines for left margin         -->
+<!-- "prepend-string" adds colon and three spaces to each line -->
 <xsl:template match="webwork//pre">
     <xsl:call-template name="prepend-string">
         <xsl:with-param name="text">
-            <xsl:call-template name="sanitize-text-output">
+            <xsl:call-template name="sanitize-text">
                 <xsl:with-param name="text" select="." />
             </xsl:call-template>
         </xsl:with-param>

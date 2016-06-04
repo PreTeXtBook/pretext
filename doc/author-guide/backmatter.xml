@@ -15,6 +15,7 @@
     <xi:include href="faq.xml" />
     <xi:include href="editors.xml" />
     <xi:include href="windows.xml" />
+    <xi:include href="windows-wsl.xml" />
     <xi:include href="gfdl-mathbook.xml" />
 
 </backmatter>
