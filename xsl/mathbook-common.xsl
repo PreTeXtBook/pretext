@@ -1814,26 +1814,26 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 </xsl:template>
 
 <xsl:template match="part" mode="raw-serial-number">
-    <xsl:number select="." format="I" />
+    <xsl:number format="I" />
 </xsl:template>
 <!-- TODO: condition on part/chapter style to use  level='any'; from="book/part"  to cross part boundaries -->
 <xsl:template match="chapter" mode="raw-serial-number">
-    <xsl:number select="." count="chapter|references|exercises" format="1" />
+    <xsl:number count="chapter|references|exercises" format="1" />
 </xsl:template>
 <xsl:template match="appendix" mode="raw-serial-number">
-    <xsl:number select="." format="A" />
+    <xsl:number format="A" />
 </xsl:template>
 <xsl:template match="section" mode="raw-serial-number">
-    <xsl:number select="." count="section|references|exercises" format="1" />
+    <xsl:number count="section|references|exercises" format="1" />
 </xsl:template>
 <xsl:template match="subsection" mode="raw-serial-number">
-    <xsl:number select="." count="subsection|references|exercises" format="1" />
+    <xsl:number count="subsection|references|exercises" format="1" />
 </xsl:template>
 <xsl:template match="subsubsection" mode="raw-serial-number">
-    <xsl:number select="." count="subsubsection|references|exercises" format="1" />
+    <xsl:number count="subsubsection|references|exercises" format="1" />
 </xsl:template>
 <xsl:template match="exercises|references" mode="raw-serial-number">
-    <xsl:number select="." count="part|chapter|appendix|section|subsection|subsubsection|references|exercises" format="1" />
+    <xsl:number count="part|chapter|appendix|section|subsection|subsubsection|references|exercises" format="1" />
 </xsl:template>
 
 <!-- Serial Numbers: Theorems, Examples, Inline Exercise, Figures, Etc. -->
@@ -1887,12 +1887,12 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$subtree-level=-1"><xsl:number select="." from="book|article|letter|memo" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=0"><xsl:number select="." from="part" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=1"><xsl:number select="." from="chapter|book/appendix" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=2"><xsl:number select="." from="section|article/appendix" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=3"><xsl:number select="." from="subsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=4"><xsl:number select="." from="subsubsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/appendix" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/appendix" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=3"><xsl:number from="subsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=4"><xsl:number from="subsubsection" level="any" count="theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for theorem number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>
@@ -1911,12 +1911,12 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <xsl:template match="mrow|men" mode="serial-number">
     <xsl:variable name="subtree-level" select="$numbering-equations + $root-level" />
     <xsl:choose>
-        <xsl:when test="$subtree-level=-1"><xsl:number select="." from="book|article|letter|memo" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
-        <xsl:when test="$subtree-level=0"><xsl:number select="." from="part" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
-        <xsl:when test="$subtree-level=1"><xsl:number select="." from="chapter|book/appendix" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
-        <xsl:when test="$subtree-level=2"><xsl:number select="." from="section|article/appendix" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
-        <xsl:when test="$subtree-level=3"><xsl:number select="." from="subsection" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
-        <xsl:when test="$subtree-level=4"><xsl:number select="." from="subsubsection" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
+        <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
+        <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
+        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/appendix" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
+        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/appendix" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
+        <xsl:when test="$subtree-level=3"><xsl:number from="subsection" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
+        <xsl:when test="$subtree-level=4"><xsl:number from="subsubsection" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for equation number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>
@@ -1958,12 +1958,12 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <xsl:template match="fn" mode="serial-number">
     <xsl:variable name="subtree-level" select="$numbering-footnotes + $root-level" />
     <xsl:choose>
-        <xsl:when test="$subtree-level=-1"><xsl:number select="." from="book|article|letter|memo" level="any" count="fn" /></xsl:when>
-        <xsl:when test="$subtree-level=0"><xsl:number select="." from="part" level="any" count="fn" /></xsl:when>
-        <xsl:when test="$subtree-level=1"><xsl:number select="." from="chapter|book/appendix" level="any" count="fn" /></xsl:when>
-        <xsl:when test="$subtree-level=2"><xsl:number select="." from="section|article/appendix" level="any" count="fn" /></xsl:when>
-        <xsl:when test="$subtree-level=3"><xsl:number select="." from="subsection" level="any" count="fn" /></xsl:when>
-        <xsl:when test="$subtree-level=4"><xsl:number select="." from="subsubsection" level="any" count="fn" /></xsl:when>
+        <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="fn" /></xsl:when>
+        <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="fn" /></xsl:when>
+        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/appendix" level="any" count="fn" /></xsl:when>
+        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/appendix" level="any" count="fn" /></xsl:when>
+        <xsl:when test="$subtree-level=3"><xsl:number from="subsection" level="any" count="fn" /></xsl:when>
+        <xsl:when test="$subtree-level=4"><xsl:number from="subsubsection" level="any" count="fn" /></xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for footnote number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>
@@ -1991,7 +1991,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     <xsl:variable name="code">
         <xsl:apply-templates select=".." mode="format-code" />
     </xsl:variable>
-    <xsl:number select="." format="{$code}" />
+    <xsl:number format="{$code}" />
 </xsl:template>
 
 <!-- Second, the serial number computed recursively             -->
