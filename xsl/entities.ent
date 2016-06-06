@@ -24,3 +24,5 @@
 <!-- Unicode strings from http://stackoverflow.com/questions/586231 -->
 <!ENTITY UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ">
 <!ENTITY LOWERCASE "abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ">
+
+<!ENTITY THEOREM-LIKE "theorem|corollary|lemma|algorithm|proposition|claim|fact">
