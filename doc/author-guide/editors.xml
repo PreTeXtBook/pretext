@@ -14,51 +14,68 @@
         <p>This appendix has information about using various text editors efficiently with MathBook XML source.</p>
     </introduction>
 
-    <section xml:id="sublime-text">
-        <title>Sublime Text</title>
+    <section xml:id="section-sublime-text">
+        <title>Sublime Text</title> 
 
         <introduction>
             <p>Sublime Text is a fast cross-platform editor with thousands of user-contributed packages implemented in its Python API. It is not free or open-source, although most of the user-contributed packages are both. Development is active as of June 2016.</p>
             <p>Here, we outline several of the most important Sublime Text features that will help you to minimize your typing overhead and work more efficiently with your MathBook XML project.</p>
+            <p>Sublime Text 2 and 3 are both available for an unlimited evaluation period, but a licence must be purchased for continued use. I have found the additional features of Sublime Text 3 to be well worth the cost of the license.</p>
         </introduction>
 
         <subsection xml:id="subsection-package-control">
             <title>Package Control</title>
-            <!-- <introduction>
-                <p></p>
-            </introduction> -->
+            <p>Sublime Text's Python API exposes a lot of the Sublime Text internals to plugin and package authors. Packages extend Sublime Text's functionality, much like Emacs major modes. A package usually consists of some Python scripts that define Sublime Text events and actions, some text-based configuration files (XML/JSON/YAML files defining language syntax, symbol recognition, custom snippet insertion triggers and contexts, keybindings for new and old commands, etc.), and perhaps some other stuff too. These typically get bundled into a <c>.zip</c> archive that is disguised with the unusual extension <c>.sublime-package</c>. These archives live in the Packages directory, accessible via the Preferencesmenu (the Sublime Text (2|3)/Preferences menu on <init>OS X</init>). Sublime Text monitors the <c>Packages</c> directory for changes and reloads all affected plugins on the fly.</p>
+            <p>Thousands of user-contributed packages are available for easy installation via Package Control. It's possible to maintain packages by hand, since most package authors publish via GitHub, but Package Control is the universally recommended method of obtaining, managing, and removing packages for your installation.</p>
+            <p>The first thing you should do after installing Sublime Text is install the Package Control package. This package manager operates within Sublime Text to automatically fetch updates for packages you have installed (unless you disable this feature). You can also list currently installed packages, find new packages to investigate, remove packages, etc.</p>
+            <ol>
+                <li>Visit the <url href="https://packagecontrol.io/">Package Control download site</url>.</li>
+                <li>Find the Sublime Text console command (make sure the correct version of Sublime Text is selected) and copy it to the clipboard.</li>
+                <li>Open the Sublime Text console (<c>Ctrl-`</c> on Windows/Linux, <c>Cmd-`</c> on <init>OS X</init>) and paste the command into the window that appears, then press <c>Enter</c>.</li>
+            </ol>
+            <p>Having installed Package Control, you can use the command palette to deploy its commands, such as Install Package, List Packages, and Remove Package. See the documentation for more. A few packages that are especially useful are recommended below.</p>
+        </subsection>
+        <subsection xml:id="subsection-keyboard-shortcuts">
+            <title>Keyboard Shortcuts</title>
             <p>To be written.</p>
-            <!-- <conclusion>
-                <p></p>
-            </conclusion> -->
         </subsection>
         <subsection xml:id="subsection-project-management">
             <title>Project Management</title>
             <introduction>
                 <p>Like many modern editors, Sublime Text has good project management features. These allow files that are part of a larger project to work together. For example, Sublime's Goto Anything command allows quick access to any file in a project. The Find in Project command permits users to search and replace (with or without regular expressions) across an entire project. The sidebar provides a convenient view of all of the files and directories in a project<mdash />or, if you like, a filtered view, where files of your choice are excluded.</p>
             </introduction>
-            <subsubsection xml:id="subsection-the-open-folder-command">
+            <subsubsection xml:id="subsubsection-the-open-folder-command">
                 <title>The Open Folder Command</title>
-                <p>The easiest way to make use of the project management functionality is to store related files in a single directory and its subdirectories. If you then use the <c>File/Open Folder...</c> command, the entire directory is opened and all its subdirectories and files are shown in the sidebar. You can toggle the sidebar with either the command palette or directly with <c>Ctrl-K, Ctrl-B</c> (<c>Cmd-K, Cmd-B</c> on OS X).</p>
+                <p>The easiest way to make use of the project management functionality is to store related files in a single directory and its subdirectories. If you then use the <c>File/Open Folder...</c> command, the entire directory is opened and all its subdirectories and files are shown in the sidebar. You can toggle the sidebar with either the command palette or directly with <c>Ctrl-K, Ctrl-B</c> (<c>Cmd-K, Cmd-B</c> on <init>OS X</init>).</p>
+                <p>By making use of this command you are already using project management, even if you never save your project. Sublime Text always has an implicit project open if you don't open an explicit one. This is good enough for many users a lot of the time, since it provides the most useful feature (Find in Project). Some of the benefits of explicit project management are outlined below.</p>
             </subsubsection>
-            <subsection xml:id="subsection-using-the-sidebar">
+            <subsubsection xml:id="subsubsection-explicit-projects">
+                <title>Explicit Projects</title>
+                <p>To save your project explicitly, use the Project menu to choose Save As Project... and choose an appropriate name and location. For a MathBook <init>XML</init> project, this would probably be the same name and location as the document root file. Use the Project menu commands to open and close your project.</p>
+                <p>There are a few benefits to using an explicit project to group files.</p>
+                <ol>
+                    <li>You can group together files and folders in different parts of the filesystem, instead of being restricted to subtrees.</li>
+                    <li>You can have project-specific settings that are different from Sublime Text's defaults and different from your user preferences (<xref provisional="subsection-settings" autoname="yes" />).</li>
+                    <li>Sublime's project workspaces will remember any alternative syntax definition you used, such as overriding the default <init>XML</init> style with the MathBook <init>XML</init> style provided by the MBXTools package (<xref ref="subsection-mbxtools" autoname="yes" />). In fact, they even remember which files you had open when you last closed the project, and at which positions.</li>
+                    <li>If you get very fancy, you can have multiple workspaces for the same project, with different filters and views for different purposes.</li>
+                    <li>It is fine to include <c>.sublime-project</c> files in Git repositories, but <c>.sublime-workspace</c> files should <alert>never</alert> be so included (according to the Sublime Text documentation).</li>
+                </ol>
+            </subsubsection>
+            <subsubsection xml:id="subsubsection-using-the-sidebar">
                 <title>Using the Sidebar</title>
-                <p>The sidebar allows you to view the entire directory tree (rooted at the folder you opened with the Open Folder command (<xref ref="subsection-the-open-folder-command" />). You can use the sidebar to copy, move, rename, delete, and duplicate files, for example, as well as opening them.</p>
-                <p>The package <c>SideBarEnchancements</c> is highly recommended (install via Package Control).</p>
-            </subsection>
-            <!-- <conclusion>
-                <p></p>
-            </conclusion> -->
+                <p>The project sidebar allows you to view the entire directory tree (rooted at the folder you opened with the Open Folder command, or all the files and folders in an explicit project. You can use the sidebar to copy, move, rename, delete, and duplicate files, for example, as well as opening them.</p>
+                <p>The package SideBarEnhancements is highly recommended (install via Package Control). It makes the sidebar much more useful.</p>
+                <p>An alternative to the sidebar that Emacs users especially will find helpful is the <url href="https://github.com/daverosoff/dired">dired package</url>. The link is to a git repository since the package is no longer available from Package Control. This package allows you to browse the directory tree in a Sublime Text buffer. You can rename and move files within it<mdash />using all your favorite Sublime commands, including multiple cursors (<xref ref="subsection-multiple-cursors" autoname="yes" />). You might also try the SublimeFileBrowser package, which is actively maintained, available in Package Control, and seems to provide similar functionality.</p>
+            </subsubsection>
         </subsection>
         <subsection xml:id="subsection-multiple-cursors">
             <title>(*) Multiple cursors</title>
-            <!-- <introduction>
-                <p></p>
-            </introduction> -->
-            <p>To be written.</p>
-            <!-- <conclusion>
-                <p></p>
-            </conclusion> -->
+            <p>Multiple cursors are the single most useful and irreplaceable feature of Sublime Text, the one that will keep you coming back.</p>
+            <p>The base functionality of multiple cursors is simple. Hold down the <c>Ctrl</c> key (<c>Cmd</c> on <init>OS X</init>), and click somewhere in the open view to get a second cursor. Continue to add more cursors. All of them will behave together when you type: text will be inserted, snippets or other commands function as usual, etc. Even mouse commands work in an intuitive way with multiple cursors.</p>
+            <p>It's hard to explain exactly what makes multiple cursors so powerful. You just have to try it for yourself. Here is a typical example. In a structured document, many bits of text occur quite frequently<mdash />element and attribute names, for example. You may want to update several occurrences of a fragment at once. Sublime's Quick Add Next command (<c>Ctrl-D</c>/<c>Cmd-D</c>) makes this a snap.</p>
+            <p>Another example that occurs frequently when authoring <init>XML</init> is when you use the Wrap with Tag snippet (<c>Alt+Shift+W</c>/<c>Ctrl+Shift+W</c>). This snippet wraps the selection(s) in a <c><lt />p<gt /></c> tag, with the tag name highlighted in both the start and end tags. If the <c>p</c> element isn't what you wanted, just type. Both tags are replaced. This is a huge benefit to the <init>XML</init> author.</p>
+            <p>Multiline select<mdash />to be written.</p>
+            <p>There are so many incredibly handy ways to use multiple cursors that we leave the reader the pleasure of discovering her own favorites. One particularly helpful package is Text Pastry, which provides some autonumbering and text insertion commands that work very nicely with multiple cursors. There are also a handful of packages that extend multiple cursor functionality, such as PowerCursors and MultiEditUtils. PowerCursors allows you to add cursors and manipulate them without using the mouse. MultiEditUtils provides additional text processing commands designed to work with multiple selections.</p>
         </subsection>
         <subsection xml:id="subsection-emmet">
             <title>(*) Emmet</title>
@@ -71,7 +88,7 @@
             </conclusion> -->
         </subsection>
         <subsection xml:id="subsection-mbxtools">
-            <title>(*) MBXtools</title>
+            <title>(*) MBXTools</title>
             <!-- <introduction>
                 <p></p>
             </introduction> -->
