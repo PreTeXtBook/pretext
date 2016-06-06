@@ -163,8 +163,11 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 
 <!-- components of mathematical objects -->
 <!ELEMENT statement (%para;)*>
-<!ELEMENT proof (%para;)*>
+<!ELEMENT proof (%para;|case)*>
     <!ATTLIST proof xml:id ID #IMPLIED>
+
+<!ELEMENT case  (%para;)*>
+    <!ATTLIST case  direction  (forward|backward) #IMPLIED>
 
 <!-- definition might contain notation -->
 <!ELEMENT definition   (title?, index*, notation*, statement)>

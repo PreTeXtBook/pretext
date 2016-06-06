@@ -1793,6 +1793,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Cases in Proofs -->
+<xsl:template match="case[@direction]">
+    <xsl:element name="article">
+    <h5 class="heading">
+        <xsl:choose>
+            <!-- 'RIGHTWARDS DOUBLE ARROW' (U+21D2) -->
+            <xsl:when test="@direction='forward'">
+                <xsl:comment>Style arrows in CSS?</xsl:comment>
+                <xsl:text>(&#x21d2;)&#xa0;&#xa0;</xsl:text>
+            </xsl:when>
+            <!-- 'LEFTWARDS DOUBLE ARROW' (U+21D0) -->
+            <xsl:when test="@direction='backward'">
+                <xsl:comment>Style arrows in CSS?</xsl:comment>
+                <xsl:text>(&#x21d0;)&#xa0;&#xa0;</xsl:text>
+            </xsl:when>
+            <!-- DTD will catch wrong values -->
+            <xsl:otherwise />
+        </xsl:choose>
+    </h5>
+    <xsl:apply-templates select="*" />
+    </xsl:element>
+</xsl:template>
 
 <!-- Figures, Tables, entire Side-By-Side Panels     -->
 <!-- Figures, Tables from within Side-By-Side Panels -->

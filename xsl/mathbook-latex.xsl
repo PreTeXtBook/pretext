@@ -432,6 +432,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}&#xa;</xsl:text>
         </xsl:for-each>
     </xsl:if>
+    <xsl:if test="/mathbook//case[@direction]">
+        <xsl:text>\newcommand{\forwardimplication}{($\Rightarrow$)\space\space}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\backwardimplication}{($\Leftarrow$)\space\space}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>%% Subdivision Numbering, Chapters, Sections, Subsections, etc&#xa;</xsl:text>
     <xsl:text>%% Subdivision numbers may be turned off at some level ("depth")&#xa;</xsl:text>
     <xsl:text>%% A section *always* has depth 1, contrary to us counting from the document root&#xa;</xsl:text>
@@ -2129,7 +2133,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{proof}&#xa;</xsl:text>
 </xsl:template>
 
-
+<!-- cases in proofs -->
+<!-- No newline after macros, so inline to text      -->
+<!-- A proof gets no metadata in DTD                 -->
+<!-- but if that changes, ignore in "preceding" test -->
+<xsl:template match="case[@direction]">
+    <xsl:if test="preceding-sibling::*">
+        <xsl:text>\par\medskip\noindent&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:choose>
+        <xsl:when test="@direction='forward'">
+            <xsl:text>\forwardimplication{}</xsl:text>
+        </xsl:when>
+        <xsl:when test="@direction='backward'">
+            <xsl:text>\backwardimplication{}</xsl:text>
+        </xsl:when>
+        <!-- DTD will catch wrong values -->
+        <xsl:otherwise />
+    </xsl:choose>
+    <xsl:apply-templates select="*" />
+</xsl:template>
 
 
 <!-- It is natural to place notation within a definition    -->

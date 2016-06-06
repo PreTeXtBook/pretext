@@ -456,6 +456,24 @@ the xsltproc executable.
                         <input>2+2</input>
                     </sage>
                 </example>
+
+                <claim>
+                    <title>An Equivalent Claim</title>
+                    <statement>
+                        <p>This claim is an equivalence: it is true if and only if it is correct.</p>
+                    </statement>
+                    <proof>
+                        <p>Our only purpose here is to show a proof of an equivalence structured with the arrows typically used to demonstrate the two <q>directions</q> involved in the proof.</p>
+
+                        <case direction="forward">
+                            <p> Nulla non lectus suscipit, bibendum leo quis, dignissim justo. In urna turpis, tincidunt id elementum id, faucibus ac tellus. Donec eget nulla id urna auctor sollicitudin. Suspendisse ut odio suscipit, aliquet tortor ut, consectetur risus. Curabitur at congue felis. Nunc condimentum enim sit amet libero mollis egestas. In tortor ex, interdum a nibh quis, bibendum accumsan orci. Ut convallis lacus a maximus pulvinar.</p>
+                        </case>
+
+                        <case direction="backward">
+                            <p>Quisque auctor ligula turpis, ut aliquam urna consectetur hendrerit. Aenean porta dolor et justo facilisis feugiat in sed sapien. Nullam porta ex et commodo semper. Nulla a arcu hendrerit, sodales massa id, sagittis ex. Aliquam dapibus magna eget luctus ullamcorper. Curabitur nec lorem in elit laoreet volutpat ac ut eros. Aenean iaculis fermentum nisl, non pharetra libero scelerisque a. Vivamus viverra nulla in felis aliquet malesuada. Nullam dapibus lacus eget diam sodales bibendum.</p>
+                        </case>
+                    </proof>
+                </claim>
             </subsection>
 
             <!--
