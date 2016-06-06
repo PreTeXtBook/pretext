@@ -2167,10 +2167,13 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 </xsl:template>
 
 <!-- Structure Numbers: Sectional Exercises -->
+<!-- If we set a level for sectional exercises, and pad,        -->
+<!-- then we could mimic the AMSMath scheme.  But we control    -->
+<!-- these numbers universally, so we do not copy this behavior -->
 <xsl:template match="exercises/exercise|exercises/exercisegroup/exercise|exercises/exercise[@number]|exercisegroup/exercise[@number]" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-maxlevel" />
-        <xsl:with-param name="pad" select="'yes'" />
+        <xsl:with-param name="pad" select="'no'" />
     </xsl:apply-templates>
 </xsl:template>
 <!-- Hints, answers, solutions get structure number from parent      -->
@@ -2181,10 +2184,13 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 </xsl:template>
 
 <!-- Structure Numbers: Bibliographic Items -->
+<!-- If we set a level for bibliographic items, and pad,        -->
+<!-- then we could mimic the AMSMath scheme.  But we control    -->
+<!-- these numbers universally, so we do not copy this behavior -->
 <xsl:template match="biblio" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-maxlevel" />
-        <xsl:with-param name="pad" select="'yes'" />
+        <xsl:with-param name="pad" select="'no'" />
     </xsl:apply-templates>
 </xsl:template>
 <!-- "main" bibliography gets unqualified numbers -->
