@@ -191,7 +191,7 @@
         <p>Choose whatever location you like for the <c>git</c> installation folder. I recommend you use the default.</p>
       </li>
       <li>
-        <p>At the <q>Adjusting your PATH environment</q> dialog, select either of the first two items. I recommend the second, <q>Add git executable to Windows PATH</q>. If you are apprehensive about adding <c>git</c> to the Windows PATH, select the first option. I do not recommend the third option.</p>
+        <p>At the <q>Adjusting your PATH environment</q> dialog, select either of the first two items. I recommend the second, <q>Add git executable to Windows PATH</q>. This will allow you to use <c>git</c> from within other Windows programs, such as Sublime Text or other text editors, which can be extremely convenient. If you are apprehensive about adding <c>git</c> to the Windows PATH, select the first option. I do not recommend the third option.</p>
       </li>
       <li>
         <p>Accept the default options for all the remaining prompts.</p>
