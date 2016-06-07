@@ -1282,9 +1282,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: this depends on multiple modal templates (below)    -->
 <!-- NB: this list should contain the list at         -->
 <!--     the "xref-as-knowl" modal template           -->
+<!-- We restrict hint, answer, solution to avoid confusion with webwork -->
 <!-- TODO: we need to process children in a way that no \label{}, nor ID's, are produced   -->
 <!--       This would perhaps obsolete the "env-type" device, and reorder explnation below -->
-<xsl:template match="fn|biblio|example|list|remark|definition|axiom|conjecture|principle|&THEOREM-LIKE;|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|li|p|contributor" mode="xref-knowl">
+<xsl:template match="fn|biblio|example|list|remark|definition|axiom|conjecture|principle|&THEOREM-LIKE;|proof|exercise|exercise/hint|exercise/answer|exercise/solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|li|p|contributor" mode="xref-knowl">
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
@@ -1323,12 +1324,93 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" mode="xref-knowl" />
 </xsl:template>
 
-<!-- WeBWorK exercises live inside generic exercises which would    -->
-<!-- typically be knowlized.  They have components (solution, hint) -->
-<!-- which are knowlized as part of generic exercises.  So we need  -->
-<!-- to dead-end the  xref-knowl  templates here and not blindly    -->
-<!-- descend into a  webwork  element                               -->
-<xsl:template match="webwork" mode="xref-knowl" />
+<!-- Base64 resources for debugging encoding and transmission problems  -->
+<!-- ASCII Table: http://www.rapidtables.com/code/text/ascii-table.htm  -->
+<!-- Online Converter: http://www.freeformatter.com/base64-encoder.html -->
+
+<!-- WeBWorK exercises become xref-knowls for their         -->
+<!-- employment within a regular exercise, we then          -->
+<!-- recurse into them to make xref-knowls of their         -->
+<!-- contents.  The hints, solutions and answers do         -->
+<!-- not get knowlized since they are different than        -->
+<!-- the identically named structures of a regular exercise -->
+<xsl:template match="webwork[*|@*]" mode="xref-knowl">
+    <!-- now a file containing WW problem -->
+    <xsl:variable name="knowl-file">
+        <xsl:apply-templates select="." mode="xref-knowl-filename" />
+    </xsl:variable>
+    <exsl:document href="{$knowl-file}" method="html">
+        <xsl:call-template name="converter-blurb-html" />
+        <!-- Actual content of knowl -->
+        <xsl:comment>use 'format=debug' on 'webwork' tag to debug problem</xsl:comment>
+        <xsl:element name="iframe">
+            <xsl:attribute name="width">100%</xsl:attribute> <!-- MBX specific -->
+            <xsl:attribute name="src">
+                <xsl:value-of select="concat($webwork-server,'/webwork2/html2xml?')"/>
+                <xsl:text>&amp;answersSubmitted=0</xsl:text>
+                <xsl:choose>
+                    <xsl:when test="@source">
+                        <xsl:text>&amp;sourceFilePath=</xsl:text>
+                        <xsl:value-of select="@source" />
+                    </xsl:when>
+                    <xsl:when test="not(. = '')">
+                        <xsl:text>&amp;problemSource=</xsl:text>
+                        <!-- formulate PG version with included routine -->
+                        <!-- form base64 version for URL transmission -->
+                        <xsl:variable name="pg-ascii">
+                            <xsl:apply-templates select="." mode="pg" />
+                        </xsl:variable>
+                        <!-- A useful debugging message if WW problems misbehave            -->
+                        <!-- Redirect output with 2> if there is too much at the console    -->
+                        <!-- <xsl:message><xsl:value-of select="$pg-ascii" /></xsl:message> -->
+                        <xsl:call-template name="b64:encode">
+                            <xsl:with-param name="urlsafe" select="true()" />
+                            <xsl:with-param name="asciiString">
+                                <xsl:value-of select="$pg-ascii" />
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:when>
+                    <!-- problem not authored, nor pointed at -->
+                    <xsl:otherwise>
+                        <xsl:message>
+                            <xsl:text>MBX:WARNING: A webwork problem requires a source URL or original content</xsl:text>
+                            <xsl:apply-templates select="." mode="location-report" />
+                        </xsl:message>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:text>&amp;problemSeed=</xsl:text>
+                <xsl:choose>
+                    <xsl:when test="@seed">
+                        <xsl:value-of select="@seed"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>123567890</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:text>&amp;displayMode=MathJax</xsl:text>
+                <xsl:text>&amp;courseID=</xsl:text>
+                <xsl:value-of select="$webwork.course"/>
+                <xsl:text>&amp;userID=</xsl:text>
+                <xsl:value-of select="$webwork.userID"/>
+                <xsl:text>&amp;password=</xsl:text>
+                <xsl:value-of select="$webwork.password"/>
+                <xsl:text>&amp;outputformat=</xsl:text>
+                <xsl:choose>
+                    <xsl:when test="@format"><xsl:value-of select="@format" /></xsl:when>
+                    <xsl:otherwise><xsl:text>simple</xsl:text></xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+            <!-- unclear what this does, mimicing Mike's blog post -->
+            <xsl:if test="not(. = '')">
+                <xsl:attribute name="base64"><xsl:text>1</xsl:text></xsl:attribute>
+                <xsl:attribute name="uri"><xsl:text>1</xsl:text></xsl:attribute>
+            </xsl:if>
+        </xsl:element> <!-- end iframe -->
+        <script type="text/javascript">iFrameResize({log:true,inPageLinks:true,resizeFrom:'child'})</script>
+    </exsl:document>
+    <!-- recurse the tree outside of the file-writing -->
+    <xsl:apply-templates select="*" mode="xref-knowl" />
+</xsl:template>
 
 <!-- Environments born visible -->
 <!-- Option (b): "environment-visible-factory"   -->
@@ -2056,7 +2138,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercise[child::webwork]" mode="body">
     <xsl:apply-templates select="statement"/>
     <xsl:apply-templates select="introduction"/>
-    <xsl:apply-templates select="webwork" mode="knowlized" />
+    <xsl:apply-templates select="webwork" mode="knowl-clickable" />
     <xsl:apply-templates select="conclusion"/>
 </xsl:template>
 <!-- Posterior: links to information  -->
@@ -4128,10 +4210,6 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- WeBWorK Embedded Exercises -->
 <!-- ########################## -->
 
-<!-- Base64 resources for debugging encoding and transmission problems  -->
-<!-- ASCII Table: http://www.rapidtables.com/code/text/ascii-table.htm  -->
-<!-- Online Converter: http://www.freeformatter.com/base64-encoder.html -->
-
 <!-- WeBWorK HTML CSS header -->
 <!-- MathView likely necessary for WW widgets          -->
 <!-- Incorporated only if "webwork" element is present -->
@@ -4140,17 +4218,17 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <script type="text/javascript" src="{$webwork-server}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
 </xsl:template>
 
-<!-- The request for a "knowlized" webwork problem comes       -->
-<!-- from deep within the environment/knowl scheme             -->
-<!-- Package as a knowl with a source URL or base64 version    -->
-<xsl:template match="webwork" mode="knowlized">
-    <!-- Clickable, cribbed from "environment-hidden-factory" template -->
+<!-- The request for a "knowl-clickable" of webwork problem comes  -->
+<!-- from within the environment/knowl scheme of an exercise       -->
+<!-- It assumes the xref-knowl has been built already              -->
+<!-- TODO: make WW problem a proper hidden knowl? -->
+<xsl:template match="webwork" mode="knowl-clickable">
+    <!-- Cribbed from "environment-hidden-factory" template -->
     <xsl:element name="div">
         <xsl:attribute name="class">
             <xsl:text>hidden-knowl-wrapper</xsl:text>
         </xsl:attribute>
         <xsl:element name="a">
-           <!-- borrowing xref style for experiment -->
             <xsl:attribute name="knowl">
                 <xsl:apply-templates select="." mode="xref-knowl-filename" />
             </xsl:attribute>
@@ -4161,80 +4239,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <!-- generally the "hidden-knowl-text", but generic here -->
             <xsl:text>WeBWorK Exercise</xsl:text>
         </xsl:element>
-    </xsl:element> <!-- end knowl clickable -->
-    <!-- now a file containing WW problem -->
-    <xsl:variable name="knowl-file">
-        <xsl:apply-templates select="." mode="xref-knowl-filename" />
-    </xsl:variable>
-    <exsl:document href="{$knowl-file}" method="html">
-        <xsl:call-template name="converter-blurb-html" />
-        <!-- Actual content of knowl -->
-        <xsl:comment>use 'format=debug' on 'webwork' tag to debug problem</xsl:comment>
-        <xsl:element name="iframe">
-            <xsl:attribute name="width">100%</xsl:attribute> <!-- MBX specific -->
-            <xsl:attribute name="src">
-                <xsl:value-of select="concat($webwork-server,'/webwork2/html2xml?')"/>
-                <xsl:text>&amp;answersSubmitted=0</xsl:text>
-                <xsl:choose>
-                    <xsl:when test="@source">
-                        <xsl:text>&amp;sourceFilePath=</xsl:text>
-                        <xsl:value-of select="@source" />
-                    </xsl:when>
-                    <xsl:when test="not(. = '')">
-                        <xsl:text>&amp;problemSource=</xsl:text>
-                        <!-- formulate PG version with included routine -->
-                        <!-- form base64 version for URL transmission -->
-                        <xsl:variable name="pg-ascii">
-                            <xsl:apply-templates select="." mode="pg" />
-                        </xsl:variable>
-                        <!-- A useful debugging message if WW problems misbehave            -->
-                        <!-- Redirect output with 2> if there is too much at the console    -->
-                        <!-- <xsl:message><xsl:value-of select="$pg-ascii" /></xsl:message> -->
-                        <xsl:call-template name="b64:encode">
-                            <xsl:with-param name="urlsafe" select="true()" />
-                            <xsl:with-param name="asciiString">
-                                <xsl:value-of select="$pg-ascii" />
-                            </xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:when>
-                    <!-- problem not authored, nor pointed at -->
-                    <xsl:otherwise>
-                        <xsl:message>
-                            <xsl:text>MBX:WARNING: A webwork problem requires a source URL or original content</xsl:text>
-                            <xsl:apply-templates select="." mode="location-report" />
-                        </xsl:message>
-                    </xsl:otherwise>
-                </xsl:choose>
-                <xsl:text>&amp;problemSeed=</xsl:text>
-                <xsl:choose>
-                    <xsl:when test="@seed">
-                        <xsl:value-of select="@seed"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text>123567890</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
-                <xsl:text>&amp;displayMode=MathJax</xsl:text>
-                <xsl:text>&amp;courseID=</xsl:text>
-                <xsl:value-of select="$webwork.course"/>
-                <xsl:text>&amp;userID=</xsl:text>
-                <xsl:value-of select="$webwork.userID"/>
-                <xsl:text>&amp;password=</xsl:text>
-                <xsl:value-of select="$webwork.password"/>
-                <xsl:text>&amp;outputformat=</xsl:text>
-                <xsl:choose>
-                    <xsl:when test="@format"><xsl:value-of select="@format" /></xsl:when>
-                    <xsl:otherwise><xsl:text>simple</xsl:text></xsl:otherwise>
-                </xsl:choose>
-            </xsl:attribute>
-            <!-- unclear what this does, mimicing Mike's blog post -->
-            <xsl:if test="not(. = '')">
-                <xsl:attribute name="base64"><xsl:text>1</xsl:text></xsl:attribute>
-                <xsl:attribute name="uri"><xsl:text>1</xsl:text></xsl:attribute>
-            </xsl:if>
-        </xsl:element> <!-- end iframe -->
-        <script type="text/javascript">iFrameResize({log:true,inPageLinks:true,resizeFrom:'child'})</script>
-    </exsl:document>
+    </xsl:element>
 </xsl:template>
 
 <!--                         -->
