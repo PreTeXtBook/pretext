@@ -1252,7 +1252,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We show the full content of the item on the page (b)            -->
 <!-- Or, we build a hidden knowl and place a link on the page (c)    -->
 <!-- NB: this template employs several modal templates, defined just below -->
-<xsl:template match="fn|biblio|example|list|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|contributor">
+<xsl:template match="fn|biblio|example|list|remark|definition|axiom|conjecture|principle|&THEOREM-LIKE;|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|contributor">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
@@ -1284,7 +1284,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     the "xref-as-knowl" modal template           -->
 <!-- TODO: we need to process children in a way that no \label{}, nor ID's, are produced   -->
 <!--       This would perhaps obsolete the "env-type" device, and reorder explnation below -->
-<xsl:template match="fn|biblio|example|list|remark|definition|axiom|conjecture|principle|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|li|p|contributor" mode="xref-knowl">
+<xsl:template match="fn|biblio|example|list|remark|definition|axiom|conjecture|principle|&THEOREM-LIKE;|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|li|p|contributor" mode="xref-knowl">
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
@@ -1704,14 +1704,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Theorems, etc. -->
 <!-- Customizable as hidden    -->
 <!-- A statement with proof -->
-<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact" mode="is-hidden">
+<xsl:template match="&THEOREM-LIKE;" mode="is-hidden">
     <xsl:value-of select="$html.knowl.theorem = 'yes'" />
 </xsl:template>
-<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact" mode="is-block-env">
+<xsl:template match="&THEOREM-LIKE;" mode="is-block-env">
     <xsl:value-of select="true()" />
 </xsl:template>
 <!-- Knowl-text is an article with heading -->
-<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact" mode="hidden-knowl-text">
+<xsl:template match="&THEOREM-LIKE;" mode="hidden-knowl-text">
     <article class="theorem-like">
         <h5 class="heading">
             <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
@@ -1723,7 +1723,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </article>
 </xsl:template>
 <!-- Head is type, number, title -->  <!-- GENERALIZE -->
-<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact" mode="head">
+<xsl:template match="&THEOREM-LIKE;" mode="head">
     <h5 class="heading">
         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
         <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
@@ -1733,18 +1733,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </h5>
 </xsl:template>
 <!-- Body is just the statement -->
-<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact" mode="body">
+<xsl:template match="&THEOREM-LIKE;" mode="body">
     <xsl:apply-templates select="statement" />
 </xsl:template>
 <!-- Posterior is just the proof -->
-<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact" mode="posterior">
+<xsl:template match="&THEOREM-LIKE;" mode="posterior">
     <xsl:apply-templates select="proof" />
 </xsl:template>
 <!-- HTML, CSS -->
-<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact" mode="environment-element">
+<xsl:template match="&THEOREM-LIKE;" mode="environment-element">
     <xsl:text>article</xsl:text>
 </xsl:template>
-<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact" mode="environment-class">
+<xsl:template match="&THEOREM-LIKE;" mode="environment-class">
     <xsl:text>theorem-like</xsl:text>
 </xsl:template>
 
@@ -1793,6 +1793,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Cases in Proofs -->
+<xsl:template match="case[@direction]">
+    <xsl:element name="article">
+    <h5 class="heading">
+        <xsl:choose>
+            <!-- 'RIGHTWARDS DOUBLE ARROW' (U+21D2) -->
+            <xsl:when test="@direction='forward'">
+                <xsl:comment>Style arrows in CSS?</xsl:comment>
+                <xsl:text>(&#x21d2;)&#xa0;&#xa0;</xsl:text>
+            </xsl:when>
+            <!-- 'LEFTWARDS DOUBLE ARROW' (U+21D0) -->
+            <xsl:when test="@direction='backward'">
+                <xsl:comment>Style arrows in CSS?</xsl:comment>
+                <xsl:text>(&#x21d0;)&#xa0;&#xa0;</xsl:text>
+            </xsl:when>
+            <!-- DTD will catch wrong values -->
+            <xsl:otherwise />
+        </xsl:choose>
+    </h5>
+    <xsl:apply-templates select="*" />
+    </xsl:element>
+</xsl:template>
 
 <!-- Figures, Tables, entire Side-By-Side Panels     -->
 <!-- Figures, Tables from within Side-By-Side Panels -->
@@ -3164,7 +3186,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a sidebyside even though this is not necessary           -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|p|biblio|note|example|list|remark|theorem|corollary|lemma|algorithm|proposition|claim|fact|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|biblio|note|example|list|remark|&THEOREM-LIKE;|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">

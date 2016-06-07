@@ -19,6 +19,12 @@ You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
+<!-- http://pimpmyxslt.com/articles/entity-tricks-part2/ -->
+<!DOCTYPE xsl:stylesheet [
+    <!ENTITY % entities SYSTEM "entities.ent">
+    %entities;
+]>
+
 <!-- Identify as a stylesheet -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
@@ -425,6 +431,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:choose>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:for-each>
+    </xsl:if>
+    <xsl:if test="/mathbook//case[@direction]">
+        <xsl:text>\newcommand{\forwardimplication}{($\Rightarrow$)\space\space}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\backwardimplication}{($\Leftarrow$)\space\space}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% Subdivision Numbering, Chapters, Sections, Subsections, etc&#xa;</xsl:text>
     <xsl:text>%% Subdivision numbers may be turned off at some level ("depth")&#xa;</xsl:text>
@@ -2085,15 +2095,65 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Exercises have hints, answers and solutions                -->
 
 <!-- Titles are passed as options to environments -->
+<!-- TODO: trash and incorporate into templates below -->
 <xsl:template match="title" mode="environment-option">
     <xsl:text>[</xsl:text>
     <xsl:apply-templates />
     <xsl:text>]</xsl:text>
 </xsl:template>
 
-<xsl:template match="theorem|corollary|lemma|algorithm|proposition|claim|fact">
-    <xsl:apply-templates select="statement|proof" />
+<!-- Theorems -->
+<xsl:template match="&THEOREM-LIKE;">
+    <xsl:text>\begin{</xsl:text>
+        <xsl:value-of select="local-name(.)" />
+    <xsl:text>}</xsl:text>
+    <!-- optional argument to environment -->
+    <!-- TODO: and/or credit              -->
+    <xsl:text>[</xsl:text>
+    <xsl:apply-templates select="." mode="title-full" />
+    <xsl:text>]</xsl:text>
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>&#xa;</xsl:text>
+    <!-- statement is required -->
+    <xsl:apply-templates select="statement" />
+    <xsl:text>\end{</xsl:text>
+        <xsl:value-of select="local-name(.)" />
+    <xsl:text>}&#xa;</xsl:text>
+    <!-- proof is optional, so may not match -->
+    <xsl:apply-templates select="proof" />
 </xsl:template>
+
+<!-- Proofs -->
+<!-- Subsidary to THEOREM-LIKE, or standalone -->
+<xsl:template match="proof">
+    <xsl:text>\begin{proof}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="*" />
+    <xsl:text>\end{proof}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- cases in proofs -->
+<!-- No newline after macros, so inline to text      -->
+<!-- A proof gets no metadata in DTD                 -->
+<!-- but if that changes, ignore in "preceding" test -->
+<xsl:template match="case[@direction]">
+    <xsl:if test="preceding-sibling::*">
+        <xsl:text>\par\medskip\noindent&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:choose>
+        <xsl:when test="@direction='forward'">
+            <xsl:text>\forwardimplication{}</xsl:text>
+        </xsl:when>
+        <xsl:when test="@direction='backward'">
+            <xsl:text>\backwardimplication{}</xsl:text>
+        </xsl:when>
+        <!-- DTD will catch wrong values -->
+        <xsl:otherwise />
+    </xsl:choose>
+    <xsl:apply-templates select="*" />
+</xsl:template>
+
 
 <!-- It is natural to place notation within a definition    -->
 <!-- We might take advantage of that, but are not currently -->
@@ -2517,12 +2577,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-
-<!-- Theorem Environments/Statements -->
-<!-- Statements are the place to generate environment -->
-<!-- Most information comes from parent               -->
-<!-- Proofs are written outside of environment        -->
-<xsl:template match="theorem/statement|corollary/statement|lemma/statement|algorithm/statement|proposition/statement|claim/statement|fact/statement|conjecture/statement|axiom/statement|principle/statement">
+<!-- statement should just be handled inside axiom-like-ish -->
+<xsl:template match="conjecture/statement|axiom/statement|principle/statement">
     <xsl:text>\begin{</xsl:text>
         <xsl:value-of select="local-name(..)" />
     <xsl:text>}</xsl:text>
@@ -2533,16 +2589,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(..)" />
     <xsl:text>}&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Proofs -->
-<!-- Conjectures, axioms, principles do not have proofs -->
-<xsl:template match="proof">
-    <xsl:text>\begin{proof}</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\end{proof}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Definition Statement -->
