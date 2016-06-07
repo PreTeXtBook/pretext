@@ -2917,10 +2917,13 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         <xsl:when test="$local='title'">
             <xsl:apply-templates select="$target" mode="title-simple" />
         </xsl:when>
-        <!-- 1 combinations: global no, local yes        -->
-        <!-- 2 combinations: global yes, local blank/yes -->
+        <!-- 1 combinations: global no, local yes               -->
+        <!-- 2 combinations: global yes, local blank/yes        -->
+        <!-- intercept biblio items, which are identified by [] -->
         <xsl:when test="$local='yes' or ($autoname='yes' and not($local!=''))">
-            <xsl:apply-templates select="$target" mode="type-name" />
+            <xsl:if test="not($target[self::biblio])">
+                <xsl:apply-templates select="$target" mode="type-name" />
+            </xsl:if>
         </xsl:when>
         <!-- just makes error message effective -->
         <xsl:when test="not($local != '')"></xsl:when>
