@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?> <!-- MBX -->
 
 <!-- This file is part of the documentation of MathBook XML   -->
 <!--                                                          -->
@@ -219,7 +219,7 @@
 
   <section xml:id="installing-imagemagick">
     <title>Installing ImageMagick</title>
-    <p>Visit the <url href="http://www.imagemagick.org/script/binary-releases.php">ImageMagick downloads page</url> and grab a binary. If you have a <xref ref="do-i-have-64-bit-windows">64-bit Windows installation</xref>, use the recommended version. If you have a 32-bit installation, find the version whose filename is obtained from that of the recommended version by substituting <c>x86</c> for <c>x64</c>. For example, if the recommended version's filename is:</p>
+    <p>Visit the <url href="http://www.imagemagick.org/script/binary-releases.php">ImageMagick downloads page</url> and grab a binary. If you have a 64-bit Windows installation (<xref ref="do-i-have-64-bit-windows" autoname="yes" />), use the recommended version. If you have a 32-bit installation, find the version whose filename is obtained from that of the recommended version by substituting <c>x86</c> for <c>x64</c>. For example, if the recommended version's filename is:</p>
     <pre>ImageMagick-7.0.1-6-Q16-x64-dll.exe</pre>
     <p>then a good choice for a 32-bit Windows would be</p>
     <pre>ImageMagick-7.0.1-6-Q16-x86-dll.exe</pre>
@@ -247,7 +247,7 @@
 
   <section xml:id="installing-ghostscript">
     <title>Installing Ghostscript</title>
-    <p>Visit the <url href="http://www.ghostscript.com/download/gsdnld.html"> Ghostscript download area</url> and download the most current binary for either <xref ref="do-i-have-64-bit-windows"> 64-bit or 32-bit Windows</xref>. Run the installer and accept all the default options.</p>
+    <p>Visit the <url href="http://www.ghostscript.com/download/gsdnld.html">Ghostscript download area</url> and download the most current binary for either 64-bit or 32-bit Windows (<xref ref="do-i-have-64-bit-windows" autoname="yes" /> ). Run the installer and accept all the default options.</p>
     <p>Congratulations, you have successfully installed Ghostscript.</p>
   </section>
 
