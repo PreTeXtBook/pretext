@@ -3035,6 +3035,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]{}</xsl:text>
 </xsl:template>
 
+<!-- Video -->
+<!-- Assuming thumbnails have been scraped with the    -->
+<!-- mbx script, we make a short static display, using -->
+<!-- a title of an enclosing figure, if available      -->
+<xsl:template match="video[@youtube]">
+    <xsl:variable name="youtube-url">
+        <xsl:text>https://www.youtube.com/watch?v=</xsl:text>
+        <xsl:value-of select="@youtube" />
+    </xsl:variable>
+    <xsl:text>\begin{tabular}{m{.1\linewidth}m{.7\linewidth}}&#xa;</xsl:text>
+    <xsl:text>\includegraphics[width=\linewidth]{</xsl:text>
+    <xsl:value-of select="$directory.images" />
+    <xsl:text>/</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>.jpg}&amp;%&#xa;</xsl:text>
+    <xsl:if test="parent::*[title]">
+        <xsl:apply-templates select="parent::*" mode="title-full" />
+        <xsl:text>\newline%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>\href{</xsl:text>
+    <xsl:value-of select="$youtube-url" />
+    <xsl:text>}{\texttt{\nolinkurl{</xsl:text>
+    <xsl:value-of select="$youtube-url" />
+    <xsl:text>}}}&#xa;</xsl:text>
+    <xsl:text>\end{tabular}&#xa;</xsl:text>
+</xsl:template>
 
 <!-- Numbers, units, quantities                     -->
 <!-- quantity                                       -->

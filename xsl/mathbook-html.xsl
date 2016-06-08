@@ -153,6 +153,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Variables that affect HTML creation -->
 <!-- More in the common file             -->
 
+<!-- This is cribbed from the CSS "max-width"-->
+<!-- Design width, measured in pixels        -->
+<xsl:variable name="design-width" select="'600'" />
+
 <!-- We generally want to chunk longer HTML output -->
 <xsl:variable name="chunk-level">
     <xsl:choose>
@@ -2950,6 +2954,49 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <source type="video/webm" src="{@source}" />
         <xsl:text disable-output-escaping='yes'>&lt;/video>&#xa;</xsl:text>
     </div>
+</xsl:template>
+
+<!-- You Tube -->
+<!-- Better sizing would require CSS classes (16:9, 4:3?)                      -->
+<!-- https://css-tricks.com/NetMag/FluidWidthVideo/Article-FluidWidthVideo.php -->
+
+<!-- Configurable options, we are considering academic uses -->
+<!-- https://developers.google.com/youtube/player_parameters#Manual_IFrame_Embeds -->
+<!-- hl parameter for language seems superfluous, user settings override       -->
+<!-- something to do with cross-domain scripting security? -->
+<!-- <xsl:text>&amp;origin=http://example.com</xsl:text>   -->
+<!-- start/end time parameters -->
+<xsl:template match="video[@youtube]">
+    <xsl:variable name="width-fraction">
+        <xsl:apply-templates select="." mode="width-percent-to-real" />
+    </xsl:variable>
+    <!-- assumes 16:9 ratio (0.5625), make configurable -->
+    <xsl:variable name="aspect-ratio">
+        <xsl:text>0.5625</xsl:text>
+    </xsl:variable>
+    <xsl:element name="iframe">
+        <xsl:attribute name="id">ytplayer</xsl:attribute>
+        <xsl:attribute name="type">text/html</xsl:attribute>
+        <xsl:attribute name="width">
+            <xsl:value-of select="$design-width * $width-fraction" />
+        </xsl:attribute>
+        <xsl:attribute name="height">
+            <xsl:value-of select="$design-width * $width-fraction * $aspect-ratio" />
+        </xsl:attribute>
+        <xsl:attribute name="frameborder">0</xsl:attribute>
+        <xsl:attribute name="src">
+            <xsl:text>https://www.youtube.com/embed/</xsl:text>
+            <xsl:value-of select="@youtube" />
+            <!-- alphabetical, ? separator first -->
+            <!-- enables keyboard controls       -->
+            <xsl:text>?disablekd=1</xsl:text>
+            <!-- use &amp; separator for remainder -->
+            <!-- modest branding -->
+            <xsl:text>&amp;modestbranding=1</xsl:text>
+            <!-- kill related videos at end -->
+            <xsl:text>&amp;rel=0</xsl:text>
+        </xsl:attribute>
+    </xsl:element>
 </xsl:template>
 
 <!-- ####### -->
