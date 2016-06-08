@@ -2968,7 +2968,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- start/end time parameters -->
 <xsl:template match="video[@youtube]">
     <xsl:variable name="width-fraction">
-        <xsl:apply-templates select="." mode="width-percent-to-real" />
+        <xsl:choose>
+            <xsl:when test="@width">
+                <!-- user-supplied as "nn%" -->
+                <xsl:apply-templates select="." mode="width-percent-to-real" />
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- 85% to account for figure margins -->
+                <xsl:text>0.85</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
     <!-- assumes 16:9 ratio (0.5625), make configurable -->
     <xsl:variable name="aspect-ratio">

@@ -2530,7 +2530,7 @@ the xsltproc executable.
             <figure>
                 <title>My first day with my drone</title>
                 <caption>First Drone Flight (1:28)</caption>
-                <video youtube="VsHMjWORFvI" width="80%" />
+                <video youtube="VsHMjWORFvI" />
             </figure>
 
         </section>
