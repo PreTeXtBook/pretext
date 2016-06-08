@@ -2618,6 +2618,7 @@ the xsltproc executable.
             <ul>
                 <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" />.</p></li>
                 <li><p>Citations: Judson's AATA with annotation at <xref ref="biblio-judson-AATA" /></p></li>
+                <li><p>Citations: Judson's AATA with autoname that should have zero effect <xref ref="biblio-judson-AATA" autoname="yes"/></p></li>
                 <li><p>Note: just the annotation of previous citation at <xref ref="note-judson-AATA" /></p></li>
                 <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" />.</p></li>
                 <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" />.</p></li>

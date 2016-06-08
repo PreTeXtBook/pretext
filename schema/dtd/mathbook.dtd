@@ -445,7 +445,10 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- ################ -->
 
 <!-- External References -->
-<!ELEMENT url       (#PCDATA)>
+<!-- This is a bit too lenient since it suggests  -->
+<!-- nesting url's is possible, or that a url can -->
+<!-- have an xref in the content                  -->
+<!ELEMENT url       (#PCDATA|%linear;)*>
     <!ATTLIST url href CDATA #IMPLIED>
 
 <!-- Internal Cross-References -->

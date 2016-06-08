@@ -2031,6 +2031,11 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- If they have a title, they can be referenced by that string          -->
 <xsl:template match="figure[not(caption)]|table[not(caption)]|listing[not(caption)]" mode="serial-number" />
 
+<!-- References in the backmatter are the "master" version -->
+<!-- The subdivision gets no number and the references     -->
+<!-- should similarly lack a structural number prefix      -->
+<xsl:template match="backmatter/references" mode="serial-number" />
+
 <!-- WeBWorK problems are never numbered, because they live    -->
 <!-- in (numbered) exercises.  But they have identically named -->
 <!-- components of exercises, so we might need to explicitly   -->
@@ -2912,10 +2917,13 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         <xsl:when test="$local='title'">
             <xsl:apply-templates select="$target" mode="title-simple" />
         </xsl:when>
-        <!-- 1 combinations: global no, local yes        -->
-        <!-- 2 combinations: global yes, local blank/yes -->
+        <!-- 1 combinations: global no, local yes               -->
+        <!-- 2 combinations: global yes, local blank/yes        -->
+        <!-- intercept biblio items, which are identified by [] -->
         <xsl:when test="$local='yes' or ($autoname='yes' and not($local!=''))">
-            <xsl:apply-templates select="$target" mode="type-name" />
+            <xsl:if test="not($target[self::biblio])">
+                <xsl:apply-templates select="$target" mode="type-name" />
+            </xsl:if>
         </xsl:when>
         <!-- just makes error message effective -->
         <xsl:when test="not($local != '')"></xsl:when>
