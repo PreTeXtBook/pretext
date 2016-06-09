@@ -3004,6 +3004,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>&amp;modestbranding=1</xsl:text>
             <!-- kill related videos at end -->
             <xsl:text>&amp;rel=0</xsl:text>
+            <xsl:if test="@start">
+                <xsl:text>&amp;start=</xsl:text>
+                <xsl:value-of select="@start" />
+            </xsl:if>
+            <xsl:if test="@end">
+                <xsl:text>&amp;end=</xsl:text>
+                <xsl:value-of select="@end" />
+            </xsl:if>
         </xsl:attribute>
     </xsl:element>
 </xsl:template>

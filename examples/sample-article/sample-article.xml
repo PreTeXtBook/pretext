@@ -2533,6 +2533,14 @@ the xsltproc executable.
                 <video youtube="VsHMjWORFvI" />
             </figure>
 
+            <p>If you are only interested in a piece of the action, you can limit the video with <c>start</c> and <c>end</c> attributes in seconds.  You might make those times clear in the caption for readers getting the link out of a PDF.  Some videos may not respect these parameters.</p>
+
+            <figure>
+                <title>My first day with my drone (Splashdown)</title>
+                <caption>First Drone Flight (Splashdown, 0:54 to 1:12)</caption>
+                <video youtube="VsHMjWORFvI" start="54" end="72" />
+            </figure>
+
         </section>
 
         <exercises xml:id="exercises">
