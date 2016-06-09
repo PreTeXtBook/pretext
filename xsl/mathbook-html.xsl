@@ -5120,6 +5120,7 @@ $(function () {
     // Make *any* div with class 'sage-compute' an executable Sage cell
     sagecell.makeSagecell({inputLocation: 'div.sage-compute',
                            linked: true,
+                           languages: ["sage", "r"],
                            evalButtonText: 'Evaluate'});
 });
 $(function () {
