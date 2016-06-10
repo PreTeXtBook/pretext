@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<mathbook xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en-US">
+    <book xml:id="hia">
+        <title>Humanities in Action</title>
+        <frontmatter xml:id="index">
+            <titlepage>
+                <author>
+                    <personname>Jahrme Risner</personname>
+                    <institution>University of Puget Sound</institution>
+                </author>
+                <date><today/></date>
+            </titlepage>
+            <preface>
+                <p>A collection of demonstrations leveraging the increased support for writing in the humanities.</p>
+            </preface>
+        </frontmatter>
+        <xi:include href="poetry.xml"/>
+    </book>
+</mathbook>
