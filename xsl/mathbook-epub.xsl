@@ -1,6 +1,13 @@
 <?xml version='1.0'?> <!-- As XML file -->
-<!-- Identify as a stylesheet -->
 <!-- http://stackoverflow.com/questions/10173139/empty-blank-namespace-declarations-being-generated-within-result-document -->
+
+<!-- http://pimpmyxslt.com/articles/entity-tricks-part2/ -->
+<!DOCTYPE xsl:stylesheet [
+    <!ENTITY % entities SYSTEM "entities.ent">
+    %entities;
+]>
+
+<!-- Identify as a stylesheet -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
                 xmlns:exsl="http://exslt.org/common"
                 xmlns:date="http://exslt.org/dates-and-times"
@@ -104,9 +111,9 @@
 <!-- First, we use the frontmatter element to trigger various necessary files     -->
 <!-- We process structural nodes via chunking routine in  xsl/mathbook-common.xsl -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file   -->
-<xsl:template match="/mathbook">
+<xsl:template match="mathbook">
     <xsl:apply-templates select="//frontmatter" mode="epub" />
-    <xsl:apply-templates mode="chunk" />
+    <xsl:apply-templates mode="chunking" />
 </xsl:template>
 
 <!-- ################ -->
@@ -114,18 +121,10 @@
 <!-- ################ -->
 
 <!-- Read the code and documentation for "chunking" in xsl/mathbook-common.xsl -->
-<!-- This will explain document structure (not XML structure) and has the      -->
-<!-- routines which call the necessary realizations of two abstract templates. -->
 
-<!-- Three modal templates accomodate all document structure nodes -->
-<!-- and all possibilities for chunking.  Read the description     -->
-<!-- in  xsl/mathbook-common.xsl to understand these.              -->
+<!-- At level 1, we can just kill book's summary page -->
 
-<!-- An individual page:                                     -->
-<!-- Inputs:                                                 -->
-<!--     * strings for page title, subtitle, authors/editors -->
-<!--     * content (exclusive of banners, etc)               -->
-<xsl:template match="*" mode="file-wrap">
+<xsl:template match="&STRUCTURAL;" mode="file-wrap">
     <xsl:param name="content" />
     <xsl:variable name="file">
         <xsl:value-of select="$content-dir" />
@@ -154,10 +153,11 @@
     </exsl:document>
 </xsl:template>
 
-<!-- The book get mined in various ways, -->
-<!-- but the "usual" HTML treatment can/should be thrown out      -->
+<!-- The book element gets mined in various ways,            -->
+<!-- but the "usual" HTML treatment can/should be thrown out -->
+<!-- At fixed level 1, this is a summary page                -->
+<!-- Later gives precedence?  So overrides above             -->
 <xsl:template match="book" mode="file-wrap" />
-
 
 <!-- ##################### -->
 <!-- Setup, Infrastructure -->
