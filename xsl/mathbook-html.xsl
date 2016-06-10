@@ -3665,11 +3665,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- TeX, LaTeX -->
+<!-- Corresponding CSS from William Hammond   -->
+<!-- attributed to David Carlisle             -->
+<!-- "mathjax-users" Google Group, 2015-12-27 -->
 <xsl:template match="latex">
-    <xsl:text>\(\mathrm{\LaTeX}\)</xsl:text>
+    <span class="latex-logo">L<span class="A">a</span>T<span class="E">e</span>X</span>
 </xsl:template>
 <xsl:template match="tex">
-    <xsl:text>\(\mathrm{\TeX}\)</xsl:text>
+    <span class="latex-logo">T<span class="E">e</span>X</span>
 </xsl:template>
 
 <!-- External URLs, Email        -->
