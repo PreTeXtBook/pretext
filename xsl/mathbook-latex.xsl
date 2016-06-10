@@ -798,8 +798,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- Poetry -->
     <xsl:if test="//poem">
-        <xsl:text>%% Poetry support&#xa;</xsl:text>
-        <xsl:text>\usepackage{verse}&#xa;</xsl:text>
+        <xsl:text>%% Poetry Support&#xa;</xsl:text>
+        <xsl:text>\newenvironment{poem}{\setlength{\parindent}{0em}}{}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\poemTitle}[1]{\begin{center}\large\textbf{#1}\end{center}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\poemIndent}{\hspace{2 em}}&#xa;</xsl:text>
+        <xsl:text>\newenvironment{stanza}{\vspace{0.25 em}\hangindent=4em}{\vspace{1 em}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\stanzaTitle}[1]{{\centering\textbf{#1}\par}\vspace{-\parskip}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\poemauthorleft}[1]{\vspace{-1em}\begin{flushleft}\textit{#1}\end{flushleft}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\poemauthorcenter}[1]{\vspace{-1em}\begin{center}\textit{#1}\end{center}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\poemauthorright}[1]{\vspace{-1em}\begin{flushright}\textit{#1}\end{flushright}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\poemlineleft}[1]{{\raggedright{#1}\par}\vspace{-\parskip}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\poemlinecenter}[1]{{\centering{#1}\par}\vspace{-\parskip}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\poemlineright}[1]{{\raggedleft{#1}\par}\vspace{-\parskip}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% Raster graphics inclusion, wrapped figures in paragraphs&#xa;</xsl:text>
     <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
@@ -5094,57 +5104,80 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--        -->
 <!-- Poetry -->
 <!--        -->
-<!-- Basic support from the "verse" package -->
 
-<!-- "poem" element loads verse package -->
-<!-- width is percentage of text width -->
-<!-- ie, "length" of longest line      -->
 <xsl:template match="poem">
-<!-- title *precedes* environment        -->
-<!-- Starred version suppresses ToC entry -->
-    <xsl:text>\poemtitle*{</xsl:text>
+    <xsl:text>\begin{poem}&#xa;</xsl:text>
+    <xsl:text>\poemTitle{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\begin{verse}</xsl:text>
-    <xsl:if test="@width">
-        <xsl:text>[0.</xsl:text>
-        <xsl:value-of select="@width" />
-        <xsl:text>\linewidth]</xsl:text>
-    </xsl:if>
-    <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="stanza"/>
     <xsl:apply-templates select="author" />
-    <xsl:text>\end{verse}&#xa;</xsl:text>
+    <xsl:text>\end{poem}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- End of a stanza is marked by last line   -->
-<!-- We just add a visual break in the source -->
-<xsl:template match="stanza">
-    <xsl:apply-templates select="line" />
-    <xsl:text>%&#xa;</xsl:text>
-</xsl:template>
-
-<!-- The last line of a stanza gets marked specially -->
-<!-- Other lines are more normal                     -->
-<xsl:template match="stanza/line">
-    <xsl:apply-templates />
-    <xsl:text>\\&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Special line ending gives new stanza -->
-<xsl:template match="stanza/line[not(following-sibling::*)]">
-    <xsl:apply-templates />
-    <xsl:text>\\!&#xa;</xsl:text>
-</xsl:template>
-
-<!-- attribution style for author at end -->
-<!-- Abusing an extra stanza             -->
 <xsl:template match="poem/author">
-    <xsl:text>\nopagebreak{\hfill\footnotesize </xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>}\\!&#xa;</xsl:text>
+    <xsl:variable name="alignment">
+        <xsl:apply-templates select="." mode="poem-halign"/>
+    </xsl:variable>
+    <xsl:text>\poemauthor</xsl:text>
+    <xsl:value-of select="$alignment"/>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
+<xsl:template match="stanza">
+    <xsl:if test="title">
+        <xsl:text>\stanzaTitle{</xsl:text>
+        <xsl:apply-templates select="." mode="title-full" />
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>\begin{stanza}&#xa;</xsl:text>
+    <xsl:apply-templates select="line" />
+    <xsl:text>\end{stanza}&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="stanza/line">
+    <!-- Find Alignment -->
+    <xsl:variable name="alignment">
+        <xsl:apply-templates select="." mode="poem-halign"/>
+    </xsl:variable>
+    <!-- Find Indentation -->
+    <xsl:variable name="indentation">
+        <xsl:apply-templates select="." mode="poem-indent"/>
+    </xsl:variable>
+    <!-- Apply Alignment and Indentation -->
+    <xsl:text>\poemline</xsl:text>
+    <xsl:value-of select="$alignment"/>
+    <xsl:text>{</xsl:text>
+    <xsl:if test="$alignment='left'"><!-- Left Alignment: Indent from Left -->
+        <xsl:call-template name="poem-line-indenting">
+            <xsl:with-param name="count"><xsl:value-of select="$indentation"/></xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:apply-templates/><!-- Center Alignment: Ignore Indentation -->
+    <xsl:if test="$alignment='right'"><!-- Right Alignment: Indent from Right -->
+        <xsl:call-template name="poem-line-indenting">
+            <xsl:with-param name="count"><xsl:value-of select="$indentation"/></xsl:with-param>
+        </xsl:call-template>
+        <!-- Latex seems to "eat" one indentation while right aligned, so we add one extra -->
+        <xsl:text>\poemIndent{}</xsl:text>
+    </xsl:if>
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template name="poem-line-indenting">
+    <xsl:param name="count"/>
+    <xsl:choose>
+        <xsl:when test="(0 >= $count)"/>
+        <xsl:otherwise>
+            <xsl:text>\poemIndent{}</xsl:text>
+            <xsl:call-template name="poem-line-indenting">
+                <xsl:with-param name="count" select="$count - 1"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- Footnotes               -->
 <!--   with no customization -->

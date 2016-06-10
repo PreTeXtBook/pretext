@@ -4060,44 +4060,91 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--        -->
 <!-- Poetry -->
 <!--        -->
+
+<!-- TODO: Address GitHub issues regarding poetry output:   -->
 <!-- https://github.com/BooksHTML/mathbook-assets/issues/65 -->
 
-<!-- "poem" element loads verse package         -->
-<!-- width attribute is for print, ignored here -->
 <xsl:template match="poem">
-    <div class="poem" style="margin: auto;">
-        <div class="poemtitle" style="padding-bottom: 20px; font-weight: bold; font-size: 121%">
+    <div class="poem" style="display: table; width: auto; max-width: 90%; margin: 0 auto;">
+        <div class="poemtitle" style="font-weight: bold; text-align: center; font-size: 120%">
             <xsl:apply-templates select="." mode="title-full"/>
         </div>
         <xsl:apply-templates select="stanza"/>
-        <xsl:apply-templates select="author" />
+        <xsl:apply-templates select="author"/>
     </div>
 </xsl:template>
 
-
-<!-- Stanzas are sequences of lines -->
-<xsl:template match="stanza">
-    <div class="stanza" style="padding-bottom: 20px;">
-    <xsl:apply-templates select="line" />
-    </div>
-</xsl:template>
-
-<!-- The last line of a stanza gets no break -->
-<!-- Other lines are more normal             -->
-<xsl:template match="poem/line|stanza/line">
-    <xsl:apply-templates />
-    <br />
-</xsl:template>
-
-<xsl:template match="poem/line[not(following-sibling::*)]|stanza/line[not(following-sibling::*)]">
-    <xsl:apply-templates />
-</xsl:template>
-
-<!-- attribution style for author at end -->
 <xsl:template match="poem/author">
-    <cite class="attribution" style="padding-bottom: 20px;">
-        <xsl:apply-templates />
-    </cite>
+    <xsl:variable name="alignment">
+        <xsl:apply-templates select="." mode="poem-halign"/>
+    </xsl:variable>
+    <xsl:element name="div">
+        <xsl:attribute name="class">
+            <xsl:text>poemauthor</xsl:text>
+            <xsl:value-of select="$alignment" />
+        </xsl:attribute>
+        <xsl:attribute name="style">
+            <xsl:text>font-style: italic; padding-bottom: 20px; text-align: </xsl:text>
+            <xsl:value-of select="$alignment" />
+        </xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+
+<xsl:template match="stanza">
+    <div class="stanza" style="padding-bottom: 20px">
+        <xsl:if test="title">
+            <div class="stanzatitle" style="font-weight: bold; text-align: center">
+                <xsl:apply-templates select="." mode="title-full"/>
+            </div>
+        </xsl:if>
+        <xsl:apply-templates select="line"/>
+    </div>
+</xsl:template>
+
+<xsl:template match="stanza/line">
+    <xsl:variable name="alignment">
+        <xsl:apply-templates select="." mode="poem-halign"/>
+    </xsl:variable>
+    <xsl:variable name="indentation">
+        <xsl:apply-templates select="." mode="poem-indent"/>
+    </xsl:variable>
+    <xsl:element name="div">
+        <xsl:attribute name="class">
+            <xsl:text>poemline</xsl:text>
+            <xsl:value-of select="$alignment" />
+        </xsl:attribute>
+        <xsl:attribute name="style">
+            <!-- Hanging indentation for overly long lines -->
+            <xsl:text>margin-left: 4em; text-indent: -4em; </xsl:text>
+            <xsl:text>text-align: </xsl:text>
+            <xsl:value-of select="$alignment" />
+        </xsl:attribute>
+        <xsl:if test="$alignment='left'"><!-- Left Alignment: Indent from Left -->
+            <xsl:call-template name="poem-line-indenting">
+                <xsl:with-param name="count"><xsl:value-of select="$indentation"/></xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:apply-templates/><!-- Center Alignment: Ignore Indentation -->
+        <xsl:if test="$alignment='right'"><!-- Right Alignment: Indent from Right -->
+            <xsl:call-template name="poem-line-indenting">
+                <xsl:with-param name="count"><xsl:value-of select="$indentation"/></xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:element>
+</xsl:template>
+
+<xsl:template name="poem-line-indenting">
+    <xsl:param name="count"/>
+    <xsl:choose>
+        <xsl:when test="(0 >= $count)"/>
+        <xsl:otherwise>
+            <span class="tab" style="margin-left: 2em"></span>
+            <xsl:call-template name="poem-line-indenting">
+                <xsl:with-param name="count" select="$count - 1"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Raw Bibliographic Entry Formatting              -->

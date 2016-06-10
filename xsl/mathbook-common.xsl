@@ -2556,6 +2556,38 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- ################ -->
+<!-- Poetry Utilities -->
+<!-- ################ -->
+
+<xsl:template match="poem|poem/author|stanza|stanza/line" mode="poem-indent">
+    <xsl:choose>
+        <xsl:when test="@indent">
+            <xsl:value-of select="@indent" />
+        </xsl:when>
+        <xsl:when test="self::poem">
+            <xsl:text>0</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="parent::*" mode="poem-indent" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="poem|poem/author|stanza|stanza/line" mode="poem-halign">
+    <xsl:choose>
+        <xsl:when test="@halign">
+            <xsl:value-of select="@halign" />
+        </xsl:when>
+        <xsl:when test="self::poem">
+            <xsl:text>left</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="parent::*" mode="poem-halign" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- ################ -->
 <!-- Cross-References -->
 <!-- ################ -->
 
