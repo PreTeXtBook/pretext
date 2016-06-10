@@ -823,10 +823,9 @@
 
 <!-- http://webwork.maa.org/wiki/Introduction_to_PGML#Basic_Formatting -->
 
-<!-- two spaces at line-end is a newline -->
-<!-- TODO - an "attribution" is the only place this could happen -->
-<!-- make this much more restrictive?                            -->
-<xsl:template match="webwork//br">
+<!-- two spaces at line-end makes a newline in PGML-->
+<xsl:template match="webwork//cell/line">
+    <xsl:apply-templates />
     <xsl:text>  &#xa;</xsl:text>
 </xsl:template>
 

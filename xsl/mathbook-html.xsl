@@ -3233,6 +3233,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="thickness-specification">
                     <xsl:with-param name="width" select="$top" />
                 </xsl:call-template>
+                <!-- uses lines -->
+                <xsl:if test="$the-cell/line">
+                    <xsl:text> lines</xsl:text>
+                </xsl:if>
             </xsl:attribute>
             <xsl:if test="not($column-span = 1)">
                 <xsl:attribute name="colspan">
@@ -3250,6 +3254,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- Arrive here only when we have no cell so      -->
     <!-- we bail out of recursion with no action taken -->
+</xsl:template>
+
+<xsl:template match="mathbook//tabular//line">
+    <xsl:apply-templates />
+    <!-- is there a next line to separate? -->
+    <xsl:if test="following-sibling::line">
+        <br />
+    </xsl:if>
 </xsl:template>
 
 
