@@ -45,6 +45,7 @@ the xsltproc executable.
 <!-- changes, the  xsl/localizations  directory has more information -->
 <mathbook>
 <!-- <mathbook xml:lang="pt-BR"> -->
+<!-- <mathbook xml:lang="fr-FR"> -->
 
     <!--
     "docinfo" is like metadata, it is necessary technical
@@ -2510,6 +2511,34 @@ the xsltproc executable.
             <figure>
                 <caption>University of Puget Sound Promotional Video</caption>
                 <video source="images/ups-visitor-guide-360.mp4" />
+            </figure>
+
+            <p>YouTube videos may be embedded with only knowledge of the <q>ID</q>.  This a string of eleven seemingly random characters that show up in the URL when you watch a video.  For the Led Zeppelin performance below, the ID is <c>hAzdgU_kpGo</c>, which you might normally watch directly from the URL <url href="https://www.youtube.com/watch?v=hAzdgU_kpGo" />.  Screen real estate is determined by specifying an optional <c>@width</c> attribute as a percentage, and aspect ratio is preserved on the assumption of HD video (16:9).</p>
+
+            <p>Enhancements could include other aspect ratios, and attributes for a start and stop time.</p>
+
+            <p>These may be placed <q>standalone</q> but are designed mostly on the assumption that they are wrapped in a <c>figure</c> with a <c>title</c> (which is distinct from a <c>caption</c>).</p>
+
+            <figure>
+                <title>Kashmir (Live), Led Zeppelin</title>
+                <caption>Kashmir (Live), Led Zeppelin. O2 Arena, London. December 10, 2007. (8:55)</caption>
+                <video youtube="hAzdgU_kpGo" width="70%" xml:id="led-zeppelin-kashmir" />
+            </figure>
+
+            <p>If you have ever owned a drone, you sympathize with this guy.  Way funnier than a cat video.</p>
+
+            <figure>
+                <title>My first day with my drone</title>
+                <caption>First Drone Flight (1:28)</caption>
+                <video youtube="VsHMjWORFvI" />
+            </figure>
+
+            <p>If you are only interested in a piece of the action, you can limit the video with <c>start</c> and <c>end</c> attributes in seconds.  You might make those times clear in the caption for readers getting the link out of a PDF.  Some videos may not respect these parameters.</p>
+
+            <figure>
+                <title>My first day with my drone (Splashdown)</title>
+                <caption>First Drone Flight (Splashdown, 0:54 to 1:12)</caption>
+                <video youtube="VsHMjWORFvI" start="54" end="72" />
             </figure>
 
         </section>

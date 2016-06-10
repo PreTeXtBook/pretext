@@ -547,7 +547,12 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 
 <!-- Video -->
 <!ELEMENT video  EMPTY>
-    <!ATTLIST video source CDATA #REQUIRED>
+    <!ATTLIST video xml:id    ID    #IMPLIED>
+    <!ATTLIST video width     CDATA #IMPLIED>
+    <!ATTLIST video source    CDATA #IMPLIED>
+    <!ATTLIST video youtube   CDATA #IMPLIED>
+    <!ATTLIST video start     CDATA #IMPLIED>
+    <!ATTLIST video end       CDATA #IMPLIED>
 
 <!-- ###### -->
 <!-- Images -->

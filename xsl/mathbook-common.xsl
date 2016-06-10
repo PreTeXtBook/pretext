@@ -1596,6 +1596,16 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="*" mode="width-percent-to-real">
+    <xsl:variable name="percentage" select="@width" />
+    <!-- could normalize, check last character -->
+    <xsl:if test="not(contains($percentage, '%'))">
+        <xsl:message>MBX:WARNING: a width is not specified as a percentage (<xsl:value-of select="$percentage" />)</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+    <xsl:value-of select="substring-before($percentage,'%') div 100" />
+</xsl:template>
+
 <xsl:template match="sidebyside" mode="type-name">
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'figure'" />
