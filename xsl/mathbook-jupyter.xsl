@@ -19,6 +19,12 @@ You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
+<!-- http://pimpmyxslt.com/articles/entity-tricks-part2/ -->
+<!DOCTYPE xsl:stylesheet [
+    <!ENTITY % entities SYSTEM "entities.ent">
+    %entities;
+]>
+
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:exsl="http://exslt.org/common"
     xmlns:str="http://exslt.org/strings"
@@ -77,8 +83,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- We process structural nodes via chunking routine in  xsl/mathbook-common.html -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file    -->
-<xsl:template match="/mathbook">
-    <xsl:apply-templates mode="chunk" />
+<xsl:template match="mathbook">
+    <xsl:apply-templates mode="chunking" />
 </xsl:template>
 
 <!-- ################ -->
@@ -96,8 +102,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Markup common to every structural node.                    -->
 <!-- Both as outer-level of a page and as subsidiary to a page. -->
-<xsl:template match="*" mode="content-wrap">
-    <xsl:param name="content" />
+<xsl:template match="&STRUCTURAL;">
     <!-- Top-level is 0, so add one at use-->
     <xsl:variable name="level">
         <xsl:apply-templates select="." mode="level" />
@@ -115,79 +120,62 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="end-string" />
         </xsl:with-param>
     </xsl:call-template>
-    <!-- content of subdivision as multiple cells -->
-    <xsl:copy-of select="$content" />
+    <xsl:apply-templates />
 </xsl:template>
 
 <!-- Some structural nodes do not need their title,                -->
 <!-- (or subtitle) so we don't put a section heading there         -->
 <!-- Title(s) for an article are forced by a frontmatter/titlepage -->
-<xsl:template match="article|frontmatter" mode="content-wrap">
-    <xsl:param name="content" />
-    <!-- content of subdivision as multiple cells -->
-    <xsl:copy-of select="$content" />
+<xsl:template match="article|frontmatter">
+    <xsl:apply-templates />
 </xsl:template>
 
-<!-- The HTML content of a page representing an intermediate node.                 -->
-<!-- Note: the necessity of the <nav> section creates two problems:                -->
-<!-- (i)  We implement a 3-pass hack which requires identifing, eg,                -->
-<!-- an introduction as preceding a conclusion, and eg, hiding the killing titles. -->
-<!-- (ii) We generally could have maybe just requied a modal template              -->
-<!-- for a summary of a structural node and moved processing all the page          -->
-<!-- elements into the  mathbook-common  routines                                  -->
-<xsl:template match="*" mode="structure-node-intermediate">
-    <xsl:apply-templates select="*" mode="summary-prenav" />
-    <nav class="summary-links">
-        <xsl:apply-templates select="*" mode="summary-nav" />
-    </nav>
-    <xsl:apply-templates select="*" mode="summary-postnav"/>
-</xsl:template>
-
-
-<!-- A 3-pass hack to create presentations and summaries of  -->
-<!-- an intermediate node.  It is the <nav> section wrapping -->
-<!-- the summaries/links that makes this necessary.          -->
-<!-- Note: titles/authors etc are killed here                -->
-<!-- TODO: improve this somehow?                             -->
-
-<!-- Pre-Navigation -->
-<xsl:template match="introduction|titlepage|abstract" mode="summary-prenav">
-    <xsl:apply-templates select="."/>
-</xsl:template>
-<xsl:template match="*" mode="summary-prenav" />
-
-<!-- Post-Navigation -->
-<xsl:template match="conclusion" mode="summary-postnav">
-    <xsl:apply-templates select="."/>
-</xsl:template>
-<xsl:template match="*" mode="summary-postnav" />
-
-<!-- Navigation -->
-<!-- Any structural node becomes a hyperlink        -->
-<!-- Could recurse into "dispatch" inside the "if", -->
-<!-- but might pile too much onto the stack?        -->
-<xsl:template match="*" mode="summary-nav">
-    <xsl:variable name="structural">
-        <xsl:apply-templates select="." mode="is-structural" />
+<!-- Content of a summary page is usual content, -->
+<!-- or link to subsidiary content               -->
+<xsl:template match="&STRUCTURAL;" mode="summary">
+    <!-- Top-level is 0, so add one at use-->
+    <xsl:variable name="level">
+        <xsl:apply-templates select="." mode="level" />
     </xsl:variable>
-    <xsl:if test="$structural='true'">
-        <xsl:call-template name="markdown-cell">
-            <xsl:with-param name="content">
-                <xsl:call-template name="begin-string" />
-                <xsl:text>## </xsl:text>
-                <xsl:text>[</xsl:text>
-                <xsl:apply-templates select="." mode="number" />
-                <xsl:text> </xsl:text>
-                <xsl:apply-templates select="." mode="title-simple" />
-                <xsl:text>]</xsl:text>
-                <xsl:text>(</xsl:text>
-                <xsl:apply-templates select="." mode="url" />
-                <xsl:text>)</xsl:text>
-                <xsl:call-template name="end-string" />
-            </xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
+    <!-- wrap a single header string as cell -->
+    <xsl:call-template name="markdown-cell">
+        <xsl:with-param name="content">
+            <xsl:call-template name="begin-string" />
+            <xsl:call-template name="heading-format">
+                <xsl:with-param name="count" select="$level + 1" />
+            </xsl:call-template>
+            <xsl:apply-templates select="." mode="number" />
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="." mode="title-full" />
+            <xsl:call-template name="end-string" />
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:for-each select="*">
+        <xsl:choose>
+            <xsl:when test="&STRUCTURAL-FILTER;">
+                <xsl:call-template name="markdown-cell">
+                    <xsl:with-param name="content">
+                        <xsl:call-template name="begin-string" />
+                        <xsl:text>## </xsl:text>
+                        <xsl:text>[</xsl:text>
+                        <xsl:apply-templates select="." mode="number" />
+                        <xsl:text> </xsl:text>
+                        <xsl:apply-templates select="." mode="title-simple" />
+                        <xsl:text>]</xsl:text>
+                        <xsl:text>(</xsl:text>
+                        <xsl:apply-templates select="." mode="url" />
+                        <xsl:text>)</xsl:text>
+                        <xsl:call-template name="end-string" />
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:for-each>
 </xsl:template>
+
 
 <!-- Mark unimplemented parts with [NI-elementname] -->
 <!-- cell level first -->
@@ -217,8 +205,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$element-name" />
     <xsl:text>]</xsl:text>
 </xsl:template>
-
-
 
 <!-- Kill various parts temporarily -->
 <xsl:template match="frontmatter" />
