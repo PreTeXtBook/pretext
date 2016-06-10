@@ -4417,6 +4417,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="table-bottom" select="$table-bottom" />
         <xsl:with-param name="table-right" select="$table-right" />
         <xsl:with-param name="table-halign" select="$table-halign" />
+        <xsl:with-param name="table-valign" select="$table-valign" />
     </xsl:apply-templates>
     <!-- mandatory finish, exclusive of any final row specifications -->
     <xsl:text>\end{tabular}&#xa;</xsl:text>
@@ -4517,6 +4518,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="table-bottom" />
     <xsl:param name="table-right" />
     <xsl:param name="table-halign" />
+    <xsl:param name="table-valign" />
     <!-- inherit global table-wide values    -->
     <!-- or replace with row-specific values -->
     <xsl:variable name="row-left">
@@ -4553,6 +4555,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="table-bottom" select="$table-bottom"/>
         <xsl:with-param name="table-right" select="$table-right" />
         <xsl:with-param name="table-halign" select="$table-halign" />
+        <xsl:with-param name="table-valign" select="$table-valign" />
         <xsl:with-param name="row-left" select="$row-left" />
         <xsl:with-param name="row-bottom" select="$row-bottom" />
         <xsl:with-param name="prior-bottom" select="'undefined'" />
@@ -4578,6 +4581,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="table-bottom" />
     <xsl:param name="table-right" />
     <xsl:param name="table-halign" />
+    <xsl:param name="table-valign" />
     <xsl:param name="row-left" />
     <xsl:param name="row-bottom" />
     <xsl:param name="prior-bottom" />
@@ -4655,6 +4659,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
+    <!-- Use row attributes for vertical alignment                -->
+    <!-- recreate the row specification for vertical alignment    -->
+    <!-- either a per-row value, or the global, table-wide value  -->
+    <xsl:variable name="row-valign">
+        <xsl:choose>
+            <xsl:when test="$the-cell/parent::*[1]/@valign">
+                <xsl:value-of select="$the-cell/parent::*[1]/@valign" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$table-valign" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <!-- Look ahead to next cell, anticipating recursion   -->
     <!-- but also probing for end of row (no more cells),  -->
     <!-- which is needed when flushing cline specification -->
@@ -4691,6 +4708,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="table-cell-lines">
                     <xsl:with-param name="the-cell" select="$the-cell" />
                     <xsl:with-param name="halign" select="$cell-halign" />
+                    <xsl:with-param name="valign" select="$row-valign" />
                 </xsl:call-template>
                 <xsl:text>}</xsl:text>
             </xsl:when>
@@ -4698,6 +4716,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="table-cell-lines">
                     <xsl:with-param name="the-cell" select="$the-cell" />
                     <xsl:with-param name="halign" select="$cell-halign" />
+                    <xsl:with-param name="valign" select="$row-valign" />
                 </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
@@ -4774,6 +4793,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="table-bottom" select="$table-bottom" />
                 <xsl:with-param name="table-right" select="$table-right" />
                 <xsl:with-param name="table-halign" select="$table-halign" />
+                <xsl:with-param name="table-valign" select="$table-valign" />
                 <!-- next line correct, only allow discrepancy on first use -->
                 <xsl:with-param name="row-left" select="$table-left" />
                 <xsl:with-param name="row-bottom" select="$row-bottom" />
@@ -4802,8 +4822,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Some utilities are defined in xsl/mathbook-common.xsl -->
 
-<!-- "halign-specification" : param "width" -->
+<!-- "halign-specification" : param "align" -->
 <!--     left, right, center -> l, c, r     -->
+
+<!-- "valign-specification" : param "align" -->
+<!--     top, middle, bottom -> t, m, b     -->
 
 <!-- Translate vertical rule width to a LaTeX "new" column specification -->
 <xsl:template name="vrule-specification">
@@ -4885,13 +4908,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="table-cell-lines">
     <xsl:param name="the-cell" />
     <xsl:param name="halign" />
+    <xsl:param name="valign" />
     <xsl:choose>
         <xsl:when test="$the-cell[line]">
             <xsl:text>\tablecelllines{</xsl:text>
             <xsl:call-template name="halign-specification">
                 <xsl:with-param name="align" select="$halign" />
             </xsl:call-template>
-            <xsl:text>}{c}&#xa;</xsl:text>
+            <xsl:text>}{</xsl:text>
+            <xsl:call-template name="valign-specification">
+                <xsl:with-param name="align" select="$valign" />
+            </xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
             <xsl:text>{</xsl:text>
             <xsl:apply-templates select="$the-cell/line" />
             <xsl:text>}&#xa;</xsl:text>

@@ -2136,9 +2136,9 @@ the xsltproc executable.
                     </row>
                     <row>
                         <cell><c>valign</c></cell>
-                        <cell>p</cell>
-                        <cell>p</cell>
-                        <cell>p</cell>
+                        <cell><m>\times</m></cell>
+                        <cell></cell>
+                        <cell><m>\times</m></cell>
                         <cell></cell>
                         <cell>top, middle, bottom</cell>
                     </row>
@@ -2431,12 +2431,12 @@ the xsltproc executable.
                 </tabular>
             </table>
 
-            <p>Table cells can have multiline content using <tag>line</tag> elements. This is not the same thing as a paragraph cell<mdash />line breaking will happen precisely where the author tells it to. A line will not break, even on a narrow screen. If a cell uses a <tag>line</tag>, it must only use a sequence of <tag>line</tag>s and no other content.</p>
+            <p>Table cells can have multiline content using <tag>line</tag> elements. This is not the same thing as a paragraph cell<mdash />line breaking will happen precisely where the author tells it to. A line will not break, even on a narrow screen. If a cell uses a <tag>line</tag>, it must only use a sequence of <tag>line</tag>s and no other content. This is also a good time to demonstrate the <attribute>valign</attribute> attribute.</p>
 
             <table xml:id="table-multiline-cells">
                 <caption><abbr>Dr.</abbr> Seuss lines</caption>
                 <tabular top="medium" left="medium" bottom="medium" right="medium">
-                    <row>
+                    <row valign="bottom">
                         <cell>
                              <line>One Fish</line>
                              <line>Two Fish</line>
