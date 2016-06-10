@@ -296,6 +296,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST row bottom        (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST row left          (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST row halign        (left|center|right)        #IMPLIED>
+    <!ATTLIST row valign        (left|center|right)        #IMPLIED>
 
 <!ELEMENT cell    (#PCDATA|%sentence;|line)*>
 <!-- Should be (#PCDATA|%sentence;)* xor (line+), but DTD cannot express this -->

@@ -1427,14 +1427,26 @@
                     <xsl:call-template name="thickness-specification">
                         <xsl:with-param name="width" select="parent::row/@bottom" />
                     </xsl:call-template>
-                    <xsl:text>px solid;</xsl:text>
+                    <xsl:text>px solid; </xsl:text>
                 </xsl:when>
                 <xsl:when test="ancestor::tabular/@bottom">
                     <xsl:text>border-bottom: </xsl:text>
                     <xsl:call-template name="thickness-specification">
                         <xsl:with-param name="width" select="ancestor::tabular/@bottom" />
                     </xsl:call-template>
-                    <xsl:text>px solid;</xsl:text>
+                    <xsl:text>px solid; </xsl:text>
+                </xsl:when>
+            </xsl:choose>
+            <xsl:choose>
+                <xsl:when test="parent::row/@valign">
+                    <xsl:text>vertical-align: </xsl:text>
+                    <xsl:value-of select="parent::row/@valign" />
+                    <xsl:text>; </xsl:text>
+                </xsl:when>
+                <xsl:when test="ancestor::tabular/@valign">
+                    <xsl:text>vertical-align: </xsl:text>
+                    <xsl:value-of select="ancestor::tabular/@valign" />
+                    <xsl:text>; </xsl:text>
                 </xsl:when>
             </xsl:choose>
         </xsl:if>

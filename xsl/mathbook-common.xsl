@@ -2676,6 +2676,29 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     </xsl:choose>
 </xsl:template>
 
+<!-- Translate vertical alignment to CSS short name         -->
+<!-- HTML:  makes portion of CSS class names for cells      -->
+<!-- LaTeX: provides one standard LaTeX vertical alignment  -->
+<!-- PG: provide LaTeX-style alignment string for           -->
+<!-- DataTable macro from niceTable.pl                      -->
+<xsl:template name="valign-specification">
+    <xsl:param name="align" />
+    <xsl:choose>
+        <xsl:when test="$align='top'">
+            <xsl:text>t</xsl:text>
+        </xsl:when>
+        <xsl:when test="$align='middle'">
+            <xsl:text>m</xsl:text>
+        </xsl:when>
+        <xsl:when test="$align='bottom'">
+            <xsl:text>b</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:WARNING: tabular vertical alignment attribute not recognized: use top, middle, bottom</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- ################ -->
 <!-- Cross-References -->
 <!-- ################ -->

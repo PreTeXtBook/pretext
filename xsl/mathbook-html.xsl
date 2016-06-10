@@ -3116,6 +3116,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+        <!-- vertical alignment -->
+        <xsl:variable name="valignment">
+            <xsl:choose>
+                <!-- parent row attribute first -->
+                <xsl:when test="$the-cell/ancestor::row/@valign">
+                    <xsl:value-of select="$the-cell/ancestor::row/@valign" />
+                </xsl:when>
+                <!-- table attribute last -->
+                <xsl:when test="$the-cell/ancestor::tabular/@valign">
+                    <xsl:value-of select="$the-cell/ancestor::tabular/@valign" />
+                </xsl:when>
+                <!-- HTML default is "baseline", not supported by MBX           -->
+                <!-- Instead we default to "middle" to be consistent with LaTeX -->
+                <xsl:otherwise>
+                    <xsl:text>middle</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <!-- bottom borders -->
         <xsl:variable name="bottom">
             <xsl:choose>
@@ -3215,9 +3233,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:element name="td">
             <!-- and the class attribute -->
             <xsl:attribute name="class">
-                <!-- always write alignmant, so *precede* all subsequent with a space -->
+                <!-- always write alignment, so *precede* all subsequent with a space -->
                 <xsl:call-template name="halign-specification">
                     <xsl:with-param name="align" select="$alignment" />
+                </xsl:call-template>
+                <!-- vertical alignment -->
+                <xsl:text> </xsl:text>
+                <xsl:call-template name="valign-specification">
+                    <xsl:with-param name="align" select="$valignment" />
                 </xsl:call-template>
                 <!-- bottom border -->
                 <xsl:text> b</xsl:text>
@@ -3280,8 +3303,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "thickness-specification" : param "width"    -->
 <!--     none, minor, medium, major -> 0, 1, 2, 3 -->
 
-<!-- "halign-specification" : param "width"       -->
+<!-- "halign-specification" : param "align"       -->
 <!--     left, right, center -> l, c, r           -->
+
+<!-- "valign-specification" : param "align"       -->
+<!--     top, middle, bottom -> t, m, b           -->
 
 <!-- ######## -->
 <!-- Captions -->
