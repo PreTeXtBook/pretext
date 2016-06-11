@@ -2136,9 +2136,9 @@ the xsltproc executable.
                     </row>
                     <row>
                         <cell><c>valign</c></cell>
-                        <cell>p</cell>
-                        <cell>p</cell>
-                        <cell>p</cell>
+                        <cell><m>\times</m></cell>
+                        <cell></cell>
+                        <cell><m>\times</m></cell>
                         <cell></cell>
                         <cell>top, middle, bottom</cell>
                     </row>
@@ -2430,6 +2430,35 @@ the xsltproc executable.
                     </row>
                 </tabular>
             </table>
+
+            <p>Table cells can have multiline content using <tag>line</tag> elements. This is not the same thing as a paragraph cell<mdash />line breaking will happen precisely where the author tells it to. A line will not break, even on a narrow screen. If a cell uses a <tag>line</tag>, it must only use a sequence of <tag>line</tag>s and no other content. This is also a good time to demonstrate the <attribute>valign</attribute> attribute.</p>
+
+            <table xml:id="table-multiline-cells">
+                <caption><abbr>Dr.</abbr> Seuss lines</caption>
+                <tabular top="medium" left="medium" bottom="medium" right="medium">
+                    <row valign="bottom">
+                        <cell>
+                             <line>One Fish</line>
+                             <line>Two Fish</line>
+                             <line>Red Fish</line>
+                             <line>Blue Fish</line>
+                        </cell>
+                        <cell>
+                             <line>I am the Lorax.</line>
+                             <line>I speak for the trees.</line>
+                        </cell>
+                        <cell>
+                             <line>Look at me!</line>
+                             <line>Look at me!</line>
+                             <line>Look at me NOW!</line>
+                             <line>It is fun to have fun.</line>
+                             <line>But you have</line>
+                             <line>to know how.</line>
+                        </cell>
+                    </row>
+                </tabular>
+            </table>
+
 
         </section>
 
