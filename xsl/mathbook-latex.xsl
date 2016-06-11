@@ -1964,7 +1964,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="author" mode="name-list"/>
         <xsl:text>}}\par\bigskip&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates />
+    <xsl:apply-templates select="*[not(self::author)]" />
     <!-- transition to book backmatter, if done with last appendix -->
     <xsl:if test="ancestor::book and self::appendix and not(following-sibling::appendix)">
         <xsl:text>%&#xa;</xsl:text>
