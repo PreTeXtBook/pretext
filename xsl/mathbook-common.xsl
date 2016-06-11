@@ -1231,11 +1231,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:variable>
      <xsl:choose>
         <xsl:when test="$chunk='true'">
-            <xsl:message>CHUNK: <xsl:apply-templates select="." mode="long-name" /></xsl:message>
+            <!-- <xsl:message>CHUNK: <xsl:apply-templates select="." mode="long-name" /></xsl:message> -->
             <xsl:apply-templates select="." mode="chunk" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>INTER: <xsl:apply-templates select="." mode="long-name" /></xsl:message>
+            <!-- <xsl:message>INTER: <xsl:apply-templates select="." mode="long-name" /></xsl:message> -->
             <xsl:apply-templates select="." mode="intermediate" />
             <xsl:apply-templates select="&STRUCTURAL;" mode="chunking" />
         </xsl:otherwise>
