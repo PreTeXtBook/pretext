@@ -2813,6 +2813,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Some references get an autoname prefix (eg Section, Theorem), -->
 <!-- subject to global and local options, interpreted here         -->
 <!-- Element is the  xref, $target  provides the autoname string   -->
+<!-- If autoname="title" and the xref has content, then there      -->
+<!-- is no number because of the title request and the xref        -->
+<!-- content becomes the link text instead                         -->
 <xsl:template match="*" mode="xref-prefix">
     <!-- We need the target for autonaming with type-name or title -->
     <xsl:param name="target" />
