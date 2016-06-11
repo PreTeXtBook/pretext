@@ -271,21 +271,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We process structural nodes via chunking routine in   xsl/mathbook-common.html -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file     -->
 <!-- The xref-knowl templates run independently on the entire document tree         -->
-<xsl:template match="/mathbook">
-    <xsl:apply-templates mode="chunk" />
+<xsl:template match="mathbook">
+    <xsl:apply-templates mode="chunking" />
     <xsl:apply-templates mode="xref-knowl" />
 </xsl:template>
 
 <!-- However, some MBX document types do not have    -->
 <!-- universal conversion, so these default warnings -->
 <!-- should be overridden by supported conversions   -->
-<xsl:template match="letter" mode="chunk">
+<xsl:template match="letter" mode="chunking">
     <xsl:message terminate="yes">
         <xsl:text>MBX:ERROR:  HTML conversion does not support the "letter" document type.  Quitting...</xsl:text>
     </xsl:message>
 </xsl:template>
 
-<xsl:template match="memo" mode="chunk">
+<xsl:template match="memo" mode="chunking">
     <xsl:message terminate="yes">
         <xsl:text>MBX:ERROR:  HTML conversion does not support the "memo" document type.  Quitting...</xsl:text>
     </xsl:message>
@@ -371,84 +371,78 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Read the code and documentation for "chunking" in xsl/mathbook-common.html -->
 <!-- This will explain document structure (not XML structure) and has the       -->
-<!-- routines which call the necessary realizations of two abstract templates.  -->
+<!-- routines which employ the realizations below of two abstract templates.    -->
 
-<!-- Three modal templates accomodate all document structure nodes -->
-<!-- and all possibilities for chunking.  Read the description     -->
-<!-- in  xsl/mathbook-common.xsl to understand these.              -->
-<!-- The  "file-wrap"  template is defined elsewhre in this file.  -->
-
-<!-- HTML markup common to every structural node. -->
-<!-- Both as outer-level of a page and as subsidiary to a page. -->
-<xsl:template match="*" mode="content-wrap">
-    <xsl:param name="content" />
-    <!-- Heading, div for subdivision that is this page -->
-    <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
+<!-- Default template for content of a complete page -->
+<xsl:template match="&STRUCTURAL;">
+    <!-- Heading, div for this structural subdivision -->
+    <xsl:variable name="ident">
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:variable>
     <section class="{local-name(.)}" id="{$ident}">
         <xsl:apply-templates select="." mode="section-header" />
-        <xsl:copy-of select="$content" />
+        <xsl:apply-templates />
     </section>
 </xsl:template>
 
-<!-- The HTML content of a page representing an intermediate node.                 -->
-<!-- Note: the necessity of the <nav> section creates two problems:                -->
-<!-- (i)  We implement a 3-pass hack which requires identifing, eg,                -->
-<!-- an introduction as preceding a conclusion, and eg, hiding the killing titles. -->
-<!-- (ii) We generally could have maybe just requied a modal template              -->
-<!-- for a summary of a structural node and moved processing all the page          -->
-<!-- elements into the  mathbook-common  routines                                  -->
-<xsl:template match="*" mode="structure-node-intermediate">
-    <xsl:apply-templates select="*" mode="summary-prenav" />
-    <nav class="summary-links">
-        <xsl:apply-templates select="*" mode="summary-nav" />
-    </nav>
-    <xsl:apply-templates select="*" mode="summary-postnav"/>
+<!-- Modal template for content of a summary page             -->
+<!-- The necessity of the <nav> section creates a difficulty  -->
+<!-- so we implement a 3-pass hack which requires identifying -->
+<!-- the early, middle and late parts                         -->
+<xsl:template match="&STRUCTURAL;" mode="summary">
+    <!-- Heading, div for this structural subdivision -->
+    <xsl:variable name="ident">
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:variable>
+    <section class="{local-name(.)}" id="{$ident}">
+        <xsl:apply-templates select="." mode="section-header" />
+        <xsl:apply-templates select="*" mode="summary-prenav" />
+        <nav class="summary-links">
+            <xsl:apply-templates select="*" mode="summary-nav" />
+        </nav>
+        <xsl:apply-templates select="*" mode="summary-postnav"/>
+    </section>
 </xsl:template>
-
 
 <!-- A 3-pass hack to create presentations and summaries of  -->
 <!-- an intermediate node.  It is the <nav> section wrapping -->
 <!-- the summaries/links that makes this necessary.          -->
-<!-- Note: titles/authors etc are killed here                -->
-<!-- TODO: improve this somehow?                             -->
 
 <!-- Pre-Navigation -->
-<xsl:template match="introduction|titlepage|abstract" mode="summary-prenav">
+<xsl:template match="author|introduction|titlepage|abstract" mode="summary-prenav">
     <xsl:apply-templates select="."/>
 </xsl:template>
+
 <xsl:template match="*" mode="summary-prenav" />
 
 <!-- Post-Navigation -->
 <xsl:template match="conclusion" mode="summary-postnav">
     <xsl:apply-templates select="."/>
 </xsl:template>
+
 <xsl:template match="*" mode="summary-postnav" />
 
 <!-- Navigation -->
 <!-- Any structural node becomes a hyperlink        -->
-<!-- Could recurse into "dispatch" inside the "if", -->
-<!-- but might pile too much onto the stack?        -->
-<xsl:template match="*" mode="summary-nav">
-    <xsl:variable name="structural">
-        <xsl:apply-templates select="." mode="is-structural" />
-    </xsl:variable>
-    <xsl:if test="$structural='true'">
-        <xsl:variable name="num"><xsl:apply-templates select="." mode="number" /></xsl:variable>
-        <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
-        <a href="{$url}">
-            <!-- important not include codenumber span -->
-            <xsl:if test="$num!=''">
-                <span class="codenumber"><xsl:value-of select="$num" /></span>
-            </xsl:if>
-            <span class="title">
-                <xsl:apply-templates select="." mode="title-simple" />
-            </span>
-        </a>
-    </xsl:if>
+<xsl:template match="&STRUCTURAL;" mode="summary-nav">
+    <xsl:variable name="num"><xsl:apply-templates select="." mode="number" /></xsl:variable>
+    <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
+    <a href="{$url}">
+        <!-- important not include codenumber span -->
+        <xsl:if test="$num!=''">
+            <span class="codenumber"><xsl:value-of select="$num" /></span>
+        </xsl:if>
+        <span class="title">
+            <xsl:apply-templates select="." mode="title-simple" />
+        </span>
+    </a>
 </xsl:template>
 
+<xsl:template match="*" mode="summary-nav" />
 
+<!-- ############### -->
 <!-- Bits and Pieces -->
+<!-- ############### -->
 
 <!-- Paragraphs -->
 <!-- Never structural, never named, somewhat distinct  -->
