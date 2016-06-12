@@ -3094,6 +3094,8 @@ the xsltproc executable.
                     <image source="images/trefoil.png"/>
                 </sidebyside>
 
+                <p>Now we fine-tune with different widths (which add up to 100<percent />).</p>
+
                 <sidebyside>
                     <image width="10%" source="images/trefoil.png"/>
                     <image width="30%" source="images/trefoil.png"/>
@@ -3101,6 +3103,17 @@ the xsltproc executable.
                     <image width="20%" source="images/trefoil.png"/>
                     <image width="20%" source="images/trefoil.png"/>
                 </sidebyside>
+
+                <p>If you want an overall caption, but no sub-captions on your images, that is also straightforward.</p>
+
+                <sidebyside>
+                    <caption>Two equally-spaced (identical) images</caption>
+                    <image source="images/trefoil.png"/>
+                    <image source="images/trefoil.png"/>
+                </sidebyside>
+
+
+
             </subsection>
 
             <subsection>
