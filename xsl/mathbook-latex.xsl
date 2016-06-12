@@ -4814,10 +4814,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- At non-cell, done with row          -->
         <!-- conclude line, dump cline info, etc -->
         <xsl:otherwise>
+            <!-- \tabularnewline is unambiguous, better than \\    -->
+            <!-- also at a final line with end-of-line decoration  -->
             <xsl:if test="not($updated-cline='') or not($last-row)">
-                <xsl:text>\\</xsl:text>
+                <xsl:text>\tabularnewline</xsl:text>
             </xsl:if>
+            <!-- no harm if end-of-line decoration is empty -->
             <xsl:value-of select="$updated-cline" />
+            <!-- next row could begin with bare [ and LaTeX sees -->
+            <!-- the start of \tabularnewline[] which would      -->
+            <!-- indicate space, so we just appease the macro    -->
+            <!-- https://github.com/rbeezer/mathbook/issues/300  -->
+            <xsl:if test="$updated-cline='' and not($last-row)">
+                <xsl:text>[0pt]</xsl:text>
+            </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
