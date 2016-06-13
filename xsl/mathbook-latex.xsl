@@ -513,7 +513,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'principle'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//definition or //example or //exercise or //remark or //list">
+    <!-- miscellaneous, not categorized yet -->
+    <xsl:if test="//definition or //exercise or //remark or //list">
         <xsl:text>%% Definition-like environments, normal text&#xa;</xsl:text>
         <xsl:text>%% Numbering for definition, examples is in sync with theorems, etc&#xa;</xsl:text>
         <xsl:text>%% also for free-form exercises, not in exercise sections&#xa;</xsl:text>
@@ -521,11 +522,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="//definition">
             <xsl:text>\newtheorem{definition}[theorem]{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'definition'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="//example">
-            <xsl:text>\newtheorem{example}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'example'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="//exercise">
@@ -542,6 +538,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% \list exists, so we peturb the natural choice&#xa;</xsl:text>
             <xsl:text>\newtheorem{listwrapper}[theorem]{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'list'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
+    <!-- EXAMPLE-LIKE blocks, environments -->
+    <xsl:if test="//example or //question or //problem">
+        <xsl:text>%% Example-like environments, normal text&#xa;</xsl:text>
+        <xsl:text>%% Numbering is in sync with theorems, etc&#xa;</xsl:text>
+        <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
+        <xsl:if test="//example">
+            <xsl:text>\newtheorem{example}[theorem]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'example'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//question">
+            <xsl:text>\newtheorem{question}[theorem]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'question'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//problem">
+            <xsl:text>\newtheorem{problem}[theorem]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'problem'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
@@ -2555,10 +2572,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{definition}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Examples, Remarks, List Wrapper -->
+<!-- Example Like -->
 <!-- Simpler than theorems, definitions, etc            -->
 <!-- Information comes from self, so slightly different -->
-<xsl:template match="example|list|remark">
+<xsl:template match="&EXAMPLE-LIKE;">
+    <xsl:text>\begin{</xsl:text>
+        <xsl:value-of select="local-name(.)" />
+    <xsl:text>}</xsl:text>
+    <!-- optional argument to environment -->
+    <!-- TODO: and/or credit              -->
+    <xsl:text>[</xsl:text>
+    <xsl:apply-templates select="." mode="title-full" />
+    <xsl:text>]</xsl:text>
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="*"/>
+    <xsl:text>\end{</xsl:text>
+        <xsl:value-of select="local-name(.)" />
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- An example might have a statement/solution structure -->
+<xsl:template match="solution[parent::*[self::example or self::question]]">
+    <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
+    <xsl:text>\textbf{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'solution'" />
+    </xsl:call-template>
+    <xsl:text>.}\quad </xsl:text>
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- Remarks, List Wrapper -->
+<!-- Simpler than theorems, definitions, etc            -->
+<!-- Information comes from self, so slightly different -->
+<xsl:template match="list|remark">
     <xsl:variable name="env-name">
         <xsl:choose>
             <xsl:when test="local-name(.)='list'">
@@ -2579,18 +2627,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="$env-name" />
     <xsl:text>}&#xa;</xsl:text>
-</xsl:template>
-
-<!-- An example might have a statement/solution structure -->
-<xsl:template match="example/statement">
-    <xsl:apply-templates />
-    <xsl:text>\par\medskip&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="example/solution">
-    <xsl:text>\noindent%&#xa;</xsl:text>
-    <xsl:text>\textbf{Solution.}\quad </xsl:text>
-    <xsl:apply-templates />
 </xsl:template>
 
 

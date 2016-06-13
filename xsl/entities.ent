@@ -33,3 +33,8 @@
 
 <!-- statement + proof -->
 <!ENTITY THEOREM-LIKE "theorem|corollary|lemma|algorithm|proposition|claim|fact">
+<!ENTITY THEOREM-FILTER "self::theorem or self::corollary or self::lemma or self::algorithm or self::proposition or self::claim or self::fact">
+
+<!-- blocks, or statement + solution -->
+<!ENTITY EXAMPLE-LIKE "example|question|problem">
+<!ENTITY EXAMPLE-FILTER "self::example or self::question or self::problem">

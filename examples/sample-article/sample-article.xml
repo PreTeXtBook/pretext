@@ -524,6 +524,19 @@ the xsltproc executable.
                             <p>Authors asked for it and it seemed a very natural thing to do, even if we only had an unstructured version for a long time.</p>
                         </solution>
                     </example>
+
+                    <question xml:id="sample-question">
+                        <title>An Example of a Question</title>
+                        <statement>
+                            <p>Any kind of question can be marked as such with <c>&lt;question&gt;</c>.  Or similarly, as a <c>&lt;problem&gt;</c>.  They behave identically to <c>example</c>s, such as the one preceding and are numbered along with theorems, examples. etc.</p>
+                        </statement>
+                        <solution>
+                            <p>You can have a solution. Or several, even if you don't ask a question.</p>
+                        </solution>
+                        <solution>
+                            <p>See?</p>
+                        </solution>
+                    </question>
                 </subsubsection>
 
                 <exercises>

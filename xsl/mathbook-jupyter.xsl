@@ -359,7 +359,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Drop a title in a cell and process remainder -->
-<xsl:template match="theorem|corollary|lemma|proposition|example|remark|exercise">
+<xsl:template match="&THEOREM-LIKE;|&EXAMPLE-LIKE;|remark|exercise">
     <xsl:call-template name="markdown-cell">
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />

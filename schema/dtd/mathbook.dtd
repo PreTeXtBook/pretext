@@ -69,7 +69,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- Everything like a paragraph, but also more substantial                   -->
 <!-- These items cannot be contained in anything but a structural subdivision -->
 <!-- Note: the "todo" element is in this list                                 -->
-<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|list|example|exercise|contributors|list-of|solution-list|notation-list|todo">
+<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|list|example|question|problem|exercise|contributors|list-of|solution-list|notation-list|todo">
 
 
 <!-- ######### -->
@@ -200,6 +200,11 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- example-like, not very structured, or statement/solution -->
 <!ELEMENT example (title?, index*, ((%para;)*|(statement, solution)))>
     <!ATTLIST example xml:id ID #IMPLIED>
+<!ELEMENT question (title?, index*, ((%para;)*|(statement, solution)))>
+    <!ATTLIST question xml:id ID #IMPLIED>
+<!ELEMENT problem (title?, index*, ((%para;)*|(statement, solution)))>
+    <!ATTLIST problem xml:id ID #IMPLIED>
+
 <!ELEMENT list (title?, index*, introduction?, (ol|ul|dl), conclusion)>
     <!ATTLIST list xml:id ID #IMPLIED>
 <!ELEMENT remark (title?, index*, (%para;)*)>

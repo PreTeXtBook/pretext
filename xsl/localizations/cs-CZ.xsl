@@ -74,7 +74,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='paragraph'><xsl:text>Odstavec</xsl:text></localization>
     <localization string-id='subparagraph'><xsl:text>Pododstavec</xsl:text></localization>
     <!-- Components of the narrative -->
+    <!-- EXAMPLE-LIKE blocks -->
     <localization string-id='example'><xsl:text>Příklad</xsl:text></localization>
+    <!-- <localization string-id='question'><xsl:text>Question</xsl:text></localization> -->
+    <!-- <localization string-id='problem'><xsl:text>Problem</xsl:text></localization> -->
+    <!--  -->
     <localization string-id='remark'><xsl:text>Remark</xsl:text></localization>
     <localization string-id='figure'><xsl:text>Obrázek</xsl:text></localization>
     <localization string-id='table'><xsl:text>Tabulka</xsl:text></localization>

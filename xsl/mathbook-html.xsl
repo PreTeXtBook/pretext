@@ -1250,7 +1250,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We show the full content of the item on the page (b)            -->
 <!-- Or, we build a hidden knowl and place a link on the page (c)    -->
 <!-- NB: this template employs several modal templates, defined just below -->
-<xsl:template match="fn|biblio|example|list|remark|definition|axiom|conjecture|principle|&THEOREM-LIKE;|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|contributor">
+<xsl:template match="fn|biblio|&EXAMPLE-LIKE;|list|remark|definition|axiom|conjecture|principle|&THEOREM-LIKE;|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|contributor">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
@@ -1283,7 +1283,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We restrict hint, answer, solution to avoid confusion with webwork -->
 <!-- TODO: we need to process children in a way that no \label{}, nor ID's, are produced   -->
 <!--       This would perhaps obsolete the "env-type" device, and reorder explnation below -->
-<xsl:template match="fn|biblio|example|list|remark|definition|axiom|conjecture|principle|&THEOREM-LIKE;|proof|exercise|exercise/hint|exercise/answer|exercise/solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|li|p|contributor" mode="xref-knowl">
+<xsl:template match="fn|biblio|&EXAMPLE-LIKE;|list|remark|definition|axiom|conjecture|principle|&THEOREM-LIKE;|proof|exercise|exercise/hint|exercise/answer|exercise/solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|li|p|contributor" mode="xref-knowl">
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
@@ -1681,23 +1681,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Examples, Remarks, List Wrappers -->
-<!-- Individually customizable -->
-<!-- Similar, as just runs of paragraphs -->
-<xsl:template match="example" mode="is-hidden">
+<!-- Examples -->
+<!-- Runs of paragraphs, or statement + solution -->
+<xsl:template match="&EXAMPLE-LIKE;" mode="is-hidden">
     <xsl:value-of select="$html.knowl.example = 'yes'" />
 </xsl:template>
-<xsl:template match="list" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.list = 'yes'" />
-</xsl:template>
-<xsl:template match="remark" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.remark = 'yes'" />
-</xsl:template>
-<xsl:template match="example|list|remark" mode="is-block-env">
+<xsl:template match="&EXAMPLE-LIKE;" mode="is-block-env">
     <xsl:value-of select="true()" />
 </xsl:template>
 <!-- Knowl-text is an article with heading -->
-<xsl:template match="example|list|remark" mode="hidden-knowl-text">
+<xsl:template match="&EXAMPLE-LIKE;" mode="hidden-knowl-text">
     <article class="example-like">
         <h5 class="heading">
             <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
@@ -1709,7 +1702,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </article>
 </xsl:template>
 <!-- Head is type, number, title -->  <!-- GENERALIZE -->
-<xsl:template match="example|list|remark" mode="head">
+<xsl:template match="&EXAMPLE-LIKE;" mode="head">
     <h5 class="heading">
         <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
         <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
@@ -1719,16 +1712,65 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </h5>
 </xsl:template>
 <!-- Body is just all content, but no title -->
-<xsl:template match="example|list|remark" mode="body">
+<xsl:template match="&EXAMPLE-LIKE;" mode="body">
+    <xsl:apply-templates select="*" />
+</xsl:template>
+<!-- No posterior  -->
+<xsl:template match="&EXAMPLE-LIKE;" mode="posterior" />
+<!-- HTML, CSS -->
+<xsl:template match="&EXAMPLE-LIKE;" mode="environment-element">
+    <xsl:text>article</xsl:text>
+</xsl:template>
+<xsl:template match="&EXAMPLE-LIKE;" mode="environment-class">
+    <xsl:text>example-like</xsl:text>
+</xsl:template>
+
+
+<!-- Remarks, List Wrappers -->
+<!-- Individually customizable -->
+<!-- Similar, as just runs of paragraphs -->
+<xsl:template match="list" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.list = 'yes'" />
+</xsl:template>
+<xsl:template match="remark" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.remark = 'yes'" />
+</xsl:template>
+<xsl:template match="list|remark" mode="is-block-env">
+    <xsl:value-of select="true()" />
+</xsl:template>
+<!-- Knowl-text is an article with heading -->
+<xsl:template match="list|remark" mode="hidden-knowl-text">
+    <article class="example-like">
+        <h5 class="heading">
+            <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+            <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
+            <xsl:if test="title">
+                <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
+            </xsl:if>
+        </h5>
+    </article>
+</xsl:template>
+<!-- Head is type, number, title -->  <!-- GENERALIZE -->
+<xsl:template match="list|remark" mode="head">
+    <h5 class="heading">
+        <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
+        <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
+        <xsl:if test="title">
+            <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
+        </xsl:if>
+    </h5>
+</xsl:template>
+<!-- Body is just all content, but no title -->
+<xsl:template match="list|remark" mode="body">
     <xsl:apply-templates select="*"/>
 </xsl:template>
 <!-- No posterior  -->
-<xsl:template match="example|list|remark" mode="posterior" />
+<xsl:template match="list|remark" mode="posterior" />
 <!-- HTML, CSS -->
-<xsl:template match="example|list|remark" mode="environment-element">
+<xsl:template match="list|remark" mode="environment-element">
     <xsl:text>article</xsl:text>
 </xsl:template>
-<xsl:template match="example|list|remark" mode="environment-class">
+<xsl:template match="list|remark" mode="environment-class">
     <xsl:text>example-like</xsl:text>
 </xsl:template>
 
@@ -3364,7 +3406,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a sidebyside even though this is not necessary           -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|p|biblio|note|example|list|remark|&THEOREM-LIKE;|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|biblio|note|&EXAMPLE-LIKE;|list|remark|&THEOREM-LIKE;|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">
