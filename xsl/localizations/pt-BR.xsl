@@ -27,6 +27,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Igor Morgado, morgado.igor@gmail.com, 2014-08-11, 2014-08-14 -->
 
 <xsl:variable name="pt-BR">
+    <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id="theorem">Teorema</localization>
     <localization string-id="corollary">Corolário</localization>

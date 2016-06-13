@@ -168,7 +168,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="frontmatter chapter appendix index-part section subsection subsubsection exercises references introduction conclusion paragraphs paragraph subparagraph backmatter" />
 <xsl:strip-space elements="docinfo author abstract" />
 <xsl:strip-space elements="titlepage preface acknowledgement biography foreword dedication colophon" />
-<!-- List is elements in &THEOREM-LIKE; entity                -->
+<!-- List is elements in THEOREM-LIKE entity                  -->
 <!-- theorem|corollary|lemma|algorithm|proposition|claim|fact -->
 <xsl:strip-space elements="theorem corollary lemma algorithm proposition claim fact" />
 <xsl:strip-space elements="proof" />
