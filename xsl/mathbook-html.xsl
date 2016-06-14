@@ -1188,7 +1188,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" mode="xref-knowl" />
 </xsl:template>
 
-<xsl:template match="me|men|md|mdn" mode="xref-knowl">
+<xsl:template match="me|men|md|mdn|p" mode="xref-knowl">
     <!-- write a file, calling modal duplicate template -->
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
@@ -1197,7 +1197,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- header since separate file -->
         <xsl:call-template name="converter-blurb-html" />
         <!-- content, as duplicate, so no @id or \label -->
-        <xsl:apply-templates select="." mode="duplicate" />
+        <xsl:apply-templates select="." mode="xref-knowl-content" />
         <!-- in-context link as part of xref-knowl content -->
         <xsl:element name="span">
             <xsl:attribute name="class">
@@ -1217,6 +1217,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" mode="xref-knowl" />
 </xsl:template>
 
+<!-- Some knowls get a bit of extra wrapping, some don't -->
+
+<xsl:template match="me|men|md|mdn" mode="xref-knowl-content">
+    <xsl:apply-templates select="." mode="duplicate" />
+</xsl:template>
+
+<!-- heading is just the generic type -->
+<xsl:template match="p" mode="xref-knowl-content">
+    <xsl:element name="article">
+        <xsl:attribute name="class">
+            <xsl:text>paragraph</xsl:text>
+        </xsl:attribute>
+        <xsl:element name="h5">
+            <xsl:attribute name="class">
+                <xsl:text>heading</xsl:text>
+            </xsl:attribute>
+            <xsl:element name="span">
+                <xsl:attribute name="class">
+                    <xsl:text>type</xsl:text>
+                </xsl:attribute>
+                <xsl:apply-templates select="." mode="type-name" />
+            </xsl:element>
+        </xsl:element>
+        <xsl:apply-templates select="." mode="duplicate" />
+    </xsl:element>
+</xsl:template>
 
 <!-- ########### -->
 <!-- Duplication -->
@@ -1303,7 +1329,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We restrict hint, answer, solution to avoid confusion with webwork -->
 <!-- TODO: we need to process children in a way that no \label{}, nor ID's, are produced   -->
 <!--       This would perhaps obsolete the "env-type" device, and reorder explnation below -->
-<xsl:template match="fn|biblio|&EXAMPLE-LIKE;|list|remark|definition|axiom|conjecture|principle|&THEOREM-LIKE;|proof|exercise|exercise/hint|exercise/answer|exercise/solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|li|p|contributor" mode="xref-knowl">
+<xsl:template match="fn|biblio|&EXAMPLE-LIKE;|list|remark|definition|axiom|conjecture|principle|&THEOREM-LIKE;|proof|exercise|exercise/hint|exercise/answer|exercise/solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|li|contributor" mode="xref-knowl">
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
@@ -2283,38 +2309,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>contributor</xsl:text>
 </xsl:template>
 
-<!-- Paragraphs -->
-<!-- Never born hidden                         -->
-<!-- Necessary as targets of index entries     -->
-<!-- and stealth knowls for defined terms      -->
-<!-- Following is just used for knowl creation -->
-<xsl:template match="p" mode="is-hidden">
-    <xsl:value-of select="false()" />
-</xsl:template>
-<xsl:template match="p" mode="is-block-env">
-    <xsl:value-of select="true()" />
-</xsl:template>
-<!-- Paragraphs are never born hidden -->
-<xsl:template match="p" mode="hidden-knowl-text" />
-<!-- ??????? -->
-<xsl:template match="p" mode="head">
-    <h5 class="heading">
-    <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-    </h5>
-</xsl:template>
-<!-- Body is everything -->
-<xsl:template match="p" mode="body">
-    <xsl:apply-templates />
-</xsl:template>
-<!-- No posterior  -->
-<xsl:template match="p" mode="posterior" />
-<!-- HTML, CSS -->
-<xsl:template match="p" mode="environment-element">
-    <xsl:text>article</xsl:text>
-</xsl:template>
-<xsl:template match="p" mode="environment-class">
-    <xsl:text>paragraph</xsl:text>
-</xsl:template>
 
 <!-- ########################## -->
 <!-- Mathematics (HTML/MathJax) -->
@@ -2521,13 +2515,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- panel will carry positioning CSS               -->
 <xsl:template match="p">
     <xsl:element name="p">
+        <!-- label original -->
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="internal-id" />
         </xsl:attribute>
         <xsl:if test="parent::sidebyside">
             <xsl:call-template name="sidebysideCSS" select="."/>
         </xsl:if>
-        <xsl:apply-templates />
+        <xsl:apply-templates select="*|text()" />
+    </xsl:element>
+</xsl:template>
+
+<xsl:template match="p" mode="duplicate">
+    <xsl:element name="p">
+        <xsl:if test="parent::sidebyside">
+            <xsl:call-template name="sidebysideCSS" select="."/>
+        </xsl:if>
+        <xsl:apply-templates select="*|text()" mode="duplicate" />
     </xsl:element>
 </xsl:template>
 
