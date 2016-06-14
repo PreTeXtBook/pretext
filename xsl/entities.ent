@@ -25,4 +25,16 @@
 <!ENTITY UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ">
 <!ENTITY LOWERCASE "abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ">
 
+<!-- for match/select -->
+<!ENTITY STRUCTURAL "book|article|letter|memo|frontmatter|part|chapter|appendix|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references|backmatter">
+
+<!-- for filtering nodes, eg *[&STRUCTURAL-FILTER;], *[not(&STRUCTURAL-FILTER;)] -->
+<!ENTITY STRUCTURAL-FILTER "self::book or self::article or self::letter or self::memo or self::frontmatter or self::part or self::chapter or self::appendix or self::index-part or self::preface or self::acknowledgement or self::biography or self::foreword or self::dedication or self::colophon or self::section or self::subsection or self::subsubsection or self::exercises or self::references or self::backmatter">
+
+<!-- statement + proof -->
 <!ENTITY THEOREM-LIKE "theorem|corollary|lemma|algorithm|proposition|claim|fact">
+<!ENTITY THEOREM-FILTER "self::theorem or self::corollary or self::lemma or self::algorithm or self::proposition or self::claim or self::fact">
+
+<!-- blocks, or statement + solution -->
+<!ENTITY EXAMPLE-LIKE "example|question|problem">
+<!ENTITY EXAMPLE-FILTER "self::example or self::question or self::problem">

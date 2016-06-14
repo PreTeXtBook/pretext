@@ -87,14 +87,14 @@ SERVER = https://webwork.pcc.edu
 #  and filenames are derived from titles of chapters, sections,
 #  etc., in addition to the titles of the problems themselves.
 #
-#  Results land in the subdirectory:  $(PGOUT)/local
+#  level 1 here partitions by sections of the sample chapter
 #
-#  2016-01-20: the chunk.level parameter is not effective?
+#  Results land in the subdirectory:  $(PGOUT)/local
 #
 sample-chapter-extract:
 	install -d $(PGOUT)
 	cd $(PGOUT); \
-	xsltproc --stringparam chunk.level 2 $(MBXSL)/mathbook-webwork-archive.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
+	xsltproc --stringparam chunk.level 1 $(MBXSL)/mathbook-webwork-archive.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
 
 # HTML with WeBWorK exercises need a WW server
 # See example below for how to specify this

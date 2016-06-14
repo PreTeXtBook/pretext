@@ -123,7 +123,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="chunk-level">
     <xsl:choose>
         <xsl:when test="$chunk.level != ''">
-            <xsl:value-of select="$chunk.level" />
+            <xsl:message terminate="yes">MBX:ERROR:   chunking of LaTeX output is deprecated as of 2016-06-10, remove the "chunk.level" stringparam</xsl:message>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>0</xsl:text>
@@ -216,12 +216,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- We process structural nodes via chunking routine in   xsl/mathbook-common.html -->
-<!-- This in turn calls specific modal templates defined elsewhere in this file     -->
-<xsl:template match="/mathbook">
-    <xsl:apply-templates mode="chunk" />
+<!-- We will have just one of the following -->
+<!-- and totally ignore docinfo             -->
+<xsl:template match="mathbook">
+    <xsl:variable name="filename">
+        <xsl:apply-templates select="article|book|letter|memo" mode="internal-id" />
+        <xsl:text>.tex</xsl:text>
+    </xsl:variable>
+    <exsl:document href="{$filename}" method="text">
+        <xsl:apply-templates select="article|book|letter|memo"/>
+    </exsl:document>
 </xsl:template>
-
 
 <!-- TODO: combine article, book, letter, templates -->
 <!-- with abstract templates for latex classes, page sizes -->
@@ -229,8 +234,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An article, LaTeX structure -->
 <!--     One page, full of sections (with abstract, references)                    -->
 <!--     Or, one page, totally unstructured, just lots of paragraphs, widgets, etc -->
-<xsl:template match="article" mode="content-wrap">
-    <xsl:param name="content" />
+<xsl:template match="article">
     <xsl:call-template name="converter-blurb-latex" />
     <xsl:text>\documentclass[</xsl:text>
     <xsl:value-of select="$font-size" />
@@ -255,15 +259,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\maketitle&#xa;</xsl:text>
         <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:copy-of select="$content" />
+    <xsl:apply-templates />
    <xsl:text>\end{document}</xsl:text>
 </xsl:template>
 
 <!-- A book, LaTeX structure -->
 <!-- The ordering of the frontmatter is from             -->
 <!-- "Bookmaking", 3rd Edition, Marshall Lee, Chapter 27 -->
-<xsl:template match="book" mode="content-wrap">
-    <xsl:param name="content" />
+<xsl:template match="book">
     <xsl:call-template name="converter-blurb-latex" />
     <xsl:text>\documentclass[</xsl:text>
     <xsl:value-of select="$font-size" />
@@ -280,13 +283,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="latex-preamble" />
     <xsl:call-template name="title-page-info-book" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
-    <xsl:copy-of select="$content" />
+    <xsl:apply-templates />
     <xsl:text>\end{document}</xsl:text>
 </xsl:template>
 
 <!-- A letter, LaTeX structure -->
-<xsl:template match="letter" mode="content-wrap">
-    <xsl:param name="content" />
+<xsl:template match="letter">
     <xsl:call-template name="converter-blurb-latex" />
     <xsl:text>\documentclass[</xsl:text>
     <xsl:value-of select="$font-size" />
@@ -302,14 +304,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\geometry{letterpaper,total={6.0in,9.0in}}&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
-    <!-- the body -->
-    <xsl:copy-of select="$content" />
+    <xsl:apply-templates />
     <xsl:text>\end{document}</xsl:text>
 </xsl:template>
 
 <!-- A memo, LaTeX structure -->
-<xsl:template match="memo" mode="content-wrap">
-    <xsl:param name="content" />
+<xsl:template match="memo">
     <xsl:call-template name="converter-blurb-latex" />
     <xsl:text>\documentclass[</xsl:text>
     <xsl:value-of select="$font-size" />
@@ -325,8 +325,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\geometry{letterpaper,total={6.0in,9.0in}}&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
     <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
-    <!-- process the body -->
-    <xsl:copy-of select="$content" />
+    <xsl:apply-templates />
     <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
 
@@ -514,7 +513,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'principle'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//definition or //example or //exercise or //remark or //list">
+    <!-- miscellaneous, not categorized yet -->
+    <xsl:if test="//definition or //exercise or //remark or //list">
         <xsl:text>%% Definition-like environments, normal text&#xa;</xsl:text>
         <xsl:text>%% Numbering for definition, examples is in sync with theorems, etc&#xa;</xsl:text>
         <xsl:text>%% also for free-form exercises, not in exercise sections&#xa;</xsl:text>
@@ -522,11 +522,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="//definition">
             <xsl:text>\newtheorem{definition}[theorem]{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'definition'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="//example">
-            <xsl:text>\newtheorem{example}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'example'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="//exercise">
@@ -543,6 +538,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% \list exists, so we peturb the natural choice&#xa;</xsl:text>
             <xsl:text>\newtheorem{listwrapper}[theorem]{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'list'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
+    <!-- EXAMPLE-LIKE blocks, environments -->
+    <xsl:if test="//example or //question or //problem">
+        <xsl:text>%% Example-like environments, normal text&#xa;</xsl:text>
+        <xsl:text>%% Numbering is in sync with theorems, etc&#xa;</xsl:text>
+        <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
+        <xsl:if test="//example">
+            <xsl:text>\newtheorem{example}[theorem]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'example'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//question">
+            <xsl:text>\newtheorem{question}[theorem]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'question'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//problem">
+            <xsl:text>\newtheorem{problem}[theorem]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'problem'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
@@ -596,6 +612,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
+    <!-- Tables -->
     <xsl:if test="//tabular">
         <xsl:text>%% For improved tables&#xa;</xsl:text>
         <xsl:text>\usepackage{array}&#xa;</xsl:text>
@@ -636,6 +653,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcolumntype{B}{!{\vrule width 0.07em}}&#xa;</xsl:text>
         <xsl:text>\newcolumntype{C}{!{\vrule width 0.11em}}&#xa;</xsl:text>
         <xsl:text>\makeatother&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="//cell/line">
+        <xsl:text>\newcommand{\tablecelllines}[3]%&#xa;</xsl:text>
+        <xsl:text>{\begin{tabular}[#2]{@{}#1@{}}#3\end{tabular}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Float package allows for placment [H]ere                    -->
     <!-- Numbering happens along with theorem counter above,         -->
@@ -794,8 +815,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- Poetry -->
     <xsl:if test="//poem">
-        <xsl:text>%% Poetry support&#xa;</xsl:text>
-        <xsl:text>\usepackage{verse}&#xa;</xsl:text>
+        <xsl:text>%% Poetry Support&#xa;</xsl:text>
+        <xsl:text>\newenvironment{poem}{\setlength{\parindent}{0em}}{}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\poemTitle}[1]{\begin{center}\large\textbf{#1}\end{center}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\poemIndent}{\hspace{2 em}}&#xa;</xsl:text>
+        <xsl:text>\newenvironment{stanza}{\vspace{0.25 em}\hangindent=4em}{\vspace{1 em}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\stanzaTitle}[1]{{\centering\textbf{#1}\par}\vspace{-\parskip}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\poemauthorleft}[1]{\vspace{-1em}\begin{flushleft}\textit{#1}\end{flushleft}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\poemauthorcenter}[1]{\vspace{-1em}\begin{center}\textit{#1}\end{center}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\poemauthorright}[1]{\vspace{-1em}\begin{flushright}\textit{#1}\end{flushright}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\poemlineleft}[1]{{\raggedright{#1}\par}\vspace{-\parskip}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\poemlinecenter}[1]{{\centering{#1}\par}\vspace{-\parskip}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\poemlineright}[1]{{\raggedleft{#1}\par}\vspace{-\parskip}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% Raster graphics inclusion, wrapped figures in paragraphs&#xa;</xsl:text>
     <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
@@ -1330,9 +1361,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The DTD should enforce order(titlepage|abstract) -->
 <!-- An optional ToC follows and is final decoration  -->
-<xsl:template match="article/frontmatter" mode="content-wrap">
-    <xsl:param name="content" />
-    <xsl:copy-of select="$content" />
+<xsl:template match="article/frontmatter">
+    <xsl:apply-templates select="titlepage|abstract" />
     <xsl:if test="$latex-toc-level > 0">
         <xsl:text>\setcounter{tocdepth}{</xsl:text>
         <xsl:value-of select="$latex-toc-level" />
@@ -1368,11 +1398,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Front Matter, Books -->
 <!-- ################### -->
 
-<xsl:template match="book/frontmatter" mode="content-wrap">
-    <xsl:param name="content" />
+<!-- The <colophon> portion of <frontmatter> generally  -->
+<!-- gets mined to migrate various places, so we kill   -->
+<!-- it as part of processing the front matter element. -->
+<!-- Author biography migrates to the obverse of the    -->
+<!-- copyright page in LaTeX, sans any provided title.  -->
+<!-- So we kill this part of the front matter as        -->
+<!-- a section of its own.  (In HTML the material       -->
+<!-- is its own titled division).                       -->
+<xsl:template match="book/frontmatter">
     <!-- DTD: does the next line presume <frontmatter> is required? -->
     <xsl:text>\frontmatter&#xa;</xsl:text>
-    <xsl:copy-of select="$content" />
+    <xsl:apply-templates select="*[not(self::colophon or self::biography)]" />
     <xsl:text>%% begin: table of contents&#xa;</xsl:text>
     <xsl:if test="$latex-toc-level > -1">
         <xsl:text>\setcounter{tocdepth}{</xsl:text>
@@ -1396,7 +1433,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Not structural, titlepage element is just a signal -->
 <!-- Includes items from the colophon                   -->
 <xsl:template match="book/frontmatter/titlepage">
-    <xsl:param name="content" />
     <!-- first page, title only -->
     <xsl:apply-templates select="/mathbook/book" mode="half-title" />
     <!-- Obverse of half-title is adcard -->
@@ -1407,26 +1443,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="/mathbook/book" mode="copyright-page" />
 </xsl:template>
 
-<!-- The <colophon> portion of <frontmatter>  -->
-<!-- generally gets mined to migrate          -->
-<!-- various places, so we kill it as part of -->
-<!-- processing the front matter element.     -->
-<!-- See the summary being killed elsewhere   -->
-<!-- NB: exsl:document() appears to not write -->
-<!-- an empty file at all. We will not rely   -->
-<!-- on this bad behavior, take no chances    -->
-<!-- and thus kill the file-wrap also         -->
-<xsl:template match="book/frontmatter/colophon" mode="content-wrap" />
-<xsl:template match="book/frontmatter/colophon" mode="file-wrap" />
-
 <!-- Preface, etc within \frontmatter is usually handled correctly by LaTeX -->
 <!-- Allow alternative titles, like "Preface to 2nd Edition"                -->
 <!-- But we use starred version anyway, so chapter headings react properly  -->
 <!-- DTD: enforce order: dedication, acknowledgements, forewords, prefaces -->
 <!-- TODO: add other frontmatter, move in title handling        -->
 <!-- TODO: add to headers, currently just CONTENTS, check backmatter        -->
-<xsl:template match="acknowledgement|foreword|preface" mode="content-wrap">
-    <xsl:param name="content" />
+<xsl:template match="acknowledgement|foreword|preface">
     <xsl:text>%% begin: </xsl:text>
     <xsl:value-of select="local-name(.)" />
     <xsl:text>&#xa;</xsl:text>
@@ -1438,7 +1461,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\addcontentsline{toc}{chapter}{</xsl:text>
     <xsl:apply-templates select="." mode="title-simple" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:copy-of select="$content" />
+    <xsl:apply-templates />
     <xsl:text>%% end:   </xsl:text>
     <xsl:value-of select="local-name(.)" />
     <xsl:text>&#xa;</xsl:text>
@@ -1446,8 +1469,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Dedication page is very plain, with a blank obverse     -->
 <!-- Accomodates multiple recipient (eg if multiple authors) -->
-<xsl:template match="dedication" mode="content-wrap">
-    <xsl:param name="content" />
+<xsl:template match="dedication">
     <xsl:text>%% begin: dedication-page&#xa;</xsl:text>
     <xsl:text>\cleardoublepage&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
@@ -1489,21 +1511,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-
-<!-- Author biography migrates to the obverse of the   -->
-<!-- copyright page in LaTeX, sans any provided title. -->
-<!-- So we kill this part of the front matter as       -->
-<!-- a section of its own.  (In HTML the material      -->
-<!-- is its own titled division).                      -->
-<xsl:template match="book/frontmatter/biography" mode="content-wrap" />
-<xsl:template match="book/frontmatter/biography" mode="file-wrap" />
-
 <!-- ##################### -->
 <!-- Front Matter, Letters -->
 <!-- ##################### -->
 
-<xsl:template match="letter/frontmatter" mode="content-wrap">
-    <xsl:param name="content" />
+<xsl:template match="letter/frontmatter">
     <!-- Logos (letterhead images) immediately -->
     <xsl:apply-templates select="/mathbook/docinfo/logo" />
     <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
@@ -1565,8 +1577,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Front Matter, Memos -->
 <!-- ################### -->
 
-<xsl:template match="memo/frontmatter" mode="content-wrap">
-    <xsl:param name="content" />
+<xsl:template match="memo/frontmatter">
     <xsl:text>\thispagestyle{empty}&#xa;%&#xa;</xsl:text>
     <!-- Logos (letterhead images) to first page -->
     <xsl:apply-templates select="/mathbook/docinfo/logo" />
@@ -1602,17 +1613,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- <backmatter> is structural -->
 <!-- Noted in an book           -->
 <!-- But not in an article      -->
-<xsl:template match="article/backmatter" mode="content-wrap">
-    <xsl:param name="content" />
-    <xsl:copy-of select="$content" />
+<xsl:template match="article/backmatter">
+    <xsl:apply-templates />
 </xsl:template>
 
-<xsl:template match="book/backmatter" mode="content-wrap">
-    <xsl:param name="content" />
+<xsl:template match="book/backmatter">
     <!-- If no appendices, go straight to book backmatter,      -->
     <!-- which automatically produces divisions with no numbers -->
     <!-- Otherwise \appendix,...\backmatter is handled in the   -->
-    <!-- content-wrap template for general subdivisions         -->
+    <!-- template for general subdivisions                      -->
     <xsl:if test="ancestor::book and not(appendix)">
         <xsl:text>%&#xa;</xsl:text>
         <xsl:text>\backmatter&#xa;</xsl:text>
@@ -1623,7 +1632,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% A lineskip in table of contents as transition to appendices, backmatter&#xa;</xsl:text>
     <xsl:text>\addtocontents{toc}{\vspace{\normalbaselineskip}}&#xa;</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:copy-of select="$content" />
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- The back colophon goes on a recto page all by itself       -->
+<!-- the centering is on the assumption it is a simple sentence -->
+<!-- Maybe a parbox, centered, etc is necessary                 -->
+<xsl:template match="book/backmatter/colophon">
+    <xsl:text>\cleardoublepage&#xa;</xsl:text>
+    <xsl:text>\pagestyle{empty}&#xa;</xsl:text>
+    <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
+    <xsl:text>\centerline{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Appendices are handled in the general subdivision template -->
@@ -1634,9 +1656,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and a compulsory "index-list"              -->
 <!-- LaTeX does sectioning via \printindex      -->
 <!-- TODO: multiple indices, with different titles -->
-<xsl:template match="index-part" mode="content-wrap" >
-    <xsl:param name="content" />
-    <xsl:copy-of select="$content" />
+<xsl:template match="index-part">
+    <xsl:apply-templates />
 </xsl:template>
 
 <xsl:template match="index-list">
@@ -1804,8 +1825,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Back Matter, Letters -->
 <!-- #################### -->
 
-<xsl:template match="letter/backmatter" mode="content-wrap">
-    <xsl:param name="content" />
+<xsl:template match="letter/backmatter">
     <xsl:text>%&#xa;</xsl:text>
     <xsl:if test="closing">
         <xsl:text>\par&#xa;</xsl:text>
@@ -1854,11 +1874,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Back Matter, Memos -->
 <!-- ################## -->
 
+<!-- No such thing yet                -->
 <!-- TODO: add "cc" block like to/from -->
-<xsl:template match="memo/backmatter" mode="content-wrap">
-    <xsl:param name="content" />
-</xsl:template>
-
+<xsl:template match="memo/backmatter" />
 
 
 <!-- ####################### -->
@@ -1899,53 +1917,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Structural Nodes -->
 <!-- ################ -->
 
-<!-- Read the code and documentation for "chunking" in xsl/mathbook-common.html -->
-<!-- This will explain document structure (not XML structure) and has the       -->
-<!-- routines which call the necessary realizations of two abstract templates.  -->
-
-<!-- Three modal templates accomodate all document structure nodes -->
-<!-- and all possibilities for chunking.  Read the description     -->
-<!-- in  xsl/mathbook-common.xsl to understand these.              -->
-
-<xsl:template match="*" mode="structure-node-intermediate">
-    <xsl:apply-templates select="*[not(self::author)]" mode="structure-node-child-summary" />
-</xsl:template>
-
-<xsl:template match="*" mode="structure-node-child-summary">
-    <xsl:variable name="structural"><xsl:apply-templates select="." mode="is-structural" /></xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$structural='true'">
-            <xsl:text>\input{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
-            <xsl:text>}</xsl:text>
-            <!-- Annotate line with better information -->
-            <xsl:text>  %% </xsl:text><xsl:apply-templates select="." mode="long-name" />
-            <xsl:text>&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="." />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- <colophon> is structural, but never gets written directly -->
-<!-- See empty "content-wrap" elsewhere                        -->
-<xsl:template match="book/frontmatter/colophon" mode="structure-node-child-summary" />
-
-<!-- Historically, latex processing writes to standard output as        -->
-<!-- one entire file.  We can (and did briefly) define variants for     -->
-<!-- top-level structural elements in order to preserve this behavior.  -->
-<xsl:template match="*" mode="file-wrap">
-    <xsl:param name="content" />
-    <xsl:variable name="filename">
-        <xsl:apply-templates select="." mode="internal-id" />
-        <xsl:text>.tex</xsl:text>
-    </xsl:variable>
-    <exsl:document href="{$filename}" method="text">
-        <xsl:copy-of select="$content" />  <!-- below -->
-    </exsl:document>
-</xsl:template>
-
 <!-- TODO: split out an appendix-specific version of following? -->
 
 <!-- Subdivisions, Parts down to Subsubsections               -->
@@ -1953,8 +1924,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (1) appendices are just chapters after \appendix macro -->
 <!-- (2) exercises, references can appear at any depth,       -->
 <!--     so compute the subdivision name                      -->
-<xsl:template match="*" mode="content-wrap">
-    <xsl:param name="content" />
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|references">
     <!-- appendices are peers of chapters (book) or sections (article)  -->
     <!-- so we need to slip this in first, with book's \backmatter later-->
     <!-- NB: if no appendices, the backmatter template does \backmatter -->
@@ -1980,7 +1950,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- but maybe someday numbering will be on/off and this will be easy  -->
     <xsl:choose>
         <!-- starred for for no numbering -->
-        <xsl:when test="ancestor::article and parent::backmatter and (self::references or self::colophon)">
+        <xsl:when test="ancestor::article and parent::backmatter and self::references">
             <xsl:text>*</xsl:text>
         </xsl:when>
         <!-- else ToC version -->
@@ -2011,7 +1981,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="author" mode="name-list"/>
         <xsl:text>}}\par\bigskip&#xa;</xsl:text>
     </xsl:if>
-    <xsl:copy-of select="$content" />
+    <xsl:apply-templates select="*[not(self::author)]" />
     <!-- transition to book backmatter, if done with last appendix -->
     <xsl:if test="ancestor::book and self::appendix and not(following-sibling::appendix)">
         <xsl:text>%&#xa;</xsl:text>
@@ -2602,10 +2572,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{definition}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Examples, Remarks, List Wrapper -->
+<!-- Example Like -->
 <!-- Simpler than theorems, definitions, etc            -->
 <!-- Information comes from self, so slightly different -->
-<xsl:template match="example|list|remark">
+<xsl:template match="&EXAMPLE-LIKE;">
+    <xsl:text>\begin{</xsl:text>
+        <xsl:value-of select="local-name(.)" />
+    <xsl:text>}</xsl:text>
+    <!-- optional argument to environment -->
+    <!-- TODO: and/or credit              -->
+    <xsl:text>[</xsl:text>
+    <xsl:apply-templates select="." mode="title-full" />
+    <xsl:text>]</xsl:text>
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="*"/>
+    <xsl:text>\end{</xsl:text>
+        <xsl:value-of select="local-name(.)" />
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- An example might have a statement/solution structure -->
+<xsl:template match="solution[parent::*[self::example or self::question]]">
+    <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
+    <xsl:text>\textbf{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'solution'" />
+    </xsl:call-template>
+    <xsl:text>.}\quad </xsl:text>
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- Remarks, List Wrapper -->
+<!-- Simpler than theorems, definitions, etc            -->
+<!-- Information comes from self, so slightly different -->
+<xsl:template match="list|remark">
     <xsl:variable name="env-name">
         <xsl:choose>
             <xsl:when test="local-name(.)='list'">
@@ -2626,18 +2627,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="$env-name" />
     <xsl:text>}&#xa;</xsl:text>
-</xsl:template>
-
-<!-- An example might have a statement/solution structure -->
-<xsl:template match="example/statement">
-    <xsl:apply-templates />
-    <xsl:text>\par\medskip&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="example/solution">
-    <xsl:text>\noindent%&#xa;</xsl:text>
-    <xsl:text>\textbf{Solution.}\quad </xsl:text>
-    <xsl:apply-templates />
 </xsl:template>
 
 
@@ -3035,6 +3024,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]{}</xsl:text>
 </xsl:template>
 
+<!-- Video -->
+<!-- Assuming thumbnails have been scraped with the    -->
+<!-- mbx script, we make a short static display, using -->
+<!-- a title of an enclosing figure, if available      -->
+<xsl:template match="video[@youtube]">
+    <xsl:variable name="youtube-url">
+        <xsl:text>https://www.youtube.com/watch?v=</xsl:text>
+        <xsl:value-of select="@youtube" />
+    </xsl:variable>
+    <xsl:text>\begin{tabular}{m{.1\linewidth}m{.7\linewidth}}&#xa;</xsl:text>
+    <xsl:text>\includegraphics[width=\linewidth]{</xsl:text>
+    <xsl:value-of select="$directory.images" />
+    <xsl:text>/</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>.jpg}&amp;%&#xa;</xsl:text>
+    <xsl:if test="parent::*[title]">
+        <xsl:apply-templates select="parent::*" mode="title-full" />
+        <xsl:text>\newline%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>\href{</xsl:text>
+    <xsl:value-of select="$youtube-url" />
+    <xsl:text>}{\texttt{\nolinkurl{</xsl:text>
+    <xsl:value-of select="$youtube-url" />
+    <xsl:text>}}}&#xa;</xsl:text>
+    <xsl:text>\end{tabular}&#xa;</xsl:text>
+</xsl:template>
 
 <!-- Numbers, units, quantities                     -->
 <!-- quantity                                       -->
@@ -4448,6 +4463,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="table-bottom" select="$table-bottom" />
         <xsl:with-param name="table-right" select="$table-right" />
         <xsl:with-param name="table-halign" select="$table-halign" />
+        <xsl:with-param name="table-valign" select="$table-valign" />
     </xsl:apply-templates>
     <!-- mandatory finish, exclusive of any final row specifications -->
     <xsl:text>\end{tabular}&#xa;</xsl:text>
@@ -4548,6 +4564,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="table-bottom" />
     <xsl:param name="table-right" />
     <xsl:param name="table-halign" />
+    <xsl:param name="table-valign" />
     <!-- inherit global table-wide values    -->
     <!-- or replace with row-specific values -->
     <xsl:variable name="row-left">
@@ -4584,6 +4601,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="table-bottom" select="$table-bottom"/>
         <xsl:with-param name="table-right" select="$table-right" />
         <xsl:with-param name="table-halign" select="$table-halign" />
+        <xsl:with-param name="table-valign" select="$table-valign" />
         <xsl:with-param name="row-left" select="$row-left" />
         <xsl:with-param name="row-bottom" select="$row-bottom" />
         <xsl:with-param name="prior-bottom" select="'undefined'" />
@@ -4609,6 +4627,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="table-bottom" />
     <xsl:param name="table-right" />
     <xsl:param name="table-halign" />
+    <xsl:param name="table-valign" />
     <xsl:param name="row-left" />
     <xsl:param name="row-bottom" />
     <xsl:param name="prior-bottom" />
@@ -4686,6 +4705,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
+    <!-- Use row attributes for vertical alignment                -->
+    <!-- recreate the row specification for vertical alignment    -->
+    <!-- either a per-row value, or the global, table-wide value  -->
+    <xsl:variable name="row-valign">
+        <xsl:choose>
+            <xsl:when test="$the-cell/parent::*[1]/@valign">
+                <xsl:value-of select="$the-cell/parent::*[1]/@valign" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$table-valign" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <!-- Look ahead to next cell, anticipating recursion   -->
     <!-- but also probing for end of row (no more cells),  -->
     <!-- which is needed when flushing cline specification -->
@@ -4693,12 +4725,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="next-cell" select="$the-cell/following-sibling::cell[1]" /> <!-- possibly empty -->
     <xsl:variable name="next-col"  select="$right-col/following-sibling::col[1]" />
     <!-- Write the cell's contents -->
-    <!-- if the left border, alignment or right border        -->
-    <!-- conflict with the column specification, then we      -->
-    <!-- wrap in a multicolumn to specify the overrides.      -->
-    <!-- Or if we have a colspan, then we use a multicolumn   -->
-    <!-- $table-left and $row-left *can* differ on first use, -->
-    <!-- but row-left is subsequently set to $table-left     -->
+    <!-- if the left border, horizontal alignment or right border -->
+    <!-- conflict with the column specification, then we          -->
+    <!-- wrap in a multicolumn to specify the overrides.          -->
+    <!-- Or if we have a colspan, then we use a multicolumn       -->
+    <!-- $table-left and $row-left *can* differ on first use,     -->
+    <!-- but row-left is subsequently set to $table-left.         -->
+    <!-- table-cell-lines handles cells with line elements        -->
     <xsl:if test="$the-cell">
         <xsl:choose>
             <xsl:when test="not($table-left = $row-left) or not($column-halign = $cell-halign) or not($column-right = $cell-right) or ($column-span > 1)">
@@ -4718,11 +4751,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="width" select="$cell-right" />
                 </xsl:call-template>
                 <xsl:text>}{</xsl:text>
-                <xsl:apply-templates select="$the-cell" />
+                <xsl:call-template name="table-cell-lines">
+                    <xsl:with-param name="the-cell" select="$the-cell" />
+                    <xsl:with-param name="halign" select="$cell-halign" />
+                    <xsl:with-param name="valign" select="$row-valign" />
+                </xsl:call-template>
                 <xsl:text>}</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates select="$the-cell" />
+                <xsl:call-template name="table-cell-lines">
+                    <xsl:with-param name="the-cell" select="$the-cell" />
+                    <xsl:with-param name="halign" select="$cell-halign" />
+                    <xsl:with-param name="valign" select="$row-valign" />
+                </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:if test="$the-cell/following-sibling::cell">
@@ -4798,6 +4839,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="table-bottom" select="$table-bottom" />
                 <xsl:with-param name="table-right" select="$table-right" />
                 <xsl:with-param name="table-halign" select="$table-halign" />
+                <xsl:with-param name="table-valign" select="$table-valign" />
                 <!-- next line correct, only allow discrepancy on first use -->
                 <xsl:with-param name="row-left" select="$table-left" />
                 <xsl:with-param name="row-bottom" select="$row-bottom" />
@@ -4808,10 +4850,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- At non-cell, done with row          -->
         <!-- conclude line, dump cline info, etc -->
         <xsl:otherwise>
+            <!-- \tabularnewline is unambiguous, better than \\    -->
+            <!-- also at a final line with end-of-line decoration  -->
             <xsl:if test="not($updated-cline='') or not($last-row)">
-                <xsl:text>\\</xsl:text>
+                <xsl:text>\tabularnewline</xsl:text>
             </xsl:if>
+            <!-- no harm if end-of-line decoration is empty -->
             <xsl:value-of select="$updated-cline" />
+            <!-- next row could begin with bare [ and LaTeX sees -->
+            <!-- the start of \tabularnewline[] which would      -->
+            <!-- indicate space, so we just appease the macro    -->
+            <!-- https://github.com/rbeezer/mathbook/issues/300  -->
+            <xsl:if test="$updated-cline='' and not($last-row)">
+                <xsl:text>[0pt]</xsl:text>
+            </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -4826,8 +4878,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Some utilities are defined in xsl/mathbook-common.xsl -->
 
-<!-- "halign-specification" : param "width" -->
+<!-- "halign-specification" : param "align" -->
 <!--     left, right, center -> l, c, r     -->
+
+<!-- "valign-specification" : param "align" -->
+<!--     top, middle, bottom -> t, m, b     -->
 
 <!-- Translate vertical rule width to a LaTeX "new" column specification -->
 <xsl:template name="vrule-specification">
@@ -4903,6 +4958,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>-</xsl:text>
         <xsl:value-of select="$finish" />
         <xsl:text>}</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template name="table-cell-lines">
+    <xsl:param name="the-cell" />
+    <xsl:param name="halign" />
+    <xsl:param name="valign" />
+    <xsl:choose>
+        <xsl:when test="$the-cell[line]">
+            <xsl:text>\tablecelllines{</xsl:text>
+            <xsl:call-template name="halign-specification">
+                <xsl:with-param name="align" select="$halign" />
+            </xsl:call-template>
+            <xsl:text>}{</xsl:text>
+            <xsl:call-template name="valign-specification">
+                <xsl:with-param name="align" select="$valign" />
+            </xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+            <xsl:text>{</xsl:text>
+            <xsl:apply-templates select="$the-cell/line" />
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="$the-cell" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="mathbook//cell/line">
+    <xsl:apply-templates />
+    <!-- is there a next line to separate? -->
+    <xsl:if test="following-sibling::*">
+        <xsl:text>\\&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 
@@ -5062,57 +5150,80 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--        -->
 <!-- Poetry -->
 <!--        -->
-<!-- Basic support from the "verse" package -->
 
-<!-- "poem" element loads verse package -->
-<!-- width is percentage of text width -->
-<!-- ie, "length" of longest line      -->
 <xsl:template match="poem">
-<!-- title *precedes* environment        -->
-<!-- Starred version suppresses ToC entry -->
-    <xsl:text>\poemtitle*{</xsl:text>
+    <xsl:text>\begin{poem}&#xa;</xsl:text>
+    <xsl:text>\poemTitle{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\begin{verse}</xsl:text>
-    <xsl:if test="@width">
-        <xsl:text>[0.</xsl:text>
-        <xsl:value-of select="@width" />
-        <xsl:text>\linewidth]</xsl:text>
-    </xsl:if>
-    <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="stanza"/>
     <xsl:apply-templates select="author" />
-    <xsl:text>\end{verse}&#xa;</xsl:text>
+    <xsl:text>\end{poem}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- End of a stanza is marked by last line   -->
-<!-- We just add a visual break in the source -->
-<xsl:template match="stanza">
-    <xsl:apply-templates select="line" />
-    <xsl:text>%&#xa;</xsl:text>
-</xsl:template>
-
-<!-- The last line of a stanza gets marked specially -->
-<!-- Other lines are more normal                     -->
-<xsl:template match="stanza/line">
-    <xsl:apply-templates />
-    <xsl:text>\\&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Special line ending gives new stanza -->
-<xsl:template match="stanza/line[not(following-sibling::*)]">
-    <xsl:apply-templates />
-    <xsl:text>\\!&#xa;</xsl:text>
-</xsl:template>
-
-<!-- attribution style for author at end -->
-<!-- Abusing an extra stanza             -->
 <xsl:template match="poem/author">
-    <xsl:text>\nopagebreak{\hfill\footnotesize </xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>}\\!&#xa;</xsl:text>
+    <xsl:variable name="alignment">
+        <xsl:apply-templates select="." mode="poem-halign"/>
+    </xsl:variable>
+    <xsl:text>\poemauthor</xsl:text>
+    <xsl:value-of select="$alignment"/>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
+<xsl:template match="stanza">
+    <xsl:if test="title">
+        <xsl:text>\stanzaTitle{</xsl:text>
+        <xsl:apply-templates select="." mode="title-full" />
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>\begin{stanza}&#xa;</xsl:text>
+    <xsl:apply-templates select="line" />
+    <xsl:text>\end{stanza}&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="stanza/line">
+    <!-- Find Alignment -->
+    <xsl:variable name="alignment">
+        <xsl:apply-templates select="." mode="poem-halign"/>
+    </xsl:variable>
+    <!-- Find Indentation -->
+    <xsl:variable name="indentation">
+        <xsl:apply-templates select="." mode="poem-indent"/>
+    </xsl:variable>
+    <!-- Apply Alignment and Indentation -->
+    <xsl:text>\poemline</xsl:text>
+    <xsl:value-of select="$alignment"/>
+    <xsl:text>{</xsl:text>
+    <xsl:if test="$alignment='left'"><!-- Left Alignment: Indent from Left -->
+        <xsl:call-template name="poem-line-indenting">
+            <xsl:with-param name="count"><xsl:value-of select="$indentation"/></xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:apply-templates/><!-- Center Alignment: Ignore Indentation -->
+    <xsl:if test="$alignment='right'"><!-- Right Alignment: Indent from Right -->
+        <xsl:call-template name="poem-line-indenting">
+            <xsl:with-param name="count"><xsl:value-of select="$indentation"/></xsl:with-param>
+        </xsl:call-template>
+        <!-- Latex seems to "eat" one indentation while right aligned, so we add one extra -->
+        <xsl:text>\poemIndent{}</xsl:text>
+    </xsl:if>
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template name="poem-line-indenting">
+    <xsl:param name="count"/>
+    <xsl:choose>
+        <xsl:when test="(0 >= $count)"/>
+        <xsl:otherwise>
+            <xsl:text>\poemIndent{}</xsl:text>
+            <xsl:call-template name="poem-line-indenting">
+                <xsl:with-param name="count" select="$count - 1"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- Footnotes               -->
 <!--   with no customization -->

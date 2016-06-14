@@ -27,6 +27,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- António Pereira, apereiraua@gmail.com, 2015-07-26 -->
 
 <xsl:variable name="pt-PT">
+    <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id="theorem">Teorema</localization>
     <localization string-id="corollary">Corolário</localization>
@@ -75,7 +76,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='paragraph'><xsl:text>Parágrafo</xsl:text></localization>
     <localization string-id='subparagraph'><xsl:text>Subparágrafo</xsl:text></localization>
     <!-- Components of the narrative -->
+    <!-- EXAMPLE-LIKE blocks -->
     <localization string-id='example'><xsl:text>Exemplo</xsl:text></localization>
+    <!-- <localization string-id='question'><xsl:text>Question</xsl:text></localization> -->
+    <!-- <localization string-id='problem'><xsl:text>Problem</xsl:text></localization> -->
+    <!--  -->
     <localization string-id='remark'><xsl:text>Observação</xsl:text></localization>
     <localization string-id='figure'><xsl:text>Figura</xsl:text></localization>
     <localization string-id='table'><xsl:text>Tabela</xsl:text></localization>
