@@ -168,14 +168,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="frontmatter chapter appendix index-part section subsection subsubsection exercises references introduction conclusion paragraphs paragraph subparagraph backmatter" />
 <xsl:strip-space elements="docinfo author abstract" />
 <xsl:strip-space elements="titlepage preface acknowledgement biography foreword dedication colophon" />
-<!-- List is elements in &THEOREM-LIKE; entity                -->
+<!-- List is elements in THEOREM-LIKE entity                  -->
 <!-- theorem|corollary|lemma|algorithm|proposition|claim|fact -->
 <xsl:strip-space elements="theorem corollary lemma algorithm proposition claim fact" />
+<xsl:strip-space elements="statement" />
 <xsl:strip-space elements="proof" />
 <xsl:strip-space elements="definition axiom conjecture principle" />
 <xsl:strip-space elements="blockquote" />
-<xsl:strip-space elements="statement" />
-<xsl:strip-space elements="example list remark exercise hint solution" />
+<!-- List is elements in EXAMPLE-LIKE entity -->
+<!-- example|question|problem                -->
+<xsl:strip-space elements="example question problem" />
+<xsl:strip-space elements="exercise hint answer solution" />
+<xsl:strip-space elements="list remark" />
 <xsl:strip-space elements="sage program console" />
 <xsl:strip-space elements="exercisegroup" />
 <xsl:strip-space elements="note" />  <!-- TODO: biblio, record, etc too -->
@@ -648,8 +652,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Type; empty element                      -->
 <!-- Provide an empty cell to scribble in     -->
 <!-- Or break text cells in the Sage notebook -->
+<!-- This cell does respect @language         -->
 <xsl:template match="sage[not(input) and not(output) and not(@type) and not(@copy)]">
     <xsl:call-template name="sage-active-markup">
+        <!-- OK to send empty string, implementation reacts -->
+        <xsl:with-param name="language-attribute">
+            <xsl:value-of select="@language" />
+        </xsl:with-param>
         <xsl:with-param name="in" select="''"/>
         <xsl:with-param name="out" select="''" />
     </xsl:call-template>
@@ -663,6 +672,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (and we can't tell in the abstract wrapping template)   -->
 <xsl:template match="sage[@type='practice']">
     <xsl:call-template name="sage-active-markup">
+        <xsl:with-param name="language-attribute">
+            <xsl:value-of select="'practice'" />
+        </xsl:with-param>
         <xsl:with-param name="in" select="'# Sage practice area&#xa;'"/>
         <xsl:with-param name="out" select="''" />
     </xsl:call-template>
@@ -681,6 +693,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These cells are meant to be be incorrect or incomplete      -->
 <xsl:template match="sage[@type='display']">
     <xsl:call-template name="sage-display-markup">
+        <xsl:with-param name="language-attribute">
+            <xsl:value-of select="'display'" />
+        </xsl:with-param>
         <xsl:with-param name="in">
             <xsl:call-template name="sanitize-text">
                 <xsl:with-param name="text" select="input" />
@@ -693,6 +708,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Absent meeting any other condition -->
 <xsl:template match="sage|sage[@type='full']">
     <xsl:call-template name="sage-active-markup">
+        <!-- OK to send empty string, implementation reacts -->
+        <xsl:with-param name="language-attribute">
+            <xsl:value-of select="@language" />
+        </xsl:with-param>
         <xsl:with-param name="in">
             <xsl:call-template name="sanitize-text">
                 <xsl:with-param name="text" select="input" />
@@ -1067,9 +1086,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Example: <section> is structural, and ancestors are all structural          -->
 <!-- Example: <title> is not structural, but does have a structural ancestor     -->
 <!-- NB: These elements need only be specified here, and in leaf template (next) -->
-<xsl:template match="book|article|letter|memo|frontmatter|part|chapter|appendix|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references|backmatter" mode="is-structural">
+<xsl:template match="&STRUCTURAL;" mode="is-structural">
     <xsl:value-of select="true()" />
 </xsl:template>
+
 <xsl:template match="*" mode="is-structural">
     <xsl:value-of select="false()" />
 </xsl:template>
@@ -1079,10 +1099,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- are the leaves of that tree, meaning they do     -->
 <!-- not contain any structural nodes themselves      -->
 <!-- frontmatter and backmatter are always structured -->
-<!-- othewise, we look for definitive markers         -->
+<!-- otherwise, we look for definitive markers        -->
 <!-- Note: references and exercises are not markers   -->
-<!-- NB: specification here must match preceding      -->
-<xsl:template match="book|article|letter|memo|frontmatter|part|chapter|appendix|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references|backmatter" mode="is-leaf">
+<xsl:template match="&STRUCTURAL;" mode="is-leaf">
     <xsl:choose>
         <xsl:when test="self::frontmatter or self::backmatter or child::part or child::chapter or child::section or child::subsection or child::subsubsection">
             <xsl:value-of select="false()" />
@@ -1092,6 +1111,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
 <xsl:template match="*" mode="is-leaf">
     <xsl:value-of select="false()" />
 </xsl:template>
@@ -1104,7 +1124,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- it is a direct descendant of a structural node or a directly    -->
 <!-- descended introduction or conclusion .                          -->
 <!-- Also, list items are considered blocks.                         -->
-<xsl:template match="md|mdn|ul|ol|dl|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|image|tabular|paragraphs|&THEOREM-LIKE;|definition|conjecture|axiom|principle|remark|example|list|exercise|li" mode="is-block">
+<xsl:template match="md|mdn|ul|ol|dl|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|image|tabular|paragraphs|&THEOREM-LIKE;|definition|conjecture|axiom|principle|remark|&EXAMPLE-LIKE;|list|exercise|li" mode="is-block">
     <xsl:value-of select="true()" />
 </xsl:template>
 
@@ -1201,234 +1221,92 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
-<!-- ################# -->
-<!-- Abstract Chunking -->
-<!-- ################# -->
+<!-- #################################### -->
+<!-- Abstract Chunking of Structural Nodes-->
+<!-- #################################### -->
 
-<!--
-** IMPORTANT **
+<!-- Implementations get structural nodes of two types          -->
+<!--                                                            -->
+<!--   1) "chunk"                                               -->
+<!--       usually realizable as a single file by               -->
+<!--       applying default templates                           -->
+<!--                                                            -->
+<!--   2) "intermediate":                                       -->
+<!--       usually realizable as a single file with a title,    -->
+<!--       introduction and conclusion surrounding a summary    -->
+<!--       of the subdivisions it contains                      -->
+<!--                                                            -->
+<!-- So an implementation must implement two modal templates    -->
+<!--                                                            -->
+<!--   1) match="&STRUCTURAL;" mode="chunk"                     -->
+<!--   2) match="&STRUCTURAL;" mode="intermediate"              -->
+<!--                                                            -->
+<!-- Similarities can be consolidated within the implementation -->
+<!-- See  xsl/mathbook-html.xsl  a typical example              -->
 
-The next two templates are "abstract" since they require that they be
-imported by an XSL file which implements three modal templates.
+<xsl:template match="&STRUCTURAL;" mode="chunking">
+    <xsl:variable name="chunk">
+        <xsl:apply-templates select="." mode="is-chunk" />
+    </xsl:variable>
+     <xsl:choose>
+        <xsl:when test="$chunk='true'">
+            <!-- <xsl:message>CHUNK: <xsl:apply-templates select="." mode="long-name" /></xsl:message> -->
+            <xsl:apply-templates select="." mode="chunk" />
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- <xsl:message>INTER: <xsl:apply-templates select="." mode="long-name" /></xsl:message> -->
+            <xsl:apply-templates select="." mode="intermediate" />
+            <xsl:apply-templates select="&STRUCTURAL;" mode="chunking" />
+        </xsl:otherwise>
+    </xsl:choose>
+ </xsl:template>
 
-The internal templates defined here are
+<!-- docinfo, and anything else, is immune and dead-ends -->
+<xsl:template match="*" mode="chunking" />
 
-(I)  "chunk" - this is called by the entry template on the document root
+<!-- With an implementation of a file-wrapping routine,     -->
+<!-- a typical use is to                                    -->
+<!--                                                        -->
+<!--   (a) apply a default template to the structural       -->
+<!--       node for a complete (chunk'ed) node              -->
+<!--                                                        -->
+<!--   (b) apply a modal template to the structural         -->
+<!--       node for a summary (intermediate) node           -->
+<!--                                                        -->
+<!-- The file-wrap routine should accept two parameters     -->
+<!--                                                        -->
+<!--   1) a "page-type" string to identify the type of page -->
+<!--   2) the "content" to be wrapped                       -->
 
-(II) "structure-node" - recursive handling of structural nodes
-
-An enclosing XSL file may then override four modal templates.
-These should all be implemented with  match="*".
-Default implementations are given here, which may be useful.
-See note below about (a) versus (b).
-
-(a) file-wrap
-    select/match: a structural node, intermediate or chunk
-    parameter: content
-    default: copy content
-    Provides:
-    All the infrastructure common to wrapping a chunk
-    For example, a web page, LaTeX file, Sage worksheet
-    Typically this will include a call to output a file, and
-    headers and footers necessary for the file to function,
-    such as HEAD and BODY elements for an HTML page
-    Typically, it does not include any displayed information 
-    unique to the content of the node, such as a title
-
-(b) content-wrap
-    select/match: a structural node, intermediate or chunk
-    parameter: content
-    default: copy content
-    Provides:
-    Content unique to a particular structural node, exclusive
-    of its subsidiary elements.
-    Typically this would be headings, such as title.
-    This should be the same not matter when a structual node is
-    rendered: as the top-level of a chunk, subsidiary to a chunk,
-    or as an intermediate page.
-
-
-(c) structure-node-intermediate
-    select/match: a structural node, intermediate
-    default: non-structural content, text versions of structural content
-    Provides:
-    The content of an intermediate node, providing its appearance 
-    inside of the  content-wrap  template.
-    This template should ignore the title, subtitle and author elements
-    (unless we have fixed this situation since writing this)
-    It should present non-structural elements completely and briefly
-    summarize structural elements, with navigation to the element's chunk.
-
-(d) structure-node-child
-    select/match: a single non-structural child of a structural node
-    default: apply all templates to the child
-    Provides:
-    Each node of a structural node being displayed as a chunk
-    will be sent to this template.  The default action is
-    usually the desired one: apply templates to the node, yielding
-    their normal presentation.
-
-How do you tell the division between file-wrap and content-wrap?    
-Two things to realize
-(i)  a single file will typically be the application of a *single* file-wrap
-(ii) the content enclosed by a file-wrap typically will have several applications of content-wrap
-
-With these four templates in place, the next two routines will provide all
-of the logic of walking the document tree  and react appropriately for all
-values of the  chunk-level  variable and various scenarios for document organization.
-See default implementations of the four modal templates following.
-
-See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontrivial examples
--->
-
-<!-- This routine kills non-structural nodes automatically. -->
-<!-- TODO: consolidate file-wraps,                                  -->
-<!-- move recursion into chunk outside (with check on intermediate) -->
-<xsl:template match="*" mode="chunk">
-    <xsl:variable name="structural"><xsl:apply-templates select="." mode="is-structural" /></xsl:variable>
-    <xsl:if test="$structural='true'">
-        <xsl:variable name="intermediate"><xsl:apply-templates select="." mode="is-intermediate" /></xsl:variable>
-        <xsl:variable name="chunk"><xsl:apply-templates select="." mode="is-chunk" /></xsl:variable>
-        <xsl:choose>
-            <!-- file-wrap a chunk -->
-            <xsl:when test="$chunk='true'">
-                <xsl:apply-templates select="." mode="file-wrap">
-                    <xsl:with-param name="content">
-                        <xsl:apply-templates select="." mode="structure-node">
-                            <xsl:with-param name="complete" select="'true'" />
-                        </xsl:apply-templates>
-                    </xsl:with-param>
-                </xsl:apply-templates>
-            </xsl:when>
-            <xsl:when test="$intermediate='true'">
-                <!-- not a leaf, not a chunk; file-wrap intermediate node -->
-                <!-- process children as potentially chunks themselves, outside file-wrap -->
-                <xsl:apply-templates select="." mode="file-wrap">
-                    <xsl:with-param name="content">
-                        <xsl:apply-templates select="." mode="structure-node">
-                            <xsl:with-param name="complete" select="'false'" />
-                        </xsl:apply-templates>
-                    </xsl:with-param>
-                </xsl:apply-templates>
-                <!-- now recurse back into this routine on each child within intermediate node -->
-                <xsl:apply-templates select="*" mode="chunk" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:message>MBX:BUG:     A structural &lt;<xsl:value-of select="local-name(.)" />&gt; element is neither intermediate nor a chunk</xsl:message>
-                <xsl:apply-templates select="." mode="location-report" />
-                </xsl:otherwise>
-        </xsl:choose>
-    </xsl:if>
-</xsl:template>
-
-<!-- A structural node is "complete" if it is presented "normally."        -->
-<!-- It is either a leaf of the abbreviated, chunked document tree         -->
-<!-- or it appears within such a presentation.  Not complete implies       -->
-<!-- an intermediate node of the chunked document tree, which will         -->
-<!-- have a "plain" or "summary" presentation.                             -->
-
-<!-- This template handles *every* structural node (excepting the root document node). -->
-<!-- Non-structural nodes should have "plain" templates defined elsewhere.             -->
-<!-- TODO: maybe handle title/author/etc better  -->
-<xsl:template match="*" mode="structure-node">
-    <xsl:param name="complete" />
-    <xsl:apply-templates select="." mode="content-wrap">
+<!-- A complete page for a structural subdivision -->
+<xsl:template match="&STRUCTURAL;" mode="chunk">
+    <xsl:apply-templates select="." mode="file-wrap">
+        <xsl:with-param name="page-type" select="'complete'" />
         <xsl:with-param name="content">
-            <xsl:choose>
-                <!-- writing a complete chunk, not intermediate    -->
-                <!-- content-wrap will handle titles, authors, etc -->
-                <xsl:when test="$complete = 'true'">
-                    <xsl:for-each select="*[not(self::title or self::subtitle or self::author)]">
-                        <xsl:variable name="structural">
-                            <xsl:apply-templates select="." mode="is-structural" />
-                        </xsl:variable>
-                        <xsl:choose>
-                            <xsl:when test="$structural='true'">
-                                <!-- recurse into structural child with present template -->
-                                <xsl:apply-templates select="." mode="structure-node">
-                                    <xsl:with-param name="complete" select="'true'" />
-                                </xsl:apply-templates>
-                            </xsl:when>
-                            <xsl:when test="$structural='false'">
-                                <!-- non-structural, so apply template to this child               -->
-                                <!-- the default, and typically, is to just apply "plain" templates -->
-                                <xsl:apply-templates select="." mode="structure-node-child" />
-                            </xsl:when>
-                        </xsl:choose>
-                    </xsl:for-each>
-                </xsl:when>
-                <!-- writing an intermnediate node in an abbreviated fashion -->
-                <xsl:when test="$complete = 'false'">
-                    <!-- create content with summarized portions -->
-                    <xsl:apply-templates select="." mode="structure-node-intermediate" />
-                </xsl:when>
-                <xsl:otherwise>
-                <xsl:message>MBX:BUG:     Call to 'structural-node' template has a 'complete' parameter that is not 'true' or 'false'</xsl:message>
-                <xsl:apply-templates select="." mode="location-report" />
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="." />
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Four Structural Node Templates  -->
-<!-- See careful descriptions above -->
-
-<!-- (a) file-wrap -->
-<xsl:template match="*" mode="file-wrap">
-    <xsl:param name="content" />
-    <!-- file name, file header, exsl:document(), etc here -->
-    <xsl:copy-of select="$content" />
-    <!-- file footer, etc -->
+<!-- A summary page for a structural subdivision -->
+<xsl:template match="&STRUCTURAL;" mode="intermediate">
+    <xsl:apply-templates select="." mode="file-wrap">
+        <xsl:with-param name="page-type" select="'summary'" />
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="." mode="summary" />
+        </xsl:with-param>
+    </xsl:apply-templates>
 </xsl:template>
 
-<!-- (b) content-wrap -->
-<xsl:template match="*" mode="content-wrap">
-    <xsl:param name="content" />
-    <!-- subdivision header, per file format -->
-    <!-- handle title, subtitle, author here -->
-    <xsl:copy-of select="$content" />
-    <!-- Subdivision footer, etc -->
+<!-- A default summary page can just ignore the structural      -->
+<!-- divisions within though usually you might want to do       -->
+<!-- something with them, so you would override this template   -->
+<!-- with an implementation.  See xsl/mathbook-sage-doctest.xsl -->
+<!-- which uses all of these general routines here              -->
+<xsl:template match="&STRUCTURAL;" mode="summary">
+    <xsl:apply-templates select="*[not(&STRUCTURAL-FILTER;)]" />
 </xsl:template>
 
-<!-- (c) structure-node-intermediate                    -->
-<!-- Implemented in two parts, study carefully          -->
-<!-- Override this entirely, or just "summary" template -->
-<xsl:template match="*" mode="structure-node-intermediate">
-    <xsl:for-each select="*"> <!-- loop over children -->
-        <xsl:variable name="structural"> <!-- identify structural -->
-            <xsl:apply-templates select="." mode="is-structural" />
-        </xsl:variable>
-        <xsl:choose>
-            <xsl:when test="$structural = 'true'">
-                <!-- Likely this stanza needs format-specific implementation      -->
-                <!-- Or overriding just this modal template would be one approach -->
-                <xsl:apply-templates select="." mode="intermediate-child-summary" />
-            </xsl:when>
-            <xsl:otherwise>
-                <!-- Want to present non-structural components -->
-                <!-- (eg, introduction, conclusion)            -->
-                <xsl:apply-templates select="." />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:for-each>
-</xsl:template>
-
-<!-- This would normally be some sort of navigation       -->
-<!-- element to structural (chunked) children if the node -->
-<xsl:template match="*" mode="intermediate-child-summary">
-    <xsl:text>&#xa;* </xsl:text>
-    <xsl:apply-templates select="." mode="long-name" />
-    <xsl:text> *&#xa;</xsl:text>
-</xsl:template>
-
-<!-- (d) structure-node-child -->
-<!-- This works well generally, when you want all,  -->
-<!-- or most, of the content.  It can be overridden -->
-<!-- with a more restrictive scope as a filter      -->
-<xsl:template match="*" mode="structure-node-child">
-    <xsl:apply-templates select="." />
-</xsl:template>
 
 <!-- Containing Filenames, URLs -->
 <!-- Relative to the chunking in effect, every -->
@@ -1474,9 +1352,6 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
         <xsl:apply-templates select="." mode="internal-id" />
     </xsl:if>
 </xsl:template>
-
-
-
 
 
 <!-- ###### -->
@@ -1893,19 +1768,19 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- where the subitem is subnumbered due to caption/number on container -->
 <!-- TODO: investigate entities for "number='no'" upgrade -->
 <!-- http://pimpmyxslt.com/articles/entity-tricks-part1/  -->
-<xsl:template match="&THEOREM-LIKE;|definition|conjecture|axiom|principle|example|list|remark|exercise|figure|table|listing|sidebyside" mode="serial-number">
+<xsl:template match="&THEOREM-LIKE;|definition|conjecture|axiom|principle|&EXAMPLE-LIKE;|list|remark|exercise|figure|table|listing|sidebyside" mode="serial-number">
     <xsl:variable name="subtree-level">
         <xsl:apply-templates select="." mode="absolute-subtree-level">
             <xsl:with-param name="numbering-items" select="$numbering-theorems" />
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="&THEOREM-LIKE;|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="&THEOREM-LIKE;|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/appendix" level="any" count="&THEOREM-LIKE;|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/appendix" level="any" count="&THEOREM-LIKE;|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=3"><xsl:number from="subsection" level="any" count="&THEOREM-LIKE;|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=4"><xsl:number from="subsubsection" level="any" count="&THEOREM-LIKE;|definition|conjecture|axiom|principle|example|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="&THEOREM-LIKE;|definition|conjecture|axiom|principle|&EXAMPLE-LIKE;|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="&THEOREM-LIKE;|definition|conjecture|axiom|principle|&EXAMPLE-LIKE;|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/appendix" level="any" count="&THEOREM-LIKE;|definition|conjecture|axiom|principle|&EXAMPLE-LIKE;|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/appendix" level="any" count="&THEOREM-LIKE;|definition|conjecture|axiom|principle|&EXAMPLE-LIKE;|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=3"><xsl:number from="subsection" level="any" count="&THEOREM-LIKE;|definition|conjecture|axiom|principle|&EXAMPLE-LIKE;|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=4"><xsl:number from="subsubsection" level="any" count="&THEOREM-LIKE;|definition|conjecture|axiom|principle|&EXAMPLE-LIKE;|list|remark|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for theorem number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>
@@ -2155,7 +2030,7 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 </xsl:template>
 
 <!-- Structure Numbers: Theorems, Examples, Inline Exercises, Figures -->
-<xsl:template match="&THEOREM-LIKE;|definition|conjecture|axiom|principle|example|list|remark|exercise|figure|table|listing|sidebyside" mode="structure-number">
+<xsl:template match="&THEOREM-LIKE;|definition|conjecture|axiom|principle|&EXAMPLE-LIKE;|list|remark|exercise|figure|table|listing|sidebyside" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-theorems" />
         <xsl:with-param name="pad" select="'yes'" />
@@ -2676,6 +2551,61 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
     </xsl:choose>
 </xsl:template>
 
+<!-- Translate vertical alignment to CSS short name         -->
+<!-- HTML:  makes portion of CSS class names for cells      -->
+<!-- LaTeX: provides one standard LaTeX vertical alignment  -->
+<!-- PG: provide LaTeX-style alignment string for           -->
+<!-- DataTable macro from niceTable.pl                      -->
+<xsl:template name="valign-specification">
+    <xsl:param name="align" />
+    <xsl:choose>
+        <xsl:when test="$align='top'">
+            <xsl:text>t</xsl:text>
+        </xsl:when>
+        <xsl:when test="$align='middle'">
+            <xsl:text>m</xsl:text>
+        </xsl:when>
+        <xsl:when test="$align='bottom'">
+            <xsl:text>b</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:WARNING: tabular vertical alignment attribute not recognized: use top, middle, bottom</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- ################ -->
+<!-- Poetry Utilities -->
+<!-- ################ -->
+
+<xsl:template match="poem|poem/author|stanza|stanza/line" mode="poem-indent">
+    <xsl:choose>
+        <xsl:when test="@indent">
+            <xsl:value-of select="@indent" />
+        </xsl:when>
+        <xsl:when test="self::poem">
+            <xsl:text>0</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="parent::*" mode="poem-indent" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="poem|poem/author|stanza|stanza/line" mode="poem-halign">
+    <xsl:choose>
+        <xsl:when test="@halign">
+            <xsl:value-of select="@halign" />
+        </xsl:when>
+        <xsl:when test="self::poem">
+            <xsl:text>left</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="parent::*" mode="poem-halign" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- ################ -->
 <!-- Cross-References -->
 <!-- ################ -->
@@ -2902,6 +2832,9 @@ See  xsl/mathbook-html.xsl  and  xsl:mathbook-latex.xsl  for two different nontr
 <!-- Some references get an autoname prefix (eg Section, Theorem), -->
 <!-- subject to global and local options, interpreted here         -->
 <!-- Element is the  xref, $target  provides the autoname string   -->
+<!-- If autoname="title" and the xref has content, then there      -->
+<!-- is no number because of the title request and the xref        -->
+<!-- content becomes the link text instead                         -->
 <xsl:template match="*" mode="xref-prefix">
     <!-- We need the target for autonaming with type-name or title -->
     <xsl:param name="target" />

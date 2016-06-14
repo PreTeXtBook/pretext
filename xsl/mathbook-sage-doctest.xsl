@@ -1,4 +1,11 @@
 <?xml version='1.0'?> <!-- As XML file -->
+
+<!-- http://pimpmyxslt.com/articles/entity-tricks-part2/ -->
+<!DOCTYPE xsl:stylesheet [
+    <!ENTITY % entities SYSTEM "entities.ent">
+    %entities;
+]>
+
 <!-- Identify as a stylesheet -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
@@ -7,14 +14,14 @@
     extension-element-prefixes="exsl date"
 >
 
+<!-- For numbers, titles, text utilities, etc -->
 <xsl:import href="./mathbook-common.xsl" />
 
 <!-- Intend output for Python docstring -->
 <xsl:output method="text" />
 
-<!-- Whitespace control in text output mode-->
-<!-- Forcing newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
-<!-- Avoiding extra whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
+<!-- Doctest files are Python (docstring) -->
+<xsl:variable name="file-extension" select="'.py'" />
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -23,89 +30,56 @@
 <!-- Deprecation warnings are universal analysis of source and parameters   -->
 <!-- There is always a "document root" directly under the mathbook element, -->
 <!-- and we process it with the chunking template called below              -->
-<!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
     <xsl:apply-templates select="mathbook" mode="deprecation-warnings" />
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- We process structural nodes via chunking routine in   xsl/mathbook-common.html -->
-<!-- This in turn calls specific modal templates defined elsewhere in this file     -->
-<xsl:template match="/mathbook">
-    <xsl:apply-templates mode="chunk" />
+<!-- We process structural nodes via chunking        -->
+<!-- routine in   xsl/mathbook-common.html           -->
+<!-- The default templates there do everything       -->
+<!-- we need once we have "file-wrap" modal template -->
+<xsl:template match="mathbook">
+    <xsl:apply-templates mode="chunking" />
 </xsl:template>
 
-<!-- ################ -->
-<!-- Structural Nodes -->
-<!-- ################ -->
 
-<!-- We override three templates, the first    -->
-<!-- two extract <sage> blocks throughout.     -->
-<!-- The third creates the file infrastructure -->
+<!-- ########################## -->
+<!-- Default Element Processing -->
+<!-- ########################## -->
 
-<!-- Intermediate structural nodes may have -->
-<!-- an introduction and aconclusion        -->
-<!-- N.B.: maybe should be more careful and -->
-<!-- "for-each" with non-structural check   -->
-<xsl:template match="*" mode="structure-node-intermediate">
-    <xsl:apply-templates select="introduction//sage|conclusion//sage" />
+<!-- Default is to just recurse into descendant elements            -->
+<!-- Ignoring text() nodes in mixed-content and mostly dead-end'ing -->
+<xsl:template match="*">
+    <xsl:apply-templates select="*" />
 </xsl:template>
 
-<!-- A non-structural child might be a sage element, -->
-<!-- or it is an environment containing one          -->
-<xsl:template match="*" mode="structure-node-child">
-    <xsl:apply-templates select="self::sage|.//sage" />
-</xsl:template>
 
-<!-- TODO: generalize filename creation, with variable extension -->
-<xsl:template match="*" mode="file-wrap">
-    <xsl:param name="content" />
-    <xsl:if test="$content!=''">
-        <xsl:variable name="filename">
-            <xsl:apply-templates select="." mode="internal-id" />
-            <xsl:text>.py</xsl:text>
-        </xsl:variable>
-        <exsl:document href="{$filename}" method="text">
-            <xsl:call-template name="doctest-file-header" />
-            <xsl:text>## </xsl:text>
-            <xsl:apply-templates select="." mode="type-name" />
-            <xsl:text> </xsl:text>
-            <xsl:apply-templates select="." mode="number" />
-            <xsl:text> </xsl:text>
-            <xsl:apply-templates select="title" />
-            <xsl:text>&#xa;</xsl:text>
-            <xsl:text>##&#xa;</xsl:text>
-            <xsl:text>r"""&#xa;</xsl:text>
-            <xsl:value-of select="$content" />
-            <xsl:text>"""&#xa;</xsl:text>
-        </exsl:document>
-    </xsl:if>
-</xsl:template>
-
-<!-- ##################### -->
-<!-- Sage Cell Conversions -->
-<!-- ##################### -->
-
-<!-- Just handle "copy" Sage blocks the same way as others -->
-<xsl:template match="sage[@copy]">
-    <xsl:apply-templates select="id(@copy)" />
-</xsl:template>
-
-<!-- Totally kill a display block, cannot depend on it, etc -->
-<xsl:template match="sage[@type='display']" />
-
-<!-- Totally kill a practice block, it is uninteresting -->
-<xsl:template match="sage[@type='practice']" />
+<!-- ####################### -->
+<!-- Sage Element Processing -->
+<!-- ####################### -->
 
 <!-- "Normal" Sage blocks, including "invisible" -->
 <!-- Form doctring/ReST verbatim block           -->
 <!-- for one input/output pair                   -->
-<xsl:template match="sage">
+<!-- Filter limits to Sage language only         -->
+<xsl:template match="sage[(not(@type) or @type='full' or @type='invisible') and (not(@language) or @language='sage')]">
     <xsl:text>~~~~~~~~~~~~~~~~~~~~~~ ::&#xA;&#xA;</xsl:text>
     <xsl:apply-templates select="input" />
     <xsl:apply-templates select="output" />
     <xsl:text>&#xA;</xsl:text>
 </xsl:template>
+
+<!-- Just handle "copy" Sage blocks the same way as others  -->
+<!-- since results may be needed for subsequent tests       -->
+<!-- This needs to come second, since it will fail previous -->
+<!-- filter and has the same priority, so will be fulfilled -->
+<xsl:template match="sage[@copy]">
+    <xsl:apply-templates select="id(@copy)" />
+</xsl:template>
+
+<!-- Kill anything else that has not matched -->
+<xsl:template match="sage" />
 
 <!-- Options to doctesting -->
 <!-- A property of the Sage element,         -->
@@ -167,11 +141,14 @@
     </xsl:if>
 </xsl:template>
 
+<!-- NB: input and output can appear in "program", etc -->
+<!-- so templates below must be specific enough        -->
+
 <!-- Sanitize input block       -->
 <!-- Add in 4-space indentation -->
 <!-- and Sage prompts, then     -->
 <!-- add Sage doctest markers   -->
-<xsl:template match="input">
+<xsl:template match="sage/input">
     <xsl:variable name="input-block">
         <xsl:call-template name="prepend-prompt">
             <xsl:with-param name="text">
@@ -219,7 +196,7 @@
 
 <!-- Sanitize output block      -->
 <!-- Add in 4-space indentation -->
-<xsl:template match="output">
+<xsl:template match="sage/output">
     <xsl:call-template name="add-indentation">
         <xsl:with-param name="text">
             <xsl:call-template name="sanitize-text" >
@@ -261,9 +238,32 @@
     </xsl:if>
 </xsl:template>
 
-<!-- ############# -->
-<!-- File Elements -->
-<!-- ############# -->
+<!-- ################# -->
+<!-- File Construction -->
+<!-- ################# -->
+
+<xsl:template match="&STRUCTURAL;" mode="file-wrap">
+    <xsl:param name="content" />
+    <xsl:if test="$content!=''">
+        <xsl:variable name="filename">
+            <xsl:apply-templates select="." mode="containing-filename" />
+        </xsl:variable>
+        <exsl:document href="{$filename}" method="text">
+            <xsl:call-template name="doctest-file-header" />
+            <xsl:text>## </xsl:text>
+            <xsl:apply-templates select="." mode="type-name" />
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="." mode="number" />
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="." mode="title-full" />
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:text>##&#xa;</xsl:text>
+            <xsl:text>r"""&#xa;</xsl:text>
+            <xsl:value-of select="$content" />
+            <xsl:text>"""&#xa;</xsl:text>
+        </exsl:document>
+    </xsl:if>
+</xsl:template>
 
 <xsl:template name="doctest-file-header">
     <xsl:text>##          Sage Doctest File         ##&#xa;</xsl:text>

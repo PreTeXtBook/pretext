@@ -69,7 +69,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- Everything like a paragraph, but also more substantial                   -->
 <!-- These items cannot be contained in anything but a structural subdivision -->
 <!-- Note: the "todo" element is in this list                                 -->
-<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|list|example|exercise|contributors|list-of|solution-list|notation-list|todo">
+<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|list|example|question|problem|exercise|contributors|list-of|solution-list|notation-list|todo">
 
 
 <!-- ######### -->
@@ -200,6 +200,11 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- example-like, not very structured, or statement/solution -->
 <!ELEMENT example (title?, index*, ((%para;)*|(statement, solution)))>
     <!ATTLIST example xml:id ID #IMPLIED>
+<!ELEMENT question (title?, index*, ((%para;)*|(statement, solution)))>
+    <!ATTLIST question xml:id ID #IMPLIED>
+<!ELEMENT problem (title?, index*, ((%para;)*|(statement, solution)))>
+    <!ATTLIST problem xml:id ID #IMPLIED>
+
 <!ELEMENT list (title?, index*, introduction?, (ol|ul|dl), conclusion)>
     <!ATTLIST list xml:id ID #IMPLIED>
 <!ELEMENT remark (title?, index*, (%para;)*)>
@@ -247,6 +252,8 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST sage doctest   (random|absolute|relative)        #IMPLIED>
     <!-- TODO: for doctest convert "not tested" to "not-tested" -->
     <!ATTLIST sage tolerance CDATA                             #IMPLIED>
+    <!-- Language options as of 2016-06-13 -->
+    <!ATTLIST sage language (sage|gap|gp|html|maxima|octave|python|r|singular) #IMPLIED>
 
 <!ELEMENT program (input, output?)>
     <!ATTLIST program xml:id      ID    #IMPLIED>
@@ -296,8 +303,10 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST row bottom        (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST row left          (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST row halign        (left|center|right)        #IMPLIED>
+    <!ATTLIST row valign        (left|middle|right)        #IMPLIED>
 
-<!ELEMENT cell    (#PCDATA|%sentence;)*>
+<!ELEMENT cell    (#PCDATA|%sentence;|line)*>
+<!-- Should be (#PCDATA|%sentence;)* xor (line+), but DTD cannot express this -->
     <!ATTLIST cell bottom       (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST cell right        (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST cell halign       (left|center|right)        #IMPLIED>

@@ -27,6 +27,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Robert A. Beezer, beezer@pugetsound.edu, 2014-08-11   -->
 
 <xsl:variable name="en-US">
+    <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id='theorem'><xsl:text>Theorem</xsl:text></localization>
     <localization string-id='corollary'><xsl:text>Corollary</xsl:text></localization>
@@ -73,7 +74,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='paragraph'><xsl:text>Paragraph</xsl:text></localization>
     <localization string-id='subparagraph'><xsl:text>Subparagraph</xsl:text></localization>
     <!-- Components of the narrative -->
+    <!-- EXAMPLE-LIKE blocks -->
     <localization string-id='example'><xsl:text>Example</xsl:text></localization>
+    <localization string-id='question'><xsl:text>Question</xsl:text></localization>
+    <localization string-id='problem'><xsl:text>Problem</xsl:text></localization>
+    <!--  -->
     <localization string-id='remark'><xsl:text>Remark</xsl:text></localization>
     <localization string-id='figure'><xsl:text>Figure</xsl:text></localization>
     <localization string-id='table'><xsl:text>Table</xsl:text></localization>
@@ -140,6 +145,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'><xsl:text>permalink</xsl:text></localization>
     <localization string-id='incontext'><xsl:text>in-context</xsl:text></localization>
+    <!-- Sage Cell evaluate button  -->
+    <!-- eg, "Evaluate Maxima Code" -->
+    <localization string-id='evaluate'><xsl:text>Evaluate</xsl:text></localization>
+    <localization string-id='code'><xsl:text>Code</xsl:text></localization>
 </xsl:variable>
 
 </xsl:stylesheet>
