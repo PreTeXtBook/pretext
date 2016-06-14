@@ -1182,9 +1182,52 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See initiation in the entry template. We default -->
 <!-- to just recursing through children elements      -->
 <!-- Otherwise, see knowl creation in next section    -->
+
 <xsl:template match="*" mode="xref-knowl">
+    <!-- do nothing, in contrast to next template -->
     <xsl:apply-templates select="*" mode="xref-knowl" />
 </xsl:template>
+
+<xsl:template match="me|men|md|mdn" mode="xref-knowl">
+    <!-- write a file, calling modal duplicate template -->
+    <xsl:variable name="knowl-file">
+        <xsl:apply-templates select="." mode="xref-knowl-filename" />
+    </xsl:variable>
+    <exsl:document href="{$knowl-file}" method="html">
+        <!-- header since separate file -->
+        <xsl:call-template name="converter-blurb-html" />
+        <!-- content, as duplicate, so no @id or \label -->
+        <xsl:apply-templates select="." mode="duplicate" />
+        <!-- in-context link as part of xref-knowl content -->
+        <xsl:element name="span">
+            <xsl:attribute name="class">
+                <xsl:text>incontext</xsl:text>
+            </xsl:attribute>
+            <xsl:element name="a">
+                <xsl:attribute name="href">
+                    <xsl:apply-templates select="." mode="url" />
+                </xsl:attribute>
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'incontext'" />
+                </xsl:call-template>
+            </xsl:element>
+        </xsl:element>
+    </exsl:document>
+    <!-- recurse the tree outside of the file-writing -->
+    <xsl:apply-templates select="*" mode="xref-knowl" />
+</xsl:template>
+
+
+<!-- ########### -->
+<!-- Duplication -->
+<!-- ########### -->
+
+<!-- At fundamental/minor elements we bail out on  -->
+<!-- original/duplicate distinction and just do it -->
+<xsl:template match="*" mode="duplicate">
+    <xsl:apply-templates select="." />
+</xsl:template>
+
 
 <!-- ####################### -->
 <!-- Environments and Knowls -->
@@ -1227,7 +1270,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We show the full content of the item on the page (b)            -->
 <!-- Or, we build a hidden knowl and place a link on the page (c)    -->
 <!-- NB: this template employs several modal templates, defined just below -->
-<xsl:template match="fn|biblio|&EXAMPLE-LIKE;|list|remark|definition|axiom|conjecture|principle|&THEOREM-LIKE;|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|contributor">
+<xsl:template match="fn|biblio|&EXAMPLE-LIKE;|list|remark|definition|axiom|conjecture|principle|&THEOREM-LIKE;|proof|exercise|hint|answer|solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|contributor">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
@@ -1260,7 +1303,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We restrict hint, answer, solution to avoid confusion with webwork -->
 <!-- TODO: we need to process children in a way that no \label{}, nor ID's, are produced   -->
 <!--       This would perhaps obsolete the "env-type" device, and reorder explnation below -->
-<xsl:template match="fn|biblio|&EXAMPLE-LIKE;|list|remark|definition|axiom|conjecture|principle|&THEOREM-LIKE;|proof|exercise|exercise/hint|exercise/answer|exercise/solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|me|men|md|mdn|li|p|contributor" mode="xref-knowl">
+<xsl:template match="fn|biblio|&EXAMPLE-LIKE;|list|remark|definition|axiom|conjecture|principle|&THEOREM-LIKE;|proof|exercise|exercise/hint|exercise/answer|exercise/solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|li|p|contributor" mode="xref-knowl">
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
@@ -1988,36 +2031,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>sidebyside</xsl:text>
 </xsl:template>
 
-<!-- Display Mathematics -->
-<!-- We make knowls of all four types of display mathematics        -->
-<!-- We likely will never reference an <me> (no xml:id, or number), -->
-<!-- but an <men> is perfectly natural.   For <md>, <mdn> the       -->
-<!-- <mrow> carry the xml:id and possible numbers, but we show      -->
-<!-- the whole display. NB: the trick is in the filename of an      -->
-<!-- mrow, it points to the enclosing display filename              -->
-<!-- NB: we could put an xml:id on a display, but it has no         -->
-<!-- title or number, so there is no way to reference it,           -->
-<!-- nor can LaTeX accomplish this (right?)                         -->
-<xsl:template match="me|men|md|mdn" mode="is-hidden">
-    <xsl:value-of select="false()" />
-</xsl:template>
-<xsl:template match="me|men|md|mdn" mode="is-block-env">
-    <xsl:value-of select="false()" />
-</xsl:template>
-<!-- Never hidden so calling hidden-knowl-text raises error -->
-<!-- There is no head ever -->
-<xsl:template match="me|men|md|mdn" mode="head" />
-<!-- Bodies of display mathematics         -->
-<!--   More complicated, so isolated below -->
-<!-- There is no posterior -->
-<xsl:template match="me|men|md|mdn" mode="posterior" />
-<!-- HTML, CSS -->
-<xsl:template match="me|men|md|mdn" mode="environment-element">
-    <xsl:text>div</xsl:text>
-</xsl:template>
-<xsl:template match="me|men|md|mdn" mode="environment-class">
-    <xsl:text>displaymath</xsl:text>
-</xsl:template>
 
 <!-- Simple environments -->
 <!-- All subsidiary to some other environment  -->
@@ -2334,37 +2347,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Inline Math -->
 <!-- See the common file for the universal "m" template -->
+<!-- Never labeled, so no need for duplicate template   -->
 
-<!-- Bodies of Displayed Math -->
-<!-- These modal templates are called by -->
-<!-- the environment/knowl scheme above  -->
-
-<!-- Single displayed equation, unnumbered -->
+<!-- Single Displayed Equation, Unnumbered -->
 <!-- Output follows source line breaks     -->
 <!-- MathJax: out-of-the-box support       -->
-<xsl:template match="me" mode="body">
+<xsl:template match="me">
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
-    <xsl:value-of select="." />
+    <xsl:value-of select="text()|var" />
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Single displayed equation, numbered -->
+<!-- Single Displayed Equation, Numbered -->
 <!-- MathJax: out-of-the-box support     -->
 <!-- Requires a manual tag for number    -->
-<xsl:template match="men" mode="body">
-    <xsl:param name="env-type" />
+<xsl:template match="men">
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
-    <xsl:value-of select="." />
-    <!-- Needs label{} at birth, NOT in xref knowl -->
-    <xsl:if test="$env-type='visible' or $env-type='hidden'">
-        <xsl:apply-templates select="." mode="label" />
-    </xsl:if>
+    <xsl:value-of select="text()|var" />
+    <!-- label original -->
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:apply-templates select="." mode="tag" />
+    <xsl:text>\end{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="men" mode="duplicate">
+    <xsl:text>\begin{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
+    <xsl:value-of select="text()|var" />
     <xsl:apply-templates select="." mode="tag" />
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
@@ -2375,8 +2393,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
 <!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
 <!-- align environment if ampersands are present, gather environment otherwise   -->
-<!-- NB: *identical* to LaTeX version, but for mode and knowl-type parameter     -->
-<xsl:template match="md|mdn" mode="body">
+<!-- LaTeX environment from "displaymath-alignment" template in -common.xsl      -->
+<!-- NB: *identical* to LaTeX version, but need "duplicate" version              -->
+<xsl:template match="md|mdn">
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}&#xa;</xsl:text>
@@ -2386,19 +2405,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Rows of a multi-line math display                 -->
+<xsl:template match="md|mdn" mode="duplicate">
+    <xsl:text>\begin{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:apply-templates select="mrow|intertext" mode="duplicate" />
+    <xsl:text>\end{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- Rows of a Multi-line Math Display                 -->
 <!-- (1) MathJax config above turns off all numbering  -->
 <!-- (2) Numbering supplied by \tag{}                  -->
 <!-- (3) MathJax config makes span id's predictable    -->
 <!-- (4) Last row special, has no line-break marker    -->
 <xsl:template match="md/mrow">
-    <xsl:param name="env-type" />
     <xsl:apply-templates select="text()|xref|var" />
     <xsl:if test="@number='yes'">
-        <!-- Needs label{} at birth, NOT in xref knowl -->
-        <xsl:if test="$env-type='visible' or $env-type='hidden'">
-            <xsl:apply-templates select="." mode="label" />
-        </xsl:if>
+        <!-- label original -->
+        <xsl:apply-templates select="." mode="label" />
+        <xsl:apply-templates select="." mode="tag"/>
+    </xsl:if>
+    <xsl:if test="following-sibling::mrow">
+       <xsl:text>\\</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="md/mrow" mode="duplicate">
+    <xsl:apply-templates select="text()|xref|var" />
+    <xsl:if test="@number='yes'">
         <xsl:apply-templates select="." mode="tag"/>
     </xsl:if>
     <xsl:if test="following-sibling::mrow">
@@ -2408,17 +2445,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="mdn/mrow">
-    <xsl:param name="env-type" />
     <xsl:apply-templates select="text()|xref|var" />
     <xsl:choose>
         <xsl:when test="@number='no'">
             <xsl:text>\notag</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <!-- Needs label{} at birth, NOT in xref knowl -->
-            <xsl:if test="$env-type='visible' or $env-type='hidden'">
-                <xsl:apply-templates select="." mode="label" />
-            </xsl:if>
+            <!-- label original -->
+            <xsl:apply-templates select="." mode="label" />
             <xsl:apply-templates select="." mode="tag"/>
         </xsl:otherwise>
     </xsl:choose>
@@ -2428,7 +2462,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Math Utilities -->
+<xsl:template match="mdn/mrow" mode="duplicate">
+    <xsl:apply-templates select="text()|xref|var" />
+    <xsl:choose>
+        <xsl:when test="@number='no'">
+            <xsl:text>\notag</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="tag"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="following-sibling::mrow">
+       <xsl:text>\\</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
 
 <!-- Manual Number Tagging -->
 <!-- We do "tag" numbered equations in MathJax output, -->
@@ -2441,14 +2489,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Intertext -->
-<!-- A LaTeX construct really, we just jump out/in of             -->
-<!-- the align/gather environment and package the text            -->
-<!-- in an HTML paragraph, assuming it is just a snippet.         -->
-<!-- This breaks the alignment, but MathJax has no good           -->
-<!-- solution for this.                                           -->
-<!-- We need * (md=no numbers), and plain (mdn=numbers) variants, -->
-<!-- together with aligned (& present) or gather (no & present).  -->
-<!-- NB: we check the *parent* for alignment                      -->
+<!-- A LaTeX construct really, we just jump out/in of     -->
+<!-- the align/gather environment and package the text    -->
+<!-- in an HTML paragraph, assuming it is just a snippet. -->
+<!-- This breaks the alignment, but MathJax has no good   -->
+<!-- solution for this.                                   -->
+<!-- NB: we check the *parent* for alignment              -->
 <xsl:template match="md/intertext|mdn/intertext">
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select=".." mode="displaymath-alignment" />
@@ -2460,6 +2506,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select=".." mode="displaymath-alignment" />
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
+
 
 
 <!-- ########### -->
