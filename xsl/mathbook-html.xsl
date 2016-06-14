@@ -4253,13 +4253,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: consider showing output in green span (?),    -->
 <!-- presently output is dropped as computable           -->
 <xsl:template name="sage-active-markup">
+    <xsl:param name="language-attribute" />
     <xsl:param name="in" />
     <xsl:param name="out" />
-    <div class="sage-compute">
-    <script type="text/x-sage">
-        <xsl:value-of select="$in" />
-    </script>
-    </div>
+    <xsl:element name="div">
+        <xsl:attribute name="class">
+            <xsl:text>sagecell-</xsl:text>
+            <xsl:if test="$language-attribute=''">
+                <xsl:text>sage</xsl:text>
+            </xsl:if>
+            <xsl:value-of select="$language-attribute" />
+        </xsl:attribute>
+        <xsl:element name="script">
+            <xsl:attribute name="type">
+                <xsl:text>text/x-sage</xsl:text>
+            </xsl:attribute>
+            <xsl:value-of select="$in" />
+        </xsl:element>
+    </xsl:element>
 </xsl:template>
 
 <!-- An abstract named template accepts input text   -->
@@ -4466,7 +4477,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:if test="//webwork[@*|node()]">
                 <xsl:call-template name="webwork" />
             </xsl:if>
-            <xsl:call-template name="sagecell" />
+            <xsl:apply-templates select="." mode="sagecell" />
             <xsl:if test="/mathbook//program">
                 <xsl:call-template name="goggle-code-prettifier" />
             </xsl:if>
@@ -4555,7 +4566,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:if test="//webwork[@*|node()]">
                 <xsl:call-template name="webwork" />
             </xsl:if>
-            <xsl:call-template name="sagecell" />
+            <xsl:apply-templates select="." mode="sagecell" />
             <xsl:call-template name="knowl" />
             <xsl:call-template name="fonts" />
             <xsl:call-template name="css" />
@@ -5242,27 +5253,181 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     <script type="text/javascript" src="https://sagecell.sagemath.org/static/jquery.min.js"></script>
 </xsl:template>
 
-<!-- Sage Cell header -->
+<!-- Sage Cell Setup -->
 <!-- TODO: internationalize button labels, strings below -->
 <!-- TODO: make an initialization cell which links with the sage-compute cells -->
-<xsl:template name="sagecell">
-    <script type="text/javascript" src="https://sagecell.sagemath.org/embedded_sagecell.js"></script>
-    <script>
-$(function () {
-    // Make *any* div with class 'sage-compute' an executable Sage cell
-    sagecell.makeSagecell({inputLocation: 'div.sage-compute',
-                           linked: true,
-                           languages: ["sage", "r"],
-                           evalButtonText: 'Evaluate'});
-});
-$(function () {
-    // Make *any* div with class 'sage-display' a visible, uneditable Sage cell
-    sagecell.makeSagecell({inputLocation: 'div.sage-display',
-                           editor: 'codemirror-readonly',
-                           hide: ['evalButton', 'editorToggle', 'language']});
-});
-    </script>
+
+<!-- A template for a generic makeSageCell script element -->
+<!-- Parameters: language, evaluate-button text -->
+<xsl:template name="makesagecell">
+    <xsl:param name="language-attribute" />
+    <xsl:param name="language-text" />
+    <xsl:element name="script">
+        <xsl:text>$(function () {&#xa;</xsl:text>
+        <xsl:text>    // Make *any* div with class 'sagecell-</xsl:text>
+            <xsl:value-of select="$language-attribute" />
+        <xsl:text>' an executable Sage cell&#xa;</xsl:text>
+        <xsl:text>    // Their results will be linked, only within language type&#xa;</xsl:text>
+        <xsl:text>    sagecell.makeSagecell({inputLocation: 'div.sagecell-</xsl:text>
+            <xsl:value-of select="$language-attribute" />
+        <xsl:text>',&#xa;</xsl:text>
+        <xsl:text>                           linked: true,&#xa;</xsl:text>
+        <xsl:text>                           languages: ['</xsl:text>
+            <xsl:value-of select="$language-attribute" />
+        <xsl:text>'],&#xa;</xsl:text>
+        <xsl:text>                           evalButtonText: '</xsl:text>
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'evaluate'" />
+            </xsl:call-template>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$language-text" />
+            <xsl:text> </xsl:text>
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'code'" />
+            </xsl:call-template>
+        <xsl:text>'});&#xa;</xsl:text>
+        <xsl:text>});&#xa;</xsl:text>
+    </xsl:element>
 </xsl:template>
+
+<!-- template for a "display only" version -->
+<xsl:template name="sagecell-display">
+    <xsl:element name="script">
+        <xsl:text>$(function () {&#xa;</xsl:text>
+        <xsl:text>    // Make *any* div with class 'sage-display' a visible, uneditable Sage cell&#xa;</xsl:text>
+        <xsl:text>    sagecell.makeSagecell({inputLocation: 'div.sage-display',&#xa;</xsl:text>
+        <xsl:text>                           editor: 'codemirror-readonly',&#xa;</xsl:text>
+        <xsl:text>                           hide: ['evalButton', 'editorToggle', 'language']});&#xa;</xsl:text>
+        <xsl:text>});&#xa;</xsl:text>
+    </xsl:element>
+</xsl:template>
+
+<!-- All languages, linked only to similar   -->
+<!-- Generic button, drop-down for languages -->
+<xsl:template name="sagecell-practice">
+    <xsl:element name="script">
+        <xsl:text>$(function () {&#xa;</xsl:text>
+        <xsl:text>    // Make *any* div with class 'sagecell-practice' an executable Sage cell&#xa;</xsl:text>
+        <xsl:text>    // Their results will be linked, only within language type&#xa;</xsl:text>
+        <xsl:text>    sagecell.makeSagecell({inputLocation: 'div.sagecell-practice',&#xa;</xsl:text>
+        <xsl:text>                           linked: true,&#xa;</xsl:text>
+        <xsl:text>                           languages: sagecell.allLanguages,&#xa;</xsl:text>
+        <xsl:text>                           evalButtonText: '</xsl:text>
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'evaluate'" />
+            </xsl:call-template>
+            <xsl:text> </xsl:text>
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'code'" />
+            </xsl:call-template>
+        <xsl:text>'});&#xa;</xsl:text>
+        <xsl:text>});&#xa;</xsl:text>
+    </xsl:element>
+</xsl:template>
+
+
+<!-- Make Sage Cell Server headers on a per-language basis -->
+<!-- Examine the subtree of the page, which can still be   -->
+<!-- excessive for summary pages, so room for improvement  -->
+<xsl:template match="*" mode="sagecell">
+    <!-- Load Javascript for Sage Cell Server, JQuery is elsewhere -->
+    <xsl:if test=".//sage">
+        <script type="text/javascript" src="https://sagecell.sagemath.org/embedded_sagecell.js"></script>
+    </xsl:if>
+
+    <!-- making a Sage version now very liberally, could be more precise -->
+    <xsl:if test=".//sage">
+        <xsl:call-template name="makesagecell">
+            <xsl:with-param name="language-attribute">sage</xsl:with-param>
+            <xsl:with-param name="language-text">Sage</xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+
+    <xsl:if test=".//sage[@type='display']">
+        <xsl:call-template name="sagecell-display" />
+    </xsl:if>
+
+    <xsl:if test=".//sage[@type='practice']">
+        <xsl:call-template name="sagecell-practice" />
+    </xsl:if>
+
+    <!-- 2016-06-13: sage, gap, gp, html, maxima, octave, python, r, and singular -->
+
+    <xsl:if test=".//sage[@language='gap']">
+        <xsl:call-template name="makesagecell">
+            <xsl:with-param name="language-attribute">
+                <xsl:text>gap</xsl:text>
+            </xsl:with-param>
+            <xsl:with-param name="language-text">GAP</xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+
+    <xsl:if test=".//sage[@language='gp']">
+        <xsl:call-template name="makesagecell">
+            <xsl:with-param name="language-attribute">
+                <xsl:text>gp</xsl:text>
+            </xsl:with-param>
+            <xsl:with-param name="language-text">GP</xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+
+    <xsl:if test=".//sage[@language='html']">
+        <xsl:call-template name="makesagecell">
+            <xsl:with-param name="language-attribute">
+                <xsl:text>html</xsl:text>
+            </xsl:with-param>
+            <xsl:with-param name="language-text">HTML</xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+
+    <xsl:if test=".//sage[@language='maxima']">
+        <xsl:call-template name="makesagecell">
+            <xsl:with-param name="language-attribute">
+                <xsl:text>maxima</xsl:text>
+            </xsl:with-param>
+            <xsl:with-param name="language-text">Maxima</xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+
+    <xsl:if test=".//sage[@language='octave']">
+        <xsl:call-template name="makesagecell">
+            <xsl:with-param name="language-attribute">
+                <xsl:text>octave</xsl:text>
+            </xsl:with-param>
+            <xsl:with-param name="language-text">Octave</xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+
+    <xsl:if test=".//sage[@language='python']">
+        <xsl:call-template name="makesagecell">
+            <xsl:with-param name="language-attribute">
+                <xsl:text>python</xsl:text>
+            </xsl:with-param>
+            <xsl:with-param name="language-text">Python</xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+
+    <xsl:if test=".//sage[@language='r']">
+        <xsl:call-template name="makesagecell">
+            <xsl:with-param name="language-attribute">
+                <xsl:text>r</xsl:text>
+                <!-- <xsl:text></xsl:text> -->
+            </xsl:with-param>
+            <xsl:with-param name="language-text">R</xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+
+    <xsl:if test=".//sage[@language='singular']">
+        <xsl:call-template name="makesagecell">
+            <xsl:with-param name="language-attribute">
+                <xsl:text>singular</xsl:text>
+            </xsl:with-param>
+            <xsl:with-param name="language-text">Singular</xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+
+</xsl:template>
+
 
 <!-- Program Listings from Google -->
 <!--   ?skin=sunburst  on end of src URL gives black terminal look -->

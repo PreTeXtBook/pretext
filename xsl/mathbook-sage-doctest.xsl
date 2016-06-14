@@ -59,26 +59,27 @@
 <!-- Sage Element Processing -->
 <!-- ####################### -->
 
-<!-- Just handle "copy" Sage blocks the same way as others -->
-<xsl:template match="sage[@copy]">
-    <xsl:apply-templates select="id(@copy)" />
-</xsl:template>
-
-<!-- Totally kill a display block, cannot depend on it, etc -->
-<xsl:template match="sage[@type='display']" />
-
-<!-- Totally kill a practice block, it is uninteresting -->
-<xsl:template match="sage[@type='practice']" />
-
 <!-- "Normal" Sage blocks, including "invisible" -->
 <!-- Form doctring/ReST verbatim block           -->
 <!-- for one input/output pair                   -->
-<xsl:template match="sage">
+<!-- Filter limits to Sage language only         -->
+<xsl:template match="sage[(not(@type) or @type='full' or @type='invisible') and (not(@language) or @language='sage')]">
     <xsl:text>~~~~~~~~~~~~~~~~~~~~~~ ::&#xA;&#xA;</xsl:text>
     <xsl:apply-templates select="input" />
     <xsl:apply-templates select="output" />
     <xsl:text>&#xA;</xsl:text>
 </xsl:template>
+
+<!-- Just handle "copy" Sage blocks the same way as others  -->
+<!-- since results may be needed for subsequent tests       -->
+<!-- This needs to come second, since it will fail previous -->
+<!-- filter and has the same priority, so will be fulfilled -->
+<xsl:template match="sage[@copy]">
+    <xsl:apply-templates select="id(@copy)" />
+</xsl:template>
+
+<!-- Kill anything else that has not matched -->
+<xsl:template match="sage" />
 
 <!-- Options to doctesting -->
 <!-- A property of the Sage element,         -->

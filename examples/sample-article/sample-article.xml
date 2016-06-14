@@ -365,9 +365,49 @@ the xsltproc executable.
                 <output>12.005</output>
             </sage>
 
-            <p>Here is a blank Sage cell that you may use for practice and experimentation with the commands above.</p>
+            <p>Sage, and by extension, the Sage Cell Server, can interpret several languages.  The next example has code in the <c>R</c> language, a popular open source language for statistics.  As an author, you add the attribute <c>language="r"</c> to your <c>sage</c> element.  (The default language is Sage, so you do not need to indicate that repeatedly.)  Note that a language like <c>R</c> likes to use a <q>less than</q> character, the second most-dangerous special character in XML.  You need to escape it by writing <c>&amp;lt;</c> as we have done in the source for this example.  (See the discussion and summary in <xref ref="subsection-reserved-characters" autoname="yes" />.)</p>
+
+            <p>As a reader you learn that the <q>Evaluate</q> button for a pre-loaded Sage cell will indicate the language in use.</p>
+
+            <sage doctest="not tested" language="r">
+                <input>
+                ruth &lt;- c(22, 25, 34, 35, 41, 41, 46, 46, 46, 47, 49, 54, 54, 59, 60)
+                bonds &lt;- c(16, 25, 24, 19, 33, 25, 34, 46, 37, 33, 42, 40, 37, 34, 49, 73, 46, 45, 45, 5, 26, 28)
+                dimaggio &lt;- c(12, 14, 20, 21, 25, 29, 30, 30, 31, 32, 32, 39, 46)
+                summary(ruth)
+                summary(bonds)
+                summary(dimaggio)
+                boxplot(ruth, bonds, dimaggio)
+                </input>
+            </sage>
+
+            <p>The Sage Cell Server supports the following languages:  <c>sage</c>, <c>gap</c>, <c>gp</c>, <c>html</c>, <c>maxima</c>, <c>octave</c>, <c>python</c>, <c>r</c>, and <c>singular</c>.</p>
+
+            <p>Here is another <c>R</c> cell.  Unfortunately, it seems Sage's <c>doctest</c> facility cannot be used easily with code from other languages.  In the source for this example, we have employed a <c>CDATA</c> element to protect all the characters from the XML processor.</p>
+
+            <sage language="r">
+                <input>
+                <![CDATA[
+                age <- c(25, 30, 56)
+                gender <- c("male", "female", "male")
+                weight <- c(160, 110, 220)
+                mydata <- data.frame(age,gender,weight)
+                summary(mydata)
+                cor(mydata$age,mydata$weight)
+                mean(mydata$age)
+                sd(mydata$age)
+                plot(mydata$age,mydata$weight)
+                ]]>
+                </input>
+            </sage>
+
+            <p>Here is a blank Sage cell that you may use for practice and experimentation with the commands above.  Note that this cell allows a choice of languages, and is not linked with any of the previous cells, so a reader would need to start fresh, or cut/paste definitioons from other cells.</p>
 
             <sage type="practice" />
+
+            <p>On the other hand a <c>&lt;sage&gt;</c> element with no content will also create an empty Sage cell for the reader's use, but now it will be specific to a particular language and linked to others of the same language.  Run the <c>R</c> cell above that defines the variable <c>ruth</c> and then try typing <c>summary(ruth)</c> in the cell below.  (The linking seems a bit buggy, as it repeats the boxplot in the output, as of 2016-06-13).</p>
+
+            <sage language="r" />
 
             <p>You can make Sage blocks which are of <c>type="invisible"</c>, which will never be shown to a reader, but which get doctested.  Why do this?  If some code produces an error, and you hope it is fixed someday, use an invisible block to raise the error.  Once fixed, the doctest will fail, and you can adjust your commentary to suit.  There is such a block right now, <em>but</em> you will need to go to the source to see it.</p>
 

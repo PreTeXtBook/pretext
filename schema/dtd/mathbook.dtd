@@ -252,6 +252,8 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST sage doctest   (random|absolute|relative)        #IMPLIED>
     <!-- TODO: for doctest convert "not tested" to "not-tested" -->
     <!ATTLIST sage tolerance CDATA                             #IMPLIED>
+    <!-- Language options as of 2016-06-13 -->
+    <!ATTLIST sage language (sage|gap|gp|html|maxima|octave|python|r|singular) #IMPLIED>
 
 <!ELEMENT program (input, output?)>
     <!ATTLIST program xml:id      ID    #IMPLIED>
