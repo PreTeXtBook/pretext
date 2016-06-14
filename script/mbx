@@ -352,7 +352,7 @@ def webwork_to_tex(origin, xslt_exec, mbx_xsl_dir, xml_source, server_url, dest_
 
         # Some tex that causes compilation errors
         # Ends with comment, so no extra newline inserted
-        tex_only = tex_only.replace('\\vadjust{\kern3pt}%', 
+        tex_only = tex_only.replace('\\vadjust{\kern3pt}%',
                                     '\\leavevmode\\vadjust{\kern3pt}% mbx script adjusted')
 
         # need to loop through content looking for images with pattern:
@@ -784,7 +784,7 @@ def _debug(msg):
     if args.verbose >= 2:
         print('MBX-DEBUG: {}'.format(msg))
 
- 
+
 def get_mbx_path():
     """Returns path of root of MBX distribution"""
     import sys, os.path
