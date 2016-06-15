@@ -1188,7 +1188,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" mode="xref-knowl" />
 </xsl:template>
 
-<xsl:template match="me|men|md|mdn|p|&EXAMPLE-LIKE;|solution" mode="xref-knowl">
+<xsl:template match="fn|biblio|me|men|md|mdn|p|&EXAMPLE-LIKE;|solution" mode="xref-knowl">
     <!-- write a file, calling modal duplicate template -->
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
@@ -1219,7 +1219,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Some knowls get a bit of extra wrapping, some don't -->
 
-<xsl:template match="me|men|md|mdn" mode="xref-knowl-content">
+<xsl:template match="biblio|me|men|md|mdn" mode="xref-knowl-content">
     <xsl:apply-templates select="." mode="duplicate" />
 </xsl:template>
 
@@ -1235,7 +1235,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- article, heading is just type, number, title -->
-<xsl:template match="&EXAMPLE-LIKE;|solution" mode="xref-knowl-content">
+<xsl:template match="fn|&EXAMPLE-LIKE;|solution" mode="xref-knowl-content">
     <xsl:element name="article">
         <xsl:attribute name="class">
             <xsl:apply-templates select="." mode="css-class" />
@@ -1317,6 +1317,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- based on elective knowlization or not        -->
 <!-- Visible: heading + body, wrapped as a unit   -->
 <!-- Hidden: heading as clickable + body as embed -->
+
+<!-- Footnotes -->
+<!-- Hidden knowl as the original content -->
+<xsl:template match="fn">
+    <xsl:apply-templates select="." mode="born-hidden-knowl" />
+    <xsl:apply-templates select="." mode="born-hidden-embed" />
+</xsl:template>
+
+<!-- Bibliographic Items -->
+<!-- Always visible as the original content       -->
+<!-- No heading, the style of the number suffices -->
+<xsl:template match="biblio">
+    <xsl:element name="article">
+        <xsl:attribute name="class">
+            <xsl:apply-templates select="." mode="css-class" />
+        </xsl:attribute>
+        <!-- label original -->
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:attribute>
+        <xsl:apply-templates select="." mode="body" />
+    </xsl:element>
+</xsl:template>
+
 <xsl:template match="&EXAMPLE-LIKE;">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
@@ -1331,8 +1355,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="class">
                     <xsl:apply-templates select="." mode="css-class" />
                 </xsl:attribute>
-            <xsl:apply-templates select="." mode="heading-full" />
-            <xsl:apply-templates select="." mode="body" />
+                <!-- label original -->
+                <xsl:attribute name="id">
+                    <xsl:apply-templates select="." mode="internal-id" />
+                </xsl:attribute>
+                <xsl:apply-templates select="." mode="heading-full" />
+                <xsl:apply-templates select="." mode="body" />
             </xsl:element>
         </xsl:otherwise>
     </xsl:choose>
@@ -1370,6 +1398,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="hidden-knowl-id" />
             </xsl:attribute>
             <!-- make the anchor a target, eg of an in-context link -->
+            <!-- label original -->
             <xsl:attribute name="id">
                 <xsl:apply-templates select="." mode="internal-id" />
             </xsl:attribute>
@@ -1406,6 +1435,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="hidden-knowl-id" />
             </xsl:attribute>
             <!-- make the anchor a target, eg of an in-context link -->
+            <!-- label original -->
             <xsl:attribute name="id">
                 <xsl:apply-templates select="." mode="internal-id" />
             </xsl:attribute>
@@ -1420,9 +1450,75 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- For footnotes -->
+<xsl:template match="fn" mode="born-hidden-knowl">
+    <xsl:element name="span">
+        <xsl:attribute name="class">
+            <xsl:text>hidden-knowl-wrapper</xsl:text>
+        </xsl:attribute>
+        <xsl:element name="a">
+            <!-- Point to the file version, which is ineffective -->
+            <xsl:attribute name="knowl">
+                <xsl:apply-templates select="." mode="xref-knowl-filename" />
+            </xsl:attribute>
+            <!-- empty, indicates content *not* in a file -->
+            <xsl:attribute name="knowl" />
+            <!-- class indicates content is in div referenced by id -->
+            <xsl:attribute name="class">
+                <xsl:text>id-ref</xsl:text>
+            </xsl:attribute>
+            <!-- and the id via a template for consistency -->
+            <xsl:attribute name="refid">
+                <xsl:apply-templates select="." mode="hidden-knowl-id" />
+            </xsl:attribute>
+            <!-- make the anchor a target, eg of an in-context link -->
+            <!-- label original -->
+            <xsl:attribute name="id">
+                <xsl:apply-templates select="." mode="internal-id" />
+            </xsl:attribute>
+            <!-- marked-up knowl text link *inside* of knowl anchor to be effective -->
+            <xsl:element name="span">
+                <xsl:attribute name="class">
+                    <xsl:text>footnote</xsl:text>
+                </xsl:attribute>
+                <xsl:element name="sup">
+                    <xsl:text>&#x2009;</xsl:text>
+                    <xsl:apply-templates select="." mode="serial-number" />
+                    <xsl:text>&#x2009;</xsl:text>
+                </xsl:element>
+            </xsl:element>
+        </xsl:element>
+    </xsl:element>
+</xsl:template>
 
 
+
+<!-- block version -->
 <xsl:template match="&EXAMPLE-LIKE;|solution" mode="born-hidden-embed">
+    <xsl:element name="div">
+        <!-- different id, for use by the knowl mechanism -->
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="hidden-knowl-id" />
+        </xsl:attribute>
+        <!-- not "visibility,"" display:none takes no space -->
+        <xsl:attribute name="style">
+            <xsl:text>display: none;</xsl:text>
+        </xsl:attribute>
+        <!-- Do not process the contents on page load, wait until it is opened -->
+        <xsl:attribute name="class">
+            <xsl:text>tex2jax_ignore</xsl:text>
+        </xsl:attribute>
+        <xsl:element name="article">
+            <xsl:attribute name="class">
+                <xsl:apply-templates select="." mode="css-class" />
+            </xsl:attribute>
+            <xsl:apply-templates select="." mode="body" />
+        </xsl:element>
+    </xsl:element>
+</xsl:template>
+
+<!-- span version -->
+<xsl:template match="fn" mode="born-hidden-embed">
     <xsl:element name="div">
         <!-- different id, for use by the knowl mechanism -->
         <xsl:attribute name="id">
@@ -1487,7 +1583,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We show the full content of the item on the page (b)            -->
 <!-- Or, we build a hidden knowl and place a link on the page (c)    -->
 <!-- NB: this template employs several modal templates, defined just below -->
-<xsl:template match="fn|biblio|list|remark|definition|axiom|conjecture|principle|&THEOREM-LIKE;|proof|exercise|hint|answer|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|contributor">
+<xsl:template match="list|remark|definition|axiom|conjecture|principle|&THEOREM-LIKE;|proof|exercise|hint|answer|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|contributor">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
@@ -1520,7 +1616,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We restrict hint, answer, solution to avoid confusion with webwork -->
 <!-- TODO: we need to process children in a way that no \label{}, nor ID's, are produced   -->
 <!--       This would perhaps obsolete the "env-type" device, and reorder explnation below -->
-<xsl:template match="fn|biblio|list|remark|definition|axiom|conjecture|principle|&THEOREM-LIKE;|proof|exercise|exercise/hint|exercise/answer|exercise/solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|li|contributor" mode="xref-knowl">
+<xsl:template match="list|remark|definition|axiom|conjecture|principle|&THEOREM-LIKE;|proof|exercise|exercise/hint|exercise/answer|exercise/solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|li|contributor" mode="xref-knowl">
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
@@ -1844,57 +1940,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Footnotes -->
 <!-- Always born hidden -->
-<xsl:template match="fn" mode="is-hidden">
-    <xsl:value-of select="true()" />
-</xsl:template>
-<!-- Occur in paragraphs and titles, hence inline -->
-<xsl:template match="fn" mode="is-block-env">
-    <xsl:value-of select="false()" />
-</xsl:template>
-<!-- Knowl text is the "mark", a number with two thin spaces -->
-<xsl:template match="fn" mode="hidden-knowl-text">
-    <sup>
-    <xsl:text>&#x2009;</xsl:text>
-    <xsl:apply-templates select="." mode="serial-number" />
-    <xsl:text>&#x2009;</xsl:text>
-    </sup>
-</xsl:template>
-<!-- Head is the named number -->
-<xsl:template match="fn" mode="head">
-    <span class="heading">
-        <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-        <xsl:text> </xsl:text>
-        <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
-    </span>
-</xsl:template>
-<!-- Body is just all content -->
-<xsl:template match="fn" mode="body">
-    <xsl:apply-templates />
-</xsl:template>
-<!-- No posterior  -->
-<xsl:template match="fn" mode="posterior" />
-<!-- HTML, CSS -->
-<xsl:template match="fn" mode="environment-element">
-    <xsl:text>span</xsl:text>
-</xsl:template>
-<xsl:template match="fn" mode="environment-class">
+
+<xsl:template match="fn" mode="css-class">
     <xsl:text>footnote</xsl:text>
+</xsl:template>
+
+<xsl:template match="fn" mode="body">
+    <xsl:apply-templates select="*|text()" />
+</xsl:template>
+
+<xsl:template match="fn" mode="duplicate">
+    <xsl:apply-templates select="*|text()" mode="duplicate" />
 </xsl:template>
 
 
 <!-- References, Citations (biblio) -->
-<!-- Never born hidden -->
-<xsl:template match="biblio" mode="is-hidden">
-    <xsl:value-of select="false()" />
+<!-- Always born visible            -->
+
+<xsl:template match="biblio" mode="css-class">
+    <xsl:text>bib</xsl:text>
 </xsl:template>
-<!-- Always in a list item -->
-<xsl:template match="biblio" mode="is-block-env">
-    <xsl:value-of select="false()" />
-</xsl:template>
-<!-- Never hidden so calling hidden-knowl-text raises error -->
-<!-- There is no head -->
-<xsl:template match="biblio" mode="head" />
-<!-- Body is all the content -->
+
 <xsl:template match="biblio" mode="body">
     <div class="bibitem">
         <xsl:text>[</xsl:text>
