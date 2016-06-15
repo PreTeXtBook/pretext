@@ -471,17 +471,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Every document node goes the same way, a    -->
 <!-- heading followed by its subsidiary elements -->
 <!-- hit with templates.  This is the header.    -->
+<!-- Only "chapter" ever gets shown generically  -->
+<!-- Subdivisions have titles, or not            -->
+<!-- and other parts have default titles         -->
 <xsl:template match="*" mode="section-header">
-    <header>
-        <!-- TODO: replicate tooltip on header (only) -->
+    <xsl:element name="header">
+         <xsl:attribute name="title">
+            <xsl:apply-templates select="." mode="tooltip-text" />
+        </xsl:attribute>
         <xsl:element name="h1">
             <xsl:attribute name="class">
-                <xsl:text>heading</xsl:text>
+                <xsl:choose>
+                    <xsl:when test="self::chapter">
+                        <xsl:text>heading</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>heading hide-type</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:attribute>
-             <xsl:attribute name="alt">
-                <xsl:apply-templates select="." mode="tooltip-text" />
-            </xsl:attribute>
-             <xsl:attribute name="title">
+            <xsl:attribute name="alt">
                 <xsl:apply-templates select="." mode="tooltip-text" />
             </xsl:attribute>
             <xsl:apply-templates select="." mode="header-content" />
@@ -489,42 +498,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="author">
             <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
         </xsl:if>
-    </header>
+    </xsl:element>
 </xsl:template>
 
-<!-- The "type" is redundant at the top-level, -->
-<!-- so we hide it with a class specification  -->
-<!-- We also hide it at lower levels, parallel -->
-<!-- to default LaTeX style behavior           -->
-<!-- Only "chapter" ever gets shown            -->
-<xsl:template match="book|article|section|subsection|subsubsection|appendix|exercises|references|index-part" mode="section-header">
-    <header>
-        <h1 class="heading hide-type">
-            <xsl:apply-templates select="." mode="header-content" />
-        </h1>
-        <xsl:if test="author">
-            <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
-        </xsl:if>
-    </header>
-</xsl:template>
-
-<!-- Sections which are "auto-titled" do not need to           -->
-<!-- display their type since that is the default title        -->
-<!-- The references and exercises are exceptions, see Headings -->
-<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|backmatter" mode="section-header">
-    <header>
-        <h1 class="heading hide-type">
-            <xsl:apply-templates select="." mode="header-content" />
-        </h1>
-        <xsl:if test="author">
-            <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
-        </xsl:if>
-    </header>
-</xsl:template>
-
-<!-- The "frontmatter" node will always lead with -->
-<!-- a pseudo-introduction that is the titlepage. -->
-<!-- The section-header is then redundant.        -->
+<!-- The front matter has its own style -->
 <xsl:template match="frontmatter" mode="section-header" />
 
 
