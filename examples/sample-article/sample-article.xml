@@ -2734,7 +2734,7 @@ the xsltproc executable.
                 <li><p>Citations: Judson's AATA with annotation at <xref ref="biblio-judson-AATA" /></p></li>
                 <li><p>Citations: Judson's AATA with autoname that should have zero effect <xref ref="biblio-judson-AATA" autoname="yes"/></p></li>
                 <li><p>Note: just the annotation of previous citation at <xref ref="note-judson-AATA" /></p></li>
-                <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" />.</p></li>
+                <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" />, or a question at <xref ref="sample-question" />.</p></li>
                 <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" />.</p></li>
                 <li><p>A link to a <c>proposition</c> element, while this document has globally renamed <c>proposition</c>s as <q>Conundrum</q>s, so this link should use the new name: <xref ref="proposition-as-conundrum" autoname="yes" /></p></li>
                 <li><p>Theorems: Fundamental Theorem of Calculus, with proof at <xref ref="theorem-FTC" /></p></li>
