@@ -183,10 +183,19 @@
             <title>MBXTools<mdash />a Sublime Text package for MathBook <init>XML</init></title>
 
             <p>MBXTools is a Sublime Text package designed to assist authors using MathBook <init>XML</init>. It is very experimental and may behave unexpectedly.</p>
-            <p>The package owes its inspiration and much of its code to the excellent <url href="https://github.com/SublimeText/LaTeXTools">LaTeXTools</url> package. Please let Dave Rosoff know of any bugs you find or any features you would like to see included in MBXTools.</p>
+            <p>The package owes its inspiration and much of its code to the excellent <url href="https://github.com/SublimeText/LaTeXTools">LaTeXTools</url> package. Please let the author know of any bugs you find or any features you would like to see included in MBXTools by <url href="https://github.com/daverosoff/mbxtools/issues">creating a GitHub issue</url>.</p>
             <subsubsection>
                 <title>Installation</title>
-                <p>MBXTools is not yet included in Package Control, so you must install via <c>git</c>. Change directories into your <c>Packages</c> folder. To find the <c>Packages</c> folder, select Browse Packages from the Preferences menu (from the Sublime Text 3 menu on <init>OS X</init>). Make sure you are in the <c>Packages</c> folder and <em>not</em> <c>Packages/User</c>. Then, run<cd>git clone https://github.com/daverosoff/MBXTools.git</cd>and restart Sublime Text (probably not necessary).</p>
+                <paragraphs>
+                    <title>via Package Control</title>
+                    <p>It is recommended to install MBXTools via <url href = "https://packagecontrol.io">Package Control</url>. If you have not installed Package Control yet, you should do that first (and restart Sublime Text afterward).</p>
+                    <p>After Package Control is installed, use the <c>Install Package</c> command to search for the MBXTools package, and select it from the Quick Panel to install. This method of installation allows Package Control to automatically update your installation and show you appropriate release notes.</p>
+                </paragraphs>
+                <paragraphs>
+                    <title>via git</title>
+                    <p>You may also install MBXTools via <c>git</c>. Change directories into your <c>Packages</c> folder. To find the <c>Packages</c> folder, select Browse Packages from the Preferences menu (from the Sublime Text 3 menu on OS X). Make sure you are in the <c>Packages</c> folder and <em>not</em> <c>Packages/User</c>.</p>
+                    <p>Then, run<cd>git clone https://github.com/daverosoff/MBXTools.git</cd>and restart Sublime Text (probably not necessary).</p>
+                </paragraphs>
             </subsubsection>
             <subsubsection>
                 <title>Usage</title>
@@ -207,19 +216,19 @@
             </subsubsection>
             <subsubsection>
                 <title>Known issues</title>
-
                 <ol>
                     <li>
-                        <p>Syntax highlighting is not always consistent.</p>
+                        <p>When manually adding an <c>xref</c> (not using the snippets or autocomplete), you will frequently see a spurious <q>Unrecognized format</q> error.</p>
                     </li>
                     <li>
                         <p>The <c>ref</c> snippet does not bring up the quick panel. Should it?</p>
                     </li>
                     <li>
                         <p>Recursive search through included files for labels is not yet implemented.</p>
+                        <p>This will only work for <c>xref</c> completion, not Go To Symbol.</p>
                     </li>
                     <li>
-                        <p>Nothing has been tested on <init>OS X</init> or Linux.</p>
+                        <p>Nothing has been tested on OS X or Linux.</p>
                     </li>
                 </ol>
             </subsubsection>
