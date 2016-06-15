@@ -9,6 +9,7 @@
 
 <chapter xml:id="webwork">
     <title><webwork /> Automated Homework Problems</title>
+    <author>Alex Jordan</author>
 
     <introduction>
         <p>With a <webwork /> server (version 2.11 or higher) and a little setup work, you can embed <webwork /> exercises in your MBX project. HTML output will have interactive problem cells. PDF output will contain static versions of exercises. And all such exercises can be archived by the <c>mbx</c> script into a file tree to be uploaded onto the <webwork /> server for use in the <q>traditional</q> way.</p>

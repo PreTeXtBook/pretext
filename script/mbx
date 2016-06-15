@@ -462,6 +462,59 @@ def webwork_to_tex(origin, xslt_exec, mbx_xsl_dir, xml_source, server_url, dest_
             raise ValueError(msg.format(include_file_name) + root_cause)
 
 
+##############################
+#
+#  You Tube thumbnail scraping
+#
+##############################
+
+def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
+    global config
+    import tempfile, os, os.path, subprocess, shutil
+    import requests
+
+    _verbose('downloading YouTube thumbnails from {} for placement in {}'.format(xml_source, dest_dir))
+    dest_dir = sanitize_directory(dest_dir)
+    xslt_executable = get_executable(config,  'xslt')
+    _debug("xslt executable: {}".format(xslt_executable))
+
+    extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-youtube.xsl')
+    cmd = [xslt_executable,
+            '--xinclude',
+            '--stringparam',
+            'subtree',
+            xmlid_root,
+            extraction_xslt,
+            xml_source]
+    try:
+        thumb_list = subprocess.check_output(cmd)
+    except subprocess.CalledProcessError as e:
+        root_cause = str(e)
+        msg = 'xsltproc command failed, tried: "{}"\n'.format(' '.join(cmd))
+        raise ValueError(msg + root_cause)
+    # "run" an assignment for the list of triples of strings
+    thumbs = eval(thumb_list.decode('ascii'))
+
+    yt_url = 'http://i.ytimg.com/vi/{}/default.jpg'
+    image_path = dest_dir + '/{}.jpg'
+    session = requests.Session()
+    for thumb in thumbs:
+        url = yt_url.format(thumb[0])
+        path = image_path.format(thumb[1])
+        _verbose('downloading {} as {}...'.format(url, path))
+        # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests/13137873
+        # removed some settings wrapper from around the URL, otherwise verbatim
+        r = requests.get(url, stream=True)
+        if r.status_code == 200:
+            with open(path, 'wb') as f:
+                r.raw.decode_content = True
+                shutil.copyfileobj(r.raw, f)
+        else:
+            msg = 'Download returned a bad status code ({}), perhaps try {} manually?'
+            raise OSError(msg.format(r.status_code, url))
+    _verbose('YouTube thumbnail download complete')
+
+
 #######################################
 #
 # Sage Worksheet Creation and Packaging
@@ -777,12 +830,13 @@ def get_cli_arguments():
     parser.add_argument('-v', '--verbose', help=verbose_help, action="count")
 
     component_info = [
-        ('tikz', 'tikz pictures'),
         ('asy', 'Asymptote diagrams'),
         ('sageplot', 'Sage graphics'),
         ('latex-image', 'LaTeX pictures'),
         ('webwork-tex', 'WeBWorK server problems as LaTeX'),
-        ('all', 'Complete document'),
+        ('youtube', 'Thumbnails for YouTube videos (JPEG only)'),
+        ('all', 'Complete document (only SageNB format)'),
+        ('tikz', 'tikz pictures (obsolete)'),
     ]
     component_help = 'Possible components are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in component_info])
     parser.add_argument('-c', '--component', help=component_help, action="store", dest="component")
@@ -957,6 +1011,8 @@ elif args.component == 'webwork-tex':
     _debug("xslt executable command: {}".format(xslt_executable))
     webwork_to_tex('server', xslt_executable, mbx_xsl_dir, args.xml_file, args.server, output_dir)
     webwork_to_tex('mbx',    xslt_executable, mbx_xsl_dir, args.xml_file, args.server, output_dir)
+elif args.component == 'youtube':
+    youtube_thumbnail(args.xml_file, args.xmlid, output_dir)
 elif args.component == 'all':
     if args.format == 'sagenb':
         # initialize  the converter

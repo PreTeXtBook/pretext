@@ -56,7 +56,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- Everything that is title material, plus more (eg me)     -->
 <!-- var is exclusive to "p" in a WeBWorK problem             -->
 <!-- Precede by a #PCDATA, wrap with ( )*                     -->
-<!ENTITY % sentence "%linear;|me|men|md|mdn|fn|index|notation|var">
+<!ENTITY % sentence "%linear;|me|men|md|mdn|cd|fn|index|notation|var">
 
 <!-- Paragraphs -->
 <!-- Elements that can mix anywhere with a paragraph, -->
@@ -69,7 +69,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- Everything like a paragraph, but also more substantial                   -->
 <!-- These items cannot be contained in anything but a structural subdivision -->
 <!-- Note: the "todo" element is in this list                                 -->
-<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|list|example|exercise|contributors|list-of|solution-list|notation-list|todo">
+<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|list|example|question|problem|exercise|contributors|list-of|solution-list|notation-list|todo">
 
 
 <!-- ######### -->
@@ -163,8 +163,11 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 
 <!-- components of mathematical objects -->
 <!ELEMENT statement (%para;)*>
-<!ELEMENT proof (%para;)*>
+<!ELEMENT proof (%para;|case)*>
     <!ATTLIST proof xml:id ID #IMPLIED>
+
+<!ELEMENT case  (%para;)*>
+    <!ATTLIST case  direction  (forward|backward) #IMPLIED>
 
 <!-- definition might contain notation -->
 <!ELEMENT definition   (title?, index*, notation*, statement)>
@@ -197,6 +200,11 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- example-like, not very structured, or statement/solution -->
 <!ELEMENT example (title?, index*, ((%para;)*|(statement, solution)))>
     <!ATTLIST example xml:id ID #IMPLIED>
+<!ELEMENT question (title?, index*, ((%para;)*|(statement, solution)))>
+    <!ATTLIST question xml:id ID #IMPLIED>
+<!ELEMENT problem (title?, index*, ((%para;)*|(statement, solution)))>
+    <!ATTLIST problem xml:id ID #IMPLIED>
+
 <!ELEMENT list (title?, index*, introduction?, (ol|ul|dl), conclusion)>
     <!ATTLIST list xml:id ID #IMPLIED>
 <!ELEMENT remark (title?, index*, (%para;)*)>
@@ -237,9 +245,6 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!ELEMENT input   (#PCDATA)>
 <!ELEMENT output  (#PCDATA)>
 
-<!-- Preformatted text, not very structured -->
-<!ELEMENT pre  (#PCDATA)>
-
 <!ELEMENT sage (input?, output?)>
     <!ATTLIST sage xml:id    ID                                #IMPLIED>
     <!ATTLIST sage copy      CDATA                             #IMPLIED>
@@ -247,6 +252,8 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST sage doctest   (random|absolute|relative)        #IMPLIED>
     <!-- TODO: for doctest convert "not tested" to "not-tested" -->
     <!ATTLIST sage tolerance CDATA                             #IMPLIED>
+    <!-- Language options as of 2016-06-13 -->
+    <!ATTLIST sage language (sage|gap|gp|html|maxima|octave|python|r|singular) #IMPLIED>
 
 <!ELEMENT program (input, output?)>
     <!ATTLIST program xml:id      ID    #IMPLIED>
@@ -296,8 +303,10 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST row bottom        (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST row left          (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST row halign        (left|center|right)        #IMPLIED>
+    <!ATTLIST row valign        (left|middle|right)        #IMPLIED>
 
-<!ELEMENT cell    (#PCDATA|%sentence;)*>
+<!ELEMENT cell    (#PCDATA|%sentence;|line)*>
+<!-- Should be (#PCDATA|%sentence;)* xor (line+), but DTD cannot express this -->
     <!ATTLIST cell bottom       (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST cell right        (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST cell halign       (left|center|right)        #IMPLIED>
@@ -312,7 +321,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST figure   valign   (bottom|middle|top)   #IMPLIED>
 
 <!-- listing attributes for use only in side-by-side -->
-<!ELEMENT listing  (title?, index*, caption?, (program|console)*)>
+<!ELEMENT listing  (title?, index*, caption?, (pre|program|console)*)>
     <!ATTLIST listing xml:id ID #IMPLIED>
     <!ATTLIST listing   width    CDATA                 #IMPLIED>
     <!ATTLIST listing   halign   (left|center|right)   #IMPLIED>
@@ -416,12 +425,28 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!ELEMENT init         (#PCDATA|%linear;)*>
 <!ELEMENT fn           (#PCDATA|%linear;)*>
     <!ATTLIST fn xml:id ID #IMPLIED>
-<!-- <c> is a bit different -->
-<!ELEMENT c         (#PCDATA)>
-    <!ATTLIST c latexsep CDATA #IMPLIED>
 <!-- PROVISIONAL: I don't like this one, it may go away with better references -->
 <!-- Using just <title> could be really confusing                              -->
 <!ELEMENT booktitle        (#PCDATA|%linear;)*>
+
+<!-- ############# -->
+<!-- Verbatim Text -->
+<!-- ############# -->
+
+<!-- Short snippets -->
+<!ELEMENT c         (#PCDATA)>
+    <!ATTLIST c latexsep CDATA #IMPLIED>
+
+<!-- Longer, displayed snippets -->
+<!-- The | is exclusive-or in practice, DTD cannot express this -->
+<!ELEMENT cd        (#PCDATA|cline)*>
+
+<!-- Verbatim, outside paragraphs -->
+<!-- The | is exclusive-or in practice, DTD cannot express this -->
+<!ELEMENT pre       (#PCDATA|cline)*>
+
+<!-- Lines of raw characters -->
+<!ELEMENT cline     (#PCDATA)>
 
 
 <!-- ################ -->
@@ -429,7 +454,10 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- ################ -->
 
 <!-- External References -->
-<!ELEMENT url       (#PCDATA)>
+<!-- This is a bit too lenient since it suggests  -->
+<!-- nesting url's is possible, or that a url can -->
+<!-- have an xref in the content                  -->
+<!ELEMENT url       (#PCDATA|%linear;)*>
     <!ATTLIST url href CDATA #IMPLIED>
 
 <!-- Internal Cross-References -->
@@ -528,7 +556,12 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 
 <!-- Video -->
 <!ELEMENT video  EMPTY>
-    <!ATTLIST video source CDATA #REQUIRED>
+    <!ATTLIST video xml:id    ID    #IMPLIED>
+    <!ATTLIST video width     CDATA #IMPLIED>
+    <!ATTLIST video source    CDATA #IMPLIED>
+    <!ATTLIST video youtube   CDATA #IMPLIED>
+    <!ATTLIST video start     CDATA #IMPLIED>
+    <!ATTLIST video end       CDATA #IMPLIED>
 
 <!-- ###### -->
 <!-- Images -->
@@ -653,7 +686,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!ELEMENT date        (#PCDATA|%characters;)*>
 
 <!-- both "front" and "back" colophons -->
-<!ELEMENT colophon   (copyright*|p*)>
+<!ELEMENT colophon   (title?, copyright?, p*)>
 
 <!-- front colophon items -->
 <!ELEMENT copyright      (year, holder, minilicense?, shortlicense?)?>

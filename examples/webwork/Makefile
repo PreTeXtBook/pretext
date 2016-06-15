@@ -87,14 +87,14 @@ SERVER = https://webwork.pcc.edu
 #  and filenames are derived from titles of chapters, sections,
 #  etc., in addition to the titles of the problems themselves.
 #
-#  Results land in the subdirectory:  $(PGOUT)/local
+#  level 1 here partitions by sections of the sample chapter
 #
-#  2016-01-20: the chunk.level parameter is not effective?
+#  Results land in the subdirectory:  $(PGOUT)/local
 #
 sample-chapter-extract:
 	install -d $(PGOUT)
 	cd $(PGOUT); \
-	xsltproc --stringparam chunk.level 2 $(MBXSL)/mathbook-webwork-archive.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
+	xsltproc --stringparam chunk.level 1 $(MBXSL)/mathbook-webwork-archive.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
 
 # HTML with WeBWorK exercises need a WW server
 # See example below for how to specify this
@@ -127,6 +127,16 @@ sample-chapter-latex:
 	xelatex sample-ww-chapter.tex; \
 	xelatex sample-ww-chapter.tex
 
+# HTML for a minimal WeBWorK cell
+# Useful for debugging
+# Output is:  $(HTMLOUT)/webwork-mini.html
+webwork-mini-html:
+	install -d $(HTMLOUT)
+	-rm $(HTMLOUT)/*.html
+	-rm $(HTMLOUT)/knowl/*.html
+	cd $(HTMLOUT); \
+	xsltproc --stringparam webwork.server $(SERVER) --stringparam html.knowl.exercise.inline no $(MBXSL)/mathbook-html.xsl $(WWEXAMPLE)/minimal/mini.xml
+
 ###########
 # Utilities
 ###########
@@ -145,13 +155,8 @@ sample-chapter-check:
 	-xmllint --xinclude --postvalid --noout --dtdvalid $(DTD)/mathbook.dtd $(WWEXAMPLE)/sample-chapter/sample-chapter.xml 2> $(SCRATCH)/dtderrors.txt
 	less $(SCRATCH)/dtderrors.txt
 
-###################################
-# Everything below here is OBSOLETE
-###################################
-
-minimal-obsolete:
-	install -d $(PGOUT) $(MBUSR)
-	-rm $(PGOUT)/*.pg
-	cp $(WWXSL)/mathbook-webwork-archive.xsl $(WWXSL)/mathbook-webwork-pg.xsl $(MBUSR)
-	cd $(PGOUT); \
-	xsltproc --stringparam webwork.server https://webwork.pcc.edu $(MBUSR)/mathbook-webwork-archive.xsl $(WWMBX)/examples/minimal/mini.xml
+webwork-mini-check:
+	install -d $(SCRATCH)
+	-rm $(SCRATCH)/dtderrors.*
+	-xmllint --xinclude --postvalid --noout --dtdvalid $(DTD)/mathbook.dtd $(WWEXAMPLE)/minimal/mini.xml 2> $(SCRATCH)/dtderrors.txt
+	less $(SCRATCH)/dtderrors.txt

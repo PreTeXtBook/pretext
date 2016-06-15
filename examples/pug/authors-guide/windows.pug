@@ -1,0 +1,428 @@
+doctype xml
+
+chapter(xml:id="windows-install-notes")
+    title Windows Installation Notes
+    introduction
+        p.
+            This document explains the best known way to install the
+            MathBook XML toolchain in a Windows environment. It has been
+            tested on Windows 7, 8, and 10. We assume that none of the
+            listed tools or equivalents have been previously installed.
+            That may complicate matters. This is especially true if you use
+            Cygwin, or if you have already installed Python on your
+            machine. MathBook XML compatibility with existing Python installations
+            is addressed elsewhere in this document (future version?).
+    section(xml:id="setup")
+        title Setup
+        introduction
+            p.
+                In this section, we do some initial setup,
+                establish notation, and issue warnings. Some of the steps in
+                this process are dangerous. Typos could lead to an unstable
+                system, or possibly even to unrecoverable system errors.
+                Double-check everything.
+
+        subsection(xml:id="notation")
+            title Notation
+
+            p.
+                Strings enclosed in <c><less />angle brackets<greater
+                /></c> are variables whose values you should substitute in
+                typed expressions. <c><less />username<greater /></c>, for
+                example, should be replaced with your Windows username
+                (mine is <c>drosoff</c>, e.g.). Throughout this
+                installation process it is very important to pay attention
+                to the direction of slashes <c>/</c> and backslashes
+                <c>\</c>.
+
+        subsection(xml:id="initial-windows-setup")
+            title Initial Windows setup
+
+            p.
+                It is easier to see what is happening if your Windows file
+                browser is not set up to hide file extensions from you.
+                Disable the <q>hide file extensions</q> behavior before
+                proceeding. In Windows 7/8, this can be done through the
+                Control Panel. In Windows 10, there is a checkbox somewhere
+                in the ribbon for it.
+
+            ol(xml:id="initial-windows-setup-steps")
+                li: p <em>On Windows 7 or 8</em>:
+                    ol
+                        li: p.
+                                Open the Start Menu and type <q>Control Panel</q>. Select the <c>Control
+                                Panel</c> entry from the popup list.
+                        li: p.
+                                Type <q>Folder Options</q> into the search
+                                box in the Control Panel window. Select
+                                <c>Folder Options</c> when it
+                                appears.
+                        li: p.
+                                Select the View tab.
+                        li: p.
+                                Uncheck the box for <q>Hide extensions for known file types</q>.
+                        li: p.
+                                Click OK until there are no more OKs to click.
+                li: p.
+                        <em>On Windows 10</em>: Coming soon.
+
+        subsection(xml:id="a-word-on-path-names")
+            title A word on path names
+
+            p.
+                An appallingly large fraction of the difficulties of using
+                GNU/Linux-based utilities with Windows come from the
+                differences in formatting path names. Windows path names
+                begin with a drive letter (usually <q>C</q>) and a colon.
+                Like all path names, they describe a path in a rooted tree.
+                The root directory (folder) in Windows is called <q>\</q>,
+                backslash. Note the direction carefully. Children of the
+                root node are either subdirectories or files in the root
+                directory (leaves). The path to my downloads folder is:
+            pre C:\Users\drosoff\Downloads\
+            p.
+                The trailing backslash is often unnecessary, but it is an
+                easy way to see immediately if a path name refers to a file
+                or to a directory. Windows path names are not case-sensitive.
+            p.
+                Linux/Mac OS X path names are quite similar, but lack drive
+                letters, start with an explicit reference to the root, use
+                forward slashes, and are case-sensitive. A path to a
+                typical Linux user's download folder might be
+            pre /home/typical.username/Downloads
+            p.
+                Again, Linux/Mac OS X pathnames are case-sensitive. The Git
+                Bash shell for Windows is an emulation of a Linux
+                environment, and the utilities within it expect path names
+                that follow Linux conventions. So we conform to this
+                expectation as follows.
+            ol
+                li: p Remove the colon, but keep the drive letter.
+                li: p All backslashes <q>\</q> become slashes <q>/</q>.
+                li: p Add an initial slash preceding the drive letter.
+            p The path name to my Windows download folder becomes
+            pre /c/users/drosoff/Downloads
+            p.
+                Even though Git Bash is pretending to be a Linux shell,
+                path names are still the underlying Windows path names, and
+                therefore are not case sensitive. You can verify this using
+                tab-completion.
+            p.
+                Path names that begin with the drive letter (Windows) or
+                the root <c>/</c> (Linux/Mac OS X) are called
+                <term>absolute path names</term>. Their referents do not
+                depend on the location from which the path name is invoked.
+                <term>Relative path names</term>, on the other hand, begin
+                in the so-called <term>current working directory</term>. A
+                relative pathname might look something like this:
+            pre ../../examples/sample-article/sample-article.xml
+            p.
+                The symbol <c>..</c> is a shortcut for the parent of the
+                current directory. Thus, the relative path name above means
+                blockquote
+                    from where we are, ascend two levels, then descend into the
+                    <c>examples</c> and <c>sample-article</c> subdirectories,
+                    and find the file <c>sample-article.xml</c>.
+            p.
+                Path names that contain spaces are <term>evil</term>, and
+                should be avoided in many cases. Unfortunately, all Windows
+                default program installation locations contain at least one
+                space (directory name <q>Program Files</q>). This does not
+                appear to cause problems, except when installing ImageMagick
+                (<xref ref="installing-imagemagick" autoname="yes"/>). To be
+                extra careful, you could always choose an installation location
+                that is free of space characters.
+
+        subsection(xml:id="do-i-have-64-bit-windows")
+            title Do I have 64-bit Windows?
+            p Find out on Windows 7:
+            ol
+                li: p.
+                        Open the start menu and type <q>Computer</q>.
+                        Right-click the <c>Computer</c> item in the popup
+                        menu.
+                li: p Select <c>Properties</c> from the drop-down menu.
+                li: p.
+                        Read in the right-hand side of the pane to find the <q>System</q> heading.
+                li: p.
+                        From the <q>System type</q> entry, read whether you have a 32- or a 64-bit OS.
+
+        conclusion
+            p.
+               Now you are ready to begin installing the various pieces
+               of the MathBook XML puzzle. The first one,
+               <c>xsltproc</c> (<xref ref="installing-xsltproc" autoname="yes" />),
+               is the most annoying. You might want
+               to go get a snack or another cup of coffee.
+
+
+    section(xml:id="installing-xsltproc")
+        title Installing xsltproc
+
+        subsection(xml:id="download-and-install-executables-and-linked-libraries")
+            p.
+                This is the most annoying part of the installation. Obtain four
+                zip archives from <url href="ftp://ftp.zlatkovic.com/libxml/">
+                Igor Zlatkovic's FTP site</url> that hosts the most recent
+                Libxml binaries for Windows. At the time of this writing, the
+                64-bit binaries were considered experimental. I have had no
+                trouble using the 32-bit binaries on my 64-bit Windows 7
+                system, so I suggest that all MBX users download the most
+                recent 32-bit version of the following libraries:
+
+            ol(xml:id="list-zip-files-xsltproc")
+                li: p.
+                        <c>iconv</c> (filename something like
+                        <c>iconv-1.9.2.win32.zip</c>)
+                li: p.
+                        <c>libxml2</c> (filename something like
+                        <c>libxml2-2.7.8.win32.zip</c>)
+                li: p.
+                        <c>libxslt</c> (filename something like
+                        <c>libxslt-1.1.26.win32.zip</c>)
+                li: p.
+                        <c>zlib</c> (filename something like
+                        <c>zlib-1.2.5.win32.zip</c>)
+
+            p.
+                We only need a handful of files from these archives. So the
+                simplest thing is to leave them in your Downloads folder and
+                grab what we need. Create a new folder <c>C:\xsltproc</c> (it
+                can be anywhere, as long as it's a new location). We'll call
+                this location <c><less />xsltproc<greater /></c> in case you
+                named your folder something different.
+
+            p.
+                Extract the following files from the four zip archives you
+                downloaded above into <c><less />xsltproc<greater /></c>:
+
+            ol(xml:id="list-extracted-files-from-zips-xsltproc")
+                li: p From <c>iconv-*.win32.zip</c>:
+                    ol
+                        li: p: pre iconv-*.win32\bin\iconv.dll
+                li: p From <c>libxml2-*.win32.zip</c>:
+                    ol
+                        li: p: pre libxml2-*.win32\bin\libxml2.dll
+                        li: p: pre libxml2-*.win32\bin\xmllint.exe
+                li: p From <c>libxslt-*.win32.zip</c>:
+                    ol
+                        li: p: pre libxslt-*.win32\bin\libexslt.dll
+                        li: p: pre libxslt-*.win32\bin\libxslt.dll
+                        li: p: pre libxslt-*.win32\bin\xsltproc.exe
+                li: p From <c>zlib-*.win32.zip</c>:
+                    ol
+                        li: p: pre zlib-*.win32\bin\zlib1.dll
+
+        subsection(xml:id="change-path-environment-variable-xsltproc")
+            title Change PATH envronment variable
+            p.u
+                <em>Note: if you prefer not to meddle with this, it can be
+                avoided. See <xref ref="installing-git" autoname="yes" />.
+                </em>
+
+            p.
+                Now, we need to make sure your system can find these files when
+                we need them.
+            ol(xml:id="steps-change-path-environment-variable-xsltproc")
+                li: p.
+                        Open the Start menu and start typing <q>Edit
+                        the system environment variables</q>. Select this
+                        option when it becomes visible.
+                li: p.
+                        Click the Environment Variables button near the bottom
+                        of the dialog.
+                li
+                    p.
+                        In the bottom part of the dialog labeled <q>System environment variables</q>, look for a
+                        variable named <c>PATH</c>. You may need to
+                        scroll.
+
+                    ol
+                        li: p.
+                            If you don't find one, create it using the New...
+                            button. Make sure to use all capital letters.
+                            (This really shouldn't happen. Make sure you are
+                            editing the <em>system</em> environment variables,
+                            not the <em>user</em> environment variables.)
+                        li: p.
+                            If you do find the <c>PATH</c> variable, select it
+                            and click the Edit... button.
+
+                li: p.
+                        Regardless of which of steps 1 and 2 you followed, now
+                        you should see a dialog with two text fields. Your
+                        variable name should be <c>PATH</c>.
+                li: p.
+                        If you created this variable, populate the second field
+                        with the full path name of <c><less />xsltproc<greater
+                        /></c>, the location where you put the seven files from
+                        Igor's zip archives. For me this looks like
+                        <c>C:\xsltproc</c>.
+                li: p.
+                        If you are editing the <c>PATH</c> variable, place the
+                        cursor in the existing value and press the End key, so
+                        that the cursor moves to the back of the line. The
+                        <c>PATH</c> string is a <c>;</c>-delimited list of full
+                        path names, so append the string <c><less
+                        />xsltproc<greater />;</c> (note the semicolon) to the
+                        existing value. If you named
+                        <less />xsltproc<greater /> as we suggested above, then
+                        the last part of your <c>PATH</c> variable is now
+                        <c>C:\xsltproc;</c>.
+                li: p.
+                        Click OK to save changes.
+
+    section(xml:id="installing-git")
+        title Installing git
+        p.
+            In this section we install the <c>git</c> version control system
+            and some tools to interact with it, including a fairly full-
+            featured emulation of the <c>bash</c> command line shell. I
+            strongly recommend you use the Git Bash shell or another
+            <c>bash</c> emulation, so that you can use Linux commands
+            referenced elsewhere.
+        ol(xml:id="steps-install-git")
+            li: p.
+                Visit the official <c>git</c> <url href="https://git-
+                scm.com/download/win">download page</url> (download starts
+                automatically) and obtain the latest binary for your system.
+            li: p.
+                Find the installer in your Download location and run it.
+            li: p.
+                Choose whatever location you like for the <c>git</c>
+                installation folder. I recommend you use the default.
+            li: p.
+                At the <q>Adjusting your PATH environment</q> dialog, select
+                either of the first two items. I recommend the second, <q>Add
+                git executable to Windows PATH</q>. If you are apprehensive
+                about adding <c>git</c> to the Windows PATH, select the first
+                option. I do not recommend the third option.
+            li: p.
+                Accept the default options for all the remaining prompts.
+        subsection(xml:id="changing-path-with-bashrc")
+            title Changing the path with .bashrc
+            p.
+                In <xref ref="change-path-environment-variable-xsltproc" autoname="yes" />,
+                we promised that you could avoid messing with the
+                Windows environment variables. If you install something else later
+                that wants to use <c>xsltproc</c>, then this might not be the best
+                idea. But if you are only going to use it from within Git Bash, then
+                this will work fine.
+            p.
+                From the Git Bash command prompt, enter this line of text and
+                hit Enter. Don't make any typos. You should substitute your
+                value of <c><less />xsltproc<greater /></c> where indicated, but
+                make sure to conform to the conventions at the end of
+                <xref ref="a-word-on-path-names" autoname="yes" />
+                regarding Windows path names in Git Bash. (I warned you this was
+                going to be annoying.)
+            pre echo "export PATH=/c/xsltproc:$PATH" <greater /><greater /> ~/.bashrc
+            p.
+                You may get a message from Git Bash the next time you run it
+                about <c>.bash_profile</c>, which you may safely ignore.
+    section(xml:id="installing-anaconda")
+        title Installing Anaconda
+        p.
+            Anaconda is a well-regulated development environment for Python
+            under Windows, and I recommend it for users who do not already have
+            Python installed. The essential <c>mbx</c> script has <url
+            href="https://github.com/rbeezer/mathbook/pull/252">recently been
+            updated</url> to support both Python 2 and Python 3. Therefore I
+            make no recommendation about which Python version to choose, except
+            to say that as of <today /> support for Python 3 should be regarded
+            as experimental.
+        p.
+            If you already have a working Python installation, skip to
+            <xref ref="installing-imagemagick" autoname="yes" />.
+        p.
+            You have some choice with your Anaconda installation. It actually
+            supports the installation of several independent Pythons side-by-
+            side (since both 2.7 and 3.x are in active use, this is more
+            reasonable than it seems). If you don't need Python for anything
+            else or are simply a minimalist, Miniconda is also an option.
+            Miniconda installs no packages, but these can be installed via the
+            <c>conda</c> utility at the command line later.
+
+        p.
+            Download either Miniconda, Python 2.7, or Python 3.5 from the
+            <url href="https://www.continuum.io/downloads">Anaconda download
+            page</url>. Run the installer and accept all the default suggestions.
+
+        conclusion
+            p.
+                Congratulations, you have successfully installed Python.
+
+            p.
+                If you don't care about images, you can stop here. Much of the
+                MBX functionality is already present. However, to use the
+                <c>mbx</c> script to create SVG images from sources like PDF/PNG
+                images, Sage, Asymptote, or Ti<em>k</em>Z, you need to install
+                ImageMagick and Ghostscript using the directions in
+                <xref ref ="installing-imagemagick" autoname="yes" /> and
+                <xref ref ="installing-ghostscript" autoname="yes" />.
+
+    section(xml:id="installing-imagemagick")
+        title Installing ImageMagick
+        p.
+            Visit the
+            <url href="http://www.imagemagick.org/script/binary-releases.php">ImageMagick 
+            downloads page</url> and grab a binary. If
+            you have a <xref ref="do-i-have-64-bit-windows">64-bit Windows
+            installation</xref>, use the recommended version. If you have a
+            32-bit installation, find the version whose filename is obtained
+            from that of the recommended version by substituting <c>x86</c> for
+            <c>x64</c>. For example, if the recommended version's filename is:
+
+        pre ImageMagick-7.0.1-6-Q16-x64-dll.exe
+        p then a good choice for a 32-bit Windows would be
+        pre ImageMagick-7.0.1-6-Q16-x86-dll.exe
+        ol(xml:id="installing-imagemagick-steps")
+            li: p Run the installer from your download location.
+            li: p Accept the license agreement.
+            li
+                p.
+                    Choose a default installation location that has no spaces in its
+                    folder name. The default choice <q>Program Files</q> causes problems
+                    because of path name issues. I chose
+                pre c:\ImageMagick-7.0.1-Q16\
+                p.
+                    It matters because the ImageMagick utility <c>convert</c> is used by
+                    the <c>mbx</c> script to convert your images into different formats.
+                    The <c>mbx</c> script will have a lot of trouble with path names that contain
+                    spaces.
+            li
+                p.
+                    When confronted with <q>Select additional tasks</q>, make
+                    sure that the boxes for <q>Add application directory to your
+                    system path</q> and <q>Install legacy utilities</q> are
+                    checked.
+            li: p If you like, carry out the procedure to verify your installation.
+        conclusion
+            p.
+                Congratulations, you have installed ImageMagick.
+
+    section(xml:id="installing-ghostscript")
+        title Installing Ghostscript
+        p.
+            Visit the <url href="http://www.ghostscript.com/download/gsdnld.html">
+            Ghostscript download area</url> and download the most current
+            binary for either <xref ref="do-i-have-64-bit-windows">
+            64-bit or 32-bit Windows</xref>. Run the installer and accept all the
+            default options.
+
+        conclusion
+            p.
+                Congratulations, you have successfully installed Ghostscript.
+
+    section(xml:id="whats-missing")
+        title What's missing
+        p.
+            Development of a Windows-compatible <c>mbx</c> script
+            (<xref ref="mbx-script" autoname="yes" />) is continuing.
+            If you need help with <c>mbx</c> now, contact Dave Rosoff.
+
+    conclusion
+        p.
+            If you find any problems or bugs, please let us know at the
+            MathBook XML Support group in Google Groups, or email
+            <c>drosoff</c> AT <c>collegeofidaho</c> DOT <c>edu</c>.

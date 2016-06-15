@@ -110,8 +110,8 @@
         <xsl:text>Context('Numeric');&#xa;</xsl:text>
     </xsl:if>
     <!-- pg-code verbatim, but trim indentation -->
-    <xsl:call-template name="sanitize-code">
-        <xsl:with-param name="raw-code" select="pg-code" />
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select="pg-code" />
     </xsl:call-template>
 </xsl:template>
 
@@ -278,47 +278,47 @@
     </xsl:call-template>
     <!-- three standard macros always, order and placement is critical -->
     <xsl:variable name="standard-macros">
-        <xsl:text>    "PGstandard.pl",&#xa;</xsl:text>
-        <xsl:text>    "MathObjects.pl",&#xa;</xsl:text>
-        <xsl:text>    "PGML.pl",&#xa;</xsl:text>
+        <xsl:text>  "PGstandard.pl",&#xa;</xsl:text>
+        <xsl:text>  "MathObjects.pl",&#xa;</xsl:text>
+        <xsl:text>  "PGML.pl",&#xa;</xsl:text>
     </xsl:variable>
     <!-- accumulate macros evidenced by some aspect of problem design -->
     <xsl:variable name="implied-macros">
         <!-- tables -->
         <xsl:if test=".//tabular">
-            <xsl:text>    "niceTables.pl",&#xa;</xsl:text>
+            <xsl:text>  "niceTables.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- popup menu multiple choice answers -->
         <xsl:if test=".//var[@form='popup']">
-            <xsl:text>    "parserPopUp.pl",&#xa;</xsl:text>
+            <xsl:text>  "parserPopUp.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- radio buttons multiple choice answers -->
         <xsl:if test=".//var[@form='buttons']">
-            <xsl:text>    "parserRadioButtons.pl",&#xa;</xsl:text>
+            <xsl:text>  "parserRadioButtons.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- checkboxes multiple choice answers-->
         <xsl:if test=".//var[@form='checkboxes']">
-            <xsl:text>    "PGchoicemacros.pl",&#xa;</xsl:text>
+            <xsl:text>  "PGchoicemacros.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- essay answers -->
         <xsl:if test=".//var[@form='essay']">
-            <xsl:text>    "PGessaymacros.pl",&#xa;</xsl:text>
+            <xsl:text>  "PGessaymacros.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- multistage problems ("scaffolded") -->
         <xsl:if test=".//stage">
-            <xsl:text>    "scaffold.pl",&#xa;</xsl:text>
+            <xsl:text>  "scaffold.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- links to syntax help following answer blanks -->
         <xsl:if test="$pg.answer.form.help = 'yes'">
-            <xsl:text>    "AnswerFormatHelp.pl",&#xa;</xsl:text>
+            <xsl:text>  "AnswerFormatHelp.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- targeted feedback messages for specific wrong answers       -->
         <xsl:if test="contains(./setup/pg-code,'AnswerHints')">
-            <xsl:text>    "answerHints.pl",&#xa;</xsl:text>
+            <xsl:text>  "answerHints.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- when there is a PGgraphmacros graph                         -->
         <xsl:if test="./statement//image[@pg-name]">
-            <xsl:text>    "PGgraphmacros.pl",&#xa;</xsl:text>
+            <xsl:text>  "PGgraphmacros.pl",&#xa;</xsl:text>
         </xsl:if>
     </xsl:variable>
     <!-- capture problem root to use inside upcoming for-each -->
@@ -342,7 +342,7 @@
                     <xsl:apply-templates select="." mode="location-report" />
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:text>    </xsl:text>
+                    <xsl:text>  </xsl:text>
                     <xsl:value-of select="$fenced-macro" />
                     <xsl:text>,&#xa;</xsl:text>
                 </xsl:otherwise>
@@ -360,7 +360,7 @@
                 <xsl:apply-templates select="." mode="location-report" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:text>    </xsl:text>
+                <xsl:text>  </xsl:text>
                 <xsl:value-of select="$fenced-macro" />
                 <xsl:text>,&#xa;</xsl:text>
             </xsl:otherwise>
@@ -373,7 +373,13 @@
     <xsl:value-of select="$user-macros" />
     <xsl:value-of select="$course-macro" />
     <xsl:text>);&#xa;</xsl:text>
+    <!-- shorten name of PGML::Format to save characters for base64 url -->
+    <!-- only used within table cells                                  -->
+    <xsl:if test=".//tabular">
+        <xsl:text>sub PF {PGML::Format(@_)};&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
+
 
 <!-- ############## -->
 <!-- PERL Variables -->
@@ -473,31 +479,6 @@
         <xsl:value-of select="$width"/>
         <xsl:text>}</xsl:text>
     </xsl:if>
-</xsl:template>
-
-<!-- (presumed) MathObject answers inside a tabular                       -->
-<!-- For answer blanks in tables (and possibly more things in the future) -->
-<!-- we cannot simply insert PGML syntax. But otherwise, we do just that. -->
-<xsl:template match="var[(@width|@form) and ancestor::tabular]" mode="field">
-    <xsl:text>".PGML::Format('[__]{</xsl:text>
-    <xsl:choose>
-        <xsl:when test="@evaluator">
-            <xsl:value-of select="@evaluator" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="@name" />
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>}{width => </xsl:text>
-    <xsl:choose>
-        <xsl:when test="@width">
-            <xsl:value-of select="@width"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>5</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>}')."</xsl:text>
 </xsl:template>
 
 <!-- Checkbox answers -->
@@ -749,13 +730,6 @@
     <xsl:text>`]</xsl:text>
 </xsl:template>
 
-<xsl:template match= "webwork//tabular//m">
-    <xsl:text>".PGML::Format('[`</xsl:text>
-    <xsl:call-template name="select-latex-macros"/>
-    <xsl:apply-templates select="text()|var" />
-    <xsl:text>`]')."</xsl:text>
-</xsl:template>
-
 <xsl:template match="webwork//me">
     <xsl:text>&#xa;&#xa;>> [``</xsl:text>
     <xsl:call-template name="select-latex-macros"/>
@@ -849,10 +823,9 @@
 
 <!-- http://webwork.maa.org/wiki/Introduction_to_PGML#Basic_Formatting -->
 
-<!-- two spaces at line-end is a newline -->
-<!-- TODO - an "attribution" is the only place this could happen -->
-<!-- make this much more restrictive?                            -->
-<xsl:template match="webwork//br">
+<!-- two spaces at line-end makes a newline in PGML-->
+<xsl:template match="webwork//cell/line">
+    <xsl:apply-templates />
     <xsl:text>  &#xa;</xsl:text>
 </xsl:template>
 
@@ -1018,12 +991,12 @@
 </xsl:template>
 
 <!-- Preformatted Text -->
-<!-- "sanitize-text-output" analyzes *all* lines for left margin -->
-<!-- "prepend-string" adds colon and three spaces to each line   -->
+<!-- Sanitization analyzes *all* lines for left margin         -->
+<!-- "prepend-string" adds colon and three spaces to each line -->
 <xsl:template match="webwork//pre">
     <xsl:call-template name="prepend-string">
         <xsl:with-param name="text">
-            <xsl:call-template name="sanitize-text-output">
+            <xsl:call-template name="sanitize-text">
                 <xsl:with-param name="text" select="." />
             </xsl:call-template>
         </xsl:with-param>
@@ -1178,7 +1151,7 @@
     <xsl:apply-templates select="row"/>
     <xsl:text>  ],&#xa;</xsl:text>
     <xsl:if test="ancestor::table/caption">
-        <xsl:text>  caption   => '</xsl:text>
+        <xsl:text>  caption => '</xsl:text>
             <xsl:apply-templates select="parent::*" mode="type-name"/>
             <xsl:text> </xsl:text>
             <xsl:apply-templates select="parent::*" mode="number"/>
@@ -1219,7 +1192,7 @@
     <!-- Build latex column specification                         -->
     <!--   vertical borders (left side, right side, three widths) -->
     <!--   horizontal alignment (left, center, right)             -->
-    <xsl:text>  align     => '</xsl:text>
+    <xsl:text>  align => '</xsl:text>
         <!-- start with left vertical border -->
         <xsl:call-template name="vrule-specification">
             <xsl:with-param name="width" select="$table-left" />
@@ -1284,7 +1257,7 @@
     <!-- kill all of niceTable's column left/right border thickness in colgroup/col css; just let cellcss control border thickness -->
     <xsl:variable name="columns-css">
         <xsl:if test="col[@right] or @left">
-            <xsl:text>[</xsl:text>
+            <xsl:text>    [</xsl:text>
                 <xsl:for-each select="col">
                     <xsl:text>'</xsl:text>
                     <xsl:if test="not($table-left='none') and (count(preceding-sibling::col)=0)">
@@ -1304,7 +1277,7 @@
                     <xsl:text> ',</xsl:text>
                     <xsl:choose>
                         <xsl:when test="following-sibling::col">
-                            <xsl:text>&#xa;                 </xsl:text>
+                            <xsl:text>&#xa;     </xsl:text>
                         </xsl:when>
                     </xsl:choose>
                 </xsl:for-each>
@@ -1312,7 +1285,7 @@
         </xsl:if>
     </xsl:variable>
     <xsl:if test="not($columns-css='')">
-        <xsl:text>  columnscss => </xsl:text>
+        <xsl:text>  columnscss =>&#xa;</xsl:text>
         <xsl:value-of select="$columns-css"/>
         <xsl:text>,&#xa;</xsl:text>
     </xsl:if>
@@ -1447,22 +1420,36 @@
         </xsl:choose>
     </xsl:variable>
     <xsl:variable name="rowcss">
-        <xsl:choose>
-            <xsl:when test="parent::row/@bottom">
-                <xsl:text>border-bottom: </xsl:text>
-                <xsl:call-template name="thickness-specification">
-                    <xsl:with-param name="width" select="parent::row/@bottom" />
-                </xsl:call-template>
-                <xsl:text>px solid;</xsl:text>
-            </xsl:when>
-            <xsl:when test="ancestor::tabular/@bottom">
-                <xsl:text>border-bottom: </xsl:text>
-                <xsl:call-template name="thickness-specification">
-                    <xsl:with-param name="width" select="ancestor::tabular/@bottom" />
-                </xsl:call-template>
-                <xsl:text>px solid;</xsl:text>
-            </xsl:when>
-        </xsl:choose>
+        <xsl:if test="position()=1">
+            <xsl:choose>
+                <xsl:when test="parent::row/@bottom">
+                    <xsl:text>border-bottom: </xsl:text>
+                    <xsl:call-template name="thickness-specification">
+                        <xsl:with-param name="width" select="parent::row/@bottom" />
+                    </xsl:call-template>
+                    <xsl:text>px solid; </xsl:text>
+                </xsl:when>
+                <xsl:when test="ancestor::tabular/@bottom">
+                    <xsl:text>border-bottom: </xsl:text>
+                    <xsl:call-template name="thickness-specification">
+                        <xsl:with-param name="width" select="ancestor::tabular/@bottom" />
+                    </xsl:call-template>
+                    <xsl:text>px solid; </xsl:text>
+                </xsl:when>
+            </xsl:choose>
+            <xsl:choose>
+                <xsl:when test="parent::row/@valign">
+                    <xsl:text>vertical-align: </xsl:text>
+                    <xsl:value-of select="parent::row/@valign" />
+                    <xsl:text>; </xsl:text>
+                </xsl:when>
+                <xsl:when test="ancestor::tabular/@valign">
+                    <xsl:text>vertical-align: </xsl:text>
+                    <xsl:value-of select="ancestor::tabular/@valign" />
+                    <xsl:text>; </xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:if>
     </xsl:variable>
     <xsl:variable name="cell-bottom-css">
         <xsl:if test="@bottom">
@@ -1551,19 +1538,19 @@
                 <xsl:value-of select="$cell-bottom-css"/>
             </xsl:if>
             <xsl:if test="not($cell-bottom-css='') and (not($cell-top-css='') or not($cell-left-css='') or not($cell-right-css=''))">
-                <xsl:text>&#xa;                   </xsl:text>
+                <xsl:text>&#xa;                  </xsl:text>
             </xsl:if>
             <xsl:if test="not($cell-top-css='')">
                 <xsl:value-of select="$cell-top-css"/>
             </xsl:if>
             <xsl:if test="not($cell-top-css='') and (not($cell-left-css='') or not($cell-right-css=''))">
-                <xsl:text>&#xa;                   </xsl:text>
+                <xsl:text>&#xa;                  </xsl:text>
             </xsl:if>
             <xsl:if test="not($cell-left-css='')">
                 <xsl:value-of select="$cell-left-css"/>
             </xsl:if>
             <xsl:if test="not($cell-left-css='') and not($cell-right-css='')">
-                <xsl:text>&#xa;                   </xsl:text>
+                <xsl:text>&#xa;                  </xsl:text>
             </xsl:if>
             <xsl:if test="not($cell-right-css='')">
                 <xsl:value-of select="$cell-right-css"/>
@@ -1573,45 +1560,45 @@
 
     <xsl:choose>
         <xsl:when test="not(preceding-sibling::cell)">
-            <xsl:text> </xsl:text>
+            <xsl:text></xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>      </xsl:text>
+            <xsl:text>     </xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 
     <xsl:choose>
         <xsl:when test="($halign='') and ($midrule='') and ($rowcss='') and ($cellcss='') and not(descendant::m) and not(descendant::var[@width|@form]) and not(@colspan)">
-            <xsl:text>"</xsl:text>
+            <xsl:text>PF('</xsl:text>
             <xsl:apply-templates/>
-            <xsl:text>",&#xa;</xsl:text>
+            <xsl:text>'),&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>["</xsl:text>
+            <xsl:text>[PF('</xsl:text>
             <xsl:apply-templates/>
-            <xsl:text>",</xsl:text>
+            <xsl:text>'),</xsl:text>
             <xsl:if test="@colspan">
-                <xsl:text>&#xa;           colspan => '</xsl:text>
+                <xsl:text>&#xa;      colspan => '</xsl:text>
                 <xsl:value-of select="@colspan"/>
                 <xsl:text>',</xsl:text>
             </xsl:if>
             <xsl:if test="not($halign='')">
-                <xsl:text>&#xa;           halign  => '</xsl:text>
+                <xsl:text>&#xa;      halign  => '</xsl:text>
                 <xsl:value-of select="$halign"/>
                 <xsl:text>',</xsl:text>
             </xsl:if>
             <xsl:if test="$midrule='1' and not(preceding-sibling::cell)">
-                <xsl:text>&#xa;           midrule => '</xsl:text>
+                <xsl:text>&#xa;      midrule => '</xsl:text>
                 <xsl:value-of select="$midrule"/>
                 <xsl:text>',</xsl:text>
             </xsl:if>
             <xsl:if test="not($rowcss='')">
-                <xsl:text>&#xa;           rowcss  => '</xsl:text>
+                <xsl:text>&#xa;      rowcss  => '</xsl:text>
                 <xsl:value-of select="$rowcss"/>
                 <xsl:text>',</xsl:text>
             </xsl:if>
             <xsl:if test="not($cellcss='')">
-                <xsl:text>&#xa;           cellcss => '</xsl:text>
+                <xsl:text>&#xa;      cellcss => '</xsl:text>
                 <xsl:value-of select="$cellcss"/>
                 <xsl:text>',</xsl:text>
             </xsl:if>
@@ -1650,11 +1637,12 @@
 <xsl:template name="begin-block">
     <xsl:param name="block-title"/>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:text>############################################################&#xa;</xsl:text>
+    <!-- short string of octothorpes to save on base64 url characters -->
+    <xsl:text>####################&#xa;</xsl:text>
     <xsl:text># </xsl:text>
     <xsl:value-of select="$block-title"/>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:text>############################################################&#xa;</xsl:text>
+    <xsl:text>####################&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Recursively prepend to multiple lines -->

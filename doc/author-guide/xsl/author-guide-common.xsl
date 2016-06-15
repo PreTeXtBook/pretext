@@ -23,7 +23,7 @@
 <xsl:template match="tag">
     <xsl:variable name="the-element">
         <c>
-            <text>&lt;</text>
+            <xsl:text>&lt;</xsl:text>
             <xsl:apply-templates />
             <xsl:text>&gt;</xsl:text>
         </c>
@@ -35,7 +35,7 @@
 <xsl:template match="tage">
     <xsl:variable name="the-element">
         <c>
-            <text>&lt;</text>
+            <xsl:text>&lt;</xsl:text>
             <xsl:apply-templates />
             <xsl:text> /&gt;</xsl:text>
         </c>
@@ -46,7 +46,7 @@
 <xsl:template match="attribute">
     <xsl:variable name="the-attribute">
         <c>
-            <text>@</text>
+            <xsl:text>@</xsl:text>
             <xsl:apply-templates />
         </c>
     </xsl:variable>

@@ -36,7 +36,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- http://meta.stackexchange.com/questions/82718/how-do-i-escape-a-backtick-in-markdown -->
 <xsl:template match="c">
     <xsl:variable name="content">
-        <xsl:apply-templates />
+        <xsl:apply-templates select="text()" />
     </xsl:variable>
     <xsl:if test="contains($content, '````')">
         <xsl:message>MBX:WARNING: 4 consecutive backticks in a "c" element will have unpredictable results</xsl:message>

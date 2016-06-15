@@ -1187,8 +1187,8 @@
                                     <cell>two</cell>
                                     <cell><m>\lfloor\pi\rfloor</m></cell>
                                 </row>
-                                <row>
-                                    <cell bottom="minor"><m>\text{I}+\text{I}+\text{I}+\text{I}</m></cell>
+                                <row valign="bottom">
+                                    <cell bottom="minor"><line><m>\text{I}+\text{I}</m></line><line><m>{}+\text{I}+\text{I}</m></line></cell>
                                     <cell><var name="$x" form="none"/></cell>
                                     <cell>six</cell>
                                 </row>

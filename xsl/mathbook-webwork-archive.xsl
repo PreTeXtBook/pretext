@@ -20,6 +20,12 @@
 <!-- along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>. -->
 <!-- ********************************************************************* -->
 
+<!-- http://pimpmyxslt.com/articles/entity-tricks-part2/ -->
+<!DOCTYPE xsl:stylesheet [
+    <!ENTITY % entities SYSTEM "entities.ent">
+    %entities;
+]>
+
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
@@ -33,6 +39,25 @@
 <!-- Intend output to be a PG/PGML problem -->
 <xsl:output method="text" />
 
+<!-- ######### -->
+<!-- Variables -->
+<!-- ######### -->
+
+<!-- Variables that affect PG archive creation -->
+<!-- More in the common file                  -->
+
+<!-- We default to one massive def file -->
+<xsl:variable name="chunk-level">
+    <xsl:choose>
+        <xsl:when test="$chunk.level != ''">
+            <xsl:value-of select="$chunk.level" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>0</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- ############## -->
 <!-- Entry template -->
 <!-- ############## -->
@@ -41,101 +66,24 @@
 <!-- Organized in directories as in the document tree, cut off at chunk level -->
 <!-- Then chunk the document to write reasonable problem definition files     -->
 <xsl:template match="/mathbook">
+    <xsl:message>C: <xsl:value-of select="$chunk-level" /></xsl:message>
     <xsl:apply-templates mode="problems" />
-    <xsl:apply-templates mode="chunk" />
+    <xsl:apply-templates mode="chunking" />
 </xsl:template>
+
+<!-- NB: the two templates for avoidance of non-webwork        -->
+<!-- problems might be cleaner (see Sage doctest example),     -->
+<!-- but it seems fine now, so we'll leave it for another time -->
 
 <!-- Handle <webwork> element carefully -->
 <!-- Recurse into other elements        -->
 <xsl:template match="*" mode="problems">
-    <xsl:apply-templates select="webwork" mode="problems"/>
+    <xsl:apply-templates select="webwork" mode="problems" />
     <xsl:apply-templates select="*[not(self::webwork)]" mode="problems" />
 </xsl:template>
 
 <!-- Kill non-element content outside of webwork -->
 <xsl:template match="text()" mode="problems" />
-
-<!-- Chunking -->
-
-<!-- (a) Making *.def files -->
-<xsl:template match="*" mode="file-wrap">
-    <xsl:param name="content" />
-    <!-- no problems, no def infos, no file -->
-    <xsl:if test="not($content = '')">
-        <!-- filenames -->
-        <xsl:variable name="def-filename">
-            <xsl:text>local/</xsl:text>
-            <xsl:call-template name="root-directory" />
-            <xsl:text>def/</xsl:text>
-            <!-- mandatory filename initial string -->
-            <xsl:text>set</xsl:text>
-            <xsl:apply-templates select="." mode="numbered-title-filesafe" />
-            <xsl:text>.def</xsl:text>
-        </xsl:variable>
-        <xsl:variable name="header-filename">
-            <xsl:text>local/</xsl:text>
-            <xsl:call-template name="root-directory" />
-            <xsl:text>header/</xsl:text>
-            <xsl:apply-templates select="." mode="numbered-title-filesafe" />
-            <xsl:text>.pg</xsl:text>
-        </xsl:variable>
-        <!-- set-definition file -->
-        <exsl:document href="{$def-filename}" method="text">
-            <xsl:text>openDate          = 01/01/2016 at 12:00am PST&#xa;</xsl:text>
-            <xsl:text>dueDate           = 07/01/2016 at 10:00pm PDT&#xa;</xsl:text>
-            <xsl:text>answerDate        = 07/01/2016 at 10:00pm PDT&#xa;</xsl:text>
-            <xsl:text>paperHeaderFile   = </xsl:text>
-            <xsl:value-of select="$header-filename" />
-            <xsl:text>&#xa;</xsl:text>
-            <xsl:text>screenHeaderFile  = </xsl:text>
-            <xsl:value-of select="$header-filename" />
-            <xsl:text>&#xa;</xsl:text>
-            <xsl:text>description       = </xsl:text>
-            <xsl:apply-templates select="." mode="title-simple" />
-            <xsl:text>&#xa;</xsl:text>
-            <!-- Version 1 problem list lead-in -->
-            <!-- <xsl:text>problemList       = &#xa;</xsl:text> -->
-            <!--                                                -->
-            <!-- Version 2 problem list lead-in -->
-            <xsl:text>problemListV2&#xa;</xsl:text>
-            <xsl:copy-of select="$content" />
-        </exsl:document>
-        <!-- set-header file -->
-        <!-- a bit of a hack to write a second file here -->
-        <!-- but we avoid the entire $content used above -->
-        <exsl:document href="{$header-filename}" method="text">
-            <xsl:apply-templates select="." mode="header-content" />
-        </exsl:document>
-    </xsl:if>
-</xsl:template>
-
-<!-- (b) no content wrapping, default is pass-through -->
-
-<!-- (c) Override intermediate node processing, snag any problems that exist -->
-<xsl:template match="*" mode="structure-node-intermediate">
-    <xsl:for-each select="*"> <!-- loop over children -->
-        <xsl:variable name="structural"> <!-- identify structural -->
-            <xsl:apply-templates select="." mode="is-structural" />
-        </xsl:variable>
-        <xsl:choose>
-            <!-- do nothing for structural children                   -->
-            <!-- so no need to implement "intermediate-child-summary" -->
-            <xsl:when test="$structural = 'true'" />
-           <xsl:otherwise>
-                <!-- Process non-structural components -->
-                <!-- (eg, introduction, conclusion)    -->
-                <!-- Write out specific problem info   -->
-                <xsl:apply-templates select=".//webwork[@*|node()]" mode="def-info-v2" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:for-each>
-</xsl:template>
-
-<!-- (d) For each child we want webwork info only  -->
-<!-- This presumes webwork is in an exercise       -->
-<xsl:template match="*" mode="structure-node-child">
-    <xsl:apply-templates select=".//webwork[@*|node()]" mode="def-info-v2" />
-</xsl:template>
 
 
 <!-- ################## -->
@@ -152,9 +100,9 @@
     </xsl:for-each>
 </xsl:template>
 
-<!-- Directory path, recursively climb structural nodes, -->
-<!-- record names as pass up throughchunk-level barrier  -->
-<!-- Includes root document node (book, article, etc)    -->
+<!-- Directory path, recursively climb structural nodes,  -->
+<!-- record names as pass up through chunk-level barrier  -->
+<!-- Includes root document node (book, article, etc)     -->
 <xsl:template match="*" mode="directory-path">
     <xsl:variable name="structural">
         <xsl:apply-templates select="." mode="is-structural"/>
@@ -214,6 +162,89 @@
 <!-- OPL problems just get killed, they live on the server already -->
 <xsl:template match="webwork[@source]" mode="problems" />
 
+
+<!-- ################# -->
+<!-- Chunking Def Files-->
+<!-- ################# -->
+
+<!-- A complete file for a structural subdivision -->
+<xsl:template match="&STRUCTURAL;" mode="chunk">
+    <xsl:apply-templates select="." mode="file-wrap">
+        <xsl:with-param name="content">
+            <xsl:apply-templates select=".//webwork[@*|node()]" mode="def-info-v2" />
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- A summary file for a structural subdivision                -->
+<!-- Any webwork not in a subdivision (say, in an introduction) -->
+<!-- The // is OK here (rather than descendant-or-self) since   -->
+<!-- there will at least be an intervening "exercise" wrapper   -->
+<xsl:template match="&STRUCTURAL;" mode="intermediate">
+    <xsl:apply-templates select="." mode="file-wrap">
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="*[not(&STRUCTURAL-FILTER;)]//webwork[@*|node()]" mode="def-info-v2" />
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+
+<!-- ##################### -->
+<!-- Def File Construction -->
+<!-- ##################### -->
+
+<!-- A *.def file for a structural subdivision -->
+<xsl:template match="&STRUCTURAL;" mode="file-wrap">
+    <xsl:param name="content" />
+    <!-- no problems, no def infos, then no file -->
+    <xsl:if test="not($content = '')">
+        <!-- filenames -->
+        <xsl:variable name="def-filename">
+            <xsl:text>local/</xsl:text>
+            <xsl:call-template name="root-directory" />
+            <xsl:text>def/</xsl:text>
+            <!-- mandatory filename initial string -->
+            <xsl:text>set</xsl:text>
+            <xsl:apply-templates select="." mode="numbered-title-filesafe" />
+            <xsl:text>.def</xsl:text>
+        </xsl:variable>
+        <xsl:variable name="header-filename">
+            <xsl:text>local/</xsl:text>
+            <xsl:call-template name="root-directory" />
+            <xsl:text>header/</xsl:text>
+            <xsl:apply-templates select="." mode="numbered-title-filesafe" />
+            <xsl:text>.pg</xsl:text>
+        </xsl:variable>
+        <!-- set-definition file -->
+        <exsl:document href="{$def-filename}" method="text">
+            <xsl:text>openDate          = 01/01/2016 at 12:00am PST&#xa;</xsl:text>
+            <xsl:text>dueDate           = 07/01/2016 at 10:00pm PDT&#xa;</xsl:text>
+            <xsl:text>answerDate        = 07/01/2016 at 10:00pm PDT&#xa;</xsl:text>
+            <xsl:text>paperHeaderFile   = </xsl:text>
+            <xsl:value-of select="$header-filename" />
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:text>screenHeaderFile  = </xsl:text>
+            <xsl:value-of select="$header-filename" />
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:text>description       = </xsl:text>
+            <xsl:apply-templates select="." mode="title-simple" />
+            <xsl:text>&#xa;</xsl:text>
+            <!-- Version 1 problem list lead-in -->
+            <!-- <xsl:text>problemList       = &#xa;</xsl:text> -->
+            <!--                                                -->
+            <!-- Version 2 problem list lead-in -->
+            <xsl:text>problemListV2&#xa;</xsl:text>
+            <xsl:copy-of select="$content" />
+        </exsl:document>
+        <!-- set-header file -->
+        <!-- a bit of a hack to write a second file here -->
+        <!-- but we avoid the entire $content used above -->
+        <exsl:document href="{$header-filename}" method="text">
+            <xsl:apply-templates select="." mode="header-content" />
+        </exsl:document>
+    </xsl:if>
+</xsl:template>
+
 <!-- Version 1 problem info -->
 <!-- Each problem gets its own line in the problem set   -->
 <!-- definition file. Be careful to create no content if -->
@@ -244,7 +275,7 @@
     <xsl:text>source_file = </xsl:text> <!-- PG file -->
     <xsl:apply-templates select="." mode="filename" />
     <xsl:text>&#xa;</xsl:text>
-    <!--Much of the following commented out until we decide we shoudl inclide them.   -->
+    <!--Much of the following commented out until we decide we should include them.   -->
     <!--WeBWorK provides good default values, customizable by sysadmin or instructor. -->
     <!--<xsl:text>value = 1&#xa;</xsl:text>--> <!-- default problem weight -->
     <!--<xsl:text>max_attempts = -1&#xa;</xsl:text>--> <!-- default max attempts is unlimited -->
@@ -313,8 +344,9 @@
         ENDDOCUMENT();
         </xsl:text>
     </xsl:variable>
-    <xsl:call-template name="sanitize-code">
-        <xsl:with-param name="raw-code" select="$header-text" />
+    <!-- lazy, strips indentation, etc -->
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select="$header-text" />
     </xsl:call-template>
 </xsl:template>
 

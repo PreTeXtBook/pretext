@@ -28,7 +28,7 @@
 
         <p>By default, <c>xsltproc</c> writes output to <c>stdout</c> (the screen), which you could redirect to a file, or you could use the <c>-o</c> switch to send the output to a named file.  However, MathBook XML automatically writes to a file whose name is derived from the <attribute>xml:id</attribute> attribute of the top-level <tag>book</tag> or <tag>article</tag> tag.  If no such attribute is given the filename will be derived from <c>book-1</c> or <c>article-1</c>.  All output is produced in whatever the current default directory is, so you will likely want to set this beforehand.</p>
 
-        <p>The <c>xsl</c> subdirectory of the MathBook XML distribution contains a variety of XSL stylesheets, which I will also refer to as <term>converters</term> or <term>conversions</term>.  The ones that you will use as an author all fave filenames of the form <c>xsl/mathbook-XXX.xsl</c>, where <c>XXX</c> is some indication of the output produced.  Conversions to <latex /> or HTML output are the two most mature converters.</p>
+        <p>The <c>xsl</c> subdirectory of the MathBook XML distribution contains a variety of XSL stylesheets, which I will also refer to as <term>converters</term> or <term>conversions</term>.  The ones that you will use as an author all have filenames of the form <c>xsl/mathbook-XXX.xsl</c>, where <c>XXX</c> is some indication of the output produced.  Conversions to <latex /> or HTML output are the two most mature converters.</p>
 
         <p>Note that authors are not responsible for creating XSL stylesheets.  Stock conversions are part of the MathBook XML distribution, and anybody is welcome to assume a source document is valid MathBook XML and create new conversions to process it to existing, or as yet unimagined, formats.</p>
     </section>
@@ -49,7 +49,7 @@
         <ul>
             <li><p>Begin small and start a project <em>without</em> using modular files.  Modularizing seems to add a layer of complexity that sometimes obscures other beginner's errors.  So get comfortable with a single source file before branching out.</p></li>
             <li><p>I am forever forgetting the <c>--xinclude</c> switch.  Empty output, or cryptic error messages, are your first clue to this simple, but common, mistake.</p></li>
-            <li><p>The XML specification requires that a source file only contain a single outer-most element.  So for example, two <tag>chapter</tag> cannot go into the same file.</p></li>
+            <li><p>The XML specification requires that a source file only contain a single outer-most element.  So for example, two <tag>chapter</tag> elements cannot go into the same file as simultaneous outer-most elements.</p></li>
             <li><p>  In practice, there is not a lot to be gained by creating a subdirectory structure mirroring your modularization<mdash />all your source files can go into one big directory and the XML hierarchy will take care of the organization.  I do sometimes like to name my files accordingly, so for example <c>chapter-mammals.xml</c> and <c>section-monkeys.xml</c>.</p></li>
         </ul>
 
@@ -103,7 +103,7 @@
     <section xml:id="processing-thin-xsl">
         <title>Customizations, Thin XSL Stylesheets</title>
 
-        <p>Stringparam (<xref ref="processing-stringparam" />) are an easy way to effect global changes in the presentation of your writing.  But putting ten of them on every command-line gets old and cumbersome fast.</p>
+        <p>Stringparams (<xref ref="processing-stringparam" />) are an easy way to effect global changes in the presentation of your writing.  But putting ten of them on every command-line gets old and cumbersome fast.</p>
 
         <p>You may also wish to customize your output in some stylistic way.  This might be especially true for <latex />/PDF/print output.  For example, you might wish to have every chapter heading of your book in a nice shade of light blue, with the title flush right to the margin, countered by a thick solid rule extending all the way right, to the edge of the paper.  Notice that this does not affect your content, it is strictly presentation.</p>
 
