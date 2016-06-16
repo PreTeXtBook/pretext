@@ -205,7 +205,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!ELEMENT problem (title?, index*, ((%para;)*|(statement, solution)))>
     <!ATTLIST problem xml:id ID #IMPLIED>
 
-<!ELEMENT list (title?, index*, introduction?, (ol|ul|dl), conclusion)>
+<!ELEMENT list (title?, index*, introduction?, (ol|ul|dl), conclusion?)>
     <!ATTLIST list xml:id ID #IMPLIED>
 <!ELEMENT remark (title?, index*, (%para;)*)>
     <!ATTLIST remark xml:id ID #IMPLIED>
