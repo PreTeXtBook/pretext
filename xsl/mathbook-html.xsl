@@ -2218,6 +2218,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="solution" mode="body-element">
+    <xsl:text>div</xsl:text>
 </xsl:template>
 
 <xsl:template match="solution" mode="body-css-class">
