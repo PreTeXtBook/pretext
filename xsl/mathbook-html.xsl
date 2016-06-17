@@ -74,10 +74,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- no matter how the switches below are set.   -->
 <!-- You may elect to have entire side-by-side   -->
 <!-- panels born as knowls, using the switch.    -->
+<!-- PROJECT-LIKE gets own switch here           -->
 <xsl:param name="html.knowl.theorem" select="'no'" />
 <xsl:param name="html.knowl.proof" select="'yes'" />
 <xsl:param name="html.knowl.definition" select="'no'" />
 <xsl:param name="html.knowl.example" select="'yes'" />
+<xsl:param name="html.knowl.project" select="'no'" />
 <xsl:param name="html.knowl.list" select="'no'" />
 <xsl:param name="html.knowl.remark" select="'no'" />
 <xsl:param name="html.knowl.figure" select="'no'" />
@@ -1208,7 +1210,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "posterior-duplicate"  no ID, no \label         -->
 
 <!-- me is absent, not numbered, never knowled -->
-<xsl:template match="fn|biblio|men|md|mdn|p|&EXAMPLE-LIKE;|solution|&THEOREM-LIKE;|proof" mode="xref-knowl">
+<xsl:template match="fn|biblio|men|md|mdn|p|&EXAMPLE-LIKE;|&PROJECT-LIKE;|solution|&THEOREM-LIKE;|proof" mode="xref-knowl">
     <!-- write a file, calling body and posterior duplicate templates -->
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
@@ -1403,7 +1405,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- do not come through here at all, since they are   -->
 <!-- always visible with no decoration, so plain       -->
 <!-- default templates are good enough                 -->
-<xsl:template match="fn|biblio|p|&EXAMPLE-LIKE;|solution|&THEOREM-LIKE;|proof">
+<xsl:template match="fn|biblio|p|&EXAMPLE-LIKE;|&PROJECT-LIKE;|solution|&THEOREM-LIKE;|proof">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
@@ -2132,57 +2134,62 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- Examples -->
+<!-- Examples, Projects -->
 <!-- Runs of paragraphs, etc,  xor  statement + solution -->
+<!-- Examples and projects are identical, but for        -->
+<!-- knowlification, independent numbering (elsewhere)   -->
 
 <xsl:template match="&EXAMPLE-LIKE;" mode="is-hidden">
     <xsl:value-of select="$html.knowl.example = 'yes'" />
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;" mode="body-element">
+<xsl:template match="&PROJECT-LIKE;" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.project = 'yes'" />
+</xsl:template>
+
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="body-element">
     <xsl:text>article</xsl:text>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;" mode="body-css-class">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="body-css-class">
     <xsl:text>example-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;" mode="birth-element">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="birth-element">
     <xsl:text>div</xsl:text>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;" mode="hidden-knowl-element">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="hidden-knowl-element">
     <xsl:text>article</xsl:text>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;" mode="hidden-knowl-css-class">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="hidden-knowl-css-class">
     <xsl:text>example-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;" mode="heading-birth">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;" mode="body">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="body">
     <xsl:apply-templates select="*[not(self::solution)]" />
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;" mode="heading-xref-knowl">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="heading-xref-knowl">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 
 <!-- duplicate, no assumptions on wrapping          -->
 <!-- create solutions as knowls to duplicate content -->
-<xsl:template match="&EXAMPLE-LIKE;" mode="body-duplicate">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="body-duplicate">
     <xsl:apply-templates select="*[not(self::solution)]" mode="duplicate" />
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;" mode="has-posterior">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="has-posterior">
     <xsl:value-of select="boolean(solution)" />
 </xsl:template>
 
-
-<xsl:template match="&EXAMPLE-LIKE;" mode="posterior">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="posterior">
     <xsl:element name="div">
         <xsl:for-each select="solution">
             <xsl:apply-templates select="." />
@@ -2190,7 +2197,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;" mode="posterior-duplicate">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="posterior-duplicate">
     <xsl:element name="div">
         <xsl:for-each select="solution">
             <xsl:apply-templates select="." mode="xref-link">
@@ -2202,15 +2209,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- Solutions (to examples) -->
+<!-- Solutions (to examples, projects) -->
+<!-- EXAMPLE-LIKE, PROJECT-LIKE -->
 
-<!-- always born hidden -->
+<!-- always born hidden-->
 <xsl:template match="solution" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.example = 'yes'" />
+    <xsl:text>true</xsl:text>
 </xsl:template>
 
 <xsl:template match="solution" mode="body-element">
-    <xsl:text>article</xsl:text>
 </xsl:template>
 
 <xsl:template match="solution" mode="body-css-class">
@@ -3985,7 +3992,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a sidebyside even though this is not necessary           -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|p|biblio|note|&EXAMPLE-LIKE;|list|remark|&THEOREM-LIKE;|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|biblio|note|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|remark|&THEOREM-LIKE;|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">

@@ -69,7 +69,10 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- Everything like a paragraph, but also more substantial                   -->
 <!-- These items cannot be contained in anything but a structural subdivision -->
 <!-- Note: the "todo" element is in this list                                 -->
-<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|list|example|question|problem|exercise|contributors|list-of|solution-list|notation-list|todo">
+<!-- THEOREM-LIKE theorem|corollary|lemma|algorithm|proposition|claim|fact    -->
+<!-- EXAMPLE-LIKE example|question|problem                                    -->
+<!-- PROJECT-LIKE project|activity|exploration|task                           -->
+<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|list|example|question|problem|project|activity|exploration|task|exercise|contributors|list-of|solution-list|notation-list|todo">
 
 
 <!-- ######### -->
@@ -197,13 +200,22 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!ELEMENT principle (title?, index*, statement)>
     <!ATTLIST principle xml:id ID #IMPLIED>
 
-<!-- example-like, not very structured, or statement/solution -->
+<!-- EXAMPLE-LIKE, PROJECT-LIKE -->
+<!-- minimal structure  xor  statement/solution -->
 <!ELEMENT example (title?, index*, ((%para;)*|(statement, solution)))>
     <!ATTLIST example xml:id ID #IMPLIED>
 <!ELEMENT question (title?, index*, ((%para;)*|(statement, solution)))>
     <!ATTLIST question xml:id ID #IMPLIED>
 <!ELEMENT problem (title?, index*, ((%para;)*|(statement, solution)))>
     <!ATTLIST problem xml:id ID #IMPLIED>
+<!ELEMENT project (title?, index*, ((%para;)*|(statement, solution)))>
+    <!ATTLIST project xml:id ID #IMPLIED>
+<!ELEMENT activity (title?, index*, ((%para;)*|(statement, solution)))>
+    <!ATTLIST activity xml:id ID #IMPLIED>
+<!ELEMENT exploration (title?, index*, ((%para;)*|(statement, solution)))>
+    <!ATTLIST exploration xml:id ID #IMPLIED>
+<!ELEMENT task (title?, index*, ((%para;)*|(statement, solution)))>
+    <!ATTLIST task xml:id ID #IMPLIED>
 
 <!ELEMENT list (title?, index*, introduction?, (ol|ul|dl), conclusion?)>
     <!ATTLIST list xml:id ID #IMPLIED>

@@ -562,6 +562,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
+    <!-- PROJECT-LIKE blocks -->
+    <xsl:if test="//project or //activity or //exploration or //task">
+        <xsl:text>%% Numbering for Projects (independent of others)&#xa;</xsl:text>
+        <xsl:text>%% Controlled by  numbering.projects.level  processing parameter&#xa;</xsl:text>
+        <xsl:text>%% Always need a project environment to set base numbering scheme&#xa;</xsl:text>
+        <xsl:text>%% even if document has no projectss (but has other blocks)&#xa;</xsl:text>
+        <!-- http://tex.stackexchange.com/questions/155710/understanding-the-arguments-in-newtheorem-e-g-newtheoremtheoremtheoremsec/155714#155714 -->
+        <xsl:text>\newtheorem{project}{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'project'" /></xsl:call-template>
+        <xsl:text>}</xsl:text>
+        <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
+        <xsl:if test="not($numbering-projects = 0)">
+            <xsl:text>[</xsl:text>
+            <xsl:call-template name="level-number-to-latex-name">
+                <xsl:with-param name="level" select="$numbering-projects + $root-level" />
+            </xsl:call-template>
+            <xsl:text>]&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:text>%% Project-like environments, normal text&#xa;</xsl:text>
+        <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
+        <xsl:if test="//activity">
+            <xsl:text>\newtheorem{activity}[project]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'activity'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//exploration">
+            <xsl:text>\newtheorem{exploration}[project]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'exploration'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//task">
+            <xsl:text>\newtheorem{task}[project]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'task'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
     <!-- Localize various standard names in use         -->
     <!-- Many environments addressed upon creation above -->
     <!-- Figure and Table addressed elsewhere           -->
@@ -2572,10 +2608,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{definition}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Example Like -->
+<!-- Example Like, Project Like -->
 <!-- Simpler than theorems, definitions, etc            -->
 <!-- Information comes from self, so slightly different -->
-<xsl:template match="&EXAMPLE-LIKE;">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;">
     <xsl:text>\begin{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}</xsl:text>
@@ -2593,7 +2629,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- An example might have a statement/solution structure -->
-<xsl:template match="solution[parent::*[self::example or self::question]]">
+<xsl:template match="solution[parent::*[&EXAMPLE-FILTER; or &PROJECT-FILTER;]]">
     <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
     <xsl:text>\textbf{</xsl:text>
     <xsl:call-template name="type-name">

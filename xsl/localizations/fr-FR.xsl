@@ -72,6 +72,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='example'><xsl:text>Exemple</xsl:text></localization> <!--checked-->
     <!-- <localization string-id='question'><xsl:text>Question</xsl:text></localization> -->
     <!-- <localization string-id='problem'><xsl:text>Problem</xsl:text></localization> -->
+    <!-- PROJECT-LIKE blocks -->
+    <!-- <localization string-id='project'><xsl:text>Project</xsl:text></localization> -->
+    <!-- <localization string-id='activity'><xsl:text>Activity</xsl:text></localization> -->
+    <!-- <localization string-id='exploration'><xsl:text>Exploration</xsl:text></localization> -->
+    <!-- <localization string-id='task'><xsl:text>Task</xsl:text></localization> -->
     <!--  -->
     <localization string-id='remark'><xsl:text>Remarque</xsl:text></localization>
     <localization string-id='figure'><xsl:text>Figure</xsl:text></localization>
