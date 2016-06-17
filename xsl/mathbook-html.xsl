@@ -1210,7 +1210,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "posterior-duplicate"  no ID, no \label         -->
 
 <!-- me is absent, not numbered, never knowled -->
-<xsl:template match="fn|biblio|men|md|mdn|p|&EXAMPLE-LIKE;|&PROJECT-LIKE;|solution|&THEOREM-LIKE;|proof" mode="xref-knowl">
+<xsl:template match="fn|biblio|men|md|mdn|p|&EXAMPLE-LIKE;|&PROJECT-LIKE;|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof" mode="xref-knowl">
     <!-- write a file, calling body and posterior duplicate templates -->
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
@@ -1405,7 +1405,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- do not come through here at all, since they are   -->
 <!-- always visible with no decoration, so plain       -->
 <!-- default templates are good enough                 -->
-<xsl:template match="fn|biblio|p|&EXAMPLE-LIKE;|&PROJECT-LIKE;|solution|&THEOREM-LIKE;|proof">
+<xsl:template match="fn|biblio|p|&EXAMPLE-LIKE;|&PROJECT-LIKE;|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
@@ -2651,11 +2651,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </span>
 </xsl:template>
 <!-- Body is everything (no title?) -->
-<xsl:template match="hint|answer|solution|note" mode="body">
+<xsl:template match="hint|answer|exercise/solution|note" mode="body">
     <xsl:apply-templates />
 </xsl:template>
 <!-- No posterior  -->
-<xsl:template match="hint|answer|solution|note" mode="posterior" />
+<xsl:template match="hint|answer|exercise/solution|note" mode="posterior" />
 <!-- HTML, CSS -->
 <xsl:template match="hint|answer|solution|note" mode="environment-element">
     <xsl:text>span</xsl:text>
