@@ -611,7 +611,7 @@ the xsltproc executable.
 
                     <exercise xml:id="exercise-test-number">
                         <statement>
-                            <p>This is an exercise in an <q>Exercises</q> subdivision at the level of a subsubsection.  There is no question other than if the numbering is appropriate (it is not for <latex /> at the moment).  Here is a self-referential link: Exercise<nbsp /><xref ref="exercise-test-number" />.</p>
+                            <p>This is an exercise in an <q>Exercises</q> subdivision at the level of a subsubsection.  There is no question other than if the numbering is appropriate.  Here is a self-referential link: Exercise<nbsp /><xref ref="exercise-test-number" />.</p>
 
                             <p>The subsubsection has no title in the source, so one is provided automatically, and will adjust according to the language of the document.</p>
                         </statement>
