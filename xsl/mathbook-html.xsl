@@ -1973,8 +1973,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>true</xsl:text>
 </xsl:template>
 
+<!-- Both ends of the hidden knowl live in a span -->
+<!-- So do not use a block tag here (eg "p")      -->
 <xsl:template match="fn" mode="body-element">
-    <xsl:text>p</xsl:text>
+    <xsl:text>span</xsl:text>
 </xsl:template>
 
 <xsl:template match="fn" mode="body-css-class">
