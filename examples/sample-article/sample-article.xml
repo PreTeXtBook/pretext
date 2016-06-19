@@ -577,6 +577,34 @@ the xsltproc executable.
                             <p>See?</p>
                         </solution>
                     </question>
+
+                    <p>There are many different blocks you can employ, and they mostly behave the same way.  A <c>&lt;project&gt;</c> is very similar to a <c>&lt;question&gt;</c> or <c>&lt;problem&gt;</c></p>
+
+                    <project>
+                        <title>Start Exploring MathBook XML</title>
+
+                        <p>You could grab the <c>minimal.xml</c> file from the <c>examples/minimal</c> directory and experiment with that.</p>
+
+                        <p>Projects get their own independent numbering scheme, since they may be central to your textbook, workbook, or lab manual.  If you process this sample article with <c>--stringparam numbering.projects.level 0</c> then you will get consecutive numbers from the beginning of your book, starting with 1.</p>
+                    </project>
+
+
+                    <exploration>
+                        <title>Exploring Explorations</title>
+
+                        <statement>
+                            <p>This is an <c>&lt;exploration&gt;</c>.  Two similar possibilities are <c>&lt;activity&gt;</c> and <c>&lt;task&gt;</c>.</p>
+
+                            <p>Note that projects, activities, explorations, and tasks <em>share</em> the independent numbering scheme, so it is really only intended you use one of these.  If you want a variant of the name (<eg /> <q>Directed Activity</q>) you can use the <c>&lt;rename&gt;</c> facility (<xref ref="rename-facility" autoname="yes" />).</p>
+                        </statement>
+
+                        <solution>
+                            <p>This is a <q>solution</q> to the exploration.  In practice, you might choose to not make this visible for students, but instead include it as part of some guidance you might provide to instructors (<eg /> an <booktitle>Instructor's Manual</booktitle>).</p>
+                        </solution>
+                    </exploration>
+
+
+
                 </subsubsection>
 
                 <exercises>
@@ -2734,7 +2762,7 @@ the xsltproc executable.
                 <li><p>Citations: Judson's AATA with annotation at <xref ref="biblio-judson-AATA" /></p></li>
                 <li><p>Citations: Judson's AATA with autoname that should have zero effect <xref ref="biblio-judson-AATA" autoname="yes"/></p></li>
                 <li><p>Note: just the annotation of previous citation at <xref ref="note-judson-AATA" /></p></li>
-                <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" />.</p></li>
+                <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" />, or a question at <xref ref="sample-question" />.</p></li>
                 <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" />.</p></li>
                 <li><p>A link to a <c>proposition</c> element, while this document has globally renamed <c>proposition</c>s as <q>Conundrum</q>s, so this link should use the new name: <xref ref="proposition-as-conundrum" autoname="yes" /></p></li>
                 <li><p>Theorems: Fundamental Theorem of Calculus, with proof at <xref ref="theorem-FTC" /></p></li>
@@ -3955,7 +3983,7 @@ the xsltproc executable.
         <section>
             <title>Customizations</title>
 
-            <subsection>
+            <subsection xml:id="rename-facility">
                 <title>Renaming Document Parts</title>
 
                 <p><q>Names</q> for various parts of a document are determined exactly once for each language, ensuring consistency and saving you the bother of always typing them in.</p>

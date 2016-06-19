@@ -138,6 +138,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For example "2" implies Theorem 5.3.12 is         -->
 <!-- 12-th theorem, lemma, etc in 5.2                  -->
 <xsl:param name="numbering.theorems.level" select="''" />
+<!-- How many levels in numbering of projects, etc     -->
+<!-- PROJECT-LIKE gets independent numbering -->
+<xsl:param name="numbering.projects.level" select="''" />
 <!-- How many levels in numbering of equations     -->
 <!-- Analagous to numbering theorems, but distinct -->
 <xsl:param name="numbering.equations.level" select="''" />
@@ -178,6 +181,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- List is elements in EXAMPLE-LIKE entity -->
 <!-- example|question|problem                -->
 <xsl:strip-space elements="example question problem" />
+<!-- List is elements in PROJECT-LIKE entity -->
+<!-- project|activity|exploration|task -->
+<xsl:strip-space elements="project activity exploration task" />
 <xsl:strip-space elements="exercise hint answer solution" />
 <xsl:strip-space elements="list remark" />
 <xsl:strip-space elements="sage program console" />
@@ -223,6 +229,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="$numbering.theorems.level != ''">
             <xsl:value-of select="$numbering.theorems.level" />
+        </xsl:when>
+        <xsl:when test="/mathbook/book/part">3</xsl:when>
+        <xsl:when test="/mathbook/book">2</xsl:when>
+        <xsl:when test="/mathbook/article/section">1</xsl:when>
+        <xsl:when test="/mathbook/article">0</xsl:when>
+        <xsl:when test="/mathbook/letter">0</xsl:when>
+        <xsl:when test="/mathbook/memo">0</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: Theorem numbering level not determined</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- User-supplied Numbering for Projects, etc    -->
+<!-- Respect switch, or provide sensible defaults -->
+<!-- PROJECT-LIKE -->
+<xsl:variable name="numbering-projects">
+    <xsl:choose>
+        <xsl:when test="$numbering.projects.level != ''">
+            <xsl:value-of select="$numbering.projects.level" />
         </xsl:when>
         <xsl:when test="/mathbook/book/part">3</xsl:when>
         <xsl:when test="/mathbook/book">2</xsl:when>
@@ -304,6 +330,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="$candidate &lt; $numbering-theorems">
             <xsl:message terminate="yes">MBX:FATAL: theorem numbering level cannot exceed sectioning level</xsl:message>
+        </xsl:when>
+        <!-- PROJECT-LIKE -->
+        <xsl:when test="$candidate &lt; $numbering-projects">
+            <xsl:message terminate="yes">MBX:FATAL: project numbering level cannot exceed sectioning level</xsl:message>
         </xsl:when>
         <xsl:when test="$candidate &lt; $numbering-equations">
             <xsl:message terminate="yes">MBX:FATAL: equation numbering level cannot exceed sectioning level</xsl:message>
@@ -1124,7 +1154,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- it is a direct descendant of a structural node or a directly    -->
 <!-- descended introduction or conclusion .                          -->
 <!-- Also, list items are considered blocks.                         -->
-<xsl:template match="md|mdn|ul|ol|dl|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|image|tabular|paragraphs|&THEOREM-LIKE;|definition|conjecture|axiom|principle|remark|&EXAMPLE-LIKE;|list|exercise|li" mode="is-block">
+<xsl:template match="md|mdn|ul|ol|dl|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|image|tabular|paragraphs|&THEOREM-LIKE;|definition|conjecture|axiom|principle|remark|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|exercise|li" mode="is-block">
     <xsl:value-of select="true()" />
 </xsl:template>
 
@@ -1791,6 +1821,26 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:number />
 </xsl:template>
 
+<!-- Serial Numbers: Projects -->
+<!-- Category that gets their own numbering scheme -->
+<xsl:template match="&PROJECT-LIKE;" mode="serial-number">
+    <xsl:variable name="subtree-level">
+        <xsl:apply-templates select="." mode="absolute-subtree-level">
+            <xsl:with-param name="numbering-items" select="$numbering-projects" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="&PROJECT-LIKE;" /></xsl:when>
+        <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="&PROJECT-LIKE;" /></xsl:when>
+        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/appendix" level="any" count="&PROJECT-LIKE;" /></xsl:when>
+        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/appendix" level="any" count="&PROJECT-LIKE;" /></xsl:when>
+        <xsl:when test="$subtree-level=3"><xsl:number from="subsection" level="any" count="&PROJECT-LIKE;" /></xsl:when>
+        <xsl:when test="$subtree-level=4"><xsl:number from="subsubsection" level="any" count="&PROJECT-LIKE;" /></xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: Subtree level for project number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- Serial Numbers: Equations -->
 <!-- We determine the appropriate subtree to count within  -->
@@ -2029,10 +2079,17 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Structure Numbers: Theorems, Examples, Inline Exercises, Figures -->
+<!-- Structure Numbers: Theorems, Examples, Projects, Inline Exercises, Figures -->
 <xsl:template match="&THEOREM-LIKE;|definition|conjecture|axiom|principle|&EXAMPLE-LIKE;|list|remark|exercise|figure|table|listing|sidebyside" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-theorems" />
+        <xsl:with-param name="pad" select="'yes'" />
+    </xsl:apply-templates>
+</xsl:template>
+<!-- PROJECT-LIKE is independent, under control of $numbering-projects -->
+<xsl:template match="&PROJECT-LIKE;"  mode="structure-number">
+    <xsl:apply-templates select="." mode="multi-number">
+        <xsl:with-param name="levels" select="$numbering-projects" />
         <xsl:with-param name="pad" select="'yes'" />
     </xsl:apply-templates>
 </xsl:template>
