@@ -14,13 +14,13 @@
 
     <dl>
         <li>
-            <title>Why is is there no tag for bold?</title>
-            <p>That would be presentation, not content.  I will answer that question with a question: <em>why</em> do you want to print something in bold?  Is it emphasis? (See <tag>em</tag>.)  Is it the volume number of a journal? (See <tag>journal</tag>.)  Do you want to SHOUT?  Try <tag>alert</tag>.  And so on. There are lots of good answers, some of which are not yet implemented.  We would love to hear about elements you need that are about expressing content, and not about altering presentation.</p>
+            <title>Why is there no tag for bold?</title>
+            <p>That would be presentation, not content.  I will answer that question with a question: <em>why</em> do you want to print something in bold?  Is it emphasis? (See <tag>em</tag>.)  Is it the volume number of a journal? (See <tag>journal</tag>.)  Do you want to SHOUT?  Try <tag>alert</tag>.  And so on. There are lots of good answers, some of which are not yet implemented.  We would love to hear about elements you need that are about expressing content, and not about altering presentation.  See <xref ref="principle-markup" /> in the <xref ref="list-principles" autoname="title" />.</p>
         </li>
 
         <li>
             <title>Why does your conversion to HTML use a fixed width for the text?</title>
-            <p>There is an optimal number of characters per line for human readers, based on research and centuries of book design.  So we set a fixed width such that that the default font comes close to achieving this optimal value.  We also use responsive design to accomodate the constraints of a small screen as best as possible.  A reader will not want to have to carefully resize a browser window to achieve the optimal width, nor should a line of text spread to many, many characters across a very expansive screen.</p>
+            <p>There is an optimal number of characters per line for human readers, based on research and centuries of book design.  So we set a fixed width such that that the default font comes close to achieving this optimal value.  We also use responsive design to accomodate the constraints of a small screen as best as possible.  A reader will not want to have to carefully resize a browser window to achieve the optimal width, nor should a line of text spread to many, many characters across a very expansive screen.  See <xref ref="principle-good-design" /> in the <xref ref="list-principles" autoname="title" />.</p>
         </li>
 
         <li>
