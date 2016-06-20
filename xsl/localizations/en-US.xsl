@@ -37,11 +37,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='claim'><xsl:text>Claim</xsl:text></localization>
     <localization string-id='fact'><xsl:text>Fact</xsl:text></localization>
     <localization string-id='proof'><xsl:text>Proof</xsl:text></localization>
+    <!-- Components of the narrative -->
     <!-- Mathematical statements without proofs -->
-    <localization string-id='definition'><xsl:text>Definition</xsl:text></localization>
-    <localization string-id='conjecture'><xsl:text>Conjecture</xsl:text></localization>
+    <!-- AXIOM-LIKE blocks -->
     <localization string-id='axiom'><xsl:text>Axiom</xsl:text></localization>
+    <localization string-id='conjecture'><xsl:text>Conjecture</xsl:text></localization>
     <localization string-id='principle'><xsl:text>Principle</xsl:text></localization>
+    <localization string-id='heuristic'><xsl:text>Heuristic</xsl:text></localization>
+    <localization string-id='hypothesis'><xsl:text>Hypothesis</xsl:text></localization>
+    <localization string-id='assumption'><xsl:text>Assumption</xsl:text></localization>
+    <!-- Definitions -->
+    <localization string-id='definition'><xsl:text>Definition</xsl:text></localization>
     <!-- Single Line Mathematics -->
     <localization string-id='me'><xsl:text>Equation</xsl:text></localization>
     <localization string-id='men'><xsl:text>Equation</xsl:text></localization>

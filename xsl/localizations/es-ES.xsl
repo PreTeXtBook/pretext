@@ -39,10 +39,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='fact'><xsl:text>Hecho</xsl:text></localization>
     <localization string-id='proof'><xsl:text>Demostración</xsl:text></localization>
     <!-- Mathematical statements without proofs -->
-    <localization string-id='definition'><xsl:text>Definición</xsl:text></localization>
-    <localization string-id='conjecture'><xsl:text>Conjetura</xsl:text></localization>
+    <!-- AXIOM-LIKE blocks -->
     <localization string-id='axiom'><xsl:text>Axioma</xsl:text></localization>
+    <localization string-id='conjecture'><xsl:text>Conjetura</xsl:text></localization>
     <localization string-id='principle'><xsl:text>Principio</xsl:text></localization>
+    <!-- <localization string-id='heuristic'><xsl:text>Heuristic</xsl:text></localization> -->
+    <!-- <localization string-id='hypothesis'><xsl:text>Hypothesis</xsl:text></localization> -->
+    <!-- <localization string-id='assumption'><xsl:text>Assumption</xsl:text></localization> -->
+    <!-- Definitions -->
+    <localization string-id='definition'><xsl:text>Definición</xsl:text></localization>
     <!-- Translation needed for Spain Spanish -->
     <!-- Single Line Mathematics -->
     <!-- <localization string-id='me'><xsl:text>Equation</xsl:text></localization> -->

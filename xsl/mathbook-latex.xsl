@@ -466,6 +466,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>]&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% Only variants actually used in document appear here&#xa;</xsl:text>
+    <xsl:text>%% Style is like a theorem, and for statements without proofs&#xa;</xsl:text>
     <xsl:text>%% Numbering: all theorem-like numbered consecutively&#xa;</xsl:text>
     <xsl:text>%% i.e. Corollary 4.3 follows Theorem 4.2&#xa;</xsl:text>
     <xsl:if test="//corollary">
@@ -498,19 +499,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'fact'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//conjecture">
-        <xsl:text>\newtheorem{conjecture}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'conjecture'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
     <xsl:if test="//axiom">
         <xsl:text>\newtheorem{axiom}[theorem]{</xsl:text>
         <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'axiom'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="//conjecture">
+        <xsl:text>\newtheorem{conjecture}[theorem]{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'conjecture'" /></xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="//principle">
         <xsl:text>\newtheorem{principle}[theorem]{</xsl:text>
         <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'principle'" /></xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="//heuristic">
+        <xsl:text>\newtheorem{heuristic}[theorem]{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'heuristic'" /></xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="//hypothesis">
+        <xsl:text>\newtheorem{hypothesis}[theorem]{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'hypothesis'" /></xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="//assumption">
+        <xsl:text>\newtheorem{assumption}[theorem]{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'assumption'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <!-- miscellaneous, not categorized yet -->
@@ -2109,7 +2125,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Theorems -->
-<xsl:template match="&THEOREM-LIKE;">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;">
     <xsl:text>\begin{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}</xsl:text>
@@ -2126,7 +2142,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
     <!-- proof is optional, so may not match -->
-    <xsl:apply-templates select="proof" />
+    <!-- make sure proof is not possible for AXIOM-LIKE -->
+    <xsl:if test="&THEOREM-FILTER;">
+        <xsl:apply-templates select="proof" />
+    </xsl:if>
 </xsl:template>
 
 <!-- Proofs -->
@@ -2166,10 +2185,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="definition">
     <xsl:apply-templates select="statement" />
     <xsl:apply-templates select="notation" />
-</xsl:template>
-
-<xsl:template match="conjecture|axiom|principle">
-    <xsl:apply-templates select="statement" />
 </xsl:template>
 
 <!-- ######### -->
@@ -2581,20 +2596,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$exercise.text.hint = 'yes'">
         <xsl:apply-templates />
     </xsl:if>
-</xsl:template>
-
-<!-- statement should just be handled inside axiom-like-ish -->
-<xsl:template match="conjecture/statement|axiom/statement|principle/statement">
-    <xsl:text>\begin{</xsl:text>
-        <xsl:value-of select="local-name(..)" />
-    <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="../title" mode="environment-option" />
-    <xsl:apply-templates select=".." mode="label"/>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\end{</xsl:text>
-        <xsl:value-of select="local-name(..)" />
-    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Definition Statement -->
