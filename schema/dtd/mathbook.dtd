@@ -69,6 +69,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- Everything like a paragraph, but also more substantial                   -->
 <!-- These items cannot be contained in anything but a structural subdivision -->
 <!-- Note: the "todo" element is in this list                                 -->
+<!-- DEFINITION-LIKE definition                                               -->
 <!-- THEOREM-LIKE theorem|corollary|lemma|algorithm|proposition|claim|fact    -->
 <!-- AXIOM-LIKE   axiom|conjecture|principle|heuristic|hypothesis|assumption  -->
 <!-- EXAMPLE-LIKE example|question|problem                                    -->

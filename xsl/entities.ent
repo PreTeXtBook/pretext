@@ -37,6 +37,10 @@
 <!-- as we immplement this on 2016-07-17, other entities -->
 <!-- below will also match this short form               -->
 
+<!-- definition, just a plain statement, but logically distinct -->
+<!ENTITY DEFINITION-LIKE "definition">
+<!ENTITY DEFINITION-FILTER "self::definition">
+
 <!-- statement + proof -->
 <!ENTITY THEOREM-LIKE "theorem|corollary|lemma|algorithm|proposition|claim|fact">
 <!ENTITY THEOREM-FILTER "self::theorem or self::corollary or self::lemma or self::algorithm or self::proposition or self::claim or self::fact">

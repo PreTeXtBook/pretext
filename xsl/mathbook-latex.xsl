@@ -2124,8 +2124,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]</xsl:text>
 </xsl:template>
 
-<!-- Theorems -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;">
+<!-- Theorems, Axioms, Definitions -->
+<!-- Statement structure should be relaxed,       -->
+<!-- especially for axioms, definitions, style is -->
+<!-- controlled in the premable by the theorem    -->
+<!-- style parameters in effect when LaTeX        -->
+<!-- environments are declared                    -->
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;">
     <xsl:text>\begin{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}</xsl:text>
@@ -2136,13 +2141,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]</xsl:text>
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
-    <!-- statement is required -->
+    <!-- statement is required now, to be relaxed -->
     <xsl:apply-templates select="statement" />
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
-    <!-- proof is optional, so may not match -->
-    <!-- make sure proof is not possible for AXIOM-LIKE -->
+    <!-- proof is optional, so may not match at  -->
+    <!-- all, make sure proof is not possible    -->
+    <!-- for AXIOM-LIKE and DEFINITION-LIKE      -->
     <xsl:if test="&THEOREM-FILTER;">
         <xsl:apply-templates select="proof" />
     </xsl:if>
@@ -2177,14 +2183,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise />
     </xsl:choose>
     <xsl:apply-templates select="*" />
-</xsl:template>
-
-
-<!-- It is natural to place notation within a definition    -->
-<!-- We might take advantage of that, but are not currently -->
-<xsl:template match="definition">
-    <xsl:apply-templates select="statement" />
-    <xsl:apply-templates select="notation" />
 </xsl:template>
 
 <!-- ######### -->
@@ -2596,17 +2594,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$exercise.text.hint = 'yes'">
         <xsl:apply-templates />
     </xsl:if>
-</xsl:template>
-
-<!-- Definition Statement -->
-<!-- Definitions are unique, perhaps coulds consolidate into theorem structure -->
-<xsl:template match="definition/statement">
-    <xsl:text>\begin{definition}</xsl:text>
-    <xsl:apply-templates select="../title" mode="environment-option" />
-    <xsl:apply-templates select=".." mode="label"/>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\end{definition}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Example Like, Project Like -->
