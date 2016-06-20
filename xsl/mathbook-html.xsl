@@ -1210,7 +1210,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "posterior-duplicate"  no ID, no \label         -->
 
 <!-- me is absent, not numbered, never knowled -->
-<xsl:template match="fn|biblio|men|md|mdn|p|&EXAMPLE-LIKE;|&PROJECT-LIKE;|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof" mode="xref-knowl">
+<xsl:template match="fn|biblio|men|md|mdn|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof|&AXIOM-LIKE;" mode="xref-knowl">
     <!-- write a file, calling body and posterior duplicate templates -->
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
@@ -1405,7 +1405,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- do not come through here at all, since they are   -->
 <!-- always visible with no decoration, so plain       -->
 <!-- default templates are good enough                 -->
-<xsl:template match="fn|biblio|p|&EXAMPLE-LIKE;|&PROJECT-LIKE;|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof">
+<xsl:template match="fn|biblio|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof|&AXIOM-LIKE;">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
@@ -1634,7 +1634,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We show the full content of the item on the page (b)            -->
 <!-- Or, we build a hidden knowl and place a link on the page (c)    -->
 <!-- NB: this template employs several modal templates, defined just below -->
-<xsl:template match="list|remark|definition|axiom|conjecture|principle|exercise|hint|answer|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|contributor">
+<xsl:template match="list|remark|exercise|hint|answer|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|contributor">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden-old" />
     </xsl:variable>
@@ -1667,7 +1667,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We restrict hint, answer, solution to avoid confusion with webwork -->
 <!-- TODO: we need to process children in a way that no \label{}, nor ID's, are produced   -->
 <!--       This would perhaps obsolete the "env-type" device, and reorder explnation below -->
-<xsl:template match="list|remark|definition|axiom|conjecture|principle|exercise|exercise/hint|exercise/answer|exercise/solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|li|contributor" mode="xref-knowl">
+<xsl:template match="list|remark|exercise|exercise/hint|exercise/answer|exercise/solution|exercisegroup|note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|li|contributor" mode="xref-knowl">
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
@@ -2136,6 +2136,55 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+
+<!-- Definitions -->
+<!-- Runs of paragraphs, etc,  xor  statement -->
+<!-- "remark" will be similar                 -->
+<xsl:template match="&DEFINITION-LIKE;" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.definition = 'yes'" />
+</xsl:template>
+
+<xsl:template match="&DEFINITION-LIKE;" mode="body-element">
+    <xsl:text>article</xsl:text>
+</xsl:template>
+
+<xsl:template match="&DEFINITION-LIKE;" mode="body-css-class">
+    <xsl:text>definition-like</xsl:text>
+</xsl:template>
+
+<xsl:template match="&DEFINITION-LIKE;" mode="birth-element">
+    <xsl:text>div</xsl:text>
+</xsl:template>
+
+<xsl:template match="&DEFINITION-LIKE;" mode="hidden-knowl-element">
+    <xsl:text>article</xsl:text>
+</xsl:template>
+
+<xsl:template match="&DEFINITION-LIKE;" mode="hidden-knowl-css-class">
+    <xsl:text>definition-like</xsl:text>
+</xsl:template>
+
+<xsl:template match="&DEFINITION-LIKE;" mode="heading-birth">
+    <xsl:apply-templates select="." mode="heading-full" />
+</xsl:template>
+
+<xsl:template match="&DEFINITION-LIKE;" mode="body">
+    <xsl:apply-templates select="*" />
+</xsl:template>
+
+<xsl:template match="&DEFINITION-LIKE;" mode="heading-xref-knowl">
+    <xsl:apply-templates select="." mode="heading-full" />
+</xsl:template>
+
+<xsl:template match="&DEFINITION-LIKE;" mode="body-duplicate">
+    <xsl:apply-templates select="*" mode="duplicate" />
+</xsl:template>
+
+<xsl:template match="&DEFINITION-LIKE;" mode="has-posterior">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
+
 <!-- Examples, Projects -->
 <!-- Runs of paragraphs, etc,  xor  statement + solution -->
 <!-- Examples and projects are identical, but for        -->
@@ -2310,101 +2359,58 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>example-like</xsl:text>
 </xsl:template>
 
-<!-- Definitions, etc. -->
-<!-- Customizable as hidden    -->
-<!-- A statement without proof -->
-<xsl:template match="definition|axiom|conjecture|principle" mode="is-hidden-old">
-    <xsl:value-of select="$html.knowl.definition = 'yes'" />
-</xsl:template>
-<xsl:template match="definition|axiom|conjecture|principle" mode="is-block-env">
-    <xsl:value-of select="true()" />
-</xsl:template>
-<!-- Knowl-text is an article with heading -->
-<xsl:template match="definition|axiom|conjecture|principle" mode="hidden-knowl-text">
-    <article class="definition-like">
-        <h5 class="heading">
-            <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-            <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
-            <xsl:if test="title">
-                <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
-            </xsl:if>
-        </h5>
-    </article>
-</xsl:template>
-<!-- Head is type, number, title -->  <!-- GENERALIZE -->
-<xsl:template match="definition|axiom|conjecture|principle" mode="head">
-    <h5 class="heading">
-        <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-        <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
-        <xsl:if test="title">
-            <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
-        </xsl:if>
-    </h5>
-</xsl:template>
-<!-- Body is just the statement -->
-<!-- For definitions, we also process any notation                -->
-<!-- The other environments should not use the notation construct -->
-<xsl:template match="definition|axiom|conjecture|principle" mode="body">
-    <xsl:apply-templates select="statement" />
-    <xsl:apply-templates select="notation" />
-</xsl:template>
-<!-- No posterior  -->
-<xsl:template match="definition|axiom|conjecture|principle" mode="posterior" />
-<!-- HTML, CSS -->
-<xsl:template match="definition|axiom|conjecture|principle" mode="environment-element">
-    <xsl:text>article</xsl:text>
-</xsl:template>
-<xsl:template match="definition|axiom|conjecture|principle" mode="environment-class">
-    <xsl:text>definition-like</xsl:text>
-</xsl:template>
+<!-- Theorems, Axioms, etc. -->
+<!-- Theorem: a statement with proof                        -->
+<!-- Axiom: a mathematical statement with no possible proof -->
+<!-- Same look/CSS, just no posterior for axiom-like        -->
 
-
-<!-- Theorems, etc. -->
-<!-- Customizable as hidden    -->
-<!-- A statement with proof    -->
-
-<xsl:template match="&THEOREM-LIKE;" mode="is-hidden">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="is-hidden">
     <xsl:value-of select="$html.knowl.theorem = 'yes'" />
 </xsl:template>
 
-<xsl:template match="&THEOREM-LIKE;" mode="body-element">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="body-element">
     <xsl:text>article</xsl:text>
 </xsl:template>
 
-<xsl:template match="&THEOREM-LIKE;" mode="body-css-class">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="body-css-class">
     <xsl:text>theorem-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&THEOREM-LIKE;" mode="birth-element">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="birth-element">
     <xsl:text>div</xsl:text>
 </xsl:template>
 
-<xsl:template match="&THEOREM-LIKE;" mode="hidden-knowl-element">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="hidden-knowl-element">
     <xsl:text>article</xsl:text>
 </xsl:template>
 
-<xsl:template match="&THEOREM-LIKE;" mode="hidden-knowl-css-class">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="hidden-knowl-css-class">
     <xsl:text>theorem-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&THEOREM-LIKE;" mode="heading-birth">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 
-<xsl:template match="&THEOREM-LIKE;" mode="body">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="body">
     <xsl:apply-templates select="statement" />
 </xsl:template>
 
-<xsl:template match="&THEOREM-LIKE;" mode="heading-xref-knowl">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="heading-xref-knowl">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 
-<xsl:template match="&THEOREM-LIKE;" mode="body-duplicate">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="body-duplicate">
     <xsl:apply-templates select="statement" mode="duplicate" />
 </xsl:template>
 
+<!-- divergent behavior THEOREM-LIKE vs AXIOM-LIKE -->
 <xsl:template match="&THEOREM-LIKE;" mode="has-posterior">
     <xsl:value-of select="boolean(proof)" />
+</xsl:template>
+
+<xsl:template match="&AXIOM-LIKE;" mode="has-posterior">
+    <xsl:value-of select="'false'" />
 </xsl:template>
 
 <xsl:template match="&THEOREM-LIKE;" mode="posterior">
@@ -3995,7 +4001,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a sidebyside even though this is not necessary           -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|p|biblio|note|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|remark|&THEOREM-LIKE;|proof|definition|axiom|conjecture|principle|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|biblio|note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|remark|&THEOREM-LIKE;|proof|&AXIOM-LIKE;|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">

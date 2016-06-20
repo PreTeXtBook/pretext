@@ -69,10 +69,12 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- Everything like a paragraph, but also more substantial                   -->
 <!-- These items cannot be contained in anything but a structural subdivision -->
 <!-- Note: the "todo" element is in this list                                 -->
+<!-- DEFINITION-LIKE definition                                               -->
 <!-- THEOREM-LIKE theorem|corollary|lemma|algorithm|proposition|claim|fact    -->
+<!-- AXIOM-LIKE   axiom|conjecture|principle|heuristic|hypothesis|assumption  -->
 <!-- EXAMPLE-LIKE example|question|problem                                    -->
 <!-- PROJECT-LIKE project|activity|exploration|task                           -->
-<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|definition|conjecture|axiom|principle|remark|list|example|question|problem|project|activity|exploration|task|exercise|contributors|list-of|solution-list|notation-list|todo">
+<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|axiom|conjecture|principle|heuristic|hypothesis|assumption|definition|remark|list|example|question|problem|project|activity|exploration|task|exercise|contributors|list-of|solution-list|notation-list|todo">
 
 
 <!-- ######### -->
@@ -192,13 +194,19 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!ELEMENT fact     (title?, index*, statement, proof*)>
     <!ATTLIST fact     xml:id ID #IMPLIED>
 
-<!-- conjecture-like, i.e. no proof -->
-<!ELEMENT conjecture (title?, index*, statement)>
-    <!ATTLIST conjecture xml:id ID #IMPLIED>
+<!-- axiom-like, i.e. no proof -->
 <!ELEMENT axiom (title?, index*, statement)>
     <!ATTLIST axiom xml:id ID #IMPLIED>
+<!ELEMENT conjecture (title?, index*, statement)>
+    <!ATTLIST conjecture xml:id ID #IMPLIED>
 <!ELEMENT principle (title?, index*, statement)>
     <!ATTLIST principle xml:id ID #IMPLIED>
+<!ELEMENT heuristic (title?, index*, statement)>
+    <!ATTLIST heuristic xml:id ID #IMPLIED>
+<!ELEMENT hypothesis (title?, index*, statement)>
+    <!ATTLIST hypothesis xml:id ID #IMPLIED>
+<!ELEMENT assumption (title?, index*, statement)>
+    <!ATTLIST assumption xml:id ID #IMPLIED>
 
 <!-- EXAMPLE-LIKE, PROJECT-LIKE -->
 <!-- minimal structure  xor  statement/solution -->
