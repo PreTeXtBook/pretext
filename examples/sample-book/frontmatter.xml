@@ -61,11 +61,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     </colophon>
 
-    <!-- A section of its own in HTML, migrates to copyright-page in LaTeX (sans a title)-->
+    <!-- A section of its own in HTML, migrates to copyright-page in LaTeX -->
+    <!-- Titles are optional, presumably none for single author,           -->
+    <!-- or for every author, even if we test a mix here                   -->
     <biography>
         <p>Thomas W. Judson did his undergraduate work in Illinois, his graduate work in Oregon and presently teaches in Texas.</p>
 
-         <p>He likes to ride his bicycle in France.</p>
+         <p>He likes to ride his bicycle in France, especially in the high Alps and Pyrenees on the roads of the Tour de France.</p>
+    </biography>
+
+    <biography>
+        <title>About Robert A. Beezer</title>
+        <p>Rob Beezer designed, wrote, and tested the Sage exercises as a contribution to this open source project.</p>
+
+         <p>He also likes to ride his bicycle, and once rode with Tom Judson in the high Alps, in addition to some hiking there, up above the passes the cyclists ride.</p>
     </biography>
 
     <!-- The following items must be placed in the desired/required order -->

@@ -1302,12 +1302,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- ISBN, Cover Design, Publisher -->
     <xsl:text>%% begin: copyright-page&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
-    <xsl:if test="frontmatter/biography" >
-        <!-- We skip the title, presuming placement is indicative enough -->
-        <xsl:text>{\setlength{\parindent}{0pt}\setlength{\parskip}{4pt}</xsl:text>
-        <xsl:apply-templates select="frontmatter/biography/*" />}
-        <xsl:text>\par\vspace*{\stretch{2}}</xsl:text>
-    </xsl:if>
+    <xsl:apply-templates select="frontmatter/biography" />
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
     <xsl:if test="frontmatter/colophon/edition" >
         <xsl:text>\noindent{\bf Edition}: </xsl:text>
@@ -1330,6 +1325,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Something so page is not totally nothing -->
     <xsl:text>\null\clearpage&#xa;</xsl:text>
     <xsl:text>%% end:   copyright-page&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Author biographies -->
+<!-- Verso of title page, we call this the front colophon -->
+<!-- Title is optional, presumably for a single author    -->
+<xsl:template match="biography">
+    <xsl:for-each select="preceding-sibling::*[self::biography]">
+        <xsl:message><xsl:value-of select="local-name(.)" /></xsl:message>
+    </xsl:for-each>
+    <xsl:if test="preceding-sibling::*[self::biography]">
+        <xsl:text>\bigskip</xsl:text>
+    </xsl:if>
+    <xsl:text>\noindent</xsl:text>
+    <xsl:if test="title">
+        <xsl:text>\textbf{</xsl:text>
+        <xsl:apply-templates select="." mode="title-full" />
+        <xsl:text>}\space\space</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="*" />
+    <!-- drop a par, for next bio, or for big vspace -->
+    <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Information about canonical project website -->
