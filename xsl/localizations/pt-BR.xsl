@@ -124,6 +124,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='preface'><xsl:text>Prefácio</xsl:text></localization>
     <localization string-id='acknowledgement'><xsl:text>Agradecimentos</xsl:text></localization>
     <localization string-id='biography'><xsl:text>Biografia do Autor</xsl:text></localization>
+    <!-- singular and plural titles for biography subdivision -->
+    <!-- <localization string-id='about-author'><xsl:text>About the Author</xsl:text></localization> -->
+    <!-- <localization string-id='about-authors'><xsl:text>About the Authors</xsl:text></localization> -->
     <localization string-id='foreword'><xsl:text>Preâmbulo</xsl:text></localization>
     <localization string-id='dedication'><xsl:text>Dedicatória</xsl:text></localization>
     <localization string-id='colophon'><xsl:text>Ficha técnica</xsl:text></localization>

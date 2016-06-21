@@ -26,6 +26,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
 <docinfo>
 
+    <!-- the other option is "long" which will produce an -->
+    <!-- entire front matter section with more headings   -->
+    <author-biographies length="short" />
+
     <brandlogo url="http://abstract.pugetsound.edu" source="images/cover_aata_2014.png" />
 
     <website>
