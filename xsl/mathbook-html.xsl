@@ -794,8 +794,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Notation List -->
 <!--               -->
 
-<!-- At actual location, we do nothing -->
+<!-- At actual location, we do nothing since  -->
+<!-- the cross-reference will always be a     -->
+<!-- knowl to the containing structure        -->
 <xsl:template match="notation" />
+<xsl:template match="notation" mode="duplicate" />
 
 <!-- Build the table infrastructure, then    -->
 <!-- populate with all the notation entries, -->
