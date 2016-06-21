@@ -78,6 +78,9 @@ def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
     _verbose('converting Asymptote diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
     dest_dir = sanitize_directory(dest_dir)
     tmp_dir = tempfile.mkdtemp()
+    if get_platform() == "Windows":
+        dest_dir = break_windows_path(dest_dir)
+        tmp_dir = break_windows_path(tmp_dir)
     _debug("temporary directory: {}".format(tmp_dir))
     xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable: {}".format(xslt_executable))
@@ -156,9 +159,12 @@ def latex_image_conversion(xml_source, xmlid_root, data_dir, dest_dir, outformat
     global config
     import tempfile, os, os.path, subprocess, shutil
 
+    plat = get_platform()
     _verbose('converting latex-image pictures from {} to {} graphics for placement in {}'.format(xml_source, outformat, dest_dir))
     dest_dir = sanitize_directory(dest_dir)
     tmp_dir = tempfile.mkdtemp()
+    if plat == "Windows":
+        tmp_dir = break_windows_path(tmp_dir)
     _debug("temporary directory: {}".format(tmp_dir))
     xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable: {}".format(xslt_executable))
@@ -167,13 +173,24 @@ def latex_image_conversion(xml_source, xmlid_root, data_dir, dest_dir, outformat
         copy_data_directory(xml_source, data_dir, tmp_dir)
     # http://stackoverflow.com/questions/11269575/how-to-hide-output-of-subprocess-in-python-2-7
     devnull = open(os.devnull, 'w')
-    convert_cmd = [xslt_executable,
-        '--stringparam', 'scratch', tmp_dir,
-        '--stringparam', 'subtree', xmlid_root,
-        '--xinclude',
-        os.path.join(mbx_xsl_dir, 'extract-latex-image.xsl'),
-        xml_source
-        ]
+    if plat == "Windows":
+        convert_cmd = [xslt_executable,
+            '--stringparam', 'scratch', tmp_dir,
+            '--stringparam', 'subtree', xmlid_root,
+            '--xinclude',
+            # os.path.join(mbx_xsl_dir, 'extract-latex-image.xsl'),
+            # dave stuff
+            "/".join((mbx_xsl_dir, 'extract-latex-image.xsl')),
+            xml_source
+            ]
+    else:
+        convert_cmd = [xslt_executable,
+            '--stringparam', 'scratch', tmp_dir,
+            '--stringparam', 'subtree', xmlid_root,
+            '--xinclude',
+            os.path.join(mbx_xsl_dir, 'extract-latex-image.xsl'),
+            xml_source
+            ]
     _verbose("extracting latex-image pictures from {}".format(xml_source))
     _debug("latex-image conversion {}".format(convert_cmd))
     subprocess.call(convert_cmd)
@@ -335,7 +352,7 @@ def webwork_to_tex(origin, xslt_exec, mbx_xsl_dir, xml_source, server_url, dest_
 
         # Some tex that causes compilation errors
         # Ends with comment, so no extra newline inserted
-        tex_only = tex_only.replace('\\vadjust{\kern3pt}%', 
+        tex_only = tex_only.replace('\\vadjust{\kern3pt}%',
                                     '\\leavevmode\\vadjust{\kern3pt}% mbx script adjusted')
 
         # need to loop through content looking for images with pattern:
@@ -467,12 +484,17 @@ def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
     import tempfile, os, os.path, subprocess, shutil
     import requests
 
+    plat = get_platform()
     _verbose('downloading YouTube thumbnails from {} for placement in {}'.format(xml_source, dest_dir))
     dest_dir = sanitize_directory(dest_dir)
+    if plat == "Windows":
+        dest_dir = break_windows_path(dest_dir)
     xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable: {}".format(xslt_executable))
-
-    extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-youtube.xsl')
+    if plat == "Windows":
+        extraction_xslt = '/'.join(mbx_xsl_dir, 'extract-youtube.xsl')
+    else:
+        extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-youtube.xsl')
     cmd = [xslt_executable,
             '--xinclude',
             '--stringparam',
@@ -923,6 +945,15 @@ def copy_data_directory(source_file, data_dir, tmp_dir):
     destination_root = os.path.join(tmp_dir, data_last_step)
     _debug("copying data directory {} to working location {}".format(data_full_path, destination_root))
     shutil.copytree(data_full_path, destination_root)
+
+def get_platform():
+    import platform
+    return platform.system()
+
+def break_windows_path(python_style_dir):
+    """Replace python os.sep with msys-acceptable "/" """
+    import re
+    return re.sub(r"\\", "/", python_style_dir)
 
 ######
 #
