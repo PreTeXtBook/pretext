@@ -1302,7 +1302,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- ISBN, Cover Design, Publisher -->
     <xsl:text>%% begin: copyright-page&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
-    <xsl:apply-templates select="frontmatter/biography" />
+    <xsl:if test="not(../docinfo/author-biographies/@length = 'long')">
+        <xsl:apply-templates select="frontmatter/biography" mode="copyright-page" />
+    </xsl:if>
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
     <xsl:if test="frontmatter/colophon/edition" >
         <xsl:text>\noindent{\bf Edition}: </xsl:text>
@@ -1330,10 +1332,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Author biographies -->
 <!-- Verso of title page, we call this the front colophon -->
 <!-- Title is optional, presumably for a single author    -->
-<xsl:template match="biography">
-    <xsl:for-each select="preceding-sibling::*[self::biography]">
-        <xsl:message><xsl:value-of select="local-name(.)" /></xsl:message>
-    </xsl:for-each>
+<xsl:template match="biography" mode="copyright-page">
     <xsl:if test="preceding-sibling::*[self::biography]">
         <xsl:text>\bigskip</xsl:text>
     </xsl:if>
@@ -1510,6 +1509,66 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="/mathbook/book" mode="title-page" />
     <!-- title page obverse is copyright, possibly empty -->
     <xsl:apply-templates select="/mathbook/book" mode="copyright-page" />
+    <!-- long biographies come earliest, since normally on copyright page -->
+    <!-- short biographies are part of the copyright-page template        -->
+    <xsl:if test="/mathbook/docinfo/author-biographies/@length = 'long' and ../biography">
+        <xsl:apply-templates select="/mathbook/book" mode="author-biography-subdivision" />
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="book" mode="author-biography-subdivision">
+    <xsl:variable name="number-authors" select="count(frontmatter/biography)" />
+    <xsl:variable name="title-string">
+        <xsl:choose>
+            <xsl:when test="$number-authors > 1">
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'about-authors'" />
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'about-author'" />
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:text>%% begin: author biography (long)&#xa;</xsl:text>
+    <xsl:text>\chapter*{</xsl:text>
+    <xsl:value-of select="$title-string" />
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\addcontentsline{toc}{chapter}{</xsl:text>
+    <xsl:value-of select="$title-string" />
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$number-authors > 1">
+            <xsl:apply-templates select="frontmatter/biography" mode="biography-subdivision" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:if test="frontmatter/biography/title">
+                <xsl:text>\section*{</xsl:text>
+                <xsl:apply-templates select="frontmatter/biography" mode="title-full" />
+                <xsl:text>}&#xa;</xsl:text>
+            </xsl:if>
+            <!-- else don't bother titling-->
+            <xsl:apply-templates select="frontmatter/biography/*" />
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>\cleardoublepage</xsl:text>
+    <xsl:text>%% end: author biography (long)&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="biography" mode="biography-subdivision">
+    <xsl:text>\section*{</xsl:text>
+    <xsl:choose>
+        <xsl:when test="title">
+            <xsl:apply-templates select="." mode="title-full" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>DEFAULT TO FULL NAME HERE</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:apply-templates select="*" />
 </xsl:template>
 
 <!-- Preface, etc within \frontmatter is usually handled correctly by LaTeX -->
