@@ -93,7 +93,7 @@
                     <p>Use Quick Add Next again to add the next instance to the selection, which will then typically be disconnected.</p>
                 </li>
                 <li>
-                    <p>Continue to Quick Add Next as many times as you like. Use Quick Skip Next (<c>Ctrl+K, Ctrl+D</c>/<c>Cmd+K, Cmd+D</c>) to jump over instances you'd like to leave alone. If you go too far and select in error, hit <c>Ctrl+U/Cmd+U</c> to undo.</p>
+                    <p>Continue to Quick Add Next as many times as you like. Use Quick Skip Next (<c>Ctrl+K, Ctrl+D</c>/<c>Cmd+K, Cmd+D</c>) to jump over instances you would like to leave alone. If you go too far and select in error, hit <c>Ctrl+U/Cmd+U</c> to undo.</p>
                 </li>
                 <li>
                     <p>Make your modification, only one time.</p>
@@ -108,10 +108,10 @@
                     <p>Use column selection, as described above, to select each line individually.</p>
                 </li>
                 <li>
-                    <p>Use Wrap with Tag to wrap <c>&lt;li&gt;</c><ellipsis /><c>&lt;/li&gt;</c> around all the selected lines at once.</p>
+                    <p>Use Wrap with Tag to wrap each of the selected lines with matched begin/end <tag>li</tag> tags, all at once.</p>
                 </li>
                 <li>
-                    <p>Now you have to select the lines again, to wrap them with <c>&lt;p&gt;</c><ellipsis /><c>&lt;/p&gt;</c>. First, hit <c>Shift+End</c> to select to end of line.</p>
+                    <p>Now you have to select the lines again, to wrap them with matched begin/end <tag>p</tag> tags. First, hit <c>Shift+End</c> to select to end of line.</p>
                 </li>
                 <li>
                     <p>If your lines are wrapped, you may need to hit <c>Shift+End</c> again to get to the end of the wrapped lines.</p>
@@ -120,7 +120,7 @@
                     <p>Now you've selected too far: the <c>&lt;/li&gt;</c> are selected as well. Hold down <c>Ctrl+Shift</c> and hit the left arrow twice (unselect by word). (After a little practice, steps like this seem automatic.)</p>
                 </li>
                 <li>
-                    <p>Use Wrap with Tag to wrap <c>&lt;p&gt;</c><ellipsis /><c>&lt;/p&gt;</c> around all the selected lines at once.</p>
+                    <p>Use Wrap with Tag to wrap each of the selected lines with matched begin/end <tag>p</tag> tags, all at once.</p>
                 </li>
             </ol>
             <p>This does take a little mouse-work, but the keystroke savings can be considerable. (The Emmet package, described in <xref ref="subsection-emmet" />, provides an even quicker way to do this task and much more complicated ones.)</p>
@@ -183,14 +183,23 @@
             <title>MBXTools<mdash />a Sublime Text package for MathBook <init>XML</init></title>
 
             <p>MBXTools is a Sublime Text package designed to assist authors using MathBook <init>XML</init>. It is very experimental and may behave unexpectedly.</p>
-            <p>The package owes its inspiration and much of its code to the excellent <url href="https://github.com/SublimeText/LaTeXTools">LaTeXTools</url> package. Please let Dave Rosoff know of any bugs you find or any features you would like to see included in MBXTools.</p>
-            <subsubsection>
+            <p>The package owes its inspiration and much of its code to the excellent <url href="https://github.com/SublimeText/LaTeXTools">LaTeXTools</url> package. Please let the author know of any bugs you find or any features you would like to see included in MBXTools by <url href="https://github.com/daverosoff/mbxtools/issues">creating a GitHub issue</url>.</p>
+            <subsubsection xml:id="subsubsection-mbxtools-install">
                 <title>Installation</title>
-                <p>MBXTools is not yet included in Package Control, so you must install via <c>git</c>. Change directories into your <c>Packages</c> folder. To find the <c>Packages</c> folder, select Browse Packages from the Preferences menu (from the Sublime Text 3 menu on <init>OS X</init>). Make sure you are in the <c>Packages</c> folder and <em>not</em> <c>Packages/User</c>. Then, run<cd>git clone https://github.com/daverosoff/MBXTools.git</cd>and restart Sublime Text (probably not necessary).</p>
+                <paragraphs xml:id="paragraphs-mbxtools-install-via-package-control">
+                    <title>via Package Control</title>
+                    <p>It is recommended to install MBXTools via <url href = "https://packagecontrol.io">Package Control</url>. If you have not installed Package Control yet, you should do that first (and restart Sublime Text afterward).</p>
+                    <p>After Package Control is installed, use the <c>Install Package</c> command to search for the MBXTools package, and select it from the Quick Panel to install. This method of installation allows Package Control to automatically update your installation and show you appropriate release notes.</p>
+                </paragraphs>
+                <paragraphs xml:id="paragraphs-mbxtools-install-via-git">
+                    <title>via git</title>
+                    <p>You may also install MBXTools via <c>git</c>. Change directories into your <c>Packages</c> folder. To find the <c>Packages</c> folder, select Browse Packages from the Preferences menu (from the Sublime Text 3 menu on OS X). Make sure you are in the <c>Packages</c> folder and <em>not</em> <c>Packages/User</c>.</p>
+                    <p>Then, run<cd>git clone https://github.com/daverosoff/MBXTools.git</cd>and restart Sublime Text (probably not necessary).</p>
+                </paragraphs>
             </subsubsection>
-            <subsubsection>
+            <subsubsection xml:id="mbxtools-usage">
                 <title>Usage</title>
-                <p>You can activate the package features by enabling the MathBook <init>XML</init> syntax. The syntax definition looks for <c>.mbx</c> file extensions, which most of us don't use (yet?). If your MathBook <init>XML</init> files end with <c>.xml</c>, you will either need to add a comment to the first line of each file (after the <init>XML</init> declaration):<cd>&lt;!-- MBX --&gt;</cd>or you will need to enable the syntax manually using the command palette. To enable it manually, open a MathBook <init>XML</init> file and press <c>Ctrl+Shift+P</c> (<c>Cmd+Shift+P</c> on <init>OS X</init>) and type <c>mbx</c>. Select <q>Set Syntax: MathBook <init>XML</init></q> from the list of options.</p>
+                <p>You can activate the package features by enabling the MathBook <init>XML</init> syntax. The syntax definition looks for <c>.mbx</c> file extensions, which most of us do not use (yet?). If your MathBook <init>XML</init> files end with <c>.xml</c>, you will either need to add a comment to the first line of each file (after the <init>XML</init> declaration):<cd>&lt;!-- MBX --&gt;</cd>or you will need to enable the syntax manually using the command palette. To enable it manually, open a MathBook <init>XML</init> file and press <c>Ctrl+Shift+P</c> (<c>Cmd+Shift+P</c> on <init>OS X</init>) and type <c>mbx</c>. Select <q>Set Syntax: MathBook <init>XML</init></q> from the list of options.</p>
                 <p>You should see the text <q>MathBook <init>XML</init></q> in the lower right corner if you have the status bar visible (command palette: Toggle Status Bar).</p>
                 <p>There are only a few features implemented so far.</p>
                 <ol>
@@ -205,21 +214,21 @@
                     </li>
                 </ol>
             </subsubsection>
-            <subsubsection>
+            <subsubsection xml:id="mbxtools-known-issues">
                 <title>Known issues</title>
-
                 <ol>
                     <li>
-                        <p>Syntax highlighting is not always consistent.</p>
+                        <p>When manually adding an <c>xref</c> (not using the snippets or autocomplete), you will frequently see a spurious <q>Unrecognized format</q> error.</p>
                     </li>
                     <li>
                         <p>The <c>ref</c> snippet does not bring up the quick panel. Should it?</p>
                     </li>
                     <li>
                         <p>Recursive search through included files for labels is not yet implemented.</p>
+                        <p>This will only work for <c>xref</c> completion, not Go To Symbol.</p>
                     </li>
                     <li>
-                        <p>Nothing has been tested on <init>OS X</init> or Linux.</p>
+                        <p>Nothing has been tested on OS X or Linux.</p>
                     </li>
                 </ol>
             </subsubsection>

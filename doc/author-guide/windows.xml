@@ -62,7 +62,7 @@
       <p>Again, Linux pathnames are case-sensitive and Mac OS X pathnames are typically <sq>case-preserving</sq>. The Git Bash shell for Windows is an emulation of a Linux environment, and the utilities within it expect path names that follow Linux conventions. So we conform to this expectation as follows.</p>
       <!-- http://apple.stackexchange.com/questions/22297/is-bash-in-osx-case-insensitive -->
       <ol>
-        <li><p>Remove the colon, but keep the drive letter.</p></li> 
+        <li><p>Remove the colon, but keep the drive letter.</p></li>
         <li><p>All backslashes <c>\</c> become slashes <c>/</c>.</p></li>
         <li><p>Add an initial slash preceding the drive letter.</p></li>
       </ol>
@@ -197,7 +197,7 @@
         <p>Choose whatever location you like for the <c>git</c> installation folder. I recommend you use the default.</p>
       </li>
       <li>
-        <p>At the <q>Adjusting your PATH environment</q> dialog, select either of the first two items. I recommend the second, <q>Add git executable to Windows PATH</q>. If you are apprehensive about adding <c>git</c> to the Windows PATH, select the first option. I do not recommend the third option.</p>
+        <p>At the <q>Adjusting your PATH environment</q> dialog, select either of the first two items. I recommend the second, <q>Add git executable to Windows PATH</q>. This will allow you to use <c>git</c> from within other Windows programs, such as Sublime Text or other text editors, which can be extremely convenient. If you are apprehensive about adding <c>git</c> to the Windows PATH, select the first option. I do not recommend the third option.</p>
       </li>
       <li>
         <p>Accept the default options for all the remaining prompts.</p>
