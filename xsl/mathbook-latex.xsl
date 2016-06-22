@@ -2217,8 +2217,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]</xsl:text>
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
-    <!-- statement is required now, to be relaxed -->
-    <xsl:apply-templates select="statement" />
+    <!-- statement is required now, to be relaxed in DTD      -->
+    <!-- explicitly ignore proof and pickup just for theorems -->
+    <xsl:apply-templates select="*[not(self::proof)]" />
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
@@ -2266,6 +2267,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######### -->
 
 <!-- Free-range exercises go into environments -->
+<!-- TODO: Be more careful about notation, todo; include answer -->
 <xsl:template match="exercise">
     <xsl:text>\begin{exercise}</xsl:text>
     <xsl:apply-templates select="title" mode="environment-option" />
@@ -2278,6 +2280,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Variant for free-range enclosing a WeBWorK problem -->
+<!-- TODO: Be more careful about notation, todo -->
 <xsl:template match="exercise[webwork]">
     <xsl:text>\begin{exercise}</xsl:text>
     <xsl:apply-templates select="title" mode="environment-option" />
