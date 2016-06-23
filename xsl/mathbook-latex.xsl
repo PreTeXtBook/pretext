@@ -3492,10 +3492,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- wrap in a group {,} to prevent look-ahead -->
     <!-- http://tex.stackexchange.com/questions/102119/why-doesnt-lstinline-work-in-table-column -->
+    <!-- tilde seems to only be a problem as the leading character -->
     <xsl:text>{\lstinline</xsl:text>
     <xsl:value-of select="$separator" />
     <!-- macro character needs help -->
-    <xsl:value-of select="str:replace(text(), '#', '\#')" />
+    <xsl:value-of select="str:replace(str:replace(text(), '#', '\#'), '~', '\~')" />
     <xsl:value-of select="$separator" />
     <xsl:text>}</xsl:text>
 </xsl:template>
