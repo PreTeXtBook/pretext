@@ -915,6 +915,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% Global, document-wide options apply to \lstinline&#xa;</xsl:text>
             <xsl:text>%% Search/replace \lstinline by \verb to remove this dependency&#xa;</xsl:text>
             <xsl:text>%% (redefining \lstinline with \verb is unlikely to work)&#xa;</xsl:text>
+            <xsl:text>%% Also see "\renewcommand\UrlFont" below for matching font choice&#xa;</xsl:text>
             <!-- breakatwhitespace fixes commas moving to new lines, and other bad things       -->
             <!-- http://tex.stackexchange.com/questions/64750/avoid-line-breaks-after-lstinline -->
             <xsl:text>\lstset{basicstyle=\small\ttfamily,breaklines=true,breakatwhitespace=true}&#xa;</xsl:text>
@@ -1052,6 +1053,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>%% hyperref driver does not need to be specified&#xa;</xsl:text>
     <xsl:text>\usepackage{hyperref}&#xa;</xsl:text>
+    <!-- http://tex.stackexchange.com/questions/79051/how-to-style-text-in-hyperref-url -->
+    <xsl:if test="//url">
+    <xsl:text>%% configure hyperref's  \url  to match listings' inline verbatim&#xa;</xsl:text>
+        <xsl:text>\renewcommand\UrlFont{\small\ttfamily}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="$latex.print='no'">
         <xsl:text>%% Hyperlinking active in PDFs, all links solid and blue&#xa;</xsl:text>
         <xsl:text>\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
