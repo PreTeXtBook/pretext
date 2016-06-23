@@ -30,7 +30,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
-    extension-element-prefixes="exsl date"
+    xmlns:str="http://exslt.org/strings"
+    extension-element-prefixes="exsl date str"
 >
 
 <xsl:import href="./mathbook-common.xsl" />
@@ -915,6 +916,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% Global, document-wide options apply to \lstinline&#xa;</xsl:text>
             <xsl:text>%% Search/replace \lstinline by \verb to remove this dependency&#xa;</xsl:text>
             <xsl:text>%% (redefining \lstinline with \verb is unlikely to work)&#xa;</xsl:text>
+            <xsl:text>%% Also see "\renewcommand\UrlFont" below for matching font choice&#xa;</xsl:text>
             <!-- breakatwhitespace fixes commas moving to new lines, and other bad things       -->
             <!-- http://tex.stackexchange.com/questions/64750/avoid-line-breaks-after-lstinline -->
             <xsl:text>\lstset{basicstyle=\small\ttfamily,breaklines=true,breakatwhitespace=true}&#xa;</xsl:text>
@@ -1052,6 +1054,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>%% hyperref driver does not need to be specified&#xa;</xsl:text>
     <xsl:text>\usepackage{hyperref}&#xa;</xsl:text>
+    <!-- http://tex.stackexchange.com/questions/79051/how-to-style-text-in-hyperref-url -->
+    <xsl:if test="//url">
+    <xsl:text>%% configure hyperref's  \url  to match listings' inline verbatim&#xa;</xsl:text>
+        <xsl:text>\renewcommand\UrlFont{\small\ttfamily}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="$latex.print='no'">
         <xsl:text>%% Hyperlinking active in PDFs, all links solid and blue&#xa;</xsl:text>
         <xsl:text>\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
@@ -3371,6 +3378,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- More care necessary in tables, when wrapped   -->
+<!-- in \multicolumn, but we just protect them all -->
+<!-- Wrap *entire* href as a group, and            -->
+<!-- adjust macro character in href                -->
+<!-- Entirely similar to above                     -->
+<xsl:template match="tabular/row/cell//url">
+    <xsl:choose>
+        <xsl:when test="not(*) and not(normalize-space())">
+            <!-- wrap whole href in a group -->
+            <xsl:text>{\url{</xsl:text>
+            <xsl:value-of select="str:replace(@href, '#', '\#')" />
+            <xsl:text>}}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- wrap whole href in a group -->
+            <xsl:text>{\href{</xsl:text>
+            <xsl:value-of select="str:replace(@href, '#', '\#')" />
+            <xsl:text>}{</xsl:text>
+            <xsl:apply-templates />
+            <xsl:text>}}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- ############# -->
 <!-- Verbatim Text -->
 <!-- ############# -->
@@ -3404,6 +3435,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="title//c">
     <xsl:text>\texttt{</xsl:text>
     <xsl:value-of select="text()" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- Verbatim in a table can be a problem when -->
+<!-- it gets wrapped in a \multicolumn, but we -->
+<!-- endeavor to protect every instance        -->
+<xsl:template match="tabular/row/cell//c">
+    <xsl:variable name="separator">
+        <xsl:choose>
+            <xsl:when test="@latexsep">
+                <xsl:value-of select="@latexsep" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>?</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- wrap in a group {,} to prevent look-ahead -->
+    <!-- http://tex.stackexchange.com/questions/102119/why-doesnt-lstinline-work-in-table-column -->
+    <xsl:text>{\lstinline</xsl:text>
+    <xsl:value-of select="$separator" />
+    <!-- macro character needs help -->
+    <xsl:value-of select="str:replace(text(), '#', '\#')" />
+    <xsl:value-of select="$separator" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 

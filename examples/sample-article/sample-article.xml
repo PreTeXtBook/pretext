@@ -1029,8 +1029,39 @@ the xsltproc executable.
                 <solidus /></p>
 
                 <p>We also distinguish between abbreviations (<abbr>vs.</abbr>), acronyms (<acro>SCUBA</acro>) and initialisms (<init>XML</init>).</p>
+            </subsection>
 
-                <p>An internet URL can very well contain some of the characters that <latex /> needs to escape.  But the packages we use for embedded links should be smart about this.  So we include a long URL for testing <latex /> output, with one reserved character, though maybe someday it will become stale and we need to change it out:  <url href="http://www.pcc.edu/enroll/registration/dropping.html#withdraw">www.pcc.edu/enroll/registration/dropping.html<hash />withdraw</url>.  Notice in the source that you <em>cannot</em> put a tag inside the <c>href</c> attribute, and do need to use an element within the content (unless you like to wrap the content in a <c>c</c> element).</p>
+            <subsection xml:id="section-urls">
+                <title>URLs</title>
+
+                <p>An internet <init>URL</init> can very well contain some of the characters that <latex /> needs to escape.  But the packages we use for embedded links should be smart about this.  So we include a long <init>URL</init> for testing <latex /> output, with one reserved character, though maybe someday it will become stale and we need to change it out:  <url href="http://www.pcc.edu/enroll/registration/dropping.html#withdraw">www.pcc.edu/enroll/registration/dropping.html<hash />withdraw</url>.  Notice in the source that you <em>cannot</em> put a tag inside the <c>href</c> attribute, and do need to use an element within the content (unless you like to wrap the content in a <c>c</c> element).  Here is a totally bogus <init>URL</init>, which contains every possible legal character, so if this fails to convert there is some problematic character.  Four combinations: with the content as normal text versus with the characters as verbatim text, and as a <init>URL</init> versus not.</p>
+
+                <blockquote>
+
+                    <p>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.<underscore /><tilde />:/?<hash />[]@!<dollar /><ampersand />'()*+,;=</p>
+
+                    <p><c latexsep="|">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&amp;'()*+,;=</c></p>
+
+                    <p><url href="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&amp;'()*+,;=">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.<underscore /><tilde />:/?<hash />[]@!<dollar /><ampersand />'()*+,;=</url></p>
+
+                    <p><url href="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&amp;'()*+,;="><c latexsep="|">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&amp;'()*+,;=</c></url></p>
+                </blockquote>
+
+                <p>The source of the four above examples can be instructive.<ul>
+                    <li><p>Four ampersands need to be authored as <c>&amp;amp;</c>: two <c>href</c> attributes and two strings of verbatim text.</p></li>
+
+                    <li><p>Two ampersands are authored as <c>&lt;ampersand /&gt;</c>: two strings of normal text.</p></li>
+
+                    <li><p>For <latex /> output, the verbatim <c>c</c> element will be automatically delimited by a character that is not in the string.  The fault is a question mark, which you see here in the string.  So we have twice used the <c>latexsep</c> attribute with the value <c>|</c> (the <term>pipe</term> character) which cannot ever appear in a <init>URL</init>.</p></li>
+
+                </ul></p>
+
+
+                <p>When a <c>url</c> has no content, then its <c>href</c> attribute is displayed as the text, automatically in a verbatim font (so no need to consider the <c>latexsep</c> attribute in any way).</p>
+
+                <blockquote>
+                    <p><url href="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&amp;'()*+,;="></url></p>
+                </blockquote>
             </subsection>
 
             <subsection>
@@ -2544,6 +2575,32 @@ the xsltproc executable.
                 </tabular>
             </table>
 
+            <p>Tables are formed in <latex /> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, some other <latex /> macros then do not behave as they should.  So the table below, one item per row, is just designed for <latex /> testing.  But of course, it should still render fine in other formats.  The first five test cases are from <xref ref="section-urls" />, but without the 52 alphabetic characters (which should not be problems in this context).</p>
+
+            <table xml:id="table-latex-problems">
+                <caption>Problematic Cells for <latex /></caption>
+                <tabular halign="center" top="medium" left="medium" bottom="medium" right="medium">
+                    <row>
+                        <cell halign="left">0123456789-.<underscore /><tilde />:/?<hash />[]@!<dollar /><ampersand />'()*+,;=</cell>
+                    </row>
+
+                    <row>
+                        <cell halign="left"><c latexsep="|">0123456789-._~:/?#[]@!$&amp;'()*+,;=</c></cell>
+                    </row>
+
+                    <row>
+                        <cell halign="left"><url href="0123456789-._~:/?#[]@!$&amp;'()*+,;=">0123456789-.<underscore /><tilde />:/?<hash />[]@!<dollar /><ampersand />'()*+,;=</url></cell>
+                    </row>
+
+                    <row>
+                        <cell halign="left"><url href="0123456789-._~:/?#[]@!$&amp;'()*+,;="><c latexsep="|">0123456789-._~:/?#[]@!$&amp;'()*+,;=</c></url></cell>
+                    </row>
+
+                    <row>
+                        <cell halign="left"><url href="0123456789-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
+                    </row>
+                </tabular>
+            </table>
 
         </section>
 

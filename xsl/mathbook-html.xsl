@@ -4350,12 +4350,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- External URLs, Email        -->
 <!-- Open in new windows         -->
 <!-- URL itself, if content-less -->
+<!-- automatically verbatim      -->
 <!-- http://stackoverflow.com/questions/9782021/check-for-empty-xml-element-using-xslt -->
 <xsl:template match="url">
     <a class="external-url" href="{@href}" target="_blank">
     <xsl:choose>
         <xsl:when test="not(*) and not(normalize-space())">
-            <xsl:value-of select="@href" />
+            <xsl:element name="tt">
+                <xsl:attribute name="class">
+                    <xsl:text>code-inline tex2jax_ignore</xsl:text>
+                </xsl:attribute>
+                <xsl:value-of select="@href" />
+            </xsl:element>
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates />
