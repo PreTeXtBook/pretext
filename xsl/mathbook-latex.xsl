@@ -501,6 +501,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'fact'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="//identity">
+        <xsl:text>\newtheorem{identity}[theorem]{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'identity'" /></xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
     <!-- AXIOM-LIKE blocks, environments -->
     <xsl:if test="//axiom">
         <xsl:text>\newtheorem{axiom}[theorem]{</xsl:text>

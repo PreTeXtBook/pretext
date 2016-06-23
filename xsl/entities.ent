@@ -42,8 +42,8 @@
 <!ENTITY DEFINITION-FILTER "self::definition">
 
 <!-- statement + proof -->
-<!ENTITY THEOREM-LIKE "theorem|corollary|lemma|algorithm|proposition|claim|fact">
-<!ENTITY THEOREM-FILTER "self::theorem or self::corollary or self::lemma or self::algorithm or self::proposition or self::claim or self::fact">
+<!ENTITY THEOREM-LIKE "theorem|corollary|lemma|algorithm|proposition|claim|fact|identity">
+<!ENTITY THEOREM-FILTER "self::theorem or self::corollary or self::lemma or self::algorithm or self::proposition or self::claim or self::fact or self::identity">
 
 <!-- a mathematical statement, but nver with a proof -->
 <!ENTITY AXIOM-LIKE "axiom|conjecture|principle|heuristic|hypothesis|assumption">

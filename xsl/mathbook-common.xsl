@@ -174,9 +174,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- List is elements in DEFINITION-LIKE entity -->
 <!-- definition -->
 <xsl:strip-space elements="definition" />
-<!-- List is elements in THEOREM-LIKE entity                  -->
-<!-- theorem|corollary|lemma|algorithm|proposition|claim|fact -->
-<xsl:strip-space elements="theorem corollary lemma algorithm proposition claim fact" />
+<!-- List is elements in THEOREM-LIKE entity                           -->
+<!-- theorem|corollary|lemma|algorithm|proposition|claim|fact|identity -->
+<xsl:strip-space elements="theorem corollary lemma algorithm proposition claim fact identity" />
 <xsl:strip-space elements="statement" />
 <xsl:strip-space elements="proof" />
 <!-- List is elements in AXIOM-LIKE entity                  -->

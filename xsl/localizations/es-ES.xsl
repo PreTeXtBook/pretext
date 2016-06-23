@@ -37,6 +37,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='proposition'><xsl:text>Proposición</xsl:text></localization>
     <localization string-id='claim'><xsl:text>Postulado</xsl:text></localization>
     <localization string-id='fact'><xsl:text>Hecho</xsl:text></localization>
+    <!-- <localization string-id='identity'><xsl:text>Identity</xsl:text></localization> -->
     <localization string-id='proof'><xsl:text>Demostración</xsl:text></localization>
     <!-- Mathematical statements without proofs -->
     <!-- AXIOM-LIKE blocks -->

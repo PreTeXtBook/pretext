@@ -65,17 +65,17 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!ENTITY % para "p|ul|ol|dl|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|console|image|tabular">
 
 <!-- Blocks -->
-<!-- Top-level descendents of structural elements                             -->
-<!-- Everything like a paragraph, but also more substantial                   -->
-<!-- These items cannot be contained in anything but a structural subdivision -->
-<!-- Note: the "todo" element is in this list                                 -->
-<!-- DEFINITION-LIKE definition                                               -->
-<!-- THEOREM-LIKE theorem|corollary|lemma|algorithm|proposition|claim|fact    -->
-<!-- AXIOM-LIKE   axiom|conjecture|principle|heuristic|hypothesis|assumption  -->
-<!-- REMARK-LIKE remark|convention|note|observation|warning                   -->
-<!-- EXAMPLE-LIKE example|question|problem                                    -->
-<!-- PROJECT-LIKE project|activity|exploration|task                           -->
-<!ENTITY % block "%para;|paragraphs|definition|theorem|corollary|lemma|algorithm|proposition|claim|fact|axiom|conjecture|principle|heuristic|hypothesis|assumption|remark|convention|note|observation|warning|list|example|question|problem|project|activity|exploration|task|exercise|contributors|list-of|solution-list|notation-list|todo">
+<!-- Top-level descendents of structural elements                                   -->
+<!-- Everything like a paragraph, but also more substantial                         -->
+<!-- These items cannot be contained in anything but a structural subdivision       -->
+<!-- Note: the "todo" element is in this list                                       -->
+<!-- DEFINITION-LIKE definition                                                     -->
+<!-- THEOREM-LIKE theorem|corollary|lemma|algorithm|proposition|claim|fact|identity -->
+<!-- AXIOM-LIKE   axiom|conjecture|principle|heuristic|hypothesis|assumption        -->
+<!-- REMARK-LIKE remark|convention|note|observation|warning                         -->
+<!-- EXAMPLE-LIKE example|question|problem                                          -->
+<!-- PROJECT-LIKE project|activity|exploration|task                                 -->
+<!ENTITY % block "%para;|paragraphs|definition|theorem|corollary|lemma|algorithm|proposition|claim|fact|identity|axiom|conjecture|principle|heuristic|hypothesis|assumption|remark|convention|note|observation|warning|list|example|question|problem|project|activity|exploration|task|exercise|contributors|list-of|solution-list|notation-list|todo">
 
 
 <!-- ######### -->
@@ -194,6 +194,8 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST claim     xml:id ID #IMPLIED>
 <!ELEMENT fact     (title?, index*, statement, proof*)>
     <!ATTLIST fact     xml:id ID #IMPLIED>
+<!ELEMENT identity     (title?, index*, statement, proof*)>
+    <!ATTLIST identity     xml:id ID #IMPLIED>
 
 <!-- axiom-like, i.e. no proof -->
 <!ELEMENT axiom (title?, index*, statement)>

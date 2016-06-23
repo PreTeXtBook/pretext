@@ -36,6 +36,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='proposition'><xsl:text>Proposition</xsl:text></localization>
     <localization string-id='claim'><xsl:text>Claim</xsl:text></localization>
     <localization string-id='fact'><xsl:text>Fact</xsl:text></localization>
+    <localization string-id='identity'><xsl:text>Identity</xsl:text></localization>
     <localization string-id='proof'><xsl:text>Proof</xsl:text></localization>
     <!-- Components of the narrative -->
     <!-- Mathematical statements without proofs -->
