@@ -30,7 +30,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
-    extension-element-prefixes="exsl date"
+    xmlns:str="http://exslt.org/strings"
+    extension-element-prefixes="exsl date str"
 >
 
 <xsl:import href="./mathbook-common.xsl" />
@@ -3377,6 +3378,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- More care necessary in tables, when wrapped   -->
+<!-- in \multicolumn, but we just protect them all -->
+<!-- Wrap *entire* href as a group, and            -->
+<!-- adjust macro character in href                -->
+<!-- Entirely similar to above                     -->
+<xsl:template match="tabular/row/cell//url">
+    <xsl:choose>
+        <xsl:when test="not(*) and not(normalize-space())">
+            <!-- wrap whole href in a group -->
+            <xsl:text>{\url{</xsl:text>
+            <xsl:value-of select="str:replace(@href, '#', '\#')" />
+            <xsl:text>}}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- wrap whole href in a group -->
+            <xsl:text>{\href{</xsl:text>
+            <xsl:value-of select="str:replace(@href, '#', '\#')" />
+            <xsl:text>}{</xsl:text>
+            <xsl:apply-templates />
+            <xsl:text>}}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- ############# -->
 <!-- Verbatim Text -->
 <!-- ############# -->
@@ -3410,6 +3435,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="title//c">
     <xsl:text>\texttt{</xsl:text>
     <xsl:value-of select="text()" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- Verbatim in a table can be a problem when -->
+<!-- it gets wrapped in a \multicolumn, but we -->
+<!-- endeavor to protect every instance        -->
+<xsl:template match="tabular/row/cell//c">
+    <xsl:variable name="separator">
+        <xsl:choose>
+            <xsl:when test="@latexsep">
+                <xsl:value-of select="@latexsep" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>?</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- wrap in a group {,} to prevent look-ahead -->
+    <!-- http://tex.stackexchange.com/questions/102119/why-doesnt-lstinline-work-in-table-column -->
+    <xsl:text>{\lstinline</xsl:text>
+    <xsl:value-of select="$separator" />
+    <!-- macro character needs help -->
+    <xsl:value-of select="str:replace(text(), '#', '\#')" />
+    <xsl:value-of select="$separator" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
