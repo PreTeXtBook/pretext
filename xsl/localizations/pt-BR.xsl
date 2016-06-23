@@ -83,6 +83,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='paragraph'><xsl:text>Parágrafo</xsl:text></localization>
     <localization string-id='subparagraph'><xsl:text>Subparágrafo</xsl:text></localization>
     <!-- Components of the narrative -->
+    <!-- REMARK-LIKE blocks -->
+    <!-- "note" is used within "biblio", likely to change -->
+    <localization string-id='remark'><xsl:text>Observação</xsl:text></localization>
+    <!-- <localization string-id='convention'><xsl:text>Convention</xsl:text></localization> -->
+    <!-- <localization string-id='note'><xsl:text>Note</xsl:text></localization> -->
+    <!-- <localization string-id='observation'><xsl:text>Observation</xsl:text></localization> -->
+    <!-- <localization string-id='warning'><xsl:text>Warning</xsl:text></localization> -->
     <!-- EXAMPLE-LIKE blocks -->
     <localization string-id='example'><xsl:text>Exemplo</xsl:text></localization>
     <!-- <localization string-id='question'><xsl:text>Question</xsl:text></localization> -->
@@ -93,7 +100,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='exploration'><xsl:text>Exploration</xsl:text></localization> -->
     <!-- <localization string-id='task'><xsl:text>Task</xsl:text></localization> -->
     <!--  -->
-    <localization string-id='remark'><xsl:text>Observação</xsl:text></localization>
     <localization string-id='figure'><xsl:text>Figura</xsl:text></localization>
     <localization string-id='table'><xsl:text>Tabela</xsl:text></localization>
     <!-- Translation needed for Brazilian Portugese -->
@@ -117,7 +123,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='exercisegroup'><xsl:text>Exercise Group</xsl:text></localization> -->
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
     <!-- <localization string-id='biblio'><xsl:text>Bibliographic Entry</xsl:text></localization> -->
-    <!-- <localization string-id='note'><xsl:text>Note</xsl:text></localization> -->
     <!-- Front matter components -->
     <localization string-id='toc'><xsl:text>Sumário</xsl:text></localization>
     <localization string-id='abstract'><xsl:text>Resumo</xsl:text></localization>

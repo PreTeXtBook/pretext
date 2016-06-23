@@ -73,6 +73,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='paragraph'><xsl:text>Paragraphe</xsl:text></localization> <!--checked-->
     <localization string-id='subparagraph'><xsl:text>Sous-paragraphe</xsl:text></localization> <!--checked-->
     <!-- Components of the narrative -->
+    <!-- REMARK-LIKE blocks -->
+    <!-- "note" is used within "biblio", likely to change -->
+    <localization string-id='remark'><xsl:text>Remarque</xsl:text></localization>
+    <!-- <localization string-id='convention'><xsl:text>Convention</xsl:text></localization> -->
+    <!-- <localization string-id='note'><xsl:text>Note</xsl:text></localization> -->
+    <!-- <localization string-id='observation'><xsl:text>Observation</xsl:text></localization> -->
+    <!-- <localization string-id='warning'><xsl:text>Warning</xsl:text></localization> -->
     <!-- EXAMPLE-LIKE blocks -->
     <localization string-id='example'><xsl:text>Exemple</xsl:text></localization> <!--checked-->
     <!-- <localization string-id='question'><xsl:text>Question</xsl:text></localization> -->
@@ -83,7 +90,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='exploration'><xsl:text>Exploration</xsl:text></localization> -->
     <!-- <localization string-id='task'><xsl:text>Task</xsl:text></localization> -->
     <!--  -->
-    <localization string-id='remark'><xsl:text>Remarque</xsl:text></localization>
     <localization string-id='figure'><xsl:text>Figure</xsl:text></localization>
     <localization string-id='table'><xsl:text>Table</xsl:text></localization>
     <localization string-id='fn'><xsl:text>Note de bas de page</xsl:text></localization> <!--checked-->

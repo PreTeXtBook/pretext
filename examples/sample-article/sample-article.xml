@@ -603,7 +603,13 @@ the xsltproc executable.
                         </solution>
                     </exploration>
 
+                    <note xml:id="note-remark">
+                        <title>A Note on Remarks</title>
 
+                        <p><c>&lt;remark&gt;</c>, <c>&lt;convention&gt;</c>, <c>&lt;note&gt;</c>, <c>&lt;observation&gt;</c> and <c>&lt;warning&gt;</c> are designed to hold very simple contents, with no additional structure (no proofs, no solutions, <etc />).</p>
+
+                        <p>But they do carry a title and a number, can be the target of a cross-reference, and may be optionally knowlized in HTML with the <c>html.knowl.remark</c> processing switch.</p>
+                    </note>
 
                 </subsubsection>
 
@@ -2823,6 +2829,7 @@ the xsltproc executable.
                 <li><p>Note: just the annotation of previous citation at <xref ref="note-judson-AATA" /></p></li>
                 <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" />, or a question at <xref ref="sample-question" />.</p></li>
                 <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" />.</p></li>
+                <li><p>A numbered Note: <xref ref="note-remark" /></p></li>
                 <li><p>A link to a <c>proposition</c> element, while this document has globally renamed <c>proposition</c>s as <q>Conundrum</q>s, so this link should use the new name: <xref ref="proposition-as-conundrum" autoname="yes" /></p></li>
                 <li><p>Theorems: Fundamental Theorem of Calculus, with proof at <xref ref="theorem-FTC" /></p></li>
                 <li><p>Proof: of second version of FTC at <xref ref="proof-FTC-corollary" /></p></li>

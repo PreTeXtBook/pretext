@@ -470,6 +470,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Style is like a theorem, and for statements without proofs&#xa;</xsl:text>
     <xsl:text>%% Numbering: all theorem-like numbered consecutively&#xa;</xsl:text>
     <xsl:text>%% i.e. Corollary 4.3 follows Theorem 4.2&#xa;</xsl:text>
+    <!-- THEOREM-LIKE blocks, environments -->
     <xsl:if test="//corollary">
         <xsl:text>\newtheorem{corollary}[theorem]{</xsl:text>
         <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'corollary'" /></xsl:call-template>
@@ -500,6 +501,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'fact'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
+    <!-- AXIOM-LIKE blocks, environments -->
     <xsl:if test="//axiom">
         <xsl:text>\newtheorem{axiom}[theorem]{</xsl:text>
         <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'axiom'" /></xsl:call-template>
@@ -530,31 +532,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'assumption'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <!-- miscellaneous, not categorized yet -->
-    <xsl:if test="//definition or //exercise or //remark or //list">
+    <!-- DEFINITION-LIKE blocks, environments -->
+    <xsl:if test="//definition">
         <xsl:text>%% Definition-like environments, normal text&#xa;</xsl:text>
-        <xsl:text>%% Numbering for definition, examples is in sync with theorems, etc&#xa;</xsl:text>
-        <xsl:text>%% also for free-form exercises, not in exercise sections&#xa;</xsl:text>
+        <xsl:text>%% Numbering is in sync with theorems, etc&#xa;</xsl:text>
         <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
         <xsl:if test="//definition">
             <xsl:text>\newtheorem{definition}[theorem]{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'definition'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="//exercise">
-            <xsl:text>\newtheorem{exercise}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'exercise'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
+    </xsl:if>
+    <!-- REMARK-LIKE blocks, environments -->
+    <xsl:if test="//remark or //convention or //note or //observation or //warning">
+        <xsl:text>%% Remark-like environments, normal text&#xa;</xsl:text>
+        <xsl:text>%% Numbering is in sync with theorems, etc&#xa;</xsl:text>
+        <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
         <xsl:if test="//remark">
             <xsl:text>\newtheorem{remark}[theorem]{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'remark'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="//list">
-        <xsl:text>%% \list exists, so we peturb the natural choice&#xa;</xsl:text>
-            <xsl:text>\newtheorem{listwrapper}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'list'" /></xsl:call-template>
+        <xsl:if test="//convention">
+            <xsl:text>\newtheorem{convention}[theorem]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'convention'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//note">
+            <xsl:text>\newtheorem{note}[theorem]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'note'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//observation">
+            <xsl:text>\newtheorem{observation}[theorem]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'observation'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//warning">
+            <xsl:text>\newtheorem{warning}[theorem]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'warning'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
@@ -612,6 +628,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="//task">
             <xsl:text>\newtheorem{task}[project]{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'task'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
+    <!-- miscellaneous, not categorized yet -->
+    <xsl:if test="//exercise or //list">
+        <xsl:text>%% Miscellaneous environments, normal text&#xa;</xsl:text>
+        <xsl:text>%% Numbering for inline exercises and lists is in sync with theorems, etc&#xa;</xsl:text>
+        <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
+        <xsl:if test="//exercise">
+            <xsl:text>\newtheorem{exercise}[theorem]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'exercise'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//list">
+        <xsl:text>%% \list exists, so we peturb the natural choice&#xa;</xsl:text>
+            <xsl:text>\newtheorem{listwrapper}[theorem]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'list'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
@@ -2682,10 +2715,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Example Like, Project Like -->
+<!-- Remark Like, Example Like, Project Like -->
 <!-- Simpler than theorems, definitions, etc            -->
 <!-- Information comes from self, so slightly different -->
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;">
+<xsl:template match="&REMARK-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;">
     <xsl:text>\begin{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}</xsl:text>
@@ -2713,10 +2746,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- Remarks, List Wrapper -->
+<!-- List Wrapper -->
 <!-- Simpler than theorems, definitions, etc            -->
 <!-- Information comes from self, so slightly different -->
-<xsl:template match="list|remark">
+<xsl:template match="list">
     <xsl:variable name="env-name">
         <xsl:choose>
             <xsl:when test="local-name(.)='list'">
@@ -5201,7 +5234,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (See also modal templates for "label" and "xref-link") -->
 <!-- Exercises in sets may have hard-coded numbers, -->
 <!-- so we provide a hard-coded number              -->
-<xsl:template match="exercises//exercise|biblio|note|proof|ol/li|hint|answer|solution" mode="xref-number">
+<xsl:template match="exercises//exercise|biblio|biblio/note|proof|ol/li|hint|answer|solution" mode="xref-number">
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 
@@ -5255,7 +5288,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- anchors/labels below and then we must point to           -->
 <!-- them with \hyperlink{}{} (nee hyperref[]{}).             -->
 <!-- (See also modal templates for "label" and "xref-number") -->
-<xsl:template match="exercises//exercise|biblio|note|proof|ol/li|hint|answer|solution|exercisegroup" mode="xref-link">
+<xsl:template match="exercises//exercise|biblio|biblio/note|proof|ol/li|hint|answer|solution|exercisegroup" mode="xref-link">
     <xsl:param name="content" />
     <xsl:text>\hyperlink{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
@@ -5290,7 +5323,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- vertical space when used in list items and it seems          -->
 <!-- to now behave well without it  (2015-12-12)                  -->
 <!-- (See also modal templates for "xref-link" and "xref-number") -->
-<xsl:template match="exercises//exercise|biblio|note|proof|ol/li|hint|answer|solution|contributor" mode="label">
+<xsl:template match="exercises//exercise|biblio|biblio/note|proof|ol/li|hint|answer|solution|contributor" mode="label">
     <xsl:text>\hypertarget{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}{}</xsl:text>
