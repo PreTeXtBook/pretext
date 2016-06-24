@@ -603,7 +603,13 @@ the xsltproc executable.
                         </solution>
                     </exploration>
 
+                    <note xml:id="note-remark">
+                        <title>A Note on Remarks</title>
 
+                        <p><c>&lt;remark&gt;</c>, <c>&lt;convention&gt;</c>, <c>&lt;note&gt;</c>, <c>&lt;observation&gt;</c> and <c>&lt;warning&gt;</c> are designed to hold very simple contents, with no additional structure (no proofs, no solutions, <etc />).</p>
+
+                        <p>But they do carry a title and a number, can be the target of a cross-reference, and may be optionally knowlized in HTML with the <c>html.knowl.remark</c> processing switch.</p>
+                    </note>
 
                 </subsubsection>
 
@@ -633,7 +639,7 @@ the xsltproc executable.
                     </statement>
                 </principle>
 
-                <p>More precisely, <c>&lt;theorem&gt;</c>, <c>&lt;corollary&gt;</c>, <c>&lt;lemma&gt;</c>, <c>&lt;algorithm&gt;</c>, <c>&lt;proposition&gt;</c>, <c>&lt;claim&gt;</c>, and <c>&lt;fact&gt;</c>, all behave exactly the same, requiring a statement (as a sequence of paragraphs) followed by an optional proof, and may have an optional title.  The elements <c>&lt;axiom&gt;</c>, <c>&lt;conjecture&gt;</c>, <c>&lt;principle&gt;</c>, <c>&lt;heuristic&gt;</c>, <c>&lt;hypothesis&gt;</c>, and <c>&lt;assumption&gt;</c> are functionally the same, barring a proof (since they would never have one!).  Definitions are an exception, as it is natural to place <c>&lt;notation&gt;</c> within<mdash />see the source for Definition<nbsp /><xref ref="definition-indefinite-integral" /> for an example.</p>
+                <p>More precisely, <c>&lt;theorem&gt;</c>, <c>&lt;corollary&gt;</c>, <c>&lt;lemma&gt;</c>, <c>&lt;algorithm&gt;</c>, <c>&lt;proposition&gt;</c>, <c>&lt;claim&gt;</c>, <c>&lt;fact&gt;</c>, and <c>&lt;identity&gt;</c>, all behave exactly the same, requiring a statement (as a sequence of paragraphs) followed by an optional proof, and may have an optional title.  The elements <c>&lt;axiom&gt;</c>, <c>&lt;conjecture&gt;</c>, <c>&lt;principle&gt;</c>, <c>&lt;heuristic&gt;</c>, <c>&lt;hypothesis&gt;</c>, and <c>&lt;assumption&gt;</c> are functionally the same, barring a proof (since they would never have one!).  Definitions are an exception, as it is natural to place <c>&lt;notation&gt;</c> within<mdash />see the source for Definition<nbsp /><xref ref="definition-indefinite-integral" /> for an example.</p>
             </subsection>
 
             <subsection>
@@ -2575,29 +2581,39 @@ the xsltproc executable.
                 </tabular>
             </table>
 
-            <p>Tables are formed in <latex /> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, some other <latex /> macros then do not behave as they should.  So the table below, one item per row, is just designed for <latex /> testing.  But of course, it should still render fine in other formats.  The first five test cases are from <xref ref="section-urls" />, but without the 52 alphabetic characters (which should not be problems in this context).</p>
+            <p>Tables are formed in <latex /> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, some other <latex /> macros then do not behave as they should.  So the table below, one item per row, is just designed for <latex /> testing.  But of course, it should still render fine in other formats.  The first five test cases are from <xref ref="section-urls" />, but without the 52 alphabetic characters (which should not be problems in this context).  The sixth cell tests the tilde, which seems to only be a problem as the leading character of the verbatim string.</p>
 
             <table xml:id="table-latex-problems">
                 <caption>Problematic Cells for <latex /></caption>
                 <tabular halign="center" top="medium" left="medium" bottom="medium" right="medium">
                     <row>
+                        <cell>1</cell>
                         <cell halign="left">0123456789-.<underscore /><tilde />:/?<hash />[]@!<dollar /><ampersand />'()*+,;=</cell>
                     </row>
 
                     <row>
+                        <cell>2</cell>
                         <cell halign="left"><c latexsep="|">0123456789-._~:/?#[]@!$&amp;'()*+,;=</c></cell>
                     </row>
 
                     <row>
+                        <cell>3</cell>
                         <cell halign="left"><url href="0123456789-._~:/?#[]@!$&amp;'()*+,;=">0123456789-.<underscore /><tilde />:/?<hash />[]@!<dollar /><ampersand />'()*+,;=</url></cell>
                     </row>
 
                     <row>
+                        <cell>4</cell>
                         <cell halign="left"><url href="0123456789-._~:/?#[]@!$&amp;'()*+,;="><c latexsep="|">0123456789-._~:/?#[]@!$&amp;'()*+,;=</c></url></cell>
                     </row>
 
                     <row>
+                        <cell>5</cell>
                         <cell halign="left"><url href="0123456789-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
+                    </row>
+
+                    <row>
+                        <cell>6</cell>
+                        <cell halign="left"><c>~x[i]</c></cell>
                     </row>
                 </tabular>
             </table>
@@ -2823,6 +2839,7 @@ the xsltproc executable.
                 <li><p>Note: just the annotation of previous citation at <xref ref="note-judson-AATA" /></p></li>
                 <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" />, or a question at <xref ref="sample-question" />.</p></li>
                 <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" />.</p></li>
+                <li><p>A numbered Note: <xref ref="note-remark" /></p></li>
                 <li><p>A link to a <c>proposition</c> element, while this document has globally renamed <c>proposition</c>s as <q>Conundrum</q>s, so this link should use the new name: <xref ref="proposition-as-conundrum" autoname="yes" /></p></li>
                 <li><p>Theorems: Fundamental Theorem of Calculus, with proof at <xref ref="theorem-FTC" /></p></li>
                 <li><p>Proof: of second version of FTC at <xref ref="proof-FTC-corollary" /></p></li>

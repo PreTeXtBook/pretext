@@ -36,6 +36,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='proposition'><xsl:text>Proposição</xsl:text></localization>
     <localization string-id='claim'><xsl:text>Afirmação</xsl:text></localization>
     <localization string-id='fact'><xsl:text>Facto</xsl:text></localization>
+    <!-- <localization string-id='identity'><xsl:text>Identity</xsl:text></localization> -->
     <localization string-id='proof'><xsl:text>Demonstração</xsl:text></localization>
     <!-- Mathematical statements without proofs -->
     <!-- AXIOM-LIKE blocks -->
@@ -81,6 +82,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='paragraph'><xsl:text>Parágrafo</xsl:text></localization>
     <localization string-id='subparagraph'><xsl:text>Subparágrafo</xsl:text></localization>
     <!-- Components of the narrative -->
+    <!-- REMARK-LIKE blocks -->
+    <!-- "note" is used within "biblio", likely to change -->
+    <localization string-id='remark'><xsl:text>Observação</xsl:text></localization>
+    <!-- <localization string-id='convention'><xsl:text>Convention</xsl:text></localization> -->
+    <localization string-id='note'><xsl:text>Nota</xsl:text></localization>
+    <!-- <localization string-id='observation'><xsl:text>Observation</xsl:text></localization> -->
+    <!-- <localization string-id='warning'><xsl:text>Warning</xsl:text></localization> -->
     <!-- EXAMPLE-LIKE blocks -->
     <localization string-id='example'><xsl:text>Exemplo</xsl:text></localization>
     <!-- <localization string-id='question'><xsl:text>Question</xsl:text></localization> -->
@@ -91,7 +99,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='exploration'><xsl:text>Exploration</xsl:text></localization> -->
     <!-- <localization string-id='task'><xsl:text>Task</xsl:text></localization> -->
     <!--  -->
-    <localization string-id='remark'><xsl:text>Observação</xsl:text></localization>
     <localization string-id='figure'><xsl:text>Figura</xsl:text></localization>
     <localization string-id='table'><xsl:text>Tabela</xsl:text></localization>
     <!-- Translation needed for Portugal Portugese -->
@@ -116,7 +123,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
     <!-- the term 'Bibliographic Item' could be just 'Referência'... -->
     <localization string-id='biblio'><xsl:text>Referência Bibliográfica</xsl:text></localization>
-    <localization string-id='note'><xsl:text>Nota</xsl:text></localization>
     <!-- Front matter components -->
     <!-- Other possible names for 'toc' are: Conteúdo, Sumário, Índice -->
     <localization string-id='toc'><xsl:text>Sumário</xsl:text></localization>

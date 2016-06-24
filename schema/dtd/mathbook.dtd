@@ -65,16 +65,17 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!ENTITY % para "p|ul|ol|dl|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|console|image|tabular">
 
 <!-- Blocks -->
-<!-- Top-level descendents of structural elements                             -->
-<!-- Everything like a paragraph, but also more substantial                   -->
-<!-- These items cannot be contained in anything but a structural subdivision -->
-<!-- Note: the "todo" element is in this list                                 -->
-<!-- DEFINITION-LIKE definition                                               -->
-<!-- THEOREM-LIKE theorem|corollary|lemma|algorithm|proposition|claim|fact    -->
-<!-- AXIOM-LIKE   axiom|conjecture|principle|heuristic|hypothesis|assumption  -->
-<!-- EXAMPLE-LIKE example|question|problem                                    -->
-<!-- PROJECT-LIKE project|activity|exploration|task                           -->
-<!ENTITY % block "%para;|paragraphs|theorem|corollary|lemma|algorithm|proposition|claim|fact|axiom|conjecture|principle|heuristic|hypothesis|assumption|definition|remark|list|example|question|problem|project|activity|exploration|task|exercise|contributors|list-of|solution-list|notation-list|todo">
+<!-- Top-level descendents of structural elements                                   -->
+<!-- Everything like a paragraph, but also more substantial                         -->
+<!-- These items cannot be contained in anything but a structural subdivision       -->
+<!-- Note: the "todo" element is in this list                                       -->
+<!-- DEFINITION-LIKE definition                                                     -->
+<!-- THEOREM-LIKE theorem|corollary|lemma|algorithm|proposition|claim|fact|identity -->
+<!-- AXIOM-LIKE   axiom|conjecture|principle|heuristic|hypothesis|assumption        -->
+<!-- REMARK-LIKE remark|convention|note|observation|warning                         -->
+<!-- EXAMPLE-LIKE example|question|problem                                          -->
+<!-- PROJECT-LIKE project|activity|exploration|task                                 -->
+<!ENTITY % block "%para;|paragraphs|definition|theorem|corollary|lemma|algorithm|proposition|claim|fact|identity|axiom|conjecture|principle|heuristic|hypothesis|assumption|remark|convention|note|observation|warning|list|example|question|problem|project|activity|exploration|task|exercise|contributors|list-of|solution-list|notation-list|todo">
 
 
 <!-- ######### -->
@@ -193,6 +194,8 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST claim     xml:id ID #IMPLIED>
 <!ELEMENT fact     (title?, index*, statement, proof*)>
     <!ATTLIST fact     xml:id ID #IMPLIED>
+<!ELEMENT identity     (title?, index*, statement, proof*)>
+    <!ATTLIST identity     xml:id ID #IMPLIED>
 
 <!-- axiom-like, i.e. no proof -->
 <!ELEMENT axiom (title?, index*, statement)>
@@ -207,6 +210,21 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST hypothesis xml:id ID #IMPLIED>
 <!ELEMENT assumption (title?, index*, statement)>
     <!ATTLIST assumption xml:id ID #IMPLIED>
+
+<!-- REMARK-LIKE, simple, no detailed structure    -->
+<!-- base, xi for conditional Sage remarks in FCLA -->
+<!ELEMENT remark (title?, index*, (%para;)*)>
+    <!ATTLIST remark xml:id ID #IMPLIED>
+    <!ATTLIST remark xml:base CDATA    #IMPLIED>
+    <!ATTLIST remark xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
+<!ELEMENT convention (title?, index*, (%para;)*)>
+    <!ATTLIST convention xml:id ID #IMPLIED>
+<!ELEMENT note (title?, index*, (%para;)*)>
+    <!ATTLIST note xml:id ID #IMPLIED>
+<!ELEMENT observation (title?, index*, (%para;)*)>
+    <!ATTLIST observation xml:id ID #IMPLIED>
+<!ELEMENT warning (title?, index*, (%para;)*)>
+    <!ATTLIST warning xml:id ID #IMPLIED>
 
 <!-- EXAMPLE-LIKE, PROJECT-LIKE -->
 <!-- minimal structure  xor  statement/solution -->
@@ -227,10 +245,6 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 
 <!ELEMENT list (title?, index*, introduction?, (ol|ul|dl), conclusion?)>
     <!ATTLIST list xml:id ID #IMPLIED>
-<!ELEMENT remark (title?, index*, (%para;)*)>
-    <!ATTLIST remark xml:id ID #IMPLIED>
-    <!ATTLIST remark xml:base CDATA    #IMPLIED>
-    <!ATTLIST remark xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
 <!ELEMENT blockquote (p+, attribution*)>
 
@@ -769,6 +783,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 
 <!-- This needs serious work - this is 100% PROVISIONAL           -->
 <!-- As-is, this needs more structure to accomodate note properly -->
+<!-- And  note  is also a remark-like environment                 -->
 <!ELEMENT references (title?, index*, introduction?, biblio*, conclusion?)>
 
 <!ELEMENT biblio  (#PCDATA|%linear;|ibid|author|title|journal|year|volume|number|note)*>
@@ -781,6 +796,4 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- <!ELEMENT year     (#PCDATA|%linear;)*> -->
 <!ELEMENT volume   (#PCDATA|%linear;)*>
 <!ELEMENT number   (#PCDATA|%linear;)*>
-<!ELEMENT note     (%para;)*>
-    <!ATTLIST note xml:id ID #IMPLIED>
 

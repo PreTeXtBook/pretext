@@ -42,13 +42,16 @@
 <!ENTITY DEFINITION-FILTER "self::definition">
 
 <!-- statement + proof -->
-<!ENTITY THEOREM-LIKE "theorem|corollary|lemma|algorithm|proposition|claim|fact">
-<!ENTITY THEOREM-FILTER "self::theorem or self::corollary or self::lemma or self::algorithm or self::proposition or self::claim or self::fact">
+<!ENTITY THEOREM-LIKE "theorem|corollary|lemma|algorithm|proposition|claim|fact|identity">
+<!ENTITY THEOREM-FILTER "self::theorem or self::corollary or self::lemma or self::algorithm or self::proposition or self::claim or self::fact or self::identity">
 
 <!-- a mathematical statement, but nver with a proof -->
 <!ENTITY AXIOM-LIKE "axiom|conjecture|principle|heuristic|hypothesis|assumption">
 <!ENTITY AXIOM-FILTER "self::axiom or self::conjecture or self::principle or self::heuristic or self::hypothesis or self::assumption">
 
+<!-- narrative, set off for structure, reference -->
+<!ENTITY REMARK-LIKE "remark|convention|note|observation|warning">
+<!ENTITY REMARK-FILTER "self::remark or self::convention or self::note or self::observation or self::warning">
 
 <!-- blocks, or statement + solution -->
 <!ENTITY EXAMPLE-LIKE "example|question|problem">
