@@ -4298,6 +4298,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <b><i><xsl:apply-templates /></i></b>
 </xsl:template>
 
+<!-- CSS for ins, del, s -->
+<!-- http://html5doctor.com/ins-del-s/           -->
+<!-- http://stackoverflow.com/questions/2539207/ -->
+
+<!-- Insert (an edit) -->
+<xsl:template match="insert">
+    <xsl:element name="ins">
+        <xsl:attribute name="class">
+            <xsl:text>insert</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates />
+    </xsl:element>
+</xsl:template>
+
+<!-- Delete (an edit) -->
+<xsl:template match="delete">
+    <xsl:element name="del">
+        <xsl:attribute name="class">
+            <xsl:text>delete</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates />
+    </xsl:element>
+</xsl:template>
+
+<!-- Stale (no longer relevant) -->
+<xsl:template match="stale">
+    <xsl:element name="s">
+        <xsl:attribute name="class">
+            <xsl:text>stale</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates />
+    </xsl:element>
+</xsl:template>
+
 <!-- Copyright symbol -->
 <xsl:template match="copyright">
     <xsl:text>&#169;</xsl:text>

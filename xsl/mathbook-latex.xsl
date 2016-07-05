@@ -377,6 +377,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Used for inline definitions of terms&#xa;</xsl:text>
         <xsl:text>\newcommand{\terminology}[1]{\textbf{#1}}&#xa;</xsl:text>
     </xsl:if>
+    <!-- http://tex.stackexchange.com/questions/23711/strikethrough-text -->
+    <!-- http://tex.stackexchange.com/questions/287599/thickness-for-sout-strikethrough-command-from-ulem-package -->
+    <xsl:if test="/mathbook//insert or /mathbook//delete or /mathbook//stale">
+        <xsl:text>%% Edits (insert, delete), stale (irrelevant, obsolete)&#xa;</xsl:text>
+        <xsl:text>%% Package: underlines and strikethroughs, no change to \emph{}&#xa;</xsl:text>
+        <xsl:text>\usepackage[normalem]{ulem}&#xa;</xsl:text>
+        <xsl:text>%% Rules in this package reset proportional to fontsize&#xa;</xsl:text>
+        <xsl:text>%% NB: *never* reset to package default (0.4pt?) after use&#xa;</xsl:text>
+        <xsl:text>%% Macros will use colors if  latex.print='no'  (the default)&#xa;</xsl:text>
+        <xsl:if test="/mathbook//insert">
+            <xsl:text>%% Used for an edit that is an addition&#xa;</xsl:text>
+            <xsl:text>\newcommand{\insertthick}{.1ex}&#xa;</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$latex.print='yes'">
+                    <xsl:text>\newcommand{\inserted}[1]{\renewcommand{\ULthickness}{\insertthick}\uline{#1}}&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>\newcommand{\inserted}[1]{\renewcommand{\ULthickness}{\insertthick}\textcolor{green}{\uline{#1}}}&#xa;</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
+        <xsl:if test="/mathbook//delete">
+            <xsl:text>%% Used for an edit that is a deletion&#xa;</xsl:text>
+            <xsl:text>\newcommand{\deletethick}{.25ex}&#xa;</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$latex.print='yes'">
+                    <xsl:text>\newcommand{\deleted}[1]{\renewcommand{\ULthickness}{\deletethick}\sout{#1}}&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>\newcommand{\deleted}[1]{\renewcommand{\ULthickness}{\deletethick}\textcolor{red}{\sout{#1}}}&#xa;</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
+        <xsl:if test="/mathbook//stale">
+            <xsl:text>%% Used for inline irrelevant or obsolete text&#xa;</xsl:text>
+            <xsl:text>\newcommand{\stalethick}{.1ex}&#xa;</xsl:text>
+            <xsl:text>\newcommand{\stale}[1]{\renewcommand{\ULthickness}{\stalethick}\sout{#1}}&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
     <!-- lower-casing macro from: http://tex.stackexchange.com/questions/114592/force-all-small-caps -->
     <!-- Letter-spacing LaTeX: http://tex.stackexchange.com/questions/114578/tufte-running-headers-not-using-full-width-of-page -->
     <!-- PDF navigation panels has titles as simple strings,    -->
@@ -921,7 +960,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>%% Raster graphics inclusion, wrapped figures in paragraphs&#xa;</xsl:text>
     <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
-    <xsl:text>%% Colors for Sage boxes and author tools (red hilites)&#xa;</xsl:text>
+    <!-- Color support automatically, could be conditional -->
+    <xsl:text>%% Colors for Sage boxes, author tools (red hilites), red/green edits&#xa;</xsl:text>
     <xsl:text>\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}&#xa;</xsl:text>
     <!-- Inconsolata font, sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html            -->
     <!-- As seen on: http://tex.stackexchange.com/questions/50810/good-monospace-font-for-code-in-latex -->
@@ -3336,6 +3376,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- \alert{} defined in preamble as semantic macro -->
 <xsl:template match="alert">
     <xsl:text>\alert{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- Insert (an edit) -->
+<!-- \inserted{} defined in preamble as semantic macro -->
+<xsl:template match="insert">
+    <xsl:text>\inserted{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- Delete (an edit) -->
+<!-- \deleted{} defined in preamble as semantic macro -->
+<xsl:template match="delete">
+    <xsl:text>\deleted{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- Stale (no longer relevant) -->
+<!-- \stale{} defined in preamble as semantic macro -->
+<xsl:template match="stale">
+    <xsl:text>\stale{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>

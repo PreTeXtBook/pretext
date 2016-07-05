@@ -39,7 +39,7 @@
 <!-- Precede these by a #PCDATA, wrap with ( )*          -->
 <!ENTITY % characters "nbsp|ndash|mdash|ampersand|less|greater|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|
 lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk|lq|rq|lsq|rsq|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|dimension|slash|solidus|copyright|ie|eg|etc|circa|tex|latex|webwork|trademark|registered|today|timeofday">
-<!ENTITY % markup "xref|url|m|c|em|alert|q|sq|braces|brackets|angles|term|foreign|quantity|acro|booktitle">
+<!ENTITY % markup "xref|url|m|c|em|alert|insert|delete|stale|q|sq|braces|brackets|angles|term|foreign|quantity|acro|booktitle">
 <!ENTITY % linear "%characters; | %markup;">
 
 <!-- Multiline Content -->
@@ -446,6 +446,9 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 
 <!ELEMENT em           (#PCDATA|%linear;)*>
 <!ELEMENT alert        (#PCDATA|%linear;)*>
+<!ELEMENT insert       (#PCDATA|%linear;)*>
+<!ELEMENT delete       (#PCDATA|%linear;)*>
+<!ELEMENT stale        (#PCDATA|%linear;)*>
 <!ELEMENT q            (#PCDATA|%linear;)*>
 <!ELEMENT sq           (#PCDATA|%linear;)*>
 <!ELEMENT braces       (#PCDATA|%linear;)*>
