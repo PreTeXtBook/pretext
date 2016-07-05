@@ -189,8 +189,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- example|question|problem                -->
 <xsl:strip-space elements="example question problem" />
 <!-- List is elements in PROJECT-LIKE entity -->
-<!-- project|activity|exploration|task -->
-<xsl:strip-space elements="project activity exploration task" />
+<!-- project|activity|exploration|task|investigation -->
+<xsl:strip-space elements="project activity exploration task investigation" />
 <xsl:strip-space elements="exercise hint answer solution" />
 <xsl:strip-space elements="blockquote" />
 <xsl:strip-space elements="list" />

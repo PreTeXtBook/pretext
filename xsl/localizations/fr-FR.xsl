@@ -90,6 +90,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='activity'><xsl:text>Activity</xsl:text></localization> -->
     <!-- <localization string-id='exploration'><xsl:text>Exploration</xsl:text></localization> -->
     <!-- <localization string-id='task'><xsl:text>Task</xsl:text></localization> -->
+    <!-- <localization string-id='investigation'><xsl:text>Investigation</xsl:text></localization> -->
     <!--  -->
     <localization string-id='figure'><xsl:text>Figure</xsl:text></localization>
     <localization string-id='table'><xsl:text>Table</xsl:text></localization>
