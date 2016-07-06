@@ -4349,6 +4349,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- Fill-in blank -->
+<!-- Bringhurst suggests 5/11 em per character -->
+<xsl:template match="fillin">
+    <xsl:variable name="characters">
+        <xsl:choose>
+            <xsl:when test="@characters">
+                <xsl:value-of select="@characters" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>10</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:element name="span">
+        <xsl:attribute name="class">
+            <xsl:text>fillin</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="style">
+            <xsl:text>width: </xsl:text>
+            <xsl:value-of select="5 * $characters div 11" />
+            <xsl:text>em;</xsl:text>
+        </xsl:attribute>
+    </xsl:element>
+</xsl:template>
+
 <!-- exempli gratia, for example -->
 <xsl:template match="eg">
     <xsl:text>e.g.</xsl:text>

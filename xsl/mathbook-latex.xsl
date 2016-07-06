@@ -416,6 +416,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\newcommand{\stale}[1]{\renewcommand{\ULthickness}{\stalethick}\sout{#1}}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
+    <xsl:if test="/mathbook//fillin">
+        <xsl:text>%% Used for fillin answer blank&#xa;</xsl:text>
+        <xsl:text>%% Argument is length in em&#xa;</xsl:text>
+        <xsl:text>\newcommand{\fillin}[1]{\rule{#1em}{0.1ex}}&#xa;</xsl:text>
+    </xsl:if>
     <!-- lower-casing macro from: http://tex.stackexchange.com/questions/114592/force-all-small-caps -->
     <!-- Letter-spacing LaTeX: http://tex.stackexchange.com/questions/114578/tufte-running-headers-not-using-full-width-of-page -->
     <!-- PDF navigation panels has titles as simple strings,    -->
@@ -3871,6 +3876,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Trademark symbol -->
 <xsl:template match="trademark">
     <xsl:text>\texttrademark{}</xsl:text>
+</xsl:template>
+
+<!-- Fill-in blank -->
+<!-- \fillin{} defined in preamble as semantic macro      -->
+<!-- argument is number of "em", Bringhurst suggests 5/11 -->
+<xsl:template match="fillin">
+    <xsl:variable name="characters">
+        <xsl:choose>
+            <xsl:when test="@characters">
+                <xsl:value-of select="@characters" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>10</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:text>\fillin{</xsl:text>
+    <xsl:value-of select="5 * $characters div 11" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- Implication Symbols -->
