@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2015 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!--
+To process this file, at the command-line issue:
+
+xsltproc /path/to/mathbook/xsl/mathbook-html.xsl /path/to/mathbook/examples/fonts-and-characters.xml
+
+then find  "fonts-and-characters.html"  in the current working directory
+and use a web browser to view.  For PDF/print, issue:
+
+xsltproc /path/to/mathbook/xsl/mathbook-latex.xsl /path/to/mathbook/examples/fonts-and-characters.xml
+
+and apply  xelatex  to  "fonts-and-characters.tex"  in the current working directory.
+(pdflatex *will not* give satisfactory results)
+-->
+
+<mathbook>
+
+    <article xml:id="fonts-and-characters">
+        <title>Characters, Fonts, and Languages in MathBook XML</title>
+
+        <section xml:id="introduction">
+            <title>Introduction</title>
+
+            <p>This is a sample MathBook XML document to demonstrate and test different fonts used for different languages.  For PDF output, and best results, process with <c>xelatex</c>.  If processed with <c>pdflatex</c>,  be prepared for errors, and maybe try running with the command-line option <c>-interaction batchmode</c> or <c>-interaction nonstopmode</c>.  Commentary here, and the original source file, should help you track down what might be missing in your system if the <c>xelatex</c> results are not satisfactoy.  You can also compare PDF output with the HTML output, which should work well for many different characters tested here.</p>
+
+            <ol>
+                <li>Your source XML file should always have <c latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c> as the first line of the file to specify that your file contains Unicode characters.</li>
+
+                <li>You will need to determine how to make your operating system, keyboard and editor cooperate to create the Unicode characters you need.  The <url href="http://www.cs.tut.fi/~jkorpela/fui.html8">Full Unicode Input utility</url> can be useful for generating short snippets or you can copy/paste from the source of this document.</li>
+
+                <li>Generating variants of HTML for web browsers should work smoothly.  You can test your system and browser for font support by viewing samples at Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url>.</li>
+            </ol>
+
+            <p>Not finding what you are looking for?  Send us a request.  Even better, send us a snippet of public domain literature that I can use as a sample.  If you know of any subleties in the use of <latex /> for your desired font, please include those hints.</p>
+
+        </section>
+
+
+        <section xml:id="examples">
+            <title>Language Examples</title>
+
+            <paragraphs>
+                <title>Update (2016/07/09)</title>
+
+                <p>Much of this needs work<mdash />currently experimenting seriously with font support.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title>Update (2015/02/01)</title>
+
+                <p>Greek characters will not all render presently via <latex />.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title>Spanish</title>
+
+                <!-- Juan Ruiz, el Arcipreste de Hita (¿1283?-¿1350?), Las ranas que demandaban un rey, del Libro de buen amor (Las ranas en un lago cantaban et jugaban), http://users.ipfw.edu/jehle/poetry.htm -->
+
+                <p>Querellando a Don Júpiter, dieron voces las ranas: señor, señor, acórrenos, tú que matas et sanas, el Rey que tú nos diste por nuestras voces vanas danos muy malas tardes et peores mañanas.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title>(Ancient) Greek</title>
+
+                <!-- KDC's original: (EZ?) <p>ὁ δὴ ΕΖ ἤτοι πρῶτός ἐστιν ἢ οὔ.</p> -->
+
+                <!-- Homer, Iliad ("Agamemnon", "Hom. Od. 9.1", "denarius"), http://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0133&redirect=true -->
+                <p>μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος οὐλομένην, ἣ μυρί᾽ Ἀχαιοῖς ἄλγε᾽ ἔθηκε, πολλὰς δ᾽ ἰφθίμους ψυχὰς Ἄϊδι προΐαψεν ἡρώων, αὐτοὺς δὲ ἑλώρια τεῦχε κύνεσσιν οἰωνοῖσί τε πᾶσι, Διὸς δ᾽ ἐτελείετο βουλή, ἐξ οὗ δὴ τὰ πρῶτα διαστήτην ἐρίσαντε Ἀτρεΐδης τε ἄναξ ἀνδρῶν καὶ δῖος Ἀχιλλεύς.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title>Vietnamese</title>
+
+                <!-- Wikipedia, Vietnamese grammar -->
+                <p>Tôi thích cái con ngựa đen đó.</p>
+            </paragraphs>
+
+        </section>
+
+        <section>
+            <title>Font Tests</title>
+
+            <p>We place various blocks of Unicode characters here to determine the minimum configuration necessary to make them render.  Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url> site has been helpful in formulating these tests.</p>
+
+            <paragraphs>
+                <title>Basic Latin, <c>U+0000</c><ndash /><c>U+007F</c></title>
+
+                <p>These 95 characters are the most basic, and should all render using <c>xelatex</c> with no special setup.  <c>U+0000</c> to <c>U+001F</c> are control codes and not used here.  <c>U+007F</c> is also a control code and so is excluded.  We have also replaced reserved <latex /> characters by their MathBook XML equivalent empty elements: </p>
+
+                <!-- ex &#x0000; - &#x001F; controls -->
+                <!-- ex &#x007F; control             -->
+                <blockquote>
+                    <p>&#x0020; &#x0021; &#x0022; <hash /> <dollar /> <percent /> <ampersand /> &#x0027; &#x0028; &#x0029; &#x002A; &#x002B; &#x002C; &#x002D; &#x002E; &#x002F; &#x0030; &#x0031; &#x0032; &#x0033; &#x0034; &#x0035; &#x0036; &#x0037; &#x0038; &#x0039; &#x003A; &#x003B; <less /> &#x003D; &#x003E; &#x003F; &#x0040; &#x0041; &#x0042; &#x0043; &#x0044; &#x0045; &#x0046; &#x0047; &#x0048; &#x0049; &#x004A; &#x004B; &#x004C; &#x004D; &#x004E; &#x004F; &#x0050; &#x0051; &#x0052; &#x0053; &#x0054; &#x0055; &#x0056; &#x0057; &#x0058; &#x0059; &#x005A; &#x005B; <backslash /> &#x005D; <circumflex /> <underscore /> &#x0060; &#x0061; &#x0062; &#x0063; &#x0064; &#x0065; &#x0066; &#x0067; &#x0068; &#x0069; &#x006A; &#x006B; &#x006C; &#x006D; &#x006E; &#x006F; &#x0070; &#x0071; &#x0072; &#x0073; &#x0074; &#x0075; &#x0076; &#x0077; &#x0078; &#x0079; &#x007A; <lbracket /> &#x007C; <rbracket /> <tilde /></p>
+                </blockquote>
+            </paragraphs>
+
+            <paragraphs>
+                <title>Latin-1 Supplement, <c>U+0080</c><ndash /><c>U+00FF</c></title>
+
+                <p>These 94 characters should all render using either <c>pdflatex</c> or <c>xelatex</c> with no special setup.  <c>U+0080</c> to <c>U+009F</c> are control codes and not used here.  <c>U+00A0</c> (non-breaking space) and <c>U+00AD</c> (soft hyphen) are also excluded.</p>
+
+                <!-- ex &#x0080; - &#x009F; controls -->
+                <!-- ex &#x00A0; non-breaking space  -->
+                <!-- ex &#x00AD; soft hyphen         -->
+                <blockquote>
+                    <p>&#x00A1; &#x00A2; &#x00A3; &#x00A4; &#x00A5; &#x00A6; &#x00A7; &#x00A8; &#x00A9; &#x00AA; &#x00AB; &#x00AC; &#x00AE; &#x00AF; &#x00B0; &#x00B1; &#x00B2; &#x00B3; &#x00B4; &#x00B5; &#x00B6; &#x00B7; &#x00B8; &#x00B9; &#x00BA; &#x00BB; &#x00BC; &#x00BD; &#x00BE; &#x00BF; &#x00C0; &#x00C1; &#x00C2; &#x00C3; &#x00C4; &#x00C5; &#x00C6; &#x00C7; &#x00C8; &#x00C9; &#x00CA; &#x00CB; &#x00CC; &#x00CD; &#x00CE; &#x00CF; &#x00D0; &#x00D1; &#x00D2; &#x00D3; &#x00D4; &#x00D5; &#x00D6; &#x00D7; &#x00D8; &#x00D9; &#x00DA; &#x00DB; &#x00DC; &#x00DD; &#x00DE; &#x00DF; &#x00E0; &#x00E1; &#x00E2; &#x00E3; &#x00E4; &#x00E5; &#x00E6; &#x00E7; &#x00E8; &#x00E9; &#x00EA; &#x00EB; &#x00EC; &#x00ED; &#x00EE; &#x00EF; &#x00F0; &#x00F1; &#x00F2; &#x00F3; &#x00F4; &#x00F5; &#x00F6; &#x00F7; &#x00F8; &#x00F9; &#x00FA; &#x00FB; &#x00FC; &#x00FD; &#x00FE; &#x00FF;</p>
+                </blockquote>
+            </paragraphs>
+
+            <paragraphs>
+                <title>Latin Extended-A, <c>U+0100</c><ndash /><c>U+017F</c></title>
+
+                <p>Good success rendering with <c>xelatex</c> and no extra setup.  About 25<percent /> of these are missing when rendered with <c>pdflatex</c>.</p>
+
+                <blockquote>
+                    <p>&#x0100; &#x0101; &#x0102; &#x0103; &#x0104; &#x0105; &#x0106; &#x0107; &#x0108; &#x0109; &#x010A; &#x010B; &#x010C; &#x010D; &#x010E; &#x010F; &#x0110; &#x0111; &#x0112; &#x0113; &#x0114; &#x0115; &#x0116; &#x0117; &#x0118; &#x0119; &#x011A; &#x011B; &#x011C; &#x011D; &#x011E; &#x011F; &#x0120; &#x0121; &#x0122; &#x0123; &#x0124; &#x0125; &#x0126; &#x0127; &#x0128; &#x0129; &#x012A; &#x012B; &#x012C; &#x012D; &#x012E; &#x012F; &#x0130; &#x0131; &#x0132; &#x0133; &#x0134; &#x0135; &#x0136; &#x0137; &#x0138; &#x0139; &#x013A; &#x013B; &#x013C; &#x013D; &#x013E; &#x013F; &#x0140; &#x0141; &#x0142; &#x0143; &#x0144; &#x0145; &#x0146; &#x0147; &#x0148; &#x0149; &#x014A; &#x014B; &#x014C; &#x014D; &#x014E; &#x014F; &#x0150; &#x0151; &#x0152; &#x0153; &#x0154; &#x0155; &#x0156; &#x0157; &#x0158; &#x0159; &#x015A; &#x015B; &#x015C; &#x015D; &#x015E; &#x015F; &#x0160; &#x0161; &#x0162; &#x0163; &#x0164; &#x0165; &#x0166; &#x0167; &#x0168; &#x0169; &#x016A; &#x016B; &#x016C; &#x016D; &#x016E; &#x016F; &#x0170; &#x0171; &#x0172; &#x0173; &#x0174; &#x0175; &#x0176; &#x0177; &#x0178; &#x0179; &#x017A; &#x017B; &#x017C; &#x017D; &#x017E; &#x017F;</p>
+                    <!-- <p>Ā ā Ă ă Ą ą Ć ć Ĉ ĉ Ċ ċ Č č Ď ď Đ đ Ē ē Ĕ ĕ Ė ė Ę ę Ě ě Ĝ ĝ Ğ ğ Ġ ġ Ģ ģ Ĥ ĥ Ħ ħ Ĩ ĩ Ī ī Ĭ ĭ Į į İ ı Ĳ ĳ Ĵ ĵ Ķ ķ ĸ Ĺ ĺ Ļ ļ Ľ ľ Ŀ ŀ Ł ł Ń ń Ņ ņ Ň ň ŉ Ŋ ŋ Ō ō Ŏ ŏ Ő ő Œ œ Ŕ ŕ Ŗ ŗ Ř ř Ś ś Ŝ ŝ Ş ş Š š Ţ ţ Ť ť Ŧ ŧ Ũ ũ Ū ū Ŭ ŭ Ů ů Ű ű Ų ų Ŵ ŵ Ŷ ŷ Ÿ Ź ź Ż ż Ž ž ſ</p> -->
+                </blockquote>
+
+                <p>Rendered with <c>xelatex</c> and no special setup, I seem to be missing only four characters:<ul>
+                    <li><c>U+0138</c> (LATIN SMALL LETTER KRA, Greenlandic, removed 1973)</li>
+                    <li><c>U+0149</c> (LATIN SMALL LETTER N PRECEDED BY APOSTROPHE,  Afrikaans, deprecated as of Unicode version 5.2.0)</li>
+                    <li><c>U+0166</c> (LATIN CAPITAL LETTER T WITH STROKE, Northern Sámi alphabet, used in northern parts of Norway, Sweden and Finland)</li>
+                    <li><c>U+0167</c> (LATIN SMALL LETTER T WITH STROKE, Northern Sámi alphabet, used in northern parts of Norway, Sweden and Finland)</li>
+                </ul></p>
+            </paragraphs>
+
+            <paragraphs>
+                <title>Latin Extended-B, <c>U+0180</c><ndash /><c>U+024F</c></title>
+
+                <p>Rendering with <c>xelatex</c> and no extra setup, maybe 50<percent /> missing, and some constructions of accents are clearly wrong.  Almost none of these appear when rendered with <c>pdflatex</c>.</p>
+
+                <blockquote>
+                    <p>&#x0180; &#x0181; &#x0182; &#x0183; &#x0184; &#x0185; &#x0186; &#x0187; &#x0188; &#x0189; &#x018A; &#x018B; &#x018C; &#x018D; &#x018E; &#x018F; &#x0190; &#x0191; &#x0192; &#x0193; &#x0194; &#x0195; &#x0196; &#x0197; &#x0198; &#x0199; &#x019A; &#x019B; &#x019C; &#x019D; &#x019E; &#x019F; &#x01A0; &#x01A1; &#x01A2; &#x01A3; &#x01A4; &#x01A5; &#x01A6; &#x01A7; &#x01A8; &#x01A9; &#x01AA; &#x01AB; &#x01AC; &#x01AD; &#x01AE; &#x01AF; &#x01B0; &#x01B1; &#x01B2; &#x01B3; &#x01B4; &#x01B5; &#x01B6; &#x01B7; &#x01B8; &#x01B9; &#x01BA; &#x01BB; &#x01BC; &#x01BD; &#x01BE; &#x01BF; &#x01C0; &#x01C1; &#x01C2; &#x01C3; &#x01C4; &#x01C5; &#x01C6; &#x01C7; &#x01C8; &#x01C9; &#x01CA; &#x01CB; &#x01CC; &#x01CD; &#x01CE; &#x01CF; &#x01D0; &#x01D1; &#x01D2; &#x01D3; &#x01D4; &#x01D5; &#x01D6; &#x01D7; &#x01D8; &#x01D9; &#x01DA; &#x01DB; &#x01DC; &#x01DD; &#x01DE; &#x01DF; &#x01E0; &#x01E1; &#x01E2; &#x01E3; &#x01E4; &#x01E5; &#x01E6; &#x01E7; &#x01E8; &#x01E9; &#x01EA; &#x01EB; &#x01EC; &#x01ED; &#x01EE; &#x01EF; &#x01F0; &#x01F1; &#x01F2; &#x01F3; &#x01F4; &#x01F5; &#x01F6; &#x01F7; &#x01F8; &#x01F9; &#x01FA; &#x01FB; &#x01FC; &#x01FD; &#x01FE; &#x01FF; &#x0200; &#x0201; &#x0202; &#x0203; &#x0204; &#x0205; &#x0206; &#x0207; &#x0208; &#x0209; &#x020A; &#x020B; &#x020C; &#x020D; &#x020E; &#x020F; &#x0210; &#x0211; &#x0212; &#x0213; &#x0214; &#x0215; &#x0216; &#x0217; &#x0218; &#x0219; &#x021A; &#x021B; &#x021C; &#x021D; &#x021E; &#x021F; &#x0220; &#x0221; &#x0222; &#x0223; &#x0224; &#x0225; &#x0226; &#x0227; &#x0228; &#x0229; &#x022A; &#x022B; &#x022C; &#x022D; &#x022E; &#x022F; &#x0230; &#x0231; &#x0232; &#x0233; &#x0234; &#x0235; &#x0236; &#x0237; &#x0238; &#x0239; &#x023A; &#x023B; &#x023C; &#x023D; &#x023E; &#x023F; &#x0240; &#x0241; &#x0242; &#x0243; &#x0244; &#x0245; &#x0246; &#x0247; &#x0248; &#x0249; &#x024A; &#x024B; &#x024C; &#x024D; &#x024E; &#x024F;</p>
+                    <!-- <p>ƀ Ɓ Ƃ ƃ Ƅ ƅ Ɔ Ƈ ƈ Ɖ Ɗ Ƌ ƌ ƍ Ǝ Ə Ɛ Ƒ ƒ i Ɠ Ɣ ƕ Ɩ Ɨ Ƙ ƙ ƚ ƛ Ɯ Ɲ ƞ Ɵ Ơ ơ Ƣ ƣ Ƥ ƥ Ʀ Ƨ ƨ Ʃ ƪ ƫ Ƭ ƭ Ʈ Ư ư Ʊ Ʋ Ƴ ƴ Ƶ ƶ Ʒ Ƹ ƹ ƺ ƻ Ƽ ƽ ƾ ƿ ǀ ǁ ǂ ǃ Ǆ ǅ ǆ Ǉ ǈ ǉ Ǌ ǋ ǌ Ǎ ǎ Ǐ ǐ Ǒ ǒ Ǔ ǔ Ǖ ǖ Ǘ ǘ Ǚ ǚ Ǜ ǜ ǝ Ǟ ǟ Ǡ ǡ Ǣ ǣ Ǥ ǥ Ǧ ǧ Ǩ ǩ Ǫ ǫ Ǭ ǭ Ǯ ǯ ǰ Ǳ ǲ ǳ Ǵ ǵ Ƕ Ƿ Ǹ ǹ Ǻ ǻ Ǽ ǽ Ǿ ǿ Ȁ ȁ Ȃ ȃ Ȅ ȅ Ȇ ȇ Ȉ ȉ Ȋ ȋ Ȍ ȍ Ȏ ȏ Ȑ ȑ Ȓ ȓ Ȕ ȕ Ȗ ȗ Ș ș Ț ț Ȝ ȝ Ȟ ȟ Ƞ ȡ Ȣ ȣ Ȥ ȥ Ȧ ȧ Ȩ ȩ Ȫ ȫ Ȭ ȭ Ȯ ȯ Ȱ ȱ Ȳ ȳ ȴ ȵ ȶ ȷ ȸ ȹ Ⱥ Ȼ ȼ Ƚ Ⱦ ȿ ɀ Ɂ ɂ Ƀ Ʉ Ʌ Ɇ ɇ Ɉ ɉ Ɋ ɋ Ɍ ɍ Ɏ ɏ</p> -->
+                </blockquote>
+            </paragraphs>
+
+            <p>This table is left-over and will be redone, perhaps.</p>
+
+            <table xml:id="table-unicode-samples">
+                <caption>Sample Unicode Characters</caption>
+                <tabular top="major">
+                    <row bottom="minor"><cell>Name</cell><cell>Range</cell><cell>Samples</cell><cell>LaTeX</cell></row>
+                    <row>
+                        <cell>Latin Extended-A</cell>
+                        <cell><c>U+0100</c> <ndash /> <c>U+017F</c></cell>
+                        <cell>Ą ą Ĳ ĳ</cell>
+                        <cell>TeXLive</cell>
+                    </row>
+                    <row>
+                        <cell>Latin Extended Additional</cell>
+                        <cell><c>U+1E00</c> <ndash /> <c>U+1EFF</c></cell>
+                        <cell>Ḁ Ẁ Ặ ỳ</cell>
+                        <cell><m>\approx</m>TeXLive</cell>
+                    </row>
+                    <row>
+                        <cell>Cyrillic</cell>
+                        <cell><c>U+0400</c> <ndash /> <c>U+04FF</c></cell>
+                        <cell>Љ Щ щ Ӄ</cell>
+                        <cell>polyglossia</cell>
+                    </row>
+                    <row>
+                        <cell>Arabic</cell>
+                        <cell><c>U+0600</c> <ndash /> <c>U+06FF</c></cell>
+                        <cell>؟ ب حٍ ۳</cell>
+                        <cell>polyglossia</cell>
+                    </row>
+                    <row>
+                        <cell>General Punctuation</cell>
+                        <cell><c>U+2000</c> <ndash /> <c>U+206F</c></cell>
+                        <cell>— “ ‰ ※</cell>
+                        <cell>TeXLive</cell>
+                    </row>
+                    <row>
+                        <cell>Letterlike Symbols</cell>
+                        <cell><c>U+2100</c> <ndash /> <c>U+214F</c></cell>
+                        <cell>℀ ℃ № ™</cell>
+                        <cell><m>\approx</m>TeXLive</cell>
+                    </row>
+                </tabular>
+            </table>
+        </section>
+
+    </article>
+</mathbook>
