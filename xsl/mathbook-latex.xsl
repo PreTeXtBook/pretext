@@ -359,14 +359,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\usepackage{ifxetex}&#xa;</xsl:text>
     <xsl:text>\ifthenelse{\boolean{xetex}}{%&#xa;</xsl:text>
     <xsl:text>%% begin: xelatex-specific configuration&#xa;</xsl:text>
+    <xsl:text>%% fontspec package will make Latin Modern (lmodern) the default font&#xa;</xsl:text>
+    <!-- http://tex.stackexchange.com/questions/115321/how-to-optimize-latin-modern-font-with-xelatex -->
     <xsl:text>\usepackage{xltxtra}&#xa;</xsl:text>
+    <xsl:text>\usepackage{fontspec}&#xa;</xsl:text>
+    <!-- TODO: put a xelatex font package hook here? -->
     <xsl:text>%% end: xelatex-specific configuration&#xa;</xsl:text>
     <xsl:text>}{%&#xa;</xsl:text>
     <xsl:text>%% begin: pdflatex-specific configuration&#xa;</xsl:text>
     <xsl:text>%% translate common Unicode to their LaTeX equivalents&#xa;</xsl:text>
-    <xsl:text>%% (\input{ix-utf8enc.dfu} from the "inputenx" package is possible addition&#xa;</xsl:text>
+    <xsl:text>%% Also, fontenc with T1 makes CM-Super the default font&#xa;</xsl:text>
+    <!-- http://tex.stackexchange.com/questions/88368/how-do-i-invoke-cm-super -->
+    <xsl:text>%% (\input{ix-utf8enc.dfu} from the "inputenx" package is possible addition (broken?)&#xa;</xsl:text>
     <xsl:text>\usepackage[T1]{fontenc}&#xa;</xsl:text>
     <xsl:text>\usepackage[utf8]{inputenc}&#xa;</xsl:text>
+    <!-- TODO: put a pdflatex font package hook here? -->
     <xsl:text>%% end: pdflatex-specific configuration&#xa;</xsl:text>
     <xsl:text>}&#xa;</xsl:text>
     <xsl:text>%% Symbols, align environment, bracket-matrix&#xa;</xsl:text>
