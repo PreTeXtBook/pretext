@@ -2905,72 +2905,60 @@ the xsltproc executable.
         <section xml:id="section-internationalization">
             <title>Internationalization</title>
 
-            <p>Accented characters and different alphabets may be entered directly into your source file.  How you do this is dependent on your operating system and is outside the scope of our documentation.  You can cut/paste from the source of this document for initial testing and experimentation.  Likely you need the incantation <c latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c> as the first line of your source file. (Maybe don't cut/paste this one here, it may have weird characters in it, go back to the top of this source file.)</p>
-
-            <p>Usage is simple: process your <latex /> output with the <c>xelatex</c> executable rather than <c>pdflatex</c>.  Adjustment in your <latex /> preamble will take place automatically.  For HTML ouput, your browser will be responsible for displaying the characters.  None of this has been tested thoroughly, so please send reports of failures or successful modifications.</p>
-
-            <p>Here are some sample characters from Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url>, which seem to be available in a default TeXLive installation.  The sample entries below will mostly be empty if you do not process this file with <c>xelatex</c>.</p>
-
-            <table xml:id="table-unicode-samples">
-                <caption>Sample Unicode Characters</caption>
-                <tabular top="major">
-                    <row bottom="minor"><cell>Name</cell><cell>Range</cell><cell>Samples</cell><cell>LaTeX</cell></row>
-                    <row>
-                        <cell>Latin Extended-A</cell>
-                        <cell><c>U+0100</c> <ndash /> <c>U+017F</c></cell>
-                        <cell>Ą ą Ĳ ĳ</cell>
-                        <cell>TeXLive</cell>
-                    </row>
-                    <row>
-                        <cell>Latin Extended Additional</cell>
-                        <cell><c>U+1E00</c> <ndash /> <c>U+1EFF</c></cell>
-                        <cell>Ḁ Ẁ Ặ ỳ</cell>
-                        <cell><m>\approx</m>TeXLive</cell>
-                    </row>
-                    <row>
-                        <cell>Cyrillic</cell>
-                        <cell><c>U+0400</c> <ndash /> <c>U+04FF</c></cell>
-                        <cell>Љ Щ щ Ӄ</cell>
-                        <cell>polyglossia</cell>
-                    </row>
-                    <row>
-                        <cell>Arabic</cell>
-                        <cell><c>U+0600</c> <ndash /> <c>U+06FF</c></cell>
-                        <cell>؟ ب حٍ ۳</cell>
-                        <cell>polyglossia</cell>
-                    </row>
-                    <row>
-                        <cell>General Punctuation</cell>
-                        <cell><c>U+2000</c> <ndash /> <c>U+206F</c></cell>
-                        <cell>— “ ‰ ※</cell>
-                        <cell>TeXLive</cell>
-                    </row>
-                    <row>
-                        <cell>Letterlike Symbols</cell>
-                        <cell><c>U+2100</c> <ndash /> <c>U+214F</c></cell>
-                        <cell>℀ ℃ № ™</cell>
-                        <cell><m>\approx</m>TeXLive</cell>
-                    </row>
-                </tabular>
-            </table>
+            <p>Supporting a multitude of possible characters, across many languages and across many output formats can be a challenge.  One of our goals is to make this easier for authors.  Fortunately, the Unicode standard has led to improvements from the 7-bit ASCII standard of old.</p>
 
             <paragraphs>
-                <title>Characters from Latin-1 Supplement</title>
-                <p>‘ ¡ ¢ £ ¤ ¥ ¦ § ¨ © ª « ¬ ® ¯ ° ± ² ³ ´ µ ¶ · ¸ ¹ º » ¼ ½ ¾ ¿ À Á Â Ã Ä Å Æ Ç È É Ê Ë Ì Í Î Ï Ð Ñ Ò Ó Ô Õ Ö × Ø Ù Ú Û Ü Ý Þ ß à á â ã ä å æ ç è é ê ë ì í î ï ð ñ ò ó ô õ ö ÷ ø ù ú û ü ý þ ÿ</p>
+                <title>Unicode Characters for HTML Output</title>
+
+                <p>First, we discuss HTML output.  If you include Unicode characters in your MathBook XML source, they should survive just fine <foreign>en route</foreign> to a web browser or e-reader.  Here are the caveats for HTML output:<ul>
+                    <li>So that you can conhtinue to get the best results with print and PDF output, use available empty elements for special characters, even if targeting HTML output, before resorting to a Unicode character.  For example, use <c>&lt;dimension /&gt;</c> for a small <q>multiplication sign</q> in text before resorting to the Unicode character <c>U+00D7</c>.</li>
+
+                    <li>How you actually enter Unicode characters into your source file is dependent on your editor and operating system, and is therefore outside the scope of our documentation.  You can cut/paste characters and text from the source of our examples for initial testing and experimentation.</li>
+
+                    <li>Always, always identify your source as having Unicode characters by including the incantation <c latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c> as the first line of your source file. (You <em>may</em> be able to accurately cut/paste this text here.  But if the copy has non-standard characters in it, go back to the top of this source file for a copy.)</li>
+
+                    <li>Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url> has a plethora of samples of various groups of Unicode characters.  If you, or your readers, are <q>missing</q> characters in a web browser, this is a good place to start testing the local setup.</li>
+                </ul></p>
             </paragraphs>
 
             <paragraphs>
-                <title>Characters from Latin Extended-A</title>
-                <p>Ā ā Ă ă Ą ą Ć ć Ĉ ĉ Ċ ċ Č č Ď ď Đ đ Ē ē Ĕ ĕ Ė ė Ę ę Ě ě Ĝ ĝ Ğ ğ Ġ ġ Ģ ģ Ĥ ĥ Ħ ħ Ĩ ĩ Ī ī Ĭ ĭ Į į İ ı Ĳ ĳ Ĵ ĵ Ķ ķ ĸ Ĺ ĺ Ļ ļ Ľ ľ Ŀ ŀ Ł ł Ń ń Ņ ņ Ň ň ŉ Ŋ ŋ Ō ō Ŏ ŏ Ő ő Œ œ Ŕ ŕ Ŗ ŗ Ř ř Ś ś Ŝ ŝ Ş ş Š š Ţ ţ Ť ť Ŧ ŧ Ũ ũ Ū ū Ŭ ŭ Ů ů Ű ű Ų ų Ŵ ŵ Ŷ ŷ Ÿ Ź ź Ż ż Ž ž ſ</p>
-                </paragraphs>
+                <title>Characters in <latex />, PDF, print</title>
 
-            <paragraphs>
-                <title>Characters from Latin Extended-B</title>
-                <p>ƀ Ɓ Ƃ ƃ Ƅ ƅ Ɔ Ƈ ƈ Ɖ Ɗ Ƌ ƌ ƍ Ǝ Ə Ɛ Ƒ ƒ i Ɠ Ɣ ƕ Ɩ Ɨ Ƙ ƙ ƚ ƛ Ɯ Ɲ ƞ Ɵ Ơ ơ Ƣ ƣ Ƥ ƥ Ʀ Ƨ ƨ Ʃ ƪ ƫ Ƭ ƭ Ʈ Ư ư Ʊ Ʋ Ƴ ƴ Ƶ ƶ Ʒ Ƹ ƹ ƺ ƻ Ƽ ƽ ƾ ƿ ǀ ǁ ǂ ǃ Ǆ ǅ ǆ Ǉ ǈ ǉ Ǌ ǋ ǌ Ǎ ǎ Ǐ ǐ Ǒ ǒ Ǔ ǔ Ǖ ǖ Ǘ ǘ Ǚ ǚ Ǜ ǜ ǝ Ǟ ǟ Ǡ ǡ Ǣ ǣ Ǥ ǥ Ǧ ǧ Ǩ ǩ Ǫ ǫ Ǭ ǭ Ǯ ǯ ǰ Ǳ ǲ ǳ Ǵ ǵ Ƕ Ƿ Ǹ ǹ Ǻ ǻ Ǽ ǽ Ǿ ǿ Ȁ ȁ Ȃ ȃ Ȅ ȅ Ȇ ȇ Ȉ ȉ Ȋ ȋ Ȍ ȍ Ȏ ȏ Ȑ ȑ Ȓ ȓ Ȕ ȕ Ȗ ȗ Ș ș Ț ț Ȝ ȝ Ȟ ȟ Ƞ ȡ Ȣ ȣ Ȥ ȥ Ȧ ȧ Ȩ ȩ Ȫ ȫ Ȭ ȭ Ȯ ȯ Ȱ ȱ Ȳ ȳ ȴ ȵ ȶ ȷ ȸ ȹ Ⱥ Ȼ ȼ Ƚ Ⱦ ȿ ɀ Ɂ ɂ Ƀ Ʉ Ʌ Ɇ ɇ Ɉ ɉ Ɋ ɋ Ɍ ɍ Ɏ ɏ</p>
+                <p>The situation for <latex /> is much more complicated, since <tex /> pre-dates Unicode's widespread adoption.</p>
+
+                <p>This sample article is intended to work well, out-of-the-box, for authors just starting with MathBook XML.  So we only include here examples that we know are likely to convert to PDF without any errors.  For more extensive examples and experiments, we provide the sample document <c>examples/fonts/fonts-and-characters.xml</c>, so be aware of that example as you look to see what is possible.</p>
+
+                <p>Similarly, you should be able to process this sample article successfully with various <latex /> engines.  We test regularly with <c>pdflatex</c> and <c>xelatex</c> and provide online sample PDF output of this document processed by <c>pdflatex</c>.  In principle, you should be able to use <c>latex</c> (to produce a DVI), and possibly other (unsupported) engines, such as <c>lualatex</c>.</p>
+
+                <p>Once you get beyond the Latin alphabet, with accents common in Western Europe and the Western Hemisphere, you will almost assuredly need to restrict your attention to producing PDF output with the <c>xelatex</c> engine.  This is discussed and tested in <c>examples/fonts/fonts-and-characters.xml</c>.</p>
             </paragraphs>
 
-            <p>More examples and more thorough explanations can be found in the sample article: <c>examples/fonts-and-characters.xml</c>.</p>
+            <paragraphs>
+                <title>Basic Latin, <c>U+0000</c><ndash /><c>U+007F</c></title>
 
+                <p>Unicode uses multiple 8-bit bytes to represent characters, and these are typically expressed in hexadecimal (base 16) notation.  Using just a single byte, we can get 256 values, and the first 128 (hex <c>00</c> to <c>7F</c>) are the <q>usual</q> Latin characters with some values used as control codes.  These 95 characters are the most basic, and should all render using <c>pdflatex</c> or <c>xelatex</c> with no special setup (and HTML).  <c>U+0000</c> to <c>U+001F</c> are control codes and not used here.  <c>U+007F</c> is also a control code and so is excluded.  We have also replaced reserved <latex /> characters by their MathBook XML equivalent empty elements: </p>
+
+                <!-- ex &#x0000; - &#x001F; controls -->
+                <!-- ex &#x007F; control             -->
+                <blockquote>
+                    <p>&#x0020; &#x0021; &#x0022; <hash /> <dollar /> <percent /> <ampersand /> &#x0027; &#x0028; &#x0029; &#x002A; &#x002B; &#x002C; &#x002D; &#x002E; &#x002F; &#x0030; &#x0031; &#x0032; &#x0033; &#x0034; &#x0035; &#x0036; &#x0037; &#x0038; &#x0039; &#x003A; &#x003B; <less /> &#x003D; &#x003E; &#x003F; &#x0040; &#x0041; &#x0042; &#x0043; &#x0044; &#x0045; &#x0046; &#x0047; &#x0048; &#x0049; &#x004A; &#x004B; &#x004C; &#x004D; &#x004E; &#x004F; &#x0050; &#x0051; &#x0052; &#x0053; &#x0054; &#x0055; &#x0056; &#x0057; &#x0058; &#x0059; &#x005A; &#x005B; <backslash /> &#x005D; <circumflex /> <underscore /> &#x0060; &#x0061; &#x0062; &#x0063; &#x0064; &#x0065; &#x0066; &#x0067; &#x0068; &#x0069; &#x006A; &#x006B; &#x006C; &#x006D; &#x006E; &#x006F; &#x0070; &#x0071; &#x0072; &#x0073; &#x0074; &#x0075; &#x0076; &#x0077; &#x0078; &#x0079; &#x007A; <lbracket /> &#x007C; <rbracket /> <tilde /></p>
+                </blockquote>
+            </paragraphs>
+
+            <paragraphs>
+                <title>Latin-1 Supplement, <c>U+0080</c><ndash /><c>U+00FF</c></title>
+
+                <p>Now we are interested in the next 128 possible bytes,  (hex <c>80</c> to <c>FF</c>).  The first 32 are again control codes and <c>U+00A0</c> is a non-breaking space, while <c>U+00AD</c> is a soft hyphen.  We have taken care to see that the remainder will render using <c>pdflatex</c> or <c>xelatex</c> with no special setup (and HTML).For more details, see the fothcoming extensive tables in <c>examples/fonts/fonts-and-characters.xml</c> . Here are all of the 94 characters.</p>
+
+                <!-- ex &#x0080; - &#x009F; controls -->
+                <!-- ex &#x00A0; non-breaking space  -->
+                <!-- ex &#x00AD; soft hyphen         -->
+                <blockquote>
+                    <p>&#x00A1; &#x00A2; &#x00A3; &#x00A4; &#x00A5; &#x00A6; &#x00A7; &#x00A8; &#x00A9; &#x00AA; &#x00AB; &#x00AC; &#x00AE; &#x00AF; &#x00B0; &#x00B1; &#x00B2; &#x00B3; &#x00B4; &#x00B5; &#x00B6; &#x00B7; &#x00B8; &#x00B9; &#x00BA; &#x00BB; &#x00BC; &#x00BD; &#x00BE; &#x00BF; &#x00C0; &#x00C1; &#x00C2; &#x00C3; &#x00C4; &#x00C5; &#x00C6; &#x00C7; &#x00C8; &#x00C9; &#x00CA; &#x00CB; &#x00CC; &#x00CD; &#x00CE; &#x00CF; &#x00D0; &#x00D1; &#x00D2; &#x00D3; &#x00D4; &#x00D5; &#x00D6; &#x00D7; &#x00D8; &#x00D9; &#x00DA; &#x00DB; &#x00DC; &#x00DD; &#x00DE; &#x00DF; &#x00E0; &#x00E1; &#x00E2; &#x00E3; &#x00E4; &#x00E5; &#x00E6; &#x00E7; &#x00E8; &#x00E9; &#x00EA; &#x00EB; &#x00EC; &#x00ED; &#x00EE; &#x00EF; &#x00F0; &#x00F1; &#x00F2; &#x00F3; &#x00F4; &#x00F5; &#x00F6; &#x00F7; &#x00F8; &#x00F9; &#x00FA; &#x00FB; &#x00FC; &#x00FD; &#x00FE; &#x00FF;</p>
+                </blockquote>
+            </paragraphs>
+
+            <p>Again, more examples and more thorough explanations can be found in the sample: <c>examples/fonts/fonts-and-characters.xml</c>.  Be aware that the nature of this sample is that it will likely produce many errors when processed with <c>pdflatex</c>.  Adding <c>-interaction batchmode</c> or <c>-interaction nonstopmode</c> to the <c>pdflatex</c> command-line will sometimes be less painless than acknowledging each error.  This more thorough sample will perform well when processed with <c>xelatex</c>.</p>
         </section>
 
         <section>
