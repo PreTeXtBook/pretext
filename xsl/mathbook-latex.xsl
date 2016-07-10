@@ -351,11 +351,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.geometry" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% For unicode character support, use the "xelatex" executable&#xa;</xsl:text>
-    <xsl:text>%% If never using xelatex, the next three lines can be removed&#xa;</xsl:text>
+    <xsl:text>%% This LaTeX file may be compiled with pdflatex or xelatex&#xa;</xsl:text>
+    <xsl:text>%% The following provides engine-specific capabilities&#xa;</xsl:text>
+    <xsl:text>%% Generally, xelatex will do better languages other than US English&#xa;</xsl:text>
+    <xsl:text>%% You can pick from the conditional if you will only ever use one engine&#xa;</xsl:text>
+    <xsl:text>\usepackage{ifthen}&#xa;</xsl:text>
     <xsl:text>\usepackage{ifxetex}&#xa;</xsl:text>
-    <!-- latex ifthen package, with \boolean{xetex} is option -->
-    <xsl:text>\ifxetex\usepackage{xltxtra}\fi&#xa;</xsl:text>
+    <xsl:text>\ifthenelse{\boolean{xetex}}{%&#xa;</xsl:text>
+    <xsl:text>%% begin: xelatex-specific configuration&#xa;</xsl:text>
+    <xsl:text>\usepackage{xltxtra}&#xa;</xsl:text>
+    <xsl:text>%% end: xelatex-specific configuration&#xa;</xsl:text>
+    <xsl:text>}{%&#xa;</xsl:text>
+    <xsl:text>%% begin: pdflatex-specific configuration&#xa;</xsl:text>
+    <xsl:text>%% translate common Unicode to their LaTeX equivalents&#xa;</xsl:text>
+    <xsl:text>%% (\input{ix-utf8enc.dfu} from the "inputenx" package is possible addition&#xa;</xsl:text>
+    <xsl:text>\usepackage[T1]{fontenc}&#xa;</xsl:text>
+    <xsl:text>\usepackage[utf8]{inputenc}&#xa;</xsl:text>
+    <xsl:text>%% end: pdflatex-specific configuration&#xa;</xsl:text>
+    <xsl:text>}&#xa;</xsl:text>
     <xsl:text>%% Symbols, align environment, bracket-matrix&#xa;</xsl:text>
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
     <xsl:text>\usepackage{amssymb}&#xa;</xsl:text>
