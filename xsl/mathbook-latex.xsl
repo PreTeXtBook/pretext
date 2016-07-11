@@ -376,6 +376,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- TODO: put a pdflatex font package hook here? -->
     <xsl:text>%% end: pdflatex-specific configuration&#xa;</xsl:text>
     <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>%% Monospace font: Inconsolata (zi4)&#xa;</xsl:text>
+    <xsl:text>%% Sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html&#xa;</xsl:text>
+    <xsl:text>%% See package documentation for excellent instructions&#xa;</xsl:text>
+    <xsl:text>%% One caveat, seem to need full file name to locate OTF files&#xa;</xsl:text>
+    <xsl:text>%% Loads the "upquote" package as needed, so we don't have to&#xa;</xsl:text>
+    <xsl:text>%% Upright quotes might come from the  textcomp  package, which we also use&#xa;</xsl:text>
+    <xsl:text>%% We employ the shapely \ell to match Google Font version&#xa;</xsl:text>
+    <xsl:text>%% pdflatex: "varqu" option produces best upright quotes&#xa;</xsl:text>
+    <xsl:text>%% xelatex: add StylisticSet 1 for shapely \ell&#xa;</xsl:text>
+    <xsl:text>%% xelatex: add StylisticSet 2 for plain zero&#xa;</xsl:text>
+    <xsl:text>%% xelatex: we add StylisticSet 3 for upright quotes&#xa;</xsl:text>
+    <xsl:text>%% &#xa;</xsl:text>
+    <xsl:text>\ifthenelse{\boolean{xetex}}{%&#xa;</xsl:text>
+    <xsl:text>%% begin: xelatex-specific monospace font&#xa;</xsl:text>
+    <xsl:text>\usepackage{zi4}&#xa;</xsl:text>
+    <xsl:text>\setmonofont[BoldFont=Inconsolatazi4-Bold.otf,StylisticSet={1,3}]{Inconsolatazi4-Regular.otf}&#xa;</xsl:text>
+    <!-- TODO: put a xelatex monospace font package hook here? -->
+    <xsl:text>%% end: xelatex-specific monospace font&#xa;</xsl:text>
+    <xsl:text>}{%&#xa;</xsl:text>
+    <xsl:text>%% begin: pdflatex-specific monospace font&#xa;</xsl:text>
+     <xsl:text>\usepackage[varqu]{zi4}&#xa;</xsl:text>
+    <xsl:text>%% end: pdflatex-specific monospace font&#xa;</xsl:text>
+    <!-- TODO: put a pdflatex monospace font package hook here? -->
+    <xsl:text>}&#xa;</xsl:text>
     <xsl:text>%% Symbols, align environment, bracket-matrix&#xa;</xsl:text>
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
     <xsl:text>\usepackage{amssymb}&#xa;</xsl:text>
@@ -1002,13 +1026,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Bitstream Vera Font names within: https://github.com/timfel/texmf/blob/master/fonts/map/vtex/bera.ali -->
     <!-- Coloring listings: http://tex.stackexchange.com/questions/18376/beautiful-listing-for-csharp -->
     <!-- Song and Dance for font changes: http://jevopi.blogspot.com/2010/03/nicely-formatted-listings-in-latex-with.html -->
-    <xsl:if test="//c or //pre or //sage or //program or //console">
+<!-- <xsl:if test="//c or //pre or //sage or //program or //console">
         <xsl:text>%% New typewriter font if  c, sage, program, console, pre  tags present&#xa;</xsl:text>
         <xsl:text>%% If only  email, url  tags, no change from default&#xa;</xsl:text>
-        <xsl:text>%% Needs a bit of scaling down to match text&#xa;</xsl:text>
-        <xsl:text>\usepackage[scaled=.95]{sourcecodepro}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="//c or //sage or //program">
+        <xsl:text>%% TODO: move this XSL conditional above&#xa;</xsl:text>
+    </xsl:if> -->
+     <xsl:if test="//c or //sage or //program">
         <xsl:text>%% Program listing support, for inline code, Sage code&#xa;</xsl:text>
         <xsl:text>\usepackage{listings}&#xa;</xsl:text>
         <xsl:text>%% We define the listings font style to be the default "ttfamily"&#xa;</xsl:text>
@@ -1201,14 +1224,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% others need to be elsewhere, these are simply package additions&#xa;</xsl:text>
         <xsl:text>\usepackage{showkeys}&#xa;</xsl:text>
         <xsl:text>\usepackage[letter,cam,center,pdflatex]{crop}&#xa;</xsl:text>
-    </xsl:if>
-    <!-- upquote package should come as late as possible -->
-    <!-- we fix minus signs in listings package above    -->
-    <xsl:if test="//c or //pre or //program or //sage"> <!-- verbatim elements (others?) -->
-        <xsl:text>%% Use upright quotes rather than LaTeX's curly quotes&#xa;</xsl:text>
-        <xsl:text>%% If custom font substitutions follow, this might be ineffective&#xa;</xsl:text>
-        <xsl:text>%% If fonts lack upright quotes, the textcomp package is employed&#xa;</xsl:text>
-        <xsl:text>\usepackage{upquote}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="/mathbook/docinfo/latex-image-preamble">
         <xsl:text>%% Graphics Preamble Entries&#xa;</xsl:text>

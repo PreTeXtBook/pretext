@@ -6132,9 +6132,10 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
 <!-- Font header -->
 <!-- Google Fonts -->
 <!-- Text: Open Sans by default (was: Istok Web font, regular and italic (400), bold (700)) -->
-<!-- Code: Source Code Pro, regular (400) -->
+<!-- Code: Inconsolata, regular (400), bold (700)                                           -->
+<!-- (SourceCodePro being removed) -->
 <xsl:template name="fonts">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic|Source+Code+Pro:400' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic|Inconsolata:400,700&amp;subset=latin,latin-ext|Source+Code+Pro:400' rel='stylesheet' type='text/css' />
 </xsl:template>
 
 <!-- CSS header -->
