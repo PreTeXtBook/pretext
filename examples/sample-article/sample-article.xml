@@ -3151,6 +3151,26 @@ the xsltproc executable.
                 </console>
             </listing>
 
+            <p>If your console input exceeds more than one line, you can author it across several lines and your choice of line breaks will be reflected in the rendering.  You can decide to indent lines after the first one for clarity, if desired.  You can also decide if your audience needs line-continuation characters or not.  (But be careful, a backslash, <q><c>\</c>,</q> will require you to define the <c>latex.console.macro-char</c> xsltproc stringparam to something else.</p>
+
+            <listing xml:id="console-raspberry-pi-multi">
+                <caption>Console Session: <c>int</c> and <c>float</c> (multi-line input)</caption>
+                <console>
+                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                    <input>
+                    gcc -Wall
+                        -o intAndFloat intAndFloat.c
+                    </input>
+                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                    <input>./intAndFloat</input>
+                    <output>
+                    The integer is 19088743 and the float is 19088.742188
+                    </output>
+                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                    <input />
+                </console>
+            </listing>
+
             <p>Notice in the HTML version of the above example that when you highlight all, or a portion, of the listing for a cut<ampersand />paste that the prompts are not included.</p>
 
             <p>There is one subtlety with a <c>console</c> session rendered as <latex /> output.  The user input is made bold by a <latex /> macro, which means that your code cannot contain the special <latex /> characters <q><backslash /></q>, <q><lbrace /></q>, and <q><rbrace /></q>, which are used to begin a macro, begin a group, and end a group (respectively).  You will get an error message if this condition exists, and there are parameters <c>latex.console.macro-char</c>, <c>latex.console.begin-char</c>, and <c>latex.console.end-char</c> that will allow you to specify alternatives (which need to be characters that do not appear in <em>any</em> of your console sessions, document-wide).  The characters <c>&amp; % $ # _ { } ~ ^ \</c> have special meaning in <latex /> but should be available for duty as these alternative characters (though not all have been tested).  The backslash used in pathnames for Windows is a highly likely case where this needs adjustment.</p>

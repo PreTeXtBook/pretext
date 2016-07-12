@@ -1105,6 +1105,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- perhaps use fancyverb more widely -->
         <xsl:text>\usepackage{fancyvrb}&#xa;</xsl:text>
         <xsl:text>\DefineVerbatimEnvironment{console}{Verbatim}%&#xa;</xsl:text>
+        <!-- numbers=left, stepnumber=5 trivial (can mimic in HTML with counting recursive routine) -->
         <xsl:text>{fontsize=\small,commandchars=</xsl:text>
         <xsl:variable name="latex-escaped" select="'&amp;%$#_{}~^\@'" />
         <xsl:if test="contains($latex-escaped, $console-macro)">
@@ -4154,22 +4155,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- match immediately preceding, only if a prompt:                   -->
 <!-- https://www.oxygenxml.com/archives/xsl-list/199910/msg00541.html -->
 <xsl:template match="console/input">
-    <!-- newline after environment is necessary -->
     <!-- Assumes prompt does not exceed one line -->
     <xsl:apply-templates select="preceding-sibling::*[1][self::prompt]" />
-    <!-- We substitute for the escape characters,    -->
-    <!-- either within this input element, or within -->
-    <!-- this console elemnet or document-wide       -->
-    <!-- consoleinput macro defined in preamble      -->
-    <xsl:value-of select="$console-macro" />
-    <xsl:text>consoleinput</xsl:text>
-    <xsl:value-of select="$console-begin" />
-    <xsl:apply-templates />
-    <xsl:value-of select="$console-end" />
-    <xsl:text>&#xa;</xsl:text>
+    <!-- sanitize left-margin, etc                    -->
+    <!-- then employ \consoleinput macro on each line -->
+    <xsl:call-template name="wrap-console-input">
+        <xsl:with-param name="text">
+            <xsl:call-template name="sanitize-text">
+                <xsl:with-param name="text" select="." />
+            </xsl:call-template>
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
-<!-- Output code gets massaged to remove a left margin, leading blank lines, etc. -->
+<!-- We substitute for the escape characters,    -->
+<!-- consoleinput macro defined in preamble      -->
+<xsl:template name="wrap-console-input">
+    <xsl:param name="text" />
+    <xsl:choose>
+        <xsl:when test="$text=''" />
+        <xsl:otherwise>
+            <xsl:value-of select="$console-macro" />
+            <xsl:text>consoleinput</xsl:text>
+            <xsl:value-of select="$console-begin" />
+            <xsl:value-of select="substring-before($text, '&#xa;')" />
+            <xsl:value-of select="$console-end" />
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:call-template name="wrap-console-input">
+                <xsl:with-param name="text" select="substring-after($text, '&#xa;')" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Output code gets massaged to remove a left margin, -->
+<!-- leading blank lines, etc.                          -->
 <xsl:template match="console/output">
     <xsl:call-template name="sanitize-text">
         <xsl:with-param name="text" select="." />
