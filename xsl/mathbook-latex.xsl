@@ -964,9 +964,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\let\c@table\c@theorem&#xa;</xsl:text>
             <xsl:text>\makeatother&#xa;</xsl:text>
         </xsl:if>
+        <!-- Listings do not float yet have semantic captions -->
+        <!-- New environment, new captiontype: -->
+        <!-- http://tex.stackexchange.com/questions/7210/label-and-caption-without-float -->
+        <!-- Within numbering argument: -->
+        <!-- http://tex.stackexchange.com/questions/115193/continuous-numbering-of-custom-float-with-caption-package -->
+        <!-- Caption formatting/style possibilities: -->
+        <!-- http://tex.stackexchange.com/questions/117531/styling-a-lstlisting-caption-using-caption-package -->
         <xsl:if test="//listing">
-            <xsl:text>% Listing environment declared as new floating environment&#xa;</xsl:text>
-            <xsl:text>\DeclareFloatingEnvironment[fileext=lol,placement={H},within=</xsl:text>
+            <xsl:text>% Listing environment declared as new environment&#xa;</xsl:text>
+            <xsl:text>\newenvironment{listing}{}{}&#xa;</xsl:text>
+            <xsl:text>% New caption type for numbering, style, etc.&#xa;</xsl:text>
+            <xsl:text>\DeclareCaptionType[within=</xsl:text>
             <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
             <xsl:choose>
                 <xsl:when test="$numbering-theorems = 0">
@@ -978,12 +987,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
-            <xsl:text>,name=</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'listing'" /></xsl:call-template>
-            <xsl:text>]{listing}&#xa;</xsl:text>
-            <xsl:text>% listings have the same number as theorems: http://tex.stackexchange.com/questions/16195/how-to-make-equations-figures-and-theorems-use-the-same-numbering-scheme &#xa;</xsl:text>
+            <xsl:text>]{listingcaption}[</xsl:text>
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'listing'" />
+            </xsl:call-template>
+            <xsl:text>]&#xa;</xsl:text>
+            <xsl:text>\captionsetup[listingcaption]{aboveskip=0.5ex,belowskip=\baselineskip}&#xa;</xsl:text>
+            <xsl:text>%% listings have the same number as theorems:&#xa;</xsl:text>
+            <xsl:text>%% http://tex.stackexchange.com/questions/16195/how-to-make-equations-figures-and-theorems-use-the-same-numbering-scheme &#xa;</xsl:text>
             <xsl:text>\makeatletter&#xa;</xsl:text>
-            <xsl:text>\let\c@listing\c@theorem&#xa;</xsl:text>
+            <xsl:text>\let\c@listingcaption\c@theorem&#xa;</xsl:text>
             <xsl:text>\makeatother&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
@@ -4102,6 +4115,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>, language=</xsl:text>
         <xsl:value-of select="$language" />
     </xsl:if>
+    <!-- lstlisting can be captioned: captionpos, title (hard-coded) -->
     <xsl:text>]&#xa;</xsl:text>
     <xsl:call-template name="sanitize-text">
         <xsl:with-param name="text" select="input" />
@@ -4222,13 +4236,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Listings -->
-<!-- Standard LaTeX figure environment redefined, see preamble comments -->
+<!-- Simple non-float environment            -->
+<!-- \captionof for numbering, style, etc    -->
+<!-- not centering the interior environments -->
+<!-- since it is not straightforward, maybe  -->
+<!-- requires a savebox and a minipage       -->
 <xsl:template match="listing">
     <xsl:apply-templates select="." mode="leave-vertical-mode" />
     <xsl:text>\begin{listing}&#xa;</xsl:text>
-    <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]"/>
-    <xsl:apply-templates select="caption" />
+    <xsl:text>\par&#xa;</xsl:text>
+    <xsl:text>\captionof{listingcaption}{</xsl:text>
+    <xsl:apply-templates select="caption/text()|caption/*" />
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>\end{listing}&#xa;</xsl:text>
 </xsl:template>
 
