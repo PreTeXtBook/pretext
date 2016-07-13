@@ -5589,9 +5589,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Times -->
-<!-- A "multiplication sign" symbol for use in text -->
+<!-- A "multiplication sign" symbol for use in text   -->
+<!-- Styled to enhance, consensus at Google Group was -->
+<!-- font-size: larger; vertical-align: -.2ex;        -->
 <xsl:template match="times">
-    <xsl:text>&#xd7;</xsl:text>
+    <xsl:element name="span">
+        <xsl:attribute name="class">
+            <xsl:text>times-sign</xsl:text>
+        </xsl:attribute>
+        <xsl:text>&#xd7;</xsl:text>
+    </xsl:element>
 </xsl:template>
 
 <!-- Slash -->

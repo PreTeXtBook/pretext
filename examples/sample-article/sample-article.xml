@@ -1427,7 +1427,7 @@ the xsltproc executable.
                 <slash /><nbsp /><nbsp />
                 <solidus /></p>
 
-                <p>We also distinguish between abbreviations (<abbr>vs.</abbr>), acronyms (<acro>SCUBA</acro>) and initialisms (<init>XML</init>).</p>
+                <p>We also distinguish between abbreviations (<abbr>vs.</abbr>), acronyms (<acro>SCUBA</acro>) and initialisms (<init>XML</init>).  This is a test of the text verion of a multiplication symbol: 2<nbsp /><times /><nbsp />4.</p>
             </subsection>
 
             <subsection xml:id="section-urls">
