@@ -361,7 +361,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% begin: xelatex and lualatex-specific configuration&#xa;</xsl:text>
     <xsl:text>%% fontspec package will make Latin Modern (lmodern) the default font&#xa;</xsl:text>
     <!-- http://tex.stackexchange.com/questions/115321/how-to-optimize-latin-modern-font-with-xelatex -->
-    <xsl:text>\usepackage{xltxtra}&#xa;</xsl:text>
+    <xsl:text>\ifxetex\usepackage{xltxtra}\fi&#xa;</xsl:text>
     <xsl:text>\usepackage{fontspec}&#xa;</xsl:text>
     <!-- TODO: put a xelatex/lualatex font package hook here? -->
     <xsl:text>%% end: xelatex and lualatex-specific configuration&#xa;</xsl:text>
