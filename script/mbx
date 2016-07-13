@@ -74,11 +74,12 @@ def tikz_conversion(xml_source, xmlid_root, dest_dir, outformat):
 
 def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
     global config
+    global plat
     import tempfile, os, os.path, subprocess, shutil, glob
     _verbose('converting Asymptote diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
     dest_dir = sanitize_directory(dest_dir)
     tmp_dir = tempfile.mkdtemp()
-    if get_platform() == "Windows":
+    if plat == "Windows":
         dest_dir = break_windows_path(dest_dir)
         tmp_dir = break_windows_path(tmp_dir)
     _debug("temporary directory: {}".format(tmp_dir))
@@ -117,6 +118,7 @@ def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
 
 def sage_conversion(xml_source, xmlid_root, dest_dir, outformat):
     global config
+    global plat
     import tempfile, os, os.path, subprocess, shutil, glob
     _verbose('converting Sage diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
     dest_dir = sanitize_directory(dest_dir)
@@ -157,9 +159,9 @@ def sage_conversion(xml_source, xmlid_root, dest_dir, outformat):
 
 def latex_image_conversion(xml_source, xmlid_root, data_dir, dest_dir, outformat):
     global config
+    global plat
     import tempfile, os, os.path, subprocess, shutil
 
-    plat = get_platform()
     _verbose('converting latex-image pictures from {} to {} graphics for placement in {}'.format(xml_source, outformat, dest_dir))
     dest_dir = sanitize_directory(dest_dir)
     tmp_dir = tempfile.mkdtemp()
@@ -178,9 +180,8 @@ def latex_image_conversion(xml_source, xmlid_root, data_dir, dest_dir, outformat
             '--stringparam', 'scratch', tmp_dir,
             '--stringparam', 'subtree', xmlid_root,
             '--xinclude',
-            # os.path.join(mbx_xsl_dir, 'extract-latex-image.xsl'),
-            # dave stuff
             "/".join((mbx_xsl_dir, 'extract-latex-image.xsl')),
+            # this is compatible with Windows CMD and also with Git Bash's MSYS shell
             xml_source
             ]
     else:
@@ -204,6 +205,7 @@ def latex_image_conversion(xml_source, xmlid_root, data_dir, dest_dir, outformat
         else:
             filebase, _ = os.path.splitext(latex_image)
             latex_image_pdf = "{}.pdf".format(filebase)
+            latex_image_pdf = "{}.pdf".format(filebase)
             latex_image_svg = "{}.svg".format(filebase)
             latex_image_png = "{}.png".format(filebase)
             latex_image_eps = "{}.eps".format(filebase)
@@ -214,7 +216,15 @@ def latex_image_conversion(xml_source, xmlid_root, data_dir, dest_dir, outformat
             subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
             pdfcrop_executable = get_executable(config,  'pdfcrop')
             _debug("pdfcrop executable: {}".format(pdfcrop_executable))
-            pdfcrop_cmd = [pdfcrop_executable, latex_image_pdf, latex_image_pdf]
+            #################################################################
+            # Rob: Please edit the _verbose message below if you like
+            #################################################################
+            if plat == "Windows":
+                _verbose("Using pdfcrop is not reliable on Windows; advise use of")
+                _verbose("a linux-like shell e.g. Git Bash or SageMathCloud terminal")
+                pdfcrop_cmd = [pdfcrop_executable, "--gscmd", "gswin64c.exe", latex_image_pdf, latex_image_pdf]
+            else:
+                pdfcrop_cmd = [pdfcrop_executable, latex_image_pdf, latex_image_pdf]
             _verbose("cropping {} to {}".format(latex_image_pdf, latex_image_pdf))
             subprocess.call(pdfcrop_cmd, stdout=devnull, stderr=subprocess.STDOUT)
             if outformat == 'all':
@@ -224,7 +234,10 @@ def latex_image_conversion(xml_source, xmlid_root, data_dir, dest_dir, outformat
             if (outformat == 'svg' or outformat == 'all'):
                 pdfsvg_executable = get_executable(config, 'pdfsvg')
                 _debug("pdfsvg executable: {}".format(pdfsvg_executable))
-                svg_cmd = [pdfsvg_executable, latex_image_pdf, latex_image_svg]
+                if plat == "Windows":
+                    svg_cmd = [pdfsvg_executable, "-density", "300", latex_image_pdf, latex_image_svg]
+                else:
+                    svg_cmd = [pdfsvg_executable, latex_image_pdf, latex_image_svg]
                 _verbose("converting {} to {}".format(latex_image_pdf, latex_image_svg))
                 subprocess.call(svg_cmd)
                 shutil.copy2(latex_image_svg, dest_dir)
@@ -282,6 +295,8 @@ def webwork_to_tex(origin, xslt_exec, mbx_xsl_dir, xml_source, server_url, dest_
 
     # verify destination exists
     sanitize_directory(dest_dir)
+    if plat == "Windows":
+        dest_dir = break_windows_path(dest_dir)
 
     # verify, construct problem format requestor
     server_url = sanitize_url(server_url)
@@ -486,10 +501,10 @@ def webwork_to_tex(origin, xslt_exec, mbx_xsl_dir, xml_source, server_url, dest_
 
 def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
     global config
+    global plat
     import tempfile, os, os.path, subprocess, shutil
     import requests
 
-    plat = get_platform()
     _verbose('downloading YouTube thumbnails from {} for placement in {}'.format(xml_source, dest_dir))
     dest_dir = sanitize_directory(dest_dir)
     if plat == "Windows":
@@ -833,6 +848,7 @@ def get_executable(config, exec_name):
         print('MBX:WARNING: executable existence-checking was not performed (e.g. on Windows)')
         result_code = 0  # perhaps a lie on Windows
     if result_code != 0:
+        print(result_code)
         error_message = '\n'.join([
                         'cannot locate executable with configuration name "{}" as command "{}"',
                         'Edit the configuration file and/or install the necessary program'])
@@ -993,6 +1009,7 @@ output_dir = os.path.abspath(args.dir)
 _debug("output dir: {}".format(output_dir))
 
 config = get_config_info(mbx_script_dir, mbx_user_dir)
+plat = get_platform()
 
 if args.component == 'tikz':
     if args.format == 'pdf':
