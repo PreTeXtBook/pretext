@@ -3017,29 +3017,204 @@ the xsltproc executable.
             <paragraphs>
                 <title>Basic Latin, <c>U+0000</c><ndash /><c>U+007F</c></title>
 
-                <p>Unicode uses multiple 8-bit bytes to represent characters, and these are typically expressed in hexadecimal (base 16) notation.  Using just a single byte, we can get 256 values, and the first 128 (hex <c>00</c> to <c>7F</c>) are the <q>usual</q> Latin characters with some values used as control codes.  These 95 characters are the most basic, and should all render using <c>pdflatex</c> or <c>xelatex</c> with no special setup (and HTML).  <c>U+0000</c> to <c>U+001F</c> are control codes and not used here.  <c>U+007F</c> is also a control code and so is excluded.  We have also replaced reserved <latex /> characters by their MathBook XML equivalent empty elements: </p>
+                <p>Unicode uses multiple 8-bit bytes to represent characters, and these are typically expressed in hexadecimal (base 16) notation.  Using just a single byte, we can get 256 values, and the first 128 (hex <c>00</c> to <c>7F</c>) are the <q>usual</q> Latin characters with some values used as control codes.  These 95 characters are the most basic, and should all render using <c>pdflatex</c> or <c>xelatex</c> with no special setup (and HTML).  <c>U+0000</c> to <c>U+001F</c> are control codes and not used here.  <c>U+007F</c> is also a control code and so is excluded, while <c>U+0020</c> is a space, so appears invisible in the table.  In the source we have also replaced reserved <latex /> characters by their MathBook XML equivalent empty elements.</p>
 
                 <!-- ex &#x0000; - &#x001F; controls -->
                 <!-- ex &#x007F; control             -->
-                <blockquote>
-                    <p>&#x0020; &#x0021; &#x0022; <hash /> <dollar /> <percent /> <ampersand /> &#x0027; &#x0028; &#x0029; &#x002A; &#x002B; &#x002C; &#x002D; &#x002E; &#x002F; &#x0030; &#x0031; &#x0032; &#x0033; &#x0034; &#x0035; &#x0036; &#x0037; &#x0038; &#x0039; &#x003A; &#x003B; <less /> &#x003D; &#x003E; &#x003F; &#x0040; &#x0041; &#x0042; &#x0043; &#x0044; &#x0045; &#x0046; &#x0047; &#x0048; &#x0049; &#x004A; &#x004B; &#x004C; &#x004D; &#x004E; &#x004F; &#x0050; &#x0051; &#x0052; &#x0053; &#x0054; &#x0055; &#x0056; &#x0057; &#x0058; &#x0059; &#x005A; &#x005B; <backslash /> &#x005D; <circumflex /> <underscore /> &#x0060; &#x0061; &#x0062; &#x0063; &#x0064; &#x0065; &#x0066; &#x0067; &#x0068; &#x0069; &#x006A; &#x006B; &#x006C; &#x006D; &#x006E; &#x006F; &#x0070; &#x0071; &#x0072; &#x0073; &#x0074; &#x0075; &#x0076; &#x0077; &#x0078; &#x0079; &#x007A; <lbrace /> &#x007C; <rbrace /> <tilde /></p>
-                </blockquote>
+                <!-- ex &#x0020; space, not visible  -->
+
+                <table>
+                    <caption>Basic Latin, Regular</caption>
+                <tabular>
+                    <row><cell />
+                    <cell><c>0</c></cell>
+                    <cell><c>1</c></cell>
+                    <cell><c>2</c></cell>
+                    <cell><c>3</c></cell>
+                    <cell><c>4</c></cell>
+                    <cell><c>5</c></cell>
+                    <cell><c>6</c></cell>
+                    <cell><c>7</c></cell>
+                    <cell><c>8</c></cell>
+                    <cell><c>9</c></cell>
+                    <cell><c>A</c></cell>
+                    <cell><c>B</c></cell>
+                    <cell><c>C</c></cell>
+                    <cell><c>D</c></cell>
+                    <cell><c>E</c></cell>
+                    <cell><c>F</c></cell></row>
+                    <row><cell><c>002_</c></cell><cell>&#x0020;</cell><cell>&#x0021;</cell><cell>&#x0022;</cell><cell><hash /></cell><cell><dollar /></cell><cell><percent /></cell><cell><ampersand /></cell><cell>&#x0027;</cell>
+                                                 <cell>&#x0028;</cell><cell>&#x0029;</cell><cell>&#x002A;</cell><cell>&#x002B;</cell><cell>&#x002C;</cell><cell>&#x002D;</cell><cell>&#x002E;</cell><cell>&#x002F;</cell></row>
+                    <row><cell><c>003_</c></cell><cell>&#x0030;</cell><cell>&#x0031;</cell><cell>&#x0032;</cell><cell>&#x0033;</cell><cell>&#x0034;</cell><cell>&#x0035;</cell><cell>&#x0036;</cell><cell>&#x0037;</cell>
+                                                 <cell>&#x0038;</cell><cell>&#x0039;</cell><cell>&#x003A;</cell><cell>&#x003B;</cell><cell><less /></cell><cell>&#x003D;</cell><cell>&#x003E;</cell><cell>&#x003F;</cell></row>
+                    <row><cell><c>004_</c></cell><cell>&#x0040;</cell><cell>&#x0041;</cell><cell>&#x0042;</cell><cell>&#x0043;</cell><cell>&#x0044;</cell><cell>&#x0045;</cell><cell>&#x0046;</cell><cell>&#x0047;</cell>
+                                                 <cell>&#x0048;</cell><cell>&#x0049;</cell><cell>&#x004A;</cell><cell>&#x004B;</cell><cell>&#x004C;</cell><cell>&#x004D;</cell><cell>&#x004E;</cell><cell>&#x004F;</cell></row>
+                    <row><cell><c>005_</c></cell><cell>&#x0050;</cell><cell>&#x0051;</cell><cell>&#x0052;</cell><cell>&#x0053;</cell><cell>&#x0054;</cell><cell>&#x0055;</cell><cell>&#x0056;</cell><cell>&#x0057;</cell>
+                                                 <cell>&#x0058;</cell><cell>&#x0059;</cell><cell>&#x005A;</cell><cell>&#x005B;</cell><cell><backslash /></cell><cell>&#x005D;</cell><cell><circumflex /></cell><cell><underscore /></cell></row>
+                    <row><cell><c>006_</c></cell><cell>&#x0060;</cell><cell>&#x0061;</cell><cell>&#x0062;</cell><cell>&#x0063;</cell><cell>&#x0064;</cell><cell>&#x0065;</cell><cell>&#x0066;</cell><cell>&#x0067;</cell>
+                                                 <cell>&#x0068;</cell><cell>&#x0069;</cell><cell>&#x006A;</cell><cell>&#x006B;</cell><cell>&#x006C;</cell><cell>&#x006D;</cell><cell>&#x006E;</cell><cell>&#x006F;</cell></row>
+                    <row><cell><c>007_</c></cell><cell>&#x0070;</cell><cell>&#x0071;</cell><cell>&#x0072;</cell><cell>&#x0073;</cell><cell>&#x0074;</cell><cell>&#x0075;</cell><cell>&#x0076;</cell><cell>&#x0077;</cell>
+                                                 <cell>&#x0078;</cell><cell>&#x0079;</cell><cell>&#x007A;</cell><cell><lbrace /></cell><cell>&#x007C;</cell><cell><rbrace /></cell><cell><tilde /></cell><cell>        </cell></row>
+                    </tabular>
+                </table>
             </paragraphs>
 
             <paragraphs>
                 <title>Latin-1 Supplement, <c>U+0080</c><ndash /><c>U+00FF</c></title>
 
-                <p>Now we are interested in the next 128 possible bytes,  (hex <c>80</c> to <c>FF</c>).  The first 32 are again control codes and <c>U+00A0</c> is a non-breaking space, while <c>U+00AD</c> is a soft hyphen.  We have taken care to see that the remainder will render using <c>pdflatex</c> or <c>xelatex</c> with no special setup (and HTML).For more details, see the fothcoming extensive tables in <c>examples/fonts/fonts-and-characters.xml</c> . Here are all of the 94 characters.</p>
+                <p>Now we are interested in the next 128 possible bytes,  (hex <c>80</c> to <c>FF</c>).  The first 32 are again control codes and <c>U+00A0</c> is a non-breaking space, so is invisible, while <c>U+00AD</c> is a soft hyphen (which we have not implemented and so is excluded).  We have taken care to see that the remainder will render using <c>pdflatex</c> or <c>xelatex</c> with no special setup (and HTML).</p>
 
                 <!-- ex &#x0080; - &#x009F; controls -->
                 <!-- ex &#x00A0; non-breaking space  -->
                 <!-- ex &#x00AD; soft hyphen         -->
-                <blockquote>
-                    <p>&#x00A1; &#x00A2; &#x00A3; &#x00A4; &#x00A5; &#x00A6; &#x00A7; &#x00A8; &#x00A9; &#x00AA; &#x00AB; &#x00AC; &#x00AE; &#x00AF; &#x00B0; &#x00B1; &#x00B2; &#x00B3; &#x00B4; &#x00B5; &#x00B6; &#x00B7; &#x00B8; &#x00B9; &#x00BA; &#x00BB; &#x00BC; &#x00BD; &#x00BE; &#x00BF; &#x00C0; &#x00C1; &#x00C2; &#x00C3; &#x00C4; &#x00C5; &#x00C6; &#x00C7; &#x00C8; &#x00C9; &#x00CA; &#x00CB; &#x00CC; &#x00CD; &#x00CE; &#x00CF; &#x00D0; &#x00D1; &#x00D2; &#x00D3; &#x00D4; &#x00D5; &#x00D6; &#x00D7; &#x00D8; &#x00D9; &#x00DA; &#x00DB; &#x00DC; &#x00DD; &#x00DE; &#x00DF; &#x00E0; &#x00E1; &#x00E2; &#x00E3; &#x00E4; &#x00E5; &#x00E6; &#x00E7; &#x00E8; &#x00E9; &#x00EA; &#x00EB; &#x00EC; &#x00ED; &#x00EE; &#x00EF; &#x00F0; &#x00F1; &#x00F2; &#x00F3; &#x00F4; &#x00F5; &#x00F6; &#x00F7; &#x00F8; &#x00F9; &#x00FA; &#x00FB; &#x00FC; &#x00FD; &#x00FE; &#x00FF;</p>
-                </blockquote>
+                <table>
+                    <caption>Latin-1 Supplement, Regular</caption>
+                <tabular>
+                    <row><cell />
+                    <cell><c>0</c></cell>
+                    <cell><c>1</c></cell>
+                    <cell><c>2</c></cell>
+                    <cell><c>3</c></cell>
+                    <cell><c>4</c></cell>
+                    <cell><c>5</c></cell>
+                    <cell><c>6</c></cell>
+                    <cell><c>7</c></cell>
+                    <cell><c>8</c></cell>
+                    <cell><c>9</c></cell>
+                    <cell><c>A</c></cell>
+                    <cell><c>B</c></cell>
+                    <cell><c>C</c></cell>
+                    <cell><c>D</c></cell>
+                    <cell><c>E</c></cell>
+                    <cell><c>F</c></cell></row>
+                    <row><cell><c>00A_</c></cell><cell><nbsp /></cell><cell>&#x00A1;</cell><cell>&#x00A2;</cell><cell>&#x00A3;</cell><cell>&#x00A4;</cell><cell>&#x00A5;</cell><cell>&#x00A6;</cell><cell>&#x00A7;</cell>
+                                                 <cell>&#x00A8;</cell><cell>&#x00A9;</cell><cell>&#x00AA;</cell><cell>&#x00AB;</cell><cell>&#x00AC;</cell><cell>        </cell><cell>&#x00AE;</cell><cell>&#x00AF;</cell></row>
+                    <row><cell><c>00B_</c></cell><cell>&#x00B0;</cell><cell>&#x00B1;</cell><cell>&#x00B2;</cell><cell>&#x00B3;</cell><cell>&#x00B4;</cell><cell>&#x00B5;</cell><cell>&#x00B6;</cell><cell>&#x00B7;</cell>
+                                                 <cell>&#x00B8;</cell><cell>&#x00B9;</cell><cell>&#x00BA;</cell><cell>&#x00BB;</cell><cell>&#x00BC;</cell><cell>&#x00BD;</cell><cell>&#x00BE;</cell><cell>&#x00BF;</cell></row>
+                    <row><cell><c>00C_</c></cell><cell>&#x00C0;</cell><cell>&#x00C1;</cell><cell>&#x00C2;</cell><cell>&#x00C3;</cell><cell>&#x00C4;</cell><cell>&#x00C5;</cell><cell>&#x00C6;</cell><cell>&#x00C7;</cell>
+                                                 <cell>&#x00C8;</cell><cell>&#x00C9;</cell><cell>&#x00CA;</cell><cell>&#x00CB;</cell><cell>&#x00CC;</cell><cell>&#x00CD;</cell><cell>&#x00CE;</cell><cell>&#x00CF;</cell></row>
+                    <row><cell><c>00D_</c></cell><cell>&#x00D0;</cell><cell>&#x00D1;</cell><cell>&#x00D2;</cell><cell>&#x00D3;</cell><cell>&#x00D4;</cell><cell>&#x00D5;</cell><cell>&#x00D6;</cell><cell>&#x00D7;</cell>
+                                                 <cell>&#x00D8;</cell><cell>&#x00D9;</cell><cell>&#x00DA;</cell><cell>&#x00DB;</cell><cell>&#x00DC;</cell><cell>&#x00DD;</cell><cell>&#x00DE;</cell><cell>&#x00DF;</cell></row>
+                    <row><cell><c>00E_</c></cell><cell>&#x00E0;</cell><cell>&#x00E1;</cell><cell>&#x00E2;</cell><cell>&#x00E3;</cell><cell>&#x00E4;</cell><cell>&#x00E5;</cell><cell>&#x00E6;</cell><cell>&#x00E7;</cell>
+                                                 <cell>&#x00E8;</cell><cell>&#x00E9;</cell><cell>&#x00EA;</cell><cell>&#x00EB;</cell><cell>&#x00EC;</cell><cell>&#x00ED;</cell><cell>&#x00EE;</cell><cell>&#x00EF;</cell></row>
+                    <row><cell><c>00F_</c></cell><cell>&#x00F0;</cell><cell>&#x00F1;</cell><cell>&#x00F2;</cell><cell>&#x00F3;</cell><cell>&#x00F4;</cell><cell>&#x00F5;</cell><cell>&#x00F6;</cell><cell>&#x00F7;</cell>
+                                                 <cell>&#x00F8;</cell><cell>&#x00F9;</cell><cell>&#x00FA;</cell><cell>&#x00FB;</cell><cell>&#x00FC;</cell><cell>&#x00FD;</cell><cell>&#x00FE;</cell><cell>&#x00FF;</cell></row>
+                    </tabular>
+                </table>
             </paragraphs>
 
-            <p>Again, more examples and more thorough explanations can be found in the sample: <c>examples/fonts/fonts-and-characters.xml</c>.  Be aware that the nature of this sample is that it will likely produce many errors when processed with <c>pdflatex</c>.  Adding <c>-interaction batchmode</c> or <c>-interaction nonstopmode</c> to the <c>pdflatex</c> command-line will sometimes be less painless than acknowledging each error.  This more thorough sample will perform well when processed with <c>xelatex</c>.</p>
+            <paragraphs>
+                <title>Monospace, Basic Latin and Latin-1 Supplement, <c>U+0000</c><ndash /><c>U+00FF</c></title>
+
+                <p>A monospace font is critical for samples of keyboard input and to distinguish exact technical input from running commentary.  We list here all of the reasonable characters from the first 256 Unicode code points.  (We skip the same 65 control characters from above, and the soft hyphen.)  These should all render fine in HTML and when processed with <c>xelatex</c>, however our focus with this sample article for PDF output is the capabilities when processed with <c>pdflatex</c>.  First, characters from <c>U+0000</c><ndash /><c>U+007F</c>.    (The two extra backslashes visible in <latex /> output are an artifact of placing these characters into a table and should be fixed.)</p>
+
+                <!-- ex &#x0000; - &#x001F; controls -->
+                <!-- ex &#x007F; control             -->
+                <table>
+                    <caption>Basic Latin, Monospace</caption>
+                    <tabular>
+                        <row><cell />
+                        <cell><c>0</c></cell>
+                        <cell><c>1</c></cell>
+                        <cell><c>2</c></cell>
+                        <cell><c>3</c></cell>
+                        <cell><c>4</c></cell>
+                        <cell><c>5</c></cell>
+                        <cell><c>6</c></cell>
+                        <cell><c>7</c></cell>
+                        <cell><c>8</c></cell>
+                        <cell><c>9</c></cell>
+                        <cell><c>A</c></cell>
+                        <cell><c>B</c></cell>
+                        <cell><c>C</c></cell>
+                        <cell><c>D</c></cell>
+                        <cell><c>E</c></cell>
+                        <cell><c>F</c></cell></row>
+                        <row><cell><c>002_</c></cell><cell><c>&#x0020;</c></cell><cell><c>&#x0021;</c></cell><cell><c>&#x0022;</c></cell><cell><c>&#x0023;</c></cell><cell><c>&#x0024;</c></cell><cell><c>&#x0025;</c></cell><cell><c>&#x0026;</c></cell><cell><c>&#x0027;</c></cell>
+                                                     <cell><c>&#x0028;</c></cell><cell><c>&#x0029;</c></cell><cell><c>&#x002A;</c></cell><cell><c>&#x002B;</c></cell><cell><c>&#x002C;</c></cell><cell><c>&#x002D;</c></cell><cell><c>&#x002E;</c></cell><cell><c>&#x002F;</c></cell></row>
+                        <row><cell><c>003_</c></cell><cell><c>&#x0030;</c></cell><cell><c>&#x0031;</c></cell><cell><c>&#x0032;</c></cell><cell><c>&#x0033;</c></cell><cell><c>&#x0034;</c></cell><cell><c>&#x0035;</c></cell><cell><c>&#x0036;</c></cell><cell><c>&#x0037;</c></cell>
+                                                     <cell><c>&#x0038;</c></cell><cell><c>&#x0039;</c></cell><cell><c>&#x003A;</c></cell><cell><c>&#x003B;</c></cell><cell><c>&#x003C;</c></cell><cell><c>&#x003D;</c></cell><cell><c>&#x003E;</c></cell><cell><c latexsep="|">&#x003F;</c></cell></row>
+                        <row><cell><c>004_</c></cell><cell><c>&#x0040;</c></cell><cell><c>&#x0041;</c></cell><cell><c>&#x0042;</c></cell><cell><c>&#x0043;</c></cell><cell><c>&#x0044;</c></cell><cell><c>&#x0045;</c></cell><cell><c>&#x0046;</c></cell><cell><c>&#x0047;</c></cell>
+                                                     <cell><c>&#x0048;</c></cell><cell><c>&#x0049;</c></cell><cell><c>&#x004A;</c></cell><cell><c>&#x004B;</c></cell><cell><c>&#x004C;</c></cell><cell><c>&#x004D;</c></cell><cell><c>&#x004E;</c></cell><cell><c>&#x004F;</c></cell></row>
+                        <row><cell><c>005_</c></cell><cell><c>&#x0050;</c></cell><cell><c>&#x0051;</c></cell><cell><c>&#x0052;</c></cell><cell><c>&#x0053;</c></cell><cell><c>&#x0054;</c></cell><cell><c>&#x0055;</c></cell><cell><c>&#x0056;</c></cell><cell><c>&#x0057;</c></cell>
+                                                     <cell><c>&#x0058;</c></cell><cell><c>&#x0059;</c></cell><cell><c>&#x005A;</c></cell><cell><c>&#x005B;</c></cell><cell><c>&#x005C;</c></cell><cell><c>&#x005D;</c></cell><cell><c>&#x005E;</c></cell><cell><c>&#x005F;</c></cell></row>
+                        <row><cell><c>006_</c></cell><cell><c>&#x0060;</c></cell><cell><c>&#x0061;</c></cell><cell><c>&#x0062;</c></cell><cell><c>&#x0063;</c></cell><cell><c>&#x0064;</c></cell><cell><c>&#x0065;</c></cell><cell><c>&#x0066;</c></cell><cell><c>&#x0067;</c></cell>
+                                                     <cell><c>&#x0068;</c></cell><cell><c>&#x0069;</c></cell><cell><c>&#x006A;</c></cell><cell><c>&#x006B;</c></cell><cell><c>&#x006C;</c></cell><cell><c>&#x006D;</c></cell><cell><c>&#x006E;</c></cell><cell><c>&#x006F;</c></cell></row>
+                        <row><cell><c>007_</c></cell><cell><c>&#x0070;</c></cell><cell><c>&#x0071;</c></cell><cell><c>&#x0072;</c></cell><cell><c>&#x0073;</c></cell><cell><c>&#x0074;</c></cell><cell><c>&#x0075;</c></cell><cell><c>&#x0076;</c></cell><cell><c>&#x0077;</c></cell>
+                                                     <cell><c>&#x0078;</c></cell><cell><c>&#x0079;</c></cell><cell><c>&#x007A;</c></cell><cell><c>&#x007B;</c></cell><cell><c>&#x007C;</c></cell><cell><c>&#x007D;</c></cell><cell><c>&#x007E;</c></cell><cell>               </cell></row>
+                    </tabular>
+                </table>
+
+                <p>Note that the single and double quotes are upright and dumb, not curly and smart: <c>" ' " ' " '</c>.  The zero is distinguished from the capital <q>oh</q>: <c>0 O 0 O 0 O</c>.  And the numeral one is slightly different from the lower-case <q>ell</q>: <c>1 l 1 l 1 l</c>.  The hyphen should be short and not expanded into some other kind of dash: <c>- - -</c>.  These characters should all cut/paste out of a PDF into a text editor with no conversion to other characters.</p>
+
+                <p>Now the remaining characters from <c>U+0080</c><ndash /><c>U+00FF</c>.  Inline code (the <c>c</c> tag) and the <c>program</c> tag are implemented in <latex /> via the <c>listing</c> package and these characters require ad-hoc replacements for processing by <c>pdflatex</c>.  (You can see the replacements in the preamble of the <latex /> source for this document.)</p>
+
+                <!-- ex &#x0080; - &#x009F; controls -->
+                <!-- ex &#x00A0; non-breaking space  -->
+                <!-- ex &#x00AD; soft hyphen         -->
+                <table>
+                    <caption>Latin-1 Supplement, Monospace</caption>
+                    <tabular>
+                        <row><cell />
+                        <cell><c>0</c></cell>
+                        <cell><c>1</c></cell>
+                        <cell><c>2</c></cell>
+                        <cell><c>3</c></cell>
+                        <cell><c>4</c></cell>
+                        <cell><c>5</c></cell>
+                        <cell><c>6</c></cell>
+                        <cell><c>7</c></cell>
+                        <cell><c>8</c></cell>
+                        <cell><c>9</c></cell>
+                        <cell><c>A</c></cell>
+                        <cell><c>B</c></cell>
+                        <cell><c>C</c></cell>
+                        <cell><c>D</c></cell>
+                        <cell><c>E</c></cell>
+                        <cell><c>F</c></cell></row>
+                        <row><cell><c>00A_</c></cell><cell>        </cell><cell><c>&#x00A1;</c></cell><cell><c>&#x00A2;</c></cell><cell><c>&#x00A3;</c></cell><cell><c>&#x00A4;</c></cell><cell><c>&#x00A5;</c></cell><cell><c>&#x00A6;</c></cell><cell><c>&#x00A7;</c></cell>
+                                                     <cell><c>&#x00A8;</c></cell><cell><c>&#x00A9;</c></cell><cell><c>&#x00AA;</c></cell><cell><c>&#x00AB;</c></cell><cell><c>&#x00AC;</c></cell><cell>        </cell><cell><c>&#x00AE;</c></cell><cell><c>&#x00AF;</c></cell></row>
+                        <row><cell><c>00B_</c></cell><cell><c>&#x00B0;</c></cell><cell><c>&#x00B1;</c></cell><cell><c>&#x00B2;</c></cell><cell><c>&#x00B3;</c></cell><cell><c>&#x00B4;</c></cell><cell><c>&#x00B5;</c></cell><cell><c>&#x00B6;</c></cell><cell><c>&#x00B7;</c></cell>
+                                                     <cell><c>&#x00B8;</c></cell><cell><c>&#x00B9;</c></cell><cell><c>&#x00BA;</c></cell><cell><c>&#x00BB;</c></cell><cell><c>&#x00BC;</c></cell><cell><c>&#x00BD;</c></cell><cell><c>&#x00BE;</c></cell><cell><c>&#x00BF;</c></cell></row>
+                        <row><cell><c>00C_</c></cell><cell><c>&#x00C0;</c></cell><cell><c>&#x00C1;</c></cell><cell><c>&#x00C2;</c></cell><cell><c>&#x00C3;</c></cell><cell><c>&#x00C4;</c></cell><cell><c>&#x00C5;</c></cell><cell><c>&#x00C6;</c></cell><cell><c>&#x00C7;</c></cell>
+                                                     <cell><c>&#x00C8;</c></cell><cell><c>&#x00C9;</c></cell><cell><c>&#x00CA;</c></cell><cell><c>&#x00CB;</c></cell><cell><c>&#x00CC;</c></cell><cell><c>&#x00CD;</c></cell><cell><c>&#x00CE;</c></cell><cell><c>&#x00CF;</c></cell></row>
+                        <row><cell><c>00D_</c></cell><cell><c>&#x00D0;</c></cell><cell><c>&#x00D1;</c></cell><cell><c>&#x00D2;</c></cell><cell><c>&#x00D3;</c></cell><cell><c>&#x00D4;</c></cell><cell><c>&#x00D5;</c></cell><cell><c>&#x00D6;</c></cell><cell><c>&#x00D7;</c></cell>
+                                                     <cell><c>&#x00D8;</c></cell><cell><c>&#x00D9;</c></cell><cell><c>&#x00DA;</c></cell><cell><c>&#x00DB;</c></cell><cell><c>&#x00DC;</c></cell><cell><c>&#x00DD;</c></cell><cell><c>&#x00DE;</c></cell><cell><c>&#x00DF;</c></cell></row>
+                        <row><cell><c>00E_</c></cell><cell><c>&#x00E0;</c></cell><cell><c>&#x00E1;</c></cell><cell><c>&#x00E2;</c></cell><cell><c>&#x00E3;</c></cell><cell><c>&#x00E4;</c></cell><cell><c>&#x00E5;</c></cell><cell><c>&#x00E6;</c></cell><cell><c>&#x00E7;</c></cell>
+                                                     <cell><c>&#x00E8;</c></cell><cell><c>&#x00E9;</c></cell><cell><c>&#x00EA;</c></cell><cell><c>&#x00EB;</c></cell><cell><c>&#x00EC;</c></cell><cell><c>&#x00ED;</c></cell><cell><c>&#x00EE;</c></cell><cell><c>&#x00EF;</c></cell></row>
+                        <row><cell><c>00F_</c></cell><cell><c>&#x00F0;</c></cell><cell><c>&#x00F1;</c></cell><cell><c>&#x00F2;</c></cell><cell><c>&#x00F3;</c></cell><cell><c>&#x00F4;</c></cell><cell><c>&#x00F5;</c></cell><cell><c>&#x00F6;</c></cell><cell><c>&#x00F7;</c></cell>
+                                                     <cell><c>&#x00F8;</c></cell><cell><c>&#x00F9;</c></cell><cell><c>&#x00FA;</c></cell><cell><c>&#x00FB;</c></cell><cell><c>&#x00FC;</c></cell><cell><c>&#x00FD;</c></cell><cell><c>&#x00FE;</c></cell><cell><c>&#x00FF;</c></cell></row>
+                    </tabular>
+                </table>
+
+                <p>The <c>pre</c> tag is implemented in <latex /> with the <c>fancyvrb</c> package.  You can compare results here with the table above, lines here are rows above.</p>
+
+                <!-- These two raise errors in both of following -->
+                <!-- ex &#x00A0; non-breaking space              -->
+                <!-- ex &#x00AD; soft hyphen                     -->
+                <pre>
+                    <cline>  &#x00A1; &#x00A2; &#x00A3; &#x00A4; &#x00A5; &#x00A6; &#x00A7; &#x00A8; &#x00A9; &#x00AA; &#x00AB; &#x00AC;   &#x00AE; &#x00AF;</cline>
+                    <cline>&#x00B0; &#x00B1; &#x00B2; &#x00B3; &#x00B4; &#x00B5; &#x00B6; &#x00B7; &#x00B8; &#x00B9; &#x00BA; &#x00BB; &#x00BC; &#x00BD; &#x00BE; &#x00BF;</cline>
+                    <cline>&#x0040; &#x0041; &#x0042; &#x0043; &#x0044; &#x0045; &#x0046; &#x0047; &#x0048; &#x0049; &#x004A; &#x004B; &#x004C; &#x004D; &#x004E; &#x004F;</cline>
+                    <cline>&#x00D0; &#x00D1; &#x00D2; &#x00D3; &#x00D4; &#x00D5; &#x00D6; &#x00D7; &#x00D8; &#x00D9; &#x00DA; &#x00DB; &#x00DC; &#x00DD; &#x00DE; &#x00DF;</cline>
+                    <cline>&#x00E0; &#x00E1; &#x00E2; &#x00E3; &#x00E4; &#x00E5; &#x00E6; &#x00E7; &#x00E8; &#x00E9; &#x00EA; &#x00EB; &#x00EC; &#x00ED; &#x00EE; &#x00EF;</cline>
+                    <cline>&#x00F0; &#x00F1; &#x00F2; &#x00F3; &#x00F4; &#x00F5; &#x00F6; &#x00F7; &#x00F8; &#x00F9; &#x00FA; &#x00FB; &#x00FC; &#x00FD; &#x00FE; &#x00FF;</cline>
+                </pre>
+
+                <p>The <c>console</c> tag is also implemented with <c>fancyvrb</c>, with adjustments for the input lines.  It will not look like it, but these are 8 such inputs, with similar results to above, but now bolded.</p>
+
+                <console>
+                    <input>  &#x00A1; &#x00A2; &#x00A3; &#x00A4; &#x00A5; &#x00A6; &#x00A7; &#x00A8; &#x00A9; &#x00AA; &#x00AB; &#x00AC;   &#x00AE; &#x00AF;</input>
+                    <input>&#x00B0; &#x00B1; &#x00B2; &#x00B3; &#x00B4; &#x00B5; &#x00B6; &#x00B7; &#x00B8; &#x00B9; &#x00BA; &#x00BB; &#x00BC; &#x00BD; &#x00BE; &#x00BF;</input>
+                    <input>&#x0040; &#x0041; &#x0042; &#x0043; &#x0044; &#x0045; &#x0046; &#x0047; &#x0048; &#x0049; &#x004A; &#x004B; &#x004C; &#x004D; &#x004E; &#x004F;</input>
+                    <input>&#x00D0; &#x00D1; &#x00D2; &#x00D3; &#x00D4; &#x00D5; &#x00D6; &#x00D7; &#x00D8; &#x00D9; &#x00DA; &#x00DB; &#x00DC; &#x00DD; &#x00DE; &#x00DF;</input>
+                    <input>&#x00E0; &#x00E1; &#x00E2; &#x00E3; &#x00E4; &#x00E5; &#x00E6; &#x00E7; &#x00E8; &#x00E9; &#x00EA; &#x00EB; &#x00EC; &#x00ED; &#x00EE; &#x00EF;</input>
+                    <input>&#x00F0; &#x00F1; &#x00F2; &#x00F3; &#x00F4; &#x00F5; &#x00F6; &#x00F7; &#x00F8; &#x00F9; &#x00FA; &#x00FB; &#x00FC; &#x00FD; &#x00FE; &#x00FF;</input>
+                </console>
+
+            </paragraphs>
+
+            <p>Again, more examples and more thorough explanations can be found in the sample: <c>examples/fonts/fonts-and-characters.xml</c>.  Be aware that the nature of the more advanced sample is that it will likely produce many errors when processed with <c>pdflatex</c>.  Adding <c>-interaction batchmode</c> or <c>-interaction nonstopmode</c> to the <c>pdflatex</c> command-line will sometimes be less painless than acknowledging each error.  The more advanced sample will perform well when processed with <c>xelatex</c>.</p>
         </section>
 
         <section>

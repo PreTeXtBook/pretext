@@ -105,26 +105,85 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
             <paragraphs>
                 <title>Basic Latin, <c>U+0000</c><ndash /><c>U+007F</c></title>
 
-                <p>These 95 characters are the most basic, and should all render using <c>xelatex</c> with no special setup.  <c>U+0000</c> to <c>U+001F</c> are control codes and not used here.  <c>U+007F</c> is also a control code and so is excluded.  We have also replaced reserved <latex /> characters by their MathBook XML equivalent empty elements: </p>
+                <p>These 95 characters are the most basic, and should all render using <c>xelatex</c> with no special setup.  <c>U+0000</c> to <c>U+001F</c> are control codes and not used here.  <c>U+007F</c> is also a control code and so is excluded.  We have also replaced reserved <latex /> characters by their MathBook XML equivalent empty elements</p>
 
-                <!-- ex &#x0000; - &#x001F; controls -->
-                <!-- ex &#x007F; control             -->
-                <blockquote>
-                    <p>&#x0020; &#x0021; &#x0022; <hash /> <dollar /> <percent /> <ampersand /> &#x0027; &#x0028; &#x0029; &#x002A; &#x002B; &#x002C; &#x002D; &#x002E; &#x002F; &#x0030; &#x0031; &#x0032; &#x0033; &#x0034; &#x0035; &#x0036; &#x0037; &#x0038; &#x0039; &#x003A; &#x003B; <less /> &#x003D; &#x003E; &#x003F; &#x0040; &#x0041; &#x0042; &#x0043; &#x0044; &#x0045; &#x0046; &#x0047; &#x0048; &#x0049; &#x004A; &#x004B; &#x004C; &#x004D; &#x004E; &#x004F; &#x0050; &#x0051; &#x0052; &#x0053; &#x0054; &#x0055; &#x0056; &#x0057; &#x0058; &#x0059; &#x005A; &#x005B; <backslash /> &#x005D; <circumflex /> <underscore /> &#x0060; &#x0061; &#x0062; &#x0063; &#x0064; &#x0065; &#x0066; &#x0067; &#x0068; &#x0069; &#x006A; &#x006B; &#x006C; &#x006D; &#x006E; &#x006F; &#x0070; &#x0071; &#x0072; &#x0073; &#x0074; &#x0075; &#x0076; &#x0077; &#x0078; &#x0079; &#x007A; <lbrace /> &#x007C; <rbrace /> <tilde /></p>
-                </blockquote>
+                <table>
+                    <caption>Basic Latin, Regular</caption>
+                <tabular>
+                    <row><cell />
+                    <cell><c>0</c></cell>
+                    <cell><c>1</c></cell>
+                    <cell><c>2</c></cell>
+                    <cell><c>3</c></cell>
+                    <cell><c>4</c></cell>
+                    <cell><c>5</c></cell>
+                    <cell><c>6</c></cell>
+                    <cell><c>7</c></cell>
+                    <cell><c>8</c></cell>
+                    <cell><c>9</c></cell>
+                    <cell><c>A</c></cell>
+                    <cell><c>B</c></cell>
+                    <cell><c>C</c></cell>
+                    <cell><c>D</c></cell>
+                    <cell><c>E</c></cell>
+                    <cell><c>F</c></cell></row>
+                    <row><cell><c>002_</c></cell><cell>&#x0020;</cell><cell>&#x0021;</cell><cell>&#x0022;</cell><cell><hash /></cell><cell><dollar /></cell><cell><percent /></cell><cell><ampersand /></cell><cell>&#x0027;</cell>
+                                                 <cell>&#x0028;</cell><cell>&#x0029;</cell><cell>&#x002A;</cell><cell>&#x002B;</cell><cell>&#x002C;</cell><cell>&#x002D;</cell><cell>&#x002E;</cell><cell>&#x002F;</cell></row>
+                    <row><cell><c>003_</c></cell><cell>&#x0030;</cell><cell>&#x0031;</cell><cell>&#x0032;</cell><cell>&#x0033;</cell><cell>&#x0034;</cell><cell>&#x0035;</cell><cell>&#x0036;</cell><cell>&#x0037;</cell>
+                                                 <cell>&#x0038;</cell><cell>&#x0039;</cell><cell>&#x003A;</cell><cell>&#x003B;</cell><cell><less /></cell><cell>&#x003D;</cell><cell>&#x003E;</cell><cell>&#x003F;</cell></row>
+                    <row><cell><c>004_</c></cell><cell>&#x0040;</cell><cell>&#x0041;</cell><cell>&#x0042;</cell><cell>&#x0043;</cell><cell>&#x0044;</cell><cell>&#x0045;</cell><cell>&#x0046;</cell><cell>&#x0047;</cell>
+                                                 <cell>&#x0048;</cell><cell>&#x0049;</cell><cell>&#x004A;</cell><cell>&#x004B;</cell><cell>&#x004C;</cell><cell>&#x004D;</cell><cell>&#x004E;</cell><cell>&#x004F;</cell></row>
+                    <row><cell><c>005_</c></cell><cell>&#x0050;</cell><cell>&#x0051;</cell><cell>&#x0052;</cell><cell>&#x0053;</cell><cell>&#x0054;</cell><cell>&#x0055;</cell><cell>&#x0056;</cell><cell>&#x0057;</cell>
+                                                 <cell>&#x0058;</cell><cell>&#x0059;</cell><cell>&#x005A;</cell><cell>&#x005B;</cell><cell><backslash /></cell><cell>&#x005D;</cell><cell><circumflex /></cell><cell><underscore /></cell></row>
+                    <row><cell><c>006_</c></cell><cell>&#x0060;</cell><cell>&#x0061;</cell><cell>&#x0062;</cell><cell>&#x0063;</cell><cell>&#x0064;</cell><cell>&#x0065;</cell><cell>&#x0066;</cell><cell>&#x0067;</cell>
+                                                 <cell>&#x0068;</cell><cell>&#x0069;</cell><cell>&#x006A;</cell><cell>&#x006B;</cell><cell>&#x006C;</cell><cell>&#x006D;</cell><cell>&#x006E;</cell><cell>&#x006F;</cell></row>
+                    <row><cell><c>007_</c></cell><cell>&#x0070;</cell><cell>&#x0071;</cell><cell>&#x0072;</cell><cell>&#x0073;</cell><cell>&#x0074;</cell><cell>&#x0075;</cell><cell>&#x0076;</cell><cell>&#x0077;</cell>
+                                                 <cell>&#x0078;</cell><cell>&#x0079;</cell><cell>&#x007A;</cell><cell><lbrace /></cell><cell>&#x007C;</cell><cell><rbrace /></cell><cell><tilde /></cell><cell>        </cell></row>
+                    </tabular>
+                </table>
             </paragraphs>
 
             <paragraphs>
                 <title>Monospace, Basic Latin, <c>U+0000</c><ndash /><c>U+007F</c></title>
 
-                <p>These are exactly the same characters as above, but now we wrap them in the <c>&lt;c&gt;</c> element intended for inline use.  This does not test all verbatim situations but is a good simple first test.</p>
+                <p>These are exactly the same characters as above, but now we wrap them in the <c>&lt;c&gt;</c> element intended for inline use.  This does not test all verbatim situations but is a good simple first test.  (The two extra backslashes visible in <latex /> output are an artifact of placing these characters into a table and should be fixed.)</p>
 
                 <!-- ex &#x0000; - &#x001F; controls -->
                 <!-- ex &#x007F; control             -->
-                <blockquote>
-                    <p><c>&#x0020; &#x0021; &#x0022; &#x0023; &#x0024; &#x0025; &#x0026; &#x0027; &#x0028; &#x0029; &#x002A; &#x002B; &#x002C; &#x002D; &#x002E; &#x002F; &#x0030; &#x0031; &#x0032; &#x0033; &#x0034; &#x0035; &#x0036; &#x0037; &#x0038; &#x0039; &#x003A; &#x003B; &lt; &#x003D; &#x003E; </c><c latexsep="|">&#x003F;</c><c> &#x0040; &#x0041; &#x0042; &#x0043; &#x0044; &#x0045; &#x0046; &#x0047; &#x0048; &#x0049; &#x004A; &#x004B; &#x004C; &#x004D; &#x004E; &#x004F; &#x0050; &#x0051; &#x0052; &#x0053; &#x0054; &#x0055; &#x0056; &#x0057; &#x0058; &#x0059; &#x005A; &#x005B; &#x005C; &#x005D; &#x005E; &#x005F; &#x0060; &#x0061; &#x0062; &#x0063; &#x0064; &#x0065; &#x0066; &#x0067; &#x0068; &#x0069; &#x006A; &#x006B; &#x006C; &#x006D; &#x006E; &#x006F; &#x0070; &#x0071; &#x0072; &#x0073; &#x0074; &#x0075; &#x0076; &#x0077; &#x0078; &#x0079; &#x007A; &#x007B; &#x007C; &#x007D; &#x007E;</c></p>
-                </blockquote>
-
+                <table>
+                    <caption>Basic Latin, Monospace</caption>
+                    <tabular>
+                        <row><cell />
+                        <cell><c>0</c></cell>
+                        <cell><c>1</c></cell>
+                        <cell><c>2</c></cell>
+                        <cell><c>3</c></cell>
+                        <cell><c>4</c></cell>
+                        <cell><c>5</c></cell>
+                        <cell><c>6</c></cell>
+                        <cell><c>7</c></cell>
+                        <cell><c>8</c></cell>
+                        <cell><c>9</c></cell>
+                        <cell><c>A</c></cell>
+                        <cell><c>B</c></cell>
+                        <cell><c>C</c></cell>
+                        <cell><c>D</c></cell>
+                        <cell><c>E</c></cell>
+                        <cell><c>F</c></cell></row>
+                        <row><cell><c>002_</c></cell><cell><c>&#x0020;</c></cell><cell><c>&#x0021;</c></cell><cell><c>&#x0022;</c></cell><cell><c>&#x0023;</c></cell><cell><c>&#x0024;</c></cell><cell><c>&#x0025;</c></cell><cell><c>&#x0026;</c></cell><cell><c>&#x0027;</c></cell>
+                                                     <cell><c>&#x0028;</c></cell><cell><c>&#x0029;</c></cell><cell><c>&#x002A;</c></cell><cell><c>&#x002B;</c></cell><cell><c>&#x002C;</c></cell><cell><c>&#x002D;</c></cell><cell><c>&#x002E;</c></cell><cell><c>&#x002F;</c></cell></row>
+                        <row><cell><c>003_</c></cell><cell><c>&#x0030;</c></cell><cell><c>&#x0031;</c></cell><cell><c>&#x0032;</c></cell><cell><c>&#x0033;</c></cell><cell><c>&#x0034;</c></cell><cell><c>&#x0035;</c></cell><cell><c>&#x0036;</c></cell><cell><c>&#x0037;</c></cell>
+                                                     <cell><c>&#x0038;</c></cell><cell><c>&#x0039;</c></cell><cell><c>&#x003A;</c></cell><cell><c>&#x003B;</c></cell><cell><c>&#x003C;</c></cell><cell><c>&#x003D;</c></cell><cell><c>&#x003E;</c></cell><cell><c latexsep="|">&#x003F;</c></cell></row>
+                        <row><cell><c>004_</c></cell><cell><c>&#x0040;</c></cell><cell><c>&#x0041;</c></cell><cell><c>&#x0042;</c></cell><cell><c>&#x0043;</c></cell><cell><c>&#x0044;</c></cell><cell><c>&#x0045;</c></cell><cell><c>&#x0046;</c></cell><cell><c>&#x0047;</c></cell>
+                                                     <cell><c>&#x0048;</c></cell><cell><c>&#x0049;</c></cell><cell><c>&#x004A;</c></cell><cell><c>&#x004B;</c></cell><cell><c>&#x004C;</c></cell><cell><c>&#x004D;</c></cell><cell><c>&#x004E;</c></cell><cell><c>&#x004F;</c></cell></row>
+                        <row><cell><c>005_</c></cell><cell><c>&#x0050;</c></cell><cell><c>&#x0051;</c></cell><cell><c>&#x0052;</c></cell><cell><c>&#x0053;</c></cell><cell><c>&#x0054;</c></cell><cell><c>&#x0055;</c></cell><cell><c>&#x0056;</c></cell><cell><c>&#x0057;</c></cell>
+                                                     <cell><c>&#x0058;</c></cell><cell><c>&#x0059;</c></cell><cell><c>&#x005A;</c></cell><cell><c>&#x005B;</c></cell><cell><c>&#x005C;</c></cell><cell><c>&#x005D;</c></cell><cell><c>&#x005E;</c></cell><cell><c>&#x005F;</c></cell></row>
+                        <row><cell><c>006_</c></cell><cell><c>&#x0060;</c></cell><cell><c>&#x0061;</c></cell><cell><c>&#x0062;</c></cell><cell><c>&#x0063;</c></cell><cell><c>&#x0064;</c></cell><cell><c>&#x0065;</c></cell><cell><c>&#x0066;</c></cell><cell><c>&#x0067;</c></cell>
+                                                     <cell><c>&#x0068;</c></cell><cell><c>&#x0069;</c></cell><cell><c>&#x006A;</c></cell><cell><c>&#x006B;</c></cell><cell><c>&#x006C;</c></cell><cell><c>&#x006D;</c></cell><cell><c>&#x006E;</c></cell><cell><c>&#x006F;</c></cell></row>
+                        <row><cell><c>007_</c></cell><cell><c>&#x0070;</c></cell><cell><c>&#x0071;</c></cell><cell><c>&#x0072;</c></cell><cell><c>&#x0073;</c></cell><cell><c>&#x0074;</c></cell><cell><c>&#x0075;</c></cell><cell><c>&#x0076;</c></cell><cell><c>&#x0077;</c></cell>
+                                                     <cell><c>&#x0078;</c></cell><cell><c>&#x0079;</c></cell><cell><c>&#x007A;</c></cell><cell><c>&#x007B;</c></cell><cell><c>&#x007C;</c></cell><cell><c>&#x007D;</c></cell><cell><c>&#x007E;</c></cell><cell>               </cell></row>
+                    </tabular>
+                </table>
                 <p>Note that the single and double quotes are upright and dumb, not curly and smart: <c>" ' " ' " '</c>.  The zero is distinguished from the capital <q>oh</q>: <c>0 O 0 O 0 O</c>.  And the numeral one is slightly different from the lower-case <q>ell</q>: <c>1 l 1 l 1 l</c>.  The hyphen should be short and not expanded into some other kind of dash: <c>- - -</c>.  These characters should all cut/paste out of a PDF into a text editor with no conversion to other characters.</p>
 
                 <p>Note also that we have entered <em>all</em> these characters into the source with the <c>&amp;#x00NN;</c> XML notation, but needed to <q>protect</q> the question mark, since we use it in the <latex /> verbatim routine to mark the beginning and end.  Finally, see that there is some little problem in PDF output with a space after the right parenthesis above, as also noted in the sample article.</p>
@@ -139,9 +198,40 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
                 <!-- ex &#x0080; - &#x009F; controls -->
                 <!-- ex &#x00A0; non-breaking space  -->
                 <!-- ex &#x00AD; soft hyphen         -->
-                <blockquote>
-                    <p>&#x00A1; &#x00A2; &#x00A3; &#x00A4; &#x00A5; &#x00A6; &#x00A7; &#x00A8; &#x00A9; &#x00AA; &#x00AB; &#x00AC; &#x00AE; &#x00AF; &#x00B0; &#x00B1; &#x00B2; &#x00B3; &#x00B4; &#x00B5; &#x00B6; &#x00B7; &#x00B8; &#x00B9; &#x00BA; &#x00BB; &#x00BC; &#x00BD; &#x00BE; &#x00BF; &#x00C0; &#x00C1; &#x00C2; &#x00C3; &#x00C4; &#x00C5; &#x00C6; &#x00C7; &#x00C8; &#x00C9; &#x00CA; &#x00CB; &#x00CC; &#x00CD; &#x00CE; &#x00CF; &#x00D0; &#x00D1; &#x00D2; &#x00D3; &#x00D4; &#x00D5; &#x00D6; &#x00D7; &#x00D8; &#x00D9; &#x00DA; &#x00DB; &#x00DC; &#x00DD; &#x00DE; &#x00DF; &#x00E0; &#x00E1; &#x00E2; &#x00E3; &#x00E4; &#x00E5; &#x00E6; &#x00E7; &#x00E8; &#x00E9; &#x00EA; &#x00EB; &#x00EC; &#x00ED; &#x00EE; &#x00EF; &#x00F0; &#x00F1; &#x00F2; &#x00F3; &#x00F4; &#x00F5; &#x00F6; &#x00F7; &#x00F8; &#x00F9; &#x00FA; &#x00FB; &#x00FC; &#x00FD; &#x00FE; &#x00FF;</p>
-                </blockquote>
+                <table>
+                    <caption>Latin-1 Supplement, Regular</caption>
+                <tabular>
+                    <row><cell />
+                    <cell><c>0</c></cell>
+                    <cell><c>1</c></cell>
+                    <cell><c>2</c></cell>
+                    <cell><c>3</c></cell>
+                    <cell><c>4</c></cell>
+                    <cell><c>5</c></cell>
+                    <cell><c>6</c></cell>
+                    <cell><c>7</c></cell>
+                    <cell><c>8</c></cell>
+                    <cell><c>9</c></cell>
+                    <cell><c>A</c></cell>
+                    <cell><c>B</c></cell>
+                    <cell><c>C</c></cell>
+                    <cell><c>D</c></cell>
+                    <cell><c>E</c></cell>
+                    <cell><c>F</c></cell></row>
+                    <row><cell><c>00A_</c></cell><cell><nbsp /></cell><cell>&#x00A1;</cell><cell>&#x00A2;</cell><cell>&#x00A3;</cell><cell>&#x00A4;</cell><cell>&#x00A5;</cell><cell>&#x00A6;</cell><cell>&#x00A7;</cell>
+                                                 <cell>&#x00A8;</cell><cell>&#x00A9;</cell><cell>&#x00AA;</cell><cell>&#x00AB;</cell><cell>&#x00AC;</cell><cell>        </cell><cell>&#x00AE;</cell><cell>&#x00AF;</cell></row>
+                    <row><cell><c>00B_</c></cell><cell>&#x00B0;</cell><cell>&#x00B1;</cell><cell>&#x00B2;</cell><cell>&#x00B3;</cell><cell>&#x00B4;</cell><cell>&#x00B5;</cell><cell>&#x00B6;</cell><cell>&#x00B7;</cell>
+                                                 <cell>&#x00B8;</cell><cell>&#x00B9;</cell><cell>&#x00BA;</cell><cell>&#x00BB;</cell><cell>&#x00BC;</cell><cell>&#x00BD;</cell><cell>&#x00BE;</cell><cell>&#x00BF;</cell></row>
+                    <row><cell><c>00C_</c></cell><cell>&#x00C0;</cell><cell>&#x00C1;</cell><cell>&#x00C2;</cell><cell>&#x00C3;</cell><cell>&#x00C4;</cell><cell>&#x00C5;</cell><cell>&#x00C6;</cell><cell>&#x00C7;</cell>
+                                                 <cell>&#x00C8;</cell><cell>&#x00C9;</cell><cell>&#x00CA;</cell><cell>&#x00CB;</cell><cell>&#x00CC;</cell><cell>&#x00CD;</cell><cell>&#x00CE;</cell><cell>&#x00CF;</cell></row>
+                    <row><cell><c>00D_</c></cell><cell>&#x00D0;</cell><cell>&#x00D1;</cell><cell>&#x00D2;</cell><cell>&#x00D3;</cell><cell>&#x00D4;</cell><cell>&#x00D5;</cell><cell>&#x00D6;</cell><cell>&#x00D7;</cell>
+                                                 <cell>&#x00D8;</cell><cell>&#x00D9;</cell><cell>&#x00DA;</cell><cell>&#x00DB;</cell><cell>&#x00DC;</cell><cell>&#x00DD;</cell><cell>&#x00DE;</cell><cell>&#x00DF;</cell></row>
+                    <row><cell><c>00E_</c></cell><cell>&#x00E0;</cell><cell>&#x00E1;</cell><cell>&#x00E2;</cell><cell>&#x00E3;</cell><cell>&#x00E4;</cell><cell>&#x00E5;</cell><cell>&#x00E6;</cell><cell>&#x00E7;</cell>
+                                                 <cell>&#x00E8;</cell><cell>&#x00E9;</cell><cell>&#x00EA;</cell><cell>&#x00EB;</cell><cell>&#x00EC;</cell><cell>&#x00ED;</cell><cell>&#x00EE;</cell><cell>&#x00EF;</cell></row>
+                    <row><cell><c>00F_</c></cell><cell>&#x00F0;</cell><cell>&#x00F1;</cell><cell>&#x00F2;</cell><cell>&#x00F3;</cell><cell>&#x00F4;</cell><cell>&#x00F5;</cell><cell>&#x00F6;</cell><cell>&#x00F7;</cell>
+                                                 <cell>&#x00F8;</cell><cell>&#x00F9;</cell><cell>&#x00FA;</cell><cell>&#x00FB;</cell><cell>&#x00FC;</cell><cell>&#x00FD;</cell><cell>&#x00FE;</cell><cell>&#x00FF;</cell></row>
+                    </tabular>
+                </table>
             </paragraphs>
 
             <paragraphs>
@@ -152,9 +242,40 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
                 <!-- ex &#x0080; - &#x009F; controls -->
                 <!-- ex &#x00A0; non-breaking space  -->
                 <!-- ex &#x00AD; soft hyphen         -->
-                <blockquote>
-                    <p><c>&#x00A1; &#x00A2; &#x00A3; &#x00A4; &#x00A5; &#x00A6; &#x00A7; &#x00A8; &#x00A9; &#x00AA; &#x00AB; &#x00AC; &#x00AE; &#x00AF; &#x00B0; &#x00B1; &#x00B2; &#x00B3; &#x00B4; &#x00B5; &#x00B6; &#x00B7; &#x00B8; &#x00B9; &#x00BA; &#x00BB; &#x00BC; &#x00BD; &#x00BE; &#x00BF; &#x00C0; &#x00C1; &#x00C2; &#x00C3; &#x00C4; &#x00C5; &#x00C6; &#x00C7; &#x00C8; &#x00C9; &#x00CA; &#x00CB; &#x00CC; &#x00CD; &#x00CE; &#x00CF; &#x00D0; &#x00D1; &#x00D2; &#x00D3; &#x00D4; &#x00D5; &#x00D6; &#x00D7; &#x00D8; &#x00D9; &#x00DA; &#x00DB; &#x00DC; &#x00DD; &#x00DE; &#x00DF; &#x00E0; &#x00E1; &#x00E2; &#x00E3; &#x00E4; &#x00E5; &#x00E6; &#x00E7; &#x00E8; &#x00E9; &#x00EA; &#x00EB; &#x00EC; &#x00ED; &#x00EE; &#x00EF; &#x00F0; &#x00F1; &#x00F2; &#x00F3; &#x00F4; &#x00F5; &#x00F6; &#x00F7; &#x00F8; &#x00F9; &#x00FA; &#x00FB; &#x00FC; &#x00FD; &#x00FE; &#x00FF;</c></p>
-                </blockquote>
+                <table>
+                    <caption>Latin-1 Supplement, Monospace</caption>
+                    <tabular>
+                        <row><cell />
+                        <cell><c>0</c></cell>
+                        <cell><c>1</c></cell>
+                        <cell><c>2</c></cell>
+                        <cell><c>3</c></cell>
+                        <cell><c>4</c></cell>
+                        <cell><c>5</c></cell>
+                        <cell><c>6</c></cell>
+                        <cell><c>7</c></cell>
+                        <cell><c>8</c></cell>
+                        <cell><c>9</c></cell>
+                        <cell><c>A</c></cell>
+                        <cell><c>B</c></cell>
+                        <cell><c>C</c></cell>
+                        <cell><c>D</c></cell>
+                        <cell><c>E</c></cell>
+                        <cell><c>F</c></cell></row>
+                        <row><cell><c>00A_</c></cell><cell>        </cell><cell><c>&#x00A1;</c></cell><cell><c>&#x00A2;</c></cell><cell><c>&#x00A3;</c></cell><cell><c>&#x00A4;</c></cell><cell><c>&#x00A5;</c></cell><cell><c>&#x00A6;</c></cell><cell><c>&#x00A7;</c></cell>
+                                                     <cell><c>&#x00A8;</c></cell><cell><c>&#x00A9;</c></cell><cell><c>&#x00AA;</c></cell><cell><c>&#x00AB;</c></cell><cell><c>&#x00AC;</c></cell><cell>        </cell><cell><c>&#x00AE;</c></cell><cell><c>&#x00AF;</c></cell></row>
+                        <row><cell><c>00B_</c></cell><cell><c>&#x00B0;</c></cell><cell><c>&#x00B1;</c></cell><cell><c>&#x00B2;</c></cell><cell><c>&#x00B3;</c></cell><cell><c>&#x00B4;</c></cell><cell><c>&#x00B5;</c></cell><cell><c>&#x00B6;</c></cell><cell><c>&#x00B7;</c></cell>
+                                                     <cell><c>&#x00B8;</c></cell><cell><c>&#x00B9;</c></cell><cell><c>&#x00BA;</c></cell><cell><c>&#x00BB;</c></cell><cell><c>&#x00BC;</c></cell><cell><c>&#x00BD;</c></cell><cell><c>&#x00BE;</c></cell><cell><c>&#x00BF;</c></cell></row>
+                        <row><cell><c>00C_</c></cell><cell><c>&#x00C0;</c></cell><cell><c>&#x00C1;</c></cell><cell><c>&#x00C2;</c></cell><cell><c>&#x00C3;</c></cell><cell><c>&#x00C4;</c></cell><cell><c>&#x00C5;</c></cell><cell><c>&#x00C6;</c></cell><cell><c>&#x00C7;</c></cell>
+                                                     <cell><c>&#x00C8;</c></cell><cell><c>&#x00C9;</c></cell><cell><c>&#x00CA;</c></cell><cell><c>&#x00CB;</c></cell><cell><c>&#x00CC;</c></cell><cell><c>&#x00CD;</c></cell><cell><c>&#x00CE;</c></cell><cell><c>&#x00CF;</c></cell></row>
+                        <row><cell><c>00D_</c></cell><cell><c>&#x00D0;</c></cell><cell><c>&#x00D1;</c></cell><cell><c>&#x00D2;</c></cell><cell><c>&#x00D3;</c></cell><cell><c>&#x00D4;</c></cell><cell><c>&#x00D5;</c></cell><cell><c>&#x00D6;</c></cell><cell><c>&#x00D7;</c></cell>
+                                                     <cell><c>&#x00D8;</c></cell><cell><c>&#x00D9;</c></cell><cell><c>&#x00DA;</c></cell><cell><c>&#x00DB;</c></cell><cell><c>&#x00DC;</c></cell><cell><c>&#x00DD;</c></cell><cell><c>&#x00DE;</c></cell><cell><c>&#x00DF;</c></cell></row>
+                        <row><cell><c>00E_</c></cell><cell><c>&#x00E0;</c></cell><cell><c>&#x00E1;</c></cell><cell><c>&#x00E2;</c></cell><cell><c>&#x00E3;</c></cell><cell><c>&#x00E4;</c></cell><cell><c>&#x00E5;</c></cell><cell><c>&#x00E6;</c></cell><cell><c>&#x00E7;</c></cell>
+                                                     <cell><c>&#x00E8;</c></cell><cell><c>&#x00E9;</c></cell><cell><c>&#x00EA;</c></cell><cell><c>&#x00EB;</c></cell><cell><c>&#x00EC;</c></cell><cell><c>&#x00ED;</c></cell><cell><c>&#x00EE;</c></cell><cell><c>&#x00EF;</c></cell></row>
+                        <row><cell><c>00F_</c></cell><cell><c>&#x00F0;</c></cell><cell><c>&#x00F1;</c></cell><cell><c>&#x00F2;</c></cell><cell><c>&#x00F3;</c></cell><cell><c>&#x00F4;</c></cell><cell><c>&#x00F5;</c></cell><cell><c>&#x00F6;</c></cell><cell><c>&#x00F7;</c></cell>
+                                                     <cell><c>&#x00F8;</c></cell><cell><c>&#x00F9;</c></cell><cell><c>&#x00FA;</c></cell><cell><c>&#x00FB;</c></cell><cell><c>&#x00FC;</c></cell><cell><c>&#x00FD;</c></cell><cell><c>&#x00FE;</c></cell><cell><c>&#x00FF;</c></cell></row>
+                    </tabular>
+                </table>
             </paragraphs>
 
             <paragraphs>
@@ -162,10 +283,44 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
 
                 <p>Good success rendering with <c>xelatex</c> and no extra setup.  About 25<percent /> of these are missing when rendered with <c>pdflatex</c>.</p>
 
-                <blockquote>
-                    <p>&#x0100; &#x0101; &#x0102; &#x0103; &#x0104; &#x0105; &#x0106; &#x0107; &#x0108; &#x0109; &#x010A; &#x010B; &#x010C; &#x010D; &#x010E; &#x010F; &#x0110; &#x0111; &#x0112; &#x0113; &#x0114; &#x0115; &#x0116; &#x0117; &#x0118; &#x0119; &#x011A; &#x011B; &#x011C; &#x011D; &#x011E; &#x011F; &#x0120; &#x0121; &#x0122; &#x0123; &#x0124; &#x0125; &#x0126; &#x0127; &#x0128; &#x0129; &#x012A; &#x012B; &#x012C; &#x012D; &#x012E; &#x012F; &#x0130; &#x0131; &#x0132; &#x0133; &#x0134; &#x0135; &#x0136; &#x0137; &#x0138; &#x0139; &#x013A; &#x013B; &#x013C; &#x013D; &#x013E; &#x013F; &#x0140; &#x0141; &#x0142; &#x0143; &#x0144; &#x0145; &#x0146; &#x0147; &#x0148; &#x0149; &#x014A; &#x014B; &#x014C; &#x014D; &#x014E; &#x014F; &#x0150; &#x0151; &#x0152; &#x0153; &#x0154; &#x0155; &#x0156; &#x0157; &#x0158; &#x0159; &#x015A; &#x015B; &#x015C; &#x015D; &#x015E; &#x015F; &#x0160; &#x0161; &#x0162; &#x0163; &#x0164; &#x0165; &#x0166; &#x0167; &#x0168; &#x0169; &#x016A; &#x016B; &#x016C; &#x016D; &#x016E; &#x016F; &#x0170; &#x0171; &#x0172; &#x0173; &#x0174; &#x0175; &#x0176; &#x0177; &#x0178; &#x0179; &#x017A; &#x017B; &#x017C; &#x017D; &#x017E; &#x017F;</p>
-                    <!-- <p>Ā ā Ă ă Ą ą Ć ć Ĉ ĉ Ċ ċ Č č Ď ď Đ đ Ē ē Ĕ ĕ Ė ė Ę ę Ě ě Ĝ ĝ Ğ ğ Ġ ġ Ģ ģ Ĥ ĥ Ħ ħ Ĩ ĩ Ī ī Ĭ ĭ Į į İ ı Ĳ ĳ Ĵ ĵ Ķ ķ ĸ Ĺ ĺ Ļ ļ Ľ ľ Ŀ ŀ Ł ł Ń ń Ņ ņ Ň ň ŉ Ŋ ŋ Ō ō Ŏ ŏ Ő ő Œ œ Ŕ ŕ Ŗ ŗ Ř ř Ś ś Ŝ ŝ Ş ş Š š Ţ ţ Ť ť Ŧ ŧ Ũ ũ Ū ū Ŭ ŭ Ů ů Ű ű Ų ų Ŵ ŵ Ŷ ŷ Ÿ Ź ź Ż ż Ž ž ſ</p> -->
-                </blockquote>
+                <table>
+                    <caption>Latin Extended-A</caption>
+                <tabular>
+                    <row><cell />
+                    <cell><c>0</c></cell>
+                    <cell><c>1</c></cell>
+                    <cell><c>2</c></cell>
+                    <cell><c>3</c></cell>
+                    <cell><c>4</c></cell>
+                    <cell><c>5</c></cell>
+                    <cell><c>6</c></cell>
+                    <cell><c>7</c></cell>
+                    <cell><c>8</c></cell>
+                    <cell><c>9</c></cell>
+                    <cell><c>A</c></cell>
+                    <cell><c>B</c></cell>
+                    <cell><c>C</c></cell>
+                    <cell><c>D</c></cell>
+                    <cell><c>E</c></cell>
+                    <cell><c>F</c></cell></row>
+                    <row><cell><c>010_</c></cell><cell>&#x0100;</cell><cell>&#x0101;</cell><cell>&#x0102;</cell><cell>&#x0103;</cell><cell>&#x0104;</cell><cell>&#x0105;</cell><cell>&#x0106;</cell><cell>&#x0107;</cell>
+                                                 <cell>&#x0108;</cell><cell>&#x0109;</cell><cell>&#x010A;</cell><cell>&#x010B;</cell><cell>&#x010C;</cell><cell>&#x010D;</cell><cell>&#x010E;</cell><cell>&#x010F;</cell></row>
+                    <row><cell><c>011_</c></cell><cell>&#x0110;</cell><cell>&#x0111;</cell><cell>&#x0112;</cell><cell>&#x0113;</cell><cell>&#x0114;</cell><cell>&#x0115;</cell><cell>&#x0116;</cell><cell>&#x0117;</cell>
+                                                 <cell>&#x0118;</cell><cell>&#x0119;</cell><cell>&#x011A;</cell><cell>&#x011B;</cell><cell>&#x011C;</cell><cell>&#x011D;</cell><cell>&#x011E;</cell><cell>&#x011F;</cell></row>
+                    <row><cell><c>012_</c></cell><cell>&#x0120;</cell><cell>&#x0121;</cell><cell>&#x0122;</cell><cell>&#x0123;</cell><cell>&#x0124;</cell><cell>&#x0125;</cell><cell>&#x0126;</cell><cell>&#x0127;</cell>
+                                                 <cell>&#x0128;</cell><cell>&#x0129;</cell><cell>&#x012A;</cell><cell>&#x012B;</cell><cell>&#x012C;</cell><cell>&#x012D;</cell><cell>&#x012E;</cell><cell>&#x012F;</cell></row>
+                    <row><cell><c>013_</c></cell><cell>&#x0130;</cell><cell>&#x0131;</cell><cell>&#x0132;</cell><cell>&#x0133;</cell><cell>&#x0134;</cell><cell>&#x0135;</cell><cell>&#x0136;</cell><cell>&#x0137;</cell>
+                                                 <cell>&#x0138;</cell><cell>&#x0139;</cell><cell>&#x013A;</cell><cell>&#x013B;</cell><cell>&#x013C;</cell><cell>&#x013D;</cell><cell>&#x013E;</cell><cell>&#x013F;</cell></row>
+                    <row><cell><c>014_</c></cell><cell>&#x0140;</cell><cell>&#x0141;</cell><cell>&#x0142;</cell><cell>&#x0143;</cell><cell>&#x0144;</cell><cell>&#x0145;</cell><cell>&#x0146;</cell><cell>&#x0147;</cell>
+                                                 <cell>&#x0148;</cell><cell>&#x0149;</cell><cell>&#x014A;</cell><cell>&#x014B;</cell><cell>&#x014C;</cell><cell>&#x014D;</cell><cell>&#x014E;</cell><cell>&#x014F;</cell></row>
+                    <row><cell><c>015_</c></cell><cell>&#x0150;</cell><cell>&#x0151;</cell><cell>&#x0152;</cell><cell>&#x0153;</cell><cell>&#x0154;</cell><cell>&#x0155;</cell><cell>&#x0156;</cell><cell>&#x0157;</cell>
+                                                 <cell>&#x0158;</cell><cell>&#x0159;</cell><cell>&#x015A;</cell><cell>&#x015B;</cell><cell>&#x015C;</cell><cell>&#x015D;</cell><cell>&#x015E;</cell><cell>&#x015F;</cell></row>
+                    <row><cell><c>016_</c></cell><cell>&#x0160;</cell><cell>&#x0161;</cell><cell>&#x0162;</cell><cell>&#x0163;</cell><cell>&#x0164;</cell><cell>&#x0165;</cell><cell>&#x0166;</cell><cell>&#x0167;</cell>
+                                                 <cell>&#x0168;</cell><cell>&#x0169;</cell><cell>&#x016A;</cell><cell>&#x016B;</cell><cell>&#x016C;</cell><cell>&#x016D;</cell><cell>&#x016E;</cell><cell>&#x016F;</cell></row>
+                    <row><cell><c>017_</c></cell><cell>&#x0170;</cell><cell>&#x0171;</cell><cell>&#x0172;</cell><cell>&#x0173;</cell><cell>&#x0174;</cell><cell>&#x0175;</cell><cell>&#x0176;</cell><cell>&#x0177;</cell>
+                                                 <cell>&#x0178;</cell><cell>&#x0179;</cell><cell>&#x017A;</cell><cell>&#x017B;</cell><cell>&#x017C;</cell><cell>&#x017D;</cell><cell>&#x017E;</cell><cell>&#x017F;</cell></row>
+                    </tabular>
+                </table>
 
                 <p>Rendered with <c>xelatex</c> and no special setup, I seem to be missing only four characters:<ul>
                     <li><c>U+0138</c> (LATIN SMALL LETTER KRA, Greenlandic, removed 1973)</li>
@@ -180,10 +335,52 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
 
                 <p>Rendering with <c>xelatex</c> and no extra setup, maybe 50<percent /> missing, and some constructions of accents are clearly wrong.  Almost none of these appear when rendered with <c>pdflatex</c>.</p>
 
-                <blockquote>
-                    <p>&#x0180; &#x0181; &#x0182; &#x0183; &#x0184; &#x0185; &#x0186; &#x0187; &#x0188; &#x0189; &#x018A; &#x018B; &#x018C; &#x018D; &#x018E; &#x018F; &#x0190; &#x0191; &#x0192; &#x0193; &#x0194; &#x0195; &#x0196; &#x0197; &#x0198; &#x0199; &#x019A; &#x019B; &#x019C; &#x019D; &#x019E; &#x019F; &#x01A0; &#x01A1; &#x01A2; &#x01A3; &#x01A4; &#x01A5; &#x01A6; &#x01A7; &#x01A8; &#x01A9; &#x01AA; &#x01AB; &#x01AC; &#x01AD; &#x01AE; &#x01AF; &#x01B0; &#x01B1; &#x01B2; &#x01B3; &#x01B4; &#x01B5; &#x01B6; &#x01B7; &#x01B8; &#x01B9; &#x01BA; &#x01BB; &#x01BC; &#x01BD; &#x01BE; &#x01BF; &#x01C0; &#x01C1; &#x01C2; &#x01C3; &#x01C4; &#x01C5; &#x01C6; &#x01C7; &#x01C8; &#x01C9; &#x01CA; &#x01CB; &#x01CC; &#x01CD; &#x01CE; &#x01CF; &#x01D0; &#x01D1; &#x01D2; &#x01D3; &#x01D4; &#x01D5; &#x01D6; &#x01D7; &#x01D8; &#x01D9; &#x01DA; &#x01DB; &#x01DC; &#x01DD; &#x01DE; &#x01DF; &#x01E0; &#x01E1; &#x01E2; &#x01E3; &#x01E4; &#x01E5; &#x01E6; &#x01E7; &#x01E8; &#x01E9; &#x01EA; &#x01EB; &#x01EC; &#x01ED; &#x01EE; &#x01EF; &#x01F0; &#x01F1; &#x01F2; &#x01F3; &#x01F4; &#x01F5; &#x01F6; &#x01F7; &#x01F8; &#x01F9; &#x01FA; &#x01FB; &#x01FC; &#x01FD; &#x01FE; &#x01FF; &#x0200; &#x0201; &#x0202; &#x0203; &#x0204; &#x0205; &#x0206; &#x0207; &#x0208; &#x0209; &#x020A; &#x020B; &#x020C; &#x020D; &#x020E; &#x020F; &#x0210; &#x0211; &#x0212; &#x0213; &#x0214; &#x0215; &#x0216; &#x0217; &#x0218; &#x0219; &#x021A; &#x021B; &#x021C; &#x021D; &#x021E; &#x021F; &#x0220; &#x0221; &#x0222; &#x0223; &#x0224; &#x0225; &#x0226; &#x0227; &#x0228; &#x0229; &#x022A; &#x022B; &#x022C; &#x022D; &#x022E; &#x022F; &#x0230; &#x0231; &#x0232; &#x0233; &#x0234; &#x0235; &#x0236; &#x0237; &#x0238; &#x0239; &#x023A; &#x023B; &#x023C; &#x023D; &#x023E; &#x023F; &#x0240; &#x0241; &#x0242; &#x0243; &#x0244; &#x0245; &#x0246; &#x0247; &#x0248; &#x0249; &#x024A; &#x024B; &#x024C; &#x024D; &#x024E; &#x024F;</p>
-                    <!-- <p>ƀ Ɓ Ƃ ƃ Ƅ ƅ Ɔ Ƈ ƈ Ɖ Ɗ Ƌ ƌ ƍ Ǝ Ə Ɛ Ƒ ƒ i Ɠ Ɣ ƕ Ɩ Ɨ Ƙ ƙ ƚ ƛ Ɯ Ɲ ƞ Ɵ Ơ ơ Ƣ ƣ Ƥ ƥ Ʀ Ƨ ƨ Ʃ ƪ ƫ Ƭ ƭ Ʈ Ư ư Ʊ Ʋ Ƴ ƴ Ƶ ƶ Ʒ Ƹ ƹ ƺ ƻ Ƽ ƽ ƾ ƿ ǀ ǁ ǂ ǃ Ǆ ǅ ǆ Ǉ ǈ ǉ Ǌ ǋ ǌ Ǎ ǎ Ǐ ǐ Ǒ ǒ Ǔ ǔ Ǖ ǖ Ǘ ǘ Ǚ ǚ Ǜ ǜ ǝ Ǟ ǟ Ǡ ǡ Ǣ ǣ Ǥ ǥ Ǧ ǧ Ǩ ǩ Ǫ ǫ Ǭ ǭ Ǯ ǯ ǰ Ǳ ǲ ǳ Ǵ ǵ Ƕ Ƿ Ǹ ǹ Ǻ ǻ Ǽ ǽ Ǿ ǿ Ȁ ȁ Ȃ ȃ Ȅ ȅ Ȇ ȇ Ȉ ȉ Ȋ ȋ Ȍ ȍ Ȏ ȏ Ȑ ȑ Ȓ ȓ Ȕ ȕ Ȗ ȗ Ș ș Ț ț Ȝ ȝ Ȟ ȟ Ƞ ȡ Ȣ ȣ Ȥ ȥ Ȧ ȧ Ȩ ȩ Ȫ ȫ Ȭ ȭ Ȯ ȯ Ȱ ȱ Ȳ ȳ ȴ ȵ ȶ ȷ ȸ ȹ Ⱥ Ȼ ȼ Ƚ Ⱦ ȿ ɀ Ɂ ɂ Ƀ Ʉ Ʌ Ɇ ɇ Ɉ ɉ Ɋ ɋ Ɍ ɍ Ɏ ɏ</p> -->
-                </blockquote>
+                <table>
+                    <caption>Latin Extended-B</caption>
+                <tabular>
+                    <row><cell />
+                    <cell><c>0</c></cell>
+                    <cell><c>1</c></cell>
+                    <cell><c>2</c></cell>
+                    <cell><c>3</c></cell>
+                    <cell><c>4</c></cell>
+                    <cell><c>5</c></cell>
+                    <cell><c>6</c></cell>
+                    <cell><c>7</c></cell>
+                    <cell><c>8</c></cell>
+                    <cell><c>9</c></cell>
+                    <cell><c>A</c></cell>
+                    <cell><c>B</c></cell>
+                    <cell><c>C</c></cell>
+                    <cell><c>D</c></cell>
+                    <cell><c>E</c></cell>
+                    <cell><c>F</c></cell></row>
+                    <row><cell><c>018_</c></cell><cell>&#x0180;</cell><cell>&#x0181;</cell><cell>&#x0182;</cell><cell>&#x0183;</cell><cell>&#x0184;</cell><cell>&#x0185;</cell><cell>&#x0186;</cell><cell>&#x0187;</cell>
+                                                 <cell>&#x0188;</cell><cell>&#x0189;</cell><cell>&#x018A;</cell><cell>&#x018B;</cell><cell>&#x018C;</cell><cell>&#x018D;</cell><cell>&#x018E;</cell><cell>&#x018F;</cell></row>
+                    <row><cell><c>019_</c></cell><cell>&#x0190;</cell><cell>&#x0191;</cell><cell>&#x0192;</cell><cell>&#x0193;</cell><cell>&#x0194;</cell><cell>&#x0195;</cell><cell>&#x0196;</cell><cell>&#x0197;</cell>
+                                                 <cell>&#x0198;</cell><cell>&#x0199;</cell><cell>&#x019A;</cell><cell>&#x019B;</cell><cell>&#x019C;</cell><cell>&#x019D;</cell><cell>&#x019E;</cell><cell>&#x019F;</cell></row>
+                    <row><cell><c>01A_</c></cell><cell>&#x01A0;</cell><cell>&#x01A1;</cell><cell>&#x01A2;</cell><cell>&#x01A3;</cell><cell>&#x01A4;</cell><cell>&#x01A5;</cell><cell>&#x01A6;</cell><cell>&#x01A7;</cell>
+                                                 <cell>&#x01A8;</cell><cell>&#x01A9;</cell><cell>&#x01AA;</cell><cell>&#x01AB;</cell><cell>&#x01AC;</cell><cell>&#x01AD;</cell><cell>&#x01AE;</cell><cell>&#x01AF;</cell></row>
+                    <row><cell><c>01B_</c></cell><cell>&#x01B0;</cell><cell>&#x01B1;</cell><cell>&#x01B2;</cell><cell>&#x01B3;</cell><cell>&#x01B4;</cell><cell>&#x01B5;</cell><cell>&#x01B6;</cell><cell>&#x01B7;</cell>
+                                                 <cell>&#x01B8;</cell><cell>&#x01B9;</cell><cell>&#x01BA;</cell><cell>&#x01BB;</cell><cell>&#x01BC;</cell><cell>&#x01BD;</cell><cell>&#x01BE;</cell><cell>&#x01BF;</cell></row>
+                    <row><cell><c>01C_</c></cell><cell>&#x01C0;</cell><cell>&#x01C1;</cell><cell>&#x01C2;</cell><cell>&#x01C3;</cell><cell>&#x01C4;</cell><cell>&#x01C5;</cell><cell>&#x01C6;</cell><cell>&#x01C7;</cell>
+                                                 <cell>&#x01C8;</cell><cell>&#x01C9;</cell><cell>&#x01CA;</cell><cell>&#x01CB;</cell><cell>&#x01CC;</cell><cell>&#x01CD;</cell><cell>&#x01CE;</cell><cell>&#x01CF;</cell></row>
+                    <row><cell><c>01D_</c></cell><cell>&#x01D0;</cell><cell>&#x01D1;</cell><cell>&#x01D2;</cell><cell>&#x01D3;</cell><cell>&#x01D4;</cell><cell>&#x01D5;</cell><cell>&#x01D6;</cell><cell>&#x01D7;</cell>
+                                                 <cell>&#x01D8;</cell><cell>&#x01D9;</cell><cell>&#x01DA;</cell><cell>&#x01DB;</cell><cell>&#x01DC;</cell><cell>&#x01DD;</cell><cell>&#x01DE;</cell><cell>&#x01DF;</cell></row>
+                    <row><cell><c>01E_</c></cell><cell>&#x01E0;</cell><cell>&#x01E1;</cell><cell>&#x01E2;</cell><cell>&#x01E3;</cell><cell>&#x01E4;</cell><cell>&#x01E5;</cell><cell>&#x01E6;</cell><cell>&#x01E7;</cell>
+                                                 <cell>&#x01E8;</cell><cell>&#x01E9;</cell><cell>&#x01EA;</cell><cell>&#x01EB;</cell><cell>&#x01EC;</cell><cell>&#x01ED;</cell><cell>&#x01EE;</cell><cell>&#x01EF;</cell></row>
+                    <row><cell><c>01F_</c></cell><cell>&#x01F0;</cell><cell>&#x01F1;</cell><cell>&#x01F2;</cell><cell>&#x01F3;</cell><cell>&#x01F4;</cell><cell>&#x01F5;</cell><cell>&#x01F6;</cell><cell>&#x01F7;</cell>
+                                                 <cell>&#x01F8;</cell><cell>&#x01F9;</cell><cell>&#x01FA;</cell><cell>&#x01FB;</cell><cell>&#x01FC;</cell><cell>&#x01FD;</cell><cell>&#x01FE;</cell><cell>&#x01FF;</cell></row>
+                    <row><cell><c>020_</c></cell><cell>&#x0200;</cell><cell>&#x0201;</cell><cell>&#x0202;</cell><cell>&#x0203;</cell><cell>&#x0204;</cell><cell>&#x0205;</cell><cell>&#x0206;</cell><cell>&#x0207;</cell>
+                                                 <cell>&#x0208;</cell><cell>&#x0209;</cell><cell>&#x020A;</cell><cell>&#x020B;</cell><cell>&#x020C;</cell><cell>&#x020D;</cell><cell>&#x020E;</cell><cell>&#x020F;</cell></row>
+                    <row><cell><c>021_</c></cell><cell>&#x0210;</cell><cell>&#x0211;</cell><cell>&#x0212;</cell><cell>&#x0213;</cell><cell>&#x0214;</cell><cell>&#x0215;</cell><cell>&#x0216;</cell><cell>&#x0217;</cell>
+                                                 <cell>&#x0218;</cell><cell>&#x0219;</cell><cell>&#x021A;</cell><cell>&#x021B;</cell><cell>&#x021C;</cell><cell>&#x021D;</cell><cell>&#x021E;</cell><cell>&#x021F;</cell></row>
+                    <row><cell><c>022_</c></cell><cell>&#x0220;</cell><cell>&#x0221;</cell><cell>&#x0222;</cell><cell>&#x0223;</cell><cell>&#x0224;</cell><cell>&#x0225;</cell><cell>&#x0226;</cell><cell>&#x0227;</cell>
+                                                 <cell>&#x0228;</cell><cell>&#x0229;</cell><cell>&#x022A;</cell><cell>&#x022B;</cell><cell>&#x022C;</cell><cell>&#x022D;</cell><cell>&#x022E;</cell><cell>&#x022F;</cell></row>
+                    <row><cell><c>023_</c></cell><cell>&#x0230;</cell><cell>&#x0231;</cell><cell>&#x0232;</cell><cell>&#x0233;</cell><cell>&#x0234;</cell><cell>&#x0235;</cell><cell>&#x0236;</cell><cell>&#x0237;</cell>
+                                                 <cell>&#x0238;</cell><cell>&#x0239;</cell><cell>&#x023A;</cell><cell>&#x023B;</cell><cell>&#x023C;</cell><cell>&#x023D;</cell><cell>&#x023E;</cell><cell>&#x023F;</cell></row>
+                    </tabular>
+                </table>
             </paragraphs>
 
             <p>This table is left-over and will be redone, perhaps.</p>
