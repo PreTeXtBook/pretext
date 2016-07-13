@@ -333,7 +333,7 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
             <paragraphs>
                 <title>Latin Extended-B, <c>U+0180</c><ndash /><c>U+024F</c></title>
 
-                <p>Rendering with <c>xelatex</c> and no extra setup, maybe 50<percent /> missing, and some constructions of accents are clearly wrong.  Almost none of these appear when rendered with <c>pdflatex</c>.</p>
+                <p>Rendering with <c>xelatex</c> and no extra setup, maybe 50<percent /> missing, and some constructions of accents are clearly wrong.  Almost none of these appear when rendered with <c>pdflatex</c>. (When processed with <c>lualatex</c> the incorrectly accented characters are not even visible.)</p>
 
                 <table>
                     <caption>Latin Extended-B</caption>

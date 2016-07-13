@@ -43,8 +43,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!--  -->
 <!-- LaTeX executable, "engine"                       -->
-<!-- pdflatex is default, xelatex for Unicode support -->
-<!-- N.B. This has no effect, and may never.  xelatex support is automatic -->
+<!-- pdflatex is default, xelatex or lualatex for Unicode support -->
+<!-- N.B. This has no effect, and may never.  xelatex and lualatex support is automatic -->
 <xsl:param name="latex.engine" select="'pdflatex'" />
 <!--  -->
 <!-- Standard fontsizes: 10pt, 11pt, or 12pt       -->
@@ -351,20 +351,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.geometry" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% This LaTeX file may be compiled with pdflatex or xelatex&#xa;</xsl:text>
+    <xsl:text>%% This LaTeX file may be compiled with pdflatex, xelatex, or lualatex&#xa;</xsl:text>
     <xsl:text>%% The following provides engine-specific capabilities&#xa;</xsl:text>
-    <xsl:text>%% Generally, xelatex will do better languages other than US English&#xa;</xsl:text>
+    <xsl:text>%% Generally, xelatex and lualatex will do better languages other than US English&#xa;</xsl:text>
     <xsl:text>%% You can pick from the conditional if you will only ever use one engine&#xa;</xsl:text>
     <xsl:text>\usepackage{ifthen}&#xa;</xsl:text>
-    <xsl:text>\usepackage{ifxetex}&#xa;</xsl:text>
-    <xsl:text>\ifthenelse{\boolean{xetex}}{%&#xa;</xsl:text>
-    <xsl:text>%% begin: xelatex-specific configuration&#xa;</xsl:text>
+    <xsl:text>\usepackage{ifxetex,ifluatex}&#xa;</xsl:text>
+    <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}{%&#xa;</xsl:text>
+    <xsl:text>%% begin: xelatex and lualatex-specific configuration&#xa;</xsl:text>
     <xsl:text>%% fontspec package will make Latin Modern (lmodern) the default font&#xa;</xsl:text>
     <!-- http://tex.stackexchange.com/questions/115321/how-to-optimize-latin-modern-font-with-xelatex -->
-    <xsl:text>\usepackage{xltxtra}&#xa;</xsl:text>
+    <xsl:text>\ifxetex\usepackage{xltxtra}\fi&#xa;</xsl:text>
     <xsl:text>\usepackage{fontspec}&#xa;</xsl:text>
-    <!-- TODO: put a xelatex font package hook here? -->
-    <xsl:text>%% end: xelatex-specific configuration&#xa;</xsl:text>
+    <xsl:text>%% realscripts is the only part of xltxtra relevant to lualatex &#xa;</xsl:text>
+    <xsl:text>\ifluatex\usepackage{realscripts}\fi&#xa;</xsl:text>
+    <!-- TODO: put a xelatex/lualatex font package hook here? -->
+    <xsl:text>%% end: xelatex and lualatex-specific configuration&#xa;</xsl:text>
     <xsl:text>}{%&#xa;</xsl:text>
     <xsl:text>%% begin: pdflatex-specific configuration&#xa;</xsl:text>
     <xsl:text>%% translate common Unicode to their LaTeX equivalents&#xa;</xsl:text>
@@ -384,16 +386,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Upright quotes might come from the  textcomp  package, which we also use&#xa;</xsl:text>
     <xsl:text>%% We employ the shapely \ell to match Google Font version&#xa;</xsl:text>
     <xsl:text>%% pdflatex: "varqu" option produces best upright quotes&#xa;</xsl:text>
-    <xsl:text>%% xelatex: add StylisticSet 1 for shapely \ell&#xa;</xsl:text>
-    <xsl:text>%% xelatex: add StylisticSet 2 for plain zero&#xa;</xsl:text>
-    <xsl:text>%% xelatex: we add StylisticSet 3 for upright quotes&#xa;</xsl:text>
+    <xsl:text>%% xelatex,lualatex: add StylisticSet 1 for shapely \ell&#xa;</xsl:text>
+    <xsl:text>%% xelatex,lualatex: add StylisticSet 2 for plain zero&#xa;</xsl:text>
+    <xsl:text>%% xelatex,lualatex: we add StylisticSet 3 for upright quotes&#xa;</xsl:text>
     <xsl:text>%% &#xa;</xsl:text>
-    <xsl:text>\ifthenelse{\boolean{xetex}}{%&#xa;</xsl:text>
-    <xsl:text>%% begin: xelatex-specific monospace font&#xa;</xsl:text>
+    <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}{%&#xa;</xsl:text>
+    <xsl:text>%% begin: xelatex and lualatex-specific monospace font&#xa;</xsl:text>
     <xsl:text>\usepackage{zi4}&#xa;</xsl:text>
     <xsl:text>\setmonofont[BoldFont=Inconsolatazi4-Bold.otf,StylisticSet={1,3}]{Inconsolatazi4-Regular.otf}&#xa;</xsl:text>
-    <!-- TODO: put a xelatex monospace font package hook here? -->
-    <xsl:text>%% end: xelatex-specific monospace font&#xa;</xsl:text>
+    <!-- TODO: put a xelatex/lualatex monospace font package hook here? -->
+    <xsl:text>%% end: xelatex and lualatex-specific monospace font&#xa;</xsl:text>
     <xsl:text>}{%&#xa;</xsl:text>
     <xsl:text>%% begin: pdflatex-specific monospace font&#xa;</xsl:text>
      <xsl:text>\usepackage[varqu]{zi4}&#xa;</xsl:text>
@@ -511,6 +513,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Used for units and number formatting&#xa;</xsl:text>
         <xsl:text>\usepackage[per-mode=fraction]{siunitx}&#xa;</xsl:text>
         <xsl:text>\ifxetex\sisetup{math-micro=\text{µ},text-micro=µ}\fi</xsl:text>
+        <xsl:text>\ifluatex\sisetup{math-micro=\text{µ},text-micro=µ}\fi</xsl:text>
         <xsl:text>%% Common non-SI units&#xa;</xsl:text>
         <xsl:for-each select="document('mathbook-units.xsl')//base[@siunitx]">
             <xsl:text>\DeclareSIUnit\</xsl:text>
