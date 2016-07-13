@@ -1039,7 +1039,7 @@ the xsltproc executable.
                 <permille /><nbsp /><nbsp />
                 <pilcrow /><nbsp /><nbsp />
                 <section-mark /><nbsp /><nbsp />
-                <dimension /><nbsp /><nbsp />
+                <times /><nbsp /><nbsp />
                 <slash /><nbsp /><nbsp />
                 <solidus /></p>
 
@@ -2911,7 +2911,7 @@ the xsltproc executable.
                 <title>Unicode Characters for HTML Output</title>
 
                 <p>First, we discuss HTML output.  If you include Unicode characters in your MathBook XML source, they should survive just fine <foreign>en route</foreign> to a web browser or e-reader.  Here are the caveats for HTML output:<ul>
-                    <li>So that you can conhtinue to get the best results with print and PDF output, use available empty elements for special characters, even if targeting HTML output, before resorting to a Unicode character.  For example, use <c>&lt;dimension /&gt;</c> for a small <q>multiplication sign</q> in text before resorting to the Unicode character <c>U+00D7</c>.</li>
+                    <li>So that you can conhtinue to get the best results with print and PDF output, use available empty elements for special characters, even if targeting HTML output, before resorting to a Unicode character.  For example, use <c>&lt;times /&gt;</c> for a small <q>multiplication sign</q> in text before resorting to the Unicode character <c>U+00D7</c>.</li>
 
                     <li>How you actually enter Unicode characters into your source file is dependent on your editor and operating system, and is therefore outside the scope of our documentation.  You can cut/paste characters and text from the source of our examples for initial testing and experimentation.</li>
 

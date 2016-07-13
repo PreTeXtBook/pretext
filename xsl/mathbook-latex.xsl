@@ -3865,9 +3865,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\textsection{}</xsl:text>
 </xsl:template>
 
-<!-- Dimension -->
-<!-- A "times" symbol for dimensions of physical objects -->
-<xsl:template match="dimension">
+<!-- Times -->
+<!-- A "multiplication sign" symbol for use in text -->
+<xsl:template match="times">
     <xsl:text>\texttimes{}</xsl:text>
 </xsl:template>
 

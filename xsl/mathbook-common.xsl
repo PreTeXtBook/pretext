@@ -3284,10 +3284,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:text>[SECTION]</xsl:text>
 </xsl:template>
 
-<!-- Dimension -->
-<!-- A "times" symbol for dimensions of physical objects -->
-<xsl:template match="dimension">
-    <xsl:text>[DIMENSION]</xsl:text>
+<!-- Times -->
+<!-- A "multiplication sign" symbol for use in text -->
+<xsl:template match="times">
+    <xsl:text>[TIMES]</xsl:text>
 </xsl:template>
 
 <!-- Slash -->

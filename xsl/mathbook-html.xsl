@@ -4692,9 +4692,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa7;</xsl:text>
 </xsl:template>
 
-<!-- Dimension -->
-<!-- A "times" symbol for dimensions of physical objects -->
-<xsl:template match="dimension">
+<!-- Times -->
+<!-- A "multiplication sign" symbol for use in text -->
+<xsl:template match="times">
     <xsl:text>&#xd7;</xsl:text>
 </xsl:template>
 
