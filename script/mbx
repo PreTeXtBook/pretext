@@ -848,7 +848,6 @@ def get_executable(config, exec_name):
         print('MBX:WARNING: executable existence-checking was not performed (e.g. on Windows)')
         result_code = 0  # perhaps a lie on Windows
     if result_code != 0:
-        print(result_code)
         error_message = '\n'.join([
                         'cannot locate executable with configuration name "{}" as command "{}"',
                         'Edit the configuration file and/or install the necessary program'])
