@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?> <!-- MBX -->
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!-- This file is part of the documentation of MathBook XML   -->
 <!--                                                          -->
@@ -16,7 +16,9 @@
 
     <section xml:id="section-sublime-text">
         <title>Sublime Text</title>
-        <author>Dave Rosoff</author>
+        <author>
+            <personname>Dave Rosoff</personname>
+        </author>
 
         <introduction>
             <p>Sublime Text is a fast cross-platform editor with thousands of user-contributed packages implemented in its Python <init>API</init>. It is not free or open-source, although most of the user-contributed packages are both. Development is active as of June<nbsp />2016.</p>
@@ -36,9 +38,9 @@
             <p>The first thing you should do after installing Sublime Text is install the Package Control package. This package manager operates within Sublime Text to automatically fetch updates for packages you have installed (unless you disable this feature). You can also list currently installed packages, find new packages to investigate, remove packages, <etc /></p>
             <p>Thousands of user-contributed packages are available for easy installation via Package Control. It is possible to maintain packages by hand, since most package authors publish via GitHub, but Package Control is the universally recommended method of obtaining, managing, and removing packages for your installation.</p>
             <ol>
-                <li>Visit the <url href="https://packagecontrol.io/">Package Control download site</url>.</li>
-                <li>Find the Sublime Text console command (make sure the correct version of Sublime Text is selected) and copy it to the clipboard.</li>
-                <li>Open the Sublime Text console (<c>Ctrl-`</c>) and paste the command into the window that appears, then press <c>Enter</c>.</li>
+                <li><p>Visit the <url href="https://packagecontrol.io/">Package Control download site</url>.</p></li>
+                <li><p>Find the Sublime Text console command (make sure the correct version of Sublime Text is selected) and copy it to the clipboard.</p></li>
+                <li><p>Open the Sublime Text console (<c>Ctrl-`</c>) and paste the command into the window that appears, then press <c>Enter</c>.</p></li>
             </ol>
             <p>Having installed Package Control, you can use the command palette to deploy its commands, such as Install Package, List Packages, and Remove Package. See the documentation for more. A few packages that are especially useful are recommended throughout this section, and summarized in <xref ref="subsection-recommended-packages" />.</p>
         </subsection>
@@ -62,11 +64,11 @@
                 <p>To save your project explicitly, use the Project menu to choose Save As Project<ellipsis /> and choose an appropriate name and location. For a MathBook <init>XML</init> project, this would probably be the same name and location as the document root file. Use the Project menu commands to open and close your project.</p>
                 <p>There are a few benefits to using an explicit project to group files.</p>
                 <ul>
-                    <li>You can group together files and folders in different parts of the filesystem, instead of being restricted to subtrees.</li>
-                    <li>You can have project-specific settings that are different from Sublime Text's defaults and different from your user preferences (<xref provisional="subsection-settings" />).</li>
-                    <li>Sublime's project workspaces will remember which files you had open when you last closed the project, and at which positions.</li>
-                    <li>If you get very fancy, you can have multiple workspaces for the same project, with different filters and views for different purposes.</li>
-                    <li>It is fine to include <c>.sublime-project</c> files in Git repositories, but <c>.sublime-workspace</c> files should <alert>never</alert> be so included (according to the Sublime Text documentation).</li>
+                    <li><p>You can group together files and folders in different parts of the filesystem, instead of being restricted to subtrees.</p></li>
+                    <li><p>You can have project-specific settings that are different from Sublime Text's defaults and different from your user preferences (<xref provisional="subsection-settings" />).</p></li>
+                    <li><p>Sublime's project workspaces will remember which files you had open when you last closed the project, and at which positions.</p></li>
+                    <li><p>If you get very fancy, you can have multiple workspaces for the same project, with different filters and views for different purposes.</p></li>
+                    <li><p>It is fine to include <c>.sublime-project</c> files in Git repositories, but <c>.sublime-workspace</c> files should <alert>never</alert> be so included (according to the Sublime Text documentation).</p></li>
                 </ul>
             </subsubsection>
             <subsubsection xml:id="subsubsection-using-the-sidebar">
@@ -79,7 +81,9 @@
         <subsection xml:id="subsection-multiple-selections">
             <title>Multiple selections</title>
             <p>Multiple selections are the single most useful and irreplaceable feature of Sublime Text, the one that will keep you coming back. From the documentation:</p>
-            <blockquote>Any praise about multiple selections is an understatement.</blockquote>
+            <blockquote>
+                <p>Any praise about multiple selections is an understatement.</p>
+            </blockquote>
             <p>The base functionality of multiple selections is simple. Hold down the <c>Ctrl</c> key (<c>Cmd</c> on <init>OS X</init>), and click somewhere in the open view to get a second cursor. Continue to add more cursors. All of them will behave together when you type: text will be inserted, most snippets or other text commands function as usual, etc. Even mouse commands work in an intuitive way with multiple selections. </p>
             <p>It is hard to explain exactly what makes multiple selections so powerful. You just have to try it for yourself. Here is a typical example. In a structured document, many bits of text occur quite frequently<mdash />element and attribute names, for example. You may want to update several occurrences of a fragment at once<mdash />making several identical changes. Sublime's Quick Add Next command (<c>Ctrl+D</c>/<c>Cmd+D</c>) makes this a snap.</p>
             <ol>
@@ -181,9 +185,10 @@
         </subsection>
         <subsection xml:id="subsection-mbxtools">
             <title>MBXTools<mdash />a Sublime Text package for MathBook <init>XML</init></title>
-
-            <p>MBXTools is a Sublime Text package designed to assist authors using MathBook <init>XML</init>. It is very experimental and may behave unexpectedly.</p>
-            <p>The package owes its inspiration and much of its code to the excellent <url href="https://github.com/SublimeText/LaTeXTools">LaTeXTools</url> package. Please let the author know of any bugs you find or any features you would like to see included in MBXTools by <url href="https://github.com/daverosoff/mbxtools/issues">creating a GitHub issue</url>.</p>
+            <introduction>
+                <p>MBXTools is a Sublime Text package designed to assist authors using MathBook <init>XML</init>. It is very experimental and may behave unexpectedly.</p>
+                <p>The package owes its inspiration and much of its code to the excellent <url href="https://github.com/SublimeText/LaTeXTools">LaTeXTools</url> package. Please let the author know of any bugs you find or any features you would like to see included in MBXTools by <url href="https://github.com/daverosoff/mbxtools/issues">creating a GitHub issue</url>.</p>
+            </introduction>
             <subsubsection xml:id="subsubsection-mbxtools-install">
                 <title>Installation</title>
                 <paragraphs xml:id="paragraphs-mbxtools-install-via-package-control">
@@ -240,15 +245,15 @@
         <subsection xml:id="subsection-recommended-packages">
             <title>Recommended Packages</title>
             <ol>
-                <li>Package Control</li>
-                <li>Emmet</li>
-                <li>SideBarEnhancements</li>
-                <li>PowerCursors</li>
-                <li>MultiEditUtils</li>
-                <li>Text Pastry</li>
-                <li>Git or SublimeGit</li>
-                <li>SublimeLinter</li>
-                <li>MBXTools</li>
+                <li><p>Package Control</p></li>
+                <li><p>Emmet</p></li>
+                <li><p>SideBarEnhancements</p></li>
+                <li><p>PowerCursors</p></li>
+                <li><p>MultiEditUtils</p></li>
+                <li><p>Text Pastry</p></li>
+                <li><p>Git or SublimeGit</p></li>
+                <li><p>SublimeLinter</p></li>
+                <li><p>MBXTools</p></li>
             </ol>
         </subsection>
     </section>
