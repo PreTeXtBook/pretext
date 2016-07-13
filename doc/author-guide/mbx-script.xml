@@ -56,6 +56,9 @@
             <li>
                 <p>Replace the right-hand sides of the entries for <c>pdfsvg</c> and <c>pdfpng</c> with the full path name of the <c>convert</c> utility installed with ImageMagick (<xref ref="installing-imagemagick" />), <alert>using forward slashes</alert>. It will be something like <cd>c:/ImageMagick-7.0.1-Q16/convert.exe</cd></p>
             </li>
+            <li>
+                <todo>Similarly, replace the right-hand side of the entry for <c>pdfcrop</c></todo>
+            </li>
         </ol>
     </section>
 

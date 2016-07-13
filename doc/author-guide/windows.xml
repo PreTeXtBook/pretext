@@ -257,6 +257,7 @@
   <section xml:id="installing-ghostscript">
     <title>Installing Ghostscript</title>
     <p>Visit the <url href="http://www.ghostscript.com/download/gsdnld.html">Ghostscript download area</url> and download the most current binary for either 64-bit or 32-bit Windows (<xref ref="do-i-have-64-bit-windows" /> ). Run the installer and accept all the default options.</p>
+    <todo>Add instructions on adding gswin64c to PATH</todo>
     <p>Congratulations, you have successfully installed Ghostscript.</p>
   </section>
 

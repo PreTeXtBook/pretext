@@ -220,8 +220,8 @@ def latex_image_conversion(xml_source, xmlid_root, data_dir, dest_dir, outformat
             # Rob: Please edit the _verbose message below if you like
             #################################################################
             if plat == "Windows":
-                _verbose("Using pdfcrop is not reliable on Windows; advise use of")
-                _verbose("a linux-like shell e.g. Git Bash or SageMathCloud terminal")
+                _debug("MBX:WARNING: Using pdfcrop is not reliable on Windows unless you are using")
+                _debug("MBX:WARNING: a linux-like shell, e.g. Git Bash or SageMathCloud terminal")
                 pdfcrop_cmd = [pdfcrop_executable, "--gscmd", "gswin64c.exe", latex_image_pdf, latex_image_pdf]
             else:
                 pdfcrop_cmd = [pdfcrop_executable, latex_image_pdf, latex_image_pdf]
