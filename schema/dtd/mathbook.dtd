@@ -39,7 +39,7 @@
 <!-- Precede these by a #PCDATA, wrap with ( )*          -->
 <!ENTITY % characters "nbsp|ndash|mdash|ampersand|less|greater|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|
 lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk|lq|rq|lsq|rsq|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|times|slash|solidus|copyright|ie|eg|etc|circa|tex|latex|webwork|trademark|registered|fillin|today|timeofday">
-<!ENTITY % markup "xref|url|m|c|em|alert|insert|delete|stale|q|sq|braces|brackets|angles|term|foreign|quantity|acro|booktitle">
+<!ENTITY % markup "xref|url|m|c|em|alert|insert|delete|stale|q|sq|braces|brackets|dblbrackets|angles|term|foreign|abbr|quantity|acro|init|booktitle">
 <!ENTITY % linear "%characters; | %markup;">
 
 <!-- Multiline Content -->
@@ -344,7 +344,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST row bottom        (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST row left          (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST row halign        (left|center|right)        #IMPLIED>
-    <!ATTLIST row valign        (left|middle|right)        #IMPLIED>
+    <!ATTLIST row valign        (bottom|middle|top)        #IMPLIED>
 
 <!ELEMENT cell    (#PCDATA|%sentence;|line)*>
 <!-- Should be (#PCDATA|%sentence;)* xor (line+), but DTD cannot express this -->
