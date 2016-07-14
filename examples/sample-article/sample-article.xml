@@ -241,9 +241,9 @@ the xsltproc executable.
             -->
             <theorem xml:id="theorem-FTC">
                 <title>The Fundamental Theorem of Calculus</title>
-                <index>Fundamental Theorem of Calculus</index>
+                <index><main>Fundamental Theorem of Calculus</main></index>
                 <statement>
-                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me><index>Buried in p/statement/theorem</index></p>
+                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me><index><main>Buried in p/statement/theorem</main></index></p>
                 </statement>
                 <proof>
                     <p>Left to the reader.</p>
@@ -285,13 +285,13 @@ the xsltproc executable.
             -->
 
             <definition xml:id="definition-indefinite-integral">
-                <statement>
-                    <p>Suppose that <m>\frac{d}{dx}F(x)=f(x)</m>.  Then the <term>indefinite integral</term> of <m>f(x)</m> is <m>F(x)</m> and is written as <me>\int\,f(x)\,dx=F(x)</me></p>
-                </statement>
                 <notation>
                     <usage>\int\,f(x)\,dx</usage>
                     <description>indefinite integral of <m>f(x)</m></description>
                 </notation>
+                <statement>
+                    <p>Suppose that <m>\frac{d}{dx}F(x)=f(x)</m>.  Then the <term>indefinite integral</term> of <m>f(x)</m> is <m>F(x)</m> and is written as <me>\int\,f(x)\,dx=F(x)</me></p>
+                </statement>
             </definition>
 
         </section>
@@ -789,10 +789,10 @@ the xsltproc executable.
                 <li><p>Black</p></li>
                 <li><p>Orange</p></li>
                 <li><p>Pink</p></li>
-                <li><p>Salmon<index>Strange Colors</index></p></li>
+                <li><p>Salmon<index><main>Strange Colors</main></index></p></li>
                 <li><p>Aqua</p></li>
                 <li><p>Cyan</p></li>
-                <li><p>Puce<index>Strange Colors</index></p></li>
+                <li><p>Puce<index><main>Strange Colors</main></index></p></li>
             </ol>
 
             <ul cols="2">
@@ -1062,15 +1062,15 @@ the xsltproc executable.
                     <p><url href="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&amp;'()*+,;="><c latexsep="|">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&amp;'()*+,;=</c></url></p>
                 </blockquote>
 
-                <p>The source of the four above examples can be instructive.<ul>
+                <p>The source of the four above examples can be instructive.</p>
+
+                <ul>
                     <li><p>Four ampersands need to be authored as <c>&amp;amp;</c>: two <c>href</c> attributes and two strings of verbatim text.</p></li>
 
                     <li><p>Two ampersands are authored as <c>&lt;ampersand /&gt;</c>: two strings of normal text.</p></li>
 
                     <li><p>For <latex /> output, the verbatim <c>c</c> element will be automatically delimited by a character that is not in the string.  The fault is a question mark, which you see here in the string.  So we have twice used the <c>latexsep</c> attribute with the value <c>|</c> (the <term>pipe</term> character) which cannot ever appear in a <init>URL</init>.</p></li>
-
-                </ul></p>
-
+                </ul>
 
                 <p>When a <c>url</c> has no content, then its <c>href</c> attribute is displayed as the text, automatically in a verbatim font (so no need to consider the <c>latexsep</c> attribute in any way).</p>
 
@@ -1938,7 +1938,7 @@ the xsltproc executable.
                             <li><p>There is an identity element, <m>e</m>.</p></li>
                             <li><p>For every element <m>b</m>, there is an element <m>c</m> (the inverse), such that <me>b\cdot c=c\cdot b = e.</me></p></li>
                         </ol>
-                        <p>If these conditions are met for a set <m>G</m>, then we say <m>G</m> is a <term index="yes">group</term>.</p>
+                        <p>If these conditions are met for a set <m>G</m>, then we say <m>G</m> is a <term>group</term>.</p>
                     </statement>
                 </definition>
 
@@ -2562,7 +2562,7 @@ the xsltproc executable.
                 </tabular>
             </table>
 
-            <p>Table cells can have multiline content using <tag>line</tag> elements. This is not the same thing as a paragraph cell<mdash />line breaking will happen precisely where the author tells it to. A line will not break, even on a narrow screen. If a cell uses a <tag>line</tag>, it must only use a sequence of <tag>line</tag>s and no other content. This is also a good time to demonstrate the <attribute>valign</attribute> attribute.</p>
+            <p>Table cells can have multiline content using <c>&lt;line&gt;</c> elements. This is not the same thing as a paragraph cell<mdash />line breaking will happen precisely where the author tells it to. A line will not break, even on a narrow screen. If a cell uses a <c>&lt;line&gt;</c>, it must only use a sequence of <c>&lt;line&gt;</c>s and no other content. This is also a good time to demonstrate the <c>&lt;valign&gt;</c> attribute.</p>
 
             <table xml:id="table-multiline-cells">
                 <caption><abbr>Dr.</abbr> Seuss lines</caption>
@@ -2910,15 +2910,17 @@ the xsltproc executable.
             <paragraphs>
                 <title>Unicode Characters for HTML Output</title>
 
-                <p>First, we discuss HTML output.  If you include Unicode characters in your MathBook XML source, they should survive just fine <foreign>en route</foreign> to a web browser or e-reader.  Here are the caveats for HTML output:<ul>
-                    <li>So that you can conhtinue to get the best results with print and PDF output, use available empty elements for special characters, even if targeting HTML output, before resorting to a Unicode character.  For example, use <c>&lt;times /&gt;</c> for a small <q>multiplication sign</q> in text before resorting to the Unicode character <c>U+00D7</c>.</li>
+                <p>First, we discuss HTML output.  If you include Unicode characters in your MathBook XML source, they should survive just fine <foreign>en route</foreign> to a web browser or e-reader.  Here are the caveats for HTML output:</p>
 
-                    <li>How you actually enter Unicode characters into your source file is dependent on your editor and operating system, and is therefore outside the scope of our documentation.  You can cut/paste characters and text from the source of our examples for initial testing and experimentation.</li>
+                <ul>
+                    <li><p>So that you can conhtinue to get the best results with print and PDF output, use available empty elements for special characters, even if targeting HTML output, before resorting to a Unicode character.  For example, use <c>&lt;times /&gt;</c> for a small <q>multiplication sign</q> in text before resorting to the Unicode character <c>U+00D7</c>.</p></li>
 
-                    <li>Always, always identify your source as having Unicode characters by including the incantation <c latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c> as the first line of your source file. (You <em>may</em> be able to accurately cut/paste this text here.  But if the copy has non-standard characters in it, go back to the top of this source file for a copy.)</li>
+                    <li><p>How you actually enter Unicode characters into your source file is dependent on your editor and operating system, and is therefore outside the scope of our documentation.  You can cut/paste characters and text from the source of our examples for initial testing and experimentation.</p></li>
 
-                    <li>Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url> has a plethora of samples of various groups of Unicode characters.  If you, or your readers, are <q>missing</q> characters in a web browser, this is a good place to start testing the local setup.</li>
-                </ul></p>
+                    <li><p>Always, always identify your source as having Unicode characters by including the incantation <c latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c> as the first line of your source file. (You <em>may</em> be able to accurately cut/paste this text here.  But if the copy has non-standard characters in it, go back to the top of this source file for a copy.)</p></li>
+
+                    <li><p>Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url> has a plethora of samples of various groups of Unicode characters.  If you, or your readers, are <q>missing</q> characters in a web browser, this is a good place to start testing the local setup.</p></li>
+                </ul>
             </paragraphs>
 
             <paragraphs>

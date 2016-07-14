@@ -39,7 +39,7 @@
 <!-- Precede these by a #PCDATA, wrap with ( )*          -->
 <!ENTITY % characters "nbsp|ndash|mdash|ampersand|less|greater|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|
 lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk|lq|rq|lsq|rsq|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|times|slash|solidus|copyright|ie|eg|etc|circa|tex|latex|webwork|trademark|registered|fillin|today|timeofday">
-<!ENTITY % markup "xref|url|m|c|em|alert|insert|delete|stale|q|sq|braces|brackets|angles|term|foreign|quantity|acro|booktitle">
+<!ENTITY % markup "xref|url|m|c|em|alert|insert|delete|stale|q|sq|braces|brackets|dblbrackets|angles|term|foreign|abbr|quantity|acro|init|booktitle">
 <!ENTITY % linear "%characters; | %markup;">
 
 <!-- Multiline Content -->
@@ -228,21 +228,21 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 
 <!-- EXAMPLE-LIKE, PROJECT-LIKE -->
 <!-- minimal structure  xor  statement/solution -->
-<!ELEMENT example (title?, index*, ((%para;)*|(statement, solution)))>
+<!ELEMENT example (title?, index*, ((%para;)*|(statement, solution*)))>
     <!ATTLIST example xml:id ID #IMPLIED>
-<!ELEMENT question (title?, index*, ((%para;)*|(statement, solution)))>
+<!ELEMENT question (title?, index*, ((%para;)*|(statement, solution*)))>
     <!ATTLIST question xml:id ID #IMPLIED>
-<!ELEMENT problem (title?, index*, ((%para;)*|(statement, solution)))>
+<!ELEMENT problem (title?, index*, ((%para;)*|(statement, solution*)))>
     <!ATTLIST problem xml:id ID #IMPLIED>
-<!ELEMENT project (title?, index*, ((%para;)*|(statement, solution)))>
+<!ELEMENT project (title?, index*, ((%para;)*|(statement, solution*)))>
     <!ATTLIST project xml:id ID #IMPLIED>
-<!ELEMENT activity (title?, index*, ((%para;)*|(statement, solution)))>
+<!ELEMENT activity (title?, index*, ((%para;)*|(statement, solution*)))>
     <!ATTLIST activity xml:id ID #IMPLIED>
-<!ELEMENT exploration (title?, index*, ((%para;)*|(statement, solution)))>
+<!ELEMENT exploration (title?, index*, ((%para;)*|(statement, solution*)))>
     <!ATTLIST exploration xml:id ID #IMPLIED>
-<!ELEMENT task (title?, index*, ((%para;)*|(statement, solution)))>
+<!ELEMENT task (title?, index*, ((%para;)*|(statement, solution*)))>
     <!ATTLIST task xml:id ID #IMPLIED>
-<!ELEMENT investigation (title?, index*, ((%para;)*|(statement, solution)))>
+<!ELEMENT investigation (title?, index*, ((%para;)*|(statement, solution*)))>
     <!ATTLIST investigation xml:id ID #IMPLIED>
 
 <!ELEMENT list (title?, index*, introduction?, (ol|ul|dl), conclusion?)>
@@ -313,7 +313,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- ################## -->
 
 <!-- Caption -->
-<!ELEMENT caption  (#PCDATA|%linear;)*>
+<!ELEMENT caption  (#PCDATA|%linear;|%markup;)*>
 
 <!-- table attributes for use only in side-by-side -->
 <!ELEMENT table   (title?, index*, caption?, tabular)>
@@ -339,7 +339,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST row bottom        (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST row left          (none|minor|medium|major)  #IMPLIED>
     <!ATTLIST row halign        (left|center|right)        #IMPLIED>
-    <!ATTLIST row valign        (left|middle|right)        #IMPLIED>
+    <!ATTLIST row valign        (bottom|middle|top)        #IMPLIED>
 
 <!ELEMENT cell    (#PCDATA|%sentence;|line)*>
 <!-- Should be (#PCDATA|%sentence;)* xor (line+), but DTD cannot express this -->
