@@ -2956,7 +2956,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
-    <xsl:value-of select="text()|var" />
+    <xsl:apply-templates select="text()|var|fillin" />
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
@@ -2969,7 +2969,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
-    <xsl:value-of select="text()|var" />
+    <xsl:apply-templates select="text()|var|fillin" />
     <!-- label original -->
     <xsl:apply-templates select="." mode="label" />
     <xsl:apply-templates select="." mode="tag" />
@@ -2982,7 +2982,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
-    <xsl:value-of select="text()|var" />
+    <xsl:apply-templates select="text()|var|fillin" />
     <xsl:apply-templates select="." mode="tag" />
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
@@ -3021,7 +3021,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (3) MathJax config makes span id's predictable    -->
 <!-- (4) Last row special, has no line-break marker    -->
 <xsl:template match="md/mrow">
-    <xsl:apply-templates select="text()|xref|var" />
+    <xsl:apply-templates select="text()|xref|var|fillin" />
     <xsl:if test="@number='yes'">
         <!-- label original -->
         <xsl:apply-templates select="." mode="label" />
@@ -3034,7 +3034,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="md/mrow" mode="duplicate">
-    <xsl:apply-templates select="text()|xref|var" />
+    <xsl:apply-templates select="text()|xref|var|fillin" />
     <xsl:if test="@number='yes'">
         <xsl:apply-templates select="." mode="tag"/>
     </xsl:if>
@@ -3045,7 +3045,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="mdn/mrow">
-    <xsl:apply-templates select="text()|xref|var" />
+    <xsl:apply-templates select="text()|xref|var|fillin" />
     <xsl:choose>
         <xsl:when test="@number='no'">
             <xsl:text>\notag</xsl:text>
@@ -3063,7 +3063,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="mdn/mrow" mode="duplicate">
-    <xsl:apply-templates select="text()|xref|var" />
+    <xsl:apply-templates select="text()|xref|var|fillin" />
     <xsl:choose>
         <xsl:when test="@number='no'">
             <xsl:text>\notag</xsl:text>
@@ -4348,9 +4348,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x2122;</xsl:text>
 </xsl:template>
 
-
 <!-- Fill-in blank -->
-<!-- Bringhurst suggests 5/11 em per character -->
+<!-- Bringhurst suggests 5/11 em per character                            -->
+<!-- A 'span' normally, but a MathJax non-standard \Rule for math         -->
+<!-- "\Rule is a MathJax-specific extension with parameters being width,  -->
+<!-- height and depth of the rule"                                        -->
+<!-- Davide Cervone                                                       -->
+<!-- https://groups.google.com/forum/#!topic/mathjax-users/IEivs1D7ntM    -->
 <xsl:template match="fillin">
     <xsl:variable name="characters">
         <xsl:choose>
@@ -4362,16 +4366,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:element name="span">
-        <xsl:attribute name="class">
-            <xsl:text>fillin</xsl:text>
-        </xsl:attribute>
-        <xsl:attribute name="style">
-            <xsl:text>width: </xsl:text>
+    <xsl:choose>
+        <xsl:when test="parent::m or parent::me or parent::men or parent::mrow">
+            <xsl:text>\Rule{</xsl:text>
             <xsl:value-of select="5 * $characters div 11" />
-            <xsl:text>em;</xsl:text>
-        </xsl:attribute>
-    </xsl:element>
+            <xsl:text>em}{0.1ex}{0pt}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:element name="span">
+                <xsl:attribute name="class">
+                    <xsl:text>fillin</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="style">
+                    <xsl:text>width: </xsl:text>
+                    <xsl:value-of select="5 * $characters div 11" />
+                    <xsl:text>em;</xsl:text>
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- exempli gratia, for example -->

@@ -555,7 +555,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="text()|var" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="text()" />
+            <xsl:apply-templates select="text()|fillin" />
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>\)</xsl:text>

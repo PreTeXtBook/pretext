@@ -2947,7 +2947,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="text()|var" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="text()" />
+            <xsl:apply-templates select="text()|fillin" />
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>\end{</xsl:text>
@@ -2964,7 +2964,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
-    <xsl:value-of select="." />
+    <xsl:apply-templates select="text()|fillin" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
@@ -2998,7 +2998,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="text()|xref|var" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="text()|xref" />
+            <xsl:apply-templates select="text()|xref|fillin" />
         </xsl:otherwise>
     </xsl:choose>
     <xsl:choose>
@@ -3019,7 +3019,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="text()|xref|var" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="text()|xref" />
+            <xsl:apply-templates select="text()|xref|fillin" />
         </xsl:otherwise>
     </xsl:choose>
     <xsl:choose>
@@ -3928,8 +3928,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Fill-in blank -->
-<!-- \fillin{} defined in preamble as semantic macro      -->
-<!-- argument is number of "em", Bringhurst suggests 5/11 -->
+<!-- \fillin{} defined in preamble as semantic macro       -->
+<!-- argument is number of "em", Bringhurst suggests 5/11  -->
+<!-- \rule works in text and in math (unlike HTML/MathJax) -->
 <xsl:template match="fillin">
     <xsl:variable name="characters">
         <xsl:choose>

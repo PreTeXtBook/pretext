@@ -699,7 +699,7 @@ the xsltproc executable.
                 </conclusion>
             </subsection>
 
-            <subsection>
+            <subsection xml:id="subsection-paragraph-markup">
                 <title>Some Paragraph-Level Markup</title>
 
                 <p>Text within a paragraph may be <em>emphasized</em> with <c>&lt;em&gt;</c> or if you want to take it to the next level you can identify the text as an <alert>alert</alert> with <c>&lt;alert&gt;</c>.</p>
@@ -1731,6 +1731,27 @@ the xsltproc executable.
                 <exercise>
                     <statement>
                         <p>Compute <m>\int 3x^2\,dx</m>.</p>
+                    </statement>
+                </exercise>
+
+                <exercise>
+                    <statement>
+                        <p>One of the few things you can place inside of mathematics is a <q>fill-in</q> blank.  We demonstrate a few scenarios here.  See details on syntax in <xref ref="subsection-paragraph-markup" autoname="yes" /><ndash />the use is identical within mathematics.<ul>
+                            <li><p>Inside inline math (short, 4 characters): <m>\sin(<fillin characters="4" />)</m></p></li>
+
+                            <li><p>Inside inline math (default, 10 characters): <m>\sin(<fillin characters="10" />)</m></p></li>
+
+                            <li><p>Inside exponents and subscripts (2 characters each).  In this case, be sure to wrap your exponents and subscripts in braces, as would be good <latex /> practice anyway: <m>x^{5+<fillin characters="2" />}\,y_{<fillin characters="2" />}</m></p></li>
+
+                            <li><p>Inside inline math (too long for this line probably, 40 characters long): <m>\tan(<fillin characters="40" />)</m></p></li>
+
+                            <li><p>So use inside a displayed equation<me>16\log\space<fillin characters="8" /></me>like this one.</p></li>
+
+                            <li><p>Inside the second line of a multi-line display:<md>
+                                <mrow>y &amp;= x^7\,x^8</mrow>
+                                <mrow>  &amp;= x^{<fillin characters="3" />}</mrow>
+                            </md></p></li>
+                        </ul></p>
                     </statement>
                 </exercise>
 

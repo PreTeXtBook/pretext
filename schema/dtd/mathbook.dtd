@@ -527,16 +527,16 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- var is allowed only within a webwork problem         -->
 <!-- xref is allowed only on mrows to allow for "reasons" -->
 <!-- TODO: warn on use of var outside of webwork          -->
-<!ELEMENT m   (#PCDATA|var)*>
-<!ELEMENT me  (#PCDATA|var)*>
-<!ELEMENT men (#PCDATA|var)*>
+<!ELEMENT m   (#PCDATA|var|fillin)*>
+<!ELEMENT me  (#PCDATA|var|fillin)*>
+<!ELEMENT men (#PCDATA|var|fillin)*>
     <!ATTLIST men xml:id ID #IMPLIED>
 
 <!ELEMENT md   (mrow, (mrow|intertext)*)>
 <!ELEMENT mdn  (mrow, (mrow|intertext)*)>
 
 <!-- <xref> may occur in an <mrow> as a "reason" -->
-<!ELEMENT mrow (#PCDATA|var|xref)*>
+<!ELEMENT mrow (#PCDATA|var|xref|fillin)*>
     <!ATTLIST mrow xml:id ID #IMPLIED>
     <!ATTLIST mrow number (yes|no) #IMPLIED>
 
