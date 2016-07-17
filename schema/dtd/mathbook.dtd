@@ -75,7 +75,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- REMARK-LIKE remark|convention|note|observation|warning                         -->
 <!-- EXAMPLE-LIKE example|question|problem                                          -->
 <!-- PROJECT-LIKE project|activity|exploration|task|investigation                   -->
-<!ENTITY % block "%para;|paragraphs|definition|theorem|corollary|lemma|algorithm|proposition|claim|fact|identity|axiom|conjecture|principle|heuristic|hypothesis|assumption|remark|convention|note|observation|warning|list|example|question|problem|project|activity|exploration|task|investigation|exercise|contributors|list-of|solution-list|notation-list|todo">
+<!ENTITY % block "%para;|paragraphs|definition|theorem|corollary|lemma|algorithm|proposition|claim|fact|identity|axiom|conjecture|principle|heuristic|hypothesis|assumption|remark|convention|note|observation|warning|list|example|question|problem|project|activity|exploration|task|investigation|assemblage|exercise|contributors|list-of|solution-list|notation-list|todo">
 
 
 <!-- ######### -->
@@ -244,6 +244,9 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST task xml:id ID #IMPLIED>
 <!ELEMENT investigation (title?, index*, ((%para;)*|(statement, solution)))>
     <!ATTLIST investigation xml:id ID #IMPLIED>
+
+<!-- a collection or summary, minimal structure, highlighted presentation -->
+<!ELEMENT assemblage (title?, index*, p+)>
 
 <!ELEMENT list (title?, index*, introduction?, (ol|ul|dl), conclusion?)>
     <!ATTLIST list xml:id ID #IMPLIED>

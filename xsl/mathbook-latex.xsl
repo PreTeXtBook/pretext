@@ -729,6 +729,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
+    <xsl:if test="//assemblage">
+        <xsl:text>%% assemblage: minimally structured content, high visibility presentation&#xa;</xsl:text>
+        <xsl:text>%% Package for breakable highlight boxes&#xa;</xsl:text>
+        <!-- TODO: load just once, see webwork -->
+        <xsl:text>\usepackage{mdframed}&#xa;</xsl:text>
+        <xsl:text>%% assemblage style&#xa;</xsl:text>
+        <xsl:text>\mdfdefinestyle{assemblage}{framemethod=default,linewidth=2pt,roundcorner=16pt,backgroundcolor=black!05}&#xa;</xsl:text>
+    </xsl:if>
     <!-- miscellaneous, not categorized yet -->
     <xsl:if test="//exercise or //list">
         <xsl:text>%% Miscellaneous environments, normal text&#xa;</xsl:text>
@@ -2837,6 +2845,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- An assemblage is low-structure content, high-visibility presentation -->
+<xsl:template match="assemblage">
+    <xsl:text>\begin{mdframed}[style=assemblage]%&#xa;</xsl:text>
+    <xsl:text>\noindent\textbf{\large </xsl:text>
+    <xsl:apply-templates select="." mode="title-full" />
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>\par\medskip&#xa;</xsl:text>
+    <xsl:apply-templates select="p" />
+    <xsl:text>\end{mdframed}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- An example might have a statement/solution structure -->

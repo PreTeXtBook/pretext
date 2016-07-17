@@ -455,7 +455,7 @@ the xsltproc executable.
         paragraphs and other blocks.)
         -->
 
-        <section>
+        <section xml:id="interesting-corollary">
             <title>An Interesting Corollary</title>
 
             <introduction>
@@ -661,12 +661,19 @@ the xsltproc executable.
                     <p>It is basically a sequence of paragraphs, where the first one gets an inline title.  You are reading the second, and final, paragraph of one right now. It is useful for organizing very short documents, where numbered subdivisions might be overkill.</p>
                 </paragraphs>
 
-                <paragraphs>
-                    <title>Properties of the <c>paragraphs</c> element</title>
+                <assemblage xml:id="assemblage-basics">
+                    <title>Assemblages: Collections and Summaries</title>
 
-                    <p>It is always a logical section of the document, but never gets a number.  It can be used within any subdivision, and thus cannot ever contain another subdivision, and so is always a leaf of the document tree.  It does not appear in the table of contents.  The title is inline with the first paragraph.  Vertical space usually sets it off slightly from its surroundings.</p>
-                </paragraphs>
+                    <p>An <c>&lt;assemblage&gt;</c> is a collection, or summary, that does not have much structure to it.  So you are limited to paragraphs (<c>p</c>), which by extension can contain lists (<c>ol</c>, <c>ul</c>, <c>dl</c>).  But its presentation should draw attention to it, because the contents should be seen as more important in some way.  It should be <q>highlighted</q> in some manner.  If you need to connect with material elsewhere, you can do that with the usual <c>xref/xml:id</c> mechanism.</p>
+
+                    <p>What have we seen so far in this (disorganized) sample?<ul>
+                        <li><p>Theorems, definitions and corollaries. (<xref ref="section-fundamental-theorem" autoname="yes" />)</p></li>
+                        <li><p>Sage cells, including with R. (<xref ref="section-sage-cells" autoname="yes" />)</p></li>
+                        <li><p>Lots of document structure, like introductions and conclusions (next). (<xref ref="interesting-corollary" autoname="yes" />)</p></li>
+                    </ul></p>
+                </assemblage>
             </subsection>
+
             <subsection xml:id="subsection-intro-conclude">
                 <title>Introductions and Conclusions</title>
 
@@ -2889,6 +2896,7 @@ the xsltproc executable.
                 <li><p>List item as knowls in HTML, including nested lists: <xref ref="list-two" />, <xref ref="list-two-two-two" autoname="yes" /></p></li>
                 <li><p>A titled list: <xref ref="list-colors-rainbow" /></p></li>
                 <li><p>List item inside a named list, second color in rainbow list: <xref ref="rainbow-orange" autoname="yes" /></p></li>
+                <li><p>An assemblage, which never has a number.  A cross-reference now requires content in the <c>xref</c> element: <xref ref="assemblage-basics">text to xref an assemblage</xref></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul>
 
