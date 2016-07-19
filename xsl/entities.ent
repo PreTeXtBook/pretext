@@ -50,8 +50,8 @@
 <!ENTITY AXIOM-FILTER "self::axiom or self::conjecture or self::principle or self::heuristic or self::hypothesis or self::assumption">
 
 <!-- narrative, set off for structure, reference -->
-<!ENTITY REMARK-LIKE "remark|convention|note|observation|warning">
-<!ENTITY REMARK-FILTER "self::remark or self::convention or self::note or self::observation or self::warning">
+<!ENTITY REMARK-LIKE "remark|convention|note|observation|warning|insight">
+<!ENTITY REMARK-FILTER "self::remark or self::convention or self::note or self::observation or self::warning or self::insight">
 
 <!-- blocks, or statement + solution -->
 <!ENTITY EXAMPLE-LIKE "example|question|problem">

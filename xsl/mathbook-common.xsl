@@ -182,9 +182,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- List is elements in AXIOM-LIKE entity                  -->
 <!-- axiom|conjecture|principle|heuristic|hypothesis|assumption -->
 <xsl:strip-space elements="axiom conjecture principle heuristic hypothesis assumption" />
-<!-- List is elements in REMARK-LIKE entity -->
-<!-- example|question|problem                -->
-<xsl:strip-space elements="remark convention note observation warning" />
+<!-- List is elements in REMARK-LIKE entity             -->
+<!-- remark|convention|note|observation|warning|insight -->
+<xsl:strip-space elements="remark convention note observation warning insight" />
 <!-- List is elements in EXAMPLE-LIKE entity -->
 <!-- example|question|problem                -->
 <xsl:strip-space elements="example question problem" />
