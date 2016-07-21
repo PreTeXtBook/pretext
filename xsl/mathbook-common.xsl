@@ -561,11 +561,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\)</xsl:text>
 </xsl:template>
 
-<!-- We get some clues about the right LaTeX environment to        -->
-<!-- use for display mathematics, but some of this is guesswork.   -->
-<!-- But we can consolidate this textual analysis (input/output)   -->
-<!-- here in the common routines.                                  -->
-<!-- TODO: provide attribute for overrides                         -->
+<!-- We get some clues about the right LaTeX environment to      -->
+<!-- use for display mathematics, but some of this is guesswork. -->
+<!-- But we can consolidate this textual analysis (input/output) -->
+<!-- here in the common routines.  Attribute allows overrides.   -->
 
 <!-- Always an "equation" for an me-variant -->
 <!-- The equation* is AMS-Math-specific,    -->
@@ -592,6 +591,71 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="self::md">
         <xsl:text>*</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<!-- User intervention is necessary/desired in some situations,   -->
+<!-- such as a LaTeX macro hiding &amp;, \amp, or spacing control -->
+<!-- @alignment = align|gather|alignat as a specific override     -->
+<xsl:template match="md[@alignment]|mdn[@alignment]" mode="displaymath-alignment">
+    <xsl:choose>
+        <xsl:when test="@alignment='gather'">
+            <xsl:text>gather</xsl:text>
+        </xsl:when>
+        <xsl:when test="@alignment='alignat'">
+            <xsl:text>alignat</xsl:text>
+        </xsl:when>
+        <xsl:when test="@alignment='align'">
+            <xsl:text>align</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: display math @alignment attribute "<xsl:value-of select="@alignment" />" is not recognized (should be "align", "gather", "alignat")</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="self::md">
+        <xsl:text>*</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- count ampersands in a string              -->
+<!-- both as LaTeX macro and as bare character -->
+<xsl:template name="count-ampersands">
+    <xsl:param name="text" />
+    <xsl:variable name="amp-char">
+        <xsl:call-template name="count-substring">
+            <xsl:with-param name="text" select="$text" />
+            <xsl:with-param name="word" select="'&amp;'" />
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="amp-macro">
+        <xsl:call-template name="count-substring">
+            <xsl:with-param name="text" select="$text" />
+            <xsl:with-param name="word" select="'\amp'" />
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="$amp-char + $amp-macro" />
+</xsl:template>
+
+<!-- With alignment="alignat" we need the number of columns as an argument -->
+<!-- Mostly we call this plentifully and usually empty template is null    -->
+<xsl:template match="me|men|md|mdn" mode="alignat-columns" />
+
+<xsl:template match="md[@alignment='alignat']|mdn[@alignment='alignat']" mode="alignat-columns">
+    <xsl:variable name="first-row-content">
+        <xsl:for-each select="mrow[1]/text()">
+            <xsl:value-of select="." />
+        </xsl:for-each>
+    </xsl:variable>
+    <xsl:variable name="number-ampersands">
+        <xsl:call-template name="count-ampersands">
+            <xsl:with-param name="text" select="$first-row-content" />
+        </xsl:call-template>
+    </xsl:variable>
+    <!-- amps + 1, divide by 2, round up; 0.5 becomes 0.25, round behaves -->
+    <xsl:variable name="number-equation-columns" select="round(($number-ampersands + 1.5) div 2)" />
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="$number-equation-columns" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 
@@ -1059,6 +1123,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="count" select="1" />
         </xsl:call-template>
     </xsl:if>
+</xsl:template>
+
+<!-- Counting Substrings -->
+<xsl:template name="count-substring">
+    <xsl:param name="text" />
+    <xsl:param name="word" />
+    <xsl:param name="count" select="'0'" />
+    <xsl:choose>
+        <xsl:when test="not(contains($text, $word))">
+            <xsl:value-of select="$count" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="count-substring">
+                <xsl:with-param name="text" select="substring-after($text, $word)" />
+                <xsl:with-param name="word" select="$word" />
+                <xsl:with-param name="count" select="$count + 1" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- File Extension -->

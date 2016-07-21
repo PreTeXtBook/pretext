@@ -70,6 +70,7 @@ the xsltproc executable.
         -->
         <macros>
         \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4} % this comment will be stripped
+        \newcommand{\myequation}[2]{#1\amp =#2} % testing alignment override
         % comments anywhere get stripped, with or without faux % comment \% characters
         \newcommand{\indefiniteintegral}[2]{\int#1\,d#2}
         \newcommand{\testingescapedpercent}{ \% } % just testing
@@ -912,32 +913,76 @@ the xsltproc executable.
         <section>
             <title>Mathematics</title>
 
-            <p>To be able to create both <latex /> and HTML output (plus variations), we rely on MathJax, which in turn supports an extensive subset of the mathematical symbols normally available.  The AMSMath symbol set is a good approximation.  For a complete list, see the <url href="http://docs.mathjax.org/en/latest/tex.html#supported-latex-commands">MathJax Supported LaTeX commands</url>.  We load the <c>AMSsymbols</c> library and the library for extensible arrows, <c>extpfeil</c>.</p>
+            <introduction>
+                <p>To be able to create both <latex /> and HTML output (plus variations), we rely on MathJax, which in turn supports an extensive subset of the mathematical symbols normally available.  The AMSMath symbol set is a good approximation.  For a complete list, see the <url href="http://docs.mathjax.org/en/latest/tex.html#supported-latex-commands">MathJax Supported LaTeX commands</url>.  We load the <c>AMSsymbols</c> library and the library for extensible arrows, <c>extpfeil</c>.</p>
+            </introduction>
 
-            <p>The following is from the MathJax <url href="http://www.mathjax.org/demos/tex-samples/">demonstration page</url>, an identity due to Ramanujan:<me>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</me></p>
 
-            <p>And again, from the MathJax demonstration page, Maxwell's equations:<md>
-                <mrow>\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &amp; = \frac{4\pi}{c}\vec{\mathbf{j}}</mrow>
-                <mrow>\nabla \cdot \vec{\mathbf{E}} &amp; = 4 \pi \rho</mrow>
-                <mrow>\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}}</mrow>
-                <mrow>\nabla \cdot \vec{\mathbf{B}} &amp; = 0</mrow>
-            </md></p>
+            <subsection>
+                <title>Basic Mathematics</title>
 
-            <notation>
-                <usage>\nabla</usage>
-                <description>gradient operator</description>
-            </notation>
+                <p>The following is from the MathJax <url href="http://www.mathjax.org/demos/tex-samples/">demonstration page</url>, an identity due to Ramanujan:<me>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</me></p>
 
-            <p>A small test that the extensible arrows library is included properly:<me>A\xmapsto[\text{bijection}]{\Phi+\Psi+\Theta}B</me></p>
+                <p>And again, from the MathJax demonstration page, Maxwell's equations:<md>
+                    <mrow>\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &amp; = \frac{4\pi}{c}\vec{\mathbf{j}}</mrow>
+                    <mrow>\nabla \cdot \vec{\mathbf{E}} &amp; = 4 \pi \rho</mrow>
+                    <mrow>\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}}</mrow>
+                    <mrow>\nabla \cdot \vec{\mathbf{B}} &amp; = 0</mrow>
+                </md></p>
 
-            <p>Look back at the top of the source file of this document to see how to include your <tex /> macros just once.  For best results keep your macros simple and semantic.</p>
+                <notation>
+                    <usage>\nabla</usage>
+                    <description>gradient operator</description>
+                </notation>
 
-            <p>Chris Hughes has made available <q>slanted</q>, or <q>beveled</q>, or <q>nice</q> fractions.  To wit, we mean fractions such as: <m>\sfrac{3}{8}</m>.  Use the built-in <c>\sfrac{}{}</c> macro in your mathematics to achieve this presentation.</p>
+                <p>A small test that the extensible arrows library is included properly:<me>A\xmapsto[\text{bijection}]{\Phi+\Psi+\Theta}B</me></p>
 
-            <p>We consider a system of equations.  We number the first and last equation (there are just two) and include an <c>xml:id</c> on each.  We reference the whole system later as the range of equations from the first to the last.<mdn>
-                <mrow xml:id="equation-system-begin">\frac{dx}{dt} \amp = x^2 - 4x - y + 4</mrow>
-                <mrow xml:id="equation-system-end">\frac{dy}{dt} \amp = x^3 - y.</mrow>
-            </mdn></p>
+                <p>Look back at the top of the source file of this document to see how to include your <tex /> macros just once.  For best results keep your macros simple and semantic.</p>
+
+                <p>Chris Hughes has made available <q>slanted</q>, or <q>beveled</q>, or <q>nice</q> fractions.  To wit, we mean fractions such as: <m>\sfrac{3}{8}</m>.  Use the built-in <c>\sfrac{}{}</c> macro in your mathematics to achieve this presentation.</p>
+
+                <p>We consider a system of equations.  We number the first and last equation (there are just two) and include an <c>xml:id</c> on each.  We reference the whole system later as the range of equations from the first to the last.<mdn>
+                    <mrow xml:id="equation-system-begin">\frac{dx}{dt} \amp = x^2 - 4x - y + 4</mrow>
+                    <mrow xml:id="equation-system-end">\frac{dy}{dt} \amp = x^3 - y.</mrow>
+                </mdn></p>
+
+            </subsection>
+
+            <subsection>
+                <title>Displayed Mathematics</title>
+
+                <p>Multi-line displays of mathematics are achieved with the <c>md</c> tag (<q>math display</q>), and the variant that produces numbers on each line, <c>mdn</c> (<q>math display numbered</q>), used within a paragraph (<c>p</c>).  As a good example of how XML syntax is superior, you author <m>n</m> lines of equations by enclosing each line inside of a <c>mrow</c> tag, rather than using <m>n-1</m> separators (such as <c>\\</c>).</p>
+
+                <p>If you use no ampersands to express alignment (read ahead), then each equation is centered independently on the width of the text.  This is implemented according to the AMSmath <latex /> package's <c>gather</c> environment.  Example:<md>
+                    <mrow>\frac{dx}{dt} = x^2 - 4x - y + 4</mrow>
+                    <mrow>\frac{dy}{dt} = x^3 - y.</mrow>
+                </md></p>
+
+                <p>An ampersand is used, in two ways, to describe positioning several equations per line, organized in columns.  We suggest in <xref ref="subsection-reserved-characters" autoname="yes" /> that the pre-defined <latex /> macro <c>\amp</c> is the safest way to specify these.  The second, fourth, sixth, <ellipsis /> ampersands separate columns, and the spacing between columns will be provided automatically.  The first, third, fifth, <ellipsis /> ampersands are alignment points for the equations in each column.  Typically this is placed just prior to a binary operator, such as an equal sign (<c>\amp = </c>), or for a column of explanations or commentary, just prior to the <c>\text{}</c> macro.  Note that this scenario suggests always having an odd number of amersands in each <c>mrow</c>.  In the example below, alignment is on the equals sign in the first two columns, and provides left-justification to the explanations in the third column.  N.B.: the use below of the <c>\text{}</c> macro does not include mathematics within its argument.  Doing so may yield unpredictable results depending on your choice of delimiters for the mathematics (and using an <c>m</c> tag will be ineffective).<md>
+                    <mrow>\frac{dx}{dt} \amp = x^2 - 4x - y + 4 \amp \frac{dy}{dt} \amp = x^3 - y          \amp\amp x, y\text{ version}</mrow>
+                    <mrow>\frac{dw}{dt} \amp = z^3 - w          \amp \frac{dz}{dt} \amp = z^2 - 4z - w + 4 \amp\amp z, w\text{ version}</mrow>
+                </md></p>
+
+                <p>MathBook XML will automatically detect the presence or absence of ampersands, but by defining macros for entire aligned equations, you can effectively hide the ampersands.  So the <c>@alignment</c> attribute can override automatic detection.  We use a simple <latex /> macro to demonstrate setting <c>alignment='align'</c> to override the use of a <c>gather</c> environment and use a <c>align</c> environment instead.  Example:<md alignment="align">
+                    <mrow>\myequation{\frac{dx}{dt}}{x^2 - 4x - y + 4}</mrow>
+                    <mrow>\myequation{\frac{dy}{dt}}{x^3 - y}.</mrow>
+                </md></p>
+
+                <p>The AMSmath <latex /> package's <c>alignat</c> environment is a third variant of alignment.  It never happens automatically, you need to ask for it with <c>alignment="alignat"</c>.  It is very similar to <c>align</c> but adds no space between the equation columns.  So you can leave it that way, or you can add your own <q>extra</q> space to suit.  Here is a previous example with no inter-column space:<md alignment="alignat">
+                    <mrow>\frac{dx}{dt} \amp = x^2 - 4x - y + 4 \amp \frac{dy}{dt} \amp = x^3 - y          \amp\amp x, y\text{ version}</mrow>
+                    <mrow>\frac{dw}{dt} \amp = z^3 - w          \amp \frac{dz}{dt} \amp = z^2 - 4z - w + 4 \amp\amp z, w\text{ version}</mrow>
+                </md>  There are a few caveats, due to the fact that the environment needs to be told how many columns you have:<ul>
+                    <li>Your first <c>mrow</c> is scanned to count the number of ampersand macros and/or characters (<c>\amp</c> or <c>&amp;amp;</c>), so add the right number to your first row to equal the maximum present across all rows.</li>
+                    <li>The scan of ampersands may not be perfect, so if it seems incorrect, please send a report and we may add an attribute for an override.</li>
+                    <li>If your number of ampersands is even (see advice above about using an odd number) behavior should still be correct, as in next example.</li>
+                </ul></p>
+
+                <p>If you want super-precise control over alignment of the terms of a system of equations (linear or not) you can use the <c>alignat</c> option to advantage by not including any extra space.  This example is modified slightly from a post by Alex Jordan:<md alignment="alignat">
+                    <mrow>2x \amp {}+{} \amp  y \amp {}+{} \amp 3z \amp {}={} \amp 10</mrow>
+                    <mrow>x  \amp       \amp    \amp {}+{} \amp  z \amp {}={} \amp 6</mrow>
+                    <mrow>x  \amp {}+{} \amp 3y \amp {}+{} \amp 2z \amp {}={} \amp 13.</mrow>
+                </md>Beautiful.</p>
+            </subsection>
         </section>
 
         <section>

@@ -716,6 +716,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="alignat-columns" />
     <xsl:apply-templates />
     <xsl:text>\\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
@@ -727,6 +728,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="alignat-columns" />
     <xsl:apply-templates />
     <xsl:apply-templates select="." mode="label" />
     <xsl:apply-templates select="." mode="tag"/>
@@ -745,7 +747,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="md|mdn">
     <xsl:text>\\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
-    <xsl:text>}\n</xsl:text>
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="alignat-columns" />
+    <xsl:text>\n</xsl:text>
     <xsl:apply-templates select="mrow|intertext" />
     <xsl:text>\\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />

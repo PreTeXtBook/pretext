@@ -2967,6 +2967,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="alignat-columns" />
     <xsl:choose>
         <xsl:when test="ancestor::webwork">
             <xsl:apply-templates select="text()|var" />
@@ -2989,6 +2990,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="alignat-columns" />
     <xsl:apply-templates select="text()|fillin" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>\end{</xsl:text>
@@ -3004,7 +3006,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="md|mdn">
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="alignat-columns" />
+    <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="mrow|intertext" />
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />

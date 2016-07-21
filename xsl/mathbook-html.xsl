@@ -3008,6 +3008,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="alignat-columns" />
     <xsl:apply-templates select="text()|var|fillin" />
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
@@ -3021,6 +3022,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="alignat-columns" />
     <xsl:apply-templates select="text()|var|fillin" />
     <!-- label original -->
     <xsl:apply-templates select="." mode="label" />
@@ -3034,6 +3036,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="alignat-columns" />
     <xsl:apply-templates select="text()|var|fillin" />
     <xsl:apply-templates select="." mode="tag" />
     <xsl:text>\end{</xsl:text>
@@ -3050,7 +3053,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="md|mdn">
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="alignat-columns" />
+    <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="mrow|intertext" />
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
@@ -3060,7 +3065,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="md|mdn" mode="duplicate">
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="alignat-columns" />
+    <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="mrow|intertext" mode="duplicate" />
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
@@ -3146,7 +3153,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- in an HTML paragraph, assuming it is just a snippet. -->
 <!-- This breaks the alignment, but MathJax has no good   -->
 <!-- solution for this.                                   -->
-<!-- NB: we check the *parent* for alignment              -->
+<!-- NB: we check the *parent* for alignment information  -->
 <xsl:template match="md/intertext|mdn/intertext">
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select=".." mode="displaymath-alignment" />
@@ -3156,7 +3163,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </p>
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select=".." mode="displaymath-alignment" />
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select=".." mode="alignat-columns" />
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 
