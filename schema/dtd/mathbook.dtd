@@ -538,7 +538,9 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST men xml:id ID #IMPLIED>
 
 <!ELEMENT md   (mrow, (mrow|intertext)*)>
+    <!ATTLIST md  alignment      (align|gather|alignat) #IMPLIED>
 <!ELEMENT mdn  (mrow, (mrow|intertext)*)>
+    <!ATTLIST mdn alignment      (align|gather|alignat) #IMPLIED>
 
 <!-- <xref> may occur in an <mrow> as a "reason" -->
 <!ELEMENT mrow (#PCDATA|var|xref|fillin)*>
