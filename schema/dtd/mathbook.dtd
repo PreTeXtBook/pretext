@@ -229,22 +229,22 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST insight xml:id ID #IMPLIED>
 
 <!-- EXAMPLE-LIKE, PROJECT-LIKE -->
-<!-- minimal structure  xor  statement/solution -->
-<!ELEMENT example (title?, index*, ((%para;)*|(statement, solution)))>
+<!-- minimal structure  xor  statement/optional-solutions -->
+<!ELEMENT example (title?, index*, ((%para;)*|(statement, solution*)))>
     <!ATTLIST example xml:id ID #IMPLIED>
-<!ELEMENT question (title?, index*, ((%para;)*|(statement, solution)))>
+<!ELEMENT question (title?, index*, ((%para;)*|(statement, solution*)))>
     <!ATTLIST question xml:id ID #IMPLIED>
-<!ELEMENT problem (title?, index*, ((%para;)*|(statement, solution)))>
+<!ELEMENT problem (title?, index*, ((%para;)*|(statement, solution*)))>
     <!ATTLIST problem xml:id ID #IMPLIED>
-<!ELEMENT project (title?, index*, ((%para;)*|(statement, solution)))>
+<!ELEMENT project (title?, index*, ((%para;)*|(statement, solution*)))>
     <!ATTLIST project xml:id ID #IMPLIED>
-<!ELEMENT activity (title?, index*, ((%para;)*|(statement, solution)))>
+<!ELEMENT activity (title?, index*, ((%para;)*|(statement, solution*)))>
     <!ATTLIST activity xml:id ID #IMPLIED>
-<!ELEMENT exploration (title?, index*, ((%para;)*|(statement, solution)))>
+<!ELEMENT exploration (title?, index*, ((%para;)*|(statement, solution*)))>
     <!ATTLIST exploration xml:id ID #IMPLIED>
-<!ELEMENT task (title?, index*, ((%para;)*|(statement, solution)))>
+<!ELEMENT task (title?, index*, ((%para;)*|(statement, solution*)))>
     <!ATTLIST task xml:id ID #IMPLIED>
-<!ELEMENT investigation (title?, index*, ((%para;)*|(statement, solution)))>
+<!ELEMENT investigation (title?, index*, ((%para;)*|(statement, solution*)))>
     <!ATTLIST investigation xml:id ID #IMPLIED>
 
 <!-- a collection or summary, minimal structure, highlighted presentation -->
