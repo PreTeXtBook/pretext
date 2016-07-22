@@ -463,7 +463,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="/mathbook//fillin">
         <xsl:text>%% Used for fillin answer blank&#xa;</xsl:text>
         <xsl:text>%% Argument is length in em&#xa;</xsl:text>
-        <xsl:text>\newcommand{\fillin}[1]{\rule{#1em}{0.1ex}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\fillin}[1]{\underline{\hspace{#1em}}}&#xa;</xsl:text>
     </xsl:if>
     <!-- lower-casing macro from: http://tex.stackexchange.com/questions/114592/force-all-small-caps -->
     <!-- Letter-spacing LaTeX: http://tex.stackexchange.com/questions/114578/tufte-running-headers-not-using-full-width-of-page -->

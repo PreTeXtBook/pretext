@@ -4429,9 +4429,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="parent::m or parent::me or parent::men or parent::mrow">
-            <xsl:text>\Rule{</xsl:text>
+            <xsl:text>\underline{\hspace{</xsl:text>
             <xsl:value-of select="5 * $characters div 11" />
-            <xsl:text>em}{0.1ex}{0pt}</xsl:text>
+            <xsl:text>em}}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:element name="span">
