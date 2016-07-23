@@ -410,6 +410,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% xfrac package for 'beveled fractions': http://tex.stackexchange.com/questions/3372/how-do-i-typeset-arbitrary-fractions-like-the-standard-symbol-for-5-%C2%BD&#xa;</xsl:text>
         <xsl:text>\usepackage{xfrac}&#xa;</xsl:text>
     </xsl:if>
+    <xsl:text>%%&#xa;</xsl:text>
+    <!-- load following conditionally if it presents problems -->
+    <xsl:text>%% Color support, xcolor package&#xa;</xsl:text>
+    <xsl:text>%% Always loaded.  Used for:&#xa;</xsl:text>
+    <xsl:text>%% mdframed boxes, add/delete text, author tools&#xa;</xsl:text>
+    <xsl:text>\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Semantic Macros&#xa;</xsl:text>
     <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
     <xsl:text>%% Only defined here if required in this document&#xa;</xsl:text>
@@ -738,7 +745,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% assemblage: minimally structured content, high visibility presentation&#xa;</xsl:text>
         <xsl:text>%% Package for breakable highlight boxes&#xa;</xsl:text>
         <!-- TODO: load just once, see webwork -->
-        <xsl:text>\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}&#xa;</xsl:text>
         <xsl:text>\usepackage[framemethod=tikz]{mdframed}&#xa;</xsl:text>
         <xsl:text>%% assemblage environment and style&#xa;</xsl:text>
         <xsl:text>\newenvironment{assemblage}[1]{\mdfsetup{frametitle={\colorbox{blue!20}{\space#1\space}},%&#xa;</xsl:text>
@@ -1044,9 +1050,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>%% Raster graphics inclusion, wrapped figures in paragraphs&#xa;</xsl:text>
     <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
-    <!-- Color support automatically, could be conditional -->
-    <xsl:text>%% Colors for Sage boxes, author tools (red hilites), red/green edits&#xa;</xsl:text>
-    <xsl:text>\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
     <!-- Inconsolata font, sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html            -->
     <!-- As seen on: http://tex.stackexchange.com/questions/50810/good-monospace-font-for-code-in-latex -->
     <!-- "Fonts for Displaying Program Code in LaTeX":  http://nepsweb.co.uk/docs%/progfonts.pdf        -->
