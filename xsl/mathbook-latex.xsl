@@ -2867,7 +2867,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>\par\medskip&#xa;</xsl:text>
-    <xsl:apply-templates select="p" />
+    <xsl:apply-templates select="p|table|figure|sidebyside" />
     <xsl:text>\end{assemblage}&#xa;</xsl:text>
 </xsl:template>
 

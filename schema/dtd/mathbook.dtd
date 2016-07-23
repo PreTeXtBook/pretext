@@ -248,7 +248,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST investigation xml:id ID #IMPLIED>
 
 <!-- a collection or summary, minimal structure, highlighted presentation -->
-<!ELEMENT assemblage (title?, index*, p+)>
+<!ELEMENT assemblage (title?, index*, (p|table|figure|sidebyside)+)>
 
 <!ELEMENT list (title?, index*, introduction?, (ol|ul|dl), conclusion?)>
     <!ATTLIST list xml:id ID #IMPLIED>

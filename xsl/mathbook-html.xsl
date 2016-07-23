@@ -2311,7 +2311,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="assemblage" mode="body">
-    <xsl:apply-templates select="p" />
+    <xsl:apply-templates select="p|table|figure|sidebyside" />
 </xsl:template>
 
 <xsl:template match="assemblage" mode="heading-xref-knowl">
@@ -2319,7 +2319,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="assemblage" mode="body-duplicate">
-    <xsl:apply-templates select="p" mode="duplicate" />
+    <xsl:apply-templates select="p|table|figure|sidebyside" mode="duplicate" />
 </xsl:template>
 
 <xsl:template match="assemblage" mode="has-posterior">

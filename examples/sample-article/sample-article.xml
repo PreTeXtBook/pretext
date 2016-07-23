@@ -665,13 +665,22 @@ the xsltproc executable.
                 <assemblage xml:id="assemblage-basics">
                     <title>Assemblages: Collections and Summaries</title>
 
-                    <p>An <c>&lt;assemblage&gt;</c> is a collection, or summary, that does not have much structure to it.  So you are limited to paragraphs (<c>p</c>), which by extension can contain lists (<c>ol</c>, <c>ul</c>, <c>dl</c>).  But its presentation should draw attention to it, because the contents should be seen as more important in some way.  It should be <q>highlighted</q> in some manner.  If you need to connect with material elsewhere, you can do that with the usual <c>xref/xml:id</c> mechanism.</p>
+                    <p>An <c>&lt;assemblage&gt;</c> is a collection, or summary, that does not have much structure to it.  So you are limited to paragraphs (<c>p</c>), tables, figures and side-by-sides.  The intent is that these do not have captions, so are not numbered, so cannot be cross-referenced and so do not become knowls (inside of the knowled assemblage).  Note that <c>p</c> may by extension contain lists (<c>ol</c>, <c>ul</c>, <c>dl</c>).  Despite limited structure, the presentation should draw attention to it, because the contents should be seen as more important in some way.  It should be <q>highlighted</q> in some manner.  If you need to connect with material elsewhere, you can do that with the usual <c>xref/xml:id</c> mechanism.</p>
 
                     <p>What have we seen so far in this (disorganized) sample?<ul>
                         <li><p>Theorems, definitions and corollaries. (<xref ref="section-fundamental-theorem" autoname="yes" />)</p></li>
                         <li><p>Sage cells, including with R. (<xref ref="section-sage-cells" autoname="yes" />)</p></li>
                         <li><p>Lots of document structure, like introductions and conclusions (next). (<xref ref="interesting-corollary" autoname="yes" />)</p></li>
                     </ul></p>
+
+                    <p>A sample table, with no caption, follows.</p>
+
+                    <table>
+                        <tabular>
+                            <row><cell>A</cell><cell>B</cell><cell>C</cell></row>
+                            <row><cell>Uno</cell><cell>Dos</cell><cell>Tres</cell></row>
+                        </tabular>
+                    </table>
                 </assemblage>
             </subsection>
 
