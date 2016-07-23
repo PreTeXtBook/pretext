@@ -1038,11 +1038,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\poemlinecenter}[1]{{\centering{#1}\par}\vspace{-\parskip}}&#xa;</xsl:text>
         <xsl:text>\newcommand{\poemlineright}[1]{{\raggedleft{#1}\par}\vspace{-\parskip}}&#xa;</xsl:text>
     </xsl:if>
+    <!-- Music -->
+    <xsl:if test="//n or //scaledeg or //chord">
+        <xsl:text>%% Musical Symbol Support&#xa;</xsl:text>
+        <xsl:text>\usepackage{fontspec}&#xa;</xsl:text>
+        <xsl:text>\usepackage{lilyglyphs}&#xa;</xsl:text>
+        <xsl:text>\lilyGlobalOptions{scale=0.8}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>%% Raster graphics inclusion, wrapped figures in paragraphs&#xa;</xsl:text>
     <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
     <!-- Color support automatically, could be conditional -->
     <xsl:text>%% Colors for Sage boxes, author tools (red hilites), red/green edits&#xa;</xsl:text>
-    <xsl:text>\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}&#xa;</xsl:text>
+    <!-- Avoid option conflicts causing errors: -->
+    <!-- http://tex.stackexchange.com/questions/57364/option-clash-for-package-xcolor -->
+    <xsl:text>\PassOptionsToPackage{usenames,dvipsnames,svgnames,table}{xcolor}&#xa;</xsl:text>
+    <xsl:text>\usepackage{xcolor}&#xa;</xsl:text>
     <!-- Inconsolata font, sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html            -->
     <!-- As seen on: http://tex.stackexchange.com/questions/50810/good-monospace-font-for-code-in-latex -->
     <!-- "Fonts for Displaying Program Code in LaTeX":  http://nepsweb.co.uk/docs%/progfonts.pdf        -->
@@ -5620,6 +5630,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!--       -->
+<!-- Music -->
+<!--       -->
+
+<!--                 -->
+<!-- Musical Symbols -->
+<!--                 -->
+
+<!-- Accidentals -->
+
+<!-- TODO: If requested, add semi- and sesqui- versions of sharp and flat -->
+
+<!-- Double Sharp -->
+<xsl:template name="doublesharp">
+    <xsl:text>{\doublesharp}</xsl:text>
+</xsl:template>
+
+<!-- Sharp -->
+<xsl:template name="sharp">
+    <xsl:text>{\sharp}</xsl:text>
+</xsl:template>
+
+<!-- Natural -->
+<xsl:template name="natural">
+    <xsl:text>{\natural}</xsl:text>
+</xsl:template>
+
+<!-- Flat -->
+<xsl:template name="flat">
+    <xsl:text>{\flat}</xsl:text>
+</xsl:template>
+
+<!-- Double Flat -->
+<xsl:template name="doubleflat">
+    <xsl:text>{\flatflat}</xsl:text>
 </xsl:template>
 
 <!-- Footnotes               -->
