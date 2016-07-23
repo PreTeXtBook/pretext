@@ -738,9 +738,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% assemblage: minimally structured content, high visibility presentation&#xa;</xsl:text>
         <xsl:text>%% Package for breakable highlight boxes&#xa;</xsl:text>
         <!-- TODO: load just once, see webwork -->
-        <xsl:text>\usepackage{mdframed}&#xa;</xsl:text>
-        <xsl:text>%% assemblage style&#xa;</xsl:text>
-        <xsl:text>\mdfdefinestyle{assemblage}{framemethod=default,linewidth=2pt,roundcorner=16pt,backgroundcolor=black!05}&#xa;</xsl:text>
+        <xsl:text>\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}&#xa;</xsl:text>        <xsl:text>\usepackage[framemethod=tikz]{mdframed}&#xa;</xsl:text>
+        <xsl:text>%% assemblage environment and style&#xa;</xsl:text>
+        <xsl:text>\newenvironment{assemblage}[1]{\mdfsetup{frametitle={\colorbox{blue!20}{\space#1\space}},	frametitlealignment={\hspace*{1ex}}, frametitleaboveskip=-1.5ex, frametitlebelowskip=0pt, roundcorner=1pt, leftmargin=3pt, rightmargin=3pt, backgroundcolor=blue!5, linecolor=blue!75!black,} \begin{mdframed}}{\end{mdframed}}&#xa;</xsl:text>
     </xsl:if>
     <!-- miscellaneous, not categorized yet -->
     <xsl:if test="//exercise or //list">
@@ -2187,7 +2187,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>,</xsl:text>
     <xsl:value-of select="@lly" />
     <xsl:text>){\includegraphics</xsl:text>
-    <xsl:if test="@width"> 
+    <xsl:if test="@width">
         <xsl:text>[width=</xsl:text>
             <xsl:value-of select="@width" />
         <xsl:text>]</xsl:text>
@@ -2854,14 +2854,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- An assemblage is low-structure content, high-visibility presentation -->
 <xsl:template match="assemblage">
-    <xsl:text>\begin{mdframed}[style=assemblage]%&#xa;</xsl:text>
-    <xsl:text>\noindent\textbf{\large </xsl:text>
+    <xsl:text>\begin{assemblage}{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>\par\medskip&#xa;</xsl:text>
     <xsl:apply-templates select="p" />
-    <xsl:text>\end{mdframed}&#xa;</xsl:text>
+    <xsl:text>\end{assemblage}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- An example might have a statement/solution structure -->
@@ -4304,9 +4303,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{listing}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- The sidebyside template 'wrapping' environment will always be a figure; 
-     captions will be accounted for appropriately using \captionof{<name/>}{<CAPTION/>}. 
-     See the caption template for details. 
+<!-- The sidebyside template 'wrapping' environment will always be a figure;
+     captions will be accounted for appropriately using \captionof{<name/>}{<CAPTION/>}.
+     See the caption template for details.
 
      Each sidebyside element is put through a measuring routine,
      which allows us to align captions correctly;
@@ -4315,13 +4314,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
      The following elements are supported:
 
-     sidebyside/figure 
-     sidebyside/table 
-     sidebyside/paragraphs 
-     sidebyside/p 
-     sidebyside/image 
-     sidebyside/tabular 
-     
+     sidebyside/figure
+     sidebyside/table
+     sidebyside/paragraphs
+     sidebyside/p
+     sidebyside/image
+     sidebyside/tabular
+
      -->
 <xsl:template match="sidebyside">
     <xsl:apply-templates select="." mode="leave-vertical-mode" />
@@ -4339,9 +4338,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="sidebyside-subitem-valign">
     <!-- process the width attritbute -->
     <xsl:variable name="width">
-        <!-- the width of a <object/> inside a sidebyside is translated into 
-             a fraction of \textwidth 
-             we do this by stripping the % sign, and 
+        <!-- the width of a <object/> inside a sidebyside is translated into
+             a fraction of \textwidth
+             we do this by stripping the % sign, and
              adding a leading .
              for example 50% is turned into .50\textwith
                -->
@@ -4383,13 +4382,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
       </xsl:when>
       <xsl:otherwise>
             <xsl:text>minipage</xsl:text>
-      </xsl:otherwise> 
+      </xsl:otherwise>
     </xsl:choose>
     <xsl:text>}</xsl:text>
     <!-- specify the text width -->
     <xsl:text>{.</xsl:text>
     <xsl:choose>
-        <!-- @width can contain a decimal, e.g 25.56%, in which 
+        <!-- @width can contain a decimal, e.g 25.56%, in which
            case we need to remove the decimal -->
         <xsl:when test="contains($width,'.')">
             <xsl:value-of select="substring-before($width,'.')"/>
@@ -4420,7 +4419,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
               <!-- anything except a paragraph gets centering by default -->
               <xsl:if test="not(self::paragraphs or self::p)">
                     <xsl:text>\centering</xsl:text>
-              </xsl:if> 
+              </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>% horizontal alignment &#xa;</xsl:text>
