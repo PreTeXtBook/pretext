@@ -3252,6 +3252,359 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
+<!-- ##### -->
+<!-- Music -->
+<!-- ##### -->
+
+<!-- Note -->
+<xsl:template match="n">
+    <xsl:text>\(</xsl:text>
+    <!-- Test that pitch class is NOT castable as a number -->
+    <xsl:if test="not(number(@pc) = number(@pc))">
+        <xsl:text>\text{</xsl:text>
+        <xsl:value-of select="@pc"/>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <!-- Provide something to place accidental -->
+    <!-- on if the pitch class is numeric.     -->
+    <xsl:if test="number(@pc) = number(@pc) and @acc">
+        <xsl:text>{}</xsl:text>
+    </xsl:if>
+    <!-- Add an accidental if applicable -->
+    <xsl:if test="@acc">
+        <xsl:text>^</xsl:text>
+        <xsl:call-template name="accidentals">
+            <xsl:with-param name="accidental"><xsl:value-of select="@acc"/></xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+    <!-- Test that pitch class IS castable as a number -->
+    <!-- Accidentals precede numeric pitch classes     -->
+    <xsl:if test="number(@pc) = number(@pc)">
+        <xsl:value-of select="@pc"/>
+    </xsl:if>
+    <!-- Add an octave number if applicable -->
+    <xsl:if test="@octave">
+        <!-- Consideration: should we accommodate other octave notations?    -->
+        <!-- Current support is for scientific pitch notation (the standard), -->
+        <!-- other octave notation exists such as "Helmholtz pitch notation"  -->
+        <xsl:text>_{</xsl:text>
+        <xsl:value-of select="@octave"/>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <xsl:text>\)</xsl:text>
+</xsl:template>
+
+<!-- Scale Degrees -->
+<xsl:template match="scaledeg">
+    <!-- Arabic numeral with circumflex accent above)-->
+    <xsl:text>\(\hat{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}\) </xsl:text>
+</xsl:template>
+
+<!-- Chord -->
+<xsl:template match="chord">
+    <xsl:text>\(\left.</xsl:text>
+    <!-- Root -->
+    <xsl:choose>
+        <!-- There is an accidental -->
+        <xsl:when test="contains(@root, ' ')">
+            <!-- Pitch Class -->
+            <xsl:text>\text{</xsl:text>
+            <xsl:value-of select="substring-before(@root, ' ')"/>
+            <xsl:text>}</xsl:text>
+            <!-- Accidental -->
+            <xsl:text>^</xsl:text>
+            <xsl:call-template name="accidentals">
+                <xsl:with-param name="accidental"><xsl:value-of select="substring-after(@root, ' ')"/></xsl:with-param>
+            </xsl:call-template>
+            <!-- prevent "double superscript" error -->
+            <xsl:text>{}</xsl:text>
+        </xsl:when>
+        <!-- There is not an accidental -->
+        <xsl:otherwise>
+            <xsl:text>\text{</xsl:text>
+            <xsl:value-of select="@root"/>
+            <xsl:text>}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- Mode (augmented, major, minor, half-diminished, diminished, etc.) -->
+    <xsl:if test="@mode">
+        <xsl:choose>
+            <!-- There is a two part mode -->
+            <xsl:when test="contains(@mode, ' ')">
+                <!-- Lower Mode -->
+                <xsl:call-template name="chordsymbols">
+                    <xsl:with-param name="mode"><xsl:value-of select="substring-before(@mode, ' ')"/></xsl:with-param>
+                </xsl:call-template>
+                <!-- Raise to be in line with bps -->
+                <xsl:text>^</xsl:text>
+                <!-- Higher Mode -->
+                <xsl:call-template name="chordsymbols">
+                    <xsl:with-param name="mode"><xsl:value-of select="substring-after(@mode, ' ')"/></xsl:with-param>
+                </xsl:call-template>
+                <!-- prevent "double superscript" error -->
+                <xsl:text>{}</xsl:text>
+            </xsl:when>
+            <!-- There is a single mode -->
+            <xsl:otherwise>
+                <xsl:call-template name="chordsymbols">
+                    <xsl:with-param name="mode"><xsl:value-of select="@mode"/></xsl:with-param>
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:if>
+    <!-- Bass Position Symbol -->
+    <xsl:if test="@bps">
+        <!-- Consideration: Even if it is not standard practice, -->
+        <!-- will anyone ever want more than two bps numbers?    -->
+        <xsl:choose>
+            <!-- We use a space to delineate the breaking point of the bps -->
+            <!-- e.g. for 6/4 we write "6 4" -->
+            <xsl:when test="contains(@bps, ' ')">
+                <xsl:text>^{</xsl:text>
+                <xsl:value-of select="substring-before(@bps, ' ')"/>
+                <xsl:text>}</xsl:text>
+                <xsl:text>_{</xsl:text>
+                <xsl:value-of select="substring-after(@bps, ' ')"/>
+                <xsl:text>}</xsl:text>
+            </xsl:when>
+            <!-- If there is no space, then we only need a superscript -->
+            <xsl:otherwise>
+                <xsl:text>^{</xsl:text>
+                <xsl:value-of select="@bps"/>
+                <xsl:text>}</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:if>
+    <!-- Suspended -->
+    <xsl:if test="@suspended = 'yes'">
+        <!-- Consideration: should we make "sus" localized/customizable? -->
+        <xsl:text>\text{sus}</xsl:text>
+    </xsl:if>
+    <!-- Chord Alterations -->
+    <xsl:if test="./*">
+        <xsl:choose>
+            <!-- Turning off parentheses is usually for showing why parenthesization clarifies meaning. -->
+            <xsl:when test="@parentheses = 'no'">
+                <xsl:text>\left.</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>\left(</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+        <!-- We only use a smallmatrix if we have more than one alteration         -->
+        <!-- Using smallmatrix with a single entry makes the alteration too small. -->
+        <xsl:if test="count(*) > 1">
+            <xsl:text>\begin{smallmatrix}</xsl:text>
+        </xsl:if>
+        <xsl:apply-templates select="*"/>
+        <xsl:if test="count(*) > 1">
+            <xsl:text>\end{smallmatrix}</xsl:text>
+        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="@parentheses = 'no'">
+                <xsl:text>\right.</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>\right)</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:if>
+    <!-- Alternate Bass Note (e.g. C/G) -->
+    <xsl:if test="@bass">
+        <!-- Resizes based on components of chord -->
+        <xsl:text>\middle/</xsl:text>
+        <xsl:choose>
+            <!-- Bass note has an accidental -->
+            <xsl:when test="contains(@bass, ' ')">
+                <!-- Pitch Class -->
+                <xsl:text>\text{</xsl:text>
+                <xsl:value-of select="substring-before(@bass, ' ')"/>
+                <xsl:text>}</xsl:text>
+                <!-- Accidental -->
+                <xsl:text>^{</xsl:text>
+                <xsl:call-template name="accidentals">
+                    <xsl:with-param name="accidental"><xsl:value-of select="substring-after(@bass, ' ')"/></xsl:with-param>
+                </xsl:call-template>
+                <xsl:text>}</xsl:text>
+            </xsl:when>
+            <!-- Bass note does not have an accidental -->
+            <xsl:otherwise>
+                <!-- Pitch Class -->
+                <xsl:text>\text{</xsl:text>
+                <xsl:value-of select="@bass"/>
+                <xsl:text>}</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:if>
+    <xsl:text>\right.\)</xsl:text>
+</xsl:template>
+
+<!-- Chord Alteration -->
+<!-- Put a break after each alteration that is not the last -->
+<xsl:template match="chord/alteration">
+    <xsl:text>\text{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+    <!-- Separate alterations -->
+    <xsl:if test="following-sibling::*">
+        <xsl:text>\\</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!--                 -->
+<!-- Musical Symbols -->
+<!--                 -->
+
+<!-- Accidentals -->
+
+<!-- TODO: If requested, add semi- and sesqui- versions of sharp and flat -->
+<!-- (Easy with LilyPond in LaTeX) -->
+<!-- (For HTML ,there are Unicode characters, though font support may be iffy) -->
+
+<!-- Double-Sharp -->
+<xsl:template match="doublesharp">
+    <xsl:call-template name="doublesharp"/>
+</xsl:template>
+
+<!-- Sharp -->
+<xsl:template match="sharp">
+    <xsl:call-template name="sharp"/>
+</xsl:template>
+
+<!-- Natural -->
+<xsl:template match="natural">
+    <xsl:call-template name="natural"/>
+</xsl:template>
+
+<!-- Flat -->
+<xsl:template match="flat">
+    <xsl:call-template name="flat"/>
+</xsl:template>
+
+<!-- Double-Flat -->
+<xsl:template match="doubleflat">
+    <xsl:call-template name="doubleflat"/>
+</xsl:template>
+
+<!-- Insert the correct accidental -->
+<!-- (For use in <n> and <chord>)  -->
+<xsl:template name="accidentals">
+    <xsl:param name="accidental"/>
+    <xsl:choose>
+        <xsl:when test="$accidental = 'doubleflat'">
+            <xsl:call-template name="doubleflat"/>
+        </xsl:when>
+        <xsl:when test="$accidental = 'flat'">
+            <xsl:call-template name="flat"/>
+        </xsl:when>
+        <xsl:when test="$accidental = 'natural'">
+            <xsl:call-template name="natural"/>
+        </xsl:when>
+        <xsl:when test="$accidental = 'sharp'">
+            <xsl:call-template name="sharp"/>
+        </xsl:when>
+        <xsl:when test="$accidental = 'doublesharp'">
+            <xsl:call-template name="doublesharp"/>
+        </xsl:when>
+        <!-- For unknown accidentals, use the given value wrapped in \text{} -->
+        <xsl:otherwise>
+            <xsl:text>\text{</xsl:text>
+            <xsl:value-of select="$accidental"/>
+            <xsl:text>}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Fall-Back values for Accidentals -->
+
+<!-- Double-Sharp -->
+<xsl:template name="doublesharp">
+    <xsl:text>[DOUBLESHARP]</xsl:text>
+</xsl:template>
+
+<!-- Sharp -->
+<xsl:template name="sharp">
+    <xsl:text>[SHARP]</xsl:text>
+</xsl:template>
+
+<!-- Natural -->
+<xsl:template name="natural">
+    <xsl:text>[NATURAL]</xsl:text>
+</xsl:template>
+
+<!-- Flat -->
+<xsl:template name="flat">
+    <xsl:text>[FLAT]</xsl:text>
+</xsl:template>
+
+<!-- Double-Flat -->
+<xsl:template name="doubleflat">
+    <xsl:text>[DOUBLEFLAT]</xsl:text>
+</xsl:template>
+
+<!-- Insert the correct chord symbol -->
+<!-- (For use in <chord>)  -->
+<xsl:template name="chordsymbols">
+    <xsl:param name="mode"/>
+    <xsl:choose>
+        <xsl:when test="$mode = 'augmented'">
+            <xsl:call-template name="augmentedchordsymbol"/>
+        </xsl:when>
+        <xsl:when test="$mode = 'major'">
+            <xsl:call-template name="majorchordsymbol"/>
+        </xsl:when>
+        <xsl:when test="$mode = 'minor'">
+            <xsl:call-template name="minorchordsymbol"/>
+        </xsl:when>
+        <xsl:when test="$mode = 'halfdiminished'">
+            <xsl:text>^</xsl:text>
+            <xsl:call-template name="halfdiminishedchordsymbol"/>
+            <xsl:text>{}</xsl:text>
+        </xsl:when>
+        <xsl:when test="$mode = 'diminished'">
+            <xsl:text>^</xsl:text>
+            <xsl:call-template name="diminishedchordsymbol"/>
+            <xsl:text>{}</xsl:text>
+        </xsl:when>
+        <!-- For unknown chord symbols, use the given value wrapped in \text{} -->
+        <!-- e.g. mode="maj" will use \text{maj}                               -->
+        <xsl:otherwise>
+            <xsl:text>\text{</xsl:text>
+            <xsl:value-of select="$mode"/>
+            <xsl:text>}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Chord Symbols -->
+
+<!-- Augmented -->
+<xsl:template name="augmentedchordsymbol">
+    <xsl:text>{+}</xsl:text>
+</xsl:template>
+
+<!-- Major -->
+<xsl:template name="majorchordsymbol">
+    <xsl:text>{\Delta}</xsl:text>
+</xsl:template>
+
+<!-- Minor -->
+<xsl:template name="minorchordsymbol">
+    <xsl:text>{-}</xsl:text>
+</xsl:template>
+
+<!-- Half Diminished -->
+<xsl:template name="halfdiminishedchordsymbol">
+    <xsl:text>\text{\o}</xsl:text>
+</xsl:template>
+
+<!-- Diminished -->
+<xsl:template name="diminishedchordsymbol">
+    <xsl:text>{\circ}</xsl:text>
+</xsl:template>
+
 <!-- ################ -->
 <!-- Cross-References -->
 <!-- ################ -->

@@ -37,9 +37,8 @@
 <!-- Elements that could be inside a single line of text -->
 <!-- For example, an <ndash>, but not a <me>             -->
 <!-- Precede these by a #PCDATA, wrap with ( )*          -->
-<!ENTITY % characters "nbsp|ndash|mdash|ampersand|less|greater|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|
-lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk|lq|rq|lsq|rsq|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|times|slash|solidus|copyright|ie|eg|etc|circa|tex|latex|webwork|trademark|registered|fillin|today|timeofday">
-<!ENTITY % markup "xref|url|m|c|em|alert|insert|delete|stale|q|sq|braces|brackets|dblbrackets|angles|term|foreign|abbr|quantity|acro|init|booktitle">
+<!ENTITY % characters "nbsp|ndash|mdash|ampersand|less|greater|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk|lq|rq|lsq|rsq|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|times|slash|solidus|copyright|ie|eg|etc|circa|tex|latex|webwork|trademark|registered|fillin|today|timeofday|doublesharp|sharp|natural|flat|doubleflat">
+<!ENTITY % markup "xref|url|m|c|em|alert|insert|delete|stale|q|sq|braces|brackets|dblbrackets|angles|term|foreign|abbr|quantity|acro|init|booktitle|n|scaledeg|chord">
 <!ENTITY % linear "%characters; | %markup;">
 
 <!-- Multiline Content -->
@@ -377,6 +376,23 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- <!ELEMENT line      (#PCDATA|%linear;)*> -->
 
 
+<!-- ##### -->
+<!-- Music -->
+<!-- ##### -->
+<!ELEMENT     scaledeg              (#PCDATA)              >
+<!ELEMENT     n                     EMPTY                  >
+    <!ATTLIST n         pc          CDATA #IMPLIED         >
+    <!ATTLIST n         acc         CDATA #IMPLIED         >
+    <!ATTLIST n         octave      CDATA #IMPLIED         >
+<!ELEMENT     chord                 (alteration)*          >
+    <!ATTLIST chord     root        CDATA #IMPLIED         >
+    <!ATTLIST chord     mode        CDATA #IMPLIED         >
+    <!ATTLIST chord     bps         CDATA #IMPLIED         >
+    <!ATTLIST chord     bass        CDATA #IMPLIED         >
+    <!ATTLIST chord     suspended   CDATA #IMPLIED         >
+    <!ATTLIST chord     parentheses CDATA #IMPLIED         >
+<!ELEMENT     alteration            (#PCDATA|%characters;)*>
+
 <!-- ################## -->
 <!-- Special Characters -->
 <!-- ################## -->
@@ -419,6 +435,13 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!ELEMENT times         EMPTY>
 <!ELEMENT slash         EMPTY>
 <!ELEMENT solidus       EMPTY>
+<!--      musical symbols  -->
+<!ELEMENT doublesharp   EMPTY>
+<!ELEMENT sharp         EMPTY>
+<!ELEMENT natural       EMPTY>
+<!ELEMENT flat          EMPTY>
+<!ELEMENT doubleflat    EMPTY>
+
 
 <!-- ############################ -->
 <!-- Abbreviations, Special Terms -->

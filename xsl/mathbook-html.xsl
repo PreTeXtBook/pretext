@@ -5124,6 +5124,61 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!--       -->
+<!-- Music -->
+<!--       -->
+
+<!--                 -->
+<!-- Musical Symbols -->
+<!--                 -->
+
+<!-- Accidentals -->
+
+<!-- TODO: If requested, add semi- and sesqui- versions of sharp and flat -->
+
+<!-- Double Sharp -->
+<!-- Unicode Character 'MUSICAL SYMBOL DOUBLE SHARP' (U+1D12A)    -->
+<!-- http://www.fileformat.info/info/unicode/char/1d12a/index.htm -->
+<xsl:template name="doublesharp">
+    <xsl:text>&#x1D12A;</xsl:text>
+</xsl:template>
+
+<!-- Sharp -->
+<!-- Unicode Character 'MUSIC SHARP SIGN' (U+266F)               -->
+<!-- http://www.fileformat.info/info/unicode/char/266f/index.htm -->
+<xsl:template name="sharp">
+    <xsl:text>&#x266F;</xsl:text>
+</xsl:template>
+
+<!-- Natural -->
+<!-- Unicode Character 'MUSIC NATURAL SIGN' (U+266E)             -->
+<!-- http://www.fileformat.info/info/unicode/char/266e/index.htm -->
+<xsl:template name="natural">
+    <xsl:text>&#x266E;</xsl:text>
+</xsl:template>
+
+<!-- Flat -->
+<!-- Unicode Character 'MUSIC FLAT SIGN' (U+266D)                -->
+<!-- http://www.fileformat.info/info/unicode/char/266d/index.htm -->
+<xsl:template name="flat">
+    <xsl:text>&#x266D;</xsl:text>
+</xsl:template>
+
+<!-- Double Flat -->
+<!-- Unicode Character 'MUSICAL SYMBOL DOUBLE FLAT' (U+1D12B)     -->
+<!-- http://www.fileformat.info/info/unicode/char/1d12b/index.htm -->
+<xsl:template name="doubleflat">
+    <xsl:text>&#x1D12B;</xsl:text>
+</xsl:template>
+
+<!-- Half Diminished -->
+<!-- (MathJax does not support "\o") -->
+<!-- Unicode Character 'LATIN SMALL LETTER O WITH STROKE' (U+00F8) -->
+<!-- http://www.fileformat.info/info/unicode/char/00F8/index.htm -->
+<xsl:template name="halfdiminishedchordsymbol">
+    <xsl:text>&#x00F8;</xsl:text>
+</xsl:template>
+
 <!-- Raw Bibliographic Entry Formatting              -->
 <!-- Markup really, not full-blown data preservation -->
 
