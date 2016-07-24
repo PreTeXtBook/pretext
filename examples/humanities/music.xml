@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xml:id="music">
+    <title>Music</title>
+    <section xml:id="symbols">
+        <title>Musical Symbols</title>
+        <example>
+            <title>Accidentals</title>
+            <ul>
+                <li><p><c>&lt;doublesharp/&gt;</c>: <doublesharp/></p></li>
+                <li><p><c>&lt;sharp/&gt;</c>: <sharp/></p></li>
+                <li><p><c>&lt;natural/&gt;</c>: <natural/></p></li>
+                <li><p><c>&lt;flat/&gt;</c>: <flat/></p></li>
+                <li><p><c>&lt;doubleflat/&gt;</c>: <doubleflat/></p></li>
+            </ul>
+        </example>
+    </section>
+    <section xml:id="scaledegs">
+        <title>Scale Degrees</title>
+        <p>Scale degrees are created using the <c>&lt;scaledeg&gt;</c> tag which places a <q>diacritic circumflex</q> over the degree. The circumflex looks best when attached to single-digit numbers.</p>
+        <example>
+            <title>Scale Degrees</title>
+            <ul cols="2">
+                <li><p><c>&lt;scaledeg&gt;0&lt;/scaledeg&gt;</c>: <scaledeg>0</scaledeg></p></li>
+                <li><p><c>&lt;scaledeg&gt;1&lt;/scaledeg&gt;</c>: <scaledeg>1</scaledeg></p></li>
+                <li><p><c>&lt;scaledeg&gt;2&lt;/scaledeg&gt;</c>: <scaledeg>2</scaledeg></p></li>
+                <li><p><c>&lt;scaledeg&gt;3&lt;/scaledeg&gt;</c>: <scaledeg>3</scaledeg></p></li>
+                <li><p><c>&lt;scaledeg&gt;4&lt;/scaledeg&gt;</c>: <scaledeg>4</scaledeg></p></li>
+                <li><p><c>&lt;scaledeg&gt;5&lt;/scaledeg&gt;</c>: <scaledeg>5</scaledeg></p></li>
+                <li><p><c>&lt;scaledeg&gt;6&lt;/scaledeg&gt;</c>: <scaledeg>6</scaledeg></p></li>
+                <li><p><c>&lt;scaledeg&gt;7&lt;/scaledeg&gt;</c>: <scaledeg>7</scaledeg></p></li>
+                <li><p><c>&lt;scaledeg&gt;8&lt;/scaledeg&gt;</c>: <scaledeg>8</scaledeg></p></li>
+                <li><p><c>&lt;scaledeg&gt;9&lt;/scaledeg&gt;</c>: <scaledeg>9</scaledeg></p></li>
+                <li><p><c>&lt;scaledeg&gt;10&lt;/scaledeg&gt;</c>: <scaledeg>10</scaledeg></p></li>
+            </ul>
+        </example>
+    </section>
+    <section xml:id="notes">
+        <title>Notes</title>
+        <p>Notes are created using the <c>&lt;n&gt;</c> tag with a pitch class, <c>@pc</c>. Optional attributes include accidentals, <c>@acc</c>, and octaves, <c>@octave</c>. Please note, accidentals precede numeric pitch classes.</p>
+        <p>For example, <c>&lt;n pc="C" acc="sharp" octave="4"/&gt;</c> results in <n pc="C" acc="sharp" octave="4"/> while <c>&lt;n pc="5" acc="flat"/&gt;</c> results in <n pc="5" acc="flat"/>.</p>
+        <example>
+            <title>Alphabetic Pitch Classes</title>
+            <ul cols="5">
+                <li><p><n pc="A" acc="doublesharp" octave="2"/></p></li>
+                <li><p><n pc="B" acc="doublesharp"/></p></li>
+                <li><p><n pc="C" acc="doublesharp" octave="3"/></p></li>
+                <li><p><n pc="D" acc="doublesharp"/></p></li>
+                <li><p><n pc="E" acc="doublesharp" octave="4"/></p></li>
+                <li><p><n pc="F" acc="doublesharp"/></p></li>
+                <li><p><n pc="G" acc="doublesharp" octave="5"/></p></li>
+
+                <li><p><n pc="A" acc="sharp" octave="2"/></p></li>
+                <li><p><n pc="B" acc="sharp"/></p></li>
+                <li><p><n pc="C" acc="sharp" octave="3"/></p></li>
+                <li><p><n pc="D" acc="sharp"/></p></li>
+                <li><p><n pc="E" acc="sharp" octave="4"/></p></li>
+                <li><p><n pc="F" acc="sharp"/></p></li>
+                <li><p><n pc="G" acc="sharp" octave="5"/></p></li>
+
+                <li><p><n pc="A" octave="2"/></p></li>
+                <li><p><n pc="B"/></p></li>
+                <li><p><n pc="C" octave="3"/></p></li>
+                <li><p><n pc="D"/></p></li>
+                <li><p><n pc="E" octave="4"/></p></li>
+                <li><p><n pc="F"/></p></li>
+                <li><p><n pc="G" octave="5"/></p></li>
+
+                <li><p><n pc="A" acc="flat" octave="2"/></p></li>
+                <li><p><n pc="B" acc="flat"/></p></li>
+                <li><p><n pc="C" acc="flat" octave="3"/></p></li>
+                <li><p><n pc="D" acc="flat"/></p></li>
+                <li><p><n pc="E" acc="flat" octave="4"/></p></li>
+                <li><p><n pc="F" acc="flat"/></p></li>
+                <li><p><n pc="G" acc="flat" octave="5"/></p></li>
+
+                <li><p><n pc="A" acc="doubleflat" octave="2"/></p></li>
+                <li><p><n pc="B" acc="doubleflat"/></p></li>
+                <li><p><n pc="C" acc="doubleflat" octave="3"/></p></li>
+                <li><p><n pc="D" acc="doubleflat"/></p></li>
+                <li><p><n pc="E" acc="doubleflat" octave="4"/></p></li>
+                <li><p><n pc="F" acc="doubleflat"/></p></li>
+                <li><p><n pc="G" acc="doubleflat" octave="5"/></p></li>
+            </ul>
+        </example>
+        <example>
+            <title>Numeric Pitch Classes</title>
+            <ul cols="5">
+                <li><p><n pc="1" acc="doublesharp" octave="5"/></p></li>
+                <li><p><n pc="2" acc="doublesharp"/></p></li>
+                <li><p><n pc="3" acc="sharp" octave="4"/></p></li>
+                <li><p><n pc="4" acc="sharp"/></p></li>
+                <li><p><n pc="5" octave="3"/></p></li>
+                <li><p><n pc="6"/></p></li>
+                <li><p><n pc="7" acc="flat" octave="2"/></p></li>
+                <li><p><n pc="8" acc="flat"/></p></li>
+                <li><p><n pc="9" acc="doubleflat" octave="1"/></p></li>
+                <li><p><n pc="10" acc="doubleflat"/></p></li>
+            </ul>
+        </example>
+    </section>
+    <section xml:id="chords">
+        <title>Chords</title>
+        <p>Chords are created using a combination of the <c>&lt;chord&gt;</c> and <c>&lt;alteration&gt;</c> tags. The <c>&lt;chord&gt;</c> tag can have any combination of the following attributes: <c>@root</c>, <c>@mode</c>, <c>@bps</c>, <c>@suspended</c>, <c>@parentheses</c>, and <c>@bass</c>. For alterations to chords, we place each alteration in an <c>&lt;alteration&gt;</c> tag, which are contained within the <c>&lt;chord&gt;</c> tag. To accommodate different styles of chord notation, the <c>&lt;chord&gt;</c> attribute <c>@parentheses</c> (<c>parentheses="yes|no"</c>) will toggle the parentheses surrounding the alterations. With regard to the <q>mode</q> or <q>characteristic</q> of the chord, whatever text is entered will be used verbatim <em>except</em> in the cases of <c>augmented</c>, <c>major</c>, <c>minor</c>, <c>halfdiminished</c>, and <c>diminished</c>. In these cases, the standard chord symbol representation will be used (<chord mode="augmented"/>, <chord mode="major"/>, <chord mode="minor"/>, <chord mode="halfdiminished"/>, and <chord mode="diminished"/> respectively).</p>
+        <p>For example, <c>&lt;chord root="C" bps="4 3"/&gt;</c> will result in <chord root="C" bps="4 3"/> while</p>
+        <pre>
+            &lt;chord root="B doublesharp" mode="min major" bps="6 5"
+                   suspended="yes" parentheses="yes" bass="G"&gt;
+                &lt;alteration&gt;&lt;sharp/&gt;9&lt;/alteration&gt;
+                &lt;alteration&gt;add 11&lt;/alteration&gt;
+            &lt;/chord&gt;
+        </pre>
+        <p>will result in <chord root="B doublesharp" mode="min major" bps="6 5" suspended="yes" parentheses="yes" bass="G"><alteration><sharp/>9</alteration><alteration>add 11</alteration></chord>.</p>
+        <example>
+            <title>Chords</title>
+            <ul cols="4">
+                <li><p><chord root="N.C."/></p></li>
+                <li><p><chord root="C"><alteration>bass</alteration></chord></p></li>
+                <li><p><chord root="A"/></p></li>
+                <li><p><chord root="B" mode="ma"/></p></li>
+                <li><p><chord root="C" mode="maj"/></p></li>
+                <li><p><chord root="D" mode="major"/></p></li>
+                <li><p><chord root="E" mode="mi"/></p></li>
+                <li><p><chord root="F" mode="min"/></p></li>
+                <li><p><chord root="G" mode="minor"/></p></li>
+                <li><p><chord root="A flat" mode="aug"/></p></li>
+                <li><p><chord root="B flat" mode="augmented"/></p></li>
+                <li><p><chord root="C flat" mode="dim"/></p></li>
+                <li><p><chord root="D flat" mode="diminished"/></p></li>
+                <li><p><chord root="E flat" bps="6"/></p></li>
+                <li><p><chord root="F flat" bps="6 9"/></p></li>
+                <li><p><chord root="G flat" bps="7"/></p></li>
+                <li><p><chord root="A sharp" mode="dom" bps="7"/></p></li>
+                <li><p><chord root="B sharp" mode="maj" bps="7"/></p></li>
+                <li><p><chord root="C sharp" mode="major" bps="7"/></p></li>
+                <li><p><chord root="D sharp" mode="m" bps="7"/></p></li>
+                <li><p><chord root="E sharp" mode="min" bps="7"/></p></li>
+                <li><p><chord root="F sharp" mode="minor" bps="7"/></p></li>
+                <li><p><chord root="G sharp" mode="aug" bps="7"/></p></li>
+                <li><p><chord root="A doubleflat" mode="augmented" bps="7"/></p></li>
+                <li><p><chord root="B doubleflat" mode="dim" bps="7"/></p></li>
+                <li><p><chord root="C doubleflat" mode="diminished" bps="7"/></p></li>
+                <li><p><chord root="D doubleflat" mode="halfdiminished"/></p></li>
+                <li><p><chord root="E doubleflat" mode="halfdiminished" bps="7"/></p></li>
+                <li><p><chord root="F doubleflat" mode="major" bps="7"/></p></li>
+                <li><p><chord root="G doubleflat" mode="min maj" bps="7"/></p></li>
+                <li><p><chord root="A doublesharp" mode="m M" bps="7"/></p></li>
+                <li><p><chord root="B doublesharp" mode="minor major" bps="7"/></p></li>
+                <li><p><chord root="C doublesharp" mode="major" bps="7"><alteration><sharp/>5</alteration></chord></p></li>
+                <li><p><chord root="D doublesharp" mode="augmented major" bps="7"/></p></li>
+                <li><p><chord root="E doublesharp" mode="min" bps="7"><alteration>dim 5</alteration></chord></p></li>
+                <li><p><chord root="F doublesharp" mode="dom" bps="7"><alteration>dim 5</alteration></chord></p></li>
+                <li><p><chord root="G doublesharp" mode="ma" bps="7" suspended="yes" bass="D doublesharp"/></p></li>
+                <li><p><chord root="A natural"><alteration>add 9</alteration><alteration>omit 3</alteration></chord></p></li>
+                <li><p><chord root="B natural" bps="7"><alteration><sharp/>11</alteration><alteration><flat/>9</alteration></chord></p></li>
+                <li><p><chord root="C natural" bps="7"><alteration>add 11</alteration><alteration>omit 5</alteration></chord></p></li>
+                <li><p><chord root="D natural" mode="major" bps="7" bass="E"><alteration><sharp/>5</alteration></chord></p></li>
+                <li><p><chord root="E natural" mode="m" bps="7" suspended="yes" parentheses="no"><alteration>add 3</alteration></chord></p></li>
+                <li><p><chord root="F natural" bass="B doubleflat"/></p></li>
+                <li><p><chord root="G natural" mode="augmented"><alteration>add <sharp/>9</alteration><alteration>add <flat/>9</alteration></chord></p></li>
+            </ul>
+        </example>
+        <example>
+            <title>Chord Comparisons</title>
+            <p>While there are different ways to notate chords, some are clearer than others.</p>
+            <ul>
+                <li><p><chord root="F" mode="maj"/> vs <chord root="F" mode="M"/></p></li>
+                <li><p><chord root="C" mode="min major" bps="7"/> vs <chord root="C" mode="minor major" bps="7"/></p></li>
+                <li><p><chord root="C" mode="major" bps="7"><alteration><sharp/>5</alteration></chord> vs <chord root="C" mode="augmented major" bps="7"/> vs <chord root="C" mode="aug maj" bps="7"/></p></li>
+            </ul>
+        </example>
+    </section>
+</chapter>
