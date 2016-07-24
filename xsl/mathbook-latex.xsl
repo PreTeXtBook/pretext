@@ -415,7 +415,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Color support, xcolor package&#xa;</xsl:text>
     <xsl:text>%% Always loaded.  Used for:&#xa;</xsl:text>
     <xsl:text>%% mdframed boxes, add/delete text, author tools&#xa;</xsl:text>
-    <xsl:text>\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}&#xa;</xsl:text>
+    <!-- Avoid option conflicts causing errors: -->
+    <!-- http://tex.stackexchange.com/questions/57364/option-clash-for-package-xcolor -->
+    <xsl:text>\PassOptionsToPackage{usenames,dvipsnames,svgnames,table}{xcolor}&#xa;</xsl:text>
+    <xsl:text>\usepackage{xcolor}&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Semantic Macros&#xa;</xsl:text>
     <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
@@ -1047,6 +1050,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\poemlineleft}[1]{{\raggedright{#1}\par}\vspace{-\parskip}}&#xa;</xsl:text>
         <xsl:text>\newcommand{\poemlinecenter}[1]{{\centering{#1}\par}\vspace{-\parskip}}&#xa;</xsl:text>
         <xsl:text>\newcommand{\poemlineright}[1]{{\raggedleft{#1}\par}\vspace{-\parskip}}&#xa;</xsl:text>
+    </xsl:if>
+    <!-- Music -->
+    <xsl:if test="//n or //scaledeg or //chord">
+        <xsl:text>%% Musical Symbol Support&#xa;</xsl:text>
+        <xsl:text>\ifthenelse{\boolean{xetex}}{&#xa;</xsl:text>
+        <xsl:text>    \usepackage{lilyglyphs}&#xa;</xsl:text>
+        <xsl:text>    \lilyGlobalOptions{scale=0.8}&#xa;</xsl:text>
+        <!-- Create alias to lilyglyphs command with common name -->
+        <xsl:text>    \newcommand*{\doubleflat}{\flatflat}</xsl:text>
+        <xsl:text>}{&#xa;</xsl:text>
+        <!-- Pulling double-flat and double-sharp characters from "musixtex" font -->
+        <!-- http://tex.stackexchange.com/questions/207261/how-do-i-produce-a-double-flat-symbol-edit -->
+        <xsl:text>    \DeclareFontFamily{U}{musix}{}%</xsl:text>
+        <xsl:text>    \DeclareFontShape{U}{musix}{m}{n}{%</xsl:text>
+        <xsl:text>        &lt;-12&gt;   musix11</xsl:text>
+        <xsl:text>        &lt;12-15&gt; musix13</xsl:text>
+        <xsl:text>        &lt;15-18&gt; musix16</xsl:text>
+        <xsl:text>        &lt;18-23&gt; musix20</xsl:text>
+        <xsl:text>        &lt;23-&gt;   musix29</xsl:text>
+        <xsl:text>    }{}%</xsl:text>
+        <xsl:text>    \newcommand*\doubleflat{\raisebox{0.5ex}{\usefont{U}{musix}{m}{n}\selectfont{3}}}</xsl:text>
+        <xsl:text>    \newcommand*\doublesharp{\raisebox{0.5ex}{\usefont{U}{musix}{m}{n}\selectfont{5}}}</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% Raster graphics inclusion, wrapped figures in paragraphs&#xa;</xsl:text>
     <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
@@ -5737,6 +5763,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!--       -->
+<!-- Music -->
+<!--       -->
+
+<!--                 -->
+<!-- Musical Symbols -->
+<!--                 -->
+
+<!-- Accidentals -->
+
+<!-- TODO: If requested, add semi- and sesqui- versions of sharp and flat -->
+
+<!-- Double Sharp -->
+<xsl:template name="doublesharp">
+    <xsl:text>{\doublesharp}</xsl:text>
+</xsl:template>
+
+<!-- Sharp -->
+<xsl:template name="sharp">
+    <xsl:text>{\sharp}</xsl:text>
+</xsl:template>
+
+<!-- Natural -->
+<xsl:template name="natural">
+    <xsl:text>{\natural}</xsl:text>
+</xsl:template>
+
+<!-- Flat -->
+<xsl:template name="flat">
+    <xsl:text>{\flat}</xsl:text>
+</xsl:template>
+
+<!-- Double Flat -->
+<xsl:template name="doubleflat">
+    <xsl:text>{\doubleflat}</xsl:text>
 </xsl:template>
 
 <!-- Footnotes               -->
