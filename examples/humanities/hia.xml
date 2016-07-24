@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <mathbook xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en-US">
+    <docinfo/>
     <book xml:id="hia">
         <title>Humanities in Action</title>
         <frontmatter xml:id="index">
@@ -15,5 +16,6 @@
             </preface>
         </frontmatter>
         <xi:include href="poetry.xml"/>
+        <xi:include href="music.xml"/>
     </book>
 </mathbook>
