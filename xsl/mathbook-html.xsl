@@ -456,10 +456,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
     <article class="paragraphs" id="{$ident}">
-        <!-- within a side-by-side can carry positioning attributes -->
-        <xsl:if test="parent::sidebyside">
-            <xsl:call-template name="sidebysideCSS" select="."/>
-        </xsl:if>
         <h5 class="heading">
             <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
@@ -1646,7 +1642,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We show the full content of the item on the page (b)            -->
 <!-- Or, we build a hidden knowl and place a link on the page (c)    -->
 <!-- NB: this template employs several modal templates, defined just below -->
-<xsl:template match="list|exercise|hint|answer|exercisegroup|biblio/note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|contributor">
+<xsl:template match="list|exercise|hint|answer|exercisegroup|biblio/note|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|contributor">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden-old" />
     </xsl:variable>
@@ -1679,7 +1675,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We restrict hint, answer, solution to avoid confusion with webwork -->
 <!-- TODO: we need to process children in a way that no \label{}, nor ID's, are produced   -->
 <!--       This would perhaps obsolete the "env-type" device, and reorder explnation below -->
-<xsl:template match="list|exercise|exercise/hint|exercise/answer|exercise/solution|exercisegroup|biblio/note|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|li|contributor" mode="xref-knowl">
+<xsl:template match="list|exercise|exercise/hint|exercise/answer|exercise/solution|exercisegroup|biblio/note|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|li|contributor" mode="xref-knowl">
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
@@ -2120,9 +2116,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="p" mode="heading-birth" />
 
 <xsl:template match="p" mode="body">
-    <xsl:if test="parent::sidebyside">
-        <xsl:call-template name="sidebysideCSS" select="."/>
-    </xsl:if>
     <xsl:apply-templates select="*|text()" />
 </xsl:template>
 
@@ -2141,9 +2134,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Extraordinary, p are containers -->
 <xsl:template match="p" mode="duplicate">
     <xsl:element name="p">
-        <xsl:if test="parent::sidebyside">
-            <xsl:call-template name="sidebysideCSS" select="."/>
-        </xsl:if>
         <xsl:apply-templates select="*|text()" mode="duplicate" />
     </xsl:element>
 </xsl:template>
@@ -2634,17 +2624,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="listing" mode="is-hidden-old">
     <xsl:value-of select="$html.knowl.table = 'yes'" />
 </xsl:template>
-<xsl:template match="sidebyside" mode="is-hidden-old">
+<xsl:template match="sidebyside-foobar" mode="is-hidden-old">
     <xsl:value-of select="$html.knowl.sidebyside = 'yes'" />
 </xsl:template>
-<xsl:template match="sidebyside/figure|sidebyside/table" mode="is-hidden-old">
+<xsl:template match="sidebyside-foobar/figure|sidebyside-foobar/table" mode="is-hidden-old">
     <xsl:value-of select="false()" />
 </xsl:template>
-<xsl:template match="figure|table|listing|sidebyside" mode="is-block-env">
+<xsl:template match="figure|table|listing|sidebyside-foobar" mode="is-block-env">
     <xsl:value-of select="true()" />
 </xsl:template>
 <!-- Knowl-text is like a theorem, employs a title -->
-<xsl:template match="figure|table|listing|sidebyside" mode="hidden-knowl-text">
+<xsl:template match="figure|table|listing|sidebyside-foobar" mode="hidden-knowl-text">
     <article class="theorem-like">
         <h5 class="heading">
             <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
@@ -2656,14 +2646,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </article>
 </xsl:template>
 <!-- There is no head, a caption always appears in the body -->
-<xsl:template match="figure|table|listing|sidebyside" mode="head" />
+<xsl:template match="figure|table|listing|sidebyside-foobar" mode="head" />
 <!-- For tables or figures within a side-by-side:              -->
 <!-- Born visible (ie within a side-by-side), we need some     -->
 <!-- extra positioning CSS. In a knowl content file, we don't  -->
 <!-- want the CSS in the way.  This is the motivating reason   -->
 <!-- for parameterizing the "head" template.  Conveniently the -->
 <!-- CSS lands just below the outer-most enclosing element.    -->
-<xsl:template match="sidebyside/figure|sidebyside/table" mode="head">
+<xsl:template match="sidebyside-foobar/figure|sidebyside-foobar/table" mode="head">
     <xsl:param name="env-type" />
     <xsl:if test="$env-type='visible'">
         <xsl:call-template name="sidebysideCSS" select="."/>
@@ -2672,23 +2662,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Body is just all content, followed by caption -->
 <!-- Figure: just contents, caption -->
 <!-- Table: wrapped in figure, tabular provides <table> -->
-<xsl:template match="figure|table|listing|sidebyside" mode="body">
+<xsl:template match="figure|table|listing|sidebyside-foobar" mode="body">
     <xsl:apply-templates select="*[not(self::caption)]"/>
     <xsl:apply-templates select="caption"/>
 </xsl:template>
 <!-- No posterior  -->
-<xsl:template match="figure|table|listing|sidebyside" mode="posterior" />
+<xsl:template match="figure|table|listing|sidebyside-foobar" mode="posterior" />
 <!-- HTML, CSS -->
 <xsl:template match="figure|table|listing" mode="environment-element">
     <xsl:text>figure</xsl:text>
 </xsl:template>
-<xsl:template match="sidebyside" mode="environment-element">
+<xsl:template match="sidebyside-foobar" mode="environment-element">
     <xsl:text>div</xsl:text>
 </xsl:template>
 <xsl:template match="figure|table|listing" mode="environment-class">
     <xsl:text>figure-like</xsl:text>
 </xsl:template>
-<xsl:template match="sidebyside" mode="environment-class">
+<xsl:template match="sidebyside-foobar" mode="environment-class">
     <xsl:text>sidebyside</xsl:text>
 </xsl:template>
 
@@ -3344,11 +3334,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:element name="img">
                 <!-- side-by-side extras with width, or plain width attribute-->
                 <xsl:choose>
-                    <!-- put CSS on bare image as a side-by-side panel -->
-                    <!-- a width CSS rule that comes from this always  -->
-                    <xsl:when test="ancestor::sidebyside and not(ancestor::figure)">
-                        <xsl:call-template name="sidebysideCSS" select="."/>
-                    </xsl:when>
                     <xsl:when test="@width">
                         <xsl:attribute name="width">
                             <xsl:value-of select="@width" />
@@ -3478,107 +3463,314 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="location-report" />
 </xsl:template>
 
-<!-- ################### -->
-<!-- Side-By-Side Panels -->
-<!-- ################### -->
 
-<!-- A side-by-side panel has objects aligned across a page. -->
-<!-- There are six elements which may be included within:    -->
-<!--                                                         -->
-<!-- (a) figures and tables: with/without captions, possibly -->
-<!--     targets of cross-references (carrying an xml:id),   -->
-<!--     and so are knowlized for cross-references, but      -->
-<!--     will never appear as knowls within a side-by-side   -->
-<!--     listings are not implemented, but could be          -->
-<!-- (b) paragraphs: exceptional, no caption, not knowlized  -->
-<!-- (c) image, tabular, p: more fundamental, no captions,   -->
-<!--     no numbers, etc., and so not knowlized              -->
-<!--                                                         -->
-<!-- The entire panel may be born as a knowl, and is         -->
-<!-- knowlized as a potential target of a cross-reference.   -->
+<!-- ################## -->
+<!-- SideBySide Layouts -->
+<!-- ################## -->
 
-<!-- To position an item within a panel, the element may       -->
-<!-- have additional atributes.  This template *must* follow   -->
-<!-- an <xsl:element name="XYX"> statement for the outer-most  -->
-<!-- enclosing HTML of the panel's content.  You will see this -->
-<!-- template employed conditionally in a variety of places.   -->
-<!-- Adding:                                                   -->
-<!--   class="left|middle|right"                               -->
-<!--   style="width=@width;                                    -->
-<!--          vertical-align=@valign;                          -->
-<!--          ext-align=@halign"                               -->
+<!-- See xsl/mathbook-common.xsl for descriptions of the  -->
+<!-- five modal templates which must be implemented here -->
 
-<!-- TODO: study "image" template and consolidate -->
-<!-- TODO: convert to a match="" template and break up conditionals -->
-<xsl:template name="sidebysideCSS">
-  <!-- paragraphs have their own class -->
-  <xsl:if test="not(self::paragraphs)">
-    <xsl:choose>
-        <!-- first child is class="left" -->
-        <xsl:when test="not(preceding-sibling::figure or preceding-sibling::image or preceding-sibling::paragraphs or preceding-sibling::p or preceding-sibling::table or preceding-sibling::tabular)">
-          <xsl:attribute name="class">left</xsl:attribute>
-        </xsl:when>
-        <!-- last child is class="right" -->
-        <xsl:when test="not(following-sibling::figure or following-sibling::image or following-sibling::paragraphs or following-sibling::p or following-sibling::table or following-sibling::tabular)">
-          <xsl:attribute name="class">right</xsl:attribute>
-        </xsl:when>
-        <!-- middle children are class="middle" -->
-        <xsl:otherwise>
-          <xsl:attribute name="class">middle</xsl:attribute>
-        </xsl:otherwise>
-    </xsl:choose>
-  </xsl:if>
-  <xsl:attribute name="style">
-  <xsl:text>width:</xsl:text>
-  <!-- if width is defined, then use it -->
-  <xsl:variable name="width">
-    <xsl:choose>
-      <xsl:when test="@width">
-          <xsl:value-of select="substring-before(@width,'%')"/>
-      </xsl:when>
-      <xsl:otherwise>
-          <!-- calculate widths that have been specified 
-             and auto-print a remaining width -->
-               <xsl:call-template name="printWidth" select="."/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <!-- the width needs to be cut a small amount to allow a space between objects -->
-  <xsl:value-of select="floor(($width)*.97)"/>
-  <xsl:text>%</xsl:text>
-  <xsl:text>;</xsl:text>
-  <!-- vertical alignment option -->
-  <xsl:text>vertical-align:</xsl:text>
-  <xsl:choose>
-    <xsl:when test="@valign">
-      <xsl:value-of select="@valign"/>
-    </xsl:when>
-    <!-- default -->
-    <xsl:otherwise>
-      <xsl:text>bottom</xsl:text>
-    </xsl:otherwise>
-  </xsl:choose>
-  <xsl:text>;</xsl:text>
-  <!-- horizontal alignment option -->
-  <xsl:text>text-align:</xsl:text>
-  <xsl:choose>
-    <xsl:when test="@halign">
-      <xsl:value-of select="@halign"/>
-    </xsl:when>
-    <!-- default -->
-    <xsl:otherwise>
-      <xsl:choose>
-        <xsl:when test="not(self::paragraphs or self::p)">
-            <xsl:text>center</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>left</xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:otherwise>
-  </xsl:choose>
-  <xsl:text>;</xsl:text>
-  </xsl:attribute>
+<!-- When we use CSS margins (or padding), then percentage        -->
+<!-- widths are relative to the remaining space.  This utility    -->
+<!-- takes in a width relative to full-text-width and the margins -->
+<!-- (both with "%" attached) and returns the larger percentage   -->
+<!-- of the remaining space.                                      -->
+<xsl:template name="relative-width">
+    <xsl:param name="width" />
+    <xsl:param name="margins" />
+    <xsl:value-of select="(100 * substring-before($width, '%')) div (100 - 2 * substring-before($margins, '%'))" />
+    <xsl:text>%</xsl:text>
+</xsl:template>
+
+<!-- We do no particular setup for the panels -->
+<xsl:template match="*" mode="panel-setup" />
+
+<!-- If an object carries a title, we add it to the -->
+<!-- row of titles across the top of the table      -->
+<!-- else we write an empty div to occupy the space -->
+<xsl:template match="*" mode="panel-heading">
+    <xsl:param name="width" />
+    <xsl:param name="margins" />
+    <xsl:element name="h5">
+        <xsl:attribute name="class">
+            <xsl:text>sbsheader</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="style">
+            <xsl:text>width:</xsl:text>
+            <xsl:call-template name="relative-width">
+                <xsl:with-param name="width" select="$width" />
+                <xsl:with-param name="margins" select="$margins" />
+            </xsl:call-template>
+            <xsl:text>;</xsl:text>
+            <xsl:if test="$sbsdebug">
+                <xsl:text>box-sizing: border-box;</xsl:text>
+                <xsl:text>-moz-box-sizing: border-box;</xsl:text>
+                <xsl:text>-webkit-box-sizing: border-box;</xsl:text>
+                <xsl:text>border: 2px solid yellow;</xsl:text>
+            </xsl:if>
+        </xsl:attribute>
+        <xsl:if test="title">
+            <xsl:apply-templates select="." mode="title-full" />
+        </xsl:if>
+    </xsl:element>
+</xsl:template>
+
+<!-- generic "panel-panel" template            -->
+<!-- makes a "sbspanel" div of specified width -->
+<!-- calls modal "panel-html-box" for contents -->
+<!-- fixed-width class is additional           -->
+<xsl:template match="*" mode="panel-panel">
+    <xsl:param name="width" />
+    <xsl:param name="margins" />
+    <xsl:param name="valign" />
+    <xsl:element name="div">
+        <xsl:attribute name="class">
+            <xsl:text>sbspanel</xsl:text>
+            <xsl:if test="self::table or self::tabular">
+                <xsl:text> fixed-width</xsl:text>
+            </xsl:if>
+        </xsl:attribute>
+        <xsl:attribute name="style">
+            <xsl:text>width:</xsl:text>
+            <xsl:call-template name="relative-width">
+                <xsl:with-param name="width" select="$width" />
+                <xsl:with-param name="margins" select="$margins" />
+            </xsl:call-template>
+            <xsl:text>;</xsl:text>
+            <!-- assumes "sbspanel" class set vertical direction -->
+            <xsl:text>justify-content:</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$valign = 'top'">
+                    <xsl:text>flex-start</xsl:text>
+                </xsl:when>
+                <xsl:when test="$valign = 'middle'">
+                    <xsl:text>center</xsl:text>
+                </xsl:when>
+                <xsl:when test="$valign = 'bottom'">
+                    <xsl:text>flex-end</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+            <xsl:text>;</xsl:text>
+            <xsl:if test="$sbsdebug">
+                <xsl:text>box-sizing: border-box;</xsl:text>
+                <xsl:text>-moz-box-sizing: border-box;</xsl:text>
+                <xsl:text>-webkit-box-sizing: border-box;</xsl:text>
+                <xsl:text>border: 2px solid black;</xsl:text>
+            </xsl:if>
+        </xsl:attribute>
+        <xsl:apply-templates select="." mode="panel-html-box" />
+    </xsl:element>
+</xsl:template>
+
+<!-- If an object carries a caption, we add it to the -->
+<!-- row of captions across the bottom of the table   -->
+<!-- else we write an empty div to occupy the space   -->
+<xsl:template match="*" mode="panel-caption">
+    <xsl:param name="width" />
+    <xsl:param name="margins" />
+    <xsl:element name="figcaption">
+        <xsl:attribute name="class">
+            <xsl:text>sbscaption</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="style">
+            <xsl:text>width:</xsl:text>
+            <xsl:call-template name="relative-width">
+                <xsl:with-param name="width" select="$width" />
+                <xsl:with-param name="margins" select="$margins" />
+            </xsl:call-template>
+            <xsl:text>;</xsl:text>
+            <xsl:if test="$sbsdebug">
+                <xsl:text>box-sizing: border-box;</xsl:text>
+                <xsl:text>-moz-box-sizing: border-box;</xsl:text>
+                <xsl:text>-webkit-box-sizing: border-box;</xsl:text>
+                <xsl:text>border: 2px solid Chocolate;</xsl:text>
+            </xsl:if>
+        </xsl:attribute>
+        <!-- we add lots of class information on "figcaption" above, -->
+        <!-- so must manage contents independent of other templates -->
+        <xsl:if test="caption">
+            <xsl:choose>
+                <xsl:when test="parent::sidebyside[caption] or ancestor::sbsgroup[caption]">
+                    <span class="codenumber">
+                        <xsl:apply-templates select="." mode="serial-number"/>
+                    </span>
+                    <xsl:apply-templates select="caption/*|caption/text()" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <span class="heading">
+                        <xsl:apply-templates select="." mode="type-name"/>
+                    </span>
+                    <span class="codenumber">
+                        <xsl:apply-templates select="." mode="number"/>
+                    </span>
+                    <xsl:apply-templates select="caption/*|caption/text()" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
+    </xsl:element>
+</xsl:template>
+
+
+<!-- We take in all three rows and package  -->
+<!-- them up inside an overriding "sidebyside" -->
+<!-- div containing three "sbsrow" divs -->
+<xsl:template match="sidebyside" mode="compose-panels">
+    <xsl:param name="margins" />
+    <xsl:param name="headings" />
+    <xsl:param name="panels" />
+    <xsl:param name="captions" />
+
+    <!-- A "sidebyside" div, to contain headings,  -->
+    <!-- panels, captions rows as "sbsrow" divs -->
+    <xsl:element name="div">
+        <xsl:attribute name="class">
+            <xsl:text>sidebyside</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="style">
+            <xsl:if test="$sbsdebug">
+                <xsl:text>box-sizing: border-box;</xsl:text>
+                <xsl:text>-moz-box-sizing: border-box;</xsl:text>
+                <xsl:text>-webkit-box-sizing: border-box;</xsl:text>
+                <xsl:text>border: 2px solid purple;</xsl:text>
+            </xsl:if>
+        </xsl:attribute>
+
+        <!-- this will need work to differentiate sbs from sbsrow -->
+        <xsl:if test="self::sidebyside">
+            <xsl:attribute name="id">
+                <xsl:apply-templates select="." mode="internal-id" />
+            </xsl:attribute>
+        </xsl:if>
+
+        <!-- Headings in an "sbsrow" div -->
+        <xsl:element name="div">
+            <xsl:attribute name="class">
+                <xsl:text>sbsrow</xsl:text>
+            </xsl:attribute>
+            <!-- margins are custom from source -->
+            <xsl:attribute name="style">
+                <xsl:text>margin-left:</xsl:text>
+                <xsl:value-of select="$margins" />
+                <xsl:text>;</xsl:text>
+                <xsl:text>margin-right:</xsl:text>
+                <xsl:value-of select="$margins" />
+                <xsl:text>;</xsl:text>
+                <xsl:if test="$sbsdebug">
+                    <xsl:text>box-sizing: border-box;</xsl:text>
+                    <xsl:text>-moz-box-sizing: border-box;</xsl:text>
+                    <xsl:text>-webkit-box-sizing: border-box;</xsl:text>
+                    <xsl:text>border: 2px solid green;</xsl:text>
+                </xsl:if>
+            </xsl:attribute>
+            <xsl:copy-of select="$headings" />
+        </xsl:element>
+
+        <!-- Panels in an "sbsrow" div -->
+        <xsl:element name="div">
+            <xsl:attribute name="class">
+                <xsl:text>sbsrow</xsl:text>
+            </xsl:attribute>
+            <!-- margins are custom from source -->
+            <xsl:attribute name="style">
+                <xsl:text>margin-left:</xsl:text>
+                <xsl:value-of select="$margins" />
+                <xsl:text>;</xsl:text>
+                <xsl:text>margin-right:</xsl:text>
+                <xsl:value-of select="$margins" />
+                <xsl:text>;</xsl:text>
+                <xsl:if test="$sbsdebug">
+                    <xsl:text>box-sizing: border-box;</xsl:text>
+                    <xsl:text>-moz-box-sizing: border-box;</xsl:text>
+                    <xsl:text>-webkit-box-sizing: border-box;</xsl:text>
+                    <xsl:text>border: 2px solid green;</xsl:text>
+                    <xsl:text>background: LightGray;</xsl:text>
+                    <xsl:text>background-clip: content-box;</xsl:text>
+                </xsl:if>
+            </xsl:attribute>
+            <xsl:copy-of select="$panels" />
+        </xsl:element>
+
+        <!-- Captions in an "sbsrow" div -->
+        <xsl:element name="div">
+            <xsl:attribute name="class">
+                <xsl:text>sbsrow</xsl:text>
+            </xsl:attribute>
+            <!-- margins are custom from source -->
+            <xsl:attribute name="style">
+                <xsl:text>margin-left:</xsl:text>
+                <xsl:value-of select="$margins" />
+                <xsl:text>;</xsl:text>
+                <xsl:text>margin-right:</xsl:text>
+                <xsl:value-of select="$margins" />
+                <xsl:text>;</xsl:text>
+                <xsl:if test="$sbsdebug">
+                    <xsl:text>box-sizing: border-box;</xsl:text>
+                    <xsl:text>-moz-box-sizing: border-box;</xsl:text>
+                    <xsl:text>-webkit-box-sizing: border-box;</xsl:text>
+                    <xsl:text>border: 2px solid green;</xsl:text>
+                </xsl:if>
+            </xsl:attribute>
+            <xsl:copy-of select="$captions" />
+        </xsl:element>
+
+        <!-- Global caption on sidebyside, always numbered -->
+        <!-- TODO: apply margins if ever unequal (left/right) -->
+        <xsl:if test="caption and not(parent::sbsgroup)">
+            <xsl:apply-templates select="caption" />
+        </xsl:if>
+
+    </xsl:element>
+</xsl:template>
+
+<!-- ########################### -->
+<!-- Object by Object HTML Boxes -->
+<!-- ########################### -->
+
+<!-- Implement modal "panel-html-box" for various MBX elements -->
+<!-- Called in generic -panel                                  -->
+
+<xsl:template match="p|tabular" mode="panel-html-box">
+    <xsl:apply-templates select="." />
+</xsl:template>
+
+<xsl:template match="paragraphs" mode="panel-html-box">
+    <xsl:apply-templates select="p" />
+</xsl:template>
+
+<xsl:template match="ol|ul|dl" mode="panel-html-box">
+    <xsl:apply-templates select="." />
+</xsl:template>
+
+<!-- needs work to support SVG, no extension @source -->
+<!-- Make a panel of the correct width, then  -->
+<!-- insert the image at 100% width and let   -->
+<!-- height follow to preserve aspect ratio   -->
+<xsl:template match="image" mode="panel-html-box">
+    <xsl:element name="img">
+        <xsl:attribute name="width">
+            <xsl:text>100%</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="src">
+            <xsl:value-of select="@source" />
+        </xsl:attribute>
+    </xsl:element>
+</xsl:template>
+
+<!-- A figure or table is just a container to hold a -->
+<!-- title and/or caption, plus perhaps an xml:id,   -->
+<!-- so we just pawn off the contents (one only!)    -->
+<!-- to the other routines                           -->
+<xsl:template match="figure|table" mode="panel-html-box">
+    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-html-box" />
+</xsl:template>
+
+
+<!-- Just temporary markers of unimplemented stuff -->
+<xsl:template match="*" mode="panel-html-box">
+    <xsl:text>[</xsl:text>
+    <xsl:value-of select="local-name(.)" />
+    <xsl:text>]</xsl:text>
 </xsl:template>
 
 
@@ -3733,21 +3925,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="tabular">
     <xsl:element name="table">
         <xsl:apply-templates select="row" />
-    </xsl:element>
-</xsl:template>
-
-<!-- Slightly different handling within a side-by-side -->
-<!-- TODO: experiment with:                 -->
-<!-- (a) dropping figure element            -->
-<!-- (b) place CSS onto the table element -->
-<!-- (c) dropping the center class          -->
-<xsl:template match="sidebyside/tabular">
-    <xsl:element name="figure">
-        <xsl:call-template name="sidebysideCSS" select="."/>
-        <xsl:element name="table">
-            <xsl:attribute name="class">center</xsl:attribute>
-            <xsl:apply-templates select="row"/>
-        </xsl:element>
     </xsl:element>
 </xsl:template>
 
@@ -4032,7 +4209,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Caption'ed sidebyside indicate subfigures and subtables are subsidiary -->
 <!-- so we number with just their serial number, a formatted (a), (b), (c), -->
-<xsl:template match="sidebyside[caption]/figure/caption|sidebyside[caption]/table/caption">
+<!-- <xsl:template match="sidebyside-foobar[caption]/figure/caption|sidebyside-foobar[caption]/table/caption">
+    <figcaption>
+        <span class="codenumber">
+            <xsl:apply-templates select="parent::*" mode="serial-number"/>
+        </span>
+        <xsl:apply-templates />
+    </figcaption>
+</xsl:template>
+ -->
+<!-- sub caption is numbered by the serial number -->
+<!-- which is a formatted  (a), (b), (c),...      -->
+<xsl:template match="caption" mode="subcaption">
     <figcaption>
         <span class="codenumber">
             <xsl:apply-templates select="parent::*" mode="serial-number"/>
@@ -4073,7 +4261,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a sidebyside even though this is not necessary           -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|p|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|&THEOREM-LIKE;|proof|&AXIOM-LIKE;|&REMARK-LIKE;|assemblage|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|&THEOREM-LIKE;|proof|&AXIOM-LIKE;|&REMARK-LIKE;|assemblage|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">
