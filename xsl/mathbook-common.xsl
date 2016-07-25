@@ -2285,6 +2285,485 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:if>
 </xsl:template>
 
+<!-- ################## -->
+<!-- SideBySide Layouts -->
+<!-- ################## -->
+
+<!-- Horizontal layouts of "panels" with vertical alignment      -->
+<!-- A container for layout of other elements, eg figures        -->
+<!-- Behaves much like a figure when captioned                   -->
+<!-- No notion of columns, no rules or dividers, no row headings -->
+
+<!-- Debugging information is not documented, nor supported     -->
+<!-- Colored boxes in HTML, black boxes in LaTeX with baselines -->
+<xsl:param name="sbs.debug" select="'no'" />
+<xsl:variable name="sbsdebug" select="boolean($sbs.debug = 'yes')" />
+
+<!-- A side-by-side group ("sbsgroup") is a wrapper     -->
+<!-- around a sequence of "sidebyside".  It provides    -->
+<!--                                                    -->
+<!--   (a) overall title                                -->
+<!--   (b) overall caption                              -->
+<!--   (c) common margins, widths, vertical alignments  -->
+<!--   (d) subcaptioning across entire group            -->
+<!--                                                    -->
+<!-- The implementation here is a working stub, but     -->
+<!-- should be overridden, perhaps with "apply-imports" -->
+
+<xsl:template match="sbsgroup">
+    <!-- start any wrapper -->
+    <!-- handle title -->
+    <xsl:apply-templates select="sidebyside" />
+    <!-- handle (optional) overall caption -->
+    <!-- finish wrapper -->
+</xsl:template>
+
+<!-- A "sidebyside" is a sequence of objects laid out       -->
+<!-- horizontally in panels.  This is a deviation from      -->
+<!-- the usual vertical rythym of a page.  The "best"       -->
+<!-- objects are those that are pliable horizontally,       -->
+<!-- such as a paragraph, or a scalable image.  Rigid       -->
+<!-- objects, like pre-formatted text or some tables,       -->
+<!-- require some care from the author.  Attributes         -->
+<!-- that control the layout follow, and override           -->
+<!-- identical attributes placed on an enclosing            -->
+<!-- "sbsgroup" (if employed).                              -->
+<!--                                                        -->
+<!-- (a) "margins"                                          -->
+<!--  - one percentage for both left and right (nn%)        -->
+<!--  - default is 0%                                       -->
+<!--  - "auto" => margins are half the space between panels -->
+<!-- (b) "widths"                                           -->
+<!--  - widths of panels, one per panel                     -->
+<!--  - space separated list of percentages                 -->
+<!--  - default is equal division of available total width  -->
+<!-- (c) "valigns", "valign"                                -->
+<!--  - vertical alignment of content within panel          -->
+<!--  - space separated list of top, middle, bottom         -->
+<!--  - singular is common alignment for all panels         -->
+<!--  - default is top                                      -->
+<!--                                                        -->
+<!-- Default behavior is no margins, no spacing             -->
+<!-- between panels and equally wide panels.                -->
+<!--                                                        -->
+<!-- With widths specified, remaining space is              -->
+<!-- used to create equal spacing between panels            -->
+
+<xsl:template match="sidebyside">
+    <!-- captions, titles on "sidebyside" ignored when used in an sbsgroup -->
+    <xsl:if test="parent::sbsgroup and caption">
+        <xsl:message>MBX:WARNING: caption of a &lt;sidebyside&gt; is ignored when contained in an &lt;sbsgroup&gt;</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+    <xsl:if test="parent::sbsgroup and title">
+        <xsl:message>MBX:WARNING: title of a &lt;sidebyside&gt; is ignored when contained in an &lt;sbsgroup&gt;</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <!-- count real elements meant for panels, discount others -->
+    <xsl:variable name="number-panels" select="count(*[not(&METADATA-FILTER;)])" />
+    <xsl:if test="$sbsdebug">
+        <xsl:message>N:<xsl:value-of select="$number-panels" />:N</xsl:message>
+    </xsl:if>
+
+    <!-- clean up, organize, vertical alignments                  -->
+    <!-- Always produces space-separated list with trailing space -->
+    <!-- Error-check as $valigns string gets depleted below       -->
+    <xsl:variable name="valigns">
+        <xsl:choose>
+            <!-- individual sbs takes priority -->
+            <xsl:when test="@valigns">
+                <xsl:value-of select="concat(normalize-space(@valigns), ' ')" />
+            </xsl:when>
+            <!-- singular form is convenience -->
+            <xsl:when test="@valign">
+                <xsl:call-template name="duplicate-string">
+                     <xsl:with-param name="text" select="concat(normalize-space(@valign), ' ')" />
+                     <xsl:with-param name="count" select="$number-panels" />
+                 </xsl:call-template>
+            </xsl:when>
+            <!-- look to enclosing sidebyside group -->
+            <xsl:when test="parent::sbsgroup[@valigns]">
+                <xsl:value-of select="concat(normalize-space(parent::sbsgroup/@valigns), ' ')" />
+            </xsl:when>
+            <!-- look to enclosing sidebyside group for singular convenience -->
+            <xsl:when test="parent::sbsgroup[@valign]">
+                <xsl:call-template name="duplicate-string">
+                     <xsl:with-param name="text" select="concat(normalize-space(parent::sbsgroup/@valign), ' ')" />
+                     <xsl:with-param name="count" select="$number-panels" />
+                 </xsl:call-template>
+            </xsl:when>
+            <!-- default: place all panels at the top    -->
+            <!-- NB: space at end of string is separator -->
+            <xsl:otherwise>
+                <xsl:call-template name="duplicate-string">
+                     <xsl:with-param name="text" select="'top '" />
+                     <xsl:with-param name="count" select="$number-panels" />
+                 </xsl:call-template>
+             </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="$sbsdebug">
+        <xsl:message>VA:<xsl:value-of select="$valigns" />:VA</xsl:message>
+    </xsl:if>
+
+    <!-- clean up and organize widths                             -->
+    <!-- Always produces space-separated list with trailing space -->
+    <!-- Error-check as $widths string gets depleted below        -->
+    <xsl:variable name="normalized-widths">
+        <xsl:choose>
+            <!-- individual sbs takes priority -->
+            <xsl:when test="@widths">
+                <xsl:value-of select="concat(normalize-space(@widths), ' ')" />
+            </xsl:when>
+            <!-- singular form is convenience -->
+            <xsl:when test="@width">
+                <xsl:call-template name="duplicate-string">
+                     <xsl:with-param name="text" select="concat(normalize-space(@width), ' ')" />
+                     <xsl:with-param name="count" select="$number-panels" />
+                 </xsl:call-template>
+            </xsl:when>
+            <!-- look to enclosing sidebyside group -->
+            <xsl:when test="parent::sbsgroup[@widths]">
+                <xsl:value-of select="concat(normalize-space(parent::sbsgroup/@widths), ' ')" />
+            </xsl:when>
+            <!-- look to enclosing sidebyside group for singular convenience -->
+            <xsl:when test="parent::sbsgroup[@width]">
+                <xsl:call-template name="duplicate-string">
+                     <xsl:with-param name="text" select="concat(normalize-space(parent::sbsgroup/@width), ' ')" />
+                     <xsl:with-param name="count" select="$number-panels" />
+                 </xsl:call-template>
+            </xsl:when>
+            <!-- defer default computation post-margins      -->
+            <!-- NB: "undetermined" widths is a single space -->
+            <xsl:otherwise>
+                <xsl:text> </xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <!-- clean up margins -->
+    <xsl:variable name="normalized-margins">
+        <xsl:choose>
+            <!-- individual sbs takes priority -->
+            <xsl:when test="@margins">
+                <xsl:value-of select="normalize-space(@margins)" />
+            </xsl:when>
+            <!-- look to enclosing sidebyside group -->
+            <xsl:when test="parent::sbsgroup[@margins]">
+                <xsl:value-of select="normalize-space(parent::sbsgroup/@margins)" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>0%</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <!-- total widths used/available    -->
+    <!-- no attributes, use 100         -->
+    <!-- no width, subtract two margins -->
+    <!-- widths given, sum them         -->
+    <!-- no percent sign, just internal -->
+    <!-- TOD: error-check that sum is 100 or less -->
+    <xsl:variable name="sum-widths">
+        <xsl:choose>
+            <xsl:when test="$normalized-widths = ' ' and $normalized-margins = ''">
+                <xsl:text>100</xsl:text>
+            </xsl:when>
+            <xsl:when test="$normalized-widths = ' '">
+                <xsl:value-of select="100 - 2 * substring-before($normalized-margins, '%')" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="sum-percentages">
+                    <xsl:with-param name="percent-list" select="$normalized-widths" />
+                    <xsl:with-param name="sum" select="'0'" />
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <!-- have width totals, determine margin         -->
+    <!-- automatic creates margins that will be half -->
+    <!-- of the subsequent space-width computation   -->
+    <!-- Input assumes % present (unless 'auto')     -->
+    <!-- Output preserves % on result                -->
+    <!-- TODO: test margin is in [0%, 50%] -->
+    <xsl:variable name="margin">
+        <xsl:choose>
+            <xsl:when test="$number-panels = 0">
+                <xsl:text>0%</xsl:text>
+            </xsl:when>
+            <xsl:when test="$normalized-margins = 'auto'">
+                <xsl:value-of select="(100 - $sum-widths) div (2 * $number-panels)" />
+                <xsl:text>%</xsl:text>
+            </xsl:when>
+            <!-- TODO: condition on % present, let otherwise report failure -->
+            <xsl:otherwise>
+                <xsl:value-of select="$normalized-margins" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="$sbsdebug">
+        <xsl:message>M:<xsl:value-of select="$margin" />:M</xsl:message>
+    </xsl:if>
+    <!-- error check for reasonable values -->
+    <xsl:if test="(substring-before($margin, '%') &lt; 0) or (substring-before($margin, '%') &gt; 50)">
+        <xsl:message>MBX:ERROR:   margins of a &lt;sidebyside&gt; ("<xsl:value-of select="$margin" />") is outside the interval [0%, 50%], (this may be computed, check consistency of "@margins" and "@widths")</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <!-- if no widths given, distribute excess beyond margins -->
+    <!-- NB: with percent signs, blank at end always          -->
+    <!-- Error-check as $widths string gets depleted below    -->
+    <xsl:variable name="widths">
+        <xsl:choose>
+            <xsl:when test="$normalized-widths = ' '">
+                <xsl:variable name="common-width" select="(100 - 2 * substring-before($margin, '%')) div $number-panels" />
+                <!-- transfer as percentages (abstract), with blank at end -->
+                <xsl:call-template name="duplicate-string">
+                     <xsl:with-param name="text" select="concat($common-width, '% ')" />
+                     <xsl:with-param name="count" select="$number-panels" />
+                 </xsl:call-template>
+             </xsl:when>
+             <xsl:otherwise>
+                <xsl:value-of select="$normalized-widths" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="$sbsdebug">
+        <xsl:message>W:<xsl:value-of select="$widths" />:W</xsl:message>
+    </xsl:if>
+
+    <!-- compute common spacing between panels, as percent -->
+    <!-- subtract margins and sum-widths from 100,         -->
+    <!-- and then distribute to n - 1 spaces               -->
+    <!-- includes % for external use                       -->
+    <xsl:variable name="space-width">
+        <xsl:choose>
+            <xsl:when test="$number-panels &lt; 2">
+                <!-- no spaces, avoids all division by zero -->
+                <xsl:text>0</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="(100 - $sum-widths - 2 * substring-before($margin, '%')) div ($number-panels - 1)" />
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>%</xsl:text>
+    </xsl:variable>
+    <xsl:if test="$sbsdebug">
+        <xsl:message>SW:<xsl:value-of select="$space-width" />:SW</xsl:message>
+    </xsl:if>
+    <!-- overall error check on space width -->
+    <xsl:choose>
+        <xsl:when test="substring-before($space-width, '%') &lt; 0">
+            <xsl:message>MBX:ERROR:   computed space between panels of a &lt;sidebyside&gt; ("<xsl:value-of select="$space-width" />") is negative (this value is computed, check consistency of "@margins" and "@widths")</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:when>
+        <xsl:when test="substring-before($space-width, '%') = 'NaN'">
+            <xsl:message>MBX:ERROR:   computed space between panels of a &lt;sidebyside&gt; is not a number (this value is computed, check that margins ("<xsl:value-of select="$margin" />") and widths ("<xsl:value-of select="$widths" />") are percentages of the form "nn%")</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:when>
+    </xsl:choose>
+
+    <!-- initiate recursing through panels,     -->
+    <!-- building up headings, captions, panels -->
+    <!-- metadata elements skipped in recursion -->
+    <xsl:apply-templates select="." mode="sbs-panel">
+        <xsl:with-param name="number-panels" select="$number-panels" />
+        <xsl:with-param name="the-panel" select="*[1]" />
+        <xsl:with-param name="widths" select="$widths" />
+        <xsl:with-param name="margins" select="$margin" />
+        <xsl:with-param name="space-width" select="$space-width" />
+        <xsl:with-param name="valigns" select="$valigns" />
+        <xsl:with-param name="has-headings" select="false()" />
+        <xsl:with-param name="has-captions" select="false()" />
+        <xsl:with-param name="setup" select="''" />
+        <xsl:with-param name="headings" select="''" />
+        <xsl:with-param name="panels" select="''" />
+        <xsl:with-param name="captions" select="''" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- recursive template to sum percentages         -->
+<!-- input: a space-separated list, with %'s'      -->
+<!-- NB: expect trailing space as sentinel for end -->
+<!-- Output: total, without %, -common use only    -->
+<xsl:template name="sum-percentages">
+    <xsl:param name="percent-list" />
+    <xsl:param name="sum" />
+    <xsl:choose>
+        <xsl:when test="$percent-list = ''">
+            <xsl:value-of select="$sum" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="sum-percentages">
+                <xsl:with-param name="percent-list" select="substring-after($percent-list, ' ')" />
+                <xsl:with-param name="sum" select="$sum + substring-before($percent-list, '%')" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Recursively handle one panel at a time                   -->
+<!-- Implementations need to define modal templates           -->
+<!--   panel-setup, panel-heading, panel-panel, panel-caption -->
+<!-- Final results are coillectively sent to modal            -->
+<!--   compose-panels                                         -->
+<!-- template to be arranged                                  -->
+
+<xsl:template match="sidebyside" mode="sbs-panel">
+    <xsl:param name="number-panels" />
+    <xsl:param name="the-panel" />
+    <xsl:param name="widths" />
+    <xsl:param name="margins" />
+    <xsl:param name="space-width" />
+    <xsl:param name="valigns" />
+    <xsl:param name="has-headings" />
+    <xsl:param name="has-captions" />
+    <xsl:param name="setup" />
+    <xsl:param name="headings" />
+    <xsl:param name="panels" />
+    <xsl:param name="captions" />
+    <xsl:choose>
+        <!-- no more panels -->
+        <xsl:when test="not($the-panel)">
+            <!-- first, check for leftover widths and valigns  -->
+            <xsl:if test="not($widths = '')">
+                <xsl:message>MBX:WARNING: &lt;sidebyside&gt; has extra "@widths" (did you confuse singular and plural?)</xsl:message>
+                <xsl:apply-templates select="." mode="location-report" />
+            </xsl:if>
+            <xsl:if test="not($valigns = '')">
+                <xsl:message>MBX:WARNING: &lt;sidebyside&gt; has extra "@valigns" (did you confuse singular and plural?)</xsl:message>
+                <xsl:apply-templates select="." mode="location-report" />
+            </xsl:if>
+            <xsl:if test="$sbsdebug">
+                <xsl:message>HH: <xsl:value-of select="$has-headings" /> :HH</xsl:message>
+                <xsl:message>HC: <xsl:value-of select="$has-captions" /> :HC</xsl:message>
+                <xsl:message>----</xsl:message>
+            </xsl:if>
+            <!-- if there are no headers or captions, we *could* set to an empty string -->
+            <!-- now collect components into output wrappers -->
+            <xsl:apply-templates select="." mode="compose-panels">
+                <xsl:with-param name="number-panels" select="$number-panels" />
+                <xsl:with-param name="margins" select="$margins" />
+                <xsl:with-param name="space-width" select="$space-width" />
+                <xsl:with-param name="setup" select="$setup" />
+                <xsl:with-param name="headings" select="$headings" />
+                <xsl:with-param name="panels" select="$panels" />
+                <xsl:with-param name="captions" select="$captions" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- the overall row can carry metadata (title, caption)  -->
+        <!-- so just skip ahead a panel, with no other net effect -->
+        <xsl:when test="$the-panel[&METADATA-FILTER;]">
+            <xsl:apply-templates select="." mode="sbs-panel">
+                <xsl:with-param name="number-panels" select="$number-panels" />
+                <xsl:with-param name="the-panel" select="$the-panel/following-sibling::*[1]" />
+                <xsl:with-param name="widths" select="$widths" />
+                <xsl:with-param name="margins" select="$margins" />
+                <xsl:with-param name="space-width" select="$space-width" />
+                <xsl:with-param name="valigns" select="$valigns" />
+                <xsl:with-param name="has-headings" select="$has-headings" />
+                <xsl:with-param name="has-captions" select="$has-captions" />
+                <xsl:with-param name="setup" select="$setup" />
+                <xsl:with-param name="headings" select="$headings" />
+                <xsl:with-param name="panels" select="$panels" />
+                <xsl:with-param name="captions" select="$captions" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- collect options from front of attribute strings, and error-check -->
+            <!-- first, get and check panel width                                 -->
+            <xsl:variable name="width" select="substring-before($widths, ' ')" />
+            <xsl:choose>
+                <xsl:when test="substring-before($width, '%') &lt; 0">
+                    <xsl:message>MBX:ERROR:   panel width in a &lt;sidebyside&gt; ("<xsl:value-of select="$width" />") is negative (this may be computed, check "@margins" and "@widths")</xsl:message>
+                    <xsl:apply-templates select="." mode="location-report" />
+                </xsl:when>
+                <xsl:when test="substring-before($width, '%') &gt; 100">
+                    <xsl:message>MBX:ERROR:   panel width in a &lt;sidebyside&gt; ("<xsl:value-of select="$width" />") is bigger than 100% (this may be computed, check "@margins" and "@widths")</xsl:message>
+                    <xsl:apply-templates select="." mode="location-report" />
+                </xsl:when>
+                <xsl:when test="$width = ''">
+                    <xsl:message>MBX:FATAL:   expecting a &lt;sidebyside&gt; panel width, maybe not enough specified?</xsl:message>
+                    <xsl:apply-templates select="." mode="location-report" />
+                    <xsl:message terminate="yes">             Quitting...</xsl:message>
+                </xsl:when>
+            </xsl:choose>
+
+            <!-- next, get and check panel vertical alignment -->
+            <xsl:variable name="valign" select="substring-before($valigns, ' ')" />
+            <xsl:choose>
+                <!-- "top" is default, check first -->
+                <xsl:when test="$valign = 'top'" />
+                <xsl:when test="$valign = 'bottom'" />
+                <xsl:when test="$valign = 'middle'" />
+                <xsl:when test="$valign = ''">
+                    <xsl:message>MBX:FATAL:   expecting a &lt;sidebyside&gt; panel vertical alignment, maybe not enough specified?</xsl:message>
+                    <xsl:apply-templates select="." mode="location-report" />
+                    <xsl:message terminate="yes">             Quitting...</xsl:message>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>MBX:ERROR:   vertical alignment ("<xsl:value-of select="$valign" />") in &lt;sidebyside&gt; is not "top," "middle" or "bottom"</xsl:message>
+                    <xsl:apply-templates select="." mode="location-report" />
+                </xsl:otherwise>
+            </xsl:choose>
+
+            <!-- update outputs by appending to recursive calls -->
+            <!-- parameter passing is maximum amount, the       -->
+            <!-- union of LaTeX and HTML implementations        -->
+            <xsl:variable name="new-setup">
+                <xsl:value-of select="$setup" />
+                <xsl:apply-templates select="$the-panel" mode="panel-setup">
+                    <xsl:with-param name="width" select="$width" />
+                </xsl:apply-templates>
+            </xsl:variable>
+
+            <xsl:variable name="new-headings">
+                <xsl:copy-of select="$headings" />
+                <xsl:apply-templates select="$the-panel" mode="panel-heading">
+                    <xsl:with-param name="width" select="$width" />
+                    <xsl:with-param name="margins" select="$margins" />
+                </xsl:apply-templates>
+            </xsl:variable>
+
+            <xsl:variable name="new-panels">
+                <xsl:copy-of select="$panels" />
+                <xsl:apply-templates select="$the-panel" mode="panel-panel">
+                    <xsl:with-param name="width" select="$width" />
+                    <xsl:with-param name="margins" select="$margins" />
+                    <xsl:with-param name="valign" select="$valign" />
+                </xsl:apply-templates>
+            </xsl:variable>
+
+            <xsl:variable name="new-captions">
+                <xsl:copy-of select="$captions" />
+                <xsl:apply-templates select="$the-panel" mode="panel-caption">
+                    <xsl:with-param name="width" select="$width" />
+                    <xsl:with-param name="margins" select="$margins" />
+                </xsl:apply-templates>
+            </xsl:variable>
+
+            <!-- move to next panel, passing updated components        -->
+            <!-- once incremented "panel-number" here, but not used    -->
+            <!-- update booleans for necessity of headings or captions -->
+            <xsl:apply-templates select="." mode="sbs-panel">
+                <xsl:with-param name="number-panels" select="$number-panels" />
+                <xsl:with-param name="the-panel" select="$the-panel/following-sibling::*[1]" />
+                <xsl:with-param name="widths" select="substring-after($widths, ' ')" />
+                <xsl:with-param name="margins" select="$margins" />
+                <xsl:with-param name="space-width" select="$space-width" />
+                <xsl:with-param name="setup" select="$new-setup" />
+                <xsl:with-param name="valigns" select="substring-after($valigns, ' ')" />
+                <xsl:with-param name="has-headings" select="$has-headings or $the-panel/title" />
+                <xsl:with-param name="has-captions" select="$has-captions or $the-panel/caption" />
+                <xsl:with-param name="headings" select="$new-headings" />
+                <xsl:with-param name="panels" select="$new-panels" />
+                <xsl:with-param name="captions" select="$new-captions" />
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- ############## -->
 <!-- List Utilities -->

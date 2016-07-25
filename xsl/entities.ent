@@ -31,6 +31,10 @@
 <!-- for filtering nodes, eg *[&STRUCTURAL-FILTER;], *[not(&STRUCTURAL-FILTER;)] -->
 <!ENTITY STRUCTURAL-FILTER "self::book or self::article or self::letter or self::memo or self::frontmatter or self::part or self::chapter or self::appendix or self::index-part or self::preface or self::acknowledgement or self::biography or self::foreword or self::dedication or self::colophon or self::section or self::subsection or self::subsubsection or self::exercises or self::references or self::backmatter">
 
+<!-- typical items in blocks that get special treatment -->
+<!ENTITY METADATA "title|subtitle|caption|index">
+<!ENTITY METADATA-FILTER "self::title or self::subtitle or self::caption or self::index">
+
 <!-- To implement a new category of blocks, search on    -->
 <!-- "PROJECT-" (case-sensitive) since we will mark      -->
 <!-- non-obvious locations with the string PROJECT-LIKE  -->

@@ -152,18 +152,10 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- Blocks -->
 <!-- ###### -->
 
-<!-- attributes for use only in side-by-side -->
 <!ELEMENT p   (#PCDATA|%sentence;)*>
-    <!ATTLIST p   width   CDATA                 #IMPLIED>
-    <!ATTLIST p   halign  (left|center|right)   #IMPLIED>
-    <!ATTLIST p   valign  (bottom|middle|top)   #IMPLIED>
 
-<!-- attributes for use only in side-by-side -->
 <!ELEMENT paragraphs   (title?, index*, (%para;)*) >
     <!ATTLIST paragraphs   xml:id   ID                    #IMPLIED>
-    <!ATTLIST paragraphs   width    CDATA                 #IMPLIED>
-    <!ATTLIST paragraphs   halign   (left|center|right)   #IMPLIED>
-    <!ATTLIST paragraphs   valign   (bottom|middle|top)   #IMPLIED>
     <!ATTLIST paragraphs   xml:base  CDATA                #IMPLIED>
 
 
@@ -320,12 +312,9 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- Caption -->
 <!ELEMENT caption  (#PCDATA|%linear;)*>
 
-<!-- table attributes for use only in side-by-side -->
 <!ELEMENT table   (title?, index*, caption?, tabular)>
     <!ATTLIST table xml:id ID #IMPLIED>
     <!ATTLIST table width     CDATA                 #IMPLIED>
-    <!ATTLIST table halign    (left|center|right)   #IMPLIED>
-    <!ATTLIST table valign    (bottom|middle|top)   #IMPLIED>
 
 <!ELEMENT tabular (col*, row+)>
     <!ATTLIST tabular bottom    (none|minor|medium|major)  #IMPLIED>
@@ -353,20 +342,14 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST cell halign       (left|center|right)        #IMPLIED>
     <!ATTLIST cell colspan      CDATA                      #IMPLIED>
 
-<!-- figure attributes for use only in side-by-side           -->
 <!-- Allowing multiple p allows for things like math displays -->
 <!ELEMENT figure  (title?, index*, caption?, (image|video|latex-image-code|p*)*)>
     <!ATTLIST figure xml:id ID #IMPLIED>
     <!ATTLIST figure   width    CDATA                 #IMPLIED>
-    <!ATTLIST figure   halign   (left|center|right)   #IMPLIED>
-    <!ATTLIST figure   valign   (bottom|middle|top)   #IMPLIED>
 
-<!-- listing attributes for use only in side-by-side -->
 <!ELEMENT listing  (title?, index*, caption?, (pre|program|console)*)>
     <!ATTLIST listing xml:id ID #IMPLIED>
     <!ATTLIST listing   width    CDATA                 #IMPLIED>
-    <!ATTLIST listing   halign   (left|center|right)   #IMPLIED>
-    <!ATTLIST listing   valign   (bottom|middle|top)   #IMPLIED>
 
 <!-- ############ -->
 <!-- Side By Side -->
@@ -374,6 +357,11 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 
 <!ELEMENT sidebyside  (caption?, (figure|image|table|tabular|paragraphs|p|ol|ul|dl)*)>
     <!ATTLIST sidebyside xml:id ID #IMPLIED>
+    <!ATTLIST sidebyside   margins   CDATA                 #IMPLIED>
+    <!ATTLIST sidebyside   width     CDATA                 #IMPLIED>
+    <!ATTLIST sidebyside   widths    CDATA                 #IMPLIED>
+    <!ATTLIST sidebyside   valign    (bottom|middle|top)   #IMPLIED>
+    <!ATTLIST sidebyside   valigns   CDATA                 #IMPLIED>
 
 
 <!-- ###### -->
@@ -616,7 +604,6 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- ###### -->
 
 <!-- PROVISIONAL: may disable height attribute, even in side-by-side -->
-<!-- height and alignment attributes for use only in side-by-side -->
 <!-- Note: pg-name is exclusive to webwork                           -->
 <!ELEMENT image  (description?, (latex-image-code|asymptote|sageplot)?)>
     <!ATTLIST image  xml:id    ID                    #IMPLIED>
@@ -625,8 +612,6 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST image  source    CDATA                 #IMPLIED>
     <!ATTLIST image  width     CDATA                 #IMPLIED>
     <!ATTLIST image  height    CDATA                 #IMPLIED>
-    <!ATTLIST image  halign    (left|center|right)   #IMPLIED>
-    <!ATTLIST image  valign    (bottom|middle|top)   #IMPLIED>
     <!ATTLIST image  pg-name   CDATA                 #IMPLIED>
 
 <!-- typically for accessibility, also used in notation element -->
