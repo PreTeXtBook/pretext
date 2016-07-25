@@ -1461,7 +1461,7 @@ the xsltproc executable.
                 <p>Figures, tables and side-by-sides that do not have a caption will automatically not receive a number.  So, in particular, a <c>figure</c> element can be used to place a centered <c>image</c>, with vertical breaks.  We interrupt this current list of figures to include a caption-less one, as a check that the numbering continues sequentially.</p>
 
                 <figure xml:id="figure-captionless-titleless-trefoil">
-                    <image source="images/trefoil.png" width="100"/>
+                    <image source="images/cross-square.png" width="100"/>
                 </figure>
 
             </subsection>
@@ -3567,7 +3567,15 @@ the xsltproc executable.
             <introduction>
               <title>Introduction</title>
 
-              <p>A variety of different objects can be put side-by-side using the <c>sidebyside</c> element.  Specifically, <c>figure</c>, <c>table</c>, <c>paragraphs</c>, <c>image</c>, <c>tabular</c>, <c>p</c>.  The first three have some structure, the second three are atomic.  For HTML output, the entire <c>sidebyside</c> will be a knowl as a target of a cross reference, and may be born within a knowl (via the <c>html.knowl.sidebyside</c> switch).  Figures and tables (only) from within a side-by-side will be realized as knowls when the target of a cross-reference, but are never born as knowls within a side-by-side.</p>
+              <p>The flow of a page is almost universally top-to-bottom.  But at times you would like to go <em>across</em> a page, perhaps to compare items (identical content in two different languages), or to make good use of a page by grouping several small items together (<eg />, images).  So the <c>&lt;sidebyside&gt;</c> tag is primarily a layout device, though it should convey some meaning by grouping certain objects together. A variety of different objects can be put side-by-side using the <c>sidebyside</c> element.  Specifically, <c>figure</c>, <c>table</c>, <c>paragraphs</c>, <c>image</c>, <c>tabular</c>, <c>p</c>, <c>ol</c>, <c>ul</c>, <c>dl</c>.  For HTML output, the entire <c>sidebyside</c> will be a knowl as a target of a cross reference, and may be born within a knowl (via the <c>html.knowl.sidebyside</c> switch).  Figures and tables (only) from within a side-by-side will be realized as knowls when the target of a cross-reference, but are never born as knowls within a side-by-side.</p>
+
+              <p>As a first example, we have two single paragraphs, laid out with different widths, and slight margins on each side.  The widths have been chosen experimentally to get roughly identical heights.</p>
+
+                <sidebyside widths="60% 31%" margins="3%">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin lorem diam, convallis in nulla sed, accumsan fermentum urna. Pellentesque aliquet leo elit, ut consequat nunc dapibus ac. Sed lobortis leo tincidunt, vulputate nunc at, ultricies leo. Vivamus purus diam, tristique laoreet purus eget, mollis gravida sapien. Nunc vulputate nisl ac mauris hendrerit cursus. Sed vel molestie velit. Suspendisse sem sem, elementum at vehicula id, volutpat ac mi. Nullam ullamcorper fringilla purus in accumsan. Mauris at nunc accumsan orci dictum vulputate id id augue. Suspendisse at dignissim elit, non euismod nunc. Aliquam faucibus magna ac molestie semper. Aliquam hendrerit sem sit amet metus congue tempor. Donec laoreet laoreet metus, id interdum purus mattis vulputate. Proin condimentum vitae erat varius mollis. Donec venenatis libero sed turpis pretium tempor.</p>
+
+                    <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra. Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                </sidebyside>
             </introduction>
 
             <subsection>
@@ -3577,31 +3585,33 @@ the xsltproc executable.
 
                 <p>If a global caption is <em>not</em> present, then the figures will be labeled regularly, as for example, <xref ref="regular-figure" autoname="yes"/> and <xref ref="another-regular-figure" autoname="yes"/></p>
 
-                <p>The <c>width</c> can be specified for each child, or omitted, in which case it will be calculated automatically based on the <em>remaining</em> width available; for finer control, it is generally best to specify the width.</p>
+                <p>The <c>sidebyside</c> tag can have an attribute <c>widths</c> that specifies a percentage width of the page for each panel of the layout.  There is no margin by default, and any remaining width is divided evenly to space out the panels.  When the <c>margins</c> attribute is given as <c>auto</c>, then a margin is provided that equals half of the inter-panel space.</p>
 
-                <sidebyside xml:id="fig-sidebyside-global">
-                    <caption>Side-by-side Figure, with subfigure children.</caption>
+                <p>With no attributes on the <c>sidebyside</c>, there is no margin, there is no inter-panel space, and each panel is the same width.</p>
+
+                <sidebyside widths="25.67% 25%" xml:id="fig-sidebyside-global">
+                    <caption>Side-by-side Figure, with subfigure children, no margin.</caption>
                     <figure width="25.67%" xml:id="fig-sidebyside-subfigure">
                         <caption></caption>
-                        <image source="images/trefoil.png">
+                        <image source="images/cross-square.png">
                             <description>Trefoil image</description>
                         </image>
                     </figure>
                     <figure width="25%">
                         <caption></caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
                 </sidebyside>
 
-                <sidebyside>
-                    <caption>Side-by-side Figure, with subfigure children.</caption>
+                <sidebyside widths="50% 25%" margins="auto">
+                    <caption>Side-by-side Figure, with subfigure children, automatic margin.</caption>
                     <figure width="50%">
                         <caption>width=50<percent/></caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
                     <figure width="25%">
                         <caption>width=25<percent/></caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
                 </sidebyside>
 
@@ -3609,30 +3619,30 @@ the xsltproc executable.
                     <caption>Widths can be calculated automatically</caption>
                     <figure>
                         <caption></caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
                     <figure>
                         <caption></caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
                     <figure>
                     <caption></caption>
-                    <image source="images/trefoil.png"/>
+                    <image source="images/cross-square.png"/>
                     </figure>
                 </sidebyside>
 
-                <sidebyside>
+                <sidebyside widths="25% 25% 50%">
                     <figure xml:id="regular-figure">
                         <caption>Side-by-side Figures</caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
                     <figure xml:id="another-regular-figure">
                         <caption>Regular numbering</caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
-                    <figure width="50%">
+                    <figure>
                         <caption>Regular numbering</caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
                 </sidebyside>
             </subsection>
@@ -3640,62 +3650,60 @@ the xsltproc executable.
             <subsection>
                 <title>Images Without Captions</title>
 
-                <p>We can use the <c>sidebyside</c> element to put <c>images</c> next to each other; there's no need to specify the <c>width</c>, unless you want to fine tune things.</p>
+                <p>We can use the <c>sidebyside</c> element to put <c>images</c> next to each other.  This next example has <c>10%</c> margins, and the panels have widths <c>25%</c> and <c>40%</c>, leaving <c>15%</c> computed as the one inter-panel space.</p>
 
-                <sidebyside>
-                    <image source="images/trefoil.png"/>
-                    <image source="images/trefoil.png"/>
+                <sidebyside widths="25% 40%" margins="10%">
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
                 </sidebyside>
 
-                <p>Now we fine-tune with different widths (which add up to 100<percent />).</p>
+                <p>Now we fine-tune with different widths (which add up to 100<percent />).  The five imgages have been given different vertical alignments, <c>top middle bottom top middle</c> via the <c>valigns</c> attribute.</p>
 
-                <sidebyside>
-                    <image width="10%" source="images/trefoil.png"/>
-                    <image width="30%" source="images/trefoil.png"/>
-                    <image width="20%" source="images/trefoil.png"/>
-                    <image width="20%" source="images/trefoil.png"/>
-                    <image width="20%" source="images/trefoil.png"/>
+                <sidebyside widths="10% 30% 20% 20% 20%" margins="0%" valigns="top middle bottom top middle">
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
                 </sidebyside>
 
-                <p>If you want an overall caption, but no sub-captions on your images, that is also straightforward.</p>
+                <p>If you want an overall caption, but no sub-captions on your images, that is also straightforward.  This example has no attributes specified.</p>
 
                 <sidebyside>
                     <caption>Two equally-spaced (identical) images</caption>
-                    <image source="images/trefoil.png"/>
-                    <image source="images/trefoil.png"/>
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
                 </sidebyside>
-
-
 
             </subsection>
 
             <subsection>
                 <title>Vertical Alignment</title>
-                <p>Vertical alignment can be specified using the (optional) <c>valign</c> attribute which can take values <c>top</c>, <c>middle</c>, and <c>bottom</c>; the default is <c>bottom</c>.</p>
+                <p>Vertical alignment can be specified using the <c>valign</c> attribute which admits a space-separated list of <c>top</c>, <c>middle</c>, and <c>bottom</c>; the default is <c>top</c>.</p>
 
-                <sidebyside>
-                    <figure width="33%" valign="middle">
+                <sidebyside widths="33% 17% 50%" valigns="middle top middle">
+                    <figure>
                         <caption>Middle</caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
-                    <figure width="17%" valign="top">
+                    <figure>
                         <caption>Top</caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
-                    <figure width="50%" valign="middle">
+                    <figure>
                         <caption>Middle</caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
                 </sidebyside>
 
-                <p>We may apply the same <c>valign</c> attribute to <c>images</c> without captions.</p>
+                <p>The singular version of the attribute, <c>valign</c>, can provide the same alignment to each panel, here we use five different widths, but all with vertical alignment of <c>middle</c>.</p>
 
-                <sidebyside>
-                    <image width="10%" valign="top" source="images/trefoil.png"/>
-                    <image width="10%" valign="bottom" source="images/trefoil.png"/>
-                    <image width="20%" source="images/trefoil.png"/>
-                    <image width="10%" valign="bottom" source="images/trefoil.png"/>
-                    <image width="20%" source="images/trefoil.png"/>
+                <sidebyside widths="2% 15% 20% 8% 25%" valign="middle">
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
                 </sidebyside>
             </subsection>
 
@@ -3704,62 +3712,41 @@ the xsltproc executable.
 
                 <p>Text can be put next to other blocks of text using either the <c>paragraphs</c> element, which can contain multiple paragraphs using the <c>p</c> element.</p>
 
-                <p>If only one paragraph is required, simply use the <c>p</c> element on its own.</p>
+                <p>If only one paragraph is required, simply use the <c>p</c> element on its own.  In addtion to captions, elements which allow titles will have those displayed above the panel.  So <c>paragraphs</c> can carry a <c>title</c>, but a single paragraph, <c>p</c>, will not.</p>
 
-                <sidebyside>
-                    <paragraphs width="20%" valign="middle">
-                        <title>Sample title</title>
+                <sidebyside widths="20% 20% 20% 20%" valigns="middle top middle top">
+                    <paragraphs>
+                        <title>Sample Title</title>
                         <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text</p>
                     </paragraphs>
-                    <paragraphs width="20%" valign="top">
+                    <paragraphs>
+                        <title>A Really Long Title on a Fairly Skinny Paragraphs Element</title>
                         <p>here is some text here is some text here is some text here is some text here</p>
                         <p>here is some text here is some text here is some text here is some text here</p>
                         <p>here is some text here is some text here is some text here is some text here</p>
                     </paragraphs>
-                    <p width="20%" valign="middle" halign="right">here is some text here is some text here is some text here is some text here</p>
-                    <p width="20%" valign="bottom" halign="center">here is some text here is some text here is some text here is some text here</p>
+                    <p>here is some text here is some text here is some text here is some text here</p>
+                    <p>here is some text here is some text here is some text here is some text here</p>
                 </sidebyside>
 
                 <p>Similarly, text can be put next to images.</p>
 
-                <sidebyside>
-                    <p width="50%" valign="middle"> here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text cross reference: <xref ref="text-next-to-figure" autoname="yes"/> and math: <m>x^2</m></p>
-                    <image width="20%" valign="top" source="images/trefoil.png"/>
+                <sidebyside widths="50% 20%" valigns="middle top">
+                    <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text cross reference: <xref ref="text-next-to-figure" autoname="yes"/> and math: <m>x^2</m></p>
+                    <image source="images/cross-square.png"/>
                 </sidebyside>
 
                 <p>You can even place text next to numbered figures, as shown below in <xref ref="text-next-to-figure" autoname="yes"/>.</p>
 
-                <sidebyside>
-                    <paragraphs width="50%" valign="middle">
+                <sidebyside widths="50% 20%" valigns="middle top">
+                    <paragraphs>
                         <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text; cross reference: <xref ref="text-next-to-figure" autoname="yes"/> and math: <m>x^2</m></p>
                     </paragraphs>
-                    <figure width="20%" valign="top" xml:id="text-next-to-figure">
+                    <figure xml:id="text-next-to-figure">
                         <caption>Text next to a figure</caption>
-                        <image source="images/trefoil.png" height="30" />
+                        <image source="images/cross-square.png" height="30" />
                     </figure>
                 </sidebyside>
-            </subsection>
-
-            <subsection>
-                <title>Horizontal Alignment</title>
-
-                <p>Text can be horizontally aligned to the <c>left</c> (default), <c>center</c>, or <c>right</c> using the optional <c>halign</c> attribute.</p>
-
-                <sidebyside>
-                    <paragraphs width="20%" halign="center" valign="bottom">
-                        <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text</p>
-                    </paragraphs>
-                    <paragraphs width="20%" halign="left" valign="top">
-                        <p>here is some text here is some text here is some text here is some text here </p>
-                        <p>here is some text here is some text here is some text here is some text here </p>
-                        <p>here is some text here is some text here is some text here is some text here </p>
-                    </paragraphs>
-                    <paragraphs width="20%" halign="right" valign="middle">
-                        <p>here is some text here is some text here is some text here is some text here </p>
-                        <p>here is some text here is some text here is some text here is some text here </p>
-                    </paragraphs>
-                </sidebyside>
-
             </subsection>
 
             <subsection>
@@ -3767,9 +3754,9 @@ the xsltproc executable.
 
                 <p>Tables can also be put side-by-side, as demonstrated below in <xref ref="table-sidebyside-global" autoname="yes"/>; naturally, subtables can be referenced as in <xref ref="table-sidebyside-subtable" autoname="yes"/>.</p>
 
-                <sidebyside xml:id="table-sidebyside-global">
+                <sidebyside widths="50% 25%" xml:id="table-sidebyside-global">
                     <caption>Side-by-side Table, with subtable children.</caption>
-                    <table halign="left" width="50%" xml:id="table-sidebyside-subtable">
+                    <table xml:id="table-sidebyside-subtable">
                         <caption>width=50<percent/></caption>
                         <tabular top="minor" left="minor" halign="center">
                             <col right="medium"/>
@@ -3790,7 +3777,7 @@ the xsltproc executable.
                             </row>
                         </tabular>
                     </table>
-                    <table width="25%">
+                    <table>
                         <caption>width=25<percent/></caption>
                         <tabular top="minor" left="minor" halign="center">
                             <col right="medium"/>
@@ -3812,6 +3799,7 @@ the xsltproc executable.
                         </tabular>
                     </table>
                 </sidebyside>
+
                 <sidebyside>
                     <caption>Widths can be calculated automatically.</caption>
                     <table>
@@ -3928,78 +3916,6 @@ the xsltproc executable.
                 </sidebyside>
             </subsection>
 
-            <subsection>
-                <title>Horizontal and Vertical Alignment</title>
-
-                <p>Tables within the <c>sidebyside</c> element can accept the <c>halign</c> and <c>valign</c> attributes; see <xref ref="table-regular-halign-demo" /> and <xref ref="table-regular-valign-demo" />. The <c>halign</c> attribute can take values <c>left</c>, <c>center</c> (default), and <c>right</c>; the <c>valign</c> attribute can take values <c>top</c>, <c>middle</c>, and <c>bottom</c> (default).</p>
-
-                <sidebyside>
-                    <caption>Global Caption</caption>
-                    <table>
-                        <caption></caption>
-                        <tabular top="minor" left="minor" halign="center">
-                            <col right="medium"/>
-                            <col right="major"/>
-                            <col />
-                            <!--  -->
-                            <row bottom="medium">
-                                <cell>1111</cell>
-                                <cell right="minor">2222</cell>
-                            </row>
-                            <row bottom="major">
-                                <cell>aaaa</cell>
-                                <cell right="medium">bbbb</cell>
-                            </row>
-                            <row>
-                                <cell bottom="minor">AAAA</cell>
-                                <cell bottom="major" right="major">BBBB</cell>
-                            </row>
-                        </tabular>
-                    </table>
-                    <table xml:id="table-regular-halign-demo" halign="right">
-                        <caption>halign="right"</caption>
-                        <tabular top="minor" left="minor" halign="center">
-                            <col right="medium"/>
-                            <col right="major"/>
-                            <col />
-                            <!--  -->
-                            <row bottom="medium">
-                                <cell>1111</cell>
-                                 <cell right="minor">2222</cell>
-                            </row>
-                            <row bottom="major">
-                                <cell>aaaa</cell>
-                                <cell right="medium">bbbb</cell>
-                            </row>
-                            <row>
-                                <cell bottom="minor">AAAA</cell>
-                                <cell bottom="major" right="major">BBBB</cell>
-                            </row>
-                        </tabular>
-                    </table>
-                    <table xml:id="table-regular-valign-demo" valign="top">
-                        <caption>valign="top"</caption>
-                        <tabular top="minor" left="minor" halign="center">
-                            <col right="medium"/>
-                            <col right="major"/>
-                            <col />
-                            <!--  -->
-                            <row bottom="medium">
-                                <cell>1111</cell>
-                                <cell right="minor">2222</cell>
-                            </row>
-                            <row bottom="major">
-                                <cell>aaaa</cell>
-                                <cell right="medium">bbbb</cell>
-                            </row>
-                            <row>
-                                <cell bottom="minor">AAAA</cell>
-                                <cell bottom="major" right="major">BBBB</cell>
-                            </row>
-                        </tabular>
-                    </table>
-                </sidebyside>
-            </subsection>
 
             <subsection>
                 <title>Tables Next to Figures</title>
@@ -4031,7 +3947,7 @@ the xsltproc executable.
                     <!--  -->
                     <figure xml:id="figure-next-table">
                         <caption>Figure next to a Table</caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
                 </sidebyside>
 
@@ -4061,7 +3977,7 @@ the xsltproc executable.
                     <!--  -->
                     <figure xml:id="figure-next-table-sublabeled">
                         <caption>Figure next to a Table</caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
                 </sidebyside>
             </subsection>
@@ -4071,8 +3987,8 @@ the xsltproc executable.
 
                 <p>Tables can go next to text blocks.</p>
 
-                <sidebyside>
-                    <table valign="top">
+                <sidebyside widths="50% 20% 20%" valigns="top top middle">
+                    <table>
                         <caption>Table next to text</caption>
                         <tabular top="minor" left="minor" halign="center">
                             <col right="medium"/>
@@ -4093,12 +4009,12 @@ the xsltproc executable.
                             </row>
                         </tabular>
                     </table>
-                    <paragraphs width="20%" halign="left" valign="top">
+                    <paragraphs>
                         <p>here is some text here is some text here is some text here is some text here </p>
                         <p>here is some text here is some text here is some text here is some text here </p>
                         <p>here is some text here is some text here is some text here is some text here </p>
                     </paragraphs>
-                    <paragraphs width="20%" halign="center" valign="middle">
+                    <paragraphs>
                         <p>here is some text here is some text here is some text here is some text here </p>
                         <p>here is some text here is some text here is some text here is some text here </p>
                     </paragraphs>
@@ -4196,28 +4112,24 @@ the xsltproc executable.
                 <p>Other objects such as lists can be put in the <c>sidebyside</c> element.</p>
 
                 <sidebyside>
-                    <paragraphs>
                         <ol>
                             <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" />.</p></li>
                             <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" />.</p></li>
                             <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" />.</p></li>
                             <li><p>Figures: An early plot, Figure<nbsp /><xref ref="figure-function-derivative" />.</p></li>
                         </ol>
-                    </paragraphs>
-                    <paragraphs>
                         <ul>
                             <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" />.</p></li>
                             <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" />.</p></li>
                             <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" />.</p></li>
                             <li><p>Figures: An early plot, Figure<nbsp /><xref ref="figure-function-derivative" />.</p></li>
                         </ul>
-                    </paragraphs>
                 </sidebyside>
 
                 <p>You can even experiment with <em>aligned</em> equations in the <c>sidebyside</c> element.</p>
 
-                <sidebyside>
-                    <paragraphs valign="middle">
+                <sidebyside valigns="middle top">
+                    <paragraphs>
                         <p>here is some text, and here is an equation that contains alignment.<md>
                             <mrow>f(x)&amp;= x^2+3x+2</mrow>
                             <mrow>&amp;=(x+2)(x+1)</mrow>
@@ -4234,6 +4146,31 @@ the xsltproc executable.
                         </md></p>
                     </paragraphs>
                 </sidebyside>
+            </subsection>
+
+            <subsection>
+                <title>Side-By-Side Groups</title>
+
+                <p>A <q>side-by-side group,</q> <c>&lt;sbsgroup&gt;</c>, is experimental.  It is a sequence of <c>sidebyside</c>, which may conceivably use the same margins, widths and vertical alignments for each horizontal run of panels.  Here are the planned distinctions:<ul>
+                    <li>Attributes on the <c>sbsgroup</c> are global and will be used by each contained <c>sidebyside</c>.  If attributes are present on an individual <c>sidebyside</c>, they override the global values.</li>
+                    <li>With an overall caption on the <c>sbsgroup</c>, the sub-numbering of the panels is consecutive across all of the panels.  So it is an error to have a caption on any <c>sidebyside</c> within an <c>sbsgroup</c>.</li>
+                    <li>If the only captions present are for individual panels, then they get regular numbering, not sub-numbering.</li>
+                </ul>  The next example demonstrates some of this behavior.</p>
+
+                <sbsgroup widths="5% 5% 5%" margins="30%">
+                    <caption>Overall SBS Group</caption>
+                    <sidebyside>
+                        <!-- <caption>This is an error if un-commented.</caption> -->
+                        <p>One.</p>
+                        <p>Two.</p>
+                        <p>Three.</p>
+                    </sidebyside>
+                    <sidebyside widths="25% 20% 15%" margins="5%">
+                        <p>Four.</p>
+                        <p>Five.</p>
+                        <p>Six.</p>
+                    </sidebyside>
+                </sbsgroup>
             </subsection>
         </section>
 
