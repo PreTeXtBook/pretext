@@ -1047,7 +1047,7 @@ the xsltproc executable.
                         <title><q>Normal</q> Text</title>
                         <p>Use <c>&lt;ampersand /&gt;</c>, <c>&lt;less /&gt;</c>, <c>&lt;greater /&gt;</c>.</p>
                     </li>
-                    <li>
+                    <li xml:id="reserved-characters-mathematics">
                         <title>Mathematics</title>
                         <p>Within <c>m</c>, <c>me</c>, <c>men</c>, and <c>mrow</c> elements, use <c>\amp</c>, <c>\lt</c>, <c>\gt</c>.  Or use <c>CDATA</c> to enclose a large chunk of <latex /> with many of these characters.</p>
                     </li>
@@ -2949,6 +2949,7 @@ the xsltproc executable.
                 <li><p>A titled list: <xref ref="list-colors-rainbow" /></p></li>
                 <li><p>List item inside a named list, second color in rainbow list: <xref ref="rainbow-orange" autoname="yes" /></p></li>
                 <li><p>An assemblage, which never has a number.  A cross-reference now requires content in the <c>xref</c> element: <xref ref="assemblage-basics">text to xref an assemblage</xref></p></li>
+                <li><p>A cross-reference to a list item in a description list, which has a title, but never a number: <xref ref="reserved-characters-mathematics" autoname="title" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul>
 

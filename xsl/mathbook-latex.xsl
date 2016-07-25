@@ -3375,18 +3375,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- Description lists get additional argument next -->
+<!-- Description lists get title as additional argument -->
 <xsl:template match="dl/li">
-    <xsl:text>\item</xsl:text>
+    <xsl:text>\item[</xsl:text>
+    <xsl:apply-templates select="." mode="title-full" />
+    <xsl:text>]</xsl:text>
+    <!-- label will protect content, so no {} -->
+    <xsl:apply-templates select="." mode="label" />
     <xsl:apply-templates />
-</xsl:template>
-
-<!-- Description lists *must* have titled elements -->
-<!-- Leave space before start of content           -->
-<xsl:template match="dl/li/title">
-    <xsl:text>[</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>]{}</xsl:text>
 </xsl:template>
 
 <!-- Video -->
@@ -5680,7 +5676,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- anchors/labels below and then we must point to           -->
 <!-- them with \hyperlink{}{} (nee hyperref[]{}).             -->
 <!-- (See also modal templates for "label" and "xref-number") -->
-<xsl:template match="exercises//exercise|biblio|biblio/note|proof|ol/li|hint|answer|solution|exercisegroup" mode="xref-link">
+<xsl:template match="exercises//exercise|biblio|biblio/note|proof|ol/li|dl/li|hint|answer|solution|exercisegroup" mode="xref-link">
     <xsl:param name="content" />
     <xsl:text>\hyperlink{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
@@ -5715,7 +5711,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- vertical space when used in list items and it seems          -->
 <!-- to now behave well without it  (2015-12-12)                  -->
 <!-- (See also modal templates for "xref-link" and "xref-number") -->
-<xsl:template match="exercises//exercise|biblio|biblio/note|proof|ol/li|hint|answer|solution|contributor" mode="label">
+<xsl:template match="exercises//exercise|biblio|biblio/note|proof|ol/li|dl/li|hint|answer|solution|contributor" mode="label">
     <xsl:text>\hypertarget{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}{}</xsl:text>
