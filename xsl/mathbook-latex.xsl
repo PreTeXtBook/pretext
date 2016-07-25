@@ -898,51 +898,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\@addtoreset{subtable}{figure}&#xa;</xsl:text>
             <xsl:text>\makeatother&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="//sidebyside">
-          <xsl:text>% Side-by-side elements need careful treatement for aligning captions, see: &#xa;</xsl:text>
-          <xsl:text>% http://tex.stackexchange.com/questions/230335/vertically-aligning-minipages-subfigures-and-subtables-not-with-baseline &#xa;</xsl:text>
-          <xsl:text>\usepackage{stackengine,ifthen}&#xa;</xsl:text>
-          <xsl:text>\newcounter{figstack}&#xa;</xsl:text>
-          <xsl:text>\newcounter{figindex}&#xa;</xsl:text>
-          <xsl:text>\newlength\fight&#xa;</xsl:text>
-          <xsl:text>\newcommand\pushValignCaptionBottom[5][b]{%&#xa;</xsl:text>
-          <xsl:text>\stepcounter{figstack}%&#xa;</xsl:text>
-          <xsl:text>\expandafter\def\csname %&#xa;</xsl:text>
-          <xsl:text>figalign\romannumeral\value{figstack}\endcsname{#1}%&#xa;</xsl:text>
-          <xsl:text>\expandafter\def\csname %&#xa;</xsl:text>
-          <xsl:text>figtype\romannumeral\value{figstack}\endcsname{#2}%&#xa;</xsl:text>
-          <xsl:text>\expandafter\def\csname %&#xa;</xsl:text>
-          <xsl:text>figwd\romannumeral\value{figstack}\endcsname{#3}%&#xa;</xsl:text>
-          <xsl:text>\expandafter\def\csname %&#xa;</xsl:text>
-          <xsl:text>figcontent\romannumeral\value{figstack}\endcsname{#4}%&#xa;</xsl:text>
-          <xsl:text>\expandafter\def\csname %&#xa;</xsl:text>
-          <xsl:text>figcap\romannumeral\value{figstack}\endcsname{#5}%&#xa;</xsl:text>
-          <xsl:text>\setbox0=\hbox{%&#xa;</xsl:text>
-          <xsl:text>\begin{#2}{#3}#4\end{#2}}%&#xa;</xsl:text>
-          <xsl:text>\ifdim\dimexpr\ht0+\dp0\relax&gt;\fight\global\setlength{\fight}{%&#xa;</xsl:text>
-          <xsl:text>\dimexpr\ht0+\dp0\relax}\fi%&#xa;</xsl:text>
-          <xsl:text>}&#xa;</xsl:text>
-          <xsl:text>\newcommand\popValignCaptionBottom{%&#xa;</xsl:text>
-          <xsl:text>\setcounter{figindex}{0}%&#xa;</xsl:text>
-          <xsl:text>\hfill%&#xa;</xsl:text>
-          <xsl:text>\whiledo{\value{figindex}&lt;\value{figstack}}{%&#xa;</xsl:text>
-          <xsl:text>\stepcounter{figindex}%&#xa;</xsl:text>
-          <xsl:text>\def\tmp{\csname figwd\romannumeral\value{figindex}\endcsname}%&#xa;</xsl:text>
-          <xsl:text>\begin{\csname figtype\romannumeral\value{figindex}\endcsname}[t]{\tmp}%&#xa;</xsl:text>
-          <xsl:text>\centering%&#xa;</xsl:text>
-          <xsl:text>\stackinset{c}{}%&#xa;</xsl:text>
-          <xsl:text>{\csname figalign\romannumeral\value{figindex}\endcsname}{}%&#xa;</xsl:text>
-          <xsl:text>{\csname figcontent\romannumeral\value{figindex}\endcsname}%&#xa;</xsl:text>
-          <xsl:text>{\rule{0pt}{\fight}}\par%&#xa;</xsl:text>
-          <xsl:text>\csname figcap\romannumeral\value{figindex}\endcsname%&#xa;</xsl:text>
-          <xsl:text>\end{\csname figtype\romannumeral\value{figindex}\endcsname}%&#xa;</xsl:text>
-          <xsl:text>\hfill%&#xa;</xsl:text>
-          <xsl:text>}%&#xa;</xsl:text>
-          <xsl:text>\setcounter{figstack}{0}%&#xa;</xsl:text>
-          <xsl:text>\setlength{\fight}{0pt}%&#xa;</xsl:text>
-          <xsl:text>\hfill%&#xa;</xsl:text>
-          <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
         <xsl:if test="//figure">
             <xsl:text>% Figure environment setup so that it no longer floats&#xa;</xsl:text>
             <xsl:text>\SetupFloatingEnvironment{figure}{fileext=lof,placement={H},within=</xsl:text>
@@ -1382,6 +1337,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>    \tikzset{ampersand replacement = \amp}&#xa;</xsl:text>
         <xsl:text>\fi&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="//sidebyside">
+        <xsl:text>%% NB: calc redefines \setlength&#xa;</xsl:text>
+        <xsl:text>\usepackage{calc}&#xa;</xsl:text>
+        <xsl:text>%% used repeatedly for vertical dimensions of sidebyside panels&#xa;</xsl:text>
+        <xsl:text>\newlength{\panelmax}&#xa;</xsl:text>
+    </xsl:if>
     <!-- We could use contains() on the 5 types of arrows  -->
     <!-- to really defend against this problematic package -->
     <xsl:if test="//m or //md or //mrow">
@@ -1397,6 +1358,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%%     lines in tables, and so also load this package late&#xa;</xsl:text>
         <xsl:text>\usepackage{extpfeil}&#xa;</xsl:text>
     </xsl:if>
+
     <xsl:text>%% Custom Preamble Entries, late (use latex.preamble.late)&#xa;</xsl:text>
     <xsl:if test="$latex.preamble.late != ''">
         <xsl:value-of select="$latex.preamble.late" />
@@ -1407,6 +1369,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Plus three from MBX for XML characters&#xa;</xsl:text>
     <xsl:value-of select="$latex-macros" />
     <xsl:text>%% End: Author-provided macros&#xa;</xsl:text>
+
+    <!-- Easter Egg -->
+    <xsl:if test="$sbsdebug">
+        <xsl:text>\setlength{\fboxrule}{1pt}&#xa;</xsl:text>
+        <xsl:text>\setlength{\fboxsep}{-1pt}&#xa;</xsl:text>
+    </xsl:if>
+
 </xsl:template>
 
 <!-- Tack in a graphic with initials                   -->
@@ -4379,6 +4348,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Subcaptions showup in side-by-side, we try    -->
+<!-- something minimal, but similar to above, and  -->
+<!-- will experiment later                         -->
+<xsl:template match="caption" mode="subcaption">
+    <xsl:text>\subcaption{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:apply-templates select="parent::*" mode="label" />
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+
 <!-- Figures, (SideBySide), Tables and Listings are floats            -->
 <!-- We try to fix their location with the [H] specifier, but         -->
 <!-- if the first item of an AMS environment, they may float up       -->
@@ -4421,242 +4401,328 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{listing}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- The sidebyside template 'wrapping' environment will always be a figure; 
-     captions will be accounted for appropriately using \captionof{<name/>}{<CAPTION/>}. 
-     See the caption template for details. 
 
-     Each sidebyside element is put through a measuring routine,
-     which allows us to align captions correctly;
-     see: http://tex.stackexchange.com/questions/230335/vertically-aligning-minipages-subfigures-and-subtables-not-with-baseline
-     for details.
+<!-- ################## -->
+<!-- SideBySide Layouts -->
+<!-- ################## -->
 
-     The following elements are supported:
+<!-- See xsl/mathbook-common.xsl for descriptions of the  -->
+<!-- five modal templates which must be implemented here -->
 
-     sidebyside/figure 
-     sidebyside/table 
-     sidebyside/paragraphs 
-     sidebyside/p 
-     sidebyside/image 
-     sidebyside/tabular 
-     
-     -->
-<xsl:template match="sidebyside">
-    <xsl:apply-templates select="." mode="leave-vertical-mode" />
-    <xsl:text>\begin{figure}&#xa;</xsl:text>
-    <xsl:text>\centering&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::caption)]" mode="sidebyside"/>
-    <!-- output the child nodes -->
-    <xsl:text>\popValignCaptionBottom&#xa;</xsl:text>
-    <!-- global caption -->
-    <xsl:apply-templates select="caption" />
-    <xsl:text>\end{figure}&#xa;</xsl:text>
-</xsl:template>
-
-<!-- vertical alignment of objects inside sidebyside -->
-<xsl:template match="*" mode="sidebyside-subitem-valign">
-    <!-- process the width attritbute -->
-    <xsl:variable name="width">
-        <!-- the width of a <object/> inside a sidebyside is translated into 
-             a fraction of \textwidth 
-             we do this by stripping the % sign, and 
-             adding a leading .
-             for example 50% is turned into .50\textwith
-               -->
-        <xsl:choose>
-            <xsl:when test="@width">
-                <xsl:value-of select="substring-before(@width,'%')" />
-            </xsl:when>
-            <xsl:otherwise>
-              <!-- default width is calculated by computing 100/(number of figures)
-                   for example, if there are 4 figures, the default width will be 25% -->
-              <xsl:call-template name="printWidth" select="."/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="length" select="string-length($width)"/>
-    <!-- capture each element -->
-    <xsl:text>\pushValignCaptionBottom</xsl:text>
-    <!-- specify the vertical alignment -->
-    <xsl:choose>
-        <xsl:when test="@valign='top'">
-            <xsl:text>[t]</xsl:text>
-        </xsl:when>
-        <xsl:when test="@valign='middle'">
-            <xsl:text>[c]</xsl:text>
-        </xsl:when>
-        <!-- default value -->
-        <xsl:otherwise>
-            <xsl:text>[b]</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <!-- specify minipage, subfigure, or subtable -->
-    <xsl:text>{</xsl:text>
-    <xsl:choose>
-      <xsl:when test="self::figure and ancestor::sidebyside/caption">
-            <xsl:text>subfigure</xsl:text>
-      </xsl:when>
-      <xsl:when test="self::table and ancestor::sidebyside/caption">
-            <xsl:text>subtable</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-            <xsl:text>minipage</xsl:text>
-      </xsl:otherwise> 
-    </xsl:choose>
-    <xsl:text>}</xsl:text>
-    <!-- specify the text width -->
-    <xsl:text>{.</xsl:text>
-    <xsl:choose>
-        <!-- @width can contain a decimal, e.g 25.56%, in which 
-           case we need to remove the decimal -->
-        <xsl:when test="contains($width,'.')">
-            <xsl:value-of select="substring-before($width,'.')"/>
-            <xsl:value-of select="substring-after($width,'.')"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$width"/>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>\textwidth}{%&#xa;</xsl:text>
-</xsl:template>
-
-<!-- horizontal alignment of objects inside sidebyside -->
-<xsl:template match="*" mode="sidebyside-subitem-halign">
-    <!-- horizontal alignment -->
-    <xsl:choose>
-        <xsl:when test="@halign='right'">
-            <xsl:text>\raggedleft</xsl:text>
-        </xsl:when>
-        <xsl:when test="@halign='left'">
-            <xsl:text>\raggedright</xsl:text>
-        </xsl:when>
-        <xsl:when test="@halign='center'">
-            <xsl:text>\centering</xsl:text>
-        </xsl:when>
-        <!-- default value -->
-        <xsl:otherwise>
-              <!-- anything except a paragraph gets centering by default -->
-              <xsl:if test="not(self::paragraphs or self::p)">
-                    <xsl:text>\centering</xsl:text>
-              </xsl:if> 
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>% horizontal alignment &#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="figure" mode="sidebyside">
-    <!-- vertical alignment -->
-    <xsl:apply-templates select="." mode="sidebyside-subitem-valign"/>
-    <!-- horizontal alignment -->
-    <xsl:apply-templates select="." mode="sidebyside-subitem-halign"/>
-    <!-- body of the figure -->
-    <xsl:apply-templates select="*[not(self::caption)]" />
-    <!-- end the body of the figure -->
-    <xsl:text>}% end body &#xa;{</xsl:text>
-    <!-- add caption -->
-    <xsl:apply-templates select="caption" />
-    <xsl:text>}% caption &#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="table" mode="sidebyside">
-    <!-- vertical alignment -->
-    <xsl:apply-templates select="." mode="sidebyside-subitem-valign"/>
-    <!-- horizontal alignment -->
-    <xsl:apply-templates select="." mode="sidebyside-subitem-halign"/>
-    <!-- body of the table -->
-    <xsl:apply-templates select="*[not(self::caption)]" />
-    <!-- end the body of the table -->
-    <xsl:text>}% end body &#xa;{</xsl:text>
-    <!-- add caption -->
-    <xsl:apply-templates select="caption" />
-    <xsl:text>}% caption &#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="image" mode="sidebyside">
-    <!-- vertical alignment -->
-    <xsl:apply-templates select="." mode="sidebyside-subitem-valign"/>
-    <!-- horizontal alignment -->
-    <xsl:apply-templates select="." mode="sidebyside-subitem-halign"/>
-    <!-- images need to have their width and height processed -->
-    <xsl:if test="@source">
-        <xsl:text>\includegraphics[</xsl:text>
-        <xsl:text>width=\textwidth,</xsl:text>
-        <!-- TODO: deprecate, abandon @height (along with HTML code) -->
-        <xsl:if test="@height">
-            <xsl:text>height=</xsl:text><xsl:value-of select="@height" /><xsl:text>pt,</xsl:text>
-        </xsl:if>
-        <xsl:text>]</xsl:text>
-        <xsl:text>{</xsl:text>
-        <xsl:value-of select="@source" />
-        <!-- default to .pdf if no extension given -->
-        <xsl:variable name="extension">
-            <xsl:call-template name="file-extension">
-                <xsl:with-param name="filename" select="@source" />
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:if test="$extension = ''">
-            <xsl:text>.pdf</xsl:text>
-        </xsl:if>
+<!-- cut/paste, remove fbox end/begin in dual placement
+    <xsl:if test="$sbsdebug">
+        <xsl:text>\fbox{</xsl:text>
+        <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
         <xsl:text>}</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="asymptote|sageplot|latex-image-code" />
-    <!-- end the body of the image -->
-    <xsl:text>}% end body &#xa;{</xsl:text>
-    <!-- add empty caption -->
-    <xsl:text>}% caption &#xa;</xsl:text>
+ -->
+
+<!-- Utility template to make a name for a LaTeX box -->
+<!-- Unique (element + count), all letters for LaTeX -->
+<!-- Alphabetic numbers are like base 26 notation    -->
+<xsl:template match="*" mode="panel-id">
+    <!-- sanitize any dashes in local names? -->
+    <xsl:number level="any" format="A" />
+    <xsl:value-of select="local-name(.)" />
 </xsl:template>
 
-<xsl:template match="paragraphs" mode="sidebyside">
-    <!-- vertical alignment -->
-    <xsl:apply-templates select="." mode="sidebyside-subitem-valign"/>
-    <!-- horizontal alignment -->
-    <xsl:apply-templates select="." mode="sidebyside-subitem-halign"/>
-    <!-- paragraphs and p elements need wrapping in a parbox -->
-    <xsl:text>\parbox{\textwidth}{%&#xa;</xsl:text>
-    <!-- horizontal alignment (inside the parbox) -->
-    <xsl:apply-templates select="." mode="sidebyside-subitem-halign"/>
-    <xsl:apply-templates />
-    <!-- \parbox needs closing-->
-    <xsl:text>}%&#xa;</xsl:text>
-    <!-- end the body of the paragraph -->
-    <xsl:text>}% end body &#xa;{</xsl:text>
-    <!-- add empty caption -->
-    <xsl:text>}% caption &#xa;</xsl:text>
+<!-- We build a TeX box (by whatever means), name and      -->
+<!-- save the box, measure its height, and update the      -->
+<!-- maximum height seen so far (to size minipages later). -->
+<!-- For the panel, we just stuff the (predictably) named  -->
+<!-- box into a minipage.  So the call here to the modal   -->
+<!-- "panel-latex-box" is where individual objects get     -->
+<!-- handled appropriately.                                -->
+<!-- Be sure to compute height plus depth of the panel box -->
+<!-- http://tex.stackexchange.com/questions/11943/         -->
+<xsl:template match="*" mode="panel-setup">
+    <xsl:param name="width" />
+    <xsl:text>\newsavebox{\panelbox</xsl:text>
+    <xsl:apply-templates select="." mode="panel-id" />
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\savebox{\panelbox</xsl:text>
+    <xsl:apply-templates select="." mode="panel-id" />
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="panel-latex-box">
+        <xsl:with-param name="width" select="$width" />
+    </xsl:apply-templates>
+    <xsl:text>}</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>\newlength{\ph</xsl:text>
+    <xsl:apply-templates select="." mode="panel-id" />
+    <xsl:text>}</xsl:text>
+    <xsl:text>\setlength{\ph</xsl:text>
+    <xsl:apply-templates select="." mode="panel-id" />
+    <xsl:text>}{\ht\panelbox</xsl:text>
+    <xsl:apply-templates select="." mode="panel-id" />
+    <xsl:text>+\dp\panelbox</xsl:text>
+    <xsl:apply-templates select="." mode="panel-id" />
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\settototalheight{\ph</xsl:text>
+    <xsl:apply-templates select="." mode="panel-id" />
+    <xsl:text>}{\usebox{\panelbox</xsl:text>
+    <xsl:apply-templates select="." mode="panel-id" />
+    <xsl:text>}}&#xa;</xsl:text>
+    <!-- update maximum panel height, compose-panels initializes to zero -->
+    <xsl:text>\setlength{\panelmax}{\maxof{\panelmax}{\ph</xsl:text>
+    <xsl:apply-templates select="." mode="panel-id" />
+    <xsl:text>}}&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="p" mode="sidebyside">
-    <!-- vertical alignment -->
-    <xsl:apply-templates select="." mode="sidebyside-subitem-valign"/>
-    <!-- paragraphs and p elements need wrapping in a parbox -->
-    <xsl:text>\parbox{\textwidth}{%&#xa;</xsl:text>
-    <!-- horizontal alignment (inside the parbox) -->
-    <xsl:apply-templates select="." mode="sidebyside-subitem-halign"/>
-    <xsl:apply-templates />
-    <!-- \parbox needs closing-->
-    <xsl:text>}%&#xa;</xsl:text>
-    <!-- end the body of the paragraph -->
-    <xsl:text>}% end body &#xa;{</xsl:text>
-    <!-- add empty caption -->
-    <xsl:text>}% caption &#xa;</xsl:text>
+<!-- If an object carries a title, we add it to the -->
+<!-- row of titles across the top of the table      -->
+<xsl:template match="*" mode="panel-heading">
+    <xsl:param name="width" />
+    <xsl:if test="title">
+        <xsl:if test="$sbsdebug">
+            <xsl:text>\fbox{</xsl:text>
+            <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
+        </xsl:if>
+        <xsl:text>\parbox[t]{</xsl:text>
+        <xsl:value-of select="substring-before($width,'%') div 100" />
+        <xsl:text>\textwidth}{\centering{}</xsl:text>
+        <xsl:apply-templates select="." mode="title-full" />
+        <xsl:text>}</xsl:text>
+        <xsl:if test="$sbsdebug">
+            <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
+            <xsl:text>}</xsl:text>
+        </xsl:if>
+    </xsl:if>
+    <xsl:if test="following-sibling::*">
+        <xsl:text>&amp;&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
-<xsl:template match="tabular" mode="sidebyside">
-    <!-- vertical alignment -->
-    <xsl:apply-templates select="." mode="sidebyside-subitem-valign"/>
-    <!-- horizontal alignment -->
-    <xsl:apply-templates select="." mode="sidebyside-subitem-halign"/>
-    <!-- body of the tabular -->
-    <xsl:call-template name="tabular" select="self()" />
-    <!-- end the body of the tabular -->
-    <xsl:text>}% end body &#xa;{</xsl:text>
-    <!-- add empty caption -->
-    <xsl:text>}% caption &#xa;</xsl:text>
+<!-- generic "panel-panel" template          -->
+<!-- simply references the box made in setup -->
+<xsl:template match="*" mode="panel-panel">
+    <xsl:param name="width" />
+    <xsl:param name="valign" />
+    <xsl:if test="$sbsdebug">
+        <xsl:text>\fbox{</xsl:text>
+        <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
+    </xsl:if>
+    <xsl:text>\begin{minipage}[c][\panelmax]</xsl:text>
+    <!-- vertical alignment within minipage -->
+    <xsl:text>[</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$valign = 'bottom'">
+            <xsl:text>b</xsl:text>
+        </xsl:when>
+        <!-- minipage anomalous, halfway is "c" -->
+        <xsl:when test="$valign = 'middle'">
+            <xsl:text>c</xsl:text>
+        </xsl:when>
+        <xsl:when test="$valign = 'top'">
+            <xsl:text>t</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+    <xsl:text>]</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="substring-before($width,'%') div 100" />
+    <xsl:text>\textwidth}</xsl:text>
+    <xsl:text>\usebox{\panelbox</xsl:text>
+    <xsl:apply-templates select="." mode="panel-id" />
+    <xsl:text>}</xsl:text>
+    <xsl:text>\end{minipage}</xsl:text>
+    <xsl:if test="$sbsdebug">
+        <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <xsl:if test="following-sibling::*">
+        <xsl:text>&amp;&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
-<xsl:template match="sidebyside/paragraphs/title">
-  <xsl:text>\paragraph{</xsl:text>
-    <xsl:apply-templates />
-  <xsl:text>}</xsl:text>
+<!-- a figure or table is the only way to introduce a      -->
+<!-- subcaption, switch on presence of caption in ancestor -->
+<xsl:template match="figure|table" mode="panel-caption">
+    <xsl:param name="width" />
+    <xsl:if test="caption">
+        <xsl:if test="$sbsdebug">
+            <xsl:text>\fbox{</xsl:text>
+            <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
+        </xsl:if>
+        <xsl:text>\parbox[t]{</xsl:text>
+        <xsl:value-of select="substring-before($width,'%') div 100" />
+        <xsl:text>\textwidth}{</xsl:text>
+        <xsl:choose>
+            <xsl:when test="parent::sidebyside[caption] or ancestor::sbsgroup[caption]">
+                <xsl:apply-templates select="caption" mode="subcaption" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="caption" />
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>}</xsl:text>
+        <xsl:if test="$sbsdebug">
+            <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
+            <xsl:text>}</xsl:text>
+        </xsl:if>
+    </xsl:if>
+    <xsl:if test="following-sibling::*">
+        <xsl:text>&amp;&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
+
+<!-- no caption if not figure or table -->
+<!-- but do include a column separator -->
+<xsl:template match="*" mode="panel-caption">
+    <xsl:if test="following-sibling::*">
+        <xsl:text>&amp;&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- We take in all three rows of a LaTeX    -->
+<!-- table and package them up appropriately -->
+<xsl:template match="sidebyside" mode="compose-panels">
+    <xsl:param name="number-panels" />
+    <xsl:param name="margins" />
+    <xsl:param name="space-width" />
+    <xsl:param name="setup" />
+    <xsl:param name="headings" />
+    <xsl:param name="panels" />
+    <xsl:param name="captions" />
+
+    <!-- protect a single side-by-side -->
+    <!-- Local/global newsavebox: http://tex.stackexchange.com/questions/18170 -->
+    <xsl:text>% group protects changes to lengths, releases boxes (?)&#xa;</xsl:text>
+    <xsl:text>{% begin: group for a single side-by-side&#xa;</xsl:text>
+    <xsl:text>% set panel max height to practical minimum, created in preamble&#xa;</xsl:text>
+    <xsl:text>\setlength{\panelmax}{0pt}&#xa;</xsl:text>
+    <xsl:value-of select="$setup" />
+
+    <xsl:apply-templates select="." mode="leave-vertical-mode" />
+    <xsl:text>% begin: side-by-side as figure/tabular&#xa;</xsl:text>
+    <xsl:text>% \tabcolsep change local to group&#xa;</xsl:text>
+    <xsl:text>\setlength{\tabcolsep}{</xsl:text>
+    <xsl:value-of select="0.5 * substring-before($space-width, '%') div 100" />
+    <xsl:text>\textwidth}&#xa;</xsl:text>
+    <!-- figure environment, for spacing, etc      -->
+    <!-- @{} strips extreme left, right colsep and -->
+    <!-- allows us to get flush left (zero margin) -->
+    <xsl:text>% @{} suppress \tabcolsep at extremes, so margins behave as intended&#xa;</xsl:text>
+    <xsl:text>\begin{figure}&#xa;</xsl:text>
+    <!-- set spacing, centering provide half at each end -->
+    <!-- LaTeX parameter is half of the column space     -->
+    <xsl:if test="not($margins = '0%')">
+        <xsl:text>\hspace*{</xsl:text>
+        <xsl:value-of select="substring-before($margins, '%') div 100" />
+        <xsl:text>\textwidth}%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>\begin{tabular}{@{}*{</xsl:text>
+    <xsl:value-of select="$number-panels" />
+    <xsl:text>}{c}@{}}&#xa;</xsl:text>
+    <!-- heading/titles in first row, if not empty -->
+    <!-- TODO: pass an "is-empty" parameter as headings/captions are built -->
+    <xsl:if test="not(str:replace(str:replace($headings, '&amp;', ''), '&#xa;', '') = '')">
+        <xsl:value-of select="$headings" />
+        <xsl:text>\tabularnewline&#xa;</xsl:text>
+    </xsl:if>
+    <!-- actual panels in second row, always -->
+    <xsl:value-of select="$panels" />
+    <!-- captions in third row, if not empty -->
+    <xsl:if test="not(str:replace(str:replace($captions, '&amp;', ''), '&#xa;', '') = '')">
+        <xsl:text>\tabularnewline&#xa;</xsl:text>
+        <xsl:value-of select="$captions" />
+    </xsl:if>
+    <xsl:text>\end{tabular}&#xa;</xsl:text>
+    <!-- global caption               -->
+    <!-- but ignore it in a sbs group -->
+    <xsl:if test="not(parent::sbsgroup)">
+        <xsl:apply-templates select="caption" />
+    </xsl:if>
+    <xsl:text>\end{figure}&#xa;</xsl:text>
+    <xsl:text>% end: side-by-side as tabular/figure&#xa;</xsl:text>
+    <xsl:text>}% end: group for a single side-by-side&#xa;</xsl:text>
+</xsl:template>
+
+
+<!-- ############################ -->
+<!-- Object by Object LaTeX Boxes -->
+<!-- ############################ -->
+
+<!-- Implement modal "panel-latex-box" for various MBX elements -->
+<!-- Baseline is consistently at bottom, so vertical alignment  -->
+<!-- behaves in minipages.                                      -->
+<!-- Called in -setup and saved results recycled in -panel      -->
+
+<xsl:template match="p|paragraphs|tabular|ol|ul|dl" mode="panel-latex-box">
+    <xsl:param name="width" />
+    <xsl:variable name="percent" select="substring-before($width,'%') div 100" />
+    <xsl:if test="$sbsdebug">
+        <xsl:text>\fbox{\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
+    </xsl:if>
+    <xsl:text>\raisebox{\depth}{\parbox{</xsl:text>
+    <xsl:value-of select="substring-before($width,'%') div 100" />
+    <xsl:text>\textwidth}{</xsl:text>
+    <!-- center tables here or below -->
+    <xsl:choose>
+        <xsl:when test="self::p">
+            <xsl:apply-templates select="*|text()" />
+        </xsl:when>
+        <xsl:when test="self::paragraphs">
+            <xsl:apply-templates select="p" />
+        </xsl:when>
+        <xsl:when test="self::tabular">
+            <xsl:text>\centering</xsl:text>
+            <xsl:apply-templates select="." />
+        </xsl:when>
+        <xsl:when test="self::ol or self::ul or self::dl">
+            <xsl:apply-templates select="." />
+        </xsl:when>
+    </xsl:choose>
+    <xsl:text>}}</xsl:text>
+    <xsl:if test="$sbsdebug">
+        <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- needs work to support SVG, no extension PDFs       -->
+<!-- baseline is automatically at the bottom of the box -->
+<xsl:template match="image" mode="panel-latex-box">
+    <xsl:param name="width" />
+    <xsl:variable name="percent" select="substring-before($width,'%') div 100" />
+    <xsl:if test="$sbsdebug">
+        <xsl:text>\fbox{</xsl:text>
+        <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
+    </xsl:if>
+    <xsl:text>\includegraphics[width=</xsl:text>
+    <xsl:value-of select="substring-before($width,'%') div 100" />
+    <xsl:text>\textwidth]{</xsl:text>
+    <xsl:apply-templates select="@source" />
+    <xsl:text>}</xsl:text>
+    <xsl:if test="$sbsdebug">
+        <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- A figure or table is just a container to hold a -->
+<!-- title and/or caption, plus perhaps an xml:id,   -->
+<!-- so we just pawn off the contents (one only!)    -->
+<!-- to the other routines                           -->
+<xsl:template match="figure|table" mode="panel-latex-box">
+    <xsl:param name="width" />
+    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-latex-box">
+        <xsl:with-param name="width" select="$width" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- We need to do identically for the panel-id -->
+<xsl:template match="figure|table" mode="panel-id">
+    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-id" />
+</xsl:template>
+
+<!-- Just temporary markers of unimplemented stuff -->
+<xsl:template match="*" mode="panel-latex-box">
+    <xsl:text>\parbox{70pt}{[</xsl:text>
+    <xsl:value-of select="local-name(.)" />
+    <xsl:text>]}</xsl:text>
+</xsl:template>
+
+
 
 <!-- Images -->
 <xsl:template match="image" >
