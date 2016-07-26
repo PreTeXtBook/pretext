@@ -370,10 +370,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Extensive support for other languages&#xa;</xsl:text>
     <xsl:text>\usepackage{polyglossia}&#xa;</xsl:text>
     <xsl:text>\setdefaultlanguage{english}&#xa;</xsl:text>
-    <xsl:text>%% Greek (Modern)&#xa;</xsl:text>
-    <!-- <xsl:text>\setotherlanguage[variant=ancient,numerals=greek]{greek}&#xa;</xsl:text> -->
-    <xsl:text>\setotherlanguage[numerals=greek]{greek}&#xa;</xsl:text>
-    <xsl:text>\newfontfamily\greekfont[Script=Greek]{GFS Artemisia}&#xa;</xsl:text>
+    <xsl:if test="/mathbook/*[not(self::docinfo)]//*[@xml:lang='el']">
+        <xsl:text>%% Greek (Modern), loaded due to presence of 'el' language tag&#xa;</xsl:text>
+        <!-- <xsl:text>\setotherlanguage[variant=ancient,numerals=greek]{greek}&#xa;</xsl:text> -->
+        <xsl:text>\setotherlanguage[numerals=greek]{greek}&#xa;</xsl:text>
+        <xsl:text>\newfontfamily\greekfont[Script=Greek]{GFS Artemisia}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>%% Magyar (Hungarian)&#xa;</xsl:text>
     <xsl:text>\setotherlanguage{magyar}&#xa;</xsl:text>
     <xsl:text>%% Spanish&#xa;</xsl:text>
