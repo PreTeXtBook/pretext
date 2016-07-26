@@ -1055,23 +1055,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="//n or //scaledeg or //chord">
         <xsl:text>%% Musical Symbol Support&#xa;</xsl:text>
         <xsl:text>\ifthenelse{\boolean{xetex}}{&#xa;</xsl:text>
-        <xsl:text>    \usepackage{lilyglyphs}&#xa;</xsl:text>
-        <xsl:text>    \lilyGlobalOptions{scale=0.8}&#xa;</xsl:text>
+        <xsl:text>%% begin: xelatex-specific configuration&#xa;</xsl:text>
+        <xsl:text>\usepackage{lilyglyphs}&#xa;</xsl:text>
+        <xsl:text>\lilyGlobalOptions{scale=0.8}&#xa;</xsl:text>
         <!-- Create alias to lilyglyphs command with common name -->
-        <xsl:text>    \newcommand*{\doubleflat}{\flatflat}</xsl:text>
+        <xsl:text>\newcommand*{\doubleflat}{\flatflat}&#xa;</xsl:text>
+        <xsl:text>%% end: xelatex-specific configuration&#xa;</xsl:text>
         <xsl:text>}{&#xa;</xsl:text>
-        <!-- Pulling double-flat and double-sharp characters from "musixtex" font -->
+        <xsl:text>%% begin: pdflatex-specific configuration&#xa;</xsl:text>
+        <!-- Pulling accidentals from "musixtex" font -->
         <!-- http://tex.stackexchange.com/questions/207261/how-do-i-produce-a-double-flat-symbol-edit -->
-        <xsl:text>    \DeclareFontFamily{U}{musix}{}%</xsl:text>
-        <xsl:text>    \DeclareFontShape{U}{musix}{m}{n}{%</xsl:text>
-        <xsl:text>        &lt;-12&gt;   musix11</xsl:text>
-        <xsl:text>        &lt;12-15&gt; musix13</xsl:text>
-        <xsl:text>        &lt;15-18&gt; musix16</xsl:text>
-        <xsl:text>        &lt;18-23&gt; musix20</xsl:text>
-        <xsl:text>        &lt;23-&gt;   musix29</xsl:text>
-        <xsl:text>    }{}%</xsl:text>
-        <xsl:text>    \newcommand*\doubleflat{\raisebox{0.5ex}{\usefont{U}{musix}{m}{n}\selectfont{3}}}</xsl:text>
-        <xsl:text>    \newcommand*\doublesharp{\raisebox{0.5ex}{\usefont{U}{musix}{m}{n}\selectfont{5}}}</xsl:text>
+        <xsl:text>\DeclareFontFamily{U}{musix}{}%&#xa;</xsl:text>
+        <xsl:text>\DeclareFontShape{U}{musix}{m}{n}{%&#xa;</xsl:text>
+        <xsl:text>&lt;-12&gt;   musix11&#xa;</xsl:text>
+        <xsl:text>&lt;12-15&gt; musix13&#xa;</xsl:text>
+        <xsl:text>&lt;15-18&gt; musix16&#xa;</xsl:text>
+        <xsl:text>&lt;18-23&gt; musix20&#xa;</xsl:text>
+        <xsl:text>&lt;23-&gt;   musix29&#xa;</xsl:text>
+        <xsl:text>}{}%&#xa;</xsl:text>
+        <xsl:text>%% We grab all five accidentals from the musix font so they are usable in both math and text mode&#xa;</xsl:text>
+        <xsl:text>\renewcommand*\flat{\raisebox{0.5ex}{\usefont{U}{musix}{m}{n}\selectfont{2}}}&#xa;</xsl:text>
+        <xsl:text>\newcommand*\doubleflat{\raisebox{0.5ex}{\usefont{U}{musix}{m}{n}\selectfont{3}}}&#xa;</xsl:text>
+        <xsl:text>\renewcommand*\sharp{\raisebox{0.5ex}{\usefont{U}{musix}{m}{n}\selectfont{4}}}&#xa;</xsl:text>
+        <xsl:text>\newcommand*\doublesharp{\raisebox{0.5ex}{\usefont{U}{musix}{m}{n}\selectfont{5}}}&#xa;</xsl:text>
+        <xsl:text>\renewcommand*\natural{\raisebox{0.5ex}{\usefont{U}{musix}{m}{n}\selectfont{6}}}&#xa;</xsl:text>
+        <xsl:text>%% end: pdflatex-specific configuration&#xa;</xsl:text>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% Raster graphics inclusion, wrapped figures in paragraphs&#xa;</xsl:text>
