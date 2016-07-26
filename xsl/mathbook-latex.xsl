@@ -1206,35 +1206,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\lstdefinestyle{sageoutput}{language=Python,breaklines=true,breakatwhitespace=true,basicstyle=\small\ttfamily,columns=fixed,xleftmargin=4ex}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="//console">
-        <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
-        <xsl:text>%% Make a console environment from fancyvrb Verbatim environment&#xa;</xsl:text>
-        <xsl:text>%% with three command characters, to allow boldfacing input&#xa;</xsl:text>
-        <xsl:text>%% The command characters may be escaped here when specified&#xa;</xsl:text>
-        <xsl:text>%% (Verbatim environment allows for line numbers, make feature request)&#xa;</xsl:text>
-        <!-- perhaps use fancyverb more widely -->
+    <xsl:if test="//console or //sidebyside/pre">
+        <!-- fancyvrb Verbatim used for consoles                    -->
+        <!-- fancyvrb BVerbatim used for "pre" as sidebyside panel  -->
+        <!-- perhaps use fancyvrb more widely, eg regular "pre"     -->
+        <xsl:text>%% Fancy Verbatim for consoles and "pre" in sidebyside panels&#xa;</xsl:text>
         <xsl:text>\usepackage{fancyvrb}&#xa;</xsl:text>
-        <xsl:text>\DefineVerbatimEnvironment{console}{Verbatim}%&#xa;</xsl:text>
-        <!-- numbers=left, stepnumber=5 trivial (can mimic in HTML with counting recursive routine) -->
-        <xsl:text>{fontsize=\small,commandchars=</xsl:text>
-        <xsl:variable name="latex-escaped" select="'&amp;%$#_{}~^\@'" />
-        <xsl:if test="contains($latex-escaped, $console-macro)">
-            <xsl:text>\</xsl:text>
+        <xsl:if test="//console">
+            <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
+            <xsl:text>%% Make a console environment from fancyvrb Verbatim environment&#xa;</xsl:text>
+            <xsl:text>%% with three command characters, to allow boldfacing input&#xa;</xsl:text>
+            <xsl:text>%% The command characters may be escaped here when specified&#xa;</xsl:text>
+            <xsl:text>%% (Verbatim environment allows for line numbers, make feature request)&#xa;</xsl:text>
+            <xsl:text>\DefineVerbatimEnvironment{console}{Verbatim}%&#xa;</xsl:text>
+            <!-- numbers=left, stepnumber=5 trivial (can mimic in HTML with counting recursive routine) -->
+            <xsl:text>{fontsize=\small,commandchars=</xsl:text>
+            <xsl:variable name="latex-escaped" select="'&amp;%$#_{}~^\@'" />
+            <xsl:if test="contains($latex-escaped, $console-macro)">
+                <xsl:text>\</xsl:text>
+            </xsl:if>
+            <xsl:value-of select="$console-macro" />
+            <xsl:if test="contains($latex-escaped, $console-begin)">
+                <xsl:text>\</xsl:text>
+            </xsl:if>
+            <xsl:value-of select="$console-begin" />
+            <xsl:if test="contains($latex-escaped, $console-end)">
+                <xsl:text>\</xsl:text>
+            </xsl:if>
+            <xsl:value-of select="$console-end" />
+            <xsl:text>}&#xa;</xsl:text>
+            <xsl:text>%% A semantic macro for the user input portion&#xa;</xsl:text>
+            <xsl:text>%% We define this in the traditional way,&#xa;</xsl:text>
+            <xsl:text>%% but may realize it with different LaTeX escape characters&#xa;</xsl:text>
+            <xsl:text>\newcommand{\consoleinput}[1]{\textbf{#1}}&#xa;</xsl:text>
         </xsl:if>
-        <xsl:value-of select="$console-macro" />
-        <xsl:if test="contains($latex-escaped, $console-begin)">
-            <xsl:text>\</xsl:text>
-        </xsl:if>
-        <xsl:value-of select="$console-begin" />
-        <xsl:if test="contains($latex-escaped, $console-end)">
-            <xsl:text>\</xsl:text>
-        </xsl:if>
-        <xsl:value-of select="$console-end" />
-        <xsl:text>}&#xa;</xsl:text>
-        <xsl:text>%% A semantic macro for the user input portion&#xa;</xsl:text>
-        <xsl:text>%% We define this in the traditional way,&#xa;</xsl:text>
-        <xsl:text>%% but may realize it with different LaTeX escape characters&#xa;</xsl:text>
-        <xsl:text>\newcommand{\consoleinput}[1]{\textbf{#1}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//tikz">
         <xsl:message>MBX:WARNING: the "tikz" element is deprecated (2015/16/10), use "latex-image-code" tag inside an "image" tag, and include the tikz package and relevant libraries in docinfo/latex-image-preamble</xsl:message>
