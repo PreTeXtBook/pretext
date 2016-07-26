@@ -836,6 +836,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="input|output" />
 </xsl:template>
 
+<!-- ################# -->
+<!-- Preformatted Text -->
+<!-- ################# -->
+
+<!-- The content of a "pre" element is wrapped many ways, -->
+<!-- but the content itself is always strictly text       -->
+
+<!-- With no "cline", we adjust left margin -->
+<xsl:template match="pre" mode="interior">
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select="." />
+    </xsl:call-template>
+</xsl:template>
+
+<!-- With a "cline", we process the lines -->
+<xsl:template match="pre[cline]" mode="interior">
+    <xsl:apply-templates select="cline" />
+</xsl:template>
+
 <!-- Code Lines -->
 <!-- A "cline" is used to (optionally) structure hunks     -->
 <!-- of verbatim text.  Due to its simplicity, it should   -->
@@ -846,6 +865,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="text()" />
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
+
 
 <!-- Sanitize Code -->
 <!-- No leading whitespace, no trailing -->

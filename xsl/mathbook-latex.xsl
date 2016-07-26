@@ -3821,28 +3821,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{verbatim}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- "pre" is analogous to HTML tag of the same name       -->
-<!-- We clean up line-broken text, just like for Sage code -->
-<!-- or we use cline to structure line-by-line             -->
+<!-- "pre" is analogous to the HTML tag of the same name -->
+<!-- The "interior" templates decide between two styles  -->
+<!--   (a) clean up raw text, just like for Sage code    -->
+<!--   (b) interpret cline as line-by-line structure     -->
+<!-- (See templates in xsl/mathbook-common.xsl file)     -->
+<!-- Then wrap in a  verbatim  environment               -->
 <xsl:template match="pre">
     <xsl:text>\begin{verbatim}&#xa;</xsl:text>
-        <xsl:call-template name="sanitize-text">
-            <xsl:with-param name="text" select="." />
-        </xsl:call-template>
+    <xsl:apply-templates select="." mode="interior"/>
     <xsl:text>\end{verbatim}&#xa;</xsl:text>
 </xsl:template>
-
-<!-- With a "cline" element present, we assume    -->
-<!-- that is the entire structure (see the cline  -->
-<!-- template in the mathbook-common.xsl file)    -->
-<xsl:template match="pre[cline]">
-    <xsl:text>\begin{verbatim}&#xa;</xsl:text>
-    <xsl:apply-templates select="cline" />
-    <xsl:text>\end{verbatim}&#xa;</xsl:text>
-</xsl:template>
-
-
-
 
 <xsl:template match="email">
     <xsl:text>\href{mailto:</xsl:text>

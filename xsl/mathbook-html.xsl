@@ -4750,28 +4750,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- Text is massaged just like Sage output code, -->
-<!-- examining *all* lines to find left margin    -->
+<!-- "pre" is analogous to the HTML tag of the same name -->
+<!-- The "interior" templates decide between two styles  -->
+<!--   (a) clean up raw text, just like for Sage code    -->
+<!--   (b) interpret cline as line-by-line structure     -->
+<!-- (See templates in xsl/mathbook-common.xsl file)     -->
+<!-- Then wrap in a pre element that MathJax ignores     -->
 <xsl:template match="pre">
     <xsl:element name="pre">
         <xsl:attribute name="class">
             <xsl:text>code-block tex2jax_ignore</xsl:text>
         </xsl:attribute>
-        <xsl:call-template name="sanitize-text">
-            <xsl:with-param name="text" select="." />
-        </xsl:call-template>
+        <xsl:apply-templates select="." mode="interior"/>
     </xsl:element>
 </xsl:template>
-
-<xsl:template match="pre[cline]">
-    <xsl:element name="pre">
-        <xsl:attribute name="class">
-            <xsl:text>code-block tex2jax_ignore</xsl:text>
-        </xsl:attribute>
-        <xsl:apply-templates select="cline" />
-    </xsl:element>
-</xsl:template>
-
 
 <!-- ################### -->
 <!-- Reserved Characters -->
