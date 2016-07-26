@@ -4109,9 +4109,9 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
-                <title>Other Objects </title>
+                <title>Other Panels </title>
 
-                <p>Other objects such as lists can be put in the <c>sidebyside</c> element.</p>
+                <p>Other elements may be placed within a <c>sidebyside</c> element.  Lists first.</p>
 
                 <sidebyside>
                         <ol>
@@ -4128,7 +4128,7 @@ the xsltproc executable.
                         </ul>
                 </sidebyside>
 
-                <p>You can even experiment with <em>aligned</em> equations in the <c>sidebyside</c> element.</p>
+                <p>You can place <em>aligned</em> equations in paragraphs within a <c>sidebyside</c> element.</p>
 
                 <sidebyside valigns="middle top">
                     <paragraphs>
@@ -4149,10 +4149,10 @@ the xsltproc executable.
                     </paragraphs>
                 </sidebyside>
 
-                <p>Pre-formatted text may be incuded by using the <c>pre</c> element.  This content is horizontally-rigid, so as the author, you need to be sure to provide enough width for the panel to contain the content.  It is somewhat easy to see the boundary of the panels when rendered in HTML since there is a background that fills the panel.</p>
+                <p>Pre-formatted text may be included by using the <c>pre</c> element.  This content is horizontally-rigid, so as the author, you need to be sure to provide enough width for the panel to contain the content.  It is easy to see the boundary of the panels when rendered in HTML since there is a background that fills the panel.</p>
 
                 <!-- https://excelwithbusiness.com/blog/post/web-design/say-hello-world-in-28-different-programming-languages -->
-                <sidebyside widths="40% 45%">
+                <sidebyside widths="40% 50%">
                     <caption><q>Hello, World!</q> in Pascal and C++</caption>
                     <pre>
                         <cline>program HelloWorld;</cline>
@@ -4165,8 +4165,7 @@ the xsltproc executable.
 
                     int main()
                     {
-                        std::cout &lt;&lt; "Hello, world!
-                    ";
+                        std::cout &lt;&lt; "Hello, world!";
                         return 0;
                     }
                     </pre>
@@ -4396,9 +4395,9 @@ the xsltproc executable.
         <section xml:id="poetry">
             <title>Poetry</title>
 
-            <p>There is support for basic poems via the <c>poem</c> tag, which can contain a <c>title</c>, <c>author</c> and multiple <c>stanza</c>, each containing multiple <c>line</c>.  See the source of the following poem for an example of the exact arrangement.  Note how the first quote crosses two <c>line</c> elements and how this is handled in the source.  Various enhancements are possible, send requests.</p>
+            <p>There is support for poems via the <c>poem</c> tag, which can contain a <c>title</c>, <c>author</c> and multiple <c>stanza</c>, each containing multiple <c>line</c>.  See the source of the following poem for an example of the exact arrangement.  Note how the first quote crosses two <c>line</c> elements and how this is handled in the source.  There are many very flexible options for horizontal alignment and indentation.  Further extensive examples, constructed by Jahrme Risner, are available in the example Humanities document.</p>
 
-            <poem width="30">
+            <poem>
                 <title>The Charge of the Light Brigade</title>
                 <author>Alfred Lord Tennyson</author>
 
