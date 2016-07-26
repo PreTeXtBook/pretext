@@ -3742,6 +3742,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." />
 </xsl:template>
 
+<!-- This matches the "regular" template, but does not -->
+<!-- duplicate the title, which is handled specially   -->
+<!-- max-width is at 100%, not 90%                     -->
+<xsl:template match="poem" mode="panel-html-box">
+    <div class="poem" style="display: table; width: auto; max-width: 100%; margin: 0 auto;">
+        <xsl:apply-templates select="stanza"/>
+        <xsl:apply-templates select="author"/>
+    </div>
+</xsl:template>
+
 <!-- needs work to support SVG, no extension @source -->
 <!-- Make a panel of the correct width, then  -->
 <!-- insert the image at 100% width and let   -->

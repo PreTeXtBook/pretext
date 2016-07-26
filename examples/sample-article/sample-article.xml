@@ -4190,7 +4190,73 @@ the xsltproc executable.
                     </pre>
                     <image source="images/cross-square.png" />
                 </sidebyside>
+            </subsection>
 
+            <subsection>
+                <title>Poems as Side-By-Side Panels</title>
+
+
+                <p>Poems may be panels of a side-by-side layout.  Here we place some commentary alongside.  See <xref ref="poetry" autoname="yes" /> for general information about poetry.</p>
+
+                <sidebyside widths="50% 50%">
+                    <poem>
+                        <title>Fire and Ice</title>
+                        <author>Robert Frost</author>
+                        <stanza>
+                            <line>Some say the world will end in fire,</line>
+                            <line>Some say in ice.</line>
+                            <line>From what I've tasted of desire</line>
+                            <line>I hold with those who favor fire.</line>
+                            <line>But if it had to perish twice,</line>
+                            <line>I think I know enough of hate</line>
+                            <line>To say that for destruction ice</line>
+                            <line>Is also great</line>
+                            <line>And would suffice.</line>
+                        </stanza>
+                    </poem>
+                    <paragraphs>
+                        <title>Commentary</title>
+                        <p>You might have several things to say about a poem and you could use a sequence of paragraphs immediately adjacent.</p>
+                        <p>This is a second paragraph of commentary.</p>
+                    </paragraphs>
+                </sidebyside>
+
+                <p>Poems are not horizontally-rigid, but they are not perfectly horizontally-flexible either.  The left copy of this next poem is in a panel roughly 2/3 the width of the page and fits there.  The right copy has the first five lines and is in space about half the previous width, and you can see the lines being wrapped with obvious indentation.  So you <em>can</em> constrain the width of a poem if you do not mind the additional indentation.  (Recognize that this example is a bit extreme.)</p>
+
+                <sidebyside widths="68% 30%">
+                    <poem>
+                        <title>Sonnet to Liberty</title>
+                        <author>Oscar Wilde</author>
+                        <stanza>
+                            <line>Not that I love thy children, whose dull eyes</line>
+                            <line>See nothing save their own unlovely woe,</line>
+                            <line>Whose minds know nothing, nothing care to know,</line>
+                            <line>But that the roar of thy Democracies,</line>
+                            <line>Thy reigns of Terror, thy great Anarchies,</line>
+                            <line>Mirror my wildest passions like the sea,</line>
+                            <line>And give my rage a brother! Liberty!</line>
+                            <line>For this sake only do thy dissonant cries</line>
+                            <line>Delight my discreet soul, else might all kings</line>
+                            <line>By bloody knout or treacherous cannonades</line>
+                            <line>Rob nations of their rights inviolate</line>
+                            <line>And I remain unmoved-and yet, and yet,</line>
+                            <line>These Christs that die upon the barricades,</line>
+                            <line>God knows it I am with them, in some things.</line>
+                        </stanza>
+                    </poem>
+                    <poem>
+                        <title>Sonnet to Liberty</title>
+                        <author>Oscar Wilde</author>
+                        <stanza>
+                            <line>Not that I love thy children, whose dull eyes</line>
+                            <line>See nothing save their own unlovely woe,</line>
+                            <line>Whose minds know nothing, nothing care to know,</line>
+                            <line>But that the roar of thy Democracies,</line>
+                            <line>Thy reigns of Terror, thy great Anarchies,</line>
+                            <line><ellipsis /></line>
+                        </stanza>
+                    </poem>
+                </sidebyside>
             </subsection>
 
             <subsection>
@@ -4215,6 +4281,114 @@ the xsltproc executable.
                         <p>Five.</p>
                         <p>Six.</p>
                     </sidebyside>
+                </sbsgroup>
+
+                <p>A long poem, when placed into a <c>sidebyside</c> will not fit onto a physical page and will not break across pages.  With a <c>sbsgroup</c> you can put each stanza (say) into its own <c>sidebyside</c> and place something (commentary) next to it.  We include the <c>title</c> with the first stanza and the <c>author</c> with the last stanza.  This device can also be useful to attach commentary to specific stanzas.</p>
+
+                <sbsgroup widths="60% 40%">
+                    <sidebyside>
+                        <poem>
+                            <title>The Stolen Child</title>
+                            <stanza>
+                                <line>Where dips the rocky highland</line>
+                                <line>Of Sleuth Wood in the lake,</line>
+                                <line>There lies a leafy island</line>
+                                <line>Where flapping herons wake</line>
+                                <line>The drowsy water-rats;</line>
+                                <line>There we've hid our faery vats,</line>
+                                <line>Full of berries</line>
+                                <line>And of reddest stolen cherries.</line>
+                                <line>Come away, O human child!</line>
+                                <line>To the waters and the wild</line>
+                                <line>With a faery, hand in hand,</line>
+                                <line>For the world's more full of weeping than you</line>
+                                <line>can understand.</line>
+                            </stanza>
+                        </poem>
+                        <paragraphs>
+                            <title>Stanza One</title>
+                            <p>Some commentary</p>
+                        </paragraphs>
+                    </sidebyside>
+                    <!--  -->
+                    <sidebyside>
+                        <poem>
+                            <stanza>
+                                <line>Where the wave of moonlight glosses</line>
+                                <line>The dim grey sands with light,</line>
+                                <line>Far off by furthest Rosses</line>
+                                <line>We foot it all the night,</line>
+                                <line>Weaving olden dances,</line>
+                                <line>Mingling hands and mingling glances</line>
+                                <line>Till the moon has taken flight;</line>
+                                <line>To and fro we leap</line>
+                                <line>And chase the frothy bubbles,</line>
+                                <line>While the world is full of troubles</line>
+                                <line>And is anxious in its sleep.</line>
+                                <line>Come away, O human child!</line>
+                                <line>To the waters and the wild</line>
+                                <line>With a faery, hand in hand,</line>
+                                <line>For the world's more full of weeping than you</line>
+                                <line>can understand.</line>
+                            </stanza>
+                        </poem>
+                        <paragraphs>
+                            <title>Stanza Two</title>
+                            <p>Some commentary</p>
+                        </paragraphs>
+                    </sidebyside>
+                    <!--  -->
+                    <sidebyside>
+                        <poem>
+                            <stanza>
+                                <line>Where the wandering water gushes</line>
+                                <line>From the hills above Glen-Car,</line>
+                                <line>In pools among the rushes</line>
+                                <line>That scarce could bathe a star,</line>
+                                <line>We seek for slumbering trout</line>
+                                <line>And whispering in their ears</line>
+                                <line>Give them unquiet dreams;</line>
+                                <line>Leaning softly out</line>
+                                <line>From ferns that drop their tears</line>
+                                <line>Over the young streams.</line>
+                                <line>Come away, O human child!</line>
+                                <line>To the waters and the wild</line>
+                                <line>With a faery, hand in hand,</line>
+                                <line>For the world's more full of weeping than you</line>
+                                <line>can understand.</line>
+                            </stanza>
+                        </poem>
+                        <paragraphs>
+                            <title>Stanza Three</title>
+                            <p>Some commentary</p>
+                        </paragraphs>
+                    </sidebyside>
+                    <!--  -->
+                    <sidebyside>
+                        <poem>
+                            <author>William Butler Yeats</author>
+                            <stanza>
+                                <line>Away with us he's going,</line>
+                                <line>The solemn-eyed:</line>
+                                <line>He'll hear no more the lowing</line>
+                                <line>Of the calves on the warm hillside</line>
+                                <line>Or the kettle on the hob</line>
+                                <line>Sing peace into his breast,</line>
+                                <line>Or see the brown mice bob</line>
+                                <line>Round and round the oatmeal-chest.</line>
+                                <line>For he comes, the human child,</line>
+                                <line>To the waters and the wild</line>
+                                <line>With a faery, hand in hand,</line>
+                                <line>From a world more full of weeping than he</line>
+                                <line>can understand.</line>
+                            </stanza>
+                        </poem>
+                        <paragraphs>
+                            <title>Stanza Four</title>
+                            <p>Some commentary</p>
+                        </paragraphs>
+                    </sidebyside>
+                    <!--  -->
                 </sbsgroup>
             </subsection>
         </section>

@@ -4705,7 +4705,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- behaves in minipages.                                      -->
 <!-- Called in -setup and saved results recycled in -panel      -->
 
-<xsl:template match="p|paragraphs|tabular|ol|ul|dl" mode="panel-latex-box">
+<xsl:template match="p|paragraphs|tabular|ol|ul|dl|poem" mode="panel-latex-box">
     <xsl:param name="width" />
     <xsl:variable name="percent" select="substring-before($width,'%') div 100" />
     <xsl:if test="$sbsdebug">
@@ -4728,6 +4728,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="self::ol or self::ul or self::dl">
             <xsl:apply-templates select="." />
+        </xsl:when>
+        <!-- like main "poem" template, but sans title -->
+        <xsl:when test="self::poem">
+            <xsl:text>\begin{poem}&#xa;</xsl:text>
+            <xsl:apply-templates select="stanza"/>
+            <xsl:apply-templates select="author" />
+            <xsl:text>\end{poem}&#xa;</xsl:text>
         </xsl:when>
     </xsl:choose>
     <xsl:text>}}</xsl:text>
