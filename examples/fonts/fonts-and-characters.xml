@@ -41,7 +41,7 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
         <section xml:id="introduction">
             <title>Introduction</title>
 
-            <p>This is a sample MathBook XML document to demonstrate and test different fonts used for different languages.  For PDF output, and best results, process with <c>xelatex</c>.  If processed with <c>pdflatex</c>,  be prepared for errors, and maybe try running with the command-line option <c>-interaction batchmode</c> or <c>-interaction nonstopmode</c>.  Commentary here, and the original source file, should help you track down what might be missing in your system if the <c>xelatex</c> results are not satisfactoy.  You can also compare PDF output with the HTML output, which should work well for many different characters tested here.</p>
+            <p>This is a sample MathBook XML document to demonstrate and test different fonts used for different languages.  For PDF output, and best results, process with <c>xelatex</c> (or <c>lualatex</c>, unsupported).  If processed with <c>pdflatex</c>,  be prepared for errors, and maybe try running with the command-line option <c>-interaction batchmode</c> or <c>-interaction nonstopmode</c>.  Commentary here, and in the original source file, should help you track down what might be missing in your system if the <c>xelatex</c> results are not satisfactoy.  You can also compare PDF output with the HTML output, which should work well for many different characters tested here.</p>
 
             <ol>
                 <li>Your source XML file should always have <c latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c> as the first line of the file to specify that your file contains Unicode characters.</li>
@@ -51,51 +51,109 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
                 <li>Generating variants of HTML for web browsers should work smoothly.  You can test your system and browser for font support by viewing samples at Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url>.</li>
             </ol>
 
-            <p>Not finding what you are looking for?  Send us a request.  Even better, send us a snippet of public domain literature that I can use as a sample.  If you know of any subleties in the use of <latex /> for your desired font, please include those hints.</p>
-
+            <p>Not finding what you are looking for?  Send us a request.  Even better, send us a snippet of textthat I can use as a sample.  If you know of any subleties in the use of <latex /> for your desired font, please include those hints.</p>
         </section>
 
 
         <section xml:id="examples">
             <title>Language Examples</title>
 
-            <paragraphs>
-                <title>Update (2016/07/09)</title>
+            <p>This next sections contain examples from various languages.  The characters should render in HTML, but without any special support for subtle variations of how a language is used (<eg /> date formats).  For <latex /> output, the <c>polyglossia</c> package may handle details like hyphenation.  Here we mostly test characters and fonts.  Improvements from those knowledgeable about the use of particular languages within  <latex /> are especially welcome, as are requests for particular languages.</p>
 
-                <p>Much of this needs work<mdash />currently experimenting seriously with font support.</p>
-            </paragraphs>
+            <list>
+                <title>Supported Languages</title>
+                <ol>
+                    <li>Greek (modern), 2016-07-25</li>
+                    <li>Hungarian (Magyar), 2016-07-25</li>
+                    <li>Spanish, 2016-07-25</li>
+                    <li>Vietnamese, 2016-07-25</li>
+                </ol>
+            </list>
+        </section>
 
-            <paragraphs>
-                <title>Update (2015/02/01)</title>
 
-                <p>Greek characters will not all render presently via <latex />.</p>
-            </paragraphs>
-
-            <paragraphs>
-                <title>Spanish</title>
-
-                <!-- Juan Ruiz, el Arcipreste de Hita (¿1283?-¿1350?), Las ranas que demandaban un rey, del Libro de buen amor (Las ranas en un lago cantaban et jugaban), http://users.ipfw.edu/jehle/poetry.htm -->
-
-                <p>Querellando a Don Júpiter, dieron voces las ranas: señor, señor, acórrenos, tú que matas et sanas, el Rey que tú nos diste por nuestras voces vanas danos muy malas tardes et peores mañanas.</p>
-            </paragraphs>
-
+<!-- 
             <paragraphs>
                 <title>(Ancient) Greek</title>
 
-                <!-- KDC's original: (EZ?) <p>ὁ δὴ ΕΖ ἤτοι πρῶτός ἐστιν ἢ οὔ.</p> -->
+                KDC's original: (EZ?) <p>ὁ δὴ ΕΖ ἤτοι πρῶτός ἐστιν ἢ οὔ.</p>
 
-                <!-- Homer, Iliad ("Agamemnon", "Hom. Od. 9.1", "denarius"), http://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0133&redirect=true -->
+                Homer, Iliad ("Agamemnon", "Hom. Od. 9.1", "denarius"), http://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0133&redirect=true
                 <p>μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος οὐλομένην, ἣ μυρί᾽ Ἀχαιοῖς ἄλγε᾽ ἔθηκε, πολλὰς δ᾽ ἰφθίμους ψυχὰς Ἄϊδι προΐαψεν ἡρώων, αὐτοὺς δὲ ἑλώρια τεῦχε κύνεσσιν οἰωνοῖσί τε πᾶσι, Διὸς δ᾽ ἐτελείετο βουλή, ἐξ οὗ δὴ τὰ πρῶτα διαστήτην ἐρίσαντε Ἀτρεΐδης τε ἄναξ ἀνδρῶν καὶ δῖος Ἀχιλλεύς.</p>
             </paragraphs>
+ -->
 
-            <paragraphs>
-                <title>Vietnamese</title>
+        <section xml:lang="el">
+            <title>Greek (Modern)</title>
 
-                <!-- Wikipedia, Vietnamese grammar -->
-                <p>Tôi thích cái con ngựa đen đó.</p>
-            </paragraphs>
+            <p><ul>
+                <li>Language code: <c>el</c></li>
+                <li>Font: <c>GFS Artemisia</c></li>
+                <li>Source: NA</li><!-- get info from Jarhme -->
+            </ul></p>
 
+            <p>ἄνδρα μοι ἔννεπε, μοῦσα, πολύτροπον, ὃς μάλα πολλὰ πλάγχθη, ἐπεὶ Τροίης ἱερὸν πτολίεθρον ἔπερσεν: πολλῶν δ᾽ ἀνθρώπων ἴδεν ἄστεα καὶ νόον ἔγνω, πολλὰ δ᾽ ὅ γ᾽ ἐν πόντῳ πάθεν ἄλγεα ὃν κατὰ θυμόν, ἀρνύμενος ἥν τε ψυχὴν καὶ νόστον ἑταίρων. ἀλλ᾽ οὐδ᾽ ὣς ἑτάρους ἐρρύσατο, ἱέμενός περ: αὐτῶν γὰρ σφετέρῃσιν ἀτασθαλίῃσιν ὄλοντο, νήπιοι, οἳ κατὰ βοῦς Ὑπερίονος Ἠελίοιο ἤσθιον: αὐτὰρ ὁ τοῖσιν ἀφείλετο νόστιμον ἦμαρ. τῶν ἁμόθεν γε, θεά, θύγατερ Διός, εἰπὲ καὶ ἡμῖν. ἔνθ᾽ ἄλλοι μὲν πάντες, ὅσοι φύγον αἰπὺν ὄλεθρον, οἴκοι ἔσαν, πόλεμόν τε πεφευγότες ἠδὲ θάλασσαν: τὸν δ᾽ οἶον νόστου κεχρημένον ἠδὲ γυναικὸς νύμφη πότνι᾽ ἔρυκε Καλυψὼ δῖα θεάων ἐν σπέσσι γλαφυροῖσι, λιλαιομένη πόσιν εἶναι. ἀλλ᾽ ὅτε δὴ ἔτος ἦλθε περιπλομένων ἐνιαυτῶν, τῷ οἱ ἐπεκλώσαντο θεοὶ οἶκόνδε νέεσθαι εἰς Ἰθάκην, οὐδ᾽ ἔνθα πεφυγμένος ἦεν ἀέθλων καὶ μετὰ οἷσι φίλοισι. θεοὶ δ᾽ ἐλέαιρον ἅπαντες νόσφι Ποσειδάωνος: ὁ δ᾽ ἀσπερχὲς μενέαινεν ἀντιθέῳ Ὀδυσῆι πάρος ἣν γαῖαν ἱκέσθαι. ἀλλ᾽ ὁ μὲν Αἰθίοπας μετεκίαθε τηλόθ᾽ ἐόντας, Αἰθίοπας τοὶ διχθὰ δεδαίαται, ἔσχατοι ἀνδρῶν, οἱ μὲν δυσομένου Ὑπερίονος οἱ δ᾽ ἀνιόντος, ἀντιόων ταύρων τε καὶ ἀρνειῶν ἑκατόμβης. ἔνθ᾽ ὅ γ᾽ ἐτέρπετο δαιτὶ παρήμενος: οἱ δὲ δὴ ἄλλοι Ζηνὸς ἐνὶ μεγάροισιν Ὀλυμπίου ἁθρόοι ἦσαν. τοῖσι δὲ μύθων ἦρχε πατὴρ ἀνδρῶν τε θεῶν τε: μνήσατο γὰρ κατὰ θυμὸν ἀμύμονος Αἰγίσθοιο, τόν ῥ᾽ Ἀγαμεμνονίδης τηλεκλυτὸς ἔκταν᾽ Ὀρέστης: τοῦ ὅ γ᾽ ἐπιμνησθεὶς ἔπε᾽ ἀθανάτοισι μετηύδα: ὢ πόποι, οἷον δή νυ θεοὺς βροτοὶ αἰτιόωνται: ἐξ ἡμέων γάρ φασι κάκ᾽ ἔμμεναι, οἱ δὲ καὶ αὐτοὶ σφῇσιν ἀτασθαλίῃσιν ὑπὲρ μόρον ἄλγε᾽ ἔχουσιν, ὡς καὶ νῦν Αἴγισθος ὑπὲρ μόρον Ἀτρεΐδαο γῆμ᾽ ἄλοχον μνηστήν, τὸν δ᾽ ἔκτανε νοστήσαντα, εἰδὼς αἰπὺν ὄλεθρον, ἐπεὶ πρό οἱ εἴπομεν ἡμεῖς, Ἑρμείαν πέμψαντες, ἐύσκοπον ἀργεϊφόντην, μήτ᾽ αὐτὸν κτείνειν μήτε μνάασθαι ἄκοιτιν: ἐκ γὰρ Ὀρέσταο τίσις ἔσσεται Ἀτρεΐδαο, ὁππότ᾽ ἂν ἡβήσῃ τε καὶ ἧς ἱμείρεται αἴης. ὣς ἔφαθ᾽ Ἑρμείας, ἀλλ᾽ οὐ φρένας Αἰγίσθοιο πεῖθ᾽ ἀγαθὰ φρονέων: νῦν δ᾽ ἁθρόα πάντ᾽ ἀπέτισεν.</p>
+
+            <p>τὸν δ᾽ ἠμείβετ᾽ ἔπειτα θεά, γλαυκῶπις Ἀθήνη: ὦ πάτερ ἡμέτερε Κρονίδη, ὕπατε κρειόντων, καὶ λίην κεῖνός γε ἐοικότι κεῖται ὀλέθρῳ: ὡς ἀπόλοιτο καὶ ἄλλος, ὅτις τοιαῦτά γε ῥέζοι: ἀλλά μοι ἀμφ᾽ Ὀδυσῆι δαΐφρονι δαίεται ἦτορ, δυσμόρῳ, ὃς δὴ δηθὰ φίλων ἄπο πήματα πάσχει νήσῳ ἐν ἀμφιρύτῃ, ὅθι τ᾽ ὀμφαλός ἐστι θαλάσσης. νῆσος δενδρήεσσα, θεὰ δ᾽ ἐν δώματα ναίει, Ἄτλαντος θυγάτηρ ὀλοόφρονος, ὅς τε θαλάσσης πάσης βένθεα οἶδεν, ἔχει δέ τε κίονας αὐτὸς μακράς, αἳ γαῖάν τε καὶ οὐρανὸν ἀμφὶς ἔχουσιν. τοῦ θυγάτηρ δύστηνον ὀδυρόμενον κατερύκει, αἰεὶ δὲ μαλακοῖσι καὶ αἱμυλίοισι λόγοισιν θέλγει, ὅπως Ἰθάκης ἐπιλήσεται: αὐτὰρ Ὀδυσσεύς, ἱέμενος καὶ καπνὸν ἀποθρῴσκοντα νοῆσαι ἧς γαίης, θανέειν ἱμείρεται. οὐδέ νυ σοί περ ἐντρέπεται φίλον ἦτορ, Ὀλύμπιε. οὔ νύ τ᾽ Ὀδυσσεὺς Ἀργείων παρὰ νηυσὶ χαρίζετο ἱερὰ ῥέζων Τροίῃ ἐν εὐρείῃ; τί νύ οἱ τόσον ὠδύσαο, Ζεῦ; τὴν δ᾽ ἀπαμειβόμενος προσέφη νεφεληγερέτα Ζεύς: τέκνον ἐμόν, ποῖόν σε ἔπος φύγεν ἕρκος ὀδόντων. πῶς ἂν ἔπειτ᾽ Ὀδυσῆος ἐγὼ θείοιο λαθοίμην, ὃς περὶ μὲν νόον ἐστὶ βροτῶν, περὶ δ᾽ ἱρὰ θεοῖσιν ἀθανάτοισιν ἔδωκε, τοὶ οὐρανὸν εὐρὺν ἔχουσιν; ἀλλὰ Ποσειδάων γαιήοχος ἀσκελὲς αἰεὶ Κύκλωπος κεχόλωται, ὃν ὀφθαλμοῦ ἀλάωσεν, ἀντίθεον Πολύφημον, ὅου κράτος ἐστὶ μέγιστον πᾶσιν Κυκλώπεσσι: Θόωσα δέ μιν τέκε νύμφη, Φόρκυνος θυγάτηρ ἁλὸς ἀτρυγέτοιο μέδοντος, ἐν σπέσσι γλαφυροῖσι Ποσειδάωνι μιγεῖσα. ἐκ τοῦ δὴ Ὀδυσῆα Ποσειδάων ἐνοσίχθων οὔ τι κατακτείνει, πλάζει δ᾽ ἀπὸ πατρίδος αἴης. ἀλλ᾽ ἄγεθ᾽, ἡμεῖς οἵδε περιφραζώμεθα πάντες νόστον, ὅπως ἔλθῃσι: Ποσειδάων δὲ μεθήσει ὃν χόλον: οὐ μὲν γὰρ τι δυνήσεται ἀντία πάντων ἀθανάτων ἀέκητι θεῶν ἐριδαινέμεν οἶος.</p>
         </section>
+
+
+        <section xml:lang="hu-HU">
+            <title>Hungarian (Magyar)</title>
+
+            <p><ul>
+                <li>Language code: <c>hu-HU</c></li>
+                <li>Font: <c>Latin Modern</c> (default)</li>
+                <li>Source: <url href="https://hu.wikipedia.org/wiki/Budapest">Wikipedia Budapest entry</url>, accessed 2016-07-25.</li>
+            </ul></p>
+
+            <p>Budapest Magyarország fővárosa, egyben legnagyobb és legnépesebb városa, az Európai Unió kilencedik legnépesebb városa. Budapest az ország politikai, kulturális, kereskedelmi, ipari és közlekedési központja. Emellett Pest megye székhelye is, bár közigazgatásilag nem része annak. 2011-ben regisztrált lakónépessége meghaladta az 1,7 (elővárosokkal együtt pedig a 2,5) millió főt. A város lakossága 1989-ben volt a legnagyobb, az akkori lélekszám 2,1 millió fő volt, és az ezt követő szuburbanizáció után is megmaradt az ország legnépesebb városának. Területe mintegy 525 négyzetkilométer, ebben a tekintetben is első az ország települései között.</p>
+
+            <p>Budapest története a keltákig nyúlik vissza, mivel a város eredetileg kelta település volt. A rómaiak által létrehozott, a Danubius folyó jobb partján fekvő Aquincum és a bal parti Contra-Aquincum volt Pannonia provincia székhelye. A magyarok a 9. században érkeztek erre a területre. Az első általuk létrehozott települést a mongolok 1241 és 1242 között, a tatárjárás során teljesen kifosztották és elpusztították. A 15. században a helyreállított város lett a magyarországi reneszánsz humanizmus központja. Ezt követően százötven évnyi török hódoltság telepedett a városra és csak a 18-19. században tudott újra fejlődni, ezt fokozta, hogy a kiegyezést követően Bécs mellett az Osztrák–Magyar Monarchia fővárosa volt. 1873-ban egyesítették Budát, Pestet és Óbudát, ekkor jött létre Budapest. Ebben az időben épültek a város leghíresebb épületei, és ekkor nőtte ki magát világvárossá.</p>
+
+            <p>Budapest kedvelt idegenforgalmi célpont is, 2012-ben 4 821 600 turista kereste fel, ezzel az Euromonitor International felmérése szerint a világ 27. és Európa 7. leglátogatottabb városa. Budapesten több világörökségi helyszín is található, többek között a Duna-part látképe, a Budai Várnegyed, az Andrássy út, a Hősök tere és a Millenniumi Földalatti Vasút, amely a második legrégebbi a világon a londoni után. Turisztikailag jelentősek még a város Duna-hídjai, valamint gyógyfürdői, mivel Budapest a világ legtöbb gyógyfürdőjével rendelkező fővárosa. Itt található még a világ legnagyobb termálvizes barlangrendszere, Európa legnagyobb zsinagógája (a Dohány utcai), valamint a magyar Országház is, amely a világ harmadik legnagyobb parlamenti épülete, és a Szent Korona jelenlegi otthona.</p>
+
+            <p>Budapest Közép-Európa egyik pénzügyi központja és a világ 100. legnagyobb GDP-jét termelő városa. Az amerikai Forbes magazin szerint Budapest a 7. „legidillibb európai város”. A UCityGuides a világ 9. legszebb városának sorolja. A befolyásos amerikai Condé Nast Traveler utazási magazin által megkérdezett 1,3 millió személy véleménye alapján „Budapest a világ második legjobb városa”. A magyar főváros továbbá egyike Európa 10 legkedveltebb bevásárlóvárosának az Economist magazin kutatásai szerint, ugyanis itt található Közép- és Kelet-Európa legtöbb bevásárlóközpontja.</p>
+        </section>
+
+        <section xml:lang="es-ES">
+            <title>Spanish</title>
+
+            <p><ul>
+                <li>Language code: <c>es-ES</c></li>
+                <li>Font: <c>Latin Modern</c> (default)</li>
+                <li>Source: <url href="https://es.wikipedia.org/wiki/Madrid">Wikipedia Madrid entry</url>, accessed 2016-07-25.</li>
+            </ul></p>
+
+            <p>Madrid es un municipio y ciudad de España. La localidad, con categoría histórica de villa, es la capital del Estado  y de la Comunidad de Madrid. También conocida como la Villa y Corte, es la ciudad más poblada del país, con 3 165 235 habitantes empadronados según datos del INE de 2014 mientras que, con la inclusión de su área metropolitana la cifra de población asciende a 6 543 031 habitantes, siendo por ello la tercera o cuarta área metropolitana de la Unión Europea, según la fuente, por detrás de las de París y Londres, y en algunas fuentes detrás también de la Región del Ruhr, así como la tercera ciudad más poblada de la Unión Europea, por detrás de Berlín y Londres. Madrid ocupa el puesto nº 38 en la lista Economist Intelligence Unit de ciudades con mejor calidad de vida del mundo.</p>
+
+            <p>Como capital del Estado, Madrid alberga las sedes del Gobierno, las Cortes Generales, ministerios, instituciones y organismos asociados, así como la residencia oficial de los reyes de España12 y del presidente del Gobierno. En el plano económico, es la cuarta ciudad más rica de Europa, tras Londres, París y Moscú. Para el 2009, el 50,1 <percent /> de los ingresos de las 5000 principales empresas españolas son generados por sociedades con sede social en Madrid, las cuales representan el 31,8 <percent /> de ellas. Es sede del 3.er mayor mercado de valores de Europa, y 2ª en el ámbito latinoamericano (Latibex) y de varias de las más grandes corporaciones del mundo. Es la 8.ª ciudad del mundo con mayor presencia de multinacionales, tras Pekín y por delante de Dubái, París y Nueva York.</p>
+
+            <p>En el plano internacional acoge la sede central de la Organización Mundial del Turismo (OMT), perteneciente a la ONU, la sede de la Organización Internacional de Comisiones de Valores (OICV), la sede de la Secretaría General Iberoamericana (SEGIB), la sede de la Organización de Estados Iberoamericanos para la Educación, la Ciencia y la Cultura (OEI), la Organización Iberoamericana de Juventud (OIJ), y la sede de Public Interest Oversight Board (PIOB). También alberga las principales instituciones internacionales reguladoras y difusoras del idioma español: la Comisión Permanente de la Asociación de Academias de la Lengua Española, y sedes centrales de la Real Academia Española (RAE), del Instituto Cervantes y de la Fundación del Español Urgente (Fundéu). Madrid organiza ferias como FITUR, Madrid Fusión, ARCO, SIMO TCI, el Salón del Automóvil y la Cibeles Madrid Fashion Week.</p>
+
+            <p>Es un influyente centro cultural y cuenta con museos de referencia internacional, entre los que destacan el Museo del Prado, el Museo Nacional Centro de Arte Reina Sofía, el Thyssen-Bornemisza y CaixaForum Madrid, que ocupan, respectivamente, el 12º, 18º, 67º y 80º puesto entre los museos más visitados del mundo.</p>
+
+            <p>Los orígenes de la ciudad son objeto de revisión tras recientes hallazgos de enterramientos visigodos así como de restos que se remontan a los carpetanos o periodo prerromano. Las excavaciones arqueológicas también arrojan restos que se atribuyen al Madrid romano. Estos hallazgos de época visigoda han venido a confirmar que el posterior asentamiento fortificado musulmán de Maǧrīţ (del siglo IX) se había asentado sobre un vicus visigodo del siglo VII llamado Matrice o matriz, arroyo. (AFI [maʤriːtˁ]),</p>
+
+            <p>No sería hasta el siglo XI cuando Madrid fue incorporada a la Corona de Castilla, tras su conquista por Alfonso VI de León y Castilla en 1083. Fue designada como sede de la Corte por el rey Felipe II en 1561, convirtiéndose en la primera capital permanente de la monarquía española. Desde el Renacimiento hasta la actualidad ha sido capital de España y sede del Gobierno y la administración del Estado salvo breves intervalos de tiempo: entre los años de 1601 y 1606 la capitalidad pasó a Valladolid; durante la Guerra de la Independencia Española, en que la capital se trasladó a Sevilla; en 1808 y en 1810 a Cádiz; durante la Guerra Civil, cuando el Gobierno republicano se trasladó primero a Valencia y después a Barcelona, durante la Guerra Civil el bando nacional se estableció en Burgos, y tras finalizar esta se estableció allí la capital hasta el 18 de octubre de 1939 que se volvió a trasladar a Madrid.</p>
+        </section>
+
+        <section xml:lang="vi-VN">
+            <title>Vietnamese</title>
+
+            <p><ul>
+                <li>Language code: <c>vi-VN</c></li>
+                <li>Font: <c>Latin Modern</c> (default)</li>
+                <li>Source: <url href="https://vi.wikipedia.org/wiki/H%C3%A0_N%E1%BB%99i">Wikipedia Hà Nội entry</url>, accessed 2016-07-25.</li>
+            </ul></p>
+
+            <p>Hà Nội là thủ đô của nước Cộng hoà Xã hội chủ nghĩa Việt Nam và cũng là kinh đô của rất nhiều vương triều Việt cổ. Do đó, lịch sử Hà Nội gắn liền với sự thăng trầm của lịch sử Việt Nam qua các thời kỳ.  Hà Nội là thành phố lớn nhất Việt Nam về diện tích với 3328,9 km2 sau đợt mở rộng hành chính năm 2008, đồng thời cũng là địa phương đứng thứ nhì về dân số với 7.500.000 người (năm 2015). Hiện nay, thủ đô Hà Nội và thành phố Hồ Chí Minh là đô thị loại đặc biệt của Việt Nam.</p>
+
+            <p>Hà Nội nằm giữa đồng bằng sông Hồng trù phú, nơi đây đã sớm trở thành 1 trung tâm chính trị, kinh tế và văn hóa ngay từ những buổi đầu của lịch sử Việt Nam. Năm 1010, Lý Công Uẩn, vị vua đầu tiên của nhà Lý, quyết định xây dựng kinh đô mới ở vùng đất này với cái tên Thăng Long. Trong suốt thời kỳ của các triều đại Lý, Trần, Lê, Mạc, kinh thành Thăng Long là trung tâm văn hóa, giáo dục và buôn bán của cả nước. Khi Tây Sơn rồi nhà Nguyễn lên nắm quyền trị vì, kinh đô được chuyển về Huế và Thăng Long bắt đầu mang tên Hà Nội từ năm 1831, dưới thời vua Minh Mạng. Năm 1902, Hà Nội trở thành thủ đô của Liên bang Đông Dương và được người Pháp xây dựng, quy hoạch lại, được coi là tiểu Paris của Phương Đông thời bấy giờ. Trải qua hai cuộc chiến tranh, Hà Nội là thủ đô của nước CHXHCN Việt Nam thống nhất và giữ vai trò này cho tới ngày nay.</p>
+
+            <p>Sau đợt mở rộng địa giới hành chính vào tháng 8 năm 2008, Hà Nội hiện nay gồm 12 quận, 1 thị xã và 17 huyện ngoại thành. Hiện nay, Hà Nội và Thành phố Hồ Chí Minh là hai trung tâm kinh tế - xã hội đặc biệt quan trọng của Việt Nam.</p>
+        </section>
+
 
         <section>
             <title>Font Tests</title>

@@ -366,6 +366,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% realscripts is the only part of xltxtra relevant to lualatex &#xa;</xsl:text>
     <xsl:text>\ifluatex\usepackage{realscripts}\fi&#xa;</xsl:text>
     <!-- TODO: put a xelatex/lualatex font package hook here? -->
+    <xsl:text>%% &#xa;</xsl:text>
+    <xsl:text>%% Extensive support for other languages&#xa;</xsl:text>
+    <xsl:text>\usepackage{polyglossia}&#xa;</xsl:text>
+    <xsl:text>\setdefaultlanguage{english}&#xa;</xsl:text>
+    <xsl:text>%% Greek (Modern)&#xa;</xsl:text>
+    <!-- <xsl:text>\setotherlanguage[variant=ancient,numerals=greek]{greek}&#xa;</xsl:text> -->
+    <xsl:text>\setotherlanguage[numerals=greek]{greek}&#xa;</xsl:text>
+    <xsl:text>\newfontfamily\greekfont[Script=Greek]{GFS Artemisia}&#xa;</xsl:text>
+    <xsl:text>%% Magyar (Hungarian)&#xa;</xsl:text>
+    <xsl:text>\setotherlanguage{magyar}&#xa;</xsl:text>
+    <xsl:text>%% Spanish&#xa;</xsl:text>
+    <xsl:text>\setotherlanguage{spanish}&#xa;</xsl:text>
+    <xsl:text>%% Vietnamese&#xa;</xsl:text>
+    <xsl:text>\setotherlanguage{vietnamese}&#xa;</xsl:text>
+    <!-- Korean gloss file may appear soon, 2016-07-25 -->
+    <!-- <xsl:text>%% Korean&#xa;</xsl:text> -->
+    <!-- <xsl:text>\setotherlanguage{korean}&#xa;</xsl:text> -->
+    <!-- <xsl:text>\newfontfamily\koreanfont{NanumMyeongjo}&#xa;</xsl:text> -->
+    <!-- <xsl:text>\newfontfamily\koreanfont[Script=Hangul]{UnBatang}&#xa;</xsl:text> -->
     <xsl:text>%% end: xelatex and lualatex-specific configuration&#xa;</xsl:text>
     <xsl:text>}{%&#xa;</xsl:text>
     <xsl:text>%% begin: pdflatex-specific configuration&#xa;</xsl:text>
@@ -2309,6 +2328,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="." mode="console-typeout" />
+    <xsl:if test="@xml:lang">
+        <xsl:text>\begin{</xsl:text>
+        <xsl:choose>
+            <xsl:when test="@xml:lang='el'">
+                <xsl:text>greek</xsl:text>
+            </xsl:when>
+            <xsl:when test="@xml:lang='hu-HU'">
+                <xsl:text>magyar</xsl:text>
+            </xsl:when>
+            <xsl:when test="@xml:lang='es-ES'">
+                <xsl:text>spanish</xsl:text>
+            </xsl:when>
+            <xsl:when test="@xml:lang='vi-VN'">
+                <xsl:text>vietnamese</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
     <!-- Construct the header of the subdivision -->
     <xsl:text>\</xsl:text>
     <xsl:apply-templates select="." mode="subdivision-name" />
@@ -2357,6 +2394,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}}\par\bigskip&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="*[not(self::author)]" />
+    <xsl:if test="@xml:lang">
+        <xsl:text>\end{</xsl:text>
+        <xsl:choose>
+            <xsl:when test="@xml:lang='el'">
+                <xsl:text>greek</xsl:text>
+            </xsl:when>
+            <xsl:when test="@xml:lang='hu-HU'">
+                <xsl:text>magyar</xsl:text>
+            </xsl:when>
+            <xsl:when test="@xml:lang='es-ES'">
+                <xsl:text>spanish</xsl:text>
+            </xsl:when>
+            <xsl:when test="@xml:lang='vi-VN'">
+                <xsl:text>vietnamese</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
     <!-- transition to book backmatter, if done with last appendix -->
     <xsl:if test="ancestor::book and self::appendix and not(following-sibling::appendix)">
         <xsl:text>%&#xa;</xsl:text>
