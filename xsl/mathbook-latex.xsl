@@ -4483,14 +4483,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newsavebox{\panelbox</xsl:text>
     <xsl:apply-templates select="." mode="panel-id" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\savebox{\panelbox</xsl:text>
-    <xsl:apply-templates select="." mode="panel-id" />
-    <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="." mode="panel-latex-box">
-        <xsl:with-param name="width" select="$width" />
-    </xsl:apply-templates>
-    <xsl:text>}</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
+    <!-- Most panel content is amenable to a \savebox           -->
+    <!-- Exceptions require different constructions as a LR box -->
+    <xsl:choose>
+        <xsl:when test="self::pre">
+            <xsl:text>\begin{lrbox}{\panelbox</xsl:text>
+            <xsl:apply-templates select="." mode="panel-id" />
+            <xsl:text>}&#xa;</xsl:text>
+            <xsl:apply-templates select="." mode="panel-latex-box">
+                <xsl:with-param name="width" select="$width" />
+            </xsl:apply-templates>
+            <xsl:text>\end{lrbox}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\savebox{\panelbox</xsl:text>
+            <xsl:apply-templates select="." mode="panel-id" />
+            <xsl:text>}{&#xa;</xsl:text>
+            <xsl:apply-templates select="." mode="panel-latex-box">
+                <xsl:with-param name="width" select="$width" />
+            </xsl:apply-templates>
+            <xsl:text>}</xsl:text>
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>\newlength{\ph</xsl:text>
     <xsl:apply-templates select="." mode="panel-id" />
     <xsl:text>}</xsl:text>
@@ -4720,6 +4735,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
         <xsl:text>}</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<!-- Verbatim text from the content of a "pre" element       -->
+<!-- is made into a LaTeX box with the  fancyvrb "BVerbatim" -->
+<!-- environment, which is then saved in an LR box above     -->
+<!-- We cannot see an easy way to get the debugging wrapper  -->
+<xsl:template match="pre" mode="panel-latex-box">
+    <xsl:param name="width" />
+    <xsl:variable name="percent" select="substring-before($width,'%') div 100" />
+    <xsl:text>\begin{BVerbatim}</xsl:text>
+    <xsl:text>[boxwidth=</xsl:text>
+    <xsl:value-of select="$percent" />
+    <xsl:text>\linewidth,baseline=b]</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="interior"/>
+    <xsl:text>\end{BVerbatim}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- needs work to support SVG, no extension PDFs       -->

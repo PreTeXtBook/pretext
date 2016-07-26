@@ -3730,7 +3730,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Implement modal "panel-html-box" for various MBX elements -->
 <!-- Called in generic -panel                                  -->
 
-<xsl:template match="p|tabular" mode="panel-html-box">
+<xsl:template match="p|tabular|pre" mode="panel-html-box">
     <xsl:apply-templates select="." />
 </xsl:template>
 

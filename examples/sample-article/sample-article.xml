@@ -4148,6 +4148,49 @@ the xsltproc executable.
                         </md></p>
                     </paragraphs>
                 </sidebyside>
+
+                <p>Pre-formatted text may be incuded by using the <c>pre</c> element.  This content is horizontally-rigid, so as the author, you need to be sure to provide enough width for the panel to contain the content.  It is somewhat easy to see the boundary of the panels when rendered in HTML since there is a background that fills the panel.</p>
+
+                <!-- https://excelwithbusiness.com/blog/post/web-design/say-hello-world-in-28-different-programming-languages -->
+                <sidebyside widths="40% 45%">
+                    <caption><q>Hello, World!</q> in Pascal and C++</caption>
+                    <pre>
+                        <cline>program HelloWorld;</cline>
+                        <cline>begin</cline>
+                        <cline>  WriteLn('Hello, world!');</cline>
+                        <cline>end.</cline>
+                    </pre>
+                    <pre>
+                    #include
+
+                    int main()
+                    {
+                        std::cout &lt;&lt; "Hello, world!
+                    ";
+                        return 0;
+                    }
+                    </pre>
+                </sidebyside>
+
+                <sidebyside widths="25% 40%" valign="middle" margins="auto">
+                    <caption>A graph defined by data (from Keller and Trotter's <booktitle>Applied Combinatorics</booktitle>)</caption>
+                    <pre>
+                        graph1.txt
+                        9
+                        6 2
+                        1 5
+                        1 7
+                        6 8
+                        9 1
+                        4 3
+                        5 7
+                        1 3
+                        5 9
+                        7 9
+                    </pre>
+                    <image source="images/cross-square.png" />
+                </sidebyside>
+
             </subsection>
 
             <subsection>

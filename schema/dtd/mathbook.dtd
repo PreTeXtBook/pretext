@@ -356,7 +356,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- Side By Side -->
 <!-- ############ -->
 
-<!ELEMENT sidebyside  (caption?, (figure|image|table|tabular|paragraphs|p|ol|ul|dl)*)>
+<!ELEMENT sidebyside  (caption?, (figure|image|table|tabular|paragraphs|p|ol|ul|dl|pre)*)>
     <!ATTLIST sidebyside xml:id ID #IMPLIED>
     <!ATTLIST sidebyside   margins   CDATA                 #IMPLIED>
     <!ATTLIST sidebyside   width     CDATA                 #IMPLIED>
