@@ -4149,7 +4149,7 @@ the xsltproc executable.
                     </paragraphs>
                 </sidebyside>
 
-                <p>Pre-formatted text may be included by using the <c>pre</c> element.  This content is horizontally-rigid, so as the author, you need to be sure to provide enough width for the panel to contain the content.  It is easy to see the boundary of the panels when rendered in HTML since there is a background that fills the panel.</p>
+                <p>Pre-formatted text may be included by using the <c>pre</c> element.  This content is horizontally-rigid, so as the author, you need to be sure to provide enough width for the panel to contain the content.  It is easy to see the boundary of the panels when rendered in HTML since there is a background that fills the panel.  (The graph image is broken in HTML output, but should be fixed soon.)</p>
 
                 <!-- https://excelwithbusiness.com/blog/post/web-design/say-hello-world-in-28-different-programming-languages -->
                 <sidebyside widths="40% 50%">
@@ -4171,7 +4171,7 @@ the xsltproc executable.
                     </pre>
                 </sidebyside>
 
-                <sidebyside widths="25% 40%" valign="middle" margins="auto">
+                <sidebyside widths="20% 40%" valign="middle" margins="15%">
                     <caption>A graph defined by data (from Keller and Trotter's <booktitle>Applied Combinatorics</booktitle>)</caption>
                     <pre>
                         graph1.txt
@@ -4187,7 +4187,7 @@ the xsltproc executable.
                         5 9
                         7 9
                     </pre>
-                    <image source="images/cross-square.png" />
+                    <image source="images/keller-trotter-graph" />
                 </sidebyside>
             </subsection>
 
