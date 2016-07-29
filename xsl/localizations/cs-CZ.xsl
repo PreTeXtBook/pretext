@@ -107,6 +107,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- assemblages are collections of minimally structured material -->
     <!-- <localization string-id='assemblage'><xsl:text>Assemblage</xsl:text></localization> -->
     <!-- <localization string-id='poem'><xsl:text>Poem</xsl:text></localization> -->
+    <!-- Objectives is the block, objective is a list item within -->
+    <!-- <localization string-id='objectives'><xsl:text>Objectives</xsl:text></localization> -->
+    <!-- <localization string-id='objective'><xsl:text>Objective</xsl:text></localization> -->
+    <!--  -->
     <localization string-id='figure'><xsl:text>Obrázek</xsl:text></localization>
     <localization string-id='table'><xsl:text>Tabulka</xsl:text></localization>
     <localization string-id='listing'><xsl:text>Výpis</xsl:text></localization>

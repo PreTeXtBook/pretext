@@ -1672,6 +1672,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:call-template>
 </xsl:template>
 
+<!-- a single objective is authored as a list item -->
+<xsl:template match="objectives/ol/li|objectives/ul/li|objectives/dl/li" mode="type-name">
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'objective'" />
+    </xsl:call-template>
+</xsl:template>
+
 <!-- This template translates an string to an upper-case language-equivalent -->
 <!-- Sometimes we must call this directly, but usually better to apply the   -->
 <!-- template mode="type-name" to the node, which then calls this routine    -->
@@ -2077,6 +2084,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- components of exercises, so we might need to explicitly   -->
 <!-- make webwork/solution, etc to be unnumbered.              -->
 
+<!-- Objectives are one-per-subdivision, and so -->
+<!-- get their serial number from their parent  -->
+<xsl:template match="objectives" mode="serial-number">
+    <xsl:apply-templates select="parent::*" mode="serial-number" />
+</xsl:template>
+
 <!-- Convert this to a warning?  Should not drop in here ever? -->
 <xsl:template match="*" mode="serial-number">
     <xsl:text>[NUM]</xsl:text>
@@ -2278,6 +2291,20 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:text>.</xsl:text>
 </xsl:template>
 
+<!-- Structure Numbers: Objectives -->
+<!-- Objectives are one-per-subdivision, and so   -->
+<!-- get their structure number from their parent -->
+<xsl:template match="objectives" mode="structure-number">
+    <xsl:apply-templates select="parent::*" mode="structure-number" />
+</xsl:template>
+
+<!-- Structure Numbers: Objective -->
+<!-- A single objective is a list item -->
+<!-- in an objectives environment       -->
+<xsl:template match="objectives/ol/li" mode="structure-number">
+    <xsl:apply-templates select="ancestor::*[&STRUCTURAL-FILTER;][1]" mode="number" />
+    <xsl:text>.</xsl:text>
+</xsl:template>
 
 <!--              -->
 <!-- Full Numbers -->
@@ -2295,6 +2322,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:value-of select="$serial" />
     </xsl:if>
 </xsl:template>
+
 
 <!-- ################## -->
 <!-- SideBySide Layouts -->

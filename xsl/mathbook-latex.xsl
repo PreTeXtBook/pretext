@@ -800,6 +800,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>linecolor=blue!50!black,} \begin{mdframed}\textbf{#1}\quad}{\end{mdframed}}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
+    <xsl:if test="//objectives">
+        <xsl:text>%% objectives: early in a subdivision, introduction/list/conclusion&#xa;</xsl:text>
+        <xsl:text>%% objectives environment and style&#xa;</xsl:text>
+        <xsl:text>\newenvironment{objectives}[1]{\noindent\rule{\linewidth}{0.1ex}\newline{{\large#1}\par\medskip}}{\par\noindent\rule{\linewidth}{0.1ex}\par\medskip}&#xa;</xsl:text>
+    </xsl:if>
     <!-- miscellaneous, not categorized yet -->
     <xsl:if test="//exercise or //list">
         <xsl:text>%% Miscellaneous environments, normal text&#xa;</xsl:text>
@@ -3144,6 +3149,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="p|table|figure|sidebyside" />
     <xsl:text>\end{assemblage}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- An objectives element holds a list, surrounded by introduction and conclusion -->
+<xsl:template match="objectives">
+    <xsl:text>\begin{objectives}{</xsl:text>
+    <xsl:text>Objectives</xsl:text>  <!-- internationalize -->
+    <xsl:if test="title">
+        <xsl:text>: </xsl:text>  <!-- internationalize -->
+        <xsl:apply-templates select="." mode="title-full" />
+    </xsl:if>
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="introduction" />
+    <xsl:apply-templates select="ol|ul|dl" />
+    <xsl:apply-templates select="conclusion" />
+    <xsl:text>\end{objectives}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- An example might have a statement/solution structure -->
@@ -5979,6 +6001,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercises//exercise|biblio|biblio/note|proof|ol/li|hint|answer|solution" mode="xref-number">
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
+
+<!-- Note: objectives are one-per-subdivision,  -->
+<!-- and precede the introduction, so the LaTeX -->
+<!-- \ref{} mechanism assigns the correct       -->
+<!-- number - that of the enclosing subdivision -->
 
 <!-- Footnotes print serial-numbers only, but   -->
 <!-- as knowls/references we desire a fully     -->

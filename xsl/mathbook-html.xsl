@@ -412,7 +412,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- the summaries/links that makes this necessary.          -->
 
 <!-- Pre-Navigation -->
-<xsl:template match="author|introduction|titlepage|abstract" mode="summary-prenav">
+<xsl:template match="author|objectives|introduction|titlepage|abstract" mode="summary-prenav">
     <xsl:apply-templates select="."/>
 </xsl:template>
 
@@ -1244,7 +1244,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "posterior-duplicate"  no ID, no \label         -->
 
 <!-- me is absent, not numbered, never knowled -->
-<xsl:template match="fn|biblio|men|md|mdn|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;" mode="xref-knowl">
+<xsl:template match="fn|biblio|men|md|mdn|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|objectives|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;" mode="xref-knowl">
     <!-- write a file, calling body and posterior duplicate templates -->
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
@@ -1397,6 +1397,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- h5, type name, no number (even if exists), title (if exists) -->
+<!-- eg, objectives is one-per-subdivison, max,                   -->
+<!-- so no need to display at birth, but is needed in xref        -->
+<xsl:template match="*" mode="heading-full-implicit-number">
+    <xsl:element name="h5">
+        <xsl:attribute name="class">
+            <xsl:text>heading</xsl:text>
+        </xsl:attribute>
+        <xsl:element name="span">
+            <xsl:attribute name="class">
+                <xsl:text>type</xsl:text>
+            </xsl:attribute>
+            <xsl:apply-templates select="." mode="type-name" />
+        </xsl:element>
+        <!-- codenumber is implicit via placement -->
+        <xsl:if test="title">
+            <xsl:element name="span">
+                <xsl:attribute name="class">
+                    <xsl:text>title</xsl:text>
+                </xsl:attribute>
+                <xsl:apply-templates select="." mode="title-full" />
+            </xsl:element>
+        </xsl:if>
+    </xsl:element>
+</xsl:template>
+
 <!-- eg "Paragraph" displayed in content of an xref-knowl -->
 <xsl:template match="*" mode="heading-type">
     <xsl:element name="h5">
@@ -1477,7 +1503,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- do not come through here at all, since they are   -->
 <!-- always visible with no decoration, so plain       -->
 <!-- default templates are good enough                 -->
-<xsl:template match="fn|biblio|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;">
+<xsl:template match="fn|biblio|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|objectives|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
@@ -2403,6 +2429,52 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="assemblage" mode="has-posterior">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
+<!-- Objectives -->
+<!-- introduction, list, conclusion -->
+<xsl:template match="objectives" mode="is-hidden">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
+<xsl:template match="objectives" mode="body-element">
+    <xsl:text>article</xsl:text>
+</xsl:template>
+
+<xsl:template match="objectives" mode="body-css-class">
+    <xsl:text>objectives</xsl:text>
+</xsl:template>
+
+<xsl:template match="objectives" mode="birth-element">
+    <xsl:text>div</xsl:text>
+</xsl:template>
+
+<xsl:template match="objectives" mode="hidden-knowl-element" />
+
+<xsl:template match="objectives" mode="hidden-knowl-css-class" />
+
+<xsl:template match="objectives" mode="heading-birth">
+    <xsl:apply-templates select="." mode="heading-full-implicit-number" />
+</xsl:template>
+
+<xsl:template match="objectives" mode="body">
+    <xsl:apply-templates select="introduction" />
+    <xsl:apply-templates select="ol|ul|dl" />
+    <xsl:apply-templates select="conclusion" />
+</xsl:template>
+
+<xsl:template match="objectives" mode="heading-xref-knowl">
+    <xsl:apply-templates select="." mode="heading-full" />
+</xsl:template>
+
+<xsl:template match="objectives" mode="body-duplicate">
+    <xsl:apply-templates select="introduction" mode="duplicate" />
+    <xsl:apply-templates select="ol|ul|dl" mode="duplicate" />
+    <xsl:apply-templates select="conclusion" mode="duplicate" />
+</xsl:template>
+
+<xsl:template match="objectives" mode="has-posterior">
     <xsl:text>false</xsl:text>
 </xsl:template>
 
@@ -4429,7 +4501,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a sidebyside even though this is not necessary           -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|p|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|objectives|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">

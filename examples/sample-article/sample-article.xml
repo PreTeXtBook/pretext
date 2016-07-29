@@ -470,6 +470,25 @@ the xsltproc executable.
         <section xml:id="interesting-corollary">
             <title>An Interesting Corollary</title>
 
+            <objectives xml:id="objectives-structures">
+                <title>Fundamental Structures</title>
+
+                <introduction>
+                    <p>This is an <c>&lt;objectives&gt;</c> element you are reading, and this is its introduction.  This early section has really grown and tries to accomplish many things.  Not all of them are listed here.</p>
+                </introduction>
+
+                <ol>
+                    <li xml:id="objective-structure">Display various <q>blocks</q>, fundamental units of the flow.</li>
+                    <li>More</li>
+                    <li>Evermore</li>
+                </ol>
+
+                <conclusion>
+                    <p>This concludes the (incomplete) objectives for this section, so now we can carry-on as before.</p>
+                </conclusion>
+            </objectives>
+
+
             <introduction>
                 <p>The Fundamental Theorem comes in two flavors, where usually one is a corollary of the other.</p>
             </introduction>
@@ -3192,6 +3211,8 @@ the xsltproc executable.
                 <li><p>A case within the proof of <xref ref="claim-with-cases" autoname="yes" />: <xref ref="inductive-step" autoname="title" /></p></li>
                 <li><p>A cross-reference to a description list item with a title containing math: <xref ref="description-list-math-title" autoname="title" /></p></li>
                 <li><p>A cross-reference to an aside, by title necessarily: <xref ref="an-aside" autoname="title" /></p></li>
+                <li><p>A cross-reference to an <c>objectives</c> block, with an autoname.  This demonstrates the number of the Objectives here, which is not shown in the original version since it is implicit: <xref ref="objectives-structures" autoname="yes" /></p></li>
+                <li><p>A cross-reference to an individual objective.  This is authored as a list item, but displayed as an objective (singular) via an autoname: <xref ref="objective-structure" autoname="yes" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul></p>
 

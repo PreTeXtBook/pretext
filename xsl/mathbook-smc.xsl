@@ -118,8 +118,8 @@
                     </xsl:with-param>
                 </xsl:apply-templates>
             </xsl:when>
-            <!-- introduction, conclusion are included on page         -->
-            <!-- as SMC cells as they are processed in document order -->
+            <!-- objectives, introduction, conclusion are included on page -->
+            <!-- as SMC cells as they are processed in document order      -->
             <xsl:otherwise>
                 <xsl:apply-templates select="." mode="smc-cell" />
             </xsl:otherwise>
