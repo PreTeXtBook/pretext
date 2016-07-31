@@ -1597,25 +1597,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 
-<!-- Names of Objects -->
-<!-- Ultimately translations are all contained in the files of  -->
-<!-- the xsl/localizations directory, which provides            -->
-<!-- upper-case, singular versions.  In this way, we only ever  -->
-<!-- hardcode a string (like "Chapter") once                    -->
-<!-- First template is modal, and calls subsequent named        -->
-<!-- template where translation with keys happens               -->
-<!-- This template allows a node to report its name             -->
-<xsl:template match="*" mode="type-name">
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="local-name(.)" />
-    </xsl:call-template>
-</xsl:template>
-
-<xsl:template match="sidebyside" mode="type-name">
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="'figure'" />
-    </xsl:call-template>
-</xsl:template>
+<!-- ######################## -->
+<!-- Widths of Images, Videos -->
+<!-- ######################## -->
 
 <xsl:template match="image|video" mode="image-width">
     <xsl:param name="width-override" select="''" />
@@ -1653,58 +1637,29 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 
-<xsl:template name="printWidth">
-    <xsl:variable name="existingWidths">
-        <xsl:choose>
-            <!-- when no siblings have a width specified -->
-            <xsl:when test="count(ancestor::sidebyside/*/@width)=0">    
-                    <xsl:value-of select="0"/>
-            </xsl:when>
-            <!-- otherwise add together the existing widths -->
-            <xsl:otherwise>
-                <xsl:variable name="tmpWidths">
-                   <xsl:for-each select="ancestor::sidebyside/*/@width">
-                    <xsl:value-of select="."/>
-                   </xsl:for-each>
-                </xsl:variable>
-                <xsl:variable name="length" select="string-length($tmpWidths)"/>
-                <xsl:call-template name="remaingingWidth">
-                    <xsl:with-param name="str" select="substring(string($tmpWidths),1,($length -1))" />
-                    <xsl:with-param name="delimiter" select="'%'" />
-                </xsl:call-template>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- output the width to at most four decimal places, e.g 3.1415 -->
-    <xsl:value-of select="format-number((100-$existingWidths) div count(ancestor::sidebyside/*[not(self::caption)][not(@width)]),'#.###')"/>
+<!-- ################ -->
+<!-- Names of Objects -->
+<!-- ################ -->
+
+<!-- Ultimately translations are all contained in the files of  -->
+<!-- the xsl/localizations directory, which provides            -->
+<!-- upper-case, singular versions.  In this way, we only ever  -->
+<!-- hardcode a string (like "Chapter") once                    -->
+<!-- First template is modal, and calls subsequent named        -->
+<!-- template where translation with keys happens               -->
+<!-- This template allows a node to report its name             -->
+<xsl:template match="*" mode="type-name">
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="local-name(.)" />
+    </xsl:call-template>
 </xsl:template>
 
-<!-- sidebyside children can have @width attribute; they can also
-     omit it. In the case where it is not present, we need to add 
-     together the numbers contained in a string separated by % symbols.
-
-     Reference:
-     http://stackoverflow.com/questions/28430054/how-to-add-all-comma-separated-values-in-xslt -->
-<xsl:template name="remaingingWidth" >
-    <xsl:param name="str" />   <!-- $str is having '0.001,0.003' value -->
-    <xsl:param name="delimiter" />
-    <xsl:param name="summation" select="0" />
-     <xsl:choose>
-        <xsl:when test="contains($str,$delimiter)">
-            <xsl:variable name="beforecomma" select="substring-before($str,$delimiter)" />
-            <xsl:variable name="aftercomma" select="substring-after($str,$delimiter)" />
-            <xsl:call-template name="remaingingWidth">
-                <xsl:with-param name="str" select="$aftercomma" />
-                <xsl:with-param name="delimiter" select="$delimiter" />
-                <xsl:with-param name="summation" select="$summation + $beforecomma" />
-            </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$summation + $str" />
-        </xsl:otherwise>
-     </xsl:choose>
+<!-- sidebyside is *always* a specialized Figure, if captioned -->
+<xsl:template match="sidebyside" mode="type-name">
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'figure'" />
+    </xsl:call-template>
 </xsl:template>
-
 
 <!-- This template translates an string to an upper-case language-equivalent -->
 <!-- Sometimes we must call this directly, but usually better to apply the   -->
