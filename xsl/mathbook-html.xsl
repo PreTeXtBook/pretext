@@ -3813,6 +3813,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2014/03/07:  http://flowplayer.org/docs/setup.html                     -->
 <!-- TODO: use for-each and extension matching to preferentially use WebM format -->
 <!-- <source type="video/mp4" src="http://mydomain.com/path/to/intro.webm">     -->
+<!-- TODO: respect @width attribute on ext rewrite, see YouTube -->
 <xsl:template match="video">
     <div class="flowplayer" style="width:200px">
         <xsl:text disable-output-escaping='yes'>&lt;video controls>&#xa;</xsl:text>
@@ -3832,17 +3833,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- <xsl:text>&amp;origin=http://example.com</xsl:text>   -->
 <!-- start/end time parameters -->
 <xsl:template match="video[@youtube]">
+    <xsl:variable name="width">
+        <xsl:apply-templates select="." mode="image-width" />
+    </xsl:variable>
     <xsl:variable name="width-fraction">
-        <xsl:choose>
-            <xsl:when test="@width">
-                <!-- user-supplied as "nn%" -->
-                <xsl:apply-templates select="." mode="width-percent-to-real" />
-            </xsl:when>
-            <xsl:otherwise>
-                <!-- 85% to account for figure margins -->
-                <xsl:text>0.85</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:value-of select="substring-before($width,'%') div 100" />
     </xsl:variable>
     <!-- assumes 16:9 ratio (0.5625), make configurable -->
     <xsl:variable name="aspect-ratio">

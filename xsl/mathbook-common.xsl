@@ -1611,42 +1611,40 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="*" mode="width-percent-to-real">
-    <xsl:variable name="percentage" select="@width" />
-    <!-- could normalize, check last character -->
-    <xsl:if test="not(contains($percentage, '%'))">
-        <xsl:message>MBX:WARNING: a width is not specified as a percentage (<xsl:value-of select="$percentage" />)</xsl:message>
-        <xsl:apply-templates select="." mode="location-report" />
-    </xsl:if>
-    <xsl:value-of select="substring-before($percentage,'%') div 100" />
-</xsl:template>
-
 <xsl:template match="sidebyside" mode="type-name">
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'figure'" />
     </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="image" mode="image-width">
+<xsl:template match="image|video" mode="image-width">
     <xsl:param name="width-override" select="''" />
-    <!-- every (?) image comes here for width, check for height (never was on youtube) -->
+    <!-- every (?) image comes here for width, check for height (never was on video) -->
     <xsl:if test="@height">
         <xsl:message>MBX:WARNING: the @height attribute of an &lt;image&gt; is deprecated, it will be ignored (2016-07-31)</xsl:message>
         <xsl:apply-templates select="." mode="location-report" />
     </xsl:if>
+    <!-- test for author-provided poorly-constructed width -->
+    <xsl:if test="@width">
+        <xsl:variable name="improved-width" select="normalize-space(@width)" />
+        <xsl:if test="not(substring($improved-width, string-length($improved-width)) = '%')">
+            <xsl:message>MBX:ERROR: a @width attribute is not specified as a percentage (<xsl:value-of select="@width" />), the alternative form is deprecated (2016-07-31)</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:if>
+    </xsl:if>
     <!-- overrides, global default, should be error-checked, sanitized elsewhere -->
     <xsl:choose>
         <!-- in sidebyside, or contained figure, then fill panel -->
-        <!-- TODO:  warn if @width on image -->
+        <!-- TODO:  warn if @width on sidebyside/*/image -->
         <xsl:when test="$width-override">
             <xsl:value-of select="$width-override" />
         </xsl:when>
         <!-- if given, use it -->
         <xsl:when test="@width">
-            <xsl:value-of select="@width" />
+            <xsl:value-of select="normalize-space(@width)" />
         </xsl:when>
         <xsl:when test="/mathbook/docinfo/defaults/image-width">
-            <xsl:value-of select="/mathbook/docinfo/defaults/image-width" />
+            <xsl:value-of select="normalize-space(/mathbook/docinfo/defaults/image-width)" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>100%</xsl:text>
@@ -4460,6 +4458,14 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <xsl:template match="*" mode="deprecation-warnings">
     <!-- newer deprecations at the top of this list, user will see in this order -->
+    <!--  -->
+    <xsl:if test="//image/@width[not(contains(., '%'))]">
+        <xsl:call-template name="deprecation-message">
+            <xsl:with-param name="date-string" select="'2016-07-31'" />
+            <xsl:with-param name="message" select="'@width attribute on &lt;image&gt; must be expressed as a percentage'" />
+            <xsl:with-param name="occurences" select="count(//image/@width[not(contains(., '%'))])" />
+        </xsl:call-template>
+    </xsl:if>
     <!--  -->
     <xsl:if test="//image[@height]">
         <xsl:call-template name="deprecation-message">
