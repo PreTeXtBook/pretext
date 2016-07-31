@@ -82,6 +82,7 @@ the xsltproc executable.
         -->
         <latex-image-preamble>
         \usepackage{pgfplots}               % loads tikz package
+        \usepackage{smartdiagram}           % for a circular diagram
         \pgfplotsset{axis x line = middle,
                      axis y line = middle}
         \usetikzlibrary{backgrounds}
@@ -1192,7 +1193,7 @@ the xsltproc executable.
         </section>
 
 
-        <section>
+        <section xml:id="graphics">
             <title>Graphics</title>
 
             <introduction>
@@ -1460,8 +1461,8 @@ the xsltproc executable.
 
                 <p>Figures, tables and side-by-sides that do not have a caption will automatically not receive a number.  So, in particular, a <c>figure</c> element can be used to place a centered <c>image</c>, with vertical breaks.  We interrupt this current list of figures to include a caption-less one, as a check that the numbering continues sequentially.</p>
 
-                <figure xml:id="figure-captionless-titleless-trefoil">
-                    <image source="images/cross-square.png" width="100"/>
+                <figure xml:id="figure-captionless-titleless-image">
+                    <image source="images/cross-square.png" width="30%"/>
                 </figure>
 
             </subsection>
@@ -1617,7 +1618,7 @@ the xsltproc executable.
 
                 <figure xml:id="figure-sage-parabola">
                     <caption>A Sage standard parabola, on <m>[-2,4]</m></caption>
-                    <image xml:id="sageplot-parabola">
+                    <image xml:id="sageplot-parabola" width="50%">
                         <description>A standard parabola on the interval [-2,4]</description>
                         <sageplot>
                         f(x) = x^2
@@ -1630,7 +1631,7 @@ the xsltproc executable.
 
                 <figure xml:id="figure-sage-double-plot">
                     <caption>Two Sage plots on one set of axes</caption>
-                    <image xml:id="sageplot-updown">
+                    <image xml:id="sageplot-updown" width="45%">
                         <sageplot>
                         f(x) = x^4
                         g(x) = -x^4
@@ -1641,52 +1642,54 @@ the xsltproc executable.
                     </image>
                 </figure>
 
-                <p>The following examples are from the <url href="http://www.sagemath.org/tour-graphics.html">Sage Tour</url>.</p>
+                <p>The following examples are from the <url href="http://www.sagemath.org/tour-graphics.html">Sage Tour</url>.  We package them into a <c>sidebyside</c> layout element, see <xref ref="section-side-by-side" autoname="yes" />.</p>
 
-                <!-- Tour example modified: figsize moved from show() into plot() -->
-                <figure xml:id="figure-sage-multigraph">
-                    <caption>A Sage multigraph of a sentence</caption>
-                    <image xml:id="sageplot-sentence-multigraph">
-                        <sageplot>
-                        stnc = 'I am a cool multiedge graph with loops'
-                        g = DiGraph({}, loops=True, multiedges=True)
-                        for a,b in [(stnc[i], stnc[i+1]) for i in xrange(len(stnc)-1)]:
-                           g.add_edge(a, b, b)
-                        g.plot(color_by_label=True, edge_style='solid', figsize=(8,8))
-                        </sageplot>
-                    </image>
-                </figure>
+                <sidebyside width="40%" margins="auto">
+                    <!-- Tour example modified: figsize moved from show() into plot() -->
+                    <figure xml:id="figure-sage-multigraph">
+                        <caption>A Sage multigraph of a sentence</caption>
+                        <image xml:id="sageplot-sentence-multigraph">
+                            <sageplot>
+                            stnc = 'I am a cool multiedge graph with loops'
+                            g = DiGraph({}, loops=True, multiedges=True)
+                            for a,b in [(stnc[i], stnc[i+1]) for i in xrange(len(stnc)-1)]:
+                               g.add_edge(a, b, b)
+                            g.plot(color_by_label=True, edge_style='solid', figsize=(8,8))
+                            </sageplot>
+                        </image>
+                    </figure>
+                    <!--  -->
+                    <!-- Tour example modified: now using R.lagrange_polynomial() -->
+                    <!-- Tour example modified: dropped ymin/ymax, figsize -->
+                    <figure xml:id="figure-sage-polynomial-approximation">
+                        <caption>Sage polynomial approximations of <m>f(x)=1/(1+25x^2)</m></caption>
+                        <image xml:id="sageplot-polynomial-approximation">
+                            <sageplot>
+                            def f(x):
+                               return RDF(1 / (1 + 25 * x^2))
 
-                <!-- Tour example modified: now using R.lagrange_polynomial() -->
-                <!-- Tour example modified: dropped ymin/ymax, figsize -->
-                <figure xml:id="figure-sage-polynomial-approximation">
-                    <caption>Sage polynomial approximations of <m>f(x)=1/(1+25x^2)</m></caption>
-                    <image xml:id="sageplot-polynomial-approximation">
-                        <sageplot>
-                        def f(x):
-                           return RDF(1 / (1 + 25 * x^2))
+                            def runge():
+                                R = PolynomialRing(RDF, 'x')
+                                g = plot(f, -1, 1, rgbcolor='red', thickness=1)
+                                polynom = []
+                                for i, n in enumerate([6, 8, 10, 12]):
+                                  data = [(x, f(x)) for x in xsrange(-1, 1, 2 / (n - 1), include_endpoint=True)]
+                                  polynom.append(R.lagrange_polynomial(data))
+                                  g += list_plot(data, rgbcolor='black', pointsize=5)
+                                g += plot(polynom, -1, 1, fill=f, fillalpha=0.2, thickness=0)
+                                return g
 
-                        def runge():
-                            R = PolynomialRing(RDF, 'x')
-                            g = plot(f, -1, 1, rgbcolor='red', thickness=1)
-                            polynom = []
-                            for i, n in enumerate([6, 8, 10, 12]):
-                              data = [(x, f(x)) for x in xsrange(-1, 1, 2 / (n - 1), include_endpoint=True)]
-                              polynom.append(R.lagrange_polynomial(data))
-                              g += list_plot(data, rgbcolor='black', pointsize=5)
-                            g += plot(polynom, -1, 1, fill=f, fillalpha=0.2, thickness=0)
-                            return g
-
-                        runge()
-                        </sageplot>
-                    </image>
-                </figure>
+                            runge()
+                            </sageplot>
+                        </image>
+                    </figure>
+                </sidebyside>
 
                 <p>From the Sage documentation, with slight modifications, credited to Douglas Summers-Stay.  A plot of the implicity defined surface <me>2 = \cos(x + ty) + \cos(x - ty) + \cos(y + tz) + \cos(y - tz) + \cos(z - tx) + \cos(z + tx)</me> in rectangular <m>xyz</m> coordinates, with <m>t</m> equal to the golden ratio.</p>
 
                 <figure xml:id="figure-sage-implicit-surface">
                     <caption>A Sage implicitly defined 3D surface</caption>
-                    <image xml:id="sageplot-implicit-surface">
+                    <image xml:id="sageplot-implicit-surface" width="50%">
                         <sageplot>
                         var('x y z')
                         T = RDF(golden_ratio)
@@ -1711,6 +1714,67 @@ the xsltproc executable.
                 </figure>
             </subsection>
 
+            <subsection>
+                <title>Technical Details</title>
+
+                <p>The table below is a summary of how graphics and images are specified, constructed and manipulated.  Additional processing is indicated by reference to the Python script <c>mbx</c>.  Images need to be placed relative to the <latex /> file that includes them during compilation, and placed relative to the <init>HTML</init> files which reference/include them.  Author-provided image files may be placed in any subdirectory, and the <c>@source</c> attribute should include the complete relative path with the subdirectory.  Files generated by the <c>mbx</c> script will be specified in the output using the relative directory <c>images</c>, which can be changed using the <c>directory.images</c> stringparam.  There is no reason author-provided files cannot also be placed in this same directory (presuming no duplicate names). [This table is presently more readable in HTML, the PDF version will improve.]</p>
+
+                <table>
+                    <tabular top="medium" bottom="minor">
+                        <row bottom="medium">
+                            <cell>MBX Element</cell>
+                            <cell>Specification</cell>
+                            <cell><latex />/Print</cell>
+                            <cell>HTML</cell>
+                            <cell>Notes</cell>
+                        </row>
+
+                        <row>
+                            <cell><c>image/@source</c></cell>
+                            <cell>full relative path, w/ extension</cell>
+                            <cell>directly included</cell>
+                            <cell>directly included</cell>
+                            <cell>author-provided <init>PNG</init>, <init>JPEG</init></cell>
+                        </row>
+
+                        <row>
+                            <cell><c>image/@source</c></cell>
+                            <cell>full relative path, w/o extension</cell>
+                            <cell>presumes <init>PDF</init></cell>
+                            <cell>presumes <init>SVG</init></cell>
+                            <cell>author-provided</cell>
+                        </row>
+
+                        <row>
+                            <cell><c>image/latex-image-code</c></cell>
+                            <cell><latex />-compatible source</cell>
+                            <cell>directly included</cell>
+                            <cell><init>SVG</init> via <c>mbx</c></cell>
+                            <cell><eg /> tikz, pgfplots, xypic</cell>
+                        </row>
+
+                        <row>
+                            <cell><c>image/sageplot</c></cell>
+                            <cell>Sage code</cell>
+                            <cell><init>PDF</init> via <c>mbx</c></cell>
+                            <cell><init>SVG</init> via <c>mbx</c></cell>
+                            <cell><init>PNG</init> for 3-D</cell>
+                        </row>
+
+                        <row>
+                            <cell><c>image/asymptote</c></cell>
+                            <cell>Asymptote code</cell>
+                            <cell><init>PDF</init> via <c>mbx</c></cell>
+                            <cell><init>SVG</init> via <c>mbx</c></cell>
+                            <cell></cell>
+                        </row>
+
+
+                    </tabular>
+                </table>
+
+                <p>In the early stages of a writing project, it may be best not to track provisional image files built with <c>mbx</c> under version control, and just regenerate them periodically (see the <c>-r</c> option for <c>mbx</c>).  As a project matures, then it makes sense to put stable files under version control for collaborators and others.  In every case, managing graphics files (and other aspects of production), is much more pleasurable with a script (shell, Makefile, etc.)</p>
+            </subsection>
         </section>
 
         <section>
@@ -3746,9 +3810,68 @@ the xsltproc executable.
                     </paragraphs>
                     <figure xml:id="text-next-to-figure">
                         <caption>Text next to a figure</caption>
-                        <image source="images/cross-square.png" height="30" />
+                        <image source="images/cross-square.png" />
                     </figure>
                 </sidebyside>
+            </subsection>
+
+            <subsection>
+                <title>Image Formats, Side-by-Sides</title>
+
+                <p>Most of our demonstrations here use our square <q>blue cross</q> test image, which is provided as a <init>PNG</init> image.  You may specify images by any of the methods described in the section on graphics, <xref ref="graphics" autoname="yes" />.  The complete graph below is specified with no file extension, on the assumption that an <init>SVG</init> version exists for <init>HTML</init> output, and a <init>PDF</init> version exists for <latex /> output.  The second is a <init>JPEG</init> image that we use elsewhere for a YouTube video, but recycle here as an image provided in that format.  By default, they are aligned at their tops.</p>
+
+                <sidebyside widths="30% 30%" margins="auto">
+                    <image source="images/complete-graph" />
+                    <image source="images/led-zeppelin-kashmir.jpg" />
+                </sidebyside>
+
+                <p>Here are two TikZ images, authored side-by-side.  The first has had its geometric portions of the original scaled down to 75<percent />, with the effect of increasing the text, relatively, so the application in a side-by-side panel with 25<percent /> width has legible text.  We caption only the second panel, which has no text adjustments.  From <url href="http://www.texample.net/tikz/examples/">TeXample.net</url>.</p>
+
+                <sidebyside widths="25% 25% 35%" margins="auto">
+                    <!-- http://www.texample.net/tikz/examples/venn/ -->
+                    <!-- :Title: A Venn diagram with PDF blending    -->
+                    <!-- :Tags: Diagrams;Cookbook                    -->
+                    <!-- :Author: Stefan Kottwitz                    -->
+                    <!-- :Slug: venn                                 -->
+                    <!-- PDF blend mode requires TikZ version 3.0 or above. -->
+                    <image xml:id="tikz-venn-diagram">
+                        <latex-image-code>
+                        \begin{tikzpicture}[scale=0.75]
+                          \begin{scope}[blend group = soft light]
+                            \fill[red!30!white]   ( 90:1.2) circle (2);
+                            \fill[green!30!white] (210:1.2) circle (2);
+                            \fill[blue!30!white]  (330:1.2) circle (2);
+                          \end{scope}
+                          \node at ( 90:2)    {Typography};
+                          \node at ( 210:2)   {Design};
+                          \node at ( 330:2)   {Coding};
+                          \node [font=\Large] {\LaTeX};
+                        \end{tikzpicture}
+                        </latex-image-code>
+                    </image>
+                    <!--  -->
+                    <figure>
+                        <caption><tex /> Work Flow</caption>
+                        <image xml:id="tikz-tex-workflow">
+                            <!-- http://www.texample.net/tikz/examples/smart-circle/ -->
+                            <!-- :Title: A circular diagram of a TeX workflow        -->
+                            <!-- :Tags: Diagrams;Flowcharts;Smartdiagram;Cookbook    -->
+                            <!-- :Author: Stefan Kottwitz                            -->
+                            <!-- :Slug: smart-circle                                 -->
+                            <!-- A diagram showing a TeX workflow using the          -->
+                            <!-- clever  smartdiagram  package. (in premable)        -->
+                            <latex-image-code>
+                            \smartdiagram[circular diagram:clockwise]{Edit,
+                            pdf\LaTeX, Bib\TeX/ biber, make\-index, pdf\LaTeX}
+                            </latex-image-code>
+                        </image>
+                    </figure>
+                    <!--  -->
+                    <p>Images by Stefan Kottwitz<ul>
+                        <li><url href="http://www.texample.net/tikz/examples/venn/">Venn Diagram</url></li>
+                        <li><url href="http://www.texample.net/tikz/examples/smart-circle/">Work Flow</url></li>
+                    </ul></p>
+                 </sidebyside>
             </subsection>
 
             <subsection>
