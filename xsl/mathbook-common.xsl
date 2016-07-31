@@ -1629,6 +1629,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <xsl:template match="image" mode="image-width">
     <xsl:param name="width-override" select="''" />
+    <!-- every (?) image comes here for width, check for height (never was on youtube) -->
+    <xsl:if test="@height">
+        <xsl:message>MBX:WARNING: the @height attribute of an &lt;image&gt; is deprecated, it will be ignored (2016-07-31)</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+    <!-- overrides, global default, should be error-checked, sanitized elsewhere -->
     <xsl:choose>
         <!-- in sidebyside, or contained figure, then fill panel -->
         <!-- TODO:  warn if @width on image -->
@@ -4454,6 +4460,14 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <xsl:template match="*" mode="deprecation-warnings">
     <!-- newer deprecations at the top of this list, user will see in this order -->
+    <!--  -->
+    <xsl:if test="//image[@height]">
+        <xsl:call-template name="deprecation-message">
+            <xsl:with-param name="date-string" select="'2016-07-31'" />
+            <xsl:with-param name="message" select="'@height attribute on &lt;image&gt; is no longer effective and will be ignored'" />
+            <xsl:with-param name="occurences" select="count(//image[@height])" />
+        </xsl:call-template>
+    </xsl:if>
     <!--  -->
     <xsl:if test="//br">
         <xsl:call-template name="deprecation-message">

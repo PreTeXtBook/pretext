@@ -627,15 +627,13 @@
 <!-- Images -->
 <!-- ###### -->
 
-<!-- PROVISIONAL: may disable height attribute, even in side-by-side -->
-<!-- Note: pg-name is exclusive to webwork                           -->
+<!-- Note: pg-name is exclusive to webwork -->
 <!ELEMENT image  (description?, (latex-image-code|asymptote|sageplot)?)>
     <!ATTLIST image  xml:id    ID                    #IMPLIED>
     <!ATTLIST image  xml:base  CDATA                 #IMPLIED>
     <!ATTLIST image  xmlns:xi  CDATA                 #FIXED   "http://www.w3.org/2001/XInclude">
     <!ATTLIST image  source    CDATA                 #IMPLIED>
     <!ATTLIST image  width     CDATA                 #IMPLIED>
-    <!ATTLIST image  height    CDATA                 #IMPLIED>
     <!ATTLIST image  pg-name   CDATA                 #IMPLIED>
 
 <!-- typically for accessibility, also used in notation element -->

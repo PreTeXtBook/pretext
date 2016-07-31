@@ -3327,10 +3327,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="width">
                     <xsl:apply-templates select="." mode="image-width" />
                 </xsl:attribute>
-                <!-- TODO: abandon, deprecate height specification (along with LaTeX code) -->
-                <xsl:if test="@height">
-                    <xsl:attribute name="height"><xsl:value-of select="@height" /></xsl:attribute>
-                </xsl:if>
                 <xsl:attribute name="src">
                     <xsl:value-of select="@source" />
                 </xsl:attribute>

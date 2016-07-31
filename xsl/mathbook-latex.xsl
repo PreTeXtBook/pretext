@@ -4873,8 +4873,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ###### -->
 
 <!-- With full source specified, default to PDF format -->
-<!-- TODO: deprecate, abandon @height (along with HTML code) -->
-<!-- GONE NOW, SO MUST DO IT -->
 <xsl:template match="image[@source]" >
     <xsl:param name="width-override" select="''" />
     <xsl:variable name="width">

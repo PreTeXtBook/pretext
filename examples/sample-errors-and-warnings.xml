@@ -205,6 +205,19 @@ systems.
 
         </section>
 
+        <section>
+            <title>Image Descriptions</title>
+
+            <p>The <c>height</c> attribute is ineffective on <c>image</c> elements.</p>
+
+            <figure>
+                <image height="30%" source="images/foobar.png" />
+            </figure>
+
+        </section>
+
+
+
     </article>
 
 </mathbook>
