@@ -1627,6 +1627,27 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="image" mode="image-width">
+    <xsl:param name="width-override" select="''" />
+    <xsl:choose>
+        <!-- in sidebyside, or contained figure, then fill panel -->
+        <!-- TODO:  warn if @width on image -->
+        <xsl:when test="$width-override">
+            <xsl:value-of select="$width-override" />
+        </xsl:when>
+        <!-- if given, use it -->
+        <xsl:when test="@width">
+            <xsl:value-of select="@width" />
+        </xsl:when>
+        <xsl:when test="/mathbook/docinfo/defaults/image-width">
+            <xsl:value-of select="/mathbook/docinfo/defaults/image-width" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>100%</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <xsl:template name="printWidth">
     <xsl:variable name="existingWidths">

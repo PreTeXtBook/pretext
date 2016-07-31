@@ -1062,6 +1062,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% Raster graphics inclusion, wrapped figures in paragraphs&#xa;</xsl:text>
+    <xsl:text>%% \resizebox sometimes used for images in side-by-side layout&#xa;</xsl:text>
     <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
     <!-- Inconsolata font, sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html            -->
@@ -4801,19 +4802,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{BVerbatim}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- needs work to support SVG, no extension PDFs       -->
-<!-- baseline is automatically at the bottom of the box -->
+<!-- "image-width" modal template will eventually receive -->
+<!-- the panel width as an override, routed through every -->
+<!-- version of an image template, since we must size the -->
+<!-- image *before* building a LaTeX box around it        -->
+<!-- Otherwise, we just do the usual                      -->
+<!-- Baseline is automatically at the bottom of the box   -->
 <xsl:template match="image" mode="panel-latex-box">
+    <xsl:param name="width" />
+    <xsl:if test="$sbsdebug">
+        <xsl:text>\fbox{</xsl:text>
+        <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select=".">
+        <xsl:with-param name="width-override" select="$width" />
+    </xsl:apply-templates>
+    <xsl:if test="$sbsdebug">
+        <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- With raw LaTeX code, we use a \resizebox from the graphicx -->
+<!-- package to scale the image to the panel width, and then    -->
+<!-- we do not pass the width to the image template             -->
+<xsl:template match="image[latex-image-code]" mode="panel-latex-box">
     <xsl:param name="width" />
     <xsl:variable name="percent" select="substring-before($width,'%') div 100" />
     <xsl:if test="$sbsdebug">
         <xsl:text>\fbox{</xsl:text>
         <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
     </xsl:if>
-    <xsl:text>\includegraphics[width=</xsl:text>
-    <xsl:value-of select="substring-before($width,'%') div 100" />
-    <xsl:text>\textwidth]{</xsl:text>
-    <xsl:apply-templates select="@source" />
+    <xsl:text>\resizebox{</xsl:text>
+    <xsl:value-of select="$percent" />
+    <xsl:text>\linewidth}{!}{</xsl:text>
+    <xsl:apply-templates select="." />
     <xsl:text>}</xsl:text>
     <xsl:if test="$sbsdebug">
         <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
@@ -4845,100 +4868,105 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-
+<!-- ###### -->
 <!-- Images -->
-<xsl:template match="image" >
-    <xsl:if test="@source">
-        <xsl:text>\includegraphics[</xsl:text>
-        <xsl:choose>
-            <xsl:when test="ancestor::sidebyside">
-                <xsl:text>width=\textwidth</xsl:text>
-            </xsl:when>
-            <xsl:when test="@width">
-                <xsl:text>width=</xsl:text>
-                <xsl:choose>
-                    <!-- BUG: following will fail with non-integral percentages -->
-                    <xsl:when test="contains(@width, '%')">
-                        <xsl:text>0.</xsl:text>
-                        <xsl:value-of select="translate(@width, '%', '')" />
-                        <xsl:text>\textwidth</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="@width" />
-                        <xsl:text>pt</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:when>
-            <xsl:otherwise />
-        </xsl:choose>
-        <xsl:text>,</xsl:text>
-        <!-- TODO: deprecate, abandon @height (along with HTML code) -->
-         <xsl:if test="@height">
-             <xsl:text>height=</xsl:text>
-             <xsl:value-of select="@height" />
-             <xsl:text>pt,</xsl:text>
-         </xsl:if>
-        <xsl:text>]</xsl:text>
-        <xsl:text>{</xsl:text>
-        <xsl:value-of select="@source" />
-        <!-- default to .pdf if no extension given -->
-        <xsl:variable name="extension">
-            <xsl:call-template name="file-extension">
-                <xsl:with-param name="filename" select="@source" />
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:if test="$extension = ''">
-            <xsl:text>.pdf</xsl:text>
-        </xsl:if>
-        <xsl:text>}</xsl:text>
+<!-- ###### -->
+
+<!-- With full source specified, default to PDF format -->
+<!-- TODO: deprecate, abandon @height (along with HTML code) -->
+<!-- GONE NOW, SO MUST DO IT -->
+<xsl:template match="image[@source]" >
+    <xsl:param name="width-override" select="''" />
+    <xsl:variable name="width">
+        <xsl:apply-templates select="." mode="image-width">
+            <xsl:with-param name="width-override" select="$width-override" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="extension">
+        <xsl:call-template name="file-extension">
+            <xsl:with-param name="filename" select="@source" />
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:text>\includegraphics[width=</xsl:text>
+    <xsl:value-of select="substring-before($width,'%') div 100" />
+    <xsl:text>\linewidth]</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="@source" mode="internal-id" />
+    <xsl:if test="not($extension)">
+        <xsl:text>.pdf&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="asymptote|sageplot|latex-image-code" />
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Asymptote graphics language  -->
-<!-- EPS's produced by mbx script -->
-<xsl:template match="image/asymptote">
-    <xsl:text>\includegraphics[width=0.80\textwidth]{</xsl:text>
+<!-- PDF's produced by mbx script -->
+<xsl:template match="image[asymptote]">
+    <xsl:param name="width-override" select="''" />
+    <xsl:variable name="width">
+        <xsl:apply-templates select="." mode="image-width">
+            <xsl:with-param name="width-override" select="$width-override" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:text>\includegraphics[width=</xsl:text>
+    <xsl:value-of select="substring-before($width,'%') div 100" />
+    <xsl:text>\linewidth]</xsl:text>
+    <xsl:text>{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select=".." mode="internal-id" />
+    <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>.pdf}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Sage graphics plots          -->
-<!-- EPS's produced by mbx script -->
+<!-- PDF's produced by mbx script -->
 <!-- PNGs are fallback for 3D     -->
-<xsl:template match="image/sageplot">
+<xsl:template match="image[sageplot]">
+    <xsl:param name="width-override" select="''" />
+    <xsl:variable name="width">
+        <xsl:apply-templates select="." mode="image-width">
+            <xsl:with-param name="width-override" select="$width-override" />
+        </xsl:apply-templates>
+    </xsl:variable>
     <xsl:text>\IfFileExists{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select=".." mode="internal-id" />
+    <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>.pdf}%&#xa;</xsl:text>
-    <xsl:text>{\includegraphics[width=0.80\textwidth]{</xsl:text>
+    <xsl:text>{\includegraphics[width=</xsl:text>
+    <xsl:value-of select="substring-before($width,'%') div 100" />
+    <xsl:text>\linewidth]</xsl:text>
+    <xsl:text>{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select=".." mode="internal-id" />
+    <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>.pdf}}%&#xa;</xsl:text>
-    <xsl:text>{\includegraphics[width=0.80\textwidth]{</xsl:text>
+    <xsl:text>{\includegraphics[width=</xsl:text>
+    <xsl:value-of select="substring-before($width,'%') div 100" />
+    <xsl:text>\linewidth]</xsl:text>
+    <xsl:text>{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select=".." mode="internal-id" />
+    <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>.png}}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- LaTeX graphics (tikz, pgfplots, pstricks, etc) -->
-<xsl:template match="latex-image-code">
-    <xsl:if test="not(parent::image)">
-        <xsl:message>MBX:WARNING: latex-image-code element should be enclosed by an image element</xsl:message>
-    </xsl:if>
+<!-- LaTeX Image Code (tikz, pgfplots, pstricks, etc) -->
+<!-- Clean indentation, drop into LaTeX               -->
+<!-- See "latex-image-preamble" for critical parts    -->
+<!-- Side-By-Side scaling happens there, could be here -->
+<xsl:template match="image[latex-image-code]">
     <!-- outer braces rein in the scope of any local graphics settings -->
     <xsl:text>{&#xa;</xsl:text>
     <xsl:call-template name="sanitize-text">
-        <xsl:with-param name="text" select="." />
+        <xsl:with-param name="text" select="latex-image-code" />
     </xsl:call-template>
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- was once direct-descendant of subdivision, this catches that -->
+<xsl:template match="latex-image-code[not(parent::image)]">
+    <xsl:message>MBX:WARNING: latex-image-code element should be enclosed by an image element</xsl:message>
+</xsl:template>
 
 <!-- ################################## -->
 <!-- Deprecated Graphics Code Templates -->
