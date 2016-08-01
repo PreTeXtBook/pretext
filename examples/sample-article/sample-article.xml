@@ -2381,7 +2381,7 @@ the xsltproc executable.
                         <cell><m>\times</m></cell>
                         <cell><m>\times</m></cell>
                         <cell><m>\times</m></cell>
-                        <cell>left*, center, right</cell>
+                        <cell>left*, center, right, justify<fn>Equivalent to left except for paragraph cells.</fn></cell>
                     </row>
                     <row>
                         <cell><c>halign</c></cell>
@@ -2430,6 +2430,14 @@ the xsltproc executable.
                         <cell></cell>
                         <cell>p</cell>
                         <cell>1*, integer</cell>
+                    </row>
+                    <row>
+                        <cell><c>width</c></cell>
+                        <cell></cell>
+                        <cell><m>\times</m></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell>percentage<fn>Applies only to columns with paragraph cells.</fn>, <m>\frac{96}{\#\text{cols}}</m><percent />*</cell>
                     </row>
                     <row>
                         <cell>colors</cell>
@@ -2706,7 +2714,45 @@ the xsltproc executable.
                 </tabular>
             </table>
 
-            <p>Table cells can have multiline content using <c>&lt;line&gt;</c> elements. This is not the same thing as a paragraph cell<mdash />line breaking will happen precisely where the author tells it to. A line will not break, even on a narrow screen. If a cell uses a <c>&lt;line&gt;</c>, it must only use a sequence of <c>&lt;line&gt;</c>s and no other content. This is also a good time to demonstrate the <c>&lt;valign&gt;</c> attribute.</p>
+            <p>Table cells with a fixed width where text wraps are known as <q>paragraph cells</q>. A cell will be created as a paragraph cell if and only if it has <c>&lt;p&gt;</c> children. The width of a paragraph cell will be constant up and down its column, except if a non-paragraph column makes it more wide. The width is either determined by a <c>width</c> attribute on the corresponding <c>&lt;col&gt;</c> (as a percentage), or a default width of <m>\frac{96}{N}</m><percent /> is used where <m>N</m> is the number of <c>&lt;col&gt;</c>s. There is presently no implementation for a paragraph cell that has a <c>colspan</c> greater than <m>1</m>, although cells with <c>colspan</c> greater than <m>1</m> that are above or below a paragraph cell should behave. Setting <c>width</c> on a <c>&lt;col&gt;</c> that has no paragraph cells may produce unexpected results. A <c>valign</c> for the parent <c>&lt;row&gt;</c> (or the ambient <c>&lt;tabular&gt;</c>) can control vertical alignment (top, middle, or bottom). A paragraph cell's <c>halign</c> attribute (left, center, right, or justify) controls how the text is justfied. Cells inherit <c>halign</c> from <c>&lt;row&gt;</c>, <c>&lt;col&gt;</c>, and <c>&lt;tabular&gt;</c> in that order of preference. In a non-paragraph cell where <c>halign='justify'</c>, the horizontal alignement will match the behavior of <c>halign='left'</c>.</p>
+
+            <table xml:id="table-time-units">
+                <caption>Time Units</caption>
+                <tabular top="major">
+                    <col halign="left"/>              <!-- cells have no p; will be left-aligned, single row  -->
+                    <col halign="left"/>
+                    <col width="40%" halign="justify"/>
+                    <col />                           <!-- width not specified, will use "24%" because that is 1/4 of 96%        -->
+                                                      <!-- halign not specified, defaults to left, so paragraphs left-justified  -->
+                    <row valign="top" bottom="medium">
+                        <cell>Unit</cell>
+                        <cell>Stands For</cell>
+                        <cell halign="center">Defininion</cell>  <!-- center to override justify, interpreted as left here       -->
+                        <cell halign="center">Roughly</cell>
+                    </row>
+                    <row valign="top" bottom="minor">
+                        <cell><quantity><unit base="second"/></quantity></cell>
+                        <cell>second</cell>
+                        <cell><p>the duration of <quantity><mag>9192631770</mag></quantity> periods of the radiation corresponding to the transition between the two hyperfine levels of the ground state of the cesium-133 atom</p>
+                            <p>an extraneous paragraph just to demonstrate the inter-paragraph formatting.</p></cell>
+                        <cell><p>the time it takes you to say the phrase <q>differential calculus</q></p></cell>
+                    </row>
+                    <row valign="top" bottom="minor" halign="right">  <!-- row can override halign -->
+                        <cell><quantity><unit base="minute"/></quantity></cell>
+                        <cell>minute</cell>
+                        <cell><p>exactly <m>60</m> seconds</p></cell>
+                        <cell><p>how long it takes to microwave a full dinner plate from the refrigerator</p></cell>
+                    </row>
+                    <row valign="top" bottom="major">
+                        <cell><quantity><unit base="hour"/></quantity></cell>
+                        <cell>hour</cell>
+                        <cell halign="center"><p>exactly <m>3600</m> seconds; exaclty <m>60</m> minutes</p></cell>  <!-- can change paragraph justification at cell -->
+                        <cell><p>the length of one episode of a premium cable television show</p></cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <p>Table cells can have multiline content using <c>&lt;line&gt;</c> elements. This is not the same thing as a paragraph cell<mdash />line breaking will happen precisely where the author tells it to. A line will not break, even on a narrow screen. If a cell uses a <c>&lt;line&gt;</c>, it must only use a sequence of <c>&lt;line&gt;</c>s and no other content. As with paragraph cells, you can use a <c>valign</c> attribute for the row.</p>
 
             <table xml:id="table-multiline-cells">
                 <caption><abbr>Dr.</abbr> Seuss lines</caption>

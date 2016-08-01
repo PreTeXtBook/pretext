@@ -158,6 +158,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is cribbed from the CSS "max-width"-->
 <!-- Design width, measured in pixels        -->
 <xsl:variable name="design-width" select="'600'" />
+<xsl:variable name="design-margin-width" select="'32'" />
 
 <!-- We generally want to chunk longer HTML output -->
 <xsl:variable name="chunk-level">
@@ -4126,14 +4127,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="thickness-specification">
                     <xsl:with-param name="width" select="$top" />
                 </xsl:call-template>
-                <!-- uses lines -->
-                <xsl:if test="$the-cell/line">
+                <!-- no wrapping unless paragraph cell -->
+                <xsl:if test="not($the-cell/p)">
                     <xsl:text> lines</xsl:text>
                 </xsl:if>
+                <!-- justified alignment for paragraph cells with halign='justify' -->
+                <xsl:if test="$the-cell/p and $alignment='justify'">
+                    <xsl:text> justify</xsl:text>
+                </xsl:if>
+
             </xsl:attribute>
             <xsl:if test="not($column-span = 1)">
                 <xsl:attribute name="colspan">
                     <xsl:value-of select="$column-span" />
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="$the-cell/p">
+                <xsl:attribute name="style">
+                    <xsl:variable name="cell-width">
+                        <xsl:apply-templates select="$left-col" mode="width-percent-to-real"/>
+                    </xsl:variable>
+                    <xsl:text>max-width:</xsl:text>
+                    <xsl:value-of select="($design-width - $design-margin-width * 2) * $cell-width" />
+                    <xsl:text>px;</xsl:text>
                 </xsl:attribute>
             </xsl:if>
             <!-- process the actual contents -->
