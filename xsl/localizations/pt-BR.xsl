@@ -105,6 +105,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!--  -->
     <!-- assemblages are collections of minimally structured material -->
     <!-- <localization string-id='assemblage'><xsl:text>Assemblage</xsl:text></localization> -->
+    <!-- <localization string-id='poem'><xsl:text>Poem</xsl:text></localization> -->
     <localization string-id='figure'><xsl:text>Figura</xsl:text></localization>
     <localization string-id='table'><xsl:text>Tabela</xsl:text></localization>
     <!-- Translation needed for Brazilian Portugese -->
