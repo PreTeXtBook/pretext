@@ -140,8 +140,8 @@
 <!ELEMENT ol (li+)>
     <!ATTLIST ol cols  CDATA #IMPLIED>
     <!ATTLIST ol label CDATA #IMPLIED>
+<!-- Description lists cannot be organized into columns -->
 <!ELEMENT dl (li+)>
-    <!ATTLIST dl cols CDATA #IMPLIED>
 <!-- title on list item is only for within a description list, <dl> -->
 <!ELEMENT li (title?, index*, (p|md|mdn|ul|ol|dl)*)>
     <!ATTLIST li xml:id ID #IMPLIED>

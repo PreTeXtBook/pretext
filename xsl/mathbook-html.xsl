@@ -3254,19 +3254,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<xsl:template match="dl">
+    <xsl:element name="dl">
+        <xsl:attribute name="class">
+            <xsl:text>description-list</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="li" />
+    </xsl:element>
+</xsl:template>
+
 <!-- Pass-through regular list items    -->
 <!-- Allow paragraphs in larger items,  -->
 <!-- or just snippets for smaller items -->
 <!-- List items should migrate to knowlization framework -->
-<xsl:template match="li">
+<xsl:template match="ol/li|ul/li">
     <xsl:element name="li">
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="internal-id" />
         </xsl:attribute>
-        <!-- TODO: this needs formatting, insertion into first paragraph -->
-        <xsl:if test="parent::dl">
-            <xsl:apply-templates select="." mode="title-full" />
-        </xsl:if>
+        <xsl:apply-templates />
+    </xsl:element>
+</xsl:template>
+
+<!-- Description list items have more structure -->
+<!-- The id is placed on the title as a target  -->
+<xsl:template match="dl/li">
+    <xsl:element name="dt">
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:attribute>
+        <xsl:apply-templates select="." mode="title-full" />
+    </xsl:element>
+    <xsl:element name="dd">
         <xsl:apply-templates />
     </xsl:element>
 </xsl:template>
