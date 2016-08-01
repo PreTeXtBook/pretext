@@ -3176,7 +3176,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template name="halign-specification">
     <xsl:param name="align" />
     <xsl:choose>
-        <xsl:when test="$align='left'">
+        <xsl:when test="$align='left' or $align='justify'">
             <xsl:text>l</xsl:text>
         </xsl:when>
         <xsl:when test="$align='center'">
@@ -3186,7 +3186,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:text>r</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:WARNING: tabular horizontal alignment attribute not recognized: use left, center, right</xsl:message>
+            <xsl:message>MBX:WARNING: tabular horizontal alignment attribute not recognized: use left, center, right, justify</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -4646,6 +4646,50 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:variable>
     <xsl:value-of select="str:replace(str:replace($blurb, '*XXX', ''), '*', '#')" />
 </xsl:template>
+
+<!-- ################# -->
+<!-- Percent Utilities -->
+<!-- ################# -->
+
+<!-- Take as input a node set of attributes -->
+<!-- of percentages (with '%' at the end)   -->
+<!-- Check that sum is under 100%           -->
+<xsl:template name="cap-width-at-one-hundred-percent">
+    <xsl:param name="nodeset" />
+    <xsl:param name="cap" select="100" />
+    <xsl:if test="$nodeset">
+        <xsl:if test="substring-before($nodeset[1], '%')&gt;$cap">
+            <xsl:message terminate="yes">MBX:ERROR:   percentage attributes sum to over 100%</xsl:message>
+        </xsl:if>
+        <xsl:call-template name="cap-width-at-one-hundred-percent">
+            <xsl:with-param name="nodeset" select="$nodeset[position()&gt;1]" />
+            <xsl:with-param name="cap" select="$cap - substring-before($nodeset[1], '%')" />
+        </xsl:call-template>
+    </xsl:if>
+</xsl:template>
+
+<!-- Take a string as input    -->
+<!-- Abort if not in the form  -->
+<!-- \s*[0-9]*\.?[0-9]*\s*%\s* -->
+<!-- Normalize to              -->
+<!-- [0-9]*\.?[0-9]*%          -->
+<xsl:template name="normalize-percentage">
+    <xsl:param name="percentage" />
+    <xsl:variable name="stripped-percentage">
+        <xsl:value-of select="normalize-space($percentage)" />
+    </xsl:variable>
+    <xsl:if test="substring($stripped-percentage,string-length($stripped-percentage)) != '%'">
+        <xsl:message terminate="yes">MBX:ERROR:   expecting a percentage ending in '%'; got <xsl:value-of select="$stripped-percentage"/></xsl:message>
+    </xsl:if>
+    <xsl:variable name="percent">
+        <xsl:value-of select="normalize-space(substring($stripped-percentage,1,string-length($stripped-percentage) - 1))" />
+    </xsl:variable>
+    <xsl:if test="number($percent) != $percent">
+        <xsl:message terminate="yes">MBX:ERROR:   expecting a numerical value preceding '%'; got <xsl:value-of select="$percent"/></xsl:message>
+    </xsl:if>
+    <xsl:value-of select="concat($percent,'%')" />
+</xsl:template>
+
 
 
 </xsl:stylesheet>

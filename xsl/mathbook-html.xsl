@@ -3620,7 +3620,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>border: 2px solid black;</xsl:text>
             </xsl:if>
         </xsl:attribute>
-        <xsl:apply-templates select="." mode="panel-html-box" />
+        <xsl:apply-templates select="." mode="panel-html-box" >
+            <xsl:with-param name="width" select="$width" />
+        </xsl:apply-templates>
     </xsl:element>
 </xsl:template>
 
@@ -3797,7 +3799,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Implement modal "panel-html-box" for various MBX elements -->
 <!-- Called in generic -panel                                  -->
 
-<xsl:template match="p|tabular|pre" mode="panel-html-box">
+<xsl:template match="p|pre" mode="panel-html-box">
     <xsl:apply-templates select="." />
 </xsl:template>
 
@@ -3807,6 +3809,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="ol|ul|dl" mode="panel-html-box">
     <xsl:apply-templates select="." />
+</xsl:template>
+
+
+<!-- tabular passes width of containing panel to base width -->
+<!-- calculation for paragraph cells                        -->
+<xsl:template match="tabular" mode="panel-html-box">
+    <xsl:param name="width" />
+    <xsl:apply-templates select="." >
+        <xsl:with-param name="ambient-relative-width" select="$width"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- This matches the "regular" template, but does not -->
@@ -3833,8 +3845,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- title and/or caption, plus perhaps an xml:id,   -->
 <!-- so we just pawn off the contents (one only!)    -->
 <!-- to the other routines                           -->
-<xsl:template match="figure|table" mode="panel-html-box">
+<!-- table needs to pass width to tabular in case    -->
+<!-- there is a paragraph cell                       -->
+<xsl:template match="figure" mode="panel-html-box">
     <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-html-box" />
+</xsl:template>
+
+<xsl:template match="table" mode="panel-html-box">
+    <xsl:param name="width" />
+    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-html-box" >
+        <xsl:with-param name="width" select="$width"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 
@@ -3992,17 +4013,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A sequence of rows, we ignore column group in applying templates -->
 <!-- Realized as an HTML table                                        -->
 <xsl:template match="tabular">
+    <xsl:param name="ambient-relative-width" select="'100%'" />
+    <!-- Abort if tabular's cols have widths summing to over 100% -->
+    <xsl:call-template name="cap-width-at-one-hundred-percent">
+        <xsl:with-param name="nodeset" select="col/@width" />
+    </xsl:call-template>
     <xsl:element name="table">
-        <xsl:apply-templates select="row" />
+        <xsl:apply-templates select="row">
+            <xsl:with-param name="ambient-relative-width" select="$ambient-relative-width" />
+        </xsl:apply-templates>
     </xsl:element>
 </xsl:template>
 
 <!-- A row of table -->
 <xsl:template match="row">
+    <xsl:param name="ambient-relative-width" />
     <!-- Form the HTML table row -->
     <xsl:element name="tr">
         <!-- Walk the cells of the row -->
         <xsl:call-template name="row-cells">
+            <xsl:with-param name="ambient-relative-width">
+                <xsl:value-of select="$ambient-relative-width" />
+            </xsl:with-param>
             <xsl:with-param name="the-cell" select="cell[1]" />
             <xsl:with-param name="left-col" select="ancestor::tabular/col[1]" />  <!-- possibly empty -->
         </xsl:call-template>
@@ -4010,6 +4042,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="row-cells">
+    <xsl:param name="ambient-relative-width" />
     <xsl:param name="the-cell" />
     <xsl:param name="left-col" />
     <!-- A cell may span several columns, or default to just 1              -->
@@ -4183,9 +4216,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- and the class attribute -->
             <xsl:attribute name="class">
                 <!-- always write alignment, so *precede* all subsequent with a space -->
-                <xsl:call-template name="halign-specification">
-                    <xsl:with-param name="align" select="$alignment" />
-                </xsl:call-template>
+                <xsl:choose>
+                    <xsl:when test="$the-cell/p and $alignment='justify'">
+                        <xsl:text>j</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="halign-specification">
+                            <xsl:with-param name="align" select="$alignment" />
+                        </xsl:call-template>
+                    </xsl:otherwise>
+                </xsl:choose>
                 <!-- vertical alignment -->
                 <xsl:text> </xsl:text>
                 <xsl:call-template name="valign-specification">
@@ -4211,14 +4251,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="thickness-specification">
                     <xsl:with-param name="width" select="$top" />
                 </xsl:call-template>
-                <!-- uses lines -->
-                <xsl:if test="$the-cell/line">
+                <!-- no wrapping unless paragraph cell -->
+                <xsl:if test="not($the-cell/p)">
                     <xsl:text> lines</xsl:text>
                 </xsl:if>
+
             </xsl:attribute>
             <xsl:if test="not($column-span = 1)">
                 <xsl:attribute name="colspan">
                     <xsl:value-of select="$column-span" />
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="$the-cell/p">
+                <xsl:attribute name="style">
+                    <xsl:text>max-width:</xsl:text>
+                    <xsl:choose>
+                        <xsl:when test="$left-col/@width">
+                            <xsl:variable name="width">
+                                <xsl:call-template name="normalize-percentage">
+                                    <xsl:with-param name="percentage" select="$left-col/@width" />
+                                </xsl:call-template>
+                            </xsl:variable>
+                            <xsl:value-of select="$design-width * substring-before($width, '%') div 100 * substring-before($ambient-relative-width, '%') div 100" />
+                            <xsl:text>px;</xsl:text>
+                        </xsl:when>
+                        <!-- If there is no $left-col/@width, terminate -->
+                        <xsl:otherwise>
+                            <xsl:message terminate="yes">MBX:ERROR:   cell with p element has no corresponding col element with width attribute</xsl:message>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:attribute>
             </xsl:if>
             <!-- process the actual contents -->
@@ -4226,6 +4287,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:element>
         <!-- recurse forward, perhaps to an empty cell -->
         <xsl:call-template name="row-cells">
+            <xsl:with-param name="ambient-relative-width" select="$ambient-relative-width" />
             <xsl:with-param name="the-cell" select="$next-cell" />
             <xsl:with-param name="left-col" select="$next-col" />
         </xsl:call-template>

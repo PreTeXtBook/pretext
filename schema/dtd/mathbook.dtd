@@ -323,30 +323,31 @@
     <!ATTLIST table width     CDATA                 #IMPLIED>
 
 <!ELEMENT tabular (col*, row+)>
-    <!ATTLIST tabular bottom    (none|minor|medium|major)  #IMPLIED>
-    <!ATTLIST tabular top       (none|minor|medium|major)  #IMPLIED>
-    <!ATTLIST tabular left      (none|minor|medium|major)  #IMPLIED>
-    <!ATTLIST tabular right     (none|minor|medium|major)  #IMPLIED>
-    <!ATTLIST tabular halign    (left|center|right)        #IMPLIED>
-    <!ATTLIST tabular valign    (bottom|middle|top)        #IMPLIED>
+    <!ATTLIST tabular bottom    (none|minor|medium|major)    #IMPLIED>
+    <!ATTLIST tabular top       (none|minor|medium|major)    #IMPLIED>
+    <!ATTLIST tabular left      (none|minor|medium|major)    #IMPLIED>
+    <!ATTLIST tabular right     (none|minor|medium|major)    #IMPLIED>
+    <!ATTLIST tabular halign    (left|center|right|justify)  #IMPLIED>
+    <!ATTLIST tabular valign    (bottom|middle|top)          #IMPLIED>
 
 <!ELEMENT col     EMPTY>
-    <!ATTLIST col top           (none|minor|medium|major)  #IMPLIED>
-    <!ATTLIST col right         (none|minor|medium|major)  #IMPLIED>
-    <!ATTLIST col halign        (left|center|right)        #IMPLIED>
+    <!ATTLIST col top           (none|minor|medium|major)    #IMPLIED>
+    <!ATTLIST col right         (none|minor|medium|major)    #IMPLIED>
+    <!ATTLIST col halign        (left|center|right|justify)  #IMPLIED>
+    <!ATTLIST col width         CDATA                        #IMPLIED>
 
 <!ELEMENT row     (cell+)>
-    <!ATTLIST row bottom        (none|minor|medium|major)  #IMPLIED>
-    <!ATTLIST row left          (none|minor|medium|major)  #IMPLIED>
-    <!ATTLIST row halign        (left|center|right)        #IMPLIED>
-    <!ATTLIST row valign        (bottom|middle|top)        #IMPLIED>
+    <!ATTLIST row bottom        (none|minor|medium|major)    #IMPLIED>
+    <!ATTLIST row left          (none|minor|medium|major)    #IMPLIED>
+    <!ATTLIST row halign        (left|center|right|justify)  #IMPLIED>
+    <!ATTLIST row valign        (bottom|middle|top)          #IMPLIED>
 
-<!ELEMENT cell    (#PCDATA|%sentence;|line)*>
-<!-- Should be (#PCDATA|%sentence;)* xor (line+), but DTD cannot express this -->
-    <!ATTLIST cell bottom       (none|minor|medium|major)  #IMPLIED>
-    <!ATTLIST cell right        (none|minor|medium|major)  #IMPLIED>
-    <!ATTLIST cell halign       (left|center|right)        #IMPLIED>
-    <!ATTLIST cell colspan      CDATA                      #IMPLIED>
+<!ELEMENT cell    (#PCDATA|%sentence;|p|line)*>
+<!-- Should be (#PCDATA|%sentence;)* xor (p+) xor (line+), but DTD cannot express this -->
+    <!ATTLIST cell bottom       (none|minor|medium|major)    #IMPLIED>
+    <!ATTLIST cell right        (none|minor|medium|major)    #IMPLIED>
+    <!ATTLIST cell halign       (left|center|right|justify)  #IMPLIED>
+    <!ATTLIST cell colspan      CDATA                        #IMPLIED>
 
 <!-- Allowing multiple p allows for things like math displays -->
 <!ELEMENT figure  (title?, index*, caption?, (image|video|latex-image-code|p*)*)>
