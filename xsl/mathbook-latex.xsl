@@ -3305,7 +3305,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
+<!-- ##### -->
 <!-- Lists -->
+<!-- ##### -->
+
 <!-- Good match between basic HTML types and basic LaTeX types -->
 
 <!-- Utility templates to translate MBX @label specification -->
@@ -3395,6 +3398,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(ancestor::ol or ancestor::ul or ancestor::dl)">
         <xsl:apply-templates select="." mode="leave-vertical-mode" />
     </xsl:if>
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:if test="@cols">
         <xsl:text>\begin{multicols}{</xsl:text>
         <xsl:value-of select="@cols" />
@@ -3422,6 +3426,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(ancestor::ol or ancestor::ul or ancestor::dl)">
         <xsl:apply-templates select="." mode="leave-vertical-mode" />
     </xsl:if>
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:if test="@cols">
         <xsl:text>\begin{multicols}{</xsl:text>
         <xsl:value-of select="@cols" />
@@ -3441,6 +3446,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(ancestor::ol or ancestor::ul or ancestor::dl)">
         <xsl:apply-templates select="." mode="leave-vertical-mode" />
     </xsl:if>
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:if test="@cols">
         <xsl:text>\begin{multicols}{</xsl:text>
         <xsl:value-of select="@cols" />
@@ -3455,21 +3461,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- List Items -->
-<!-- We assume content of list items  -->
-<!-- (typically paragraphs), end with -->
-<!-- non-blank line and a newline     -->
+<!-- If the content is structured, we presume the last  -->
+<!-- element ends the line with a newline of some sort. -->
+<!-- If the content is unstructured, we end the line    -->
+<!-- with at least some content (%) and a newline.      -->
+<!-- Keep the tests here in sync with DTD.              -->
 
 <!-- In an ordered list, an item can be a target -->
 <xsl:template match="ol/li">
     <xsl:text>\item</xsl:text>
     <xsl:apply-templates select="." mode="label" />
     <xsl:apply-templates />
+    <xsl:if test="not(p)">
+        <xsl:text>%&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
-<!-- We seperate the item from the content -->
+<!-- In an unordered list, an item cannot be a target -->
+<!-- So we use an empty group to end the \item        -->
 <xsl:template match="ul/li">
     <xsl:text>\item{}</xsl:text>
     <xsl:apply-templates />
+    <xsl:if test="not(p)">
+        <xsl:text>%&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Description lists get title as additional argument -->
@@ -4453,13 +4468,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Potential alternate solution: write a leading "empty" \mbox{}                                       -->
 <!-- http://tex.stackexchange.com/questions/171220/include-non-floating-graphic-in-a-theorem-environment -->
 <xsl:template match="*" mode="leave-vertical-mode">
-    <xsl:text>\leavevmode%&#xa;</xsl:text>
+    <xsl:text>\leavevmode</xsl:text>
 </xsl:template>
 
 <!-- Figures -->
 <!-- Standard LaTeX figure environment redefined, see preamble comments -->
 <xsl:template match="figure">
     <xsl:apply-templates select="." mode="leave-vertical-mode" />
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:text>\begin{figure}&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]"/>
@@ -4475,6 +4491,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- requires a savebox and a minipage       -->
 <xsl:template match="listing">
     <xsl:apply-templates select="." mode="leave-vertical-mode" />
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:text>\begin{listing}&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]"/>
     <xsl:text>\par&#xa;</xsl:text>
@@ -4693,6 +4710,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$setup" />
 
     <xsl:apply-templates select="." mode="leave-vertical-mode" />
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:text>% begin: side-by-side as figure/tabular&#xa;</xsl:text>
     <xsl:text>% \tabcolsep change local to group&#xa;</xsl:text>
     <xsl:text>\setlength{\tabcolsep}{</xsl:text>
@@ -5024,6 +5042,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- see preamble comments for details              -->
 <xsl:template match="table">
     <xsl:apply-templates select="." mode="leave-vertical-mode" />
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:text>\begin{table}&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]" />

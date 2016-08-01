@@ -55,13 +55,14 @@
 <!-- Everything that is title material, plus more (eg me)     -->
 <!-- var is exclusive to "p" in a WeBWorK problem             -->
 <!-- Precede by a #PCDATA, wrap with ( )*                     -->
-<!ENTITY % sentence "%linear;|me|men|md|mdn|cd|fn|index|notation|var">
+<!ENTITY % listitem "%linear;|me|men|md|mdn|cd|fn|index|notation|var">
+<!ENTITY % sentence "%listitem;|ul|ol|dl">
 
 <!-- Paragraphs -->
 <!-- Elements that can mix anywhere with a paragraph, -->
 <!-- such as in the statement of a theorem or a proof -->
 <!-- For example <md> yes, but <theorem> no           -->
-<!ENTITY % para "p|ul|ol|dl|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|console|image|tabular">
+<!ENTITY % para "p|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|console|image|tabular">
 
 <!-- Blocks -->
 <!-- Top-level descendents of structural elements                                   -->
@@ -142,8 +143,10 @@
     <!ATTLIST ol label CDATA #IMPLIED>
 <!-- Description lists cannot be organized into columns -->
 <!ELEMENT dl (li+)>
-<!-- title on list item is only for within a description list, <dl> -->
-<!ELEMENT li (title?, index*, (p|md|mdn|ul|ol|dl)*)>
+<!-- ol/li: %listitem; or structured with elements, no title, xml:id active           -->
+<!-- ul/li: %listitem; or structured with elements, no title, xml:id inactive         -->
+<!-- ul/li: only structured with elements, exactly one title mandatory, xml:id active -->
+<!ELEMENT li (#PCDATA|title|index|p|%listitem;)*>
     <!ATTLIST li xml:id ID #IMPLIED>
 
 

@@ -756,25 +756,21 @@ the xsltproc executable.
             </sage>
             -->
 
-            <p>Because of the Fundamental Theorem, for every derivative we know, there is an antiderivative we might find useful.  Because of the Fundamental Theorem of Calculus, we recycle the <q><m>\int</m></q> symbol as notation for an antiderivative.</p>
-
-            <ul cols="2">
+            <p>Because of the Fundamental Theorem, for every derivative we know, there is an antiderivative we might find useful.  Because of the Fundamental Theorem of Calculus, we recycle the <q><m>\int</m></q> symbol as notation for an antiderivative.<ul cols="2">
                 <li>
-                    <p>Derivatives</p>
-                    <ol label="(a)">
-                        <li><p><m>\frac{d}{dx}x^n = nx^{n-1}</m></p></li>
-                        <li><p><m>\frac{d}{dx}e^x = e^x</m></p></li>
-                        <li><p><m>\frac{d}{dx}\cos(x) = -\sin(x)</m></p></li>
-                    </ol>
+                    <p>Derivatives<ol label="(a)">
+                        <li><m>\frac{d}{dx}x^n = nx^{n-1}</m></li>
+                        <li><m>\frac{d}{dx}e^x = e^x</m></li>
+                        <li><m>\frac{d}{dx}\cos(x) = -\sin(x)</m></li>
+                    </ol></p>
                 </li>
-                <li><p>Antiderivatives</p>
-                    <ol label="i)">
-                        <li><p><m>\indefiniteintegral{x^n}{x} = \displaystyle\frac{x^{n-1}}{n+1}\text{ if }n\neq -1</m></p></li>
-                        <li><p><m>\indefiniteintegral{e^x}{x} = e^x</m></p></li>
-                        <li><p><m>\indefiniteintegral{\sin(x)}{x} = -\cos(x)</m></p></li>
-                    </ol>
+                <li><p>Antiderivatives<ol label="i)">
+                        <li><m>\indefiniteintegral{x^n}{x} = \displaystyle\frac{x^{n-1}}{n+1}\text{ if }n\neq -1</m></li>
+                        <li><m>\indefiniteintegral{e^x}{x} = e^x</m></li>
+                        <li><m>\indefiniteintegral{\sin(x)}{x} = -\cos(x)</m></li>
+                    </ol></p>
                 </li>
-            </ul>
+            </ul></p>
 
             <remark>
                 <p>You can gain a greater understanding of derivatives by studying the graphs of functions with their derivatives.  Can you discern the derivative<ndash />antiderivative relationship in Figure<nbsp /><xref ref="figure-function-derivative" />?</p>
@@ -796,9 +792,7 @@ the xsltproc executable.
                 </image>
             </figure>
 
-            <p>Lists can have multiple columns.  With <init>HTML</init> items displayed in row-major order (horizontally first) and with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items <mdash /> derivatives and integrals <mdash /> where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.<index xml:id="index-start-multicolumn" finish="index-finish-multicolumn"><main>Lists</main><sub>multicolumn</sub></index></p>
-
-            <ol cols="5">
+            <p>Lists can have multiple columns.  With <init>HTML</init> items displayed in row-major order (horizontally first) and with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items <mdash /> derivatives and integrals <mdash /> where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.<index xml:id="index-start-multicolumn" finish="index-finish-multicolumn"><main>Lists</main><sub>multicolumn</sub></index><ol cols="5">
                 <li><p>Red</p></li>
                 <li><p>Blue</p></li>
                 <li><p>Green</p></li>
@@ -811,9 +805,7 @@ the xsltproc executable.
                 <li><p>Aqua</p></li>
                 <li><p>Cyan</p></li>
                 <li><p>Puce<index><main>Strange Colors</main></index></p></li>
-            </ol>
-
-            <ul cols="2">
+            </ol><ul cols="2">
                 <li>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin lorem diam, convallis in nulla sed, accumsan fermentum urna. Pellentesque aliquet leo elit, ut consequat nunc dapibus ac. Sed lobortis leo tincidunt, vulputate nunc at, ultricies leo. Vivamus purus diam, tristique laoreet purus eget, mollis gravida sapien. Nunc vulputate nisl ac mauris hendrerit cursus. Sed vel molestie velit. Suspendisse sem sem, elementum at vehicula id, volutpat ac mi. Nullam ullamcorper fringilla purus in accumsan. Mauris at nunc accumsan orci dictum vulputate id id augue. Suspendisse at dignissim elit, non euismod nunc. Aliquam faucibus magna ac molestie semper. Aliquam hendrerit sem sit amet metus congue tempor. Donec laoreet laoreet metus, id interdum purus mattis vulputate. Proin condimentum vitae erat varius mollis. Donec venenatis libero sed turpis pretium tempor.</p>
 
@@ -837,7 +829,7 @@ the xsltproc executable.
 
                     <p>Ut id iaculis leo. Sed nec vestibulum mi. Mauris est mauris, porta in nulla eget, bibendum luctus nisl. Praesent et posuere felis, molestie vehicula velit. Nulla a nunc venenatis, aliquam orci nec, congue felis. Vestibulum a dolor nisi. Morbi sed nisi nulla. Nam iaculis felis a enim blandit, at venenatis diam congue. Nulla augue diam, egestas eget fermentum nec, posuere eget risus. Praesent egestas nulla eros, eget accumsan augue euismod vel. Pellentesque pellentesque non erat vitae posuere. Curabitur lacus arcu, varius sed risus ut, ullamcorper tincidunt lorem. Sed et lacus dignissim, tincidunt nisl ac, porttitor sapien.</p>
                 </li>
-            </ul>
+            </ul></p>
 
             <!-- This is not implemented
             <subsection>
@@ -1041,9 +1033,7 @@ the xsltproc executable.
                     <mrow>c^2\amp\gt a^2 + b^2</mrow>
                 </md></p>
 
-                <p>So as a summary of how to avoid conflicts with XML's reserved characters:</p>
-
-                <dl>
+                <p>So as a summary of how to avoid conflicts with XML's reserved characters:<dl>
                     <li>
                         <title><q>Normal</q> Text</title>
                         <p>Use <c>&lt;ampersand /&gt;</c>, <c>&lt;less /&gt;</c>, <c>&lt;greater /&gt;</c>.</p>
@@ -1056,7 +1046,7 @@ the xsltproc executable.
                         <title>Verbatim, Code</title>
                         <p>Within verbatim text (<c>c</c> and <c>pre</c> elements), Sage code, program listings, and console sessions, use the XML entitites <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c> to get exactly the characters desired.</p>
                     </li>
-                </dl>
+                </dl></p>
 
                 <p>It might be instructive to see how the paragraphs above about escape characters were written without inadvertently using an escape character improperly.</p>
 
@@ -1171,15 +1161,14 @@ the xsltproc executable.
 
                 <p>I must stand with anybody that stands right, and stand with him while he is right, and part with him when he goes wrong.<rq /></p>
 
-                <p>And as a tests, we try some crazy combinations of quotes, which would normally give <latex /> some trouble where the quotation marks are adjacent.</p>
-                <ul>
+                <p>And as a tests, we try some crazy combinations of quotes, which would normally give <latex /> some trouble where the quotation marks are adjacent.<ul>
                     <li><p><q>we use <sq>single quotes inside of double quotes</sq></q></p></li>
                     <li><p><sq><q>double quotes inside of single quotes</q> with more</sq></p></li>
                     <li><p><q><sq>single quotes tight inside of double quotes</sq></q></p></li>
                     <li><p><sq><q>double quotes tight inside of single quotes</q></sq></p></li>
                     <li><p>An <q><sq><sq><q>absurd test</q></sq></sq></q> of two adjacent single quotes inside a pair of double quotes</p></li>
                     <li><p>you would never do this, but a <sq><sq>pair of single quotes</sq></sq></p></li>
-                </ul>
+                </ul></p>
 
                 <p><abbr>N.B.</abbr> We have taken no special care to protect against interactions of the actual quote characters (described above) in <latex /> with themselves, or with the grouping tags.</p>
             </subsection>
@@ -1920,168 +1909,133 @@ the xsltproc executable.
 
                 <p>This section contains nested lists, to demonstrate how they get assigned labels (numbering, symbols).  But we begin with two simple lists, demonstrating an ordered list and an unordered list.  Se the end of section for an example of a description list.  Since Jupyter notebooks use markdown syntax, their lists are less flexible.  So some assertions here may be wrong when viewed as a Jupyter notebook.</p>
 
-                <ol>
-                    <li><p>First.</p></li>
-                    <li><p>Second.</p></li>
-                    <li><p>Third.</p></li>
-                </ol>
-
-                <ul>
+                <p><ol>
+                    <li>First.</li>
+                    <li>Second.</li>
+                    <li>Third.</li>
+                </ol><ul>
                     <li><p>Red</p></li>
                     <li><p>Green</p></li>
                     <li><p>Yellow</p></li>
                     <li><p>Purple</p></li>
-                </ul>
+                </ul></p>
 
-                <p>Next, we have a list with no customization and multiple levels to test the defaults.  <latex /> allows a maximum of four levels of ordered/numbered lists, and a total of six levels if some unordered lists are mixed in.  The second-level defaults (lower-case Latin) are formatted slightly different in <latex /> versus HTML.  The HTML style is not easy to adjust, but you can  specify the <latex /> version to match if it is important.  The default order of the labels in Markdown/Jupyter (Arabic, Latin, latin, roman) is different than for <latex /> and HTML (Arabic, latin, roman, Latin), so cross-references are not correct.</p>
-
-                <ol>
+                <p>Next, we have a list with no customization and multiple levels to test the defaults.  <latex /> allows a maximum of four levels of ordered/numbered lists, and a total of six levels if some unordered lists are mixed in.  The second-level defaults (lower-case Latin) are formatted slightly different in <latex /> versus HTML.  The HTML style is not easy to adjust, but you can  specify the <latex /> version to match if it is important.  The default order of the labels in Markdown/Jupyter (Arabic, Latin, latin, roman) is different than for <latex /> and HTML (Arabic, latin, roman, Latin), so cross-references are not correct.<ol>
                     <li><p>Level 1, first.</p></li>
                     <li xml:id="list-two">
-                        <p>Level 1, second.</p>
-                        <ol>
+                        <p>Level 1, second.<ol>
                             <li><p>Level 2, first.</p></li>
-                            <li>
-                                <p>Level 2, second.</p>
-                                <ol>
-                                    <li><p>Level 3, first.</p></li>
-                                    <li xml:id="list-two-two-two">
-                                        <p>Level 3, second.</p>
-                                        <ol>
-                                            <li><p>Level 4, first.</p></li>
-                                            <li><p>Level 4, second.</p></li>
-                                            <li xml:id="list-two-two-two-three"><p>Level 4, third.</p></li>
-                                        </ol>
-                                    </li>
-                                    <li><p>Level 3, third.</p></li>
-                                </ol>
+                            <li><p>Level 2, second.<ol>
+                                <li><p>Level 3, first.</p></li>
+                                <li xml:id="list-two-two-two"><p>Level 3, second.<ol>
+                                    <li><p>Level 4, first.</p></li>
+                                    <li><p>Level 4, second.</p></li>
+                                    <li xml:id="list-two-two-two-three"><p>Level 4, third.</p></li>
+                                </ol></p>
+                                </li>
+                                <li><p>Level 3, third.</p></li>
+                            </ol></p>
                             </li>
-                        <li><p>Level 2, third.</p></li>
-                        </ol>
+                            <li><p>Level 2, third.</p></li>
+                        </ol></p>
                     </li>
                     <li><p>Level 1, third.</p></li>
-                </ol>
+                </ol></p>
 
                 <p>Items in ordered lists may be be give an <c>xml:id</c> and then may be the target of an <c>xref</c>.  We test three here, referencing down into the hierarchy above.  Level 1, second: <xref ref="list-two" />.  Level 3, second: <xref ref="list-two-two-two" />.  Level 4, third: <xref ref="list-two-two-two-three" />.</p>
 
-                <p>And now a four-level deep unordered list with the default labels supplied by MBX (disc, circle, square, disc).  Again, the defalt order for Markdown/Jupyter (disc, square, circle, circle) is different than for <latex /> and HTML (disc, circle, square, disc)</p>
-
-                <ul>
+                <p>And now a four-level deep unordered list with the default labels supplied by MBX (disc, circle, square, disc).  Again, the defalt order for Markdown/Jupyter (disc, square, circle, circle) is different than for <latex /> and HTML (disc, circle, square, disc)<ul>
                     <li><p>Level 1, first.</p></li>
                     <li>
-                        <p>Level 1, second.</p>
-                        <ul>
+                        <p>Level 1, second.<ul>
                             <li><p>Level 2, first.</p></li>
                             <li>
-                                <p>Level 2, second.</p>
-                                <ul>
+                                <p>Level 2, second.<ul>
                                     <li><p>Level 3, first.</p></li>
                                     <li>
-                                        <p>Level 3, second.</p>
-                                        <ul>
+                                        <p>Level 3, second.<ul>
                                             <li><p>Level 4, first.</p></li>
                                             <li><p>Level 4, second.</p></li>
                                             <li><p>Level 4, third.</p></li>
-                                        </ul>
+                                        </ul></p>
                                     </li>
                                     <li><p>Level 3, third.</p></li>
-                                </ul>
+                                </ul></p>
                             </li>
                             <li><p>Level 2, third.</p></li>
-                        </ul>
+                        </ul></p>
                     </li>
                     <li><p>Level 1, third.</p></li>
-                </ul>
+                </ul></p>
 
-                <p>And a total of six levels with a mix of ordered and unordered lists, the most that out-of-the-box-<latex /> is able to handle.</p>
-
-                <ol>
+                <p>And a total of six levels with a mix of ordered and unordered lists, the most that out-of-the-box-<latex /> is able to handle.<ol>
                     <li><p>Level 1, first.</p></li>
-                    <li>
-                        <p>Level 1, second.</p>
-                        <ol>
+                    <li><p>Level 1, second.<ol>
                             <li><p>Level 2, first.</p></li>
-                            <li>
-                                <p>Level 2, second.</p>
-                                <ul>
+                            <li><p>Level 2, second.<ul>
                                     <li><p>Level 3, first.</p></li>
-                                    <li>
-                                        <p>Level 3, second.</p>
-                                        <ol>
+                                    <li><p>Level 3, second.<ol>
                                             <li><p>Level 4, first.</p></li>
-                                            <li>
-                                                <p>Level 4, second.</p>
-                                                <ol>
+                                            <li><p>Level 4, second.<ol>
                                                     <li><p>Level 5, first.</p></li>
-                                                    <li>
-                                                        <p>Level 5, second.</p>
-                                                        <ul>
+                                                    <li><p>Level 5, second.<ul>
                                                             <li><p>Level 6, first.</p></li>
                                                             <li><p>Level 6, second.</p></li>
                                                             <li><p>Level 6, third.</p></li>
-                                                        </ul>
+                                                        </ul></p>
                                                     </li>
                                                     <li><p>Level 5, third.</p></li>
-                                                </ol>
+                                                </ol></p>
                                             </li>
                                             <li><p>Level 4, third.</p></li>
-                                        </ol>
+                                        </ol></p>
                                     </li>
                                     <li><p>Level 3, third.</p></li>
-                                </ul>
+                                </ul></p>
                             </li>
                             <li><p>Level 2, third.</p></li>
-                        </ol>
+                        </ol></p>
                     </li>
                     <li><p>Level 1, third.</p></li>
-                </ol>
+                </ol></p>
 
-                <p>Now, nested lists with the defaults replaced by custom choices.  First, an ordered list, three deep, upper Roman numerals, then upper-case Latin, then more traditional Arabic numerals on the three elements of the third level.  Note the adornments of the labels will be rendered in LaTeX, but not in HTML, and the label specifications have no effect in a Jupyter notebook.</p>
-
-                <ol label="*I*">
+                <p>Now, nested lists with the defaults replaced by custom choices.  First, an ordered list, three deep, upper Roman numerals, then upper-case Latin, then more traditional Arabic numerals on the three elements of the third level.  Note the adornments of the labels will be rendered in LaTeX, but not in HTML, and the label specifications have no effect in a Jupyter notebook.<ol label="*I*">
                     <li><p>Level 1, first.</p></li>
-                    <li>
-                        <p>Level 1, second.</p>
-                        <ol label="++A">
+                    <li><p>Level 1, second.<ol label="++A">
                             <li><p>Level 2, first.</p></li>
-                            <li>
-                                <p>Level 2, second.</p>
-                                <ol label="1)">
+                            <li><p>Level 2, second.<ol label="1)">
                                     <li><p>Level 3, first.</p></li>
                                     <li><p>Level 3, second.</p></li>
                                     <li><p>Level 3, third.</p></li>
-                                </ol>
+                                </ol></p>
                             </li>
                             <li><p>Level 2, third.</p></li>
-                        </ol>
+                        </ol></p>
                     </li>
                     <li><p>Level 1, third.</p></li>
-                </ol>
+                </ol></p>
 
-                <p>A nested unordered list, with labels given as squares on the outer list and nothing (blank) on the inner lists.</p>
-
-                <ul label="square">
+                <p>A nested unordered list, with labels given as squares on the outer list and nothing (blank) on the inner lists.<ul label="square">
                     <li><p>Level 1, first.</p></li>
-                    <li><p>Level 1, second.</p>
-                        <ul label="">
+                    <li><p>Level 1, second.<ul label="">
                             <li><p>Level 2, first.</p></li>
                             <li><p>Level 2, second.</p></li>
-                        </ul>
+                        </ul></p>
                     </li>
                     <li><p>Level 1, third.</p></li>
-                </ul>
+                </ul></p>
 
                 <p>The next definition is very poorly worded.  It is meant to test leading off with a list (bad form), for which <latex /> normally begins right after the heading.</p>
 
                 <definition>
                     <title>Group</title>
                     <statement>
-                        <ol label="a)">
-                            <li><p>There is a binary operation, denoted <q><m>\cdot</m></q>.</p></li>
-                            <li><p>The operation is associative.</p></li>
-                            <li><p>There is an identity element, <m>e</m>.</p></li>
-                            <li><p>For every element <m>b</m>, there is an element <m>c</m> (the inverse), such that <me>b\cdot c=c\cdot b = e.</me></p></li>
-                        </ol>
+                        <p><ol label="a)">
+                            <li>There is a binary operation, denoted <q><m>\cdot</m></q>.</li>
+                            <li>The operation is associative.</li>
+                            <li>There is an identity element, <m>e</m>.</li>
+                            <li>For every element <m>b</m>, there is an element <m>c</m> (the inverse), such that <me>b\cdot c=c\cdot b = e.</me></li>
+                        </ol></p>
                         <p>If these conditions are met for a set <m>G</m>, then we say <m>G</m> is a <term>group</term>.</p>
                     </statement>
                 </definition>
@@ -2099,16 +2053,14 @@ the xsltproc executable.
 
                 <exercise>
                     <statement>
-                        <p>This exercise should have several parts, and labels should follow the defaults for second-level lists (since the exercise is numbered according to the top-level default).</p>
-                        <ol>
+                        <p>This exercise should have several parts, and labels should follow the defaults for second-level lists (since the exercise is numbered according to the top-level default).<ol>
                             <li><p>Exercise 1, first part.</p></li>
-                            <li><p>Exercise 1, second part.</p>
-                                <ol>
+                            <li><p>Exercise 1, second part.<ol>
                                     <li xml:id="exercise-one-two-one"><p>Exercise 1, second part, first refinement.</p></li>
-                                </ol>
+                                </ol></p>
                             </li>
                             <li xml:id="exercise-one-three"><p>Exercise 1, third part.</p></li>
-                        </ol>
+                        </ol></p>
                     </statement>
                 </exercise>
 
@@ -2151,9 +2103,7 @@ the xsltproc executable.
             <subsection>
                 <title>Description Lists</title>
 
-                <p>A <q>description</q> list has a short term or phrase that is prominent, followed by a short description.  It is modeled on the lists of similar structure in both <latex /> and HTML.  It makes for a nice medium-weight way to define terms, somewhere in-between the <c>term</c> tag which just makes a term prominent in a sentence, and a <c>definition</c>, which is set off, has a heading, a number, and a title.  This example is from Bob Plantz.</p>
-
-                <dl>
+                <p>A <q>description</q> list has a short term or phrase that is prominent, followed by a short description.  It is modeled on the lists of similar structure in both <latex /> and HTML.  It makes for a nice medium-weight way to define terms, somewhere in-between the <c>term</c> tag which just makes a term prominent in a sentence, and a <c>definition</c>, which is set off, has a heading, a number, and a title.  This example is from Bob Plantz.<dl>
                     <li>
                         <title>Central Processing Unit (CPU)</title>
                         <p>Controls most of the activities of the computer, performs the arithmetic and logical operations, and contains a small amount of very fast memory.</p>
@@ -2173,8 +2123,7 @@ the xsltproc executable.
                         <title>Bus</title>
                         <p>A communication pathway with a protocol specifying exactly how the pathway is used.</p>
                     </li>
-                </dl>
-
+                </dl></p>
             </subsection>
 
             <subsection>
@@ -2211,12 +2160,11 @@ the xsltproc executable.
                 <biblio type="raw" xml:id="biblio-undetermined">
                     Some book would be listed here.
                     <note>
-                        <p>Here is the annotation and an ordered list as part of that annotation.  (The lack of a space will be addressed with more work on references.)</p>
-                        <ol>
-                            <li><p>Book 1, first part.</p></li>
-                            <li><p>Book 1, second part.</p></li>
-                            <li><p>Book 1, third part.</p></li>
-                        </ol>
+                        <p>Here is the annotation and an ordered list as part of that annotation.  (The lack of a space will be addressed with more work on references.)<ol>
+                            <li>Book 1, first part.</li>
+                            <li>Book 1, second part.</li>
+                            <li>Book 1, third part.</li>
+                        </ol></p>
                     </note>
                 </biblio>
             </references>
@@ -2914,11 +2862,10 @@ the xsltproc executable.
 
             <exercise>
                 <statement>
-                    <p>Can you prove Corollary<nbsp /><xref ref="corollary-FTC-derivative" /> directly?  If not consider that a problem could have several parts, which should be formatted as a second-level list, since the problems normally get numbered at the top level</p>
-                    <ol>
+                    <p>Can you prove Corollary<nbsp /><xref ref="corollary-FTC-derivative" /> directly?  If not consider that a problem could have several parts, which should be formatted as a second-level list, since the problems normally get numbered at the top level.<ol>
                         <li><p>Why is this result a Corollary?</p></li>
                         <li><p>Could you interchange the Theorem and Corollary?</p></li>
-                    </ol>
+                    </ol></p>
                 </statement>
                 <!-- A hint is a push in the right direction -->
                 <hint>
@@ -2930,10 +2877,10 @@ the xsltproc executable.
                 </hint>
                 <!-- The answer is just the end product -->
                 <answer xml:id="exercise-complicated-first-answer">
-                    <ol>
+                    <p><ol>
                         <li><p>It follows easily.</p></li>
                         <li><p>Yes.</p></li>
-                    </ol>
+                    </ol></p>
                 </answer>
                 <!-- A solution is everything that should be said -->
                 <solution>
@@ -2963,19 +2910,15 @@ the xsltproc executable.
 
             <p>Here is a reference that has no indication of its type in the source:  <xref ref="theorem-FTC" />.  So by default you will just see a number that you can click on.  If you use the <c>autoname="yes"</c> switch then you should see <q>Theorem</q> prepended.  Note that if you changed the theorem to a lemma, then that change would be reflected here automatically when autonaming is in effect.</p>
 
-            <p>If you set the autonaming behavior globally, or accept the default behavior, there will still be instances where you want to override that choice.  Simple: just say <c>autoname="yes"</c> or <c>autoname="no"</c> as part of the <c>xref</c>.  Each example below should look the same each time this article is processed, no matter how the global <c>autoname</c> is set.</p>
-
-            <ul>
+            <p>If you set the autonaming behavior globally, or accept the default behavior, there will still be instances where you want to override that choice.  Simple: just say <c>autoname="yes"</c> or <c>autoname="no"</c> as part of the <c>xref</c>.  Each example below should look the same each time this article is processed, no matter how the global <c>autoname</c> is set.<ul>
                 <li><p>No name ever: <xref ref="corollary-FTC-derivative" autoname="no" /></p></li>
                 <li><p>Always named: <xref ref="corollary-FTC-derivative" autoname="yes" /></p></li>
-            </ul>
+            </ul></p>
 
-            <p>You might also wish to provide a prefix to a cross-reference and have it incorporated into the text of what you would click on in an electronic version.  So if you make an <c>xref</c> with some content, then that content will prefix the cross-reference within the clickable/pokeable text and be attached with a non-breaking space.  This <c>xref</c> content totally overrides any prefix that might happen otherwise.  So the name of an item (<eg /> <q>corollary</q>) could be replaced, and if you make a cross-reference with a title as the clickable, then that text can be replaced also.  An example:</p>
-
-            <ul>
+            <p>You might also wish to provide a prefix to a cross-reference and have it incorporated into the text of what you would click on in an electronic version.  So if you make an <c>xref</c> with some content, then that content will prefix the cross-reference within the clickable/pokeable text and be attached with a non-breaking space.  This <c>xref</c> content totally overrides any prefix that might happen otherwise.  So the name of an item (<eg /> <q>corollary</q>) could be replaced, and if you make a cross-reference with a title as the clickable, then that text can be replaced also.  An example:<ul>
                 <li><p>A grand result: <xref ref="corollary-FTC-derivative">Major Corollary</xref></p></li>
                 <li><p>A grand result: <xref ref="corollary-FTC-derivative" autoname="title">a nice corollary</xref></p></li>
-            </ul>
+            </ul></p>
 
             <p>Suppose you want to reference two theorems, so you might want to say something like <q>Theorems 4.6 and 5.2.</q>  With global autonaming on, you can override the first <c>Theorem</c> by providing the content <c>Theorems</c> on the first <c>xref</c> and <c>autoname="no"</c> on the second <c>xref</c>.  (With global autonaming off, you will also get what you want/expect.)   Here is the test, which should look correct no matter what the global switch is:  <xref ref="section-cross-referencing">Sections</xref> and <xref ref="section-internationalization" autoname="no" />.  (But notice that it is up to you to be certain the types of these targets do not change without you changing the content of the first <c>xref</c>.  The <q>author-tools</q> mode and careful choices of <c>xml:id</c> strings can help avoid this trap.)</p>
 
@@ -2983,9 +2926,7 @@ the xsltproc executable.
 
             <p>Cross-references to exercises with hard-coded numbers should respect the supplied number.  Exercise<nbsp /><xref ref="exercise-with-hardcoded-number" /> should reference problem 42a.</p>
 
-            <p>Here we form a list to test pointing at various structures.  Each of the following should open a knowl in the HTML version, otherwise it will be a traditional hyperlink (if possible).  Note that if a knowl opens, there will always be an <q>in-context</q> link which will take you to the actual location, should you have  wished instead to just go there.</p>
-
-            <ul>
+            <p>Here we form a list to test pointing at various structures.  Each of the following should open a knowl in the HTML version, otherwise it will be a traditional hyperlink (if possible).  Note that if a knowl opens, there will always be an <q>in-context</q> link which will take you to the actual location, should you have  wished instead to just go there.<ul>
                 <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" />.</p></li>
                 <li><p>Citations: Judson's AATA with annotation at <xref ref="biblio-judson-AATA" /></p></li>
                 <li><p>Citations: Judson's AATA with autoname that should have zero effect <xref ref="biblio-judson-AATA" autoname="yes"/></p></li>
@@ -3016,7 +2957,7 @@ the xsltproc executable.
                 <li><p>A cross-reference to a list item in a description list, which has a title, but never a number: <xref ref="reserved-characters-mathematics" autoname="title" />.  Note that you need to include the attribute <c>autoname="number"</c> even if that is obvious from the situation.  This requirement may be relaxed in a future refactoring of the cross-reference system.</p></li>
                 <li><p>A cross-reference to a <q>paragraphs</q> subdivision, which never has a number (so comments above about description list items and titles applies here too): <xref ref="hierarchy-structure" autoname="title" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
-            </ul>
+            </ul></p>
 
             <p>Cross-references to structural elements of the document will always take you there directly, since even in the HTML version these parts never get realized as knowls.  You will find such links sprinkled through this document, but here is an autonamed link to a subsubsection:  <xref ref="subsubsection-different-integrals" autoname="yes" />.</p>
 
@@ -3027,26 +2968,21 @@ the xsltproc executable.
                 <mrow>a^2 + b^2 &amp;= c^2&amp;&amp;\text{Section}~<xref ref="section-fundamental-theorem" /></mrow>
             </md></p>
 
-            <p>Variations on the above include multiple <c>xml:id</c> as the value of a single <c>ref</c> attribute on an <c>xref</c>, in the form of a comma-separated list.  In this case, only the numbers are links/knowls and the autonaming attribute is based on the type of the first <c>ref</c>.  Wrapping with brackets (citations) or parentheses (equations) is also controlled by the type of the first <c>ref</c>.  And the <c>detail</c> attribute for a bibliographic reference is silently ignored.  So you can do silly things like have a reference to a theorem within a list of equation numbers and there will be no error message.  Handle with care.  Spaces after commas in the list will migrate to the output as spaces, so if you don't have any, you won't get any.</p>
-
-            <ul>
+            <p>Variations on the above include multiple <c>xml:id</c> as the value of a single <c>ref</c> attribute on an <c>xref</c>, in the form of a comma-separated list.  In this case, only the numbers are links/knowls and the autonaming attribute is based on the type of the first <c>ref</c>.  Wrapping with brackets (citations) or parentheses (equations) is also controlled by the type of the first <c>ref</c>.  And the <c>detail</c> attribute for a bibliographic reference is silently ignored.  So you can do silly things like have a reference to a theorem within a list of equation numbers and there will be no error message.  Handle with care.  Spaces after commas in the list will migrate to the output as spaces, so if you don't have any, you won't get any.<ul>
                 <li><p>Three theorems, with spaces, autonamed: <xref ref="theorem-FTC, theorem-number-01, theorem-number-03" autoname="yes"/></p></li>
                 <li><p>Two equations, no spaces, autonamed: <xref ref="equation-alternate-FTC,equation-use-FTC" autoname="yes"/></p></li>
                 <li><p>Two bibliographic items, no autoname: <xref ref="biblio-judson-AATA, biblio-lay-article" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
-            </ul>
+            </ul></p>
 
-            <p>If you have a long list of items (such as homework exercises, not in an <c>exercisegroup</c>, or perhaps several chapters, you can get a cross-reference that prints as a range by using <c>xref</c> with two attributes <c>first</c> and <c>last</c>, which may contain a single <c>xml:id</c> each.  As with multiple references, <c>first</c> will control autonaming and other features.</p>
-
-            <ul>
+            <p>If you have a long list of items (such as homework exercises, not in an <c>exercisegroup</c>, or perhaps several chapters, you can get a cross-reference that prints as a range by using <c>xref</c> with two attributes <c>first</c> and <c>last</c>, which may contain a single <c>xml:id</c> each.  As with multiple references, <c>first</c> will control autonaming and other features.<ul>
                 <li><p>A range of exercises, autonamed: <xref first="exercise-test-number" last="exercise-essay" autoname="yes"/></p></li>
                 <li><p>A range of equations: <xref first="equation-alternate-FTC" last="equation-use-FTC" /></p></li>
                 <li><p>A system of equations, given as range from first to last: <xref first="equation-system-begin" last="equation-system-end" /></p></li>
                 <li><p>A range of sections, hand-named to be plural: Sections<nbsp /><xref first="section-sage-cells" last="section-cross-referencing" /></p></li>
                 <li><p>A range of bibliographic items: <xref first="biblio-judson-AATA" last="biblio-lay-article" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
-            </ul>
-
+            </ul></p>
         </section>
 
         <section xml:id="section-internationalization">
@@ -3424,21 +3360,18 @@ the xsltproc executable.
             <algorithm xml:id="algorithm-sieve-eratosthenes">
                 <title>Sieve of Eratosthenes</title>
                 <statement>
-                    <p>On input of a positive integer <c>n</c> this algorithm will compute all the prime numbers up to, and including, <c>n</c>.  It was named for Eratosthenes of Cyrene (<circa /> 276 BC<ndash /><circa /> 195/194 BC) by Nicomachus (<circa /> 60<ndash /><circa /> 120 CE) in <booktitle>Introduction to Arithmetic</booktitle>. (<url href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Wikipedia</url>, 2015)</p>
-
-                    <ol>
-                        <li><p>Input: <c>n</c></p></li>
-                        <li><p>Form the list of all integers from <c>2</c> to <c>n</c></p></li>
-                        <li><p>Set <c>p = 2</c></p></li>
-                        <li><p>While <c>p &lt; sqrt(n)</c></p>
-                            <ol label="1.">
-                                <li><p>If present, remove from the list multiples <c>2p, 3p, ...</c></p></li>
-                                <li><p>If <c>p</c> is now the last element of the list, stop</p></li>
-                                <li><p>Otherwise, set <c>p</c> to the element of the list immediately after current <c>p</c></p></li>
-                            </ol>
+                    <p>On input of a positive integer <c>n</c> this algorithm will compute all the prime numbers up to, and including, <c>n</c>.  It was named for Eratosthenes of Cyrene (<circa /> 276 BC<ndash /><circa /> 195/194 BC) by Nicomachus (<circa /> 60<ndash /><circa /> 120 CE) in <booktitle>Introduction to Arithmetic</booktitle>. (<url href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Wikipedia</url>, 2015)<ol>
+                        <li>Input: <c>n</c></li>
+                        <li>Form the list of all integers from <c>2</c> to <c>n</c></li>
+                        <li>Set <c>p = 2</c></li>
+                        <li><p>While <c>p &lt; sqrt(n)</c><ol label="1.">
+                                <li>If present, remove from the list multiples <c>2p, 3p, ...</c></li>
+                                <li>If <c>p</c> is now the last element of the list, stop</li>
+                                <li>Otherwise, set <c>p</c> to the element of the list immediately after current <c>p</c></li>
+                            </ol></p>
                         </li>
-                        <li><p>Output: the remaining elements of the list</p></li>
-                    </ol>
+                        <li>Output: the remaining elements of the list</li>
+                    </ol></p>
                 </statement>
 
                 <proof>
