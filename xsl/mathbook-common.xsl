@@ -1897,8 +1897,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:choose>
         <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
         <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/appendix" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/appendix" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/backmatter/appendix" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/backmatter/appendix" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
         <xsl:when test="$subtree-level=3"><xsl:number from="subsection" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
         <xsl:when test="$subtree-level=4"><xsl:number from="subsubsection" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
         <xsl:otherwise>
@@ -1922,8 +1922,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:choose>
         <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="&PROJECT-LIKE;" /></xsl:when>
         <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="&PROJECT-LIKE;" /></xsl:when>
-        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/appendix" level="any" count="&PROJECT-LIKE;" /></xsl:when>
-        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/appendix" level="any" count="&PROJECT-LIKE;" /></xsl:when>
+        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/backmatter/appendix" level="any" count="&PROJECT-LIKE;" /></xsl:when>
+        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/backmatter/appendix" level="any" count="&PROJECT-LIKE;" /></xsl:when>
         <xsl:when test="$subtree-level=3"><xsl:number from="subsection" level="any" count="&PROJECT-LIKE;" /></xsl:when>
         <xsl:when test="$subtree-level=4"><xsl:number from="subsubsection" level="any" count="&PROJECT-LIKE;" /></xsl:when>
         <xsl:otherwise>
@@ -1941,8 +1941,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:choose>
         <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
         <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
-        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/appendix" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
-        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/appendix" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
+        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/backmatter/appendix" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
+        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/backmatter/appendix" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
         <xsl:when test="$subtree-level=3"><xsl:number from="subsection" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
         <xsl:when test="$subtree-level=4"><xsl:number from="subsubsection" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
         <xsl:otherwise>
@@ -1988,8 +1988,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:choose>
         <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="fn" /></xsl:when>
         <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="fn" /></xsl:when>
-        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/appendix" level="any" count="fn" /></xsl:when>
-        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/appendix" level="any" count="fn" /></xsl:when>
+        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/backmatter/appendix" level="any" count="fn" /></xsl:when>
+        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/backmatter/appendix" level="any" count="fn" /></xsl:when>
         <xsl:when test="$subtree-level=3"><xsl:number from="subsection" level="any" count="fn" /></xsl:when>
         <xsl:when test="$subtree-level=4"><xsl:number from="subsubsection" level="any" count="fn" /></xsl:when>
         <xsl:otherwise>
