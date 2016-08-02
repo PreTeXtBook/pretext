@@ -74,11 +74,11 @@ def tikz_conversion(xml_source, xmlid_root, dest_dir, outformat):
 
 def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
     global config
-    global plat
     import tempfile, os, os.path, subprocess, shutil, glob
     _verbose('converting Asymptote diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
     dest_dir = sanitize_directory(dest_dir)
     tmp_dir = tempfile.mkdtemp()
+    plat = get_platform()
     if plat == "Windows":
         dest_dir = break_windows_path(dest_dir)
         tmp_dir = break_windows_path(tmp_dir)
@@ -118,11 +118,11 @@ def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
 
 def sage_conversion(xml_source, xmlid_root, dest_dir, outformat):
     global config
-    global plat
     import tempfile, os, os.path, subprocess, shutil, glob
     _verbose('converting Sage diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
     dest_dir = sanitize_directory(dest_dir)
     tmp_dir = tempfile.mkdtemp()
+    plat = get_platform()
     _debug("temporary directory: {}".format(tmp_dir))
     xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable: {}".format(xslt_executable))
@@ -159,9 +159,8 @@ def sage_conversion(xml_source, xmlid_root, dest_dir, outformat):
 
 def latex_image_conversion(xml_source, xmlid_root, data_dir, dest_dir, outformat):
     global config
-    global plat
     import tempfile, os, os.path, subprocess, shutil
-
+    plat = get_platform()
     _verbose('converting latex-image pictures from {} to {} graphics for placement in {}'.format(xml_source, outformat, dest_dir))
     dest_dir = sanitize_directory(dest_dir)
     tmp_dir = tempfile.mkdtemp()
@@ -217,7 +216,10 @@ def latex_image_conversion(xml_source, xmlid_root, data_dir, dest_dir, outformat
             _debug("pdfcrop executable: {}".format(pdfcrop_executable))
             if plat == "Windows":
                 _debug("using pdfcrop is not reliable on Windows unless you are using a linux-like shell, e.g. Git Bash or SageMathCloud terminal")
-                pdfcrop_cmd = [pdfcrop_executable, "--gscmd", "gswin64c.exe", latex_image_pdf, latex_image_pdf]
+                if is_os_64bit():
+                    pdfcrop_cmd = [pdfcrop_executable, "--gscmd", "gswin64c.exe", latex_image_pdf, latex_image_pdf]
+                else:
+                    pdfcrop_cmd = [pdfcrop_executable, "--gscmd", "gswin32c.exe", latex_image_pdf, latex_image_pdf]
             else:
                 pdfcrop_cmd = [pdfcrop_executable, latex_image_pdf, latex_image_pdf]
             _verbose("cropping {} to {}".format(latex_image_pdf, latex_image_pdf))
@@ -229,10 +231,7 @@ def latex_image_conversion(xml_source, xmlid_root, data_dir, dest_dir, outformat
             if (outformat == 'svg' or outformat == 'all'):
                 pdfsvg_executable = get_executable(config, 'pdfsvg')
                 _debug("pdfsvg executable: {}".format(pdfsvg_executable))
-                if plat == "Windows":
-                    svg_cmd = [pdfsvg_executable, "-density", "300", latex_image_pdf, latex_image_svg]
-                else:
-                    svg_cmd = [pdfsvg_executable, latex_image_pdf, latex_image_svg]
+                svg_cmd = [pdfsvg_executable, latex_image_pdf, latex_image_svg]
                 _verbose("converting {} to {}".format(latex_image_pdf, latex_image_svg))
                 subprocess.call(svg_cmd)
                 shutil.copy2(latex_image_svg, dest_dir)
@@ -496,12 +495,12 @@ def webwork_to_tex(origin, xslt_exec, mbx_xsl_dir, xml_source, server_url, dest_
 
 def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
     global config
-    global plat
     import tempfile, os, os.path, subprocess, shutil
     import requests
 
     _verbose('downloading YouTube thumbnails from {} for placement in {}'.format(xml_source, dest_dir))
     dest_dir = sanitize_directory(dest_dir)
+    plat = get_platform()
     if plat == "Windows":
         dest_dir = break_windows_path(dest_dir)
     xslt_executable = get_executable(config,  'xslt')
@@ -962,8 +961,15 @@ def copy_data_directory(source_file, data_dir, tmp_dir):
     shutil.copytree(data_full_path, destination_root)
 
 def get_platform():
+    """Return a string that tells us whether we are on Windows."""
     import platform
     return platform.system()
+
+def is_os_64bit():
+    """Return true if we are running a 64-bit OS.
+    http://stackoverflow.com/questions/2208828/detect-64-bit-os-windows-in-python"""
+    import platform
+    return platform.machine().endswith('64')
 
 def break_windows_path(python_style_dir):
     """Replace python os.sep with msys-acceptable "/" """
