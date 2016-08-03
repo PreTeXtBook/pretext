@@ -2124,6 +2124,21 @@ the xsltproc executable.
                         <p>A communication pathway with a protocol specifying exactly how the pathway is used.</p>
                     </li>
                 </dl></p>
+
+                <p>Some presentations can be assisted by a hint from the author about the lengths of the titles.  You can choose to provide a <c>width</c> attribute on a <c>dl</c> element with possible values <c>narrow</c>, <c>medium</c>, and <c>wide</c>.  Conversion to <latex /> ignores this attribute, and conversion to <init>HTML</init> only reacts to <c>narrow</c> (<c>medium</c> is the default, and <c>wide</c> behaves identically).<dl width="narrow">
+                    <li>
+                        <title>Red</title>
+                        <p>The color of the sun at sunset.</p>
+                    </li>
+                    <li>
+                        <title>Blue</title>
+                        <p>The color of a clear sky.</p>
+                    </li>
+                    <li>
+                        <title>Aqua</title>
+                        <p>The color of shallow tropical waters.</p>
+                    </li>
+                </dl></p>
             </subsection>
 
             <subsection>

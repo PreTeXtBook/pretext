@@ -3254,10 +3254,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- We let CSS react to narrow titles -->
 <xsl:template match="dl">
     <xsl:element name="dl">
         <xsl:attribute name="class">
-            <xsl:text>description-list</xsl:text>
+            <xsl:choose>
+                <xsl:when test="@width = 'narrow'">
+                    <xsl:text>description-list-narrow</xsl:text>
+                </xsl:when>
+                <!-- 'medium', 'wide', and any typo (let DTD check) -->
+                <xsl:otherwise>
+                    <xsl:text>description-list</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:attribute>
         <xsl:apply-templates select="li" />
     </xsl:element>
