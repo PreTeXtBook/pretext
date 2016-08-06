@@ -5455,10 +5455,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Write the cell's contents -->
     <!-- Wrap in a multicolumn in any of the following situations for    -->
     <!-- the purposes of vertical boundary rules or content formatting:  -->
-    <!--     if the left border, horizontal alignment or right border    -->
+    <!--    -if the left border, horizontal alignment or right border    -->
     <!--         conflict with the column specification                  -->
-    <!--     if we have a colspan                                        -->
-    <!--     if there are paragraphs in the cell                         -->
+    <!--    -if we have a colspan                                        -->
+    <!--    -if there are paragraphs in the cell                         -->
     <!-- $table-left and $row-left *can* differ on first use,            -->
     <!-- but row-left is subsequently set to $table-left.                -->
     <xsl:if test="$the-cell">
@@ -5481,14 +5481,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:call-template>
                         <xsl:text>{</xsl:text>
                         <xsl:choose>
-                            <xsl:when test="$the-cell/ancestor::tabular/child::col">
-                                <xsl:apply-templates select="$left-col" mode="width-percent-to-real"/>
+                            <xsl:when test="$left-col/@width">
+                                <xsl:value-of select="substring-before($left-col/@width, '%') div 100" />
                             </xsl:when>
-                            <!-- If the table has no col tags, then use a cell in the first row,  -->
-                            <!-- whose width attribute should not exist.                          -->
-                            <!-- This will produce default width based on first row cell count    -->
+                            <!-- If there is no $left-col/@width, terminate -->
                             <xsl:otherwise>
-                                <xsl:apply-templates select="$the-cell/ancestor::tabular/child::row[1]/child::cell[1]" mode="width-percent-to-real"/>
+                                <xsl:message terminate="yes">MBX:ERROR:   cell with p element has no corresponding col element with width attribute</xsl:message>
                             </xsl:otherwise>
                         </xsl:choose>
                         <xsl:text>\linewidth}</xsl:text>
@@ -5636,8 +5634,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "valign-specification" : param "align" -->
 <!--     top, middle, bottom -> t, m, b     -->
 
-<!-- paragraph valign-specifications (p, m, b) -->
-<!-- are different from (t, m, b)              -->
+<!-- paragraph valign-specifications (p, m, b) are  -->
+<!-- different from (t, m, b) in mathbook-common    -->
 
 <!-- paragraph halign-specifications (left, center, right, justify) -->
 <!-- converted to \raggedright, \centering, \raggedleft, <empty>    -->
@@ -5775,7 +5773,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%&#xa;</xsl:text>
             <xsl:apply-templates select="$the-cell/p" />
         </xsl:when>
-        <xsl:when test="$the-cell[line]">
+        <xsl:when test="$the-cell/line">
             <xsl:text>\tablecelllines{</xsl:text>
             <xsl:call-template name="halign-specification">
                 <xsl:with-param name="align" select="$halign" />
@@ -5790,7 +5788,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="$the-cell/node()" />
+            <xsl:apply-templates select="$the-cell" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>

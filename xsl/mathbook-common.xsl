@@ -1654,37 +1654,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:call-template>
 </xsl:template>
 
-<!-- This template is to be applied to an element with a @width -->
-<!-- in the form of a percentage (e.g. '45%') and produce the   -->
-<!-- corresponding real (e.g. '0.45'). If no @width is present  -->
-<!-- the assumption is that the width should be 1/N, where N is -->
-<!-- the number of like-named siblings (including self).        -->
-<xsl:template match="*" mode="width-percent-to-real">
-    <xsl:variable name="element-name">
-        <xsl:value-of select="name()" />
-    </xsl:variable>
-    <xsl:variable name="percentage">
-        <xsl:choose>
-            <xsl:when test="@width">
-                <xsl:value-of select="@width" />
-            </xsl:when>
-            <!-- Calculate a default percentage based on the number of like-named siblings -->
-            <!-- Uses max of 96% to provide some protection against overfilling, and also  -->
-            <!-- 96 cleanly divisible by both 4 and 3                                      -->
-            <xsl:otherwise>
-                <xsl:value-of select="concat(format-number(96 div (1+count(preceding-sibling::*[name()=$element-name])+count(following-sibling::*[name()=$element-name])),'##.#'),'%')" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- could normalize, check last character -->
-    <xsl:if test="not(contains($percentage, '%'))">
-        <xsl:message>MBX:WARNING: a width is not specified as a percentage (<xsl:value-of select="$percentage" />)</xsl:message>
-        <xsl:apply-templates select="." mode="location-report" />
-    </xsl:if>
-    <xsl:value-of select="substring-before($percentage,'%') div 100" />
-</xsl:template>
-
-<!-- sidebyside is *always* a specialized Figure, if captioned  -->
+<!-- sidebyside is *always* a specialized Figure, if captioned -->
 <xsl:template match="sidebyside" mode="type-name">
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'figure'" />
@@ -3192,7 +3162,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template name="halign-specification">
     <xsl:param name="align" />
     <xsl:choose>
-        <xsl:when test="$align='left'">
+        <xsl:when test="$align='left' or $align='justify'">
             <xsl:text>l</xsl:text>
         </xsl:when>
         <xsl:when test="$align='center'">
@@ -3200,9 +3170,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
         <xsl:when test="$align='right'">
             <xsl:text>r</xsl:text>
-        </xsl:when>
-        <xsl:when test="$align='justify'">
-            <xsl:text>l</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:WARNING: tabular horizontal alignment attribute not recognized: use left, center, right, justify</xsl:message>

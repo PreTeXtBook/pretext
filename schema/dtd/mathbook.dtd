@@ -322,21 +322,18 @@
     <!ATTLIST tabular left      (none|minor|medium|major)    #IMPLIED>
     <!ATTLIST tabular right     (none|minor|medium|major)    #IMPLIED>
     <!ATTLIST tabular halign    (left|center|right|justify)  #IMPLIED>
-    <!-- justify = left for non-paragraph applications -->
     <!ATTLIST tabular valign    (bottom|middle|top)          #IMPLIED>
 
 <!ELEMENT col     EMPTY>
     <!ATTLIST col top           (none|minor|medium|major)    #IMPLIED>
     <!ATTLIST col right         (none|minor|medium|major)    #IMPLIED>
     <!ATTLIST col halign        (left|center|right|justify)  #IMPLIED>
-    <!-- justify = left for non-paragraph applications -->
     <!ATTLIST col width         CDATA                        #IMPLIED>
 
 <!ELEMENT row     (cell+)>
     <!ATTLIST row bottom        (none|minor|medium|major)    #IMPLIED>
     <!ATTLIST row left          (none|minor|medium|major)    #IMPLIED>
     <!ATTLIST row halign        (left|center|right|justify)  #IMPLIED>
-    <!-- justify = left for non-paragraph applications -->
     <!ATTLIST row valign        (bottom|middle|top)          #IMPLIED>
 
 <!ELEMENT cell    (#PCDATA|%sentence;|p|line)*>
@@ -344,7 +341,6 @@
     <!ATTLIST cell bottom       (none|minor|medium|major)    #IMPLIED>
     <!ATTLIST cell right        (none|minor|medium|major)    #IMPLIED>
     <!ATTLIST cell halign       (left|center|right|justify)  #IMPLIED>
-    <!-- justify = left for non-paragraph applications -->
     <!ATTLIST cell colspan      CDATA                        #IMPLIED>
 
 <!-- Allowing multiple p allows for things like math displays -->
