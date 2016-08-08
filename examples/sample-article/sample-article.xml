@@ -1919,7 +1919,7 @@ the xsltproc executable.
             <subsection>
                 <title>Lists, Generally</title>
 
-                <p>This section contains nested lists, to demonstrate how they get assigned labels (numbering, symbols).  But we begin with two simple lists, demonstrating an ordered list and an unordered list.  Se the end of section for an example of a description list.  Since Jupyter notebooks use markdown syntax, their lists are less flexible.  So some assertions here may be wrong when viewed as a Jupyter notebook.</p>
+                <p>This section contains nested lists, to demonstrate how they get assigned labels (numbering, symbols).  But we begin with two simple lists, demonstrating an ordered list and an unordered list.  See the end of section for an example of a description list.  Since Jupyter notebooks use markdown syntax, their lists are less flexible.  So some assertions here may be wrong when viewed as a Jupyter notebook.</p>
 
                 <p><ol>
                     <li>First.</li>
