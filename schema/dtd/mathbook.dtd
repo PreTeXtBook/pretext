@@ -61,7 +61,7 @@
 <!-- Paragraphs -->
 <!-- Elements that can mix anywhere with a paragraph, -->
 <!-- such as in the statement of a theorem or a proof -->
-<!-- For example <md> yes, but <theorem> no           -->
+<!-- For example <figure> yes, but <theorem> no           -->
 <!ENTITY % para "p|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|console|image|tabular">
 
 <!-- Blocks -->
@@ -157,6 +157,7 @@
 
 <!ELEMENT p   (#PCDATA|%sentence;)*>
 
+<!-- As a sidebyside panel, only contains "p|blockquote" -->
 <!ELEMENT paragraphs   (title?, index*, (%para;)*) >
     <!ATTLIST paragraphs   xml:id   ID                    #IMPLIED>
     <!ATTLIST paragraphs   xml:base  CDATA                #IMPLIED>

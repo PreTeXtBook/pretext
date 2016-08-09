@@ -4780,7 +4780,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="*|text()" />
         </xsl:when>
         <xsl:when test="self::paragraphs">
-            <xsl:apply-templates select="p" />
+            <xsl:apply-templates select="p|blockquote" />
         </xsl:when>
         <xsl:when test="self::tabular">
             <xsl:text>\centering</xsl:text>

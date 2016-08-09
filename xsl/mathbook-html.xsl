@@ -3728,7 +3728,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="paragraphs" mode="panel-html-box">
-    <xsl:apply-templates select="p" />
+    <xsl:apply-templates select="p|blockquote" />
 </xsl:template>
 
 <xsl:template match="ol|ul|dl" mode="panel-html-box">
