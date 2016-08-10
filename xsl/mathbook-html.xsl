@@ -1400,7 +1400,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- A case in a proof, eg "(=>) Necessity." -->
 <xsl:template match="*" mode="heading-case">
-    <h5 class="heading">
+    <xsl:element name="h6">
+        <xsl:attribute name="class">
+            <xsl:text>heading</xsl:text>
+        </xsl:attribute>
         <xsl:choose>
             <!-- 'RIGHTWARDS DOUBLE ARROW' (U+21D2) -->
             <xsl:when test="@direction='forward'">
@@ -1419,7 +1422,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="title-full" />
             <xsl:text>.</xsl:text>
         </xsl:if>
-    </h5>
+    </xsl:element>
 </xsl:template>
 
 
