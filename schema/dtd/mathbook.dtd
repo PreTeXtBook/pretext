@@ -146,7 +146,7 @@
     <!ATTLIST dl width  (narrow|medium|wide)  #IMPLIED>
 <!-- ol/li: %listitem; or structured with elements, no title, xml:id active           -->
 <!-- ul/li: %listitem; or structured with elements, no title, xml:id inactive         -->
-<!-- ul/li: only structured with elements, exactly one title mandatory, xml:id active -->
+<!-- dl/li: only structured with elements, exactly one title mandatory, xml:id active -->
 <!ELEMENT li (#PCDATA|title|index|p|%listitem;)*>
     <!ATTLIST li xml:id ID #IMPLIED>
 
