@@ -3930,6 +3930,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Realized as an HTML table                                        -->
 <xsl:template match="mathbook//tabular">
     <xsl:param name="ambient-relative-width" select="'100%'" />
+    <!-- Abort if tabular's cols have widths summing to over 100% -->
+    <xsl:call-template name="cap-width-at-one-hundred-percent">
+        <xsl:with-param name="nodeset" select="col/@width" />
+    </xsl:call-template>
     <xsl:element name="table">
         <xsl:apply-templates select="row">
             <xsl:with-param name="ambient-relative-width" select="$ambient-relative-width" />
@@ -4179,7 +4183,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>max-width:</xsl:text>
                     <xsl:choose>
                         <xsl:when test="$left-col/@width">
-                            <xsl:value-of select="($design-width - $design-margin-width * 2) * substring-before($left-col/@width, '%') div 100 * substring-before($ambient-relative-width, '%') div 100" />
+                            <xsl:variable name="width">
+                                <xsl:call-template name="normalize-percentage">
+                                    <xsl:with-param name="percentage" select="$left-col/@width" />
+                                </xsl:call-template>
+                            </xsl:variable>
+                            <xsl:value-of select="($design-width - $design-margin-width * 2) * substring-before($width, '%') div 100 * substring-before($ambient-relative-width, '%') div 100" />
                             <xsl:text>px;</xsl:text>
                         </xsl:when>
                         <!-- If there is no $left-col/@width, terminate -->
