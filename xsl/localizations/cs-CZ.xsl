@@ -79,6 +79,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='paragraphs'><xsl:text>Odstavce</xsl:text></localization>
     <localization string-id='paragraph'><xsl:text>Odstavec</xsl:text></localization>
     <localization string-id='subparagraph'><xsl:text>Pododstavec</xsl:text></localization>
+    <!-- <localization string-id='case'><xsl:text>Case</xsl:text></localization> -->
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
     <!-- "note" is used within "biblio", likely to change -->

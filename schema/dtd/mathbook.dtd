@@ -168,8 +168,9 @@
 <!ELEMENT proof (%para;|case)*>
     <!ATTLIST proof xml:id ID #IMPLIED>
 
-<!ELEMENT case  (%para;)*>
-    <!ATTLIST case  direction  (forward|backward) #IMPLIED>
+<!ELEMENT case  (title?, index*, %para;)*>
+    <!ATTLIST case   xml:id   ID                    #IMPLIED>
+    <!ATTLIST case   direction  (forward|backward)  #IMPLIED>
 
 <!-- definition might contain notation -->
 <!ELEMENT definition   (title?, index*, notation*, statement)>

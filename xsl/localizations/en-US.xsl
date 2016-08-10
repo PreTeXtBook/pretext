@@ -38,6 +38,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='fact'><xsl:text>Fact</xsl:text></localization>
     <localization string-id='identity'><xsl:text>Identity</xsl:text></localization>
     <localization string-id='proof'><xsl:text>Proof</xsl:text></localization>
+    <localization string-id='case'><xsl:text>Case</xsl:text></localization>
     <!-- Components of the narrative -->
     <!-- Mathematical statements without proofs -->
     <!-- AXIOM-LIKE blocks -->

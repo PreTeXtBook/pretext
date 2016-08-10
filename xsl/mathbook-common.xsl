@@ -178,7 +178,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- theorem|corollary|lemma|algorithm|proposition|claim|fact|identity -->
 <xsl:strip-space elements="theorem corollary lemma algorithm proposition claim fact identity" />
 <xsl:strip-space elements="statement" />
-<xsl:strip-space elements="proof" />
+<xsl:strip-space elements="proof case" />
 <!-- List is elements in AXIOM-LIKE entity                  -->
 <!-- axiom|conjecture|principle|heuristic|hypothesis|assumption -->
 <xsl:strip-space elements="axiom conjecture principle heuristic hypothesis assumption" />
@@ -2041,7 +2041,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Empty string signifies not numbered -->
 <!-- We do provide a "xref number" of an -->
 <!-- exercisegroup, but otherwise not    -->
-<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|paragraph|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|index-part|colophon|backmatter|exercisegroup|p|assemblage" mode="serial-number" />
+<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|paragraph|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|index-part|colophon|backmatter|exercisegroup|p|assemblage|case" mode="serial-number" />
 
 <!-- If a list item has any ancestor that is not  -->
 <!-- an ordered list, then it gets no number      -->

@@ -1209,7 +1209,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "posterior-duplicate"  no ID, no \label         -->
 
 <!-- me is absent, not numbered, never knowled -->
-<xsl:template match="fn|biblio|men|md|mdn|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof|&AXIOM-LIKE;|&REMARK-LIKE;" mode="xref-knowl">
+<xsl:template match="fn|biblio|men|md|mdn|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;" mode="xref-knowl">
     <!-- write a file, calling body and posterior duplicate templates -->
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
@@ -1398,6 +1398,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- A case in a proof, eg "(=>) Necessity." -->
+<xsl:template match="*" mode="heading-case">
+    <h5 class="heading">
+        <xsl:choose>
+            <!-- 'RIGHTWARDS DOUBLE ARROW' (U+21D2) -->
+            <xsl:when test="@direction='forward'">
+                <xsl:comment>Style arrows in CSS?</xsl:comment>
+                <xsl:text>(&#x21d2;)&#xa0;&#xa0;</xsl:text>
+            </xsl:when>
+            <!-- 'LEFTWARDS DOUBLE ARROW' (U+21D0) -->
+            <xsl:when test="@direction='backward'">
+                <xsl:comment>Style arrows in CSS?</xsl:comment>
+                <xsl:text>(&#x21d0;)&#xa0;&#xa0;</xsl:text>
+            </xsl:when>
+            <!-- DTD will catch wrong values -->
+            <xsl:otherwise />
+        </xsl:choose>
+        <xsl:if test="title">
+            <xsl:apply-templates select="." mode="title-full" />
+            <xsl:text>.</xsl:text>
+        </xsl:if>
+    </h5>
+</xsl:template>
+
+
 <!-- ###################### -->
 <!-- Born Hidden or Visible -->
 <!-- ###################### -->
@@ -1414,7 +1439,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- do not come through here at all, since they are   -->
 <!-- always visible with no decoration, so plain       -->
 <!-- default templates are good enough                 -->
-<xsl:template match="fn|biblio|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof|&AXIOM-LIKE;|&REMARK-LIKE;">
+<xsl:template match="fn|biblio|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
@@ -2545,6 +2570,49 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>false</xsl:text>
 </xsl:template>
 
+<!-- Cases of Proofs -->
+<!-- Always visible, but cross-reference is a knowl -->
+
+<xsl:template match="case" mode="is-hidden">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
+<xsl:template match="case" mode="body-element">
+    <xsl:text>article</xsl:text>
+</xsl:template>
+
+<xsl:template match="case" mode="body-css-class">
+    <xsl:text>case</xsl:text>
+</xsl:template>
+
+<xsl:template match="case" mode="birth-element">
+    <xsl:text>div</xsl:text>
+</xsl:template>
+
+<xsl:template match="case" mode="hidden-knowl-element" />
+<xsl:template match="case" mode="hidden-knowl-css-class" />
+
+<!-- always a knowl attached to an example -->
+<xsl:template match="case" mode="heading-birth">
+    <xsl:apply-templates select="." mode="heading-case" />
+</xsl:template>
+
+<xsl:template match="case" mode="body">
+    <xsl:apply-templates select="*" />
+</xsl:template>
+
+<xsl:template match="case" mode="heading-xref-knowl">
+    <xsl:apply-templates select="." mode="heading-case" />
+</xsl:template>
+
+<xsl:template match="case" mode="body-duplicate">
+    <xsl:apply-templates select="*" mode="duplicate" />
+</xsl:template>
+
+<xsl:template match="case" mode="has-posterior">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
 
 <!-- SAVE -->
 <!--
@@ -2559,55 +2627,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 -->
-
-<!-- Cases in Proofs -->
-<!-- for original content -->
-
-<!-- TODO: generalize heading -->
-<xsl:template match="case[@direction]">
-    <xsl:element name="article">
-    <h5 class="heading">
-        <xsl:choose>
-            <!-- 'RIGHTWARDS DOUBLE ARROW' (U+21D2) -->
-            <xsl:when test="@direction='forward'">
-                <xsl:comment>Style arrows in CSS?</xsl:comment>
-                <xsl:text>(&#x21d2;)&#xa0;&#xa0;</xsl:text>
-            </xsl:when>
-            <!-- 'LEFTWARDS DOUBLE ARROW' (U+21D0) -->
-            <xsl:when test="@direction='backward'">
-                <xsl:comment>Style arrows in CSS?</xsl:comment>
-                <xsl:text>(&#x21d0;)&#xa0;&#xa0;</xsl:text>
-            </xsl:when>
-            <!-- DTD will catch wrong values -->
-            <xsl:otherwise />
-        </xsl:choose>
-    </h5>
-    <xsl:apply-templates select="*" />
-    </xsl:element>
-</xsl:template>
-
-<!-- for duplicated content, identical but for duplication -->
-<xsl:template match="case[@direction]" mode="duplicate" >
-    <xsl:element name="article">
-    <h5 class="heading">
-        <xsl:choose>
-            <!-- 'RIGHTWARDS DOUBLE ARROW' (U+21D2) -->
-            <xsl:when test="@direction='forward'">
-                <xsl:comment>Style arrows in CSS?</xsl:comment>
-                <xsl:text>(&#x21d2;)&#xa0;&#xa0;</xsl:text>
-            </xsl:when>
-            <!-- 'LEFTWARDS DOUBLE ARROW' (U+21D0) -->
-            <xsl:when test="@direction='backward'">
-                <xsl:comment>Style arrows in CSS?</xsl:comment>
-                <xsl:text>(&#x21d0;)&#xa0;&#xa0;</xsl:text>
-            </xsl:when>
-            <!-- DTD will catch wrong values -->
-            <xsl:otherwise />
-        </xsl:choose>
-    </h5>
-    <xsl:apply-templates select="*" mode="duplicate" />
-    </xsl:element>
-</xsl:template>
 
 <!-- Figures, Tables, entire Side-By-Side Panels     -->
 <!-- Figures, Tables from within Side-By-Side Panels -->
@@ -4254,7 +4273,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a sidebyside even though this is not necessary           -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|p|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|&THEOREM-LIKE;|proof|&AXIOM-LIKE;|&REMARK-LIKE;|assemblage|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|assemblage|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">
