@@ -168,7 +168,7 @@
 <!ELEMENT proof (%para;|case)*>
     <!ATTLIST proof xml:id ID #IMPLIED>
 
-<!ELEMENT case  (title?, index*, %para;)*>
+<!ELEMENT case  (title?, index*, (%para;)*)>
     <!ATTLIST case   xml:id   ID                    #IMPLIED>
     <!ATTLIST case   direction  (forward|backward)  #IMPLIED>
 
