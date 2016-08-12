@@ -2761,10 +2761,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Never hidden so calling hidden-knowl-text raises error -->
 <!-- There is no head ever -->
 <xsl:template match="exercisegroup" mode="head" />
-<!-- Body is just all content             -->
-<!-- introducttion, exercises, conclusion -->
+<!-- Body is introduction,       -->
+<!-- exercises wrapped in a div, -->
+<!-- conclusion                  -->
 <xsl:template match="exercisegroup" mode="body">
-    <xsl:apply-templates />
+    <xsl:apply-templates select="introduction"/>
+    <xsl:element name="div">
+        <xsl:attribute name="class">
+            <xsl:text>exercisegroup-exercises</xsl:text>
+            <xsl:text> cols</xsl:text>
+            <xsl:choose>
+                <xsl:when test="not(@cols)">
+                    <xsl:text>1</xsl:text>
+                </xsl:when>
+                <xsl:when test="@cols = 1 or @cols = 2 or @cols = 3 or @cols = 4 or @cols = 5 or @cols = 6">
+                    <xsl:value-of select="@cols" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message terminate="yes">MBX:ERROR: invalid value <xsl:value-of select="@cols" /> for cols attribute of exercisegroup</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:apply-templates select="exercise" />
+    </xsl:element>
+    <xsl:apply-templates select="conclusion"/>
 </xsl:template>
 <!-- No posterior  -->
 <xsl:template match="exercisegroup" mode="posterior" />

@@ -1836,7 +1836,7 @@ the xsltproc executable.
 
                     <exercise>
                         <statement>
-                            <p><m>f(x)=x^3</m>, <m>\frac{df}{dx}</m>.  This sentence is just a bunch of gibberish to be certain that the problem's left margin aligns with the problem number's indentation.</p>
+                            <p><m>f(x)=x^3</m>, <m>\frac{df}{dx}</m>.  This sentence is just a bunch of gibberish to check where the second line of the problem begins relative to the first line.</p>
                         </statement>
                     </exercise>
 
@@ -1907,6 +1907,26 @@ the xsltproc executable.
                         <statement><p>Second exercise of second group.</p></statement>
                     </exercise>
                     <conclusion><p>Conclusion to second exercise group.</p></conclusion>
+                </exercisegroup>
+
+                <exercisegroup cols="4">
+                    <introduction><p>An <c>&lt;exercisegroup&gt;</c> can have a <c>cols</c> attribute taking a value from 1<ndash />6. Exercises will progress by row, in so many columns. On a small screen, the HTML exercises may reorganize into fewer columns.</p></introduction>
+                    <exercise>
+                        <statement><p><m>1+2</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>3+4</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>5+6</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p>Add seven to eight.</p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>9+10</m></p></statement>
+                    </exercise>
+                    <conclusion><p>This feature was designed with short <q>drill</q> exercises in mind.</p></conclusion>
                 </exercisegroup>
 
             </exercises>

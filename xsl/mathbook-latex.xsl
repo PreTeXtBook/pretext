@@ -1308,8 +1308,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
             <xsl:if test="//exercisegroup">
                 <xsl:text>%% Indented groups of exercises within an exercise section, maximum depth 4&#xa;</xsl:text>
-                <xsl:text>\newlist{exercisegroup}{description}{4}&#xa;</xsl:text>
-                <xsl:text>\setlist[exercisegroup]{leftmargin=2em,labelindent=2em,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
+                <xsl:text>\usepackage{tasks}&#xa;</xsl:text>
+                <xsl:text>\NewTasks[label-format=\bfseries,item-indent=3.33em,label-offset=5pt,label-width=20pt,label-align=right,after-item-skip=\smallskipamount,after-skip=\smallskipamount]{exercisegroup}[\exercise]&#xa;</xsl:text>
+                <!--<xsl:text>\newlist{exercisegroup}{description}{4}&#xa;</xsl:text>-->
+                <!--<xsl:text>\setlist[exercisegroup]{leftmargin=2em,labelindent=2em,itemsep=-1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>-->
             </xsl:if>
         </xsl:if>
     </xsl:if>
@@ -2495,6 +2497,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" />
 </xsl:template>
 
+<xsl:template match="exercisegroup/introduction">
+    <xsl:apply-templates select="." mode="console-typeout" />
+    <xsl:text>\par\noindent </xsl:text>
+    <xsl:apply-templates select="*" />
+</xsl:template>
+
 <!-- Last subdivision just ends, presumably a \par is order -->
 <!-- Some visual separation is a necessity, with no title   -->
 <!-- "break" command is like also using a \par and encourages a page break     -->
@@ -2502,6 +2510,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="conclusion">
     <xsl:apply-templates select="." mode="console-typeout" />
     <xsl:text>\bigbreak&#xa;</xsl:text>
+    <xsl:apply-templates select="*" />
+</xsl:template>
+
+<xsl:template match="exercisegroup/conclusion">
+    <xsl:apply-templates select="." mode="console-typeout" />
     <xsl:apply-templates select="*" />
 </xsl:template>
 
@@ -2668,13 +2681,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Start a list right before first exercise of subdivision, or of exercise group -->
     <xsl:choose>
         <xsl:when test="not(preceding-sibling::exercise) and parent::exercisegroup">
-            <xsl:text>\begin{exercisegroup}&#xa;</xsl:text>
+            <xsl:text>\begin{exercisegroup}(</xsl:text>
+            <xsl:choose>
+                <xsl:when test="not(../@cols)">
+                    <xsl:text>1</xsl:text>
+                </xsl:when>
+                <xsl:when test="../@cols = 1 or ../@cols = 2 or ../@cols = 3 or ../@cols = 4 or ../@cols = 5 or ../@cols = 6">
+                    <xsl:value-of select="../@cols"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message terminate="yes">MBX:ERROR: invalid value <xsl:value-of select="../@cols" /> for cols attribute of exercisegroup</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>)&#xa;</xsl:text>
         </xsl:when>
         <xsl:when test="not(preceding-sibling::exercise) and parent::exercises">
             <xsl:text>\begin{exerciselist}&#xa;</xsl:text>
         </xsl:when>
     </xsl:choose>
-    <xsl:text>\item[</xsl:text>
+    <xsl:choose>
+        <xsl:when test="parent::exercises">
+            <xsl:text>\item[</xsl:text>
+        </xsl:when>
+        <xsl:when test="parent::exercisegroup">
+            <xsl:text>\exercise[</xsl:text>
+        </xsl:when>
+    </xsl:choose>
     <xsl:apply-templates select="." mode="serial-number" />
     <xsl:text>.]</xsl:text>
     <xsl:apply-templates select="." mode="label"/>
@@ -2694,7 +2726,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Order enforced: statement, hint, answer, solution -->
             <xsl:if test="$exercise.text.statement='yes'">
                 <xsl:apply-templates select="statement" />
-                <xsl:text>\par\smallskip&#xa;</xsl:text>
+                <xsl:if test="not(parent::exercisegroup)">
+                    <xsl:text>\par\smallskip&#xa;</xsl:text>
+                </xsl:if>
             </xsl:if>
             <xsl:if test="hint and $exercise.text.hint='yes'">
                 <xsl:apply-templates select="hint" />
