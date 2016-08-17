@@ -2867,7 +2867,7 @@ the xsltproc executable.
                         <row>
                             <cell>A1.S1</cell>
                             <cell><p>All legislative Powers herein granted shall be vested in a Congress of the United States, which shall consist of a Senate and House of Representatives.</p>
-                                  <p>Should be 50<percent /> of 45<percent />.</p></cell>
+                                  <p>Should be 50<percent /> of 45<percent /> except perhaps on small screens.</p></cell>
                         </row>
                     </tabular>
                 </table>
@@ -2878,7 +2878,7 @@ the xsltproc executable.
                     <row>
                         <cell>A1.S2.C1</cell>
                         <cell><p>The House of Representatives shall be composed of Members chosen every second Year by the People of the several States, and the Electors in each State shall have the Qualifications requisite for Electors of the most numerous Branch of the State Legislature.</p>
-                              <p>Should be 50<percent /> of 55<percent />.</p></cell>
+                              <p>Should be 50<percent /> of 55<percent /> except perhaps on small screens.</p></cell>
                     </row>
                 </tabular>
             </sidebyside>

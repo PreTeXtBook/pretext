@@ -158,7 +158,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is cribbed from the CSS "max-width"-->
 <!-- Design width, measured in pixels        -->
 <xsl:variable name="design-width" select="'600'" />
-<xsl:variable name="design-margin-width" select="'32'" />
 
 <!-- We generally want to chunk longer HTML output -->
 <xsl:variable name="chunk-level">
@@ -4188,7 +4187,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                     <xsl:with-param name="percentage" select="$left-col/@width" />
                                 </xsl:call-template>
                             </xsl:variable>
-                            <xsl:value-of select="($design-width - $design-margin-width * 2) * substring-before($width, '%') div 100 * substring-before($ambient-relative-width, '%') div 100" />
+                            <xsl:value-of select="$design-width * substring-before($width, '%') div 100 * substring-before($ambient-relative-width, '%') div 100" />
                             <xsl:text>px;</xsl:text>
                         </xsl:when>
                         <!-- If there is no $left-col/@width, terminate -->
