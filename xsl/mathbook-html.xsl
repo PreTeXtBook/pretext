@@ -124,6 +124,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- There is no default server provided         -->
 <!-- Interactions are with an "anonymous" course -->
 <xsl:param name="webwork.server" select="''"/>
+<xsl:param name="webwork.version" select="'2.12'"/>
 <xsl:param name="webwork.course" select="'anonymous'" />
 <xsl:param name="webwork.userID" select="'anonymous'" />
 <xsl:param name="webwork.password" select="'anonymous'" />
@@ -1810,7 +1811,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="$webwork.course"/>
                 <xsl:text>&amp;userID=</xsl:text>
                 <xsl:value-of select="$webwork.userID"/>
-                <xsl:text>&amp;password=</xsl:text>
+                <xsl:choose>
+                    <xsl:when test="$webwork.version='2.11'">
+                        <xsl:text>&amp;password=</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>&amp;course_password=</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
                 <xsl:value-of select="$webwork.password"/>
                 <xsl:text>&amp;outputformat=</xsl:text>
                 <xsl:choose>
