@@ -2410,9 +2410,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- else ToC version -->
         <xsl:otherwise>
-            <xsl:text>[</xsl:text>
+            <xsl:text>[{</xsl:text>
             <xsl:apply-templates select="." mode="title-simple"/>
-            <xsl:text>]</xsl:text>
+            <xsl:text>}]</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>{</xsl:text>
@@ -2519,9 +2519,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="console-typeout" />
     <xsl:text>\paragraph</xsl:text>
     <!-- keep optional title if LaTeX source is re-purposed -->
-    <xsl:text>[</xsl:text>
+    <xsl:text>[{</xsl:text>
     <xsl:apply-templates select="." mode="title-simple" />
-    <xsl:text>]</xsl:text>
+    <xsl:text>}]</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}</xsl:text>
@@ -2540,9 +2540,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Titles are passed as options to environments -->
 <!-- TODO: trash and incorporate into templates below -->
 <xsl:template match="title" mode="environment-option">
-    <xsl:text>[</xsl:text>
+    <xsl:text>[{</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>]</xsl:text>
+    <xsl:text>}]</xsl:text>
 </xsl:template>
 
 <!-- Theorems, Axioms, Definitions -->
@@ -2557,9 +2557,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <!-- optional argument to environment -->
     <!-- TODO: and/or credit              -->
-    <xsl:text>[</xsl:text>
+    <xsl:text>[{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
-    <xsl:text>]</xsl:text>
+    <xsl:text>}]</xsl:text>
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <!-- statement is required now, to be relaxed in DTD      -->
@@ -3498,9 +3498,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Description lists get title as additional argument -->
 <xsl:template match="dl/li">
-    <xsl:text>\item[</xsl:text>
+    <xsl:text>\item[{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
-    <xsl:text>]</xsl:text>
+    <xsl:text>}]</xsl:text>
     <!-- label will protect content, so no {} -->
     <xsl:apply-templates select="." mode="label" />
     <xsl:apply-templates />
