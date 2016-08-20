@@ -205,6 +205,7 @@
                 <prompt>$ </prompt>
                 <input>xsltproc --stringparam webwork.server https://webwork.myschool.edu &lt;xsl&gt; &lt;xml&gt;</input>
             </console>
+            <p>If your <c>webwork.server</c> is running version 2.11 (the first version which can be used with MBX), then you should additionally pass <c>--stringparam webwork.version 2.11</c>.</p>
             <p>For HTML output, this is all that is needed. For <latex />, you may need to do more first. See <xref ref="subsection-webwork-latex"/>.</p>
         </subsection>
 

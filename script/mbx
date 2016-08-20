@@ -308,6 +308,7 @@ def webwork_to_tex(origin, xslt_exec, mbx_xsl_dir, xml_source, server_url, dest_
         'courseID': 'anonymous',
         'userID': 'anonymous',
         'password': 'anonymous',
+        'course_password': 'anonymous',
         'outputformat': 'simple'
     }
 
