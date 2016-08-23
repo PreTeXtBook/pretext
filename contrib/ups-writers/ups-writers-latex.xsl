@@ -51,4 +51,102 @@
 
 <!-- A wavy underline, potential '5': \uwave{} -->
 
+<!-- Ellipsis (dots), for text, not math -->
+<xsl:template match="ellipsis">
+    <xsl:text>{.~.~.}</xsl:text>
+</xsl:template>
+
+<!-- Bibliography Formatting -->
+<xsl:template match="i">
+    <xsl:text>\textit{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- Bibliography Colors -->
+<xsl:template match="black">
+    <xsl:text>\textcolor{black}{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+<xsl:template match="red">
+    <xsl:text>\textcolor{red}{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+<xsl:template match="lightblue">
+    <xsl:text>\textcolor{LightBlue}{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+<xsl:template match="lightgreen">
+    <xsl:text>\textcolor{LightGreen}{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+<xsl:template match="lightpurple">
+    <xsl:text>\textcolor{Lavender}{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+<xsl:template match="maroon">
+    <xsl:text>\textcolor{Maroon}{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+<xsl:template match="pink">
+    <xsl:text>\textcolor{pink}{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+<xsl:template match="darkred">
+    <xsl:text>\textcolor{DarkRed}{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+<xsl:template match="blue">
+    <xsl:text>\textcolor{blue}{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+<xsl:template match="orange">
+    <xsl:text>\textcolor{orange}{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+<xsl:template match="teal">
+    <xsl:text>\textcolor{teal}{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+<xsl:template match="darkpurple">
+    <xsl:text>\textcolor{DarkViolet}{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+<xsl:template match="lightpink">
+    <xsl:text>\textcolor{LightPink}{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+<xsl:template match="green">
+    <xsl:text>\textcolor{green}{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+<xsl:template match="darkgreen">
+    <xsl:text>\textcolor{DarkGreen}{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+<xsl:template match="navy">
+    <xsl:text>\textcolor{Navy}{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+<xsl:template match="gray">
+    <xsl:text>\textcolor{gray}{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
 </xsl:stylesheet>

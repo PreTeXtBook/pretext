@@ -65,22 +65,174 @@
 <!--   (1) won't span lines (needs non-breaking space for snippets) -->
 <!--   (2) must go into CSS, becaue of "after" pseudo-class         -->
 <!-- http://stackoverflow.com/questions/28152175/a-wavy-underline-in-css -->
-<!-- 
-.mathbook-content .underline-wavy {
-  border-bottom:2px dotted black;
-  display: inline;
-  position: relative;
-}
 
-.underline-wavy:after {
-  content: '';
-  height: 5px;
-  width: 100%;
-  border-bottom:2px dotted black;
-  position: absolute;
-  bottom: -3px;
-  left: -2px;
-  }
--->
+<!-- .mathbook-content .underline-wavy { -->
+<!-- border-bottom:2px dotted black; -->
+<!-- display: inline; -->
+<!-- position: relative; -->
+<!-- } -->
+<!--  -->
+<!-- .underline-wavy:after { -->
+<!-- content: ''; -->
+<!-- height: 5px; -->
+<!-- width: 100%; -->
+<!-- border-bottom:2px dotted black; -->
+<!-- position: absolute; -->
+<!-- bottom: -3px; -->
+<!-- left: -2px; -->
+<!-- } -->
+
+<!-- Ellipsis (dots), for text, not math -->
+<xsl:template match="ellipsis">
+    <xsl:text>.&#xa0;.&#xa0;.</xsl:text>
+</xsl:template>
+
+<!-- Bibliography Formatting -->
+<xsl:template match="i">
+    <xsl:element name="span">
+        <xsl:attribute name="style">
+            <xsl:text>font-style: italic;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+
+<!-- Bibliography Colors -->
+<xsl:template match="black">
+    <xsl:element name="span">
+        <xsl:attribute name="style">
+            <xsl:text>color: black;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+<xsl:template match="red">
+    <xsl:element name="span">
+        <xsl:attribute name="style">
+            <xsl:text>color: red;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+<xsl:template match="lightblue">
+    <xsl:element name="span">
+        <xsl:attribute name="style">
+            <xsl:text>color: lightblue;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+<xsl:template match="lightgreen">
+    <xsl:element name="span">
+        <xsl:attribute name="style">
+            <xsl:text>color: lightgreen;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+<xsl:template match="lightpurple">
+    <xsl:element name="span">
+        <xsl:attribute name="style">
+            <xsl:text>color: violet;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+<xsl:template match="maroon">
+    <xsl:element name="span">
+        <xsl:attribute name="style">
+            <xsl:text>color: maroon;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+<xsl:template match="pink">
+    <xsl:element name="span">
+        <xsl:attribute name="style">
+            <xsl:text>color: pink;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+<xsl:template match="darkred">
+    <xsl:element name="span">
+        <xsl:attribute name="style">
+            <xsl:text>color: darkred;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+<xsl:template match="blue">
+    <xsl:element name="span">
+        <xsl:attribute name="style">
+            <xsl:text>color: blue;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+<xsl:template match="orange">
+    <xsl:element name="span">
+        <xsl:attribute name="style">
+            <xsl:text>color: orange;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+<xsl:template match="teal">
+    <xsl:element name="span">
+        <xsl:attribute name="style">
+            <xsl:text>color: teal;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+<xsl:template match="darkpurple">
+    <xsl:element name="span">
+        <xsl:attribute name="style">
+            <xsl:text>color: darkviolet;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+<xsl:template match="lightpink">
+    <xsl:element name="span">
+        <xsl:attribute name="style">
+            <xsl:text>color: lightpink;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+<xsl:template match="green">
+    <xsl:element name="span">
+        <xsl:attribute name="style">
+            <xsl:text>color: green;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+<xsl:template match="darkgreen">
+    <xsl:element name="span">
+        <xsl:attribute name="style">
+            <xsl:text>color: darkgreen;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+<xsl:template match="navy">
+    <xsl:element name="span">
+        <xsl:attribute name="style">
+            <xsl:text>color: navy;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+<xsl:template match="gray">
+    <xsl:element name="span">
+        <xsl:attribute name="style">
+            <xsl:text>color: gray;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
 
 </xsl:stylesheet>
