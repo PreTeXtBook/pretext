@@ -316,6 +316,22 @@
         <xsl:if test="contains(./setup/pg-code,'AnswerHints')">
             <xsl:text>  "answerHints.pl",&#xa;</xsl:text>
         </xsl:if>
+        <!-- for questions where multiple answer blanks work in conjunction  -->
+        <xsl:if test="contains(./setup/pg-code,'MultiAnswer')">
+            <xsl:text>  "parserMultiAnswer.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- for questions where any one of a finite list of answers is allowable  -->
+        <xsl:if test="contains(./setup/pg-code,'OneOf')">
+            <xsl:text>  "parserOneOf.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- Fraction context  -->
+        <xsl:if test="contains(./setup/pg-code,'Fraction')">
+            <xsl:text>  "contextFraction.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- Piecewise context  -->
+        <xsl:if test="contains(./setup/pg-code,'PiecewiseFunction')">
+            <xsl:text>  "contextPiecewiseFunction.pl",&#xa;</xsl:text>
+        </xsl:if>
         <!-- when there is a PGgraphmacros graph                         -->
         <xsl:if test="./statement//image[@pg-name]">
             <xsl:text>  "PGgraphmacros.pl",&#xa;</xsl:text>
