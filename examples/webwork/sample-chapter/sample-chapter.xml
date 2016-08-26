@@ -167,7 +167,7 @@
                 <title>Declaring a Problem Seed</title>
 
                 <introduction>
-                    <p>You can also declare a <c>seed</c> to specify a different random version of any problem that has randomization. Here is the same problem, but with a <c>seed</c> specified.</p>
+                    <p>You can also declare a <c>seed</c> to specify a version of any problem that has randomization. Here is the same problem, but with a <c>seed</c> specified.</p>
                 </introduction>
 
                 <webwork xml:id="integer-addition-with-seed" seed="510">
@@ -187,6 +187,46 @@
                         <pg-code>
                             $a = Compute(random(1, 9, 1));
                             $b = Compute(random(1, 9, 1));
+                            $c = $a + $b;
+                        </pg-code>
+                    </setup>
+
+                    <statement>
+                        <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
+                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" /></p>
+                    </statement>
+
+                    <solution>
+                        <p><m><var name="$a" /> + <var name="$b" /> = <var name="$c" /></m>.</p>
+                    </solution>
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <title>Controlling Randomness</title>
+
+                <introduction>
+                    <p>You can code your problem with randomization, but then use a specific <c>seed</c> and <webwork />'s <c>$envir{problemSeed}</c>to override that randomization for the purposes of the version that will appear in HTML and print putput.</p>
+                </introduction>
+
+                <webwork xml:id="integer-addition-with-control-seed" seed="1">
+                    <title>Integer Addition</title>
+
+                    <setup>
+                        <var name="$a">
+                            <static>1</static>
+                        </var>
+                        <var name="$b">
+                            <static>2</static>
+                        </var>
+                        <var name="$c" category="integer">
+                            <static>3</static>
+                        </var>
+
+                        <pg-code>
+                            $a = Compute(random(1, 9, 1));
+                            $b = Compute(random(1, 9, 1));
+                            if ($envir{problemSeed}==1){$a=1;$b=2};
                             $c = $a + $b;
                         </pg-code>
                     </setup>
