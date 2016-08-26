@@ -333,7 +333,7 @@
             <xsl:text>  "contextPiecewiseFunction.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- when there is a PGgraphmacros graph                         -->
-        <xsl:if test="./statement//image[@pg-name]">
+        <xsl:if test="./statement//image[@pg-name]|./solution//image[@pg-name]">
             <xsl:text>  "PGgraphmacros.pl",&#xa;</xsl:text>
         </xsl:if>
     </xsl:variable>
@@ -389,6 +389,10 @@
     <xsl:value-of select="$user-macros" />
     <xsl:value-of select="$course-macro" />
     <xsl:text>);&#xa;</xsl:text>
+    <!-- if images are used, explicitly refresh or stale images will be used in HTML -->
+    <xsl:if test="./statement//image[@pg-name]|./solution//image[@pg-name]">
+        <xsl:text>$refreshCachedImages= 1;</xsl:text>
+    </xsl:if>
     <!-- shorten name of PGML::Format to save characters for base64 url -->
     <!-- only used within table cells                                  -->
     <xsl:if test=".//tabular">
@@ -436,13 +440,6 @@
     <xsl:apply-templates select="." mode="form-help"/>
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="varname" select="@name" />
-    <xsl:if test="not($problem/setup/var[@name=$varname]/static) and not($problem/setup/var[@name=$varname]/set/member) and @name and not($problem//image[@pg-name])">
-        <xsl:message>
-            <xsl:text>MBX:WARNING: A WeBWorK problem body uses an answer field (name="</xsl:text>
-            <xsl:value-of select="$varname"/>
-            <xsl:text>") for which there is no static value declared</xsl:text>
-        </xsl:message>
-    </xsl:if>
 </xsl:template>
 
 <!-- MathObject answers -->
@@ -459,7 +456,8 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:if test="count(preceding-sibling::*)=0 and not(ancestor::li)">
+    <!-- when an answer blank is the first thing on a line, indent -->
+    <xsl:if test="(count(preceding-sibling::*)+count(preceding-sibling::text()))=0 and parent::p/parent::statement">
         <xsl:text>    </xsl:text>
     </xsl:if>
     <xsl:text>[</xsl:text>
