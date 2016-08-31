@@ -2403,6 +2403,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- number suppressed and a table of contents entry manufactured      -->
     <!-- This ad-hoc treatment seems preferable to a more general scheme,  -->
     <!-- but maybe someday numbering will be on/off and this will be easy  -->
+    <!--                                                              -->
+    <!-- LaTeX's *optional* arguments are counter to TeX's arguments  -->
+    <!-- So text in an optional argument should always be in a group, -->
+    <!-- especially if it contains a closing bracket                  -->
+    <!-- We have such protection below, and elsewhere without comment -->
+    <!-- See http://tex.stackexchange.com/questions/99495             -->
+    <!-- LaTeX3e with the xparse package might make this unnecessary  -->
     <xsl:choose>
         <!-- starred for for no numbering -->
         <xsl:when test="ancestor::article and parent::backmatter and self::references">
