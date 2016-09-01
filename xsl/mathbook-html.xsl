@@ -449,20 +449,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Paragraphs -->
 <!-- Never structural, never named, somewhat distinct  -->
-<!-- Extra CSS to position within a side-by-side panel -->
 <xsl:template match="paragraphs|paragraph">
     <xsl:if test="local-name(.)='paragraph'">
         <xsl:message>MBX:WARNING: the "paragraph" element is deprecated (2015/03/13), use "paragraphs" instead</xsl:message>
         <xsl:apply-templates select="." mode="location-report" />
     </xsl:if>
-    <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
+    <xsl:variable name="ident">
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:variable>
     <article class="paragraphs" id="{$ident}">
-        <h5 class="heading">
-            <span class="title">
-                <xsl:apply-templates select="." mode="title-full" />
-            </span>
-        </h5>
-        <xsl:apply-templates  select="*"/>
+        <xsl:if test="title">
+            <h5 class="heading">
+                <span class="title">
+                    <xsl:apply-templates select="." mode="title-full" />
+                </span>
+            </h5>
+        </xsl:if>
+        <xsl:apply-templates select="*"/>
     </article>
 </xsl:template>
 

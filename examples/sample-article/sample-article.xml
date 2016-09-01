@@ -675,6 +675,13 @@ the xsltproc executable.
                     <p>It is basically a sequence of paragraphs, where the first one gets an inline title.  You are reading the second, and final, paragraph of one right now. It is useful for organizing very short documents, where numbered subdivisions might be overkill.</p>
                 </paragraphs>
 
+                <paragraphs>
+                    <p>You do not have to provide a title for the <c>paragraphs</c> element, as it is optional.  Then this element functions only as a grouping without much more structure than that.</p>
+
+                    <p>This is the second paragraph of a title-less <c>paragraphs</c> grouping, so it should seem related to the previous paragraph, and these two paragraphs should look distinct from the two paragraphs in the grouping with the title <q>Structure</q> immediately prior.</p>
+                </paragraphs>
+
+
                 <assemblage xml:id="assemblage-basics">
                     <title>Assemblages: Collections and Summaries</title>
 
