@@ -2496,7 +2496,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="exercisegroup/introduction">
-    <xsl:apply-templates select="." mode="console-typeout" />
     <xsl:text>\par\noindent </xsl:text>
     <xsl:apply-templates select="*" />
 </xsl:template>
@@ -2512,7 +2511,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="exercisegroup/conclusion">
-    <xsl:apply-templates select="." mode="console-typeout" />
     <xsl:apply-templates select="*" />
 </xsl:template>
 
