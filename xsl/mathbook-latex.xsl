@@ -1309,7 +1309,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="//exercisegroup">
                 <xsl:text>%% Indented groups of exercises within an exercise section, maximum depth 4&#xa;</xsl:text>
                 <xsl:text>\usepackage{tasks}&#xa;</xsl:text>
-                <xsl:text>\NewTasks[label-format=\bfseries,item-indent=3.33em,label-offset=5pt,label-width=20pt,label-align=right,after-item-skip=\smallskipamount,after-skip=\smallskipamount]{exercisegroup}[\exercise]&#xa;</xsl:text>
+                <xsl:text>\NewTasks[label-format=\bfseries,item-indent=3.3em,label-offset=0.4em,label-width=1.7em,label-align=right,after-item-skip=\smallskipamount,after-skip=\smallskipamount]{exercisegroup}[\exercise]&#xa;</xsl:text>
             </xsl:if>
         </xsl:if>
     </xsl:if>
