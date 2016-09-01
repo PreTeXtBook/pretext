@@ -1310,8 +1310,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>%% Indented groups of exercises within an exercise section, maximum depth 4&#xa;</xsl:text>
                 <xsl:text>\usepackage{tasks}&#xa;</xsl:text>
                 <xsl:text>\NewTasks[label-format=\bfseries,item-indent=3.33em,label-offset=5pt,label-width=20pt,label-align=right,after-item-skip=\smallskipamount,after-skip=\smallskipamount]{exercisegroup}[\exercise]&#xa;</xsl:text>
-                <!--<xsl:text>\newlist{exercisegroup}{description}{4}&#xa;</xsl:text>-->
-                <!--<xsl:text>\setlist[exercisegroup]{leftmargin=2em,labelindent=2em,itemsep=-1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>-->
             </xsl:if>
         </xsl:if>
     </xsl:if>
