@@ -580,6 +580,7 @@
 
 <!ELEMENT exercisegroup (introduction?, exercise+, conclusion?)>
     <!ATTLIST exercisegroup xml:id ID    #IMPLIED>
+    <!ATTLIST exercisegroup cols   CDATA #IMPLIED>
 
 <!ELEMENT exercise (title?, index*, ((statement, hint*, answer*, solution*)|(introduction?, webwork, conclusion?)))>
     <!ATTLIST exercise xml:id ID    #IMPLIED>
