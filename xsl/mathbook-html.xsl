@@ -2315,6 +2315,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+
+<xsl:template match="p[ol or ul or dl]">
+    <!-- will later loop over lists within paragraph -->
+    <xsl:variable name="lists" select="ul|ol|dl" />
+    <!-- content prior to first list is exceptional -->
+    <xsl:element name="p"> <!-- needs label -->
+        <xsl:apply-templates select="$lists[1]/preceding-sibling::node()" />
+    </xsl:element>
+    <!-- for each list, output the list, plus trailing content -->
+    <xsl:for-each select="$lists">
+        <!-- do the list proper -->
+        <xsl:apply-templates select="." />
+        <!-- look through remainder, all element and text nodes, and the next list -->
+        <xsl:variable name="rightward" select="following-sibling::node()[not(self::comment()) and not(self::processing-instruction())]" />
+        <xsl:variable name="next-list" select="following-sibling::*[self::ul or self::ol or self::dl][1]" />
+        <xsl:choose>
+            <xsl:when test="$next-list">
+                <xsl:variable name="leftward" select="$next-list/preceding-sibling::node()[not(self::comment()) and not(self::processing-instruction())]" />
+                <!-- device below forms set intersection -->
+                <xsl:variable name="common" select="$rightward[count(. | $leftward) = count($leftward)]" />
+                <!-- not if empty -->
+                <xsl:if test="$common">
+                    <xsl:element name="p">
+                        <xsl:apply-templates select="$common" />
+                    </xsl:element>
+                </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- not if empty -->
+                <xsl:if test="$rightward">
+                    <xsl:element name="p">
+                        <xsl:apply-templates select="$rightward" />
+                    </xsl:element>
+                </xsl:if>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:for-each>
+</xsl:template>
+
+
+
+
 <!-- Definitions, Remarks, Asides -->
 <!-- Runs of paragraphs, etc,  xor  statement -->
 <!-- is-hidden, -css-class are diveregent -->
