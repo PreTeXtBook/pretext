@@ -346,7 +346,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="34 * substring-before($font-size, 'pt')" />
         <xsl:text>pt</xsl:text>
     </xsl:variable>
-    <xsl:message><xsl:value-of select="$text-width" /></xsl:message>
     <xsl:text>%% Text height identically 9 inches, text width varies on point size&#xa;</xsl:text>
     <xsl:text>%% See Bringhurst 2.1.1 on measure for recommendations&#xa;</xsl:text>
     <xsl:text>%% 75 characters per line (count spaces, punctuation) is target&#xa;</xsl:text>
