@@ -273,10 +273,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- We process structural nodes via chunking routine in   xsl/mathbook-common.html -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file     -->
-<!-- The xref-knowl templates run independently on the entire document tree         -->
+<!-- The xref-knowl templates run independently on content node of document tree    -->
 <xsl:template match="mathbook">
     <xsl:apply-templates mode="chunking" />
-    <xsl:apply-templates mode="xref-knowl" />
+    <xsl:apply-templates select="*[not(self::docinfo)]" mode="xref-knowl" />
 </xsl:template>
 
 <!-- However, some MBX document types do not have    -->
@@ -6614,17 +6614,17 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 <xsl:template match="statcounter">
 <xsl:comment>Start: StatCounter code</xsl:comment>
 <script type="text/javascript">
-var sc_project=<xsl:value-of select="./project" />;
+var sc_project=<xsl:value-of select="project" />;
 var sc_invisible=1;
-var sc_security="<xsl:value-of select="./security" />";
+var sc_security="<xsl:value-of select="security" />";
 var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "https://www.");
 <![CDATA[document.write("<sc"+"ript type='text/javascript' src='" + scJsHost+ "statcounter.com/counter/counter.js'></"+"script>");]]>
 </script>
 <xsl:variable name="noscript_url">
     <xsl:text>https://c.statcounter.com/</xsl:text>
-    <xsl:value-of select="./project" />
+    <xsl:value-of select="project" />
     <xsl:text>/0/</xsl:text>
-    <xsl:value-of select="./security" />
+    <xsl:value-of select="security" />
     <xsl:text>/1/</xsl:text>
 </xsl:variable>
 <noscript>
