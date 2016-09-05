@@ -163,6 +163,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- font-size also dictates document class for -->
 <!-- those provided by extsizes, but we can get -->
 <!-- these by just inserting the "ext" prefix   -->
+<!-- We don't load the package, the classes     -->
+<!-- are incorporated in the documentclass[]{}  -->
+<!-- and only if we need the extreme values     -->
 
 <!-- Default is 10pt above, this stupid template     -->
 <!-- provides an error message and also sets a value -->
@@ -246,9 +249,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]{</xsl:text>
     <xsl:value-of select="$document-class-prefix" />
     <xsl:text>article}&#xa;</xsl:text>
-    <xsl:text>%% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
-    <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
-    <xsl:text>\geometry{letterpaper,total={5.0in,9.0in}}&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
     <!-- parameterize preamble template with "page-geometry" template conditioned on self::article etc -->
     <xsl:call-template name="title-page-info-article" />
@@ -278,9 +278,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]{</xsl:text>
     <xsl:value-of select="$document-class-prefix" />
     <xsl:text>book}&#xa;</xsl:text>
-    <xsl:text>%% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
-    <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
-    <xsl:text>\geometry{letterpaper,total={5.0in,9.0in}}&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
     <xsl:call-template name="title-page-info-book" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
@@ -300,9 +297,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]{</xsl:text>
     <xsl:value-of select="$document-class-prefix" />
     <xsl:text>article}&#xa;</xsl:text>
-    <xsl:text>%% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
-    <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
-    <xsl:text>\geometry{letterpaper,total={6.0in,9.0in}}&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
     <xsl:apply-templates />
@@ -321,9 +315,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]{</xsl:text>
     <xsl:value-of select="$document-class-prefix" />
     <xsl:text>article}&#xa;</xsl:text>
-    <xsl:text>% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
-    <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
-    <xsl:text>\geometry{letterpaper,total={6.0in,9.0in}}&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
     <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
     <xsl:apply-templates />
@@ -345,7 +336,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% See:  https://tug.org/TUGboat/tb36-3/tb114ltnews22.pdf&#xa;</xsl:text>
     <xsl:text>%% and read "Fewer fragile commands" in distribution's  latexchanges.pdf&#xa;</xsl:text>
     <xsl:text>\IfFileExists{latexrelease.sty}{}{\usepackage{fixltx2e}}&#xa;</xsl:text>
-    <xsl:text>%% Page Layout Adjustments (latex.geometry)&#xa;</xsl:text>
+    <!-- Determine height of text block, assumes US letterpaper (11in height) -->
+    <!-- Could react to document type, paper, margin specs                    -->
+    <xsl:variable name="text-height">
+        <xsl:text>9.0in</xsl:text>
+    </xsl:variable>
+    <!-- Bringhurst: 30x => 66 chars, so 34x => 75 chars -->
+    <xsl:variable name="text-width">
+        <xsl:value-of select="34 * substring-before($font-size, 'pt')" />
+        <xsl:text>pt</xsl:text>
+    </xsl:variable>
+    <xsl:message><xsl:value-of select="$text-width" /></xsl:message>
+    <xsl:text>%% Text height identically 9 inches, text width varies on point size&#xa;</xsl:text>
+    <xsl:text>%% See Bringhurst 2.1.1 on measure for recommendations&#xa;</xsl:text>
+    <xsl:text>%% 75 characters per line (count spaces, punctuation) is target&#xa;</xsl:text>
+    <xsl:text>%% which is the upper limit of Bringhurst's recommendations&#xa;</xsl:text>
+    <xsl:text>%% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
+    <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
+    <xsl:text>\geometry{letterpaper,total={</xsl:text>
+    <xsl:value-of select="$text-width" />
+    <xsl:text>,</xsl:text>
+    <xsl:value-of select="$text-height" />
+    <xsl:text>}}&#xa;</xsl:text>
+    <xsl:text>%% Custom Page Layout Adjustments (use latex.geometry)&#xa;</xsl:text>
     <xsl:if test="$latex.geometry != ''">
         <xsl:text>\geometry{</xsl:text>
         <xsl:value-of select="$latex.geometry" />
