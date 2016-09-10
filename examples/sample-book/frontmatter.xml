@@ -52,6 +52,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <colophon>
 
+        <edition>Annual Edition 2015</edition>
+
+        <website>
+            <name><c>abstract.pugetsound.edu</c></name>
+            <address>http://abstract.pugetsound.edu</address>
+        </website>
+
         <copyright>
             <year>1997<ndash />2015</year>
             <holder>Thomas W. Judson, Robert A. Beezer</holder>

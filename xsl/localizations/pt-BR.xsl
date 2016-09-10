@@ -171,6 +171,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Various -->
     <localization string-id='todo'><xsl:text>Para fazer</xsl:text></localization>
     <localization string-id='editor'><xsl:text>Editor</xsl:text></localization>
+    <!-- <localization string-id='edition'><xsl:text>Edition</xsl:text></localization> -->
+    <!-- <localization string-id='website'><xsl:text>Website</xsl:text></localization> -->
     <localization string-id='copyright'><xsl:text>XXXCopyright</xsl:text></localization>
     <!-- HTML clickables (lowercase strings to click on) -->
     <!-- Translation needed for Brazilian Portugese -->

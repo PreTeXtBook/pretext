@@ -665,6 +665,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We process pieces, in document order -->
 <!-- TODO: edition, publisher, production notes, cover design, etc -->
 <!-- TODO: revision control commit hash -->
+<xsl:template match="frontmatter/colophon/edition">
+    <xsl:element name="p">
+        <xsl:element name="b">
+            <xsl:apply-templates select="." mode="type-name" />
+        </xsl:element>
+        <xsl:text>: </xsl:text>
+        <xsl:apply-templates />
+    </xsl:element>
+</xsl:template>
+
+<!-- website for the book -->
+<xsl:template match="frontmatter/colophon/website">
+    <xsl:element name="p">
+        <xsl:element name="b">
+            <xsl:apply-templates select="." mode="type-name" />
+        </xsl:element>
+        <xsl:text>: </xsl:text>
+        <xsl:element name="a">
+            <xsl:attribute name="href">
+                <xsl:apply-templates select="address" />
+            </xsl:attribute>
+            <xsl:apply-templates select="name" />
+        </xsl:element>
+    </xsl:element>
+</xsl:template>
+
 <xsl:template match="frontmatter/colophon/copyright">
     <p>
         <xsl:text>&#xa9;</xsl:text>
@@ -677,19 +703,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="shortlicense" />
         </p>
     </xsl:if>
-</xsl:template>
-
-<!-- website for the book -->
-<xsl:template match="frontmatter/colophon/website">
-    <p>
-        <xsl:text>Website: </xsl:text>
-        <xsl:element name="a">
-            <xsl:attribute name="href">
-                <xsl:apply-templates select="address" />
-            </xsl:attribute>
-            <xsl:apply-templates select="name" />
-        </xsl:element>
-    </p>
 </xsl:template>
 
 <!-- Introductions and Conclusions -->

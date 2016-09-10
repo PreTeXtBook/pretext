@@ -686,7 +686,7 @@
 
 <!-- A mini-database of relevant information with no natural home -->
 
-<!ELEMENT docinfo   (brandlogo|website|macros|latex-image-preamble|initialism|feedback|rename)*>
+<!ELEMENT docinfo   (brandlogo|macros|latex-image-preamble|initialism|feedback|rename)*>
     <!ATTLIST docinfo xml:base CDATA    #IMPLIED>
     <!ATTLIST docinfo xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
@@ -694,10 +694,6 @@
 <!ELEMENT brandlogo    EMPTY>
     <!ATTLIST brandlogo   url      CDATA   #IMPLIED>
     <!ATTLIST brandlogo   source   CDATA   #IMPLIED>
-
-<!-- TODO: maybe these should be reworked -->
-<!ELEMENT website    (title, url)>
-    <!-- title and url elements done elsewhere -->
 
 <!-- typically for short HTML titles on tabs, bookmarks, etc -->
 <!ELEMENT initialism                 (#PCDATA)>
@@ -748,15 +744,18 @@
 <!ELEMENT date        (#PCDATA|%characters;)*>
 
 <!-- both "front" and "back" colophons -->
-<!ELEMENT colophon   (title?, copyright?, p*)>
+<!ELEMENT colophon   (title?, edition?, website? copyright?, p*)>
 
 <!-- front colophon items -->
+<!ELEMENT edition    (#PCDATA)>
+<!ELEMENT website    (name, address)>
+    <!ELEMENT name       (#PCDATA)>
+    <!ELEMENT address    (#PCDATA)>
 <!ELEMENT copyright      (year, holder, minilicense?, shortlicense?)?>
-<!ELEMENT year           (#PCDATA|%linear;)*>
-<!ELEMENT holder         (#PCDATA|%linear;)*>
-<!ELEMENT minilicense    (#PCDATA|%linear;)*>
-<!ELEMENT shortlicense   (#PCDATA|%linear;)*>
-
+    <!ELEMENT year           (#PCDATA|%linear;)*>
+    <!ELEMENT holder         (#PCDATA|%linear;)*>
+    <!ELEMENT minilicense    (#PCDATA|%linear;)*>
+    <!ELEMENT shortlicense   (#PCDATA|%linear;)*>
 
 <!ELEMENT biography (title?, index*, (%block;)*)>
     <!ATTLIST biography xml:id ID #IMPLIED>

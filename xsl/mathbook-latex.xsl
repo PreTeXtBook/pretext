@@ -1628,12 +1628,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="frontmatter/biography" mode="copyright-page" />
     </xsl:if>
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
+
     <xsl:if test="frontmatter/colophon/edition" >
-        <xsl:text>\noindent{\bf Edition}: </xsl:text>
+        <xsl:text>\noindent{\bf </xsl:text>
+        <xsl:apply-templates select="frontmatter/colophon/edition" mode="type-name" />
+        <xsl:text>}: </xsl:text>
         <xsl:apply-templates select="frontmatter/colophon/edition" />
-        <xsl:text>\par&#xa;</xsl:text>
+        <xsl:text>\par\medskip&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="frontmatter/colophon/website" />
+
+    <xsl:if test="frontmatter/colophon/website" >
+        <xsl:text>\noindent{\bf </xsl:text>
+        <xsl:apply-templates select="frontmatter/colophon/website" mode="type-name" />
+        <xsl:text>}: </xsl:text>
+        <xsl:apply-templates select="frontmatter/colophon/website" />
+        <xsl:text>\par\medskip&#xa;</xsl:text>
+    </xsl:if>
+
     <xsl:if test="frontmatter/colophon/copyright" >
         <xsl:text>\noindent\textcopyright\ </xsl:text>
         <xsl:apply-templates select="frontmatter/colophon/copyright/year" />
@@ -1643,12 +1654,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\\[0.5\baselineskip]&#xa;</xsl:text>
             <xsl:apply-templates select="frontmatter/colophon/copyright/shortlicense" />
         </xsl:if>
-        <xsl:text>\par&#xa;</xsl:text>
+        <xsl:text>\par\medskip&#xa;</xsl:text>
     </xsl:if>
+
     <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
     <!-- Something so page is not totally nothing -->
     <xsl:text>\null\clearpage&#xa;</xsl:text>
     <xsl:text>%% end:   copyright-page&#xa;</xsl:text>
+</xsl:template>
+
+<!-- URL for canonical project website -->
+<xsl:template match="frontmatter/colophon/website" >
+    <xsl:text>\href{</xsl:text>
+    <xsl:apply-templates select="address" />
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="name" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- Author biographies -->
@@ -1668,16 +1689,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" />
     <!-- drop a par, for next bio, or for big vspace -->
     <xsl:text>\par&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Information about canonical project website -->
-<xsl:template match="frontmatter/colophon/website" >
-    <xsl:text>\noindent Website:\ \ \href{</xsl:text>
-    <xsl:apply-templates select="address" />
-    <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="name" />
-    <xsl:text>}</xsl:text>
-    <xsl:text>\par\medskip&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Authors, editors, full info for titlepage -->

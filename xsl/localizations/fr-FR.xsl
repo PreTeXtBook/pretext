@@ -143,6 +143,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Various -->
     <localization string-id='todo'><xsl:text>À Faire</xsl:text></localization>  
     <localization string-id='editor'><xsl:text>Éditeur</xsl:text></localization>  
+    <!-- <localization string-id='edition'><xsl:text>Edition</xsl:text></localization> -->
+    <!-- <localization string-id='website'><xsl:text>Website</xsl:text></localization> -->
     <localization string-id='copyright'><xsl:text>Copyright</xsl:text></localization>
 </xsl:variable>
 
