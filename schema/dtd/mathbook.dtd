@@ -744,7 +744,7 @@
 <!ELEMENT date        (#PCDATA|%characters;)*>
 
 <!-- both "front" and "back" colophons -->
-<!ELEMENT colophon   (title?, edition?, website? copyright?, p*)>
+<!ELEMENT colophon   (title?, edition?, website?, copyright?, p*)>
 
 <!-- front colophon items -->
 <!ELEMENT edition    (#PCDATA)>
