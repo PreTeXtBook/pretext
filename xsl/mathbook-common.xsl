@@ -2618,10 +2618,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Recursively handle one panel at a time                   -->
 <!-- Implementations need to define modal templates           -->
 <!--   panel-setup, panel-heading, panel-panel, panel-caption -->
-<!-- Final results are coillectively sent to modal            -->
+<!-- Final results are collectively sent to modal             -->
 <!--   compose-panels                                         -->
 <!-- template to be arranged                                  -->
-
+<!-- has-headings and has-captions are updated per panel,     -->
+<!-- so compose-panels can avoid outputting empty space       -->
 <xsl:template match="sidebyside" mode="sbs-panel">
     <xsl:param name="number-panels" />
     <xsl:param name="the-panel" />
@@ -2629,8 +2630,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="margins" />
     <xsl:param name="space-width" />
     <xsl:param name="valigns" />
-    <xsl:param name="has-headings" />
-    <xsl:param name="has-captions" />
+    <xsl:param name="has-headings" select="false()" />
+    <xsl:param name="has-captions" select="false()" />
     <xsl:param name="setup" />
     <xsl:param name="headings" />
     <xsl:param name="panels" />
@@ -2658,6 +2659,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:with-param name="number-panels" select="$number-panels" />
                 <xsl:with-param name="margins" select="$margins" />
                 <xsl:with-param name="space-width" select="$space-width" />
+                <xsl:with-param name="has-headings" select="$has-headings" />
+                <xsl:with-param name="has-captions" select="$has-captions" />
                 <xsl:with-param name="setup" select="$setup" />
                 <xsl:with-param name="headings" select="$headings" />
                 <xsl:with-param name="panels" select="$panels" />

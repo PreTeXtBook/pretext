@@ -4770,6 +4770,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="number-panels" />
     <xsl:param name="margins" />
     <xsl:param name="space-width" />
+    <xsl:param name="has-headings" />
+    <xsl:param name="has-captions" />
     <xsl:param name="setup" />
     <xsl:param name="headings" />
     <xsl:param name="panels" />
@@ -4805,16 +4807,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{tabular}{@{}*{</xsl:text>
     <xsl:value-of select="$number-panels" />
     <xsl:text>}{c}@{}}&#xa;</xsl:text>
-    <!-- heading/titles in first row, if not empty -->
-    <!-- TODO: pass an "is-empty" parameter as headings/captions are built -->
-    <xsl:if test="not(str:replace(str:replace($headings, '&amp;', ''), '&#xa;', '') = '')">
+    <!-- Headings as a table row, if extant -->
+    <xsl:if test="$has-headings">
         <xsl:value-of select="$headings" />
         <xsl:text>\tabularnewline&#xa;</xsl:text>
     </xsl:if>
     <!-- actual panels in second row, always -->
     <xsl:value-of select="$panels" />
-    <!-- captions in third row, if not empty -->
-    <xsl:if test="not(str:replace(str:replace($captions, '&amp;', ''), '&#xa;', '') = '')">
+    <!-- Captions as a table row, if extant -->
+    <xsl:if test="$has-captions">
         <xsl:text>\tabularnewline&#xa;</xsl:text>
         <xsl:value-of select="$captions" />
     </xsl:if>

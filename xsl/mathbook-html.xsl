@@ -3678,6 +3678,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- div containing three "sbsrow" divs -->
 <xsl:template match="sidebyside" mode="compose-panels">
     <xsl:param name="margins" />
+    <xsl:param name="has-headings" />
+    <xsl:param name="has-captions" />
     <xsl:param name="headings" />
     <xsl:param name="panels" />
     <xsl:param name="captions" />
@@ -3704,30 +3706,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
         </xsl:if>
 
-        <!-- Headings in an "sbsrow" div -->
-        <xsl:element name="div">
-            <xsl:attribute name="class">
-                <xsl:text>sbsrow</xsl:text>
-            </xsl:attribute>
-            <!-- margins are custom from source -->
-            <xsl:attribute name="style">
-                <xsl:text>margin-left:</xsl:text>
-                <xsl:value-of select="$margins" />
-                <xsl:text>;</xsl:text>
-                <xsl:text>margin-right:</xsl:text>
-                <xsl:value-of select="$margins" />
-                <xsl:text>;</xsl:text>
-                <xsl:if test="$sbsdebug">
-                    <xsl:text>box-sizing: border-box;</xsl:text>
-                    <xsl:text>-moz-box-sizing: border-box;</xsl:text>
-                    <xsl:text>-webkit-box-sizing: border-box;</xsl:text>
-                    <xsl:text>border: 2px solid green;</xsl:text>
-                </xsl:if>
-            </xsl:attribute>
-            <xsl:copy-of select="$headings" />
-        </xsl:element>
+        <!-- Headings in an "sbsrow" div, if extant -->
+        <xsl:if test="$has-headings">
+            <xsl:element name="div">
+                <xsl:attribute name="class">
+                    <xsl:text>sbsrow</xsl:text>
+                </xsl:attribute>
+                <!-- margins are custom from source -->
+                <xsl:attribute name="style">
+                    <xsl:text>margin-left:</xsl:text>
+                    <xsl:value-of select="$margins" />
+                    <xsl:text>;</xsl:text>
+                    <xsl:text>margin-right:</xsl:text>
+                    <xsl:value-of select="$margins" />
+                    <xsl:text>;</xsl:text>
+                    <xsl:if test="$sbsdebug">
+                        <xsl:text>box-sizing: border-box;</xsl:text>
+                        <xsl:text>-moz-box-sizing: border-box;</xsl:text>
+                        <xsl:text>-webkit-box-sizing: border-box;</xsl:text>
+                        <xsl:text>border: 2px solid green;</xsl:text>
+                    </xsl:if>
+                </xsl:attribute>
+                <xsl:copy-of select="$headings" />
+            </xsl:element>
+        </xsl:if>
 
-        <!-- Panels in an "sbsrow" div -->
+        <!-- Panels in an "sbsrow" div, always -->
         <xsl:element name="div">
             <xsl:attribute name="class">
                 <xsl:text>sbsrow</xsl:text>
@@ -3752,28 +3756,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:copy-of select="$panels" />
         </xsl:element>
 
-        <!-- Captions in an "sbsrow" div -->
-        <xsl:element name="div">
-            <xsl:attribute name="class">
-                <xsl:text>sbsrow</xsl:text>
-            </xsl:attribute>
-            <!-- margins are custom from source -->
-            <xsl:attribute name="style">
-                <xsl:text>margin-left:</xsl:text>
-                <xsl:value-of select="$margins" />
-                <xsl:text>;</xsl:text>
-                <xsl:text>margin-right:</xsl:text>
-                <xsl:value-of select="$margins" />
-                <xsl:text>;</xsl:text>
-                <xsl:if test="$sbsdebug">
-                    <xsl:text>box-sizing: border-box;</xsl:text>
-                    <xsl:text>-moz-box-sizing: border-box;</xsl:text>
-                    <xsl:text>-webkit-box-sizing: border-box;</xsl:text>
-                    <xsl:text>border: 2px solid green;</xsl:text>
-                </xsl:if>
-            </xsl:attribute>
-            <xsl:copy-of select="$captions" />
-        </xsl:element>
+        <!-- Captions in an "sbsrow" div, if extant -->
+        <xsl:if test="$has-captions">
+            <xsl:element name="div">
+                <xsl:attribute name="class">
+                    <xsl:text>sbsrow</xsl:text>
+                </xsl:attribute>
+                <!-- margins are custom from source -->
+                <xsl:attribute name="style">
+                    <xsl:text>margin-left:</xsl:text>
+                    <xsl:value-of select="$margins" />
+                    <xsl:text>;</xsl:text>
+                    <xsl:text>margin-right:</xsl:text>
+                    <xsl:value-of select="$margins" />
+                    <xsl:text>;</xsl:text>
+                    <xsl:if test="$sbsdebug">
+                        <xsl:text>box-sizing: border-box;</xsl:text>
+                        <xsl:text>-moz-box-sizing: border-box;</xsl:text>
+                        <xsl:text>-webkit-box-sizing: border-box;</xsl:text>
+                        <xsl:text>border: 2px solid green;</xsl:text>
+                    </xsl:if>
+                </xsl:attribute>
+                <xsl:copy-of select="$captions" />
+            </xsl:element>
+        </xsl:if>
 
         <!-- Global caption on sidebyside, always numbered -->
         <!-- TODO: apply margins if ever unequal (left/right) -->
