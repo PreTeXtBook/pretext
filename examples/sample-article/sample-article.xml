@@ -64,6 +64,16 @@ the xsltproc executable.
         -->
         <brandlogo url="http://mathbook.pugetsound.edu" source="images/book-cover-google-art-project.jpg" />
         <!--
+        LaTeX packages that are also implemented as MathJax extensions
+        may be specified here and any macros they have in common may be
+        used within mathematics.  See below in the "Mathematics" section
+        an example of the use of the "\cancelto{}{}" macro from
+        the "cancel" package.
+        -->
+        <latex-preamble>
+            <package>cancel</package>
+        </latex-preamble>
+        <!--
         TeX/LaTeX macros can be written in the usual way.
         Whitespace and line breaks are irrelevant here.
         These are "write once, use everywhere".
@@ -1003,6 +1013,16 @@ the xsltproc executable.
                     <mrow>x  \amp       \amp    \amp {}+{} \amp  z \amp {}={} \amp 6</mrow>
                     <mrow>x  \amp {}+{} \amp 3y \amp {}+{} \amp 2z \amp {}={} \amp 13.</mrow>
                 </md>Beautiful.</p>
+            </subsection>
+
+            <subsection>
+                <title><latex /> Packages and MathJax Extensions</title>
+
+                <p>If you would like to use macros from a <latex /> package <em>and</em> there is a MathJax extension <em>of the same name</em> which implements the same macros, then you may use these with your mathematics as we demonstrate here.</p>
+
+                <p>This example is from Jason Underdown.  The package is named <c>cancel</c> and is included in the TeXLive distribution, so is fairly standard.  The particular macro being demonstrated is <c>\cancelto{}{}</c>.  <me>\lim_{b \rightarrow \infty}\left[\cancelto{0}{-\frac{1}{s}e^{-sb}} + \frac{1}{s}\right]</me>Look at the source of this article to see the package name being supplied in a <c>latex-preamble/package</c> element within the <c>docinfo</c> section.  That is the only setup required to make the macro usable in <latex /> and <init>HTML</init> output.</p>
+
+                <p>The packages appear before the author-supplied macros, so you can use macros from the packages as building blocks for document-specific macros.  We cannot guarantee there will be no conflicts between additional packages and those in use normally, or added in the future.  So use at your own risk.</p>
             </subsection>
         </section>
 

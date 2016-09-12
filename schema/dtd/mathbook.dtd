@@ -686,7 +686,7 @@
 
 <!-- A mini-database of relevant information with no natural home -->
 
-<!ELEMENT docinfo   (brandlogo|macros|latex-image-preamble|initialism|feedback|rename)*>
+<!ELEMENT docinfo   (brandlogo|latex-preamble|macros|latex-image-preamble|initialism|feedback|rename)*>
     <!ATTLIST docinfo xml:base CDATA    #IMPLIED>
     <!ATTLIST docinfo xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
@@ -698,7 +698,9 @@
 <!-- typically for short HTML titles on tabs, bookmarks, etc -->
 <!ELEMENT initialism                 (#PCDATA)>
 
-<!-- LaTeX macros, image preamble, as raw data -->
+<!-- LaTeX packages, macros, image preamble, as raw data -->
+<!ELEMENT latex-preamble  (package*)>
+    <!ELEMENT package                (#PCDATA)>
 <!ELEMENT macros                 (#PCDATA)>
 <!ELEMENT latex-image-preamble   (#PCDATA)>
 

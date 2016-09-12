@@ -6576,11 +6576,26 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
 
 </xsl:template>
 
-<!-- LaTeX Macros -->
-<!-- In a hidden div, for near the top of the page, as math -->
+<!-- ############## -->
+<!-- LaTeX Preamble -->
+<!-- ############## -->
+
+<!-- First a variable to massage the author-supplied -->
+<!-- package list to the form MathJax expects        -->
+<xsl:variable name="latex-packages-mathjax">
+    <xsl:value-of select="str:replace($latex-packages, '\usepackage{', '\require{')" />
+</xsl:variable>
+
+
+<!-- MathJax expects math wrapping, and we place in   -->
+<!-- a hidden div so not visible and take up no space -->
+<!-- We could rename this properly, since we are      -->
+<!-- sneaking in packages, which load first, in       -->
+<!-- case authors want to build on these macros       -->
 <xsl:template name="latex-macros">
     <div style="display:none;">
     <xsl:text>\(</xsl:text>
+    <xsl:value-of select="$latex-packages-mathjax" />
     <xsl:value-of select="$latex-macros" />
     <xsl:text>\)</xsl:text>
     </div>

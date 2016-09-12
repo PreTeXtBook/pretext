@@ -1442,6 +1442,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.preamble.late" />
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
+    <xsl:text>%% Begin: Author-provided packages&#xa;</xsl:text>
+    <xsl:text>%% (From  docinfo/latex-preamble/package  elements)&#xa;</xsl:text>
+    <xsl:value-of select="$latex-packages" />
+    <xsl:text>%% End: Author-provided packages&#xa;</xsl:text>
     <xsl:text>%% Begin: Author-provided macros&#xa;</xsl:text>
     <xsl:text>%% (From  docinfo/macros  element)&#xa;</xsl:text>
     <xsl:text>%% Plus three from MBX for XML characters&#xa;</xsl:text>

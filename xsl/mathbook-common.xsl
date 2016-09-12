@@ -659,9 +659,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- ############ -->
-<!-- LaTeX Macros -->
-<!-- ############ -->
+<!-- ############## -->
+<!-- LaTeX Preamble -->
+<!-- ############## -->
+
+<!-- We round up any author-supplied packages as   -->
+<!-- a big string, in LaTeX syntax.  It will need  -->
+<!-- manipulation to be usable on the MathJax side -->
+<xsl:variable name="latex-packages">
+    <xsl:for-each select="/mathbook/docinfo/latex-preamble/package">
+        <xsl:text>\usepackage{</xsl:text>
+        <xsl:apply-templates />
+        <xsl:text>}</xsl:text>
+    </xsl:for-each>
+</xsl:variable>
 
 <!-- We pick up user-supplied macros, and         -->
 <!-- add three of our own that are useful         -->
