@@ -1882,7 +1882,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="env-type" select="'visible'" />
         </xsl:apply-templates>
     </xsl:element>
-    <xsl:apply-templates select="." mode="posterior" />
+    <div class="posterior">
+        <xsl:apply-templates select="." mode="posterior" />
+    </div>
 </xsl:template>
 
 <!-- Environments born hidden -->
