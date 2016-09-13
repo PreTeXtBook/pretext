@@ -2199,6 +2199,10 @@ the xsltproc executable.
                         <title>Aqua</title>
                         <p>The color of shallow tropical waters.</p>
                     </li>
+                    <li xml:id="description-list-math-title">
+                        <title>Math <m>x^2</m></title>
+                        <p>Sorry, not a color but testing titles with math in them.</p>
+                    </li>
                 </dl></p>
             </subsection>
 
@@ -3033,6 +3037,7 @@ the xsltproc executable.
                 <li><p>A cross-reference to a list item in a description list, which has a title, but never a number: <xref ref="reserved-characters-mathematics" autoname="title" />.  Note that you need to include the attribute <c>autoname="number"</c> even if that is obvious from the situation.  This requirement may be relaxed in a future refactoring of the cross-reference system.</p></li>
                 <li><p>A cross-reference to a <q>paragraphs</q> subdivision, which never has a number (so comments above about description list items and titles applies here too): <xref ref="hierarchy-structure" autoname="title" /></p></li>
                 <li><p>A case within the proof of <xref ref="claim-with-cases" autoname="yes" />: <xref ref="inductive-step" autoname="title" /></p></li>
+                <li><p>A cross-reference to a description list item with a title containing math: <xref ref="description-list-math-title" autoname="title" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul></p>
 
