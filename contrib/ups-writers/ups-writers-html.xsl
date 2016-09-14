@@ -11,6 +11,8 @@
 <xsl:import href="../xsl/mathbook-html.xsl" />
 
 <xsl:output method="html" />
+<xsl:param name="html.css.file" select="'mathbook-ups.css'"/>
+<xsl:param name="html.knowl.example" select="'no'"/>
 
 <xsl:template match="un[@s='1']">
     <xsl:element name="span">
