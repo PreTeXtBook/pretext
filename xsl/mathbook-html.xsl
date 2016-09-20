@@ -3946,7 +3946,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>0.5625</xsl:text>
     </xsl:variable>
     <xsl:element name="iframe">
-        <xsl:attribute name="id">ytplayer</xsl:attribute>
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:attribute>
         <xsl:attribute name="type">text/html</xsl:attribute>
         <xsl:attribute name="width">
             <xsl:value-of select="$design-width * $width-fraction" />
