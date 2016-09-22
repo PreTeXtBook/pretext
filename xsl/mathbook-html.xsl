@@ -756,7 +756,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                           (.//solution and $exercise.backmatter.solution='yes')" />
 
     <xsl:if test="$nonempty='true'">
-        <section class="exercises" id="">
+        <!-- these sections do not have HTML id, so no way to point to them -->
+        <!-- maybe there is a way to generate a reasonable internal-id      -->
+        <section class="exercises">
             <h1 class="heading">
                 <span class="type">Exercises</span>
                 <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
