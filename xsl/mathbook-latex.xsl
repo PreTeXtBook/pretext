@@ -5127,6 +5127,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- A tabular layout -->
 <xsl:template match="tabular" name="tabular">
+    <!-- Abort if tabular's cols have widths summing to over 100% -->
+    <xsl:call-template name="cap-width-at-one-hundred-percent">
+        <xsl:with-param name="nodeset" select="col/@width" />
+    </xsl:call-template>
     <!-- Determine global, table-wide properties -->
     <!-- set defaults here if values not given   -->
     <xsl:variable name="table-top">
@@ -5547,16 +5551,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="next-cell" select="$the-cell/following-sibling::cell[1]" /> <!-- possibly empty -->
     <xsl:variable name="next-col"  select="$right-col/following-sibling::col[1]" />
     <!-- Write the cell's contents -->
-    <!-- if the left border, horizontal alignment or right border -->
-    <!-- conflict with the column specification, then we          -->
-    <!-- wrap in a multicolumn to specify the overrides.          -->
-    <!-- Or if we have a colspan, then we use a multicolumn       -->
-    <!-- $table-left and $row-left *can* differ on first use,     -->
-    <!-- but row-left is subsequently set to $table-left.         -->
-    <!-- table-cell-lines handles cells with line elements        -->
+    <!-- Wrap in a multicolumn in any of the following situations for    -->
+    <!-- the purposes of vertical boundary rules or content formatting:  -->
+    <!--    -if the left border, horizontal alignment or right border    -->
+    <!--         conflict with the column specification                  -->
+    <!--    -if we have a colspan                                        -->
+    <!--    -if there are paragraphs in the cell                         -->
+    <!-- $table-left and $row-left *can* differ on first use,            -->
+    <!-- but row-left is subsequently set to $table-left.                -->
     <xsl:if test="$the-cell">
         <xsl:choose>
-            <xsl:when test="not($table-left = $row-left) or not($column-halign = $cell-halign) or not($column-right = $cell-right) or ($column-span > 1)">
+            <xsl:when test="not($table-left = $row-left) or not($column-halign = $cell-halign) or not($column-right = $cell-right) or ($column-span > 1) or $the-cell/p">
                 <xsl:text>\multicolumn{</xsl:text>
                 <xsl:value-of select="$column-span" />
                 <xsl:text>}{</xsl:text>
@@ -5566,14 +5571,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:with-param name="width" select="$row-left" />
                     </xsl:call-template>
                 </xsl:if>
-                <xsl:call-template name="halign-specification">
-                    <xsl:with-param name="align" select="$cell-halign" />
-                </xsl:call-template>
+                <xsl:choose>
+                    <xsl:when test="$the-cell/p">
+                        <!-- paragraph-valign-specification differs from valign-specification -->
+                        <xsl:call-template name="paragraph-valign-specification">
+                            <xsl:with-param name="align" select="$row-valign" />
+                        </xsl:call-template>
+                        <xsl:text>{</xsl:text>
+                        <xsl:choose>
+                            <xsl:when test="$left-col/@width">
+                                <xsl:variable name="width">
+                                    <xsl:call-template name="normalize-percentage">
+                                        <xsl:with-param name="percentage" select="$left-col/@width" />
+                                    </xsl:call-template>
+                                </xsl:variable>
+                                <xsl:value-of select="substring-before($width, '%') div 100" />
+                            </xsl:when>
+                            <!-- If there is no $left-col/@width, terminate -->
+                            <xsl:otherwise>
+                                <xsl:message terminate="yes">MBX:ERROR:   cell with p element has no corresponding col element with width attribute</xsl:message>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:text>\linewidth}</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="halign-specification">
+                            <xsl:with-param name="align" select="$cell-halign" />
+                        </xsl:call-template>
+                    </xsl:otherwise>
+                </xsl:choose>
                 <xsl:call-template name="vrule-specification">
                     <xsl:with-param name="width" select="$cell-right" />
                 </xsl:call-template>
                 <xsl:text>}{</xsl:text>
-                <xsl:call-template name="table-cell-lines">
+                <xsl:call-template name="table-cell-content">
                     <xsl:with-param name="the-cell" select="$the-cell" />
                     <xsl:with-param name="halign" select="$cell-halign" />
                     <xsl:with-param name="valign" select="$row-valign" />
@@ -5581,7 +5612,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>}</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:call-template name="table-cell-lines">
+                <xsl:call-template name="table-cell-content">
                     <xsl:with-param name="the-cell" select="$the-cell" />
                     <xsl:with-param name="halign" select="$cell-halign" />
                     <xsl:with-param name="valign" select="$row-valign" />
@@ -5706,6 +5737,51 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "valign-specification" : param "align" -->
 <!--     top, middle, bottom -> t, m, b     -->
 
+<!-- paragraph valign-specifications (p, m, b) are  -->
+<!-- different from (t, m, b) in mathbook-common    -->
+
+<!-- paragraph halign-specifications (left, center, right, justify) -->
+<!-- converted to \raggedright, \centering, \raggedleft, <empty>    -->
+
+<xsl:template name="paragraph-valign-specification">
+    <xsl:param name="align" />
+    <xsl:choose>
+        <xsl:when test="$align='top'">
+            <xsl:text>p</xsl:text>
+        </xsl:when>
+        <xsl:when test="$align='middle'">
+            <xsl:text>m</xsl:text>
+        </xsl:when>
+        <xsl:when test="$align='bottom'">
+            <xsl:text>b</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:WARNING: vertical alignment attribute not recognized: use top, middle, bottom</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="paragraph-halign-specification">
+    <xsl:param name="align" />
+    <xsl:choose>
+        <xsl:when test="$align='justify'">
+            <xsl:text></xsl:text>
+        </xsl:when>
+        <xsl:when test="$align='left'">
+            <xsl:text>\raggedright</xsl:text>
+        </xsl:when>
+        <xsl:when test="$align='center'">
+            <xsl:text>\centering</xsl:text>
+        </xsl:when>
+        <xsl:when test="$align='right'">
+            <xsl:text>\raggedleft</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:WARNING: horizontal alignment attribute not recognized: use left, center, right, justify</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- Translate vertical rule width to a LaTeX "new" column specification -->
 <xsl:template name="vrule-specification">
     <xsl:param name="width" />
@@ -5783,12 +5859,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<xsl:template name="table-cell-lines">
+<xsl:template name="table-cell-content">
     <xsl:param name="the-cell" />
     <xsl:param name="halign" />
     <xsl:param name="valign" />
     <xsl:choose>
-        <xsl:when test="$the-cell[line]">
+        <xsl:when test="$the-cell/p">
+            <!-- paragraph-halign-specification differs from halign-specification -->
+            <xsl:call-template name="paragraph-halign-specification">
+                <xsl:with-param name="align" select="$halign" />
+            </xsl:call-template>
+            <!-- styling choice for interparagraph spacing within a table cell    -->
+            <xsl:if test="$the-cell[count(p) &gt; 1]">
+                <xsl:text>\setlength{\parskip}{0.5\baselineskip}</xsl:text>
+            </xsl:if>
+            <xsl:text>%&#xa;</xsl:text>
+            <xsl:apply-templates select="$the-cell/p" />
+        </xsl:when>
+        <xsl:when test="$the-cell/line">
             <xsl:text>\tablecelllines{</xsl:text>
             <xsl:call-template name="halign-specification">
                 <xsl:with-param name="align" select="$halign" />

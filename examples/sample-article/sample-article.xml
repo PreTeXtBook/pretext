@@ -2407,7 +2407,7 @@ the xsltproc executable.
                         <cell><m>\times</m></cell>
                         <cell><m>\times</m></cell>
                         <cell><m>\times</m></cell>
-                        <cell>left*, center, right</cell>
+                        <cell>left*, center, right, justify</cell>
                     </row>
                     <row>
                         <cell><c>halign</c></cell>
@@ -2456,6 +2456,14 @@ the xsltproc executable.
                         <cell></cell>
                         <cell>p</cell>
                         <cell>1*, integer</cell>
+                    </row>
+                    <row>
+                        <cell><c>width</c></cell>
+                        <cell></cell>
+                        <cell><m>\times</m></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell>percentage</cell>
                     </row>
                     <row>
                         <cell>colors</cell>
@@ -2732,7 +2740,44 @@ the xsltproc executable.
                 </tabular>
             </table>
 
-            <p>Table cells can have multiline content using <c>&lt;line&gt;</c> elements. This is not the same thing as a paragraph cell<mdash />line breaking will happen precisely where the author tells it to. A line will not break, even on a narrow screen. If a cell uses a <c>&lt;line&gt;</c>, it must only use a sequence of <c>&lt;line&gt;</c>s and no other content. This is also a good time to demonstrate the <c>&lt;valign&gt;</c> attribute.</p>
+            <p>Table cells with a fixed width where text wraps are known as <q>paragraph cells</q>. A cell will be created as a paragraph cell if and only if it has <c>&lt;p&gt;</c> children. And such cells should <em>only</em> have <c>&lt;p&gt;</c> children. The width of a paragraph cell is determined by a <c>width</c> attribute on the corresponding <c>&lt;col&gt;</c> (as a percentage). If no <c>width</c> is specified (or there isn't even a <c>&lt;col&gt;</c> in the first place) then <c>xsltproc</c> will abort. If the column has a non-paragraph cell with contents that are wider than the paragraph cells, results will be undesirable. There is presently no implementation for a paragraph cell that has a <c>colspan</c> greater than <m>1</m>, although cells with <c>colspan</c> greater than <m>1</m> that are above or below a paragraph cell will behave. Setting <c>width</c> on a <c>&lt;col&gt;</c> that has no paragraph cells may produce unexpected results. A <c>valign</c> for the parent <c>&lt;row&gt;</c> (or the ambient <c>&lt;tabular&gt;</c>) can control vertical alignment (top, middle, or bottom). A paragraph cell's <c>halign</c> attribute (left, center, right, or justify) controls how the text is justfied. Cells inherit <c>halign</c> from <c>&lt;row&gt;</c>, <c>&lt;col&gt;</c>, and <c>&lt;tabular&gt;</c> in that order of preference. In a non-paragraph cell where <c>halign='justify'</c>, the horizontal alignment will match the behavior of <c>halign='left'</c>.</p>
+
+            <table xml:id="table-time-units">
+                <caption>Time Units</caption>
+                <tabular top="major">
+                    <col />
+                    <col />
+                    <col width="40%"/>
+                    <col width="25%" />
+                    <row valign="top" bottom="medium">
+                        <cell>Unit</cell>
+                        <cell>Stands For</cell>
+                        <cell >Defininion</cell>
+                        <cell >Roughly</cell>
+                    </row>
+                    <row valign="top" bottom="minor">
+                        <cell><quantity><unit base="second"/></quantity></cell>
+                        <cell>second</cell>
+                        <cell><p>the duration of <quantity><mag>9192631770</mag></quantity> periods of the radiation corresponding to the transition between the two hyperfine levels of the ground state of the cesium-133 atom</p>
+                            <p>an extraneous paragraph just to demonstrate the inter-paragraph formatting.</p></cell>
+                        <cell><p>the time it takes you to say the phrase <q>differential calculus</q></p></cell>
+                    </row>
+                    <row valign="top" bottom="minor">
+                        <cell><quantity><unit base="minute"/></quantity></cell>
+                        <cell>minute</cell>
+                        <cell><p>exactly <m>60</m> seconds</p></cell>
+                        <cell><p>how long it takes to microwave a full dinner plate from the refrigerator</p></cell>
+                    </row>
+                    <row valign="top" bottom="major">
+                        <cell><quantity><unit base="hour"/></quantity></cell>
+                        <cell>hour</cell>
+                        <cell><p>exactly <m>3600</m> seconds; exaclty <m>60</m> minutes</p></cell>
+                        <cell><p>the length of one episode of a premium cable television show</p></cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <p>Table cells can have multiline content using <c>&lt;line&gt;</c> elements. This is not the same thing as a paragraph cell<mdash />line breaking will happen precisely where the author tells it to. A <c>&lt;line&gt;</c> will not break, even on a narrow screen. If a cell uses a <c>&lt;line&gt;</c>, it must only use a sequence of <c>&lt;line&gt;</c>s and no other content. As with paragraph cells, you can use a <c>valign</c> attribute for the row.</p>
 
             <table xml:id="table-multiline-cells">
                 <caption><abbr>Dr.</abbr> Seuss lines</caption>
@@ -2759,6 +2804,110 @@ the xsltproc executable.
                     </row>
                 </tabular>
             </table>
+
+            <p>This is a table torture test with many combinations of <c>halign</c>, <c>valign</c>, <c>colspan</c>, <c>&lt;p&gt;</c> children, and <c>&lt;line&gt;</c> children.</p>
+
+            <table>
+                <caption>Table Torture Test</caption>
+                <tabular top="minor" bottom="minor" right="minor" left="minor">
+                    <col />
+                    <col width="10%" />
+                    <col halign="right"/>
+                    <col width="10%" halign="right"/>
+                    <col halign="center"/>
+                    <col width="10%" halign="center"/>
+                    <col halign="justify"/> <!-- justify => left for non-p cells -->
+                    <col width="10%" halign="justify"/>
+                    <col />
+                    <row>
+                        <cell />
+                        <cell />
+                        <cell />
+                        <cell />
+                        <cell />
+                        <cell />
+                        <cell />
+                        <cell>Cell too wide</cell>
+                        <cell />
+                    </row>
+                    <row>
+                        <cell>Lf md</cell>
+                        <cell><p>Lef mid par cel</p></cell>
+                        <cell>Rt md</cell>
+                        <cell><p>Rig mid par cel</p></cell>
+                        <cell>Cn md</cell>
+                        <cell><p>Cen mid par cel</p></cell>
+                        <cell>Js md</cell>
+                        <cell><p>Jus mid par cel jus mid par cel</p></cell>
+                        <cell><line /><line /><line /><line /><line /><line /></cell>
+                    </row>
+                    <row>
+                        <cell colspan="2"><line>Colspan=2</line><line>lef mid</line><line>with lines</line></cell>
+                        <cell colspan="3">Colspan=3 rig mid</cell>
+                        <cell><line>Lines</line><line>Between</line><line>Par</line></cell>
+                        <cell><line>Lines</line><line>Between</line><line>No Par</line></cell>
+                        <cell><p>Par in row with lines</p></cell>
+                        <cell><line /><line /><line /><line /><line /><line /></cell>
+                    </row>
+                    <row valign="top">
+                        <cell>L t</cell>
+                        <cell><p>Lef top par cel</p></cell>
+                        <cell>R t</cell>
+                        <cell><p>Rig top par cel</p></cell>
+                        <cell>C t</cell>
+                        <cell><p>Cen top par cel</p></cell>
+                        <cell>J t</cell>
+                        <cell><p>Jus top par cel jus top par cel</p></cell>
+                        <cell><line /><line /><line /><line /><line /><line /></cell>
+                    </row>
+                    <row valign="bottom">
+                        <cell>L b</cell>
+                        <cell><p>Lef bot par cel</p></cell>
+                        <cell>R b</cell>
+                        <cell><p>Rig bot par cel</p></cell>
+                        <cell>C b</cell>
+                        <cell><p>Cen bot par cel</p></cell>
+                        <cell>J b</cell>
+                        <cell><p>Jus bot par cel jus bot par cel</p></cell>
+                        <cell><line /><line /><line /><line /><line /><line /></cell>
+                    </row>
+                    <row valign="bottom">
+                        <cell colspan="3">Colspan=3 lef bot</cell>
+                        <cell colspan="2"><line>Colspan=2</line><line>rig bot</line><line>with lines</line></cell>
+                        <cell><line>Lines</line><line>Under</line><line>Par</line></cell>
+                        <cell><line>Lines</line><line>Under</line><line>No Par</line></cell>
+                        <cell><p>Par in row with lines</p></cell>
+                        <cell><line /><line /><line /><line /><line /><line /></cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <p>And now a <c>&lt;sidebyside&gt;</c> with a <c>&lt;table&gt;</c> and a <c>&lt;tabular&gt;</c> to check that width is scaled appropriately. See <xref ref="section-side-by-side">Section</xref> to learn about <c>&lt;sidebyside&gt;</c>s.</p>
+
+            <sidebyside widths="45% 55%">
+                <caption>Some text from the US Constitution</caption>
+                <table>
+                    <tabular valign="top" top="minor" bottom="minor" left="minor" right="minor">
+                        <col />
+                        <col width="50%" />
+                        <row>
+                            <cell>A1.S1</cell>
+                            <cell><p>All legislative Powers herein granted shall be vested in a Congress of the United States, which shall consist of a Senate and House of Representatives.</p>
+                                  <p>Should be 50<percent /> of 45<percent /> except perhaps on small screens.</p></cell>
+                        </row>
+                    </tabular>
+                </table>
+
+                <tabular valign="top" top="minor" bottom="minor" left="minor" right="minor">
+                    <col />
+                    <col width="50%" />
+                    <row>
+                        <cell>A1.S2.C1</cell>
+                        <cell><p>The House of Representatives shall be composed of Members chosen every second Year by the People of the several States, and the Electors in each State shall have the Qualifications requisite for Electors of the most numerous Branch of the State Legislature.</p>
+                              <p>Should be 50<percent /> of 55<percent /> except perhaps on small screens.</p></cell>
+                    </row>
+                </tabular>
+            </sidebyside>
 
             <p>Tables are formed in <latex /> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, some other <latex /> macros then do not behave as they should.  So the table below, one item per row, is just designed for <latex /> testing.  But of course, it should still render fine in other formats.  The first five test cases are from <xref ref="section-urls" />, but without the 52 alphabetic characters (which should not be problems in this context).  The sixth cell tests the tilde, which seems to only be a problem as the leading character of the verbatim string.</p>
 
