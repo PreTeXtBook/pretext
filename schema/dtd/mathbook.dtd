@@ -282,6 +282,7 @@
 <!-- Generic code chunks, raw text -->
 <!ELEMENT prompt  (#PCDATA)>
 <!ELEMENT input   (#PCDATA)>
+    <!ATTLIST input xml:base CDATA    #IMPLIED>
 <!ELEMENT output  (#PCDATA)>
 
 <!ELEMENT sage (input?, output?)>
