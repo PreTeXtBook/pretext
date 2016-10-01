@@ -708,17 +708,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Introductions and Conclusions -->
 <!-- Simple containers, allowed before and after      -->
 <!-- explicit subdivisions, to introduce or summarize -->
-<!-- Title optional (and discouraged),                -->
-<!-- typically just a few paragraphs                  -->
+<!-- Title optional, typically just a few paragraphs  -->
+<!-- Also occur in "smaller" units such as an         -->
+<!-- "exercisegroup", so the HTML element varies      -->
+<!-- from a "section" to an "article"                 -->
 <xsl:template match="introduction|conclusion">
-    <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
-    <article class="{local-name(.)}" id="{$ident}">
-        <h5 class="heading">
-            <xsl:apply-templates select="." mode="title-full" />
-            <span> </span>
-        </h5>
+    <xsl:variable name="element-name">
+        <xsl:choose>
+            <xsl:when test="parent::*[&STRUCTURAL-FILTER;]">
+                <xsl:text>section</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>article</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:element name="{$element-name}">
+        <xsl:attribute name="class">
+            <xsl:value-of select="local-name(.)" />
+        </xsl:attribute>
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:attribute>
+        <xsl:if test="title">
+            <h5 class="heading">
+                <xsl:apply-templates select="." mode="title-full" />
+                <span> </span>
+            </h5>
+        </xsl:if>
         <xsl:apply-templates  select="*"/>
-    </article>
+    </xsl:element>
 </xsl:template>
 
 <!-- ####################### -->
