@@ -31,14 +31,10 @@
 <!-- SageWS files as output -->
 <xsl:variable name="file-extension" select="'.sagews'" />
 
-
 <!-- Do not implement any cross-reference as a knowl -->
 <xsl:template match="*" mode="xref-as-knowl">
     <xsl:value-of select="false()" />
 </xsl:template>
-
-<!-- And do not even build the knowls -->
-<xsl:template match="*" mode="xref-knowl-factory" />
 
 <!-- Deprecation warnings are universal analysis of source and parameters   -->
 <xsl:template match="/">
@@ -48,73 +44,153 @@
 
 <!-- We process structural nodes via chunking routine in   xsl/mathbook-common.html -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file     -->
+<!-- Contrary to HTML production, we do not have a pass through to build the knowls -->
 <xsl:template match="mathbook">
     <xsl:apply-templates mode="chunking" />
 </xsl:template>
 
 <!-- File wrap -->
-<!-- Per file setup, macros, css, in/out SMC mode -->
+<!-- Per file setup, CSS, LaTeX macros, crude nav bars top and bottom -->
 <xsl:template match="*" mode="file-wrap">
     <xsl:param name="content" />
-    <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
+    <xsl:variable name="url">
+        <xsl:apply-templates select="." mode="url" />
+    </xsl:variable>
     <exsl:document href="{$url}" method="html">
-        <!-- CSS to hidden executable cell -->
-        <xsl:call-template name="css-load" />
-        <!-- Start in HTML mode -->
-        <xsl:apply-templates select="." mode="inputbegin-execute" />
-        <xsl:text>%html&#xa;</xsl:text>
-        <xsl:call-template name="latex-macros" />
-        <!-- top nav bar -->
+        <xsl:call-template name="sage-css-setup" />
+        <xsl:call-template name="html-css-mathjax-setup" />
         <xsl:apply-templates select="." mode="crude-nav-bar" />
-        <!-- now the guts -->
+        <!-- the guts -->
         <xsl:copy-of select="$content" />
-        <!-- fall out of SMC mode -->
-        <xsl:apply-templates select="." mode="inputoutput" />
-        <xsl:apply-templates select="." mode="outputend" />
-        <!-- bottom nav bar -->
+        <!-- A nav bar at the bottom too -->
         <xsl:apply-templates select="." mode="crude-nav-bar" />
     </exsl:document>
 </xsl:template>
 
+<!-- The abstract chunking routines will use a default   -->
+<!-- template for a structural subdivision, so we define -->
+<!-- that here.  For SMC we write a subdvision header    -->
+<!-- (ie section title) as an HTML cell, then deal with  -->
+<!-- each direct descendant (children) as HTML or Sage   -->
+<!-- cells.  At a minimum this assumes that a Sage cell  -->
+<!-- is not buried in some other structure, like a list. -->
+<xsl:template match="&STRUCTURAL;">
+    <!-- Subdivision heading, as its own HTML cell -->
+    <xsl:apply-templates select="." mode="smc-html-cell">
+        <xsl:with-param name="content">
+            <xsl:variable name="ident">
+                <xsl:apply-templates select="." mode="internal-id" />
+            </xsl:variable>
+            <section class="{local-name(.)}" id="{$ident}">
+                <xsl:apply-templates select="." mode="section-header" />
+            </section>
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <!-- Direct, and interesting, children become cells             -->
+    <!-- Further subdivisions (not chunked) come through here again -->
+    <xsl:apply-templates select="*[not(&METADATA-FILTER;)]" mode="smc-cell" />
+</xsl:template>
 
-<!-- Content of a summary page is usual content, -->
-<!-- or link to subsidiary content               -->
+<!-- Introductions and Conclusions     -->
+<!-- Nearly identical to HTML template -->
+<xsl:template match="introduction|conclusion">
+    <!-- Cell for introduction header, condition on title! -->
+    <xsl:apply-templates select="." mode="smc-html-cell">
+        <xsl:with-param name="content">
+            <xsl:variable name="ident">
+                <xsl:apply-templates select="." mode="internal-id" />
+            </xsl:variable>
+            <article class="{local-name(.)}" id="{$ident}">
+                <h5 class="heading">
+                    <xsl:apply-templates select="." mode="title-full" />
+                    <span> </span>
+                </h5>
+            </article>
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <!-- Build cells for remaining children -->
+    <xsl:apply-templates select="*[not(&METADATA-FILTER;)]" mode="smc-cell" />
+</xsl:template>
+
+<!-- Most children of a subdivision will be HTML cells,    -->
+<!-- so wrap as such and then call their default templates -->
+<xsl:template match="*" mode="smc-cell">
+    <xsl:apply-templates select="." mode="smc-html-cell">
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="." />
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- Handle Sage code with a minimum of interference   -->
+<!-- This comes second, so as to overide generic above -->
+<xsl:template match="sage" mode="smc-cell">
+    <xsl:apply-templates select="." mode="smc-compute-cell">
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="." />
+            <!-- Sage input always ends with a newline -->
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- Most Sage options are implemented in  xsl/mathbook-common.xsl -->
+<!-- We just output the input code, with no XHTML protections      -->
+<xsl:template name="sage-active-markup">
+    <xsl:param name="in" />
+    <xsl:value-of select="$in" disable-output-escaping="yes" />
+</xsl:template>
+
+<!-- TODO: sage-display-only abstract template needed (?) -->
+<!--       Or deprecate type="display"                    -->
+
+<!-- Summary page is links to subsidiary content      -->
+<!-- This is functional but will not win style points -->
 <xsl:template match="&STRUCTURAL;" mode="summary">
-    <xsl:apply-templates select="." mode="crude-nav-bar" />
     <!-- Heading, div for subdivision that is this page -->
-    <!-- We shorten up the section element,             -->
-    <!-- so we do not cross SMC cell boundaries         -->
-    <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
-    <section class="{local-name(.)}" id="{$ident}">
-        <xsl:apply-templates select="." mode="section-header" />
-    </section>
+    <xsl:apply-templates select="." mode="smc-html-cell">
+        <xsl:with-param name="content">
+            <xsl:variable name="ident">
+                <xsl:apply-templates select="." mode="internal-id" />
+            </xsl:variable>
+            <section class="{local-name(.)}" id="{$ident}">
+                <xsl:apply-templates select="." mode="section-header" />
+            </section>
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <!-- Handle structural elements as pointers -->
+    <!-- introduction and conclusion as cells   -->
     <xsl:for-each select="*">
         <xsl:choose>
             <xsl:when test="&STRUCTURAL-FILTER;">
-                <xsl:variable name="num"><xsl:apply-templates select="." mode="number" /></xsl:variable>
-                <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
-                <div style="font-size:150%; padding-bottom:1.5ex">
-                    <a href="{$url}">
-                        <!-- important not include codenumber span -->
-                        <xsl:if test="$num!=''">
-                            <span class="codenumber"><xsl:value-of select="$num" /></span>
-                            <xsl:text> </xsl:text>
-                        </xsl:if>
-                        <span class="title">
-                            <xsl:apply-templates select="." mode="title-simple" />
-                        </span>
-                    </a>
-                </div>
+                <xsl:apply-templates select="." mode="smc-html-cell">
+                    <xsl:with-param name="content">
+                        <xsl:variable name="num"><xsl:apply-templates select="." mode="number" /></xsl:variable>
+                        <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
+                        <div style="font-size:150%; padding-bottom:1.5ex">
+                            <a href="{$url}">
+                                <!-- important not include codenumber span -->
+                                <xsl:if test="$num!=''">
+                                    <span class="codenumber"><xsl:value-of select="$num" /></span>
+                                    <xsl:text> </xsl:text>
+                                </xsl:if>
+                                <span class="title">
+                                    <xsl:apply-templates select="." mode="title-simple" />
+                                </span>
+                            </a>
+                        </div>
+                    </xsl:with-param>
+                </xsl:apply-templates>
             </xsl:when>
+            <!-- introduction, conclusion are included on page -->
             <xsl:otherwise>
                 <xsl:apply-templates select="." />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:for-each>
-    <xsl:apply-templates select="." mode="crude-nav-bar" />
 </xsl:template>
 
-<!-- Mimics depth-first search, crudely styled -->
+<!-- Mimics depth-first search, into its own HTML cell -->
+<!-- This is functional but will not win style points  -->
 <xsl:template match="*" mode="crude-nav-bar">
     <xsl:variable name="prev">
         <xsl:apply-templates select="." mode="previous-linear-url" />
@@ -125,81 +201,45 @@
     <xsl:variable name="next">
         <xsl:apply-templates select="." mode="next-linear-url" />
     </xsl:variable>
-    <table width="90%" style="font-size: 200%;">
-        <tr>
-            <xsl:if test="not($prev = '')">
-                <td align="left">
-                    <xsl:element name="a">
-                        <xsl:attribute name="href">
-                            <xsl:value-of select="$prev" />
-                        </xsl:attribute>
-                        <xsl:text>Previous</xsl:text>
-                    </xsl:element>
-                </td>
-            </xsl:if>
-            <xsl:if test="not($up = '')">
-                <td align="center">
-                    <xsl:element name="a">
-                        <xsl:attribute name="href">
-                            <xsl:value-of select="$up" />
-                        </xsl:attribute>
-                        <xsl:text>Up</xsl:text>
-                    </xsl:element>
-                </td>
-            </xsl:if>
-            <xsl:if test="not($next = '')">
-                <td align="right">
-                    <xsl:element name="a">
-                        <xsl:attribute name="href">
-                            <xsl:value-of select="$next" />
-                        </xsl:attribute>
-                        <xsl:text>Next</xsl:text>
-                    </xsl:element>
-                </td>
-            </xsl:if>
-        </tr>
-    </table>
-</xsl:template>
-
-<!-- We presume entire page is inside a %html cell -->
-<!-- In reality at the end of any subdivision,     -->
-<!-- we suspend and immediately restart            -->
-<xsl:template match="&STRUCTURAL;">
-    <!-- Section element needed for CSS, apply-templates moved out -->
-    <xsl:variable name="ident"><xsl:apply-templates select="." mode="internal-id" /></xsl:variable>
-    <section class="{local-name(.)}" id="{$ident}">
-        <xsl:apply-templates select="." mode="section-header" />
-    </section>
-    <!-- Recurse through contents -->
-    <xsl:apply-templates />
-    <!-- Hop out, back in, to HTML mode -->
-    <xsl:apply-templates select="." mode="html-break" />
-</xsl:template>
-
-<!-- An abstract named template accepts input text and output    -->
-<!-- text, then wraps it in SMC syntax for an executable cell    -->
-<!-- (But does not evaluate the cell, that is for the reader)    -->
-<!-- [Next part seems broken, code remains to test later]        -->
-<!-- We are careful not to hop in/out of HTML mode when there    -->
-<!-- is a sequence of consecutive Sage elements (a likely event) -->
-<xsl:template name="sage-active-markup">
-    <xsl:param name="in" />
-    <xsl:param name="out" />
-    <!-- Drop out of HTML mode if first in a run (or first in subdivision) -->
-    <!-- <xsl:if test="not(local-name(preceding-sibling::*[1]) = 'sage')"> -->
-        <xsl:apply-templates select="." mode="inputoutput" />
-        <xsl:apply-templates select="." mode="outputend" />
-    <!-- </xsl:if> -->
-    <!-- Create a complete Sage cell region -->
-    <xsl:apply-templates select="." mode="inputbegin" />
-        <xsl:value-of select="$in" disable-output-escaping="yes" />
-    <xsl:apply-templates select="." mode="inputoutput" />
-    <xsl:apply-templates select="." mode="outputend" />
-    <!-- Start back in HTML mode, if last in a run (or last in subdivision) -->
-    <!-- <xsl:if test="not(local-name(following-sibling::*[1]) = 'sage')"> -->
-        <xsl:apply-templates select="." mode="inputbegin-execute" />
-        <xsl:text>%html&#xa;</xsl:text>
-    <!-- </xsl:if> -->
+    <!-- HTML cell begins here, holds a table element -->
+    <xsl:apply-templates select="." mode="smc-html-cell">
+        <xsl:with-param name="content">
+            <table width="90%" style="font-size: 200%;">
+                <tr>
+                    <xsl:if test="not($prev = '')">
+                        <td align="left">
+                            <xsl:element name="a">
+                                <xsl:attribute name="href">
+                                    <xsl:value-of select="$prev" />
+                                </xsl:attribute>
+                                <xsl:text>Previous</xsl:text>
+                            </xsl:element>
+                        </td>
+                    </xsl:if>
+                    <xsl:if test="not($up = '')">
+                        <td align="center">
+                            <xsl:element name="a">
+                                <xsl:attribute name="href">
+                                    <xsl:value-of select="$up" />
+                                </xsl:attribute>
+                                <xsl:text>Up</xsl:text>
+                            </xsl:element>
+                        </td>
+                    </xsl:if>
+                    <xsl:if test="not($next = '')">
+                        <td align="right">
+                            <xsl:element name="a">
+                                <xsl:attribute name="href">
+                                    <xsl:value-of select="$next" />
+                                </xsl:attribute>
+                                <xsl:text>Next</xsl:text>
+                            </xsl:element>
+                        </td>
+                    </xsl:if>
+                </tr>
+            </table>
+        </xsl:with-param>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- We bypass image creation and just let SMC -->
@@ -208,6 +248,7 @@
     <xsl:apply-templates select="sageplot" />
 </xsl:template>
 
+<!-- TODO: Not fixed up yet 2016-10-02 -->
 <xsl:template match="sageplot">
     <!-- Drop out of HTML mode -->
     <xsl:apply-templates select="." mode="inputoutput" />
@@ -225,51 +266,135 @@
     <xsl:text>%html&#xa;</xsl:text>
 </xsl:template>
 
-<!-- TODO: sage-display-only abstract template needed -->
-
-<!-- Override wrapper for SVG images        -->
-<!-- SMC treates the object tag badly,      -->
-<!-- so we just use an img tag (with alt)   -->
-<!-- Template expects a fallback flag,      -->
-<!-- but this is just to support Sage 3D    -->
-<!-- and we just do "sageplot" straightaway -->
-<xsl:template match="*" mode="svg-wrapper">
-    <xsl:param name="png-fallback" />
+<!-- Override for SVG images                        -->
+<!-- SMC treates the object tag badly.  We ignore   -->
+<!-- any PNG fallback and so just use an img tag.   -->
+<!-- A named template creates the infrastructure    -->
+<!-- for an SVG image.  Parameter lists (doc, code) -->
+<!-- are identical to those for HTML conversion     -->
+<!-- Parameters                                     -->
+<!-- svg-filename: required, full relative path     -->
+<!-- png-fallback-filename: optional                -->
+<!-- image-width: required                          -->
+<!-- image-description: optional                    -->
+<xsl:template name="svg-wrapper">
+    <xsl:param name="svg-filename" />
+    <xsl:param name="png-fallback-filename" select="''" />
+    <xsl:param name="image-width" />
+    <xsl:param name="image-description" select="''" />
     <xsl:element name="img">
-        <xsl:attribute name="style">width:60%; margin:auto;</xsl:attribute>
-        <xsl:attribute name="src">
-            <xsl:value-of select="$directory.images" />
-            <xsl:text>/</xsl:text>
-            <xsl:apply-templates select=".." mode="internal-id" />
-            <xsl:text>.svg</xsl:text>
+        <xsl:attribute name="style">
+            <xsl:text>width:</xsl:text>
+            <xsl:value-of select="$image-width" />
+            <xsl:text>; margin:0 auto;</xsl:text>
         </xsl:attribute>
-        <xsl:apply-templates select="../description" />
+        <xsl:attribute name="src">
+            <xsl:value-of select="$svg-filename" />
+        </xsl:attribute>
+        <xsl:attribute name="alt">
+            <xsl:value-of select="$image-description" />
+        </xsl:attribute>
     </xsl:element>
 </xsl:template>
 
-<!-- CSS -->
-<xsl:template name="css-load">
-    <!-- Load CSS files                                -->
-    <!-- A hidden cell, typically at the top of a page -->
-    <xsl:apply-templates select="." mode="inputbegin-execute" />
-    <xsl:text>%hide&#xa;</xsl:text>
-    <xsl:text>load("mathbook-content.css")&#xa;</xsl:text>
-    <xsl:text>load("mathbook-add-on.css")&#xa;</xsl:text>
-    <xsl:apply-templates select="." mode="inputoutput" />
-    <xsl:apply-templates select="." mode="outputend" />
-    <!-- Blend background color for MathJax display math -->
-    <xsl:apply-templates select="." mode="inputbegin-execute" />
-    <xsl:text>%html&#xa;</xsl:text>
-    <xsl:element name="style">
-        <xsl:text>.MathJax_SVG_Display {background-color: inherit;}</xsl:text>
-    </xsl:element>
-    <xsl:apply-templates select="." mode="inputoutput" />
-    <xsl:apply-templates select="." mode="outputend" />
+<!-- ##################### -->
+<!-- Set-up, per-worksheet -->
+<!-- ##################### -->
+
+<!-- Sage code for CSS load -->
+<xsl:template name="sage-css-setup">
+    <xsl:apply-templates select="." mode="smc-compute-cell">
+        <xsl:with-param name="content">
+            <xsl:text>%auto&#xa;</xsl:text>
+            <xsl:text>%hide&#xa;</xsl:text>
+            <xsl:text>load("mathbook-content.css")&#xa;</xsl:text>
+            <xsl:text>load("mathbook-add-on.css")&#xa;</xsl:text>
+        </xsl:with-param>
+    </xsl:apply-templates>
 </xsl:template>
+
+<!-- HTML code for CSS style, MathJax macros -->
+<xsl:template name="html-css-mathjax-setup">
+    <xsl:apply-templates select="." mode="smc-html-cell">
+        <xsl:with-param name="content">
+            <!-- Blend background color for MathJax display math       -->
+            <!-- Status: https://github.com/sagemathinc/smc/issues/136 -->
+            <xsl:element name="style">
+                <xsl:text>.MathJax_SVG_Display {background-color: inherit;}</xsl:text>
+            </xsl:element>
+            <xsl:call-template name="latex-macros" />
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- ########################### -->
+<!-- SageMathCloud Cell Wrappers -->
+<!-- ########################### -->
+
+<!-- SMC HTML Cell -->
+<!-- Pass in HTML content, after templates applied -->
+<!-- USe SMC UUID markers on their own lines       -->
+<!-- Wrap in custom CSS class, mathbook-content    -->
+<xsl:template match="*" mode="smc-html-cell">
+    <xsl:param name="content" />
+    <xsl:apply-templates select="." mode="smc-input-marker" />
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>%auto&#xa;</xsl:text>
+    <xsl:text>%html(hide=True)&#xa;</xsl:text>
+    <xsl:element name="div">
+        <xsl:attribute name="class">
+            <xsl:text>mathbook-content</xsl:text>
+        </xsl:attribute>
+        <xsl:copy-of select="$content" />
+    </xsl:element>
+    <!-- Be certain output marker is on own line -->
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="smc-output-marker" />
+    <!-- We could parse HTML $content into a JSON-escaped string -->
+    <!-- Belongs *immediately* after output marker (?)           -->
+    <!-- <xsl:text disable-output-escaping='yes'>{"done":true,"html":"&lt;p&gt;Execute cell above for proper output.&lt;/p&gt;"}&#xa;</xsl:text> -->
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- SMC Compute Cell -->
+<!-- Pass in content, after templates applied -->
+<!-- USe SMC UUID markers on their own lines       -->
+<!-- Wrap in custom CSS class, mathbook-content    -->
+<xsl:template match="*" mode="smc-compute-cell">
+    <xsl:param name="content" />
+    <xsl:apply-templates select="." mode="smc-input-marker" />
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$content" />
+    <!-- Be certain $content ends with newline -->
+    <xsl:apply-templates select="." mode="smc-output-marker" />
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- ########################## -->
 <!-- SageMathCloud Cell Markers -->
 <!-- ########################## -->
+
+<!-- SMC uses markers to denote the start of each cell, -->
+<!-- differentiating input from output.                 -->
+<!-- By default these are Sage compute cells, but       -->
+<!-- decorators/magics can make them behave differently -->
+
+<!-- Pair of matched seldom-used Unicode, with a UUID -->
+<!-- 'COMBINING LIGATURE LEFT HALF' (U+FE20)          -->
+<xsl:template match="*" mode="smc-input-marker">
+    <xsl:text>&#xFE20;</xsl:text>
+    <xsl:apply-templates select="." mode="uuid" />
+    <xsl:text>&#xFE20;</xsl:text>
+</xsl:template>
+
+<!-- Pair of matched seldom-used Unicode, with a UUID -->
+<!-- 'COMBINING LIGATURE RIGHT HALF' (U+FE21)         -->
+<xsl:template match="*" mode="smc-output-marker">
+    <xsl:text>&#xFE21;</xsl:text>
+    <xsl:apply-templates select="." mode="uuid" />
+    <xsl:text>&#xFE21;</xsl:text>
+</xsl:template>
 
 <!-- Version 4 UUID -->
 <!-- Improvements:                     -->
@@ -337,60 +462,5 @@
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
-
-<!-- SMC codes for blocking cells          -->
-<!-- carriage returns are carefully placed -->
-<xsl:template match="*" mode="inputbegin">
-    <xsl:text>&#xFE20;</xsl:text>
-    <xsl:apply-templates select="." mode="uuid" />
-    <xsl:text>&#xFE20;&#xa;</xsl:text>
-</xsl:template>
-
-<!-- "x" code after UUID to execute -->
-<xsl:template match="*" mode="inputbegin-execute">
-    <xsl:text>&#xFE20;</xsl:text>
-    <xsl:apply-templates select="." mode="uuid" />
-    <xsl:text>x</xsl:text>
-    <xsl:text>&#xFE20;&#xa;</xsl:text>
-</xsl:template>
-
-<!-- "i" code after UUID to hide -->
-<xsl:template match="*" mode="inputbegin-hide">
-    <xsl:text>&#xFE20;</xsl:text>
-    <xsl:apply-templates select="." mode="uuid" />
-    <xsl:text>i</xsl:text>
-    <xsl:text>&#xFE20;&#xa;</xsl:text>
-</xsl:template>
-
-<!-- End an input cell and begin subsequent output cell -->
-<xsl:template match="*" mode="inputoutput">
-    <xsl:text>&#xa;&#xFE21;</xsl:text>
-    <xsl:apply-templates select="." mode="uuid" />
-    <xsl:text>&#xFE21;</xsl:text>
-</xsl:template>
-
-<!-- End an output cell -->
-<xsl:template match="*" mode="outputend">
-    <xsl:text>&#xFE21;&#xa;</xsl:text>
-</xsl:template>
-
-<!-- We like to keep HTML cells short and manageable -->
-<!-- So we frequently drop out of HTML mode,         -->
-<!-- only to instantly restart back in HTML mode     -->
-<!-- This presumes                                   -->
-<!-- (1) Page begins in HTML mode                    -->
-<!-- (2) Page ending concludes HTML mode             -->
-<!-- (3) Sage cells drop out/in properly             -->
-<xsl:template match="*" mode="html-break">
-    <!-- End input, begin output -->
-    <xsl:apply-templates select="." mode="inputoutput" />
-    <!-- End ouput               -->
-    <xsl:apply-templates select="." mode="outputend" />
-    <!-- Start new HTML cell     -->
-    <xsl:apply-templates select="." mode="inputbegin-execute" />
-    <xsl:text>%html&#xa;</xsl:text>
-</xsl:template>
-
-
 
 </xsl:stylesheet>
