@@ -1063,7 +1063,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 <!-- no links yet, so close subindex item w/o links, open subsubitem -->
                                 <xsl:text disable-output-escaping="yes">&lt;/div></xsl:text>
                                 <xsl:text disable-output-escaping="yes">&lt;div class="subsubindexitem"></xsl:text>
-                                <xsl:value-of select="'*'" />
                                 <xsl:value-of select="text[3]" />
                                 <!-- terminal so start knowl list -->
                                 <xsl:call-template name="begin-index-knowl-list" />
@@ -1091,7 +1090,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <!-- no links yet, so close subindex item w/o links, open subsubitem -->
                         <xsl:text disable-output-escaping="yes">&lt;/div></xsl:text>
                         <xsl:text disable-output-escaping="yes">&lt;div class="subsubindexitem"></xsl:text>
-                        <xsl:value-of select="'*'" />
                         <xsl:value-of select="text[3]" />
                         <!-- terminal so start knowl list -->
                         <xsl:call-template name="begin-index-knowl-list" />
@@ -1107,7 +1105,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="not($key3 = $prev3)">
                 <xsl:call-template name="end-index-knowl-list" />
                 <xsl:text disable-output-escaping="yes">&lt;div class="subsubindexitem"></xsl:text>
-                <xsl:value-of select="'*'" />
                 <xsl:value-of select="text[3]" />
                 <xsl:call-template name="begin-index-knowl-list" />
             </xsl:when>
