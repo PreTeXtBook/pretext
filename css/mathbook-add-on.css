@@ -35,8 +35,61 @@
     text-decoration: none;
 }
 
+#primary-navbar .navbar-top-buttons .toolbar-align-right .toolbar-item {
+   /* for the prev/next svg from SL2X */
+    margin-top: -8px;
+    border-left: 0;
+}
+
+#primary-navbar .navbar-top-buttons .toolbar-align-right {
+   /* also for the prev/next svg from SL2X */
+    border-right: 0;
+}
+
+#primary-navbar .navbar-top-buttons .toolbar-align-right .toolbar-item-left {
+    float: left;
+    padding: 3px 6px 3px 6px;
+    margin: 4px 10px 0px 5px;
+    border: 1px solid #aaf;
+    background-color: #def;
+/*
+    border: 1px solid #aaf;
+    margin: 8px 10px 0px 10px;
+*/
+    font-size: 90%;
+}
+
+#primary-navbar .navbar-top-buttons .toolbar-align-right .toolbar-item-left a {
+    text-decoration: none;
+/*
+    padding: 3px 6px 3px 6px;
+    margin: 4px 10px 0px 5px;
+    margin: 0;
+    border: 1px solid #aaf;
+    background-color: #def;
+*/
+}
+
+
+#feedback {position: relative;
+        margin-top: 30px; /* negative value of footer height */
+        height: 30px;
+        margin-left: 30px;
+        font-size: 70%;
+        text-align: bottom;
+        clear:both;
+} 
+
 .mathbook-content figure figcaption {
     font-weight: normal;
+}
+
+.mathbook-content figure figcaption {
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 100%;
+    text-indent: -30px;
 }
 
 .mathbook-content figure figcaption .heading, .mathbook-content figure figcaption .codenumber {
@@ -56,35 +109,44 @@
     content: ". ";
 }
 
-.unprocessed {
+.mathbook-content .definition-like p > em {
+    font-weight: 700;
+}
 
+.unprocessed {
     padding: 8px;
     background-color: rgb(255,230,230)
 }
 
 .unprocessed .unprocessed {
-
     margin: 8px;
     background-color: rgb(255,200,255)
 }
 
 .unprocessed .unprocessed .unprocessed {
-
     margin: 8px;
     background-color: rgb(205,205,255)
 }
 
+/* does this apply anywhere? */
 
+/*
 *[knowl] {
   border-bottom: 1px dotted #00a;
 }
+*/
 
 #toc h2 + h2 {
     margin-top: 0.3em;
 }
 
-.example-like, .exercise-like {
-  margin: 1.42857em 0;
+h2:last-child {
+/* for the chapter pages with section links at the bottom */
+    margin-bottom: 100px;
+}
+
+.mathbook-content section h2 a {
+    text-decoration: none;
 }
 
 .aside-like {
@@ -113,7 +175,7 @@
     display: inline;
 }
 
-.mathbook-content .paragraphs .heading:after {
+.mathbook-content .paragraphs .heading .title:not(:empty):after {
     content: ".\2002";  /* en space */
 }
 
@@ -121,14 +183,46 @@
     display: inline;
 }
 
-/*
-.mathbook-content .sidebyside > .paragraphs:after {
-    display:inline-block;
-    content:' x ';    
+.mathbook-content .paragraphs .heading + p:after {
+    content: "";
+    display: block;
+    margin-bottom: 1.25em;
 }
-*/
-/* does not work:  appears below, not after */
 
+/* the next are to avoid styping a p as inline, because
+ * inline styling messes up the meaning of line-height.
+ * */
+
+.mathbook-content .paragraphs p .title {
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+    font-size: 1.125em;
+    font-weight: 700;
+}
+
+.mathbook-content .paragraphs p .title:after {
+    content: ".\2002";
+}
+
+.mathbook-content .paragraphs p h5.heading {
+    display: inline;
+}
+
+.mathbook-content section .paragraphs h5.heading {
+    margin-top: 0;
+}
+
+.mathbook-content section .paragraphs {
+    margin-top: 0em;
+}
+
+.mathbook-content section .paragraphs + .paragraphs {
+    margin-top: 3em;
+}
+
+.mathbook-content h6 {
+    line-height: 1em;
+    margin-bottom: 0.5em;
+}
 
 .mathbook-content .sidebyside > p, .mathbook-content .sidebyside > figure, .mathbook-content .sidebyside > img, .mathbook-content .sidebyside > table, .mathbook-content .sidebyside > tabular, .mathbook-content .sidebyside > .paragraphs {
     display: inline-block;
@@ -141,9 +235,15 @@
 
 .mathbook-content .sidebyside figcaption {
     font-weight: normal;
-    padding-left: 10%;
-    padding-right: 10%;
-    padding-top: 20px;
+/*    padding-left: 5%;
+ */
+    padding-left: 1em; 
+    padding-right: 0;
+/*    padding-top: 20px;
+ */
+/*    margin-top:0.75em;
+ */
+    margin: 0.75em 0 0 0;
 }
 
 .mathbook-content .sidebyside figcaption .heading, .mathbook-content .sidebyside figcaption .codenumber {
@@ -151,9 +251,12 @@
 }
 
 .mathbook-content .sidebyside figcaption .heading:after {
-    content: " ";
+    content: "\00a0";
 }
 
+.mathbook-content figcaption .codenumber{
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+}
 .mathbook-content .sidebyside figcaption .codenumber:after {
     content: ".\2002";  /* en space */
 }
@@ -164,23 +267,8 @@
 }
 
 
-.mathbook-content .sidebyside > figure > figcaption {
-    margin: 0;
-    padding: 0;
-    max-width: 200px;
-    padding-left: 20%;
-}
-
-.mathbook-content .sidebyside > table > figcaption {
-    margin: 0;
-    padding: 0;
-    max-width: 200px;
-    padding-left: 20%;
-}
-
 .mathbook-content .sidebyside > p {
-    width: 25%;
-    margin-right: 7%;
+    width: 32%;
     vertical-align: top;
 }
 
@@ -196,16 +284,79 @@
     margin-bottom: 20px;
 }
 
+.mathbook-content .sidebyside .sbsrow h5.sbsheader {
+    margin-top: 0;
+}
+
+/*
 .mathbook-content .sidebyside {
     text-align: justify;
 }
+*/
+
+/* Deleted on 9/12/16 because it caused a blank line.
+   Figure out when it was supposed to do, and do it another way.
 
 .mathbook-content .sidebyside:after {
     display:inline-block;
     width:100%;
     content:'';
 }
+*/
 
+.mathbook-content .sbsgroup {
+    width: 100%;
+}
+
+.mathbook-content .sidebyside {
+    width: 100%;
+}
+
+.mathbook-content .sbsrow {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Components of three types of "sbsrow" */
+
+/* titles, totally centered text */
+.mathbook-content .sbsheader {
+/*
+    display: flex;
+*/
+    text-align: center;
+    justify-content: center;
+}
+
+/* containers of desired width for actual content */
+.mathbook-content .sbspanel {
+    display: flex;
+    flex-direction: column;
+}
+
+/* fixed-width items are centered horizontally in their panel */
+/* always used in conjunction with sbspanel                   */
+.mathbook-content .fixed-width {
+    align-items: center;
+}
+
+/* captions, centered until word-wrapped */
+.mathbook-content .sbscaption {
+/*
+    display: flex;
+*/
+    justify-content: center;
+}
+
+
+
+
+
+table {
+    border-spacing: 0;
+}
+
+/*
 table {
     border-collapse: collapse;
 }
@@ -216,6 +367,7 @@ table tr td {
     padding-right: 5px;
     font-size: 90%;
 }
+*/
 
 .mathbook-content table tr td.l {
     text-align: left;
@@ -225,6 +377,12 @@ table tr td {
 }
 .mathbook-content table tr td.r {
     text-align: right;
+}
+.mathbook-content table tr td.j {
+    text-align: justify;
+}
+.mathbook-content table tr td.lines {
+        white-space: nowrap;
 }
 
 
@@ -238,83 +396,81 @@ table tr td {
     vertical-align: middle;
 }
 
-.vv {
+.mathbook-content table tr td.vv {
     border-left: 2px solid #000;
     border-right: 2px solid #000;
 }
 
-.vcv {
+.mathbook-content table tr td.vcv {
     border-left: 2px solid #000;
     border-right: 2px solid #000;
     text-align: center;
 }
 
-.vcvv {
+.mathbook-content table tr td.vcvv {
     border-left: 2px solid #000;
     border-right: 4px solid #000;
     text-align: center;
 }
 
-.vlv {
+.mathbook-content table tr td.vlv {
     border-left: 2px solid #000;
     border-right: 2px solid #000;
     text-align: left;
 }
 
-.vrv {
+.mathbook-content table tr td.vrv {
     border-left: 2px solid #000;
     border-right: 2px solid #000;
     text-align: right;
 }
 
-.rv {
+.mathbook-content table tr td.rv {
     border-right: 2px solid #000;
     text-align: right;
 }
 
-.vr {
+.mathbook-content table tr td.vr {
     border-left: 2px solid #000;
     text-align: right;
 }
 
-.lv {
+.mathbook-content table tr td.lv {
     border-right: 2px solid #000;
     text-align: left;
 }
 
-.vl {
+.mathbook-content table tr td.vl {
     border-left: 2px solid #000;
     text-align: left;
 }
-.cv {
+.mathbook-content table tr td.cv {
     border-right: 2px solid #000;
     text-align: center;
 }
 
-.Xv {
+.mathbook-content table tr td.Xv {
     border-right: 2px solid #000;
     text-align: left;
 }
-.vc {
+
+.mathbook-content table tr td.vc {
     border-left: 2px solid #000;
     text-align: center;
 }
 
-table td.hline {
+.mathbook-content table tr td.hline {
+    padding: 0;
+}
+
+.mathbook-content table tr td.hlinethick {
 
     padding-left: 0px;
     padding-right: 0px;
 
 }
 
-table td.hlinethick {
-
-    padding-left: 0px;
-    padding-right: 0px;
-
-}
-
-td.hline hr  {
+.mathbook-content table tr td.hline hr  {
 
     margin-top:0;
     margin-bottom:0;
@@ -324,7 +480,7 @@ td.hline hr  {
 
 }
 
-td.hlinethick hr  {
+.mathbook-content table tr td.hlinethick hr  {
 
     margin-top:0;
     margin-bottom:0;
@@ -395,6 +551,1070 @@ td.hlinethick hr  {
     border-left: none;
 }
 
+.mathbook-content table tr td p {
+    margin-bottom: 0;
+}
+
+.mathbook-content table tr td p + p {
+    margin-top: 1em;
+}
+
 .mathbook-content table + p {
     margin-top: 20px;
 }
+
+.mathbook-content table tr td span.decimal {
+    float: left;
+    text-align: right;
+}
+
+.mathbook-content table + article.theorem-like {
+    margin-top: 1em;
+}
+
+.mathbook-content ol li p, .mathbook-content ul li p {
+    margin-bottom: 0;
+}
+
+.mathbook-content ol li + li, .mathbook-content ul li + li {
+    margin-top: 0.5em;
+}
+
+.mathbook-content ol li ol, .mathbook-content ol li ul,  .mathbook-content ul li ol, .mathbook-content ul li ul {
+    margin-top: 0.5em;
+}
+
+.mathbook-content ol li p + p, .mathbook-content ul li p + p {
+    margin-top: 1em;
+}
+
+.mathbook-content article h5.heading + dl {
+    margin-top: 1em;
+}
+
+.mathbook-content dl dd p {
+    margin-bottom: 0.5em;
+}
+
+.mathbook-content dl dd *:last-child {
+    margin-bottom: 0;
+}
+
+.mathbook-content dl dt, .mathbook-content dl dd {
+    margin-top: 1em;
+}
+
+.mathbook-content dl dt:first-of-type, .mathbook-content dl dd:first-of-type {
+    margin-top: 0;
+}
+
+.mathbook-content .hidden-knowl-wrapper .hiddenproof h5 {
+    margin-top: 0;
+}
+
+.mathbook-content .hidden-knowl-wrapper article {
+    display: inline;
+}
+
+.mathbook-content .hidden-knowl-wrapper {
+    margin-bottom: 1.5em;
+}
+
+.mathbook-content  .theorem-like + .hidden-knowl-wrapper {
+    margin-top: -0.5em;
+}   
+
+.mathbook-content .hiddenproof > .heading::after {
+    content: "."
+}
+
+.mathbook-content .hidden-knowl-wrapper h5 {
+    display: inline;
+}
+
+.amathbook-content figure.figure-like {
+    overflow: auto;
+}
+.mathbook-content figure.figure-like {
+/*
+    margin-left: 0;
+    margin-right: 0;
+*/
+    margin-left: auto;
+    margin-right: auto;
+}
+/*
+.mathbook-content .sbscaption {
+    width: 100%! important;
+}
+*/
+
+.mathbook-content figure.figure-like figcaption {
+    overflow: hidden;
+}
+
+/* need to fix this in the main CSS code */
+.mathbook-content  .proof {
+    padding-top: 0;
+}
+
+.mathbook-content .knowl p:last-of-type {
+    margin-bottom: 0;
+}
+
+.mathbook-content .knowl-output .knowl-content {
+    margin-bottom: 0.5em;
+}
+
+.mathbook-content tt {
+    font-size: 1.4em;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
+}
+
+.mathbook-content section .videolink a:link {
+    background-size: 0;
+    text-decoration: none;
+}
+
+.mathbook-content .exercise-like ol li table {
+    margin-bottom: 0.5em;
+}
+
+.mathbook-content .exercise-like ol li + li {
+    margin-top: 0.5em;
+}
+
+.mathbook-content section header .heading a.permalink {
+    opacity: 0.1;
+    color: #d00;
+    font-size: 70%;
+    text-decoration: none;
+}
+
+/*
+.mathbook-content .heading a.permalink:after {
+    content: "permalink";
+    opacity: 0;
+    font-size: 50%;
+    font-weight:normal;
+    font-family: sans-serif;
+    text-decoration: none;
+}
+*/
+
+.mathbook-content .heading a.permalink:hover {
+    opacity: 1;
+    color: #a32;
+}
+
+/*
+.mathbook-content .heading a.permalink:hover:after {
+    opacity: 1;
+}
+*/
+
+.mathbook-content .heading a.permalink:focus {
+    opacity: 1;
+    color: #a32;
+}
+/*
+.mathbook-content .heading a.permalink:focus:after {
+    opacity: 1;
+}
+*/
+
+.mathbook-content .indexitem {
+    margin-top: 2px;
+}
+
+.mathbook-content .subindexitem {
+    margin-left: 2em;
+    font-size: 95%;
+    margin-top: -1px;
+}
+
+.mathbook-content .subsubindexitem {
+    margin-left: 3.5em;
+    font-size: 95%;
+    margin-top: -1px;
+}
+
+.mathbook-content .indexknowl {
+    margin-left: 2em;
+}
+
+.mathbook-content .indexitem .indexknowl {
+    font-size: 90%;
+}
+
+/*
+.mathbook-content .indexitem a {
+    font-size: 90%;
+}
+*/
+
+.mathbook-content .indexitem [knowl], .mathbook-content .subindexitem [knowl], .mathbook-content .subsubindexitem [knowl] {
+    padding-right: 2px;
+    padding-left: 2px;
+}
+
+.mathbook-content .subindexitem .indexknowl {
+    font-size: 95%;
+}
+.mathbook-content .subsubindexitem .indexknowl {
+    font-size: 95%;
+}
+
+.mathbook-content .indexletter {
+    margin-top: 1em;
+    font-size: 170%;
+    font-weight: bold;
+}
+.mathbook-content .indexletter {
+    padding-top: 1.5em;
+    margin-top: -0.5em;
+}
+
+.mathbook-content .indexknowl + .indexknowl{
+    margin-left: 1em;
+}
+
+/*
+.mathbook-content section #hk-exercise-essay article {
+    display: inline;
+}
+*/
+
+.mathbook-content .hidden-knowl-wrapper h5 {
+    display: inline;
+}
+.mathbook-content h5 + .hidden-knowl-wrapper {
+    display: inline;
+}
+.mathbook-content article .hidden-knowl-wrapper {
+    display: inline;
+}
+
+.mathbook-content .incontext {
+    display: block;
+    font-size: 85%;
+    text-align: right;
+    margin-bottom: -0.5em;
+}
+
+.mathbook-content .terminology {
+  font-style: italic;
+  font-weight: bold;
+}
+
+:target {
+    -webkit-animation: target-fade 10s 1;
+    -moz-animation: target-fade 10s 1;
+}
+
+@-webkit-keyframes target-fade {
+    0% { background-color: rgba(120,0,120,.3); }
+    100% { background-color: inherit; }
+}
+@-moz-keyframes target-fade {
+    0% { background-color: rgba(120,0,120,.3); }
+    100% { background-color: inherit; }
+}
+
+/*
+.mathbook-content .autoterm {
+    display: inline;
+}
+*/
+
+.mathbook-content .autoterm [knowl], .mathbook-content .autoterm [knowl]:after {
+    font-weight: inherit;
+    color: inherit;
+    padding: 0;
+    margin-bottom: inherit;
+    border-bottom: inherit;
+    border-bottom-color: inherit;
+}
+
+/*
+.mathbook-content .autoterm [knowl]:hover {
+    background: inherit;
+    border-bottom: inherit;
+}
+
+.mathbook-content .autoterm [knowl]:hover {
+    background: #eebbff;
+    border-bottom: 1px dotted red;
+}
+*/
+
+/*
+.mathbook-content .autoterm .active[knowl] {
+    background: inherit;
+}
+*/
+
+.mathbook-content .autoterm [knowl]:hover {
+    background: #ffddff;
+    border-top: 2px dotted purple;
+    border-bottom: 1px dotted red;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.has-sidebar-left #primary-navbar-sticky-wrapper .navbar-top-buttons .toolbar, .has-sidebar-left #primary-navbar .navbar-top-buttons .toolbar {
+     border-right: 0;
+}
+
+#primary-navbar .toolbar.toolbar-divisor-3 > .toolbar-item:last-child, #primary-navbar-sticky-wrapper .toolbar.toolbar-divisor-3 > .toolbar-item:last-child {
+    border-right: 1px solid #bababa;
+}
+
+.mathbook-content ol li.custom-list-style-type {
+    list-style-type: none;
+}
+
+.mathbook-content ol li.custom-list-style-type:before {
+     content: attr(label) "\00A0\00A0 ";
+}
+
+/* The dl should behave more like the default on a narrow screen,
+ * with the term and definition on separate lines.
+ */
+
+.mathbook-content dl.description-list {
+    margin-left: 0;
+}
+
+.mathbook-content dl.description-list dt {
+    float: left;
+    clear: left;
+    text-align: right;
+    width: 18ex;
+}
+
+.mathbook-content dl.description-list dd {
+    margin-left: 22ex;
+}
+
+.mathbook-content dl.description-list dd:after {
+    content: "";
+    display: block;
+    clear: left;
+}
+
+.mathbook-content dl.description-list-narrow {
+    margin-left: 0;
+}
+.mathbook-content dl.description-list-narrow dt {
+    float: left;
+    clear: left;
+    text-align: right;
+    width: 8ex;
+}
+.mathbook-content dl.description-list-narrow dd {
+    margin-left: 12ex;
+}
+
+/*
+#toc ul li.listprefix {
+    list-style-type: none;
+    display: inline-block;
+}
+
+#toc ul li.listprefix:before {
+     content: attr(label) "\00A0\00A0 ";
+     display: inline-block;
+}
+*/
+
+.mathbook-content .knowl .definition-like:last-child, .mathbook-content .knowl .theorem-like:last-child, .mathbook-content .knowl .remark-like:last-child, .mathbook-content .knowl .example-like:last-child, .mathbook-content .knowl .exercise-like:last-child, .mathbook-content .knowl .aside-like:last-child {
+    margin-bottom: 0.3em;
+}
+
+.mathbook-content a {
+    color: inherit;
+}
+
+/* to stop things being blue when rendering MathJax with SVG */
+a.mjx-svg-href  {
+    fill: inherit;
+    stroke: inherit;
+}
+
+.floatnav {
+    margin-top: 8px;
+    margin-left: 50px;
+}
+
+.floatnav a {
+    text-decoration: none;
+    padding-left: 3px;
+/*
+ *  omitted, because we put a space in the source
+    padding-right: 3px;
+*/
+    margin-right: -1px;
+    color: inherit;
+}
+
+.floatnav a:hover {
+    background: #eeaaff;
+}
+
+.mathbook-content .unselectable {  /* from Alex Jordan */
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
+}
+
+/* Adapted from William Hammond (attributed to David Carlisle) */
+/* "mathjax-users" Google Group, 2015-12-27 */
+
+.mathbook-content .latex-logo {font-family: "PT Serif", "Times New Roman", Times, serif;}
+
+.mathbook-content .latex-logo .A {font-size: 75%; text-transform: uppercase; vertical-align: .5ex;
+         margin-left: -.48em; margin-right: -.2em;}
+
+.mathbook-content .latex-logo .E {vertical-align:-.5ex; text-transform: uppercase;
+         margin-left: -.18em; margin-right: -.12em}
+
+.mathbook-content .posterior {
+    margin-bottom: 1.25em;
+}
+
+.mathbook-content .fillin {
+    display: inline-block;
+    border-bottom-style: solid;
+    border-width: 1px;
+    margin-right: 0.1em;
+    margin-bottom: -0.25em;
+}
+
+.mathbook-content .exercisegroup {
+    margin-bottom: 1.0em;
+}
+.mathbook-content .exercisegroup article.exercise-like p {
+    margin: 0;
+}
+.mathbook-content .exercisegroup article.exercise-like .heading {
+    margin: 0;
+}
+.mathbook-content .exercisegroup .conclusion .heading {
+    margin-top: 0.5em;
+}
+.mathbook-content .exercisegroup .hidden-knowl-wrapper {
+    margin: 0;
+}
+.mathbook-content .exercisegroup .exercise-like .heading + p:after {
+    margin: 0;
+}
+.mathbook-content .exercisegroup .introduction .heading + p:last-child {
+    margin-bottom: 0.5em;
+}
+
+/* for titles on APEX WW exercises, but should make sense for other exercises */
+.mathbook-content .exercise-like .heading {
+    font-weight: normal;
+    font-size: inherit;
+}
+
+.mathbook-content .exercisegroup article.exercise-like {
+    margin-left: 2em;
+    margin-bottom: 0.5em;
+}
+
+.mathbook-content .exercisegroup article.exercise-like:not(:first-child) {
+    margin-top: 0em;
+}
+
+.mathbook-content .exercisegroup article.conclusion {
+    margin-left: 1.5em;
+}
+
+
+.mathbook-content .exercisegroup .exercisegroup-exercises {
+    width: 100%;
+    display:inline-flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    justify-content:flex-start;
+    align-items:flex-start;
+    align-content:flex-start;
+}
+
+.mathbook-content .exercisegroup .exercisegroup-exercises.cols1 {
+    display:inline;
+}
+
+.mathbook-content .exercisegroup .exercisegroup-exercises.cols1 .knowl-output {
+    display: block;
+}
+
+.mathbook-content .exercisegroup .exercisegroup-exercises article.exercise-like {
+    margin-top: 0;
+}
+
+.mathbook-content .exercisegroup .cols1 article.exercise-like {flex-basis: calc(100% - 2em);}
+.mathbook-content .exercisegroup .cols2 article.exercise-like {flex-basis: calc(50% - 2em);}
+.mathbook-content .exercisegroup .cols3 article.exercise-like {flex-basis: calc(33.33% - 2em);}
+.mathbook-content .exercisegroup .cols4 article.exercise-like {flex-basis: calc(25% - 2em);}
+.mathbook-content .exercisegroup .cols5 article.exercise-like {flex-basis: calc(20% - 2em);}
+.mathbook-content .exercisegroup .cols6 article.exercise-like {flex-basis: calc(16.66% - 2em);}
+/*
+.mathbook-content .exercisegroup .cols3 article.exercise-like {flex-basis: calc(100% / 3 - 2em);}
+.mathbook-content .exercisegroup .cols6 article.exercise-like {flex-basis: calc(100% / 6 - 2em);}
+*/
+
+
+.mathbook-content .code-inline,
+.mathbook-content .code-block,
+.mathbook-content .console {
+    font-family: "Inconsolata", monospace;
+}
+
+.main .mathbook-content section  h5.heading {
+    line-height: 1.125em;
+}
+
+.mathbook-content .sagecell_sessionOutput pre {
+    font-family: 'Inconsolata';
+}
+
+.mathbook-content .sagecell {
+    margin-bottom: 1.25em;
+}
+
+.mathbook-content .assemblage-like {
+    border: solid 2px #1100AA;
+    border-radius: 12px;
+    padding: 10px;
+    background-color: #f4f4fe;
+}
+
+.mathbook-content .assemblage-like .heading {
+    margin-top: 0;
+}
+
+.mathbook-content .assemblage-like + .assemblage-like {
+    margin-top: 3ex;
+}
+
+.mathbook-content .booktitle {
+    font-style: oblique;
+}
+
+.mathbook-content .definition-like > h5.heading .type:last-child:after, .mathbook-content .theorem-like > h5.heading .type:last-child:after, .mathbook-content .remark-like > h5.heading .type:last-child:after, .mathbook-content .example-like > h5.heading .type:last-child:after, .mathbook-content .exercise-like > h5.heading .type:last-child:after, .mathbook-content .aside-like > h5.heading .type:last-child:after, .mathbook-content .definition-like > h5.heading .codenumber:last-child:after, .mathbook-content .theorem-like > h5.heading .codenumber:last-child:after, .mathbook-content .remark-like > h5.heading .codenumber:last-child:after, .mathbook-content .example-like > h5.heading .codenumber:last-child:after, .mathbook-content .exercise-like > h5.heading .codenumber:last-child:after, .mathbook-content .aside-like > h5.heading .codenumber:last-child:after, .mathbook-content .definition-like > h5.heading .title:last-child:after, .mathbook-content .theorem-like > h5.heading .title:last-child:after, .mathbook-content .remark-like > h5.heading .title:last-child:after, .mathbook-content .example-like > h5.heading .title:last-child:after, .mathbook-content .exercise-like > h5.heading .title:last-child:after, .mathbook-content .aside-like > h5.heading .title:last-child:after, .mathbook-content .definition-like > header > h5.heading .type:last-child:after, .mathbook-content .theorem-like > header > h5.heading .type:last-child:after, .mathbook-content .remark-like > header > h5.heading .type:last-child:after, .mathbook-content .example-like > header > h5.heading .type:last-child:after, .mathbook-content .exercise-like > header > h5.heading .type:last-child:after, .mathbook-content .aside-like > header > h5.heading .type:last-child:after, .mathbook-content .definition-like > header > h5.heading .codenumber:last-child:after, .mathbook-content .theorem-like > header > h5.heading .codenumber:last-child:after, .mathbook-content .remark-like > header > h5.heading .codenumber:last-child:after, .mathbook-content .example-like > header > h5.heading .codenumber:last-child:after, .mathbook-content .exercise-like > header > h5.heading .codenumber:last-child:after, .mathbook-content .aside-like > header > h5.heading .codenumber:last-child:after, .mathbook-content .definition-like > header > h5.heading .title:last-child:after, .mathbook-content .theorem-like > header > h5.heading .title:last-child:after, .mathbook-content .remark-like > header > h5.heading .title:last-child:after, .mathbook-content .example-like > header > h5.heading .title:last-child:after, .mathbook-content .exercise-like > header > h5.heading .title:last-child:after, .mathbook-content .aside-like > header > h5.heading .title:last-child:after {  
+    content: ".\2009 ";
+}
+
+.mathbook-content a  .definition-like > h5.heading .type:last-child:after, .mathbook-content a  .theorem-like > h5.heading .type:last-child:after, .mathbook-content a  .remark-like > h5.heading .type:last-child:after, .mathbook-content a  .example-like > h5.heading .type:last-child:after, .mathbook-content a  .exercise-like > h5.heading .type:last-child:after, .mathbook-content a  .aside-like > h5.heading .type:last-child:after, .mathbook-content a  .definition-like > h5.heading .codenumber:last-child:after, .mathbook-content a  .theorem-like > h5.heading .codenumber:last-child:after, .mathbook-content a  .remark-like > h5.heading .codenumber:last-child:after, .mathbook-content a  .example-like > h5.heading .codenumber:last-child:after, .mathbook-content a  .exercise-like > h5.heading .codenumber:last-child:after, .mathbook-content a  .aside-like > h5.heading .codenumber:last-child:after, .mathbook-content a  .definition-like > h5.heading .title:last-child:after, .mathbook-content a  .theorem-like > h5.heading .title:last-child:after, .mathbook-content a  .remark-like > h5.heading .title:last-child:after, .mathbook-content a  .example-like > h5.heading .title:last-child:after, .mathbook-content a  .exercise-like > h5.heading .title:last-child:after, .mathbook-content a  .aside-like > h5.heading .title:last-child:after, .mathbook-content a  .definition-like > header > h5.heading .type:last-child:after, .mathbook-content a  .theorem-like > header > h5.heading .type:last-child:after, .mathbook-content a  .remark-like > header > h5.heading .type:last-child:after, .mathbook-content a  .example-like > header > h5.heading .type:last-child:after, .mathbook-content a  .exercise-like > header > h5.heading .type:last-child:after, .mathbook-content a  .aside-like > header > h5.heading .type:last-child:after, .mathbook-content a  .definition-like > header > h5.heading .codenumber:last-child:after, .mathbook-content a  .theorem-like > header > h5.heading .codenumber:last-child:after, .mathbook-content a  .remark-like > header > h5.heading .codenumber:last-child:after, .mathbook-content a  .example-like > header > h5.heading .codenumber:last-child:after, .mathbook-content a  .exercise-like > header > h5.heading .codenumber:last-child:after, .mathbook-content a  .aside-like > header > h5.heading .codenumber:last-child:after, .mathbook-content a  .definition-like > header > h5.heading .title:last-child:after, .mathbook-content a  .theorem-like > header > h5.heading .title:last-child:after, .mathbook-content a  .remark-like > header > h5.heading .title:last-child:after, .mathbook-content a  .example-like > header > h5.heading .title:last-child:after, .mathbook-content a  .exercise-like > header > h5.heading .title:last-child:after, .mathbook-content a  .aside-like > header > h5.heading .title:last-child:after {  
+    content: "";
+}
+
+/* FOr exercises, etc, hidden in knowls */
+.mathbook-content a  .definition-like > h5.heading .codenumber:not(:empty)::after, .mathbook-content a  .theorem-like > h5.heading .codenumber:not(:empty)::after, .mathbook-content a  .remark-like > h5.heading .codenumber:not(:empty)::after, .mathbook-content a  .example-like > h5.heading .codenumber:not(:empty)::after, .mathbook-content a  .exercise-like > h5.heading .codenumber:not(:empty)::after, .mathbook-content a  .aside-like > h5.heading .codenumber:not(:empty)::after, .mathbook-content a  .theorem-like > header > h5.heading .codenumber:not(:empty)::after, .mathbook-content a  .remark-like > header > h5.heading .codenumber:not(:empty)::after, .mathbook-content a  .example-like > header > h5.heading .codenumber:not(:empty)::after, .mathbook-content a  .exercise-like > header > h5.heading .codenumber:not(:empty)::after, .mathbook-content a  .aside-like > header > h5.heading .codenumber:not(:empty)::after {
+    content: ": \2009";
+}
+
+.mathbook-content .hiddenproof > .heading .type:after, .mathbook-content .hiddenproof > header > .heading .type:after {
+  content: "";
+}
+
+.mathbook-content .exercise-like > h5.heading .codenumber:not(:empty):after {
+    content: ".\2009 ";
+}
+
+
+/* these failed to solve the problem of extra space to the left
+ * of a knowl that starts a line 
+ *
+.mathbook-content [knowl] {
+    padding-left: 0;
+}
+.mathbook-content [knowl]:hover {
+    padding-left: 0;
+}
+.mathbook-content .active[knowl], .mathbook-content [knowl]:active {
+    padding-left: 0;
+}
+
+.mathbook-content [knowl]::before {
+    content: "\2002";
+}
+
+
+*/
+
+/* these were put into the main scss
+
+.mathbook-content .hidden-knowl-wrapper > [knowl], .mathbook-content .hidden-knowl-wrapper > [knowl]:hover, .mathbook-content .hidden-knowl-wrapper > .active[knowl] {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.mathbook-content .hidden-knowl-wrapper > [knowl]::after, .mathbook-content .hidden-knowl-wrapper > [knowl]:hover::after, .mathbook-content .hidden-knowl-wrapper > .active[knowl]::after {
+    left: 1px;
+}
+
+.mathbook-content [knowl], .mathbook-content [knowl]:hover, .mathbook-content .active[knowl] {
+    padding-left: 1px;
+    padding-right: 2px;
+}
+
+.mathbook-content [knowl]::after, .mathbook-content [knowl]:hover::after, .mathbook-content .active[knowl]::after {
+    left: 1px;
+}
+
+*/
+
+/* these were taken from the local add-on.css.
+ * need to check if the are needed.
+ */
+
+body, html body { background: #fff; }
+
+figure {
+    margin-top: 10px;
+}
+
+.mathbook-content img {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mathbook-content img.cs {
+
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mathbook-content img.cs.svg {
+ /*   transform:  scale(1.3);
+ */
+}
+
+img:not(.cs) {
+    max-width: 550px;
+}
+
+.mathbook-content table tr td img {
+    max-width: 200px;
+    margin-right: 30px;
+}
+
+.mathbook-content table tr td.lines {
+    	white-space: nowrap;
+}
+
+p+ img.cs {
+    margin-top: 0;
+}
+
+figure img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 550px;
+}
+
+figure img + img {
+    margin-top: 30px;
+}
+
+figure.wrap img {
+    width: 250px;
+}
+
+div.center img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 550px;
+}
+
+div.center + div.center > img {
+    margin-top: 60px;
+}
+
+div.center > img + img {
+    margin-top: 60px;
+}
+
+figure table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.caption {
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 100%;
+    text-align: center;
+}
+
+
+figure.wrap {
+    float: right;
+    margin-right: 0;
+    margin-left: 30px;
+}
+
+figure figcaption.wrap {
+    margin: 10px;
+    font-size: 100%;
+    text-align: center;
+}
+
+figure img.wrap {
+    float: right;
+    margin: 0;
+}
+
+
+.caption .counter:after { content: " ";}
+
+/* above repeated for captions outside figures */
+
+.caption .heading {
+    font-weight: bold;
+}
+
+.caption .heading:after { content: " ";}
+
+.caption .counter {
+    font-weight: bold;
+}
+
+figcaption .counter:after { content: " ";}
+
+div.quote {
+    padding-left: 40px;
+    padding-right: 10px;
+    margin-bottom: 1em;
+}
+
+.minipage  + .minipage {
+    display: inline-block;
+}
+
+code.inline {
+    background: none;
+    border: none;
+}
+
+/* sup knowls are used for footnotes */
+sup [knowl] {
+    padding: 0px 0px 0px 3px;
+}
+
+sup .active[knowl] {
+    padding: 0px 0px 0px 3px;
+}
+
+sup [knowl]:hover {
+    padding: 0px 0px 0px 3px;
+}
+
+.mathbook-content .proof > .heading:after {
+    content: ".";
+}
+
+/* new "L" styling for definitions, theorems, etc 
+ */
+
+/* in main css
+article.proof {
+    padding-right: 1.25em;
+    border-right: 1px dotted #aaa;
+}
+
+article.proof:after {
+    content:'';
+    border-bottom: 1px dotted #aaa;
+    display: block;
+    margin-left: auto;
+    margin-right: -1.25em;
+    width: 1.5em;
+}
+*/
+
+figure pre.prettyprint {
+    margin-top: 0;
+    padding-left: 15px;
+    border-left: 1px solid #aaa;
+}
+
+figure pre.prettyprint:before {
+    content:'';
+    border-top: 1px solid #aaa;
+    display: block;
+    margin-right: auto;
+    margin-left: -15px;
+    padding-bottom: 0.25em;
+    width: 2.5em;
+}
+
+
+article.example-like {
+    padding-left: 6px;
+    border-left: 1px solid #569;
+}
+
+article.example-like:after {
+    content:'';
+    border-bottom: 1px solid #569;
+    display: block;
+    margin-right: auto;
+    margin-left: -6px;
+    padding-top: 0.25em;
+    width: 1.5em;
+}
+
+.mathbook-content article.example-like > *:last-child {
+    margin-bottom: 0;
+}
+.mathbook-content article.example-like > *:last-child::after {
+    margin-bottom: 0;
+}
+.mathbook-content article.example-like + .posterior {
+    margin-top: -0.75em;
+}
+
+.mathbook-content article.proof > *:last-child {
+    margin-bottom: 0;
+}
+.mathbook-content article.proof > *:last-child::after {
+    margin-bottom: 0;
+}
+
+article.definition-like {
+    padding-right: 6px;
+    border-right: 2px solid #956;
+}
+
+article.definition-like:after {
+    content:''; 
+    border-bottom: 2px solid #956;
+    display: block;
+    margin-left: auto;
+    margin-right: -6px;
+    padding-top: 0.25em;
+    width: 1.5em;
+}
+
+.mathbook-content article.definition-like *:last-child {
+    margin-bottom: 0;
+}
+.mathbook-content article.definition-like *:last-child::after {
+    margin-bottom: 0;
+}
+
+article.theorem-like {
+    padding-right: 6px;
+    border-right: 1px solid #66a;
+}
+
+article.theorem-like:after {
+  content:'';  
+border-bottom: 1px solid #66a;
+  display: block;
+  margin-left: auto;
+  margin-right: -6px;
+    padding-top: 0.25em;
+  width: 1.5em;
+}
+
+.mathbook-content article.theorem-like *:last-child { 
+    margin-bottom: 0;
+}
+.mathbook-content article.theorem-like *:last-child::after {
+    margin-bottom: 0;
+}
+
+article.remark-like {
+    padding-right: 6px;
+    border-right: 1px solid #aaa;
+}
+
+article.remark-like:after {
+  content:'';
+border-bottom: 1px solid #aaa;
+  display: block;
+  margin-left: auto;
+  margin-right: -6px;
+    padding-top: 0.25em;
+  width: 1.5em;
+}
+
+.mathbook-content article.remark-like *:last-child {
+    margin-bottom: 0;
+}
+.mathbook-content article.remark-like *:last-child::after {
+    margin-bottom: 0;
+}
+
+.mathbook-content article.aside-like *:last-child {
+    margin-bottom: 0;
+}
+.mathbook-content article.aside-like *:last-child::after {
+    margin-bottom: 0;
+}
+.mathbook-content .aside-like {
+    margin-bottom: 1.25em;
+}
+
+
+/* borders above should not appear in a knowl ref 
+   or when the example is created as a knowl */
+
+.knowl article.example-like {
+    padding-left: 0;
+    border-left: none;
+}
+a > article.example-like {
+    padding-left: 0;
+    border-left: none;
+}
+
+.knowl article.example-like:after {
+  content:'';
+  border-bottom: none;
+  display: inline;
+  margin-left: 0;
+  margin-right: 0;
+  width: 0;
+}
+a > article.example-like:after {
+  content:'';
+  border-bottom: none;
+  display: inline;
+  margin-left: 0;
+  margin-right: 0;
+  width: 0;
+}
+
+/*  this is helpful in a knowl
+.knowl figure pre.prettyprint {
+    padding-left: 15px;
+    border-left: none;
+}
+
+.knowl figure pre.prettyprint:before {
+    content:'';
+    border-top: none;
+    display: block;
+    margin-right: 0;
+    margin-left: 0;
+    padding-bottom: 0;
+    width: 0;
+}
+*/
+
+.knowl article.definition-like {
+    padding-right: 0;
+    border-right: none;
+}
+
+.knowl article.definition-like:after {
+  content:'';  
+  border-bottom: none;
+  display: inline;
+  margin-left: 0;
+  margin-right: 0;
+  width: 0;
+}
+
+.knowl article.theorem-like {
+    padding-right: 0;
+    border-right: none;
+}
+
+.knowl article.theorem-like:after {
+  content:'';
+  border-bottom: none;
+  display: inline;
+  margin-left: 0;
+  margin-right: 0;
+  width: 0;
+}
+
+.knowl article.remark-like {
+    padding-right: 0;
+    border-right: none;
+}
+
+.knowl article.remark-like:after {
+  content:'';
+  border-bottom: none;
+  display: inline;
+  margin-left: 0;
+  margin-right: 0;
+  width: 0;
+}
+
+/*
+article.exercise-like span.hint {
+}
+*/
+
+.mathbook-content article.exercise-like .hint [knowl]{
+    font-weight: lighter;
+}
+
+.mathbook-content .exercise-like .hint {
+    display: block;
+    margin-top: -0.75em;
+}
+
+.mathbook-content .exercise-like .introduction {
+    display: inline;
+}
+.mathbook-content .exercise-like .introduction .heading {
+    display: inline;
+}
+.mathbook-content .exercise-like .introduction p {
+    display: inline;
+}
+.mathbook-content .exercise-like .introduction::after {
+    content: "";
+    display: block;
+    margin-bottom: 0.5em;
+}
+
+/*
+.mathbook-content .example-like .hint {
+}
+*/
+
+.example-like, .exercise-like {
+  margin: 1.25em 0;
+}
+
+/* if hants and solutions are in .posterior, then
+ * some of the above styling does not apply */
+
+.mathbook-content article.exercise-like + .posterior {
+    margin-top: -0.75em;
+}
+
+
+.mathbook-content article.example-like .hint {
+    display: block;
+    margin-top: -0.75em;
+}
+
+.mathbook-content article.example-like .hint [knowl]{
+    font-weight: lighter;
+}
+
