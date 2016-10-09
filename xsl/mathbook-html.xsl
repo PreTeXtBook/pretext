@@ -4294,6 +4294,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <!-- If there is no $left-col/@width, terminate -->
                         <xsl:otherwise>
                             <xsl:message terminate="yes">MBX:ERROR:   cell with p element has no corresponding col element with width attribute</xsl:message>
+                            <xsl:apply-templates select="." mode="location-report" />
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:attribute>
