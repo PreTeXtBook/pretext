@@ -1616,7 +1616,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="width-override" select="''" />
     <!-- every (?) image comes here for width, check for height (never was on video) -->
     <xsl:if test="@height">
-        <xsl:message>MBX:WARNING: the @height attribute of an &lt;image&gt; is deprecated, it will be ignored (2016-07-31)</xsl:message>
+        <xsl:message>MBX:WARNING: the @height attribute of an &lt;image&gt; is deprecated, it will be ignored, except within a WeBWorK exercise (2016-07-31)</xsl:message>
         <xsl:apply-templates select="." mode="location-report" />
     </xsl:if>
     <!-- test for author-provided poorly-constructed width -->
@@ -4436,11 +4436,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         </xsl:call-template>
     </xsl:if>
     <!--  -->
-    <xsl:if test="//image[@height]">
+    <xsl:if test="//image[@height and not(ancestor::*[self::webwork])]">
         <xsl:call-template name="deprecation-message">
             <xsl:with-param name="date-string" select="'2016-07-31'" />
-            <xsl:with-param name="message" select="'@height attribute on &lt;image&gt; is no longer effective and will be ignored'" />
-            <xsl:with-param name="occurences" select="count(//image[@height])" />
+            <xsl:with-param name="message" select="'@height attribute on &lt;image&gt; is no longer effective and will be ignored, except within a WeBWorK exercise'" />
+            <xsl:with-param name="occurences" select="count(//image[@height and not(ancestor::*[self::webwork])])" />
         </xsl:call-template>
     </xsl:if>
     <!--  -->
