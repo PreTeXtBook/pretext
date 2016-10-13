@@ -67,14 +67,69 @@
     </exsl:document>
 </xsl:template>
 
-<!-- The abstract chunking routines will use a default   -->
-<!-- template for a structural subdivision, so we define -->
-<!-- that here.  For SMC we write a subdvision header    -->
-<!-- (ie section title) as an HTML cell, then deal with  -->
-<!-- each direct descendant (children) as HTML or Sage   -->
-<!-- cells.  At a minimum this assumes that a Sage cell  -->
-<!-- is not buried in some other structure, like a list. -->
+<!-- The abstract chunking routines expect a default  -->
+<!-- template for a structural subdivision that is an -->
+<!-- entire chunk, so we define that here.  We just   -->
+<!-- ship out to the "smc-cell" modal templates       -->
 <xsl:template match="&STRUCTURAL;">
+    <xsl:apply-templates select="." mode="smc-cell" />
+</xsl:template>
+
+<!-- The abstract chunking routines expect a modal   -->
+<!-- "summary" template for a subdivision that sits  -->
+<!-- above the chunking level.  We write a header,   -->
+<!-- process the remainder in document order, either -->
+<!-- as content (eg introduction) or as a pointer    -->
+<!-- to a finer subdivision                          -->
+<!-- TODO: This is functional but the output will not win style points -->
+<xsl:template match="&STRUCTURAL;" mode="summary">
+    <!-- Heading, div for subdivision that is this page -->
+    <xsl:apply-templates select="." mode="smc-html-cell">
+        <xsl:with-param name="content">
+            <xsl:variable name="ident">
+                <xsl:apply-templates select="." mode="internal-id" />
+            </xsl:variable>
+            <section class="{local-name(.)}" id="{$ident}">
+                <xsl:apply-templates select="." mode="section-header" />
+            </section>
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <!-- Take structural elements to links         -->
+    <!-- Introduction and conclusion, etc as cells -->
+    <xsl:for-each select="*[not(&METADATA-FILTER;)]">
+        <xsl:choose>
+            <xsl:when test="&STRUCTURAL-FILTER;">
+                <xsl:apply-templates select="." mode="smc-html-cell">
+                    <xsl:with-param name="content">
+                        <xsl:variable name="num"><xsl:apply-templates select="." mode="number" /></xsl:variable>
+                        <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
+                        <div style="font-size:150%; padding-bottom:1.5ex">
+                            <a href="{$url}">
+                                <!-- important not include codenumber span -->
+                                <xsl:if test="$num!=''">
+                                    <span class="codenumber"><xsl:value-of select="$num" /></span>
+                                    <xsl:text> </xsl:text>
+                                </xsl:if>
+                                <span class="title">
+                                    <xsl:apply-templates select="." mode="title-simple" />
+                                </span>
+                            </a>
+                        </div>
+                    </xsl:with-param>
+                </xsl:apply-templates>
+            </xsl:when>
+            <!-- introduction, conclusion are included on page         -->
+            <!-- as SMC cells as they are processed in document order -->
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="smc-cell" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:for-each>
+</xsl:template>
+
+<!-- Subdivisions get a full heading in a cell, then  -->
+<!-- children are dispatched for possible refinement -->
+<xsl:template match="&STRUCTURAL;" mode="smc-cell">
     <!-- Subdivision heading, as its own HTML cell -->
     <xsl:apply-templates select="." mode="smc-html-cell">
         <xsl:with-param name="content">
@@ -91,10 +146,10 @@
     <xsl:apply-templates select="*[not(&METADATA-FILTER;)]" mode="smc-cell" />
 </xsl:template>
 
-<!-- Introductions and Conclusions     -->
-<!-- Nearly identical to HTML template -->
-<xsl:template match="introduction|conclusion">
-    <!-- Cell for introduction header, condition on title! -->
+<!-- Introductions and conclusions get a milder heading in a    -->
+<!-- cell, then children are dispatched for possible refinement -->
+<!-- TODO: condition on no title, so no cell -->
+<xsl:template match="introduction|conclusion" mode="smc-cell">
     <xsl:apply-templates select="." mode="smc-html-cell">
         <xsl:with-param name="content">
             <xsl:variable name="ident">
@@ -143,51 +198,6 @@
 <!-- TODO: sage-display-only abstract template needed (?) -->
 <!--       Or deprecate type="display"                    -->
 
-<!-- Summary page is links to subsidiary content      -->
-<!-- This is functional but will not win style points -->
-<xsl:template match="&STRUCTURAL;" mode="summary">
-    <!-- Heading, div for subdivision that is this page -->
-    <xsl:apply-templates select="." mode="smc-html-cell">
-        <xsl:with-param name="content">
-            <xsl:variable name="ident">
-                <xsl:apply-templates select="." mode="internal-id" />
-            </xsl:variable>
-            <section class="{local-name(.)}" id="{$ident}">
-                <xsl:apply-templates select="." mode="section-header" />
-            </section>
-        </xsl:with-param>
-    </xsl:apply-templates>
-    <!-- Handle structural elements as pointers -->
-    <!-- introduction and conclusion as cells   -->
-    <xsl:for-each select="*">
-        <xsl:choose>
-            <xsl:when test="&STRUCTURAL-FILTER;">
-                <xsl:apply-templates select="." mode="smc-html-cell">
-                    <xsl:with-param name="content">
-                        <xsl:variable name="num"><xsl:apply-templates select="." mode="number" /></xsl:variable>
-                        <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
-                        <div style="font-size:150%; padding-bottom:1.5ex">
-                            <a href="{$url}">
-                                <!-- important not include codenumber span -->
-                                <xsl:if test="$num!=''">
-                                    <span class="codenumber"><xsl:value-of select="$num" /></span>
-                                    <xsl:text> </xsl:text>
-                                </xsl:if>
-                                <span class="title">
-                                    <xsl:apply-templates select="." mode="title-simple" />
-                                </span>
-                            </a>
-                        </div>
-                    </xsl:with-param>
-                </xsl:apply-templates>
-            </xsl:when>
-            <!-- introduction, conclusion are included on page -->
-            <xsl:otherwise>
-                <xsl:apply-templates select="." />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:for-each>
-</xsl:template>
 
 <!-- Mimics depth-first search, into its own HTML cell -->
 <!-- This is functional but will not win style points  -->
