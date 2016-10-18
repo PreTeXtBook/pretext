@@ -781,16 +781,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="//assemblage">
-        <xsl:text>%% assemblage: minimally structured content, high visibility presentation&#xa;</xsl:text>
+    <xsl:if test="//assemblage or //aside or //historical or //biographical">
         <xsl:text>%% Package for breakable highlight boxes&#xa;</xsl:text>
         <!-- TODO: load just once, see webwork -->
         <xsl:text>\usepackage[framemethod=tikz]{mdframed}&#xa;</xsl:text>
-        <xsl:text>%% assemblage environment and style&#xa;</xsl:text>
-        <xsl:text>\newenvironment{assemblage}[1]{\mdfsetup{frametitle={\colorbox{blue!20}{\space#1\space}},%&#xa;</xsl:text>
-        <xsl:text>frametitlealignment={\hspace*{1ex}}, frametitleaboveskip=-1.5ex, frametitlebelowskip=0pt,%&#xa;</xsl:text>
-        <xsl:text>roundcorner=1pt, leftmargin=3pt, rightmargin=3pt, backgroundcolor=blue!5,%&#xa;</xsl:text>
-        <xsl:text>linecolor=blue!75!black,} \begin{mdframed}}{\end{mdframed}}&#xa;</xsl:text>
+        <xsl:if test="//assemblage">
+            <xsl:text>%% assemblage: minimally structured content, high visibility presentation&#xa;</xsl:text>
+            <xsl:text>%% assemblage environment and style&#xa;</xsl:text>
+            <xsl:text>\newenvironment{assemblage}[1]{\mdfsetup{frametitle={\colorbox{blue!20}{\space#1\space}},%&#xa;</xsl:text>
+            <xsl:text>frametitlealignment={\hspace*{1ex}}, frametitleaboveskip=-1.5ex, frametitlebelowskip=0pt,%&#xa;</xsl:text>
+            <xsl:text>roundcorner=1pt, leftmargin=3pt, rightmargin=3pt, backgroundcolor=blue!5,%&#xa;</xsl:text>
+            <xsl:text>linecolor=blue!75!black,} \begin{mdframed}}{\end{mdframed}}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//aside or //historical or //biographical">
+            <xsl:text>%% aside, biographical, historical environments and style&#xa;</xsl:text>
+            <xsl:text>\newenvironment{aside}[1]{\mdfsetup{shadow=true, shadowsize=1.5ex, rightmargin=1.5ex,%&#xa;</xsl:text>
+            <xsl:text>backgroundcolor=blue!3,%&#xa;</xsl:text>
+            <xsl:text>linecolor=blue!50!black,} \begin{mdframed}\textbf{#1}\quad}{\end{mdframed}}&#xa;</xsl:text>
+        </xsl:if>
     </xsl:if>
     <!-- miscellaneous, not categorized yet -->
     <xsl:if test="//exercise or //list">
@@ -3111,6 +3119,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- An aside goes into a framed box             -->
+<!-- We do not distinguish biographical or       -->
+<!-- historical semantically, but perhaps should -->
+<!-- title is inline, boldface in mdframe setup  -->
+<xsl:template match="&ASIDE-LIKE;">
+    <xsl:text>\begin{aside}{</xsl:text>
+    <xsl:apply-templates select="." mode="title-full" />
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="p|table|figure|sidebyside" />
+    <xsl:text>\end{aside}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- An assemblage is low-structure content, high-visibility presentation -->

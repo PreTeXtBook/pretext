@@ -635,6 +635,12 @@ the xsltproc executable.
                         <p>But they do carry a title and a number, can be the target of a cross-reference, and may be optionally knowlized in HTML with the <c>html.knowl.remark</c> processing switch.</p>
                     </note>
 
+                    <aside xml:id="an-aside">
+                        <title>An Aside</title>
+
+                        <p>An <c>&lt;aside&gt;</c> is similar to a remark, but is not as critical to the narrative.  It is not numbered, and so requires a title.  It can be the target of a cross-reference.  They are meant to be short, and so are not knowlized at their first appearance.  If the content is appropriate, these can be marked as <c>&lt;historical&gt;</c> or <c>&lt;biographical&gt;</c>, though longer items should use subdivisions (<eg /> sections, subsections) instead.</p>
+                    </aside>
+
                 </subsubsection>
 
                 <exercises>
@@ -3185,6 +3191,7 @@ the xsltproc executable.
                 <li><p>A cross-reference to a <q>paragraphs</q> subdivision, which never has a number (so comments above about description list items and titles applies here too): <xref ref="hierarchy-structure" autoname="title" /></p></li>
                 <li><p>A case within the proof of <xref ref="claim-with-cases" autoname="yes" />: <xref ref="inductive-step" autoname="title" /></p></li>
                 <li><p>A cross-reference to a description list item with a title containing math: <xref ref="description-list-math-title" autoname="title" /></p></li>
+                <li><p>A cross-reference to an aside, by title necessarily: <xref ref="an-aside" autoname="title" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul></p>
 

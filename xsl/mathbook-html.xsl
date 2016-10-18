@@ -1244,7 +1244,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "posterior-duplicate"  no ID, no \label         -->
 
 <!-- me is absent, not numbered, never knowled -->
-<xsl:template match="fn|biblio|men|md|mdn|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;" mode="xref-knowl">
+<xsl:template match="fn|biblio|men|md|mdn|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;" mode="xref-knowl">
     <!-- write a file, calling body and posterior duplicate templates -->
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
@@ -1412,7 +1412,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- Title only, eg on an assemblage -->
+<!-- Title only, eg on an assemblage or aside -->
 <xsl:template match="*" mode="heading-title">
     <xsl:element name="h5">
         <xsl:attribute name="class">
@@ -1477,7 +1477,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- do not come through here at all, since they are   -->
 <!-- always visible with no decoration, so plain       -->
 <!-- default templates are good enough                 -->
-<xsl:template match="fn|biblio|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;">
+<xsl:template match="fn|biblio|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
@@ -2209,7 +2209,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Definitions, Remarks -->
+<!-- Definitions, Remarks, Asides -->
 <!-- Runs of paragraphs, etc,  xor  statement -->
 <!-- is-hidden, -css-class are diveregent -->
 <xsl:template match="&DEFINITION-LIKE;" mode="is-hidden">
@@ -2220,7 +2220,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$html.knowl.remark = 'yes'" />
 </xsl:template>
 
-<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;" mode="body-element">
+<xsl:template match="&ASIDE-LIKE;" mode="is-hidden">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
+<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;" mode="body-element">
     <xsl:text>article</xsl:text>
 </xsl:template>
 
@@ -2232,11 +2236,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>remark-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;" mode="birth-element">
+<xsl:template match="&ASIDE-LIKE;" mode="body-css-class">
+    <xsl:text>aside-like</xsl:text>
+</xsl:template>
+
+<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;" mode="birth-element">
     <xsl:text>div</xsl:text>
 </xsl:template>
 
-<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;" mode="hidden-knowl-element">
+<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;" mode="hidden-knowl-element">
     <xsl:text>article</xsl:text>
 </xsl:template>
 
@@ -2248,11 +2256,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>remark-like</xsl:text>
 </xsl:template>
 
+<xsl:template match="&ASIDE-LIKE;" mode="hidden-knowl-css-class">
+    <xsl:text>remark-like</xsl:text>
+</xsl:template>
+
 <xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 
-<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;" mode="body">
+<xsl:template match="&ASIDE-LIKE;" mode="heading-birth">
+    <xsl:apply-templates select="." mode="heading-title" />
+</xsl:template>
+
+<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;" mode="body">
     <xsl:apply-templates select="*" />
 </xsl:template>
 
@@ -2260,11 +2276,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 
-<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;" mode="body-duplicate">
+<xsl:template match="&ASIDE-LIKE;" mode="heading-xref-knowl">
+    <xsl:apply-templates select="." mode="heading-title" />
+</xsl:template>
+
+<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;" mode="body-duplicate">
     <xsl:apply-templates select="*" mode="duplicate" />
 </xsl:template>
 
-<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;" mode="has-posterior">
+<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;" mode="has-posterior">
     <xsl:text>false</xsl:text>
 </xsl:template>
 
@@ -4409,7 +4429,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a sidebyside even though this is not necessary           -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|p|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|assemblage|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">

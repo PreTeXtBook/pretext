@@ -73,9 +73,10 @@
 <!-- THEOREM-LIKE theorem|corollary|lemma|algorithm|proposition|claim|fact|identity -->
 <!-- AXIOM-LIKE   axiom|conjecture|principle|heuristic|hypothesis|assumption        -->
 <!-- REMARK-LIKE remark|convention|note|observation|warning|insight                 -->
+<!-- ASIDE-LIKE aside|biographical|historical                                       -->
 <!-- EXAMPLE-LIKE example|question|problem                                          -->
 <!-- PROJECT-LIKE project|activity|exploration|task|investigation                   -->
-<!ENTITY % block "%para;|paragraphs|definition|theorem|corollary|lemma|algorithm|proposition|claim|fact|identity|axiom|conjecture|principle|heuristic|hypothesis|assumption|remark|convention|note|observation|warning|insight|list|example|question|problem|project|activity|exploration|task|investigation|assemblage|exercise|contributors|list-of|solution-list|notation-list|todo">
+<!ENTITY % block "%para;|paragraphs|definition|theorem|corollary|lemma|algorithm|proposition|claim|fact|identity|axiom|conjecture|principle|heuristic|hypothesis|assumption|remark|convention|note|observation|warning|insight|aside|biographical|historical|list|example|question|problem|project|activity|exploration|task|investigation|assemblage|exercise|contributors|list-of|solution-list|notation-list|todo">
 
 
 <!-- ######### -->
@@ -224,6 +225,14 @@
     <!ATTLIST warning xml:id ID #IMPLIED>
 <!ELEMENT insight (title?, index*, (%para;)*)>
     <!ATTLIST insight xml:id ID #IMPLIED>
+
+<!-- ASIDE-LIKE, simple, limited structure, title required   -->
+<!ELEMENT aside (title, index*, (%para;)*)>
+    <!ATTLIST aside xml:id ID #IMPLIED>
+<!ELEMENT biographical (title, index*, (%para;)*)>
+    <!ATTLIST biographical xml:id ID #IMPLIED>
+<!ELEMENT historical (title, index*, (%para;)*)>
+    <!ATTLIST historical xml:id ID #IMPLIED>
 
 <!-- EXAMPLE-LIKE, PROJECT-LIKE -->
 <!-- minimal structure  xor  statement/optional-solutions -->

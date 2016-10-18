@@ -93,6 +93,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='observation'><xsl:text>Observation</xsl:text></localization> -->
     <!-- <localization string-id='warning'><xsl:text>Warning</xsl:text></localization> -->
     <!-- <localization string-id='insight'><xsl:text>Insight</xsl:text></localization> -->
+    <!-- ASIDE-LIKE blocks -->
+    <!-- <localization string-id='aside'><xsl:text>Aside</xsl:text></localization> -->
+    <!-- <localization string-id='biographical'><xsl:text>Biographical Aside</xsl:text></localization> -->
+    <!-- <localization string-id='historical'><xsl:text>Historical Aside</xsl:text></localization> -->
     <!-- EXAMPLE-LIKE blocks -->
     <localization string-id='example'><xsl:text>Exemplo</xsl:text></localization>
     <!-- <localization string-id='question'><xsl:text>Question</xsl:text></localization> -->
