@@ -2666,9 +2666,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- in a posterior as a knowl, we use a span       -->
+<!-- else the proof is a div, or a detached knowl -->
 <xsl:template match="proof" mode="birth-element">
     <xsl:choose>
-        <xsl:when test="$html.knowl.proof = 'yes'">
+        <xsl:when test="$html.knowl.proof = 'yes' and parent::*[self::theorem]">
             <xsl:text>span</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -2685,7 +2687,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>hiddenproof</xsl:text>
 </xsl:template>
 
-<!-- always a knowl attached to an example -->
 <xsl:template match="proof" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-type" />
 </xsl:template>
