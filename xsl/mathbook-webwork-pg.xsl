@@ -282,27 +282,19 @@
         <xsl:text>  "MathObjects.pl",&#xa;</xsl:text>
         <xsl:text>  "PGML.pl",&#xa;</xsl:text>
     </xsl:variable>
-    <!-- accumulate macros evidenced by some aspect of problem design -->
+    <!-- accumulate macros evidenced by some aspect of problem design      -->
+    <!-- for details on what each macro file provides, see their source at -->
+    <!-- https://github.com/openwebwork/pg/tree/master/macros              -->
+    <!-- or                                                                -->
+    <!-- https://github.com/openwebwork/webwork-open-problem-library/tree/master/OpenProblemLibrary/macros -->
     <xsl:variable name="implied-macros">
         <!-- tables -->
         <xsl:if test=".//tabular">
             <xsl:text>  "niceTables.pl",&#xa;</xsl:text>
         </xsl:if>
-        <!-- popup menu multiple choice answers -->
-        <xsl:if test=".//var[@form='popup']">
-            <xsl:text>  "parserPopUp.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- radio buttons multiple choice answers -->
-        <xsl:if test=".//var[@form='buttons']">
-            <xsl:text>  "parserRadioButtons.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- checkboxes multiple choice answers-->
-        <xsl:if test=".//var[@form='checkboxes']">
-            <xsl:text>  "PGchoicemacros.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- essay answers -->
-        <xsl:if test=".//var[@form='essay']">
-            <xsl:text>  "PGessaymacros.pl",&#xa;</xsl:text>
+        <!-- bizarro arithmetic technique for assesing answer form -->
+        <xsl:if test="contains(./setup/pg-code,'bizarro')">
+            <xsl:text>  "bizarroArithmetic.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- multistage problems ("scaffolded") -->
         <xsl:if test=".//stage">
@@ -312,9 +304,56 @@
         <xsl:if test="$pg.answer.form.help = 'yes'">
             <xsl:text>  "AnswerFormatHelp.pl",&#xa;</xsl:text>
         </xsl:if>
-        <!-- targeted feedback messages for specific wrong answers       -->
+        <!-- targeted feedback messages for specific wrong answers -->
         <xsl:if test="contains(./setup/pg-code,'AnswerHints')">
             <xsl:text>  "answerHints.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- checkboxes multiple choice answers or the very useful NchooseK function-->
+        <xsl:if test=".//var[@form='checkboxes'] or contains(./setup/pg-code,'NchooseK')">
+            <xsl:text>  "PGchoicemacros.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- essay answers -->
+        <xsl:if test=".//var[@form='essay']">
+            <xsl:text>  "PGessaymacros.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- when there is a PGgraphmacros graph -->
+        <xsl:if test="./statement//image[@pg-name]|./solution//image[@pg-name]">
+            <xsl:text>  "PGgraphmacros.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- ################### -->
+        <!-- Parser Enhancements -->
+        <!-- ################### -->
+        <!-- popup menu multiple choice answers -->
+        <xsl:if test=".//var[@form='popup']">
+            <xsl:text>  "parserPopUp.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- radio buttons multiple choice answers -->
+        <xsl:if test=".//var[@form='buttons']">
+            <xsl:text>  "parserRadioButtons.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- "assignment" answers, like "y=x+1", "f(x)=x+1" -->
+        <xsl:if test="contains(./setup/pg-code,'parser::Assignment')">
+            <xsl:text>  "parserAssignment.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- allow "f(x)" as part of answers -->
+        <xsl:if test="contains(./setup/pg-code,'parserFunction')">
+            <xsl:text>  "parserFunction.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- numbers with units -->
+        <xsl:if test="contains(./setup/pg-code,'NumberWithUnits')">
+            <xsl:text>  "parserNumberWithUnits.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- formulas with units -->
+        <xsl:if test="contains(./setup/pg-code,'FormulaWithUnits')">
+            <xsl:text>  "parserFormulaWithUnits.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- implicit planes, e.g. x+2y=3z+1 -->
+        <xsl:if test="contains(./setup/pg-code,'ImplicitPlane')">
+            <xsl:text>  "parserImplicitPlane.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- implicit equations, e.g. x^2+sin(x+y)=5 -->
+        <xsl:if test="contains(./setup/pg-code,'ImplicitEquation')">
+            <xsl:text>  "parserImplicitEquation.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- for questions where multiple answer blanks work in conjunction  -->
         <xsl:if test="contains(./setup/pg-code,'MultiAnswer')">
@@ -324,17 +363,26 @@
         <xsl:if test="contains(./setup/pg-code,'OneOf')">
             <xsl:text>  "parserOneOf.pl",&#xa;</xsl:text>
         </xsl:if>
-        <!-- Fraction context  -->
+        <!-- #################### -->
+        <!-- Math Object contexts -->
+        <!-- #################### -->
         <xsl:if test="contains(./setup/pg-code,'Fraction')">
             <xsl:text>  "contextFraction.pl",&#xa;</xsl:text>
         </xsl:if>
-        <!-- Piecewise context  -->
         <xsl:if test="contains(./setup/pg-code,'PiecewiseFunction')">
             <xsl:text>  "contextPiecewiseFunction.pl",&#xa;</xsl:text>
         </xsl:if>
-        <!-- when there is a PGgraphmacros graph                         -->
-        <xsl:if test="./statement//image[@pg-name]|./solution//image[@pg-name]">
-            <xsl:text>  "PGgraphmacros.pl",&#xa;</xsl:text>
+        <xsl:if test="contains(./setup/pg-code,'Ordering')">
+            <xsl:text>  "contextOrdering.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="contains(./setup/pg-code,'InequalitySetBuilder')">
+            <xsl:text>  "contextInequalitySetBuilder.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="contains(./setup/pg-code,'Inequalities')">
+            <xsl:text>  "contextInequalities.pl.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="contains(./setup/pg-code,'LimitedRadical')">
+            <xsl:text>  "contextLimitedRadical.pl",&#xa;</xsl:text>
         </xsl:if>
     </xsl:variable>
     <!-- capture problem root to use inside upcoming for-each -->
