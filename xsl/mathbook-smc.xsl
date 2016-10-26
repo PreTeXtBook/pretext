@@ -323,15 +323,10 @@
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- HTML code for CSS style, MathJax macros -->
+<!-- HTML code for MathJax macros -->
 <xsl:template name="html-css-mathjax-setup">
     <xsl:apply-templates select="." mode="smc-html-cell">
         <xsl:with-param name="content">
-            <!-- Blend background color for MathJax display math       -->
-            <!-- Status: https://github.com/sagemathinc/smc/issues/136 -->
-            <xsl:element name="style">
-                <xsl:text>.MathJax_SVG_Display {background-color: inherit;}</xsl:text>
-            </xsl:element>
             <xsl:call-template name="latex-macros" />
         </xsl:with-param>
     </xsl:apply-templates>
