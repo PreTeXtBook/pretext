@@ -3046,13 +3046,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="li" mode="head">
     <h5 class="heading">
     <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-    <xsl:text> </xsl:text>
     <span class="codenumber"><xsl:apply-templates select="." mode="serial-number" /></span>
     <xsl:if test="title">
-        <xsl:text> </xsl:text>
         <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
     </xsl:if>
     </h5>
+</xsl:template>
+<!-- A list item inside an objectives is handled differently -->
+<!-- We don't display just its serial number as just above   -->
+<xsl:template match="objectives/*/li" mode="head">
+    <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 <!-- Body is everything, including nested lists -->
 <!-- TODO: maybe something is missing here, style of label, etc -->
