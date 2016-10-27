@@ -678,7 +678,7 @@
 
 <!ENTITY % prefix "yocto|zepto|atto|femto|pico|nano|micro|milli|centi|deci|deca|deka|hecto|kilo|mega|giga|tera|peta|exa|zetta|yotta">
 
-<!ENTITY % base "ampere|candela|kelvin|gram|meter|metre|mole|second|becquerel|gray|sievert|degreeCelsius|celsius|coulomb|henry|ohm|siemens|tesla|volt|weber|hertz|katal|joule|newton|pascal|watt|lumen|lux|radian|steradian|degree|arcminute|arcsecond|day|hour|minute|hectare|liter|litre|percent|degreeFahrenheit|fahrenheit|pound|foot|inch|yard|mile|mileperhour|gallon">
+<!ENTITY % base "ampere|candela|kelvin|gram|meter|metre|mole|second|becquerel|gray|sievert|degreeCelsius|celsius|coulomb|henry|ohm|siemens|tesla|volt|weber|hertz|katal|joule|newton|pascal|watt|lumen|lux|radian|steradian|degree|arcminute|arcsecond|millennium|century|decade|year|month|week|day|hour|minute|hectare|liter|litre|percent|degreeFahrenheit|fahrenheit|pound|foot|inch|yard|mile|mileperhour|gallon">
 
 <!ELEMENT quantity   (mag*, unit*, per*)>
 

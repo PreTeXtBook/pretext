@@ -142,6 +142,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <base full='yard'              short='yd'       siunitx='none' />
     <base full='mile'              short='mi'       siunitx='none' />
 
+    <!-- Time                                                                       -->
+    <base full='millennium'        short='millennium' siunitx='none' />
+    <base full='century'           short='century'    siunitx='none' />
+    <base full='decade'            short='decade'     siunitx='none' />
+    <base full='year'              short='yr'         siunitx='none' />
+    <base full='month'             short='mo'         siunitx='none' />
+    <base full='week'              short='wk'         siunitx='none' />
+
     <!-- Speed                                                                      -->
     <base full='kilometerperhour'  short='kph'      siunitx='none' />
     <base full='kilometreperhour'  short='kph'      siunitx='none' />
