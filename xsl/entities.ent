@@ -25,6 +25,10 @@
 <!ENTITY UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸŽŠŒ">
 <!ENTITY LOWERCASE "abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿžšœ">
 
+<!-- Some more of our own design -->
+<!ENTITY DIGIT "0123456789">
+<!ENTITY SIMPLECHAR "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ">
+
 <!-- for match/select -->
 <!ENTITY STRUCTURAL "book|article|letter|memo|frontmatter|part|chapter|appendix|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references|backmatter">
 

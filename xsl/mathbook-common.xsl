@@ -4406,6 +4406,56 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:choose>
 </xsl:template>
 
+<!-- ############### -->
+<!-- Global Warnings -->
+<!-- ############### -->
+
+<!-- Checks for errors that would be time-consuming -->
+<!-- if done repeatedly, so a pre-processing step   -->
+<!-- Calling context should be "mathbook" element   -->
+<xsl:template match="mathbook" mode="generic-warnings">
+    <xsl:apply-templates select="." mode="xinclude-warnings" />
+    <xsl:apply-templates select="." mode="xmlid-warning" />
+</xsl:template>
+
+<!-- Using the modular  xinclude  scheme at the top level,      -->
+<!-- and forgetting the command-line switch is a common mistake -->
+<!-- The following is not perfect, but reasonably effective     -->
+<xsl:template match="mathbook" mode="xinclude-warnings">
+    <xsl:if test="book and not(book/chapter)">
+        <xsl:message>
+            <xsl:text>MBX:WARNING:    </xsl:text>
+            <xsl:text>Your &lt;book&gt; does not have any chapters.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
+        </xsl:message>
+    </xsl:if>
+    <xsl:if test="article and not(article/p) and not(article/section)">
+        <xsl:message>
+            <xsl:text>MBX:WARNING:    </xsl:text>
+            <xsl:text>Your &lt;article&gt; does not have any sections, nor any top-level paragraphs.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
+        </xsl:message>
+    </xsl:if>
+</xsl:template>
+
+<!-- We warn about bad xml:id.  Our limits: -->
+<!-- 26 Latin letters (upper, lower case),  -->
+<!-- 10 digits, hyphen/dash, underscore     -->
+<!-- TODO: Added 2016-10-29, make into a fatal error later -->
+<xsl:template match="mathbook" mode="xmlid-warning">
+    <xsl:variable name="xmlid-characters">
+        <xsl:text>-_&SIMPLECHAR;</xsl:text>
+    </xsl:variable>
+    <xsl:for-each select="//@xml:id">
+        <xsl:if test="not(translate(., $xmlid-characters, '') = '')">
+            <xsl:message>
+                <xsl:text>MBX:WARNING:    </xsl:text>
+                <xsl:text>The @xml:id "</xsl:text>
+                <xsl:value-of select="." />
+                <xsl:text>" is invalid.  Use only letters, numbers, hyphens and underscores.</xsl:text>
+            </xsl:message>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
 
 <!-- ############ -->
 <!-- Deprecations -->
@@ -4432,26 +4482,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <!-- <xsl:text>, set log.level to see more details</xsl:text> -->
     </xsl:message>
 </xsl:template>
-
-<!-- Using the modular  xinclude  scheme at the top level,      -->
-<!-- and forgetting the command-line switch is a common mistake -->
-<!-- The following is not perfect, but reasonably effective     -->
-<!-- Calling context should be "mathbook" element               -->
-<xsl:template match="*" mode="generic-warnings">
-    <xsl:if test="book and not(book/chapter)">
-        <xsl:message>
-            <xsl:text>MBX:WARNING:    </xsl:text>
-            <xsl:text>Your &lt;book&gt; does not have any chapters.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
-        </xsl:message>
-    </xsl:if>
-    <xsl:if test="article and not(article/p) and not(article/section)">
-        <xsl:message>
-            <xsl:text>MBX:WARNING:    </xsl:text>
-            <xsl:text>Your &lt;article&gt; does not have any sections, nor any top-level paragraphs.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
-        </xsl:message>
-    </xsl:if>
-</xsl:template>
-
 
 <xsl:template match="*" mode="deprecation-warnings">
     <!-- newer deprecations at the top of this list, user will see in this order -->
