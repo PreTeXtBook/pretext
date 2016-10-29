@@ -5736,14 +5736,19 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                         <xsl:call-template name="brand-logo" />
                         <div class="title-container">
                             <h1 class="heading">
-                                <span class="title">
-                                    <xsl:apply-templates select="/mathbook/book|/mathbook/article" mode="title-simple" />
-                                </span>
-                                <xsl:if test="normalize-space(/mathbook/book/subtitle|/mathbook/article/subtitle)">
-                                    <span class="subtitle">
-                                        <xsl:apply-templates select="/mathbook/book|/mathbook/article" mode="subtitle" />
+                                <xsl:element name="a">
+                                    <xsl:attribute name="href">
+                                        <xsl:apply-templates select="/mathbook/*[not(self::docinfo)]" mode="containing-filename" />
+                                    </xsl:attribute>
+                                    <span class="title">
+                                        <xsl:apply-templates select="/mathbook/book|/mathbook/article" mode="title-simple" />
                                     </span>
-                                </xsl:if>
+                                    <xsl:if test="normalize-space(/mathbook/book/subtitle|/mathbook/article/subtitle)">
+                                        <span class="subtitle">
+                                            <xsl:apply-templates select="/mathbook/book|/mathbook/article" mode="subtitle" />
+                                        </span>
+                                    </xsl:if>
+                                </xsl:element>
                             </h1>
                             <!-- Serial list of authors/editors -->
                             <p class="byline">
