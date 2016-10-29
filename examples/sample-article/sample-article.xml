@@ -621,6 +621,25 @@ the xsltproc executable.
                         </solution>
                     </question>
 
+                    <exercise>
+                        <title>An Inline Exercise</title>
+
+                        <statement>
+                            <p>There are lots of exercises in this sample article, but mostly they are in special exercise sections.  Sometimes you just want to sprinkle some exercises through the narrative.  We call these <term>inline exercises</term>, in contrast to <term>sectional exercises</term>.  The inline exercises look a bit more like a theorem or definition, with titles and fully-qualified numbers.</p>
+
+                            <p>These may also have hints, answers and solutions.</p>
+                        </statement>
+                        <hint>
+                            <p>A good hint.</p>
+                        </hint>
+                        <answer>
+                            <p>42.</p>
+                        </answer>
+                        <solution>
+                            <p>What was the question?</p>
+                        </solution>
+                    </exercise>
+
                     <p>There are many different blocks you can employ, and they mostly behave the same way.  A <c>&lt;project&gt;</c><index><main>project</main></index> is very similar to a <c>&lt;question&gt;</c><index><main>question</main></index> or <c>&lt;problem&gt;</c><index><main>problem</main></index></p>
 
                     <project>
@@ -1968,6 +1987,9 @@ the xsltproc executable.
                     </exercise>
                     <exercise>
                         <statement><p><m>3+4+5</m></p></statement>
+                        <hint><p>Addition is associative.</p></hint>
+                        <answer><p><m>12</m></p></answer>
+                        <solution><p>First, add <m>3</m> and <m>4</m> to get <m>7</m>, then add <m>5</m> to arrive at <m>12</m>.</p></solution>
                     </exercise>
                     <exercise>
                         <statement><p><m>5+6</m></p></statement>

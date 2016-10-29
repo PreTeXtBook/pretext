@@ -1244,7 +1244,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "posterior-duplicate"  no ID, no \label         -->
 
 <!-- me is absent, not numbered, never knowled -->
-<xsl:template match="fn|biblio|men|md|mdn|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|objectives|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;" mode="xref-knowl">
+<xsl:template match="fn|biblio|men|md|mdn|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|exercise|hint[not(ancestor::*[self::webwork])]|answer[not(ancestor::*[self::webwork])]|solution[not(ancestor::*[self::webwork])]" mode="xref-knowl">
     <!-- write a file, calling body and posterior duplicate templates -->
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
@@ -1397,6 +1397,59 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- h5, no type name, serial number, title (if exists) -->
+<xsl:template match="*" mode="heading-sectional-exercise">
+    <xsl:element name="h5">
+        <xsl:attribute name="class">
+            <xsl:text>heading</xsl:text>
+        </xsl:attribute>
+        <xsl:element name="span">
+            <xsl:attribute name="class">
+                <xsl:text>codenumber</xsl:text>
+            </xsl:attribute>
+            <xsl:apply-templates select="." mode="serial-number" />
+        </xsl:element>
+        <xsl:if test="title">
+            <xsl:element name="span">
+                <xsl:attribute name="class">
+                    <xsl:text>title</xsl:text>
+                </xsl:attribute>
+                <xsl:apply-templates select="." mode="title-full" />
+            </xsl:element>
+        </xsl:if>
+    </xsl:element>
+</xsl:template>
+
+<!-- h5, type name, serial number, title (if exists) -->
+<!-- For the knowl text of a sectional exercise      -->
+<xsl:template match="*" mode="heading-sectional-exercise-typed">
+    <xsl:element name="h5">
+        <xsl:attribute name="class">
+            <xsl:text>heading</xsl:text>
+        </xsl:attribute>
+        <xsl:element name="span">
+            <xsl:attribute name="class">
+                <xsl:text>type</xsl:text>
+            </xsl:attribute>
+            <xsl:apply-templates select="." mode="type-name" />
+        </xsl:element>
+        <xsl:element name="span">
+            <xsl:attribute name="class">
+                <xsl:text>codenumber</xsl:text>
+            </xsl:attribute>
+            <xsl:apply-templates select="." mode="serial-number" />
+        </xsl:element>
+        <xsl:if test="title">
+            <xsl:element name="span">
+                <xsl:attribute name="class">
+                    <xsl:text>title</xsl:text>
+                </xsl:attribute>
+                <xsl:apply-templates select="." mode="title-full" />
+            </xsl:element>
+        </xsl:if>
+    </xsl:element>
+</xsl:template>
+
 <!-- h5, type name, no number (even if exists), title (if exists) -->
 <!-- eg, objectives is one-per-subdivison, max,                   -->
 <!-- so no need to display at birth, but is needed in xref        -->
@@ -1448,14 +1501,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- eg "Solution 5" as text of knowl-clickable, no wrapping -->
+<!-- eg "Solution 5" as text of knowl-clickable, no h5 wrapping -->
 <xsl:template match="*" mode="heading-simple">
-    <xsl:apply-templates select="." mode="type-name" />
+    <!-- the name of the object, its "type" -->
+    <xsl:element name="span">
+        <xsl:attribute name="class">
+            <xsl:text>type</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="." mode="type-name" />
+    </xsl:element>
+    <!-- A simple number, this should be in -common perhaps? -->
+    <!-- The work here is to see if the count exceeds 1      -->
     <xsl:variable name="elt-name" select="local-name(.)" />
     <xsl:variable name="siblings" select="parent::*/child::*[local-name(.) = $elt-name]" />
     <xsl:if test="count($siblings) > 1">
         <xsl:text> </xsl:text>
-        <xsl:number />
+        <xsl:element name="span">
+            <xsl:attribute name="class">
+                <xsl:text>codenumber</xsl:text>
+            </xsl:attribute>
+            <xsl:number />
+        </xsl:element>
     </xsl:if>
 </xsl:template>
 
@@ -1503,7 +1569,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- do not come through here at all, since they are   -->
 <!-- always visible with no decoration, so plain       -->
 <!-- default templates are good enough                 -->
-<xsl:template match="fn|biblio|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|objectives|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;">
+<xsl:template match="fn|biblio|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|exercise|hint[not(ancestor::*[self::webwork])]|answer[not(ancestor::*[self::webwork])]|solution[not(ancestor::*[self::webwork])]">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
@@ -1731,7 +1797,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We show the full content of the item on the page (b)            -->
 <!-- Or, we build a hidden knowl and place a link on the page (c)    -->
 <!-- NB: this template employs several modal templates, defined just below -->
-<xsl:template match="list|exercise|hint|answer|exercisegroup|biblio/note|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|contributor">
+<xsl:template match="list|biblio/note|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|contributor">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden-old" />
     </xsl:variable>
@@ -1764,7 +1830,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We restrict hint, answer, solution to avoid confusion with webwork -->
 <!-- TODO: we need to process children in a way that no \label{}, nor ID's, are produced   -->
 <!--       This would perhaps obsolete the "env-type" device, and reorder explnation below -->
-<xsl:template match="list|exercise|exercise/hint|exercise/answer|exercise/solution|exercisegroup|biblio/note|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|li|contributor" mode="xref-knowl">
+<xsl:template match="list|biblio/note|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|li|contributor" mode="xref-knowl">
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
@@ -2063,6 +2129,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:message>MBX:ERROR: an environment  (<xsl:value-of select="local-name(.)" />) does not know its posterior</xsl:message>
 </xsl:template>
  -->
+
+
+
 <!-- ########################### -->
 <!-- Environment Implementations -->
 <!-- ########################### -->
@@ -2478,54 +2547,278 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>false</xsl:text>
 </xsl:template>
 
-<!-- Solutions (to examples, projects) -->
-<!-- EXAMPLE-LIKE, PROJECT-LIKE -->
 
-<!-- always born hidden-->
-<xsl:template match="solution" mode="is-hidden">
-    <xsl:text>true</xsl:text>
+<!-- Exercise Groups (exercisegroup) -->
+
+<!-- Never hidden -->
+<xsl:template match="exercisegroup" mode="is-hidden">
+    <xsl:text>false</xsl:text>
 </xsl:template>
 
-<xsl:template match="solution" mode="body-element">
+<xsl:template match="exercisegroup" mode="body-element">
     <xsl:text>div</xsl:text>
 </xsl:template>
 
-<xsl:template match="solution" mode="body-css-class">
-    <xsl:text>remark-like</xsl:text>
+<xsl:template match="exercisegroup" mode="body-css-class">
+    <xsl:text>exercisegroup</xsl:text>
 </xsl:template>
 
-<!-- always a list of knowls inside a div -->
-<xsl:template match="solution" mode="birth-element">
-    <xsl:text>span</xsl:text>
+<xsl:template match="exercisegroup" mode="birth-element">
+    <xsl:text>div</xsl:text>
 </xsl:template>
 
-<xsl:template match="solution" mode="hidden-knowl-element">
-    <xsl:text>span</xsl:text>
+<xsl:template match="exercisegroup" mode="hidden-knowl-element" />
+
+<xsl:template match="exercisegroup" mode="hidden-knowl-css-class" />
+
+<xsl:template match="exercisegroup" mode="heading-birth" />
+
+<xsl:template match="exercisegroup" mode="body">
+    <xsl:apply-templates select="introduction"/>
+    <xsl:element name="div">
+        <xsl:attribute name="class">
+            <xsl:text>exercisegroup-exercises</xsl:text>
+            <xsl:text> cols</xsl:text>
+            <xsl:choose>
+                <xsl:when test="not(@cols)">
+                    <xsl:text>1</xsl:text>
+                </xsl:when>
+                <xsl:when test="@cols = 1 or @cols = 2 or @cols = 3 or @cols = 4 or @cols = 5 or @cols = 6">
+                    <xsl:value-of select="@cols" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message terminate="yes">MBX:ERROR: invalid value <xsl:value-of select="@cols" /> for cols attribute of exercisegroup</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:apply-templates select="exercise" />
+    </xsl:element>
+    <xsl:apply-templates select="conclusion"/>
 </xsl:template>
 
-<xsl:template match="solution" mode="hidden-knowl-css-class">
-    <xsl:text></xsl:text>
+<xsl:template match="exercisegroup" mode="heading-xref-knowl">
+    <xsl:apply-templates select="." mode="heading-type" />
 </xsl:template>
 
-<!-- always a knowl attached to an example -->
-<xsl:template match="solution" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-simple" />
+<!-- TODO: the mode="duplicate" on the exercises -->
+<!--  is not accurate. Copies will have id's etc -->
+<xsl:template match="exercisegroup" mode="body-duplicate">
+    <xsl:apply-templates select="introduction" mode="duplicate"/>
+    <xsl:element name="div">
+        <xsl:attribute name="class">
+            <xsl:text>exercisegroup-exercises</xsl:text>
+            <xsl:text> cols</xsl:text>
+            <xsl:choose>
+                <xsl:when test="not(@cols)">
+                    <xsl:text>1</xsl:text>
+                </xsl:when>
+                <xsl:when test="@cols = 1 or @cols = 2 or @cols = 3 or @cols = 4 or @cols = 5 or @cols = 6">
+                    <xsl:value-of select="@cols" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message terminate="yes">MBX:ERROR: invalid value <xsl:value-of select="@cols" /> for cols attribute of exercisegroup</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:apply-templates select="exercise" mode="duplicate"/>
+    </xsl:element>
+    <xsl:apply-templates select="conclusion" mode="duplicate"/>
 </xsl:template>
 
-<xsl:template match="solution" mode="body">
-    <xsl:apply-templates select="*" />
+<xsl:template match="exercisegroup" mode="has-posterior">
+    <xsl:text>false</xsl:text>
 </xsl:template>
 
-<xsl:template match="solution" mode="heading-xref-knowl">
+<!-- Exercises, sectional or inline -->
+<!-- Match first on "exercise", then to differentiate        -->
+<!-- follow with match on "exercises//exercise"              -->
+<!-- The // allows for exercisegroup and eventual sectioning -->
+
+<xsl:template match="exercise" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.exercise.inline = 'yes'" />
+</xsl:template>
+
+<xsl:template match="exercises//exercise" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.exercise.sectional = 'yes'" />
+</xsl:template>
+
+<xsl:template match="exercise" mode="body-element">
+    <xsl:text>article</xsl:text>
+</xsl:template>
+
+<xsl:template match="exercise" mode="body-css-class">
+    <xsl:text>exercise-like</xsl:text>
+</xsl:template>
+
+<xsl:template match="exercise" mode="birth-element">
+    <xsl:text>div</xsl:text>
+</xsl:template>
+
+<xsl:template match="exercise" mode="hidden-knowl-element">
+    <xsl:text>article</xsl:text>
+</xsl:template>
+
+<xsl:template match="exercise" mode="hidden-knowl-css-class">
+    <xsl:text>exercise-like</xsl:text>
+</xsl:template>
+
+<xsl:template match="exercise" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 
-<xsl:template match="solution" mode="body-duplicate">
+<xsl:template match="exercises//exercise" mode="heading-birth">
+    <xsl:apply-templates select="." mode="heading-sectional-exercise" />
+</xsl:template>
+
+<!-- Unstructured (no solutions, etc) -->
+<xsl:template match="exercise" mode="body">
+    <xsl:apply-templates select="*" />
+</xsl:template>
+
+<!-- Stuctured (indicated by statement)                   -->
+<!-- Order enforced: statement, hint, answer, solution    -->
+<!-- We put a space between each knowl for solution-like  -->
+<!-- items that seems necessary for the CSS               -->
+<xsl:template match="exercise[child::statement]" mode="body">
+    <xsl:if test="$exercise.text.statement='yes'">
+        <xsl:apply-templates select="statement" />
+    </xsl:if>
+    <xsl:if test="$exercise.text.hint='yes'">
+        <xsl:for-each select="hint">
+            <xsl:apply-templates select="." />
+            <xsl:text> </xsl:text>
+        </xsl:for-each>
+    </xsl:if>
+    <xsl:if test="$exercise.text.answer='yes'">
+        <xsl:for-each select="answer">
+            <xsl:apply-templates select="." />
+            <xsl:text> </xsl:text>
+        </xsl:for-each>
+    </xsl:if>
+    <xsl:if test="$exercise.text.solution='yes'">
+        <xsl:for-each select="solution">
+            <xsl:apply-templates select="." />
+            <xsl:text> </xsl:text>
+        </xsl:for-each>
+    </xsl:if>
+</xsl:template>
+
+<!-- A WeBWorK exercise (indicated by webwork) -->
+<xsl:template match="exercise[child::webwork]" mode="body">
+    <xsl:apply-templates select="statement"/>
+    <xsl:apply-templates select="introduction"/>
+    <xsl:apply-templates select="webwork" mode="knowl-clickable" />
+    <xsl:apply-templates select="conclusion"/>
+</xsl:template>
+
+<xsl:template match="exercise" mode="heading-xref-knowl">
+    <xsl:apply-templates select="." mode="heading-full" />
+</xsl:template>
+
+<xsl:template match="exercises//exercise" mode="heading-xref-knowl">
+    <xsl:apply-templates select="." mode="heading-sectional-exercise-typed" />
+</xsl:template>
+
+<!-- Unstructured (no solutions, etc) -->
+<xsl:template match="exercise" mode="body-duplicate">
+    <xsl:apply-templates select="*" mode="duplicate" />
+</xsl:template>
+
+<!-- TODO: -->
+<!-- The modal templates for "duplicate" do not exist    -->
+<!-- for hint, answer, solution.  They are always born   -->
+<!-- as knowls, so when duplicated as knowl-content they -->
+<!-- have duplicate id's in them, so somehow this needs  -->
+<!-- to be suppressed.  Maybe a "duplication" parameter  -->
+<!-- on the environment/block builder.                   -->
+
+<!-- Stuctured (indicated by statement)                -->
+<!-- Order enforced: statement, hint, answer, solution -->
+<xsl:template match="exercise[child::statement]" mode="body-duplicate">
+    <xsl:if test="$exercise.text.statement='yes'">
+        <xsl:apply-templates select="statement" mode="duplicate"/>
+    </xsl:if>
+    <xsl:if test="$exercise.text.hint='yes'">
+        <xsl:for-each select="hint">
+            <xsl:apply-templates select="." mode="duplicate"/>
+            <xsl:text> </xsl:text>
+        </xsl:for-each>
+    </xsl:if>
+    <xsl:if test="$exercise.text.answer='yes'">
+        <xsl:for-each select="answer">
+            <xsl:apply-templates select="." mode="duplicate"/>
+            <xsl:text> </xsl:text>
+        </xsl:for-each>
+    </xsl:if>
+    <xsl:if test="$exercise.text.solution='yes'">
+        <xsl:for-each select="solution">
+            <xsl:apply-templates select="." mode="duplicate"/>
+            <xsl:text> </xsl:text>
+        </xsl:for-each>
+    </xsl:if>
+</xsl:template>
+
+<!-- Needs work, to have duplicate templates -->
+<xsl:template match="exercise[child::webwork]" mode="body-duplicate">
+    <xsl:apply-templates select="statement"/>
+    <xsl:apply-templates select="introduction"/>
+    <xsl:apply-templates select="webwork" mode="knowl-clickable" />
+    <xsl:apply-templates select="conclusion"/>
+</xsl:template>
+
+<xsl:template match="exercise" mode="has-posterior">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
+
+<!-- Hints, Answers, Solutions (to an exercise) -->
+<!-- Solutions (to an example, project)         -->
+
+<!-- always born hidden-->
+<xsl:template match="hint|answer|solution" mode="is-hidden">
+    <xsl:text>true</xsl:text>
+</xsl:template>
+
+<xsl:template match="hint|answer|solution" mode="body-element">
+    <xsl:text>span</xsl:text>
+</xsl:template>
+
+<xsl:template match="hint|answer|solution" mode="body-css-class">
+    <xsl:text>solution</xsl:text>
+</xsl:template>
+
+<!-- always a list of knowls inside a div -->
+<xsl:template match="hint|answer|solution" mode="birth-element">
+    <xsl:text>span</xsl:text>
+</xsl:template>
+
+<xsl:template match="hint|answer|solution" mode="hidden-knowl-element">
+    <xsl:text>span</xsl:text>
+</xsl:template>
+
+<xsl:template match="hint|answer|solution" mode="hidden-knowl-css-class">
+    <xsl:text>heading</xsl:text>
+</xsl:template>
+
+<!-- always a knowl attached to an example -->
+<xsl:template match="hint|answer|solution" mode="heading-birth">
+    <xsl:apply-templates select="." mode="heading-simple" />
+</xsl:template>
+
+<xsl:template match="hint|answer|solution" mode="body">
+    <xsl:apply-templates select="*" />
+</xsl:template>
+
+<xsl:template match="hint|answer|solution" mode="heading-xref-knowl">
+    <xsl:apply-templates select="." mode="heading-full" />
+</xsl:template>
+
+<xsl:template match="hint|answer|solution" mode="body-duplicate">
     <xsl:apply-templates select="*" mode="duplicate" />
 </xsl:template>
 
 <!-- no posterior -->
-<xsl:template match="solution" mode="has-posterior">
+<xsl:template match="hint|answer|solution" mode="has-posterior">
     <xsl:text>false</xsl:text>
 </xsl:template>
 
@@ -2882,155 +3175,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>solution</xsl:text>
 </xsl:template>
 
-<!-- Exercise Group -->
-<!-- We interrupt a list of exercises with short commentary, -->
-<!-- typically instructions for a list of similar exercises  -->
-<!-- Commentary goes in an introduction and/or conclusion    -->
-<!-- Available as a xref knowl, but never born hidden        -->
-<xsl:template match="exercisegroup" mode="is-hidden-old">
-    <xsl:value-of select="false()" />
-</xsl:template>
-<xsl:template match="exercisegroup" mode="is-block-env">
-    <xsl:value-of select="true()" />
-</xsl:template>
-<!-- Never hidden so calling hidden-knowl-text raises error -->
-<!-- There is no head ever -->
-<xsl:template match="exercisegroup" mode="head" />
-<!-- Body is introduction,       -->
-<!-- exercises wrapped in a div, -->
-<!-- conclusion                  -->
-<xsl:template match="exercisegroup" mode="body">
-    <xsl:apply-templates select="introduction"/>
-    <xsl:element name="div">
-        <xsl:attribute name="class">
-            <xsl:text>exercisegroup-exercises</xsl:text>
-            <xsl:text> cols</xsl:text>
-            <xsl:choose>
-                <xsl:when test="not(@cols)">
-                    <xsl:text>1</xsl:text>
-                </xsl:when>
-                <xsl:when test="@cols = 1 or @cols = 2 or @cols = 3 or @cols = 4 or @cols = 5 or @cols = 6">
-                    <xsl:value-of select="@cols" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message terminate="yes">MBX:ERROR: invalid value <xsl:value-of select="@cols" /> for cols attribute of exercisegroup</xsl:message>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:attribute>
-        <xsl:apply-templates select="exercise" />
-    </xsl:element>
-    <xsl:apply-templates select="conclusion"/>
-</xsl:template>
-<!-- No posterior  -->
-<xsl:template match="exercisegroup" mode="posterior" />
-<!-- HTML, CSS -->
-<xsl:template match="exercisegroup" mode="environment-element">
-    <xsl:text>div</xsl:text>
-</xsl:template>
-<xsl:template match="exercisegroup" mode="environment-class">
-    <xsl:text>exercisegroup</xsl:text>
-</xsl:template>
 
-<!-- Exercises -->
-<!-- TODO: switches for inline versus sectional -->
-<xsl:template match="exercise" mode="is-hidden-old">
-    <xsl:value-of select="$html.knowl.exercise.inline = 'yes'" />
-</xsl:template>
-<xsl:template match="exercises//exercise" mode="is-hidden-old">
-    <xsl:value-of select="$html.knowl.exercise.sectional = 'yes'" />
-</xsl:template>
-<!-- does block form work in "exercises" section -->
-<xsl:template match="exercise" mode="is-block-env">
-    <xsl:value-of select="true()" />
-</xsl:template>
-<!-- Knowl text has simpler number at appearance in division -->
-<xsl:template match="exercises//exercise" mode="hidden-knowl-text">
-    <h5 class="heading">
-    <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-    <xsl:text> </xsl:text>
-    <span class="codenumber"><xsl:apply-templates select="." mode="serial-number" /></span>
-    <xsl:if test="title">
-        <xsl:text> </xsl:text>
-        <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
-    </xsl:if>
-    </h5>
-</xsl:template>
-<xsl:template match="exercise" mode="hidden-knowl-text">
-    <h5 class="heading">
-    <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-    <xsl:text> </xsl:text>
-    <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
-    <xsl:if test="title">
-        <xsl:text> </xsl:text>
-        <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
-    </xsl:if>
-    </h5>
-</xsl:template>
-<!-- Simpler head for sectional exercise -->
-<xsl:template match="exercises//exercise" mode="head">
-    <h5 class="heading">
-    <span class="codenumber"><xsl:apply-templates select="." mode="serial-number" /></span>
-    <xsl:if test="title">
-        <xsl:text> </xsl:text>
-        <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
-    </xsl:if>
-    </h5>
-</xsl:template>
-<xsl:template match="exercise" mode="head">
-    <h5 class="heading">
-    <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-    <xsl:text> </xsl:text>
-    <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
-    <xsl:if test="title">
-        <xsl:text> </xsl:text>
-        <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
-    </xsl:if>
-    </h5>
-</xsl:template>
-<!-- Body is statement normally, but for WeBWorK -->
-<!-- body is introduction, webwork, conclusion   -->
-<!-- (ignoring .text switches for WW!)           -->
-<xsl:template match="exercise[child::statement]" mode="body">
-    <xsl:apply-templates select="statement"/>
-</xsl:template>
-<xsl:template match="exercise[child::webwork]" mode="body">
-    <xsl:apply-templates select="statement"/>
-    <xsl:apply-templates select="introduction"/>
-    <xsl:apply-templates select="webwork" mode="knowl-clickable" />
-    <xsl:apply-templates select="conclusion"/>
-</xsl:template>
-<!-- Posterior: links to information  -->
-<xsl:template match="exercise" mode="posterior">
-    <xsl:variable name="hint-visible">
-        <xsl:value-of select="$exercise.text.hint='yes'" />
-    </xsl:variable>
-    <xsl:variable name="answer-visible">
-        <xsl:value-of select="$exercise.text.answer='yes'" />
-    </xsl:variable>
-    <xsl:variable name="solution-visible">
-        <xsl:value-of select="$exercise.text.solution='yes'" />
-    </xsl:variable>
-    <!-- Order enforced: hint, answer, solution                   -->
-    <!-- wrapped in a div to get these to open in proper location -->
-    <div class="hidden-knowl-wrapper">
-        <xsl:if test="$hint-visible='true'">
-            <xsl:apply-templates select="hint"/>
-        </xsl:if>
-        <xsl:if test="$answer-visible='true'">
-            <xsl:apply-templates select="answer"/>
-        </xsl:if>
-        <xsl:if test="$solution-visible='true'">
-            <xsl:apply-templates select="solution"/>
-        </xsl:if>
-    </div>
-</xsl:template>
-<!-- HTML, CSS -->
-<xsl:template match="exercise" mode="environment-element">
-    <xsl:text>article</xsl:text>
-</xsl:template>
-<xsl:template match="exercise" mode="environment-class">
-    <xsl:text>exercise-like</xsl:text>
-</xsl:template>
+
 
 <!-- List Items -->
 <!-- Never born hidden -->
