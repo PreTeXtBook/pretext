@@ -1724,6 +1724,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Internal Identifier -->
 <!--                     -->
 
+<!-- Check once if "index" is available -->
+<!-- for use on the root element        -->
+<xsl:variable name="b-index-is-available" select="not(//@xml:id[.='index'])" />
+
 <!-- A *unique* text identifier for any element -->
 <!-- Uses:                                      -->
 <!--   HTML: filenames (pages and knowls)       -->
@@ -1742,6 +1746,25 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:choose>
         <xsl:when test="@xml:id">
             <xsl:value-of select="@xml:id" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="local-name(.)" />
+            <xsl:text>-</xsl:text>
+            <xsl:number level="any" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Override for document root node,          -->
+<!-- slide in "index" as preferential default, -->
+<!-- presuming it is not in use anywhere else  -->
+<xsl:template match="/mathbook/*[not(self::docinfo)]" mode="internal-id">
+    <xsl:choose>
+        <xsl:when test="@xml:id">
+            <xsl:value-of select="@xml:id" />
+        </xsl:when>
+        <xsl:when test="$b-index-is-available">
+            <xsl:text>index</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:value-of select="local-name(.)" />
