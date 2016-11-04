@@ -4675,7 +4675,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <xsl:text>\savebox{\panelbox</xsl:text>
             <xsl:apply-templates select="." mode="panel-id" />
-            <xsl:text>}{&#xa;</xsl:text>
+            <xsl:text>}{%&#xa;</xsl:text>
             <xsl:apply-templates select="." mode="panel-latex-box">
                 <xsl:with-param name="width" select="$width" />
             </xsl:apply-templates>
