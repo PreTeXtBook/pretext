@@ -105,6 +105,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A space-separated list of CSS URLs (points to servers or local files) -->
 <xsl:param name="html.css.extra"  select="''" />
 
+<!-- Annotation -->
+<xsl:param name="html.annotation" select="''" />
+<xsl:variable name="b-activate-hypothesis" select="boolean($html.annotation='hypothesis')" />
+
 <!-- Navigation -->
 <!-- Navigation may follow two different logical models:                     -->
 <!--   (a) Linear, Prev/Next - depth-first search, linear layout like a book -->
@@ -266,6 +270,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and we process it with the chunking template called below              -->
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
+    <!-- temporary - while Hypothesis annotation is beta -->
+    <xsl:if test="$b-activate-hypothesis">
+        <xsl:call-template name="banner-warning">
+            <xsl:with-param name="warning">Hypothes.is annotation is experimental</xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
     <xsl:apply-templates select="mathbook" mode="generic-warnings" />
     <xsl:apply-templates select="mathbook" mode="deprecation-warnings" />
     <xsl:apply-templates />
@@ -5859,6 +5870,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:call-template name="knowl" />
             <xsl:call-template name="mathbook-js" />
             <xsl:call-template name="fonts" />
+            <xsl:call-template name="hypothesis-annotation" />
             <xsl:call-template name="css" />
             <xsl:if test="//video">
                 <xsl:call-template name="video" />
@@ -5949,6 +5961,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:apply-templates select="." mode="sagecell" />
             <xsl:call-template name="knowl" />
             <xsl:call-template name="fonts" />
+            <xsl:call-template name="hypothesis-annotation" />
             <xsl:call-template name="css" />
         </head>
         <!-- TODO: needs some padding etc -->
@@ -6841,6 +6854,22 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
 <xsl:template name="fonts">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic' rel='stylesheet' type='text/css' />
     <link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+</xsl:template>
+
+<!-- Hypothes.is Annotations -->
+<!-- Configurations are the defaults as of 2016-11-04   -->
+<!-- async="" is a guessed-hack, docs ahve no attribute -->
+<xsl:template name="hypothesis-annotation">
+    <xsl:if test="$b-activate-hypothesis">
+        <script type="application/json" class="js-hypothesis-config">
+        <xsl:text>{&#xa;</xsl:text>
+        <xsl:text>    "openLoginForm": false;</xsl:text>
+        <xsl:text>    "openSidebar": false;</xsl:text>
+        <xsl:text>    "showHighlights": true;</xsl:text>
+        <xsl:text>}</xsl:text>
+        </script>
+        <script src="https://hypothes.is/embed.js" async=""></script>
+    </xsl:if>
 </xsl:template>
 
 <!-- CSS header -->
