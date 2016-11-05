@@ -3000,6 +3000,27 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
+<!-- CSS class for multi-column lists -->
+<!-- Context is element carrying the "cols" attribute  -->
+<!-- Value is "colsN" with 1 <= N <= 6                  -->
+<!-- Error message of out-of-range, could be made fatal -->
+<xsl:template match="ol|ul|exercisegroup" mode="number-cols-CSS-class">
+    <xsl:text>cols</xsl:text>
+    <xsl:choose>
+        <xsl:when test="not(@cols)">
+            <xsl:text>1</xsl:text>
+        </xsl:when>
+        <xsl:when test="@cols=1 or @cols=2 or @cols=3 or @cols=4 or @cols=5 or @cols=6">
+            <xsl:value-of select="@cols" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message terminate="yes">MBX:ERROR: @cols attribute of lists or exercise groups, must be between 1 and 6 (inclusive), not "cols=<xsl:value-of select="@cols" />"</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
+
 <!-- ############### -->
 <!-- Arbitrary Lists -->
 <!-- ############### -->
