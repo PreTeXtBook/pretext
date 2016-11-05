@@ -3523,57 +3523,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Lists themselves -->
-<!-- Hard-code the list style, trading on match  -->
-<!-- in label templates. When columns are        -->
-<!-- specified, float items and clear afterwards -->
-<!-- NB: an  xsl:copy  makes namespace confusion -->
-<xsl:template match="ol">
-    <ol>
+<!-- Hard-code the list style, trading -->
+<!-- on match in label templates.      -->
+<xsl:template match="ol|ul">
+    <xsl:element name="{local-name(.)}">
+        <xsl:attribute name="class">
+            <!-- HTML-specific, but in mathbook-common.xsl -->
+            <xsl:apply-templates select="." mode="number-cols-CSS-class" />
+        </xsl:attribute>
         <xsl:attribute name="style">
             <xsl:text>list-style-type: </xsl:text>
                 <xsl:apply-templates select="." mode="html-list-label" />
             <xsl:text>;</xsl:text>
         </xsl:attribute>
-        <xsl:choose>
-            <xsl:when test="@cols">
-                <xsl:apply-templates select="li" mode="variable-width">
-                    <xsl:with-param name="percent-width" select="98 div @cols" />
-                </xsl:apply-templates>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="li" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </ol>
-    <xsl:if test="@cols">
-        <div style="clear:both;"></div>
-    </xsl:if>
+        <xsl:apply-templates select="li" />
+    </xsl:element>
 </xsl:template>
 
-<xsl:template match="ul">
-    <ul>
-        <xsl:attribute name="style">
-            <xsl:text>list-style-type: </xsl:text>
-                <xsl:apply-templates select="." mode="html-list-label" />
-            <xsl:text>;</xsl:text>
-        </xsl:attribute>
-        <xsl:choose>
-            <xsl:when test="@cols">
-                <xsl:apply-templates select="li" mode="variable-width">
-                    <xsl:with-param name="percent-width" select="98 div @cols" />
-                </xsl:apply-templates>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="li" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </ul>
-    <xsl:if test="@cols">
-        <div style="clear:both;"></div>
-    </xsl:if>
-</xsl:template>
-
-<!-- We let CSS react to narrow titles -->
+<!-- We let CSS react to narrow titles for dl -->
+<!-- But no support for multiple columns      -->
 <xsl:template match="dl">
     <xsl:element name="dl">
         <xsl:attribute name="class">
@@ -3600,6 +3568,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="internal-id" />
         </xsl:attribute>
+        <!-- set width with style attribute -->
+        <xsl:if test="parent::*[@cols]">
+            <xsl:attribute name="style">
+                <xsl:text>width:</xsl:text>
+                <xsl:value-of select="98 div parent::*/@cols" />
+                <xsl:text>%;</xsl:text>
+                <xsl:text> </xsl:text>
+                <xsl:text>float:left;</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:apply-templates />
     </xsl:element>
 </xsl:template>
@@ -3615,24 +3593,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
     <xsl:element name="dd">
         <xsl:apply-templates />
-    </xsl:element>
-</xsl:template>
-
-<!-- List items in HTML need to float with fractional widths -->
-<xsl:template match="li" mode="variable-width">
-    <xsl:param name="percent-width" />
-    <xsl:element name="li">
-        <xsl:attribute name="style">
-            <xsl:text>width:</xsl:text><xsl:value-of select="$percent-width" /><xsl:text>%; float:left;</xsl:text>
-        </xsl:attribute>
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id" />
-        </xsl:attribute>
-        <!-- TODO: this needs formatting, insertion into first paragraph -->
-        <xsl:if test="parent::dl">
-            <xsl:apply-templates select="." mode="title-full" />
-        </xsl:if>
-       <xsl:apply-templates />
     </xsl:element>
 </xsl:template>
 
