@@ -2157,18 +2157,22 @@ the xsltproc executable.
             <subsection>
                 <title>List Spacing, I</title>
 
-                <p>This is a short list that ends a subsection, so can be used to address the necessary spacing.<ol>
+                <p>This is a short list that ends a subsection, so can be used to address the necessary spacing.<ol cols="2">
                     <li>One item.</li>
                     <li>Two items.</li>
+                    <li>Three item.</li>
+                    <li>Fours items.</li>
                 </ol></p>
             </subsection>
 
             <subsection>
                 <title>List Spacing, II</title>
 
-                <p>This is another short list that ends a subsection, so can be used to address the necessary spacing.<ul>
+                <p>This is another short list that ends a subsection, so can be used to address the necessary spacing.<ul cols="2">
                     <li>Uno item.</li>
                     <li>Dos items.</li>
+                    <li>Tres item.</li>
+                    <li>Quattro items.</li>
                 </ul></p>
             </subsection>
 
