@@ -140,10 +140,10 @@
 <!-- ##### -->
 
 <!ELEMENT ul (li+)>
-    <!ATTLIST ul cols  CDATA #IMPLIED>
+    <!ATTLIST ul cols  (2|3|4|5|6) #IMPLIED>
     <!ATTLIST ul label CDATA #IMPLIED>
 <!ELEMENT ol (li+)>
-    <!ATTLIST ol cols  CDATA #IMPLIED>
+    <!ATTLIST ol cols  (2|3|4|5|6) #IMPLIED>
     <!ATTLIST ol label CDATA #IMPLIED>
 <!-- Description lists cannot be organized into columns -->
 <!ELEMENT dl (li+)>
@@ -593,8 +593,8 @@
     <!ATTLIST exercises xml:base CDATA    #IMPLIED>
 
 <!ELEMENT exercisegroup (introduction?, exercise+, conclusion?)>
-    <!ATTLIST exercisegroup xml:id ID    #IMPLIED>
-    <!ATTLIST exercisegroup cols   CDATA #IMPLIED>
+    <!ATTLIST exercisegroup xml:id ID             #IMPLIED>
+    <!ATTLIST exercisegroup cols      (2|3|4|5|6) #IMPLIED>
 
 <!ELEMENT exercise (title?, index*, ((statement, hint*, answer*, solution*)|(introduction?, webwork, conclusion?)))>
     <!ATTLIST exercise xml:id ID    #IMPLIED>

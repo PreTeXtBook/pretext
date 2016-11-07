@@ -1981,7 +1981,7 @@ the xsltproc executable.
                 </exercisegroup>
 
                 <exercisegroup cols="4">
-                    <introduction><p>An <c>&lt;exercisegroup&gt;</c> can have a <c>cols</c> attribute taking a value from 1<ndash />6. Exercises will progress by row, in so many columns. On a small screen, the HTML exercises may reorganize into fewer columns.</p></introduction>
+                    <introduction><p>An <c>&lt;exercisegroup&gt;</c> can have a <c>cols</c> attribute taking a value from 2<ndash />6. Exercises will progress by row, in so many columns. On a small screen, the HTML exercises may reorganize into fewer columns.</p></introduction>
                     <exercise>
                         <statement><p><m>1+2</m></p></statement>
                     </exercise>

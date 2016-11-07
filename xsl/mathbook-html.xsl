@@ -2589,9 +2589,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:element name="div">
         <xsl:attribute name="class">
             <xsl:text>exercisegroup-exercises</xsl:text>
-            <xsl:text> </xsl:text>
-            <!-- HTML-specific, but in mathbook-common.xsl -->
-            <xsl:apply-templates select="." mode="number-cols-CSS-class" />
+            <xsl:if test="@cols">
+                <xsl:text> </xsl:text>
+                <!-- HTML-specific, but in mathbook-common.xsl -->
+                <xsl:apply-templates select="." mode="number-cols-CSS-class" />
+            </xsl:if>
         </xsl:attribute>
         <xsl:apply-templates select="exercise" />
     </xsl:element>
@@ -2609,9 +2611,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:element name="div">
         <xsl:attribute name="class">
             <xsl:text>exercisegroup-exercises</xsl:text>
-            <xsl:text> </xsl:text>
-            <!-- HTML-specific, but in mathbook-common.xsl -->
-            <xsl:apply-templates select="." mode="number-cols-CSS-class" />
+            <xsl:if test="@cols">
+                <xsl:text> </xsl:text>
+                <!-- HTML-specific, but in mathbook-common.xsl -->
+                <xsl:apply-templates select="." mode="number-cols-CSS-class" />
+            </xsl:if>
         </xsl:attribute>
         <xsl:apply-templates select="exercise" mode="duplicate"/>
     </xsl:element>
@@ -3527,10 +3531,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- on match in label templates.      -->
 <xsl:template match="ol|ul">
     <xsl:element name="{local-name(.)}">
-        <xsl:attribute name="class">
-            <!-- HTML-specific, but in mathbook-common.xsl -->
-            <xsl:apply-templates select="." mode="number-cols-CSS-class" />
-        </xsl:attribute>
+        <xsl:if test="@cols">
+            <xsl:attribute name="class">
+                <!-- HTML-specific, but in mathbook-common.xsl -->
+                <xsl:apply-templates select="." mode="number-cols-CSS-class" />
+            </xsl:attribute>
+        </xsl:if>
         <xsl:attribute name="style">
             <xsl:text>list-style-type: </xsl:text>
                 <xsl:apply-templates select="." mode="html-list-label" />
