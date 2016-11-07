@@ -2154,6 +2154,24 @@ the xsltproc executable.
                 <p>The next two subdivisions are an Exercises subdivision and a References subdivision, which have lists within an exercise and a bibliographic item (respectively).</p>
             </subsection>
 
+            <subsection>
+                <title>List Spacing, I</title>
+
+                <p>This is a short list that ends a subsection, so can be used to address the necessary spacing.<ol>
+                    <li>One item.</li>
+                    <li>Two items.</li>
+                </ol></p>
+            </subsection>
+
+            <subsection>
+                <title>List Spacing, II</title>
+
+                <p>This is another short list that ends a subsection, so can be used to address the necessary spacing.<ul>
+                    <li>Uno item.</li>
+                    <li>Dos items.</li>
+                </ul></p>
+            </subsection>
+
             <exercises>
                 <title>Exercises (with lists)</title>
 
