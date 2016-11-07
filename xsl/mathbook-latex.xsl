@@ -580,6 +580,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\setcounter{secnumdepth}{</xsl:text>
         <xsl:value-of select="$latex-numbering-maxlevel" />
     <xsl:text>}&#xa;</xsl:text>
+    <xsl:if test="//assemblage or //aside or //biographical or //historical">
+        <xsl:text>%% mdframed environments use a tikz frame method&#xa;</xsl:text>
+        <xsl:text>\usepackage{tikz}</xsl:text>
+        <xsl:if test="//aside or //biographical or //historical">
+            <xsl:text>%% mdframed environments use drop shadows&#xa;</xsl:text>
+            <xsl:text>\usetikzlibrary{shadows}</xsl:text>
+        </xsl:if>
+    </xsl:if>
     <!-- Could condition following on existence of any amsthm environment -->
     <xsl:text>%% Environments with amsthm package&#xa;</xsl:text>
     <xsl:text>%% Theorem-like environments in "plain" style, with or without proof&#xa;</xsl:text>
