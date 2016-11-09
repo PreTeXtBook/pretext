@@ -196,12 +196,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="list" />
 <xsl:strip-space elements="sage program console" />
 <xsl:strip-space elements="exercisegroup" />
-<xsl:strip-space elements="ul ol dl li" />
+<xsl:strip-space elements="ul ol dl" />
 <xsl:strip-space elements="md mdn" />
 <xsl:strip-space elements="sage figure listing index" />
 <xsl:strip-space elements="sidebyside paragraphs" />
 <xsl:strip-space elements="table tabular col row" />
 <xsl:strip-space elements="webwork setup" />
+
+<!-- A few basic elements are explicitly mixed-content -->
+<!-- So we must preserve whitespace-only text nodes    -->
+<!-- Example: a space between two marked-up words      -->
+<!--                                                   -->
+<!--         <em>two</em> <alert>ducks</alert>         -->
+<!--                                                   -->
+<!-- Describes source expectations, DO NOT             -->
+<!-- override in subsequent stylesheets                -->
+<xsl:preserve-space elements="p li" />
 
 <!-- ######### -->
 <!-- Variables -->
@@ -2833,6 +2843,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- ############## -->
 <!-- List Utilities -->
 <!-- ############## -->
+
+<!-- A list item may be:                                        -->
+<!--   * unstructured, like a sentence of a "p"                 -->
+<!--   * structured into paragraphs, sublists, etc.             -->
+<!-- For the first, we cannot automatically strip space         -->
+<!-- To be flexible about the second, we kill interstitial text -->
+<xsl:template match="li[p|ol|ul|dl]/text()">
+    <xsl:variable name="text" select="normalize-space(.)" />
+    <xsl:if test="$text">
+        <xsl:message>MBX:WARNING: Unstructured content within a list item is being ignored ("<xsl:value-of select="$text" />")</xsl:message>
+    </xsl:if>
+</xsl:template>
 
 <!-- List Levels -->
 <!-- Utility templates to determine the depth      -->

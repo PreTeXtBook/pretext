@@ -2157,11 +2157,11 @@ the xsltproc executable.
             <subsection>
                 <title>List Spacing, I</title>
 
-                <p>This is a short list that ends a subsection, so can be used to address the necessary spacing.<ol cols="2">
+                <p>This is a short list that ends a subsection, so can be used to address the necessary spacing.  We also test two XML elements separated by a space (which should not go missing).<ol cols="2">
                     <li>One item.</li>
-                    <li>Two items.</li>
-                    <li>Three item.</li>
-                    <li>Fours items.</li>
+                    <li><em>Two</em> <alert>ducks</alert>.</li>
+                    <li>Three items.</li>
+                    <li>Four items.</li>
                 </ol></p>
             </subsection>
 
