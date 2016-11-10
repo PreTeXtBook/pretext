@@ -1634,8 +1634,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:element>
         </xsl:when>
         <xsl:otherwise>
-            <!-- above, without wrapping, so no ID (math?), just body -->
-            <xsl:message>BUG: IN EMPTY BORN VISIBLE</xsl:message>
+            <!-- above, without wrapping supplied by templates, -->
+            <!-- so ID is responsibility of the body template   -->
             <xsl:apply-templates select="." mode="body" />
         </xsl:otherwise>
     </xsl:choose>
@@ -2276,43 +2276,137 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An id is needed as target of in-context links  -->
 <!-- that arise from knowling paragraphs routinely  -->
 <!-- for notation, term index cross-references      -->
-<!-- A single paragraph within a side-by-side       -->
-<!-- panel will carry positioning CSS               -->
 
 <xsl:template match="p" mode="is-hidden">
     <xsl:text>false</xsl:text>
 </xsl:template>
 
-<xsl:template match="p" mode="body-element">
-    <xsl:text>p</xsl:text>
-</xsl:template>
+<!-- With no body-element, there is no automatic -->
+<!-- wrapping so we can let the body,            -->
+<!-- body-duplicate templates provide everything -->
+<!-- Never born embedded, so OK if this is empty -->
+<xsl:template match="p" mode="body-element" />
 
 <xsl:template match="p" mode="body-css-class" />
 
 <xsl:template match="p" mode="heading-birth" />
 
+<!-- Paragraphs, without lists within -->
 <xsl:template match="p" mode="body">
-    <xsl:apply-templates select="*|text()" />
+    <xsl:element name="p">
+        <!-- label original -->
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:attribute>
+        <xsl:apply-templates select="*|text()" />
+    </xsl:element>
+</xsl:template>
+
+<!-- Paragraphs, with lists within -->
+<xsl:template match="p[ol or ul or dl]" mode="body">
+    <!-- will later loop over lists within paragraph -->
+    <xsl:variable name="lists" select="ul|ol|dl" />
+    <!-- content prior to first list is exceptional   -->
+    <!-- possibly empty if a list happens immediately -->
+    <xsl:element name="p"> <!-- needs label -->
+        <!-- label original -->
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:attribute>
+        <xsl:apply-templates select="$lists[1]/preceding-sibling::node()" />
+    </xsl:element>
+    <!-- for each list, output the list, plus trailing content -->
+    <xsl:for-each select="$lists">
+        <!-- do the list proper -->
+        <xsl:apply-templates select="." />
+        <!-- look through remainder, all element and text nodes, and the next list -->
+        <xsl:variable name="rightward" select="following-sibling::node()[not(self::comment()) and not(self::processing-instruction())]" />
+        <xsl:variable name="next-list" select="following-sibling::*[self::ul or self::ol or self::dl][1]" />
+        <xsl:choose>
+            <xsl:when test="$next-list">
+                <xsl:variable name="leftward" select="$next-list/preceding-sibling::node()[not(self::comment()) and not(self::processing-instruction())]" />
+                <!-- device below forms set intersection -->
+                <xsl:variable name="common" select="$rightward[count(. | $leftward) = count($leftward)]" />
+                <!-- not if empty, no id on these -->
+                <!-- the first "p" got that above -->
+                <xsl:if test="$common">
+                    <xsl:element name="p">
+                        <xsl:apply-templates select="$common" />
+                    </xsl:element>
+                </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- finish the trailing content -->
+                <!-- but not if tere is not any  -->
+                <xsl:if test="$rightward">
+                    <xsl:element name="p">
+                        <xsl:apply-templates select="$rightward" />
+                    </xsl:element>
+                </xsl:if>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:for-each>
 </xsl:template>
 
 <xsl:template match="p" mode="heading-xref-knowl">
     <xsl:apply-templates select="." mode="heading-type" />
 </xsl:template>
 
+<!-- Paragraphs, without lists within, as duplicate -->
+<!-- Lacking an "id", calling duplicates            -->
 <xsl:template match="p" mode="body-duplicate">
-    <xsl:apply-templates select="*|text()" mode="duplicate" />
+    <xsl:element name="p">
+        <xsl:apply-templates select="*|text()" mode="duplicate" />
+    </xsl:element>
+</xsl:template>
+
+<!-- Paragraphs, with lists within, as duplicate -->
+<!-- Lacking an "id", calling duplicates         -->
+<xsl:template match="p[ol or ul or dl]" mode="body-duplicate">
+    <!-- will later loop over lists within paragraph -->
+    <xsl:variable name="lists" select="ul|ol|dl" />
+    <!-- content prior to first list is exceptional   -->
+    <!-- possibly empty if a list happens immediately -->
+    <xsl:element name="p">
+        <xsl:apply-templates select="$lists[1]/preceding-sibling::node()" mode="duplicate"/>
+    </xsl:element>
+    <!-- for each list, output the list, plus trailing content -->
+    <xsl:for-each select="$lists">
+        <!-- do the list proper -->
+        <xsl:apply-templates select="." mode="duplicate"/>
+        <!-- look through remainder, all element and text nodes, and the next list -->
+        <xsl:variable name="rightward" select="following-sibling::node()[not(self::comment()) and not(self::processing-instruction())]" />
+        <xsl:variable name="next-list" select="following-sibling::*[self::ul or self::ol or self::dl][1]" />
+        <xsl:choose>
+            <xsl:when test="$next-list">
+                <xsl:variable name="leftward" select="$next-list/preceding-sibling::node()[not(self::comment()) and not(self::processing-instruction())]" />
+                <!-- device below forms set intersection -->
+                <xsl:variable name="common" select="$rightward[count(. | $leftward) = count($leftward)]" />
+                <!-- not if empty, no id on these -->
+                <!-- the first "p" got that above -->
+                <xsl:if test="$common">
+                    <xsl:element name="p">
+                        <xsl:apply-templates select="$common" mode="duplicate" />
+                    </xsl:element>
+                </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- finish the trailing content -->
+                <!-- but not if tere is not any  -->
+                <xsl:if test="$rightward">
+                    <xsl:element name="p">
+                        <xsl:apply-templates select="$rightward" mode="duplicate" />
+                    </xsl:element>
+                </xsl:if>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:for-each>
 </xsl:template>
 
 <xsl:template match="p" mode="has-posterior">
     <xsl:text>false</xsl:text>
 </xsl:template>
 
-<!-- Extraordinary, p are containers -->
-<xsl:template match="p" mode="duplicate">
-    <xsl:element name="p">
-        <xsl:apply-templates select="*|text()" mode="duplicate" />
-    </xsl:element>
-</xsl:template>
 
 
 <!-- Definitions, Remarks, Asides -->

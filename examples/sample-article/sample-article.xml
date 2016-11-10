@@ -2299,6 +2299,26 @@ the xsltproc executable.
                         <p>So some people use the acronym <acro>ROY-G-BIV</acro> to remember this sequence.</p>
                     </conclusion>
                 </list>
+
+                <p><index><main>list</main></index>This is a paragraph with three lists contained within it.  For HTML output we have to <q>inside-out</q> the lists.<ol>
+                    <li>A one item ordered list.</li>
+                </ol>In other words, the text before, after, and between, needs to each be encapsulated as an HTML <c>p</c> element of its own.<ul>
+                    <li>A one item unordered list.</li>
+                </ul>Including definition lists.<dl>
+                    <li>
+                        <title>Define Me</title>
+                        <p>A one item definition list.</p>
+                    </li>
+                </dl>That's all!</p>
+
+                <p>A one item list, whose item is a paragraph with two contained ordered lists, separated by text.<ul label="square">
+                    <li><p>Introductory text.<ol label="A">
+                        <li>First item, first list.</li>
+                    </ol>Intermediate text.<ol label="a">
+                        <li>First item, second list.</li>
+                    </ol>Concluding text.</p></li>
+                </ul></p>
+
             </subsection>
 
             <references>
