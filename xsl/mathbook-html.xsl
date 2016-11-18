@@ -26,7 +26,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 ]>
 
 <!-- Identify as a stylesheet -->
-    <!-- xmlns="http://www.w3.org/1999/xhtml" -->
+    <!-- Adding the next declaration will          -->
+    <!-- (a) close some tags                       -->
+    <!-- (b) remove all whitespace in output       -->
+    <!-- http://stackoverflow.com/questions/476609 -->
+    <!-- xmlns="http://www.w3.org/1999/xhtml"      -->
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
@@ -1257,74 +1261,85 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
     <exsl:document href="{$knowl-file}" method="html">
-        <!-- header since separate file -->
-        <xsl:call-template name="converter-blurb-html" />
-        <!-- content, as duplicate, so no @id or \label -->
+        <xsl:text disable-output-escaping="yes">&lt;!doctype html&gt;&#xa;</xsl:text>
+        <xsl:element name="html">
+            <!-- header since separate file -->
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:call-template name="converter-blurb-html" />
 
-        <!-- variables for HTML container names -->
-        <xsl:variable name="body-elt">
-            <xsl:apply-templates select="." mode="body-element" />
-        </xsl:variable>
-        <xsl:variable name="body-css">
-            <xsl:apply-templates select="." mode="body-css-class" />
-        </xsl:variable>
-        <!-- heading + body (usually) go into an HTML container -->
-        <xsl:choose>
-            <xsl:when test="not($body-elt='')">
-                <xsl:element name="{$body-elt}">
-                    <xsl:if test="not($body-css = '')">
+            <xsl:element name="head">
+                <!-- dissuade indexing duplicated content -->
+                <meta name="robots" content="noindex, nofollow" />
+            </xsl:element>
+
+            <xsl:element name="body">
+                <!-- content, as duplicate, so no @id or \label -->
+
+                <!-- variables for HTML container names -->
+                <xsl:variable name="body-elt">
+                    <xsl:apply-templates select="." mode="body-element" />
+                </xsl:variable>
+                <xsl:variable name="body-css">
+                    <xsl:apply-templates select="." mode="body-css-class" />
+                </xsl:variable>
+                <!-- heading + body (usually) go into an HTML container -->
+                <xsl:choose>
+                    <xsl:when test="not($body-elt='')">
+                        <xsl:element name="{$body-elt}">
+                            <xsl:if test="not($body-css = '')">
+                                <xsl:attribute name="class">
+                                    <xsl:value-of select="$body-css" />
+                                </xsl:attribute>
+                            </xsl:if>
+
+                            <!-- First, a heading to describe xref knowl itself, -->
+                            <!-- since it is divorced from its context, so       -->
+                            <!-- provide as much information as possible         -->
+                            <xsl:apply-templates select="." mode="heading-xref-knowl" />
+
+                            <!-- Second, the main body with content as duplicates of the -->
+                            <!-- various components, so no @id, no \label.  Exclusive of -->
+                            <!-- various decorations like proofs or solutions -->
+                            <xsl:apply-templates select="." mode="body-duplicate" />
+                        </xsl:element>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!-- above, without wrapping (eg math)-->
+                        <xsl:apply-templates select="." mode="heading-xref-knowl" />
+                        <xsl:apply-templates select="." mode="body-duplicate" />
+                    </xsl:otherwise>
+                </xsl:choose>
+
+                <!-- posterior, possibly empty -->
+                <xsl:variable name="with-posterior">
+                    <xsl:apply-templates select="." mode="has-posterior" />
+                </xsl:variable>
+                <xsl:if test="$with-posterior = 'true'">
+                    <xsl:element name="div">
                         <xsl:attribute name="class">
-                            <xsl:value-of select="$body-css" />
+                            <xsl:text>posterior</xsl:text>
                         </xsl:attribute>
-                    </xsl:if>
+                        <xsl:apply-templates select="." mode="posterior-duplicate" />
+                    </xsl:element>
+                </xsl:if>
 
-                    <!-- First, a heading to describe xref knowl itself, -->
-                    <!-- since it is divorced from its context, so       -->
-                    <!-- provide as much information as possible         -->
-                    <xsl:apply-templates select="." mode="heading-xref-knowl" />
-
-                    <!-- Second, the main body with content as duplicates of the -->
-                    <!-- various components, so no @id, no \label.  Exclusive of -->
-                    <!-- various decorations like proofs or solutions -->
-                    <xsl:apply-templates select="." mode="body-duplicate" />
+                <!-- in-context link always part of xref-knowl content -->
+                <xsl:element name="span">
+                    <xsl:attribute name="class">
+                        <xsl:text>incontext</xsl:text>
+                    </xsl:attribute>
+                    <xsl:element name="a">
+                        <xsl:attribute name="href">
+                            <xsl:apply-templates select="." mode="url" />
+                        </xsl:attribute>
+                        <xsl:call-template name="type-name">
+                            <xsl:with-param name="string-id" select="'incontext'" />
+                        </xsl:call-template>
+                    </xsl:element>
                 </xsl:element>
-            </xsl:when>
-            <xsl:otherwise>
-                <!-- above, without wrapping (eg math)-->
-                <xsl:apply-templates select="." mode="heading-xref-knowl" />
-                <xsl:apply-templates select="." mode="body-duplicate" />
-            </xsl:otherwise>
-        </xsl:choose>
-
-        <!-- posterior, possibly empty -->
-        <xsl:variable name="with-posterior">
-            <xsl:apply-templates select="." mode="has-posterior" />
-        </xsl:variable>
-        <xsl:if test="$with-posterior = 'true'">
-            <xsl:element name="div">
-                <xsl:attribute name="class">
-                    <xsl:text>posterior</xsl:text>
-                </xsl:attribute>
-                <xsl:apply-templates select="." mode="posterior-duplicate" />
-            </xsl:element>
-        </xsl:if>
-
-        <!-- in-context link always part of xref-knowl content -->
-        <xsl:element name="span">
-            <xsl:attribute name="class">
-                <xsl:text>incontext</xsl:text>
-            </xsl:attribute>
-            <xsl:element name="a">
-                <xsl:attribute name="href">
-                    <xsl:apply-templates select="." mode="url" />
-                </xsl:attribute>
-                <xsl:call-template name="type-name">
-                    <xsl:with-param name="string-id" select="'incontext'" />
-                </xsl:call-template>
-            </xsl:element>
-        </xsl:element>
-
-    </exsl:document>
+            </xsl:element>  <!-- end body -->
+        </xsl:element>  <!-- end html -->
+    </exsl:document>  <!-- end file -->
     <!-- recurse the tree outside of the file-writing -->
     <xsl:apply-templates select="*" mode="xref-knowl" />
 </xsl:template>
