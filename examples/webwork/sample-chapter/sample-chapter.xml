@@ -328,9 +328,6 @@
                         <var name="$b">
                             <static>3</static>
                         </var>
-                        <var name="$c">
-                            <static>45</static>
-                        </var>
                         <var name="$expression">
                             <static>\sqrt{45}</static>
                         </var>
@@ -413,9 +410,6 @@
                         <var name="$c">
                             <static>-6</static>
                         </var>
-                        <var name="$x">
-                            <static>x</static>
-                        </var>
                         <var name="$quadratic">
                             <static>2x^2 + x - 6</static>
                         </var>
@@ -433,7 +427,10 @@
                         </var>
 
                         <var name="$multians1">
-                            <static>1.5, 2</static>
+                            <set>
+                                <member correct="yes">1.5</member>
+                                <member correct="yes">2</member>
+                            </set>
                         </var>
 
                         <!-- TODO: move out context shift -->
@@ -918,8 +915,12 @@
                 <webwork>
 
                     <setup>
-                        <var name="$answer" category="number"/>
-                        <var name="$second_x" category="number"/>
+                        <var name="$answer" category="number">
+                            <static>3</static>
+                        </var>
+                        <var name="$second_x" category="number">
+                            <static>3.8</static>
+                        </var>
 
                         <pg-code>
                             $answer = random(1,3,1);
@@ -984,12 +985,6 @@
                 <webwork xml:id="number-or-function">
 
                     <setup>
-                        <var name="$a" category="integer">
-                            <static>5</static>
-                        </var>
-                        <var name="$b" category="integer">
-                            <static>8</static>
-                        </var>
                         <var name="$answer1" category="integer">
                             <static>5</static>
                         </var>
@@ -1039,9 +1034,6 @@
                 <webwork xml:id="function-with-domain-issues">
 
                     <setup>
-                        <var name="$a" category="integer">
-                            <static>2</static>
-                        </var>
                         <var name="$answer1" category="formula">
                             <static>\sqrt{x-2}</static>
                         </var>
