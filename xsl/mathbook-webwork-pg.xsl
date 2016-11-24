@@ -455,27 +455,34 @@
 
 <!-- PGML markup for Perl variable in LaTeX expression -->
 <xsl:template match="statement//var|hint//var|solution//var">
+    <xsl:apply-templates select="." mode="static-warning" />
     <xsl:variable name="varname" select="@name" />
     <xsl:variable name="problem" select="ancestor::webwork" />
-    <xsl:variable name="category" select="$problem/setup/var[@name=$varname]/@category" />
     <xsl:text>[</xsl:text>
     <xsl:value-of select="@name" />
     <xsl:if test="$problem/statement//var[@name=$varname and @form='checkboxes']">
         <xsl:text>->correct_ans()</xsl:text>
     </xsl:if>
     <xsl:text>]</xsl:text>
-    <xsl:if test="not($problem/setup/var[@name=$varname]/static) and not($problem/setup/var[@name=$varname]/set/member) and not($problem//image[@pg-name])">
+</xsl:template>
+
+<xsl:template match="description//var">
+    <xsl:apply-templates select="." mode="static-warning" />
+    <xsl:value-of select="@name"/>
+</xsl:template>
+
+<xsl:template match="var" mode="static-warning">
+    <xsl:variable name="varname" select="@name" />
+    <xsl:variable name="problem" select="ancestor::webwork" />
+    <xsl:if test="not($problem/setup/var[@name=$varname]/static) and not($problem/setup/var[@name=$varname]/set/member) and not(@form='essay')">
         <xsl:message>
-            <xsl:text>MBX:WARNING: A WeBWorK problem body uses a var (name="</xsl:text>
+            <xsl:text>MBX:WARNING: A WeBWorK exercise uses a var (name="</xsl:text>
             <xsl:value-of select="$varname"/>
-            <xsl:text>") for which there is no static value declared</xsl:text>
+            <xsl:text>") for which there is no static value or set declared</xsl:text>
         </xsl:message>
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="description//var">
-    <xsl:value-of select="@name"/>
-</xsl:template>
 
 <!-- ############ -->
 <!-- PGML answers -->
@@ -484,6 +491,7 @@
 <!-- PGML answer input               -->
 <!-- Example: [_____]{$ans}          -->
 <xsl:template match="webwork//statement//var[@width|@form]">
+    <xsl:apply-templates select="." mode="static-warning" />
     <xsl:apply-templates select="." mode="field"/>
     <xsl:apply-templates select="." mode="form-help"/>
     <xsl:variable name="problem" select="ancestor::webwork" />
@@ -1355,15 +1363,6 @@
     <!-- remains to apply tabular/@top and tabular/@bottom -->
     <!-- will handle these at cell level -->
     <xsl:text>);@]*&#xa;&#xa;</xsl:text>
-    <xsl:if test=".//col/@top">
-        <xsl:message>MBX:WARNING: column-specific top border attributes are not implemented for the hardcopy output of a WeBWorK PG table</xsl:message>
-    </xsl:if>
-    <xsl:if test=".//cell/@bottom">
-        <xsl:message>MBX:WARNING: cell-specific bottom border attributes are not implemented for the hardcopy output of a WeBWorK PG table</xsl:message>
-    </xsl:if>
-    <xsl:if test=".//*[@top='medium'] or .//*[@top='major'] or .//*[@bottom='medium'] or .//*[@bottom='major'] or .//*[@left='medium'] or .//*[@left='major'] or .//*[@right='medium'] or .//*[@right='major']">
-        <xsl:message>MBX:WARNING: medium and major will come out as minor in the hardcopy output of a WeBWorK PG table</xsl:message>
-    </xsl:if>
 </xsl:template>
 
 <xsl:template match="webwork//tabular/row">
