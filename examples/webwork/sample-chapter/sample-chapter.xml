@@ -321,10 +321,6 @@
 
                 <webwork>
                     <title>Multiplication with Exponents</title>
-                    <pg-macros>
-                        <macro-file>contextLimitedRadical.pl</macro-file>
-                    </pg-macros>
-
                     <setup>
                         <var name="$a">
                             <static>5</static>
@@ -406,11 +402,6 @@
                 <title>Solving Quadratic Equations</title>
 
                 <webwork xml:id="quadratic-equation">
-
-                    <pg-macros>
-                        <macro-file>parserMultiAnswer.pl</macro-file>
-                        <macro-file>contextFraction.pl</macro-file>
-                    </pg-macros>
 
                     <setup>
                         <var name="$a">
