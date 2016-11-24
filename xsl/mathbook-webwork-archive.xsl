@@ -66,6 +66,7 @@
 <!-- Organized in directories as in the document tree, cut off at chunk level -->
 <!-- Then chunk the document to write reasonable problem definition files     -->
 <xsl:template match="/mathbook">
+    <xsl:apply-templates select="." mode="generic-warnings" />
     <xsl:message>C: <xsl:value-of select="$chunk-level" /></xsl:message>
     <xsl:apply-templates mode="problems" />
     <xsl:apply-templates mode="chunking" />

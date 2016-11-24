@@ -1355,15 +1355,6 @@
     <!-- remains to apply tabular/@top and tabular/@bottom -->
     <!-- will handle these at cell level -->
     <xsl:text>);@]*&#xa;&#xa;</xsl:text>
-    <xsl:if test=".//col/@top">
-        <xsl:message>MBX:WARNING: column-specific top border attributes are not implemented for the hardcopy output of a WeBWorK PG table</xsl:message>
-    </xsl:if>
-    <xsl:if test=".//cell/@bottom">
-        <xsl:message>MBX:WARNING: cell-specific bottom border attributes are not implemented for the hardcopy output of a WeBWorK PG table</xsl:message>
-    </xsl:if>
-    <xsl:if test=".//*[@top='medium'] or .//*[@top='major'] or .//*[@bottom='medium'] or .//*[@bottom='major'] or .//*[@left='medium'] or .//*[@left='major'] or .//*[@right='medium'] or .//*[@right='major']">
-        <xsl:message>MBX:WARNING: medium and major will come out as minor in the hardcopy output of a WeBWorK PG table</xsl:message>
-    </xsl:if>
 </xsl:template>
 
 <xsl:template match="webwork//tabular/row">
