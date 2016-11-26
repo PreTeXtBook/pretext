@@ -1255,7 +1255,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "posterior-duplicate"  no ID, no \label         -->
 
 <!-- me is absent, not numbered, never knowled -->
-<xsl:template match="fn|biblio|men|md|mdn|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|exercise|hint[not(ancestor::*[self::webwork])]|answer[not(ancestor::*[self::webwork])]|solution[not(ancestor::*[self::webwork])]" mode="xref-knowl">
+<xsl:template match="fn|biblio|men|md|mdn|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|exercise|hint[not(ancestor::*[self::webwork])]|answer[not(ancestor::*[self::webwork])]|solution[not(ancestor::*[self::webwork])]" mode="xref-knowl">
     <!-- write a file, calling body and posterior duplicate templates -->
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
@@ -1591,7 +1591,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- do not come through here at all, since they are   -->
 <!-- always visible with no decoration, so plain       -->
 <!-- default templates are good enough                 -->
-<xsl:template match="fn|biblio|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|exercise|hint[not(ancestor::*[self::webwork])]|answer[not(ancestor::*[self::webwork])]|solution[not(ancestor::*[self::webwork])]">
+<xsl:template match="fn|biblio|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|exercise|hint[not(ancestor::*[self::webwork])]|answer[not(ancestor::*[self::webwork])]|solution[not(ancestor::*[self::webwork])]">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
@@ -1819,7 +1819,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We show the full content of the item on the page (b)            -->
 <!-- Or, we build a hidden knowl and place a link on the page (c)    -->
 <!-- NB: this template employs several modal templates, defined just below -->
-<xsl:template match="list|biblio/note|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|contributor">
+<xsl:template match="biblio/note|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|contributor">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden-old" />
     </xsl:variable>
@@ -1852,7 +1852,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We restrict hint, answer, solution to avoid confusion with webwork -->
 <!-- TODO: we need to process children in a way that no \label{}, nor ID's, are produced   -->
 <!--       This would perhaps obsolete the "env-type" device, and reorder explnation below -->
-<xsl:template match="list|biblio/note|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|li|contributor" mode="xref-knowl">
+<xsl:template match="biblio/note|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|li|contributor" mode="xref-knowl">
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
@@ -2500,10 +2500,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Examples, Projects -->
+<!-- Examples, Projects, Lists -->
 <!-- Runs of paragraphs, etc,  xor  statement + solution -->
 <!-- Examples and projects are identical, but for        -->
 <!-- knowlification, independent numbering (elsewhere)   -->
+<!-- List blocks are like examples, but have             -->
+<!-- introduction/list/conclusion structure              -->
 
 <xsl:template match="&EXAMPLE-LIKE;" mode="is-hidden">
     <xsl:value-of select="$html.knowl.example = 'yes'" />
@@ -2513,27 +2515,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$html.knowl.project = 'yes'" />
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="body-element">
+<xsl:template match="list" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.list = 'yes'" />
+</xsl:template>
+
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|list" mode="body-element">
     <xsl:text>article</xsl:text>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="body-css-class">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|list" mode="body-css-class">
     <xsl:text>example-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="birth-element">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|list" mode="birth-element">
     <xsl:text>div</xsl:text>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="hidden-knowl-element">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|list" mode="hidden-knowl-element">
     <xsl:text>article</xsl:text>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="hidden-knowl-css-class">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|list" mode="hidden-knowl-css-class">
     <xsl:text>example-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="heading-birth">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|list" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 
@@ -2541,7 +2547,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*[not(self::solution)]" />
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="heading-xref-knowl">
+<!-- Assume a certain structure for list block -->
+<xsl:template match="list" mode="body">
+    <xsl:apply-templates select="introduction" />
+    <xsl:apply-templates select="ol|ul|dl" />
+    <xsl:apply-templates select="conclusion" />
+</xsl:template>
+
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|list" mode="heading-xref-knowl">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 
@@ -2551,8 +2564,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*[not(self::solution)]" mode="duplicate" />
 </xsl:template>
 
+<!-- Assume a certain structure for list block -->
+<xsl:template match="list" mode="body-duplicate">
+    <xsl:apply-templates select="introduction" mode="duplicate"/>
+    <xsl:apply-templates select="ol|ul|dl" mode="duplicate"/>
+    <xsl:apply-templates select="conclusion" mode="duplicate"/>
+</xsl:template>
+
 <xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="has-posterior">
     <xsl:value-of select="boolean(solution)" />
+</xsl:template>
+
+<xsl:template match="list" mode="has-posterior">
+    <xsl:value-of select="false()" />
 </xsl:template>
 
 <xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="posterior">
@@ -2922,51 +2946,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- no posterior -->
 <xsl:template match="hint|answer|solution" mode="has-posterior">
     <xsl:text>false</xsl:text>
-</xsl:template>
-
-<!-- List Wrappers -->
-<!-- Individually customizable -->
-<!-- Similar, as just runs of paragraphs -->
-<xsl:template match="list" mode="is-hidden-old">
-    <xsl:value-of select="$html.knowl.list = 'yes'" />
-</xsl:template>
-<xsl:template match="list" mode="is-block-env">
-    <xsl:value-of select="true()" />
-</xsl:template>
-<!-- Knowl-text is an article with heading -->
-<xsl:template match="list" mode="hidden-knowl-text">
-    <article class="example-like">
-        <h5 class="heading">
-            <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-            <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
-            <xsl:if test="title">
-                <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
-            </xsl:if>
-        </h5>
-    </article>
-</xsl:template>
-<!-- Head is type, number, title -->  <!-- GENERALIZE -->
-<xsl:template match="list" mode="head">
-    <h5 class="heading">
-        <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-        <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
-        <xsl:if test="title">
-            <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
-        </xsl:if>
-    </h5>
-</xsl:template>
-<!-- Body is just all content, but no title -->
-<xsl:template match="list" mode="body">
-    <xsl:apply-templates select="*"/>
-</xsl:template>
-<!-- No posterior  -->
-<xsl:template match="list" mode="posterior" />
-<!-- HTML, CSS -->
-<xsl:template match="list" mode="environment-element">
-    <xsl:text>article</xsl:text>
-</xsl:template>
-<xsl:template match="list" mode="environment-class">
-    <xsl:text>example-like</xsl:text>
 </xsl:template>
 
 <!-- Theorems, Axioms, etc. -->
