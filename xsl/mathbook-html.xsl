@@ -1255,7 +1255,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "posterior-duplicate"  no ID, no \label         -->
 
 <!-- me is absent, not numbered, never knowled -->
-<xsl:template match="fn|biblio|men|md|mdn|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|exercise|hint[not(ancestor::*[self::webwork])]|answer[not(ancestor::*[self::webwork])]|solution[not(ancestor::*[self::webwork])]|contributor" mode="xref-knowl">
+<xsl:template match="fn|biblio|men|md|mdn|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|exercise|hint[not(ancestor::*[self::webwork])]|answer[not(ancestor::*[self::webwork])]|solution[not(ancestor::*[self::webwork])]|contributor|li" mode="xref-knowl">
     <!-- write a file, calling body and posterior duplicate templates -->
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
@@ -1852,7 +1852,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We restrict hint, answer, solution to avoid confusion with webwork -->
 <!-- TODO: we need to process children in a way that no \label{}, nor ID's, are produced   -->
 <!--       This would perhaps obsolete the "env-type" device, and reorder explnation below -->
-<xsl:template match="biblio/note|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|li" mode="xref-knowl">
+<xsl:template match="biblio/note|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table" mode="xref-knowl">
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
@@ -2599,6 +2599,53 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- List Items -->
+<!-- List items become xref knowls, but we do not -->
+<!-- generate them as originals via this scheme,  -->
+<!-- so look elsewhere for that                   -->
+
+<!-- Not applicable -->
+<xsl:template match="li" mode="is-hidden" />
+
+<xsl:template match="li" mode="body-element">
+    <xsl:text>article</xsl:text>
+</xsl:template>
+
+<!-- not yet supported, change this? -->
+<xsl:template match="li" mode="body-css-class">
+    <xsl:text>listitem</xsl:text>
+</xsl:template>
+
+<!-- Not applicable -->
+<xsl:template match="li" mode="birth-element" />
+
+<!-- Not applicable -->
+<xsl:template match="li" mode="hidden-knowl-element" />
+
+<!-- Not applicable -->
+<xsl:template match="li" mode="hidden-knowl-css-class" />
+
+<!-- Not applicable -->
+<xsl:template match="li" mode="heading-birth" />
+
+<!-- Not applicable -->
+<xsl:template match="li" mode="body" />
+
+<xsl:template match="li" mode="heading-xref-knowl">
+    <xsl:apply-templates select="." mode="heading-full" />
+</xsl:template>
+
+<!-- List items are tricky - go ahead and process them as-is, -->
+<!-- with labels, titles (dl), structured/mixed-content, etc  -->
+<xsl:template match="li" mode="body-duplicate">
+    <xsl:apply-templates select="." mode="duplicate" />
+</xsl:template>
+
+<xsl:template match="li" mode="has-posterior">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
+
 <!-- Assemblage -->
 <!-- Runs of paragraphs only -->
 <xsl:template match="assemblage" mode="is-hidden">
@@ -3322,53 +3369,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 <xsl:template match="hint|answer|solution|biblio/note" mode="environment-class">
     <xsl:text>solution</xsl:text>
-</xsl:template>
-
-
-
-
-<!-- List Items -->
-<!-- Never born hidden -->
-<xsl:template match="li" mode="is-hidden-old">
-    <xsl:value-of select="false()" />
-</xsl:template>
-<xsl:template match="li" mode="is-block-env">
-    <xsl:value-of select="true()" />
-</xsl:template>
-<!-- List items are never born hidden -->
-<xsl:template match="li" mode="hidden-knowl-text" />
-<!-- ??????? -->
-<xsl:template match="li" mode="head">
-    <h5 class="heading">
-    <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-    <span class="codenumber"><xsl:apply-templates select="." mode="serial-number" /></span>
-    <xsl:if test="title">
-        <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
-    </xsl:if>
-    </h5>
-</xsl:template>
-<!-- A list item inside an objectives is handled differently -->
-<!-- We don't display just its serial number as just above   -->
-<xsl:template match="objectives/*/li" mode="head">
-    <xsl:apply-templates select="." mode="heading-full" />
-</xsl:template>
-<!-- Body is everything, including nested lists -->
-<!-- TODO: maybe something is missing here, style of label, etc -->
-<xsl:template match="li" mode="body">
-    <!-- TODO: this needs formatting, insertion into first paragraph -->
-    <xsl:if test="parent::dl">
-        <xsl:apply-templates select="." mode="title-full" />
-    </xsl:if>
-    <xsl:apply-templates />
-</xsl:template>
-<!-- No posterior  -->
-<xsl:template match="li" mode="posterior" />
-<!-- HTML, CSS -->
-<xsl:template match="li" mode="environment-element">
-    <xsl:text>article</xsl:text>
-</xsl:template>
-<xsl:template match="li" mode="environment-class">
-    <xsl:text>list</xsl:text>
 </xsl:template>
 
 <!-- ########################## -->
