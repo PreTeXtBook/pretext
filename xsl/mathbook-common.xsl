@@ -777,6 +777,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This cell does respect @language         -->
 <xsl:template match="sage[not(input) and not(output) and not(@type) and not(@copy)]">
     <xsl:call-template name="sage-active-markup">
+        <xsl:with-param name="internal-id">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:with-param>
         <!-- OK to send empty string, implementation reacts -->
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="@language" />
@@ -794,6 +797,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (and we can't tell in the abstract wrapping template)   -->
 <xsl:template match="sage[@type='practice']">
     <xsl:call-template name="sage-active-markup">
+        <xsl:with-param name="internal-id">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:with-param>
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="'practice'" />
         </xsl:with-param>
@@ -805,6 +811,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Type: "copy"; used for replays     -->
 <!-- Mostly when HTML is chunked        -->
 <!-- Just handle the same way as others -->
+<!-- TODO: HTML copies will get same id! -->
 <xsl:template match="sage[@copy]">
     <xsl:apply-templates select="id(@copy)" />
 </xsl:template>
@@ -815,6 +822,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These cells are meant to be be incorrect or incomplete      -->
 <xsl:template match="sage[@type='display']">
     <xsl:call-template name="sage-display-markup">
+        <xsl:with-param name="internal-id">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:with-param>
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="'display'" />
         </xsl:with-param>
@@ -830,6 +840,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Absent meeting any other condition -->
 <xsl:template match="sage|sage[@type='full']">
     <xsl:call-template name="sage-active-markup">
+        <xsl:with-param name="internal-id">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:with-param>
         <!-- OK to send empty string, implementation reacts -->
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="@language" />

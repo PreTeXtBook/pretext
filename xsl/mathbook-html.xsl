@@ -5681,6 +5681,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: consider showing output in green span (?),    -->
 <!-- presently output is dropped as computable           -->
 <xsl:template name="sage-active-markup">
+    <xsl:param name="internal-id" />
     <xsl:param name="language-attribute" />
     <xsl:param name="in" />
     <xsl:param name="out" />
@@ -5691,6 +5692,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>sage</xsl:text>
             </xsl:if>
             <xsl:value-of select="$language-attribute" />
+        </xsl:attribute>
+        <xsl:attribute name="id">
+            <xsl:value-of select="$internal-id" />
         </xsl:attribute>
         <xsl:element name="script">
             <xsl:attribute name="type">
