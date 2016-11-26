@@ -1255,7 +1255,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "posterior-duplicate"  no ID, no \label         -->
 
 <!-- me is absent, not numbered, never knowled -->
-<xsl:template match="fn|biblio|men|md|mdn|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|exercise|hint[not(ancestor::*[self::webwork])]|answer[not(ancestor::*[self::webwork])]|solution[not(ancestor::*[self::webwork])]" mode="xref-knowl">
+<xsl:template match="fn|biblio|men|md|mdn|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|exercise|hint[not(ancestor::*[self::webwork])]|answer[not(ancestor::*[self::webwork])]|solution[not(ancestor::*[self::webwork])]|contributor" mode="xref-knowl">
     <!-- write a file, calling body and posterior duplicate templates -->
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
@@ -1591,7 +1591,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- do not come through here at all, since they are   -->
 <!-- always visible with no decoration, so plain       -->
 <!-- default templates are good enough                 -->
-<xsl:template match="fn|biblio|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|exercise|hint[not(ancestor::*[self::webwork])]|answer[not(ancestor::*[self::webwork])]|solution[not(ancestor::*[self::webwork])]">
+<xsl:template match="fn|biblio|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|exercise|hint[not(ancestor::*[self::webwork])]|answer[not(ancestor::*[self::webwork])]|solution[not(ancestor::*[self::webwork])]|contributor">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
@@ -1819,7 +1819,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We show the full content of the item on the page (b)            -->
 <!-- Or, we build a hidden knowl and place a link on the page (c)    -->
 <!-- NB: this template employs several modal templates, defined just below -->
-<xsl:template match="biblio/note|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|contributor">
+<xsl:template match="biblio/note|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden-old" />
     </xsl:variable>
@@ -1852,7 +1852,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We restrict hint, answer, solution to avoid confusion with webwork -->
 <!-- TODO: we need to process children in a way that no \label{}, nor ID's, are produced   -->
 <!--       This would perhaps obsolete the "env-type" device, and reorder explnation below -->
-<xsl:template match="biblio/note|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|li|contributor" mode="xref-knowl">
+<xsl:template match="biblio/note|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|li" mode="xref-knowl">
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
@@ -3126,6 +3126,74 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- Contributors -->
+<!-- Born visible in some front matter subdivision -->
+<!-- Otherwise always inline xref knowls           -->
+<xsl:template match="contributor" mode="is-hidden">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
+<xsl:template match="contributor" mode="body-element">
+    <xsl:text>div</xsl:text>
+</xsl:template>
+
+<xsl:template match="contributor" mode="body-css-class">
+    <xsl:text>contributor</xsl:text>
+</xsl:template>
+
+<xsl:template match="contributor" mode="birth-element">
+    <xsl:text>span</xsl:text>
+</xsl:template>
+
+<!-- never born hidden -->
+<xsl:template match="contributor" mode="hidden-knowl-element" />
+<xsl:template match="contributor" mode="hidden-knowl-css-class" />
+
+<!-- no heading on original, self-explanatory  -->
+<xsl:template match="contributor" mode="heading-birth" />
+
+<!-- http://stackoverflow.com/questions/17217766/two-divs-side-by-side-fluid-display -->
+<xsl:template match="contributor" mode="body">
+    <xsl:comment>Style Me (contributor-name)</xsl:comment>
+    <div style="width:40%;float:left;">
+        <xsl:apply-templates select="personname" />
+    </div>
+    <xsl:comment>Style Me (contributor-info)</xsl:comment>
+    <div style="margin-left:40%;">
+        <xsl:if test="department">
+            <xsl:apply-templates select="department" />
+        </xsl:if>
+        <xsl:if test="department and institution">
+            <br />
+        </xsl:if>
+        <xsl:apply-templates select="institution" />
+    </div>
+</xsl:template>
+
+<!-- no heading on duplicate, self-explanatory  -->
+<xsl:template match="contributor" mode="heading-xref-knowl" />
+
+<xsl:template match="contributor" mode="body-duplicate">
+    <xsl:comment>Style Me (contributor-name)</xsl:comment>
+    <div style="width:40%;float:left;">
+        <xsl:apply-templates select="personname" mode="duplicate" />
+    </div>
+    <xsl:comment>Style Me (contributor-info)</xsl:comment>
+    <div style="margin-left:40%;">
+        <xsl:if test="department">
+            <xsl:apply-templates select="department" mode="duplicate" />
+        </xsl:if>
+        <xsl:if test="department and institution">
+            <br />
+        </xsl:if>
+        <xsl:apply-templates select="institution" mode="duplicate" />
+    </div>
+</xsl:template>
+
+<xsl:template match="contributor" mode="has-posterior">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
 <!-- SAVE -->
 <!--
 <xsl:template match="proof|hint|answer|solution|biblio/note" mode="environment-class">
@@ -3302,45 +3370,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="li" mode="environment-class">
     <xsl:text>list</xsl:text>
 </xsl:template>
-
-<!-- Contributors -->
-<!-- Never born hidden -->
-<xsl:template match="contributor" mode="is-hidden-old">
-    <xsl:value-of select="false()" />
-</xsl:template>
-<!-- Always in a list -->
-<xsl:template match="contributor" mode="is-block-env">
-    <xsl:value-of select="false()" />
-</xsl:template>
-<!-- Never hidden so calling hidden-knowl-text raises error -->
-<!-- Side-By-Side divs -->
-<!-- http://stackoverflow.com/questions/17217766/two-divs-side-by-side-fluid-display -->
-<!-- There head is the person's name -->
-<xsl:template match="contributor" mode="head">
-    <xsl:comment>Style Me (contributor-name)</xsl:comment>
-    <div style="width:40%;float:left;">
-        <xsl:value-of select="personname" />
-    </div>
-</xsl:template>
-<!-- Body is the identifying info for the contributor -->
-<xsl:template match="contributor" mode="body">
-    <xsl:comment>Style Me (contributor-info)</xsl:comment>
-    <div style="margin-left:40%;">
-        <xsl:apply-templates select="department" />
-        <br />
-        <xsl:apply-templates select="institution" />
-    </div>
-</xsl:template>
-<!-- No posterior  -->
-<xsl:template match="contributor" mode="posterior" />
-<!-- HTML, CSS -->
-<xsl:template match="contributor" mode="environment-element">
-    <xsl:text>div</xsl:text>
-</xsl:template>
-<xsl:template match="contributor" mode="environment-class">
-    <xsl:text>contributor</xsl:text>
-</xsl:template>
-
 
 <!-- ########################## -->
 <!-- Mathematics (HTML/MathJax) -->
