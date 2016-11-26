@@ -2327,7 +2327,7 @@ the xsltproc executable.
                 <biblio type="raw" xml:id="biblio-undetermined">
                     Some book would be listed here.
                     <note>
-                        <p>Here is the annotation and an ordered list as part of that annotation.  (The lack of a space will be addressed with more work on references.)<ol>
+                        <p>Here is the annotation and an ordered list as part of that annotation.<ol>
                             <li>Book 1, first part.</li>
                             <li>Book 1, second part.</li>
                             <li>Book 1, third part.</li>
