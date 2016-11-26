@@ -45,10 +45,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Will also read  base64_binarydatamap.xml  -->
 <xsl:include href="./xslt_base64/base64.xsl"/>
 
-<!-- Routines specific to converting a "webwork"  -->
-<!-- element into a problem in the PGML language -->
-<xsl:include href="./mathbook-webwork-pg.xsl" />
-
 <!-- Intend output for rendering by a web browser -->
 <xsl:output method="xml" encoding="utf-8"/>
 
@@ -7168,5 +7164,11 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
         <xsl:value-of select="$content" />
     </xsl:element>
 </xsl:template>
+
+<!-- Include last, since template priorities will   -->
+<!-- tie even with more specific webwork// versions -->
+<!-- Routines specific to converting a "webwork"    -->
+<!-- element into a problem in the PGML language    -->
+<xsl:include href="./mathbook-webwork-pg.xsl" />
 
 </xsl:stylesheet>

@@ -75,7 +75,7 @@
 <xsl:template match="webwork[child::statement]" mode="pg">
     <xsl:call-template   name="begin-problem" />
     <xsl:call-template   name="pg-macros" />
-    <xsl:call-template   name="header" />
+    <xsl:call-template   name="pg-header" />
     <xsl:apply-templates select="setup" />
     <xsl:apply-templates select="statement" />
     <xsl:apply-templates select="hint" />
@@ -89,7 +89,7 @@
 <xsl:template match="webwork[child::stage]" mode="pg">
     <xsl:call-template   name="begin-problem" />
     <xsl:call-template   name="pg-macros" />
-    <xsl:call-template   name="header" />
+    <xsl:call-template   name="pg-header" />
     <xsl:apply-templates select="setup" />
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Scaffold</xsl:with-param>
@@ -101,7 +101,7 @@
     <xsl:call-template   name="end-problem" />
 </xsl:template>
 
-<xsl:template match="setup">
+<xsl:template match="webwork/setup">
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">PG Setup</xsl:with-param>
     </xsl:call-template>
@@ -118,7 +118,7 @@
 <!-- A stage is part of a multi-stage problem -->
 <!-- WeBWorK calls these "scaffold" problems, -->
 <!-- which have "section"s                    -->
-<xsl:template match="stage">
+<xsl:template match="webwork/stage">
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Section</xsl:with-param>
     </xsl:call-template>
@@ -243,7 +243,7 @@
 </xsl:template>
 
 <!-- Includes (localized) PG "COMMENT" promoting MBX -->
-<xsl:template name="header">
+<xsl:template name="pg-header">
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Header</xsl:with-param>
     </xsl:call-template>
@@ -471,7 +471,7 @@
     <xsl:value-of select="@name"/>
 </xsl:template>
 
-<xsl:template match="var" mode="static-warning">
+<xsl:template match="webwork//var" mode="static-warning">
     <xsl:variable name="varname" select="@name" />
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:if test="not($problem/setup/var[@name=$varname]/static) and not($problem/setup/var[@name=$varname]/set/member) and not(@form='essay')">
@@ -501,7 +501,7 @@
 <!-- MathObject answers -->
 <!-- with variant for MathObjects like Matrix, Vector, ColumnVector      -->
 <!-- where the shape of the MathObject guides the array of answer blanks -->
-<xsl:template match="var[@width|@form]" mode="field">
+<xsl:template match="webwork//var[@width|@form]" mode="field">
     <xsl:variable name="width">
         <xsl:choose>
             <xsl:when test="@width">
@@ -556,7 +556,7 @@
 <!-- The issue is only surfacing when trying to do a checkbox problem from an iframe. Any    -->
 <!-- attempt to check multiple boxes and submit leads to only one box being seen as checked  -->
 <!-- by WeBWorK 2                                                                            --> 
-<xsl:template match="var[@form='checkboxes']" mode="field">
+<xsl:template match="webwork//var[@form='checkboxes']" mode="field">
     <xsl:text>    [@</xsl:text>
     <xsl:value-of select="@name"/>
     <xsl:text>->print_a() @]*&#xa;END_PGML&#xa;ANS(checkbox_cmp(</xsl:text>
@@ -568,7 +568,7 @@
 <!-- Example: [@ ANS(essay_cmp); essay_box(6,76) @]*   -->
 <!-- Requires:  PGessaymacros.pl, automatically loaded -->
 <!-- http://webwork.maa.org/moodle/mod/forum/discuss.php?d=3370 -->
-<xsl:template match="var[@form='essay']" mode="field">
+<xsl:template match="webwork//var[@form='essay']" mode="field">
     <xsl:text>[@ ANS(essay_cmp); essay_box(</xsl:text>
     <xsl:choose>
         <xsl:when test="@height">
@@ -590,7 +590,7 @@
     <xsl:text>) @]*</xsl:text>
 </xsl:template>
 
-<xsl:template match="var[@width]|var[@form]" mode="form-help">
+<xsl:template match="webwork//var[@width]|var[@form]" mode="form-help">
     <xsl:variable name="varname" select="@name" />
     <xsl:variable name="problem" select="ancestor::webwork" />
     <xsl:variable name="category" select="$problem/setup/var[@name=$varname]/@category" />
@@ -723,7 +723,7 @@
 
 <!-- We need to override the HTML template that  -->
 <!-- puts the description into an "alt" tag -->
-<xsl:template match="description" mode="pg">
+<xsl:template match="webwork//description" mode="pg">
     <xsl:apply-templates />
 </xsl:template>
 
@@ -777,13 +777,13 @@
 <!-- for LaTeX and numbers elsewhere, so it is unimplmented in -->
 <!-- mathbook-common.xsl, hence we implement it here           -->
 
-<xsl:template match="*" mode="xref-number">
+<xsl:template match="webwork//*" mode="xref-number">
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 
 <!-- In common template, but have to point -->
 <!-- to it since it is a modal template    -->
-<xsl:template match="exercisegroup" mode="xref-number">
+<xsl:template match="webwork//exercisegroup" mode="xref-number">
     <xsl:apply-imports />
 </xsl:template>
 
@@ -1020,7 +1020,7 @@
 
 <!-- Asterisk -->
 <!-- Centered as a character, not an exponent -->
-<xsl:template match="asterisk">
+<xsl:template match="webwork//asterisk">
     <xsl:text>\*</xsl:text>
 </xsl:template>
 
@@ -1111,51 +1111,6 @@
     <xsl:text>[$MDASH]*</xsl:text>
 </xsl:template>
 
-<!-- ################## -->
-<!-- Special Characters -->
-<!-- ################## -->
-
-<!-- These are specific instances of abstract templates        -->
-<!-- See the similar section of  mathbook-common.xsl  for more -->
-
-<!-- These templates react to their location, here we do a     -->
-<!-- WeBWorK version, but otherwise defer to the surroundings. -->
-<!-- This means this file must be the last one imported        -->
-<!-- that has versions of these templates                      -->
-
-<xsl:template match="*" mode="nbsp">
-    <xsl:choose>
-        <xsl:when test="ancestor::webwork">
-            <xsl:text>[$NBSP]*</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-imports />
-        </xsl:otherwise>
-    </xsl:choose>
- </xsl:template>
-
-<xsl:template match="*" mode="ndash">
-    <xsl:choose>
-        <xsl:when test="ancestor::webwork">
-            <xsl:text>[$NDASH]*</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-imports />
-        </xsl:otherwise>
-    </xsl:choose>
- </xsl:template>
-
-<xsl:template match="*" mode="mdash">
-    <xsl:choose>
-        <xsl:when test="ancestor::webwork">
-            <xsl:text>[$MDASH]*</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-imports />
-        </xsl:otherwise>
-    </xsl:choose>
- </xsl:template>
-
 <!-- ##### -->
 <!-- Lists -->
 <!-- ##### -->
@@ -1166,7 +1121,7 @@
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="ul/li[ancestor::webwork]">
+<xsl:template match="webwork//ul/li">
     <xsl:call-template name="duplicate-string">
         <xsl:with-param name="count" select="4 * (count(ancestor::ul) + count(ancestor::ol) - 1)" />
         <xsl:with-param name="text"  select="' '" />
@@ -1185,7 +1140,7 @@
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="ol/li[ancestor::webwork]">
+<xsl:template match="webwork//ol/li">
     <xsl:call-template name="duplicate-string">
         <xsl:with-param name="count" select="4 * (count(ancestor::ul) + count(ancestor::ol) - 1)" />
         <xsl:with-param name="text"  select="' '" />
@@ -1264,7 +1219,7 @@
     <!--   horizontal alignment (left, center, right)             -->
     <xsl:text>  align => '</xsl:text>
         <!-- start with left vertical border -->
-        <xsl:call-template name="vrule-specification">
+        <xsl:call-template name="pg-vrule-specification">
             <xsl:with-param name="width" select="$table-left" />
         </xsl:call-template>
         <xsl:choose>
@@ -1288,7 +1243,7 @@
                             </xsl:choose>
                         </xsl:with-param>
                     </xsl:call-template>
-                    <xsl:call-template name="vrule-specification">
+                    <xsl:call-template name="pg-vrule-specification">
                         <xsl:with-param name="width">
                             <xsl:choose>
                                 <xsl:when test="@right">
@@ -1316,7 +1271,7 @@
                         <xsl:call-template name="halign-specification">
                             <xsl:with-param name="align" select="$table-halign" />
                         </xsl:call-template>
-                        <xsl:call-template name="vrule-specification">
+                        <xsl:call-template name="pg-vrule-specification">
                             <xsl:with-param name="width" select="$table-right" />
                         </xsl:call-template>
                     </xsl:with-param>
@@ -1380,12 +1335,12 @@
             <xsl:if test="(count(preceding-sibling::cell) = 0) and (parent::row/@left or ancestor::tabular/@left)">
                 <xsl:choose>
                     <xsl:when test="parent::row/@left">
-                        <xsl:call-template name="vrule-specification">
+                        <xsl:call-template name="pg-vrule-specification">
                             <xsl:with-param name="width" select="parent::row/@left" />
                         </xsl:call-template>
                     </xsl:when>
                     <xsl:when test="ancestor::tabular/@left">
-                        <xsl:call-template name="vrule-specification">
+                        <xsl:call-template name="pg-vrule-specification">
                             <xsl:with-param name="width" select="ancestor::tabular/@left" />
                         </xsl:call-template>
                     </xsl:when>
@@ -1417,17 +1372,17 @@
             </xsl:call-template>
             <xsl:choose>
                 <xsl:when test="@right">
-                    <xsl:call-template name="vrule-specification">
+                    <xsl:call-template name="pg-vrule-specification">
                         <xsl:with-param name="width" select="@right" />
                     </xsl:call-template>
                 </xsl:when>
                 <xsl:when test="ancestor::tabular/col[$this-cells-right-column]/@right">
-                    <xsl:call-template name="vrule-specification">
+                    <xsl:call-template name="pg-vrule-specification">
                         <xsl:with-param name="width" select="ancestor::tabular/col[$this-cells-right-column]/@right" />
                     </xsl:call-template>
                 </xsl:when>
                 <xsl:when test="ancestor::tabular/@right">
-                    <xsl:call-template name="vrule-specification">
+                    <xsl:call-template name="pg-vrule-specification">
                         <xsl:with-param name="width" select="ancestor::tabular/@right" />
                     </xsl:call-template>
                 </xsl:when>
@@ -1669,7 +1624,7 @@
 </xsl:template>
 
 <!-- Translate vertical rule width to a LaTeX vertical rule -->
-<xsl:template name="vrule-specification">
+<xsl:template name="pg-vrule-specification">
     <xsl:param name="width" />
     <xsl:choose>
         <xsl:when test="$width='none'">
