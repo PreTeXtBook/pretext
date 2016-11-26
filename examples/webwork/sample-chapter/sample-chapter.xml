@@ -809,40 +809,35 @@
 
                 <webwork>
                     <setup>
-                        <var name="$a1" category="integer">
+                        <var name="$a[0]" category="integer">
                             <static>2</static>
                         </var>
-                        <var name="$a2" category="integer">
+                        <var name="$a[1]" category="integer">
                             <static>4</static>
                         </var>
-                        <var name="$b1" category="integer">
+                        <var name="$b[0]" category="integer">
                             <static>5</static>
                         </var>
-                        <var name="$b2" category="integer">
+                        <var name="$b[1]" category="integer">
                             <static>7</static>
                         </var>
-                        <var name="$p11" category="integer">
+                        <var name="$p[0]" category="integer">
                             <static>10</static>
                         </var>
-                        <var name="$p12" category="integer">
+                        <var name="$p[1]" category="integer">
                             <static>14</static>
                         </var>
-                        <var name="$p21" category="integer">
+                        <var name="$p[2]" category="integer">
                             <static>20</static>
                         </var>
-                        <var name="$p22" category="integer">
+                        <var name="$p[3]" category="integer">
                             <static>28</static>
                         </var>
 
                         <pg-code>
-                            $a1 = random(2,9,1);
-                            $a2 = random(2,9,1);
-                            $b1 = random(2,9,1);
-                            $b2 = random(2,9,1);
-                            $p11 = $a1*$b1;
-                            $p12 = $a1*$b2;
-                            $p21 = $a2*$b1;
-                            $p22 = $a2*$b2;
+                            @a = (random(2,9,1),random(2,9,1));
+                            @b = (random(2,9,1),random(2,9,1));
+                            for my$i(0..3){$p[$i]=$a[int($i/2)]*$b[$i % 2]};
                         </pg-code>
                     </setup>
 
@@ -856,18 +851,18 @@
                                 <col />
                                 <row bottom="major">
                                     <cell><m>\times</m></cell>
-                                    <cell><m><var name="$a1"/></m></cell>
-                                    <cell><m><var name="$a2"/></m></cell>
+                                    <cell><m><var name="$a[0]"/></m></cell>
+                                    <cell><m><var name="$a[1]"/></m></cell>
                                 </row>
                                 <row>
-                                    <cell><m><var name="$b1"/></m></cell>
-                                    <cell><var name="$p11" form="none"/></cell>
-                                    <cell><var name="$p21" form="none"/></cell>
+                                    <cell><m><var name="$b[0]"/></m></cell>
+                                    <cell><var name="$p[0]" form="none"/></cell>
+                                    <cell><var name="$p[2]" form="none"/></cell>
                                 </row>
                                 <row>
-                                    <cell><m><var name="$b2"/></m></cell>
-                                    <cell><var name="$p12" form="none"/></cell>
-                                    <cell><var name="$p22" form="none"/></cell>
+                                    <cell><m><var name="$b[1]"/></m></cell>
+                                    <cell><var name="$p[1]" form="none"/></cell>
+                                    <cell><var name="$p[3]" form="none"/></cell>
                                 </row>
                             </tabular>
                         </table>
@@ -881,18 +876,18 @@
                                 <col />
                                 <row bottom="major">
                                     <cell><m>\times</m></cell>
-                                    <cell><m><var name="$a1"/></m></cell>
-                                    <cell><m><var name="$a2"/></m></cell>
+                                    <cell><m><var name="$a[0]"/></m></cell>
+                                    <cell><m><var name="$a[1]"/></m></cell>
                                 </row>
                                 <row>
-                                    <cell><m><var name="$b1"/></m></cell>
-                                    <cell><m><var name="$p11"/></m></cell>
-                                    <cell><m><var name="$p21"/></m></cell>
+                                    <cell><m><var name="$b[0]"/></m></cell>
+                                    <cell><m><var name="$p[0]"/></m></cell>
+                                    <cell><m><var name="$p[2]"/></m></cell>
                                 </row>
                                 <row>
-                                    <cell><m><var name="$b2"/></m></cell>
-                                    <cell><m><var name="$p12"/></m></cell>
-                                    <cell><m><var name="$p22"/></m></cell>
+                                    <cell><m><var name="$b[1]"/></m></cell>
+                                    <cell><m><var name="$p[1]"/></m></cell>
+                                    <cell><m><var name="$p[3]"/></m></cell>
                                 </row>
                             </tabular>
                         </table>
