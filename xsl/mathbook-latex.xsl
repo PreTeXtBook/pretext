@@ -894,6 +894,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\hrulethin}  {\noalign{\hrule height 0.04em}}&#xa;</xsl:text>
         <xsl:text>\newcommand{\hrulemedium}{\noalign{\hrule height 0.07em}}&#xa;</xsl:text>
         <xsl:text>\newcommand{\hrulethick} {\noalign{\hrule height 0.11em}}&#xa;</xsl:text>
+        <!-- TeX produced by a WeBWorK server may contain these booktabs table rule commands  -->
+        <xsl:if test="//webwork[@source]">
+            <xsl:text>% TeX imported from a WeBWorK server might use booktabs rule commands&#xa;</xsl:text>
+            <xsl:text>% Replace/delete these three approximations if booktabs is loaded&#xa;</xsl:text>
+            <xsl:text>\newcommand{\toprule}{\hrulethick}&#xa;</xsl:text>
+            <xsl:text>\newcommand{\midrule}{\hrulemedium}&#xa;</xsl:text>
+            <xsl:text>\newcommand{\bottomrule}{\hrulethick}&#xa;</xsl:text>
+        </xsl:if>
         <!-- http://tex.stackexchange.com/questions/24549/horizontal-rule-with-adjustable-height-behaving-like-clinen-m -->
         <!-- Could preserve/restore \arrayrulewidth on entry/exit to tabular -->
         <!-- But we'll get cleaner source with this built into macros        -->
