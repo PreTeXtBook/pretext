@@ -1255,7 +1255,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "posterior-duplicate"  no ID, no \label         -->
 
 <!-- me is absent, not numbered, never knowled -->
-<xsl:template match="fn|biblio|men|md|mdn|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|exercise|hint[not(ancestor::*[self::webwork])]|answer[not(ancestor::*[self::webwork])]|solution[not(ancestor::*[self::webwork])]|biblio/note|contributor|li" mode="xref-knowl">
+<xsl:template match="fn|biblio|men|md|mdn|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|exercise|hint[not(ancestor::*[self::webwork])]|answer[not(ancestor::*[self::webwork])]|solution[not(ancestor::*[self::webwork])]|biblio/note|contributor|li" mode="xref-knowl">
     <!-- write a file, calling body and posterior duplicate templates -->
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
@@ -1591,7 +1591,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- do not come through here at all, since they are   -->
 <!-- always visible with no decoration, so plain       -->
 <!-- default templates are good enough                 -->
-<xsl:template match="fn|biblio|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|exercise|hint[not(ancestor::*[self::webwork])]|answer[not(ancestor::*[self::webwork])]|solution[not(ancestor::*[self::webwork])]|biblio/note|contributor">
+<xsl:template match="fn|biblio|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|exercise|hint[not(ancestor::*[self::webwork])]|answer[not(ancestor::*[self::webwork])]|solution[not(ancestor::*[self::webwork])]|biblio/note|contributor">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
@@ -1819,7 +1819,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We show the full content of the item on the page (b)            -->
 <!-- Or, we build a hidden knowl and place a link on the page (c)    -->
 <!-- NB: this template employs several modal templates, defined just below -->
-<xsl:template match="figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table">
+<xsl:template match="now-empty">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden-old" />
     </xsl:variable>
@@ -1852,7 +1852,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We restrict hint, answer, solution to avoid confusion with webwork -->
 <!-- TODO: we need to process children in a way that no \label{}, nor ID's, are produced   -->
 <!--       This would perhaps obsolete the "env-type" device, and reorder explnation below -->
-<xsl:template match="figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table" mode="xref-knowl">
+<xsl:template match="now-empty" mode="xref-knowl">
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
     </xsl:variable>
@@ -2599,6 +2599,90 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+
+<!-- Figure, Table, Listing, Side-By-Side -->
+<!-- FIGURE-LIKE: displays available with captions -->
+
+<xsl:template match="figure" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.figure = 'yes'" />
+</xsl:template>
+
+<xsl:template match="table" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.table = 'yes'" />
+</xsl:template>
+
+<xsl:template match="listing" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.listing = 'yes'" />
+</xsl:template>
+
+<xsl:template match="sidebyside" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.sidebyside = 'yes'" />
+</xsl:template>
+
+<xsl:template match="sidebyside/figure|sidebyside/table|side-byside/listing" mode="is-hidden">
+    <xsl:value-of select="false()" />
+</xsl:template>
+
+<xsl:template match="figure|table|listing" mode="body-element">
+    <xsl:text>figure</xsl:text>
+</xsl:template>
+
+<!-- don't interfere with sidebyside construction -->
+<xsl:template match="sidebyside" mode="body-element" />
+
+<xsl:template match="figure|table|listing" mode="body-css-class">
+    <xsl:text>figure-like</xsl:text>
+</xsl:template>
+
+<!-- don't interfere with sidebyside construction -->
+<xsl:template match="sidebyside" mode="body-css-class" />
+
+<xsl:template match="&FIGURE-LIKE;" mode="birth-element">
+    <xsl:text>div</xsl:text>
+</xsl:template>
+
+<xsl:template match="&FIGURE-LIKE;" mode="hidden-knowl-element">
+    <xsl:text>article</xsl:text>
+</xsl:template>
+
+<!-- Styling of link is like for theorems -->
+<xsl:template match="&FIGURE-LIKE;" mode="hidden-knowl-css-class">
+    <xsl:text>theorem-like</xsl:text>
+</xsl:template>
+
+<!-- no heading, since captioned -->
+<xsl:template match="&FIGURE-LIKE;|list" mode="heading-birth" />
+
+<xsl:template match="figure|table|listing" mode="body">
+    <xsl:apply-templates select="*[not(self::caption)]"/>
+    <xsl:apply-templates select="caption"/>
+</xsl:template>
+
+<!-- call main template in common -->
+<xsl:template match="sidebyside" mode="body">
+    <xsl:apply-templates select="." mode="common-setup" />
+</xsl:template>
+
+<!-- no heading, since captioned -->
+<xsl:template match="&FIGURE-LIKE;" mode="heading-xref-knowl" />
+
+<!-- duplicate, no assumptions on wrapping          -->
+<!-- create solutions as knowls to duplicate content -->
+<xsl:template match="figure|table|listing" mode="body-duplicate">
+    <xsl:apply-templates select="*[not(self::caption)]" mode="duplicate"/>
+    <xsl:apply-templates select="caption" mode="duplicate"/>
+</xsl:template>
+
+<!-- call main template in common -->
+<!-- TODO - need someway to pass in duplication flag -->
+<xsl:template match="sidebyside" mode="body-duplicate">
+    <xsl:apply-templates select="." mode="common-setup" />
+</xsl:template>
+
+<xsl:template match="&FIGURE-LIKE;" mode="has-posterior">
+    <xsl:value-of select="false()" />
+</xsl:template>
+
 <!-- List Items -->
 <!-- List items become xref knowls, but we do not -->
 <!-- generate them as originals via this scheme,  -->
@@ -3243,80 +3327,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="contributor" mode="has-posterior">
     <xsl:text>false</xsl:text>
 </xsl:template>
-
-<!-- Figures, Tables, entire Side-By-Side Panels     -->
-<!-- Figures, Tables from within Side-By-Side Panels -->
-<!-- Individually customizable, but otherwise very similar                 -->
-<!-- This includes figures and tables contained within side-by-side panels -->
-<!-- They are never born as knowls, but their content can be displayed     -->
-<!-- as a knowl when the target of a cross-reference                       -->
-<xsl:template match="figure" mode="is-hidden-old">
-    <xsl:value-of select="$html.knowl.figure = 'yes'" />
-</xsl:template>
-<xsl:template match="table" mode="is-hidden-old">
-    <xsl:value-of select="$html.knowl.table = 'yes'" />
-</xsl:template>
-<xsl:template match="listing" mode="is-hidden-old">
-    <xsl:value-of select="$html.knowl.table = 'yes'" />
-</xsl:template>
-<xsl:template match="sidebyside-foobar" mode="is-hidden-old">
-    <xsl:value-of select="$html.knowl.sidebyside = 'yes'" />
-</xsl:template>
-<xsl:template match="sidebyside-foobar/figure|sidebyside-foobar/table" mode="is-hidden-old">
-    <xsl:value-of select="false()" />
-</xsl:template>
-<xsl:template match="figure|table|listing|sidebyside-foobar" mode="is-block-env">
-    <xsl:value-of select="true()" />
-</xsl:template>
-<!-- Knowl-text is like a theorem, employs a title -->
-<xsl:template match="figure|table|listing|sidebyside-foobar" mode="hidden-knowl-text">
-    <article class="theorem-like">
-        <h5 class="heading">
-            <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-            <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
-            <xsl:if test="title">
-                <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
-            </xsl:if>
-        </h5>
-    </article>
-</xsl:template>
-<!-- There is no head, a caption always appears in the body -->
-<xsl:template match="figure|table|listing|sidebyside-foobar" mode="head" />
-<!-- For tables or figures within a side-by-side:              -->
-<!-- Born visible (ie within a side-by-side), we need some     -->
-<!-- extra positioning CSS. In a knowl content file, we don't  -->
-<!-- want the CSS in the way.  This is the motivating reason   -->
-<!-- for parameterizing the "head" template.  Conveniently the -->
-<!-- CSS lands just below the outer-most enclosing element.    -->
-<xsl:template match="sidebyside-foobar/figure|sidebyside-foobar/table" mode="head">
-    <xsl:param name="env-type" />
-    <xsl:if test="$env-type='visible'">
-        <xsl:call-template name="sidebysideCSS" select="."/>
-    </xsl:if>
-</xsl:template>
-<!-- Body is just all content, followed by caption -->
-<!-- Figure: just contents, caption -->
-<!-- Table: wrapped in figure, tabular provides <table> -->
-<xsl:template match="figure|table|listing|sidebyside-foobar" mode="body">
-    <xsl:apply-templates select="*[not(self::caption)]"/>
-    <xsl:apply-templates select="caption"/>
-</xsl:template>
-<!-- No posterior  -->
-<xsl:template match="figure|table|listing|sidebyside-foobar" mode="posterior" />
-<!-- HTML, CSS -->
-<xsl:template match="figure|table|listing" mode="environment-element">
-    <xsl:text>figure</xsl:text>
-</xsl:template>
-<xsl:template match="sidebyside-foobar" mode="environment-element">
-    <xsl:text>div</xsl:text>
-</xsl:template>
-<xsl:template match="figure|table|listing" mode="environment-class">
-    <xsl:text>figure-like</xsl:text>
-</xsl:template>
-<xsl:template match="sidebyside-foobar" mode="environment-class">
-    <xsl:text>sidebyside</xsl:text>
-</xsl:template>
-
 
 <!-- ########################## -->
 <!-- Mathematics (HTML/MathJax) -->
@@ -4670,7 +4680,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a sidebyside even though this is not necessary           -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|p|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|objectives|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside-foobar|sidebyside-foobar/figure|sidebyside-foobar/table|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|objectives|exercise|hint|answer|solution|exercisegroup|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">

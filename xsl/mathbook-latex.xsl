@@ -4662,6 +4662,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
  -->
 
+<!-- We call a common template, which in turn calls -->
+<!-- the modal templates implemented below          -->
+<xsl:template match="sidebyside">
+    <xsl:apply-templates select="." mode="common-setup" />
+</xsl:template>
+
 <!-- Utility template to make a name for a LaTeX box -->
 <!-- Unique (element + count), all letters for LaTeX -->
 <!-- Alphabetic numbers are like base 26 notation    -->

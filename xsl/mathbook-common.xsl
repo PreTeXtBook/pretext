@@ -2440,7 +2440,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- With widths specified, remaining space is              -->
 <!-- used to create equal spacing between panels            -->
 
-<xsl:template match="sidebyside">
+<xsl:template match="sidebyside" mode="common-setup">
     <!-- captions, titles on "sidebyside" ignored when used in an sbsgroup -->
     <xsl:if test="parent::sbsgroup and caption">
         <xsl:message>MBX:WARNING: caption of a &lt;sidebyside&gt; is ignored when contained in an &lt;sbsgroup&gt;</xsl:message>
