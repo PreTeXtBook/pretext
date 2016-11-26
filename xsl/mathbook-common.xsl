@@ -2866,6 +2866,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="text" select="normalize-space(.)" />
     <xsl:if test="$text">
         <xsl:message>MBX:WARNING: Unstructured content within a list item is being ignored ("<xsl:value-of select="$text" />")</xsl:message>
+         <xsl:apply-templates select=".." mode="location-report" />
     </xsl:if>
 </xsl:template>
 
