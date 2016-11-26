@@ -5930,7 +5930,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                 </xsl:if>
             </xsl:attribute>
             <xsl:call-template name="latex-macros" />
-             <header id="masthead">
+             <header id="masthead" class="smallbuttons">
                 <div class="banner">
                     <div class="container">
                         <xsl:call-template name="brand-logo" />
@@ -6222,7 +6222,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                     <xsl:value-of select="$previous-url" />
                 </xsl:attribute>
                 <xsl:call-template name="type-name">
-                    <xsl:with-param name="string-id" select="'previous'" />
+                    <xsl:with-param name="string-id" select="'previous-short'" />
                 </xsl:call-template>
             </xsl:element>
         </xsl:when>
@@ -6230,7 +6230,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:element name="span">
                 <xsl:attribute name="class">previous-button button toolbar-item disabled</xsl:attribute>
                 <xsl:call-template name="type-name">
-                    <xsl:with-param name="string-id" select="'previous'" />
+                    <xsl:with-param name="string-id" select="'previous-short'" />
                 </xsl:call-template>
             </xsl:element>
         </xsl:otherwise>
@@ -6256,7 +6256,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                     <xsl:value-of select="$next-url" />
                 </xsl:attribute>
                 <xsl:call-template name="type-name">
-                    <xsl:with-param name="string-id" select="'next'" />
+                    <xsl:with-param name="string-id" select="'next-short'" />
                 </xsl:call-template>
             </xsl:element>
         </xsl:when>
@@ -6264,7 +6264,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:element name="span">
                 <xsl:attribute name="class">next-button button toolbar-item disabled</xsl:attribute>
                 <xsl:call-template name="type-name">
-                    <xsl:with-param name="string-id" select="'next'" />
+                    <xsl:with-param name="string-id" select="'next-short'" />
                 </xsl:call-template>
             </xsl:element>
         </xsl:otherwise>
@@ -6284,7 +6284,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                     <xsl:value-of select="$up-url" />
                 </xsl:attribute>
                 <xsl:call-template name="type-name">
-                    <xsl:with-param name="string-id" select="'up'" />
+                    <xsl:with-param name="string-id" select="'up-short'" />
                 </xsl:call-template>
             </xsl:element>
         </xsl:when>
@@ -6292,7 +6292,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:element name="span">
                 <xsl:attribute name="class">up-button button disabled toolbar-item</xsl:attribute>
                 <xsl:call-template name="type-name">
-                    <xsl:with-param name="string-id" select="'up'" />
+                    <xsl:with-param name="string-id" select="'up-short'" />
                 </xsl:call-template>
             </xsl:element>
         </xsl:otherwise>
@@ -6390,11 +6390,12 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                                     </xsl:when>
                                 </xsl:choose>
                             </xsl:attribute>
-                            <xsl:apply-templates select="." mode="previous-button" />
+                            <!-- reverse-order in HTML, as they successively float right -->
+                            <xsl:apply-templates select="." mode="next-button" />
                             <xsl:if test="$nav-upbutton='yes'">
                                 <xsl:apply-templates select="." mode="up-button" />
                             </xsl:if>
-                            <xsl:apply-templates select="." mode="next-button" />
+                            <xsl:apply-templates select="." mode="previous-button" />
                         </xsl:element>
                     </xsl:when>
                     <xsl:when test="$nav-style = 'compact'">
@@ -6430,6 +6431,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                     </xsl:call-template>
                 </button>
                 <!-- Prev/Up/Next buttons on top, according to options -->
+                <!-- in order, for mobile interface on bottom          -->
                 <xsl:apply-templates select="." mode="previous-button" />
                 <xsl:if test="$nav-upbutton='yes'">
                     <xsl:apply-templates select="." mode="up-button" />

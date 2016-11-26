@@ -165,6 +165,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='previous'><xsl:text>Anterior</xsl:text></localization>
     <localization string-id='up'><xsl:text>Arriba</xsl:text></localization>
     <localization string-id='next'><xsl:text>Siguiente</xsl:text></localization>
+    <!-- Keep these short, so buttons are not overly wide, 4 characters maximum -->
+    <!-- TODO: SHORTEN THESE -->
+    <localization string-id='previous-short'><xsl:text>Anterior</xsl:text></localization>
+    <localization string-id='up-short'><xsl:text>Arriba</xsl:text></localization>
+    <localization string-id='next-short'><xsl:text>Siguiente</xsl:text></localization>
     <!-- NB: Use toc from above for both headings and navigation sidebar-->
     <localization string-id='annotations'><xsl:text>Anotaciones</xsl:text></localization>
     <localization string-id='feedback'><xsl:text>Comentario</xsl:text></localization>
