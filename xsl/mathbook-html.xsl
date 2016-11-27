@@ -6237,6 +6237,21 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     </xsl:choose>
 </xsl:template>
 
+<!-- We assume 0 or 1 "index-part" present -->
+<xsl:template match="*" mode="index-button">
+    <xsl:variable name="indices" select="//index-part" />
+    <xsl:if test="$indices">
+        <xsl:variable name="url">
+            <xsl:apply-templates select="$indices[1]" mode="url" />
+        </xsl:variable>
+        <a class="index-button toolbar-item button" href="{$url}">
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'index-part'" />
+            </xsl:call-template>
+        </a>
+    </xsl:if>
+</xsl:template>
+
 <xsl:template match="*" mode="next-button">
     <xsl:variable name="next-url">
         <xsl:choose>
@@ -6390,6 +6405,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                                     </xsl:when>
                                 </xsl:choose>
                             </xsl:attribute>
+                            <xsl:apply-templates select="." mode="index-button" />
                             <!-- reverse-order in HTML, as they successively float right -->
                             <xsl:apply-templates select="." mode="next-button" />
                             <xsl:if test="$nav-upbutton='yes'">
