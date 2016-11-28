@@ -65,18 +65,18 @@
 <!ENTITY % para "p|blockquote|pre|sidebyside|sage|figure|table|listing|poem|program|console|image|tabular">
 
 <!-- Blocks -->
-<!-- Top-level descendents of structural elements                                   -->
-<!-- Everything like a paragraph, but also more substantial                         -->
-<!-- These items cannot be contained in anything but a structural subdivision       -->
-<!-- Note: the "todo" element is in this list                                       -->
-<!-- DEFINITION-LIKE definition                                                     -->
-<!-- THEOREM-LIKE theorem|corollary|lemma|algorithm|proposition|claim|fact|identity -->
-<!-- AXIOM-LIKE   axiom|conjecture|principle|heuristic|hypothesis|assumption        -->
-<!-- REMARK-LIKE remark|convention|note|observation|warning|insight                 -->
-<!-- ASIDE-LIKE aside|biographical|historical                                       -->
-<!-- EXAMPLE-LIKE example|question|problem                                          -->
-<!-- PROJECT-LIKE project|activity|exploration|task|investigation                   -->
-<!ENTITY % block "%para;|paragraphs|definition|theorem|corollary|lemma|algorithm|proposition|claim|fact|identity|axiom|conjecture|principle|heuristic|hypothesis|assumption|remark|convention|note|observation|warning|insight|aside|biographical|historical|list|example|question|problem|project|activity|exploration|task|investigation|assemblage|exercise|contributors|list-of|solution-list|notation-list|todo">
+<!-- Top-level descendents of structural elements                                          -->
+<!-- Everything like a paragraph, but also more substantial                                -->
+<!-- These items cannot be contained in anything but a structural subdivision              -->
+<!-- Note: the "todo" element is in this list                                              -->
+<!-- DEFINITION-LIKE definition                                                            -->
+<!-- THEOREM-LIKE theorem|corollary|lemma|algorithm|proposition|claim|fact|identity        -->
+<!-- AXIOM-LIKE   axiom|conjecture|principle|heuristic|hypothesis|assumption               -->
+<!-- REMARK-LIKE remark|convention|note|observation|warning|insight|computation|technology -->
+<!-- ASIDE-LIKE aside|biographical|historical                                              -->
+<!-- EXAMPLE-LIKE example|question|problem                                                 -->
+<!-- PROJECT-LIKE project|activity|exploration|task|investigation                          -->
+<!ENTITY % block "%para;|paragraphs|definition|theorem|corollary|lemma|algorithm|proposition|claim|fact|identity|axiom|conjecture|principle|heuristic|hypothesis|assumption|remark|convention|note|observation|warning|insight|computation|technology|aside|biographical|historical|list|example|question|problem|project|activity|exploration|task|investigation|assemblage|exercise|contributors|list-of|solution-list|notation-list|todo">
 
 
 <!-- ######### -->
@@ -228,6 +228,10 @@
     <!ATTLIST warning xml:id ID #IMPLIED>
 <!ELEMENT insight (title?, index*, (%para;)*)>
     <!ATTLIST insight xml:id ID #IMPLIED>
+<!ELEMENT computation (title?, index*, (%para;)*)>
+    <!ATTLIST computation xml:id ID #IMPLIED>
+<!ELEMENT technology (title?, index*, (%para;)*)>
+    <!ATTLIST technology xml:id ID #IMPLIED>
 
 <!-- ASIDE-LIKE, simple, limited structure, title required   -->
 <!ELEMENT aside (title, index*, (%para;)*)>
