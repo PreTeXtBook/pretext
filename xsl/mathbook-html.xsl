@@ -5943,6 +5943,16 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                 <xsl:attribute name="href">
                     <xsl:value-of select="$previous-url" />
                 </xsl:attribute>
+                <xsl:attribute name="title">
+                    <xsl:call-template name="type-name">
+                        <xsl:with-param name="string-id" select="'previous'" />
+                    </xsl:call-template>
+                </xsl:attribute>
+                <xsl:attribute name="alt">
+                    <xsl:call-template name="type-name">
+                        <xsl:with-param name="string-id" select="'previous'" />
+                    </xsl:call-template>
+                </xsl:attribute>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'previous-short'" />
                 </xsl:call-template>
@@ -5992,6 +6002,16 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                 <xsl:attribute name="href">
                     <xsl:value-of select="$next-url" />
                 </xsl:attribute>
+                <xsl:attribute name="title">
+                    <xsl:call-template name="type-name">
+                        <xsl:with-param name="string-id" select="'next'" />
+                    </xsl:call-template>
+                </xsl:attribute>
+                <xsl:attribute name="alt">
+                    <xsl:call-template name="type-name">
+                        <xsl:with-param name="string-id" select="'next'" />
+                    </xsl:call-template>
+                </xsl:attribute>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'next-short'" />
                 </xsl:call-template>
@@ -6019,6 +6039,16 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                 <xsl:attribute name="class">up-button button toolbar-item</xsl:attribute>
                 <xsl:attribute name="href">
                     <xsl:value-of select="$up-url" />
+                </xsl:attribute>
+                <xsl:attribute name="title">
+                    <xsl:call-template name="type-name">
+                        <xsl:with-param name="string-id" select="'up'" />
+                    </xsl:call-template>
+                </xsl:attribute>
+                <xsl:attribute name="alt">
+                    <xsl:call-template name="type-name">
+                        <xsl:with-param name="string-id" select="'up'" />
+                    </xsl:call-template>
                 </xsl:attribute>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'up-short'" />
@@ -6128,12 +6158,17 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                                 </xsl:choose>
                             </xsl:attribute>
                             <xsl:apply-templates select="." mode="index-button" />
-                            <!-- reverse-order in HTML, as they successively float right -->
-                            <xsl:apply-templates select="." mode="next-button" />
-                            <xsl:if test="$nav-upbutton='yes'">
-                                <xsl:apply-templates select="." mode="up-button" />
-                            </xsl:if>
-                            <xsl:apply-templates select="." mode="previous-button" />
+                            <!-- span to encase Prev/Up/Next buttons and float right -->
+                            <xsl:element name="span">
+                                <xsl:attribute name="class">
+                                    <xsl:text>threebuttons</xsl:text>
+                                </xsl:attribute>
+                                <xsl:apply-templates select="." mode="previous-button" />
+                                <xsl:if test="$nav-upbutton='yes'">
+                                    <xsl:apply-templates select="." mode="up-button" />
+                                </xsl:if>
+                                <xsl:apply-templates select="." mode="next-button" />
+                            </xsl:element>
                         </xsl:element>
                     </xsl:when>
                     <xsl:when test="$nav-style = 'compact'">
