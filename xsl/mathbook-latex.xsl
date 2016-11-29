@@ -6349,7 +6349,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Miscellaneous -->
 
 <!-- Inline warnings go into text, no matter what -->
-<!-- They are colored for an author's report -->
+<!-- They are colored for an author's report      -->
+<!-- A bad xml:id might have underscores, so we   -->
+<!-- sanitize the entire warning text for LaTeX   -->
 <xsl:template name="inline-warning">
     <xsl:param name="warning" />
     <!-- Color for author tools version -->
@@ -6358,7 +6360,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>{</xsl:text>
     <xsl:text>$\langle\langle$</xsl:text>
-    <xsl:value-of select="$warning"/>
+    <xsl:value-of select="str:replace($warning, '_', '\_')" />
     <xsl:text>$\rangle\rangle$</xsl:text>
     <xsl:text>}</xsl:text>
 </xsl:template>

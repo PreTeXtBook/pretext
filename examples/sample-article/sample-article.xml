@@ -281,7 +281,7 @@ the xsltproc executable.
             make these visible, or not
             -->
 
-            <p>When we are writing we do not always know what we want to cite, or just where subsequent material will end up.  For example, we might want a citation to <xref provisional="some textbook about the FTC" /> or we might want to reference a later<nbsp /><xref provisional="chapter about DiffEq's" />.</p>
+            <p>When we are writing we do not always know what we want to cite, or just where subsequent material will end up.  For example, we might want a citation to <xref provisional="some textbook about the FTC" /> or we might want to reference a later<nbsp /><xref provisional="chapter about DiffEq's, and an_underscore" />.</p>
 
             <p>We can also embed <q>todo</q>s in the source, and selectively display them, so you may not see the one here in the output you are looking at now.  Or maybe you do see it?</p>
 
