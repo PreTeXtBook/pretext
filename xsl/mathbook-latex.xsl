@@ -3071,7 +3071,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- ############################# -->
-<!-- WeBWork Problems from Servers -->
+<!-- WeBWorK Problems from Servers -->
 <!-- ############################# -->
 
 <!-- @source, in an otherwise empty "webwork" element,     -->
@@ -3105,9 +3105,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$server-tex/statement|$server-tex/solution|$server-tex/hint" />
     <xsl:text>}</xsl:text>
     <xsl:text>\par\vspace*{2ex}%&#xa;</xsl:text>
-    <xsl:text>{\tiny\ttfamily\noindent&#xa;</xsl:text>
+    <xsl:text>{\tiny\ttfamily\noindent\url{</xsl:text>
     <xsl:value-of select="@source" />
-    <xsl:text>\\</xsl:text>
+    <xsl:text>}\\</xsl:text>
     <!-- seed will round-trip through mbx script, default -->
     <!-- is hard-coded there.  It comes back as an        -->
     <!-- attribute of the overall "webwork-tex" element   -->
