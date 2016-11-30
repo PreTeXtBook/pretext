@@ -5976,11 +5976,27 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <xsl:variable name="url">
             <xsl:apply-templates select="$indices[1]" mode="url" />
         </xsl:variable>
-        <a class="index-button toolbar-item button" href="{$url}">
+        <xsl:element name="a">
+            <xsl:attribute name="class">
+                <xsl:text>index-button toolbar-item button</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="href">
+                <xsl:value-of select="$url" />
+            </xsl:attribute>
+            <xsl:attribute name="title">
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'index-part'" />
+                </xsl:call-template>
+            </xsl:attribute>
+            <xsl:attribute name="alt">
+                <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'index-part'" />
+                </xsl:call-template>
+            </xsl:attribute>
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'index-part'" />
             </xsl:call-template>
-        </a>
+        </xsl:element>
     </xsl:if>
 </xsl:template>
 
