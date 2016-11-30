@@ -5630,6 +5630,9 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                     <xsl:text> has-toc has-sidebar-left</xsl:text> <!-- note space, later add right -->
                 </xsl:if>
             </xsl:attribute>
+            <!-- assistive "Skip to main content" link    -->
+            <!-- this *must* be first for maximum utility -->
+            <xsl:call-template name="skip-to-content-link" />
             <xsl:call-template name="latex-macros" />
              <header id="masthead" class="smallbuttons">
                 <div class="banner">
@@ -5719,6 +5722,24 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- ################# -->
 <!-- Navigational Aids -->
 <!-- ################# -->
+
+<!-- Skip to Main Content link -->
+<!-- For accessibilty, a link (hidden off-screen)  -->
+<!-- which allows a quick by-pass of all the other -->
+<!-- navigational elements, direct to content      -->
+<xsl:template name="skip-to-content-link">
+    <xsl:element name="a">
+        <xsl:attribute name="class">
+            <xsl:text>assistive</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="href">
+            <xsl:text>#content</xsl:text>
+        </xsl:attribute>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'skip-to-content'" />
+        </xsl:call-template>
+    </xsl:element>
+</xsl:template>
 
 <!-- Prev/Up/Next URL's -->
 <!-- The "tree" versions are simpler, though less natural for a reader -->

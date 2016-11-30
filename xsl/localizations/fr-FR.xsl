@@ -136,6 +136,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='see'><xsl:text>Visiter</xsl:text></localization> <!--see latex mechanism-->
     <localization string-id='also'><xsl:text>Voir Aussi</xsl:text></localization> <!--see latex mechanism-->
     <!-- Navigation Interface elements -->
+    <!-- Assistive "skip to content" link -->
+    <!-- <localization string-id='skip-to-content'><xsl:text>Skip to main content</xsl:text></localization> -->
     <localization string-id='previous'><xsl:text>Précédent</xsl:text></localization> <!--buttons for HTML navigation-->
     <localization string-id='up'><xsl:text>Haut</xsl:text></localization>
     <localization string-id='next'><xsl:text>Suivant</xsl:text></localization>

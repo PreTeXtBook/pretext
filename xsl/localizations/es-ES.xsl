@@ -164,6 +164,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='page'><xsl:text>Page</xsl:text></localization> -->
     <!-- <localization string-id='continued'><xsl:text>Continued on next page</xsl:text></localization> -->
     <!-- Navigation Interface elements -->
+    <!-- Assistive "skip to content" link -->
+    <!-- <localization string-id='skip-to-content'><xsl:text>Skip to main content</xsl:text></localization> -->
     <localization string-id='previous'><xsl:text>Anterior</xsl:text></localization>
     <localization string-id='up'><xsl:text>Arriba</xsl:text></localization>
     <localization string-id='next'><xsl:text>Siguiente</xsl:text></localization>
