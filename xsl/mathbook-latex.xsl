@@ -2575,6 +2575,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" />
 </xsl:template>
 
+<!-- Most introductions are followed by other sectioning blocks (e.g. subsection) -->
+<!-- And then there is a resetting of the carriage. An introduction preceding a   -->
+<!-- webwork needs an additional \par at the end (if there even was an intro)     -->
+<xsl:template match="introduction[following-sibling::webwork]">
+    <xsl:apply-templates select="." mode="console-typeout" />
+    <xsl:apply-templates select="*" />
+    <xsl:text>\par\medskip&#xa;</xsl:text>
+</xsl:template>
+
 <xsl:template match="exercisegroup/introduction">
     <xsl:text>\par\noindent </xsl:text>
     <xsl:apply-templates select="*" />
@@ -2588,6 +2597,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="console-typeout" />
     <xsl:text>\bigbreak&#xa;</xsl:text>
     <xsl:apply-templates select="*" />
+</xsl:template>
+
+<!-- webwork conclusions forego the \bigbreak  -->
+<!-- To stand apart, a medskip and noindent    -->
+<xsl:template match="conclusion[preceding-sibling::webwork]">
+    <xsl:apply-templates select="." mode="console-typeout" />
+    <xsl:text>\medskip\noindent </xsl:text>
+    <xsl:apply-templates select="*" />
+    <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="exercisegroup/conclusion">
@@ -2913,7 +2931,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Top-down structure -->
 <!-- Basic outline of a simple problem -->
 <xsl:template match="webwork[child::statement]">
-    <xsl:text>\par&#xa;</xsl:text>
     <xsl:apply-templates select="statement" />
     <xsl:apply-templates select="hint" />
     <xsl:apply-templates select="solution" />
@@ -2944,10 +2961,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="webwork//statement">
     <xsl:text>\noindent%&#xa;</xsl:text>
     <xsl:choose>
-        <xsl:when test="parent::webwork">
-            <xsl:text>\textbf{Problem.}\quad </xsl:text>
+        <xsl:when test="parent::stage and count(parent::stage/preceding-sibling::stage)=0">
+            <xsl:text>\par\noindent%&#xa;</xsl:text>
+            <xsl:text>\textbf{Part </xsl:text>
+            <xsl:number count="stage" from="webwork" />
+            <xsl:text>.}\quad </xsl:text>
         </xsl:when>
         <xsl:when test="parent::stage">
+            <xsl:text>\medskip\noindent%&#xa;</xsl:text>
             <xsl:text>\textbf{Part </xsl:text>
             <xsl:number count="stage" from="webwork" />
             <xsl:text>.}\quad </xsl:text>
@@ -2959,7 +2980,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- default template, for solution -->
 <xsl:template match="webwork//solution">
-    <xsl:text>\noindent%&#xa;</xsl:text>
+    <xsl:text>\medskip\noindent%&#xa;</xsl:text>
     <xsl:text>\textbf{Solution.}\quad </xsl:text>
     <xsl:apply-templates />
     <xsl:text>\par&#xa;</xsl:text>
@@ -2967,7 +2988,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- default template, for hint -->
 <xsl:template match="webwork//hint">
-    <xsl:text>\noindent%&#xa;</xsl:text>
+    <xsl:text>\medskip\noindent%&#xa;</xsl:text>
     <xsl:text>\textbf{Hint.}\quad </xsl:text>
     <xsl:apply-templates />
     <xsl:text>\par&#xa;</xsl:text>
