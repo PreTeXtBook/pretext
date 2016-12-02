@@ -3119,12 +3119,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- http://stackoverflow.com/questions/17217766/two-divs-side-by-side-fluid-display -->
 <xsl:template match="contributor" mode="body">
-    <xsl:comment>Style Me (contributor-name)</xsl:comment>
-    <div style="width:40%;float:left;">
+    <div class="contributor-name">
         <xsl:apply-templates select="personname" />
     </div>
-    <xsl:comment>Style Me (contributor-info)</xsl:comment>
-    <div style="margin-left:40%;">
+    <div class="contributor-info">
         <xsl:if test="department">
             <xsl:apply-templates select="department" />
         </xsl:if>
@@ -3139,12 +3137,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="contributor" mode="heading-xref-knowl" />
 
 <xsl:template match="contributor" mode="body-duplicate">
-    <xsl:comment>Style Me (contributor-name)</xsl:comment>
-    <div style="width:40%;float:left;">
+    <div class="contributor-name">
         <xsl:apply-templates select="personname" mode="duplicate" />
     </div>
-    <xsl:comment>Style Me (contributor-info)</xsl:comment>
-    <div style="margin-left:40%;">
+    <div class="contributor-info">
         <xsl:if test="department">
             <xsl:apply-templates select="department" mode="duplicate" />
         </xsl:if>
