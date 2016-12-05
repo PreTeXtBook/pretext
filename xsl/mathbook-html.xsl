@@ -5626,7 +5626,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                     <xsl:when test="/mathbook/book">mathbook-book</xsl:when>
                     <xsl:when test="/mathbook/article">mathbook-article</xsl:when>
                 </xsl:choose>
-                <xsl:if test="$toc-level > 0">
+                <xsl:if test="$b-has-toc">
                     <xsl:text> has-toc has-sidebar-left</xsl:text> <!-- note space, later add right -->
                 </xsl:if>
             </xsl:attribute>
@@ -6272,7 +6272,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- Displayed text is simple titles                               -->
 <!-- TODO: split out inner link formation, outer link formation? -->
 <xsl:template match="*" mode="toc-items">
-    <xsl:if test="$toc-level > 0">
+    <xsl:if test="$b-has-toc">
         <!-- Subtree for page this sidebar will adorn -->
         <xsl:variable name="this-page-node" select="descendant-or-self::*" />
         <xsl:for-each select="/mathbook/book/*|/mathbook/article/*">

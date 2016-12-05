@@ -3277,6 +3277,7 @@ the xsltproc executable.
                 <li><p>A cross-reference to an aside, by title necessarily: <xref ref="an-aside" autoname="title" /></p></li>
                 <li><p>A cross-reference to an <c>objectives</c> block, with an autoname.  This demonstrates the number of the Objectives here, which is not shown in the original version since it is implicit: <xref ref="objectives-structures" autoname="yes" /></p></li>
                 <li><p>A cross-reference to an individual objective.  This is authored as a list item, but displayed as an objective (singular) via an autoname: <xref ref="objective-structure" autoname="yes" /></p></li>
+                <li><p>A cross-reference to the top-level element (<eg /><c>book</c>) will point to a summary page similar to a Table of Contents in HTML.  For LaTeX output it will behave similarly, unless there is no Table of Contents, then it will go to the main title page:  <xref ref="derivatives">ToC or Title</xref></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul></p>
 

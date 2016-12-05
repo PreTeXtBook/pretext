@@ -253,6 +253,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- parameterize preamble template with "page-geometry" template conditioned on self::article etc -->
     <xsl:call-template name="title-page-info-article" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
+    <!-- Target for xref to top-level element -->
+    <!-- immediately, or first in ToC         -->
+    <xsl:choose>
+        <xsl:when test="$b-has-toc">
+            <xsl:text>%% Target for xref to top-level element is ToC&#xa;</xsl:text>
+            <xsl:text>\addtocontents{toc}{\protect\hypertarget{</xsl:text>
+            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:text>}{}}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>%% Target for xref to top-level element is document start&#xa;</xsl:text>
+            <xsl:text>\hypertarget{</xsl:text>
+            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:text>}{}&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <!-- If no frontmatter/titlepage, then title is not printed       -->
     <!-- so we make sure it happens here, else triggered by titlepage -->
     <!-- If a title, we know it is page 1, so use empty style -->
@@ -1598,6 +1614,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:text>{\centering&#xa;</xsl:text>
     <xsl:text>\vspace*{0.14\textheight}&#xa;</xsl:text>
+    <!-- Target for xref to top-level element -->
+    <!-- immediately, or first in ToC         -->
+    <xsl:choose>
+        <xsl:when test="$b-has-toc">
+            <xsl:text>%% Target for xref to top-level element is ToC&#xa;</xsl:text>
+            <xsl:text>\addtocontents{toc}{\protect\hypertarget{</xsl:text>
+            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:text>}{}}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>%% Target for xref to top-level element is document start&#xa;</xsl:text>
+            <xsl:text>\hypertarget{</xsl:text>
+            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:text>}{}&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>{\Huge </xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}\\</xsl:text> <!-- end line inside centering -->
@@ -1807,6 +1839,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="article/frontmatter">
     <xsl:apply-templates select="titlepage|abstract" />
     <xsl:if test="$latex-toc-level > 0">
+        <xsl:text>%% Adjust Table of Contents&#xa;</xsl:text>
         <xsl:text>\setcounter{tocdepth}{</xsl:text>
         <xsl:value-of select="$latex-toc-level" />
         <xsl:text>}&#xa;</xsl:text>
@@ -1855,6 +1888,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*[not(self::colophon or self::biography)]" />
     <xsl:text>%% begin: table of contents&#xa;</xsl:text>
     <xsl:if test="$latex-toc-level > -1">
+        <xsl:text>%% Adjust Table of Contents&#xa;</xsl:text>
         <xsl:text>\setcounter{tocdepth}{</xsl:text>
         <xsl:value-of select="$latex-toc-level" />
         <xsl:text>}&#xa;</xsl:text>
@@ -6093,14 +6127,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- We hard-code some numbers (sectional exercises) and      -->
 <!-- we institute some numberings that LaTeX does not do      -->
-<!-- naturally (references in extra sections, proofs,         -->
+<!-- naturally - references in extra sections, proofs,        -->
 <!-- items in ordered lists (alone or in an exercise),        -->
-<!-- hints, answers, solutions). For an exercise group we     -->
-<!-- point to the introduction.  We make custom               -->
+<!-- hints, answers, solutions. A xref to the very top level  -->
+<!-- will land at the table of contents or at the             -->
+<!-- title/titlepage For an exercise group we point to        -->
+<!-- the introduction.  We make custom                        -->
 <!-- anchors/labels below and then we must point to           -->
 <!-- them with \hyperlink{}{} (nee hyperref[]{}).             -->
 <!-- (See also modal templates for "label" and "xref-number") -->
-<xsl:template match="paragraphs|exercises//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup" mode="xref-link">
+<xsl:template match="paragraphs|exercises//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|book|article" mode="xref-link">
     <xsl:param name="content" />
     <xsl:text>\hyperlink{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />

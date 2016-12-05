@@ -224,6 +224,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>0</xsl:text>
 </xsl:variable>
 
+<!-- Flag Table of Contents, or not, with boolean variable -->
+<xsl:variable name="b-has-toc" select="$toc-level != 0" />
+
 <xsl:variable name="toc-level">
     <xsl:choose>
         <xsl:when test="$toc.level != ''">
