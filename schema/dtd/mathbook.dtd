@@ -832,6 +832,7 @@
 <!-- As-is, this needs more structure to accomodate note properly -->
 <!-- And  note  is also a remark-like environment                 -->
 <!ELEMENT references (title?, index*, introduction?, biblio*, conclusion?)>
+    <!ATTLIST references xml:id   ID       #IMPLIED>
 
 <!ELEMENT biblio  (#PCDATA|%linear;|ibid|author|title|journal|year|volume|number|note)*>
     <!ATTLIST biblio xml:id ID    #IMPLIED>
