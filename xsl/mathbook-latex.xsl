@@ -3968,10 +3968,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Verbatim in a table can be a problem when -->
-<!-- it gets wrapped in a \multicolumn, but we -->
-<!-- endeavor to protect every instance        -->
-<xsl:template match="tabular/row/cell//c">
+<!-- Certain special characters for LaTeX, when     -->
+<!-- they appear in a verbatim \listinline that is  -->
+<!-- contained in an argument of some other command -->
+<!-- cause problems and need to be escaped          -->
+<!--                                                -->
+<!-- Situations                                     -->
+<!--   (1) table entries, especially \multicolumn   -->
+<!--   (2) text portion of an href                  -->
+<!--                                                -->
+<!-- Characters                                     -->
+<!--   (1) #, %, leading ~                          -->
+<!--   (2) %, leading ~, but not #                  -->
+<!--                                                -->
+<!-- Escaping all three characters, every time, is  -->
+<!-- is overkill, but seems to not be a problem     -->
+<xsl:template match="tabular/row/cell//c|url//c">
     <xsl:variable name="separator">
         <xsl:choose>
             <xsl:when test="@latexsep">
@@ -3988,7 +4000,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{\lstinline</xsl:text>
     <xsl:value-of select="$separator" />
     <!-- macro character needs help -->
-    <xsl:value-of select="str:replace(str:replace(text(), '#', '\#'), '~', '\~')" />
+    <xsl:value-of select="str:replace(str:replace(str:replace(text(), '#', '\#'), '~', '\~'),  '%', '\%')" />
     <xsl:value-of select="$separator" />
     <xsl:text>}</xsl:text>
 </xsl:template>
