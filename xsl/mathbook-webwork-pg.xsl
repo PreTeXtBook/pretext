@@ -379,7 +379,7 @@
             <xsl:text>  "contextInequalitySetBuilder.pl",&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="contains(./setup/pg-code,'Inequalities')">
-            <xsl:text>  "contextInequalities.pl.pl",&#xa;</xsl:text>
+            <xsl:text>  "contextInequalities.pl",&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="contains(./setup/pg-code,'LimitedRadical')">
             <xsl:text>  "contextLimitedRadical.pl",&#xa;</xsl:text>
