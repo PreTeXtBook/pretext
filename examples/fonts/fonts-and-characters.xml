@@ -51,7 +51,7 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
                 <li>Generating variants of HTML for web browsers should work smoothly.  You can test your system and browser for font support by viewing samples at Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url>.</li>
             </ol>
 
-            <p>Not finding what you are looking for?  Send us a request.  Even better, send us a snippet of textthat I can use as a sample.  If you know of any subleties in the use of <latex /> for your desired font, please include those hints.</p>
+            <p>Not finding what you are looking for?  Send us a request.  Even better, send us a snippet of text that I can use as a sample.  If you know of any subleties in the use of <latex /> for your desired font, please include those hints.</p>
         </section>
 
 
