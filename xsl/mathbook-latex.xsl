@@ -404,6 +404,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\setotherlanguage[numerals=greek]{greek}&#xa;</xsl:text>
         <xsl:text>\newfontfamily\greekfont[Script=Greek]{GFS Artemisia}&#xa;</xsl:text>
     </xsl:if>
+    <xsl:text>%% Korean&#xa;</xsl:text>
+    <xsl:text>\setotherlanguage{korean}&#xa;</xsl:text>
+    <xsl:text>\newfontfamily\koreanfont{NanumMyeongjo}&#xa;</xsl:text>
     <xsl:text>%% Magyar (Hungarian)&#xa;</xsl:text>
     <xsl:text>\setotherlanguage{magyar}&#xa;</xsl:text>
     <xsl:text>%% Spanish&#xa;</xsl:text>
@@ -2471,24 +2474,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="." mode="console-typeout" />
-    <xsl:if test="@xml:lang">
-        <xsl:text>\begin{</xsl:text>
-        <xsl:choose>
-            <xsl:when test="@xml:lang='el'">
-                <xsl:text>greek</xsl:text>
-            </xsl:when>
-            <xsl:when test="@xml:lang='hu-HU'">
-                <xsl:text>magyar</xsl:text>
-            </xsl:when>
-            <xsl:when test="@xml:lang='es-ES'">
-                <xsl:text>spanish</xsl:text>
-            </xsl:when>
-            <xsl:when test="@xml:lang='vi-VN'">
-                <xsl:text>vietnamese</xsl:text>
-            </xsl:when>
-        </xsl:choose>
-        <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:apply-templates select="." mode="begin-language" />
     <!-- Construct the header of the subdivision -->
     <xsl:text>\</xsl:text>
     <xsl:apply-templates select="." mode="subdivision-name" />
@@ -2544,24 +2530,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}}\par\bigskip&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="*[not(self::author)]" />
-    <xsl:if test="@xml:lang">
-        <xsl:text>\end{</xsl:text>
-        <xsl:choose>
-            <xsl:when test="@xml:lang='el'">
-                <xsl:text>greek</xsl:text>
-            </xsl:when>
-            <xsl:when test="@xml:lang='hu-HU'">
-                <xsl:text>magyar</xsl:text>
-            </xsl:when>
-            <xsl:when test="@xml:lang='es-ES'">
-                <xsl:text>spanish</xsl:text>
-            </xsl:when>
-            <xsl:when test="@xml:lang='vi-VN'">
-                <xsl:text>vietnamese</xsl:text>
-            </xsl:when>
-        </xsl:choose>
-        <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:apply-templates select="." mode="end-language" />
     <!-- transition to book backmatter, if done with last appendix -->
     <xsl:if test="ancestor::book and self::appendix and not(following-sibling::appendix)">
         <xsl:text>%&#xa;</xsl:text>
@@ -4371,9 +4340,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Foreign words/idioms        -->
 <!-- Matches HTML5 specification -->
 <xsl:template match="foreign">
+    <xsl:apply-templates select="." mode="begin-language" />
     <xsl:text>\textit{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="end-language" />
 </xsl:template>
 
 <!-- Non-breaking space, which "joins" two words as a unit -->
@@ -6184,6 +6155,60 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\hypertarget{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}{}</xsl:text>
+</xsl:template>
+
+<!-- ################## -->
+<!-- Languages, Scripts -->
+<!-- ################## -->
+
+<!-- Absent @xml:lang, do nothing -->
+<xsl:template match="*" mode="begin-language" />
+<xsl:template match="*" mode="end-language" />
+
+<!-- More specifically, change language                -->
+<!-- This assumes element is enabled for this behavior -->
+<xsl:template match="*[@xml:lang]" mode="begin-language">
+    <xsl:text>\begin{</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@xml:lang='el'">
+            <xsl:text>greek</xsl:text>
+        </xsl:when>
+        <xsl:when test="@xml:lang='ko-KR'">
+            <xsl:text>korean</xsl:text>
+        </xsl:when>
+        <xsl:when test="@xml:lang='hu-HU'">
+            <xsl:text>magyar</xsl:text>
+        </xsl:when>
+        <xsl:when test="@xml:lang='es-ES'">
+            <xsl:text>spanish</xsl:text>
+        </xsl:when>
+        <xsl:when test="@xml:lang='vi-VN'">
+            <xsl:text>vietnamese</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="*[@xml:lang]" mode="end-language">
+    <xsl:text>\end{</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@xml:lang='el'">
+            <xsl:text>greek</xsl:text>
+        </xsl:when>
+        <xsl:when test="@xml:lang='ko-KR'">
+            <xsl:text>korean</xsl:text>
+        </xsl:when>
+        <xsl:when test="@xml:lang='hu-HU'">
+            <xsl:text>magyar</xsl:text>
+        </xsl:when>
+        <xsl:when test="@xml:lang='es-ES'">
+            <xsl:text>spanish</xsl:text>
+        </xsl:when>
+        <xsl:when test="@xml:lang='vi-VN'">
+            <xsl:text>vietnamese</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!--        -->
