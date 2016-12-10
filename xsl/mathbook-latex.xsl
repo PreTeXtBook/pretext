@@ -409,6 +409,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newfontfamily\koreanfont{NanumMyeongjo}&#xa;</xsl:text>
     <xsl:text>%% Magyar (Hungarian)&#xa;</xsl:text>
     <xsl:text>\setotherlanguage{magyar}&#xa;</xsl:text>
+    <!-- http://tex.stackexchange.com/questions/91507/liberation-mono-the-current-roman-font-does-not-contain-the-cyrillic-script -->
+    <xsl:text>%% Russian&#xa;</xsl:text>
+    <xsl:text>\setotherlanguage{russian}&#xa;</xsl:text>
+    <xsl:text>\newfontfamily\cyrillicfont{Liberation Serif}&#xa;</xsl:text>
     <xsl:text>%% Spanish&#xa;</xsl:text>
     <xsl:text>\setotherlanguage{spanish}&#xa;</xsl:text>
     <xsl:text>%% Vietnamese&#xa;</xsl:text>
@@ -6203,6 +6207,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="@xml:lang='hu-HU'">
             <xsl:text>magyar</xsl:text>
+        </xsl:when>
+        <xsl:when test="@xml:lang='ru-RU'">
+            <xsl:text>russian</xsl:text>
         </xsl:when>
         <xsl:when test="@xml:lang='es-ES'">
             <xsl:text>spanish</xsl:text>

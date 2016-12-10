@@ -128,6 +128,25 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
             <p>Budapest Közép-Európa egyik pénzügyi központja és a világ 100. legnagyobb GDP-jét termelő városa. Az amerikai Forbes magazin szerint Budapest a 7. „legidillibb európai város”. A UCityGuides a világ 9. legszebb városának sorolja. A befolyásos amerikai Condé Nast Traveler utazási magazin által megkérdezett 1,3 millió személy véleménye alapján „Budapest a világ második legjobb városa”. A magyar főváros továbbá egyike Európa 10 legkedveltebb bevásárlóvárosának az Economist magazin kutatásai szerint, ugyanis itt található Közép- és Kelet-Európa legtöbb bevásárlóközpontja.</p>
         </section>
 
+        <section xml:lang="ru-RU">
+            <title>Russian</title>
+
+            <p><ul>
+                <li>Language code: <c>ru-RU</c></li>
+                <li>Font: <c>Liberation Serif</c></li>
+                <li>Source: <url href="https://ru.wikipedia.org/wiki/%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0">Wikipedia Moscow entry</url>, accessed 2016-12-09.</li>
+            </ul></p>
+
+            <p>Москва — столица Российской Федерации, город федерального значения, административный центр Центрального федерального округа и центр Московской области, в состав которой не входит. Крупнейший по численности населения город России и её субъект — 12 330 126 чел. (2016), самый населённый из городов, полностью расположенных в Европе, входит в первую десятку городов мира по численности населения. Центр Московской городской агломерации.</p>
+
+            <p>Историческая столица Великого княжества Московского, Русского царства, Российской империи (в 1728—1730 годах), Советской России и СССР. Город-герой. В Москве находятся федеральные органы государственной власти Российской Федерации (за исключением Конституционного суда), посольства иностранных государств, штаб-квартиры большинства крупнейших российских коммерческих организаций и общественных объединений.</p>
+
+            <p>Расположена на реке Москве в центре Восточно-Европейской равнины, в междуречье Оки и Волги. Как субъект федерации Москва граничит с Московской и Калужской областями.</p>
+
+            <p>Москва — важный туристический центр России. Московский Кремль, Красная площадь, Новодевичий монастырь и Церковь Вознесения в Коломенском входят в список Всемирного наследия ЮНЕСКО. Она является важнейшим транспортным узлом. Город обслуживают 5 аэропортов, 9 железнодорожных вокзалов, 3 речных порта (имеется речное сообщение с морями бассейнов Атлантического и Северного Ледовитого океанов). С 1935 года в Москве работает метрополитен.</p>
+
+        </section>
+
         <section xml:lang="es-ES">
             <title>Spanish</title>
 
@@ -206,14 +225,15 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
                         <p>From the <url href="http://kermitproject.org/">Kermit Project</url> a <url href="http://kermitproject.org/utf8.html#notes">startling phrase</url> in many languages.</p>
                     </introduction>
 
-                    <p><ul>
+                    <ul>
                         <li>Modern Greek (monotonic), Italic: <foreign xml:lang="el">Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα.</foreign></li>
                         <li>Modern Greek (polytonic), Italic: <foreign xml:lang="el">Μπορῶ νὰ φάω σπασμένα γυαλιὰ χωρὶς νὰ πάθω τίποτα.</foreign></li>
                         <li>Korean, Italic: <foreign xml:lang="ko-KR">나는 유리를 먹을 수 있어요. 그래도 아프지 않아요</foreign></li>
                         <li>Hungarian, Italic: <foreign xml:lang="hu-HU">Meg tudom enni az üveget, nem lesz tőle bajom.</foreign></li>
+                        <li>Russian, Italic: <foreign xml:lang="ru-RU">Я могу есть стекло, оно мне не вредит.</foreign></li>
                         <li>Spanish, Italic: <foreign xml:lang="es-ES">Puedo comer vidrio, no me hace daño.</foreign></li>
                         <li>Vietnamese, Italic: <foreign xml:lang="vi-VN">Tôi có thể ăn thủy tinh mà không hại gì.</foreign></li>
-                    </ul></p>
+                    </ul>
                 </list>
             </subsection>
 
