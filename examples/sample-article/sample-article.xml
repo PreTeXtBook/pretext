@@ -2013,7 +2013,7 @@ the xsltproc executable.
             <subsection>
                 <title>Lists, Generally</title>
                   <index><main>ordered list</main></index><index><main>list</main><sub>ordered</sub></index><index><main>unordered list</main></index><index><main>list</main><sub>unordered</sub></index>
-                <p>This section contains nested lists, to demonstrate how they get assigned labels (numbering, symbols).  But we begin with two simple lists, demonstrating an ordered list and an unordered list.  See the end of section for an example of a description list.  Since Jupyter notebooks use markdown syntax, their lists are less flexible.  So some assertions here may be wrong when viewed as a Jupyter notebook.</p>
+                <p>This section contains nested lists, to demonstrate how they get assigned labels (numbering, symbols).  But we begin with two simple lists, demonstrating an ordered list and an unordered list.  See the end of section for an example of a description list.  Since Jupyter notebooks use markdown syntax, their lists are less flexible.  So some assertions here may be wrong when viewed as a Jupyter notebook.  Note in the source the optional use of a paragraph (<c>p</c>) for the list items.</p>
 
                 <p><ol>
                     <li>First.</li>
@@ -2026,7 +2026,7 @@ the xsltproc executable.
                     <li><p>Purple</p></li>
                 </ul></p>
 
-                <p>Next, we have a list with no customization and multiple levels to test the defaults.  <latex /> allows a maximum of four levels of ordered/numbered lists, and a total of six levels if some unordered lists are mixed in.  The second-level defaults (lower-case Latin) are formatted slightly different in <latex /> versus HTML.  The HTML style is not easy to adjust, but you can  specify the <latex /> version to match if it is important.  The default order of the labels in Markdown/Jupyter (Arabic, Latin, latin, roman) is different than for <latex /> and HTML (Arabic, latin, roman, Latin), so cross-references are not correct.<ol>
+                <p>Next, we have a list with no customization and multiple levels to test the defaults.  <latex /> allows a maximum of four levels of ordered/numbered lists, and a total of six levels if some unordered lists are mixed in.  The second-level defaults (lower-case Latin) are formatted slightly different in <latex /> versus HTML.  The HTML style is not easy to adjust, but you can  specify the <latex /> version to match if it is important.  The default order of the labels in Markdown/Jupyter (Arabic, Latin, latin, roman) is different than for <latex /> and HTML (Arabic, latin, roman, Latin), so cross-references are not correct.  Note that to have nested lists you <em>must</em> structure your list items as paragraphs, since a list may only appear within a <c>p</c> element.<ol>
                     <li><p>Level 1, first.</p></li>
                     <li xml:id="list-two">
                         <p>Level 1, second.<ol>
