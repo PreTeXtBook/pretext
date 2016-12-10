@@ -6169,28 +6169,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This assumes element is enabled for this behavior -->
 <xsl:template match="*[@xml:lang]" mode="begin-language">
     <xsl:text>\begin{</xsl:text>
-    <xsl:choose>
-        <xsl:when test="@xml:lang='el'">
-            <xsl:text>greek</xsl:text>
-        </xsl:when>
-        <xsl:when test="@xml:lang='ko-KR'">
-            <xsl:text>korean</xsl:text>
-        </xsl:when>
-        <xsl:when test="@xml:lang='hu-HU'">
-            <xsl:text>magyar</xsl:text>
-        </xsl:when>
-        <xsl:when test="@xml:lang='es-ES'">
-            <xsl:text>spanish</xsl:text>
-        </xsl:when>
-        <xsl:when test="@xml:lang='vi-VN'">
-            <xsl:text>vietnamese</xsl:text>
-        </xsl:when>
-    </xsl:choose>
-    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="country-to-language" />
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="*[@xml:lang]" mode="end-language">
     <xsl:text>\end{</xsl:text>
+    <xsl:apply-templates select="." mode="country-to-language" />
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Even more specifically, we provide an inline version -->
+<!-- This should be more readable in LaTex source         -->
+<xsl:template match="foreign[@xml:lang]" mode="begin-language">
+    <xsl:text>\text</xsl:text>
+    <xsl:apply-templates select="." mode="country-to-language" />
+    <xsl:text>{</xsl:text>
+</xsl:template>
+
+<xsl:template match="foreign[@xml:lang]" mode="end-language">
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- Assumes element has an xml:lang attribute      -->
+<!-- Translates a country-region code to a language -->
+<xsl:template match="*[@xml:lang]" mode="country-to-language">
     <xsl:choose>
         <xsl:when test="@xml:lang='el'">
             <xsl:text>greek</xsl:text>
@@ -6208,7 +6211,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>vietnamese</xsl:text>
         </xsl:when>
     </xsl:choose>
-    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!--        -->
