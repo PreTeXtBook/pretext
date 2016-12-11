@@ -254,8 +254,9 @@ the xsltproc executable.
             <theorem xml:id="theorem-FTC">
                 <title>The Fundamental Theorem of Calculus</title>
                 <index><main>Fundamental Theorem of Calculus</main></index>
+
                 <statement>
-                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me><index><main>Buried in p/statement/theorem</main></index></p>
+                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me><index><main>test: buried in theorem/statement/p</main></index></p>
                 </statement>
                 <proof>
                     <p>Left to the reader.</p>
@@ -323,13 +324,33 @@ the xsltproc executable.
 
         <section xml:id="section-sage-cells">
             <title>Computing Integrals with Sage (<m>\int</m>)</title>
-
+            <!-- Index testing, semi-realistic -->
             <index><main>Sage</main><sub>integration</sub></index>
             <index><main>Sage</main><sub>integration</sub><sub>cell</sub></index>
             <index><main>Sage</main><sub>integration</sub><sub>numerical</sub></index>
-            <index><main>Numerical integration</main></index>
-            <index><main>Numerical integration</main><sub>Sage</sub><sub>cell</sub></index>
-            <index><main>Numerical integration</main><see>Sage integration</see></index>
+            <index><main>numerical</main><see>Sage integration</see></index>
+            <index><main>numerical</main><see>Sage</see></index>
+            <index><main>numerics</main><seealso>Sage</seealso></index>
+            <index><main>numerical integration</main><sub>Sage</sub><sub>cell</sub></index>
+            <index><main>numerical integration</main><sub>Sage</sub><sub>cell</sub><see>Sage</see></index>
+            <!-- Index testing, at most one see/seealso per index -->
+            <index><main>A</main></index>
+            <index><main>A</main><see>F</see></index>
+            <index><main>A</main><see>G</see></index>
+            <index><main>A</main><seealso>H</seealso></index>
+            <index><main>A</main><sub>B</sub><seealso>C</seealso></index>
+            <index><main>A</main><sub>B</sub><sub>C</sub><see>D</see></index>
+            <!--  -->
+            <!-- Index testing, fancy variant -->
+            <index>mixed-content <em>emphasized</em></index>
+            <index><main>structured-content <em>emphasized</em></main></index>
+            <index><main sortby="cat">sorted as if <q>Cat</q></main></index>
+            <index sortby="quorum">sorted as if <q>Quorum</q></index>
+            <index><main>units</main><sub sortby="A">Z (<alert>sort as</alert> A)</sub></index>
+            <index><main>units</main><sub sortby="Z">A (<alert>sort as</alert> Z)</sub></index>
+            <index><c>verbatim text</c>, use sortby</index>
+            <!-- keep this, collides with real "R" entry elsewhere -->
+            <index sortby="R"><m>\rho</m><ndash />fibers</index>
 
             <p>Sage can compute definite integrals.  The output contains the approximate numerical value of the definite integral, followed by an upper bound  of the error in the approximation.</p>
 
@@ -377,6 +398,7 @@ the xsltproc executable.
                 <output>12.005</output>
             </sage>
 
+            <!-- keep R index entry, collides with sortby attribute elsewhere -->
             <p>Sage, and by extension, the Sage Cell Server, can interpret several languages.  The next example has code in the <c>R</c> language,<index><main>R</main></index> a popular open source language for statistics.  As an author, you add the attribute <c>language="r"</c> to your <c>sage</c> element.  (The default language is Sage, so you do not need to indicate that repeatedly.)  Note that a language like <c>R</c> likes to use a <q>less than</q> character, the second most-dangerous special character in XML.  You need to escape it by writing <c>&amp;lt;</c> as we have done in the source for this example.  (See the discussion and summary in <xref ref="subsection-reserved-characters" autoname="yes" />.)</p>
 
             <p>As a reader you learn that the <q>Evaluate</q> button for a pre-loaded Sage cell will indicate the language in use.</p>
@@ -712,7 +734,8 @@ the xsltproc executable.
 
             <subsection>
                 <title>Linking Sage Cells</title>
-                  <index><main>linking Sage cells</main></index>
+                <index><main>Sage cells</main><sub>linking</sub></index>
+
                 <p>Sage cells share their results on a per-webpage basis, so if you move to a new chapter, section, or subsection that happens to be on another webpage, your Sage computations are gone and you start fresh.  But maybe you need some results from elsewhere.  As an author, you can make an exact copy of a cell in another location.  As a reader you are suggested to <q>replay</q> the cell.  You have seen the next cell before.  More typically such a cell might define a function or set some values of a variable.</p>
 
                 <sage copy="sage-numerical-integral" />
@@ -874,10 +897,10 @@ the xsltproc executable.
                 <li><p>Black</p></li>
                 <li><p>Orange</p></li>
                 <li><p>Pink</p></li>
-                <li><p>Salmon<index><main>Strange Colors</main></index></p></li>
+                <li><p>Salmon<index><main>strange colors</main></index></p></li>
                 <li><p>Aqua</p></li>
                 <li><p>Cyan</p></li>
-                <li><p>Puce<index><main>Strange Colors</main></index></p></li>
+                <li><p>Puce<index><main>strange colors</main></index></p></li>
             </ol><ul cols="2">
                 <li>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin lorem diam, convallis in nulla sed, accumsan fermentum urna. Pellentesque aliquet leo elit, ut consequat nunc dapibus ac. Sed lobortis leo tincidunt, vulputate nunc at, ultricies leo. Vivamus purus diam, tristique laoreet purus eget, mollis gravida sapien. Nunc vulputate nisl ac mauris hendrerit cursus. Sed vel molestie velit. Suspendisse sem sem, elementum at vehicula id, volutpat ac mi. Nullam ullamcorper fringilla purus in accumsan. Mauris at nunc accumsan orci dictum vulputate id id augue. Suspendisse at dignissim elit, non euismod nunc. Aliquam faucibus magna ac molestie semper. Aliquam hendrerit sem sit amet metus congue tempor. Donec laoreet laoreet metus, id interdum purus mattis vulputate. Proin condimentum vitae erat varius mollis. Donec venenatis libero sed turpis pretium tempor.</p>
@@ -1064,7 +1087,7 @@ the xsltproc executable.
 
                 <p>If you would like to use macros from a <latex /> package <em>and</em> there is a MathJax extension <em>of the same name</em> which implements the same macros, then you may use these with your mathematics as we demonstrate here.</p>
 
-                <p>This example is from Jason Underdown.<index><main>Underdown, Jason</main></index>  The package is named <c>cancel</c> and is included in the TeXLive distribution, so is fairly standard.  The particular macro being demonstrated is <c>\cancelto{}{}</c>.  <me>\lim_{b \rightarrow \infty}\left[\cancelto{0}{-\frac{1}{s}e^{-sb}} + \frac{1}{s}\right]</me>Look at the source of this article to see the package name being supplied in a <c>latex-preamble/package</c> element within the <c>docinfo</c> section.  That is the only setup required to make the macro usable in <latex /> and <init>HTML</init> output.<index><main>canceling a term</main></index><index><main><c>cancelto</c> macro</main></index></p>
+                <p>This example is from Jason Underdown.<index><main>Underdown, Jason</main></index>  The package is named <c>cancel</c> and is included in the TeXLive distribution, so is fairly standard.  The particular macro being demonstrated is <c>\cancelto{}{}</c>.  <me>\lim_{b \rightarrow \infty}\left[\cancelto{0}{-\frac{1}{s}e^{-sb}} + \frac{1}{s}\right]</me>Look at the source of this article to see the package name being supplied in a <c>latex-preamble/package</c> element within the <c>docinfo</c> section.  That is the only setup required to make the macro usable in <latex /> and <init>HTML</init> output.<index><main>canceling a term</main></index><index sortby="cancelto macro"><c>cancelto</c> macro</index></p>
 
                 <p>The packages appear before the author-supplied macros, so you can use macros from the packages as building blocks for document-specific macros.  We cannot guarantee there will be no conflicts between additional packages and those in use normally, or added in the future.  So use at your own risk.</p>
             </subsection>
@@ -1685,7 +1708,8 @@ the xsltproc executable.
 
             <subsection>
                 <title>Sage Plots</title>
-                  <index><main>Sage plots</main></index>
+                <index><main>Sage plots</main></index>
+
                 <p>Any of the numerous capabilities of Sage may be used to produce any graphics object, be it the simple graph of a single-variable function or some realization of a more complicated object.  All of the usual rules about formatting Sage code (esp. indentation) apply, along with one more caveat.  The last line of your Sage code <alert>must</alert> return a Sage <c>Graphics</c> object (or 3D plot).  The <c>mbx</c> script will isolate this last line, use it as the RHS of an assignment statement, and the Sage <c>.save()</c> method will be called to generate the image, which is either a Portable Document Format (PDF) file amenable to <latex /> output, or a Scalable Vector Graphics (SVG) file amenable to HTML output.  For visualizations of 3D plots, Sage will only produce Portable Network Graphics (PNG) files, which can be included in HTML pages or <latex /> output.</p>
 
                 <figure xml:id="figure-sage-parabola">
@@ -1870,7 +1894,8 @@ the xsltproc executable.
 
             <references>
                 <title>References</title>
-                  <index><main>references</main><sub>within a section</sub></index>
+                <index><main>references</main><sub>within a section</sub></index>
+
                 <introduction>
                     <p>These items are here to test basic formatting of references.</p>
                 </introduction>
@@ -1931,7 +1956,7 @@ the xsltproc executable.
 
                 <exercise>
                     <statement>
-                        <p>One of the few things you can place inside of mathematics is a <q>fill-in</q> blank.<index><main>fill-in the blank</main></index>  We demonstrate a few scenarios here.  See details on syntax in <xref ref="subsection-paragraph-markup" autoname="yes" /><ndash />the use is identical within mathematics.<ul>
+                        <p>One of the few things you can place inside of mathematics is a <q>fill-in</q> blank.<index><main>fill-in blank</main></index>  We demonstrate a few scenarios here.  See details on syntax in <xref ref="subsection-paragraph-markup" autoname="yes" /><ndash />the use is identical within mathematics.<ul>
                             <li><p>Inside inline math (short, 4 characters): <m>\sin(<fillin characters="4" />)</m></p></li>
 
                             <li><p>Inside inline math (default, 10 characters): <m>\sin(<fillin characters="10" />)</m></p></li>
@@ -2012,7 +2037,11 @@ the xsltproc executable.
 
             <subsection>
                 <title>Lists, Generally</title>
-                  <index><main>ordered list</main></index><index><main>list</main><sub>ordered</sub></index><index><main>unordered list</main></index><index><main>list</main><sub>unordered</sub></index>
+                <index><main>ordered list</main></index>
+                <index><main>list</main><sub>ordered</sub></index>
+                <index><main>unordered list</main></index>
+                <index><main>list</main><sub>unordered</sub></index>
+
                 <p>This section contains nested lists, to demonstrate how they get assigned labels (numbering, symbols).  But we begin with two simple lists, demonstrating an ordered list and an unordered list.  See the end of section for an example of a description list.  Since Jupyter notebooks use markdown syntax, their lists are less flexible.  So some assertions here may be wrong when viewed as a Jupyter notebook.  Note in the source the optional use of a paragraph (<c>p</c>) for the list items.</p>
 
                 <p><ol>
@@ -2566,7 +2595,7 @@ the xsltproc executable.
             </table>
 
             <paragraphs>
-                <title>Bully Pulpit</title>
+                <title>Bully Pulpit: Vertical Rules in Tables</title>
 
                 <p>One of the goals of MathBook XML is to gently guide authors towards good choices in the design of their documents, even if we do not claim to know it all ourselves.  Take a close look at that table about tables.  What's missing?  No vertical rules.  Try living without them, you will not really miss them.  If you think you need to divide a table into two halves, maybe you really need two tables (and then see the <q>side-by-side</q> capabilities, Section <xref ref="section-side-by-side" />).</p>
 
@@ -3047,7 +3076,8 @@ the xsltproc executable.
 
             <subsection>
                 <title>GeoGebra</title>
-                  <index><main>GeoGebra</main></index>
+                <index><main>GeoGebra</main></index>
+
                 <p>This first example of a  GeoGebra demonstration has just the controls for moving the three vertices on the circumfrence of the circle.  This is courtesy of Danny Parsons at the African Institute of Mathematical Sciences.  This demo requires Java, which could be problematic.</p>
 
                 <p>GeoGebra will create screenshots of demonstrations in TikZ/<latex /> code.  For a static version, we use this as a figure.</p>
@@ -3125,7 +3155,9 @@ the xsltproc executable.
 
             <figure>
                 <title>Kashmir (Live), Led Zeppelin</title>
-                <caption>Kashmir (Live), Led Zeppelin.<index><main>Led Zeppelin video</main></index> O2 Arena, London. December 10, 2007. (8:55)</caption>
+                <caption>Kashmir (Live), Led Zeppelin. O2 Arena, London. December 10, 2007. (8:55)</caption>
+                <index><main>Led Zeppelin video</main></index>
+
                 <video youtube="hAzdgU_kpGo" width="70%" xml:id="led-zeppelin-kashmir" />
             </figure>
 
@@ -5058,11 +5090,24 @@ the xsltproc executable.
                 <biblio type="raw" xml:id="biblio-lay-article">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash />62.</biblio>
 
                 <conclusion>
-                    <p>There is an index manufactured in the next subdivision (so we are talking about here), which contains just a few sample entries.  Look at the source of this XML file, searching on <c>&gt;index&lt;</c>, to see how they are written.  They may be placed inside of a a variety of structures, and their location greatly influences the cross-references produced in the HTML version of the index.</p>
+                    <p>There is an index manufactured in the next subdivision (so we are talking about  it here, rather than within the index, an impossibility).  It contains some sample entries, and is not meant to be comprehensive.  Look at the source of this XML file, searching on <c>&lt;index&gt;</c>, to see how they are written.  They may be placed inside of a a variety of structures, and their location greatly influences the cross-references produced in the HTML version of the index.</p>
 
                     <p>The <latex /> version of the index is more traditional, using page numbers to reference locations.  A newer package is used to create the index, and so there is no extra intermediate step required to process the index.  The one downside of this convenience is that index entries may not be placed in the back colophon (which is the only subdivision that may follow the index).</p>
 
                     <p>There is an index entry about multicolumn lists which spans more than one page.  This requires doubly-linked index entries, the first has the index content and points to the <c>xml:id</c> of the second.  The second is an empty element, but points back to the <c>xml:id</c> of the first entry.  So each has a marker and a reference, which allows the span of the index topic to cut across XML boundaries in the source.  This is the mechanism to produce a page range in the <latex /> index.  See the source of this article for syntax details.</p>
+
+                    <paragraphs>
+                        <title>Bully Pulpit: Index Headings</title>
+
+                        <p>Professionals do not capitalize the headings (entries) of an index, unless it is a proper noun (name, place, <etc />).  We do not provide any enforcement of this advice, nor any assistance.  It is your responsibility to provide quality source material in this regard.</p>
+                    </paragraphs>
+
+                    <paragraphs>
+                        <title>Note</title>
+
+                        <p>Most all of the index entries below to page 2 (PDF output) are just from a suite of non-sensical tests.  These are harder to recognize in the <init>HTML</init> output.</p>
+                    </paragraphs>
+
                 </conclusion>
             </references>
 
