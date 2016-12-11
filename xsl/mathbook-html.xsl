@@ -1073,10 +1073,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:call-template name="end-index-knowl-list" />
                 </xsl:if>
                 <!-- Compare lower-cased leading letters, break if changed -->
+                <!-- Once had a letter as a heading, gone now (blank)      -->
+                <!-- But div remains to provide visual separation          -->
+                <!-- and a target for a "jump to" list of index letters    -->
                 <xsl:if test="not(substring($prev1, 1,1) = substring($key1, 1,1))">
-                    <div class="indexletter">
-                        <xsl:value-of select="translate(substring($key1, 1, 1), &UPPERCASE;, &LOWERCASE;)" />
-                    </div>
+                    <xsl:element name="div">
+                        <xsl:attribute name="class">
+                            <xsl:text>indexletter</xsl:text>
+                        </xsl:attribute>
+                        <xsl:attribute name="id">
+                            <!-- already lower-cased, math is a \ -->
+                            <xsl:text>indexletter-</xsl:text>
+                            <xsl:value-of select="substring($key1, 1, 1)" />
+                        </xsl:attribute>
+                        <!-- empty div, no content -->
+                    </xsl:element>
                 </xsl:if>
                 <!--  -->
                 <xsl:text disable-output-escaping="yes">&lt;div class="indexitem"></xsl:text>
