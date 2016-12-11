@@ -552,13 +552,18 @@
     <!ATTLIST xref autoname        (yes|no|title) #IMPLIED>
 
 <!-- Index -->
-<!ELEMENT index (main?,sub*,see*)>
+<!-- A mixed-content model is allowed, but DTD will complain -->
+<!ELEMENT index (main?,sub*,(see|seealso)?)>
     <!ATTLIST index xml:id ID #IMPLIED>
-    <!ATTLIST index start CDATA #IMPLIED>
+    <!ATTLIST index sortby CDATA #IMPLIED>
+    <!ATTLIST index start  CDATA #IMPLIED>
     <!ATTLIST index finish CDATA #IMPLIED>
 <!ELEMENT main (#PCDATA|%linear;)*>
+    <!ATTLIST main sortby CDATA #IMPLIED>
 <!ELEMENT sub  (#PCDATA|%linear;)*>
-<!ELEMENT see  (#PCDATA|%linear;)*>
+    <!ATTLIST sub sortby CDATA #IMPLIED>
+<!ELEMENT see      (#PCDATA|%linear;)*>
+<!ELEMENT seealso  (#PCDATA|%linear;)*>
 
 
 <!-- #### -->
