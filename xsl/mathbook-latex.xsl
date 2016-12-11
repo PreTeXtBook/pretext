@@ -1392,14 +1392,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Support for index creation&#xa;</xsl:text>
         <xsl:if test="$author-tools='no'">
             <xsl:text>%% imakeidx package does not require extra pass (as with makeidx)&#xa;</xsl:text>
-            <xsl:text>%% We set the title of the "Index" section via a keyword&#xa;</xsl:text>
-            <xsl:text>%% And we provide language support for the "see" phrase&#xa;</xsl:text>
+            <xsl:text>%% Title of the "Index" section set via a keyword&#xa;</xsl:text>
+            <xsl:text>%% Language support for the "see" and "see also" phrases&#xa;</xsl:text>
             <xsl:text>\usepackage{imakeidx}&#xa;</xsl:text>
             <xsl:text>\makeindex[title=</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'indexsection'" /></xsl:call-template>
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'indexsection'" />
+            </xsl:call-template>
             <xsl:text>, intoc=true]&#xa;</xsl:text>
             <xsl:text>\renewcommand{\seename}{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'see'" /></xsl:call-template>
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'see'" />
+            </xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+            <xsl:text>\renewcommand{\alsoname}{</xsl:text>
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'also'" />
+            </xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="$author-tools='yes'">
@@ -3414,23 +3423,71 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Index -->
 <!-- ##### -->
 
-<!-- LaTeX only, no companion for other conversions -->
-<xsl:template match="index">
+<!-- Excellent built-in LaTeX support, HTML may lag -->
+
+<!-- Unstructured                       -->
+<!-- simple and quick, minimal features -->
+<!-- Only supports  @sortby  attribute  -->
+<xsl:template match="index[not(main)]">
+    <xsl:text>\index{</xsl:text>
+    <xsl:apply-templates select="@sortby" />
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- Structured                                      -->
+<!--   main - one only, optional @sortby             -->
+<!--   sub - up two, optional, with optional @sortby -->
+<!--   see, seealso - one total                      -->
+<!--   @start, @finish support page ranges for print -->
+<xsl:template match="index[main]">
     <xsl:text>\index{</xsl:text>
     <xsl:apply-templates select="main" />
     <xsl:apply-templates select="sub" />
     <xsl:apply-templates select="see" />
+    <xsl:apply-templates select="seealso" />
     <xsl:apply-templates select="@finish" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
+<!-- Page Range, Finish Variant              -->
+<!-- @start is a marker for END of a range   -->
+<!-- End of page range duplicates it's start -->
+<xsl:template match="index[@start]">
+    <xsl:variable name="start" select="id(@start)" />
+    <xsl:text>\index{</xsl:text>
+    <xsl:apply-templates select="$start/main" />
+    <xsl:apply-templates select="$start/sub" />
+    <xsl:apply-templates select="$start/see" />
+    <xsl:apply-templates select="$start/seealso" />
+    <xsl:apply-templates select="@start" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="index/main">
+    <xsl:apply-templates select="@sortby" />
+    <xsl:apply-templates />
+</xsl:template>
+
+<xsl:template match="index/@sortby|main/@sortby|sub/@sortby">
+    <xsl:value-of select="." />
+    <xsl:text>@</xsl:text>
+</xsl:template>
+
 <xsl:template match="index/sub">
     <xsl:text>!</xsl:text>
+    <xsl:apply-templates select="@sortby" />
     <xsl:apply-templates />
 </xsl:template>
 
 <xsl:template match="index/see">
     <xsl:text>|see{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="index/seealso">
+    <xsl:text>|seealso{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>
@@ -3443,16 +3500,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- start  attribute marks end of range  -->
 <xsl:template match="@start">
     <xsl:text>|)</xsl:text>
-</xsl:template>
-
-<xsl:template match="index[@start]">
-    <xsl:variable name="start" select="id(@start)" />
-    <xsl:text>\index{</xsl:text>
-    <xsl:apply-templates select="$start/main" />
-    <xsl:apply-templates select="$start/sub" />
-    <xsl:apply-templates select="$start/see" />
-    <xsl:apply-templates select="@start" />
-    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- ##### -->
