@@ -1003,15 +1003,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ############## -->
 
 <xsl:template name="print-index">
-    <!-- <index> and identified <term> with mixed-content heading            -->
-    <!-- start attribute is actual end of a "page range", goodies at @finish -->
+    <!-- <index> with single mixed-content heading -->
+    <!-- start attribute is actual end of a        -->
+    <!-- "page range", goodies at @finish          -->
     <xsl:variable name="unstructured-index">
         <xsl:for-each select="//index[not(main) and not(@start)]">
             <xsl:variable name="content">
                 <xsl:apply-templates select="*|text()" />
             </xsl:variable>
             <index>
-                <xsl:apply-templates select="." mode="index-enclosure" />
+                <!-- text, key-value for single index heading -->
                 <!-- convert $content from a string to proper HTML nodes -->
                 <text>
                     <xsl:copy-of select="exsl:node-set($content)" />
@@ -1028,6 +1029,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:otherwise>
                     </xsl:choose>
                 </key>
+                <!-- write/preserve info about the location's surroundings -->
+                <!-- as "knowl" and "typename" temporary elements          -->
+                <xsl:apply-templates select="." mode="index-enclosure" />
             </index>
         </xsl:for-each>
     </xsl:variable>
@@ -1035,9 +1039,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="structured-index">
         <xsl:for-each select="//index[main and not(@start)]">
             <index>
-                <!-- write/preserve info about the location's surroundings -->
-                <!-- as "knowl" and "typename" temporary elements          -->
-                <xsl:apply-templates select="." mode="index-enclosure" />
+                <!-- text, key-value of index headings -->
                 <xsl:for-each select="main|sub">
                     <xsl:variable name="content">
                         <xsl:apply-templates select="*|text()" />
@@ -1058,6 +1060,49 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </xsl:otherwise>
                         </xsl:choose>
                     </key>
+                    <!-- if terminal, enhance final sort key -->
+                    <!-- link type for final sort preference -->
+                    <!-- this mimics LaTeX's ordering        -->
+                    <!--   0 - has "see also"                -->
+                    <!--   1 - has "see"                     -->
+                    <!--   2 - is knowl/hyperlink reference  -->
+                    <!-- condition on last level of headings -->
+                    <xsl:if test="not(following-sibling::*[self::sub])">
+                        <link>
+                            <xsl:choose>
+                                <xsl:when test="../seealso">
+                                    <xsl:text>0</xsl:text>
+                                </xsl:when>
+                                <xsl:when test="../see">
+                                    <xsl:text>1</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>2</xsl:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </link>
+                    </xsl:if>
+                </xsl:for-each>
+                <!-- write/preserve info about the location's surroundings -->
+                <!-- as "knowl" and "typename" temporary elements          -->
+                <xsl:apply-templates select="." mode="index-enclosure" />
+                <!-- there is at most one "see" or "seealso" total -->
+                <!-- these replace the knowls, so perhaps condition here -->
+                <xsl:for-each select="see">
+                    <xsl:variable name="content">
+                        <xsl:apply-templates select="*|text()" />
+                    </xsl:variable>
+                    <see>
+                        <xsl:copy-of select="exsl:node-set($content)" />
+                    </see>
+                </xsl:for-each>
+                <xsl:for-each select="seealso">
+                    <xsl:variable name="content">
+                        <xsl:apply-templates select="*|text()" />
+                    </xsl:variable>
+                    <seealso>
+                        <xsl:copy-of select="exsl:node-set($content)" />
+                    </seealso>
                 </xsl:for-each>
             </index>
         </xsl:for-each>
@@ -1068,6 +1113,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:sort select="./key[1]" />
             <xsl:sort select="./key[2]" />
             <xsl:sort select="./key[3]" />
+            <xsl:sort select="./link" />
             <xsl:copy-of select="." />
         </xsl:for-each>
     </xsl:variable>
@@ -1078,8 +1124,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:variable name="key1"><xsl:value-of select="key[1]" /></xsl:variable>
         <xsl:variable name="key2"><xsl:value-of select="key[2]" /></xsl:variable>
         <xsl:variable name="key3"><xsl:value-of select="key[3]" /></xsl:variable>
-        <!--
-        Debugging code, maybe not correct or useful, remove later
+        <!-- Debugging code follows, maybe not correct or useful, remove later -->
+        <!-- 
         <xsl:variable name="con">
             <xsl:copy-of select="text" />
         </xsl:variable>
@@ -1178,26 +1224,52 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <!-- if here then key1, key2, key3 all unchanged, so just drop a link -->
         </xsl:choose>
-        <!-- every item has a link, above we just place breaks into the list -->
+        <!-- every item has a reference, either a knowl, or a see/seealso -->
+        <!-- above we just place breaks into the list                     -->
+        <!-- TODO: comma as first char of next element, looks just like LaTeX -->
         <xsl:text> </xsl:text>
-        <xsl:element name="a">
-            <!-- knowl or traditional hyperlink     -->
-            <!-- mutually exclusive by construction -->
-            <xsl:if test="knowl">
-                <xsl:attribute name="knowl">
-                    <xsl:value-of select="knowl" />
-                </xsl:attribute>
-            </xsl:if>
-            <xsl:if test="hyperlink">
-                <xsl:attribute name="href">
-                    <xsl:value-of select="hyperlink" />
-                </xsl:attribute>
-            </xsl:if>
-            <!-- content: replace with localized short-names -->
-            <xsl:value-of select="typename" />
-        </xsl:element>
+        <xsl:choose>
+            <xsl:when test="see">
+                <i>
+                    <xsl:call-template name="type-name">
+                        <xsl:with-param name="string-id" select="'see'" />
+                    </xsl:call-template>
+                </i>
+                <xsl:text> </xsl:text>
+                <xsl:copy-of select="see/node()" />
+            </xsl:when>
+            <xsl:when test="seealso">
+                <i>
+                    <xsl:call-template name="type-name">
+                        <xsl:with-param name="string-id" select="'also'" />
+                    </xsl:call-template>
+                </i>
+                <xsl:text> </xsl:text>
+                <xsl:copy-of select="seealso/node()" />
+            </xsl:when>
+            <!-- else a real content reference, knowl or hyperlink -->
+            <!-- TODO: split into two more when, otherwise as error? -->
+            <xsl:otherwise>
+                <xsl:element name="a">
+                    <!-- knowl or traditional hyperlink     -->
+                    <!-- mutually exclusive by construction -->
+                    <xsl:if test="knowl">
+                        <xsl:attribute name="knowl">
+                            <xsl:value-of select="knowl" />
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:if test="hyperlink">
+                        <xsl:attribute name="href">
+                            <xsl:value-of select="hyperlink" />
+                        </xsl:attribute>
+                    </xsl:if>
+                    <!-- content: replace with localized short-names -->
+                    <xsl:value-of select="typename" />
+                </xsl:element>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:for-each>
-    <!-- we fall out with one unbalanced item -->
+    <!-- we fall out with one unbalanced item at very end -->
     <xsl:call-template name="end-index-knowl-list" />
 </xsl:template>
 
