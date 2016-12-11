@@ -1003,40 +1003,60 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ############## -->
 
 <xsl:template name="print-index">
-    <!-- <index> and identified <term> with simple content index entry             -->
-    <!-- start attribute is actual end of a "page range", goodies are at other end -->
+    <!-- <index> and identified <term> with mixed-content heading            -->
+    <!-- start attribute is actual end of a "page range", goodies at @finish -->
     <xsl:variable name="unstructured-index">
-        <xsl:for-each select="//index[not(child::*) and not(@start)]|//term[@index='yes']">
+        <xsl:for-each select="//index[not(main) and not(@start)]">
             <xsl:variable name="content">
                 <xsl:apply-templates select="*|text()" />
             </xsl:variable>
             <index>
                 <xsl:apply-templates select="." mode="index-enclosure" />
+                <!-- convert $content from a string to proper HTML nodes -->
                 <text>
-                    <xsl:value-of select="$content" />
+                    <xsl:copy-of select="exsl:node-set($content)" />
                 </text>
                 <key>
-                    <xsl:value-of select="translate($content, &UPPERCASE;, &LOWERCASE;)" />
+                    <xsl:choose>
+                        <!-- salt prevents accidental key collisions -->
+                        <xsl:when test="@sortby">
+                            <xsl:value-of select="translate(@sortby, &UPPERCASE;, &LOWERCASE;)" />
+                            <xsl:value-of select="generate-id(.)" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="translate($content, &UPPERCASE;, &LOWERCASE;)" />
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </key>
             </index>
         </xsl:for-each>
     </xsl:variable>
     <!-- index entries with structure, cant't be end of a "page range" -->
     <xsl:variable name="structured-index">
-        <xsl:for-each select="//index[child::*]">
+        <xsl:for-each select="//index[main and not(@start)]">
             <index>
                 <!-- write/preserve info about the location's surroundings -->
                 <!-- as "knowl" and "typename" temporary elements          -->
                 <xsl:apply-templates select="." mode="index-enclosure" />
-                 <xsl:for-each select="main|sub">
+                <xsl:for-each select="main|sub">
                     <xsl:variable name="content">
                         <xsl:apply-templates select="*|text()" />
                     </xsl:variable>
+                    <!-- convert $content from a string to proper HTML nodes -->
                     <text>
-                        <xsl:value-of select="$content" />
+                        <xsl:copy-of select="exsl:node-set($content)" />
                     </text>
                     <key>
-                        <xsl:value-of select="translate($content, &UPPERCASE;, &LOWERCASE;)" />
+                        <xsl:choose>
+                            <!-- salt prevents accidental key collisions -->
+                            <xsl:when test="@sortby">
+                                <xsl:value-of select="translate(@sortby, &UPPERCASE;, &LOWERCASE;)" />
+                                <xsl:value-of select="generate-id(.)" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="translate($content, &UPPERCASE;, &LOWERCASE;)" />
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </key>
                 </xsl:for-each>
             </index>
@@ -1058,7 +1078,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:variable name="key1"><xsl:value-of select="key[1]" /></xsl:variable>
         <xsl:variable name="key2"><xsl:value-of select="key[2]" /></xsl:variable>
         <xsl:variable name="key3"><xsl:value-of select="key[3]" /></xsl:variable>
-        <!-- strings for second item -->
+        <!--
+        Debugging code, maybe not correct or useful, remove later
+        <xsl:variable name="con">
+            <xsl:copy-of select="text" />
+        </xsl:variable>
+        <xsl:message><xsl:value-of select="$key1" />:<xsl:value-of select="$key2" />:<xsl:value-of select="$key3" />:<xsl:copy-of select="$con" />:</xsl:message>
+        -->
+         <!-- strings for second item -->
         <xsl:variable name="previous" select="preceding-sibling::*[1]" />
         <xsl:variable name="prev1"><xsl:value-of select="$previous/key[1]" /></xsl:variable>
         <xsl:variable name="prev2"><xsl:value-of select="$previous/key[2]" /></xsl:variable>
@@ -1066,7 +1093,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- flatten the sorted structure, with breaks -->
         <xsl:choose>
             <!-- new key1, so finish knowl list and start new level one list -->
-            <!-- (if not dimply starting out)                                -->
+            <!-- (if not simply starting out)                                -->
             <!-- Extraordinary: perhaps time for a new prominent letter      -->
             <xsl:when test="not($key1 = $prev1)">
                 <xsl:if test="not($prev1='')">
@@ -1091,20 +1118,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:if>
                 <!--  -->
                 <xsl:text disable-output-escaping="yes">&lt;div class="indexitem"></xsl:text>
-                <!-- <xsl:value-of select="$key1" /> -->
-                <xsl:value-of select="text[1]" />
+                <!-- use copy-of to do deep copy of nodes under first text -->
+                <xsl:copy-of select="text[1]/node()" />
                 <xsl:choose>
                     <xsl:when test="not($key2='')">
                         <!-- no links yet, so close index item w/o links (?), open subitem -->
                         <xsl:text disable-output-escaping="yes">&lt;/div></xsl:text>
                         <xsl:text disable-output-escaping="yes">&lt;div class="subindexitem"></xsl:text>
-                        <xsl:value-of select="text[2]" />
+                        <xsl:copy-of select="text[2]/node()" />
                         <xsl:choose>
                             <xsl:when test="not($key3='')">
                                 <!-- no links yet, so close subindex item w/o links, open subsubitem -->
                                 <xsl:text disable-output-escaping="yes">&lt;/div></xsl:text>
                                 <xsl:text disable-output-escaping="yes">&lt;div class="subsubindexitem"></xsl:text>
-                                <xsl:value-of select="text[3]" />
+                                <xsl:copy-of select="text[3]/node()" />
                                 <!-- terminal so start knowl list -->
                                 <xsl:call-template name="begin-index-knowl-list" />
                             </xsl:when>
@@ -1125,13 +1152,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="not($key2 = $prev2)">
                 <xsl:call-template name="end-index-knowl-list" />
                 <xsl:text disable-output-escaping="yes">&lt;div class="subindexitem"></xsl:text>
-                <xsl:value-of select="text[2]" />
+                <xsl:copy-of select="text[2]/node()" />
                 <xsl:choose>
                     <xsl:when test="not($key3='')">
                         <!-- no links yet, so close subindex item w/o links, open subsubitem -->
                         <xsl:text disable-output-escaping="yes">&lt;/div></xsl:text>
                         <xsl:text disable-output-escaping="yes">&lt;div class="subsubindexitem"></xsl:text>
-                        <xsl:value-of select="text[3]" />
+                        <xsl:copy-of select="text[3]/node()" />
                         <!-- terminal so start knowl list -->
                         <xsl:call-template name="begin-index-knowl-list" />
                     </xsl:when>
@@ -1146,7 +1173,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="not($key3 = $prev3)">
                 <xsl:call-template name="end-index-knowl-list" />
                 <xsl:text disable-output-escaping="yes">&lt;div class="subsubindexitem"></xsl:text>
-                <xsl:value-of select="text[3]" />
+                <xsl:copy-of select="text[3]/node()" />
                 <xsl:call-template name="begin-index-knowl-list" />
             </xsl:when>
             <!-- if here then key1, key2, key3 all unchanged, so just drop a link -->
