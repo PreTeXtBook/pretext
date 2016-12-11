@@ -4530,9 +4530,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- 10 digits, hyphen/dash, underscore     -->
 <!-- TODO: Added 2016-10-29, make into a fatal error later -->
 <xsl:template match="mathbook" mode="xmlid-warning">
-    <xsl:variable name="xmlid-characters">
-        <xsl:text>-_&SIMPLECHAR;</xsl:text>
-    </xsl:variable>
+    <xsl:variable name="xmlid-characters" select="concat('-_', &SIMPLECHAR;)" />
     <xsl:for-each select="//@xml:id">
         <xsl:if test="not(translate(., $xmlid-characters, '') = '')">
             <xsl:message>
