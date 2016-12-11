@@ -22,6 +22,8 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:str="http://exslt.org/strings"
+    extension-element-prefixes="str"
 >
 
 <!-- This file is a library of routines to convert parts of      -->
@@ -1645,6 +1647,105 @@
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- Numbers, units, quantities                     -->
+<!-- quantity                                       -->
+<xsl:template match="quantity">
+    <!-- warning if there is no content -->
+    <xsl:if test="not(descendant::unit) and not(descendant::per) and not(descendant::mag)">
+        <xsl:message terminate="no">
+        <xsl:text>MBX:WARNING: magnitude or units needed</xsl:text>
+        </xsl:message>
+    </xsl:if>
+    <!-- print magnitude if there is one -->
+    <xsl:if test="descendant::mag">
+        <xsl:apply-templates select="mag"/>
+        <!-- if the units that follow are fractional, space -->
+        <xsl:if test="descendant::per">
+            <xsl:text> </xsl:text>
+        </xsl:if>
+    </xsl:if>
+    <!-- if there are non-fracitonal units, print them -->
+    <xsl:if test="descendant::unit and not(descendant::per)">
+        <xsl:apply-templates select="unit" />
+    </xsl:if>
+    <!-- if there are fracitonal units with a numerator part, print them -->
+    <xsl:if test="descendant::unit and descendant::per">
+        <sup> <xsl:apply-templates select="unit" /> </sup>
+        <xsl:text>/</xsl:text>
+        <sub> <xsl:apply-templates select="per" /> </sub>
+    </xsl:if>
+    <!-- if there are fracitonal units without a numerator part, print them -->
+    <xsl:if test="not(descendant::unit) and descendant::per">
+        <sup> <xsl:text>1</xsl:text></sup>
+        <xsl:text>/</xsl:text>
+        <sub> <xsl:apply-templates select="per" /> </sub>
+    </xsl:if>
+</xsl:template>
+
+<!-- Magnitude                                      -->
+<xsl:template match="mag">
+    <xsl:variable name="mag">
+        <xsl:apply-templates />
+    </xsl:variable>
+    <xsl:value-of select="str:replace($mag,'\pi','\(\pi\)')"/>
+</xsl:template>
+
+<!-- unit and per children of a quantity element    -->
+<!-- have a mandatory base attribute                -->
+<!-- may have prefix and exp attributes             -->
+<!-- base and prefix are not abbreviations          -->
+
+<xsl:key name="prefix-key" match="prefix" use="concat(../@name, @full)"/>
+<xsl:key name="base-key" match="base" use="concat(../@name, @full)"/>
+
+<xsl:template match="unit|per">
+    <xsl:if test="not(parent::quantity)">
+        <xsl:message>MBX:WARNING: unit or per element should have parent quantity element</xsl:message>
+    </xsl:if>
+    <!-- if the unit is 1st and no mag, no need for space. Otherwise, give space -->
+    <xsl:if test="position() != 1 or (local-name(.)='unit' and (preceding-sibling::mag or following-sibling::mag) and not(preceding-sibling::per or following-sibling::per))">
+        <xsl:text> </xsl:text>
+    </xsl:if>
+    <!-- prefix is optional -->
+    <xsl:if test="@prefix">
+        <xsl:variable name="prefix">
+            <xsl:value-of select="@prefix" />
+        </xsl:variable>
+        <xsl:variable name="short">
+            <xsl:for-each select="document('mathbook-units.xsl')">
+                <xsl:value-of select="key('prefix-key',concat('prefixes',$prefix))/@short"/>
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:value-of select="$short" />
+    </xsl:if>
+    <!-- base unit is *mandatory* so check to see if it has been provided -->
+    <xsl:choose>
+        <xsl:when test="@base">
+            <xsl:variable name="base">
+                <xsl:value-of select="@base" />
+            </xsl:variable>
+            <xsl:variable name="short">
+                <xsl:for-each select="document('mathbook-units.xsl')">
+                    <xsl:value-of select="key('base-key',concat('bases',$base))/@short"/>
+                </xsl:for-each>
+            </xsl:variable>
+            <xsl:value-of select="$short" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message terminate="no">
+                <xsl:text>MBX:WARNING: base unit needed</xsl:text>
+            </xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- exponent is optional -->
+    <xsl:if test="@exp">
+        <sup><xsl:value-of select="@exp"/></sup>
+    </xsl:if>
+</xsl:template>
+
+
+
 
 <!-- ################# -->
 <!-- Utility Templates -->
