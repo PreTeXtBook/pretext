@@ -131,6 +131,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='foreword'><xsl:text>Avant-propos</xsl:text></localization>
     <localization string-id='dedication'><xsl:text>Dédicace</xsl:text></localization>
     <localization string-id='colophon'><xsl:text>Colophon</xsl:text></localization>
+    <!-- Back matter components -->
+    <!-- Following is temporary, "index-part" to be deprecated -->
+    <!-- NB: repurpose translations, replace "indexsection below", maybe move appendix here -->
+    <!-- <localization string-id='index-part'><xsl:text>Index</xsl:text></localization> -->
+    <!-- <localization string-id='jump-to'><xsl:text>Jump to:</xsl:text></localization> -->
     <!-- Parts of the Index -->
     <localization string-id='indexsection'><xsl:text>Index</xsl:text></localization> <!--see latex mechanism-->
     <localization string-id='see'><xsl:text>Visiter</xsl:text></localization> <!--see latex mechanism-->

@@ -1149,21 +1149,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:call-template name="end-index-knowl-list" />
                 </xsl:if>
                 <!-- Compare lower-cased leading letters, break if changed -->
-                <!-- Once had a letter as a heading, gone now (blank)      -->
-                <!-- But div remains to provide visual separation          -->
-                <!-- and a target for a "jump to" list of index letters    -->
+                <!--   End wrapping (if not first letter)                  -->
+                <!--   Begin a new group                                   -->
                 <xsl:if test="not(substring($prev1, 1,1) = substring($key1, 1,1))">
-                    <xsl:element name="div">
-                        <xsl:attribute name="class">
-                            <xsl:text>indexletter</xsl:text>
-                        </xsl:attribute>
-                        <xsl:attribute name="id">
-                            <!-- already lower-cased, math is a \ -->
-                            <xsl:text>indexletter-</xsl:text>
-                            <xsl:value-of select="substring($key1, 1, 1)" />
-                        </xsl:attribute>
-                        <!-- empty div, no content -->
-                    </xsl:element>
+                    <xsl:if test="$previous">
+                        <xsl:text disable-output-escaping="yes">&lt;/div></xsl:text>
+                    </xsl:if>
+                    <xsl:text disable-output-escaping="yes">&lt;div</xsl:text>
+                    <xsl:text disable-output-escaping="yes"> class="indexletter"</xsl:text>
+                    <xsl:text disable-output-escaping="yes"> id="</xsl:text>
+                    <xsl:text disable-output-escaping="yes">indexletter-</xsl:text>
+                    <xsl:value-of select="substring($key1, 1, 1)" />
+                    <xsl:text disable-output-escaping="yes">"</xsl:text>
+                    <xsl:text disable-output-escaping="yes">></xsl:text>
                 </xsl:if>
                 <!--  -->
                 <xsl:text disable-output-escaping="yes">&lt;div class="indexitem"></xsl:text>
@@ -1230,7 +1228,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- every item has a reference, either a knowl, or a see/seealso -->
         <!-- above we just place breaks into the list                     -->
         <!-- TODO: comma as first char of next element, looks just like LaTeX -->
-        <xsl:text> </xsl:text>
+        <xsl:text>, </xsl:text>
         <xsl:choose>
             <xsl:when test="see">
                 <i>
@@ -1274,6 +1272,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
     <!-- we fall out with one unbalanced item at very end -->
     <xsl:call-template name="end-index-knowl-list" />
+    <!-- we fall out needing to close last indexletter div -->
+    <xsl:text disable-output-escaping="yes">&lt;/div></xsl:text>
 </xsl:template>
 
 <!-- Climb the tree looking for an enclosing structure of        -->
@@ -6111,6 +6111,44 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     </xsl:if>
 </xsl:template>
 
+<!-- The "jump to" navigation on a page with the index -->
+<xsl:template match="*" mode="index-jump-nav">
+    <span class="mininav">
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'jump-to'" />
+        </xsl:call-template>
+    </span>
+    <span class="indexnav">
+    <a href="#indexletter-a">A </a>
+    <a href="#indexletter-b">B </a>
+    <a href="#indexletter-c">C </a>
+    <a href="#indexletter-d">D </a>
+    <a href="#indexletter-e">E </a>
+    <a href="#indexletter-f">F </a>
+    <a href="#indexletter-g">G </a>
+    <a href="#indexletter-h">H </a>
+    <a href="#indexletter-i">I </a>
+    <a href="#indexletter-j">J </a>
+    <a href="#indexletter-k">K </a>
+    <a href="#indexletter-l">L </a>
+    <a href="#indexletter-m">M </a>
+    <br />
+    <a href="#indexletter-n">N </a>
+    <a href="#indexletter-o">O </a>
+    <a href="#indexletter-p">P </a>
+    <a href="#indexletter-q">Q </a>
+    <a href="#indexletter-r">R </a>
+    <a href="#indexletter-s">S </a>
+    <a href="#indexletter-t">T </a>
+    <a href="#indexletter-u">U </a>
+    <a href="#indexletter-v">V </a>
+    <a href="#indexletter-w">W </a>
+    <a href="#indexletter-x">X </a>
+    <a href="#indexletter-y">Y </a>
+    <a href="#indexletter-z">Z </a>
+    </span>
+</xsl:template>
+
 <xsl:template match="*" mode="next-button">
     <xsl:variable name="next-url">
         <xsl:choose>
@@ -6284,7 +6322,17 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                                     </xsl:when>
                                 </xsl:choose>
                             </xsl:attribute>
-                            <xsl:apply-templates select="." mode="index-button" />
+                            <!-- A page either has an/the index as    -->
+                            <!-- a child, and gets the "jump to" bar, -->
+                            <!-- or it deserves an index button       -->
+                            <xsl:choose>
+                                <xsl:when test="index-list">
+                                    <xsl:apply-templates select="." mode="index-jump-nav" />
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:apply-templates select="." mode="index-button" />
+                                </xsl:otherwise>
+                            </xsl:choose>
                             <!-- span to encase Prev/Up/Next buttons and float right -->
                             <xsl:element name="span">
                                 <xsl:attribute name="class">
