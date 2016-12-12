@@ -395,24 +395,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\ifluatex\usepackage{realscripts}\fi&#xa;</xsl:text>
     <!-- TODO: put a xelatex/lualatex font package hook here? -->
     <xsl:text>%% &#xa;</xsl:text>
+    <!-- language tags appear in docinfo in renames, so be careful -->
     <xsl:text>%% Extensive support for other languages&#xa;</xsl:text>
     <xsl:text>\usepackage{polyglossia}&#xa;</xsl:text>
     <xsl:text>\setdefaultlanguage{english}&#xa;</xsl:text>
-    <xsl:if test="/mathbook/*[not(self::docinfo)]//*[@xml:lang='el']">
-        <xsl:text>%% Greek (Modern), loaded due to presence of 'el' language tag&#xa;</xsl:text>
+    <xsl:if test="/mathbook/*[not(self::docinfo)]//@xml:lang='el'">
+        <xsl:text>%% Greek (Modern) specified by 'el' language tag&#xa;</xsl:text>
         <!-- <xsl:text>\setotherlanguage[variant=ancient,numerals=greek]{greek}&#xa;</xsl:text> -->
         <xsl:text>\setotherlanguage[numerals=greek]{greek}&#xa;</xsl:text>
         <xsl:text>\newfontfamily\greekfont[Script=Greek]{GFS Artemisia}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% Korean&#xa;</xsl:text>
-    <xsl:text>\setotherlanguage{korean}&#xa;</xsl:text>
-    <xsl:text>\newfontfamily\koreanfont{NanumMyeongjo}&#xa;</xsl:text>
+    <xsl:if test="/mathbook/*[not(self::docinfo)]//@xml:lang='ko-KR'">
+        <xsl:text>%% Korean specified by 'ko-KR' language tag&#xa;</xsl:text>
+        <xsl:text>\setotherlanguage{korean}&#xa;</xsl:text>
+        <xsl:text>\newfontfamily\koreanfont{NanumMyeongjo}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>%% Magyar (Hungarian)&#xa;</xsl:text>
     <xsl:text>\setotherlanguage{magyar}&#xa;</xsl:text>
     <!-- http://tex.stackexchange.com/questions/91507/liberation-mono-the-current-roman-font-does-not-contain-the-cyrillic-script -->
-    <xsl:text>%% Russian&#xa;</xsl:text>
-    <xsl:text>\setotherlanguage{russian}&#xa;</xsl:text>
-    <xsl:text>\newfontfamily\cyrillicfont{Liberation Serif}&#xa;</xsl:text>
+    <xsl:if test="/mathbook/*[not(self::docinfo)]//@xml:lang='ru-RU'">
+        <xsl:text>%% Russian specified by 'ru-RU' language tag&#xa;</xsl:text>
+        <xsl:text>\setotherlanguage{russian}&#xa;</xsl:text>
+        <xsl:text>\newfontfamily\cyrillicfont{Liberation Serif}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>%% Spanish&#xa;</xsl:text>
     <xsl:text>\setotherlanguage{spanish}&#xa;</xsl:text>
     <xsl:text>%% Vietnamese&#xa;</xsl:text>
