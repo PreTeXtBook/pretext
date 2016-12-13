@@ -2145,6 +2145,15 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:apply-templates select="parent::*" mode="serial-number" />
 </xsl:template>
 
+<!-- Multi-part WeBWorK problems have MBX elements        -->
+<!-- called "stage" which typically render as "Part..."   -->
+<!-- Their serial numbers are useful, there is no attempt -->
+<!-- above to integrate these into our general scheme     -->
+<!-- These are just counted among enclosing "webwork"     -->
+<xsl:template match="stage" mode="serial-number">
+        <xsl:number count="stage" from="webwork" />
+</xsl:template>
+
 <!-- Convert this to a warning?  Should not drop in here ever? -->
 <xsl:template match="*" mode="serial-number">
     <xsl:text>[NUM]</xsl:text>

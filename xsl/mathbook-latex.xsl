@@ -2988,7 +2988,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
     <xsl:text>\noindent%&#xa;</xsl:text>
     <xsl:text>\textbf{Part </xsl:text>
-    <xsl:number count="stage" from="webwork" />
+    <xsl:apply-templates select="." mode="serial-number" />
     <xsl:text>.}\quad </xsl:text>
     <xsl:apply-templates />
     <xsl:text>\par&#xa;</xsl:text>
