@@ -9,6 +9,14 @@
 
 <mathbook xmlns:xi="http://www.w3.org/2001/XInclude">
 
+    <docinfo>
+        <search>
+            <google>
+                <cx>008832104071767086392:woji51c1uko</cx>
+            </google>
+        </search>
+    </docinfo>
+
     <book xml:id="mathbook-author-guide">
         <title>MathBook XML Author's Guide</title>
 
