@@ -261,6 +261,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- HTML files as output -->
 <xsl:variable name="file-extension" select="'.html'" />
 
+<!-- A boolean variable for Google Custom Search Engine add-on -->
+<xsl:variable name="b-google-cse" select="boolean(/mathbook/docinfo/search/google)" />
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
@@ -5716,6 +5719,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:if test="/mathbook//program">
                 <xsl:call-template name="goggle-code-prettifier" />
             </xsl:if>
+            <xsl:call-template name="google-search-box-js" />
             <xsl:call-template name="knowl" />
             <xsl:call-template name="mathbook-js" />
             <xsl:call-template name="fonts" />
@@ -5742,6 +5746,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:call-template name="latex-macros" />
              <header id="masthead" class="smallbuttons">
                 <div class="banner">
+                    <xsl:call-template name="google-search-box" />
                     <div class="container">
                         <xsl:call-template name="brand-logo" />
                         <div class="title-container">
@@ -5765,11 +5770,11 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                                 <xsl:apply-templates select="//frontmatter/titlepage/author" mode="name-list"/>
                                 <xsl:apply-templates select="//frontmatter/titlepage/editor" mode="name-list"/>
                             </p>
-                        </div>
-                    </div>
-                </div>
+                        </div>  <!-- title-container -->
+                    </div>  <!-- container -->
+                </div> <!-- banner -->
             <xsl:apply-templates select="." mode="primary-navigation" />
-            </header>
+            </header> <!-- masthead -->
             <div class="page">
                 <xsl:apply-templates select="." mode="sidebars" />
                 <main class="main">
@@ -6770,11 +6775,41 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
 </xsl:template>
 
+<!-- JS setup for a Google Custom Search Engine box -->
+<!-- Empty if not enabled via presence of cx number -->
+<xsl:template name="google-search-box-js">
+    <xsl:if test="$b-google-cse">
+        <xsl:element name="script">
+            <xsl:text>(function() {&#xa;</xsl:text>
+            <xsl:text>  var cx = '</xsl:text>
+            <xsl:value-of select="/mathbook/docinfo/search/google/cx" />
+            <xsl:text>';&#xa;</xsl:text>
+            <xsl:text>  var gcse = document.createElement('script');&#xa;</xsl:text>
+            <xsl:text>  gcse.type = 'text/javascript';&#xa;</xsl:text>
+            <xsl:text>  gcse.async = true;&#xa;</xsl:text>
+            <xsl:text>  gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;&#xa;</xsl:text>
+            <xsl:text>  var s = document.getElementsByTagName('script')[0];&#xa;</xsl:text>
+            <xsl:text>  s.parentNode.insertBefore(gcse, s);&#xa;</xsl:text>
+            <xsl:text>})();&#xa;</xsl:text>
+        </xsl:element>
+    </xsl:if>
+</xsl:template>
+
+<!-- Div for Google Search -->
+<!-- https://developers.google.com/custom-search/docs/element -->
+<!-- Empty if not enabled via presence of cx number           -->
+<xsl:template name="google-search-box">
+    <xsl:if test="$b-google-cse">
+        <div class="searchwrapper">
+            <div class="gcse-search" />
+        </div>
+    </xsl:if>
+</xsl:template>
+
 <!-- Knowl header -->
 <xsl:template name="knowl">
 <link href="https://aimath.org/knowlstyle.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="https://aimath.org/knowl.js"></script>
-
 </xsl:template>
 
 <!-- Mathbook Javascript header -->
