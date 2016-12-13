@@ -2593,7 +2593,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- And then there is a resetting of the carriage. An introduction preceding a   -->
 <!-- webwork needs an additional \par at the end (if there even was an intro)     -->
 <xsl:template match="introduction[following-sibling::webwork]">
-    <xsl:apply-templates select="." mode="console-typeout" />
     <xsl:apply-templates select="*" />
     <xsl:text>\par\medskip&#xa;</xsl:text>
 </xsl:template>
@@ -2616,7 +2615,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- webwork conclusions forego the \bigbreak  -->
 <!-- To stand apart, a medskip and noindent    -->
 <xsl:template match="conclusion[preceding-sibling::webwork]">
-    <xsl:apply-templates select="." mode="console-typeout" />
     <xsl:text>\medskip\noindent </xsl:text>
     <xsl:apply-templates select="*" />
     <xsl:text>\par&#xa;</xsl:text>
@@ -2970,24 +2968,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="webwork/macros" />
 <xsl:template match="webwork/setup" />
 
-<!-- default template, for complete presentation -->
-<!-- TODO: internationalize Problem/Part         -->
+<!-- default template for problem statement -->
 <xsl:template match="webwork//statement">
     <xsl:text>\noindent%&#xa;</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>\par&#xa;</xsl:text>
+</xsl:template>
+
+<!-- For statements inside a "stage" of a problem -->
+<!-- TODO: internationalize Part                  -->
+<xsl:template match="webwork//statement[parent::stage]">
     <xsl:choose>
-        <xsl:when test="parent::stage and count(parent::stage/preceding-sibling::stage)=0">
-            <xsl:text>\par\noindent%&#xa;</xsl:text>
-            <xsl:text>\textbf{Part </xsl:text>
-            <xsl:number count="stage" from="webwork" />
-            <xsl:text>.}\quad </xsl:text>
+        <xsl:when test="not(parent::stage/preceding-sibling::stage)">
+            <xsl:text>\par</xsl:text>
         </xsl:when>
-        <xsl:when test="parent::stage">
-            <xsl:text>\medskip\noindent%&#xa;</xsl:text>
-            <xsl:text>\textbf{Part </xsl:text>
-            <xsl:number count="stage" from="webwork" />
-            <xsl:text>.}\quad </xsl:text>
-        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\medskip</xsl:text>
+        </xsl:otherwise>
     </xsl:choose>
+    <xsl:text>\noindent%&#xa;</xsl:text>
+    <xsl:text>\textbf{Part </xsl:text>
+    <xsl:number count="stage" from="webwork" />
+    <xsl:text>.}\quad </xsl:text>
     <xsl:apply-templates />
     <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
