@@ -719,6 +719,8 @@
         <xsl:text>"!</xsl:text>
     </xsl:if>
     <xsl:text>)@]* </xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- We need to override the HTML template that  -->
@@ -1117,6 +1119,7 @@
 
 <!-- Implement PGML unordered lists -->
 <xsl:template match="webwork//ul|webwork//ol">
+    <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
