@@ -44,7 +44,7 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
             <p>This is a sample MathBook XML document to demonstrate and test different fonts used for different languages.  For PDF output, and best results, process with <c>xelatex</c> (or <c>lualatex</c>, unsupported).  If processed with <c>pdflatex</c>,  be prepared for errors, and maybe try running with the command-line option <c>-interaction batchmode</c> or <c>-interaction nonstopmode</c>.  Commentary here, and in the original source file, should help you track down what might be missing in your system if the <c>xelatex</c> results are not satisfactory.  You can also compare PDF output with the HTML output, which should work well for many different characters tested here.</p>
 
             <ol>
-                <li>Your source XML file should always have <c latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c> as the first line of the file to specify that your file contains Unicode characters.</li>
+                <li>Your source XML file should always have <cd latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</cd> as the first line of the file to specify that your file contains Unicode characters.</li>
 
                 <li>You will need to determine how to make your operating system, keyboard and editor cooperate to create the Unicode characters you need.  The <url href="http://www.cs.tut.fi/~jkorpela/fui.html8">Full Unicode Input utility</url> can be useful for generating short snippets or you can copy/paste from the source of this document.</li>
 
@@ -89,7 +89,7 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
 
             <p><ul>
                 <li>Language code: <c>el</c></li>
-                <li>Font: <c>GFS Artemisia</c></li>
+                <li>Font: <c>CMU Serif</c> (Computer Modern Unicode)</li>
                 <li>Source: NA</li><!-- get info from Jarhme -->
             </ul></p>
 
@@ -115,7 +115,7 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
 
             <p><ul>
                 <li>Language code: <c>hu-HU</c></li>
-                <li>Font: <c>Latin Modern</c> (default)</li>
+                <li>Font: <c>Latin Modern</c></li>
                 <li>Source: <url href="https://hu.wikipedia.org/wiki/Budapest">Wikipedia Budapest entry</url>, accessed 2016-07-25.</li>
             </ul></p>
 
@@ -133,7 +133,7 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
 
             <p><ul>
                 <li>Language code: <c>ru-RU</c></li>
-                <li>Font: <c>Liberation Serif</c></li>
+                <li>Font: <c>CMU Serif</c> (Computer Modern Unicode)</li>
                 <li>Source: <url href="https://ru.wikipedia.org/wiki/%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0">Wikipedia Moscow entry</url>, accessed 2016-12-09.</li>
             </ul></p>
 
@@ -152,7 +152,7 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
 
             <p><ul>
                 <li>Language code: <c>es-ES</c></li>
-                <li>Font: <c>Latin Modern</c> (default)</li>
+                <li>Font: <c>Latin Modern</c></li>
                 <li>Source: <url href="https://es.wikipedia.org/wiki/Madrid">Wikipedia Madrid entry</url>, accessed 2016-07-25.</li>
             </ul></p>
 
@@ -174,7 +174,7 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
 
             <p><ul>
                 <li>Language code: <c>vi-VN</c></li>
-                <li>Font: <c>Latin Modern</c> (default)</li>
+                <li>Font: <c>Latin Modern</c></li>
                 <li>Source: <url href="https://vi.wikipedia.org/wiki/H%C3%A0_N%E1%BB%99i">Wikipedia Hà Nội entry</url>, accessed 2016-07-25.</li>
             </ul></p>
 

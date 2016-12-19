@@ -401,9 +401,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\setdefaultlanguage{english}&#xa;</xsl:text>
     <xsl:if test="/mathbook/*[not(self::docinfo)]//@xml:lang='el'">
         <xsl:text>%% Greek (Modern) specified by 'el' language tag&#xa;</xsl:text>
+        <xsl:text>%% Font families: CMU Serif, Linux Libertine O, GFS Artemisia&#xa;</xsl:text>
         <!-- <xsl:text>\setotherlanguage[variant=ancient,numerals=greek]{greek}&#xa;</xsl:text> -->
-        <xsl:text>\setotherlanguage[numerals=greek]{greek}&#xa;</xsl:text>
-        <xsl:text>\newfontfamily\greekfont[Script=Greek]{GFS Artemisia}&#xa;</xsl:text>
+        <xsl:text>\setotherlanguage{greek}&#xa;</xsl:text>
+        <xsl:text>\newfontfamily\greekfont[Script=Greek]{CMU Serif}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="/mathbook/*[not(self::docinfo)]//@xml:lang='ko-KR'">
         <xsl:text>%% Korean specified by 'ko-KR' language tag&#xa;</xsl:text>
@@ -412,11 +413,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>%% Magyar (Hungarian)&#xa;</xsl:text>
     <xsl:text>\setotherlanguage{magyar}&#xa;</xsl:text>
-    <!-- http://tex.stackexchange.com/questions/91507/liberation-mono-the-current-roman-font-does-not-contain-the-cyrillic-script -->
     <xsl:if test="/mathbook/*[not(self::docinfo)]//@xml:lang='ru-RU'">
         <xsl:text>%% Russian specified by 'ru-RU' language tag&#xa;</xsl:text>
+        <xsl:text>%% Font families: CMU Serif, Linux Libertine O&#xa;</xsl:text>
         <xsl:text>\setotherlanguage{russian}&#xa;</xsl:text>
-        <xsl:text>\newfontfamily\cyrillicfont{Liberation Serif}&#xa;</xsl:text>
+        <xsl:text>\newfontfamily\cyrillicfont[Script=Cyrillic]{CMU Serif}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% Spanish&#xa;</xsl:text>
     <xsl:text>\setotherlanguage{spanish}&#xa;</xsl:text>
