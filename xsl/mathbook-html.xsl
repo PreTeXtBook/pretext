@@ -2485,7 +2485,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- no heading, since captioned -->
-<xsl:template match="&FIGURE-LIKE;|list" mode="heading-birth" />
+<xsl:template match="&FIGURE-LIKE;" mode="heading-birth" />
 
 <xsl:template match="figure|table|listing" mode="body">
     <xsl:apply-templates select="*[not(self::caption)]"/>
