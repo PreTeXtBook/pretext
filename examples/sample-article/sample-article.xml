@@ -789,6 +789,10 @@ the xsltproc executable.
                         </tabular>
                     </table>
                 </assemblage>
+
+                <assemblage>
+                    <p>This is a small <c>assemblage</c> with no title, simply to make sure the surrounding box behaves properly, especially for <latex /> output.</p>
+                </assemblage>
             </subsection>
 
             <subsection xml:id="subsection-intro-conclude">

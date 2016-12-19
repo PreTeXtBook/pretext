@@ -832,12 +832,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- TODO: load just once, see webwork -->
         <xsl:text>\usepackage[framemethod=tikz]{mdframed}&#xa;</xsl:text>
         <xsl:if test="//assemblage">
-            <xsl:text>%% assemblage: minimally structured content, high visibility presentation&#xa;</xsl:text>
-            <xsl:text>%% assemblage environment and style&#xa;</xsl:text>
+            <xsl:text>%% begin: assemblage&#xa;</xsl:text>
+            <xsl:text>%% minimally structured content, high visibility presentation&#xa;</xsl:text>
+            <xsl:text>%% environments (untitled, titled), with style&#xa;</xsl:text>
+            <xsl:text>\newenvironment{assemblage-untitled}{\mdfsetup{%&#xa;</xsl:text>
+            <xsl:text>roundcorner=2ex, backgroundcolor=blue!5,linecolor=blue!75!black,}%&#xa;</xsl:text>
+            <xsl:text>\begin{mdframed}}{\end{mdframed}}&#xa;</xsl:text>
             <xsl:text>\newenvironment{assemblage}[1]{\mdfsetup{frametitle={\colorbox{blue!20}{\space#1\space}},%&#xa;</xsl:text>
             <xsl:text>frametitlealignment={\hspace*{1ex}}, frametitleaboveskip=-1.5ex, frametitlebelowskip=0pt,%&#xa;</xsl:text>
-            <xsl:text>roundcorner=2ex, backgroundcolor=blue!5,%&#xa;</xsl:text>
-            <xsl:text>linecolor=blue!75!black,} \begin{mdframed}}{\end{mdframed}}&#xa;</xsl:text>
+            <xsl:text>roundcorner=2ex, backgroundcolor=blue!5,linecolor=blue!75!black,}%&#xa;</xsl:text>
+            <xsl:text>\begin{mdframed}}{\end{mdframed}}&#xa;</xsl:text>
+            <xsl:text>%% end: assemblage&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="//aside or //historical or //biographical">
             <xsl:text>%% aside, biographical, historical environments and style&#xa;</xsl:text>
@@ -3211,8 +3216,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{aside}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- An assemblage is low-structure content, high-visibility presentation -->
+<!-- Assemblages -->
+<!-- Low-structure content, high-visibility presentation -->
+<!-- Title is optional, keep remainders coordinated      -->
+
+<!-- Less specific first, untitled version -->
 <xsl:template match="assemblage">
+    <xsl:text>\begin{assemblage-untitled}</xsl:text>
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="p|table|figure|sidebyside" />
+    <xsl:text>\end{assemblage-untitled}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- More-specific next, title as environment parameter -->
+<xsl:template match="assemblage[title]">
     <xsl:text>\begin{assemblage}{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}</xsl:text>
