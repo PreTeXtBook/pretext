@@ -854,17 +854,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="notation-list">
     <table>
         <tr>
-            <th style="text-align:left">
+            <th style="text-align:left;">
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'symbol'" />
                 </xsl:call-template>
             </th>
-            <th style="text-align:left">
+            <th style="text-align:left;">
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'description'" />
                 </xsl:call-template>
             </th>
-            <th style="text-align:left">
+            <th style="text-align:left;">
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'location'" />
                 </xsl:call-template>
@@ -879,15 +879,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Create a cross-reference to enclosing content -->
 <xsl:template match="notation" mode="backmatter">
     <tr>
-        <td>
+        <td style="text-align:left; vertical-align:top;">
             <xsl:text>\(</xsl:text>
             <xsl:value-of select="usage" />
             <xsl:text>\)</xsl:text>
         </td>
-        <td>
+        <td style="text-align:left; vertical-align:top;">
             <xsl:apply-templates select="description" />
         </td>
-        <td>
+        <td style="text-align:left; vertical-align:top;">
             <xsl:apply-templates select="." mode="enclosure-xref" />
         </td>
     </tr>

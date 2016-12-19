@@ -970,6 +970,11 @@ the xsltproc executable.
                 <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
             </md></p>
 
+            <notation>
+                <usage>\rho</usage>
+                <description>this symbol could be used for lots of things, but we are just trying to make a super-long description to get it to wrap within the column where it belongs, which is sometimes set to a fixed width to accomodate really complicated explanations</description>
+            </notation>
+
             <p><latex /> has a device where you can interrupt a sequence of equations with a small amout of text and preserve the equation alignment on eithr side.  Here are two tests of that device, with aligned equations and non-aligned equations.  Study the source to see use and differences.  (The math does not make sense.)  Aligned and numbered first.</p>
 
             <p><mdn>

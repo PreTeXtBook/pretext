@@ -2235,8 +2235,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Deccription column is "p" to enable word-wrapping  -->
+<!-- The 60% width is arbitrary, could see improvements -->
 <xsl:template match="notation-list">
-    <xsl:text>\begin{longtable}[l]{llr}&#xa;</xsl:text>
+    <xsl:text>\begin{longtable}[l]{lp{0.60\textwidth}r}&#xa;</xsl:text>
     <xsl:text>\textbf{</xsl:text>
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'symbol'" />
