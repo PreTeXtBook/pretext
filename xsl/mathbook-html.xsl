@@ -3431,6 +3431,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- on match in label templates.      -->
 <xsl:template match="ol|ul">
     <xsl:element name="{local-name(.)}">
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:attribute>
         <xsl:if test="@cols">
             <xsl:attribute name="class">
                 <!-- HTML-specific, but in mathbook-common.xsl -->
@@ -3450,6 +3453,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- But no support for multiple columns      -->
 <xsl:template match="dl">
     <xsl:element name="dl">
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:attribute>
         <xsl:attribute name="class">
             <xsl:choose>
                 <xsl:when test="@width = 'narrow'">
