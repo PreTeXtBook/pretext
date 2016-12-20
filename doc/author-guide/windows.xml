@@ -197,7 +197,7 @@
       <list xml:id="steps-install-git">
         <ol>
           <li>
-            <p>Visit the official <c>git</c> <url href="https://git- scm.com/download/win">download page</url> (download starts automatically) and obtain the latest binary for your system.</p>
+            <p>Visit the official <c>git</c> <url href="https://git-scm.com/download/win">download page</url> (download starts automatically) and obtain the latest binary for your system.</p>
           </li>
           <li>
             <p>Find the installer in your Download location and run it.</p>
