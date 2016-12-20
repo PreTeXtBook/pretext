@@ -6301,12 +6301,22 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <div class="container">
             <!-- Several buttons across the top -->
             <div class="navbar-top-buttons">
-                <!-- "contents" button is uniform across logic, style -->
-                <button class="sidebar-left-toggle-button button active">
+                <!-- "contents" button brings up document root page       -->
+                <!-- Perhaps better to make a link and style as a button? -->
+                <!-- http://stackoverflow.com/questions/2906582           -->
+                <xsl:element name="button">
+                    <xsl:attribute name="class">
+                        <xsl:text>sidebar-left-toggle-button button active</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="onclick">
+                        <xsl:text>window.location.href='</xsl:text>
+                        <xsl:apply-templates select="$document-root" mode="url" />
+                        <xsl:text>'</xsl:text>
+                    </xsl:attribute>
                     <xsl:call-template name="type-name">
                         <xsl:with-param name="string-id" select="'toc'" />
                     </xsl:call-template>
-                </button>
+                </xsl:element>
                 <!-- Prev/Up/Next buttons on top, according to options -->
                 <xsl:choose>
                     <xsl:when test="$nav-style = 'full'">

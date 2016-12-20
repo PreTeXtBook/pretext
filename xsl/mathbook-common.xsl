@@ -384,6 +384,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- The main "mathbook" element only has two possible children     -->
+<!-- One is "docinfo", the other is "book", "article", etc.         -->
+<!-- This is of interest by itself, or the root of content searches -->
+<xsl:variable name="document-root" select="/mathbook/*[not(self::docinfo)]" />
+
 <!-- We read the document language translation -->
 <!-- nodes out of the right file, which relies -->
 <!-- on filenames with country codes           -->
