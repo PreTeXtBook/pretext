@@ -47,7 +47,12 @@
             </ol>
           </li>
           <li>
-            <p>On Windows 10: To be completed.</p>
+            <p>On Windows 10:</p>
+            <ol>
+              <li><p>Open the Start Menu (icon shaped like a Window at the bottom left, typically).  Select the <c>File Explorer</c> option, right above <c>Settings</c>, from the popup list.</p></li>
+              <li><p>Click on this, and then select <c>View</c> from the <q>ribbon lists</q> of options along the top.</p></li>
+              <li><p>After clicking this, on the right there should be a check box for <q>File Name Extensions</q>.  Click this box; that should do it.</p></li>
+            </ol>
           </li>
         </ul>
       </list>
