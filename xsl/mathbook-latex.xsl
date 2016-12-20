@@ -1538,6 +1538,104 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\setlength{\fboxsep}{-1pt}&#xa;</xsl:text>
     </xsl:if>
 
+    <!-- PGML definitions. What follows is the PGML problem preamble in its entirety, taken from  -->
+    <!-- https://github.com/openwebwork/pg/blob/master/macros/PGML.pl. However some lines are     -->
+    <!-- commented out, as they clash with MBX LaTeX.                                             -->
+    <xsl:if test="//webwork[@source]">
+        <xsl:text>%% PGML macros&#xa;</xsl:text>
+        <xsl:text>%% formatted to exactly match output from PGML.pl as of 11/22/2016&#xa;</xsl:text>
+        <xsl:text>%% but with some lines commented out&#xa;</xsl:text>
+        <xsl:text>%\ifx\pgmlMarker\undefined&#xa;</xsl:text>
+        <xsl:text>%  \newdimen\pgmlMarker \pgmlMarker=0.00314159pt  % hack to tell if \newline was used&#xa;</xsl:text>
+        <xsl:text>%\fi&#xa;</xsl:text>
+        <xsl:text>%\ifx\oldnewline\undefined \let\oldnewline=\newline \fi&#xa;</xsl:text>
+        <xsl:text>%\def\newline{\oldnewline\hskip-\pgmlMarker\hskip\pgmlMarker\relax}%&#xa;</xsl:text>
+        <xsl:text>%\parindent=0pt&#xa;</xsl:text>
+        <xsl:text>%\catcode`\^^M=\active&#xa;</xsl:text>
+        <xsl:text>%\def^^M{\ifmmode\else\fi\ignorespaces}%  skip paragraph breaks in the preamble&#xa;</xsl:text>
+        <xsl:text>%\def\par{\ifmmode\else\endgraf\fi\ignorespaces}%&#xa;</xsl:text>
+        <xsl:text>%\ifdim\lastskip=\pgmlMarker&#xa;</xsl:text>
+        <xsl:text>%  \let\pgmlPar=\relax&#xa;</xsl:text>
+        <xsl:text>% \else&#xa;</xsl:text>
+        <xsl:text>  \let\pgmlPar=\par&#xa;</xsl:text>
+        <xsl:text>%  \vadjust{\kern3pt}%&#xa;</xsl:text>
+        <xsl:text>%\fi&#xa;</xsl:text>
+        <xsl:text>%&#xa;</xsl:text>
+        <xsl:text>%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%%    definitions for PGML&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%&#xa;</xsl:text>
+        <xsl:text>%\ifx\pgmlCount\undefined  % do not redefine if multiple files load PGML.pl&#xa;</xsl:text>
+        <xsl:text>  \newcount\pgmlCount&#xa;</xsl:text>
+        <xsl:text>  \newdimen\pgmlPercent&#xa;</xsl:text>
+        <xsl:text>  \newdimen\pgmlPixels  \pgmlPixels=.5pt&#xa;</xsl:text>
+        <xsl:text>%\fi&#xa;</xsl:text>
+        <xsl:text>%\pgmlPercent=.01\hsize&#xa;</xsl:text>
+        <xsl:text>%&#xa;</xsl:text>
+        <xsl:text>\def\pgmlSetup{%&#xa;</xsl:text>
+        <xsl:text>  \parskip=0pt \parindent=0pt&#xa;</xsl:text>
+        <xsl:text>%  \ifdim\lastskip=\pgmlMarker\else\par\fi&#xa;</xsl:text>
+        <xsl:text>  \pgmlPar&#xa;</xsl:text>
+        <xsl:text>}%&#xa;</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>\def\pgmlIndent{\par\advance\leftskip by 2em \advance\pgmlPercent by .02em \pgmlCount=0}%&#xa;</xsl:text>
+        <xsl:text>\def\pgmlbulletItem{\par\indent\llap{$\bullet$ }\ignorespaces}%&#xa;</xsl:text>
+        <xsl:text>\def\pgmlcircleItem{\par\indent\llap{$\circ$ }\ignorespaces}%&#xa;</xsl:text>
+        <xsl:text>\def\pgmlsquareItem{\par\indent\llap{\vrule height 1ex width .75ex depth -.25ex\ }\ignorespaces}%&#xa;</xsl:text>
+        <xsl:text>\def\pgmlnumericItem{\par\indent\advance\pgmlCount by 1 \llap{\the\pgmlCount. }\ignorespaces}%&#xa;</xsl:text>
+        <xsl:text>\def\pgmlalphaItem{\par\indent{\advance\pgmlCount by `\a \llap{\char\pgmlCount. }}\advance\pgmlCount by 1\ignorespaces}%&#xa;</xsl:text>
+        <xsl:text>\def\pgmlAlphaItem{\par\indent{\advance\pgmlCount by `\A \llap{\char\pgmlCount. }}\advance\pgmlCount by 1\ignorespaces}%&#xa;</xsl:text>
+        <xsl:text>\def\pgmlromanItem{\par\indent\advance\pgmlCount by 1 \llap{\romannumeral\pgmlCount. }\ignorespaces}%&#xa;</xsl:text>
+        <xsl:text>\def\pgmlRomanItem{\par\indent\advance\pgmlCount by 1 \llap{\uppercase\expandafter{\romannumeral\pgmlCount}. }\ignorespaces}%&#xa;</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>\def\pgmlCenter{%&#xa;</xsl:text>
+        <xsl:text>  \par \parfillskip=0pt&#xa;</xsl:text>
+        <xsl:text>  \advance\leftskip by 0pt plus .5\hsize&#xa;</xsl:text>
+        <xsl:text>  \advance\rightskip by 0pt plus .5\hsize&#xa;</xsl:text>
+        <xsl:text>  \def\pgmlBreak{\break}%&#xa;</xsl:text>
+        <xsl:text>}%&#xa;</xsl:text>
+        <xsl:text>\def\pgmlRight{%&#xa;</xsl:text>
+        <xsl:text>  \par \parfillskip=0pt&#xa;</xsl:text>
+        <xsl:text>  \advance\leftskip by 0pt plus \hsize&#xa;</xsl:text>
+        <xsl:text>  \def\pgmlBreak{\break}%&#xa;</xsl:text>
+        <xsl:text>}%&#xa;</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>\def\pgmlBreak{\\}%&#xa;</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>\def\pgmlHeading#1{%&#xa;</xsl:text>
+        <xsl:text>  \par\bfseries&#xa;</xsl:text>
+        <xsl:text>  \ifcase#1 \or\huge \or\LARGE \or\large \or\normalsize \or\footnotesize \or\scriptsize \fi&#xa;</xsl:text>
+        <xsl:text>}%&#xa;</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>\def\pgmlRule#1#2{%&#xa;</xsl:text>
+        <xsl:text>  \par\noindent&#xa;</xsl:text>
+        <xsl:text>  \hbox{%&#xa;</xsl:text>
+        <xsl:text>    \strut%&#xa;</xsl:text>
+        <xsl:text>    \dimen1=\ht\strutbox%&#xa;</xsl:text>
+        <xsl:text>    \advance\dimen1 by -#2%&#xa;</xsl:text>
+        <xsl:text>    \divide\dimen1 by 2%&#xa;</xsl:text>
+        <xsl:text>    \advance\dimen2 by -\dp\strutbox%&#xa;</xsl:text>
+        <xsl:text>    \raise\dimen1\hbox{\vrule width #1 height #2 depth 0pt}%&#xa;</xsl:text>
+        <xsl:text>  }%&#xa;</xsl:text>
+        <xsl:text>  \par&#xa;</xsl:text>
+        <xsl:text>}%&#xa;</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>\def\pgmlIC#1{\futurelet\pgmlNext\pgmlCheckIC}%&#xa;</xsl:text>
+        <xsl:text>\def\pgmlCheckIC{\ifx\pgmlNext\pgmlSpace \/\fi}%&#xa;</xsl:text>
+        <xsl:text>{\def\getSpace#1{\global\let\pgmlSpace= }\getSpace{} }%&#xa;</xsl:text>
+        <xsl:text>%&#xa;</xsl:text>
+        <xsl:text>%{\catcode`\ =12\global\let\pgmlSpaceChar= }%&#xa;</xsl:text>
+        <xsl:text>%{\obeylines\gdef\pgmlPreformatted{\par\small\ttfamily\hsize=10\hsize\obeyspaces\obeylines\let^^M=\pgmlNL\pgmlNL}}%&#xa;</xsl:text>
+        <xsl:text>%\def\pgmlNL{\par\bgroup\catcode`\ =12\pgmlTestSpace}%&#xa;</xsl:text>
+        <xsl:text>%\def\pgmlTestSpace{\futurelet\next\pgmlTestChar}%&#xa;</xsl:text>
+        <xsl:text>%\def\pgmlTestChar{\ifx\next\pgmlSpaceChar\ \pgmlTestNext\fi\egroup}%&#xa;</xsl:text>
+        <xsl:text>%\def\pgmlTestNext\fi\egroup#1{\fi\pgmlTestSpace}%&#xa;</xsl:text>
+        <xsl:text>%&#xa;</xsl:text>
+        <xsl:text>%\def^^M{\ifmmode\else\space\fi\ignorespaces}%&#xa;</xsl:text>
+        <xsl:text>%% END PGML macros&#xa;</xsl:text>
+    </xsl:if>
+
 </xsl:template>
 
 <!-- Tack in a graphic with initials                   -->
@@ -3126,7 +3224,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Here, we just provide a light wrapper, and drop an    -->
 <!-- include, since the basename for the filenames has     -->
 <!-- been managed by the  mbx  script to be predictable.   -->
-<xsl:template match="webwork[@source]|webwork[descendant::image[@pg-name]]">
+<xsl:template match="webwork[@source]">
     <!-- directory of server LaTeX must be specified -->
     <xsl:if test="$webwork.server.latex = ''">
         <xsl:message terminate="yes">MBX:ERROR   For LaTeX versions of WeBWorK problems on a server, the mbx script will collect the LaTeX source and then this conversion must specify the location through the "webwork.server.latex" command line stringparam.  Quitting...</xsl:message>
@@ -3144,7 +3242,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="introduction" /> <!-- before boxed problem -->
     <xsl:text>\begin{mdframed}&#xa;</xsl:text>
     <xsl:text>{</xsl:text> <!-- prophylactic wrapper -->
-    <xsl:value-of select="$server-tex/preamble" />
+    <!-- mbx script collects problem preamble, but we do not use it here -->
     <!-- process in the order server produces them, may be several -->
     <xsl:apply-templates select="$server-tex/statement|$server-tex/solution|$server-tex/hint" />
     <xsl:text>}</xsl:text>
@@ -3181,6 +3279,56 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates />
     </xsl:if>
 </xsl:template>
+
+<!-- ############################# -->
+<!-- WeBWorK Images   from Servers -->
+<!-- ############################# -->
+
+<!-- When a webwork exercise is written in MBX source, but -->
+<!-- uses an image with an @pg-name, we make the exercise  -->
+<!-- in the usual way but include an image which has been  -->
+<!-- created by the mbx script with a predictable name     -->
+<!-- For such images, width and height are pixel counts    -->
+<!-- sent to the PG image creator, intended to define the  -->
+<!-- width of HTML output. A separate tex_size is intended -->
+<!-- to define width of LaTeX output. tex_size of say 800  -->
+<!-- means 0.800\linewidth. We use 400px for the default   -->
+<!-- width in mathbook-webwork-pg. Since 600px is the      -->
+<!-- default design width in html, we use 667 as the       -->
+<!-- default for tex_size                                  -->
+
+<xsl:template match="webwork//image[@pg-name]">
+    <!-- We must count all images that came before this one.   -->
+    <!-- Note DTD permits webwork/(statement,hint?,solution?)  -->
+    <!-- or numerous webwork/stage/(statement,hint?,solution?) -->
+    <!-- 1 for self, plus preceding-sibling images             -->
+    <!-- plus if in a hint, count inside preceding statment    -->
+    <!-- plus if in a solution, count inside preceding         -->
+    <!-- statment and hint                                     -->
+    <!-- plus if inside a stage, count in preceding stages     -->
+    <xsl:variable name="png-position" select="1+count(preceding-sibling::image[@pg-name])+count(ancestor::hint/preceding-sibling::statement//image[@pg-name])+count(ancestor::solution/preceding-sibling::statement//image[@pg-name])+count(ancestor::solution/preceding-sibling::hint//image[@pg-name])+count(ancestor::stage/preceding-sibling::stage//image[@pg-name])"/>
+    <xsl:variable name="png-filename">
+        <!-- assumes path has trailing slash -->
+        <xsl:value-of select="$webwork.server.latex" />
+        <xsl:apply-templates select="ancestor::webwork" mode="internal-id" />
+        <xsl:text>-image-</xsl:text>
+        <xsl:value-of select="$png-position" />
+        <xsl:text>.png</xsl:text>
+    </xsl:variable>
+    <xsl:text>\includegraphics[width=</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@tex_size">
+            <xsl:value-of select="@tex_size*0.001"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>0.667</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>\linewidth]{</xsl:text>
+    <xsl:value-of select="$png-filename" />
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- Remark Like, Example Like, Project Like -->
 <!-- Simpler than theorems, definitions, etc            -->

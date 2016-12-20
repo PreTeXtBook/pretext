@@ -949,7 +949,7 @@
                             </image>
                         </figure>
 
-                        <p><m>x=</m> <var name="$answer"/></p>
+                        <p><m>x=</m> <var name="$answer" width="5"/></p>
                     </statement>
 
                     <solution>
