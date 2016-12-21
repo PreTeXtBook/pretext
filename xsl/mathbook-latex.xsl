@@ -3127,7 +3127,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Here, we just provide a light wrapper, and drop an    -->
 <!-- include, since the basename for the filenames has     -->
 <!-- been managed by the  mbx  script to be predictable.   -->
-<xsl:template match="webwork[@source]|webwork[descendant::image[@pg-name]]">
+<xsl:template match="webwork[@source]">
     <!-- directory of server LaTeX must be specified -->
     <xsl:if test="$webwork.server.latex = ''">
         <xsl:message terminate="yes">MBX:ERROR   For LaTeX versions of WeBWorK problems on a server, the mbx script will collect the LaTeX source and then this conversion must specify the location through the "webwork.server.latex" command line stringparam.  Quitting...</xsl:message>
@@ -3145,7 +3145,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="introduction" /> <!-- before boxed problem -->
     <xsl:text>\begin{mdframed}&#xa;</xsl:text>
     <xsl:text>{</xsl:text> <!-- prophylactic wrapper -->
-    <xsl:value-of select="$server-tex/preamble" />
+    <!-- mbx script collects problem preamble, but we do not use it here -->
     <!-- process in the order server produces them, may be several -->
     <xsl:apply-templates select="$server-tex/statement|$server-tex/solution|$server-tex/hint" />
     <xsl:text>}</xsl:text>
@@ -3182,6 +3182,44 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates />
     </xsl:if>
 </xsl:template>
+
+<!-- ############################# -->
+<!-- WeBWorK Images   from Servers -->
+<!-- ############################# -->
+
+<!-- When a webwork exercise is written in MBX source, but -->
+<!-- uses an image with an @pg-name, we make the exercise  -->
+<!-- in the usual way but include an image which has been  -->
+<!-- created by the mbx script with a predictable name     -->
+<!-- For such images, width and height are pixel counts    -->
+<!-- sent to the PG image creator, intended to define the  -->
+<!-- width of HTML output. A separate tex_size is intended -->
+<!-- to define width of LaTeX output. tex_size of say 800  -->
+<!-- means 0.800\linewidth. We use 400px for the default   -->
+<!-- width in mathbook-webwork-pg. Since 600px is the      -->
+<!-- default design width in html, we use 667 as the       -->
+<!-- default for tex_size                                  -->
+
+<xsl:template match="webwork//image[@pg-name]">
+    <xsl:text>\includegraphics[width=</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@tex_size">
+            <xsl:value-of select="@tex_size*0.001"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>0.667</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>\linewidth]{</xsl:text>
+        <!-- assumes path has trailing slash -->
+        <xsl:value-of select="$webwork.server.latex" />
+        <xsl:apply-templates select="ancestor::webwork" mode="internal-id" />
+        <xsl:text>-image-</xsl:text>
+        <xsl:number count="image[@pg-name]" from="webwork" level="any" />
+        <xsl:text>.png</xsl:text>
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- Remark Like, Example Like, Project Like -->
 <!-- Simpler than theorems, definitions, etc            -->
