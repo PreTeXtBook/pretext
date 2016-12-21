@@ -3481,7 +3481,7 @@ the xsltproc executable.
             <paragraphs>
                 <title>Monospace, Basic Latin and Latin-1 Supplement, <c>U+0000</c><ndash /><c>U+00FF</c></title>
 
-                <p>A monospace font is critical for samples of keyboard input and to distinguish exact technical input from running commentary.  We list here all of the reasonable characters from the first 256 Unicode code points.  (We skip the same 65 control characters from above, and the soft hyphen.)  These should all render fine in HTML and when processed with <c>xelatex</c>, however our focus with this sample article for PDF output is the capabilities when processed with <c>pdflatex</c>.  First, characters from <c>U+0000</c><ndash /><c>U+007F</c>.    (The two extra backslashes visible in <latex /> output are an artifact of placing these characters into a table and should be fixed.)</p>
+                <p>A monospace font is critical for samples of keyboard input and to distinguish exact technical input from running commentary.  We list here all of the reasonable characters from the first 256 Unicode code points.  (We skip the same 65 control characters from above, and the soft hyphen.)  These should all render fine in HTML and when processed with <c>xelatex</c>, however our focus with this sample article for PDF output is the capabilities when processed with <c>pdflatex</c>.  First, characters from <c>U+0000</c><ndash /><c>U+007F</c>.</p>
 
                 <!-- ex &#x0000; - &#x001F; controls -->
                 <!-- ex &#x007F; control             -->
@@ -3522,7 +3522,7 @@ the xsltproc executable.
 
                 <p>Note that the single and double quotes are upright and dumb, not curly and smart: <c>" ' " ' " '</c>.  The zero is distinguished from the capital <q>oh</q>: <c>0 O 0 O 0 O</c>.  And the numeral one is slightly different from the lower-case <q>ell</q>: <c>1 l 1 l 1 l</c>.  The hyphen should be short and not expanded into some other kind of dash: <c>- - -</c>.  These characters should all cut/paste out of a PDF into a text editor with no conversion to other characters.</p>
 
-                <p>Now the remaining characters from <c>U+0080</c><ndash /><c>U+00FF</c>.  Inline code (the <c>c</c> tag) and the <c>program</c> tag are implemented in <latex /> via the <c>listing</c> package and these characters require ad-hoc replacements for processing by <c>pdflatex</c>.  (You can see the replacements in the preamble of the <latex /> source for this document.)</p>
+                <p>Now the remaining characters from <c>U+0080</c><ndash /><c>U+00FF</c>.  Inline code (the <c>c</c> tag) and the <c>program</c> tag are implemented in <latex /> via the <c>listing</c> package and these characters require ad-hoc replacements for processing by <c>pdflatex</c>.  (You can see the replacements in the preamble of the <latex /> source for this document.)  The replacement mechanism provided by the <c>listing</c> package will cause the characters below to produce a <latex /> compilation error if processed by <c>pdflatex</c> and in a table cell in certain situations (which we have avoided in the table below).  The only workaround in this case is to switch to <c>xelatex</c>.</p>
 
                 <!-- ex &#x0080; - &#x009F; controls -->
                 <!-- ex &#x00A0; non-breaking space  -->

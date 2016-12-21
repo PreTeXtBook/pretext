@@ -290,7 +290,7 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
             <paragraphs>
                 <title>Monospace, Basic Latin, <c>U+0000</c><ndash /><c>U+007F</c></title>
 
-                <p>These are exactly the same characters as above, but now we wrap them in the <c>&lt;c&gt;</c> element intended for inline use.  This does not test all verbatim situations but is a good simple first test.  (The two extra backslashes visible in <latex /> output are an artifact of placing these characters into a table and should be fixed.)</p>
+                <p>These are exactly the same characters as above, but now we wrap them in the <c>&lt;c&gt;</c> element intended for inline use.  This does not test all verbatim situations but is a good simple first test.</p>
 
                 <!-- ex &#x0000; - &#x001F; controls -->
                 <!-- ex &#x007F; control             -->
@@ -330,7 +330,7 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
                 </table>
                 <p>Note that the single and double quotes are upright and dumb, not curly and smart: <c>" ' " ' " '</c>.  The zero is distinguished from the capital <q>oh</q>: <c>0 O 0 O 0 O</c>.  And the numeral one is slightly different from the lower-case <q>ell</q>: <c>1 l 1 l 1 l</c>.  The hyphen should be short and not expanded into some other kind of dash: <c>- - -</c>.  These characters should all cut/paste out of a PDF into a text editor with no conversion to other characters.</p>
 
-                <p>Note also that we have entered <em>all</em> these characters into the source with the <c>&amp;#x00NN;</c> XML notation, but needed to <q>protect</q> the question mark, since we use it in the <latex /> verbatim routine to mark the beginning and end.  Finally, see that there is some little problem in PDF output with a space after the right parenthesis above, as also noted in the sample article.</p>
+                <p>Note also that we have entered <em>all</em> these characters into the source with the <c>&amp;#x00NN;</c> XML notation, but needed to <q>protect</q> the question mark, since we use it in the <latex /> verbatim routine to mark the beginning and end.</p>
 
             </paragraphs>
 
