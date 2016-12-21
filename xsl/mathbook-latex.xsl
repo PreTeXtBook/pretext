@@ -6523,6 +6523,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
+<!-- ######### -->
+<!-- Utilities -->
+<!-- ######### -->
+
+<!-- Escape Verbatim Text as LaTeX -->
+<!-- Slash first, so don't clobber later additions    -->
+<!-- Double-quote is problematic in LaTeX, and also   -->
+<!-- in strings below, so use &#x22; it's hex Unicode -->
+<!--     \ & # % ~ { } "                              -->
+<!-- no problem yet with math underscore or caret     -->
+<!-- (a text-only template, but LaTeX-specific)       -->
+<xsl:template name="escape-latex">
+    <xsl:param    name="text" />
+    <xsl:variable name="sans-slash" select="str:replace($text,       '\',      '\\'      )" />
+    <xsl:variable name="sans-amp"   select="str:replace($sans-slash, '&amp;',  '\&amp;'  )" />
+    <xsl:variable name="sans-hash"  select="str:replace($sans-amp,   '#',      '\#'      )" />
+    <xsl:variable name="sans-per"   select="str:replace($sans-hash,  '%',      '\%'      )" />
+    <xsl:variable name="sans-tilde" select="str:replace($sans-per,   '~',      '\~'      )" />
+    <xsl:variable name="sans-open"  select="str:replace($sans-tilde, '{',      '\{'      )" />
+    <xsl:variable name="sans-close" select="str:replace($sans-open,  '}',      '\}'      )" />
+    <xsl:variable name="sans-quote" select="str:replace($sans-close, '&#x22;', '\&#x22;' )" />
+    <xsl:value-of select="$sans-quote" />
+</xsl:template>
+
 <!-- Miscellaneous -->
 
 <!-- Inline warnings go into text, no matter what -->
