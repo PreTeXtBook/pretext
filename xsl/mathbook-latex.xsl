@@ -4075,16 +4075,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- contained in an argument of some other command -->
 <!-- cause problems and need to be escaped          -->
 <!--                                                -->
+<!-- NB: some table entries get wrapped in a        -->
+<!-- \multicolumn, largely to override table-wide   -->
+<!-- defaults. This situation requires escaping the -->
+<!-- LaTeX characters, so in turn we must then      -->
+<!-- wrap any cell that has escaped characters by a -->
+<!-- \multicolumn elsewhere                         -->
+<!--                                                -->
 <!-- Situations                                     -->
 <!--   (1) table entries, especially \multicolumn   -->
 <!--   (2) text portion of an href                  -->
 <!--                                                -->
-<!-- Characters                                     -->
-<!--   (1) #, %, leading ~                          -->
-<!--   (2) %, leading ~, but not #                  -->
-<!--                                                -->
-<!-- Escaping all three characters, every time, is  -->
-<!-- is overkill, but seems to not be a problem     -->
 <xsl:template match="tabular/row/cell//c|url//c">
     <xsl:variable name="separator">
         <xsl:choose>
@@ -4096,15 +4097,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <!-- wrap in a group {,} to prevent look-ahead -->
-    <!-- http://tex.stackexchange.com/questions/102119/why-doesnt-lstinline-work-in-table-column -->
-    <!-- tilde seems to only be a problem as the leading character -->
-    <xsl:text>{\lstinline</xsl:text>
+    <xsl:text>\lstinline</xsl:text>
     <xsl:value-of select="$separator" />
-    <!-- macro character needs help -->
-    <xsl:value-of select="str:replace(str:replace(str:replace(text(), '#', '\#'), '~', '\~'),  '%', '\%')" />
+    <!-- make LaTeX characters into escape sequences -->
+    <xsl:call-template name="escape-latex">
+        <xsl:with-param name="text" select="text()" />
+    </xsl:call-template>
     <xsl:value-of select="$separator" />
-    <xsl:text>}</xsl:text>
+    <xsl:text></xsl:text>
 </xsl:template>
 
 <!-- 100% analogue of LaTeX's verbatim            -->
@@ -5748,11 +5748,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!--         conflict with the column specification                  -->
     <!--    -if we have a colspan                                        -->
     <!--    -if there are paragraphs in the cell                         -->
+    <!--    -if the cell contains verbatim text that gets LaTeX-escaped  -->
     <!-- $table-left and $row-left *can* differ on first use,            -->
     <!-- but row-left is subsequently set to $table-left.                -->
     <xsl:if test="$the-cell">
         <xsl:choose>
-            <xsl:when test="not($table-left = $row-left) or not($column-halign = $cell-halign) or not($column-right = $cell-right) or ($column-span > 1) or $the-cell/p">
+            <xsl:when test="not($table-left = $row-left) or not($column-halign = $cell-halign) or not($column-right = $cell-right) or ($column-span > 1) or $the-cell/p or $the-cell//c[contains(., '\') or contains(., '&amp;') or contains(., '#') or contains(., '%') or contains(., '~') or contains(., '{') or contains(., '}') or contains(., '&#x22;')]">
                 <xsl:text>\multicolumn{</xsl:text>
                 <xsl:value-of select="$column-span" />
                 <xsl:text>}{</xsl:text>
