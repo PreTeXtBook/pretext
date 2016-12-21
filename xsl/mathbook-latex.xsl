@@ -3990,48 +3990,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- External URLs, Email        -->
-<!-- URL itself, if content-less -->
-<!-- http://stackoverflow.com/questions/9782021/check-for-empty-xml-element-using-xslt -->
+<!-- ############# -->
+<!-- External URLs -->
+<!-- ############# -->
+
+<!-- We escape all the problem LaTeX characters      -->
+<!-- when given in the @href attribute, the \url{}   -->
+<!-- and \href{}{} seem to do the right thing        -->
+<!-- and they do better in footnotes and table cells -->
+
 <xsl:template match="url">
-    <xsl:choose>
-        <xsl:when test="not(*) and not(normalize-space())">
-            <xsl:text>\url{</xsl:text>
+    <xsl:text>\url{</xsl:text>
+    <xsl:call-template name="escape-latex">
+        <xsl:with-param name="text">
             <xsl:value-of select="@href" />
-            <xsl:text>}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\href{</xsl:text>
-            <xsl:value-of select="@href" />
-            <xsl:text>}{</xsl:text>
-            <xsl:apply-templates />
-            <xsl:text>}</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- More care necessary in tables, when wrapped   -->
-<!-- in \multicolumn, but we just protect them all -->
-<!-- Wrap *entire* href as a group, and            -->
-<!-- adjust macro character in href                -->
-<!-- Entirely similar to above                     -->
-<xsl:template match="tabular/row/cell//url">
-    <xsl:choose>
-        <xsl:when test="not(*) and not(normalize-space())">
-            <!-- wrap whole href in a group -->
-            <xsl:text>{\url{</xsl:text>
-            <xsl:value-of select="str:replace(@href, '#', '\#')" />
-            <xsl:text>}}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <!-- wrap whole href in a group -->
-            <xsl:text>{\href{</xsl:text>
-            <xsl:value-of select="str:replace(@href, '#', '\#')" />
-            <xsl:text>}{</xsl:text>
-            <xsl:apply-templates />
-            <xsl:text>}}</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+<!-- Checking for "content-less" form           -->
+<!-- http://stackoverflow.com/questions/9782021 -->
+<xsl:template match="url[* or normalize-space()]">
+    <xsl:text>\href{</xsl:text>
+    <xsl:call-template name="escape-latex">
+        <xsl:with-param name="text">
+            <xsl:value-of select="@href" />
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- ############# -->

@@ -1252,6 +1252,8 @@ the xsltproc executable.
                 <blockquote>
                     <p><url href="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;="></url></p>
                 </blockquote>
+
+                <p>We are not fans of footnotes, they are totally unstructured<fn><url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url></fn>.  A URL in a footnote migrates around, and so care must be taken with special characters, such as the percent and hash<fn><url href="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;="><c latexsep="|">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></url></fn>.  This paragraph has two footnotes, one with a real URL from Jesse Oldroyd, another with a fake URL from the above suite (the fourth one).  For good measure, we repeat the URL found in the first footnote: <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url>.  And we include a no-content version of the same link:  <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" />.</p>
             </subsection>
 
             <subsection>
@@ -3046,39 +3048,39 @@ the xsltproc executable.
                 </tabular>
             </sidebyside>
 
-            <p>Tables are formed in <latex /> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, some other <latex /> macros then do not behave as they should.  So the table below, one item per row, is just designed for <latex /> testing.  But of course, it should still render fine in other formats.  The first five test cases are from <xref ref="section-urls" />, but without the 52 alphabetic characters, which should not be problems in this context, and we have added a percent character to the content portion in cases 1<ndash />4.  We have not added a percent to the <c>href</c> attribute in cases 3 and 4, since this causes an error we have not been able to protect against.  The sixth cell tests the tilde, which seems to only be a problem as the leading character of the verbatim string.</p>
+            <p>Tables are formed in <latex /> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, we also use them as part of a strategy to accomodate <latex />'s special characters in verbatim text.  So the table below, two items per row, is just designed for <latex /> testing.  But of course, it should still render fine in other formats.  The five test cases are from <xref ref="section-urls" />, but without 50 alphabetic characters and 8 digits, which should not be problems in this context.  The first column's entries are <em>forced</em> to be wrapped in a <c>\multicolumn</c> by specifying their horizontal alignment.  The second column's entries <em>may</em> be wrapped in a <c>\multicolumn</c> depending on their contents (essentially verbatim characters given by escaped versions).</p>
 
             <table xml:id="table-latex-problems">
                 <caption>Problematic Cells for <latex /></caption>
                 <tabular halign="center" top="medium" left="medium" bottom="medium" right="medium">
                     <row>
                         <cell>1</cell>
-                        <cell halign="left">0123456789<percent />-.<underscore /><tilde />:/?<hash />[]@!<dollar /><ampersand />'()*+,;=</cell>
+                        <cell halign="left">09az<percent />-.<underscore /><tilde />:/?<hash />[]@!<dollar /><ampersand />'()*+,;=</cell>
+                        <cell>09az<percent />-.<underscore /><tilde />:/?<hash />[]@!<dollar /><ampersand />'()*+,;=</cell>
                     </row>
 
                     <row>
                         <cell>2</cell>
-                        <cell halign="left"><c latexsep="|">0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></cell>
+                        <cell halign="left"><c latexsep="|">09az%-._~:/?#[]@!$&amp;'()*+,;=</c></cell>
+                        <cell><c latexsep="|">09az%-._~:/?#[]@!$&amp;'()*+,;=</c></cell>
                     </row>
 
                     <row>
                         <cell>3</cell>
-                        <cell halign="left"><url href="0123456789-._~:/?#[]@!$&amp;'()*+,;=">0123456789<percent />-.<underscore /><tilde />:/?<hash />[]@!<dollar /><ampersand />'()*+,;=</url></cell>
+                        <cell halign="left"><url href="09az%-._~:/?#[]@!$&amp;'()*+,;=">09az<percent />-.<underscore /><tilde />:/?<hash />[]@!<dollar /><ampersand />'()*+,;=</url></cell>
+                        <cell><url href="09az%-._~:/?#[]@!$&amp;'()*+,;=">09az<percent />-.<underscore /><tilde />:/?<hash />[]@!<dollar /><ampersand />'()*+,;=</url></cell>
                     </row>
 
                     <row>
                         <cell>4</cell>
-                        <cell halign="left"><url href="0123456789-._~:/?#[]@!$&amp;'()*+,;="><c latexsep="|">0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></url></cell>
+                        <cell halign="left"><url href="09az%-._~:/?#[]@!$&amp;'()*+,;="><c latexsep="|">09az%-._~:/?#[]@!$&amp;'()*+,;=</c></url></cell>
+                        <cell><url href="09az%-._~:/?#[]@!$&amp;'()*+,;="><c latexsep="|">09az%-._~:/?#[]@!$&amp;'()*+,;=</c></url></cell>
                     </row>
 
                     <row>
                         <cell>5</cell>
-                        <cell halign="left"><url href="0123456789-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
-                    </row>
-
-                    <row>
-                        <cell>6</cell>
-                        <cell halign="left"><c>~x[i]</c></cell>
+                        <cell halign="left"><url href="09az%-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
+                        <cell><url href="09az%-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
                     </row>
                 </tabular>
             </table>
