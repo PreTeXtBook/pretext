@@ -354,22 +354,6 @@ def webwork_to_tex(origin, xslt_exec, mbx_xsl_dir, xml_source, server_url, dest_
         end = end_marker.split(content, maxsplit=1)
         tex_only = end[0]
 
-        # There is a problem header we'd prefer not to see
-        # When enmeshed in some TeX macros, we need remove it
-        # Pattern is based on:
-        #
-        # {\bf 13. {\footnotesize (1 point) \path|Library/....pg|}}\newline
-        #
-        header_pattern = re.compile(r'{\\bf.*\\path\|.*\|}}\\newline')
-        head_match = header_pattern.search(tex_only)
-        if head_match:
-            tex_only = tex_only.replace(head_match.group(), '%mbx script removed problem header\n')
-
-        # Some tex that causes compilation errors
-        # Ends with comment, so no extra newline inserted
-        tex_only = tex_only.replace('\\vadjust{\kern3pt}%',
-                                    '\\leavevmode\\vadjust{\kern3pt}% mbx script adjusted')
-
         # need to loop through content looking for images with pattern:
         #
         #   \includegraphics[<width-spec>]{(base-graphic-filename).(file-extension)}
@@ -413,7 +397,8 @@ def webwork_to_tex(origin, xslt_exec, mbx_xsl_dir, xml_source, server_url, dest_
         problem_start = r'<webwork-tex seed="{}">'.format(seed)
         problem_end = r'</webwork-tex>'
 
-        preamble_end_pattern = re.compile(r'%%% END beginproblem\(\)')
+        preamble_begin_pattern = re.compile(r'%%% BEGIN PROBLEM PREAMBLE')
+        preamble_end_pattern = re.compile(r'%%% END PROBLEM PREAMBLE')
         preamble_start = r'<preamble>'
         preamble_end = r'</preamble>'
 
@@ -474,6 +459,9 @@ def webwork_to_tex(origin, xslt_exec, mbx_xsl_dir, xml_source, server_url, dest_
                 elif end_pattern.search(line):
                     balanced = True
                 xml_lines.append(line)
+        # if we made it to the end unbalanced, need to close statement
+        if not(balanced):
+            xml_lines.append(statement_end)
         xml_lines.append(problem_end)
 
         # place modified LaTeX as XML in a file in destination directory
