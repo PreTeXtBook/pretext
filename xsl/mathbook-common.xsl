@@ -1438,10 +1438,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:variable>
      <xsl:choose>
         <xsl:when test="$chunk='true'">
+            <!-- Very informative output for debugging purposes, comment/uncomment, but do not remove  -->
             <!-- <xsl:message>CHUNK: <xsl:apply-templates select="." mode="long-name" /></xsl:message> -->
             <xsl:apply-templates select="." mode="chunk" />
         </xsl:when>
         <xsl:otherwise>
+            <!-- Very informative output for debugging purposes, comment/uncomment, but do not remove  -->
             <!-- <xsl:message>INTER: <xsl:apply-templates select="." mode="long-name" /></xsl:message> -->
             <xsl:apply-templates select="." mode="intermediate" />
             <xsl:apply-templates select="&STRUCTURAL;" mode="chunking" />

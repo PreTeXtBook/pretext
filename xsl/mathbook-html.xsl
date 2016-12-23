@@ -5925,7 +5925,9 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <xsl:choose>
         <xsl:when test="$intermediate='true'">
             <!-- Descend once, will always have a child that is structural -->
-            <xsl:variable name="first-structural-child" select="*[not(self::title or self::subtitle or self::todo or self::introduction or self::conclusion or self::titlepage or self::author)][1]" />
+            <xsl:variable name="first-structural-child" select="*[&STRUCTURAL-FILTER;][1]" />
+            <xsl:apply-templates select="$first-structural-child" mode="url" />
+            <!-- remainder is a basic check, could be removed -->
             <xsl:variable name="structural">
                 <xsl:apply-templates select="$first-structural-child" mode="is-structural" />
             </xsl:variable>
@@ -5933,7 +5935,6 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                 <xsl:message>MBX:ERROR: descending into first node of an intermediate page (<xsl:value-of select="local-name($first-structural-child)" />) that is non-structural; maybe your source has incorrect structure</xsl:message>
                 <xsl:apply-templates select="." mode="location-report" />
             </xsl:if>
-            <xsl:apply-templates select="$first-structural-child" mode="url" />
         </xsl:when>
         <xsl:otherwise>
             <!-- try going sideways, which climbs up the tree recursively -->
@@ -6023,14 +6024,15 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:apply-templates select="." mode="url" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:variable name="last-structural-child" select="*[not(self::title or self::subtitle or self::todo or self::introduction or self::conclusion)][last()]" />
+            <xsl:variable name="last-structural-child" select="*[&STRUCTURAL-FILTER;][last()]" />
+            <xsl:apply-templates select="$last-structural-child" mode="previous-descent-url" />
+            <!-- remainder is a basic check, could be removed -->
             <xsl:variable name="structural">
                 <xsl:apply-templates select="$last-structural-child" mode="is-structural" />
             </xsl:variable>
             <xsl:if test="$structural='false'">
                 <xsl:message>MBX:ERROR: descending into last node of an intermediate page (<xsl:value-of select="local-name($last-structural-child)" />) that is non-structural</xsl:message>
             </xsl:if>
-            <xsl:apply-templates select="$last-structural-child" mode="previous-descent-url" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
