@@ -170,7 +170,7 @@
         </example>
     </section>
 
-    <section>
+    <section xml:id="scores">
         <title>Scores</title>
 
         <introduction>
@@ -187,6 +187,18 @@
             <figure>
                 <caption>Allegretto in F, Rob Hutchinson</caption>
                 <image source="images/allegretto-in-F-hutchinson" />
+            </figure>
+        </subsection>
+
+        <subsection>
+            <title>Embedded Interactive Musical Scores</title>
+
+            <p>A score hosted on <url href="http://musescore.com">MuseScore</url> is easy to specify with two ID numbers: the user number and the score number (examine the source for details).  Then an embedded interactive player is nearly trivial to embed into <init>HTML</init> output.  Work continues on a process to realize the score within <latex /> output.</p>
+
+            <figure>
+                <caption><url href="https://musescore.com/user/141988/scores/3113841">String Quartet 1</url> by <url href="https://musescore.com/user/141988">Lily He</url></caption>
+
+                <score musescoreuser="141988" musescore="3113841" />
             </figure>
         </subsection>
     </section>

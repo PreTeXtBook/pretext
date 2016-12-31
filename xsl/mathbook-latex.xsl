@@ -3906,6 +3906,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{tabular}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- ############ -->
+<!-- Music Scores -->
+<!-- ############ -->
+
+<!-- Embed an interactive score from MuseScore                          -->
+<!-- Flag: score element has two MuseScore-specific attributes          -->
+<!-- https://musescore.org/user/{usernumber}/scores/{scorenumber}/embed -->
+<!-- into an iframe with width and height (todo)                        -->
+<xsl:template match="score[@musescoreuser and @musescore]">
+    <xsl:text>[\texttt{\nolinkurl{https://musescore.org/user/</xsl:text>
+    <xsl:value-of select="@musescoreuser" />
+    <xsl:text>/scores/</xsl:text>
+    <xsl:value-of select="@musescore" />
+    <xsl:text>}} not yet realized in \LaTeX]&#xa;</xsl:text>
+</xsl:template>
+
 <!-- Numbers, units, quantities                     -->
 <!-- quantity                                       -->
 <xsl:template match="quantity">

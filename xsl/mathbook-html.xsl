@@ -4124,6 +4124,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- ############ -->
+<!-- Music Scores -->
+<!-- ############ -->
+
+<!-- Embed an interactive score from MuseScore                          -->
+<!-- Flag: score element has two MuseScore-specific attributes          -->
+<!-- https://musescore.org/user/{usernumber}/scores/{scorenumber}/embed -->
+<!-- into an iframe with width and height (todo)                        -->
+<xsl:template match="score[@musescoreuser and @musescore]">
+    <xsl:element name="iframe">
+        <xsl:attribute name="width">
+            <xsl:text>100%</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="height">
+            <xsl:text>500</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="frameborder">
+            <xsl:text>0</xsl:text>
+        </xsl:attribute>
+        <!-- empty attribute, just switch -->
+        <xsl:attribute name="allowfullscreen">
+            <xsl:text></xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="src">
+            <xsl:text>https://musescore.com/user/</xsl:text>
+            <xsl:value-of select="@musescoreuser" />
+            <xsl:text>/scores/</xsl:text>
+            <xsl:value-of select="@musescore" />
+            <xsl:text>/embed</xsl:text>
+        </xsl:attribute>
+    </xsl:element>
+</xsl:template>
+
 <!-- ####### -->
 <!-- Tabular -->
 <!-- ####### -->
