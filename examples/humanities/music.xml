@@ -169,4 +169,25 @@
             </ul>
         </example>
     </section>
+
+    <section>
+        <title>Scores</title>
+
+        <introduction>
+            <p>A score may be represented in several formats: <init>PDF</init> output from a scorewriter (not a scan of printed sheet music), an <init>XML</init> file in the MusicXML format, online within MuseScore, or in Lilypond syntax.  We plan to support various output options and conversions, but at this writing support is rudimentary, but evolving.</p>
+        </introduction>
+
+        <subsection>
+            <title><init>PDF</init> Source</title>
+
+            <p>Starting with a <init>PDF</init> that is <q>born digital</q> such as output from a <term>scorewriter</term> like Finale, it is possible to treat the score simply as we would any other image.  The <init>PDF</init> version will be incorporated into the <init>PDF</init> output when the <latex /> output is compiled, presuming the file is placed in the right location relative to the main <tex /> file.  For <init>HTML</init> output the utilities <c>pdfcrop</c> and <c>pdf2svg</c> will produce an <init>SVG</init> image that will work well.</p>
+
+            <p>This procedure will work best for very short scores, since it is treated as an indivisible image.  For <latex /> output, a longer score can lead to very poor page breaks, and large vertical gaps, especially in a preceding page.  Or worse, the score might be longer than a single page, for which there is no solution. The piece below is inadvisably long and will likely demonstrate this behavior, though it is shorter than a page.  Using scores authored, or converted to, Lilypond syntax should allow for better behavior of longer scores within a <latex /> document.</p>
+
+            <figure>
+                <caption>Allegretto in F, Rob Hutchinson</caption>
+                <image source="images/allegretto-in-F-hutchinson" />
+            </figure>
+        </subsection>
+    </section>
 </chapter>
