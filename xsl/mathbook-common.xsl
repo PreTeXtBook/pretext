@@ -389,6 +389,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is of interest by itself, or the root of content searches -->
 <xsl:variable name="document-root" select="/mathbook/*[not(self::docinfo)]" />
 
+<!-- Source Analysis -->
+<!-- Some boolean variables ("b-*") for -->
+<!-- the presence of certain elements -->
+<xsl:variable name="b-has-jsxgraph" select="boolean($document-root//jsxgraph)" />
+
+
 <!-- We read the document language translation -->
 <!-- nodes out of the right file, which relies -->
 <!-- on filenames with country codes           -->

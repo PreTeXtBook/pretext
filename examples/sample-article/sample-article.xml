@@ -3154,6 +3154,98 @@ the xsltproc executable.
 
             </subsection>
 
+            <subsection>
+                <title>JSXGraph</title>
+
+                <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is contrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">example</url> is taken from the JSXGraph <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>.</p>
+
+                <figure>
+                    <caption>The Archimedian Spiral <m>r = a + b\theta</m>, <m>0\leq\theta\leq 8\pi</m></caption>
+                    <jsxgraph xml:id="jsxgraph-archimedian-spiral">
+                        <!-- http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral -->
+                        <input>
+                        var board = JXG.JSXGraph.initBoard('jsxgraph-archimedian-spiral', {boundingbox: [-10, 10, 10, -10]});
+                        var a = board.create('slider', [[1,8],[5,8],[0,1,4]],{name:'a'});
+                        var b = board.create('slider', [[1,9],[5,9],[0,0.25,4]],{name:'b'});
+
+                        var c = board.create('curve', [function(phi){return a.Value()+b.Value()*phi; }, [0, 0],0, 8*Math.PI],
+                                     {curveType:'polar', strokewidth:4});
+
+                        var g = board.create('glider', [c]);
+                        var t = board.create('tangent', [g], {dash:2,strokeColor:'#a612a9'});
+                        var n = board.create('normal', [g], {dash:2,strokeColor:'#a612a9'});
+                        </input>
+                    </jsxgraph>
+                </figure>
+
+                <p><url href="http://jsxgraph.uni-bayreuth.de/wp/index.html">JSXGraph</url> is a <q>cross-browser JavaScript library for interactive geometry, function plotting, charting, and data visualization in the web browser.</q>  Place Javascript inside an <c>input</c> element inside a <c>jsxgraph</c> element.  You will want an <c>xml:id</c> on the <c>jsxgraph</c> element, since it is what will be used as the HTML <c>id</c> on the <c>div</c> that will hold the demonstration, and will typically be used in an early call to the <c>initBoard()</c> method.</p>
+
+                <p>Here is a more elaborate example, from the <url href="http://jsxgraph.uni-bayreuth.de/showcase/">JSXGraph Showcase</url>, titled <url href="http://jsxgraph.uni-bayreuth.de/showcase/infinity.html">Infinity</url>.  Notice that the code here contains a problematic less-than character for a comparison in a loop.  We could replace it by the <c>&amp;lt;</c> XML escape sequence, but we have instead chosen the expedient of using a <c>CDATA</c> construction to wrap the entire hunk of code (see the source for exact syntax).  This might be the best solution if the code contains many HTML strings that need to be protected from the XML parser.</p>
+
+                <p>There are two active sliders to control the shape and shading of the graphic, and hovering the mouse near one of the edges will highlight the entirety of one of the 30 quadrangles.  Finally, each of the four red corners may be dragged to a new location.</p>
+
+                <figure>
+                    <caption>Infinity, from the JSXGraph Showcase</caption>
+                    <jsxgraph xml:id="jsxgraph-infinity">
+                        <!-- http://jsxgraph.uni-bayreuth.de/showcase/infinity.html -->
+                        <input><![CDATA[
+                        JXG.Options.renderer = 'canvas';
+                        var board = JXG.JSXGraph.initBoard('jsxgraph-infinity', {
+                                boundingbox: [-9, 8, 9, -10],
+                                keepaspectreatio: true,
+                                axis: false,
+                                grid: false,
+                                shownavigation: false
+                            });
+
+                        // construction
+                        board.suspendUpdate();
+                        var S = board.create('slider', [[-5,-6],[5,-6],[0,0.85,1]], {
+                            name:'Whirl'
+                        });
+                        var hue = board.create('slider', [[-5,-7],[5,-7],[0,20.5,36]], {
+                            name:'Colors'
+                        });
+
+                        var points = new Array();
+                        points[0] = board.create('point',[5, 5], {name:' '});
+                        points[1] = board.create('point',[-5, 5], {name:' '});
+                        points[2] = board.create('point',[-5, -5], {name:' '});
+                        points[3] = board.create('point',[5, -5], {name:' '});
+
+                        function quadrangle(pt, n) {
+                            var col;
+                            var arr = new Array();
+                            for(var i = 0; i < 4; i++) {
+                                arr[i] = board.create('point',
+                                    [function(t) {
+                                        return function () {var x = pt[t].X();
+                                                var x1 = pt[(t+1)%4].X();
+                                                var s = S.Value();
+                                                return x+(x1-x)*s;
+                                         }}(i),
+                                    function(t) {
+                                        return function () {var y = pt[t].Y();
+                                                var y1 = pt[(t+1)%4].Y();
+                                                var s = S.Value();
+                                                return y+(y1-y)*s;
+                                         }}(i)
+                                    ],
+                                {size:1, name: "", withLabel: false, visible: false});
+                            }
+                            col =  function(){return JXG.hsv2rgb(hue.Value()*n,0.7,0.9);};
+                            board.create('polygon',pt, {fillColor:col});
+                            if(n>0)
+                                quadrangle(arr, --n);
+                        }
+                        quadrangle(points,30);
+
+                        board.unsuspendUpdate();
+                        ]]>
+                        </input>
+                    </jsxgraph>
+                </figure>
+            </subsection>
         </section>
 
         <section>

@@ -5682,6 +5682,31 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 </td></tr></table>
 </xsl:template>
 
+<!-- JSXGraph -->
+<xsl:template match="jsxgraph">
+    <!-- the div to hold the JSX output -->
+    <xsl:element name="div">
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:attribute>
+        <xsl:attribute name="class">
+            <xsl:text>jxgbox</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="style">
+            <xsl:text>width:400px; height:400px;</xsl:text>
+        </xsl:attribute>
+    </xsl:element>
+    <!-- the script to hold the code -->
+    <xsl:element name="script">
+        <xsl:attribute name="type">
+            <xsl:text>text/javascript</xsl:text>
+        </xsl:attribute>
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="input" />
+        </xsl:call-template>
+    </xsl:element>
+</xsl:template>
+
 <!-- ########################## -->
 <!-- WeBWorK Embedded Exercises -->
 <!-- ########################## -->
@@ -5763,6 +5788,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:call-template name="mathbook-js" />
             <xsl:call-template name="fonts" />
             <xsl:call-template name="hypothesis-annotation" />
+            <xsl:call-template name="jsxgraph" />
             <xsl:call-template name="css" />
             <xsl:if test="//video">
                 <xsl:call-template name="video" />
@@ -5858,6 +5884,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:call-template name="knowl" />
             <xsl:call-template name="fonts" />
             <xsl:call-template name="hypothesis-annotation" />
+            <xsl:call-template name="jsxgraph" />
             <xsl:call-template name="css" />
         </head>
         <!-- TODO: needs some padding etc -->
@@ -6942,6 +6969,14 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
         <xsl:text>}</xsl:text>
         </script>
         <script src="https://hypothes.is/embed.js" async=""></script>
+    </xsl:if>
+</xsl:template>
+
+<!-- JSXGraph -->
+<xsl:template name="jsxgraph">
+    <xsl:if test="$b-has-jsxgraph">
+        <link rel="stylesheet" type="text/css" href="http://jsxgraph.uni-bayreuth.de/distrib/jsxgraph.css" />
+        <script type="text/javascript" src="http://jsxgraph.uni-bayreuth.de/distrib/jsxgraphcore.js"></script>
     </xsl:if>
 </xsl:template>
 
