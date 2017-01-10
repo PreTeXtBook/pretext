@@ -4527,7 +4527,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- and forgetting the command-line switch is a common mistake -->
 <!-- The following is not perfect, but reasonably effective     -->
 <xsl:template match="mathbook" mode="xinclude-warnings">
-    <xsl:if test="book and not(book/chapter)">
+    <xsl:if test="book and not(book/chapter or book/part/chapter)">
         <xsl:message>
             <xsl:text>MBX:WARNING:    </xsl:text>
             <xsl:text>Your &lt;book&gt; does not have any chapters.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
