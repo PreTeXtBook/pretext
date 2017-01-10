@@ -233,6 +233,15 @@
         <p>It is possible to author <webwork /> automated homework problems directly within your source.  A static version will be rendered in your <latex />/PDF/print output, and a <q>live</q> version will be rendered into HTML output (though a student is not able to authenticate against a course).  However, you can also extract <em>all</em> of the <webwork /> questions from a textbook into a single archive suitable for uploading into a traditional <webwork /> server.  This is a big topic, so see the dedicated <xref ref="webwork" /> for details.</p>
     </section>
 
+    <section xml:id="overview-url">
+        <title><init>URL</init>s and External References</title>
+
+        <p>The <tag>url</tag> tag always requires an <attribute>href</attribute> attribute.  Usually this will be some external web page, or other resource.  If the <tag>url</tag> is empty, then the value of the <attribute>href</attribute> attribute will be the link text, typically in a monospace font.  You can also provide your own content, using elements much like any other piece of text that would occur in a paragraph.  Of course, there is no need to anticipate any problems with <latex /> output and special characters like a tilde.  Use the character itself in the <attribute>href</attribute>, and use the <tag>tilde</tag> element in the content (or wrap the content in the <tag>c</tag> element and use the literal character).</p>
+
+        <p>This element may also be used to link to external data files.  See <xref ref="topic-url" /> for details.</p>
+
+    </section>
+
     <section xml:id="overview-si-units">
         <title>Scientific Units</title>
 

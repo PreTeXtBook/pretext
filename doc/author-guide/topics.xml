@@ -167,6 +167,38 @@
 
     </section>
 
+    <section xml:id="topic-url">
+        <title><init>URL</init>s and External References</title>
+
+        <subsection>
+            <title><init>URL</init>s to External Web Pages</title>
+
+            <p>The <tag>url</tag> tag can be used to point to external items (as distinct from other portions of your current document, which is accomplished with the <tag>xref</tag> element, <xref ref="overview-cross-references" />).  It always needs a value for the <attribute>href</attribute> attribute, most likely a <init>URL</init>.  Most of this time, this will point to some resource available on the Internet but it could be a file on the system hosting your document, perhaps using a relative address (but see the rest of this section for some cautions).  Here are three scenarios:<ul>
+                <li><p>The <tag>url</tag> element is empty.  Then the value of the <attribute>href</attribute> is also used for the visible text of the link, verbatim, and usually in a monospace font.  Use <term>percent-encoding</term> (aka <term>URL encoding</term>) for the <attribute>href</attribute> attribute to include special characters, such as spaces.</p></li>
+
+                <li><p>The <tag>url</tag> element has content.  Now the content should be authored as you would any other text in a sentence.  Potentially problematic characters, such as a tilde should be authored with provided empty elements, but authored literally in the <attribute>href</attribute> attribute.</p></li>
+
+                <li><p>The <tag>url</tag> element has content, but you want this content to look like a <init>URL</init>.  Use the <tag>c</tag> element around the content, and follow the rules for verbatim text.  I do this often for simple <init>URL</init>s that point to the top level of a website.  The <attribute>href</attribute> is a complete <init>URL</init> like <c>http://mathbook.pugetsound.edu/</c> but for content I use a less-imposing reader-friendly version like <c>mathbook.pugetsound.edu</c>.</p></li>
+            </ul></p>
+
+            <p>For <latex /> output it gets quite tricky to handle all the various meanings of certain escape characters in <init>URL</init>s in more complicated contexts (such as tables, footnotes, and titles), so there may be some special cases where the formatting is off or you get an error when compiling your <latex />.  We handle most of these situations, but we always appreciate reports of missed cases.</p>
+        </subsection>
+
+        <subsection xml:id="topic-external-data-file">
+            <title><init>URL</init>s to External Data Files</title>
+
+            <p>The <tag>url</tag> element can be used to make data files available to your reader.  Consider the example of a spreadsheet containing a large data set that a reader needs to analyze as part of an exercise.  Here are our recommendations on how to accomplish this:<ul>
+                <li><p>If the file is hosted on some server unassociated with your project, and does not have a license compatible with your project, then just set the <attribute>href</attribute> to the complete address.  Be sure to include enough of the address for the reader of a a print version to be able to type in the <init>URL</init>, either as the content of the <tag>url</tag> or in close vicinity.</p></li>
+
+                <li><p>If you authored the spreadsheet, or you are allowed to legally copy and distribute it, then place it on your server where you host your book project.  Then do as above and use the full <init>URL</init> for the <attribute>href</attribute> attribute, with a visible version available for <init>PDF</init> and print versions.</p></li>
+
+                <li><p>If you have control over the placement of the file, you can host it on your server, and use a <init>URL</init> relative to the location of your <init>HTML</init>, <init>PDF</init>, or other files that comprise your document.  This might be a good choice if your book will be posted many places and you can give it to others as an archive, like a <c>*.zip</c> file.  It is a bad idea if a reader downloads a PDF without the data file following along and remaining in the same relative location.  It is an impossible idea if your document gets printed on paper and there is no idea what a relative <init>URL</init> means and there is not even a link to click on.</p></li>
+            </ul></p>
+
+            <p>Consider your audience and think about how much guidance they need about using context menus or helper/viewer applications to make use of the file formats you are providing. This advice may be different depending on the type of files and the types of output for your document.</p>
+        </subsection>
+    </section>
+
     <section xml:id="topic-units-measure">
         <title>(*) Units of Measure</title>
 
