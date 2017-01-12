@@ -817,7 +817,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="'practice'" />
         </xsl:with-param>
-        <xsl:with-param name="in" select="'# Sage practice area&#xa;'"/>
+        <xsl:with-param name="in" select="'# Practice area (not linked for Sage Cell use)&#xa;'"/>
         <xsl:with-param name="out" select="''" />
     </xsl:call-template>
 </xsl:template>
