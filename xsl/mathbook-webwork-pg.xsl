@@ -474,7 +474,7 @@
 <xsl:template match="webwork//var" mode="static-warning">
     <xsl:variable name="varname" select="@name" />
     <xsl:variable name="problem" select="ancestor::webwork" />
-    <xsl:if test="not($problem/setup/var[@name=$varname]/static) and not($problem/setup/var[@name=$varname]/set/member) and not(@form='essay')">
+    <xsl:if test="substring($varname,1,1)='$' and not($problem/setup/var[@name=$varname]/static) and not($problem/setup/var[@name=$varname]/set/member) and not(@form='essay')">
         <xsl:message>
             <xsl:text>MBX:WARNING: A WeBWorK exercise uses a var (name="</xsl:text>
             <xsl:value-of select="$varname"/>
