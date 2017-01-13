@@ -366,6 +366,21 @@
                 </webwork>
             </exercise>
 
+            <exercise>
+                <title>No Randomization</title>
+                <introduction>
+                    <p>This problem has no randomization at all, not even if it were exported to be part of a problem set on a <webwork /> server. As such, it really doesn't need any lines of Perl code in its setup, so you have the option of skipping that part of the authoring process.</p>
+                </introduction>
+                <webwork>
+                    <statement>
+                        <p><m>1+2=</m><var name="3" width="5" /></p>
+                    </statement>
+                </webwork>
+                <conclusion>
+                    <p>For more about problems that do not require any randomization, see the MBX Author Guide.</p>
+                </conclusion>
+            </exercise>
+
         </section>
 
         <section>
