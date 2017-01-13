@@ -1110,6 +1110,16 @@ the xsltproc executable.
 
                 <p>The packages appear before the author-supplied macros, so you can use macros from the packages as building blocks for document-specific macros.  We cannot guarantee there will be no conflicts between additional packages and those in use normally, or added in the future.  So use at your own risk.</p>
             </subsection>
+
+            <subsection>
+                <title>Advanced Mathematics</title>
+
+                <p>MathJax is extremely capable, and improving all the time.  You can get fairly fancy with some of its supported commands.  In particular, if you need to mix in a few words, the <c>\text{}</c> macro is supported.  The following example is a good stress-test.  Note the Unicode left and right smart quotes.  This a contribution from Alex Jordan as part of his work on <booktitle>APEX Calculus</booktitle>.<md>
+                    <mrow>y \rightarrow \frac{\sin(0) }{0} \rightarrow {{\text{“}}\atop{}}\frac{0}{0}{{\text{”}}\atop{}}\text{.}</mrow>
+                </md>And another one from Alex.  Note the use of the <c>\mathord{}</c> and <c>\mathrel{}</c> macros to control spacing around the mathematical symbols.  Examine the source to see how the quotation marks have been authored with <init>XML</init> syntax for Unicode characters.<md>
+                    <mrow>\zeta(1)=\sum_{n=1}^{\infty}\frac{1}{n}\mathrel{\text{ &#x201c;}\mathord{=}{\text{&#x201d; }}}\prod_{p}\left(\frac{1}{1-1/p}\right)=\prod_{p}\left(\frac{1}{1-p^{-1}}\right)</mrow>
+                </md></p>
+            </subsection>
         </section>
 
         <section>
