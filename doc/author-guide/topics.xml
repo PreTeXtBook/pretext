@@ -233,7 +233,7 @@
         <subsection>
             <title>Unicode Support in OSX</title>
 
-            <p>Mitch Keller reports on 2016-01-12 a way to get some popular characters with OSX.  Use the Keyboard preference pane under System Preferences. In there, you can enable <cd>
+            <p>Mitch Keller reports on 2017-01-12 a way to get some popular characters with OSX.  Use the Keyboard preference pane under System Preferences. In there, you can enable <cd>
                 <cline>Show Keyboard, Emoji, &amp; Symbols Viewers in menu bar</cline>
             </cd>Once you activate the keyboard viewer, you get a keyboard on your screen. When you hold down <c>opt</c>, it shows you what other symbol you would get if you push <c>opt+letter</c>. For instance, <c>opt+w</c> gives an upper-case Greek sigma and <c>opt+=</c> gives a not-equals sign (neither of which we can handle when processing the latex version of this guide). To get ä, you type <c>opt+u</c> and then hit <c>a</c>. This is illustrated by the keys for diacritical marks being highlighted in orange while holding opt.  The shift key can have an effect to produce variations of some characters, such as quote marks (dumb versus smart).</p>
         </subsection>
