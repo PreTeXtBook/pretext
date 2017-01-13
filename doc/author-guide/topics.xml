@@ -204,6 +204,53 @@
 
     </section>
 
+    <section xml:id="topic-unicode">
+        <title>Unicode Characters</title>
+
+        <introduction>
+
+            <p>MathBook XML supports (and encourages) the use of Unicode characters.  Here are some relevant comments.<ul>
+                <li><p>Unicode characters will migrate well to any output format based on <init>HTML</init>.  Most browsers will have a variety of fonts with glyphs to realize these characters.</p></li>
+
+                <li><p><latex /> will not always behave as smoothly.  For openers, you definitely will want to use the <c>xelatex</c> engine to build a <init>PDF</init>.  Then you need to be sure your system has a font with the necessary characters and you make the font known to <c>xelatex</c>.  We are working out the details of the best way to accomplish this.</p></li>
+
+                <li><p>How do you get a Unicode character into your source?  In part this is specific to your operating system and editor, so is outside the scope of this guide, but we have hints below for popular operating systems.</p></li>
+
+                <li><p>You can always place a Unicode character in your source using <init>XML</init> syntax.  The first thing an <init>XML</init> parser will do is convert this syntax into a character.  The number of the <c>SECTION SIGN</c> in hexadecimal is <c>A7</c>, so the syntax <c>&amp;#xA7;</c> is identical to the  character &#xA7;.  Of course, this will get tedious fast.</p></li>
+
+                <li><p>The <url href="https://www.cs.tut.fi/~jkorpela/fui.html8">Full Unicode Input</url> utility at <c>www.cs.tut.fi/~jkorpela/fui.html8</c> will allow you to specify a chunk of 256 consecutive Unicode numbers and then you can click on characters to make a string of several or many.  You can cut/paste these into your source, or convert the whole lot to <init>XML</init> syntax all at once.</p></li>
+
+                <li><p>Unicode characters have standardized names.  You can find these, and more information, including font support, at the Unicode section of <url href="http://www.fileformat.info/info/unicode/">FileFormat.info</url>, <c>www.fileformat.info/info/unicode/</c>.  If you are struggling to find a specific character, then using this site's name in a search will often quickly locate what you need.  Be sure to experiment with the test pages there for browser and font support (including checking your local configuration).</p></li>
+
+                <li>
+                    <p><alert>Warning</alert>: do not use Unicode characters as a way to get mathematical symbols (that is delegated to our use of <latex /> syntax).  And do not use Unicode when we have provided an empty element for a character, especially when that character may be used in a markup syntax for some output, such as <latex />, <init>HTML</init>, <init>JSON</init>, Markdown, <ellipsis /></p>
+
+                    <p>For example, if you put many naked hash symbols (<hash />) in your source, then you will get nice <init>HTML</init>, but when you try to get print from a PDF from <latex /> you will have a train wreck on your hands when you compile the <latex />.  Instead, be sure to always use the provided <c>&lt;hash /&gt;</c> element.  <em>Always</em>.  Other empty elements are conveniences, which spare you from looking up Unicode numbers and make your source more readable, rather than a necessity to avoid special characters.  An example is <c>&lt;times /&gt;</c>, for use outside of a strictly mathematical setting:  <q>I bought a 2<times />4 at the lumberyard.</q></p>
+                </li>
+            </ul></p>
+        </introduction>
+
+        <subsection>
+            <title>Unicode Support in OSX</title>
+
+            <p>Mitch Keller reports on 2016-01-12 a way to get some popular characters with OSX.  Use the Keyboard preference pane under System Preferences. In there, you can enable <cd>
+                <cline>Show Keyboard, Emoji, &amp; Symbols Viewers in menu bar</cline>
+            </cd>Once you activate the keyboard viewer, you get a keyboard on your screen. When you hold down <c>opt</c>, it shows you what other symbol you would get if you push <c>opt+letter</c>. For instance, <c>opt+w</c> gives an upper-case Greek sigma and <c>opt+=</c> gives a not-equals sign (neither of which we can handle when processing the latex version of this guide). To get ä, you type <c>opt+u</c> and then hit <c>a</c>. This is illustrated by the keys for diacritical marks being highlighted in orange while holding opt.  The shift key can have an effect to produce variations of some characters, such as quote marks (dumb versus smart).</p>
+        </subsection>
+
+        <subsection>
+            <title>(*) Unicode Support in Linux</title>
+
+            <p></p>
+        </subsection>
+
+        <subsection>
+            <title>(*) Unicode Support in Windows</title>
+
+            <p></p>
+        </subsection>
+    </section>
+
     <section xml:id="topic-doctest-sage">
         <title>(*) Testing Sage Examples</title>
 
