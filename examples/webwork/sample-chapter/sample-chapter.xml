@@ -248,11 +248,11 @@
 
                 <introduction>
                     <p>One of the strengths of <webwork /> is its ability to give intelligent feedback for incorrect answers.</p>
-                    <ul>
+                    <p><ul>
                         <li><p>There is general feedback for when the student's answer is in an entirely different ballpark from the correct answer. Try entering something like <q>y</q>.</p></li>
                         <li><p>There is general feedback for when the student's answer is not in the right form. Try entering <q>x<circumflex />2*x<circumflex />3</q>, which, right or wrong, is unsimplified.</p></li>
                         <li><p>And problems can be written to detect and respond to common mistakes. Try entering an answer where you multiply the two exponents (instead of adding them, which would be correct.)</p></li>
-                    </ul>
+                    </ul></p>
                 </introduction>
 
                 <webwork>
@@ -1011,24 +1011,24 @@
                     </setup>
 
                     <statement>
-                        <ol label="a.">
+                        <p><ol label="a.">
                             <li>
                                 <p>Suppose the correct answer is <m><var name="$answer1"/></m>.</p>
-                                <ul label="square">
+                                <p><ul label="square">
                                     <li>
                                         <p><var name="$answer1" width="15"/></p>
                                     </li>
-                                </ul>
+                                </ul></p>
                             </li>
                             <li>
                                 <p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/></m>.</p>
-                                <ul label="square">
+                                <p><ul label="square">
                                     <li>
                                         <p><var name="$answer2" width="15"/></p>
                                     </li>
-                                </ul>
+                                </ul></p>
                             </li>
-                        </ol>
+                        </ol></p>
 
                     </statement>
 
@@ -1062,24 +1062,24 @@
                     </setup>
 
                     <statement>
-                        <ol label="a.">
+                        <p><ol label="a.">
                             <li>
                                 <p>Suppose the correct answer is <m>\displaystyle <var name="$answer1"/></m>.</p>
-                                <ul label="square">
+                                <p><ul label="square">
                                     <li>
                                         <p><var name="$answer1" width="15"/></p>
                                     </li>
-                                </ul>
+                                </ul></p>
                             </li>
                             <li>
                                 <p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/></m>.</p>
-                                <ul label="square">
+                                <p><ul label="square">
                                     <li>
                                         <p><var name="$answer2" width="15" evaluator="$answer2evaluator"/></p>
                                     </li>
-                                </ul>
+                                </ul></p>
                             </li>
-                        </ol>
+                        </ol></p>
 
                     </statement>
 
@@ -1320,10 +1320,10 @@
                 </webwork>
             </exercise>
             <exercise>
+                <title>Has a Title</title>
                 <introduction>
                     <p>Has an introduction.</p>
                 </introduction>
-                <title>Has a Title</title>
                 <webwork>
                     <statement>
                         <p><m>1+1=2</m></p>
@@ -1365,10 +1365,10 @@
                 </conclusion>
             </exercise>
             <exercise>
+                <title>Has a Title</title>
                 <introduction>
                     <p>Has an introduction.</p>
                 </introduction>
-                <title>Has a Title</title>
                 <webwork>
                     <statement>
                         <p><m>1+1=2</m></p>
@@ -1405,10 +1405,10 @@
                     </webwork>
                 </exercise>
                 <exercise>
+                    <title>Has a Title</title>
                     <introduction>
                         <p>Has an introduction.</p>
                     </introduction>
-                    <title>Has a Title</title>
                     <webwork>
                         <statement>
                             <p><m>1+1=2</m></p>
@@ -1450,10 +1450,10 @@
                     </conclusion>
                 </exercise>
                 <exercise>
+                    <title>Has a Title</title>
                     <introduction>
                         <p>Has an introduction.</p>
                     </introduction>
-                    <title>Has a Title</title>
                     <webwork>
                         <statement>
                             <p><m>1+1=2</m></p>
