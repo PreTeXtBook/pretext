@@ -1288,6 +1288,358 @@
                   </stage>
                 </webwork>
             </exercise>
+
+            <exercise>
+                <title>Checking Proper Indentation In Lists</title>
+                <webwork>
+                    <statement>
+                        <p><ol>
+                            <li>Simple item</li>
+                            <li>Simple item</li>
+                            <li>Simple item</li>
+                        </ol></p>
+
+                        <p><ol>
+                            <li>Simple item</li>
+                            <li>Simple item</li>
+                            <li>Simple item</li>
+                        </ol></p>
+
+                        <p>Text before.<ol>
+                            <li>Simple item</li>
+                            <li>Simple item</li>
+                            <li>Simple item</li>
+                        </ol>And after.</p>
+
+                        <p><ol>
+                            <li>
+                                <p>Structured item</p>
+                            </li>
+                            <li>
+                                <p>Structured item</p>
+                            </li>
+                            <li>
+                                <p>Structured item</p>
+                            </li>
+                        </ol></p>
+
+                        <p>Text before.<ol>
+                            <li>
+                                <p>Structured item</p>
+                            </li>
+                            <li>
+                                <p>Structured item</p>
+                            </li>
+                            <li>
+                                <p>Structured item</p>
+                            </li>
+                        </ol>And after.</p>
+
+                        <p><ol>
+                            <li>
+                                <p>Structured item</p>
+                            </li>
+                            <li>
+                                <p><ol label="a">
+                                    <li>
+                                        <p>Sublist Item</p>
+                                    </li>
+                                    <li>
+                                        <p>Sublist Item</p>
+                                    </li>
+                                    <li>
+                                        <p>Sublist Item</p>
+                                    </li>
+                                </ol></p>
+                            </li>
+                            <li>
+                                <p>Structured item</p>
+                            </li>
+                        </ol></p>
+
+                        <p>Text before.<ol>
+                            <li>
+                                <p>Structured item</p>
+                            </li>
+                            <li>
+                                <p>Text before.<ol label="a">
+                                    <li>
+                                        <p>Sublist Item</p>
+                                    </li>
+                                    <li>
+                                        <p>Sublist Item</p>
+                                    </li>
+                                    <li>
+                                        <p>Sublist Item</p>
+                                    </li>
+                                </ol>And after.</p>
+                            </li>
+                            <li>
+                                <p>Structured item</p>
+                            </li>
+                        </ol>And after.</p>
+
+                        <p>Note: some lists follow with second paragraphs in list items. While the PGML output by MBX appears to be in order, PGML does not process second paragraphs as intended when they are in a nest deeper than the outermost list. List numbering is interfered with. Either this is a bug with PGML, or PGML never intended to support second paragraphs in inner lists.</p>
+
+                        <p><ol>
+                            <li>
+                                <p>Structured item</p>
+                                <p>Second paragraph</p>
+                            </li>
+                            <li>
+                                <p><ol label="a">
+                                    <li>
+                                        <p>Sublist Item</p>
+                                        <p>Second paragraph</p>
+                                    </li>
+                                    <li>
+                                        <p>Sublist Item</p>
+                                        <p>Second paragraph</p>
+                                    </li>
+                                    <li>
+                                        <p>Sublist Item</p>
+                                        <p>Second paragraph</p>
+                                    </li>
+                                </ol></p>
+                            </li>
+                            <li>
+                                <p>Structured item</p>
+                                <p>Second paragraph</p>
+                            </li>
+                        </ol></p>
+
+                        <p>Text before.<ol>
+                            <li>
+                                <p>Structured item</p>
+                                <p>Second paragraph</p>
+                            </li>
+                            <li>
+                                <p>Text before.<ol label="a">
+                                    <li>
+                                        <p>Sublist Item</p>
+                                        <p>Second paragraph</p>
+                                    </li>
+                                    <li>
+                                        <p>Sublist Item</p>
+                                        <p>Second paragraph</p>
+                                    </li>
+                                    <li>
+                                        <p>Sublist Item</p>
+                                        <p>Second paragraph</p>
+                                    </li>
+                                </ol>And after.</p>
+                            </li>
+                            <li>
+                                <p>Structured item</p>
+                                <p>Second paragraph</p>
+                            </li>
+                        </ol>And after.</p>
+
+                        <p><ol>
+                            <li>
+                                <p><me>1+1=2</me>Structured item</p>
+                                <p>Second<me>1+1=2</me> paragraph</p>
+                            </li>
+                            <li>
+                                <p><ol label="a">
+                                    <li>
+                                        <p>Sublist<me>1+1=2</me> Item</p>
+                                        <p>Second paragraph<me>1+1=2</me></p>
+                                    </li>
+                                    <li>
+                                        <p><me>1+1=2</me>Sublist Item</p>
+                                        <p>Second<me>1+1=2</me> paragraph</p>
+                                    </li>
+                                    <li>
+                                        <p>Sublist Item<me>1+1=2</me></p>
+                                        <p><me>1+1=2</me>Second paragraph</p>
+                                    </li>
+                                </ol></p>
+                            </li>
+                            <li>
+                                <p>Structured<me>1+1=2</me> item</p>
+                                <p>Second paragraph<me>1+1=2</me></p>
+                            </li>
+                        </ol></p>
+
+                        <p>Text before.<ol>
+                            <li>
+                                <p>Structured<me>1+1=2</me> item</p>
+                                <p>Second paragraph<me>1+1=2</me></p>
+                            </li>
+                            <li>
+                                <p><me>1+1=2</me>Text before.<ol label="a">
+                                    <li>
+                                        <p>Sublist<me>1+1=2</me> Item</p>
+                                        <p>Second paragraph<me>1+1=2</me></p>
+                                    </li>
+                                    <li>
+                                        <p><me>1+1=2</me>Sublist Item</p>
+                                        <p>Second<me>1+1=2</me> paragraph</p>
+                                    </li>
+                                    <li>
+                                        <p>Sublist Item<me>1+1=2</me></p>
+                                        <p><me>1+1=2</me>Second paragraph</p>
+                                    </li>
+                                </ol>And<me>1+1=2</me> after.</p>
+                            </li>
+                            <li>
+                                <p>Structured item<me>1+1=2</me></p>
+                                <p><me>1+1=2</me>Second paragraph</p>
+                            </li>
+                        </ol>And after.</p>
+
+                        <p>Text before.<ol>
+                            <li>
+                                <p>Structured<md>
+                                    <mrow>1+1\amp=2</mrow>
+                                    <mrow>2\amp=2</mrow>
+                                </md> item</p>
+                                <p>Second paragraph<md>
+                                    <mrow>1+1\amp=2</mrow>
+                                    <mrow>2\amp=2</mrow>
+                                </md></p>
+                            </li>
+                            <li>
+                                <p><md>
+                                    <mrow>1+1\amp=2</mrow>
+                                    <mrow>2\amp=2</mrow>
+                                </md>Text before.<ol label="a">
+                                    <li>
+                                        <p>Sublist<md>
+                                            <mrow>1+1\amp=2</mrow>
+                                            <mrow>2\amp=2</mrow>
+                                        </md> Item</p>
+                                        <p>Second paragraph<md>
+                                            <mrow>1+1\amp=2</mrow>
+                                            <mrow>2\amp=2</mrow>
+                                        </md></p>
+                                    </li>
+                                    <li>
+                                        <p><md>
+                                            <mrow>1+1\amp=2</mrow>
+                                            <mrow>2\amp=2</mrow>
+                                        </md>Sublist Item</p>
+                                        <p>Second<md>
+                                            <mrow>1+1\amp=2</mrow>
+                                            <mrow>2\amp=2</mrow>
+                                        </md> paragraph</p>
+                                    </li>
+                                    <li>
+                                        <p>Sublist Item<md>
+                                            <mrow>1+1\amp=2</mrow>
+                                            <mrow>2\amp=2</mrow>
+                                        </md></p>
+                                        <p><md>
+                                            <mrow>1+1\amp=2</mrow>
+                                            <mrow>2\amp=2</mrow>
+                                        </md>Second paragraph</p>
+                                    </li>
+                                </ol>And<md>
+                                <mrow>1+1\amp=2</mrow>
+                                <mrow>2\amp=2</mrow>
+                            </md> after.</p>
+                            </li>
+                            <li>
+                                <p>Structured item<md>
+                                    <mrow>1+1\amp=2</mrow>
+                                    <mrow>2\amp=2</mrow>
+                                </md></p>
+                                <p><md>
+                                    <mrow>1+1\amp=2</mrow>
+                                    <mrow>2\amp=2</mrow>
+                                </md>Second paragraph</p>
+                            </li>
+                        </ol>And after.</p>
+                    </statement>
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <title>Checking Proper Indentation In Lists with Images and Tables</title>
+                <webwork>
+                    <setup>
+                        <pg-code>
+                            $g=init_graph(0,0,1,1);
+                        </pg-code>
+                    </setup>
+                    <statement>
+                        <p><ol>
+                            <li>
+                                <p>Structured item</p>
+                                <image pg-name="$g" width="100" height="100"/>
+                            </li>
+                            <li>
+                                <image pg-name="$g" width="100" height="100"/>
+                                <p>Structured item</p>
+                            </li>
+                            <li>
+                                <p>Structured item</p>
+                                <image pg-name="$g" width="100" height="100"/>
+                                <p>Second paragraph</p>
+                            </li>
+                            <li>
+                                <p>Structured item</p>
+                            </li>
+                        </ol></p>
+
+                        <p><ol>
+                            <li>
+                                <p>Structured item</p>
+                                <tabular>
+                                    <row>
+                                        <cell>a</cell>
+                                        <cell>b</cell>
+                                    </row>
+                                    <row>
+                                        <cell>c</cell>
+                                        <cell>d</cell>
+                                    </row>
+                                </tabular>
+                            </li>
+                            <li>
+                                <tabular top="major" left="major" bottom="major" right="minor" halign="center">
+                                    <col halign="right" top="minor"/>
+                                    <col right="medium"/>
+                                    <col halign="left"/>
+                                    <row bottom="none" left="none">
+                                    <cell right="minor">1</cell>
+                                        <cell>two</cell>
+                                        <cell><m>\lfloor\pi\rfloor</m></cell>
+                                    </row>
+                                    <row valign="bottom">
+                                        <cell bottom="minor"><line><m>\text{I}+\text{I}</m></line><line><m>{}+\text{I}+\text{I}</m></line></cell>
+                                        <cell><m>5</m></cell>
+                                        <cell>six</cell>
+                                    </row>
+                                    <row halign="right">
+                                        <cell><m>2^3-1</m></cell>
+                                        <cell colspan="2" halign="center">VIII</cell>
+                                    </row>
+                                </tabular>
+                                <p>Structured item</p>
+                            </li>
+                            <li>
+                                <p>Structured item</p>
+                                <tabular>
+                                    <row>
+                                        <cell>a</cell>
+                                        <cell>b</cell>
+                                    </row>
+                                    <row>
+                                        <cell>c</cell>
+                                        <cell>d</cell>
+                                    </row>
+                                </tabular>
+                                <p>Second paragraph</p>
+                            </li>
+                            <li>
+                                <p>Structured item</p>
+                            </li>
+                        </ol></p>
+                    </statement>
+                </webwork>
+            </exercise>
         </section>
 
         <section>
