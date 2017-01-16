@@ -1379,8 +1379,6 @@
                             </li>
                         </ol>And after.</p>
 
-                        <p>Note: some lists follow with second paragraphs in list items. While the PGML output by MBX appears to be in order, PGML does not process second paragraphs as intended when they are in a nest deeper than the outermost list. List numbering is interfered with. Either this is a bug with PGML, or PGML never intended to support second paragraphs in inner lists.</p>
-
                         <p><ol>
                             <li>
                                 <p>Structured item</p>
@@ -1637,6 +1635,50 @@
                                 <p>Structured item</p>
                             </li>
                         </ol></p>
+                    </statement>
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <title>Deep-nested lists</title>
+                <webwork>
+                    <statement>
+                        <p>Ordered list.</p>
+                        <p><ol>
+                            <li><p>Level 1, first.</p></li>
+                            <li><p>Level 1, second.<ol>
+                                <li><p>Level 2, first.</p></li>
+                                <li><p>Level 2, second.<ol>
+                                    <li><p>Level 3, first.</p></li>
+                                    <li><p>Level 3, second.<ol>
+                                        <li><p>Level 4, first.</p></li>
+                                        <li><p>Level 4, second.</p></li>
+                                        <li><p>Level 4, third.</p></li>
+                                    </ol></p></li>
+                                    <li><p>Level 3, third.</p></li>
+                                </ol></p></li>
+                                <li><p>Level 2, third.</p></li>
+                            </ol></p></li>
+                            <li><p>Level 1, third.</p></li>
+                        </ol></p>
+                        <p>Unordered list.</p>
+                        <p><ul>
+                            <li><p>Level 1, first.</p></li>
+                            <li><p>Level 1, second.<ul>
+                                <li><p>Level 2, first.</p></li>
+                                <li><p>Level 2, second.<ul>
+                                    <li><p>Level 3, first.</p></li>
+                                    <li><p>Level 3, second.<ul>
+                                        <li><p>Level 4, first.</p></li>
+                                        <li><p>Level 4, second.</p></li>
+                                        <li><p>Level 4, third.</p></li>
+                                    </ul></p></li>
+                                    <li><p>Level 3, third.</p></li>
+                                </ul></p></li>
+                                <li><p>Level 2, third.</p></li>
+                            </ul></p></li>
+                            <li><p>Level 1, third.</p></li>
+                        </ul></p>
                     </statement>
                 </webwork>
             </exercise>
