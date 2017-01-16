@@ -1161,7 +1161,13 @@
                 <xsl:when test="../@label='disc'">*</xsl:when>
                 <xsl:when test="../@label='circle'">o</xsl:when>
                 <xsl:when test="../@label='square'">+</xsl:when>
-                <xsl:otherwise>-</xsl:otherwise>
+                <xsl:otherwise>
+                    <xsl:choose>
+                        <xsl:when test="count(ancestor::ul) mod 3 = 1">*</xsl:when>
+                        <xsl:when test="count(ancestor::ul) mod 3 = 2">o</xsl:when>
+                        <xsl:when test="count(ancestor::ul) mod 3 = 0">+</xsl:when>
+                    </xsl:choose>
+                </xsl:otherwise>
             </xsl:choose>
             <xsl:text> </xsl:text>
         </xsl:when>
@@ -1172,7 +1178,14 @@
                 <xsl:when test="contains(../@label,'A')">A</xsl:when>
                 <xsl:when test="contains(../@label,'i')">i</xsl:when>
                 <xsl:when test="contains(../@label,'I')">I</xsl:when>
-                <xsl:otherwise>1</xsl:otherwise>
+                <xsl:otherwise>
+                    <xsl:choose>
+                        <xsl:when test="count(ancestor::ol) mod 4 = 1">1</xsl:when>
+                        <xsl:when test="count(ancestor::ol) mod 4 = 2">a</xsl:when>
+                        <xsl:when test="count(ancestor::ol) mod 4 = 3">i</xsl:when>
+                        <xsl:when test="count(ancestor::ol) mod 4 = 0">A</xsl:when>
+                    </xsl:choose>
+                </xsl:otherwise>
             </xsl:choose>
             <xsl:text>.  </xsl:text>
         </xsl:when>

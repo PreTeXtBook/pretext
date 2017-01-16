@@ -1640,6 +1640,54 @@
                     </statement>
                 </webwork>
             </exercise>
+
+            <exercise>
+                <title>Deep-nested lists</title>
+                <introduction>
+                    <p>Nesting lists deeper than a second level is known to result in enumeration issues, seen here. This is a PGML issue, not an MBX issue. Perhaps in the future PGML will be able to handle deep nested lists. However, this does demonstrate that (arabic, latin, roman, Latin) is the enumeration scheme, matching HTML and LaTeX.</p>
+                    <p>With unordered lists, there is also a PGML issue at depth 4 and deeper. The bullet cycle for HTML and LaTeX is (disc, circle, square, disc) but despite proper PGML output from MBX, the fourth level currently comes out as circle.</p>
+                </introduction>
+                <webwork>
+                    <statement>
+                        <p>Ordered list.</p>
+                        <p><ol>
+                            <li><p>Level 1, first.</p></li>
+                            <li><p>Level 1, second.<ol>
+                                <li><p>Level 2, first.</p></li>
+                                <li><p>Level 2, second.<ol>
+                                    <li><p>Level 3, first.</p></li>
+                                    <li><p>Level 3, second.<ol>
+                                        <li><p>Level 4, first.</p></li>
+                                        <li><p>Level 4, second.</p></li>
+                                        <li><p>Level 4, third.</p></li>
+                                    </ol></p></li>
+                                    <li><p>Level 3, third.</p></li>
+                                </ol></p></li>
+                                <li><p>Level 2, third.</p></li>
+                            </ol></p></li>
+                            <li><p>Level 1, third.</p></li>
+                        </ol></p>
+                        <p>Unordered list.</p>
+                        <p><ul>
+                            <li><p>Level 1, first.</p></li>
+                            <li><p>Level 1, second.<ul>
+                                <li><p>Level 2, first.</p></li>
+                                <li><p>Level 2, second.<ul>
+                                    <li><p>Level 3, first.</p></li>
+                                    <li><p>Level 3, second.<ul>
+                                        <li><p>Level 4, first.</p></li>
+                                        <li><p>Level 4, second.</p></li>
+                                        <li><p>Level 4, third.</p></li>
+                                    </ul></p></li>
+                                    <li><p>Level 3, third.</p></li>
+                                </ul></p></li>
+                                <li><p>Level 2, third.</p></li>
+                            </ul></p></li>
+                            <li><p>Level 1, third.</p></li>
+                        </ul></p>
+                    </statement>
+                </webwork>
+            </exercise>
         </section>
 
         <section>
