@@ -312,14 +312,34 @@
 <!-- Set-up, per-worksheet -->
 <!-- ##################### -->
 
-<!-- Sage code for CSS load -->
+<!-- HTML code for CSS load -->
+<!-- Gets a div.mathbook-content wrapper      -->
+<!-- which seems to only produce excess space -->
 <xsl:template name="sage-css-setup">
-    <xsl:apply-templates select="." mode="smc-compute-cell">
+    <xsl:apply-templates select="." mode="smc-html-cell">
         <xsl:with-param name="content">
-            <xsl:text>%auto&#xa;</xsl:text>
-            <xsl:text>%hide&#xa;</xsl:text>
-            <xsl:text>load("mathbook-content.css")&#xa;</xsl:text>
-            <xsl:text>load("mathbook-add-on.css")&#xa;</xsl:text>
+            <xsl:element name="link">
+                <xsl:attribute name="rel">
+                    <xsl:text>stylesheet</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="type">
+                    <xsl:text>text/css</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="href">
+                    <xsl:text>http://buzzard.ups.edu/mathbook-content.css</xsl:text>
+                </xsl:attribute>
+            </xsl:element>
+            <xsl:element name="link">
+                <xsl:attribute name="rel">
+                    <xsl:text>stylesheet</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="type">
+                    <xsl:text>text/css</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="href">
+                    <xsl:text>https://aimath.org/mathbook/mathbook-add-on.css</xsl:text>
+                </xsl:attribute>
+            </xsl:element>
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
