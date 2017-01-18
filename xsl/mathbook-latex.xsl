@@ -1317,14 +1317,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\lstdefinestyle{genericinput}{breaklines=true,breakatwhitespace=true,columns=fixed,frame=single,xleftmargin=4ex,xrightmargin=4ex,&#xa;</xsl:text>
             <xsl:text>basicstyle=\small\ttfamily,identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}}&#xa;</xsl:text>
         </xsl:if>
+        <!-- Set "framerule", set "framesep" (latter like CSS padding)            -->
+        <!-- Then set margins on the code to pull box flush with surrounding text -->
+        <!-- "xmargins" = framerule + framesep + epsilon (~0.25pt)                -->
         <xsl:if test="//sage">
             <xsl:text>%% Sage's blue is 50%, we go way lighter (blue!05 would work)&#xa;</xsl:text>
             <xsl:text>\definecolor{sageblue}{rgb}{0.95,0.95,1}&#xa;</xsl:text>
             <xsl:text>%% Sage input, listings package: Python syntax, boxed, colored, line breaking&#xa;</xsl:text>
-            <xsl:text>%% Indent from left margin, flush at right margin&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{sageinput}{language=Python,breaklines=true,breakatwhitespace=true,basicstyle=\small\ttfamily,columns=fixed,frame=single,backgroundcolor=\color{sageblue},xleftmargin=4ex}&#xa;</xsl:text>
+            <xsl:text>%% Flush with surrounding text's margins&#xa;</xsl:text>
+            <xsl:text>%% xmargins are sum of framerule, framesep, epsilon&#xa;</xsl:text>
+            <xsl:text>%% space between input/output comes from input style "belowskip",&#xa;</xsl:text>
+            <xsl:text>%% by giving output an aboveskip of zero&#xa;</xsl:text>
+            <xsl:text>\lstdefinestyle{sageinput}{language=Python,breaklines=true,breakatwhitespace=true,%&#xa;</xsl:text>
+            <xsl:text>basicstyle=\small\ttfamily,columns=fixed,frame=single,backgroundcolor=\color{sageblue},%&#xa;</xsl:text>
+            <xsl:text>framerule=0.5pt,framesep=4pt,xleftmargin=4.75pt,xrightmargin=4.75pt}&#xa;</xsl:text>
+            <!--  -->
             <xsl:text>%% Sage output, similar, but not boxed, not colored&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{sageoutput}{language=Python,breaklines=true,breakatwhitespace=true,basicstyle=\small\ttfamily,columns=fixed,xleftmargin=4ex}&#xa;</xsl:text>
+            <xsl:text>\lstdefinestyle{sageoutput}{language=Python,breaklines=true,%&#xa;</xsl:text>
+            <xsl:text>breakatwhitespace=true,basicstyle=\small\ttfamily,columns=fixed,aboveskip=0pt}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
     <xsl:if test="//console or //sidebyside/pre">
