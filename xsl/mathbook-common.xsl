@@ -914,12 +914,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- ########################## -->
+<!-- Text Manipulation Routines -->
+<!-- ########################## -->
+
+<!-- Various bits of textual material            -->
+<!-- (eg Sage, code, verbatim, LaTeX)            -->
+<!-- require manipulation to                     -->
+<!--                                             -->
+<!--   (a) behave in some output format          -->
+<!--   (b) produce human-readable output (LaTeX) -->
+
+<!-- We need to identify particular characters   -->
+<!-- space, tab, carriage return, newline        -->
+<xsl:variable name="whitespaces">
+    <xsl:text>&#x20;&#x9;&#xD;&#xA;</xsl:text>
+</xsl:variable>
+<!-- space, tab, carriage return, newline        -->
+<xsl:variable name="blanks">
+    <xsl:text>&#x20;&#x9;</xsl:text>
+</xsl:variable>
 
 <!-- Sanitize Code -->
 <!-- No leading whitespace, no trailing -->
 <!-- http://stackoverflow.com/questions/1134318/xslt-xslstrip-space-does-not-work -->
-<xsl:variable name="whitespace"><xsl:text>&#x20;&#x9;&#xD;&#xA;</xsl:text></xsl:variable>
-
 <!-- Trim all whitespace at end of code hunk -->
 <!-- Append carriage return to mark last line, remove later -->
 <xsl:template name="trim-end">
@@ -929,7 +947,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$last-char=''">
             <xsl:text>&#xA;</xsl:text>
         </xsl:when>
-        <xsl:when test="contains($whitespace, $last-char)">
+        <xsl:when test="contains($whitespaces, $last-char)">
             <xsl:call-template name="trim-end">
                 <xsl:with-param name="text" select="substring($text, 1, string-length($text) - 1)" />
             </xsl:call-template>
@@ -956,7 +974,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="text" select="substring($text, 2)" />
             </xsl:call-template>
         </xsl:when>
-        <xsl:when test="contains($whitespace, $first-char)">
+        <xsl:when test="contains($whitespaces, $first-char)">
             <xsl:call-template name="trim-start-lines">
                 <xsl:with-param name="text" select="substring($text, 2)" />
                 <xsl:with-param name="pad"  select="concat($pad, $first-char)" />
@@ -979,7 +997,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$first-char='&#xA;'">
             <xsl:value-of select="string-length($pad)" />
         </xsl:when>
-        <xsl:when test="contains($whitespace, $first-char)">
+        <xsl:when test="contains($whitespaces, $first-char)">
             <xsl:call-template name="count-pad-length">
                 <xsl:with-param name="text" select="substring($text, 2)" />
                 <xsl:with-param name="pad"  select="concat($pad, $first-char)" />
@@ -1214,6 +1232,136 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="word" select="$word" />
                 <xsl:with-param name="count" select="$count + 1" />
             </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Remove empty lines -->
+<!-- These are lines with no characters -->
+<!-- at all, just a newline             -->
+<!-- 2017-01-22: UNUSED, UNTESTED, incorporate with caution  -->
+<xsl:template name="strip-empty-lines">
+    <xsl:param name="text" />
+    <xsl:choose>
+        <!-- no more splitting, output $text, empty or not -->
+        <xsl:when test="not(contains($text, '&#xa;'))">
+            <xsl:value-of select="$text" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:variable name="firstline" select="substring-before($text, '&#xa;')" />
+            <xsl:choose>
+                <!-- silently drop an empty line, newline already gone -->
+                <xsl:when test="not($firstline)" />
+                <!-- output first line with restored newline -->
+                <xsl:otherwise>
+                    <xsl:value-of select="concat($firstline, '&#xa;')" />
+                </xsl:otherwise>
+            </xsl:choose>
+            <!-- recurse with remainder -->
+            <xsl:call-template name="strip-empty-lines">
+                <xsl:with-param name="text" select="substring-after($text, '&#xa;')" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Gobble leading whitespace -->
+<!-- Drop spaces and tabs, quit when empty, or not space/tab -->
+<!-- Designed for a single line as input                     -->
+<!-- Note: used in "slide-text-left" below                   -->
+<!-- 2017-01-22: UNUSED, UNTESTED, incorporate with caution  -->
+<xsl:template name="strip-leading-whitespace">
+    <xsl:param name="text" />
+    <xsl:variable name="first-char" select="substring($text, 1, 1)" />
+    <!-- <xsl:message>C:<xsl:value-of select="$first-char" />:C</xsl:message> -->
+    <xsl:choose>
+        <!-- if empty, done -->
+        <xsl:when test="not($first-char)" />
+        <!-- first character is space, tab, drop it -->
+        <xsl:when test="contains($blanks, $first-char)">
+            <xsl:call-template name="strip-leading-whitespace">
+                <xsl:with-param name="text" select="substring($text, 2)" />
+            </xsl:call-template>
+        </xsl:when>
+        <!-- finished stripping, output as-is -->
+        <xsl:otherwise>
+            <xsl:value-of select="$text" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Shove text left -->
+<!-- Remove all leading whitespace from every line -->
+<!-- Note: very similar to "sanitize-latex" below           -->
+<!-- 2017-01-22: UNUSED, UNTESTED, incorporate with caution -->
+<xsl:template name="slide-text-left">
+    <xsl:param name="text" />
+    <xsl:choose>
+        <!-- no more splitting, strip leading whitespace -->
+        <xsl:when test="not(contains($text, '&#xa;'))">
+            <xsl:call-template name="strip-leading-whitespace">
+                <xsl:with-param name="text">
+                    <xsl:value-of select="$text" />
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="strip-leading-whitespace">
+                <xsl:with-param name="text" select="concat(substring-before($text, '&#xa;'), '&#xa;')" />
+            </xsl:call-template>
+            <!-- recurse with remainder -->
+            <xsl:call-template name="slide-text-left">
+                <xsl:with-param name="text" select="substring-after($text, '&#xa;')" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Sanitize LaTex -->
+<!-- We allow authors to include whitespace for readability          -->
+<!--                                                                 -->
+<!-- (1) Newlines used to format complicated math (eg matrices)      -->
+<!-- (2) Newlines used to avoid word-wrapping in editing tools       -->
+<!-- (3) Newlines to support atomic version control changesets       -->
+<!-- (4) Source indentation of above, consonant with XML indentation -->
+<!--                                                                 -->
+<!-- But once we form LaTeX output we want to                        -->
+<!--                                                                 -->
+<!--   (i) Remove 100% whitespace lines                              -->
+<!--   (ii) Remove leading whitespace                                -->
+<!--                                                                 -->
+<!-- So we                                                           -->
+<!--                                                                 -->
+<!-- (a) Strip all leading whitespace                                -->
+<!-- (b) Remove any 100% empty lines (newline only)                  -->
+<!-- (c) Preserve remaining newlines                                 -->
+<!-- (d) Preserve remaining whitespace                               -->
+<xsl:template name="sanitize-latex">
+    <xsl:param name="text" />
+    <xsl:variable name="first-char" select="substring($text, 1, 1)" />
+    <xsl:choose>
+        <!-- empty, end recursion -->
+        <xsl:when test="not($first-char)" />
+        <!-- first character is whitespace, including newline -->
+        <!-- silently drop it as we recurse on remainder      -->
+        <xsl:when test="contains($whitespaces, $first-char)">
+            <xsl:call-template name="sanitize-latex">
+                <xsl:with-param name="text" select="substring($text, 2)" />
+            </xsl:call-template>
+        </xsl:when>
+        <!-- content followed by newline -->
+        <!-- split, output, and recurse  -->
+        <xsl:when test="contains($text, '&#xa;')">
+            <xsl:value-of select="substring-before($text, '&#xa;')" />
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:call-template name="sanitize-latex">
+                <xsl:with-param name="text" select="substring-after($text, '&#xa;')" />
+            </xsl:call-template>
+        </xsl:when>
+        <!-- content, no following newline -->
+        <!-- output in full, end recursion -->
+        <xsl:otherwise>
+            <xsl:value-of select="$text" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
