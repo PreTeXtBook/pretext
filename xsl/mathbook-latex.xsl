@@ -3447,15 +3447,49 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- So prior to second, and subsequent -->
 <!-- Guarantee: Never a blank line,     -->
 <!-- always finish with newline         -->
+
+<!-- NOTE: combine this into general template with a test on   -->
+<!-- preceding-sibling::*[not(todo)][1][self::p or self::paragraphs]  -->
+<!-- for necessity of \par (do careful diff to see subtle differences -->
 <xsl:template match="p[1]">
-    <xsl:apply-templates />
-    <xsl:text>%&#xa;</xsl:text>
+    <!-- build the paragraph as output -->
+    <xsl:variable name="raw-latex" >
+        <xsl:apply-templates />
+        <xsl:text>%&#xa;</xsl:text>
+    </xsl:variable>
+    <!-- control whitespace, or not -->
+    <xsl:choose>
+        <xsl:when test="$whitespace-style='flexible'">
+            <xsl:call-template name="sanitize-latex">
+                <xsl:with-param name="text" select="$raw-latex" />
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="$whitespace-style='strict'">
+            <xsl:value-of select="$raw-latex" />
+        </xsl:when>
+        <xsl:otherwise />
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="p">
-    <xsl:text>\par&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>%&#xa;</xsl:text>
+    <!-- build the paragraph as output -->
+    <xsl:variable name="raw-latex" >
+        <xsl:text>\par&#xa;</xsl:text>
+        <xsl:apply-templates />
+        <xsl:text>%&#xa;</xsl:text>
+    </xsl:variable>
+    <!-- control whitespace, or not -->
+    <xsl:choose>
+        <xsl:when test="$whitespace-style='flexible'">
+            <xsl:call-template name="sanitize-latex">
+                <xsl:with-param name="text" select="$raw-latex" />
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="$whitespace-style='strict'">
+            <xsl:value-of select="$raw-latex" />
+        </xsl:when>
+        <xsl:otherwise />
+    </xsl:choose>
 </xsl:template>
 
 <!-- For a memo, not indenting the first paragraph helps -->
