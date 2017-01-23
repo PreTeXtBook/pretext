@@ -1469,9 +1469,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- it for inclusion in the final throes of the display math -->
 <xsl:template match="me|men|md|mdn" mode="get-sentence-punctuation">
     <xsl:variable name="trailing-text" select="following-sibling::node()[1]/self::text()" />
-    <xsl:message>
-        <xsl:value-of select="$trailing-text" />
-    </xsl:message>
     <xsl:variable name="punctuation">
         <xsl:call-template name="leading-sentence-punctuation">
             <xsl:with-param name="text" select="$trailing-text" />
