@@ -3550,6 +3550,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="text()|fillin" />
         </xsl:otherwise>
     </xsl:choose>
+    <!-- look ahead to absorb immediate sentence-ending punctuation -->
+    <xsl:apply-templates select="." mode="get-sentence-punctuation" />
+    <!-- finish LaTeX environment -->
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
@@ -3566,6 +3569,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="alignat-columns" />
     <xsl:apply-templates select="text()|fillin" />
+    <!-- look ahead to absorb immediate sentence-ending punctuation -->
+    <xsl:apply-templates select="." mode="get-sentence-punctuation" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
@@ -3604,6 +3609,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="text()|xref|fillin" />
         </xsl:otherwise>
     </xsl:choose>
+    <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
+        <!-- look ahead to absorb immediate sentence-ending punctuation -->
+        <!-- pass the context as enclosing environment (md)             -->
+        <xsl:apply-templates select="parent::md" mode="get-sentence-punctuation" />
+    </xsl:if>
     <xsl:choose>
         <xsl:when test="@number='yes'">
             <xsl:apply-templates select="." mode="label" />
@@ -3625,6 +3635,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="text()|xref|fillin" />
         </xsl:otherwise>
     </xsl:choose>
+    <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
+        <!-- look ahead to absorb immediate sentence-ending punctuation -->
+        <!-- pass the context as enclosing environment (md)             -->
+        <xsl:apply-templates select="parent::mdn" mode="get-sentence-punctuation" />
+    </xsl:if>
     <xsl:choose>
         <xsl:when test="@number='no'">
             <xsl:text>\notag</xsl:text>
@@ -3647,6 +3662,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Text adjustments -->
+<!-- This is a general template for every text node. -->
+<!-- But we are only using it to adjust for          -->
+<!-- sentence-ending punctuation being absorbed into -->
+<!-- display math, so it is here near math handling. -->
+<!-- If generalized for other tasks, some chaining   -->
+<!-- of transformations will be necessary.           -->
+<xsl:template match="text()">
+    <xsl:variable name="first-char" select="substring(., 1, 1)" />
+    <!-- scrub sentence-ending punctuation, absorbed elsewhere -->
+    <!-- then likely some extra whitespace                     -->
+    <xsl:choose>
+        <xsl:when test="contains($sentence-end, $first-char) and preceding-sibling::node()[1][self::me or self::men or self::md or self::mdn]">
+            <xsl:call-template name="strip-leading-whitespace">
+                <xsl:with-param name="text">
+                    <xsl:call-template name="drop-sentence-punctuation">
+                        <xsl:with-param name="text" select="." />
+                    </xsl:call-template>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="." />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- ##### -->
 <!-- Index -->
