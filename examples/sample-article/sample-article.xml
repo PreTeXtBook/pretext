@@ -227,7 +227,7 @@ the xsltproc executable.
             example near the discussion of Asymptote.
             -->
 
-            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me> This is also a demonstration of the capabilities of <url href="http://mathbook.pugetsound.edu">MathBook XML</url>.<notation>
+            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me>.  This is also a demonstration of the capabilities of <url href="http://mathbook.pugetsound.edu">MathBook XML</url>.<notation>
                 <usage>\int_a^b\,f(x)\,dx</usage>
                 <description>definite integral of <m>f(x)</m></description>
             </notation></p>
@@ -532,7 +532,7 @@ the xsltproc executable.
 
                 <corollary xml:id="corollary-FTC-derivative">
                     <statement>
-                        <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men></p>
+                        <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men>.</p>
                     </statement>
                     <proof xml:id="proof-FTC-corollary">
                         <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.<mdn>
@@ -552,7 +552,7 @@ the xsltproc executable.
 
                 <example xml:id="example-mysterious">
                     <title>A Mysterious Derivative</title>
-                    <p>So if we define a function with its variable employed as a limit of integration, like so <me>K(z)=\definiteintegral{345}{z}{x^4\sin(x^2)}{x}</me> then we get the derivative of that function so easily it seems like a mystery, <me>\frac{d}{dz}K(z)=z^4\sin(z^2)</me>  That's it.</p>
+                    <p>So if we define a function with its variable employed as a limit of integration, like so <me>K(z)=\definiteintegral{345}{z}{x^4\sin(x^2)}{x}</me> then we get the derivative of that function so easily it seems like a mystery, <me>\frac{d}{dz}K(z)=z^4\sin(z^2)</me>. That's it.</p>
 
                     <p>For testing purposes, there is a temporary simple Sage Cell here.</p>
 
@@ -971,8 +971,8 @@ the xsltproc executable.
 
             <p><index xml:id="index-finish-multicolumn" start="index-start-multicolumn" />The multi-row displayed mathematics in the proof of the Fundamental Theorem had equations aligned on the equals signs via the <ampersand /> character.  Sometimes you don't want that.  Here is an example with some differential equations, with each equation centered and unnumbered,<md>
                 <mrow>{\mathcal L}(y')(s) = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
-                <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
-            </md></p>
+                <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0)</mrow>
+            </md>.</p>
 
             <notation>
                 <usage>\rho</usage>
@@ -1106,7 +1106,7 @@ the xsltproc executable.
 
                 <p>If you would like to use macros from a <latex /> package <em>and</em> there is a MathJax extension <em>of the same name</em> which implements the same macros, then you may use these with your mathematics as we demonstrate here.</p>
 
-                <p>This example is from Jason Underdown.<index><main>Underdown, Jason</main></index>  The package is named <c>cancel</c> and is included in the TeXLive distribution, so is fairly standard.  The particular macro being demonstrated is <c>\cancelto{}{}</c>.  <me>\lim_{b \rightarrow \infty}\left[\cancelto{0}{-\frac{1}{s}e^{-sb}} + \frac{1}{s}\right]</me>Look at the source of this article to see the package name being supplied in a <c>latex-preamble/package</c> element within the <c>docinfo</c> section.  That is the only setup required to make the macro usable in <latex /> and <init>HTML</init> output.<index><main>canceling a term</main></index><index sortby="cancelto macro"><c>cancelto</c> macro</index></p>
+                <p>This example is from Jason Underdown.<index><main>Underdown, Jason</main></index>  The package is named <c>cancel</c> and is included in the TeXLive distribution, so is fairly standard.  The particular macro being demonstrated is <c>\cancelto{}{}</c>.  <me>\lim_{b \rightarrow \infty}\left[\cancelto{0}{-\frac{1}{s}e^{-sb}} + \frac{1}{s}\right]</me>.   Look at the source of this article to see the package name being supplied in a <c>latex-preamble/package</c> element within the <c>docinfo</c> section.  That is the only setup required to make the macro usable in <latex /> and <init>HTML</init> output.<index><main>canceling a term</main></index><index sortby="cancelto macro"><c>cancelto</c> macro</index></p>
 
                 <p>The packages appear before the author-supplied macros, so you can use macros from the packages as building blocks for document-specific macros.  We cannot guarantee there will be no conflicts between additional packages and those in use normally, or added in the future.  So use at your own risk.</p>
             </subsection>
@@ -3327,7 +3327,7 @@ the xsltproc executable.
                     <p>Compute the definite integral <m>\definiteintegral{2}{4}{x^2}{x}</m>, not as an approximate value from a Riemann sum, but as an exact value based of the limit by using the Fundamental Theorem.</p>
                 </statement>
                 <solution xml:id="solution-antiderivative">
-                    <p>An antiderivative of <m>x^2</m> is <m>F(x)=x^3/3</m>, so by the FTC,<me>\definiteintegral{2}{4}{x^2}{x}=F(4)-F(2)=\frac{1}{3}\left(4^3-2^3\right)=\frac{56}{3}.</me></p>
+                    <p>An antiderivative of <m>x^2</m> is <m>F(x)=x^3/3</m>, so by the FTC,<me>\definiteintegral{2}{4}{x^2}{x}=F(4)-F(2)=\frac{1}{3}\left(4^3-2^3\right)=\frac{56}{3}</me>!?!      This is indeed an exciting result, but we are mostly interested in seeing that the sentence-ending punctuation is absorbed properly into the displayed equation.</p>
                 </solution>
             </exercise>
 
