@@ -959,6 +959,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="blanks">
     <xsl:text>&#x20;&#x9;</xsl:text>
 </xsl:variable>
+<!-- Punctuation ending a sentence               -->
+<xsl:variable name="sentence-end">
+    <xsl:text>.?!</xsl:text>
+</xsl:variable>
 
 <!-- Sanitize Code -->
 <!-- No leading whitespace, no trailing -->
@@ -1291,14 +1295,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Gobble leading whitespace -->
-<!-- Drop spaces and tabs, quit when empty, or not space/tab -->
-<!-- Designed for a single line as input                     -->
-<!-- Note: used in "slide-text-left" below                   -->
-<!-- 2017-01-22: UNUSED, UNTESTED, incorporate with caution  -->
+<!-- Drop consecutive leading spaces and tabs           -->
+<!-- Designed for a single line as input                -->
+<!-- Used after maniplating sentence ending punctuation -->
 <xsl:template name="strip-leading-whitespace">
     <xsl:param name="text" />
     <xsl:variable name="first-char" select="substring($text, 1, 1)" />
-    <!-- <xsl:message>C:<xsl:value-of select="$first-char" />:C</xsl:message> -->
     <xsl:choose>
         <!-- if empty, done -->
         <xsl:when test="not($first-char)" />
@@ -1391,6 +1393,52 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- This collects "sentence-ending" punctuation   -->
+<!-- from the *front* of a text node.  It does not -->
+<!-- change the text node, but simply outputs the  -->
+<!-- punctuation for use by another template       -->
+<xsl:template name="leading-sentence-punctuation">
+    <xsl:param name="text" />
+    <xsl:variable name="first-char" select="substring($text, 1, 1)" />
+    <xsl:choose>
+        <!-- empty, quit -->
+        <xsl:when test="not($first-char)" />
+        <!-- if punctuation, output and recurse -->
+        <!-- else silently quit recursion       -->
+        <xsl:when test="contains($sentence-end, $first-char)">
+            <xsl:value-of select="$first-char" />
+            <xsl:call-template name="leading-sentence-punctuation">
+                <xsl:with-param name="text" select="substring($text, 2)" />
+            </xsl:call-template>
+        </xsl:when>
+        <!-- consecutive only, stop collecting -->
+        <xsl:otherwise />
+    </xsl:choose>
+</xsl:template>
+
+<!-- If we absorb punctuation, we need to scrub it by    -->
+<!-- examining and manipulating the text node with       -->
+<!-- those characters.  We drop consecutive punctuation. -->
+<xsl:template name="drop-sentence-punctuation">
+    <xsl:param name="text" />
+    <xsl:variable name="first-char" select="substring($text, 1, 1)" />
+    <xsl:choose>
+        <!-- if empty, done -->
+        <xsl:when test="not($first-char)" />
+        <!-- first character ends sentence, drop it, recurse -->
+        <xsl:when test="contains($sentence-end, $first-char)">
+            <xsl:call-template name="drop-sentence-punctuation">
+                <xsl:with-param name="text" select="substring($text, 2)" />
+            </xsl:call-template>
+        </xsl:when>
+        <!-- no more punctuation, output as-is -->
+        <xsl:otherwise>
+            <xsl:value-of select="$text" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
 <!-- File Extension -->
 <!-- Input: full filename                       -->
 <!-- Output: extension (no period), lowercase'd -->
@@ -1405,6 +1453,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="translate($extension, &UPPERCASE;, &LOWERCASE;)" />
 </xsl:template>
 
+<!-- ################## -->
+<!-- LaTeX Shortcomings -->
+<!-- ################## -->
+
+<!-- Math bits are authored in LaTeX syntax, -->
+<!-- but sometimes LaTeX needs a little help -->
+<!-- to do the right thing.  This help is    -->
+<!-- often common to several output formats, -->
+<!-- so we put these modal templates here.   -->
+
+<!-- Sentences ending with display math -->
+<!-- We look for an immediately adjacent/subsequent           -->
+<!-- text node and if we get any punctuation, we wrap         -->
+<!-- it for inclusion in the final throes of the display math -->
+<xsl:template match="me|men|md|mdn" mode="get-sentence-punctuation">
+    <xsl:variable name="trailing-text" select="following-sibling::node()[1]/self::text()" />
+    <xsl:message>
+        <xsl:value-of select="$trailing-text" />
+    </xsl:message>
+    <xsl:variable name="punctuation">
+        <xsl:call-template name="leading-sentence-punctuation">
+            <xsl:with-param name="text" select="$trailing-text" />
+        </xsl:call-template>
+    </xsl:variable>
+    <!-- unclear why  test="$punctuation"  tests true always here -->
+    <xsl:if test="not($punctuation='')">
+        <xsl:text>\text{</xsl:text>
+        <xsl:value-of select="$punctuation" />
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+</xsl:template>
 
 <!-- Date and Time Functions -->
 <!-- http://stackoverflow.com/questions/1437995/how-to-convert-2009-09-18-to-18th-sept-in-xslt -->
