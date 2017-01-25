@@ -440,30 +440,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- TODO: put a pdflatex font package hook here? -->
     <xsl:text>%% end: pdflatex-specific configuration&#xa;</xsl:text>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>%% Monospace font: Inconsolata (zi4)&#xa;</xsl:text>
-    <xsl:text>%% Sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html&#xa;</xsl:text>
-    <xsl:text>%% See package documentation for excellent instructions&#xa;</xsl:text>
-    <xsl:text>%% One caveat, seem to need full file name to locate OTF files&#xa;</xsl:text>
-    <xsl:text>%% Loads the "upquote" package as needed, so we don't have to&#xa;</xsl:text>
-    <xsl:text>%% Upright quotes might come from the  textcomp  package, which we also use&#xa;</xsl:text>
-    <xsl:text>%% We employ the shapely \ell to match Google Font version&#xa;</xsl:text>
-    <xsl:text>%% pdflatex: "varqu" option produces best upright quotes&#xa;</xsl:text>
-    <xsl:text>%% xelatex,lualatex: add StylisticSet 1 for shapely \ell&#xa;</xsl:text>
-    <xsl:text>%% xelatex,lualatex: add StylisticSet 2 for plain zero&#xa;</xsl:text>
-    <xsl:text>%% xelatex,lualatex: we add StylisticSet 3 for upright quotes&#xa;</xsl:text>
-    <xsl:text>%% &#xa;</xsl:text>
-    <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}{%&#xa;</xsl:text>
-    <xsl:text>%% begin: xelatex and lualatex-specific monospace font&#xa;</xsl:text>
-    <xsl:text>\usepackage{zi4}&#xa;</xsl:text>
-    <xsl:text>\setmonofont[BoldFont=Inconsolatazi4-Bold.otf,StylisticSet={1,3}]{Inconsolatazi4-Regular.otf}&#xa;</xsl:text>
-    <!-- TODO: put a xelatex/lualatex monospace font package hook here? -->
-    <xsl:text>%% end: xelatex and lualatex-specific monospace font&#xa;</xsl:text>
-    <xsl:text>}{%&#xa;</xsl:text>
-    <xsl:text>%% begin: pdflatex-specific monospace font&#xa;</xsl:text>
-     <xsl:text>\usepackage[varqu]{zi4}&#xa;</xsl:text>
-    <xsl:text>%% end: pdflatex-specific monospace font&#xa;</xsl:text>
-    <!-- TODO: put a pdflatex monospace font package hook here? -->
-    <xsl:text>}&#xa;</xsl:text>
+    <!-- Two approaches to the same monospace font: Inconsolata -->
+    <!-- Conditional on various verbatim type environments      -->
+    <!-- Note: no-content URLs get a monospace font but absent  -->
+    <!-- other monospace use, we do not load an extra font      -->
+    <xsl:if test="$document-root//c or $document-root//cd or $document-root//pre or $document-root//program or $document-root//console or $document-root//sage">
+        <xsl:text>%% Monospace font: Inconsolata (zi4)&#xa;</xsl:text>
+        <xsl:text>%% Sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html&#xa;</xsl:text>
+        <xsl:text>%% See package documentation for excellent instructions&#xa;</xsl:text>
+        <xsl:text>%% One caveat, seem to need full file name to locate OTF files&#xa;</xsl:text>
+        <xsl:text>%% Loads the "upquote" package as needed, so we don't have to&#xa;</xsl:text>
+        <xsl:text>%% Upright quotes might come from the  textcomp  package, which we also use&#xa;</xsl:text>
+        <xsl:text>%% We employ the shapely \ell to match Google Font version&#xa;</xsl:text>
+        <xsl:text>%% pdflatex: "varqu" option produces best upright quotes&#xa;</xsl:text>
+        <xsl:text>%% xelatex,lualatex: add StylisticSet 1 for shapely \ell&#xa;</xsl:text>
+        <xsl:text>%% xelatex,lualatex: add StylisticSet 2 for plain zero&#xa;</xsl:text>
+        <xsl:text>%% xelatex,lualatex: we add StylisticSet 3 for upright quotes&#xa;</xsl:text>
+        <xsl:text>%% &#xa;</xsl:text>
+        <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}{%&#xa;</xsl:text>
+        <xsl:text>%% begin: xelatex and lualatex-specific monospace font&#xa;</xsl:text>
+        <xsl:text>\usepackage{zi4}&#xa;</xsl:text>
+        <xsl:text>\setmonofont[BoldFont=Inconsolatazi4-Bold.otf,StylisticSet={1,3}]{Inconsolatazi4-Regular.otf}&#xa;</xsl:text>
+        <!-- TODO: put a xelatex/lualatex monospace font package hook here? -->
+        <xsl:text>%% end: xelatex and lualatex-specific monospace font&#xa;</xsl:text>
+        <xsl:text>}{%&#xa;</xsl:text>
+        <xsl:text>%% begin: pdflatex-specific monospace font&#xa;</xsl:text>
+         <xsl:text>\usepackage[varqu]{zi4}&#xa;</xsl:text>
+        <xsl:text>%% end: pdflatex-specific monospace font&#xa;</xsl:text>
+        <!-- TODO: put a pdflatex monospace font package hook here? -->
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>%% Symbols, align environment, bracket-matrix&#xa;</xsl:text>
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
     <xsl:text>\usepackage{amssymb}&#xa;</xsl:text>
