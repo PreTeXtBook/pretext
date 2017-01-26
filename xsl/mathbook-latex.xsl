@@ -1685,6 +1685,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%\def^^M{\ifmmode\else\space\fi\ignorespaces}%&#xa;</xsl:text>
         <xsl:text>%% END PGML macros&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="$document-root//contributors">
+        <xsl:text>%% Semantic macros for contributor list&#xa;</xsl:text>
+        <xsl:text>\newcommand{\contributor}[1]{\noindent{}#1\par\bigskip}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\contributorname}[1]{\textsc{#1}\\[0.25\baselineskip]}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\contributorinfo}[1]{\hspace*{0.05\linewidth}\parbox{0.95\linewidth}{\textsl{#1}}}&#xa;</xsl:text>
+    </xsl:if>
 
 </xsl:template>
 
@@ -2529,28 +2535,44 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################ -->
 
 <xsl:template match="contributors">
+    <!-- <xsl:text>\par\bigskip&#xa;</xsl:text> -->
+    <xsl:text>\begin{multicols}{2}&#xa;</xsl:text>
     <xsl:apply-templates select="contributor" />
+    <xsl:text>\end{multicols}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- label works best before *anything* happens -->
+<!-- tested for first name in second column     -->
 <xsl:template match="contributor">
     <xsl:apply-templates select="." mode="label" />
-    <xsl:text>\noindent</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:text>\parbox[t]{0.35\textwidth}{</xsl:text>
-    <xsl:value-of select="personname" />
+    <xsl:text>\contributor{</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
+    <xsl:text>\contributorname{</xsl:text>
+    <xsl:apply-templates select="personname" />
     <xsl:text>}%&#xa;</xsl:text>
-    <xsl:text>\parbox[t]{0.65\textwidth}</xsl:text>
-    <xsl:text>{</xsl:text>
-    <xsl:if test="department">
-        <xsl:apply-templates select="department" />
-        <xsl:text>\\</xsl:text>
+    <xsl:if test="department|institution|email">
+        <xsl:text>\contributorinfo{</xsl:text>
+        <xsl:if test="department">
+            <xsl:apply-templates select="department" />
+            <xsl:if test="department/following-sibling::*">
+                <xsl:text>\\&#xa;</xsl:text>
+            </xsl:if>
+        </xsl:if>
+        <xsl:if test="institution">
+            <xsl:apply-templates select="institution" />
+            <xsl:if test="institution/following-sibling::*">
+                <xsl:text>\\&#xa;</xsl:text>
+            </xsl:if>
+        </xsl:if>
+        <xsl:if test="email">
+            <xsl:text>\texttt{</xsl:text>
+            <xsl:apply-templates select="email" />
+            <xsl:text>}</xsl:text>
+        </xsl:if>
+        <xsl:text>}%&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="institution">
-        <xsl:apply-templates select="institution" />
-        <xsl:text>\\</xsl:text>
-    </xsl:if>
-    <xsl:text>}</xsl:text>
-    <xsl:text>\par&#xa;</xsl:text>
+    <xsl:text>}%&#xa;</xsl:text>
 </xsl:template>
 
 
@@ -6948,6 +6970,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We bypass autonaming, numbers and all that -->
 <!-- for cross-references to contributors       -->
 <!-- $content param is just ignored             -->
+<!-- TODO: should this be more integrated somehow? -->
 <xsl:template match="contributor" mode="xref-link">
     <xsl:text>\hyperlink{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />

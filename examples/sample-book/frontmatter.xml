@@ -238,6 +238,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <preface>
         <title>Contributors to the 4<m>^\mathrm{th}</m> Edition</title>
 
+        <p>Many individuals have made this book possible.  We will try to thank a few of them here, and hope we have not forgotten anybody really important.</p>
+
         <contributors>
             <contributor xml:id="tjudson">
                 <personname>Thomas Judson</personname>
@@ -266,6 +268,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <email>alex.jordan@pcc.edu</email>
             </contributor>
         </contributors>
+
+        <p>That's it.  Thanks everybody.</p>
 
     </preface>
 

@@ -2672,11 +2672,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="contributor-info">
                     <xsl:if test="department">
                         <xsl:apply-templates select="department" />
+                        <xsl:if test="department/following-sibling::*">
+                            <br />
+                        </xsl:if>
                     </xsl:if>
-                    <xsl:if test="department and institution">
-                        <br />
+                    <xsl:if test="institution">
+                        <xsl:apply-templates select="institution" />
+                        <xsl:if test="institution/following-sibling::*">
+                            <br />
+                        </xsl:if>
                     </xsl:if>
-                    <xsl:apply-templates select="institution" />
+                    <xsl:if test="email">
+                        <xsl:apply-templates select="email" />
+                        <xsl:if test="email/following-sibling::*">
+                            <br />
+                        </xsl:if>
+                    </xsl:if>
                 </div>
             </xsl:when>
             <xsl:when test="self::biblio">
@@ -5132,6 +5143,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:attribute>
                 <!-- link content from common template -->
                 <!-- For a contributor we bypass autonaming, etc -->
+                <!-- TODO: should this be more integrated? -->
                 <xsl:choose>
                     <xsl:when test="self::contributor">
                         <xsl:apply-templates select="personname" />
