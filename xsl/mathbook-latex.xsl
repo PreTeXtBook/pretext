@@ -3681,7 +3681,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- then likely some extra whitespace                     -->
     <xsl:choose>
         <xsl:when test="contains($sentence-end, $first-char) and preceding-sibling::node()[1][self::me or self::men or self::md or self::mdn]">
-            <xsl:call-template name="strip-leading-whitespace">
+            <xsl:call-template name="strip-leading-blanks">
                 <xsl:with-param name="text">
                     <xsl:call-template name="drop-sentence-punctuation">
                         <xsl:with-param name="text" select="." />

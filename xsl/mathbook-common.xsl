@@ -1298,7 +1298,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Drop consecutive leading spaces and tabs           -->
 <!-- Designed for a single line as input                -->
 <!-- Used after maniplating sentence ending punctuation -->
-<xsl:template name="strip-leading-whitespace">
+<xsl:template name="strip-leading-blanks">
     <xsl:param name="text" />
     <xsl:variable name="first-char" select="substring($text, 1, 1)" />
     <xsl:choose>
@@ -1306,7 +1306,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="not($first-char)" />
         <!-- first character is space, tab, drop it -->
         <xsl:when test="contains($blanks, $first-char)">
-            <xsl:call-template name="strip-leading-whitespace">
+            <xsl:call-template name="strip-leading-blanks">
                 <xsl:with-param name="text" select="substring($text, 2)" />
             </xsl:call-template>
         </xsl:when>
@@ -1326,14 +1326,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- no more splitting, strip leading whitespace -->
         <xsl:when test="not(contains($text, '&#xa;'))">
-            <xsl:call-template name="strip-leading-whitespace">
+            <xsl:call-template name="strip-leading-blanks">
                 <xsl:with-param name="text">
                     <xsl:value-of select="$text" />
                 </xsl:with-param>
             </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:call-template name="strip-leading-whitespace">
+            <xsl:call-template name="strip-leading-blanks">
                 <xsl:with-param name="text" select="concat(substring-before($text, '&#xa;'), '&#xa;')" />
             </xsl:call-template>
             <!-- recurse with remainder -->
@@ -1438,6 +1438,82 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Remove consecutive run of blanks and  -->
+<!-- newlines in first portion of a string -->
+<xsl:template name="strip-leading-whitespace">
+    <xsl:param name="text" />
+    <xsl:variable name="first-char" select="substring($text, 1, 1)" />
+    <xsl:choose>
+        <!-- if empty, quit -->
+        <xsl:when test="not($first-char)" />
+        <!-- if first character is whitespace, drop it -->
+        <xsl:when test="contains($whitespaces, $first-char)">
+            <xsl:call-template name="strip-leading-whitespace">
+                <xsl:with-param name="text" select="substring($text, 2)" />
+            </xsl:call-template>
+        </xsl:when>
+        <!-- else finished stripping, output as-is -->
+        <xsl:otherwise>
+            <xsl:value-of select="$text" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Remove consecutive run of blanks and -->
+<!-- newlines in last portion of a string -->
+<xsl:template name="strip-trailing-whitespace">
+    <xsl:param name="text" />
+    <xsl:variable name="last-char" select="substring($text, string-length($text), 1)" />
+    <xsl:choose>
+        <!-- if empty, quit -->
+        <xsl:when test="not($last-char)" />
+        <!-- if last character is whitespace, drop it -->
+        <xsl:when test="contains($whitespaces, $last-char)">
+            <xsl:call-template name="strip-trailing-whitespace">
+                <xsl:with-param name="text" select="substring($text, 1, string-length($text)-1)" />
+            </xsl:call-template>
+        </xsl:when>
+        <!-- else finished stripping, output as-is -->
+        <xsl:otherwise>
+            <xsl:value-of select="$text" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- spurious newlines introduce whitespace on either side -->
+<!-- we split at newlines, strip consecutive whitesapce on either side, -->
+<!-- and replace newlines by spaces (could restore a single newline) -->
+<xsl:template name="strip-newlines">
+    <xsl:param name="text" />
+    <xsl:choose>
+        <!-- if has newline, modify newline-free front portion -->
+        <!-- replace splitting newline with new separator      -->
+        <!-- modify trailing portion, and recurse with it      -->
+        <xsl:when test="contains($text, '&#xa;')">
+            <!-- clean trailing portion of left half -->
+            <xsl:call-template name="strip-trailing-whitespace">
+                <xsl:with-param name="text" select="substring-before($text, '&#xa;')" />
+            </xsl:call-template>
+            <!-- restore a separator, blank now -->
+            <!-- Note: this could be a newline, perhaps optionally (whitespace="breaks") -->
+            <!-- Note: this could be " %\n" in LaTeX output to be super explicit -->
+            <xsl:text> </xsl:text>
+            <!-- recurse with modified right half -->
+            <xsl:call-template name="strip-newlines">
+                <xsl:with-param name="text">
+                    <!-- clean leading portion of right half -->
+                    <xsl:call-template name="strip-leading-whitespace">
+                        <xsl:with-param name="text" select="substring-after($text, '&#xa;')" />
+                    </xsl:call-template>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:when>
+        <!-- else finished stripping, output as-is -->
+        <xsl:otherwise>
+            <xsl:value-of select="$text" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- File Extension -->
 <!-- Input: full filename                       -->
