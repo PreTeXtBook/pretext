@@ -1558,6 +1558,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- ################################## -->
+<!-- General Text Handling and Clean-Up -->
+<!-- ################################## -->
+
+<!-- Text adjustments -->
+<!-- This is a general template for every text node. -->
+<!-- We are first using it to adjust for             -->
+<!-- sentence-ending punctuation being absorbed into -->
+<!-- display math, so it is here near math handling. -->
+<!-- If generalized for other tasks, some chaining   -->
+<!-- of transformations will be necessary.           -->
+<xsl:template match="text()">
+    <xsl:variable name="first-char" select="substring(., 1, 1)" />
+    <!-- scrub sentence-ending punctuation, absorbed elsewhere -->
+    <!-- Scrub the extra leading whitespace that results       -->
+    <xsl:choose>
+        <xsl:when test="contains($sentence-end, $first-char) and preceding-sibling::node()[1][self::me or self::men or self::md or self::mdn]">
+            <xsl:call-template name="strip-leading-blanks">
+                <xsl:with-param name="text">
+                    <xsl:call-template name="drop-sentence-punctuation">
+                        <xsl:with-param name="text" select="." />
+                    </xsl:call-template>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="." />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- Date and Time Functions -->
 <!-- http://stackoverflow.com/questions/1437995/how-to-convert-2009-09-18-to-18th-sept-in-xslt -->
 <!-- http://remysharp.com/2008/08/15/how-to-default-a-variable-in-xslt/ -->
