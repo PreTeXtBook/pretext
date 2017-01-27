@@ -79,6 +79,24 @@
     <section xml:id="topic-mathematics">
         <title>(*) Mathematics</title>
 
+        <p>This section is incomplete, newer features are being discussed as they are introduced.</p>
+
+        <paragraphs>
+            <title>Punctuation After Display Math</title>
+
+            <p>If a chunk of displayed math concludes a sentence, then the sentence-ending punctuation should appear at the conclusion of the display.  (And certainly not at the start of the first line after the display!)  But do not author the punctuation within the mathematics element, put it afterwards, where it logically belongs.</p>
+
+            <p>More specifically, place a sentence-ending period (say) <em>immediately</em> after the closing of an <tag>me</tag>, <tag>men</tag>, <tag>md</tag>, or <tag>mdn</tag> element. MathBook XML will place the period in your output in the right place and in the right way.  (By using <latex />'s <c>\text{}</c> macro, if you are curious to know the details.)  Here is an example.  The <init>XML</init> source<cd>
+                <cline>&lt;md&gt;</cline>
+                <cline>    &lt;mrow&gt;(a+b)^2&lt;/mrow&gt;</cline>
+                <cline>&lt;/md&gt;.  Now...</cline>
+            </cd>will render as<md>
+                <mrow>(a+b)^2</mrow>
+            </md>.  Now<ellipsis /></p>
+
+            <p>Take notice of the requirement that the punctuation must be <em>immediately</em> after the closing tag of the math element, otherwise it will not migrate properly.</p>
+        </paragraphs>
+
     </section>
 
     <section xml:id="topic-lists-and-labels">
