@@ -4738,78 +4738,82 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Groupings -->
 <!-- ######## -->
 
-<!-- Characters with left and right variants naturally  -->
-<!-- give rise to tags with begin and end variants      -->
-<!-- We implement these here with Result Tree Fragments -->
-<!-- using polymorphic techniques for the characters    -->
-<!-- Be sure not add a temporary top-level element to   -->
-<!-- the result tree fragment, so default template can  -->
-<!-- process its contents                               -->
+<!-- Characters with left and right variants naturally       -->
+<!-- give rise to tags with begin and end variants           -->
+<!-- We implement these here with Result Tree Fragments      -->
+<!-- as a polymorphic technique for the actual characters    -->
+<!-- LaTeX quotes are odd, so we override "q" and "sq" there -->
 
 <xsl:template match="q">
-    <xsl:variable name="q-rtf">
-        <fakeroot>
-            <lq />
-            <xsl:copy-of select="*|text()"/>
-            <rq />
-        </fakeroot>
+    <xsl:variable name="lq-rtf">
+        <lq />
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($q-rtf)/fakeroot" />
+    <xsl:apply-templates select="exsl:node-set($lq-rtf)" />
+    <xsl:apply-templates />
+    <xsl:variable name="rq-rtf">
+        <rq />
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($rq-rtf)" />
 </xsl:template>
 
 <xsl:template match="sq">
-    <xsl:variable name="sq-rtf">
-        <fakeroot>
-            <lsq />
-            <xsl:copy-of select="*|text()"/>
-            <rsq />
-        </fakeroot>
+    <xsl:variable name="lsq-rtf">
+        <lsq />
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($sq-rtf)/fakeroot" />
+    <xsl:apply-templates select="exsl:node-set($lsq-rtf)" />
+    <xsl:apply-templates />
+    <xsl:variable name="rsq-rtf">
+        <rsq />
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($rsq-rtf)" />
 </xsl:template>
 
 <xsl:template match="braces">
-    <xsl:variable name="braces-rtf">
-        <fakeroot>
-            <lbrace />
-            <xsl:copy-of select="*|text()"/>
-            <rbrace />
-        </fakeroot>
+    <xsl:variable name="lbrace-rtf">
+        <lbrace />
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($braces-rtf)/fakeroot" />
+    <xsl:apply-templates select="exsl:node-set($lbrace-rtf)" />
+    <xsl:apply-templates />
+    <xsl:variable name="rbrace-rtf">
+        <rbrace />
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($rbrace-rtf)" />
 </xsl:template>
 
 <xsl:template match="brackets">
-    <xsl:variable name="brackets-rtf">
-        <fakeroot>
-            <lbracket />
-            <xsl:copy-of select="*|text()"/>
-            <rbracket />
-        </fakeroot>
+    <xsl:variable name="lbracket-rtf">
+        <lbracket />
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($brackets-rtf)/fakeroot" />
+    <xsl:apply-templates select="exsl:node-set($lbracket-rtf)" />
+    <xsl:apply-templates />
+    <xsl:variable name="rbracket-rtf">
+        <rbracket />
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($rbracket-rtf)" />
 </xsl:template>
 
 <xsl:template match="dblbrackets">
-    <xsl:variable name="dblbrackets-rtf">
-        <fakeroot>
-            <ldblbracket />
-            <xsl:copy-of select="*|text()"/>
-            <rdblbracket />
-        </fakeroot>
+    <xsl:variable name="ldblbracket-rtf">
+        <ldblbracket />
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($dblbrackets-rtf)/fakeroot" />
+    <xsl:apply-templates select="exsl:node-set($ldblbracket-rtf)" />
+    <xsl:apply-templates />
+    <xsl:variable name="rdblbracket-rtf">
+        <rdblbracket />
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($rdblbracket-rtf)" />
 </xsl:template>
 
 <xsl:template match="angles">
-    <xsl:variable name="angles-rtf">
-        <fakeroot>
-            <langle />
-            <xsl:copy-of select="*|text()"/>
-            <rangle />
-            </fakeroot>
+    <xsl:variable name="langle-rtf">
+        <langle />
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($angles-rtf)/fakeroot" />
+    <xsl:apply-templates select="exsl:node-set($langle-rtf)" />
+    <xsl:apply-templates />
+    <xsl:variable name="rangle-rtf">
+        <rangle />
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($rangle-rtf)" />
 </xsl:template>
 
 <!-- ############ -->
