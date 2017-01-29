@@ -935,7 +935,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- character, which the output format should recognize   -->
 <!-- via its own devices.                                  -->
 <xsl:template match="cline">
-    <xsl:apply-templates select="text()" />
+    <xsl:value-of select="." />
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 

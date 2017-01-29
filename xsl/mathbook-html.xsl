@@ -5041,7 +5041,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="class">
             <xsl:text>code-inline tex2jax_ignore</xsl:text>
         </xsl:attribute>
-        <xsl:apply-templates select="text()" />
+        <xsl:value-of select="." />
     </xsl:element>
 </xsl:template>
 
@@ -5050,17 +5050,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- environment or HTML's <pre> element          -->
 <!-- TODO: center on page?                        -->
 
-<!-- cd is for use in paragraphs, inline            -->
-<!-- One line is mixed content, and should be tight -->
+<!-- cd is for use in paragraphs, inline -->
+<!-- Unstructured is pure text           -->
 <xsl:template match="cd">
     <xsl:element name="pre">
         <xsl:attribute name="class">
             <xsl:text>code-block tex2jax_ignore</xsl:text>
         </xsl:attribute>
-        <xsl:apply-templates select="text()" />
+        <xsl:value-of select="." />
     </xsl:element>
 </xsl:template>
 
+<!-- cline template is in xsl/mathbook-common.xsl -->
 <xsl:template match="cd[cline]">
     <xsl:element name="pre">
         <xsl:attribute name="class">
@@ -5626,10 +5627,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- do not run through generic text() template -->
 <xsl:template match="console/prompt">
     <xsl:element name="span">
         <xsl:attribute name="class">prompt unselectable</xsl:attribute>
-        <xsl:apply-templates />
+        <xsl:value-of select="." />
     </xsl:element>
 </xsl:template>
 
