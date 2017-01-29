@@ -1562,6 +1562,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- General Text Handling and Clean-Up -->
 <!-- ################################## -->
 
+<!-- Debugging information is not documented, nor supported -->
+<!-- Only outputs on a change                               -->
+<xsl:param name="ws.debug" select="'no'" />
+<xsl:variable name="wsdebug" select="boolean($ws.debug = 'yes')" />
+
 <!-- Text adjustments -->
 <!-- This is a general template for every text node. -->
 <!-- We are first using it to adjust for             -->
@@ -1570,22 +1575,95 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- If generalized for other tasks, some chaining   -->
 <!-- of transformations will be necessary.           -->
 <xsl:template match="text()">
+    <!-- Scrub sentence-ending punctuation, absorbed elsewhere -->
+    <!-- Also scrub the extra leading whitespace that results  -->
     <xsl:variable name="first-char" select="substring(., 1, 1)" />
-    <!-- scrub sentence-ending punctuation, absorbed elsewhere -->
-    <!-- Scrub the extra leading whitespace that results       -->
+    <xsl:variable name="math-punctuation">
+        <xsl:choose>
+            <xsl:when test="contains($sentence-end, $first-char) and preceding-sibling::node()[1][self::me or self::men or self::md or self::mdn]">
+                <xsl:call-template name="strip-leading-whitespace">
+                    <xsl:with-param name="text">
+                        <xsl:call-template name="drop-sentence-punctuation">
+                            <xsl:with-param name="text" select="." />
+                        </xsl:call-template>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="." />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:choose>
-        <xsl:when test="contains($sentence-end, $first-char) and preceding-sibling::node()[1][self::me or self::men or self::md or self::mdn]">
-            <xsl:call-template name="strip-leading-blanks">
-                <xsl:with-param name="text">
-                    <xsl:call-template name="drop-sentence-punctuation">
-                        <xsl:with-param name="text" select="." />
-                    </xsl:call-template>
-                </xsl:with-param>
-            </xsl:call-template>
+        <!-- pass through if assuming strict adherence to whitespace policy -->
+        <xsl:when test="$whitespace='strict'">
+            <xsl:value-of select="$math-punctuation" />
         </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="." />
-        </xsl:otherwise>
+        <!-- We must "apply-templates" to math bits in order    -->
+        <!-- to process "var", "fillin" and "xref", so we pass  -->
+        <!-- through neighboring text nodes under any policy    -->
+        <!-- and we handle whitespace specially afterward       -->
+        <xsl:when test="parent::*[self::m or self::me or self::men or self::mrow]">
+            <xsl:value-of select="$math-punctuation" />
+        </xsl:when>
+        <!-- manipulate leading, trailing, intermediate whitespace under flexible policy -->
+        <!-- if only text node inside parent, all three transformations may apply        -->
+        <xsl:when test="$whitespace='flexible'">
+            <xsl:variable name="original" select="$math-punctuation" />
+            <xsl:variable name="front-cleaned">
+                <xsl:choose>
+                    <xsl:when test="not(preceding-sibling::node()[self::* or self::text()])">
+                        <xsl:call-template name="strip-leading-whitespace">
+                            <xsl:with-param name="text" select="$original" />
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$original" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:variable name="back-cleaned">
+                <xsl:choose>
+                    <xsl:when test="not(following-sibling::node()[self::* or self::text()])">
+                        <xsl:call-template name="strip-trailing-whitespace">
+                            <xsl:with-param name="text" select="$front-cleaned" />
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$front-cleaned" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:variable name="middle-cleaned">
+                <xsl:call-template name="strip-newlines">
+                    <xsl:with-param name="text" select="$back-cleaned" />
+                </xsl:call-template>
+            </xsl:variable>
+            <!-- ACTUAL output -->
+            <xsl:value-of select="$middle-cleaned" />
+            <xsl:if test="$wsdebug and not($math-punctuation = $middle-cleaned)">
+                <!-- DEBUGGING follows, maybe move outward later -->
+                <xsl:message>
+                    <xsl:text>****&#xa;</xsl:text>
+                    <xsl:text>O:</xsl:text>
+                    <xsl:value-of select="." />
+                    <xsl:text>:O&#xa;</xsl:text>
+                    <xsl:text>M:</xsl:text>
+                    <xsl:value-of select="$math-punctuation" />
+                    <xsl:text>:M&#xa;</xsl:text>
+                    <xsl:text>F:</xsl:text>
+                    <xsl:value-of select="$front-cleaned" />
+                    <xsl:text>:F&#xa;</xsl:text>
+                    <xsl:text>B:</xsl:text>
+                    <xsl:value-of select="$back-cleaned" />
+                    <xsl:text>:B&#xa;</xsl:text>
+                    <xsl:text>M:</xsl:text>
+                    <xsl:value-of select="$middle-cleaned" />
+                    <xsl:text>:M&#xa;</xsl:text>
+                    <xsl:text>****&#xa;</xsl:text>
+                </xsl:message>
+            </xsl:if>
+        </xsl:when>
     </xsl:choose>
 </xsl:template>
 
