@@ -935,7 +935,7 @@ the xsltproc executable.
                 </li>
 
                 <li>
-                    <p> Sed varius leo urna. Phasellus tempus mollis ultricies. Curabitur non neque aliquet, facilisis tortor in, sodales dui. Donec hendrerit ultricies nulla mollis rhoncus. In vel lobortis est. Vestibulum consectetur lacus vel sem dignissim vestibulum. Etiam sed elementum ligula, vel congue turpis. Morbi nec diam mattis, venenatis eros et, elementum tellus. Integer sed orci ornare, elementum elit id, lacinia augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; In et libero id turpis pharetra faucibus. Integer consequat dignissim semper. Donec pretium magna at ullamcorper ultricies. Nam quis suscipit elit. Donec cursus tellus et venenatis feugiat. Mauris dictum molestie leo, vitae aliquet metus luctus vitae.</p>
+                    <p>Sed varius leo urna. Phasellus tempus mollis ultricies. Curabitur non neque aliquet, facilisis tortor in, sodales dui. Donec hendrerit ultricies nulla mollis rhoncus. In vel lobortis est. Vestibulum consectetur lacus vel sem dignissim vestibulum. Etiam sed elementum ligula, vel congue turpis. Morbi nec diam mattis, venenatis eros et, elementum tellus. Integer sed orci ornare, elementum elit id, lacinia augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; In et libero id turpis pharetra faucibus. Integer consequat dignissim semper. Donec pretium magna at ullamcorper ultricies. Nam quis suscipit elit. Donec cursus tellus et venenatis feugiat. Mauris dictum molestie leo, vitae aliquet metus luctus vitae.</p>
 
                     <p>Ut id iaculis leo. Sed nec vestibulum mi. Mauris est mauris, porta in nulla eget, bibendum luctus nisl. Praesent et posuere felis, molestie vehicula velit. Nulla a nunc venenatis, aliquam orci nec, congue felis. Vestibulum a dolor nisi. Morbi sed nisi nulla. Nam iaculis felis a enim blandit, at venenatis diam congue. Nulla augue diam, egestas eget fermentum nec, posuere eget risus. Praesent egestas nulla eros, eget accumsan augue euismod vel. Pellentesque pellentesque non erat vitae posuere. Curabitur lacus arcu, varius sed risus ut, ullamcorper tincidunt lorem. Sed et lacus dignissim, tincidunt nisl ac, porttitor sapien.</p>
                 </li>
@@ -1005,7 +1005,7 @@ the xsltproc executable.
                 <caption>Euler's approximation for Duffing's Equation with <m>h = 0.2</m></caption>
                 <tabular top="major" halign="center">
                     <row bottom="minor">
-                        <cell>  <m>i</m></cell>
+                        <cell><m>i</m></cell>
                         <cell><m>t_i</m></cell>
                         <cell><m>x_i</m></cell>
                         <cell><m>y_i</m></cell>
@@ -3880,7 +3880,7 @@ the xsltproc executable.
                 <p>This is a proof that is authored <q>detached.</q>  It is not associated with the theorem above in a way other than simply following it.</p>
             </proof>
 
-            <p>A specialized version of a program listing is an interactive command/response session at a command-line, where differing fonts are used to differentiate the system prompt, the user's commands, and the system's reaction.  A   <c>console</c> session may be used by itself, or it can be wrapped in a listing to get a number and a caption.  As elsewhere, you will need to escape ampersands and angle brackets (such as if you have a command using redirection), using <c>&amp;amp;</c>, <c>&amp;lt;</c>, and <c>&amp;gt;</c> in your source.  </p>
+            <p>A specialized version of a program listing is an interactive command/response session at a command-line, where differing fonts are used to differentiate the system prompt, the user's commands, and the system's reaction.  A   <c>console</c> session may be used by itself, or it can be wrapped in a listing to get a number and a caption.  As elsewhere, you will need to escape ampersands and angle brackets (such as if you have a command using redirection), using <c>&amp;amp;</c>, <c>&amp;lt;</c>, and <c>&amp;gt;</c> in your source.</p>
 
             <listing xml:id="console-raspberry-pi">
                 <caption>Console Session: <c>int</c> and <c>float</c></caption>
@@ -4559,13 +4559,13 @@ the xsltproc executable.
                         </tabular>
                     </table>
                     <paragraphs>
-                        <p>here is some text here is some text here is some text here is some text here </p>
-                        <p>here is some text here is some text here is some text here is some text here </p>
-                        <p>here is some text here is some text here is some text here is some text here </p>
+                        <p>here is some text here is some text here is some text here is some text here</p>
+                        <p>here is some text here is some text here is some text here is some text here</p>
+                        <p>here is some text here is some text here is some text here is some text here</p>
                     </paragraphs>
                     <paragraphs>
-                        <p>here is some text here is some text here is some text here is some text here </p>
-                        <p>here is some text here is some text here is some text here is some text here </p>
+                        <p>here is some text here is some text here is some text here is some text here</p>
+                        <p>here is some text here is some text here is some text here is some text here</p>
                     </paragraphs>
                 </sidebyside>
             </subsection>
@@ -4656,7 +4656,7 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
-                <title>Other Panels </title>
+                <title>Other Panels</title>
 
                 <p>Other elements may be placed within a <c>sidebyside</c> element.  Lists first.</p>
 
@@ -4812,7 +4812,7 @@ the xsltproc executable.
                     <li>Attributes on the <c>sbsgroup</c> are global and will be used by each contained <c>sidebyside</c>.  If attributes are present on an individual <c>sidebyside</c>, they override the global values.</li>
                     <li>With an overall caption on the <c>sbsgroup</c>, the sub-numbering of the panels is consecutive across all of the panels.  So it is an error to have a caption on any <c>sidebyside</c> within an <c>sbsgroup</c>.</li>
                     <li>If the only captions present are for individual panels, then they get regular numbering, not sub-numbering.</li>
-                </ul>  The next example demonstrates some of this behavior.</p>
+                </ul>The next example demonstrates some of this behavior.</p>
 
                 <sbsgroup widths="5% 5% 5%" margins="30%">
                     <caption>Overall SBS Group</caption>
