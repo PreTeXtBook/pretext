@@ -3480,36 +3480,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Paragraphs -->
+<!-- \par *separates* paragraphs So look backward for          -->
+<!-- cases where a paragraph would have been the previous      -->
+<!-- thing in the output Not: "notation", "todo", index, etc   -->
+<!-- Guarantee: Never a blank line, always finish with newline -->
+<!--                                                           -->
+<!-- Note: a paragraph could end with an item we want          -->
+<!-- to look good in teh source, like a list or display        -->
+<!-- math and we already have a newline so any subsequent      -->
+<!-- content from the paragraph will start anwew.  But         -->
+<!-- there might not be anything more to output.  So we        -->
+<!-- always end with a %-newline combo.                        -->
 
-<!-- Paragraphs                         -->
-<!-- \par separates paragraphs          -->
-<!-- So prior to second, and subsequent -->
-<!-- Guarantee: Never a blank line,     -->
-<!-- always finish with newline         -->
-
-<!-- NOTE: combine this into general template with a test on   -->
-<!-- preceding-sibling::*[not(todo)][1][self::p or self::paragraphs]  -->
-<!-- for necessity of \par (do careful diff to see subtle differences -->
-
-<!-- Note: a paragraph could end with visual source, like         -->
-<!-- a list or display math, where we have finishd with a newline -->
-<!-- So we need to finish paragraph with trailing % to protect    -->
-<!-- against a possible blank line                                -->
-<!-- TODO: maybe inspect forward for final node that   -->
-<!-- (sans absorbed punctuation) normalizes to nothing -->
-<xsl:template match="p[1]">
+<!-- TODO: maybe we could look backward at the end of a paragraph       -->
+<!-- to see if the above scenario happens, and we could end gracefully. -->
+<xsl:template match="p">
+    <xsl:if test="preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)][1][self::p or self::paragraphs]">
+        <xsl:text>\par&#xa;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates />
     <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="p">
-        <xsl:text>\par&#xa;</xsl:text>
-        <xsl:apply-templates />
-        <xsl:text>%&#xa;</xsl:text>
-</xsl:template>
-
 <!-- For a memo, not indenting the first paragraph helps -->
 <!-- with alignment and the to/from/subject/date block   -->
+<!-- TODO: maybe memo header should set this up          -->
 <xsl:template match="memo/p[1]">
     <xsl:text>\noindent{}</xsl:text>
     <xsl:apply-templates />

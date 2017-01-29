@@ -39,17 +39,18 @@
 <!ENTITY METADATA "title|subtitle|caption|index">
 <!ENTITY METADATA-FILTER "self::title or self::subtitle or self::caption or self::index">
 
-<!-- Subdivisions contain "invisible" items that get killed     -->
-<!-- and then used/accessed other ways.  To see if something    -->
-<!-- is first, last, preceded, or followed by other significant -->
-<!-- items requires filtering out these items in forming a      -->
-<!-- node-set (so as to not be confused by their presence)      -->
-<!-- A super-lightweight "article" might have "frontmatter"     -->
-<!-- and "backmatter" as peers of content elements, and in      -->
-<!-- other cases it should not be a problem                     -->
-<!-- Typical use:  *[not(&SUBDIVISION-METADATA-FILTER;)]        -->
-<!ENTITY SUBDIVISION-METADATA "title|subtitle|index|frontmatter|backmatter">
-<!ENTITY SUBDIVISION-METADATA-FILTER "self::title or self::subtitle or self::index or self::frontmatter or self::backmatter">
+<!-- Subdivisions and runs of paragraphs (like in a proof)  -->
+<!-- contain "invisible" items that get killed  and then    -->
+<!-- used/accessed other ways.  To see if something  is     -->
+<!--first, last, preceded, or followed by other significant -->
+<!-- items requires filtering out these items in forming a  -->
+<!-- node-set (so as to not be confused by their presence)  -->
+<!-- A super-lightweight "article" might have "frontmatter" -->
+<!-- and "backmatter" as peers of content elements, and in  -->
+<!-- other cases it should not be a problem                 -->
+<!-- Typical use:  *[not(&SUBDIVISION-METADATA-FILTER;)]    -->
+<!ENTITY SUBDIVISION-METADATA "title|subtitle|index|notation|todo|frontmatter|backmatter">
+<!ENTITY SUBDIVISION-METADATA-FILTER "self::title or self::subtitle or self::index or self::notation or self::todo or self::frontmatter or self::backmatter">
 
 <!-- To implement a new category of blocks, search on    -->
 <!-- "PROJECT-" (case-sensitive) since we will mark      -->
