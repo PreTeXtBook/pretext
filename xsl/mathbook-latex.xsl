@@ -3526,8 +3526,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="text()|fillin" />
         </xsl:otherwise>
     </xsl:choose>
-    <!-- look ahead to absorb immediate sentence-ending punctuation -->
-    <xsl:apply-templates select="." mode="get-sentence-punctuation" />
+    <!-- look ahead to absorb immediate clause-ending punctuation -->
+    <xsl:apply-templates select="." mode="get-clause-punctuation" />
     <!-- finish LaTeX environment -->
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
@@ -3545,8 +3545,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="alignat-columns" />
     <xsl:apply-templates select="text()|fillin" />
-    <!-- look ahead to absorb immediate sentence-ending punctuation -->
-    <xsl:apply-templates select="." mode="get-sentence-punctuation" />
+    <!-- look ahead to absorb immediate clause-ending punctuation -->
+    <xsl:apply-templates select="." mode="get-clause-punctuation" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
@@ -3586,9 +3586,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
-        <!-- look ahead to absorb immediate sentence-ending punctuation -->
-        <!-- pass the context as enclosing environment (md)             -->
-        <xsl:apply-templates select="parent::md" mode="get-sentence-punctuation" />
+        <!-- look ahead to absorb immediate clause-ending punctuation -->
+        <!-- pass the context as enclosing environment (md)           -->
+        <xsl:apply-templates select="parent::md" mode="get-clause-punctuation" />
     </xsl:if>
     <xsl:choose>
         <xsl:when test="@number='yes'">
@@ -3612,9 +3612,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
-        <!-- look ahead to absorb immediate sentence-ending punctuation -->
-        <!-- pass the context as enclosing environment (md)             -->
-        <xsl:apply-templates select="parent::mdn" mode="get-sentence-punctuation" />
+        <!-- look ahead to absorb immediate clause-ending punctuation -->
+        <!-- pass the context as enclosing environment (md)           -->
+        <xsl:apply-templates select="parent::mdn" mode="get-clause-punctuation" />
     </xsl:if>
     <xsl:choose>
         <xsl:when test="@number='no'">

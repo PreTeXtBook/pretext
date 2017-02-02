@@ -3229,8 +3229,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="alignat-columns" />
     <xsl:apply-templates select="text()|var|fillin" />
-    <!-- look ahead to absorb immediate sentence-ending punctuation -->
-    <xsl:apply-templates select="." mode="get-sentence-punctuation" />
+    <!-- look ahead to absorb immediate clause-ending punctuation -->
+    <xsl:apply-templates select="." mode="get-clause-punctuation" />
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
@@ -3245,8 +3245,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="alignat-columns" />
     <xsl:apply-templates select="text()|var|fillin" />
-    <!-- look ahead to absorb immediate sentence-ending punctuation -->
-    <xsl:apply-templates select="." mode="get-sentence-punctuation" />
+    <!-- look ahead to absorb immediate clause-ending punctuation -->
+    <xsl:apply-templates select="." mode="get-clause-punctuation" />
     <!-- label original -->
     <xsl:apply-templates select="." mode="label" />
     <xsl:apply-templates select="." mode="tag" />
@@ -3261,8 +3261,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="alignat-columns" />
     <xsl:apply-templates select="text()|var|fillin" />
-    <!-- look ahead to absorb immediate sentence-ending punctuation -->
-    <xsl:apply-templates select="." mode="get-sentence-punctuation" />
+    <!-- look ahead to absorb immediate clause-ending punctuation -->
+    <xsl:apply-templates select="." mode="get-clause-punctuation" />
     <xsl:apply-templates select="." mode="tag" />
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
@@ -3307,9 +3307,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="md/mrow">
     <xsl:apply-templates select="text()|xref|var|fillin" />
     <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
-        <!-- look ahead to absorb immediate sentence-ending punctuation -->
-        <!-- pass the context as enclosing environment (md)             -->
-        <xsl:apply-templates select="parent::md" mode="get-sentence-punctuation" />
+        <!-- look ahead to absorb immediate clause-ending punctuation -->
+        <!-- pass the context as enclosing environment (md)           -->
+        <xsl:apply-templates select="parent::md" mode="get-clause-punctuation" />
     </xsl:if>
     <xsl:if test="@number='yes'">
         <!-- label original -->
@@ -3325,9 +3325,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="md/mrow" mode="duplicate">
     <xsl:apply-templates select="text()|xref|var|fillin" />
     <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
-        <!-- look ahead to absorb immediate sentence-ending punctuation -->
-        <!-- pass the context as enclosing environment (md)             -->
-        <xsl:apply-templates select="parent::md" mode="get-sentence-punctuation" />
+        <!-- look ahead to absorb immediate clause-ending punctuation -->
+        <!-- pass the context as enclosing environment (md)           -->
+        <xsl:apply-templates select="parent::md" mode="get-clause-punctuation" />
     </xsl:if>
     <xsl:if test="@number='yes'">
         <xsl:apply-templates select="." mode="tag"/>
@@ -3341,9 +3341,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="mdn/mrow">
     <xsl:apply-templates select="text()|xref|var|fillin" />
     <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
-        <!-- look ahead to absorb immediate sentence-ending punctuation -->
-        <!-- pass the context as enclosing environment (md)             -->
-        <xsl:apply-templates select="parent::md" mode="get-sentence-punctuation" />
+        <!-- look ahead to absorb immediate clause-ending punctuation -->
+        <!-- pass the context as enclosing environment (md)           -->
+        <xsl:apply-templates select="parent::md" mode="get-clause-punctuation" />
     </xsl:if>
     <xsl:choose>
         <xsl:when test="@number='no'">
@@ -3364,9 +3364,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="mdn/mrow" mode="duplicate">
     <xsl:apply-templates select="text()|xref|var|fillin" />
     <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
-        <!-- look ahead to absorb immediate sentence-ending punctuation -->
-        <!-- pass the context as enclosing environment (md)             -->
-        <xsl:apply-templates select="parent::md" mode="get-sentence-punctuation" />
+        <!-- look ahead to absorb immediate clause-ending punctuation -->
+        <!-- pass the context as enclosing environment (md)           -->
+        <xsl:apply-templates select="parent::md" mode="get-clause-punctuation" />
     </xsl:if>
     <xsl:choose>
         <xsl:when test="@number='no'">
