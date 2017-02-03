@@ -3626,7 +3626,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Limited exceptions to raw text only:                        -->
 <!--     xref's allow for "reasons" in proofs                    -->
 <!--     var is part of WeBWorK problems only                    -->
-<xsl:template match="md/mrow">
+<xsl:template match="md/mrow|mdn/mrow">
     <xsl:choose>
         <xsl:when test="ancestor::webwork">
             <xsl:apply-templates select="text()|xref|var" />
@@ -3637,44 +3637,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
     <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
         <!-- look ahead to absorb immediate clause-ending punctuation -->
-        <!-- pass the context as enclosing environment (md)           -->
-        <xsl:apply-templates select="parent::md" mode="get-clause-punctuation" />
+        <!-- pass the context as enclosing environment (md, mdn)      -->
+        <xsl:apply-templates select="parent::*" mode="get-clause-punctuation" />
     </xsl:if>
+    <!-- The element name dictates the LaTeX environment used     -->
+    <!-- But to mix and match requires overrides via an attribute -->
     <xsl:choose>
-        <xsl:when test="@number='yes'">
-            <xsl:apply-templates select="." mode="label" />
+        <xsl:when test="parent::md">
+            <xsl:choose>
+                <xsl:when test="@number='yes'">
+                    <xsl:apply-templates select="." mode="label" />
+                </xsl:when>
+                <xsl:otherwise></xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
-        <xsl:otherwise></xsl:otherwise>
-    </xsl:choose>
-    <xsl:if test="following-sibling::mrow">
-       <xsl:text>\\</xsl:text>
-    </xsl:if>
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
-<!-- TODO: consolidate with above, testing on parent for numbering conditions -->
-<xsl:template match="mdn/mrow">
-    <xsl:choose>
-        <xsl:when test="ancestor::webwork">
-            <xsl:apply-templates select="text()|xref|var" />
+        <xsl:when test="parent::mdn">
+            <xsl:choose>
+                <xsl:when test="@number='no'">
+                    <xsl:text>\notag</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="." mode="label" />
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="text()|xref|fillin" />
-        </xsl:otherwise>
     </xsl:choose>
-    <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
-        <!-- look ahead to absorb immediate clause-ending punctuation -->
-        <!-- pass the context as enclosing environment (md)           -->
-        <xsl:apply-templates select="parent::mdn" mode="get-clause-punctuation" />
-    </xsl:if>
-    <xsl:choose>
-        <xsl:when test="@number='no'">
-            <xsl:text>\notag</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="." mode="label" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <!-- intertext does not need line-ending on prior row -->
+    <!-- nor does final mrow of the whole display         -->
     <xsl:if test="following-sibling::mrow">
        <xsl:text>\\</xsl:text>
     </xsl:if>
@@ -3682,7 +3671,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Intertext -->
-<!-- An <mrow> will provide trailing newline, so do the same here -->
+<!-- An <mrow> will provide trailing newline, -->
+<!-- so do the same here for visual source    -->
 <xsl:template match="md/intertext|mdn/intertext">
     <xsl:text>\intertext{</xsl:text>
     <xsl:apply-templates />
