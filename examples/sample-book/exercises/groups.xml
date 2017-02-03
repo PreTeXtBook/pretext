@@ -389,8 +389,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <exercise number="40">
         <statement>
-            <p><me>
-                \begin{pmatrix}
+            <p><me>\begin{pmatrix}
                 \cos \theta &amp; -\sin \theta \\
                 \sin \theta &amp; \cos \theta
                 \end{pmatrix}</me>

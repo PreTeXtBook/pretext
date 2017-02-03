@@ -626,8 +626,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </example>
 
             <example xml:id="example-groups-gl2-subgroup">
-                <p>It is important to realize that a subset <m>H</m> of a group <m>G</m> can be a group without being a subgroup of <m>G</m>. For <m>H</m> to be a subgroup of <m>G</m> it must inherit <m>G</m>'s binary operation.  The set of all <m>2 \times 2</m> matrices, <m>{\mathbb M}_2(\mathbb R)</m>, forms a group under the operation of addition. The <m>2 \times 2</m> general linear group is a subset of <m>{\mathbb M}_2(\mathbb R)</m> and is a group under matrix multiplication, but it is not a subgroup of <m>{\mathbb M}_2(\mathbb R)</m>.  If we add two invertible matrices, we do not necessarily obtain another invertible matrix. Observe that<me>
-                \begin{pmatrix}<![CDATA[
+                <p>It is important to realize that a subset <m>H</m> of a group <m>G</m> can be a group without being a subgroup of <m>G</m>. For <m>H</m> to be a subgroup of <m>G</m> it must inherit <m>G</m>'s binary operation.  The set of all <m>2 \times 2</m> matrices, <m>{\mathbb M}_2(\mathbb R)</m>, forms a group under the operation of addition. The <m>2 \times 2</m> general linear group is a subset of <m>{\mathbb M}_2(\mathbb R)</m> and is a group under matrix multiplication, but it is not a subgroup of <m>{\mathbb M}_2(\mathbb R)</m>.  If we add two invertible matrices, we do not necessarily obtain another invertible matrix. Observe that<me>\begin{pmatrix}<![CDATA[
                 1 & 0 \\
                 0 & 1
                 ]]>\end{pmatrix}
@@ -640,8 +639,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 \begin{pmatrix}<![CDATA[
                 0 & 0 \\
                 0 & 0
-                ]]>\end{pmatrix},
-                </me>
+                ]]>\end{pmatrix}</me>,
                 but the zero matrix is not in <m>GL_2( {\mathbb R })</m>.</p>
             </example>
 
