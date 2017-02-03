@@ -1355,21 +1355,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                                                 -->
 <!-- But once we form LaTeX output we want to                        -->
 <!--                                                                 -->
-<!--   (i) Remove 100% whitespace lines                              -->
-<!--   (ii) Remove leading whitespace                                -->
+<!--   (i)   Remove 100% whitespace lines                            -->
+<!--   (ii)  Remove leading whitespace                               -->
+<!--   (iii) Finish without a newline                                -->
 <!--                                                                 -->
 <!-- So we                                                           -->
 <!--                                                                 -->
 <!-- (a) Strip all leading whitespace                                -->
-<!-- (b) Remove any 100% empty lines (newline only)                  -->
-<!-- (c) Preserve remaining newlines                                 -->
-<!-- (d) Preserve remaining whitespace                               -->
+<!-- (b) Remove any 100% resulting empty lines (newline only)        -->
+<!-- (c) Preserve remaining newlines (trailing after content)        -->
+<!-- (d) Preserve remaining whitespace (eg, within expressions)      -->
+<!-- (e) Take care with trailing characters, except final newline    -->
+<!--                                                                 -->
+<!-- We can do this because of the limited purposes of the           -->
+<!-- m, me, men, md, mdn elements.  The whitespace we strip is not   -->
+<!-- relevant/important, and what we leave does not change output    -->
 <xsl:template name="sanitize-latex">
     <xsl:param name="text" />
     <xsl:variable name="first-char" select="substring($text, 1, 1)" />
     <xsl:choose>
         <!-- empty, end recursion -->
-        <xsl:when test="not($first-char)" />
+        <xsl:when test="$first-char = ''" />
         <!-- first character is whitespace, including newline -->
         <!-- silently drop it as we recurse on remainder      -->
         <xsl:when test="contains($whitespaces, $first-char)">
@@ -1377,14 +1383,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="text" select="substring($text, 2)" />
             </xsl:call-template>
         </xsl:when>
-        <!-- content followed by newline -->
-        <!-- split, output, and recurse  -->
+        <!-- content followed by newline                           -->
+        <!-- split, preserve newline, output, and recurse, but     -->
+        <!-- drop a newline that only protects trailing whitespace -->
         <xsl:when test="contains($text, '&#xa;')">
             <xsl:value-of select="substring-before($text, '&#xa;')" />
-            <xsl:text>&#xa;</xsl:text>
-            <xsl:call-template name="sanitize-latex">
-                <xsl:with-param name="text" select="substring-after($text, '&#xa;')" />
-            </xsl:call-template>
+            <xsl:variable name="remainder" select="substring-after($text, '&#xa;')" />
+            <xsl:choose>
+                <xsl:when test="normalize-space($remainder) = ''" />
+                <xsl:otherwise>
+                    <xsl:text>&#xa;</xsl:text>
+                    <xsl:call-template name="sanitize-latex">
+                        <xsl:with-param name="text" select="$remainder" />
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
         <!-- content, no following newline -->
         <!-- output in full, end recursion -->

@@ -3457,6 +3457,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NOTE: combine this into general template with a test on   -->
 <!-- preceding-sibling::*[not(todo)][1][self::p or self::paragraphs]  -->
 <!-- for necessity of \par (do careful diff to see subtle differences -->
+
+<!-- Note: a paragraph could end with visual source, like         -->
+<!-- a list or display math, where we have finishd with a newline -->
+<!-- So we need to finish paragraph with trailing % to protect    -->
+<!-- against a possible blank line                                -->
+<!-- TODO: maybe inspect forward for final node that   -->
+<!-- (sans absorbed punctuation) normalizes to nothing -->
 <xsl:template match="p[1]">
     <xsl:apply-templates />
     <xsl:text>%&#xa;</xsl:text>
@@ -3506,73 +3513,116 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Displayed Math -->
 
-<!-- Single displayed equation, unnumbered                         -->
+<!-- Single displayed equation, me (unnumbered), men (numbered)    -->
 <!-- Output follows source line breaks                             -->
 <!-- MathJax: out-of-the-box support                               -->
 <!-- LaTeX: with AMS-TeX, \[,\] tranlates to equation* environment -->
 <!-- LaTeX: without AMS-TEX, it is improved version of $$, $$      -->
 <!-- WeBWorK: allow for "var" element                              -->
-<!-- See: http://tex.stackexchange.com/questions/40492/what-are-the-differences-between-align-equation-and-displaymath -->
-<xsl:template match="me">
+<!-- See: http://tex.stackexchange.com/questions/40492/            -->
+<xsl:template match="me|men">
+    <!-- build and save for possible manipulation                   -->
+    <!-- Note: template for text nodes passes through mrow children -->
+    <xsl:variable name="raw-latex">
+        <xsl:choose>
+            <xsl:when test="ancestor::webwork">
+                <xsl:apply-templates select="text()|var" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="text()|fillin" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Build container begin -->
+    <!-- We must be in a paragraph, so we can  -->
+    <!-- cautiously add a protected newline    -->
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="alignat-columns" />
+    <!-- leading whitespace not present, or stripped -->
+    <xsl:text>&#xa;</xsl:text>
+    <!-- Manipulate guts, or not -->
     <xsl:choose>
-        <xsl:when test="ancestor::webwork">
-            <xsl:apply-templates select="text()|var" />
+        <xsl:when test="$whitespace = 'strict'">
+            <xsl:value-of select="$raw-latex" />
         </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="text()|fillin" />
-        </xsl:otherwise>
+        <xsl:when test="$whitespace = 'flexible'">
+            <xsl:call-template name="sanitize-latex">
+                <xsl:with-param name="text" select="$raw-latex" />
+            </xsl:call-template>
+        </xsl:when>
     </xsl:choose>
     <!-- look ahead to absorb immediate clause-ending punctuation -->
     <xsl:apply-templates select="." mode="get-clause-punctuation" />
-    <!-- finish LaTeX environment -->
+    <!-- finish LaTeX environment, optionally labeled -->
+    <xsl:if test="self::men">
+        <xsl:apply-templates select="." mode="label" />
+    </xsl:if>
+    <!-- Build container end                            -->
+    <!-- We add a newline for visually appealing source -->
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
-</xsl:template>
-
-<!-- Single displayed equation, numbered                  -->
-<!-- MathJax: out-of-the-box support                      -->
-<!-- LaTeX: with AMS-TeX, equation* environment supported -->
-<!-- LaTeX: without AMS-TEX, $$ with equation numbering   -->
-<!-- See link above, also.                                -->
-<xsl:template match="men">
-    <xsl:text>\begin{</xsl:text>
-    <xsl:apply-templates select="." mode="displaymath-alignment" />
-    <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="." mode="alignat-columns" />
-    <xsl:apply-templates select="text()|fillin" />
-    <!-- look ahead to absorb immediate clause-ending punctuation -->
-    <xsl:apply-templates select="." mode="get-clause-punctuation" />
-    <xsl:apply-templates select="." mode="label"/>
-    <xsl:text>\end{</xsl:text>
-    <xsl:apply-templates select="." mode="displaymath-alignment" />
-    <xsl:text>}</xsl:text>
+    <!-- We must return to a paragraph, so                     -->
+    <!-- we can add an unprotected newline                     -->
+    <!-- Note: clause-ending punctuation has been absorbed,    -->
+    <!-- so is not left orphaned at the start of the next line -->
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Multi-Line Math -->
 <!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
 <!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
 <!-- align environment if ampersands are present, gather environment otherwise   -->
-<!-- Output follows source line breaks                                           -->
+<!-- Output follows source line breaks, but may be sanitized for quality output  -->
 <xsl:template match="md|mdn">
+    <!-- build and save for possible manipulation                   -->
+    <!-- Note: template for text nodes passes through mrow children -->
+    <xsl:variable name="raw-latex">
+        <xsl:apply-templates select="mrow|intertext" />
+    </xsl:variable>
+    <!-- Build container begin -->
+    <!-- We must be in a paragraph, so we can  -->
+    <!-- cautiously add a protected newline    -->
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="alignat-columns" />
+    <!-- leading whitespace not present, or stripped -->
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="mrow|intertext" />
+    <!-- Manipulate guts, or not -->
+    <!-- With no manipulation, final mrow/intertext provides newline -->
+    <!-- Using the sanitize-latex template, we add a final newline   -->
+    <xsl:choose>
+        <xsl:when test="$whitespace = 'strict'">
+            <xsl:value-of select="$raw-latex" />
+        </xsl:when>
+        <xsl:when test="$whitespace = 'flexible'">
+            <xsl:call-template name="sanitize-latex">
+                <xsl:with-param name="text" select="$raw-latex" />
+            </xsl:call-template>
+            <!-- We add a newline for visually appealing source -->
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+    <!-- Build container end -->
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
+    <!-- We must return to a paragraph, so -->
+    <!-- we can add an unprotected newline -->
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Rows of a multi-line math display -->
 <!-- Numbering controlled here with \label{}, \notag, or nothing -->
 <!-- Last row different, has no line-break marker                -->
+<!-- Each mrow finishes with a newline, for visual output        -->
+<!-- LaTeX sanitization observes newlines, but strips final one  -->
 <!-- Limited exceptions to raw text only:                        -->
 <!--     xref's allow for "reasons" in proofs                    -->
 <!--     var is part of WeBWorK problems only                    -->
@@ -3602,6 +3652,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- TODO: consolidate with above, testing on parent for numbering conditions -->
 <xsl:template match="mdn/mrow">
     <xsl:choose>
         <xsl:when test="ancestor::webwork">
