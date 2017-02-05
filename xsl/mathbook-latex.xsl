@@ -3494,24 +3494,51 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- of equations (automatic for LaTeX, managed for HTML) -->
 
 <!-- Numbering -->
-<!-- We do not tag equations with numbers in LaTeX output,               -->
-<!-- but instead let the LaTeX preamble's configuration                  -->
-<!-- options control the way numbers are generated and assigned.         -->
-<!-- The combination of starred/un-starred LaTeX environments,            -->
-<!-- and the presence of "\label{}", "\notag", or no such command,        -->
-<!-- control the numbering in response to the number of levels specified. -->
+<!-- We do not tag equations with numbers in LaTeX output,   -->
+<!-- but instead let the LaTeX preamble's configuration      -->
+<!-- options control the way numbers are generated and       -->
+<!-- assigned. The combination of starred/un-starred LaTeX   -->
+<!-- environments, and the presence of "\label{}", "\notag", -->
+<!-- or no such command, control the numbering in response   -->
+<!-- to the number of levels specified.                      -->
 
-<!-- NOTE -->
-<!-- The remainder should look very similar to that  -->
-<!-- of the HTML/MathJax version in terms of result. -->
-<!-- Notably, "intertext" elements are implemented   -->
-<!-- differently, and we need to be careful not to   -->
-<!-- place LaTeX "\label{}" in know'ed content.      -->
+<!-- Other differences -->
+<!-- \intertext needs a very different stategy for HTML      -->
+<!-- \label needs to not occur in duplicated content in HTML -->
 
-<!-- Inline Math -->
-<!-- See the common file for the universal "m" template -->
-
-<!-- Displayed Math -->
+<!-- Inline Math ("m") -->
+<!-- We use the asymmetric LaTeX delimiters \( and \).     -->
+<!-- For LaTeX these are not "robust", hence break moving  -->
+<!-- items (titles, index), so use the "fixltx2e" package, -->
+<!-- which declares \MakeRobust\( and \MakeRobust\)        -->
+<xsl:template match= "m">
+    <xsl:variable name="raw-latex">
+        <!-- build and save for possible manipulation     -->
+        <!-- Note: generic text() template passes through -->
+        <xsl:choose>
+            <xsl:when test="ancestor::webwork">
+                <xsl:apply-templates select="text()|var" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="text()|fillin" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- wrap tightly in math delimiters -->
+    <xsl:text>\(</xsl:text>
+    <!-- Manipulate guts, or not -->
+    <xsl:choose>
+        <xsl:when test="$whitespace = 'strict'">
+            <xsl:value-of select="$raw-latex" />
+        </xsl:when>
+        <xsl:when test="$whitespace = 'flexible'">
+            <xsl:call-template name="sanitize-latex">
+                <xsl:with-param name="text" select="$raw-latex" />
+            </xsl:call-template>
+        </xsl:when>
+    </xsl:choose>
+    <xsl:text>\)</xsl:text>
+</xsl:template>
 
 <!-- Single displayed equation, me (unnumbered), men (numbered)    -->
 <!-- Output follows source line breaks                             -->

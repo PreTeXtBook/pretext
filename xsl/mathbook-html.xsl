@@ -3193,9 +3193,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- differently, and we need to be careful not to    -->
 <!-- place LaTeX "\label{}" in know'ed content.       -->
 
-<!-- Inline Math -->
-<!-- See the common file for the universal "m" template -->
-<!-- Never labeled, so no need for duplicate template   -->
+<!-- Inline Math ("m") -->
+<!-- Never labeled, so not ever knowled,        -->
+<!-- and so no need for a duplicate template    -->
+<!-- Asymmetric LaTeX delimiters \( and \) need -->
+<!-- to be part of MathJax configuration, but   -->
+<!-- also free up the dollar sign               -->
+<!-- TODO: absorb punctuation, bad HTML line breaks -->
+<xsl:template match= "m">
+    <xsl:variable name="raw-latex">
+        <!-- build and save for possible manipulation     -->
+        <!-- Note: generic text() template passes through -->
+        <xsl:choose>
+            <xsl:when test="ancestor::webwork">
+                <xsl:apply-templates select="text()|var" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="text()|fillin" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- wrap tightly in math delimiters -->
+    <xsl:text>\(</xsl:text>
+    <!-- Manipulate guts, or not -->
+    <xsl:choose>
+        <xsl:when test="$whitespace = 'strict'">
+            <xsl:value-of select="$raw-latex" />
+        </xsl:when>
+        <xsl:when test="$whitespace = 'flexible'">
+            <xsl:call-template name="sanitize-latex">
+                <xsl:with-param name="text" select="$raw-latex" />
+            </xsl:call-template>
+        </xsl:when>
+    </xsl:choose>
+    <xsl:text>\)</xsl:text>
+</xsl:template>
 
 <!-- We don't wrap math, stay out of MathJax' way -->
 <!-- me is not numbered ever, so not knowlized    -->

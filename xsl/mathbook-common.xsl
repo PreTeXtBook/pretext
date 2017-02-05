@@ -581,34 +581,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
-<!-- ################################ -->
-<!-- Mathematics (LaTeX/HTML/MathJax) -->
-<!-- ################################ -->
-
-<!-- Since MathJax interprets a large subset of LaTeX,   -->
-<!-- there are only subtle differences between LaTeX     -->
-<!-- and HTML output.  See LaTeX- and HTML-specific       -->
-<!-- templates for intertext elements and the numbering   -->
-<!-- of equations (automatic for LaTeX, managed for HTML) -->
-
-<!-- Inline Math -->
-<!-- We use the LaTeX delimiters \( and \)                                       -->
-<!-- MathJax: needs to be specified in the tex2jax/inlineMath configuration list -->
-<!-- LaTeX: these are not "robust", hence break moving itmes (titles, index), so -->
-<!-- use the "fixltx2e" package, which declares \MakeRobust\( and \MakeRobust\)  -->
-<!-- WeBWorK: allow the "var" element                                            -->
-<xsl:template match= "m">
-    <xsl:text>\(</xsl:text>
-    <xsl:choose>
-        <xsl:when test="ancestor::webwork">
-            <xsl:apply-templates select="text()|var" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="text()|fillin" />
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>\)</xsl:text>
-</xsl:template>
+<!-- ########### -->
+<!-- Mathematics -->
+<!-- ########### -->
 
 <!-- We get some clues about the right LaTeX environment to      -->
 <!-- use for display mathematics, but some of this is guesswork. -->
