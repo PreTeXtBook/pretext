@@ -1546,11 +1546,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- often common to several output formats, -->
 <!-- so we put these modal templates here.   -->
 
-<!-- Sentences ending with display math -->
-<!-- We look for an immediately adjacent/subsequent           -->
-<!-- text node and if we get any punctuation, we wrap         -->
-<!-- it for inclusion in the final throes of the display math -->
-<xsl:template match="me|men|md|mdn" mode="get-clause-punctuation">
+<!-- Clauses ending with math -->
+<!-- We look for an immediately adjacent/subsequent text -->
+<!-- node and if we get any punctuation, we wrap it for  -->
+<!-- inclusion in the final throes of the math part      -->
+<!-- See compensating code below for general text        -->
+<xsl:template match="m|me|men|md|mdn" mode="get-clause-punctuation">
     <xsl:variable name="trailing-text" select="following-sibling::node()[1]/self::text()" />
     <xsl:variable name="punctuation">
         <xsl:call-template name="leading-clause-punctuation">
@@ -1575,15 +1576,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="wsdebug" select="boolean($ws.debug = 'yes')" />
 
 <!-- Text adjustments -->
-<!-- This is a general template for every text node. -->
-<!-- We are first using it to adjust for             -->
-<!-- clause-ending punctuation being absorbed into   -->
-<!-- display math, so it is here near math handling. -->
-<!-- If generalized for other tasks, some chaining   -->
-<!-- of transformations will be necessary.           -->
+<!-- This is a general template for every text node.   -->
+<!-- We are first using it to adjust for clause-ending -->
+<!-- punctuation being absorbed elsewhere into math,   -->
+<!-- so we place this near math handling.              -->
 <xsl:template match="text()">
-    <!-- Scrub clause-ending punctuation, absorbed elsewhere   -->
-    <!-- Also scrub the extra leading whitespace that results  -->
+    <!-- Scrub clause-ending punctuation immediately after math  -->
+    <!-- It migrates and is absorbed in math templates elsewhere -->
+    <!-- Side-effect: resulting leading whitespace is scrubbed   -->
+    <!-- for displayed mathematics (only) as it is irrelevant    -->
+    <!-- Inline math only adjusted for MathJax processing        -->
     <xsl:variable name="first-char" select="substring(., 1, 1)" />
     <xsl:variable name="math-punctuation">
         <xsl:choose>
@@ -1596,11 +1598,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
+            <xsl:when test="contains($clause-ending-marks, $first-char) and preceding-sibling::node()[1][self::m] and $latex-processing='mathjax'">
+                <xsl:call-template name="drop-clause-punctuation">
+                    <xsl:with-param name="text" select="." />
+                </xsl:call-template>
+            </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="." />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
+    <!-- TODO: strip leading whitespace above only under  -->
+    <!-- 'strict' policy, and combine two when clauses.   -->
+    <!-- Below, strip leading and trailing whitespace on  -->
+    <!-- either side of displayed objects, math and lists -->
+    <!-- (only?), in addition to first and last nodes     -->
     <xsl:choose>
         <!-- pass through if assuming strict adherence to whitespace policy -->
         <xsl:when test="$whitespace='strict'">
@@ -1615,6 +1627,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- manipulate leading, trailing, intermediate whitespace under flexible policy -->
         <!-- if only text node inside parent, all three transformations may apply        -->
+        <!-- Note: space after clause-punctuation will not be deleted here               -->
         <xsl:when test="$whitespace='flexible'">
             <xsl:variable name="original" select="$math-punctuation" />
             <xsl:variable name="front-cleaned">

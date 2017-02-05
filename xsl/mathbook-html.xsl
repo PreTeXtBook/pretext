@@ -3216,6 +3216,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="text()|fillin" />
             </xsl:otherwise>
         </xsl:choose>
+        <!-- look ahead to absorb immediate clause-ending punctuation -->
+        <xsl:apply-templates select="." mode="get-clause-punctuation" />
     </xsl:variable>
     <!-- wrap tightly in math delimiters -->
     <xsl:text>\(</xsl:text>

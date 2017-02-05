@@ -3515,6 +3515,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For LaTeX these are not "robust", hence break moving  -->
 <!-- items (titles, index), so use the "fixltx2e" package, -->
 <!-- which declares \MakeRobust\( and \MakeRobust\)        -->
+<!-- Note: LaTeX, unlike HTML, needs no help with          -->
+<!-- clause-ending punctuation trailing inline math        -->
+<!-- it always does the right thing.  So when the general  -->
+<!-- template for text nodes in mathbook-common goes to    -->
+<!-- drop this punctuation, it also checks the             -->
+<!-- $latex-processing global variable                     -->
 <xsl:template match= "m">
     <xsl:variable name="raw-latex">
         <!-- build and save for possible manipulation     -->
