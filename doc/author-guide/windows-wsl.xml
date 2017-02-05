@@ -10,7 +10,7 @@
 <appendix xml:id="windows-subsystem-linux">
     <title>Windows Subsystem for Linux</title>
 
-    <p>With Windows 10 you can install the <term>Windows Subsystem for Linux</term> (<init>WSL</init>).  This is basically Ubuntu Linux (one of the most popular versions of Linux) integrated into Windows 10 in a way that command-line Linux programs can be executed easily.  An early announcement is available at <url href="https://msdn.microsoft.com/commandline/wsl" />.  Michael Dood reports on 2016-06-01 that this works quite well for the programs necessary to author with MathBook XML.</p>
+    <p>With Windows 10 you can install the <term>Windows Subsystem for Linux</term> (<init>WSL</init>).  This is basically Ubuntu Linux (one of the most popular versions of Linux) integrated into Windows 10 in a way that command-line Linux programs can be executed easily.  News and announcements can be fouund at <url href="https://msdn.microsoft.com/commandline/wsl/about" /> (<c>msdn.microsoft.com/commandline/wsl/about</c>).  Michael Doob reports on 2016-06-01 and 2017-02-03 that this works quite well for the programs necessary to author with MathBook XML.</p>
 
     <p>Ubuntu Linux installs new programs using <c>apt</c> via a command such as:</p>
 
