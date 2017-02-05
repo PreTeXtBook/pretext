@@ -55,6 +55,7 @@ systems.
             <!-- Newer deprecations first  -->
             <p>Cite element subsumed into xref scheme (2014/06/25).</p>
             <p>Obsolete filebase attribute (2014/05/04).</p>
+            <p>Once upon a time there was a hyphen element for hyphenated<hyphen />words.</p>
         </section>
 
         <section filebase="obsolete-way-to-introduce-filename-strings">

@@ -5097,6 +5097,14 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <xsl:template match="*" mode="deprecation-warnings">
     <!-- newer deprecations at the top of this list, user will see in this order -->
     <!--  -->
+    <xsl:if test="$document-root//hyphen">
+        <xsl:call-template name="deprecation-message">
+            <xsl:with-param name="date-string" select="'2017-02-05'" />
+            <xsl:with-param name="message" select="'use the hyphen-minus character instead of &lt;hyphen/&gt;'" />
+            <xsl:with-param name="occurences" select="count($document-root//hyphen)" />
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
     <xsl:if test="//image/@width[not(contains(., '%'))]">
         <xsl:call-template name="deprecation-message">
             <xsl:with-param name="date-string" select="'2016-07-31'" />

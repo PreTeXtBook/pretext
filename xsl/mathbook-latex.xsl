@@ -4703,7 +4703,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Dashes -->
+<!-- Dashes, Hyphen -->
 <!-- http://www.public.asu.edu/~arrows/tidbits/dashes.html -->
 <xsl:template match="mdash">
     <xsl:text>\textemdash{}</xsl:text>
@@ -4711,7 +4711,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="ndash">
     <xsl:text>\textendash{}</xsl:text>
 </xsl:template>
+<!-- A "hyphen" element was a bad idea, very cumbersome -->
 <xsl:template match="hyphen">
+    <xsl:message>MBX:WARNING: the "hyphen" element is deprecated (2017-02-05), use the "hyphen-minus" character instead (aka the "ASCII hyphen")</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
     <xsl:text>-</xsl:text>
 </xsl:template>
 

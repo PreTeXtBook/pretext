@@ -5344,16 +5344,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Dashes, Hyphen -->
 <!-- http://www.cs.tut.fi/~jkorpela/dashes.html -->
-<!-- HTML Tidy does not like these characters, but they seem to be OK -->
-<!-- Could do this in CSS, perhaps? -->
 <xsl:template match="mdash">
     <xsl:text>&#8212;</xsl:text>
 </xsl:template>
 <xsl:template match="ndash">
     <xsl:text>&#8211;</xsl:text>
 </xsl:template>
-<!-- Unambiguous hyphen -->
+<!-- A "hyphen" element was a bad idea, very cumbersome -->
 <xsl:template match="hyphen">
+    <xsl:message>MBX:WARNING: the "hyphen" element is deprecated (2017-02-05), use the "hyphen-minus" character instead (aka the "ASCII hyphen")</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
     <xsl:text>&#8208;</xsl:text>
 </xsl:template>
 
