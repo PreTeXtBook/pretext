@@ -3164,15 +3164,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>false</xsl:text>
 </xsl:template>
 
-<!-- ########################## -->
-<!-- Mathematics (HTML/MathJax) -->
-<!-- ########################## -->
+<!-- ########### -->
+<!-- Mathematics -->
+<!-- ########### -->
 
-<!-- Since MathJax interprets a large subset of LaTeX,   -->
-<!-- there are only subtle differences between LaTeX     -->
-<!-- and HTML output.  See LaTeX- and HTML-specific       -->
-<!-- templates for intertext elements and the numbering   -->
-<!-- of equations (automatic for LaTeX, managed for HTML) -->
+<!-- Mathematics authored in LaTeX syntax will be        -->
+<!-- independent of output format.  Despite MathJax's    -->
+<!-- broad array of capabilities, there are enough       -->
+<!-- differences that it is easier to maintain separate  -->
+<!-- routines for different outputs.  Still, we try to   -->
+<!-- isolate some routines in "xsl/mathbook-common.xsl". -->
 
 <!-- Numbering -->
 <!-- We manually "tag" numbered equations in HTML output,       -->
@@ -3229,8 +3230,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\)</xsl:text>
 </xsl:template>
 
-<!-- We don't wrap math, stay out of MathJax' way -->
-<!-- me is not numbered ever, so not knowlized    -->
+<!-- Minimal templates for general environments       -->
+<!-- These are necessary since we can xross-reference -->
+<!-- numbered equations within a math display         -->
 
 <!-- always visible -->
 <xsl:template match="men|md|mdn" mode="is-hidden">
@@ -3252,9 +3254,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>false</xsl:text>
 </xsl:template>
 
-<!-- Single Displayed Equation, Unnumbered -->
-<!-- Output follows source line breaks     -->
-<!-- MathJax: out-of-the-box support       -->
+<!-- Displayed Single-Line Math, Unnumbered ("me") -->
+<!-- Never numbered, so never knowled, and thus no   -->
+<!-- duplicate template.  Also no wrapping in div's, -->
+<!-- etc. Output follows source line breaks          -->
 <xsl:template match="me">
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
@@ -3268,7 +3271,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Single Displayed Equation, Numbered -->
+<!-- Displayed Single-Line Math, Numbered ("men") -->
 <!-- MathJax: out-of-the-box support     -->
 <!-- Requires a manual tag for number    -->
 <xsl:template match="men">
@@ -3301,7 +3304,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Multi-Line Math -->
+<!-- Displayed Multi-Line Math ("md", "mdn") -->
 <!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
 <!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
 <!-- align environment if ampersands are present, gather environment otherwise   -->
@@ -3331,7 +3334,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- Rows of a Multi-line Math Display                 -->
+<!-- Rows of displayed Multi-Line Math ("mrow") -->
 <!-- (1) MathJax config above turns off all numbering  -->
 <!-- (2) Numbering supplied by \tag{}                  -->
 <!-- (3) MathJax config makes span id's predictable    -->

@@ -3483,15 +3483,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
-<!-- ########################### -->
-<!-- Mathematics (LaTeX/MathJax) -->
-<!-- ########################### -->
+<!-- ########### -->
+<!-- Mathematics -->
+<!-- ########### -->
 
-<!-- Since MathJax interprets a large subset of LaTeX,   -->
-<!-- there are only subtle differences between LaTeX     -->
-<!-- and HTML output.  See LaTeX- and HTML-specific       -->
-<!-- templates for intertext elements and the numbering   -->
-<!-- of equations (automatic for LaTeX, managed for HTML) -->
+<!-- Mathematics authored in LaTeX syntax will be        -->
+<!-- independent of output format.  Despite MathJax's    -->
+<!-- broad array of capabilities, there are enough       -->
+<!-- differences that it is easier to maintain separate  -->
+<!-- routines for different outputs.  Still, we try to   -->
+<!-- isolate some routines in "xsl/mathbook-common.xsl". -->
 
 <!-- Numbering -->
 <!-- We do not tag equations with numbers in LaTeX output,   -->
@@ -3540,12 +3541,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\)</xsl:text>
 </xsl:template>
 
+<!-- Displayed Single-Line Math ("me", "men") -->
 <!-- Single displayed equation, me (unnumbered), men (numbered)    -->
 <!-- Output follows source line breaks                             -->
-<!-- MathJax: out-of-the-box support                               -->
-<!-- LaTeX: with AMS-TeX, \[,\] tranlates to equation* environment -->
-<!-- LaTeX: without AMS-TEX, it is improved version of $$, $$      -->
-<!-- WeBWorK: allow for "var" element                              -->
 <!-- See: http://tex.stackexchange.com/questions/40492/            -->
 <xsl:template match="me|men">
     <!-- build and save for possible manipulation                   -->
@@ -3600,7 +3598,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Multi-Line Math -->
+<!-- Displayed Multi-Line Math ("md", "mdn") -->
 <!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
 <!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
 <!-- align environment if ampersands are present, gather environment otherwise   -->
@@ -3645,7 +3643,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Rows of a multi-line math display -->
+<!-- Rows of displayed Multi-Line Math ("mrow") -->
 <!-- Numbering controlled here with \label{}, \notag, or nothing -->
 <!-- Last row different, has no line-break marker                -->
 <!-- Each mrow finishes with a newline, for visual output        -->

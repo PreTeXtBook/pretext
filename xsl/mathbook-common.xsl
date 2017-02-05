@@ -585,10 +585,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Mathematics -->
 <!-- ########### -->
 
-<!-- We get some clues about the right LaTeX environment to      -->
-<!-- use for display mathematics, but some of this is guesswork. -->
-<!-- But we can consolidate this textual analysis (input/output) -->
-<!-- here in the common routines.  Attribute allows overrides.   -->
+<!-- Mathematics authored in LaTeX syntax will be        -->
+<!-- independent of output format.  Despite MathJax's    -->
+<!-- broad array of capabilities, there are enough       -->
+<!-- differences that it is easier to maintain separate  -->
+<!-- routines for different outputs.  Still, we try to   -->
+<!-- isolate some routines in "xsl/mathbook-common.xsl". -->
+
+<!-- Certain options and variants are common in both     -->
+<!-- cases, so we provide templates for those decisions  -->
+<!-- Elsewhere are low-level manipulation of whitespace  -->
+<!-- in processed version of  LaTeX output               -->
 
 <!-- Always an "equation" for an me-variant -->
 <!-- The equation* is AMS-Math-specific,    -->
