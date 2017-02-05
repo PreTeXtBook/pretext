@@ -2381,6 +2381,19 @@ the xsltproc executable.
 
             </subsection>
 
+            <subsection>
+                <title>Testing List Decompositions</title>
+
+                <p>A list in a paragraph is a construction in HTML that browsers try to correct, which leads to unpredictable results, so we have to decompose an author's paragraph with lists into a sequence of HTML paragraphs, interrupted by lists.  This subsection is only relevant to HTML output, and only for testing.<index><main>paragraph</main><sub>normal</sub></index></p>
+
+                <p><ol>
+                    <li>This paragraph opens with an ordered list.</li>
+                    <li>Testing the id, and other info that should be at the top of the paragraph.</li>
+                </ol>Now the paragraph continues, and we have an index item here, so we can test cross-references back here.<index><main>paragraph</main><sub>opens with list</sub></index></p>
+
+            </subsection>
+
+
             <references>
                 <title>References (with lists in Annotations)</title>
 
