@@ -217,6 +217,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Variables -->
 <!-- ######### -->
 
+<!-- The latex processing model is overridden in       -->
+<!-- imported files, per output format. Any stylesheet -->
+<!-- importing this one, should define this            -->
+<!-- The purpose is to identify variations in how      -->
+<!-- text nodes are manipulated, such as clause-ending -->
+<!-- punctuation that has migrated into inline math    -->
+<!-- Values are: 'native' and 'mathjax'                -->
+<!-- Note: this device might be abandoned if browsers  -->
+<!-- and MathJax ever cooperate on placing line breaks -->
+<xsl:variable name="latex-processing" select="''" />
+
 <!-- We set this variable a bit differently -->
 <!-- for different conversions, so this is  -->
 <!-- basically an abstract implementation   -->

@@ -120,6 +120,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Variables that affect LaTeX creation -->
 <!-- More in the common file              -->
 
+<!-- LaTeX is handled natively -->
+<xsl:variable name="latex-processing" select="'native'" />
+
 <!-- We generally want one large complete LaTeX file -->
 <xsl:variable name="chunk-level">
     <xsl:choose>

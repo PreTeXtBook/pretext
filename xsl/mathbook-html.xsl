@@ -160,6 +160,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Variables that affect HTML creation -->
 <!-- More in the common file             -->
 
+<!-- LaTeX is handled with MathJax -->
+<xsl:variable name="latex-processing" select="'mathjax'" />
+
 <!-- This is cribbed from the CSS "max-width"-->
 <!-- Design width, measured in pixels        -->
 <xsl:variable name="design-width" select="'600'" />
