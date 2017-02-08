@@ -545,7 +545,7 @@ the xsltproc executable.
 
                 <p>The alternative version of the Fundamental Theorem (<acro>FTC</acro>) in <xref ref="equation-alternate-FTC" /> is a compact way to express the result.</p>
 
-                <p>For testing purposes, there is a temporary simple Sage Cell here.</p>
+                <p>For testing purposes, there is a simple bare Sage Cell here.</p>
                 <sage>
                     <input>2+2</input>
                 </sage>
@@ -554,12 +554,14 @@ the xsltproc executable.
                     <title>A Mysterious Derivative</title>
                     <p>So if we define a function with its variable employed as a limit of integration, like so <me>K(z)=\definiteintegral{345}{z}{x^4\sin(x^2)}{x}</me> then we get the derivative of that function so easily it seems like a mystery, <me>\frac{d}{dz}K(z)=z^4\sin(z^2)</me>. That's it.</p>
 
-                    <p>For testing purposes, there is a temporary simple Sage Cell here.</p>
+                    <p>For testing purposes, there is a simple Sage Cell here, buried inside an example that should be a knowl (embedded in the page).</p>
 
                     <sage>
                         <input>2+2</input>
                     </sage>
                 </example>
+
+                <p>We cross-reference the example just prior, <xref ref="example-mysterious" autoname="yes" />, to test the simple Sage cell that will now be part of a cross-reference knowl (an external file).</p>
 
                 <claim xml:id="claim-with-cases">
                     <title>An Equivalent Claim</title>

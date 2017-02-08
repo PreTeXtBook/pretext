@@ -1392,6 +1392,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:element name="head">
                 <!-- dissuade indexing duplicated content -->
                 <meta name="robots" content="noindex, nofollow" />
+                <!-- we need Sage cell configuration functions     -->
+                <!-- in the knowl file itself, the main Javascript -->
+                <!-- is being placed on *every* page, if present   -->
+                <!-- anywhere in the document, and that is         -->
+                <!-- sufficient for the external knowl             -->
+                <xsl:apply-templates select="." mode="sagecell" />
             </xsl:element>
 
             <xsl:element name="body">
@@ -5847,7 +5853,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
             <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
             <!-- jquery used by sage, webwork, knowls -->
-            <xsl:call-template name="jquery" />
+            <xsl:call-template name="jquery-sagecell" />
             <xsl:call-template name="mathjax" />
             <!-- webwork's iframeResizer needs to come before sage -->
             <xsl:if test="//webwork[@*|node()]">
@@ -5948,7 +5954,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
 
             <!-- jquery used by sage, webwork, knowls -->
-            <xsl:call-template name="jquery" />
+            <xsl:call-template name="jquery-sagecell" />
             <xsl:call-template name="mathjax" />
             <!-- webwork's iframeResizer needs to come before sage -->
             <xsl:if test="//webwork[@*|node()]">
@@ -6786,11 +6792,17 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full" />
 </xsl:template>
 
-<!-- jQuery -->
-<!-- used by sage, webwork, knowls                  -->
-<!-- essential to use the version from sagemath.org -->
-<xsl:template name="jquery">
+<!-- jQuery, SageCell -->
+<!-- jQuery used by sage, webwork, knowls, so load always  -->
+<!--  * essential to use the version from sagemath.org *   -->
+<!-- We never know if a Sage cell might be inside a knowl, -->
+<!-- so we load the relevant JavaScript onto every page if -->
+<!-- a cell occurs *anywhere* in the entire document       -->
+<xsl:template name="jquery-sagecell">
     <script type="text/javascript" src="https://sagecell.sagemath.org/static/jquery.min.js"></script>
+    <xsl:if test="$document-root//sage">
+        <script type="text/javascript" src="https://sagecell.sagemath.org/embedded_sagecell.js"></script>
+    </xsl:if>
 </xsl:template>
 
 <!-- Sage Cell Setup -->
@@ -6870,11 +6882,6 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
 <!-- Examine the subtree of the page, which can still be   -->
 <!-- excessive for summary pages, so room for improvement  -->
 <xsl:template match="*" mode="sagecell">
-    <!-- Load Javascript for Sage Cell Server, JQuery is elsewhere -->
-    <xsl:if test=".//sage">
-        <script type="text/javascript" src="https://sagecell.sagemath.org/embedded_sagecell.js"></script>
-    </xsl:if>
-
     <!-- making a Sage version now very liberally, could be more precise -->
     <xsl:if test=".//sage">
         <xsl:call-template name="makesagecell">
