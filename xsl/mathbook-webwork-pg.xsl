@@ -795,10 +795,20 @@
 
 <!-- PGML inline math uses its own delimiters  -->
 <!-- NB: we allow the "var" element as a child -->
+
+<!-- Note: the default template for "text()" in             -->
+<!-- xsl/mathbook-common.xsl will drop "clause-ending"      -->
+<!-- punctuation that immediately follows a bit of math,    -->
+<!-- and possibly remove some resulting leading whitespace. -->
+<!-- Then the math templates need to look forward and       -->
+<!-- recover this punctuation with a \text{} wrapper.       -->
+
 <xsl:template match= "webwork//m">
     <xsl:text>[`</xsl:text>
     <xsl:call-template name="select-latex-macros"/>
     <xsl:apply-templates select="text()|var" />
+    <!-- look ahead to absorb immediate clause-ending punctuation -->
+    <xsl:apply-templates select="." mode="get-clause-punctuation" />
     <xsl:text>`]</xsl:text>
 </xsl:template>
 
@@ -806,6 +816,8 @@
     <xsl:text>&#xa;&#xa;>> [``</xsl:text>
     <xsl:call-template name="select-latex-macros"/>
     <xsl:apply-templates select="text()|var" />
+    <!-- look ahead to absorb immediate clause-ending punctuation -->
+    <xsl:apply-templates select="." mode="get-clause-punctuation" />
     <xsl:text>``] &lt;&lt;&#xa;&#xa;</xsl:text>
 </xsl:template>
 
@@ -832,7 +844,12 @@
 
 <xsl:template match="webwork//md/mrow">
     <xsl:apply-templates select="text()|var" />
-    <xsl:if test="position()!=last()">
+    <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
+        <!-- look ahead to absorb immediate clause-ending punctuation -->
+        <!-- pass the enclosing environment (md) as the context       -->
+        <xsl:apply-templates select="parent::md" mode="get-clause-punctuation" />
+    </xsl:if>
+    <xsl:if test="following-sibling::mrow">
        <xsl:text>\\</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
