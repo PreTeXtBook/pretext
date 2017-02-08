@@ -1384,17 +1384,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <exsl:document href="{$knowl-file}" method="html">
         <xsl:text disable-output-escaping="yes">&lt;!doctype html&gt;&#xa;</xsl:text>
-        <!-- <xsl:element name="html"> -->
+        <xsl:element name="html">
             <!-- header since separate file -->
-            <!-- <xsl:text>&#xa;</xsl:text> -->
-            <!-- <xsl:call-template name="converter-blurb-html" /> -->
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:call-template name="converter-blurb-html" />
 
-            <!-- <xsl:element name="head"> -->
+            <xsl:element name="head">
                 <!-- dissuade indexing duplicated content -->
-                <!-- <meta name="robots" content="noindex, nofollow" /> -->
-            <!-- </xsl:element> -->
+                <meta name="robots" content="noindex, nofollow" />
+            </xsl:element>
 
-            <!-- <xsl:element name="body"> -->
+            <xsl:element name="body">
                 <!-- content, as duplicate, so no @id or \label -->
 
                 <!-- variables for HTML container names -->
@@ -1459,8 +1459,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:call-template>
                     </xsl:element>
                 </xsl:element>
-            <!-- </xsl:element> -->  <!-- end body -->
-        <!-- </xsl:element> -->  <!-- end html -->
+            </xsl:element>  <!-- end body -->
+        </xsl:element>  <!-- end html -->
     </exsl:document>  <!-- end file -->
     <!-- recurse the tree outside of the file-writing -->
     <xsl:apply-templates select="*" mode="xref-knowl" />
