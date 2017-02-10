@@ -148,6 +148,20 @@ the xsltproc executable.
             </google>
         </search>
 
+        <!-- Images in HTML output may carry a discreet list of links    -->
+        <!-- to "archival" versions of images in a variety of formats.   -->
+        <!-- Authors have complete freedom to do this as they choose,    -->
+        <!-- along with complete responsibility to provide the actual    -->
+        <!-- files, with proper filenames and suffices.  Search this     -->
+        <!-- source file for "archive=" to see particular examples.      -->
+        <!-- The following demonstrates a global specification, which    -->
+        <!-- we just use for testing - it just makes totally fake links. -->
+        <!--
+        <images>
+            <archive>One Two Three</archive>
+        </images>
+        -->
+
     </docinfo>
 
     <!--
@@ -4261,7 +4275,7 @@ the xsltproc executable.
 
                 <sidebyside widths="30% 30%" margins="auto">
                     <image source="images/complete-graph" />
-                    <image source="images/led-zeppelin-kashmir.jpg" />
+                    <image source="images/led-zeppelin-kashmir.jpg" archive="jpg" />
                 </sidebyside>
 
                 <p>Here are two TikZ images, authored side-by-side.  The first has had its geometric portions of the original scaled down to 75<percent />, with the effect of increasing the text, relatively, so the application in a side-by-side panel with 25<percent /> width has legible text.  We caption only the second panel, which has no text adjustments.  From <url href="http://www.texample.net/tikz/examples/">TeXample.net</url>.</p>
@@ -4273,7 +4287,7 @@ the xsltproc executable.
                     <!-- :Author: Stefan Kottwitz                    -->
                     <!-- :Slug: venn                                 -->
                     <!-- PDF blend mode requires TikZ version 3.0 or above. -->
-                    <image xml:id="tikz-venn-diagram">
+                    <image xml:id="tikz-venn-diagram" archive="pdf svg">
                         <latex-image-code>
                         \begin{tikzpicture}[scale=0.75]
                           \begin{scope}[blend group = soft light]
@@ -4749,7 +4763,7 @@ the xsltproc executable.
                         5 9
                         7 9
                     </pre>
-                    <image source="images/keller-trotter-graph" />
+                    <image source="images/keller-trotter-graph" archive="pdf svg" />
                 </sidebyside>
             </subsection>
 

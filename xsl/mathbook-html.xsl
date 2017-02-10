@@ -3633,6 +3633,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   we write an HTML "img" tag with attributes    -->
 <xsl:template match="image[@source]" >
     <!-- condition on file extension -->
+    <!-- no period, lowercase'ed     -->
     <xsl:variable name="extension">
         <xsl:call-template name="file-extension">
             <xsl:with-param name="filename" select="@source" />
@@ -3654,6 +3655,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="description" />
                 </xsl:with-param>
             </xsl:call-template>
+            <!-- possibly annotate with archive links -->
+            <xsl:apply-templates select="." mode="archive">
+                <xsl:with-param name="base-pathname" select="@source" />
+            </xsl:apply-templates>
         </xsl:when>
         <!-- with extension, just include it -->
         <xsl:otherwise>
@@ -3669,6 +3674,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="description" />
                 </xsl:attribute>
             </xsl:element>
+            <!-- possibly annotate with archive links -->
+            <xsl:apply-templates select="." mode="archive">
+                <xsl:with-param name="base-pathname">
+                    <xsl:call-template name="substring-before-last">
+                        <xsl:with-param name="input" select="@source" />
+                        <xsl:with-param name="substr" select="'.'" />
+                    </xsl:call-template>
+                </xsl:with-param>
+            </xsl:apply-templates>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -3678,18 +3692,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   LaTeX source code images                    -->
 <!--   Sage graphics plots, w/ PNG fallback for 3D -->
 <xsl:template match="image[asymptote]|image[latex-image-code]|image[sageplot]">
+    <xsl:variable name="base-pathname">
+        <xsl:value-of select="$directory.images" />
+        <xsl:text>/</xsl:text>
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:variable>
     <xsl:call-template name="svg-wrapper">
-        <xsl:with-param name="svg-filename">
-            <xsl:value-of select="$directory.images" />
-            <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
-            <xsl:text>.svg</xsl:text>
-        </xsl:with-param>
+        <xsl:with-param name="svg-filename" select="concat($base-pathname, '.svg')" />
+        <!-- maybe empty, which is fine -->
         <xsl:with-param name="png-fallback-filename">
             <xsl:if test="sageplot">
-                <xsl:value-of select="$directory.images" />
-                <xsl:text>/</xsl:text>
-                <xsl:apply-templates select="." mode="internal-id" />
+                <xsl:value-of select="$base-pathname" />
                 <xsl:text>.png</xsl:text>
             </xsl:if>
         </xsl:with-param>
@@ -3700,6 +3713,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="description" />
         </xsl:with-param>
     </xsl:call-template>
+    <!-- possibly annotate with archive links -->
+    <xsl:apply-templates select="." mode="archive">
+        <xsl:with-param name="base-pathname" select="$base-pathname" />
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- A named template creates the infrastructure for an SVG image -->
@@ -3752,6 +3769,84 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:element>
+</xsl:template>
+
+<!-- Image Archives -->
+<!-- Under an image provide a set of (download) links              -->
+<!-- for archival versions of the image in different formats       -->
+<!--                                                               -->
+<!-- 1.  @archive is a space-delimited list of file suffixes       -->
+<!-- 2.  Author must ensure the versions are next to file employed -->
+<!-- 3.  Formatting and case of suffixes is author's choice        -->
+<!-- 4.  Order in suffix list is respected in output               -->
+<!-- 5.  Per-image, with global spec in "docinfo/images/archive"   -->
+<!--                                                               -->
+<!-- The originating image template knows/computes the filename,   -->
+<!-- so this template accepts the filename, sans period and        -->
+<!-- extension, to transmit to the actual link production where    -->
+<!-- different extensions are added                                -->
+<!--                                                               -->
+<xsl:template match="image" mode="archive">
+    <xsl:param name="base-pathname" />
+    <!-- Determine requested archive links            -->
+    <!-- Local request on image overrides global      -->
+    <!-- If $formats ends empty, then nothing happens -->
+    <xsl:variable name="formats">
+        <xsl:choose>
+            <!-- local, given on image, including suppression -->
+            <xsl:when test="@archive">
+                <xsl:value-of select="normalize-space(@archive)" />
+            </xsl:when>
+            <!-- global, presumes one only, ignores subtree versions -->
+            <xsl:when test="/mathbook/docinfo/images/archive[not(@from)]">
+                <xsl:value-of select="normalize-space(/mathbook/docinfo/images/archive)" />
+            </xsl:when>
+            <!-- nothing begets nothing -->
+            <xsl:otherwise />
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="not($formats = '')">
+        <!-- Build the links with recursion through formats    -->
+        <!-- First wrap resulting links in overall styling div -->
+        <xsl:element name="div">
+            <xsl:attribute name="class">
+                <xsl:text>image-archive</xsl:text>
+            </xsl:attribute>
+            <!-- Add trailing space as marker for recursion finale -->
+            <xsl:call-template name="archive-links">
+                <xsl:with-param name="base-pathname" select="$base-pathname" />
+                <xsl:with-param name="formats" select="concat($formats, ' ')" />
+            </xsl:call-template>
+        </xsl:element>
+    </xsl:if>
+</xsl:template>
+
+<!-- $base-pathname has no concluding -->
+<!-- period, so we add it here        -->
+<xsl:template name="archive-links">
+    <xsl:param name="base-pathname" />
+    <xsl:param name="formats" />
+    <!-- stop recursion if empty (note extra space added in initial call) -->
+    <xsl:if test="not($formats = '')">
+        <xsl:variable name="next-format" select="substring-before($formats, ' ')" />
+        <xsl:variable name="remaining-formats" select="substring-after($formats, ' ')" />
+        <!-- link to the file, author's responsibility  -->
+        <!-- add period, and the suffix to rest of path -->
+        <!-- text of link is the format suffix verbatim -->
+        <xsl:element name="a">
+            <xsl:attribute name="href">
+                <xsl:value-of select="$base-pathname" />
+                <xsl:text>.</xsl:text>
+                <xsl:value-of select="$next-format" />
+            </xsl:attribute>
+            <xsl:value-of select="$next-format" />
+        </xsl:element>
+        <!-- recurse through remaining formats -->
+        <xsl:call-template name="archive-links">
+            <xsl:with-param name="base-pathname" select="$base-pathname" />
+            <xsl:with-param name="formats" select="$remaining-formats" />
+        </xsl:call-template>
+    </xsl:if>
 </xsl:template>
 
 <!-- LaTeX standalone image              -->
