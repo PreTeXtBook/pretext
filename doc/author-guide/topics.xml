@@ -11,7 +11,7 @@
     <title>(*) Topics</title>
 
     <introduction>
-        <p>Careful descriptions arranged into topics.  List here is a temporary outline.</p>
+        <p>Careful descriptions arranged into topics.  Unwritten sections provide a temporary outline.</p>
     </introduction>
 
     <section xml:id="topic-exercises">
@@ -158,6 +158,35 @@
             <p>To be written once elements and tags solidfy, see sample article for examples.</p>
         </subsection>
 
+        <subsection xml:id="topic-images-archive">
+            <title>Image Archives</title>
+
+            <p>As an instructor, you might want to recycle images from a text for a classroom presentation, a project handout, or an examination question.  As an author, you can elect to make images files available through links in the HTML version, and it is easy and flexible to produce those links automatically.</p>
+
+            <p>First, it is your responsibility to manufacture the files.  For making different formats, the <c>mbx</c> script can sometimes help (<xref ref="mbx-script" />).  The Image Magick <c>convert</c> command is a quick way to make raster images in different formats, while the <c>pdf2svg</c> executable is good for converting vector graphics <init>PDF</init>s into <init>SVG</init>s.  Also, to make this easy to specify, different versions of the same image must have identical paths and names, other than the suffixes.  Finally, the case and spelling of the suffix in your <init>MBX</init> source must match the filename (<eg /> <c>jpg</c> versus <c>JPEG</c>).  OK, those are the ground rules.</p>
+
+            <p>For links for a single image, add the <attribute>archive</attribute> attribute to the <tag>image</tag> element, such as<cd>
+                <cline>&lt;image  ...  archive="pdf svg"&gt;</cline>
+            </cd>to get two links for a single image.</p>
+
+            <p>To have every single image receive an identical collection of links, in <c>docinfo/images</c> place an <tag>archive</tag> element whose content is the space-separated list of suffixes/formats.<cd>
+                <cline>&lt;archive&gt;png JPEG tex ods&lt;/archive&gt;</cline>
+            </cd>will provide four links on every image, including a link to an OpenDocument spreadsheet.</p>
+
+            <p>For a collection of images that is contained within some portion of your document, you can place an <attribute>@xml:id</attribute> on the enclosing element and then in <c>docinfo/images</c> place<cd>
+                <cline>&lt;archive from="the-xml-id-on-the-portion"&gt;svg png&lt;/archive&gt;</cline>
+            </cd>to get two links on every image <em>only</em> in that portion (chapter, subsection, side-by-side, <etc />).  The <attribute>from</attribute> attribute is meant to suggest the root of a subtree of your hierarchical document.  If you use this, then <em>do not</em> use the global form that does not have <attribute>from</attribute>.</p>
+
+            <p>You may accumulate several of the above semi-global semi-local forms in succession.  An image will receive links according to the last <tag>archive</tag> whose <attribute>from</attribute> subtree contains the image.  So the strategy is to place general, large subtree, specifications early, and use refined, smaller subtree specifications later.  For example,<cd>
+                <cline>&lt;archive from="the-xml:id-on-a-chapter"&gt;svg png&lt;/archive&gt;</cline>
+                <cline>&lt;archive from="the-xml:id-on-the-introduction"&gt;jpeg&lt;/archive&gt;</cline>
+                <cline>&lt;archive from="the-xml:id-on-a-section-within" /&gt;</cline>
+            </cd>will put two links on every image of a chapter, but just one link on images in the introduction, and no links at all on every image image within one specific section.  Again, do not mix with the global form.  You can use the root document node (<eg /> <tag>book</tag>) for <attribute>from</attribute> to obtain a global treatment, but it is unnecessary (and inefficient) to provide empty content for the root node as first in the list<mdash />the same effect is the default behavior.</p>
+
+            <p>Notice that this facility does not restrict you to providing files of the same image, or even images at all.  You could choose to make data files available for each data plot you provide, as spreadsheets, or text files, or whatever you have, or whatever you think your readers need.</p>
+
+            <p>Finally, <q>archive</q> may be a bit of a misnomer, since there is no historical aspect to any of this.  Maybe <q>repository</q> would be more accurate.  Though for a history textbook, it might be a perfect name.</p>
+        </subsection>
     </section>
 
     <section xml:id="topic-tabular">
