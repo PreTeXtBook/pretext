@@ -224,9 +224,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- text nodes are manipulated, such as clause-ending -->
 <!-- punctuation that has migrated into inline math    -->
 <!-- Values are: 'native' and 'mathjax'                -->
+<!-- We set the default to 'mathjax' (assistive), and  -->
+<!-- then override just in the LaTeX conversion        -->
 <!-- Note: this device might be abandoned if browsers  -->
 <!-- and MathJax ever cooperate on placing line breaks -->
-<xsl:variable name="latex-processing" select="''" />
+<!-- TODO: could rename as "inline-math-punctation-absorption" -->
+<xsl:variable name="latex-processing" select="'mathjax'" />
 
 <!-- We set this variable a bit differently -->
 <!-- for different conversions, so this is  -->
@@ -1589,6 +1592,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="first-char" select="substring(., 1, 1)" />
     <xsl:variable name="math-punctuation">
         <xsl:choose>
+            <!-- always adjust display math punctuation -->
             <xsl:when test="contains($clause-ending-marks, $first-char) and preceding-sibling::node()[1][self::me or self::men or self::md or self::mdn]">
                 <xsl:call-template name="strip-leading-whitespace">
                     <xsl:with-param name="text">
@@ -1598,7 +1602,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
-            <xsl:when test="contains($clause-ending-marks, $first-char) and preceding-sibling::node()[1][self::m] and $latex-processing='mathjax'">
+            <!-- adjust inline math, except for real LaTeX -->
+            <xsl:when test="contains($clause-ending-marks, $first-char) and preceding-sibling::node()[1][self::m] and not($latex-processing='native')">
                 <xsl:call-template name="drop-clause-punctuation">
                     <xsl:with-param name="text" select="." />
                 </xsl:call-template>

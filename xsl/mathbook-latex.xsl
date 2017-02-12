@@ -120,7 +120,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Variables that affect LaTeX creation -->
 <!-- More in the common file              -->
 
-<!-- LaTeX is handled natively -->
+<!-- LaTeX is handled natively, so we flip a  -->
+<!-- switch here to signal the general text() -->
+<!-- handler in xsl/mathbook-common.xsl to    -->
+<!-- not dress-up clause-ending punctuation   -->
 <xsl:variable name="latex-processing" select="'native'" />
 
 <!-- We generally want one large complete LaTeX file -->

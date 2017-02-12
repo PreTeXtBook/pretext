@@ -800,6 +800,9 @@
 <!-- xsl/mathbook-common.xsl will drop "clause-ending"      -->
 <!-- punctuation that immediately follows a bit of math,    -->
 <!-- and possibly remove some resulting leading whitespace. -->
+<!-- For inline math "m" this behavior is under the control -->
+<!-- of the global $latex-processing variable, which is     -->
+<!-- only overridden for LaTeX processing itself.           -->
 <!-- Then the math templates need to look forward and       -->
 <!-- recover this punctuation with a \text{} wrapper.       -->
 

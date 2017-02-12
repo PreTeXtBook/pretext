@@ -167,8 +167,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Variables that affect HTML creation -->
 <!-- More in the common file             -->
 
-<!-- LaTeX is handled with MathJax -->
-<xsl:variable name="latex-processing" select="'mathjax'" />
+<!-- We leave the global $latex-processing variable    -->
+<!-- set to its default value, which will manipulate   -->
+<!-- clause-ending punctuation immediately after       -->
+<!-- inline mathematics.  So we need to do half of the -->
+<!-- job here, absorbing punctuation into mathematics  -->
 
 <!-- This is cribbed from the CSS "max-width"-->
 <!-- Design width, measured in pixels        -->
