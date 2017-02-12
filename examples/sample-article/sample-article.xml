@@ -162,6 +162,21 @@ the xsltproc executable.
         </images>
         -->
 
+        <!-- Demonstration of subtree specifications for archive formats -->
+        <!-- (Do not use in concert with above global test)              -->
+        <!-- Chapter on graphics, fake "A B" links throughout            -->
+        <!-- No other part of the @archive scheme is affected            -->
+        <!-- Two images, inside figures, within graphics chapter         -->
+        <!--   1) one has "A B" links turned off                         -->
+        <!--   2) single link "exceptional"                              -->
+        <!--
+        <images>
+            <archive from="graphics">A B</archive>
+            <archive from="figure-asymptote-levers" />
+            <archive from="figure-asymptote-contour-plot">exceptional</archive>
+        </images>
+        -->
+
     </docinfo>
 
     <!--

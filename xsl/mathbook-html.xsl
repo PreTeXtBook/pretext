@@ -3797,6 +3797,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="@archive">
                 <xsl:value-of select="normalize-space(@archive)" />
             </xsl:when>
+            <!-- semi-local, semi-global via subtree specification     -->
+            <!-- last in list that contains the image wins             -->
+            <!-- Documented heavily as first "mid-range" specification -->
+            <!-- A single @from puts us in mid-range mode              -->
+            <xsl:when test="/mathbook/docinfo/images/archive[@from]">
+                <!-- context of next "select" filters is "archive" -->
+                <!-- so save off the present context, the "image"  -->
+                <xsl:variable name="the-image" select="." />
+                <!-- Filter all of the "archive" in docinfo with @from      -->
+                <!-- Subset occurs in document order                        -->
+                <!-- Form two subtrees of all desendant nodes, rooted at    -->
+                <!--   (1) the image node                                   -->
+                <!--   (2) the node pointed to by @from                     -->
+                <!-- The pipe forms a union of the nodes in the subtrees    -->
+                <!-- "image" is on the subtree @from iff union is no larger -->
+                <xsl:variable name="containing-archives"
+                    select="/mathbook/docinfo/images/archive[@from][count($the-image/descendant-or-self::node()|id(@from)/descendant-or-self::node())=count(id(@from)/descendant-or-self::node())]" />
+                <!-- We mimic XSL and the last applicable "archive" is effective -->
+                <!-- This way, big subtrees go first, included subtrees refine   -->
+                <!-- @from can be an empty string and turn off the behavior      -->
+                <!-- We grab the content of the last "archive" to be the formats -->
+                <xsl:value-of select="$containing-archives[last()]/." />
+            </xsl:when>
             <!-- global, presumes one only, ignores subtree versions -->
             <xsl:when test="/mathbook/docinfo/images/archive[not(@from)]">
                 <xsl:value-of select="normalize-space(/mathbook/docinfo/images/archive)" />
