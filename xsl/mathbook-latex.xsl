@@ -3616,23 +3616,71 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- We sniff around for ampersands, to decide between "align"     -->
+<!-- and "gather", plus an asterisk for the unnumbered version     -->
+<!-- NOTE: this is "md|mdn" override from the -common version,     -->
+<!-- since AMSmath has no easy way to make a one-off number within -->
+<!-- the *-form, so we lean toward always using the un-starred     -->
+<!-- versions, except when we flag 100% no numbers inside an "md"  -->
+<!-- NOTE: this consolidates two templates from -common            -->
+<!-- ie the [@alignment] forms are mixed in here                   -->
+<xsl:template match="md|mdn" mode="displaymath-alignment">
+    <xsl:param name="b-nonumbers" select="false()" />
+    <xsl:choose>
+        <!-- look for @alignment override, possibly bad -->
+        <xsl:when test="@alignment='gather'">
+            <xsl:text>gather</xsl:text>
+        </xsl:when>
+        <xsl:when test="@alignment='alignat'">
+            <xsl:text>alignat</xsl:text>
+        </xsl:when>
+        <xsl:when test="@alignment='align'">
+            <xsl:text>align</xsl:text>
+        </xsl:when>
+        <xsl:when test="@alignment">
+            <xsl:message>MBX:ERROR: display math @alignment attribute "<xsl:value-of select="@alignment" />" is not recognized (should be "align", "gather", "alignat")</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:when>
+        <!-- sniff for alignment specifications    -->
+        <!-- this can be easily fooled, eg matrices-->
+        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
+            <xsl:text>align</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>gather</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- if absolutely no numbers, we'll economize -->
+    <!-- in favor of human-readability             -->
+    <xsl:if test="$b-nonumbers">
+        <xsl:text>*</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <!-- Displayed Multi-Line Math ("md", "mdn") -->
 <!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
 <!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
 <!-- align environment if ampersands are present, gather environment otherwise   -->
 <!-- Output follows source line breaks, but may be sanitized for quality output  -->
 <xsl:template match="md|mdn">
+    <!-- Look for 100% no-number mrows -->
+    <xsl:variable name="b-nonumbers" select="self::md and not(child::mrow[@number='yes'])" />
     <!-- build and save for possible manipulation                   -->
     <!-- Note: template for text nodes passes through mrow children -->
     <xsl:variable name="raw-latex">
-        <xsl:apply-templates select="mrow|intertext" />
+        <xsl:apply-templates select="mrow|intertext">
+            <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
+        </xsl:apply-templates>
     </xsl:variable>
     <!-- Build container begin -->
     <!-- We must be in a paragraph, so we can  -->
     <!-- cautiously add a protected newline    -->
+    <!-- TODO: save alignment in a variable, use twice -->
     <xsl:text>%&#xa;</xsl:text>
     <xsl:text>\begin{</xsl:text>
-    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:apply-templates select="." mode="displaymath-alignment">
+        <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
+    </xsl:apply-templates>
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="alignat-columns" />
     <!-- leading whitespace not present, or stripped -->
@@ -3654,7 +3702,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
     <!-- Build container end -->
     <xsl:text>\end{</xsl:text>
-    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:apply-templates select="." mode="displaymath-alignment">
+        <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
+    </xsl:apply-templates>
     <xsl:text>}</xsl:text>
     <!-- We must return to a paragraph, so -->
     <!-- we can add an unprotected newline -->
@@ -3669,7 +3719,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Limited exceptions to raw text only:                        -->
 <!--     xref's allow for "reasons" in proofs                    -->
 <!--     var is part of WeBWorK problems only                    -->
-<xsl:template match="md/mrow|mdn/mrow">
+<xsl:template match="mrow">
+    <xsl:param name="b-nonumbers" />
     <xsl:choose>
         <xsl:when test="ancestor::webwork">
             <xsl:apply-templates select="text()|xref|var" />
@@ -3683,15 +3734,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- pass the context as enclosing environment (md, mdn)      -->
         <xsl:apply-templates select="parent::*" mode="get-clause-punctuation" />
     </xsl:if>
-    <!-- The element name dictates the LaTeX environment used     -->
-    <!-- But to mix and match requires overrides via an attribute -->
+    <!-- If we built a pure no-number environment, then we add nothing   -->
+    <!-- Otherwise, we are in a non-starred environment and get a number -->
+    <!-- unless we "\notag" it, which is the better choice under AMSmath -->
+    <!-- http://tex.stackexchange.com/questions/48965                    -->
     <xsl:choose>
+        <xsl:when test="$b-nonumbers" />
         <xsl:when test="parent::md">
             <xsl:choose>
                 <xsl:when test="@number='yes'">
                     <xsl:apply-templates select="." mode="label" />
                 </xsl:when>
-                <xsl:otherwise></xsl:otherwise>
+                <xsl:otherwise>
+                    <xsl:text>\notag</xsl:text>
+                </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
         <xsl:when test="parent::mdn">

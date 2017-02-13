@@ -624,6 +624,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- We sniff around for ampersands, to decide between "align" -->
 <!-- and "gather", plus an asterisk for the unnumbered version -->
+<!-- Note: this is overridden for LaTeX to make slightly       -->
+<!-- cleaner output for the *-version (no numbering)           -->
 <xsl:template match="md|mdn" mode="displaymath-alignment">
     <xsl:choose>
         <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
