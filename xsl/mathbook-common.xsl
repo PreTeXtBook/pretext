@@ -1569,6 +1569,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- QED Here -->
+<!-- Analyze a final "mrow" or any "me"                            -->
+<!-- Strictly LaTeX/amsthm, not a MathJax feature (yet? ever?)     -->
+<!--   (1) Locate enclosing proof, quit if no such thing           -->
+<!--   (2) Check an mrow for being numbered, do not clobber that   -->
+<!--   (3) Locate all trailing element, text nodes                 -->
+<!--       strip-space: between "mrow" and "md" or "mdn"           -->
+<!--       strip-space: between final "p" and "proof"              -->
+<!--   (4) Form nodes interior to proof, and trailing ("remnants") -->
+<!--   (5) At very end of proof                                    -->
+<!--      (a) if no more nodes, or                                 -->
+<!--      (b) one node, totally whitespace and punctuation         -->
+<!--          (we don't differentiate whitespace policy here)      -->
+<!--   (6) Having survived all this write a \qedhere               -->
+<!-- TODO: \qedhere also functions at the end of a list            -->
+<xsl:template match="mrow|me" mode="qed-here">
+    <!-- <xsl:message>here</xsl:message> -->
+    <xsl:variable name="enclosing-proof" select="ancestor::proof" />
+    <xsl:if test="$enclosing-proof and not(self::mrow and parent::md and @number='yes') and not(self::mrow and parent::mdn and not(@number='no'))">
+        <xsl:variable name="proof-nodes" select="$enclosing-proof/descendant-or-self::node()[self::* or self::text()]" />
+        <xsl:variable name="trailing-nodes" select="./following::node()[self::* or self::text()]" />
+        <xsl:variable name="proof-remnants" select="$proof-nodes[count(.|$trailing-nodes) = count($trailing-nodes)]" />
+        <xsl:choose>
+            <xsl:when test="count($proof-remnants) = 0">
+                <xsl:text>\qedhere</xsl:text>
+            </xsl:when>
+            <xsl:when test="(count($proof-remnants) = 1) and (translate(normalize-space($proof-remnants), $clause-ending-marks, '') = '')">
+                <xsl:text>\qedhere</xsl:text>
+            </xsl:when>
+            <xsl:otherwise />
+        </xsl:choose>
+    </xsl:if>
+</xsl:template>
+
 <!-- ################################## -->
 <!-- General Text Handling and Clean-Up -->
 <!-- ################################## -->

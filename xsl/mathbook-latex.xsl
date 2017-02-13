@@ -3597,6 +3597,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="self::men">
         <xsl:apply-templates select="." mode="label" />
     </xsl:if>
+    <!-- check to see if this is very end of entire proof -->
+    <!-- and sneak in a \qedhere from the amsthm package  -->
+    <!-- Inappropriate if numbers exist to the right      -->
+    <xsl:if test="self::me">
+        <xsl:apply-templates select="." mode="qed-here" />
+    </xsl:if>
     <!-- Build container end                            -->
     <!-- We add a newline for visually appealing source -->
     <xsl:text>&#xa;</xsl:text>
@@ -3703,6 +3709,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- nor does final mrow of the whole display         -->
     <xsl:if test="following-sibling::mrow">
        <xsl:text>\\</xsl:text>
+    </xsl:if>
+    <!-- check last row as very end of entire proof      -->
+    <!-- and sneak in a \qedhere from the amsthm package -->
+    <xsl:if test="not(following-sibling::*)">
+        <xsl:apply-templates select="." mode="qed-here" />
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
