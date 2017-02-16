@@ -622,28 +622,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>equation</xsl:text>
 </xsl:template>
 
-<!-- We sniff around for ampersands, to decide between "align" -->
-<!-- and "gather", plus an asterisk for the unnumbered version -->
-<!-- Note: this is overridden for LaTeX to make slightly       -->
-<!-- cleaner output for the *-version (no numbering)           -->
-<xsl:template match="md|mdn" mode="displaymath-alignment">
-    <xsl:choose>
-        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
-            <xsl:text>align</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>gather</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:if test="self::md">
-        <xsl:text>*</xsl:text>
-    </xsl:if>
-</xsl:template>
-
+<!-- We sniff around for ampersands, to decide between "align"    -->
+<!-- and "gather", plus an asterisk for the unnumbered version    -->
+<!-- Note: this is overridden for LaTeX to make slightly          -->
+<!-- cleaner output for the *-version (no numbering)              -->
 <!-- User intervention is necessary/desired in some situations,   -->
 <!-- such as a LaTeX macro hiding &amp;, \amp, or spacing control -->
 <!-- @alignment = align|gather|alignat as a specific override     -->
-<xsl:template match="md[@alignment]|mdn[@alignment]" mode="displaymath-alignment">
+<xsl:template match="md|mdn" mode="displaymath-alignment">
     <xsl:choose>
         <xsl:when test="@alignment='gather'">
             <xsl:text>gather</xsl:text>
@@ -654,9 +640,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="@alignment='align'">
             <xsl:text>align</xsl:text>
         </xsl:when>
-        <xsl:otherwise>
+        <xsl:when test="@alignment">
             <xsl:message>MBX:ERROR: display math @alignment attribute "<xsl:value-of select="@alignment" />" is not recognized (should be "align", "gather", "alignat")</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
+        </xsl:when>
+        <!-- sniff for alignment specifications    -->
+        <!-- this can be easily fooled, eg matrices-->
+        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
+            <xsl:text>align</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>gather</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="self::md">
