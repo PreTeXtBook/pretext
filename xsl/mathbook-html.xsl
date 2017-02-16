@@ -277,6 +277,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A boolean variable for Google Custom Search Engine add-on -->
 <xsl:variable name="b-google-cse" select="boolean(/mathbook/docinfo/search/google)" />
 
+<!-- "presentation" mode is experimental, target        -->
+<!-- is in-class presentation of a textbook             -->
+<!--   (1) clickable mathematics (MathJax) at 300% zoom -->
+<!-- boolean variable $b-html-presentation              -->
+<xsl:param name="html.presentation" select="'no'" />
+<xsl:variable name="b-html-presentation" select="$html.presentation = 'yes'" />
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
@@ -6932,6 +6939,13 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <xsl:text>    "HTML-CSS": {&#xa;</xsl:text>
         <xsl:text>        scale: 88,&#xa;</xsl:text>
         <xsl:text>    },&#xa;</xsl:text>
+        <!-- optional presentation mode gets clickable, large math -->
+        <xsl:if test="$b-html-presentation">
+            <xsl:text>    menuSettings:{&#xa;</xsl:text>
+            <xsl:text>      zoom:"Click",&#xa;</xsl:text>
+            <xsl:text>      zscale:"300%"&#xa;</xsl:text>
+            <xsl:text>    },&#xa;</xsl:text>
+        </xsl:if>
         <!-- close of MathJax.Hub.Config -->
         <xsl:text>});&#xa;</xsl:text>
         <!-- optional beveled fraction support -->
