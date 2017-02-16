@@ -677,23 +677,69 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$amp-char + $amp-macro" />
 </xsl:template>
 
-<!-- With alignment="alignat" we need the number of columns as an argument -->
-<!-- Mostly we call this plentifully and usually empty template is null    -->
-<xsl:template match="me|men|md|mdn" mode="alignat-columns" />
-
-<xsl:template match="md[@alignment='alignat']|mdn[@alignment='alignat']" mode="alignat-columns">
-    <xsl:variable name="first-row-content">
-        <xsl:for-each select="mrow[1]/text()">
+<!-- Recurse through "mrow"s of a presumed "md" or "mdn" -->
+<!-- counting ampersands and tracking the maximum        -->
+<xsl:template match="mrow" mode="max-ampersands">
+    <xsl:param name="max" select="0"/>
+    <!-- build string/text content -->
+    <xsl:variable name="row-content">
+        <xsl:for-each select="text()">
             <xsl:value-of select="." />
         </xsl:for-each>
     </xsl:variable>
-    <xsl:variable name="number-ampersands">
+    <!-- count row's ampersands -->
+    <xsl:variable name="ampersands">
         <xsl:call-template name="count-ampersands">
-            <xsl:with-param name="text" select="$first-row-content" />
+            <xsl:with-param name="text" select="$row-content" />
         </xsl:call-template>
     </xsl:variable>
-    <!-- amps + 1, divide by 2, round up; 0.5 becomes 0.25, round behaves -->
-    <xsl:variable name="number-equation-columns" select="round(($number-ampersands + 1.5) div 2)" />
+    <!-- recalculate maximum -->
+    <xsl:variable name="new-max">
+        <xsl:choose>
+            <xsl:when test="$ampersands > $max">
+                <xsl:value-of select="$ampersands" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$max" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- recurse or report -->
+    <xsl:variable name="following-mrows" select="following-sibling::mrow" />
+    <xsl:choose>
+        <xsl:when test="$following-mrows">
+            <xsl:apply-templates select="$following-mrows[1]" mode="max-ampersands">
+                <xsl:with-param name="max" select="$new-max" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$new-max" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- With alignment="alignat" we need the number of columns     -->
+<!-- as an argument, complete with the LaTeX group (braces)     -->
+<!-- Mostly we call this regularly, and it usually does nothing -->
+<xsl:template match="me|men|md|mdn" mode="alignat-columns" />
+
+<xsl:template match="md[@alignment='alignat']|mdn[@alignment='alignat']" mode="alignat-columns">
+    <xsl:variable name="number-equation-columns">
+        <xsl:choose>
+            <!-- override first -->
+            <xsl:when test="@alignat-columns">
+                <xsl:value-of select="@alignat-columns" />
+            </xsl:when>
+            <!-- count ampersands, compute columns -->
+            <xsl:otherwise>
+                <xsl:variable name="number-ampersands">
+                    <xsl:apply-templates select="mrow[1]" mode="max-ampersands" />
+                </xsl:variable>
+                <!-- amps + 1, divide by 2, round up; 0.5 becomes 0.25, round behaves -->
+                <xsl:value-of select="round(($number-ampersands + 1.5) div 2)" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$number-equation-columns" />
     <xsl:text>}</xsl:text>

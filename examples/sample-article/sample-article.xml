@@ -1126,11 +1126,15 @@ the xsltproc executable.
                 <p>The AMSmath <latex /> package's <c>alignat</c> environment is a third variant of alignment.  It never happens automatically, you need to ask for it with <c>alignment="alignat"</c>.  It is very similar to <c>align</c> but adds no space between the equation columns.  So you can leave it that way, or you can add your own <q>extra</q> space to suit.  Here is a previous example with no inter-column space:<md alignment="alignat">
                     <mrow>\frac{dx}{dt} \amp = x^2 - 4x - y + 4 \amp \frac{dy}{dt} \amp = x^3 - y          \amp\amp x, y\text{ version}</mrow>
                     <mrow>\frac{dw}{dt} \amp = z^3 - w          \amp \frac{dz}{dt} \amp = z^2 - 4z - w + 4 \amp\amp z, w\text{ version}</mrow>
-                </md>  There are a few caveats, due to the fact that the environment needs to be told how many columns you have:<ul>
-                    <li>Your first <c>mrow</c> is scanned to count the number of ampersand macros and/or characters (<c>\amp</c> or <c>&amp;amp;</c>), so add the right number to your first row to equal the maximum present across all rows.</li>
-                    <li>The scan of ampersands may not be perfect, so if it seems incorrect, please send a report and we may add an attribute for an override.</li>
-                    <li>If your number of ampersands is even (see advice above about using an odd number) behavior should still be correct, as in next example.</li>
-                </ul></p>
+                </md>.  This modified example has a middle row with three columns, while the other rows have just one column, as a test of our routines for determining the <c>mrow</c> with the greatest number of ampersands (and how many there are),<md alignment="alignat">
+                    <mrow>\frac{dw}{dt} &amp;= z^3 - w</mrow>
+                    <mrow>\frac{dx}{dt} &amp;= x^2 - 4x - y + 4 &amp; \frac{dy}{dt} &amp;= x^3 - y&amp;&amp; x, y\text{ third column}</mrow>
+                    <mrow>\frac{dw}{dt} &amp; = z^3 - w</mrow>
+                </md>.  Final example demonstrates that ampersands in other objects (matrices here) can wreak havoc with computing the number of columns.  So we provide yet another attribute to override automatic detection, <c>alignat-columns</c>.  This is the number of <em>columns</em> not the number of <em>ampersands</em>.  Generally, for <m>c</m> columns, there will be <m>2c-1</m> ampersands.<md alignment="alignat" alignat-columns="2">
+                    <mrow>A &amp;= \begin{bmatrix}1 &amp; 2 \\ 3 &amp; 4\end{bmatrix}
+                    &amp;
+                    I &amp;= \begin{bmatrix}1 &amp; 0 \\ 0 &amp; 1\end{bmatrix}</mrow>
+                </md>.  One caveat: if your number of ampersands is even (see advice above about using an odd number) behavior should still be correct, as in next example.</p>
 
                 <p>If you want super-precise control over alignment of the terms of a system of equations (linear or not) you can use the <c>alignat</c> option to advantage by not including any extra space.  This example is modified slightly from a post by Alex Jordan:<md alignment="alignat">
                     <mrow>2x \amp {}+{} \amp  y \amp {}+{} \amp 3z \amp {}={} \amp 10</mrow>
