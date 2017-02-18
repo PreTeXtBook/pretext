@@ -475,6 +475,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- Sometimes  xsltproc fails, and fails spectacularly,        -->
+<!-- setting this switch will dump lots of location info to the -->
+<!-- console, and perhaps will be helpful in locating a failure -->
+<!-- You might redirect stderror to a file with "2> errors.txt" -->
+<!-- appended to your command line                              -->
+<xsl:param name="debug" select="'no'" />
+<xsl:variable name="b-debug" select="$debug = 'yes'" />
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -5053,6 +5060,33 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:apply-templates select="parent::*[1]" mode="location-report" />
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- Debugging info -->
+<!-- @xml:base attribute of xinclude scheme -->
+<!-- @xml:id - self-explanatory             -->
+<!-- title - if there is one                -->
+<xsl:template match="*" mode="debug-location">
+    <xsl:if test="$b-debug">
+        <xsl:message>
+            <xsl:text>MBX:DEBUG:   </xsl:text>
+            <xsl:text>f: </xsl:text>
+            <xsl:choose>
+                <xsl:when test="@xml:base">
+                    <xsl:value-of select="@xml:base" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text></xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>|e: </xsl:text>
+            <xsl:value-of select="local-name(.)" />
+            <xsl:text>|i: </xsl:text>
+            <xsl:value-of select="@xml:id" />
+            <xsl:text>|t: </xsl:text>
+            <xsl:apply-templates select="." mode="title-simple" />
+        </xsl:message>
+    </xsl:if>
 </xsl:template>
 
 <!-- ############### -->

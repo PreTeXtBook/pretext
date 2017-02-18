@@ -412,6 +412,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Default template for content of a complete page -->
 <xsl:template match="&STRUCTURAL;">
+    <!-- location info for debugging efforts -->
+    <xsl:apply-templates select="." mode="debug-location" />
     <!-- Heading, div for this structural subdivision -->
     <xsl:variable name="ident">
         <xsl:apply-templates select="." mode="internal-id" />
@@ -427,6 +429,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- so we implement a 3-pass hack which requires identifying -->
 <!-- the early, middle and late parts                         -->
 <xsl:template match="&STRUCTURAL;" mode="summary">
+    <!-- location info for debugging efforts -->
+    <xsl:apply-templates select="." mode="debug-location" />
     <!-- Heading, div for this structural subdivision -->
     <xsl:variable name="ident">
         <xsl:apply-templates select="." mode="internal-id" />
