@@ -3526,7 +3526,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- $latex-processing global variable                     -->
 <xsl:template match= "m">
     <xsl:variable name="raw-latex">
-        <!-- build and save for possible manipulation     -->
+        <!-- build and save for later manipulation        -->
         <!-- Note: generic text() template passes through -->
         <xsl:choose>
             <xsl:when test="ancestor::webwork">
@@ -3539,17 +3539,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- wrap tightly in math delimiters -->
     <xsl:text>\(</xsl:text>
-    <!-- Manipulate guts, or not -->
-    <xsl:choose>
-        <xsl:when test="$whitespace = 'strict'">
-            <xsl:value-of select="$raw-latex" />
-        </xsl:when>
-        <xsl:when test="$whitespace = 'flexible'">
-            <xsl:call-template name="sanitize-latex">
-                <xsl:with-param name="text" select="$raw-latex" />
-            </xsl:call-template>
-        </xsl:when>
-    </xsl:choose>
+    <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
+    <!--   (1) avoid LaTeX compilation errors                       -->
+    <!--   (2) avoid spurious blank lines leading to new paragraphs -->
+    <!--   (3) provide human-readable source of high quality        -->
+    <!-- sanitize-latex template does not provide a final newline   -->
+    <!-- and we do not add one here either for inline math          -->
+    <xsl:call-template name="sanitize-latex">
+        <xsl:with-param name="text" select="$raw-latex" />
+    </xsl:call-template>
     <xsl:text>\)</xsl:text>
 </xsl:template>
 
@@ -3558,7 +3556,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Output follows source line breaks                             -->
 <!-- See: http://tex.stackexchange.com/questions/40492/            -->
 <xsl:template match="me|men">
-    <!-- build and save for possible manipulation                   -->
+    <!-- build and save for later manipulation                      -->
     <!-- Note: template for text nodes passes through mrow children -->
     <xsl:variable name="raw-latex">
         <xsl:choose>
@@ -3577,20 +3575,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
+    <!-- TODO: next not necessary in me?, not present in HTML version -->
     <xsl:apply-templates select="." mode="alignat-columns" />
     <!-- leading whitespace not present, or stripped -->
     <xsl:text>&#xa;</xsl:text>
-    <!-- Manipulate guts, or not -->
-    <xsl:choose>
-        <xsl:when test="$whitespace = 'strict'">
-            <xsl:value-of select="$raw-latex" />
-        </xsl:when>
-        <xsl:when test="$whitespace = 'flexible'">
-            <xsl:call-template name="sanitize-latex">
-                <xsl:with-param name="text" select="$raw-latex" />
-            </xsl:call-template>
-        </xsl:when>
-    </xsl:choose>
+    <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
+    <!--   (1) avoid LaTeX compilation errors                       -->
+    <!--   (2) avoid spurious blank lines leading to new paragraphs -->
+    <!--   (3) provide human-readable source of high quality        -->
+    <!-- sanitize-latex template does not provide a final newline   -->
+    <!-- so we add one later for visual appeal                      -->
+    <xsl:call-template name="sanitize-latex">
+        <xsl:with-param name="text" select="$raw-latex" />
+    </xsl:call-template>
     <!-- look ahead to absorb immediate clause-ending punctuation -->
     <xsl:apply-templates select="." mode="get-clause-punctuation" />
     <!-- finish LaTeX environment, optionally labeled -->
@@ -3665,7 +3662,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="md|mdn">
     <!-- Look for 100% no-number mrows -->
     <xsl:variable name="b-nonumbers" select="self::md and not(child::mrow[@number='yes'])" />
-    <!-- build and save for possible manipulation                   -->
+    <!-- build and save for later manipulation                      -->
     <!-- Note: template for text nodes passes through mrow children -->
     <xsl:variable name="raw-latex">
         <xsl:apply-templates select="mrow|intertext">
@@ -3685,21 +3682,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="alignat-columns" />
     <!-- leading whitespace not present, or stripped -->
     <xsl:text>&#xa;</xsl:text>
-    <!-- Manipulate guts, or not -->
-    <!-- With no manipulation, final mrow/intertext provides newline -->
-    <!-- Using the sanitize-latex template, we add a final newline   -->
-    <xsl:choose>
-        <xsl:when test="$whitespace = 'strict'">
-            <xsl:value-of select="$raw-latex" />
-        </xsl:when>
-        <xsl:when test="$whitespace = 'flexible'">
-            <xsl:call-template name="sanitize-latex">
-                <xsl:with-param name="text" select="$raw-latex" />
-            </xsl:call-template>
-            <!-- We add a newline for visually appealing source -->
-            <xsl:text>&#xa;</xsl:text>
-        </xsl:when>
-    </xsl:choose>
+    <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
+    <!--   (1) avoid LaTeX compilation errors                       -->
+    <!--   (2) avoid spurious blank lines leading to new paragraphs -->
+    <!--   (3) provide human-readable source of high quality        -->
+    <!-- sanitize-latex template does not provide a final newline   -->
+    <!-- so we add one later for visual appeal                      -->
+    <xsl:call-template name="sanitize-latex">
+        <xsl:with-param name="text" select="$raw-latex" />
+    </xsl:call-template>
+    <!-- We add a newline for visually appealing source -->
+    <xsl:text>&#xa;</xsl:text>
     <!-- Build container end -->
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment">

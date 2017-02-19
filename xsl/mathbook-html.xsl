@@ -3278,17 +3278,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- wrap tightly in math delimiters -->
     <xsl:text>\(</xsl:text>
-    <!-- Manipulate guts, or not -->
-    <xsl:choose>
-        <xsl:when test="$whitespace = 'strict'">
-            <xsl:value-of select="$raw-latex" />
-        </xsl:when>
-        <xsl:when test="$whitespace = 'flexible'">
-            <xsl:call-template name="sanitize-latex">
-                <xsl:with-param name="text" select="$raw-latex" />
-            </xsl:call-template>
-        </xsl:when>
-    </xsl:choose>
+    <!-- we clean whitespace that is irrelevant      -->
+    <!-- MathJax is more tolerant than Latex, but    -->
+    <!-- we choose to treat math bits identically    -->
+    <!-- sanitize-latex template does not provide    -->
+    <!-- a final newline and we do not add one here  -->
+    <!-- either for inline math                      -->
+    <xsl:call-template name="sanitize-latex">
+        <xsl:with-param name="text" select="$raw-latex" />
+    </xsl:call-template>
     <xsl:text>\)</xsl:text>
 </xsl:template>
 
@@ -3321,49 +3319,109 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- duplicate template.  Also no wrapping in div's, -->
 <!-- etc. Output follows source line breaks          -->
 <xsl:template match="me">
+    <!-- build and save for later manipulation                      -->
+    <!-- Note: template for text nodes passes through mrow children -->
+    <xsl:variable name="raw-latex">
+        <xsl:apply-templates select="." mode="alignat-columns" />
+        <xsl:apply-templates select="text()|var|fillin" />
+        <!-- look ahead to absorb immediate clause-ending punctuation -->
+        <xsl:apply-templates select="." mode="get-clause-punctuation" />
+    </xsl:variable>
+    <!-- we provide a newline for visual appeal -->
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="." mode="alignat-columns" />
-    <xsl:apply-templates select="text()|var|fillin" />
-    <!-- look ahead to absorb immediate clause-ending punctuation -->
-    <xsl:apply-templates select="." mode="get-clause-punctuation" />
+    <!-- leading whitespace not present, or stripped -->
+    <xsl:text>&#xa;</xsl:text>
+    <!-- we clean whitespace that is irrelevant    -->
+    <!-- MathJax is more tolerant than Latex, but  -->
+    <!-- we choose to treat math bits identically  -->
+    <!-- sanitize-latex template does not provide  -->
+    <!-- a final newline so we add one here        -->
+    <xsl:call-template name="sanitize-latex">
+        <xsl:with-param name="text" select="$raw-latex" />
+    </xsl:call-template>
+    <!-- We add a newline for visually appealing source -->
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
+    <!-- we provide a newline for visual appeal -->
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Displayed Single-Line Math, Numbered ("men") -->
 <!-- MathJax: out-of-the-box support     -->
 <!-- Requires a manual tag for number    -->
 <xsl:template match="men">
+    <!-- build and save for later manipulation                      -->
+    <!-- Note: template for text nodes passes through mrow children -->
+    <xsl:variable name="raw-latex">
+        <xsl:apply-templates select="." mode="alignat-columns" />
+        <xsl:apply-templates select="text()|var|fillin" />
+        <!-- look ahead to absorb immediate clause-ending punctuation -->
+        <xsl:apply-templates select="." mode="get-clause-punctuation" />
+        <!-- label original -->
+        <xsl:apply-templates select="." mode="label" />
+        <xsl:apply-templates select="." mode="tag" />
+    </xsl:variable>
+    <!-- we provide a newline for visual appeal -->
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="." mode="alignat-columns" />
-    <xsl:apply-templates select="text()|var|fillin" />
-    <!-- look ahead to absorb immediate clause-ending punctuation -->
-    <xsl:apply-templates select="." mode="get-clause-punctuation" />
-    <!-- label original -->
-    <xsl:apply-templates select="." mode="label" />
-    <xsl:apply-templates select="." mode="tag" />
+    <!-- leading whitespace not present, or stripped -->
+    <xsl:text>&#xa;</xsl:text>
+    <!-- we clean whitespace that is irrelevant    -->
+    <!-- MathJax is more tolerant than Latex, but  -->
+    <!-- we choose to treat math bits identically  -->
+    <!-- sanitize-latex template does not provide  -->
+    <!-- a final newline so we add one here        -->
+    <xsl:call-template name="sanitize-latex">
+        <xsl:with-param name="text" select="$raw-latex" />
+    </xsl:call-template>
+    <!-- We add a newline for visually appealing source -->
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
+    <!-- we provide a newline for visual appeal -->
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="men" mode="duplicate">
+    <!-- build and save for later manipulation                      -->
+    <!-- Note: template for text nodes passes through mrow children -->
+    <xsl:variable name="raw-latex">
+        <xsl:apply-templates select="." mode="alignat-columns" />
+        <xsl:apply-templates select="text()|var|fillin" />
+        <!-- look ahead to absorb immediate clause-ending punctuation -->
+        <xsl:apply-templates select="." mode="get-clause-punctuation" />
+        <xsl:apply-templates select="." mode="tag" />
+    </xsl:variable>
+    <!-- we provide a newline for visual appeal -->
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="." mode="alignat-columns" />
-    <xsl:apply-templates select="text()|var|fillin" />
-    <!-- look ahead to absorb immediate clause-ending punctuation -->
-    <xsl:apply-templates select="." mode="get-clause-punctuation" />
-    <xsl:apply-templates select="." mode="tag" />
+    <!-- leading whitespace not present, or stripped -->
+    <xsl:text>&#xa;</xsl:text>
+    <!-- we clean whitespace that is irrelevant    -->
+    <!-- MathJax is more tolerant than Latex, but  -->
+    <!-- we choose to treat math bits identically  -->
+    <!-- sanitize-latex template does not provide  -->
+    <!-- a final newline so we add one here        -->
+    <xsl:call-template name="sanitize-latex">
+        <xsl:with-param name="text" select="$raw-latex" />
+    </xsl:call-template>
+    <!-- We add a newline for visually appealing source -->
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
+    <!-- we provide a newline for visual appeal -->
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Displayed Multi-Line Math ("md", "mdn") -->
@@ -3373,36 +3431,54 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX environment from "displaymath-alignment" template in -common.xsl      -->
 <!-- NB: *identical* to LaTeX version, but need "duplicate" version              -->
 <xsl:template match="md|mdn">
+    <!-- We add a newline for visually appealing source -->
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="alignat-columns" />
+    <!-- We add a newline for visually appealing source -->
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="mrow|intertext" />
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
+    <!-- We add a newline for visually appealing source -->
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="md|mdn" mode="duplicate">
+    <!-- We add a newline for visually appealing source -->
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="alignat-columns" />
+    <!-- We add a newline for visually appealing source -->
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="mrow|intertext" mode="duplicate" />
+    <xsl:apply-templates select="mrow|intertext" />
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
+    <!-- We add a newline for visually appealing source -->
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Rows of displayed Multi-Line Math ("mrow") -->
-<!-- (1) MathJax config above turns off all numbering  -->
-<!-- (2) Numbering supplied by \tag{}                  -->
-<!-- (3) MathJax config makes span id's predictable    -->
-<!-- (4) Last row special, has no line-break marker    -->
+<!-- (1) MathJax config above turns off all numbering -->
+<!-- (2) Numbering supplied by \tag{}                 -->
+<!-- (3) MathJax config makes span id's predictable   -->
+<!-- (4) Last row special, has no line-break marker   -->
+<!-- Unlike for LaTeX output, we perform LaTeX        -->
+<!-- sanitization on each "mrow" since interleaved    -->
+<!-- "intertext" will have HTML output that might get -->
+<!-- stripped out in generic text processing.         -->
 <xsl:template match="md/mrow">
-    <xsl:apply-templates select="text()|xref|var|fillin" />
+    <xsl:call-template name="sanitize-latex">
+        <xsl:with-param name="text">
+            <xsl:apply-templates select="text()|xref|var|fillin" />
+        </xsl:with-param>
+    </xsl:call-template>
     <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
         <!-- look ahead to absorb immediate clause-ending punctuation -->
         <!-- pass the context as enclosing environment (md)           -->
@@ -3420,7 +3496,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="md/mrow" mode="duplicate">
-    <xsl:apply-templates select="text()|xref|var|fillin" />
+    <xsl:call-template name="sanitize-latex">
+        <xsl:with-param name="text">
+            <xsl:apply-templates select="text()|xref|var|fillin" />
+        </xsl:with-param>
+    </xsl:call-template>
     <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
         <!-- look ahead to absorb immediate clause-ending punctuation -->
         <!-- pass the context as enclosing environment (md)           -->
@@ -3436,7 +3516,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="mdn/mrow">
-    <xsl:apply-templates select="text()|xref|var|fillin" />
+    <xsl:call-template name="sanitize-latex">
+        <xsl:with-param name="text">
+            <xsl:apply-templates select="text()|xref|var|fillin" />
+        </xsl:with-param>
+    </xsl:call-template>
     <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
         <!-- look ahead to absorb immediate clause-ending punctuation -->
         <!-- pass the context as enclosing environment (md)           -->
@@ -3459,7 +3543,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="mdn/mrow" mode="duplicate">
-    <xsl:apply-templates select="text()|xref|var|fillin" />
+    <xsl:call-template name="sanitize-latex">
+        <xsl:with-param name="text">
+            <xsl:apply-templates select="text()|xref|var|fillin" />
+        </xsl:with-param>
+    </xsl:call-template>
     <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
         <!-- look ahead to absorb immediate clause-ending punctuation -->
         <!-- pass the context as enclosing environment (md)           -->
@@ -3490,23 +3578,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Intertext -->
-<!-- A LaTeX construct really, we just jump out/in of     -->
-<!-- the align/gather environment and package the text    -->
-<!-- in an HTML paragraph, assuming it is just a snippet. -->
-<!-- This breaks the alignment, but MathJax has no good   -->
-<!-- solution for this.                                   -->
-<!-- NB: we check the *parent* for alignment information  -->
+<!-- A LaTeX construct really, we just jump out/in of    -->
+<!-- the align/gather environment and process the text   -->
+<!-- "md" and "mdn" can only occur in a "p" so no wrap   -->
+<!-- This breaks the alignment, but MathJax has no good  -->
+<!-- solution for this.                                  -->
+<!-- NB: we check the *parent* for alignment information -->
 <xsl:template match="md/intertext|mdn/intertext">
     <xsl:text>\end{</xsl:text>
-    <xsl:apply-templates select=".." mode="displaymath-alignment" />
+    <xsl:apply-templates select="parent::*" mode="displaymath-alignment" />
     <xsl:text>}&#xa;</xsl:text>
-    <p>
-        <xsl:apply-templates />
-    </p>
+    <xsl:apply-templates />
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>\begin{</xsl:text>
-    <xsl:apply-templates select=".." mode="displaymath-alignment" />
+    <xsl:apply-templates select="parent::*" mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
-    <xsl:apply-templates select=".." mode="alignat-columns" />
+    <xsl:apply-templates select="parent::*" mode="alignat-columns" />
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
