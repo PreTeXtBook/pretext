@@ -2400,14 +2400,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>)}\\&#xa;</xsl:text>
     <xsl:text>\endfoot&#xa;</xsl:text>
     <xsl:text>\endlastfoot&#xa;</xsl:text>
-    <xsl:apply-templates select="//notation" mode="backmatter" />
+    <xsl:apply-templates select="$document-root//notation" mode="backmatter" />
     <xsl:text>\end{longtable}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="notation" mode="backmatter">
-    <xsl:text>$</xsl:text>
-    <xsl:value-of select="usage" />
-    <xsl:text>$</xsl:text>
+    <xsl:text>\(</xsl:text>
+    <xsl:apply-templates select="usage" />
+    <xsl:text>\)</xsl:text>
     <xsl:text>&amp;</xsl:text>
     <xsl:apply-templates select="description" />
     <xsl:text>&amp;</xsl:text>
