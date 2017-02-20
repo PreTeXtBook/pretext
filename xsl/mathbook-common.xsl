@@ -1720,7 +1720,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:variable name="original" select="$math-punctuation" />
             <xsl:variable name="front-cleaned">
                 <xsl:choose>
-                    <xsl:when test="not(preceding-sibling::node()[self::* or self::text()])">
+                    <xsl:when test="not(preceding-sibling::node()[self::* or self::text()]) or preceding-sibling::node()[self::* or self::text()][1][self::me or self::men or self::md or self::mdn or self::cd or self::pre]">
                         <xsl:call-template name="strip-leading-whitespace">
                             <xsl:with-param name="text" select="$original" />
                         </xsl:call-template>
@@ -1732,7 +1732,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:variable>
             <xsl:variable name="back-cleaned">
                 <xsl:choose>
-                    <xsl:when test="not(following-sibling::node()[self::* or self::text()])">
+                    <xsl:when test="not(following-sibling::node()[self::* or self::text()])  or following-sibling::node()[self::* or self::text()][1][self::me or self::men or self::md or self::mdn or self::cd or self::pre]">
                         <xsl:call-template name="strip-trailing-whitespace">
                             <xsl:with-param name="text" select="$front-cleaned" />
                         </xsl:call-template>
