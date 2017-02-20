@@ -1702,6 +1702,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- either side of displayed objects, math and lists -->
     <!-- (only?), in addition to first and last nodes     -->
     <xsl:choose>
+        <!-- pass through if a node within "webwork-tex" -->
+        <xsl:when test="ancestor::webwork-tex">
+            <xsl:value-of select="$math-punctuation" />
+        </xsl:when>
         <!-- pass through if assuming strict adherence to whitespace policy -->
         <xsl:when test="$whitespace='strict'">
             <xsl:value-of select="$math-punctuation" />
