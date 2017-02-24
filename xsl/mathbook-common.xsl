@@ -799,9 +799,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$latex-left-justified" />
         </xsl:with-param>
     </xsl:call-template>
-    <xsl:text>\newcommand{\lt}{ &lt; }&#xa;</xsl:text>
-    <xsl:text>\newcommand{\gt}{ &gt; }&#xa;</xsl:text>
-    <xsl:text>\newcommand{\amp}{ &amp; }&#xa;</xsl:text>
+    <xsl:text>\newcommand{\lt}{&lt;}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\gt}{&gt;}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\amp}{&amp;}&#xa;</xsl:text>
 </xsl:variable>
 
 <!-- Recursively, line-by-line, find first %                             -->
