@@ -6879,11 +6879,9 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                         <xsl:attribute name="href">
                             <xsl:value-of select="$outer-url" />
                         </xsl:attribute>
-                        <xsl:if test="1 > $chunk-level">
-                            <xsl:attribute name="data-scroll">
-                                <xsl:value-of select="$outer-internal" />
-                            </xsl:attribute>
-                        </xsl:if>
+                        <xsl:attribute name="data-scroll">
+                            <xsl:value-of select="$outer-internal" />
+                        </xsl:attribute>
                         <xsl:variable name="num"><xsl:apply-templates select="." mode="number" /></xsl:variable>
                         <xsl:if test="$num!=''">
                             <span class="codenumber"><xsl:value-of select="$num" /></span>
@@ -6894,42 +6892,50 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                     </xsl:element>
                 </h2>
                 <xsl:if test="$toc-level > 1">
-                    <ul>
-                    <xsl:for-each select="./*">
-                        <xsl:variable name="inner-structural">
-                            <xsl:apply-templates select="." mode="is-structural" />
-                        </xsl:variable>
-                        <xsl:if test="$inner-structural='true'">
-                            <!-- Subtree represented by this ToC item -->
-                            <xsl:variable name="inner-node" select="descendant-or-self::*" />
-                            <xsl:variable name="inner-url">
-                                <xsl:apply-templates select="." mode="url" />
+                    <!-- a level 1 ToC entry may not have any structural      -->
+                    <!-- descendants, so we build a possible sublist in a     -->
+                    <!-- variable and do not use it if it ends up being empty -->
+                    <xsl:variable name="sublist">
+                        <xsl:for-each select="./*">
+                            <xsl:variable name="inner-structural">
+                                <xsl:apply-templates select="." mode="is-structural" />
                             </xsl:variable>
-                            <xsl:variable name="inner-internal">
-                                <xsl:apply-templates select="." mode="internal-id" />
-                            </xsl:variable>
-                            <li>
-                                <xsl:element name="a">
-                                    <xsl:attribute name="href">
-                                        <xsl:value-of select="$inner-url" />
-                                    </xsl:attribute>
-                                    <xsl:if test="2 > $chunk-level">
-                                        <xsl:attribute name="data-scroll">
-                                            <xsl:value-of select="$outer-internal" />
+                            <xsl:if test="$inner-structural='true'">
+                                <!-- Subtree represented by this ToC item -->
+                                <xsl:variable name="inner-node" select="descendant-or-self::*" />
+                                <xsl:variable name="inner-url">
+                                    <xsl:apply-templates select="." mode="url" />
+                                </xsl:variable>
+                                <xsl:variable name="inner-internal">
+                                    <xsl:apply-templates select="." mode="internal-id" />
+                                </xsl:variable>
+                                <li>
+                                    <xsl:element name="a">
+                                        <xsl:attribute name="href">
+                                            <xsl:value-of select="$inner-url" />
                                         </xsl:attribute>
-                                    </xsl:if>
-                                    <!-- Add if an "active" class if this is where we are -->
-                                    <xsl:if test="count($this-page-node|$inner-node) = count($inner-node)">
-                                        <xsl:attribute name="class">active</xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:apply-templates select="." mode="title-simple" />
-                                </xsl:element>
-                            </li>
-                        </xsl:if>
-                    </xsl:for-each>
-                    </ul>
-                </xsl:if>
-            </xsl:if>
+                                        <xsl:attribute name="data-scroll">
+                                            <xsl:value-of select="$inner-internal" />
+                                        </xsl:attribute>
+                                        <!-- Add if an "active" class if this is where we are -->
+                                        <xsl:if test="count($this-page-node|$inner-node) = count($inner-node)">
+                                            <xsl:attribute name="class">active</xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:apply-templates select="." mode="title-simple" />
+                                    </xsl:element>
+                                </li>
+                            </xsl:if>
+                        </xsl:for-each>
+                    </xsl:variable>
+                    <!-- not clear why this is the right test         -->
+                    <!-- make an unordered list if there is a sublist -->
+                    <xsl:if test="not($sublist='')">
+                        <ul>
+                            <xsl:copy-of select="$sublist" />
+                        </ul>
+                    </xsl:if>
+                </xsl:if>  <!-- end $toc-level > 1 -->
+            </xsl:if>  <!-- end structural, level 1 -->
         </xsl:for-each>
     </xsl:if>
 </xsl:template>
