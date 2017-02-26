@@ -91,13 +91,11 @@
 
             <p>The term <term>whitespace</term> refers to characters you type but typically do not see.  For us they are <term>space</term>, <term>non-breaking space</term>, <term>tab</term> and <term>newline</term> (also known as a <q>carriage return</q> and/or <q>line feed</q>).  Unlike some other markup languages, MathBook XML <em>does not ever use whitespace</em> to convey formatting information.</p>
 
-            <p>In some parts of a MathBook XML document, every single whitespace character is important and will affect your output, often in significant ways and often in ways that are unpleasant.  For starters, a paragraph is the place where this is important, so inside of a <tag>p</tag> element do not include a newline when you start, or when you end, or anywhere in the middle.  If a sequence of sentences runs off the right side of your screen, learn how to use the settings in your editor to <q>wrap</q> (<q>soft line wrapping</q>) your text visually, without introducing newlines into the saved version of your source file (<q>hard line wrapping</q>).</p>
+            <p>In some parts of a MathBook XML document, every single whitespace character is important and will be transmitted to your output, such as in the <tag>input</tag> and <tag>output</tag> portions of a <tag>sage</tag> element.  Since Sage code mostly follows Python syntax, indentation is important and leading spaces must be preserved.  But you can indent all of your code to match your <init>XML</init> indentation and the entire <tag>input</tag> (or <tag>output</tag>) content will be uniformly shifted left to the margin in your final output.</p>
 
             <p>In other parts of a MathBook XML document, every single whitespace character is ignored, and you have the freedom to use indentation and blank lines to help you understand the logical structure of your document.  An example is that you can add as much whitespace as you like between the paragraphs of a section, such as a preceding blank line and indentation, and none of it will affect your output in any way.</p>
 
-            <p>If you do come from a programming background, recognize that you are not writing line-oriented code and you should adapt the tools you know to a slightly different situation.</p>
-
-            <p>Never use tabs, they can only cause problems.  You may be able to set your editor to translate the tab key to a certain number of spaces, or to translate tabs to spaces when you save a file (and these behaviors are useful).  I have Sublime Text configured to show me every single space as a small faint dot, since I like to be certain I have no stray whitespace <em>anywhere</em>.  Whitespace is evil.</p>
+            <p>Never use tabs, they can only cause problems.  You may be able to set your editor to translate the tab key to a certain number of spaces, or to translate tabs to spaces when you save a file (and these behaviors are useful).  I have Sublime Text configured to show me every single space as a small faint dot, since I like to be certain I have no stray whitespace <em>anywhere</em>.</p>
         </paragraphs>
 
         <paragraphs>

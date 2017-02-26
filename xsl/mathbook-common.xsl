@@ -458,8 +458,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- applications of low-level text-processing routines -->
 <!-- and perhaps speed up processing.  Switch here      -->
 <!-- controls possible whitespace modes.                -->
-<!-- NB: default will change to 'flexible' once fully implemented -->
-<xsl:param name="whitespace" select="'strict'" />
+<xsl:param name="whitespace" select="'flexible'" />
 <xsl:variable name="whitespace-style">
     <xsl:choose>
         <xsl:when test="$whitespace='strict' or $whitespace='flexible'">
