@@ -2249,7 +2249,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Final lines of from/to address get treated carefully above -->
-<xsl:template match="from/line|to/line">
+<!-- Differentiate from memo versions                           -->
+<xsl:template match="letter/frontmatter/from/line|letter/frontmatter/to/line">
     <xsl:apply-templates />
     <!-- is there a following line to separate? -->
     <xsl:if test="following-sibling::*">
@@ -2278,8 +2279,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{tabular}{rp{0.97\textwidth}}&#xa;</xsl:text>
     <xsl:text>\textsf{To:}&amp;</xsl:text>
     <xsl:apply-templates select="to" /><xsl:text>\\&#xa;</xsl:text>
-    <xsl:text>\textsf{From:}&amp;</xsl:text>
-    <xsl:apply-templates select="from" /><xsl:text>\\&#xa;</xsl:text>
+    <xsl:text>\textsf{From:}</xsl:text>
+    <xsl:choose>
+        <!-- multiline structured -->
+        <xsl:when test="from/line">
+            <xsl:apply-templates select="from/line" />
+        </xsl:when>
+        <!-- always a newline, even if blank -->
+        <xsl:otherwise>
+            <xsl:text>&amp;</xsl:text>
+            <xsl:apply-templates select="from" />
+            <xsl:text>\\&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>\textsf{Date:}&amp;</xsl:text>
     <xsl:apply-templates select="date" /><xsl:text>\\&#xa;</xsl:text>
     <xsl:text>\textsf{Subject:}&amp;</xsl:text>
@@ -2288,6 +2300,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}%&#xa;</xsl:text>
     <!-- And drop a bit -->
     <xsl:text>\par\bigskip&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Differentiate from letter versions -->
+<xsl:template match="memo/frontmatter/from/line|memo/frontmatter/to/line">
+    <xsl:text>&amp;</xsl:text>
+    <xsl:apply-templates />
+    <!-- part of a big block, use newline everywhere -->
+    <xsl:text>\\&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ############ -->
