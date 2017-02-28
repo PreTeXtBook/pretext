@@ -685,7 +685,7 @@
 
 <xsl:template match="webwork//image[@pg-name]">
     <xsl:if test="preceding-sibling::p|preceding-sibling::image|preceding-sibling::tabular">
-        <xsl:call-template name="list-indent" />
+        <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:text>[@ image(insertGraph(</xsl:text>
     <xsl:value-of select="@pg-name"/>
@@ -751,7 +751,7 @@
 <!-- If p is inside a list, special handling        -->
 <xsl:template match="webwork//p">
     <xsl:if test="preceding-sibling::p|preceding-sibling::image|preceding-sibling::tabular and not(child::*[1][self::ol] or child::*[1][self::ul])">
-        <xsl:call-template name="list-indent" />
+        <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:apply-templates />
     <!-- If p is last thing in entire (maybe nested) list, explicitly terminate list with three spaces at end of line. -->
@@ -812,7 +812,7 @@
 <xsl:template match="webwork//me">
     <xsl:text>&#xa;&#xa;</xsl:text>
     <xsl:if test="ancestor::ul|ancestor::ol">
-        <xsl:call-template name="list-indent" />
+        <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:text>&gt;&gt; [``</xsl:text>
     <xsl:call-template name="select-latex-macros"/>
@@ -821,14 +821,14 @@
     <xsl:apply-templates select="." mode="get-clause-punctuation" />
     <xsl:text>``] &lt;&lt;&#xa;&#xa;</xsl:text>
     <xsl:if test="following-sibling::text()[normalize-space()] or following-sibling::*">
-        <xsl:call-template name="list-indent" />
+        <xsl:call-template name="potential-list-indent" />
     </xsl:if>
 </xsl:template>
 
 <xsl:template match="webwork//md">
     <xsl:text>&#xa;&#xa;</xsl:text>
         <xsl:if test="ancestor::ul|ancestor::ol">
-            <xsl:call-template name="list-indent" />
+            <xsl:call-template name="potential-list-indent" />
         </xsl:if>
     <xsl:text>&gt;&gt; </xsl:text>
     <xsl:choose>
@@ -849,13 +849,13 @@
     </xsl:choose>
     <xsl:text> &lt;&lt;&#xa;&#xa;</xsl:text>
     <xsl:if test="following-sibling::text()[normalize-space()] or following-sibling::*">
-        <xsl:call-template name="list-indent" />
+        <xsl:call-template name="potential-list-indent" />
     </xsl:if>
 </xsl:template>
 
 <xsl:template match="webwork//md/mrow">
     <xsl:if test="ancestor::ul|ancestor::ol">
-        <xsl:call-template name="list-indent" />
+        <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:apply-templates select="text()|var" />
     <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
@@ -1165,12 +1165,12 @@
     <!-- nested list.                                                         -->
     <xsl:if test="following-sibling::text()[normalize-space()] or following-sibling::*">
         <xsl:text>&#xa;</xsl:text>
-        <xsl:call-template name="list-indent" />
+        <xsl:call-template name="potential-list-indent" />
     </xsl:if>
 </xsl:template>
 
 <xsl:template match="webwork//li">
-    <!-- Indent according to list depth; note this differs from list-indent template. -->
+    <!-- Indent according to list depth; note this differs from potential-list-indent template. -->
     <xsl:call-template name="duplicate-string">
         <xsl:with-param name="count" select="4 * (count(ancestor::ul) + count(ancestor::ol) - 1)" />
         <xsl:with-param name="text"  select="' '" />
@@ -1242,18 +1242,18 @@
 
 <xsl:template match="webwork//tabular">
     <xsl:if test="preceding-sibling::p|preceding-sibling::image|preceding-sibling::tabular">
-        <xsl:call-template name="list-indent" />
+        <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <!-- MBX tabular attributes top, bottom, left, right, halign are essentially passed -->
     <!-- down to cells, rather than used at the tabular level.                          -->
     <xsl:text>[@DataTable(&#xa;</xsl:text>
-    <xsl:call-template name="list-indent" />
+    <xsl:call-template name="potential-list-indent" />
     <xsl:text>  [&#xa;</xsl:text>
     <xsl:apply-templates select="row"/>
-    <xsl:call-template name="list-indent" />
+    <xsl:call-template name="potential-list-indent" />
     <xsl:text>  ],&#xa;</xsl:text>
     <xsl:if test="ancestor::table/caption">
-        <xsl:call-template name="list-indent" />
+        <xsl:call-template name="potential-list-indent" />
         <xsl:text>  caption => '</xsl:text>
             <xsl:apply-templates select="parent::*" mode="type-name"/>
             <xsl:text> </xsl:text>
@@ -1295,7 +1295,7 @@
     <!-- Build latex column specification                         -->
     <!--   vertical borders (left side, right side, three widths) -->
     <!--   horizontal alignment (left, center, right)             -->
-    <xsl:call-template name="list-indent" />
+    <xsl:call-template name="potential-list-indent" />
     <xsl:text>  align => '</xsl:text>
         <!-- start with left vertical border -->
         <xsl:call-template name="pg-vrule-specification">
@@ -1361,7 +1361,7 @@
     <!-- kill all of niceTable's column left/right border thickness in colgroup/col css; just let cellcss control border thickness -->
     <xsl:variable name="columns-css">
         <xsl:if test="col[@right] or @left">
-            <xsl:call-template name="list-indent" />
+            <xsl:call-template name="potential-list-indent" />
             <xsl:text>    [</xsl:text>
                 <xsl:for-each select="col">
                     <xsl:text>'</xsl:text>
@@ -1383,7 +1383,7 @@
                     <xsl:choose>
                         <xsl:when test="following-sibling::col">
                             <xsl:text>&#xa;     </xsl:text>
-                            <xsl:call-template name="list-indent" />
+                            <xsl:call-template name="potential-list-indent" />
                         </xsl:when>
                     </xsl:choose>
                 </xsl:for-each>
@@ -1391,28 +1391,28 @@
         </xsl:if>
     </xsl:variable>
     <xsl:if test="not($columns-css='')">
-        <xsl:call-template name="list-indent" />
+        <xsl:call-template name="potential-list-indent" />
         <xsl:text>  columnscss =>&#xa;</xsl:text>
-        <xsl:call-template name="list-indent" />
+        <xsl:call-template name="potential-list-indent" />
         <xsl:value-of select="$columns-css"/>
         <xsl:text>,&#xa;</xsl:text>
     </xsl:if>
     <!-- column specification done -->
     <xsl:if test="not(parent::table)">
-        <xsl:call-template name="list-indent" />
+        <xsl:call-template name="potential-list-indent" />
         <xsl:text>  center => 0,&#xa;</xsl:text>
     </xsl:if>
     <!-- remains to apply tabular/@top and tabular/@bottom -->
     <!-- will handle these at cell level -->
-    <xsl:call-template name="list-indent" />
+    <xsl:call-template name="potential-list-indent" />
     <xsl:text>);@]*&#xa;&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="webwork//tabular/row">
-    <xsl:call-template name="list-indent" />
+    <xsl:call-template name="potential-list-indent" />
     <xsl:text>    [</xsl:text>
     <xsl:apply-templates />
-    <xsl:call-template name="list-indent" />
+    <xsl:call-template name="potential-list-indent" />
     <xsl:text>    ],&#xa;</xsl:text>
 </xsl:template>
 
@@ -1646,7 +1646,7 @@
             </xsl:if>
             <xsl:if test="not($cell-bottom-css='') and (not($cell-top-css='') or not($cell-left-css='') or not($cell-right-css=''))">
                 <xsl:text>&#xa;</xsl:text>
-                <xsl:call-template name="list-indent" />
+                <xsl:call-template name="potential-list-indent" />
                 <xsl:text>                  </xsl:text>
             </xsl:if>
             <xsl:if test="not($cell-top-css='')">
@@ -1654,7 +1654,7 @@
             </xsl:if>
             <xsl:if test="not($cell-top-css='') and (not($cell-left-css='') or not($cell-right-css=''))">
                 <xsl:text>&#xa;</xsl:text>
-                <xsl:call-template name="list-indent" />
+                <xsl:call-template name="potential-list-indent" />
                 <xsl:text>                  </xsl:text>
             </xsl:if>
             <xsl:if test="not($cell-left-css='')">
@@ -1662,7 +1662,7 @@
             </xsl:if>
             <xsl:if test="not($cell-left-css='') and not($cell-right-css='')">
                 <xsl:text>&#xa;</xsl:text>
-                <xsl:call-template name="list-indent" />
+                <xsl:call-template name="potential-list-indent" />
                 <xsl:text>                  </xsl:text>
             </xsl:if>
             <xsl:if test="not($cell-right-css='')">
@@ -1676,7 +1676,7 @@
             <xsl:text></xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:call-template name="list-indent" />
+            <xsl:call-template name="potential-list-indent" />
             <xsl:text>     </xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -1693,35 +1693,35 @@
             <xsl:text>'),</xsl:text>
             <xsl:if test="@colspan">
                 <xsl:text>&#xa;</xsl:text>
-                <xsl:call-template name="list-indent" />
+                <xsl:call-template name="potential-list-indent" />
                 <xsl:text>      colspan => '</xsl:text>
                 <xsl:value-of select="@colspan"/>
                 <xsl:text>',</xsl:text>
             </xsl:if>
             <xsl:if test="not($halign='')">
                 <xsl:text>&#xa;</xsl:text>
-                <xsl:call-template name="list-indent" />
+                <xsl:call-template name="potential-list-indent" />
                 <xsl:text>      halign  => '</xsl:text>
                 <xsl:value-of select="$halign"/>
                 <xsl:text>',</xsl:text>
             </xsl:if>
             <xsl:if test="$midrule='1' and not(preceding-sibling::cell)">
                 <xsl:text>&#xa;</xsl:text>
-                <xsl:call-template name="list-indent" />
+                <xsl:call-template name="potential-list-indent" />
                 <xsl:text>      midrule => '</xsl:text>
                 <xsl:value-of select="$midrule"/>
                 <xsl:text>',</xsl:text>
             </xsl:if>
             <xsl:if test="not($rowcss='')">
                 <xsl:text>&#xa;</xsl:text>
-                <xsl:call-template name="list-indent" />
+                <xsl:call-template name="potential-list-indent" />
                 <xsl:text>      rowcss  => '</xsl:text>
                 <xsl:value-of select="$rowcss"/>
                 <xsl:text>',</xsl:text>
             </xsl:if>
             <xsl:if test="not($cellcss='')">
                 <xsl:text>&#xa;</xsl:text>
-                <xsl:call-template name="list-indent" />
+                <xsl:call-template name="potential-list-indent" />
                 <xsl:text>      cellcss => '</xsl:text>
                 <xsl:value-of select="$cellcss"/>
                 <xsl:text>',</xsl:text>
@@ -1790,7 +1790,7 @@
 </xsl:template>
 
 <!-- Base indentation for lines of code in the middle of a list -->
-<xsl:template name="list-indent">
+<xsl:template name="potential-list-indent">
     <xsl:call-template name="duplicate-string">
         <xsl:with-param name="count" select="4 * (count(ancestor::ul) + count(ancestor::ol))" />
         <xsl:with-param name="text"  select="' '" />
