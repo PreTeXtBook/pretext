@@ -755,7 +755,7 @@
     </xsl:if>
     <xsl:apply-templates />
     <!-- If p is last thing in entire (maybe nested) list, explicitly terminate list with three spaces at end of line. -->
-    <xsl:if test="parent::li and not(following-sibling::*) and not(../following::*[1][self::li])">
+    <xsl:if test="parent::li and not(following-sibling::*) and not(parent::*/following::*[1][self::li])">
         <xsl:text>   </xsl:text>
     </xsl:if>
     <!-- Blank line required or PGML will treat two adjacent p as one -->
@@ -1178,9 +1178,9 @@
     <xsl:choose>
         <xsl:when test="parent::ul">
             <xsl:choose>
-                <xsl:when test="../@label='disc'">*</xsl:when>
-                <xsl:when test="../@label='circle'">o</xsl:when>
-                <xsl:when test="../@label='square'">+</xsl:when>
+                <xsl:when test="parent::*/@label='disc'">*</xsl:when>
+                <xsl:when test="parent::*/@label='circle'">o</xsl:when>
+                <xsl:when test="parent::*/@label='square'">+</xsl:when>
                 <xsl:otherwise>
                     <xsl:choose>
                         <xsl:when test="count(ancestor::ul) mod 3 = 1">*</xsl:when>
@@ -1193,11 +1193,11 @@
         </xsl:when>
         <xsl:when test="parent::ol">
             <xsl:choose>
-                <xsl:when test="contains(../@label,'1')">1</xsl:when>
-                <xsl:when test="contains(../@label,'a')">a</xsl:when>
-                <xsl:when test="contains(../@label,'A')">A</xsl:when>
-                <xsl:when test="contains(../@label,'i')">i</xsl:when>
-                <xsl:when test="contains(../@label,'I')">I</xsl:when>
+                <xsl:when test="contains(parent::*/@label,'1')">1</xsl:when>
+                <xsl:when test="contains(parent::*/@label,'a')">a</xsl:when>
+                <xsl:when test="contains(parent::*/@label,'A')">A</xsl:when>
+                <xsl:when test="contains(parent::*/@label,'i')">i</xsl:when>
+                <xsl:when test="contains(parent::*/@label,'I')">I</xsl:when>
                 <xsl:otherwise>
                     <xsl:choose>
                         <xsl:when test="count(ancestor::ol) mod 4 = 1">1</xsl:when>
