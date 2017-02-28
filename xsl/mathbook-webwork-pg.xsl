@@ -928,8 +928,10 @@
 
 <!-- two spaces at line-end makes a newline in PGML-->
 <xsl:template match="webwork//cell/line">
-    <!-- This leads to lines of PG code that would ideally be indented for human readability,        -->
-    <!-- but it cannot be avoided because the cell is fed to PF(), and would act on the indentation. -->
+    <!-- This leads to lines of PG code that would ideally be indented -->
+    <!-- for human readability, but it cannot be avoided because the   -->
+    <!-- cell is fed to PF(), alias for PGML::Format(), and would act  -->
+    <!-- on the indentation. -->
     <xsl:apply-templates />
     <xsl:text>  &#xa;</xsl:text>
 </xsl:template>
