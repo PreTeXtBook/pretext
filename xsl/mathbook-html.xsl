@@ -6020,6 +6020,27 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 
 <!-- JSXGraph -->
 <xsl:template match="jsxgraph">
+    <!-- interpret @width percentage and @aspect ratio -->
+    <xsl:variable name="width-percentage">
+        <xsl:apply-templates select="." mode="image-width" />
+    </xsl:variable>
+    <xsl:variable name="aspect-ratio">
+        <xsl:apply-templates select="." mode="aspect-ratio" />
+    </xsl:variable>
+    <xsl:variable name="width-pixels">
+        <xsl:value-of select="round((substring-before($width-percentage, '%') div 100) * $design-width)" />
+    </xsl:variable>
+    <xsl:variable name="height-pixels">
+        <xsl:choose>
+            <xsl:when test="not($aspect-ratio='')">
+                <xsl:value-of select="round($width-pixels div $aspect-ratio)" />
+            </xsl:when>
+            <!-- empty string means not specified, use 1:1, ie square -->
+            <xsl:otherwise>
+                <xsl:value-of select="$width-pixels" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <!-- the div to hold the JSX output -->
     <xsl:element name="div">
         <xsl:attribute name="id">
@@ -6029,10 +6050,16 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:text>jxgbox</xsl:text>
         </xsl:attribute>
         <xsl:attribute name="style">
-            <xsl:text>width:400px; height:400px;</xsl:text>
+            <xsl:text>width:</xsl:text>
+            <xsl:value-of select="$width-pixels" />
+            <xsl:text>px; height:</xsl:text>
+            <xsl:value-of select="$height-pixels" />
+            <xsl:text>px;</xsl:text>
         </xsl:attribute>
     </xsl:element>
-    <!-- the script to hold the code -->
+    <!-- the script to hold the code                       -->
+    <!-- JSXGraph code must reference the id on the div,   -->
+    <!-- so ideally an xml:id specifies this in the source -->
     <xsl:element name="script">
         <xsl:attribute name="type">
             <xsl:text>text/javascript</xsl:text>

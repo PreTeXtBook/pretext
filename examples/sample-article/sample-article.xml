@@ -3222,11 +3222,11 @@ the xsltproc executable.
             <subsection>
                 <title>JSXGraph</title>
 
-                <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is contrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">example</url> is taken from the JSXGraph <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>.</p>
+                <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is contrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">example</url> is taken from the JSXGraph <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>.  Width is 75<percent /> and aspect ratio is 4:3.</p>
 
                 <figure>
                     <caption>The Archimedian Spiral <m>r = a + b\theta</m>, <m>0\leq\theta\leq 8\pi</m></caption>
-                    <jsxgraph xml:id="jsxgraph-archimedian-spiral">
+                    <jsxgraph xml:id="jsxgraph-archimedian-spiral" width="75%" aspect="4:3">
                         <!-- http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral -->
                         <input>
                         var board = JXG.JSXGraph.initBoard('jsxgraph-archimedian-spiral', {boundingbox: [-10, 10, 10, -10]});
@@ -3247,11 +3247,11 @@ the xsltproc executable.
 
                 <p>Here is a more elaborate example, from the <url href="http://jsxgraph.uni-bayreuth.de/showcase/">JSXGraph Showcase</url>, titled <url href="http://jsxgraph.uni-bayreuth.de/showcase/infinity.html">Infinity</url>.  Notice that the code here contains a problematic less-than character for a comparison in a loop.  We could replace it by the <c>&amp;lt;</c> XML escape sequence, but we have instead chosen the expedient of using a <c>CDATA</c> construction to wrap the entire hunk of code (see the source for exact syntax).  This might be the best solution if the code contains many HTML strings that need to be protected from the XML parser.</p>
 
-                <p>There are two active sliders to control the shape and shading of the graphic, and hovering the mouse near one of the edges will highlight the entirety of one of the 30 quadrangles.  Finally, each of the four red corners may be dragged to a new location.</p>
+                <p>There are two active sliders to control the shape and shading of the graphic, and hovering the mouse near one of the edges will highlight the entirety of one of the 30 quadrangles.  Finally, each of the four red corners may be dragged to a new location.  Width is 60<percent /> and aspect ratio is the default, 1:1, <ie /> a square.</p>
 
                 <figure>
                     <caption>Infinity, from the JSXGraph Showcase</caption>
-                    <jsxgraph xml:id="jsxgraph-infinity">
+                    <jsxgraph xml:id="jsxgraph-infinity" width="60%">
                         <!-- http://jsxgraph.uni-bayreuth.de/showcase/infinity.html -->
                         <input><![CDATA[
                         JXG.Options.renderer = 'canvas';
