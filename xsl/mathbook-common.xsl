@@ -2198,11 +2198,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 
-<!-- ######################## -->
-<!-- Widths of Images, Videos -->
-<!-- ######################## -->
+<!-- ############################# -->
+<!-- Widths of Images, Videos, Etc -->
+<!-- ############################# -->
 
-<xsl:template match="image|video" mode="image-width">
+<xsl:template match="image|video|jsxgraph" mode="image-width">
     <xsl:param name="width-override" select="''" />
     <!-- every (?) image comes here for width, check for height (never was on video) -->
     <xsl:if test="@height">
@@ -2237,6 +2237,30 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
+<!-- Assumes element may have an @aspect attribute   -->
+<!-- Form:  "width:height" or decimal width/height   -->
+<!-- Return: real number, unitless for use by caller -->
+<!-- Totally blank means caller supplies default     -->
+<!-- TODO: add for video, not for image (warn?) -->
+<xsl:template match="jsxgraph" mode="aspect-ratio">
+    <xsl:choose>
+        <xsl:when test="not(@aspect)" />
+        <xsl:when test="contains(@aspect, ':')">
+            <xsl:variable name="width" select="substring-before(@aspect, ':')" />
+            <xsl:variable name="height" select="substring-after(@aspect, ':')" />
+            <xsl:value-of select="$width div $height" />
+        </xsl:when>
+        <!-- NaN does not equal *anything*, so tests if a number -->
+        <!-- http://stackoverflow.com/questions/6895870          -->
+        <xsl:when test="(number(@aspect)=number(@aspect)) and (@aspect > 0)">
+            <xsl:value-of select="@aspect" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:WARNING: the @aspect attribute should be a ratio, like 4:3, or a positive number, not "<xsl:value-of select="@aspect" />"</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- ################ -->
 <!-- Names of Objects -->
