@@ -580,13 +580,16 @@
 
 <!ELEMENT md   (mrow, (mrow|intertext)*)>
     <!ATTLIST md  alignment      (align|gather|alignat) #IMPLIED>
+    <!ATTLIST md  break          (yes|no) #IMPLIED>
 <!ELEMENT mdn  (mrow, (mrow|intertext)*)>
     <!ATTLIST mdn alignment      (align|gather|alignat) #IMPLIED>
+    <!ATTLIST mdn break          (yes|no) #IMPLIED>
 
 <!-- <xref> may occur in an <mrow> as a "reason" -->
 <!ELEMENT mrow (#PCDATA|var|xref|fillin)*>
     <!ATTLIST mrow xml:id ID #IMPLIED>
     <!ATTLIST mrow number (yes|no) #IMPLIED>
+    <!ATTLIST mrow break  (yes|no) #IMPLIED>
 
 <!-- simple text between rows of aligned equations -->
 <!ELEMENT intertext (#PCDATA|%linear;)*>

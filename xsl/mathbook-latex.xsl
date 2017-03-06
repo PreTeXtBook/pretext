@@ -479,6 +479,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Symbols, align environment, bracket-matrix&#xa;</xsl:text>
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
     <xsl:text>\usepackage{amssymb}&#xa;</xsl:text>
+    <xsl:text>%% allow page breaks within display mathematics anywhere&#xa;</xsl:text>
+    <xsl:text>%% level 4 is maximally permissive&#xa;</xsl:text>
+    <xsl:text>%% this is exactly the opposite of AMSmath package philosophy&#xa;</xsl:text>
+    <xsl:text>%% there are per-display, and per-equation options to control this&#xa;</xsl:text>
+    <xsl:text>%% split, aligned, gathered, and alignedat are not affected&#xa;</xsl:text>
+    <xsl:text>\allowdisplaybreaks[4]&#xa;</xsl:text>
     <xsl:text>%% allow more columns to a matrix&#xa;</xsl:text>
     <xsl:text>%% can make this even bigger by overriding with  latex.preamble.late  processing option&#xa;</xsl:text>
     <xsl:text>\setcounter{MaxMatrixCols}{30}&#xa;</xsl:text>
@@ -3776,8 +3782,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
     <!-- intertext does not need line-ending on prior row -->
     <!-- nor does final mrow of the whole display         -->
+    <!-- \allowdisplaybreaks is on globally always        -->
+    <!-- but may need to override with a modal template   -->
     <xsl:if test="following-sibling::mrow">
        <xsl:text>\\</xsl:text>
+       <xsl:apply-templates select="." mode="dislay-page-break" />
     </xsl:if>
     <!-- check last row as very end of entire proof      -->
     <!-- and sneak in a \qedhere from the amsthm package -->
@@ -3795,6 +3804,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
+
+<!-- Page Breaks within Display Math -->
+<!-- If parent has  break="no"  then surpress with a * -->
+<!-- Unless mrow has  break="yes" then leave alone     -->
+<!-- NB: if mrow goes to common, just make a null      -->
+<!-- version of this template for the HTML version,    -->
+<!-- where it is irrelevant                            -->
+<xsl:template match="mrow" mode="dislay-page-break">
+    <xsl:if test="parent::*/@break='no' and not(@break='yes')">
+        <xsl:text>*</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- ##### -->
 <!-- Index -->

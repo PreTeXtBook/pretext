@@ -1141,6 +1141,136 @@ the xsltproc executable.
                     <mrow>x  \amp       \amp    \amp {}+{} \amp  z \amp {}={} \amp 6</mrow>
                     <mrow>x  \amp {}+{} \amp 3y \amp {}+{} \amp 2z \amp {}={} \amp 13.</mrow>
                 </md>Beautiful.</p>
+
+                <example>
+                    <title>Excessive Display Mathematics</title>
+
+                    <p>In print versions, a long run of displayed equations often needs to be broken across pages.  If you are reading some other version of this, then there is nothing to see here.  But for <latex /> output it could be interesting.  First, with no extra effort, this page-long display should break naturally, no matter how the preceding material changes.<md number="yes">
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow>m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow>m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow>m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow>m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow>m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow>m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow>m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow>m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow>m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow>m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow>m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow>m^2+n^2=p^2</mrow>
+                        <!--  -->
+                    </md></p>.
+                    <p>In this version we have turned off page breaking for the entire display, but then allowed a break at every fourth equation, so you should see a reasonably attractive page break right after one of the <m>m^2+n^2=p^2</m> equations.<mdn break="no">
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow break="yes">m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow break="yes">m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow break="yes">m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow break="yes">m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow break="yes">m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow break="yes">m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow break="yes">m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow break="yes">m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow break="yes">m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow break="yes">m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow break="yes">m^2+n^2=p^2</mrow>
+                        <!--  -->
+                        <mrow>x^2+y^2=z^2</mrow>
+                        <mrow>a^2+b^2=c^2</mrow>
+                        <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
+                        <mrow break="yes">m^2+n^2=p^2</mrow>
+                        <!--  -->
+                    </mdn></p>.
+                    <p>So.  Do not take any extra steps and let <latex /> figure out the breaks.  If you do not like a break, modify the <c>md</c> or <c>mdn</c> to go back to the AMSmath default behavior and not break at all.  Ever.  Or rather, go further and modify an individual <c>mrow</c> to suggest that it is a good place for a break.</p>
+                </example>
             </subsection>
 
             <subsection>
