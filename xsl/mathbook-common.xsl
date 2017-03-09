@@ -5127,6 +5127,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:apply-templates select="." mode="xinclude-warnings" />
     <xsl:apply-templates select="." mode="xmlid-warning" />
     <xsl:apply-templates select="." mode="webwork-warnings" />
+    <xsl:apply-templates select="." mode="text-element-warning" />
 </xsl:template>
 
 <!-- Using the modular  xinclude  scheme at the top level,      -->
@@ -5208,6 +5209,36 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:text>)</xsl:text>
         </xsl:message>
     </xsl:if>
+</xsl:template>
+
+<!-- Elements should never happen like this, so we     -->
+<!-- can match on them and offer pretty good advice    -->
+<!-- Last: since both summary and specifics.  We       -->
+<!-- can't catch with a template, since we don't apply -->
+<!-- templates in the places where elements are banned -->
+<!-- c, cline; unstructured cd, pre                    -->
+<!-- prompt, input, output for sage, console, program  -->
+<xsl:template match="mathbook" mode="text-element-warning">
+    <xsl:variable name="bad-elements" select="$document-root//c/*|$document-root//cline/*|$document-root//cd[not(cline)]/*|$document-root//pre[not(cline)]/*|$document-root//prompt/*|$document-root//input/*|$document-root//output/*" />
+    <xsl:if test="$bad-elements">
+        <xsl:message>
+            <xsl:text>MBX:WARNING: </xsl:text>
+            <xsl:text>There are apparent XML elements in locations that should be text only (</xsl:text>
+            <xsl:value-of select="count($bad-elements)" />
+            <xsl:text> times).</xsl:text>
+        </xsl:message>
+    </xsl:if>
+    <xsl:for-each select="$bad-elements">
+        <xsl:message>
+            <xsl:text>MBX:WARNING: </xsl:text>
+            <xsl:text>There is an apparent XML element (&lt;</xsl:text>
+            <xsl:value-of select="local-name(.)" />
+            <xsl:text>&gt;) inside an &lt;</xsl:text>
+            <xsl:value-of select="local-name(parent::*)" />
+            <xsl:text>&gt; element, which should only contain text.  Using an escaped "less than" ('&amp;lt;') might be the solution, or using a CDATA section.</xsl:text>
+        </xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:for-each>
 </xsl:template>
 
 <!-- ############ -->

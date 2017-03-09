@@ -168,6 +168,15 @@ systems.
         </section>
 
         <section>
+            <title>Catching Mis-Authored Code Chunks</title>
+
+            <p>The XML special characters are often misunderstood.  We can <q>see</q> when an element expecting pure text has a stray XML element.  This could happen when code outputs legitimate HTML elements via print statements.  But there are other possibilities.  Solution, generally, is to use an escaped <q>less than</q> (<c>&amp;lt;</c>) or use a CDATA section.  First a silly inline verbatim that has a problem: <c>foo <bar /> foo</c>, and a structured code display<cd>
+                <cline>I'm fine.</cline>
+                <cline>I'm <broken />.</cline>
+            </cd>Note, this is no help for stray <q>less than</q> in places like tikz code for diagrams.</p>
+        </section>
+
+        <section>
             <title>A Badly Structured Section</title>
 
             <p>This introductory paragraph should be inside an introduction, since it is followed by a sequence of subsections (well, just one anyway).</p>
