@@ -4417,12 +4417,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$separator" />
 </xsl:template>
 
-<!-- We need to be a bit more careful, and less general -->
-<!-- for verbatim text in a title.  We only wrap in a   -->
-<!-- \texttt so that font-scaling can happen            -->
+<!-- We need to be a bit more careful, as a title    -->
+<!-- is a moving argument.  We escape problematic    -->
+<!-- LaTeX characters and wrap in font changer. This -->
+<!-- construct does well when font sizes change.     -->
 <xsl:template match="title//c">
     <xsl:text>\texttt{</xsl:text>
-    <xsl:value-of select="." />
+    <xsl:call-template name="escape-text-to-latex">
+        <xsl:with-param name="text" select="." />
+    </xsl:call-template>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -6894,6 +6897,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######### -->
 
 <!-- Escape Verbatim Text as LaTeX -->
+<!-- THIS SHOULD BE MADE OBSOLETE, SEE JUST BELOW -->
 <!-- Slash first, so don't clobber later additions    -->
 <!-- Double-quote is problematic in LaTeX, and also   -->
 <!-- in strings below, so use &#x22; it's hex Unicode -->
@@ -6911,6 +6915,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="sans-close" select="str:replace($sans-open,  '}',      '\}'      )" />
     <xsl:variable name="sans-quote" select="str:replace($sans-close, '&#x22;', '\&#x22;' )" />
     <xsl:value-of select="$sans-quote" />
+</xsl:template>
+
+<!-- Author's Verbatim Text to Escaped LaTeX -->
+<!-- 10 wicked LaTeX characters:   & % $ # _ { } ~ ^ \       -->
+<!-- \, {, } all need replacement, and also occur in some    -->
+<!-- replacements.  So order, and some care, is necessary.   -->
+<!-- [[TlWvKovNykSRI]] is just an unlikely "mkpasswd" marker -->
+<!-- http://tex.stackexchange.com/questions/34580/           -->
+<xsl:template name="escape-text-to-latex">
+    <xsl:param    name="text" />
+    <xsl:variable name="mark-slash" select="str:replace($text,       '\',     '[[TlWvKovNykSRI]]')" />
+
+    <xsl:variable name="sans-open"  select="str:replace($mark-slash, '{',     '\{'      )" />
+    <xsl:variable name="sans-close" select="str:replace($sans-open,  '}',     '\}'      )" />
+
+    <xsl:variable name="sans-amp"   select="str:replace($sans-close, '&amp;', '\&amp;'  )" />
+    <xsl:variable name="sans-hash"  select="str:replace($sans-amp,   '#',     '\#'      )" />
+    <xsl:variable name="sans-per"   select="str:replace($sans-hash,  '%',     '\%'      )" />
+    <xsl:variable name="sans-tilde" select="str:replace($sans-per,   '~',     '\textasciitilde{}')" />
+    <xsl:variable name="sans-dollar" select="str:replace($sans-tilde, '$',    '\$' )" />
+    <xsl:variable name="sans-under" select="str:replace($sans-dollar, '_',    '\_'      )" />
+    <xsl:variable name="sans-caret" select="str:replace($sans-under,  '^',    '\textasciicircum{}')" />
+
+    <xsl:value-of select="str:replace($sans-caret, '[[TlWvKovNykSRI]]', '\textbackslash{}')" />
 </xsl:template>
 
 <!-- Miscellaneous -->

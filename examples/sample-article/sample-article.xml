@@ -1488,6 +1488,12 @@ the xsltproc executable.
                 <p>It is possible to make some other groupings like quotations, such as <braces>some <em>emphasized text</em> grouped within braces</braces>, or <brackets>a <booktitle>Book Title</booktitle> inside brackets</brackets>, <angles>some <foreign>foreign words</foreign> inside angle brackets</angles>, or <dblbrackets>just a bit of text within double brackets</dblbrackets>.  Some of these are used extensively by scholars who study texts to note various restorations or deletions.</p>
             </subsection>
 
+            <subsection>
+                <title>Verbatim in titles, <c>\a&amp;b#c%d~e{f}g$h_i^j</c>, OK</title>
+
+                <p>You can test the migration of the <latex /> special characters in this section title by requesting a 2-deep Table of Contents with <c> --stringparam toc.level 2</c>.</p>
+            </subsection>
+
         </section>
 
 
