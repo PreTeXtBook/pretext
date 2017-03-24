@@ -114,6 +114,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translations needed for France French -->
     <!-- <localization string-id='list'><xsl:text>List</xsl:text></localization> -->
     <!-- <localization string-id='li'><xsl:text>Item</xsl:text></localization> -->
+    <!-- A regular paragraph, not the old sectioning structure -->
+    <localization string-id='p'><xsl:text>Paragraph</xsl:text></localization>
+    <!-- <localization string-id='blockquote'><xsl:text>Quotation</xsl:text></localization> -->
     <!-- Parts of an exercise and it's solution -->
     <localization string-id='exercise'><xsl:text>Exercice</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Indication</xsl:text></localization>

@@ -1398,7 +1398,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "posterior-duplicate"  no ID, no \label         -->
 
 <!-- me is absent, not numbered, never knowled -->
-<xsl:template match="fn|biblio|men|md|mdn|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|exercise|hint[not(ancestor::*[self::webwork])]|answer[not(ancestor::*[self::webwork])]|solution[not(ancestor::*[self::webwork])]|biblio/note|contributor|li" mode="xref-knowl">
+<xsl:template match="fn|biblio|men|md|mdn|p|blockquote|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|exercise|hint[not(ancestor::*[self::webwork])]|answer[not(ancestor::*[self::webwork])]|solution[not(ancestor::*[self::webwork])]|biblio/note|contributor|li" mode="xref-knowl">
     <!-- write a file, calling body and posterior duplicate templates -->
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
@@ -2297,6 +2297,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>false</xsl:text>
 </xsl:template>
 
+<!-- Block Quotations -->
+<!-- XREF KNOWL only, see elsewhere for orginal instance -->
+<!-- Necessary for index entries incorporated within     -->
+
+<xsl:template match="blockquote" mode="body-element">
+    <xsl:text>blockquote</xsl:text>
+</xsl:template>
+
+<xsl:template match="blockquote" mode="heading-xref-knowl">
+    <xsl:apply-templates select="." mode="heading-type" />
+</xsl:template>
+
+<xsl:template match="blockquote" mode="body-duplicate">
+    <xsl:apply-templates select="*" mode="duplicate" />
+</xsl:template>
+
+<xsl:template match="blockquote" mode="has-posterior">
+    <xsl:text>false</xsl:text>
+</xsl:template>
 
 
 <!-- Definitions, Remarks, Asides -->

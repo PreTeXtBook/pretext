@@ -123,6 +123,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='li'><xsl:text>Item</xsl:text></localization>
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Paragraph</xsl:text></localization>
+    <localization string-id='blockquote'><xsl:text>Quotation</xsl:text></localization>
     <!-- Parts of an exercise and it's solution -->
     <localization string-id='exercise'><xsl:text>Exercise</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Hint</xsl:text></localization>
