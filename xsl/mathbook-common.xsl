@@ -588,7 +588,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- http://bytes.com/topic/net/answers/572365-how-compute-nodes-depth-xslt -->
 <!-- NB: a * instead of node() seems to break things, unsure why            -->
 <xsl:template match="*" mode="level">
-    <xsl:value-of select="count(ancestor::node())-2" />
+    <xsl:choose>
+        <xsl:when test="ancestor::backmatter or ancestor::frontmatter">
+            <xsl:value-of select="count(ancestor::node())-3" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="count(ancestor::node())-2" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Enclosing Level -->
@@ -661,23 +668,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="level" />
     </xsl:variable>
     <xsl:call-template name="level-number-to-latex-name">
-        <xsl:with-param name="level">
-            <xsl:choose>
-                <!-- With parts, the *matter is a peer of a part and +1 and -1 counteract -->
-                <xsl:when test="(ancestor::frontmatter or ancestor::backmatter) and /mathbook/book/part">
-                    <xsl:value-of select="$relative-level + $root-level" />
-                </xsl:when>
-                <!-- *matter is considered structural, but shouldn't be counted    -->
-                <!-- in building the right names at different levels, absent parts -->
-                <xsl:when test="ancestor::frontmatter or ancestor::backmatter">
-                    <xsl:value-of select="$relative-level + $root-level - 1" />
-                </xsl:when>
-                <!-- in the body this is right -->
-                <xsl:otherwise>
-                    <xsl:value-of select="$relative-level + $root-level" />
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:with-param>
+        <xsl:with-param name="level" select="$relative-level + $root-level" />
     </xsl:call-template>
 </xsl:template>
 
