@@ -60,6 +60,36 @@
         </ol>
     </section>
 
+    <section xml:id="section-python-requests">
+        <title>Python <c>requests</c> Library</title>
+
+        <p>In some situations the <c>mbx</c> script will go out on the Internet to fetch some interesting bits for you, saving you the trouble.  These include<ul>
+            <li>Grabbing, downloading, and organizing stock thumbnails for YouTube videos, using a standard API provided for this purpose.  These get used in PDF output in place of embedded videos.</li>
+            <li><webwork /> problems that are stored on a remote server will give up <latex /> versions if asked.  Again, these are used for PDF output in place of interactive versions.</li>
+        </ul>We use the Python <c>requests</c> module/library to manage the connections to these external servers.  There are two items to be aware of.</p>
+
+        <paragraphs>
+            <title>Installation</title>
+
+            <p>This library is not available on Apple computers by default.  From Alex Jordan comes the following incantation at the command line,<cd>
+                <cline>sudo easy_install pip</cline>
+                <cline>sudo pip install requests</cline>
+            </cd>which was last tested 2017-03-31.  Please update us if the situation has changed or there is more to add here.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Warnings</title>
+
+            <p>Using this library to connect to a webserver securely via <c>HTTPS</c> will raise a warning since the support for SSL certificates is not complete.  You will see messages similar to<cd>
+                <cline>site-packages/requests/packages/urllib3/connectionpool.py:843:</cline>
+                <cline>InsecureRequestWarning: Unverified HTTPS request is being made.</cline>
+                <cline>Adding certificate verification is strongly advised.</cline>
+                <cline>See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings</cline>
+                <cline>InsecureRequestWarning</cline>
+            </cd>We have not figured out the best way to stop these, as of 2017-04-01.</p>
+        </paragraphs>
+    </section>
+
     <!--
     <section xml:id="processing-">
         <title>(*) </title>
