@@ -7073,6 +7073,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <xsl:text>    },&#xa;</xsl:text>
         <xsl:text>    "HTML-CSS": {&#xa;</xsl:text>
         <xsl:text>        scale: 88,&#xa;</xsl:text>
+        <xsl:text>        mtextFontInherit: true,&#xa;</xsl:text>
         <xsl:text>    },&#xa;</xsl:text>
         <!-- optional presentation mode gets clickable, large math -->
         <xsl:if test="$b-html-presentation">
