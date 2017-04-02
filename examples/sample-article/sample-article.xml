@@ -1299,6 +1299,11 @@ the xsltproc executable.
                 </md>And another one from Alex.  Note the use of the <c>\mathord{}</c> and <c>\mathrel{}</c> macros to control spacing around the mathematical symbols.  Examine the source to see how the quotation marks have been authored with <init>XML</init> syntax for Unicode characters.<md>
                     <mrow>\zeta(1)=\sum_{n=1}^{\infty}\frac{1}{n}\mathrel{\text{ &#x201c;}\mathord{=}{\text{&#x201d; }}}\prod_{p}\left(\frac{1}{1-1/p}\right)=\prod_{p}\left(\frac{1}{1-p^{-1}}\right)</mrow>
                 </md></p>
+
+                <p>Generally, you cannot use any <init>XML</init> elements inside of the mathematics elements.  An exception is the <c>xref</c> element which you might want to use to provide justifications for the steps of a derivation.  Here is a visual example that is mathematically meaningless,<md>
+                    <mrow>A&amp;=B+C&amp;&amp;<xref ref="corollary-FTC-derivative" autoname="yes" /></mrow>
+                    <mrow>&amp;=D+E&amp;&amp;<xref ref="theorem-FTC" autoname="title" /></mrow>
+                </md>.</p>
             </subsection>
         </section>
 
