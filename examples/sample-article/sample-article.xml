@@ -502,6 +502,18 @@ the xsltproc executable.
 
             <p>Sage output can sometimes be quite long, though this has improved with some changes in Sage's output routines.  Output code should be included primarily for doctesting purposes, and in this use, you may break at almost whitespace character and the doctesting framework will adjust accordingly.  You may wish to show sample output in a static format, like a PDF, so you can consider formatting your output to fit the width constraints of that medium.  Or you may even adjust exactly what is output, to keep it from being too verbose.  Sage doctesting also allows for a wild-card style syntax which allows you to skip over huge chunks of meaningless or unpredictable output, such as tracebacks on error messages.</p>
 
+
+            <paragraphs>
+                <title>Titled Sage Cells</title>
+                <index><main>Sage cell</main><sub>with a title</sub></index>
+
+                <sage>
+                    <input>integral(sin(x)^2, x)</input>
+                    <output>1/2*x - 1/4*sin(2*x)</output>
+                </sage>
+
+                <p>You can place Sage cells inside of a <c>paragraphs</c> if you want to give them a title, but no numbers, <etc />  Their surrounding box sometimes gets clobbered in <latex  /> output if they are the first piece of content, so we test that here also.</p>
+            </paragraphs>
         </section>
 
         <!--

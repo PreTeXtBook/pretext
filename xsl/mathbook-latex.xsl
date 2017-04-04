@@ -4914,9 +4914,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- output text, then wraps it for print, including output          -->
 <!-- But we do not write an environment if there isn't any content   -->
 <!-- So conceivably, this template can do nothing (ie an empty cell) -->
+<!-- As a named template, the context is a calling sage element,     -->
+<!-- this could be reworked and many of the parameters inferred      -->
 <xsl:template name="sage-active-markup">
     <xsl:param name="in" />
     <xsl:param name="out" />
+    <!-- Surrounding box gets clobbered if it is the first -->
+    <!-- thing after a heading.  This could be excessive   -->
+    <!-- if the cell is empty, but should not be harmful.  -->
+    <!-- NB: maybe this should not even be called if all empty -->
+    <xsl:if test="not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)])">
+        <xsl:apply-templates select="." mode="leave-vertical-mode" />
+        <xsl:text>%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="$in!=''">
         <xsl:text>\begin{lstlisting}[style=sageinput]&#xa;</xsl:text>
         <xsl:value-of select="$in" />
