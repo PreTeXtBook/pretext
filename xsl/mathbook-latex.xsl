@@ -3991,11 +3991,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Lists themselves -->
 <!-- If columns are specified, we        -->
 <!-- wrap in the multicolumn environment -->
+<!-- TODO: fewer \leavevmode might be possible.      -->
+<!-- Test for first node of "p", then test for the   -->
+<!-- "p" being first node of some sectioning element -->
 <xsl:template match="ol">
-    <xsl:if test="not(ancestor::ol or ancestor::ul or ancestor::dl)">
-        <xsl:apply-templates select="." mode="leave-vertical-mode" />
-    </xsl:if>
-    <xsl:text>%&#xa;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl)">
+            <xsl:call-template name="leave-vertical-mode" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>%&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:if test="@cols">
         <xsl:text>\begin{multicols}{</xsl:text>
         <xsl:value-of select="@cols" />
@@ -4020,10 +4027,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- from LaTeX's so we write out a label  -->
 <!-- choice for each such list             -->
 <xsl:template match="ul">
-    <xsl:if test="not(ancestor::ol or ancestor::ul or ancestor::dl)">
-        <xsl:apply-templates select="." mode="leave-vertical-mode" />
-    </xsl:if>
-    <xsl:text>%&#xa;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl)">
+            <xsl:call-template name="leave-vertical-mode" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>%&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:if test="@cols">
         <xsl:text>\begin{multicols}{</xsl:text>
         <xsl:value-of select="@cols" />
@@ -4040,10 +4051,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="dl">
-    <xsl:if test="not(ancestor::ol or ancestor::ul or ancestor::dl)">
-        <xsl:apply-templates select="." mode="leave-vertical-mode" />
-    </xsl:if>
-    <xsl:text>%&#xa;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl)">
+            <xsl:call-template name="leave-vertical-mode" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>%&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:if test="@cols">
         <xsl:text>\begin{multicols}{</xsl:text>
         <xsl:value-of select="@cols" />
@@ -4924,8 +4939,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- if the cell is empty, but should not be harmful.  -->
     <!-- NB: maybe this should not even be called if all empty -->
     <xsl:if test="not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)])">
-        <xsl:apply-templates select="." mode="leave-vertical-mode" />
-        <xsl:text>%&#xa;</xsl:text>
+        <xsl:call-template name="leave-vertical-mode" />
     </xsl:if>
     <xsl:if test="$in!=''">
         <xsl:text>\begin{lstlisting}[style=sageinput]&#xa;</xsl:text>
@@ -5102,18 +5116,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- if the first item of an AMS environment, they may float up       -->
 <!-- Seems LaTeX is stacking boxes vertically, and we need to go to   -->
 <!-- horizontal mode before doing these floating layout-type elements -->
+<!-- Necessary before a "lstlisting" environment with surrounding box -->
 <!-- http://tex.stackexchange.com/questions/22852/function-and-usage-of-leavevmode                       -->
 <!-- Potential alternate solution: write a leading "empty" \mbox{}                                       -->
 <!-- http://tex.stackexchange.com/questions/171220/include-non-floating-graphic-in-a-theorem-environment -->
-<xsl:template match="*" mode="leave-vertical-mode">
-    <xsl:text>\leavevmode</xsl:text>
+<xsl:template name="leave-vertical-mode">
+    <xsl:text>\leavevmode%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Figures -->
 <!-- Standard LaTeX figure environment redefined, see preamble comments -->
 <xsl:template match="figure">
-    <xsl:apply-templates select="." mode="leave-vertical-mode" />
-    <xsl:text>%&#xa;</xsl:text>
+    <xsl:if test="not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)])">
+        <xsl:call-template name="leave-vertical-mode" />
+    </xsl:if>
     <xsl:text>\begin{figure}&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]"/>
@@ -5128,8 +5144,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- since it is not straightforward, maybe  -->
 <!-- requires a savebox and a minipage       -->
 <xsl:template match="listing">
-    <xsl:apply-templates select="." mode="leave-vertical-mode" />
-    <xsl:text>%&#xa;</xsl:text>
+    <xsl:if test="not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)])">
+        <xsl:call-template name="leave-vertical-mode" />
+    </xsl:if>
     <xsl:text>\begin{listing}&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]"/>
     <xsl:text>\par&#xa;</xsl:text>
@@ -5355,8 +5372,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\setlength{\panelmax}{0pt}&#xa;</xsl:text>
     <xsl:value-of select="$setup" />
 
-    <xsl:apply-templates select="." mode="leave-vertical-mode" />
-    <xsl:text>%&#xa;</xsl:text>
+    <xsl:call-template name="leave-vertical-mode" />
     <xsl:text>% begin: side-by-side as figure/tabular&#xa;</xsl:text>
     <xsl:text>% \tabcolsep change local to group&#xa;</xsl:text>
     <xsl:text>\setlength{\tabcolsep}{</xsl:text>
@@ -5686,8 +5702,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Standard LaTeX table environment is redefined, -->
 <!-- see preamble comments for details              -->
 <xsl:template match="table">
-    <xsl:apply-templates select="." mode="leave-vertical-mode" />
-    <xsl:text>%&#xa;</xsl:text>
+    <xsl:if test="not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)])">
+        <xsl:call-template name="leave-vertical-mode" />
+    </xsl:if>
     <xsl:text>\begin{table}&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]" />
