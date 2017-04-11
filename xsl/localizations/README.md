@@ -37,5 +37,6 @@ Current (partially) implemented language codes and contributors
 * es-ES, Spanish (Spain), Juan José Torrens
 * en-US, English (United States), Robert A. Beezer
 * fr-FR, French (France), Thomas W. Judson
+* hu-HU, Hungarian (Hungary), Sándor Czirbusz
 * pt-BR, Portugese (Brazil), Igor Morgado
 * pt-PT, Portugese (Portugal), António Pereira
