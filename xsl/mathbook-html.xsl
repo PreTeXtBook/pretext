@@ -7099,15 +7099,14 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:text>text/x-mathjax-config</xsl:text>
         </xsl:attribute>
         <xsl:text>&#xa;</xsl:text>
-        <xsl:text>// contrib directory for accessibility menu, moot after v2.6+?&#xa;</xsl:text>
-        <xsl:text>MathJax.Ajax.config.path["Contrib"] = "https://cdn.mathjax.org/mathjax/contrib";&#xa;</xsl:text>
+        <!-- // contrib directory for accessibility menu, moot after v2.6+ -->
+        <!-- MathJax.Ajax.config.path["Contrib"] = "<some-url>";           -->
         <xsl:text>MathJax.Hub.Config({&#xa;</xsl:text>
         <xsl:text>    tex2jax: {&#xa;</xsl:text>
         <xsl:text>        inlineMath: [['\\(','\\)']],&#xa;</xsl:text>
         <xsl:text>    },&#xa;</xsl:text>
         <xsl:text>    TeX: {&#xa;</xsl:text>
-        <xsl:text>        // [Contrib]accessibility menu moot after v2.6+?&#xa;</xsl:text>
-        <xsl:text>        extensions: ["AMSmath.js", "AMSsymbols.js", "extpfeil.js", "autobold.js", "https://aimath.org/mathbook/mathjaxknowl.js", "[Contrib]/a11y/accessibility-menu.js", ],&#xa;</xsl:text>
+        <xsl:text>        extensions: ["extpfeil.js", "autobold.js", "https://aimath.org/mathbook/mathjaxknowl.js", ],&#xa;</xsl:text>
         <xsl:text>        equationNumbers: { autoNumber: "none",&#xa;</xsl:text>
         <xsl:text>                           useLabelIds: true,&#xa;</xsl:text>
         <xsl:text>                           // JS comment, XML CDATA protect XHTML quality of file&#xa;</xsl:text>
@@ -7119,7 +7118,13 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <xsl:text>        TagSide: "right",&#xa;</xsl:text>
         <xsl:text>        TagIndent: ".8em",&#xa;</xsl:text>
         <xsl:text>    },&#xa;</xsl:text>
+        <!-- key needs quotes since it is not a valid identifier by itself-->
+        <xsl:text>    // HTML-CSS output Jax to be dropped for MathJax 3.0&#xa;</xsl:text>
         <xsl:text>    "HTML-CSS": {&#xa;</xsl:text>
+        <xsl:text>        scale: 88,&#xa;</xsl:text>
+        <xsl:text>        mtextFontInherit: true,&#xa;</xsl:text>
+        <xsl:text>    },&#xa;</xsl:text>
+        <xsl:text>    CommonHTML: {&#xa;</xsl:text>
         <xsl:text>        scale: 88,&#xa;</xsl:text>
         <xsl:text>        mtextFontInherit: true,&#xa;</xsl:text>
         <xsl:text>    },&#xa;</xsl:text>
