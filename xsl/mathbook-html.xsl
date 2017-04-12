@@ -7065,7 +7065,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- MathJax Logo for bottom of left sidebar -->
 <xsl:template name="powered-by-mathjax">
     <a href="https://www.mathjax.org">
-        <img title="Powered by MathJax" src="https://cdn.mathjax.org/mathjax/badge/badge.gif" border="0" alt="Powered by MathJax" />
+        <img title="Powered by MathJax" src="https://www.mathjax.org/badge/badge.gif" border="0" alt="Powered by MathJax" />
     </a>
 </xsl:template>
 
