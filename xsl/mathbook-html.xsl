@@ -7163,7 +7163,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:text>text/javascript</xsl:text>
         </xsl:attribute>
         <xsl:attribute name="src">
-            <xsl:text>https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full</xsl:text>
+            <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML-full</xsl:text>
         </xsl:attribute>
     </xsl:element>
 </xsl:template>
