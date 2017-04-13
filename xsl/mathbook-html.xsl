@@ -7107,6 +7107,8 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <xsl:text>    },&#xa;</xsl:text>
         <xsl:text>    TeX: {&#xa;</xsl:text>
         <xsl:text>        extensions: ["extpfeil.js", "autobold.js", "https://aimath.org/mathbook/mathjaxknowl.js", ],&#xa;</xsl:text>
+        <xsl:text>        // scrolling to fragment identifiers is controlled by other Javascript&#xa;</xsl:text>
+        <xsl:text>        positionToHash: false,&#xa;</xsl:text>
         <xsl:text>        equationNumbers: { autoNumber: "none",&#xa;</xsl:text>
         <xsl:text>                           useLabelIds: true,&#xa;</xsl:text>
         <xsl:text>                           // JS comment, XML CDATA protect XHTML quality of file&#xa;</xsl:text>
