@@ -4068,6 +4068,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text> fixed-width</xsl:text>
             </xsl:if>
         </xsl:attribute>
+        <!-- some structures do not get an id in their panel-html-box  -->
+        <!-- TODO: add more, move to structure with title and caption? -->
+        <xsl:if test="self::list">
+            <xsl:attribute name="id">
+                <xsl:apply-templates select="." mode="internal-id" />
+            </xsl:attribute>
+        </xsl:if>
         <xsl:attribute name="style">
             <xsl:text>width:</xsl:text>
             <xsl:call-template name="relative-width">
@@ -4285,6 +4292,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="ol|ul|dl" mode="panel-html-box">
     <xsl:apply-templates select="." />
+</xsl:template>
+
+<!-- Process intro, the list, conclusion     -->
+<!-- title is killed -->
+<xsl:template match="list" mode="panel-html-box">
+    <xsl:apply-templates select="introduction" />
+    <xsl:apply-templates select="ol|ul|dl" />
+    <xsl:apply-templates select="conclusion" />
 </xsl:template>
 
 
