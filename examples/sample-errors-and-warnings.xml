@@ -179,12 +179,12 @@ systems.
         <section>
             <title>A Badly Structured Section</title>
 
-            <p>This introductory paragraph should be inside an introduction, since it is followed by a sequence of subsections (well, just one anyway).</p>
+            <p>This introductory paragraph should be inside an introduction, since it is followed by a sequence of subsections (well, just one anyway).  This will fail validation, and <em>also</em> raise a warning.</p>
 
             <subsection>
                 <title>First Subsection</title>
 
-                <p>With a single paragraph.</p>
+                <p>With a single paragraph.  We try to catch this common structural violation.</p>
             </subsection>
         </section>
 
@@ -231,8 +231,6 @@ systems.
             </figure>
 
         </section>
-
-
 
     </article>
 
