@@ -7207,12 +7207,9 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'evaluate'" />
             </xsl:call-template>
-            <xsl:text> </xsl:text>
+            <xsl:text> (</xsl:text>
             <xsl:value-of select="$language-text" />
-            <xsl:text> </xsl:text>
-            <xsl:call-template name="type-name">
-                <xsl:with-param name="string-id" select="'code'" />
-            </xsl:call-template>
+            <xsl:text>)</xsl:text>
         <xsl:text>'});&#xa;</xsl:text>
         <xsl:text>});&#xa;</xsl:text>
     </xsl:element>
@@ -7243,10 +7240,6 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <xsl:text>                           evalButtonText: '</xsl:text>
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'evaluate'" />
-            </xsl:call-template>
-            <xsl:text> </xsl:text>
-            <xsl:call-template name="type-name">
-                <xsl:with-param name="string-id" select="'code'" />
             </xsl:call-template>
         <xsl:text>'});&#xa;</xsl:text>
         <xsl:text>});&#xa;</xsl:text>
