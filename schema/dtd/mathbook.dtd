@@ -379,7 +379,7 @@
 <!-- Side By Side -->
 <!-- ############ -->
 
-<!ELEMENT sidebyside  (caption?, (figure|image|table|tabular|paragraphs|p|ol|ul|dl|pre)*)>
+<!ELEMENT sidebyside  (caption?, (figure|image|table|tabular|paragraphs|p|ol|ul|dl|list|pre)*)>
     <!ATTLIST sidebyside xml:id ID #IMPLIED>
     <!ATTLIST sidebyside   margins   CDATA                 #IMPLIED>
     <!ATTLIST sidebyside   width     CDATA                 #IMPLIED>
