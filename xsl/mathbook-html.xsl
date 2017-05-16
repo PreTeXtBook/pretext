@@ -2441,8 +2441,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 
+<!-- only solutions in examples, but projects could have more -->
 <xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="body">
-    <xsl:apply-templates select="*[not(self::solution)]" />
+    <xsl:apply-templates select="*[not(self::hint or self::answer or self::solution)]" />
 </xsl:template>
 
 <!-- Assume a certain structure for list block -->
@@ -2459,7 +2460,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- duplicate, no assumptions on wrapping          -->
 <!-- create solutions as knowls to duplicate content -->
 <xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="body-duplicate">
-    <xsl:apply-templates select="*[not(self::solution)]" mode="duplicate" />
+    <xsl:apply-templates select="*[not(self::hint or self::answer or self::solution)]" mode="duplicate" />
 </xsl:template>
 
 <!-- Assume a certain structure for list block -->
@@ -2477,7 +2478,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="false()" />
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="posterior">
+<!-- Only solutions to examples -->
+<xsl:template match="&EXAMPLE-LIKE;" mode="posterior">
     <xsl:element name="div">
         <xsl:for-each select="solution">
             <xsl:apply-templates select="." />
@@ -2485,9 +2487,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="posterior-duplicate">
+<!-- Also hints and answers for projects -->
+<xsl:template match="&PROJECT-LIKE;" mode="posterior">
+    <xsl:element name="div">
+        <xsl:for-each select="hint|answer|solution">
+            <xsl:apply-templates select="." />
+        </xsl:for-each>
+    </xsl:element>
+</xsl:template>
+
+<!-- Only solutions to examples -->
+<xsl:template match="&EXAMPLE-LIKE;" mode="posterior-duplicate">
     <xsl:element name="div">
         <xsl:for-each select="solution">
+            <xsl:apply-templates select="." mode="xref-link">
+                <xsl:with-param name="content">
+                    <xsl:apply-templates select="." mode="type-name" />
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:for-each>
+    </xsl:element>
+</xsl:template>
+
+<!-- Also hints and answers for projects -->
+<xsl:template match="&PROJECT-LIKE;" mode="posterior-duplicate">
+    <xsl:element name="div">
+        <xsl:for-each select="hint|answer|solution">
             <xsl:apply-templates select="." mode="xref-link">
                 <xsl:with-param name="content">
                     <xsl:apply-templates select="." mode="type-name" />

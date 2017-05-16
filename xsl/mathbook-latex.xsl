@@ -3465,12 +3465,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{objectives}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- An example might have a statement/solution structure -->
+<!-- An example or project may have a statement/solution structure -->
 <xsl:template match="solution[parent::*[&EXAMPLE-FILTER; or &PROJECT-FILTER;]]">
     <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
     <xsl:text>\textbf{</xsl:text>
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'solution'" />
+    </xsl:call-template>
+    <xsl:text>.}\quad </xsl:text>
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- A project may have a hint -->
+<xsl:template match="hint[parent::*[&PROJECT-FILTER;]]">
+    <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
+    <xsl:text>\textbf{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'hint'" />
+    </xsl:call-template>
+    <xsl:text>.}\quad </xsl:text>
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- A project may have an answer -->
+<xsl:template match="answer[parent::*[&PROJECT-FILTER;]]">
+    <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
+    <xsl:text>\textbf{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'answer'" />
     </xsl:call-template>
     <xsl:text>.}\quad </xsl:text>
     <xsl:apply-templates />
