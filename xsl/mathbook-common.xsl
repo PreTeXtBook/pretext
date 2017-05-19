@@ -5128,6 +5128,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:apply-templates select="." mode="xmlid-warning" />
     <xsl:apply-templates select="." mode="webwork-warnings" />
     <xsl:apply-templates select="." mode="text-element-warning" />
+    <xsl:apply-templates select="." mode="subdivision-structure-warning" />
 </xsl:template>
 
 <!-- Using the modular  xinclude  scheme at the top level,      -->
@@ -5238,6 +5239,40 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:text>&gt; element, which should only contain text.  Using an escaped "less than" ('&amp;lt;') might be the solution, or using a CDATA section.</xsl:text>
         </xsl:message>
         <xsl:apply-templates select="." mode="location-report" />
+    </xsl:for-each>
+</xsl:template>
+
+<!-- New authors often begin a subdivision with some material,     -->
+<!-- then begin a run of further subdivisions.  This preliminary   -->
+<!-- material belongs in an introduction (or is for a conclusion). -->
+<!-- This test is not exhaustive, but will catch most cases.       -->
+<xsl:template match="mathbook" mode="subdivision-structure-warning">
+    <xsl:for-each select=".//chapter">
+        <xsl:if test="p and section">
+            <xsl:message>
+                <xsl:text>MBX:WARNING: </xsl:text>
+                <xsl:text>A chapter containing sections needs to have other content inside an &lt;introduction&gt; and/or  &lt;conclusion&gt;.</xsl:text>
+            </xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:if>
+    </xsl:for-each>
+    <xsl:for-each select=".//section">
+        <xsl:if test="p and subsection">
+            <xsl:message>
+                <xsl:text>MBX:WARNING: </xsl:text>
+                <xsl:text>A section containing subsections needs to have other content inside an &lt;introduction&gt; and/or  &lt;conclusion&gt;.</xsl:text>
+            </xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:if>
+    </xsl:for-each>
+    <xsl:for-each select=".//subsection">
+        <xsl:if test="p and subsubsection">
+            <xsl:message>
+                <xsl:text>MBX:WARNING: </xsl:text>
+                <xsl:text>A subsection containing subsubsections needs to have other content inside an &lt;introduction&gt; and/or  &lt;conclusion&gt;.</xsl:text>
+            </xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:if>
     </xsl:for-each>
 </xsl:template>
 

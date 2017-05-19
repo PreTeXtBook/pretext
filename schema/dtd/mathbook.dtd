@@ -249,15 +249,15 @@
     <!ATTLIST question xml:id ID #IMPLIED>
 <!ELEMENT problem (title?, index*, ((%para;)*|(statement, solution*)))>
     <!ATTLIST problem xml:id ID #IMPLIED>
-<!ELEMENT project (title?, index*, ((%para;)*|(statement, solution*)))>
+<!ELEMENT project (title?, index*, ((%para;)*|(statement, hint*, answer*, solution*)))>
     <!ATTLIST project xml:id ID #IMPLIED>
-<!ELEMENT activity (title?, index*, ((%para;)*|(statement, solution*)))>
+<!ELEMENT activity (title?, index*, ((%para;)*|(statement, hint*, answer*, solution*)))>
     <!ATTLIST activity xml:id ID #IMPLIED>
-<!ELEMENT exploration (title?, index*, ((%para;)*|(statement, solution*)))>
+<!ELEMENT exploration (title?, index*, ((%para;)*|(statement, hint*, answer*, solution*)))>
     <!ATTLIST exploration xml:id ID #IMPLIED>
-<!ELEMENT task (title?, index*, ((%para;)*|(statement, solution*)))>
+<!ELEMENT task (title?, index*, ((%para;)*|(statement, hint*, answer*, solution*)))>
     <!ATTLIST task xml:id ID #IMPLIED>
-<!ELEMENT investigation (title?, index*, ((%para;)*|(statement, solution*)))>
+<!ELEMENT investigation (title?, index*, ((%para;)*|(statement, hint*, answer*, solution*)))>
     <!ATTLIST investigation xml:id ID #IMPLIED>
 
 <!-- a collection or summary, minimal structure, highlighted presentation -->
@@ -379,7 +379,7 @@
 <!-- Side By Side -->
 <!-- ############ -->
 
-<!ELEMENT sidebyside  (caption?, (figure|image|table|tabular|paragraphs|p|ol|ul|dl|pre)*)>
+<!ELEMENT sidebyside  (caption?, (figure|image|table|tabular|paragraphs|p|ol|ul|dl|list|pre)*)>
     <!ATTLIST sidebyside xml:id ID #IMPLIED>
     <!ATTLIST sidebyside   margins   CDATA                 #IMPLIED>
     <!ATTLIST sidebyside   width     CDATA                 #IMPLIED>

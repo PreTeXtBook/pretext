@@ -191,6 +191,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'><xsl:text>permalink</xsl:text></localization>
     <localization string-id='incontext'><xsl:text>v-souvislosti</xsl:text></localization>
+    <!-- Sage Cell evaluate button      -->
+    <!-- eg, "Evaluate (Maxima)"        -->
+    <!-- 2017-05-14: 'code' is obsolete -->
+    <!-- <localization string-id='evaluate'><xsl:text>Evaluate</xsl:text></localization> -->
+    <!-- <localization string-id='code'><xsl:text>Code</xsl:text></localization> -->
 </xsl:variable>
 
 </xsl:stylesheet>

@@ -69,9 +69,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='part'><xsl:text>Rész</xsl:text></localization>
     <localization string-id='chapter'><xsl:text>Fejezet</xsl:text></localization>
     <localization string-id='appendix'><xsl:text>Függelék</xsl:text></localization>
-    <localization string-id='section'><xsl:text>Szakasz</xsl:text></localization>
-    <localization string-id='subsection'><xsl:text>Alszakasz</xsl:text></localization>
-    <localization string-id='subsubsection'><xsl:text>Al-alszakasz</xsl:text></localization>
+    <localization string-id='section'><xsl:text>Pont</xsl:text></localization>
+    <localization string-id='subsection'><xsl:text>Alpont</xsl:text></localization>
+    <localization string-id='subsubsection'><xsl:text>alpont</xsl:text></localization>
     <localization string-id='introduction'><xsl:text>Bevezetés</xsl:text></localization>
     <localization string-id='conclusion'><xsl:text>Következtetés</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Feladatok</xsl:text></localization>
@@ -190,10 +190,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'><xsl:text>permalink</xsl:text></localization>
     <localization string-id='incontext'><xsl:text>szövegkörnyezet</xsl:text></localization>
-    <!-- Sage Cell evaluate button  -->
-    <!-- eg, "Evaluate Maxima Code" -->
+    <!-- Sage Cell evaluate button      -->
+    <!-- eg, "Evaluate (Maxima)"        -->
+    <!-- 2017-05-14: 'code' is obsolete -->
     <localization string-id='evaluate'><xsl:text>Kiértékelés</xsl:text></localization>
-    <localization string-id='code'><xsl:text>Kód</xsl:text></localization>
+    <!-- <localization string-id='code'><xsl:text>Kód</xsl:text></localization> -->
 </xsl:variable>
 
 </xsl:stylesheet>

@@ -171,6 +171,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='edition'><xsl:text>Edition</xsl:text></localization> -->
     <!-- <localization string-id='website'><xsl:text>Website</xsl:text></localization> -->
     <localization string-id='copyright'><xsl:text>Copyright</xsl:text></localization>
+    <!-- Sage Cell evaluate button      -->
+    <!-- eg, "Evaluate (Maxima)"        -->
+    <!-- 2017-05-14: 'code' is obsolete -->
+    <!-- <localization string-id='evaluate'><xsl:text>Evaluate</xsl:text></localization> -->
+    <!-- <localization string-id='code'><xsl:text>Code</xsl:text></localization> -->
 </xsl:variable>
 
 </xsl:stylesheet>

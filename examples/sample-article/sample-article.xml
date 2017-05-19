@@ -737,15 +737,35 @@ the xsltproc executable.
                         <title>Exploring Explorations</title>
 
                         <statement>
-                            <p>This is an <c>&lt;exploration&gt;</c>.<index><main>exploration</main></index>  Two similar possibilities are <c>&lt;activity&gt;</c><index><main>activity</main></index> and <c>&lt;task&gt;</c>.<index><main>task</main></index></p>
+                            <p>This is an <c>&lt;exploration&gt;</c>.<index><main>exploration</main></index>  Other similar possibilities are <c>&lt;project&gt;</c><index><main>project</main></index>, <c>&lt;activity&gt;</c><index><main>activity</main></index>, <c>&lt;task&gt;</c><index><main>task</main></index>, and <c>&lt;investigation&gt;</c><index><main>investigation</main></index>.</p>
 
-                            <p>Note that projects, activities, explorations, and tasks <em>share</em> the independent numbering scheme, so it is really only intended you use one of these.  If you want a variant of the name (<eg /> <q>Directed Activity</q>) you can use the <c>&lt;rename&gt;</c><index><main>rename an environment</main></index> facility (<xref ref="rename-facility" autoname="yes" />).</p>
+                            <p>Note that projects, activities, explorations, tasks and investigations <em>share</em> the independent numbering scheme, so it is really only intended you use one of these.  If you want a variant of the name (<eg /> <q>Directed Activity</q>) you can use the <c>&lt;rename&gt;</c><index><main>rename an environment</main></index> facility (<xref ref="rename-facility" autoname="yes" />).</p>
                         </statement>
 
                         <solution>
                             <p>This is a <q>solution</q> to the exploration.  In practice, you might choose to not make this visible for students, but instead include it as part of some guidance you might provide to instructors (<eg /> an <booktitle>Instructor's Manual</booktitle>).</p>
                         </solution>
                     </exploration>
+
+                    <activity xml:id="activity-with-hint-answer-solution">
+                        <title>Hints, Answers, Solutions</title>
+
+                        <statement>
+                            <p>Another variant of these project-like items is to possibly include a <c>&lt;hint&gt;</c> and an <c>&lt;answer&gt;</c> before the <c>&lt;solution&gt;</c>.</p>
+                        </statement>
+
+                        <hint>
+                            <p>Just a little help.</p>
+                        </hint>
+
+                        <answer>
+                            <p>The result, but no help in getting there.</p>
+                        </answer>
+
+                        <solution>
+                            <p>Everything to get it all done, in detail.</p>
+                        </solution>
+                    </activity>
 
                     <note xml:id="note-remark">
                         <title>A Note on Remarks</title>
@@ -3650,6 +3670,7 @@ the xsltproc executable.
                 <li><p>A cross-reference to an individual objective.  This is authored as a list item, but displayed as an objective (singular) via an autoname: <xref ref="objective-structure" autoname="yes" /></p></li>
                 <li><p>A cross-reference to the top-level element (<eg /><c>book</c>) will point to a summary page similar to a Table of Contents in HTML.  For LaTeX output it will behave similarly, unless there is no Table of Contents, then it will go to the main title page:  <xref ref="derivatives">ToC or Title</xref></p></li>
                 <li><p><q>Cross-references inside quotations previously lost track of their target, so this tests correcting that, not so much the cross-reference itself: <xref ref="theorem-FTC" autoname="yes" /></q></p></li>
+                <li><p>An activity with full details following: <xref ref="activity-with-hint-answer-solution" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul></p>
 
@@ -4872,6 +4893,47 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
+                <title>Lists in Side-by-Sides</title>
+
+                <p>A <q>regular</q> list normally belongs in a <c>p</c> but it can be placed unadorned into a panel of a side-by-side, as demonstrated below in <xref ref="subsection-sbs-other-panels" autoname="yes" />.  You can also put <q>named</q> lists into a panel, and then the title, introduction, and conclusion will behave as expected.</p>
+
+                <sidebyside widths="30% 60%" valign="top">
+                    <caption>Two named lists</caption>
+                    <list>
+                        <title>Sea Life</title>
+                        <introduction>
+                            <p>Dr. Seuss again.</p>
+                        </introduction>
+                        <ul>
+                            <li>One fish</li>
+                            <li>Two fish</li>
+                            <li>Red fish</li>
+                            <li>Blue fish</li>
+                        </ul>
+                    </list>
+                    <list>
+                        <title>Color Shades</title>
+                        <index><main>colors</main><sub>shades</sub></index>
+                        <ol>
+                            <li><p>Blue<ol>
+                                <li>Light</li>
+                                <li>Navy</li>
+                                <li>Royal</li>
+                            </ol></p></li>
+                            <li><p>Red<ol>
+                                <li>Maroon</li>
+                                <li>Pink</li>
+                                <li>Shocking</li>
+                            </ol></p></li>
+                        </ol>
+                        <conclusion>
+                            <p>This ends our example.</p>
+                        </conclusion>
+                    </list>
+                </sidebyside>
+            </subsection>
+
+            <subsection xml:id="subsection-sbs-other-panels">
                 <title>Other Panels</title>
 
                 <p>Other elements may be placed within a <c>sidebyside</c> element.  Lists first.</p>

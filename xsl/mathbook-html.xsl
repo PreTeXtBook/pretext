@@ -2441,8 +2441,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 
+<!-- only solutions in examples, but projects could have more -->
 <xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="body">
-    <xsl:apply-templates select="*[not(self::solution)]" />
+    <xsl:apply-templates select="*[not(self::hint or self::answer or self::solution)]" />
 </xsl:template>
 
 <!-- Assume a certain structure for list block -->
@@ -2459,7 +2460,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- duplicate, no assumptions on wrapping          -->
 <!-- create solutions as knowls to duplicate content -->
 <xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="body-duplicate">
-    <xsl:apply-templates select="*[not(self::solution)]" mode="duplicate" />
+    <xsl:apply-templates select="*[not(self::hint or self::answer or self::solution)]" mode="duplicate" />
 </xsl:template>
 
 <!-- Assume a certain structure for list block -->
@@ -2477,7 +2478,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="false()" />
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="posterior">
+<!-- Only solutions to examples -->
+<xsl:template match="&EXAMPLE-LIKE;" mode="posterior">
     <xsl:element name="div">
         <xsl:for-each select="solution">
             <xsl:apply-templates select="." />
@@ -2485,9 +2487,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="posterior-duplicate">
+<!-- Also hints and answers for projects -->
+<xsl:template match="&PROJECT-LIKE;" mode="posterior">
+    <xsl:element name="div">
+        <xsl:for-each select="hint|answer|solution">
+            <xsl:apply-templates select="." />
+        </xsl:for-each>
+    </xsl:element>
+</xsl:template>
+
+<!-- Only solutions to examples -->
+<xsl:template match="&EXAMPLE-LIKE;" mode="posterior-duplicate">
     <xsl:element name="div">
         <xsl:for-each select="solution">
+            <xsl:apply-templates select="." mode="xref-link">
+                <xsl:with-param name="content">
+                    <xsl:apply-templates select="." mode="type-name" />
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:for-each>
+    </xsl:element>
+</xsl:template>
+
+<!-- Also hints and answers for projects -->
+<xsl:template match="&PROJECT-LIKE;" mode="posterior-duplicate">
+    <xsl:element name="div">
+        <xsl:for-each select="hint|answer|solution">
             <xsl:apply-templates select="." mode="xref-link">
                 <xsl:with-param name="content">
                     <xsl:apply-templates select="." mode="type-name" />
@@ -4068,6 +4093,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text> fixed-width</xsl:text>
             </xsl:if>
         </xsl:attribute>
+        <!-- some structures do not get an id in their panel-html-box  -->
+        <!-- TODO: add more, move to structure with title and caption? -->
+        <xsl:if test="self::list">
+            <xsl:attribute name="id">
+                <xsl:apply-templates select="." mode="internal-id" />
+            </xsl:attribute>
+        </xsl:if>
         <xsl:attribute name="style">
             <xsl:text>width:</xsl:text>
             <xsl:call-template name="relative-width">
@@ -4285,6 +4317,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="ol|ul|dl" mode="panel-html-box">
     <xsl:apply-templates select="." />
+</xsl:template>
+
+<!-- Process intro, the list, conclusion     -->
+<!-- title is killed -->
+<xsl:template match="list" mode="panel-html-box">
+    <xsl:apply-templates select="introduction" />
+    <xsl:apply-templates select="ol|ul|dl" />
+    <xsl:apply-templates select="conclusion" />
 </xsl:template>
 
 
@@ -7107,6 +7147,8 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <xsl:text>    },&#xa;</xsl:text>
         <xsl:text>    TeX: {&#xa;</xsl:text>
         <xsl:text>        extensions: ["extpfeil.js", "autobold.js", "https://aimath.org/mathbook/mathjaxknowl.js", ],&#xa;</xsl:text>
+        <xsl:text>        // scrolling to fragment identifiers is controlled by other Javascript&#xa;</xsl:text>
+        <xsl:text>        positionToHash: false,&#xa;</xsl:text>
         <xsl:text>        equationNumbers: { autoNumber: "none",&#xa;</xsl:text>
         <xsl:text>                           useLabelIds: true,&#xa;</xsl:text>
         <xsl:text>                           // JS comment, XML CDATA protect XHTML quality of file&#xa;</xsl:text>
@@ -7161,7 +7203,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:text>text/javascript</xsl:text>
         </xsl:attribute>
         <xsl:attribute name="src">
-            <xsl:text>https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full</xsl:text>
+            <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML-full</xsl:text>
         </xsl:attribute>
     </xsl:element>
 </xsl:template>
@@ -7205,12 +7247,9 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'evaluate'" />
             </xsl:call-template>
-            <xsl:text> </xsl:text>
+            <xsl:text> (</xsl:text>
             <xsl:value-of select="$language-text" />
-            <xsl:text> </xsl:text>
-            <xsl:call-template name="type-name">
-                <xsl:with-param name="string-id" select="'code'" />
-            </xsl:call-template>
+            <xsl:text>)</xsl:text>
         <xsl:text>'});&#xa;</xsl:text>
         <xsl:text>});&#xa;</xsl:text>
     </xsl:element>
@@ -7241,10 +7280,6 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <xsl:text>                           evalButtonText: '</xsl:text>
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'evaluate'" />
-            </xsl:call-template>
-            <xsl:text> </xsl:text>
-            <xsl:call-template name="type-name">
-                <xsl:with-param name="string-id" select="'code'" />
             </xsl:call-template>
         <xsl:text>'});&#xa;</xsl:text>
         <xsl:text>});&#xa;</xsl:text>

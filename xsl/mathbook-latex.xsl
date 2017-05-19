@@ -404,7 +404,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- language tags appear in docinfo in renames, so be careful -->
     <xsl:text>%% Extensive support for other languages&#xa;</xsl:text>
     <xsl:text>\usepackage{polyglossia}&#xa;</xsl:text>
-    <xsl:text>\setdefaultlanguage{english}&#xa;</xsl:text>
+    <!--  -->
+    <!-- US English -->
+    <!-- switch to positive test once ready -->
+    <xsl:if test="not($document-language = 'hu-HU')">
+        <xsl:text>%% Main document language is US English&#xa;</xsl:text>
+        <xsl:text>\setdefaultlanguage{english}&#xa;</xsl:text>
+    </xsl:if>
+    <!-- does this need a font family? -->
+    <xsl:if test="$document-root//@xml:lang='en-US'">
+        <xsl:text>%% Document language contains parts in US English&#xa;</xsl:text>
+        <xsl:text>\setotherlanguage{english}&#xa;</xsl:text>
+    </xsl:if>
+    <!--  -->
     <xsl:if test="/mathbook/*[not(self::docinfo)]//@xml:lang='el'">
         <xsl:text>%% Greek (Modern) specified by 'el' language tag&#xa;</xsl:text>
         <xsl:text>%% Font families: CMU Serif, Linux Libertine O, GFS Artemisia&#xa;</xsl:text>
@@ -417,8 +429,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\setotherlanguage{korean}&#xa;</xsl:text>
         <xsl:text>\newfontfamily\koreanfont{NanumMyeongjo}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% Magyar (Hungarian)&#xa;</xsl:text>
-    <xsl:text>\setotherlanguage{magyar}&#xa;</xsl:text>
+    <!--  -->
+    <!-- Magyar (Hungarian) -->
+    <xsl:if test="$document-language = 'hu-HU'">
+        <xsl:text>%% Main document language is Magyar (Hungarian)&#xa;</xsl:text>
+        <xsl:text>\setdefaultlanguage{magyar}&#xa;</xsl:text>
+    </xsl:if>
+    <!-- does this need a font family -->
+    <xsl:if test="$document-root//@xml:lang='hu-HU'">
+        <xsl:text>%% Document contains parts in Magyar (Hungarian)&#xa;</xsl:text>
+        <xsl:text>\setotherlanguage{magyar}&#xa;</xsl:text>
+    </xsl:if>
+    <!--  -->
     <xsl:if test="/mathbook/*[not(self::docinfo)]//@xml:lang='ru-RU'">
         <xsl:text>%% Russian specified by 'ru-RU' language tag&#xa;</xsl:text>
         <xsl:text>%% Font families: CMU Serif, Linux Libertine O&#xa;</xsl:text>
@@ -3443,12 +3465,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{objectives}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- An example might have a statement/solution structure -->
+<!-- An example or project may have a statement/solution structure -->
 <xsl:template match="solution[parent::*[&EXAMPLE-FILTER; or &PROJECT-FILTER;]]">
     <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
     <xsl:text>\textbf{</xsl:text>
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'solution'" />
+    </xsl:call-template>
+    <xsl:text>.}\quad </xsl:text>
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- A project may have a hint -->
+<xsl:template match="hint[parent::*[&PROJECT-FILTER;]]">
+    <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
+    <xsl:text>\textbf{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'hint'" />
+    </xsl:call-template>
+    <xsl:text>.}\quad </xsl:text>
+    <xsl:apply-templates />
+</xsl:template>
+
+<!-- A project may have an answer -->
+<xsl:template match="answer[parent::*[&PROJECT-FILTER;]]">
+    <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
+    <xsl:text>\textbf{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'answer'" />
     </xsl:call-template>
     <xsl:text>.}\quad </xsl:text>
     <xsl:apply-templates />
@@ -5422,7 +5466,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- behaves in minipages.                                      -->
 <!-- Called in -setup and saved results recycled in -panel      -->
 
-<xsl:template match="p|paragraphs|tabular|ol|ul|dl|poem" mode="panel-latex-box">
+<xsl:template match="p|paragraphs|tabular|ol|ul|dl|list|poem" mode="panel-latex-box">
     <xsl:param name="width" />
     <xsl:variable name="percent" select="substring-before($width,'%') div 100" />
     <xsl:if test="$sbsdebug">
@@ -5445,6 +5489,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="self::ol or self::ul or self::dl">
             <xsl:apply-templates select="." />
+        </xsl:when>
+        <!-- named list, ignore title -->
+        <xsl:when test="self::list">
+            <xsl:apply-templates select="index" />
+            <xsl:apply-templates select="introduction" />
+            <xsl:apply-templates select="ol|ul|dl" />
+            <xsl:apply-templates select="conclusion" />
         </xsl:when>
         <!-- like main "poem" template, but sans title -->
         <xsl:when test="self::poem">
