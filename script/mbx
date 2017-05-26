@@ -478,16 +478,16 @@ def webwork_to_tex(origin, xslt_exec, mbx_xsl_dir, xml_source, server_url, dest_
 
 ##############################
 #
-#  You Tube thumbnail scraping
+#  Thumbnail scraping
 #
 ##############################
 
-def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
+def thumbnail(xml_source, xmlid_root, dest_dir):
     global config
     import tempfile, os, os.path, subprocess, shutil
     import requests
 
-    _verbose('downloading YouTube thumbnails from {} for placement in {}'.format(xml_source, dest_dir))
+    _verbose('downloading thumbnails from {} for placement in {}'.format(xml_source, dest_dir))
     dest_dir = sanitize_directory(dest_dir)
     plat = get_platform()
     if plat == "Windows":
@@ -495,9 +495,9 @@ def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
     xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable: {}".format(xslt_executable))
     if plat == "Windows":
-        extraction_xslt = '/'.join(mbx_xsl_dir, 'extract-youtube.xsl')
+        extraction_xslt = '/'.join(mbx_xsl_dir, 'extract-thumbnail.xsl')
     else:
-        extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-youtube.xsl')
+        extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-thumbnail.xsl')
     cmd = [xslt_executable,
             '--xinclude',
             '--stringparam',
@@ -514,13 +514,24 @@ def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
     # "run" an assignment for the list of triples of strings
     thumbs = eval(thumb_list.decode('ascii'))
 
+    # thumbnail url patterns
     yt_url = 'http://i.ytimg.com/vi/{}/default.jpg'
-    image_path = dest_dir + '/{}.jpg'
+    ggt_url = 'https://tube.geogebra.org/files/material-{}-thumb.png'
+
+    # thumbnail destination files
+    yt_image_path = dest_dir + '/{}.jpg'
+    ggt_image_path = dest_dir + '/{}.png'
+
     session = requests.Session()
     for thumb in thumbs:
-        url = yt_url.format(thumb[0])
-        path = image_path.format(thumb[1])
-        _verbose('downloading {} as {}...'.format(url, path))
+        if thumb[0] == "youtube":
+            url = yt_url.format(thumb[1])
+            path = yt_image_path.format(thumb[2])
+            _verbose('downloading {} as {}...'.format(url, path))
+        elif thumb[0] == "geogebratube":
+            url = ggt_url.format(thumb[1])
+            path = ggt_image_path.format(thumb[2])
+            _verbose('downloading {} as {}...'.format(url, path))
         # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests/13137873
         # removed some settings wrapper from around the URL, otherwise verbatim
         r = requests.get(url, stream=True)
@@ -531,7 +542,7 @@ def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
         else:
             msg = 'Download returned a bad status code ({}), perhaps try {} manually?'
             raise OSError(msg.format(r.status_code, url))
-    _verbose('YouTube thumbnail download complete')
+    _verbose('Thumbnail download complete')
 
 
 #######################################
@@ -853,7 +864,7 @@ def get_cli_arguments():
         ('sageplot', 'Sage graphics'),
         ('latex-image', 'LaTeX pictures'),
         ('webwork-tex', 'WeBWorK server problems as LaTeX'),
-        ('youtube', 'Thumbnails for YouTube videos (JPEG only)'),
+        ('thumbnail', 'Thumbnails for YouTube (.jpg), GeoGebraTube (.png)'),
         ('all', 'Complete document (only SageNB format)'),
         ('tikz', 'tikz pictures (obsolete)'),
     ]
@@ -1048,7 +1059,9 @@ elif args.component == 'webwork-tex':
     webwork_to_tex('server', xslt_executable, mbx_xsl_dir, args.xml_file, args.server, output_dir)
     webwork_to_tex('mbx',    xslt_executable, mbx_xsl_dir, args.xml_file, args.server, output_dir)
 elif args.component == 'youtube':
-    youtube_thumbnail(args.xml_file, args.xmlid, output_dir)
+    raise ValueError('the "{}" component is now "thumbnail"'.format(args.component))
+elif args.component == 'thumbnail':
+    thumbnail(args.xml_file, args.xmlid, output_dir)
 elif args.component == 'all':
     if args.format == 'sagenb':
         # initialize  the converter
