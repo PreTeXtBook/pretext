@@ -4843,12 +4843,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>$\Leftarrow$</xsl:text>
 </xsl:template>
 
-<!-- TeX, LaTeX -->
+<!-- TeX, LaTeX, PreTeXt -->
 <xsl:template match="latex">
     <xsl:text>\LaTeX{}</xsl:text>
 </xsl:template>
 <xsl:template match="tex">
     <xsl:text>\TeX{}</xsl:text>
+</xsl:template>
+<xsl:template match="pretext">
+    <xsl:text>Pre\TeX{}t</xsl:text>
 </xsl:template>
 
 <!-- Foreign words/idioms        -->

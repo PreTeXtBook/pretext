@@ -5346,7 +5346,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x21D0;</xsl:text>
 </xsl:template>
 
-<!-- TeX, LaTeX -->
+<!-- TeX, LaTeX, PreTeXt -->
 <!-- Corresponding CSS from William Hammond   -->
 <!-- attributed to David Carlisle             -->
 <!-- "mathjax-users" Google Group, 2015-12-27 -->
@@ -5355,6 +5355,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 <xsl:template match="tex">
     <span class="latex-logo">T<span class="E">e</span>X</span>
+</xsl:template>
+<xsl:template match="pretext">
+    <span class="latex-logo">PreT<span class="E">e</span>Xt</span>
 </xsl:template>
 
 <!-- External URLs, Email        -->

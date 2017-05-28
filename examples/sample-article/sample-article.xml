@@ -228,7 +228,7 @@ the xsltproc executable.
             </titlepage>
 
             <abstract>
-                <p>This is a sample of many of the things you can do with MathBook XML.  Sometimes the math makes sense, sometimes it seems to be written in the first person, sort of like this Abstract.</p>
+                <p>This is a sample of many of the things you can do with <pretext />.  Sometimes the math makes sense, sometimes it seems to be written in the first person, sort of like this Abstract.</p>
             </abstract>
             <!--
             Acknowledgements, dedications, colophon (ISBN, copyright, etc)
@@ -256,7 +256,7 @@ the xsltproc executable.
             example near the discussion of Asymptote.
             -->
 
-            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me>.  This is also a demonstration of the capabilities of <url href="http://mathbook.pugetsound.edu">MathBook XML</url>.<notation>
+            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me>.  This is also a demonstration of the capabilities of <url href="http://mathbook.pugetsound.edu"><pretext /></url>.<notation>
                 <usage>\int_a^b\,f(x)\,dx</usage>
                 <description>definite integral of <m>f(x)</m></description>
             </notation></p>
@@ -725,7 +725,7 @@ the xsltproc executable.
                     <p>There are many different blocks you can employ, and they mostly behave the same way.  A <c>&lt;project&gt;</c><index><main>project</main></index> is very similar to a <c>&lt;question&gt;</c><index><main>question</main></index> or <c>&lt;problem&gt;</c><index><main>problem</main></index></p>
 
                     <project>
-                        <title>Start Exploring MathBook XML</title>
+                        <title>Start Exploring <pretext /></title>
 
                         <p>You could grab the <c>minimal.xml</c> file from the <c>examples/minimal</c> directory and experiment with that.</p>
 
@@ -799,7 +799,7 @@ the xsltproc executable.
             <subsection>
                 <title>Theorem-Like Environments</title>
 
-                <p>There are a variety of pre-defined environments in MathBook XML.  All take a title, and must have a statement.  Some have proofs (theorems, corollaries, <etc />), while some do not have proofs (conjectures, axioms, principles).</p>
+                <p>There are a variety of pre-defined environments in <pretext />.  All take a title, and must have a statement.  Some have proofs (theorems, corollaries, <etc />), while some do not have proofs (conjectures, axioms, principles).</p>
 
                 <principle xml:id="principle-principle">
                     <title>The Title Principle</title>
@@ -1150,7 +1150,7 @@ the xsltproc executable.
                     <mrow>\frac{dw}{dt} \amp = z^3 - w          \amp \frac{dz}{dt} \amp = z^2 - 4z - w + 4 \amp\amp z, w\text{ version}</mrow>
                 </md></p>
 
-                <p>MathBook XML will automatically detect the presence or absence of ampersands, but by defining macros for entire aligned equations, you can effectively hide the ampersands.  So the <c>@alignment</c> attribute can override automatic detection.  We use a simple <latex /> macro to demonstrate setting <c>alignment='align'</c> to override the use of a <c>gather</c> environment and use a <c>align</c> environment instead.  Example:<md alignment="align">
+                <p><pretext /> will automatically detect the presence or absence of ampersands, but by defining macros for entire aligned equations, you can effectively hide the ampersands.  So the <c>@alignment</c> attribute can override automatic detection.  We use a simple <latex /> macro to demonstrate setting <c>alignment='align'</c> to override the use of a <c>gather</c> environment and use a <c>align</c> environment instead.  Example:<md alignment="align">
                     <mrow>\myequation{\frac{dx}{dt}}{x^2 - 4x - y + 4}</mrow>
                     <mrow>\myequation{\frac{dy}{dt}}{x^3 - y}.</mrow>
                 </md></p>
@@ -1345,7 +1345,7 @@ the xsltproc executable.
             <subsection xml:id="subsection-reserved-characters">
                 <title>Reserved Characters</title>
 
-                <p>One of the goals of MathBook XML is to relieve an author of managing the numerous conflicts when mixing languages that use different characters for special purposes.  But, of course, XML has its own special characters.</p>
+                <p>One of the goals of <pretext /> is to relieve an author of managing the numerous conflicts when mixing languages that use different characters for special purposes.  But, of course, XML has its own special characters.</p>
 
                 <p>Everybody wants the ampersand, it is the most-dangerous character.  It is <em>the</em> escape character for XML, and <latex /> uses it to organize tables and arrays, and for aligning equations.  Consistently use the element <c>&lt;ampersand /&gt;</c> to make a literal ampersand in normal text, such as in <q>A<ampersand />P.</q>  In mathematics, and other places where you are using <latex /> syntax, use the pre-defined <c>\amp</c> macro.  For code listings and other verbatim text, use the escaped XML entity <c>&amp;amp;</c>.</p>
 
@@ -1404,7 +1404,7 @@ the xsltproc executable.
 
 
 
-                <p>There are a handful of characters that might render just fine in HTML, but <latex /> reserves them for special purposes.  So if they appear unadorned in your source, they will wreak havoc with the <latex /> processing.  And if you escape them with backslashes to migrate to the <latex /> output, then you will see those backslashes in your HTML.  And the backslash is the escape character for Markdown and JSON.  You can't win.  Thus, you need to be aware of these symbols and use the provided MathBook XML elements for each in order to get the right behavior in each type of output.  Here are the outputs, look at the source of this document to see the input elements.</p>
+                <p>There are a handful of characters that might render just fine in HTML, but <latex /> reserves them for special purposes.  So if they appear unadorned in your source, they will wreak havoc with the <latex /> processing.  And if you escape them with backslashes to migrate to the <latex /> output, then you will see those backslashes in your HTML.  And the backslash is the escape character for Markdown and JSON.  You can't win.  Thus, you need to be aware of these symbols and use the provided <pretext /> elements for each in order to get the right behavior in each type of output.  Here are the outputs, look at the source of this document to see the input elements.</p>
 
                 <!-- Carriage returns are unwise, but this is impossible to read otherwise -->
                 <p><hash /><nbsp /><nbsp />
@@ -2864,7 +2864,7 @@ the xsltproc executable.
             <paragraphs>
                 <title>Bully Pulpit: Vertical Rules in Tables</title>
 
-                <p>One of the goals of MathBook XML is to gently guide authors towards good choices in the design of their documents, even if we do not claim to know it all ourselves.  Take a close look at that table about tables.  What's missing?  No vertical rules.  Try living without them, you will not really miss them.  If you think you need to divide a table into two halves, maybe you really need two tables (and then see the <q>side-by-side</q> capabilities, Section <xref ref="section-side-by-side" />).</p>
+                <p>One of the goals of <pretext /> is to gently guide authors towards good choices in the design of their documents, even if we do not claim to know it all ourselves.  Take a close look at that table about tables.  What's missing?  No vertical rules.  Try living without them, you will not really miss them.  If you think you need to divide a table into two halves, maybe you really need two tables (and then see the <q>side-by-side</q> capabilities, Section <xref ref="section-side-by-side" />).</p>
 
                 <p>In the documentation for his excellent <latex /> package, <url href="https://www.ctan.org/pkg/booktabs">booktabs</url>, Simon Fear gives two rules for what he calls <q>formal tables</q>: (1) Never, ever use vertical rules, and (2) Never use double rules.  We have resisted the temptation to enforce the former and have provided an alternative to the second (three thicknesses).  He refers to using tables for layout as creating <q>tableau.</q>  If you are finicky about the look of your work, the first three pages of the documentation is recommended reading.</p>
 
@@ -3706,7 +3706,7 @@ the xsltproc executable.
             <!-- http://templates.openoffice.org/en/template/running-statistics-template -->
             <!-- http://templates.openoffice.org/template/download/1203 -->
 
-            <p>You can also provide a file yourself, but now it is your obligation to distribute the file with your document (<init>HTML</init>, <init>PDF</init>, <etc />) and provide a relative link.  This creates some complications, such as making sure an electronic PDF has the associated file in the same place relative to the PDF file.  Of course, if you make a print PDF, this becomes impossible.  Here is a test example anyway, which is highly likely to be broken in a PDF (including at the MathBook XML project site) unless you build this example on your own computer, locally.  Here is a template from the Apache OpenOffice project, provided via the Public Documentation License (PDL):  <url href="data/runningstatisticstemplate.ots">Running Statistics Template</url>.</p>
+            <p>You can also provide a file yourself, but now it is your obligation to distribute the file with your document (<init>HTML</init>, <init>PDF</init>, <etc />) and provide a relative link.  This creates some complications, such as making sure an electronic PDF has the associated file in the same place relative to the PDF file.  Of course, if you make a print PDF, this becomes impossible.  Here is a test example anyway, which is highly likely to be broken in a PDF (including at the <pretext /> project site) unless you build this example on your own computer, locally.  Here is a template from the Apache OpenOffice project, provided via the Public Documentation License (PDL):  <url href="data/runningstatisticstemplate.ots">Running Statistics Template</url>.</p>
         </section>
 
         <section xml:id="section-internationalization">
@@ -3717,7 +3717,7 @@ the xsltproc executable.
             <paragraphs>
                 <title>Unicode Characters for HTML Output</title>
 
-                <p>First, we discuss HTML output.  If you include Unicode characters in your MathBook XML source, they should survive just fine <foreign>en route</foreign> to a web browser or e-reader.  Here are the caveats for HTML output:<ul>
+                <p>First, we discuss HTML output.  If you include Unicode characters in your <pretext /> source, they should survive just fine <foreign>en route</foreign> to a web browser or e-reader.  Here are the caveats for HTML output:<ul>
                     <li><p>So that you can continue to get the best results with print and PDF output, use available empty elements for special characters, even if targeting HTML output, before resorting to a Unicode character.  For example, use <c>&lt;times /&gt;</c> for a small <q>multiplication sign</q> in text before resorting to the Unicode character <c>U+00D7</c>.</p></li>
 
                     <li><p>How you actually enter Unicode characters into your source file is dependent on your editor and operating system, and is therefore outside the scope of our documentation.  You can cut/paste characters and text from the source of our examples for initial testing and experimentation.</p></li>
@@ -3733,7 +3733,7 @@ the xsltproc executable.
 
                 <p>The situation for <latex /> is much more complicated, since <tex /> pre-dates Unicode's widespread adoption.</p>
 
-                <p>This sample article is intended to work well, out-of-the-box, for authors just starting with MathBook XML.  So we only include here examples that we know are likely to convert to PDF without any errors.  For more extensive examples and experiments, we provide the sample document <c>examples/fonts/fonts-and-characters.xml</c>, so be aware of that example as you look to see what is possible.</p>
+                <p>This sample article is intended to work well, out-of-the-box, for authors just starting with <pretext />.  So we only include here examples that we know are likely to convert to PDF without any errors.  For more extensive examples and experiments, we provide the sample document <c>examples/fonts/fonts-and-characters.xml</c>, so be aware of that example as you look to see what is possible.</p>
 
                 <p>Similarly, you should be able to process this sample article successfully with various <latex /> engines.  We test regularly with <c>pdflatex</c> and <c>xelatex</c> and provide online sample PDF output of this document processed by <c>pdflatex</c>.  In principle, you should be able to use <c>latex</c> (to produce a DVI), and possibly other (unsupported) engines, such as <c>lualatex</c>.</p>
 
@@ -3743,7 +3743,7 @@ the xsltproc executable.
             <paragraphs>
                 <title>Basic Latin, <c>U+0000</c><ndash /><c>U+007F</c></title>
 
-                <p>Unicode uses multiple 8-bit bytes to represent characters, and these are typically expressed in hexadecimal (base 16) notation.  Using just a single byte, we can get 256 values, and the first 128 (hex <c>00</c> to <c>7F</c>) are the <q>usual</q> Latin characters with some values used as control codes.  These 95 characters are the most basic, and should all render using <c>pdflatex</c> or <c>xelatex</c> with no special setup (and HTML).  <c>U+0000</c> to <c>U+001F</c> are control codes and not used here.  <c>U+007F</c> is also a control code and so is excluded, while <c>U+0020</c> is a space, so appears invisible in the table.  In the source we have also replaced reserved <latex /> characters by their MathBook XML equivalent empty elements.</p>
+                <p>Unicode uses multiple 8-bit bytes to represent characters, and these are typically expressed in hexadecimal (base 16) notation.  Using just a single byte, we can get 256 values, and the first 128 (hex <c>00</c> to <c>7F</c>) are the <q>usual</q> Latin characters with some values used as control codes.  These 95 characters are the most basic, and should all render using <c>pdflatex</c> or <c>xelatex</c> with no special setup (and HTML).  <c>U+0000</c> to <c>U+001F</c> are control codes and not used here.  <c>U+007F</c> is also a control code and so is excluded, while <c>U+0020</c> is a space, so appears invisible in the table.  In the source we have also replaced reserved <latex /> characters by their <pretext /> equivalent empty elements.</p>
 
                 <!-- ex &#x0000; - &#x001F; controls -->
                 <!-- ex &#x007F; control             -->
@@ -3975,7 +3975,7 @@ the xsltproc executable.
     An outdented line
             </pre>
 
-            <p>The <c>&lt;c&gt;</c> element, for inline code snippets (or anything else in a monospace font) uses the question-mark character to tell <latex /> where the text begins and ends.  This will be a problem if the text has a question mark in it!  So there is the attribute <c>latexsep</c> that allows you to specify another character that does not appear in your text.  For example, XML directives use question-marks now and then, so writing about them in MathBook XML requires specifying a different separation character, as in:  <c latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c>.  The <c>&lt;pre&gt;</c> element does not suffer from this quirk.</p>
+            <p>The <c>&lt;c&gt;</c> element, for inline code snippets (or anything else in a monospace font) uses the question-mark character to tell <latex /> where the text begins and ends.  This will be a problem if the text has a question mark in it!  So there is the attribute <c>latexsep</c> that allows you to specify another character that does not appear in your text.  For example, XML directives use question-marks now and then, so writing about them in <pretext /> requires specifying a different separation character, as in:  <c latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c>.  The <c>&lt;pre&gt;</c> element does not suffer from this quirk.</p>
 
             <p>Snippets should also be robust for cut/paste operations.  For example, you should not get <q>curly</q> <q>smart</q> quote marks in verbatim text: <c>this should have "dumb" quote marks</c>. Here are a few characters that should migrate through <latex /> to a PDF unmolested:  <c>'"----"'</c></p>
 
@@ -4105,7 +4105,7 @@ the xsltproc executable.
                 </proof>
             </algorithm>
 
-            <p>If you are writing about system-level software, you may need to write numbers in hexadecimal or binary.  Here we use a numbered, displayed equation (mathematics) and <latex /> macros such as <c>\texttt</c> for a monospace text font, and <c>\;</c> for spacing/grouping the bits of the binary number. <men>\texttt{6C2A}_{16} = \texttt{0110}\;\texttt{1100}\;\texttt{0010}\;\texttt{1010}_{2}</men>  If you use these constructions repeatedly, then some <latex /> macros might be useful.  It might also be beneficial for us to add some MathBook XML markup for such numbers used in a paragraph<mdash />send us a feature request.</p>
+            <p>If you are writing about system-level software, you may need to write numbers in hexadecimal or binary.  Here we use a numbered, displayed equation (mathematics) and <latex /> macros such as <c>\texttt</c> for a monospace text font, and <c>\;</c> for spacing/grouping the bits of the binary number. <men>\texttt{6C2A}_{16} = \texttt{0110}\;\texttt{1100}\;\texttt{0010}\;\texttt{1010}_{2}</men>  If you use these constructions repeatedly, then some <latex /> macros might be useful.  It might also be beneficial for us to add some <pretext /> markup for such numbers used in a paragraph<mdash />send us a feature request.</p>
 
             <theorem>
                 <statement>
@@ -5256,7 +5256,7 @@ the xsltproc executable.
             <title>Advanced Numbering</title>
 
             <introduction>
-                <p>This section demonstrates the numbering patterns used throughout MathBook XML.  There are five subsections.  Two intermediate subsections each have two subsubsections.  This creates a total of seven divisions that are leaves of the document tree.  In each leaf we have placed two numbered theorems, for a total of fourteen.  There is no real content, this is just a demonstration.</p>
+                <p>This section demonstrates the numbering patterns used throughout <pretext />.  There are five subsections.  Two intermediate subsections each have two subsubsections.  This creates a total of seven divisions that are leaves of the document tree.  In each leaf we have placed two numbered theorems, for a total of fourteen.  There is no real content, this is just a demonstration.</p>
 
                 <p>Use values of <c>0</c> through <c>3</c> for the <c>numbering.theorems.level</c> parameter to see how these numbers change accordingly.  It is easiest to compare if you use <c>chunk.level &lt; 2</c> so the theorems all land on the same page if you are previewing in HTML.</p>
             </introduction>
@@ -5455,9 +5455,9 @@ the xsltproc executable.
                 <paragraphs>
                     <title>Important Notes</title>
 
-                    <p>If you are renaming many parts of your document, then you may not understand the design philosophy of MathBook XML.  In particular, you should not be doing a wholesale shuffle of <c>part</c>, <c>chapter</c>, <c>section</c>, <etc />  This feature is intended for very limited use and is <em>not considered best practice</em>.</p>
+                    <p>If you are renaming many parts of your document, then you may not understand the design philosophy of <pretext />.  In particular, you should not be doing a wholesale shuffle of <c>part</c>, <c>chapter</c>, <c>section</c>, <etc />  This feature is intended for very limited use and is <em>not considered best practice</em>.</p>
 
-                    <p>This feature could also be abused to provide a comprehensive suite of translations into a language not yet supported.  If so, please contact us about moving your translations into MathBook XML for the benefit of all.  Thanks.</p>
+                    <p>This feature could also be abused to provide a comprehensive suite of translations into a language not yet supported.  If so, please contact us about moving your translations into <pretext /> for the benefit of all.  Thanks.</p>
                 </paragraphs>
 
             </subsection>
@@ -5528,7 +5528,7 @@ the xsltproc executable.
             </index-part>
 
             <colophon>
-                <p>This article was authored in MathBook XML.</p>
+                <p>This article was authored in <pretext />.</p>
             </colophon>
         </backmatter>
     </article>
