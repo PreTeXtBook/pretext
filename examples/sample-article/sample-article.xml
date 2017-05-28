@@ -2072,7 +2072,7 @@ the xsltproc executable.
 
                 <figure xml:id="figure-tikz-cone3D-copied">
                     <caption>TikZ Cone Drawing (Copy)</caption>
-                    <image copy="tikzcone" xml:id="tikz-cone-copy" />
+                    <image copy="tikz-cone" xml:id="tikz-cone-copy" />
                 </figure>
 
                 <figure xml:id="figure-captionless-titleless-image-copied">
