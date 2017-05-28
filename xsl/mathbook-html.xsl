@@ -7105,19 +7105,17 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:text>/stbh/</xsl:text>
-            <xsl:if test="@toolbar">
-                <xsl:choose>
-                    <xsl:when test="@toolbar-help = 'yes'">
-                        <xsl:text>true</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="@toolbar-help = 'no'">
-                        <xsl:text>false</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text>false</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:if>
+            <xsl:choose>
+                <xsl:when test="@toolbar and @toolbar-help = 'yes'">
+                    <xsl:text>true</xsl:text>
+                </xsl:when>
+                <xsl:when test="@toolbar and @toolbar-help = 'no'">
+                    <xsl:text>false</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>false</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:text>/ai/</xsl:text>
             <xsl:choose>
                 <xsl:when test="@input-bar = 'yes'">
