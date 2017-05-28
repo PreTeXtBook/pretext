@@ -10,10 +10,9 @@
 <backmatter xml:id="backmatter" xmlns:xi="http://www.w3.org/2001/XInclude">
     <title>Appendices</title>
 
-    <!-- Provide an appendix about co-existing with git -->
-
     <xi:include href="faq.xml" />
     <xi:include href="editors.xml" />
+    <xi:include href="git.xml" />
     <xi:include href="windows.xml" />
     <xi:include href="windows-wsl.xml" />
     <xi:include href="gfdl-mathbook.xml" />
