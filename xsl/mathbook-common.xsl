@@ -2198,6 +2198,22 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 
+<!-- ################ -->
+<!-- Copies of Images -->
+<!-- ################ -->
+
+<xsl:template match="image[@copy]">
+    <xsl:variable name="target" select="id(@copy)" />
+    <xsl:choose>
+        <xsl:when test="$target">
+            <xsl:apply-templates select="$target" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:WARNING: &lt;image&gt; failure due to unknown reference @copy="<xsl:value-of select="@copy"/>"</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- ############################# -->
 <!-- Widths of Images, Videos, Etc -->
 <!-- ############################# -->

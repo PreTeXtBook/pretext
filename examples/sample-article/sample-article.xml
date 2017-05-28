@@ -1811,7 +1811,7 @@ the xsltproc executable.
                 <p>Figures, tables and side-by-sides that do not have a caption will automatically not receive a number.  So, in particular, a <c>figure</c> element can be used to place a centered <c>image</c>, with vertical breaks.  We interrupt this current list of figures to include a caption-less one, as a check that the numbering continues sequentially.</p>
 
                 <figure xml:id="figure-captionless-titleless-image">
-                    <image source="images/cross-square.png" width="30%"/>
+                    <image xml:id="cross-square" source="images/cross-square.png" width="30%"/>
                 </figure>
 
             </subsection>
@@ -2062,6 +2062,24 @@ the xsltproc executable.
                     <caption>Complete graph on <m>16</m> vertices, from <c>www.texample.net</c></caption>
                     <image source="images/complete-graph" width="65%"/>
                 </figure>
+            </subsection>
+
+            <subsection>
+                <title>Copies of Images</title>
+
+                <p>So you do not have to duplicate the source of an image (and risk them later diverging), or for other reasons of efficiency, you can place an image as a copy of another one.  The copy is an <em>exact</em> copy, such as having the identical width.  Though, if placed within a <c>figure</c> element, the caption and so on, can be changed.</p>
+                <p>To use this feature, simply be certain to give the original an <c>xml:id</c> and then place an <c>image</c> tag where you want the copy.  Then use a <c>@copy</c> attribute to point to the original.  Two test examples, one from TikZ source, the other from a raster image.</p>
+
+                <figure xml:id="figure-tikz-cone3D-copied">
+                    <caption>TikZ Cone Drawing (Copy)</caption>
+                    <image copy="tikzcone" xml:id="tikz-cone-copy" />
+                </figure>
+
+                <figure xml:id="figure-captionless-titleless-image-copied">
+                    <caption>Copy of raster image, now numbered, captioned</caption>
+                    <image copy="cross-square" />
+                </figure>
+
             </subsection>
 
             <subsection>
