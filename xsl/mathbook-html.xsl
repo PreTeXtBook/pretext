@@ -6201,7 +6201,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                 </xsl:if>
             <xsl:apply-templates select="." mode="title-simple" />
             </title>
-            <meta name="Keywords" content="Authored in MathBook XML" />
+            <meta name="Keywords" content="Authored in PreTeXt" />
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
             <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
             <!-- jquery used by sage, webwork, knowls -->
@@ -6302,7 +6302,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <xsl:call-template name="converter-blurb-html" />
     <html> <!-- lang="", and/or dir="rtl" here -->
         <head>
-            <meta name="Keywords" content="Authored in MathBook XML" />
+            <meta name="Keywords" content="Authored in PreTeXt" />
             <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
 
             <!-- jquery used by sage, webwork, knowls -->
@@ -7101,7 +7101,8 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id" select="'authored'" />
         </xsl:call-template>
-        <xsl:text> MathBook&#xa0;XML</xsl:text>
+        <xsl:text> </xsl:text>
+        <xsl:text>PreTeXt</xsl:text>
     </a>
 </xsl:template>
 
