@@ -3517,11 +3517,11 @@ the xsltproc executable.
 
             <p>First, a gratuitous reference to Exercise<nbsp /><xref ref="exercises-cosine-derivative" /> about the derivative of a cosine.</p>
 
-            <p>Embedded videos can make sense for a web version of your document. This is a video promoting the University of Puget Sound to potential new students.  Support is limited to WebM format initially, mp4 support will be easy to add.  This may require an HTML5 capable browser, such as Chrome, to render properly.</p>
+            <p>Embedded videos can make sense for a web version of your document. This is a video promoting the University of Puget Sound to potential new students.  Support is limited to HTML5-capable browsers.  The file format can be MP4, Ogg, or WebM, though this may vary depending upon the browser.  The example below is an old promotional video from the University of Puget Sound, in WebM format.  The <c>source</c> attribute should <em>not</em> include an extension, since the three possibilities above will be searched for preferentially (you need only provide one, but more will increase the chances every browser will find a compatible format).</p>
 
             <figure>
                 <caption>University of Puget Sound Promotional Video</caption>
-                <video source="images/ups-visitor-guide-360.mp4" />
+                <video source="images/ups-visitor-guide-360" width="80%"/>
             </figure>
 
             <p>YouTube<index><main>YouTube videos</main></index><index><main>videos</main><sub>YouTube</sub></index> videos may be embedded with only knowledge of the <q>ID</q>.  This a string of eleven seemingly random characters that show up in the URL when you watch a video.  For the Led Zeppelin performance below, the ID is <c>hAzdgU_kpGo</c>, which you might normally watch directly from the URL <url href="https://www.youtube.com/watch?v=hAzdgU_kpGo" />.  Screen real estate is determined by specifying an optional <c>@width</c> attribute as a percentage, and aspect ratio is preserved on the assumption of HD video (16:9).</p>
