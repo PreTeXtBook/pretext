@@ -19,10 +19,12 @@ You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!-- This stylesheet locates <latex-image-code> elements   -->
-<!-- and wraps them for LaTeX processing                   -->
-<!-- This includes the LaTeX macros present in docinfo     -->
-<!-- and the document's docinfo/latex-image-preamble       -->
+
+<!-- Extraction template for thumbnail images        -->
+<!-- Outputs an array with three elements:           -->
+<!-- (thumbnail-for-what, external id,  internal id) -->
+<!-- Example: (youtube, abcdEFGH, youtube-1)         -->
+<!-- Example: (geogebratube, abcdEFGH, geogebra-1)   -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
@@ -50,10 +52,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]</xsl:text>
 </xsl:template>
 
-<!-- YouTube ID, and internal id as a Python pair -->
+<!-- Type of thumbnail, external ID, and internal ID as a Python triple -->
 <xsl:template match="video[@youtube]">
     <xsl:text>('</xsl:text>
+    <xsl:text>youtube</xsl:text>
+    <xsl:text>', '</xsl:text>
     <xsl:value-of select="@youtube" />
+    <xsl:text>', '</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>'), </xsl:text>
+</xsl:template>
+
+<xsl:template match="geogebra[@geogebratube]">
+    <xsl:text>('</xsl:text>
+    <xsl:text>geogebratube</xsl:text>
+    <xsl:text>', '</xsl:text>
+    <xsl:value-of select="@geogebratube" />
     <xsl:text>', '</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>'), </xsl:text>

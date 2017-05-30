@@ -5119,6 +5119,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- GeoGebra from GeoGebraTube -->
+<!-- Assuming thumbnails have been scraped with the    -->
+<!-- mbx script, we make a short static display, using -->
+<!-- a title of an enclosing figure, if available      -->
+<xsl:template match="geogebra[@geogebratube]">
+    <xsl:variable name="geogebratube-url">
+        <xsl:text>https://www.geogebra.org/m/</xsl:text>
+        <xsl:value-of select="@geogebratube" />
+    </xsl:variable>
+    <xsl:text>\begin{tabular}{m{.1\linewidth}m{.7\linewidth}}&#xa;</xsl:text>
+    <xsl:text>\includegraphics[width=\linewidth]{</xsl:text>
+    <xsl:value-of select="$directory.images" />
+    <xsl:text>/</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>.png}&amp;%&#xa;</xsl:text>
+    <xsl:if test="parent::*[title]">
+        <xsl:apply-templates select="parent::*" mode="title-full" />
+        <xsl:text>\newline%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>\href{</xsl:text>
+    <xsl:value-of select="$geogebratube-url" />
+    <xsl:text>}{\texttt{\nolinkurl{</xsl:text>
+    <xsl:value-of select="$geogebratube-url" />
+    <xsl:text>}}}&#xa;</xsl:text>
+    <xsl:text>\end{tabular}&#xa;</xsl:text>
+</xsl:template>
+
 <!-- JSXGraph -->
 <xsl:template match="jsxgraph">
     <xsl:text>\par\smallskip\centerline{A JSXGraph interactive demonstration goes here in interactive output.}\smallskip&#xa;</xsl:text>
