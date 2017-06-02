@@ -5119,6 +5119,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- GeoGebra from GeoGebra Materials                  -->
+<!-- Assuming thumbnails have been scraped with the    -->
+<!-- mbx script, we make a short static display, using -->
+<!-- a title of an enclosing figure, if available      -->
+<xsl:template match="geogebra[@materials]">
+    <xsl:variable name="geogebra-materials-url">
+        <xsl:text>https://www.geogebra.org/m/</xsl:text>
+        <xsl:value-of select="@materials" />
+    </xsl:variable>
+    <xsl:text>\begin{tabular}{p{.3\linewidth}p{.7\linewidth}}&#xa;</xsl:text>
+    <xsl:text>\raisebox{\dimexpr-\height+\baselineskip}{\includegraphics[width=\linewidth]{</xsl:text>
+    <xsl:value-of select="$directory.images" />
+    <xsl:text>/</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>.png}}&amp;%&#xa;</xsl:text>
+    <xsl:if test="parent::*[title]">
+        <xsl:apply-templates select="parent::*" mode="title-full" />
+        <xsl:text>\newline%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>GeoGebra applet at:\newline</xsl:text>
+    <xsl:text>\href{</xsl:text>
+    <xsl:value-of select="$geogebra-materials-url" />
+    <xsl:text>}{\texttt{\nolinkurl{</xsl:text>
+    <xsl:value-of select="$geogebra-materials-url" />
+    <xsl:text>}}}&#xa;</xsl:text>
+    <xsl:text>\end{tabular}&#xa;</xsl:text>
+</xsl:template>
+
 <!-- JSXGraph -->
 <xsl:template match="jsxgraph">
     <xsl:text>\par\smallskip\centerline{A JSXGraph interactive demonstration goes here in interactive output.}\smallskip&#xa;</xsl:text>
@@ -5469,7 +5497,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- behaves in minipages.                                      -->
 <!-- Called in -setup and saved results recycled in -panel      -->
 
-<xsl:template match="p|paragraphs|tabular|ol|ul|dl|list|poem" mode="panel-latex-box">
+<xsl:template match="p|paragraphs|tabular|ol|ul|dl|list|poem|geogebra" mode="panel-latex-box">
     <xsl:param name="width" />
     <xsl:variable name="percent" select="substring-before($width,'%') div 100" />
     <xsl:if test="$sbsdebug">
@@ -5506,6 +5534,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="stanza"/>
             <xsl:apply-templates select="author" />
             <xsl:text>\end{poem}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:when test="self::geogebra">
+            <xsl:text>\centering</xsl:text>
+            <xsl:apply-templates select="."/>
         </xsl:when>
     </xsl:choose>
     <xsl:text>}}</xsl:text>
