@@ -5183,10 +5183,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:for-each>
 </xsl:template>
 
-<!-- We warn about WeBWorK table details that ultimately may not be respected -->
-<!-- if a problem is archived to .pg, and then that file is used on a WeBWorK -->
-<!-- server, and then WeBWorK's print copy mechanism is used to make a pdf    -->
+<!-- Some things in a webwork do not behave as they do elsewhere in PTX -->
 <xsl:template match="mathbook" mode="webwork-warnings">
+    <!-- We warn about WeBWorK table details that ultimately may not be respected -->
+    <!-- if a problem is archived to .pg, and then that file is used on a WeBWorK -->
+    <!-- server, and then WeBWorK's print copy mechanism is used to make a pdf    -->
     <xsl:variable name="coltop" select="//webwork//tabular/col/@top" />
     <xsl:variable name="cellbottom" select="//webwork//tabular/cell/@bottom" />
     <xsl:variable name="medium-major" select="//webwork//tabular//*[@top='medium' or @top='major' or @bottom='medium' or @bottom='major' or @left='medium' or @left='major' or @right='medium' or @right='major']" />
@@ -5221,6 +5222,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:value-of select="count($medium-major)" />
             <xsl:text> time</xsl:text>
             <xsl:if test="count($medium-major) > 1">
+                <xsl:text>s</xsl:text>
+            </xsl:if>
+            <xsl:text>)</xsl:text>
+        </xsl:message>
+    </xsl:if>
+    <!-- We warn about WeBWorK not actually being able to handle multiple objects in a sidebyside -->
+    <xsl:variable name="multiple-sidebyside" select="//webwork//sidebyside[count(child::*[not(self::caption)]) > 1]" />
+    <xsl:if test="$multiple-sidebyside">
+        <xsl:message>
+            <xsl:text>MBX:WARNING:   </xsl:text>
+            <xsl:text>a sidebyside inside a webwork with more than one object will not layout the objects side by side (</xsl:text>
+            <xsl:value-of select="count($multiple-sidebyside)" />
+            <xsl:text> time</xsl:text>
+            <xsl:if test="count($multiple-sidebyside) > 1">
                 <xsl:text>s</xsl:text>
             </xsl:if>
             <xsl:text>)</xsl:text>

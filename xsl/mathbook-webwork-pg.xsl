@@ -1234,13 +1234,29 @@
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- ###### -->
-<!-- Tables -->
-<!-- ###### -->
+<!-- ############################ -->
+<!-- Tables, Figures, Sidebysides -->
+<!-- ############################ -->
+
+<!-- These outer wrappers for tabular, image, and similar things are allowed inside a webwork problem, -->
+<!-- but captions and numbering are ignored. Presently no effort is made to handle the sidebysides as  -->
+<!-- true sidebysides. -->
+
+<xsl:template match="webwork//figure">
+    <xsl:apply-templates select="*[not(self::caption)]" />
+</xsl:template>
 
 <xsl:template match="webwork//table">
     <xsl:apply-templates select="*[not(self::caption)]" />
 </xsl:template>
+
+<xsl:template match="webwork//sidebyside">
+    <xsl:apply-templates select="*[not(self::caption)]" />
+</xsl:template>
+
+<!-- ####### -->
+<!-- Tabular -->
+<!-- ####### -->
 
 <xsl:template match="webwork//tabular">
     <xsl:if test="preceding-sibling::p|preceding-sibling::image|preceding-sibling::tabular">
