@@ -915,7 +915,7 @@
         </section>
 
         <section>
-            <title>Graphics in Exercises</title>
+            <title>Graphics and Interactives in Exercises</title>
             <p>It is natural to want to write exercises that rely on graphics. For example, an exericse might produce a chart of some kind, and ask the reader to extract some information from that chart.</p>
             <p>At present, this can be done using the same mechanism one would use to insert a graphic into a <webwork /> problem when writing regular <webwork /> problems. (And this is what is done below.) In the future, there will be a nicer option that will be able to make use of MBX's <c>latex-image-code</c>. This requires some <webwork /> development first, which is underway.</p>
 
@@ -979,6 +979,20 @@
 
                     </solution>
 
+                </webwork>
+            </exercise>
+
+            <p>Material from GeoGebra-Materials can also be embedded in a <webwork /> problem.</p>
+
+            <exercise>
+                <webwork>
+                    <statement>
+                        <p>Find <m>f(g(2))</m>.</p>
+                        <sidebyside>
+                            <geogebra materials="vZUDWFjJ" width="425" height="420"/>
+                        </sidebyside>
+                        <p><var name="'30'" width="10"/></p>
+                    </statement>
                 </webwork>
             </exercise>
 

@@ -732,7 +732,296 @@
     <xsl:apply-templates />
 </xsl:template>
 
+<!-- ####################### -->
+<!-- PGML GeoGebra Materials -->
+<!-- ####################### -->
 
+<xsl:template match="webwork//geogebra[@materials]">
+    <xsl:variable name="geogebra-materials-embed-url">
+        <xsl:text>https://www.geogebra.org/material/iframe/id/</xsl:text>
+        <xsl:value-of select="@materials" />
+    </xsl:variable>
+    <xsl:variable name="geogebra-materials-url">
+        <xsl:text>https://www.geogebra.org/m/</xsl:text>
+        <xsl:value-of select="@materials" />
+    </xsl:variable>
+    <xsl:if test="preceding-sibling::p|preceding-sibling::image|preceding-sibling::tabular">
+        <xsl:call-template name="potential-list-indent" />
+    </xsl:if>
+    <xsl:text>[@MODES(</xsl:text>
+    <!-- HTML Mode -->
+    <xsl:text>HTML=&gt;'&lt;iframe </xsl:text>
+    <xsl:if test="title">
+        <xsl:text>title="</xsl:text>
+        <xsl:value-of select="title"/>
+        <xsl:text>" </xsl:text>
+    </xsl:if>
+    <xsl:text>width="</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@width">
+            <xsl:value-of select="@width"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>400</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>" </xsl:text>
+    <xsl:text>height="</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@height">
+            <xsl:value-of select="@height"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>400</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>" </xsl:text>
+    <xsl:text>scrolling="</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@scrolling">
+            <xsl:value-of select="@scrolling"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>no</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>" </xsl:text>
+    <xsl:text>src="</xsl:text>
+    <xsl:value-of select="$geogebra-materials-embed-url" />
+    <xsl:text>/width/</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@width">
+            <xsl:value-of select="@width"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>400</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>/height/</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@height">
+            <xsl:value-of select="@height"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>400</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>/border/</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@border-color">
+            <xsl:value-of select="@border-color"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>888888</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>/smb/</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@menu = 'yes'">
+            <xsl:text>true</xsl:text>
+        </xsl:when>
+        <xsl:when test="@menu = 'no'">
+            <xsl:text>false</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>false</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>/stb/</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@toolbar = 'yes'">
+            <xsl:text>true</xsl:text>
+        </xsl:when>
+        <xsl:when test="@toolbar = 'no'">
+            <xsl:text>false</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>false</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>/stbh/</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@toolbar = 'yes' and @toolbar-help = 'yes'">
+            <xsl:text>true</xsl:text>
+        </xsl:when>
+        <xsl:when test="@toolbar-help = 'no'">
+            <xsl:text>false</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>false</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>/ai/</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@input-bar = 'yes'">
+            <xsl:text>true</xsl:text>
+        </xsl:when>
+        <xsl:when test="@input-bar = 'no'">
+            <xsl:text>false</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>false</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>/asb/</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@style-bar = 'yes'">
+            <xsl:text>true</xsl:text>
+        </xsl:when>
+        <xsl:when test="@style-bar = 'no'">
+            <xsl:text>false</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>false</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>/sri/</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@allow-reset = 'yes'">
+            <xsl:text>true</xsl:text>
+        </xsl:when>
+        <xsl:when test="@allow-reset = 'no'">
+            <xsl:text>false</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>true</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>/rc/</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@right-click-and-keyboard-editing = 'yes'">
+            <xsl:text>true</xsl:text>
+        </xsl:when>
+        <xsl:when test="@right-click-and-keyboard-editing = 'no'">
+            <xsl:text>false</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>false</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>/ld/</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@label-dragging = 'yes'">
+            <xsl:text>true</xsl:text>
+        </xsl:when>
+        <xsl:when test="@label-dragging = 'no'">
+            <xsl:text>false</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>false</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>/sdz/</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@pan-and-zoom = 'yes'">
+            <xsl:text>true</xsl:text>
+        </xsl:when>
+        <xsl:when test="@pan-and-zoom = 'no'">
+            <xsl:text>false</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>false</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>/ctl/</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@click-to-load = 'yes'">
+            <xsl:text>true</xsl:text>
+        </xsl:when>
+        <xsl:when test="@click-to-load = 'no'">
+            <xsl:text>false</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>false</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>" </xsl:text>
+    <xsl:text>style="border:0px;" </xsl:text>
+    <xsl:text>&gt;&lt;/iframe&gt;', </xsl:text>
+    <!-- TeX Mode -->
+    <xsl:text>TeX =&gt;'A GeoGebra applet at \path|</xsl:text>
+    <xsl:value-of select="$geogebra-materials-embed-url" />
+    <xsl:text>|.', </xsl:text>
+    <!-- PTX Mode -->
+    <xsl:text>PTX =&gt;'&lt;geogebra </xsl:text>
+    <xsl:text>materials="</xsl:text>
+    <xsl:value-of select="@materials" />
+    <xsl:text>" </xsl:text>
+    <xsl:if test="@width">
+        <xsl:text>width="</xsl:text>
+        <xsl:value-of select="@width" />
+        <xsl:text>" </xsl:text>
+    </xsl:if>
+    <xsl:if test="@height">
+        <xsl:text>height="</xsl:text>
+        <xsl:value-of select="@height" />
+        <xsl:text>" </xsl:text>
+    </xsl:if>
+    <xsl:if test="@scrolling">
+        <xsl:text>scrolling="</xsl:text>
+        <xsl:value-of select="@scrolling" />
+        <xsl:text>" </xsl:text>
+    </xsl:if>
+    <xsl:if test="@border-color">
+        <xsl:text>border-color="</xsl:text>
+        <xsl:value-of select="@border-color" />
+        <xsl:text>" </xsl:text>
+    </xsl:if>
+    <xsl:if test="@menu">
+        <xsl:text>menu="</xsl:text>
+        <xsl:value-of select="@menu" />
+        <xsl:text>" </xsl:text>
+    </xsl:if>
+    <xsl:if test="@toolbar">
+        <xsl:text>toolbar="</xsl:text>
+        <xsl:value-of select="@toolbar" />
+        <xsl:text>" </xsl:text>
+    </xsl:if>
+    <xsl:if test="@toolbar-help">
+        <xsl:text>toolbar-help="</xsl:text>
+        <xsl:value-of select="@toolbar-help" />
+        <xsl:text>" </xsl:text>
+    </xsl:if>
+    <xsl:if test="@input-bar">
+        <xsl:text>input-bar="</xsl:text>
+        <xsl:value-of select="@input-bar" />
+        <xsl:text>" </xsl:text>
+    </xsl:if>
+    <xsl:if test="@style-bar">
+        <xsl:text>style-bar="</xsl:text>
+        <xsl:value-of select="@style-bar" />
+        <xsl:text>" </xsl:text>
+    </xsl:if>
+    <xsl:if test="@allow-reset">
+        <xsl:text>allow-reset="</xsl:text>
+        <xsl:value-of select="@allow-reset" />
+        <xsl:text>" </xsl:text>
+    </xsl:if>
+    <xsl:if test="@right-click-and-keyboard-editing">
+        <xsl:text>right-click-and-keyboard-editing="</xsl:text>
+        <xsl:value-of select="@right-click-and-keyboard-editing" />
+        <xsl:text>" </xsl:text>
+    </xsl:if>
+    <xsl:if test="@label-dragging">
+        <xsl:text>label-dragging="</xsl:text>
+        <xsl:value-of select="@label-dragging" />
+        <xsl:text>" </xsl:text>
+    </xsl:if>
+    <xsl:if test="@pan-and-zoom">
+        <xsl:text>pan-and-zoom="</xsl:text>
+        <xsl:value-of select="@pan-and-zoom" />
+        <xsl:text>" </xsl:text>
+    </xsl:if>
+    <xsl:if test="@click-to-load">
+        <xsl:text>click-to-load="</xsl:text>
+        <xsl:value-of select="@click-to-load" />
+        <xsl:text>" </xsl:text>
+    </xsl:if>
+    <xsl:text>/&gt;', </xsl:text>
+    <xsl:text>);@]*</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
 
 <!-- ############################# -->
 <!-- ############################# -->
