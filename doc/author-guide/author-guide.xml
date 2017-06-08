@@ -30,6 +30,7 @@
         <xi:include href="add-ons.xml" />
         <xi:include href="mbx-script.xml" />
         <xi:include href="webwork.xml" />
+        <xi:include href="windows-installation.xml" />
         <xi:include href="backmatter.xml" />
 
     </book>
