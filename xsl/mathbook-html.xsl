@@ -6015,6 +6015,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </pre>
 </xsl:template>
 
+<!-- Interactive Programs -->
+<!-- Use the PyTutor embedding to provide a Python program -->
+<!-- where a reader can interactively step through the program -->
+<xsl:template match="program[@interactive='pythontutor']">
+    <!-- check that the language is Python? -->
+    <xsl:variable name="internalid">
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:variable>
+    <xsl:element name="div">
+        <xsl:attribute name="class">
+            <xsl:text>pytutorVisualizer</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="id">
+            <xsl:value-of select="$internalid" />
+            <xsl:text>-div</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="data-tracefile">
+            <xsl:text>pytutor/</xsl:text>
+            <xsl:value-of select="$internalid" />
+            <xsl:text>.json</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="data-params">
+            <xsl:text>{</xsl:text>
+            <xsl:text>"verticalStack": true, </xsl:text>
+            <xsl:text>"embeddedMode": false, </xsl:text>
+            <xsl:text>"codeDivWidth": </xsl:text>
+            <xsl:value-of select="$design-width" />
+            <xsl:text>, </xsl:text>
+            <xsl:text>"codeDivHeight": 300</xsl:text>
+            <xsl:text>}</xsl:text>
+        </xsl:attribute>
+    </xsl:element>
+</xsl:template>
+
+<!-- Bits of Javascript for the top and bottom of the web page -->
+<xsl:template name="pytutor-header">
+    <script type="text/javascript" src="http://pythontutor.com/build/pytutor-embed.bundle.js?cc25af72af" charset="utf-8"></script>
+</xsl:template>
+
+<xsl:template name="pytutor-footer">
+    <script type="text/javascript">createAllVisualizersFromHtmlAttrs();</script>
+</xsl:template>
 
 <!-- Console Session -->
 <!-- An interactive command-line session with a prompt, input and output -->
@@ -6250,6 +6292,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:call-template name="hypothesis-annotation" />
             <xsl:call-template name="jsxgraph" />
             <xsl:call-template name="css" />
+            <xsl:call-template name="pytutor-header" />
         </head>
         <xsl:element name="body">
             <!-- the first class controls the default icon -->
@@ -6305,7 +6348,8 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                     </div>
                 </main>
             </div>
-        <xsl:apply-templates select="/mathbook/docinfo/analytics" />
+            <xsl:apply-templates select="/mathbook/docinfo/analytics" />
+            <xsl:call-template name="pytutor-footer" />
         </xsl:element>
     </html>
     </exsl:document>

@@ -3689,6 +3689,7 @@ the xsltproc executable.
                 <li><p>A cross-reference to the top-level element (<eg /><c>book</c>) will point to a summary page similar to a Table of Contents in HTML.  For LaTeX output it will behave similarly, unless there is no Table of Contents, then it will go to the main title page:  <xref ref="derivatives">ToC or Title</xref></p></li>
                 <li><p><q>Cross-references inside quotations previously lost track of their target, so this tests correcting that, not so much the cross-reference itself: <xref ref="theorem-FTC" autoname="yes" /></q></p></li>
                 <li><p>An activity with full details following: <xref ref="activity-with-hint-answer-solution" /></p></li>
+                <li><p>An interactive program inside a program listing, to test if the Javascript will execute properly within a knowl: <xref ref="program-interactive" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul></p>
 
@@ -4292,6 +4293,26 @@ the xsltproc executable.
                     dispOtherCharAddr:
                             .word   dispOtherChar
                     </input>
+                </program>
+            </listing>
+
+            <p>In <init>HTML</init> output, a program can be interactive.  This is an example program provided by <url href="http://www.pythontutor.com/">Python Tutor</url>.</p>
+
+            <listing xml:id="program-interactive">
+                <caption>An interactive Python program, using <booktitle>Python Tutor</booktitle></caption>
+                <program xml:id="happy" language="python" interactive="pythontutor">
+                # From "Teaching with Python" by John Zelle
+                def happy():
+                    print("Happy Birthday to you!")
+
+                def sing(P):
+                    happy()
+                    happy()
+                    print("Happy Birthday dear " + P + "!")
+                    happy()
+
+                # main
+                sing("Fred")
                 </program>
             </listing>
         </section>
