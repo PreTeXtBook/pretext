@@ -482,6 +482,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="debug" select="'no'" />
 <xsl:variable name="b-debug" select="$debug = 'yes'" />
 
+<xsl:param name="debug.datedfiles" select="'yes'" />
+<xsl:variable name="b-debug-datedfiles" select="not($debug.datedfiles = 'no')" />
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
@@ -5492,8 +5495,10 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:param name="lead-out" />
     <xsl:copy-of select="$lead-in" /><xsl:text>**************************************</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     <xsl:copy-of select="$lead-in" /><xsl:text>*    Generated from PreTeXt source   *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:if test="$b-debug-datedfiles">
     <xsl:copy-of select="$lead-in" /><xsl:text>*    on </xsl:text>  <xsl:value-of select="date:date-time()" />
                                                                       <xsl:text>    *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    </xsl:if>
     <xsl:copy-of select="$lead-in" /><xsl:text>*                                    *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     <xsl:copy-of select="$lead-in" /><xsl:text>*   http://mathbook.pugetsound.edu   *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     <xsl:copy-of select="$lead-in" /><xsl:text>*                                    *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
