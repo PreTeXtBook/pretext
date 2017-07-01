@@ -3054,6 +3054,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- used to create equal spacing between panels            -->
 
 <xsl:template match="sidebyside" mode="common-setup">
+    <xsl:param name="b-original" select="true()" />
+
     <!-- captions, titles on "sidebyside" ignored when used in an sbsgroup -->
     <xsl:if test="parent::sbsgroup and caption">
         <xsl:message>MBX:WARNING: caption of a &lt;sidebyside&gt; is ignored when contained in an &lt;sbsgroup&gt;</xsl:message>
@@ -3273,6 +3275,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <!-- building up headings, captions, panels -->
     <!-- metadata elements skipped in recursion -->
     <xsl:apply-templates select="." mode="sbs-panel">
+        <xsl:with-param name="b-original" select="$b-original" />
+
         <xsl:with-param name="number-panels" select="$number-panels" />
         <xsl:with-param name="the-panel" select="*[1]" />
         <xsl:with-param name="widths" select="$widths" />
@@ -3317,6 +3321,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- has-headings and has-captions are updated per panel,     -->
 <!-- so compose-panels can avoid outputting empty space       -->
 <xsl:template match="sidebyside" mode="sbs-panel">
+    <xsl:param name="b-original" select="true()" />
+
     <xsl:param name="number-panels" />
     <xsl:param name="the-panel" />
     <xsl:param name="widths" />
@@ -3349,6 +3355,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <!-- if there are no headers or captions, we *could* set to an empty string -->
             <!-- now collect components into output wrappers -->
             <xsl:apply-templates select="." mode="compose-panels">
+                <xsl:with-param name="b-original" select="$b-original" />
+
                 <xsl:with-param name="number-panels" select="$number-panels" />
                 <xsl:with-param name="margins" select="$margins" />
                 <xsl:with-param name="space-width" select="$space-width" />
@@ -3364,6 +3372,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <!-- so just skip ahead a panel, with no other net effect -->
         <xsl:when test="$the-panel[&METADATA-FILTER;]">
             <xsl:apply-templates select="." mode="sbs-panel">
+                <xsl:with-param name="b-original" select="$b-original" />
+
                 <xsl:with-param name="number-panels" select="$number-panels" />
                 <xsl:with-param name="the-panel" select="$the-panel/following-sibling::*[1]" />
                 <xsl:with-param name="widths" select="$widths" />
@@ -3437,6 +3447,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:variable name="new-panels">
                 <xsl:copy-of select="$panels" />
                 <xsl:apply-templates select="$the-panel" mode="panel-panel">
+                    <xsl:with-param name="b-original" select="$b-original" />
+
                     <xsl:with-param name="width" select="$width" />
                     <xsl:with-param name="margins" select="$margins" />
                     <xsl:with-param name="valign" select="$valign" />
@@ -3455,6 +3467,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <!-- once incremented "panel-number" here, but not used    -->
             <!-- update booleans for necessity of headings or captions -->
             <xsl:apply-templates select="." mode="sbs-panel">
+                <xsl:with-param name="b-original" select="$b-original" />
+
                 <xsl:with-param name="number-panels" select="$number-panels" />
                 <xsl:with-param name="the-panel" select="$the-panel/following-sibling::*[1]" />
                 <xsl:with-param name="widths" select="substring-after($widths, ' ')" />
