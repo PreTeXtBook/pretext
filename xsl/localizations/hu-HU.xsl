@@ -126,6 +126,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='blockquote'><xsl:text>Idézet</xsl:text></localization>
     <!-- Parts of an exercise and it's solution -->
     <localization string-id='exercise'><xsl:text>Feladat</xsl:text></localization>
+    <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Tipp</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Vélasz</xsl:text></localization>
     <localization string-id='solution'><xsl:text>Megoldás</xsl:text></localization>
