@@ -4271,6 +4271,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: <quote> element for inline -->
 <xsl:template match="blockquote">
     <xsl:text>\begin{quote}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\end{quote}&#xa;</xsl:text>
 </xsl:template>
@@ -6653,7 +6655,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- anchors/labels below and then we must point to           -->
 <!-- them with \hyperlink{}{} (nee hyperref[]{}).             -->
 <!-- (See also modal templates for "label" and "xref-number") -->
-<xsl:template match="paragraphs|exercises//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|book|article" mode="xref-link">
+<xsl:template match="paragraphs|blockquote|exercises//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|book|article" mode="xref-link">
     <xsl:param name="content" />
     <xsl:text>\hyperlink{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
@@ -6688,7 +6690,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- vertical space when used in list items and it seems          -->
 <!-- to now behave well without it  (2015-12-12)                  -->
 <!-- (See also modal templates for "xref-link" and "xref-number") -->
-<xsl:template match="paragraphs|exercises//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|contributor" mode="label">
+<xsl:template match="paragraphs|blockquote|exercises//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|contributor" mode="label">
     <xsl:text>\hypertarget{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}{}</xsl:text>
