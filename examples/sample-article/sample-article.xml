@@ -1494,7 +1494,7 @@ the xsltproc executable.
 
                 <p>A large quote can be accomodated with the <c>blockquote</c> tag, which can carry within itself an <c>attribution</c> element.</p>
 
-                <blockquote>
+                <blockquote xml:id="blockquote-seuss">
                     <p>The problem with writing a book in verse is, to be successful, it has to sound like you knocked it off on a rainy Friday afternoon. It has to sound easy. When you can do it, it helps tremendously because it's a thing that forces kids to read on. You have this unconsummated feeling if you stop.</p>
                     <attribution>Dr. Seuss</attribution>
                 </blockquote>
@@ -3701,6 +3701,7 @@ the xsltproc executable.
                 <li><p><q>Cross-references inside quotations previously lost track of their target, so this tests correcting that, not so much the cross-reference itself: <xref ref="theorem-FTC" autoname="yes" /></q></p></li>
                 <li><p>An activity with full details following: <xref ref="activity-with-hint-answer-solution" /></p></li>
                 <li><p>An interactive program inside a program listing, to test if the Javascript will execute properly within a knowl: <xref ref="program-interactive" /></p></li>
+                <li><p>A cross-reference to a block quotation (which is never numbered): <xref ref="blockquote-seuss" autoname="title">Quote by Dr Seuss</xref></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul></p>
 
