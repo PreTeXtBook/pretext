@@ -2432,6 +2432,17 @@ the xsltproc executable.
                     <li><p>Level 1, third.</p></li>
                 </ul></p>
 
+                <p>A nested ordered list, to test intramural cross-references.<ol>
+                    <li><p>Level 1, first.</p></li>
+                    <li xml:id="list-item-second"><p>Level 1, second.<ul label="">
+                            <li><p>Level 2, first.</p></li>
+                            <li><p>Level 2, second.</p></li>
+                        </ul></p>
+                    </li>
+                    <li><p>Level 1, third.  With a cross-reference to second list item, <xref ref="list-item-second" />.</p></li>
+                    <li><p>Level 1, fourth.  Whose number should not change when knowl just prior is opened.</p></li>
+                </ol></p>
+
                 <p>The next definition is very poorly worded.  It is meant to test leading off with a list (bad form), for which <latex /> normally begins right after the heading.</p>
 
                 <definition>
