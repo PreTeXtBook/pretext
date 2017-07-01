@@ -1369,48 +1369,52 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- that needs a cross-reference target as a knowl file,  -->
 <!-- that file is built and the tree traversal continues.  -->
 <!--                                                       -->
-<!-- See initiation in the entry template. We default      -->
-<!-- to just recursing through children elements           -->
-<!-- Otherwise, see knowl creation in next section         -->
+<!-- See initiation in the entry template.  Default is to  -->
+<!-- recurse through elements to children elements.        -->
 
+<!-- recurse if not knowlizable -->
 <xsl:template match="*" mode="xref-knowl">
-    <!-- do nothing here, in contrast to next template -->
     <xsl:apply-templates select="*" mode="xref-knowl" />
 </xsl:template>
 
-<!-- Implement six modal templates                   -->
-<!-- Produces an external xref-knowl content file    -->
-<!-- These templates could return empty strings      -->
-<!--                                                 -->
-<!-- Main section is a heading and body              -->
-<!-- This gets an (optional) HTML wrapper            -->
-<!--                                                 -->
-<!-- "body-element"                                  -->
-<!-- "body-css-class"                                -->
-<!--                                                 -->
-<!-- "heading-xref-knowl" is the (optional) heading  -->
-<!-- "body-duplicate" is content; no ID, no \label   -->
-<!--                                                 -->
-<!-- A posterior is optional, typically              -->
-<!-- a list of knowls or a proof                     -->
-<!--                                                 -->
-<!-- "has-posterior-element"                         -->
-<!-- "posterior-duplicate"  no ID, no \label         -->
-
-<!-- me is absent, not numbered, never knowled -->
-<xsl:template match="fn|biblio|men|md|mdn|p|blockquote|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|exercise|hint[not(ancestor::*[self::webwork])]|answer[not(ancestor::*[self::webwork])]|solution[not(ancestor::*[self::webwork])]|biblio/note|contributor|li" mode="xref-knowl">
-    <!-- write a file, calling body and posterior duplicate templates -->
-    <xsl:variable name="knowl-file">
-        <xsl:apply-templates select="." mode="xref-knowl-filename" />
+<!-- build xref-knowl, and optionally a hidden-knowl duplicate -->
+<xsl:template match="fn|li|men|md|mdn|p|blockquote|&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|&FIGURE-LIKE;|exercise|exercisegroup|webwork[*|@*]|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|biblio|biblio/note|contributor" mode="xref-knowl">
+    <!-- a generally available cross-reference knowl file, of duplicated content -->
+    <xsl:apply-templates select="." mode="manufacture-knowl">
+        <xsl:with-param name="knowl-type" select="'xref'" />
+    </xsl:apply-templates>
+    <!-- optionally, a file version of duplicated hidden-knowl content -->
+    <xsl:variable name="hidden">
+        <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
+    <xsl:if test="$hidden = 'true'">
+        <xsl:apply-templates select="." mode="manufacture-knowl">
+            <xsl:with-param name="knowl-type" select="'hidden'" />
+        </xsl:apply-templates>
+    </xsl:if>
+</xsl:template>
+
+<!-- Build one, or two, files for knowl content -->
+<xsl:template match="*" mode="manufacture-knowl">
+    <xsl:param name="knowl-type" />
+    <xsl:variable name="knowl-file">
+        <xsl:choose>
+            <xsl:when test="$knowl-type = 'xref'">
+                <xsl:apply-templates select="." mode="xref-knowl-filename" />
+            </xsl:when>
+            <xsl:when test="$knowl-type = 'hidden'">
+                <xsl:apply-templates select="." mode="hidden-knowl-filename" />
+            </xsl:when>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- write file infrastructure first -->
     <exsl:document href="{$knowl-file}" method="html">
         <xsl:text disable-output-escaping="yes">&lt;!doctype html&gt;&#xa;</xsl:text>
-        <xsl:element name="html">
+        <html>
             <!-- header since separate file -->
             <xsl:text>&#xa;</xsl:text>
             <xsl:call-template name="converter-blurb-html" />
-
-            <xsl:element name="head">
+            <head>
                 <!-- dissuade indexing duplicated content -->
                 <meta name="robots" content="noindex, nofollow" />
                 <!-- we need Sage cell configuration functions     -->
@@ -1419,75 +1423,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- anywhere in the document, and that is         -->
                 <!-- sufficient for the external knowl             -->
                 <xsl:apply-templates select="." mode="sagecell" />
-            </xsl:element>
-
-            <xsl:element name="body">
-                <!-- content, as duplicate, so no @id or \label -->
-
-                <!-- variables for HTML container names -->
-                <xsl:variable name="body-elt">
-                    <xsl:apply-templates select="." mode="body-element" />
-                </xsl:variable>
-                <xsl:variable name="body-css">
-                    <xsl:apply-templates select="." mode="body-css-class" />
-                </xsl:variable>
-                <!-- heading + body (usually) go into an HTML container -->
+            </head>
+            <body>
+                <!-- content, in xref style or hidden style -->
+                <!-- initiate tunneling duplication flag    -->
                 <xsl:choose>
-                    <xsl:when test="not($body-elt='')">
-                        <xsl:element name="{$body-elt}">
-                            <xsl:if test="not($body-css = '')">
-                                <xsl:attribute name="class">
-                                    <xsl:value-of select="$body-css" />
-                                </xsl:attribute>
-                            </xsl:if>
-
-                            <!-- First, a heading to describe xref knowl itself, -->
-                            <!-- since it is divorced from its context, so       -->
-                            <!-- provide as much information as possible         -->
-                            <xsl:apply-templates select="." mode="heading-xref-knowl" />
-
-                            <!-- Second, the main body with content as duplicates of the -->
-                            <!-- various components, so no @id, no \label.  Exclusive of -->
-                            <!-- various decorations like proofs or solutions -->
-                            <xsl:apply-templates select="." mode="body-duplicate" />
-                        </xsl:element>
+                    <xsl:when test="$knowl-type = 'xref'">
+                        <xsl:apply-templates select="." mode="body">
+                            <xsl:with-param name="block-type" select="'xref'" />
+                            <xsl:with-param name="b-original" select="false()" />
+                        </xsl:apply-templates>
                     </xsl:when>
-                    <xsl:otherwise>
-                        <!-- above, without wrapping (eg math)-->
-                        <xsl:apply-templates select="." mode="heading-xref-knowl" />
-                        <xsl:apply-templates select="." mode="body-duplicate" />
-                    </xsl:otherwise>
+                    <xsl:when test="$knowl-type = 'hidden'">
+                        <xsl:apply-templates select="." mode="body">
+                            <xsl:with-param name="block-type" select="'hidden'" />
+                            <xsl:with-param name="b-original" select="false()" />
+                        </xsl:apply-templates>
+                    </xsl:when>
                 </xsl:choose>
-
-                <!-- posterior, possibly empty -->
-                <xsl:variable name="with-posterior">
-                    <xsl:apply-templates select="." mode="has-posterior" />
-                </xsl:variable>
-                <xsl:if test="$with-posterior = 'true'">
-                    <xsl:element name="div">
-                        <xsl:attribute name="class">
-                            <xsl:text>posterior</xsl:text>
-                        </xsl:attribute>
-                        <xsl:apply-templates select="." mode="posterior-duplicate" />
-                    </xsl:element>
+                <!-- in-context link just for xref-knowl content -->
+                <xsl:if test="$knowl-type = 'xref'">
+                    <xsl:variable name="href">
+                        <xsl:apply-templates select="." mode="url" />
+                    </xsl:variable>
+                    <span class="incontext">
+                        <a href="{$href}">
+                            <xsl:call-template name="type-name">
+                                <xsl:with-param name="string-id" select="'incontext'" />
+                            </xsl:call-template>
+                        </a>
+                    </span>
                 </xsl:if>
-
-                <!-- in-context link always part of xref-knowl content -->
-                <xsl:element name="span">
-                    <xsl:attribute name="class">
-                        <xsl:text>incontext</xsl:text>
-                    </xsl:attribute>
-                    <xsl:element name="a">
-                        <xsl:attribute name="href">
-                            <xsl:apply-templates select="." mode="url" />
-                        </xsl:attribute>
-                        <xsl:call-template name="type-name">
-                            <xsl:with-param name="string-id" select="'incontext'" />
-                        </xsl:call-template>
-                    </xsl:element>
-                </xsl:element>
-            </xsl:element>  <!-- end body -->
-        </xsl:element>  <!-- end html -->
+            </body>
+        </html>
     </exsl:document>  <!-- end file -->
     <!-- recurse the tree outside of the file-writing -->
     <xsl:apply-templates select="*" mode="xref-knowl" />
@@ -1501,6 +1469,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>.html</xsl:text>
 </xsl:template>
 
+<xsl:template match="*" mode="hidden-knowl-filename">
+    <xsl:text>./knowl/</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>-hidden.html</xsl:text>
+</xsl:template>
+
 <!-- Small trick, a cross-reference to an <mrow> of -->
 <!-- a multi-line display of mathematics will point -->
 <!-- to the file for the entire display.            -->
@@ -1508,24 +1482,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>./knowl/</xsl:text>
     <xsl:apply-templates select="parent::*" mode="internal-id" />
     <xsl:text>.html</xsl:text>
-</xsl:template>
-
-<!-- ########### -->
-<!-- Duplication -->
-<!-- ########### -->
-
-<!-- At fundamental/minor elements we bail out on        -->
-<!-- the original/duplicate distinction and just do it   -->
-<!-- For example, this handles characters in paragraphs, -->
-<!-- but for "containers," such as statement, we need to -->
-<!-- pass the mode on down through explicitly            -->
-<xsl:template match="*" mode="duplicate">
-    <xsl:apply-templates select="." />
-</xsl:template>
-
-<!-- pass-through on pure containers  -->
-<xsl:template match="statement" mode="duplicate">
-    <xsl:apply-templates select="*" mode="duplicate" />
 </xsl:template>
 
 <!-- ######## -->
@@ -1724,108 +1680,128 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- ###################### -->
-<!-- Born Hidden or Visible -->
-<!-- ###################### -->
+<!-- ######################## -->
+<!-- Block Production, Knowls -->
+<!-- ######################## -->
 
-<!-- Originals, just a question of presentation   -->
-<!-- based on elective knowlization or a          -->
-<!-- consequence of naturally hidden, or not      -->
-<!-- Hidden: heading as clickable + body as embed -->
-<!-- Visible: heading + body, wrapped as a unit   -->
+<!-- Generically, a "block" is a child of a "division."  See the schema for more precision.  Blocks also have significant components.  An "example" is a block, and its "solution" is a significant component.  A "p" might be a block, but it could also be a significant component of an "example." -->
 
-<!-- default template for most things knowlizable -->
-<!-- Exceptions: the four math display (me|men|md|mdn) -->
-<!-- and paragraphs (p)                                -->
-<!-- do not come through here at all, since they are   -->
-<!-- always visible with no decoration, so plain       -->
-<!-- default templates are good enough                 -->
-<xsl:template match="fn|biblio|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|exercise|hint[not(ancestor::*[self::webwork])]|answer[not(ancestor::*[self::webwork])]|solution[not(ancestor::*[self::webwork])]|biblio/note|contributor">
+<!-- Some blocks and components can be realized in a hidden fashion, as knowls whose content is embedded within the page.  This may be automatic (footnotes, "fn", are a good example), elective ("theorem" is a good example), or banned (a "blockquote" is never hidden). -->
+
+<!-- All blocks, and many of their significant components, are available as targets of cross-references, implemented as knowls, but now the content resides in external files.  These files contain duplicates of blocks and their components (rather than originals), so need to be free of the unique identifiers that are used in the original versions. -->
+
+<!-- This suggests four modes for the initial production of a block or component, though some blocks may only be produced in two of the four modes: visible and original, hidden and original, a cross-reference knowl, an external knowl duplicating a hidden knowl. -->
+<!-- (a) Visible and original (on a main page) -->
+<!-- (b) Hidden and original (embedded knowl on a page) -->
+<!-- (c) Visible and duplicate (in, or as, a cross-reference knowl) -->
+<!-- (d) Hidden and duplicate (an external knowl, duplicating the hidden original knowl) -->
+
+<!-- The generic (not modal) template matches any element that is a block or a significant component of some other element that is a block or a component. -->
+
+<!-- Every such element is only output in one of two forms, and as few times as possible.  One form is the "original" and includes full identifying information, such as an HTML id attribute or a LaTeX label for rows of display mathematics.  The other form is a "duplicate", as an external file, for use by the knowl code to open and display.  As a duplicate of the orginal, it should be free of all identifying information and should recycle other duplicates as much as possible. -->
+
+<!-- An element arrives here in one of four situations, two as originals and two as duplicates.  We describe those situations and what should happen. -->
+
+<!-- Original, born visible.  The obvious situation, we render the element as part of the page, adding identifying information.  The template sets the "b-original" flag to true by default, for this reason.  Children of the element are incorporated (through the modal body templates) as originals (visible and/or hidden) by passing along the "b-original" flag. -->
+
+<!-- Original, born hidden.  The element knows if it should be hidden on the page in an embedded knowl via the modal "is-hidden" template.  So a link is written on the page, and the main content is written onto the page as a hidden, embedded knowl.  The "b-original" flag (set to true) is passed through to templates for the children. -->
+
+<!-- Duplicates.  Duplicated versions, sans identification, are created by an extra, specialized, traversal of the entire document tree with the "xref-knowl" modal templates.  When an element is first encountered the infrastructure for an external file is constructed and the modal "body" template of the element is called with the "b-original" flag set to false.  The content of the knowl should have an overall header, explaining what it is, since it is a target of the cross-reference.  Now the body template will pass along the "b-original" flag set to false, indicating the production mode should be duplication.  For a block that is born hidden, we build an additional external knowl that duplicates it, so without identification, without an overall header, and without an in-context link.  -->
+
+<!-- Child elements born visible will be written into knowl files without identification.  Child elements born hidden will write a knowl link into the page, pointing to the duplicated (hidden) version.  -->
+
+<!-- The upshot is that the main pages have visible content and hidden, embedded content (knowls) with full identification as original canonical versions.  Cross-references open external file knowls, whose hidden components are again accessed via knowls that use external files of duplicated content.  None of the knowl files contain any identification, so these identifiers remain unique in their appearances as part of the main pages. -->
+
+<!-- This process is controlled by the boolean "b-original" parameter, which needs to be laboriously passed down and through templates, including containers like "sidebyside."  The XSLT 2.0 tunnel parameter would be a huge advantage here.  The parameter "block-type" can take on the values: 'visible', 'embed', 'xref', 'hidden'.  The four situations above can be identified with these parameters.  The block-type parameter is also used to aid in placement of identification.  For example, an element born visible will have an HTML id on its outermost element, such as an "article".  But as an embedded knowl, we put the id onto the visible link text instead, even if the same outermost element is employed for the hidden content. -->
+
+<!-- The relevant templates controlling production of a block, and their use, are: -->
+
+<!-- (1) "is-hidden":  mandatory, value is 'true' or 'false' (could move to a boolean), controls visible or hidden property, so usd in a variety of situations to control flow.  Often fixed, but also responds to options. (As boolean: do conditionals in global text variable, then check value in "select" of new global boolean variable.) -->
+
+<!-- (2) "body-element", "body-css-class": useful for general production, but sometimes its employment leads to requiring exceptional templates (eg display math).  The outermost HTML element of a block.  Sometimes it gets an ID, sometimes not, which is its main purpose.  Employed in "body" templates (see below). -->
+
+<!-- (3) "heading-birth": produces HTML immediately interior to the "body-element", for visible blocks, in both the original and duplication processes.  Similarly, it is the link-text of a knowl for a block that is hidden (again in original or duplication modes).  Employed in "body" templates. -->
+
+<!-- (4) "birth-element": 'div' or 'span' to wrap hidden knowl links and contents so they appear correctly on a page (block or inline, basically). -->
+
+<!-- (5) "heading-xref-knowl": when a knowl is a target of a cross-reference, sometimes a better heading is necessary to help identify it.  For example, a cross-refernce to a list item can be improved by providing the number of the item in a heading. -->
+
+<!-- (6) "body": main template to produce the HTML "body" portion of a knowl, or the content displayed on a page.  Reacts to four modes: 'visible' (original or duplicate), 'embed', or 'xref'. -->
+
+<!-- (7) TODO: "wrapped-content" called by "body" to separate code. -->
+
+<xsl:template match="li|me|men|md|mdn|fn|biblio|p|blockquote|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|webwork[*|@*]|exercise|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|biblio/note|contributor">
+    <xsl:param name="b-original" select="true()" />
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$hidden = 'true'">
-            <xsl:apply-templates select="." mode="born-hidden-knowl" />
-            <xsl:apply-templates select="." mode="born-hidden-embed" />
+            <xsl:choose>
+                <!-- primary occurrence, born hidden as embedded knowl     -->
+                <!-- is original flag pass-thru necessary?  always true()? -->
+                <!-- Hack: WW not working from embedded knowls,            -->
+                <!-- so go with external file of duplicated content        -->
+                <xsl:when test="$b-original and not(self::webwork)">
+                    <xsl:apply-templates select="." mode="born-hidden">
+                        <xsl:with-param name="b-original" select="$b-original" />
+                    </xsl:apply-templates>
+                </xsl:when>
+                <!-- duplicating, so just make a xref-knowl in same style, -->
+                <!-- but therefore clean of id's or other identification   -->
+                <xsl:otherwise>
+                    <xsl:variable name="birth-elt">
+                        <xsl:apply-templates select="." mode="birth-element" />
+                    </xsl:variable>
+                    <xsl:element name="{$birth-elt}">
+                        <!-- copied from "xref-link" template,  -->
+                        <!-- maybe build a 2-parameter template -->
+                        <xsl:element name="a">
+                            <xsl:attribute name="knowl">
+                                <xsl:apply-templates select="." mode="hidden-knowl-filename" />
+                            </xsl:attribute>
+                            <!-- TODO: check if this "knowl-id" is needed, knowl.js implies it is -->
+                            <xsl:attribute name="knowl-id">
+                                <xsl:text>hidden-</xsl:text>
+                                <xsl:apply-templates select="." mode="internal-id" />
+                            </xsl:attribute>
+                            <!-- add HTML title and alt attributes to the link -->
+                            <xsl:attribute name="alt">
+                                <xsl:apply-templates select="." mode="tooltip-text" />
+                            </xsl:attribute>
+                            <xsl:attribute name="title">
+                                <xsl:apply-templates select="." mode="tooltip-text" />
+                            </xsl:attribute>
+                            <xsl:apply-templates select="." mode="hidden-knowl-text" />
+                         </xsl:element>
+                    </xsl:element>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="." mode="born-visible" />
+            <!-- pass-thru of b-original mandatory -->
+            <xsl:apply-templates select="." mode="born-visible">
+                <xsl:with-param name="b-original" select="$b-original" />
+            </xsl:apply-templates>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
-
-
-<!-- "body-element"          -->
-<!-- "body-css-class"        -->
-<!-- "heading-birth"         -->
-<!-- "body"                  -->
-<!-- "has-posterior-element" -->
-<!-- "posterior"             -->
 
 <xsl:template match="*" mode="born-visible">
-    <!-- variables for HTML container names -->
-    <xsl:variable name="body-elt">
-        <xsl:apply-templates select="." mode="body-element" />
-    </xsl:variable>
-    <xsl:variable name="body-css">
-        <xsl:apply-templates select="." mode="body-css-class" />
-    </xsl:variable>
-
-    <!-- heading + body (usually) go into an HTML container -->
-    <xsl:choose>
-        <xsl:when test="not($body-elt='')">
-            <xsl:element name="{$body-elt}">
-                <xsl:if test="not($body-css = '')">
-                    <xsl:attribute name="class">
-                        <xsl:value-of select="$body-css" />
-                    </xsl:attribute>
-                </xsl:if>
-                <!-- label original -->
-                <xsl:attribute name="id">
-                    <xsl:apply-templates select="." mode="internal-id" />
-                </xsl:attribute>
-
-                <!-- First, a heading to describe the content -->
-                <xsl:apply-templates select="." mode="heading-birth" />
-
-                <!-- Second, the main body with content -->
-                <xsl:apply-templates select="." mode="body" />
-            </xsl:element>
-        </xsl:when>
-        <xsl:otherwise>
-            <!-- above, without wrapping supplied by templates, -->
-            <!-- so ID is responsibility of the body template   -->
-            <xsl:apply-templates select="." mode="body" />
-        </xsl:otherwise>
-    </xsl:choose>
-    <!-- posterior, possibly empty -->
-    <xsl:variable name="with-posterior">
-        <xsl:apply-templates select="." mode="has-posterior" />
-    </xsl:variable>
-    <xsl:if test="$with-posterior = 'true'">
-        <xsl:element name="div">
-            <xsl:attribute name="class">
-                <xsl:text>posterior</xsl:text>
-            </xsl:attribute>
-            <xsl:apply-templates select="." mode="posterior" />
-        </xsl:element>
-    </xsl:if>
+    <xsl:param name="b-original" select="true()" />
+    <xsl:apply-templates select="." mode="body">
+        <xsl:with-param name="block-type" select="'visible'" />
+        <xsl:with-param name="b-original" select="$b-original" />
+    </xsl:apply-templates>
 </xsl:template>
 
-
-<!-- "birth-element"          -->
-<!-- "hidden-knowl-element"   -->
-<!-- "hidden-knowl-css-class" -->
-<!-- "has-posterior-element"  -->
-<!-- "posterior"              -->
-
-
-<xsl:template match="*" mode="born-hidden-knowl">
-    <xsl:variable name="b-elt">
+<xsl:template match="*" mode="born-hidden">
+    <xsl:param name="b-original" select="true()" />
+    <xsl:variable name="birth-elt">
         <xsl:apply-templates select="." mode="birth-element" />
     </xsl:variable>
-    <xsl:element name="{$b-elt}">
+    <!-- First: the link that is visible on the page -->
+    <xsl:element name="{$birth-elt}">
         <xsl:attribute name="class">
             <xsl:text>hidden-knowl-wrapper</xsl:text>
         </xsl:attribute>
@@ -1850,28 +1826,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="internal-id" />
             </xsl:attribute>
             <!-- marked-up knowl text link *inside* of knowl anchor to be effective -->
-            <xsl:variable name="hk-elt">
-                <xsl:apply-templates select="." mode="hidden-knowl-element" />
-            </xsl:variable>
             <!-- heading in an HTML container -->
-            <xsl:if test="not($hk-elt='')">
-                <xsl:element name="{$hk-elt}">
-                    <xsl:attribute name="class">
-                        <xsl:apply-templates select="." mode="hidden-knowl-css-class" />
-                    </xsl:attribute>
-                    <xsl:apply-templates select="." mode="heading-birth" />
-                </xsl:element>
-            </xsl:if>
+            <xsl:apply-templates select="." mode="hidden-knowl-text" />
         </xsl:element>
     </xsl:element>
-</xsl:template>
-
-
-<xsl:template match="*" mode="born-hidden-embed">
-    <xsl:variable name="b-elt">
-        <xsl:apply-templates select="." mode="birth-element" />
-    </xsl:variable>
-    <xsl:element name="{$b-elt}">
+    <!-- Second: the content of the knowl, to be revealed/parsed later -->
+    <xsl:element name="{$birth-elt}">
         <!-- different id, for use by the knowl mechanism -->
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="hidden-knowl-id" />
@@ -1884,41 +1844,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="class">
             <xsl:text>tex2jax_ignore</xsl:text>
         </xsl:attribute>
-
-        <!-- variables for HTML container names -->
-        <xsl:variable name="body-elt">
-            <xsl:apply-templates select="." mode="body-element" />
-        </xsl:variable>
-        <xsl:variable name="body-css">
-            <xsl:apply-templates select="." mode="body-css-class" />
-        </xsl:variable>
-        <!-- body (usually) goes into an HTML container -->
-        <xsl:if test="not($body-elt='')">
-            <xsl:element name="{$body-elt}">
-                <xsl:if test="not($body-css = '')">
-                    <xsl:attribute name="class">
-                        <xsl:value-of select="$body-css" />
-                    </xsl:attribute>
-                </xsl:if>
-                <xsl:apply-templates select="." mode="body" />
-            </xsl:element>
-        </xsl:if>
-
-        <!-- posterior, possibly empty -->
-        <xsl:variable name="with-posterior">
-            <xsl:apply-templates select="." mode="has-posterior" />
-        </xsl:variable>
-        <xsl:if test="$with-posterior = 'true'">
-            <xsl:element name="div">
-                <xsl:attribute name="class">
-                    <xsl:text>posterior</xsl:text>
-                </xsl:attribute>
-                <xsl:apply-templates select="." mode="posterior" />
-            </xsl:element>
-        </xsl:if>
+        <xsl:apply-templates select="." mode="body">
+            <xsl:with-param name="block-type" select="'embed'" />
+            <xsl:with-param name="b-original" select="$b-original" />
+        </xsl:apply-templates>
     </xsl:element>
 </xsl:template>
 
+<xsl:template match="*" mode="hidden-knowl-text">
+    <xsl:variable name="body-elt">
+        <xsl:apply-templates select="." mode="body-element" />
+    </xsl:variable>
+    <xsl:element name="{$body-elt}">
+        <xsl:attribute name="class">
+            <xsl:apply-templates select="." mode="body-css-class" />
+        </xsl:attribute>
+        <xsl:apply-templates select="." mode="heading-birth" />
+    </xsl:element>
+</xsl:template>
 
 <!-- Hidden knowls are embedded in a div that MathJax ignores.   -->
 <!-- That div needs an id for the knowl to be able to locate it  -->
