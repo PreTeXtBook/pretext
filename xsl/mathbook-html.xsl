@@ -3140,8 +3140,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
     <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
         <!-- look ahead to absorb immediate clause-ending punctuation -->
-        <!-- pass the context as enclosing environment (md)           -->
-        <xsl:apply-templates select="parent::md" mode="get-clause-punctuation" />
+        <!-- pass the context as enclosing environment (mdn)          -->
+        <xsl:apply-templates select="parent::mdn" mode="get-clause-punctuation" />
     </xsl:if>
     <xsl:choose>
         <xsl:when test="@number='no'">
