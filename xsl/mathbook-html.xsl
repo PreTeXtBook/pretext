@@ -87,6 +87,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.knowl.project" select="'no'" />
 <xsl:param name="html.knowl.list" select="'no'" />
 <xsl:param name="html.knowl.remark" select="'no'" />
+<xsl:param name="html.knowl.objectives" select="'no'" />
 <xsl:param name="html.knowl.figure" select="'no'" />
 <xsl:param name="html.knowl.table" select="'no'" />
 <xsl:param name="html.knowl.listing" select="'no'" />
@@ -2041,7 +2042,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="objectives" mode="is-hidden">
-    <xsl:text>false</xsl:text>
+    <xsl:value-of select="$html.knowl.objectives = 'yes'" />
 </xsl:template>
 
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="is-hidden">
