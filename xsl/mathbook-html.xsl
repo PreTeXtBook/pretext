@@ -750,19 +750,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Introductions and Conclusions -->
-<!-- Simple containers, allowed before and after      -->
-<!-- explicit subdivisions, to introduce or summarize -->
-<!-- Title optional, typically just a few paragraphs  -->
-<!-- Also occur in "smaller" units such as an         -->
-<!-- "exercisegroup", so the HTML element varies      -->
-<!-- from a "section" to an "article"                 -->
+<!-- Simple containers, allowed before and after           -->
+<!-- explicit subdivisions, to introduce or summarize      -->
+<!-- Title optional, typically just a few paragraphs       -->
+<!-- Also occur in "smaller" units (elsewhere), so the     -->
+<!-- HTML element varies from a "section" to an "article"  -->
 
-<!-- Not knowlable as a component of bigger things,    -->
-<!-- a pure container                                  -->
-<!-- Tunnel the duplication flag, drop id if duplicate -->
-<xsl:template match="introduction|conclusion">
+<!-- Not knowlable as a component of bigger things, a      -->
+<!-- pure container.  This is the component of a division. -->
+<!-- Tunnel the duplication flag, drop id if duplicate     -->
+<xsl:template match="introduction[parent::*[&STRUCTURAL-FILTER;]]|conclusion[parent::*[&STRUCTURAL-FILTER;]]">
     <xsl:param name="b-original" select="true()" />
-    <xsl:element name="article">
+    <xsl:element name="section">
+        <!-- cheap, but it works -->
         <xsl:attribute name="class">
             <xsl:value-of select="local-name(.)" />
         </xsl:attribute>
@@ -780,25 +780,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates  select="*">
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
-    </xsl:element>
-</xsl:template>
-
-<!-- More specialized as a division                    -->
-<xsl:template match="introduction[parent::*[&STRUCTURAL-FILTER;]]|conclusion[parent::*[&STRUCTURAL-FILTER;]]">
-    <xsl:element name="section">
-        <xsl:attribute name="class">
-            <xsl:value-of select="local-name(.)" />
-        </xsl:attribute>
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id" />
-        </xsl:attribute>
-        <xsl:if test="title">
-            <h5 class="heading">
-                <xsl:apply-templates select="." mode="title-full" />
-                <span> </span>
-            </h5>
-        </xsl:if>
-        <xsl:apply-templates select="*"/>
     </xsl:element>
 </xsl:template>
 
@@ -3145,6 +3126,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- #################### -->
+<!-- Components of Blocks -->
+<!-- #################### -->
+
+<!-- Introductions and Conclusions -->
+<!-- As components of blocks.      -->
+<xsl:template match="introduction[not(parent::*[&STRUCTURAL-FILTER;])]|conclusion[not(parent::*[&STRUCTURAL-FILTER;])]">
+    <xsl:param name="b-original" select="true()" />
+    <xsl:element name="article">
+        <xsl:attribute name="class">
+            <xsl:value-of select="local-name(.)" />
+        </xsl:attribute>
+        <xsl:if test="$b-original">
+            <xsl:attribute name="id">
+                <xsl:apply-templates select="." mode="internal-id" />
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="title">
+            <h5 class="heading">
+                <xsl:apply-templates select="." mode="title-full" />
+                <span> </span>
+            </h5>
+        </xsl:if>
+        <xsl:apply-templates select="*">
+            <xsl:with-param name="b-original" select="$b-original" />
+        </xsl:apply-templates>
+    </xsl:element>
+</xsl:template>
 
 
 <!-- ########### -->

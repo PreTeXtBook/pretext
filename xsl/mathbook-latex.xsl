@@ -2751,7 +2751,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- typically just a few paragraphs                  -->
 <!-- TOD0: design a LaTeX environment to make this more semantic -->
 <xsl:template match="introduction[title]|conclusion[title]">
-    <xsl:apply-templates select="." mode="console-typeout" />
+    <xsl:if test="self::*[&STRUCTURAL-FILTER;]">
+        <xsl:apply-templates select="." mode="console-typeout" />
+    </xsl:if>
     <xsl:text>\</xsl:text>
     <xsl:apply-templates select="." mode="subdivision-name" />
     <xsl:text>*{</xsl:text>
@@ -2762,7 +2764,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Spacing comes from division header above, subdivision header below -->
 <xsl:template match="introduction">
-    <xsl:apply-templates select="." mode="console-typeout" />
+    <xsl:if test="self::*[&STRUCTURAL-FILTER;]">
+        <xsl:apply-templates select="." mode="console-typeout" />
+    </xsl:if>
     <xsl:apply-templates select="*" />
 </xsl:template>
 
@@ -2784,7 +2788,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "break" command is like also using a \par and encourages a page break     -->
 <!-- http://tex.stackexchange.com/questions/41476/lengths-and-when-to-use-them -->
 <xsl:template match="conclusion">
-    <xsl:apply-templates select="." mode="console-typeout" />
+    <xsl:if test="self::*[&STRUCTURAL-FILTER;]">
+        <xsl:apply-templates select="." mode="console-typeout" />
+    </xsl:if>
     <xsl:text>\bigbreak&#xa;</xsl:text>
     <xsl:apply-templates select="*" />
 </xsl:template>
