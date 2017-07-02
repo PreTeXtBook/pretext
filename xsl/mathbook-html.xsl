@@ -1424,19 +1424,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="sagecell" />
             </head>
             <body>
-                <!-- content, in xref style or hidden style -->
-                <!-- initiate tunneling duplication flag    -->
+                <!-- content, in xref style or hidden style     -->
+                <!-- initiate tunneling duplication flag here   -->
+                <!-- We send a flag to the "body" template      -->
+                <!-- indicating the call is at the outermost    -->
+                <!-- level of the knowl being constructed,      -->
+                <!-- rather than to manufacture a child element -->
+                <!-- Usually this parameter is ignored          -->
                 <xsl:choose>
                     <xsl:when test="$knowl-type = 'xref'">
                         <xsl:apply-templates select="." mode="body">
                             <xsl:with-param name="block-type" select="'xref'" />
                             <xsl:with-param name="b-original" select="false()" />
+                            <xsl:with-param name="b-top-level" select="true()" />
                         </xsl:apply-templates>
                     </xsl:when>
                     <xsl:when test="$knowl-type = 'hidden'">
                         <xsl:apply-templates select="." mode="body">
                             <xsl:with-param name="block-type" select="'hidden'" />
                             <xsl:with-param name="b-original" select="false()" />
+                            <xsl:with-param name="b-top-level" select="true()" />
                         </xsl:apply-templates>
                     </xsl:when>
                 </xsl:choose>
@@ -2985,19 +2992,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Displayed Single-Line Math, Unnumbered ("me") -->
 <!-- Never numbered, so never knowled              -->
 <xsl:template match="me" mode="body">
-    <!-- block-type parameter is ignored, since the          -->
-    <!-- representation never varies, no heading, no wrapper -->
-    <!-- Never numbered, so no xre knowl, so always original -->
+    <!-- block-type parameter is ignored, since the           -->
+    <!-- representation never varies, no heading, no wrapper  -->
+    <!-- Never numbered, so no xref knowl, so always original -->
+    <!-- top-level flag is critical for dropping punctuation  -->
     <!-- TODO: Included in same scheme as "men" for later consolidation -->
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="b-top-level" select="false()" />
     <!-- build and save for later manipulation                      -->
     <!-- Note: template for text nodes passes through mrow children -->
     <xsl:variable name="raw-latex">
         <xsl:apply-templates select="." mode="alignat-columns" />
         <xsl:apply-templates select="text()|var|fillin" />
-        <!-- look ahead to absorb immediate clause-ending punctuation -->
-        <xsl:apply-templates select="." mode="get-clause-punctuation" />
+        <!-- look ahead to absorb immediate clause-ending punctuation      -->
+        <!-- for original versions, and as a child of a duplicated element -->
+        <!-- but not in a duplicate that is entirely the display math      -->
+        <xsl:if test="$b-original or not($b-top-level)">
+            <xsl:apply-templates select="." mode="get-clause-punctuation" />
+        </xsl:if>
     </xsl:variable>
     <!-- we provide a newline for visual appeal -->
     <xsl:text>&#xa;</xsl:text>
@@ -3029,15 +3042,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="men" mode="body">
     <!-- block-type parameter is ignored, since the          -->
     <!-- representation never varies, no heading, no wrapper -->
+    <!-- top-level flag is critical for dropping punctuation -->
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="b-top-level" select="false()" />
     <!-- build and save for later manipulation                      -->
     <!-- Note: template for text nodes passes through mrow children -->
     <xsl:variable name="raw-latex">
         <xsl:apply-templates select="." mode="alignat-columns" />
         <xsl:apply-templates select="text()|var|fillin" />
-        <!-- look ahead to absorb immediate clause-ending punctuation -->
-        <xsl:apply-templates select="." mode="get-clause-punctuation" />
+        <!-- look ahead to absorb immediate clause-ending punctuation      -->
+        <!-- for original versions, and as a child of a duplicated element -->
+        <!-- but not in a duplicate that is entirely the display math      -->
+        <xsl:if test="$b-original or not($b-top-level)">
+            <xsl:apply-templates select="." mode="get-clause-punctuation" />
+        </xsl:if>
         <!-- label original -->
         <xsl:if test="$b-original">
             <xsl:apply-templates select="." mode="label" />
@@ -3077,8 +3096,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="md|mdn" mode="body">
     <!-- block-type parameter is ignored, since the          -->
     <!-- representation never varies, no heading, no wrapper -->
+    <!-- top-level flag is critical for dropping punctuation -->
+    <!-- and gets passed through to mrow "helper" templates  -->
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="b-top-level" select="false()" />
     <!-- We add a newline for visually appealing source -->
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>\begin{</xsl:text>
@@ -3089,6 +3111,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="mrow|intertext">
         <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="b-top-level" select="$b-top-level" />
     </xsl:apply-templates>
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
@@ -3108,15 +3131,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- stripped out in generic text processing.         -->
 <xsl:template match="md/mrow">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="b-top-level" select="false()" />
     <xsl:call-template name="sanitize-latex">
         <xsl:with-param name="text">
             <xsl:apply-templates select="text()|xref|var|fillin" />
         </xsl:with-param>
     </xsl:call-template>
     <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
-        <!-- look ahead to absorb immediate clause-ending punctuation -->
-        <!-- pass the context as enclosing environment (md)           -->
-        <xsl:apply-templates select="parent::md" mode="get-clause-punctuation" />
+        <!-- look ahead to absorb immediate clause-ending punctuation      -->
+        <!-- for original versions, and as a child of a duplicated element -->
+        <!-- but not in a duplicate that is entirely the display math      -->
+        <!-- pass the context as enclosing environment (md)                -->
+        <xsl:if test="$b-original or not($b-top-level)">
+            <xsl:apply-templates select="parent::md" mode="get-clause-punctuation" />
+        </xsl:if>
     </xsl:if>
     <xsl:if test="@number='yes'">
         <!-- label original -->
@@ -3133,15 +3161,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="mdn/mrow">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="b-top-level" select="false()" />
     <xsl:call-template name="sanitize-latex">
         <xsl:with-param name="text">
             <xsl:apply-templates select="text()|xref|var|fillin" />
         </xsl:with-param>
     </xsl:call-template>
     <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
-        <!-- look ahead to absorb immediate clause-ending punctuation -->
-        <!-- pass the context as enclosing environment (mdn)          -->
-        <xsl:apply-templates select="parent::mdn" mode="get-clause-punctuation" />
+        <!-- look ahead to absorb immediate clause-ending punctuation      -->
+        <!-- for original versions, and as a child of a duplicated element -->
+        <!-- but not in a duplicate that is entirely the display math      -->
+        <!-- pass the context as enclosing environment (mdn)               -->
+        <xsl:if test="$b-original or not($b-top-level)">
+            <xsl:apply-templates select="parent::mdn" mode="get-clause-punctuation" />
+        </xsl:if>
     </xsl:if>
     <xsl:choose>
         <xsl:when test="@number='no'">
