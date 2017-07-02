@@ -750,6 +750,10 @@ the xsltproc executable.
                     <activity xml:id="activity-with-hint-answer-solution">
                         <title>Hints, Answers, Solutions</title>
 
+                        <prelude>
+                            <p>This is quite the activity upcoming.  This is a <c>prelude</c> authored within the <c>activity</c> element, but visually just prior.</p>
+                        </prelude>
+
                         <statement>
                             <p>Another variant of these project-like items is to possibly include a <c>&lt;hint&gt;</c> and an <c>&lt;answer&gt;</c> before the <c>&lt;solution&gt;</c>.</p>
                         </statement>
@@ -765,6 +769,10 @@ the xsltproc executable.
                         <solution>
                             <p>Everything to get it all done, in detail.</p>
                         </solution>
+
+                        <postlude>
+                            <p>This was quite the activity just now.  This is a <c>postlude</c> authored within the <c>activity</c> element, but visually just after.</p>
+                        </postlude>
                     </activity>
 
                     <note xml:id="note-remark">

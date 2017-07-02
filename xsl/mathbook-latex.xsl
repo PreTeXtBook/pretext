@@ -2807,6 +2807,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" />
 </xsl:template>
 
+<!-- Statement -->
+<!-- Simple containier for blocks with structured contents -->
+<!-- Consumers are responsible for surrounding breaks      -->
+<xsl:template match="statement">
+    <xsl:apply-templates select="*" />
+</xsl:template>
+
+<!-- Prelude, Interlude, Postlude -->
+<!-- Very simple containiers, to help with movement, use -->
+<xsl:template match="prelude|interlude|postlude">
+    <xsl:text>\par&#xa;</xsl:text>
+    <xsl:apply-templates select="*" />
+</xsl:template>
+
+
 <!-- Paragraphs -->
 <!-- Non-structural, even if they appear to be -->
 <!-- Note: Presumes we never go below subsubsection  -->
@@ -3039,11 +3054,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\end{exerciselist}&#xa;</xsl:text>
         </xsl:when>
     </xsl:choose>
-</xsl:template>
-
-<!-- An exercise statement is just a container -->
-<xsl:template match="exercise/statement">
-    <xsl:apply-templates />
 </xsl:template>
 
 <!-- Assume various solution-types with non-blank line and newline -->

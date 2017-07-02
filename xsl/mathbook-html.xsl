@@ -2345,6 +2345,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="fn|blockquote|&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|case|proof|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|figure|table|listing|exercisegroup|exercise|hint|answer|solution|biblio|biblio/note|contributor" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
+    <!-- prelude beforehand, when original -->
+    <xsl:if test="$b-original">
+        <xsl:apply-templates select="prelude">
+            <xsl:with-param name="b-original" select="$b-original" />
+        </xsl:apply-templates>
+    </xsl:if>
     <xsl:variable name="body-elt">
         <xsl:apply-templates select="." mode="body-element" />
     </xsl:variable>
@@ -2530,6 +2536,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
         </div>
+    </xsl:if>
+    <!-- postlude afterward, when original -->
+    <xsl:if test="$b-original">
+        <xsl:apply-templates select="postlude">
+            <xsl:with-param name="b-original" select="$b-original" />
+        </xsl:apply-templates>
     </xsl:if>
 </xsl:template>
 
@@ -3153,6 +3165,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </xsl:element>
+</xsl:template>
+
+<!-- Prelude, Interlude, Postlude -->
+<!-- Very simple containiers, to help with movement, use -->
+<xsl:template match="prelude|interlude|postlude">
+    <xsl:param name="b-original" select="true()" />
+    <xsl:apply-templates select="*">
+        <xsl:with-param name="b-original" select="$b-original" />
+    </xsl:apply-templates>
 </xsl:template>
 
 
