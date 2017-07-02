@@ -3410,6 +3410,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Simpler than theorems, definitions, etc            -->
 <!-- Information comes from self, so slightly different -->
 <xsl:template match="&REMARK-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;">
+    <xsl:if test="statement">
+        <xsl:apply-templates select="prelude" />
+    </xsl:if>
     <xsl:text>\begin{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}</xsl:text>
@@ -3420,10 +3423,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]</xsl:text>
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="*"/>
+    <xsl:choose>
+        <!-- structured version first      -->
+        <!-- prelude?, statement, hint*,   -->
+        <!-- answer*, solution*, postlude? -->
+        <xsl:when test="statement">
+            <xsl:apply-templates select="statement"/>
+            <xsl:apply-templates select="hint"/>
+            <xsl:apply-templates select="answer"/>
+            <xsl:apply-templates select="solution"/>
+        </xsl:when>
+        <!-- Potential common mistake, no content results-->
+        <xsl:when test="prelude|hint|answer|solution|postlude">
+            <xsl:message>MBX:WARNING: a &lt;prelude&gt;, &lt;hint&gt;, &lt;answer&gt;, &lt;solution&gt;, or &lt;postlude&gt; in a remark-like, example-like, or project-like block will need to also be structured with a &lt;statement&gt;.  Content will be missing from output.</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:when>
+        <!-- unstructured, no need to avoid dangerous misunderstandings -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="*"/>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
+    <xsl:if test="statement">
+        <xsl:apply-templates select="postlude" />
+    </xsl:if>
 </xsl:template>
 
 <!-- An aside goes into a framed box             -->
@@ -3481,8 +3506,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{objectives}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- An example or project may have a statement/solution structure -->
-<xsl:template match="solution[parent::*[&EXAMPLE-FILTER; or &PROJECT-FILTER;]]">
+<xsl:template match="solution[parent::*[&EXAMPLE-FILTER;]]">
     <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
     <xsl:text>\textbf{</xsl:text>
     <xsl:call-template name="type-name">
@@ -3494,24 +3518,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- A project may have a hint -->
 <xsl:template match="hint[parent::*[&PROJECT-FILTER;]]">
-    <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
-    <xsl:text>\textbf{</xsl:text>
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="'hint'" />
-    </xsl:call-template>
-    <xsl:text>.}\quad </xsl:text>
-    <xsl:apply-templates />
+    <xsl:if test="$project.text.hint = 'yes'">
+        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
+        <xsl:text>\textbf{</xsl:text>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'hint'" />
+        </xsl:call-template>
+        <xsl:text>.}\quad </xsl:text>
+        <xsl:apply-templates />
+    </xsl:if>
 </xsl:template>
 
 <!-- A project may have an answer -->
 <xsl:template match="answer[parent::*[&PROJECT-FILTER;]]">
-    <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
-    <xsl:text>\textbf{</xsl:text>
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="'answer'" />
-    </xsl:call-template>
-    <xsl:text>.}\quad </xsl:text>
-    <xsl:apply-templates />
+    <xsl:if test="$project.text.answer = 'yes'">
+        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
+        <xsl:text>\textbf{</xsl:text>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'answer'" />
+        </xsl:call-template>
+        <xsl:text>.}\quad </xsl:text>
+        <xsl:apply-templates />
+    </xsl:if>
+</xsl:template>
+
+<!-- A project may have a solution -->
+<xsl:template match="solution[parent::*[&PROJECT-FILTER;]]">
+    <xsl:if test="$project.text.solution = 'yes'">
+        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
+        <xsl:text>\textbf{</xsl:text>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'solution'" />
+        </xsl:call-template>
+        <xsl:text>.}\quad </xsl:text>
+        <xsl:apply-templates />
+    </xsl:if>
 </xsl:template>
 
 <!-- List Wrapper -->

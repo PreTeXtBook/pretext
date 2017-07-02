@@ -2342,6 +2342,53 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="biblio" mode="heading-birth" />
 
 
+<xsl:template match="&PROJECT-LIKE;" mode="wrapped-content">
+    <xsl:param name="b-original" select="true()" />
+    <xsl:choose>
+        <!-- structured version first      -->
+        <!-- prelude?, statement, hint*,   -->
+        <!-- answer*, solution*, postlude? -->
+        <xsl:when test="statement">
+            <xsl:apply-templates select="statement">
+                <xsl:with-param name="b-original" select="$b-original" />
+            </xsl:apply-templates>
+            <!-- this could be a useful three-parameter template -->
+            <xsl:if test="(hint and $project.text.hint='yes') or (answer and $project.text.answer='yes') or (solution and $project.text.solution='yes')">
+                <!-- then can populate posterior -->
+                <div class="posterior">
+                    <xsl:if test="$project.text.hint='yes'">
+                        <xsl:apply-templates select="hint">
+                            <xsl:with-param name="b-original" select="$b-original" />
+                        </xsl:apply-templates>
+                    </xsl:if>
+                    <xsl:if test="$project.text.answer='yes'">
+                        <xsl:apply-templates select="answer">
+                            <xsl:with-param name="b-original" select="$b-original" />
+                        </xsl:apply-templates>
+                    </xsl:if>
+                    <xsl:if test="$project.text.solution='yes'">
+                        <xsl:apply-templates select="solution">
+                            <xsl:with-param name="b-original" select="$b-original" />
+                        </xsl:apply-templates>
+                    </xsl:if>
+                </div>
+            </xsl:if>
+        </xsl:when>
+        <!-- Potential common mistake, no content results-->
+        <xsl:when test="prelude|hint|answer|solution|postlude">
+            <xsl:message>MBX:WARNING: a &lt;prelude&gt;, &lt;hint&gt;, &lt;answer&gt;, &lt;solution&gt;, or &lt;postlude&gt; in a remark-like, example-like, or project-like block will need to also be structured with a &lt;statement&gt;.  Content will be missing from output.</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:when>
+        <!-- unstructured, no need to avoid dangerous misunderstandings -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="*">
+                <xsl:with-param name="b-original" select="$b-original" />
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
 <xsl:template match="fn|blockquote|&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|case|proof|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|figure|table|listing|exercisegroup|exercise|hint|answer|solution|biblio|biblio/note|contributor" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
@@ -2520,6 +2567,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:apply-templates>
                 </div>
             </xsl:when>
+            <!-- migrate elements here until none left -->
+            <xsl:when test="&PROJECT-FILTER;">
+                <xsl:apply-templates select="." mode="wrapped-content">
+                    <xsl:with-param name="b-original" select="$b-original" />
+                </xsl:apply-templates>
+            </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates select="*[not(self::hint or self::answer or self::solution or self::proof)]">
                     <xsl:with-param name="b-original" select="$b-original" />
@@ -2530,7 +2583,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- create posterior for appendages                  -->
     <!-- could condition on block too, rather than schema -->
     <!-- exercises have selectors, activities do not, think how to refactor this -->
-    <xsl:if test="(hint|answer|solution and not(self::exercise)) or proof or note">
+    <xsl:if test="(hint|answer|solution and not(self::exercise) and not(&PROJECT-FILTER;)) or proof or note">
         <div class="posterior">
             <xsl:apply-templates select="hint|answer|solution|proof|note">
                 <xsl:with-param name="b-original" select="$b-original" />
