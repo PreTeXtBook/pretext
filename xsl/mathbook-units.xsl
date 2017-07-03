@@ -160,6 +160,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- Distance per Volume                                                        -->
     <base full='milepergallon'     short='mpg'      siunitx='none' />
+    <base full='kilometerpergallon'     short='kpg'      siunitx='none' />
 
 </xsl:variable>
 
