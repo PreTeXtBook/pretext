@@ -1920,61 +1920,82 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- Paragraphs, with lists within -->
-<xsl:template match="p[ol or ul or dl]" mode="body">
+<!-- Paragraphs, with displays within                   -->
+<!-- Later, so a higher priority match                  -->
+<!-- Lists and display math are HTML blocks             -->
+<!-- and so should not be within an HTML paragraph.     -->
+<!-- We bust them out, and put the id for the paragraph -->
+<!-- on the first one, even if empty.                   -->
+<xsl:template match="p[ol|ul|dl|me|men|md|mdn]" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
     <xsl:if test="$block-type = 'xref'">
         <xsl:apply-templates select="." mode="heading-xref-knowl" />
     </xsl:if>
-    <!-- will later loop over lists within paragraph -->
-    <xsl:variable name="lists" select="ul|ol|dl" />
-    <!-- content prior to first list is exceptional   -->
-    <!-- possibly empty if a list happens immediately -->
-    <xsl:element name="p">
-        <!-- label original -->
-        <xsl:if test="$b-original">
-            <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="internal-id" />
-            </xsl:attribute>
-        </xsl:if>
-        <xsl:apply-templates select="$lists[1]/preceding-sibling::node()">
-            <xsl:with-param name="b-original" select="$b-original" />
-        </xsl:apply-templates>
-    </xsl:element>
-    <!-- for each list, output the list, plus trailing content -->
-    <xsl:for-each select="$lists">
-        <!-- do the list proper -->
+    <!-- will later loop over displays within paragraph -->
+    <xsl:variable name="displays" select="ul|ol|dl|me|men|md|mdn" />
+    <!-- all interesting nodes of paragraph, before first display -->
+    <xsl:variable name="initial" select="$displays[1]/preceding-sibling::node()[self::* or self::text()]" />
+    <!-- content prior to first display is exceptional  -->
+    <!-- first HTML paragraph gets id, even if empty    -->
+    <!-- otherwise, empty paragraphs are never produced -->
+    <xsl:if test="(count($initial) > 0) or $b-original">
+        <xsl:element name="p">
+            <xsl:if test="$b-original">
+                <!-- alternative for placing id, when empty? -->
+                <xsl:attribute name="id">
+                    <xsl:apply-templates select="." mode="internal-id" />
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:apply-templates select="$initial">
+                <xsl:with-param name="b-original" select="$b-original" />
+            </xsl:apply-templates>
+        </xsl:element>
+    </xsl:if>
+    <!-- for each display, output the display, plus trailing content -->
+    <xsl:for-each select="$displays">
+        <!-- do the display proper -->
         <xsl:apply-templates select=".">
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
-        <!-- look through remainder, all element and text nodes, and the next list -->
-        <xsl:variable name="rightward" select="following-sibling::node()[not(self::comment()) and not(self::processing-instruction())]" />
-        <xsl:variable name="next-list" select="following-sibling::*[self::ul or self::ol or self::dl][1]" />
+        <!-- look through remainder, all element and text nodes, and the next display -->
+        <xsl:variable name="rightward" select="following-sibling::node()[self::* or self::text()]" />
+        <xsl:variable name="next-display" select="following-sibling::*[self::ul or self::ol or self::dl or self::me or self::men or self::md or self::mdn][1]" />
         <xsl:choose>
-            <xsl:when test="$next-list">
-                <xsl:variable name="leftward" select="$next-list/preceding-sibling::node()[not(self::comment()) and not(self::processing-instruction())]" />
+            <xsl:when test="$next-display">
+                <xsl:variable name="leftward" select="$next-display/preceding-sibling::node()[self::* or self::text()]" />
                 <!-- device below forms set intersection -->
                 <xsl:variable name="common" select="$rightward[count(. | $leftward) = count($leftward)]" />
-                <!-- not if empty, no id on these -->
-                <!-- the first "p" got that above -->
-                <xsl:if test="$common">
-                    <xsl:element name="p">
-                        <xsl:apply-templates select="$common">
-                            <xsl:with-param name="b-original" select="$b-original" />
-                        </xsl:apply-templates>
-                    </xsl:element>
+                <!-- No id on these, as the first "p" got that    -->
+                <!-- Careful, punctuation after display math      -->
+                <!-- gets absorbed into display and so is a node  -->
+                <!-- that produces no content (cannot just count) -->
+                <xsl:variable name="common-content">
+                    <xsl:apply-templates select="$common">
+                        <xsl:with-param name="b-original" select="$b-original" />
+                    </xsl:apply-templates>
+                </xsl:variable>
+                <!-- XSLT 1.0: string value of $common-content RTF is just first node? -->
+                <!-- that is the most pressing case: trailing punctuation squashed     -->
+                <xsl:if test="not($common-content = '')">
+                    <p>
+                        <xsl:copy-of select="$common-content" />
+                    </p>
                 </xsl:if>
             </xsl:when>
             <xsl:otherwise>
-                <!-- finish the trailing content -->
-                <!-- but not if tere is not any  -->
-                <xsl:if test="$rightward">
-                    <xsl:element name="p">
-                        <xsl:apply-templates select="$rightward">
-                            <xsl:with-param name="b-original" select="$b-original" />
-                        </xsl:apply-templates>
-                    </xsl:element>
+                <!-- finish the trailing content, if nonempty -->
+                <xsl:variable name="common-content">
+                    <xsl:apply-templates select="$rightward">
+                        <xsl:with-param name="b-original" select="$b-original" />
+                    </xsl:apply-templates>
+                </xsl:variable>
+                <!-- XSLT 1.0: string value of $common-content RTF is just first node? -->
+                <!-- that is the most pressing case: trailing punctuation squashed     -->
+                <xsl:if test="not($common-content = '')">
+                    <p>
+                        <xsl:copy-of select="$common-content" />
+                    </p>
                 </xsl:if>
             </xsl:otherwise>
         </xsl:choose>
