@@ -576,11 +576,11 @@ the xsltproc executable.
                         <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men>.</p>
                     </statement>
                     <proof xml:id="proof-FTC-corollary">
-                        <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.<mdn>
+                        <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" /><mdn>
                             <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
                             <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
                             <mrow>&amp;=f(x)-0 = f(x)</mrow>
-                        </mdn></p>
+                        </mdn>.</p>
                     </proof>
                     <proof>
                         <p>You can have multiple proofs.  Here we just exercise displayed math with no automatic numbering, and an elective number on the middle equation.  For <latex /> output, with no number on the third line, the tombstone is placed on that line.<md>
