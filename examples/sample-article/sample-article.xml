@@ -255,6 +255,7 @@ the xsltproc executable.
             the href attribute will be the content you click on.  See the
             example near the discussion of Asymptote.
             -->
+            <p><men>x+y</men>.  <men>w+z</men></p>
 
             <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me>.  This is also a demonstration of the capabilities of <url href="http://mathbook.pugetsound.edu"><pretext /></url>.<notation>
                 <usage>\int_a^b\,f(x)\,dx</usage>
@@ -1057,9 +1058,9 @@ the xsltproc executable.
                 <description>this symbol could be used for lots of things, but we are just trying to make a super-long description to get it to wrap within the column where it belongs, which is sometimes set to a fixed width to accomodate really complicated explanations</description>
             </notation>
 
-            <p><latex /> has a device where you can interrupt a sequence of equations with a small amout of text and preserve the equation alignment on either side.  Here are two tests of that device, with aligned equations and non-aligned equations.  Study the source to see use and differences.  (The math does not make sense.)  Aligned and numbered first.</p>
+            <p><latex /> has a device where you can interrupt a sequence of equations with a small amout of text and preserve the equation alignment on either side.  Here are two tests of that device, with aligned equations and non-aligned equations.  Study the source to see use and differences.  (The math does not make sense.)</p>
 
-            <p><mdn>
+            <p>Aligned and numbered first.<mdn>
                 <mrow>{\mathcal L}(y')(s)  &amp;= s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s) &amp;= s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
                 <intertext>And so it follows that,</intertext>
@@ -1067,15 +1068,13 @@ the xsltproc executable.
                 <mrow>{\mathcal L}(y'')(s)^{5} &amp;= s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
             </mdn></p>
 
-            <p>Now with no numbers and no alignment.</p>
-
-            <p><md>
+            <p>Now with no numbers and no alignment.<md>
                 <mrow>{\mathcal L}(y')(s)  = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
                 <intertext>And so it follows that,</intertext>
                 <mrow>{\mathcal L}(y')(s)^{++} = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
-                <mrow>{\mathcal L}(y'')(s)^{5} = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
-            </md></p>
+                <mrow>{\mathcal L}(y'')(s)^{5} = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0)</mrow>
+            </md>.</p>
 
             <p>Tables can get quite complex.  Simple ones are simpler, such as this example of numerical computations for Euler's method.</p>
 
@@ -1311,6 +1310,8 @@ the xsltproc executable.
                     </mdn></p>.
                     <p>So.  Do not take any extra steps and let <latex /> figure out the breaks.  If you do not like a break, modify the <c>md</c> or <c>mdn</c> to go back to the AMSmath default behavior and not break at all.  Ever.  Or rather, go further and modify an individual <c>mrow</c> to suggest that it is a good place for a break.</p>
                 </example>
+
+                <p>This is a poorly-authored paragaph to test the conversion to <init>HTML</init>.  There are two displayed equations, separated by a period ending the first one's sentence, which should migrate into the display, and not leave behind an empty paragraph: <me>z+y = z</me>.  <me>a + b = c</me>.  This final sentence should remain, inside another <init>HTML</init> paragraph, without the second equation's period.</p>
             </subsection>
 
             <subsection>
