@@ -56,6 +56,11 @@
 <!-- to provide AnswerFormatHelp link.                            -->
 <xsl:param name="pg.answer.form.help" select="'yes'" />
 
+
+<!-- If the extraction style sheet is calling this style sheet, $static -->
+<!-- will be 'yes', and that influences certain templates here          -->
+<xsl:param name="static" />
+
 <!-- ################# -->
 <!-- File Organization -->
 <!-- ################# -->
@@ -802,7 +807,12 @@
 
 <xsl:template match= "webwork//m">
     <xsl:text>[`</xsl:text>
-    <xsl:call-template name="select-latex-macros"/>
+    <xsl:choose>
+        <xsl:when test="$static = 'yes'" />
+        <xsl:otherwise>
+            <xsl:call-template name="select-latex-macros"/>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:apply-templates select="text()|var" />
     <!-- look ahead to absorb immediate clause-ending punctuation -->
     <xsl:apply-templates select="." mode="get-clause-punctuation" />
@@ -815,7 +825,12 @@
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:text>&gt;&gt; [``</xsl:text>
-    <xsl:call-template name="select-latex-macros"/>
+    <xsl:choose>
+        <xsl:when test="$static = 'yes'" />
+        <xsl:otherwise>
+            <xsl:call-template name="select-latex-macros"/>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:apply-templates select="text()|var" />
     <!-- look ahead to absorb immediate clause-ending punctuation -->
     <xsl:apply-templates select="." mode="get-clause-punctuation" />
@@ -834,14 +849,24 @@
     <xsl:choose>
         <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
             <xsl:text>[``</xsl:text>
-            <xsl:call-template name="select-latex-macros"/>
+            <xsl:choose>
+                <xsl:when test="$static = 'yes'" />
+                <xsl:otherwise>
+                    <xsl:call-template name="select-latex-macros"/>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:text>\begin{aligned}&#xa;</xsl:text>
             <xsl:apply-templates select="mrow" />
             <xsl:text>\end{aligned}``]</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>[``</xsl:text>
-            <xsl:call-template name="select-latex-macros"/>
+            <xsl:choose>
+                <xsl:when test="$static = 'yes'" />
+                <xsl:otherwise>
+                    <xsl:call-template name="select-latex-macros"/>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:text>\begin{gathered}&#xa;</xsl:text>
             <xsl:apply-templates select="mrow" />
             <xsl:text>\end{gathered}``]</xsl:text>
