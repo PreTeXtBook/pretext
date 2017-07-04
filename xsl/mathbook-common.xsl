@@ -5356,129 +5356,129 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         </xsl:call-template>
     </xsl:if>
     <!--  -->
-    <xsl:if test="//image/@width[not(contains(., '%'))]">
+    <xsl:if test="$document-root//image/@width[not(contains(., '%'))]">
         <xsl:call-template name="deprecation-message">
             <xsl:with-param name="date-string" select="'2016-07-31'" />
             <xsl:with-param name="message" select="'@width attribute on &lt;image&gt; must be expressed as a percentage'" />
-            <xsl:with-param name="occurences" select="count(//image/@width[not(contains(., '%'))])" />
+            <xsl:with-param name="occurences" select="count($document-root//image/@width[not(contains(., '%'))])" />
         </xsl:call-template>
     </xsl:if>
     <!--  -->
-    <xsl:if test="//image[@height and not(ancestor::*[self::webwork])]">
+    <xsl:if test="$document-root//image[@height and not(ancestor::*[self::webwork])]">
         <xsl:call-template name="deprecation-message">
             <xsl:with-param name="date-string" select="'2016-07-31'" />
             <xsl:with-param name="message" select="'@height attribute on &lt;image&gt; is no longer effective and will be ignored, except within a WeBWorK exercise'" />
-            <xsl:with-param name="occurences" select="count(//image[@height and not(ancestor::*[self::webwork])])" />
+            <xsl:with-param name="occurences" select="count($document-root//image[@height and not(ancestor::*[self::webwork])])" />
         </xsl:call-template>
     </xsl:if>
     <!--  -->
-    <xsl:if test="//br">
+    <xsl:if test="$document-root//br">
         <xsl:call-template name="deprecation-message">
             <xsl:with-param name="date-string" select="'2016-05-23'" />
             <xsl:with-param name="message" select="'&lt;br&gt; can no longer be used to create multiline output; you may use &lt;line&gt; elements in select situations'" />
-            <xsl:with-param name="occurences" select="count(//br)" />
+            <xsl:with-param name="occurences" select="count($document-root//br)" />
         </xsl:call-template>
     </xsl:if>
     <!--  -->
-    <xsl:if test="//letter/frontmatter/from[not(line)]|//letter/frontmatter/to[not(line)]|//letter/backmatter/signature[not(line)]">
+    <xsl:if test="$document-root//letter/frontmatter/from[not(line)]|$document-root//letter/frontmatter/to[not(line)]|$document-root//letter/backmatter/signature[not(line)]">
         <xsl:call-template name="deprecation-message">
             <xsl:with-param name="date-string" select="'2016-05-23'" />
             <xsl:with-param name="message" select="'&lt;to&gt;, &lt;from&gt;, and &lt;signature&gt; of a letter must be structured as a sequence of &lt;line&gt;'" />
-            <xsl:with-param name="occurences" select="count(//letter/frontmatter/from[not(line)]|//letter/frontmatter/to[not(line)]|//letter/backmatter/signature[not(line)])" />
+            <xsl:with-param name="occurences" select="count($document-root//letter/frontmatter/from[not(line)]|$document-root//letter/frontmatter/to[not(line)]|$document-root//letter/backmatter/signature[not(line)])" />
         </xsl:call-template>
     </xsl:if>
     <!--  -->
-    <xsl:if test="//xref/@autoname='plural'">
+    <xsl:if test="$document-root//xref/@autoname='plural'">
         <xsl:call-template name="deprecation-message">
             <xsl:with-param name="date-string" select="'2016-04-07'" />
             <xsl:with-param name="message" select="'a cross-reference (&lt;xref&gt;) may not have an @autoname attribute set to plural.  There is no replacement, use content in the xref.'" />
-            <xsl:with-param name="occurences" select="count(//xref[@autoname='plural'])" />
+            <xsl:with-param name="occurences" select="count($document-root//xref[@autoname='plural'])" />
         </xsl:call-template>
     </xsl:if>
     <!--  -->
-    <xsl:if test="//ol/@label=''">
+    <xsl:if test="$document-root//ol/@label=''">
         <xsl:call-template name="deprecation-message">
             <xsl:with-param name="date-string" select="'2015-12-12'" />
             <xsl:with-param name="message" select="'an ordered list (&lt;ol&gt;) may not have empty labels, and numbering will be unpredictable.  Switch to an unordered list  (&lt;ul&gt;)'" />
-            <xsl:with-param name="occurences" select="count(//ol[@label=''])" />
+            <xsl:with-param name="occurences" select="count($document-root//ol[@label=''])" />
         </xsl:call-template>
     </xsl:if>
     <!--  -->
     <xsl:if test="$html.chunk.level != ''">
         <xsl:call-template name="deprecation-message">
-            <xsl:with-param name="date-string" select="'2015/06/26'" />
+            <xsl:with-param name="date-string" select="'2015-06-26'" />
             <xsl:with-param name="message" select="'the  html.chunk.level  parameter has been replaced by simply chunk.level  and now applies more generally'" />
             <xsl:with-param name="occurences" select="'1'" />
         </xsl:call-template>
     </xsl:if>
     <!-- tables are radically different, tgroup element is a marker -->
-    <xsl:if test="//tgroup">
+    <xsl:if test="$document-root//tgroup">
         <xsl:call-template name="deprecation-message">
-            <xsl:with-param name="date-string" select="'2015/03/17'" />
+            <xsl:with-param name="date-string" select="'2015-03-17'" />
             <xsl:with-param name="message" select="'tables are done quite differently, the &quot;tgroup&quot; element is indicative'" />
-            <xsl:with-param name="occurences" select="count(//tgroup)" />
+            <xsl:with-param name="occurences" select="count($document-root//tgroup)" />
         </xsl:call-template>
     </xsl:if>
     <!-- tables are radically different, entry to cell shows magnitude -->
-    <xsl:if test="//tgroup/thead/row/entry or //tgroup/tbody/row/entry">
+    <xsl:if test="$document-root//tgroup/thead/row/entry|$document-root//tgroup/tbody/row/entry">
         <xsl:call-template name="deprecation-message">
-            <xsl:with-param name="date-string" select="'2015/03/17'" />
+            <xsl:with-param name="date-string" select="'2015-03-17'" />
             <xsl:with-param name="message" select="'tables are done quite differently, the &quot;entry&quot; element should be replaced by the &quot;cell&quot; element'" />
-            <xsl:with-param name="occurences" select="count(//tgroup/thead/row/entry) + count(//tgroup/tbody/row/entry)" />
+            <xsl:with-param name="occurences" select="count($document-root//tgroup/thead/row/entry|$document-root//tgroup/tbody/row/entry)" />
         </xsl:call-template>
     </xsl:if>
     <!--  -->
     <!-- paragraph is renamed more accurately to paragraphs -->
-    <xsl:if test="//paragraph">
+    <xsl:if test="$document-root//paragraph">
         <xsl:call-template name="deprecation-message">
-            <xsl:with-param name="date-string" select="'2015/03/13'" />
+            <xsl:with-param name="date-string" select="'2015-03-13'" />
             <xsl:with-param name="message" select="'the &quot;paragraph&quot; element is deprecated, replaced by functional equivalent &quot;paragraphs&quot;'" />
-            <xsl:with-param name="occurences" select="count(//paragraph)" />
+            <xsl:with-param name="occurences" select="count($document-root//paragraph)" />
         </xsl:call-template>
     </xsl:if>
     <!-- tikz is generalized to latex-image-code -->
-    <xsl:if test="//tikz">
+    <xsl:if test="$document-root//tikz">
         <xsl:call-template name="deprecation-message">
-            <xsl:with-param name="date-string" select="'2015/02/20'" />
+            <xsl:with-param name="date-string" select="'2015-02-20'" />
             <xsl:with-param name="message" select="'the &quot;tikz&quot; element is deprecated, convert to &quot;latex-image-code&quot; inside &quot;image&quot;'" />
-            <xsl:with-param name="occurences" select="count(//tikz)" />
+            <xsl:with-param name="occurences" select="count($document-root//tikz)" />
         </xsl:call-template>
     </xsl:if>
     <!--  -->
     <!-- naked tikz, asymptote, sageplot are banned                -->
     <!-- typically these would be in a figure, but not necessarily -->
-    <xsl:if test="//figure/tikz or //figure/asymptote or //figure/sageplot">
+    <xsl:if test="$document-root//tikz[not(parent::image)]|$document-root//asymptote[not(parent::image)]|$document-root//sageplot[not(parent::image)]">
         <xsl:call-template name="deprecation-message">
-            <xsl:with-param name="date-string" select="'2015/02/08'" />
+            <xsl:with-param name="date-string" select="'2015-02-08'" />
             <xsl:with-param name="message" select="'&quot;tikz&quot;, &quot;asymptote&quot;, &quot;sageplot&quot;, elements must always be contained directly within an &quot;image&quot; element, rather than directly within a &quot;figure&quot; element'" />
-            <xsl:with-param name="occurences" select="count(//figure/tikz) + count(//figure/asymptote) + count(//figure/sageplot)" />
+            <xsl:with-param name="occurences" select="count($document-root//figure/tikz|$document-root//figure/asymptote|$document-root//figure/sageplot)" />
         </xsl:call-template>
     </xsl:if>
     <!--  -->
     <!-- once both circum and circumflex existed, circumflex won -->
-    <xsl:if test="//circum">
+    <xsl:if test="$document-root//circum">
         <xsl:call-template name="deprecation-message">
-            <xsl:with-param name="date-string" select="'2015/01/28'" />
+            <xsl:with-param name="date-string" select="'2015-01-28'" />
             <xsl:with-param name="message" select="'the &quot;circum&quot; element has been replaced by the &quot;circumflex&quot; element'" />
-            <xsl:with-param name="occurences" select="count(//circum)" />
+            <xsl:with-param name="occurences" select="count($document-root//circum)" />
         </xsl:call-template>
     </xsl:if>
     <!--  -->
     <!-- xref once had variant called "cite" -->
-    <xsl:if test="//cite">
+    <xsl:if test="$document-root//cite">
         <xsl:call-template name="deprecation-message">
-            <xsl:with-param name="date-string" select="'2014/06/25'" />
+            <xsl:with-param name="date-string" select="'2014-06-25'" />
             <xsl:with-param name="message" select="'the &quot;cite&quot; element is deprecated, convert to &quot;xref&quot;'" />
-            <xsl:with-param name="occurences" select="count(//cite)" />
+            <xsl:with-param name="occurences" select="count($document-root//cite)" />
         </xsl:call-template>
     </xsl:if>
     <!--  -->
     <!-- @filebase has been replaced in function by @xml:id -->
-    <xsl:if test="//@filebase">
+    <xsl:if test="$document-root//@filebase">
         <xsl:call-template name="deprecation-message">
-            <xsl:with-param name="date-string" select="'2014/05/04'" />
+            <xsl:with-param name="date-string" select="'2014-05-04'" />
             <xsl:with-param name="message" select="'the &quot;filebase&quot; attribute is deprecated, convert to &quot;xml:id&quot;'" />
-            <xsl:with-param name="occurences" select="count(//@filebase)" />
+            <xsl:with-param name="occurences" select="count($document-root//@filebase)" />
         </xsl:call-template>
     </xsl:if>
 </xsl:template>
