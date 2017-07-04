@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-
+<?xml version="1.0" encoding="UTF-8"?>
 <!--********************************************************************
 Copyright 2015 Robert A. Beezer
 
@@ -18,7 +17,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
-
 <!--
 To process this file, at the command-line issue:
 
@@ -37,7 +35,6 @@ test specific errors or warnings, and/or to test
 improvements to the error/warning/deprecation
 systems.
 -->
-
 <mathbook>
 
     <article xml:id="errors-and-warnings">
@@ -55,7 +52,7 @@ systems.
             <!-- Newer deprecations first  -->
             <p>Cite element subsumed into xref scheme (2014/06/25).</p>
             <p>Obsolete filebase attribute (2014/05/04).</p>
-            <p>Once upon a time there was a hyphen element for hyphenated<hyphen />words.</p>
+            <p>Once upon a time there was a hyphen element for hyphenated<hyphen/>words.</p>
         </section>
 
         <section filebase="obsolete-way-to-introduce-filename-strings">
@@ -65,17 +62,17 @@ systems.
 
         <section>
             <title>Cross-References</title>
-            <p>A <c>cite</c> is replaced directly by an <c>xref</c>, the obsolete use here would be functional <cite ref="errors-and-warning" /> and  <cite provisional="just-a-test" />.</p>
+            <p>A <c>cite</c> is replaced directly by an <c>xref</c>, the obsolete use here would be functional <cite ref="errors-and-warning"/> and  <cite provisional="just-a-test"/>.</p>
 
-            <p>A cross-reference to nowhere (warnings): <xref ref="pointer-to-nowhere-as-test" /></p>
+            <p>A cross-reference to nowhere (warnings): <xref ref="pointer-to-nowhere-as-test"/></p>
 
-            <p>A cross-reference with a bad/missing attribute: <xref perversional="spelled-bad" />.</p>
+            <p>A cross-reference with a bad/missing attribute: <xref perversional="spelled-bad"/>.</p>
 
-            <p>A cross-reference with a bad value for the autoname attribute: <xref ref="errors-and-warnings" autoname="maybe" />.</p>
+            <p>A cross-reference with a bad value for the autoname attribute: <xref ref="errors-and-warnings" autoname="maybe"/>.</p>
 
-            <p>The <q>detail</q> attribute of a cross-reference is only implemented for a reference to a bibliographic item: <xref ref="errors-and-warnings" detail="blah" />.</p>
+            <p>The <q>detail</q> attribute of a cross-reference is only implemented for a reference to a bibliographic item: <xref ref="errors-and-warnings" detail="blah"/>.</p>
 
-            <p>The <q>plural</q> attribute of a cross-reference is deprecated with no equivalent replacment: <xref ref="errors-and-warnings" autoname="plural" />.</p>
+            <p>The <q>plural</q> attribute of a cross-reference is deprecated with no equivalent replacment: <xref ref="errors-and-warnings" autoname="plural"/>.</p>
         </section>
 
         <section>
@@ -90,9 +87,9 @@ systems.
         <section xml:id="section-images">
             <title>Images</title>
 
-            <p>TikZ code no longer goes in a <c>tikz</c> element, but <c>latex-image-code</c> instead.  And similar graphics languages need to go into an <c>image</c>c> element.  We globally trap occurence inside <c>figure</c>c> without an intervening <c>image</c>, which may not be the only way this could occur.</p>
+            <p>TikZ code no longer goes in a <c>tikz</c> element, but <c>latex-image-code</c> instead.  And similar graphics languages need to go into an <c>image</c>c&gt; element.  We globally trap occurence inside <c>figure</c>c&gt; without an intervening <c>image</c>, which may not be the only way this could occur.</p>
 
-            <tikz />
+            <tikz/>
 
             <figure>
                 <tikz>
@@ -114,12 +111,12 @@ systems.
         <section>
             <title>Miscellaneous</title>
 
-            <p>A circumflex should still be obtainable with <c>circum</c>: <circum />.</p>
+            <p>A circumflex should still be obtainable with <c>circum</c>: <circum/>.</p>
 
             <paragraph>
                 <title>Groups of paragraphs</title>
 
-                <p>There has always been a sort of odd mini-sectioning element, called <c>paragraph</c> orignally since that is what it is in <latex />, but now better named as <c>paragraphs</c>.</p>
+                <p>There has always been a sort of odd mini-sectioning element, called <c>paragraph</c> orignally since that is what it is in <latex/>, but now better named as <c>paragraphs</c>.</p>
             </paragraph>
 
             <p>Tables once looked like this, but now are really different.</p>
@@ -170,9 +167,9 @@ systems.
         <section>
             <title>Catching Mis-Authored Code Chunks</title>
 
-            <p>The XML special characters are often misunderstood.  We can <q>see</q> when an element expecting pure text has a stray XML element.  This could happen when code outputs legitimate HTML elements via print statements.  But there are other possibilities.  Solution, generally, is to use an escaped <q>less than</q> (<c>&amp;lt;</c>) or use a CDATA section.  First a silly inline verbatim that has a problem: <c>foo <bar /> foo</c>, and a structured code display<cd>
+            <p>The XML special characters are often misunderstood.  We can <q>see</q> when an element expecting pure text has a stray XML element.  This could happen when code outputs legitimate HTML elements via print statements.  But there are other possibilities.  Solution, generally, is to use an escaped <q>less than</q> (<c>&amp;lt;</c>) or use a CDATA section.  First a silly inline verbatim that has a problem: <c>foo <bar/> foo</c>, and a structured code display<cd>
                 <cline>I'm fine.</cline>
-                <cline>I'm <broken />.</cline>
+                <cline>I'm <broken/>.</cline>
             </cd>Note, this is no help for stray <q>less than</q> in places like tikz code for diagrams.</p>
         </section>
 
@@ -191,17 +188,17 @@ systems.
         <section>
             <title>Prohibited Cross-References in Display Mathematics</title>
 
-            <p>Cross-references can be built into display mathematics, but they can only point to one item (<ie /> a comma-delimited list of targets is not supported).<md>
-                <mrow>x^2 + y^2 &amp;= z^2&amp;&amp;<xref ref="table-euler1" /></mrow>
-                <mrow>x^2 + y^2 &amp;= z^2&amp;&amp;<xref ref="section-images" /></mrow>
-                <mrow>a^2 + b^2 &amp;= c^2&amp;&amp;<xref ref="table-euler1, table-euler1" /></mrow>
+            <p>Cross-references can be built into display mathematics, but they can only point to one item (<ie/> a comma-delimited list of targets is not supported).<md>
+                <mrow>x^2 + y^2 &amp;= z^2&amp;&amp;<xref ref="table-euler1"/></mrow>
+                <mrow>x^2 + y^2 &amp;= z^2&amp;&amp;<xref ref="section-images"/></mrow>
+                <mrow>a^2 + b^2 &amp;= c^2&amp;&amp;<xref ref="table-euler1, table-euler1"/></mrow>
             </md></p>
         </section>
 
         <section>
             <title>WeBWorK</title>
 
-            <p>A WeBWorK problem will need a server.  You will get a warning if you do not specify one.  But you should not be warned just because you use the empty element to get the stylized version, like this: <webwork />.  So you can test warnings by commenting out one or the other instance.</p>
+            <p>A WeBWorK problem will need a server.  You will get a warning if you do not specify one.  But you should not be warned just because you use the empty element to get the stylized version, like this: <webwork/>.  So you can test warnings by commenting out one or the other instance.</p>
 
             <exercise>
                 <title>Mock WW Exercise</title>
@@ -221,13 +218,13 @@ systems.
             <p>The <c>height</c> attribute is ineffective on <c>image</c> elements.</p>
 
             <figure>
-                <image height="30%" source="images/foobar.png" />
+                <image height="30%" source="images/foobar.png"/>
             </figure>
 
             <p><c>width</c> attributes once could be dimensionless, but now need to be percentages.</p>
 
             <figure>
-                <image width="300" source="images/foobar.png" />
+                <image width="300" source="images/foobar.png"/>
             </figure>
 
         </section>
