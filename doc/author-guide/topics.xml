@@ -323,22 +323,6 @@
 
     </section>
 
-    <section xml:id="topic-build-in-smc">
-        <title>Building Output in SageMathCloud</title>
-
-        <p>SageMathCloud has <em>all</em> the tools you need to author with MathBook XML.  You will need an upgrade from a subscription to allow Internet connectivity, but at a minimum a colleague with a paid plan can spare you one, they are plentiful and meant to be shared.</p>
-
-        <ul>
-            <li><p>Text editor: reasonably good, partially XML syntax-aware.</p></li>
-            <li><p><c>git</c>: installed (so clone MathBook XML).</p></li>
-            <li><p><latex />: installed with many additional packages.</p></li>
-            <li><p>Python: installed, necessary for <c>mbx</c> script.</p></li>
-            <li><p>PDF viewer: handed off to your browser.</p></li>
-            <li><p>HTML viewer: convert to the <q>raw</q> URL and you can preview.</p></li>
-            <li><p>HTML server: nope.  Zip up output and host elsewhere.</p></li>
-        </ul>
-    </section>
-
 
     <!--
     <section xml:id="topic-">
