@@ -137,6 +137,71 @@
         <p>This script has a variety of options, so we document it fully in <xref ref="mbx-script" />.</p>
     </section>
 
+    <section xml:id="topic-updating-source">
+        <title>Keeping Your Source Up-to-Date</title>
+
+        <p>Once in a while it becomes necessary to adjust how the <pretext /> vocabulary is arranged, which involves adding or removing elements or attributes, or changing their behavior.  When elements or attributes are removed, or their relationships with other elements change, we say that certain items or behaviors are <term>deprecated</term>.  Fortunately, we can often automate the changes.</p>
+
+        <p>When there is a deprecation, a warning is added so that any conversion will report the presence of the old use in the console.  Sometimes we can preserve the old behavior, so there is no rush to make changes to your source.  Sometimes a change needs to be more urgent.  And frequently old behaviors do not get updates or bug-fixes.  Our warnings provide advice and information about what you need to do.  There are also announcements on public discussion groups, clearly marked as deprecations.  Also, the schema will change as part of any deprecation, so the old elements or old use will be reported.</p>
+
+        <p>The rest of this section describes a tool you can use to automate the process of adjusting your source when there are deprecations.  Generally, there is an <init>XSLT</init> stylesheet which will convert your <init>XML</init> source to another <init>XML</init> source file, fixing many of the deprecations automatically.  However, it is the nature of <init>XML</init> processing that your source file will undergo some cosmetic changes.  For example, the order of attributes is never relevant, so an <init>XML</init>-to-<init>XML</init> conversion is free to re-order the attributes of an element, perhaps different from how you like to author them.</p>
+
+        <p>So you have two choices:<ul>
+            <li>Process your source with any of the provided conversions and edit by hand until the warnings all disappear.</li>
+            <li>Run the deprecation-fixing conversion and accept the changes in <init>XML</init> formatting. (Read on for more specifics about these changes.)</li>
+        </ul></p>
+
+        <p>You perform this conversion using <c>xsl/utilities/fix-deprecations.xsl</c> on an <init>XML</init> source file in the usual way.  By default, output appears on the console, so you will want to specify an output file, for example with the <c>-o</c> flag of <c>xsltproc</c>.  You will discover a safety measure that requires you to also use a parameter, which you can pass in to <c>xsltproc</c> with the <c>-stringparam</c> command-line argument.</p>
+
+        <p>One choice of the parameter will result in just <q>copying</q> your source file and making all the cosmetic source format changes (we refer to this here as <term>normalization</term>).  This might be a useful thing to do first, all by itself, either as a first step, or an exploratory experiment.  The other value of the parameter will actually make changes, and report some information about progress.</p>
+
+        <p>Here are some notes:<ul>
+            <li><p>Be sure to experiment on copies of your source in a scratch directory.  Send your output to another directory.  When finished, use a <c>diff</c> tool to inspect the actual changes made.  You can record your eventual changes using revision-control (<xref ref="git" />).</p></li>
+            <li><p>Do not enable <c>xinclude</c> processing or else your several files will all be merged into one as output and any modularity of your source will be lost.</p></li>
+            <li><p>Every single bit of indentation and whitespace in your source will be preserved, except perhaps for some blank lines near the top of your source files, and limited exceptions noted below.</p></li>
+            <li><p>Attributes will likely be re-ordered, with normalized spacing between them.</p></li>
+            <li><p>Empty elements will have any spaces removed from the end of the tag.</p></li>
+            <li><p>Elements with no content may be written with a single empty tag.</p></li>
+            <li><p><abbr>CDATA</abbr> sections will be converted to text acceptable to the <init>XML</init> parser.  In other words, the <abbr>CDATA</abbr> wrapper will be removed and dangerous characters (<ampersand />, <less />, <greater />) will be replaced by equivalent entities (such as <c>&amp;amp;</c>).  If you have many matrices expressed in <latex /> and wrapped in a <abbr>CDATA</abbr>, this might be a big change.</p></li>
+            <li><p>The output files will be labeled as having <c>UTF-8</c> encoding.</p></li>
+            <li><p>It could be necessary to run this conversion more than once if deprecations build on one another.  In other words, we do not update specific conversions, but rely on regular use to keep source up-to-date.</p></li>
+            <li><p>It should be safe to run this conversion repeatedly, even after new deprecations are added.  In fact, it is encouraged.</p></li>
+            <li><p>The <pretext /> source file <c>examples/sample-errors-and-warnings.xml</c> is intentionally full of lots of bad stuff.  You can experiment with it, should you want to see interesting things happen.  We have already performed the normalization step, so you can concentrate on substantive changes.</p></li>
+        </ul></p>
+
+        <p>To process a directory with multiple source files, I would proceed as follows.  First make three temporary directories, <c>/tmp/original</c>, <c>/tmp/normal</c>, <c>/tmp/clean</c>, and copy my source files into <c>/tmp/original</c>.  Then, using a BASH shell, and inputting the command all on one long line,</p>
+
+        <console>
+            <prompt>rob@lava:/tmp/original$ </prompt>
+            <input>for f in *.xml; do xsltproc -o ../normal/$f -stringparam fix normalize</input>
+            <input>  /home/rob/mathbook/xsl/utilities/fix-deprecations.xsl $f; done</input>
+        </console>
+
+        <p>This will loop over every <init>XML</init> file in the current working directory, <c>/tmp/original</c>, running the normalization conversion on each file, with the output files using the same filename, but now being placed in the <c>/tmp/normal</c> directory.  If you change to the <c>/tmp</c> directory, then you can compare the results.  I like to use the <c>diff</c> utility provided by <c>git</c>.</p>
+
+        <console>
+            <prompt>rob@lava:/tmp$ </prompt>
+            <input>git diff original normal</input>
+        </console>
+
+        <p>Or, try this for a view that might be more informative.</p>
+
+        <console>
+            <prompt>rob@lava:/tmp$ </prompt>
+            <input>git diff --word-diff original normal</input>
+        </console>
+
+        <p>You may only do the above once, on your first use of this conversion stylesheet.  You will see how your style of authoring <init>XML</init> will undergo some minor changes.  We can repeat the above to actual make the changes necessary due to <pretext /> deprecations.  Make <c>/tmp/normal</c> the working directory.</p>
+
+        <console>
+            <prompt>rob@lava:/tmp/normal$ </prompt>
+            <input>for f in *.xml; do xsltproc -o ../clean/$f -stringparam fix all</input>
+            <input>  /home/rob/mathbook/xsl/utilities/fix-deprecations.xsl $f; done</input>
+        </console>
+
+        <p>And as above, you can now compare the <c>normal</c> and <c>clean</c> directories to see actual changes.  If you are satisfied with the changes, you can copy the files in the <c>clean</c> directory back onto your source files.  If you are using revision-control (you are, aren't you?) then you can make a commit that holds these changes (<xref ref="git" />).  Or maybe even make two commits, one from the normalization step, and a second with the substantive changes.</p>
+    </section>
+
     <section xml:id="processing-file-management">
         <title>File Management</title>
 
