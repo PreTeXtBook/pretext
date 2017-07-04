@@ -30,10 +30,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     xsltproc mathbook/xsl/mathbook-html.xsl minimal.xml                                      -->
 <!--     <browswer>  minimal.html                                                                 -->
 <!--                                                                                              -->
-<!-- (3) SageMathCloud worksheet (parameter causes a single file for output)                      -->
+<!-- (3) CoCalc worksheet (parameter causes a single file for output)                             -->
 <!--     REMOVE the "X" in the double dash (which is not legal in an XML comment)                 -->
 <!--     xsltproc -X-stringparam chunk.level 0 mathbook/xsl/mathbook-smc.xsl minimal.xml          -->
-<!--     <SageMathCloud> minimal.sagews                                                           -->
+<!--     <CoCalc> minimal.sagews                                                                  -->
 <!--                                                                                              -->
 <!-- (4) Sage doctesting                                                                          -->
 <!--     REMOVE the "X" in the double dash (which is not legal in an XML comment)                 -->

@@ -58,7 +58,7 @@
 
         <p>There are two components to processing your document, the MathBook XML stylesheets and the <c>xsltproc</c> program.  We work at the <term>command-line</term> inside of a <term>terminal</term> or <term>console</term>.  If you do not know what this is, it will seem very primitive at first.  Sometimes the old ways are the best ways.  This will be called a <q>Command Prompt</q> in Windows or a <q>Terminal</q> on a Mac.  In Linux it may be known as a <q>console</q> or a <q>shell</q>.  A tutorial, which is Linux-specific, can be found at <url href="http://ryanstutorials.net/linuxtutorial/">Ryan's Tutorials</url> and certainly others exist.</p>
 
-        <p>The operating system on a Mac is built on Unix, which is very similar to Linux, so most of the directions here will be little changed between the two.  Procedures can be very different in Windows.  One alternative is <url href="https://cloud.sagemath.com/">SageMathCloud</url> which provides a full Linux computer for free in your web browser, so that may be an excellent place for initial experiments.</p>
+        <p>The operating system on a Mac is built on Unix, which is very similar to Linux, so most of the directions here will be little changed between the two.  Procedures can be very different in Windows (<xref ref="windows-install-notes" />, <xref ref="windows-subsystem-linux" />).  One alternative is <url href="https://cocalc.com/">CoCalc</url> which provides a full Linux computer for free in your web browser, so that may be an excellent place for initial experiments (<xref ref="topic-build-in-cocalc" />).</p>
 
         <paragraphs>
             <title>Step 1: MathBook XML</title>
@@ -99,7 +99,7 @@
             <input>xsltproc /path/to/mathbook/xsl/mathbook-latex.xsl /path/to/quickstart.xml</input>
         </console>
 
-        <p>In the current working directory you should now find the file <c>article-1.tex</c> which you can process with <c>pdflatex</c> or <c>xelatex</c> at the command line as below.  If you do not have <latex /> installed on your system, you could process this file within a variety of online services, and SageMathCloud would be an obvious choice.</p>
+        <p>In the current working directory you should now find the file <c>article-1.tex</c> which you can process with <c>pdflatex</c> or <c>xelatex</c> at the command line as below.  If you do not have <latex /> installed on your system, you could process this file within a variety of online services, and CoCalc would be an obvious choice.</p>
 
         <console>
             <prompt>$ </prompt>
