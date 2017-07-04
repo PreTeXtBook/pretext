@@ -895,7 +895,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="//objectives">
         <xsl:text>%% objectives: early in a subdivision, introduction/list/conclusion&#xa;</xsl:text>
         <xsl:text>%% objectives environment and style&#xa;</xsl:text>
-        <xsl:text>\newenvironment{objectives}[1]{\noindent\rule{\linewidth}{0.1ex}\newline{{\large#1}\par\medskip}}{\par\noindent\rule{\linewidth}{0.1ex}\par\medskip}&#xa;</xsl:text>
+        <xsl:text>\newenvironment{objectives}[1]{\noindent\rule{\linewidth}{0.1ex}\newline{\textbf{{\large#1}}\par\smallskip}}{\par\noindent\rule{\linewidth}{0.1ex}\par\smallskip}&#xa;</xsl:text>
     </xsl:if>
     <!-- miscellaneous, not categorized yet -->
     <xsl:if test="//exercise or //list">
@@ -3492,9 +3492,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An objectives element holds a list, surrounded by introduction and conclusion -->
 <xsl:template match="objectives">
     <xsl:text>\begin{objectives}{</xsl:text>
-    <xsl:text>Objectives</xsl:text>  <!-- internationalize -->
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'objectives'" />
+    </xsl:call-template>
     <xsl:if test="title">
-        <xsl:text>: </xsl:text>  <!-- internationalize -->
+        <xsl:text>: </xsl:text>
         <xsl:apply-templates select="." mode="title-full" />
     </xsl:if>
     <xsl:text>}</xsl:text>
@@ -4091,9 +4093,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: fewer \leavevmode might be possible.      -->
 <!-- Test for first node of "p", then test for the   -->
 <!-- "p" being first node of some sectioning element -->
+<!-- The \leavevmode seems to introduce too much     -->
+<!-- vertical space when an "objectives" has no      -->
+<!-- introduction, and its absence does not seem      -->
+<!-- to cause any problems.                           -->
 <xsl:template match="ol">
     <xsl:choose>
-        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl)">
+        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl or parent::objectives)">
             <xsl:call-template name="leave-vertical-mode" />
         </xsl:when>
         <xsl:otherwise>
@@ -4125,7 +4131,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- choice for each such list             -->
 <xsl:template match="ul">
     <xsl:choose>
-        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl)">
+        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl or parent::objectives)">
             <xsl:call-template name="leave-vertical-mode" />
         </xsl:when>
         <xsl:otherwise>
@@ -4149,7 +4155,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="dl">
     <xsl:choose>
-        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl)">
+        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl or parent::objectives)">
             <xsl:call-template name="leave-vertical-mode" />
         </xsl:when>
         <xsl:otherwise>
