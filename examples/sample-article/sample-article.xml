@@ -255,7 +255,6 @@ the xsltproc executable.
             the href attribute will be the content you click on.  See the
             example near the discussion of Asymptote.
             -->
-            <p><men>x+y</men>.  <men>w+z</men></p>
 
             <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me>.  This is also a demonstration of the capabilities of <url href="http://mathbook.pugetsound.edu"><pretext /></url>.<notation>
                 <usage>\int_a^b\,f(x)\,dx</usage>
