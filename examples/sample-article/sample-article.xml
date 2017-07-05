@@ -3308,7 +3308,7 @@ the xsltproc executable.
 
             <sidebyside widths="45% 55%">
                 <caption>Some text from the US Constitution</caption>
-                <table>
+                <table xml:id="table-consitution-text">
                     <tabular valign="top" top="minor" bottom="minor" left="minor" right="minor">
                         <col />
                         <col width="50%" />
@@ -4377,13 +4377,13 @@ the xsltproc executable.
 
                 <sidebyside widths="25.67% 25%" xml:id="fig-sidebyside-global">
                     <caption>Side-by-side Figure, with subfigure children, no margin.</caption>
-                    <figure width="25.67%" xml:id="fig-sidebyside-subfigure">
+                    <figure xml:id="fig-sidebyside-subfigure">
                         <caption></caption>
                         <image source="images/cross-square.png">
                             <description>Trefoil image</description>
                         </image>
                     </figure>
-                    <figure width="25%">
+                    <figure>
                         <caption></caption>
                         <image source="images/cross-square.png"/>
                     </figure>
@@ -4391,11 +4391,11 @@ the xsltproc executable.
 
                 <sidebyside widths="50% 25%" margins="auto">
                     <caption>Side-by-side Figure, with subfigure children, automatic margin.</caption>
-                    <figure width="50%">
+                    <figure>
                         <caption>width=50<percent/></caption>
                         <image source="images/cross-square.png"/>
                     </figure>
-                    <figure width="25%">
+                    <figure>
                         <caption>width=25<percent/></caption>
                         <image source="images/cross-square.png"/>
                     </figure>
