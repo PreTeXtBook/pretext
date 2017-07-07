@@ -88,9 +88,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="chunk.level" select="''" />
 
 <!-- DO NOT USE -->
-<!-- HTML-specific deprecated 2015/06, but still functional -->
+<!-- HTML-specific deprecated 2015-06, but still functional -->
 <xsl:param name="html.chunk.level" select="''" />
-<!-- html.knowl.sidebyside is deprecated 2017/07  -->
+<!-- html.knowl.sidebyside is deprecated 2017-07  -->
 <!-- null value necessary for deprecation message -->
 <xsl:param name="html.knowl.sidebyside" select="''" />
 <!-- DO NOT USE -->
@@ -2082,10 +2082,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="$intermediate='true' or $chunk='true'">
             <xsl:apply-templates select="." mode="internal-id" />
             <xsl:value-of select="$file-extension" />
-            <!-- DEPRECATION: May 2015, replace with terminate=yes if present without an xml:id -->
-            <xsl:if test="@filebase">
-                <xsl:message>MBX:WARNING: filebase attribute (value=<xsl:value-of select="@filebase" />) is deprecated, use xml:id attribute instead</xsl:message>
-            </xsl:if>
+            <!-- DEPRECATION: May 2015, ignore silently here, warning in -common -->
+            <!-- could replace with terminate=yes if present without an xml:id   -->
+            <xsl:if test="@filebase" />
         </xsl:when>
         <!-- Halts since "mathbook" element will be chunk (or earlier) -->
         <xsl:otherwise>
@@ -2236,18 +2235,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <xsl:template match="image|video|jsxgraph" mode="image-width">
     <xsl:param name="width-override" select="''" />
-    <!-- every (?) image comes here for width, check for height (never was on video) -->
-    <xsl:if test="@height">
-        <xsl:message>MBX:WARNING: the @height attribute of an &lt;image&gt; is deprecated, it will be ignored, except within a WeBWorK exercise (2016-07-31)</xsl:message>
-        <xsl:apply-templates select="." mode="location-report" />
-    </xsl:if>
+    <!-- every (?) image comes here for width              -->
     <!-- test for author-provided poorly-constructed width -->
     <xsl:if test="@width">
         <xsl:variable name="improved-width" select="normalize-space(@width)" />
-        <xsl:if test="not(substring($improved-width, string-length($improved-width)) = '%')">
-            <xsl:message>MBX:ERROR: a @width attribute is not specified as a percentage (<xsl:value-of select="@width" />), the alternative form is deprecated (2016-07-31)</xsl:message>
-            <xsl:apply-templates select="." mode="location-report" />
-        </xsl:if>
     </xsl:if>
     <!-- overrides, global default, should be error-checked, sanitized elsewhere -->
     <xsl:choose>
@@ -3619,10 +3610,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:when test="contains(@label,'A')">A</xsl:when>
                 <xsl:when test="contains(@label,'i')">i</xsl:when>
                 <xsl:when test="contains(@label,'I')">I</xsl:when>
-                <xsl:when test="@label=''">
-                    <xsl:message>MBX:WARNING: empty labels on ordered list items are deprecated, switch to an unordered list (2015-12-12)</xsl:message>
-                    <xsl:apply-templates select="." mode="location-report" />
-                </xsl:when>
+                <!-- DEPRECATED 2015-12-12 -->
+                <xsl:when test="@label=''" />
                 <xsl:otherwise>
                     <xsl:message>MBX:ERROR: ordered list label (<xsl:value-of select="@label" />) not recognized</xsl:message>
                 </xsl:otherwise>
@@ -4586,11 +4575,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <!-- Local:  blank, yes/no, title                -->
     <!-- Global: yes/no, so 8 combinations           -->
     <xsl:variable name="local" select="@autoname" />
-    <!-- 2016-04-07 autoname="plural" never really was viable -->
-    <xsl:if test="$local='plural'">
-        <xsl:message>MBX:WARNING: "autoname" attribute with value "plural" is deprecated as of 2016-04-07, and there is no replacement</xsl:message>
-        <xsl:apply-templates select="." mode="location-report" />
-    </xsl:if>
+    <!-- DEPRECATED: 2016-04-07 autoname="plural" never really was viable -->
+    <xsl:if test="$local='plural'" />
     <xsl:choose>
         <!-- if xref has content, then use it, no matter what -->
         <xsl:when test="normalize-space(.)">
@@ -4722,10 +4708,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Appear both inline and moreso in author tools        -->
 <!-- TODO: Make cite/@provisional an error eventually     -->
 <xsl:template match="cite[@provisional]|xref[@provisional]">
-    <xsl:if test="self::cite">
-        <xsl:message>MBX:WARNING: &lt;cite provisional="<xsl:value-of select="@provisional" />"&gt; is deprecated, convert to &lt;xref provisional="<xsl:value-of select="@provisional" />"&gt;</xsl:message>
-        <xsl:apply-templates select="." mode="location-report" />
-    </xsl:if>
+    <!-- DEPRECATED: 2014-06-25 -->
+    <xsl:if test="self::cite" />
     <xsl:variable name="inline-warning">
         <xsl:value-of select="@provisional" />
     </xsl:variable>
@@ -4839,10 +4823,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- 2015/01/28: there was a mismatch between HTML and LaTeX names -->
 <!-- We only have this warning only here                           -->
+<!-- DEPRECATION: 2015-01-28 -->
 <xsl:template match="circum">
-    <xsl:text>\textasciicircum{}</xsl:text>
-    <xsl:message>MBX:WARNING: the "circum" element is deprecated (2015/01/28), use "circumflex"</xsl:message>
-    <xsl:apply-templates select="." mode="location-report" />
     <xsl:text>[CIRCUM-DEPRECATED]</xsl:text>
 </xsl:template>
 
