@@ -3308,7 +3308,7 @@ the xsltproc executable.
 
             <figure xml:id="table-consitution-text">
                 <caption>Some text from the US Constitution</caption>
-            <sidebyside widths="45% 55%">
+                <sidebyside widths="45% 55%">
                     <tabular valign="top" top="minor" bottom="minor" left="minor" right="minor">
                         <col />
                         <col width="50%" />
@@ -3319,16 +3319,16 @@ the xsltproc executable.
                         </row>
                     </tabular>
 
-                <tabular valign="top" top="minor" bottom="minor" left="minor" right="minor">
-                    <col />
-                    <col width="50%" />
-                    <row>
-                        <cell>A1.S2.C1</cell>
-                        <cell><p>The House of Representatives shall be composed of Members chosen every second Year by the People of the several States, and the Electors in each State shall have the Qualifications requisite for Electors of the most numerous Branch of the State Legislature.</p>
-                              <p>Should be 50<percent /> of 55<percent /> except perhaps on small screens.</p></cell>
-                    </row>
-                </tabular>
-            </sidebyside>
+                    <tabular valign="top" top="minor" bottom="minor" left="minor" right="minor">
+                        <col />
+                        <col width="50%" />
+                        <row>
+                            <cell>A1.S2.C1</cell>
+                            <cell><p>The House of Representatives shall be composed of Members chosen every second Year by the People of the several States, and the Electors in each State shall have the Qualifications requisite for Electors of the most numerous Branch of the State Legislature.</p>
+                                  <p>Should be 50<percent /> of 55<percent /> except perhaps on small screens.</p></cell>
+                        </row>
+                    </tabular>
+                </sidebyside>
             </figure>
 
             <p>Tables are formed in <latex /> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, we also use them as part of a strategy to accomodate <latex />'s special characters in verbatim text.  So the table below, two items per row, is just designed for <latex /> testing.  But of course, it should still render fine in other formats.  The five test cases are from <xref ref="section-urls" />, but without 50 alphabetic characters and 8 digits, which should not be problems in this context.  The first column's entries are <em>forced</em> to be wrapped in a <c>\multicolumn</c> by specifying their horizontal alignment.  The second column's entries <em>may</em> be wrapped in a <c>\multicolumn</c> depending on their contents (essentially verbatim characters given by escaped versions).</p>
@@ -4377,50 +4377,50 @@ the xsltproc executable.
 
                 <figure>
                     <caption>Side-by-side Figure, with subfigure children, no margin.</caption>
-                <sidebyside widths="25.67% 25%" xml:id="fig-sidebyside-global">
-                    <figure xml:id="fig-sidebyside-subfigure">
-                        <caption></caption>
-                        <image source="images/cross-square.png">
-                            <description>Trefoil image</description>
-                        </image>
-                    </figure>
-                    <figure>
-                        <caption></caption>
-                        <image source="images/cross-square.png"/>
-                    </figure>
-                </sidebyside>
+                    <sidebyside widths="25.67% 25%" xml:id="fig-sidebyside-global">
+                        <figure xml:id="fig-sidebyside-subfigure">
+                            <caption></caption>
+                            <image source="images/cross-square.png">
+                                <description>Trefoil image</description>
+                            </image>
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-square.png"/>
+                        </figure>
+                    </sidebyside>
                 </figure>
 
                 <figure>
                     <caption>Side-by-side Figure, with subfigure children, automatic margin.</caption>
-                <sidebyside widths="50% 25%" margins="auto">
-                    <figure>
-                        <caption>width=50<percent/></caption>
-                        <image source="images/cross-square.png"/>
-                    </figure>
-                    <figure>
-                        <caption>width=25<percent/></caption>
-                        <image source="images/cross-square.png"/>
-                    </figure>
-                </sidebyside>
+                    <sidebyside widths="50% 25%" margins="auto">
+                        <figure>
+                            <caption>width=50<percent/></caption>
+                            <image source="images/cross-square.png"/>
+                        </figure>
+                        <figure>
+                            <caption>width=25<percent/></caption>
+                            <image source="images/cross-square.png"/>
+                        </figure>
+                    </sidebyside>
                 </figure>
 
                 <figure>
                     <caption>Widths can be calculated automatically</caption>
-                <sidebyside>
-                    <figure>
+                    <sidebyside>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-square.png"/>
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-square.png"/>
+                        </figure>
+                        <figure>
                         <caption></caption>
                         <image source="images/cross-square.png"/>
-                    </figure>
-                    <figure>
-                        <caption></caption>
-                        <image source="images/cross-square.png"/>
-                    </figure>
-                    <figure>
-                    <caption></caption>
-                    <image source="images/cross-square.png"/>
-                    </figure>
-                </sidebyside>
+                        </figure>
+                    </sidebyside>
                 </figure>
 
                 <sidebyside widths="25% 25% 50%">
@@ -4463,10 +4463,10 @@ the xsltproc executable.
 
                 <figure>
                     <caption>Two equally-spaced (identical) images</caption>
-                <sidebyside>
-                    <image source="images/cross-square.png"/>
-                    <image source="images/cross-square.png"/>
-                </sidebyside>
+                    <sidebyside>
+                        <image source="images/cross-square.png"/>
+                        <image source="images/cross-square.png"/>
+                    </sidebyside>
                 </figure>
 
             </subsection>
@@ -4609,98 +4609,98 @@ the xsltproc executable.
 
                 <figure xml:id="table-sidebyside-global">
                     <caption>Side-by-side Table, with subtable children.</caption>
-                <sidebyside widths="50% 25%">
-                    <table xml:id="table-sidebyside-subtable">
-                        <caption>width=50<percent/></caption>
-                        <tabular top="minor" left="minor" halign="center">
-                            <col right="medium"/>
-                            <col right="major"/>
-                            <col />
-                            <!--  -->
-                            <row bottom="medium">
-                                <cell>1111</cell>
-                                <cell right="minor">2222</cell>
-                            </row>
-                            <row bottom="major">
-                                <cell>aaaa</cell>
-                                <cell right="medium">bbbb</cell>
-                            </row>
-                            <row>
-                                <cell bottom="minor">AAAA</cell>
-                                <cell bottom="major" right="major">BBBB</cell>
-                            </row>
-                        </tabular>
-                    </table>
-                    <table>
-                        <caption>width=25<percent/></caption>
-                        <tabular top="minor" left="minor" halign="center">
-                            <col right="medium"/>
-                            <col right="major"/>
-                            <col />
-                            <!--  -->
-                            <row bottom="medium">
-                                <cell>1111</cell>
-                                <cell right="minor">2222</cell>
-                            </row>
-                            <row bottom="major">
-                                <cell>aaaa</cell>
-                                <cell right="medium">bbbb</cell>
-                            </row>
-                            <row>
-                                <cell bottom="minor">AAAA</cell>
-                                <cell bottom="major" right="major">BBBB</cell>
-                            </row>
-                        </tabular>
-                    </table>
-                </sidebyside>
+                    <sidebyside widths="50% 25%">
+                        <table xml:id="table-sidebyside-subtable">
+                            <caption>width=50<percent/></caption>
+                            <tabular top="minor" left="minor" halign="center">
+                                <col right="medium"/>
+                                <col right="major"/>
+                                <col />
+                                <!--  -->
+                                <row bottom="medium">
+                                    <cell>1111</cell>
+                                    <cell right="minor">2222</cell>
+                                </row>
+                                <row bottom="major">
+                                    <cell>aaaa</cell>
+                                    <cell right="medium">bbbb</cell>
+                                </row>
+                                <row>
+                                    <cell bottom="minor">AAAA</cell>
+                                    <cell bottom="major" right="major">BBBB</cell>
+                                </row>
+                            </tabular>
+                        </table>
+                        <table>
+                            <caption>width=25<percent/></caption>
+                            <tabular top="minor" left="minor" halign="center">
+                                <col right="medium"/>
+                                <col right="major"/>
+                                <col />
+                                <!--  -->
+                                <row bottom="medium">
+                                    <cell>1111</cell>
+                                    <cell right="minor">2222</cell>
+                                </row>
+                                <row bottom="major">
+                                    <cell>aaaa</cell>
+                                    <cell right="medium">bbbb</cell>
+                                </row>
+                                <row>
+                                    <cell bottom="minor">AAAA</cell>
+                                    <cell bottom="major" right="major">BBBB</cell>
+                                </row>
+                            </tabular>
+                        </table>
+                    </sidebyside>
                 </figure>
 
                 <figure>
                     <caption>Widths can be calculated automatically.</caption>
-                <sidebyside>
-                    <table>
-                        <caption></caption>
-                        <tabular top="minor" left="minor" halign="center">
-                            <col right="medium"/>
-                            <col right="major"/>
-                            <col />
-                            <!--  -->
-                            <row bottom="medium">
-                                <cell>1111</cell>
-                                <cell right="minor">2222</cell>
-                            </row>
-                            <row bottom="major">
-                                <cell>aaaa</cell>
-                                <cell right="medium">bbbb</cell>
-                            </row>
-                            <row>
-                                <cell bottom="minor">AAAA</cell>
-                                <cell bottom="major" right="major">BBBB</cell>
-                            </row>
-                        </tabular>
-                    </table>
-                    <table>
-                        <caption></caption>
-                        <tabular top="minor" left="minor" halign="center">
-                            <col right="medium"/>
-                            <col right="major"/>
-                            <col />
-                            <!--  -->
-                            <row bottom="medium">
-                                <cell>1111</cell>
-                                <cell right="minor">2222</cell>
-                            </row>
-                            <row bottom="major">
-                                <cell>aaaa</cell>
-                                <cell right="medium">bbbb</cell>
-                            </row>
-                            <row>
-                                <cell bottom="minor">AAAA</cell>
-                                <cell bottom="major" right="major">BBBB</cell>
-                            </row>
-                        </tabular>
-                    </table>
-                </sidebyside>
+                    <sidebyside>
+                        <table>
+                            <caption></caption>
+                            <tabular top="minor" left="minor" halign="center">
+                                <col right="medium"/>
+                                <col right="major"/>
+                                <col />
+                                <!--  -->
+                                <row bottom="medium">
+                                    <cell>1111</cell>
+                                    <cell right="minor">2222</cell>
+                                </row>
+                                <row bottom="major">
+                                    <cell>aaaa</cell>
+                                    <cell right="medium">bbbb</cell>
+                                </row>
+                                <row>
+                                    <cell bottom="minor">AAAA</cell>
+                                    <cell bottom="major" right="major">BBBB</cell>
+                                </row>
+                            </tabular>
+                        </table>
+                        <table>
+                            <caption></caption>
+                            <tabular top="minor" left="minor" halign="center">
+                                <col right="medium"/>
+                                <col right="major"/>
+                                <col />
+                                <!--  -->
+                                <row bottom="medium">
+                                    <cell>1111</cell>
+                                    <cell right="minor">2222</cell>
+                                </row>
+                                <row bottom="major">
+                                    <cell>aaaa</cell>
+                                    <cell right="medium">bbbb</cell>
+                                </row>
+                                <row>
+                                    <cell bottom="minor">AAAA</cell>
+                                    <cell bottom="major" right="major">BBBB</cell>
+                                </row>
+                            </tabular>
+                        </table>
+                    </sidebyside>
                 </figure>
 
                 <!-- the "Tables" content interior to the xref will override any autonaming -->
@@ -4810,34 +4810,34 @@ the xsltproc executable.
 
                 <figure xml:id="figure-table-captioned">
                     <caption>Figure and Table, Captioned, so Sublabeled</caption>
-                <sidebyside>
-                    <table xml:id="table-next-figure-sublabeled">
-                        <caption>Table next to a Figure</caption>
-                        <tabular top="minor" left="minor" halign="center">
-                            <col right="medium"/>
-                            <col right="major"/>
-                            <col />
-                            <!--  -->
-                            <row bottom="medium">
-                                <cell>1111</cell>
-                                <cell right="minor">2222</cell>
-                            </row>
-                            <row bottom="major">
-                                <cell>aaaa</cell>
-                                <cell right="medium">bbbb</cell>
-                            </row>
-                            <row>
-                                <cell bottom="minor">AAAA</cell>
-                                <cell bottom="major" right="major">BBBB</cell>
-                             </row>
-                        </tabular>
-                    </table>
-                    <!--  -->
-                    <figure xml:id="figure-next-table-sublabeled">
-                        <caption>Figure next to a Table</caption>
-                        <image source="images/cross-square.png"/>
-                    </figure>
-                </sidebyside>
+                    <sidebyside>
+                        <table xml:id="table-next-figure-sublabeled">
+                            <caption>Table next to a Figure</caption>
+                            <tabular top="minor" left="minor" halign="center">
+                                <col right="medium"/>
+                                <col right="major"/>
+                                <col />
+                                <!--  -->
+                                <row bottom="medium">
+                                    <cell>1111</cell>
+                                    <cell right="minor">2222</cell>
+                                </row>
+                                <row bottom="major">
+                                    <cell>aaaa</cell>
+                                    <cell right="medium">bbbb</cell>
+                                </row>
+                                <row>
+                                    <cell bottom="minor">AAAA</cell>
+                                    <cell bottom="major" right="major">BBBB</cell>
+                                 </row>
+                            </tabular>
+                        </table>
+                        <!--  -->
+                        <figure xml:id="figure-next-table-sublabeled">
+                            <caption>Figure next to a Table</caption>
+                            <image source="images/cross-square.png"/>
+                        </figure>
+                    </sidebyside>
                 </figure>
             </subsection>
 
@@ -4972,39 +4972,39 @@ the xsltproc executable.
 
                 <figure>
                     <caption>Two named lists</caption>
-                <sidebyside widths="30% 60%" valign="top">
-                    <list>
-                        <title>Sea Life</title>
-                        <introduction>
-                            <p>Dr. Seuss again.</p>
-                        </introduction>
-                        <ul>
-                            <li>One fish</li>
-                            <li>Two fish</li>
-                            <li>Red fish</li>
-                            <li>Blue fish</li>
-                        </ul>
-                    </list>
-                    <list>
-                        <title>Color Shades</title>
-                        <index><main>colors</main><sub>shades</sub></index>
-                        <ol>
-                            <li><p>Blue<ol>
-                                <li>Light</li>
-                                <li>Navy</li>
-                                <li>Royal</li>
-                            </ol></p></li>
-                            <li><p>Red<ol>
-                                <li>Maroon</li>
-                                <li>Pink</li>
-                                <li>Shocking</li>
-                            </ol></p></li>
-                        </ol>
-                        <conclusion>
-                            <p>This ends our example.</p>
-                        </conclusion>
-                    </list>
-                </sidebyside>
+                    <sidebyside widths="30% 60%" valign="top">
+                        <list>
+                            <title>Sea Life</title>
+                            <introduction>
+                                <p>Dr. Seuss again.</p>
+                            </introduction>
+                            <ul>
+                                <li>One fish</li>
+                                <li>Two fish</li>
+                                <li>Red fish</li>
+                                <li>Blue fish</li>
+                            </ul>
+                        </list>
+                        <list>
+                            <title>Color Shades</title>
+                            <index><main>colors</main><sub>shades</sub></index>
+                            <ol>
+                                <li><p>Blue<ol>
+                                    <li>Light</li>
+                                    <li>Navy</li>
+                                    <li>Royal</li>
+                                </ol></p></li>
+                                <li><p>Red<ol>
+                                    <li>Maroon</li>
+                                    <li>Pink</li>
+                                    <li>Shocking</li>
+                                </ol></p></li>
+                            </ol>
+                            <conclusion>
+                                <p>This ends our example.</p>
+                            </conclusion>
+                        </list>
+                    </sidebyside>
                 </figure>
             </subsection>
 
@@ -5054,44 +5054,44 @@ the xsltproc executable.
                 <!-- https://excelwithbusiness.com/blog/post/web-design/say-hello-world-in-28-different-programming-languages -->
                 <figure>
                     <caption><q>Hello, World!</q> in Pascal and C++</caption>
-                <sidebyside widths="40% 50%">
-                    <pre>
-                        <cline>program HelloWorld;</cline>
-                        <cline>begin</cline>
-                        <cline>  WriteLn('Hello, world!');</cline>
-                        <cline>end.</cline>
-                    </pre>
-                    <pre>
-                    #include
+                    <sidebyside widths="40% 50%">
+                        <pre>
+                            <cline>program HelloWorld;</cline>
+                            <cline>begin</cline>
+                            <cline>  WriteLn('Hello, world!');</cline>
+                            <cline>end.</cline>
+                        </pre>
+                        <pre>
+                        #include
 
-                    int main()
-                    {
-                        std::cout &lt;&lt; "Hello, world!";
-                        return 0;
-                    }
-                    </pre>
-                </sidebyside>
+                        int main()
+                        {
+                            std::cout &lt;&lt; "Hello, world!";
+                            return 0;
+                        }
+                        </pre>
+                    </sidebyside>
                 </figure>
 
                 <figure>
                     <caption>A graph defined by data (from Keller and Trotter's <booktitle>Applied Combinatorics</booktitle>)</caption>
-                <sidebyside widths="20% 40%" valign="middle" margins="15%">
-                    <pre>
-                        graph1.txt
-                        9
-                        6 2
-                        1 5
-                        1 7
-                        6 8
-                        9 1
-                        4 3
-                        5 7
-                        1 3
-                        5 9
-                        7 9
-                    </pre>
-                    <image source="images/keller-trotter-graph" archive="pdf svg" />
-                </sidebyside>
+                    <sidebyside widths="20% 40%" valign="middle" margins="15%">
+                        <pre>
+                            graph1.txt
+                            9
+                            6 2
+                            1 5
+                            1 7
+                            6 8
+                            9 1
+                            4 3
+                            5 7
+                            1 3
+                            5 9
+                            7 9
+                        </pre>
+                        <image source="images/keller-trotter-graph" archive="pdf svg" />
+                    </sidebyside>
                 </figure>
             </subsection>
 
