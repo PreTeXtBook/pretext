@@ -5425,27 +5425,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and is a subcaption if sbs parent is captioned -->
 <xsl:template match="figure|table" mode="panel-caption">
     <xsl:param name="width" />
-    <xsl:if test="caption">
-        <xsl:if test="$sbsdebug">
-            <xsl:text>\fbox{</xsl:text>
-            <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
-        </xsl:if>
-        <xsl:text>\parbox[t]{</xsl:text>
-        <xsl:value-of select="substring-before($width,'%') div 100" />
-        <xsl:text>\textwidth}{</xsl:text>
-        <xsl:choose>
-            <xsl:when test="parent::sidebyside/parent::figure">
-                <xsl:apply-templates select="caption" mode="subcaption" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="caption" />
-            </xsl:otherwise>
-        </xsl:choose>
+    <xsl:if test="$sbsdebug">
+        <xsl:text>\fbox{</xsl:text>
+        <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
+    </xsl:if>
+    <xsl:text>\parbox[t]{</xsl:text>
+    <xsl:value-of select="substring-before($width,'%') div 100" />
+    <xsl:text>\textwidth}{</xsl:text>
+    <xsl:choose>
+        <xsl:when test="parent::sidebyside/parent::figure">
+            <xsl:apply-templates select="caption" mode="subcaption" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="caption" />
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>}</xsl:text>
+    <xsl:if test="$sbsdebug">
+        <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
         <xsl:text>}</xsl:text>
-        <xsl:if test="$sbsdebug">
-            <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
-            <xsl:text>}</xsl:text>
-        </xsl:if>
     </xsl:if>
     <xsl:if test="following-sibling::*">
         <xsl:text>&amp;&#xa;</xsl:text>
