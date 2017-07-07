@@ -4375,9 +4375,9 @@ the xsltproc executable.
 
                 <p>With no attributes on the <c>sidebyside</c>, there is no margin, there is no inter-panel space, and each panel is the same width.</p>
 
-                <figure>
+                <figure xml:id="fig-sidebyside-global">
                     <caption>Side-by-side Figure, with subfigure children, no margin.</caption>
-                    <sidebyside widths="25.67% 25%" xml:id="fig-sidebyside-global">
+                    <sidebyside widths="25.67% 25%">
                         <figure xml:id="fig-sidebyside-subfigure">
                             <caption></caption>
                             <image source="images/cross-square.png">
