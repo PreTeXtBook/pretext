@@ -342,7 +342,7 @@ the xsltproc executable.
                     <description>indefinite integral of <m>f(x)</m></description>
                 </notation>
                 <statement>
-                    <p>Suppose that <m>\frac{d}{dx}F(x)=f(x)</m>.  Then the <term>indefinite integral</term> of <m>f(x)</m> is <m>F(x)</m> and is written as <me>\int\,f(x)\,dx=F(x)</me></p>
+                    <p>Suppose that <m>\frac{d}{dx}F(x)=f(x)</m>.  Then the <term>indefinite integral</term> of <m>f(x)</m> is <m>F(x)</m> and is written as <me>\int\,f(x)\,dx=F(x)</me>.</p>
                 </statement>
             </definition>
 
