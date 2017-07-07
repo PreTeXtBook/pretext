@@ -34,6 +34,60 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecations that can be fixed with a transformation -->
 <!-- In reverse chronological order, with dates           -->
 
+<!-- 2017-07-05:  wrap a captioned side-by-side as a captioned figure -->
+<xsl:template match="sidebyside[caption]">
+    <figure>
+        <xsl:copy-of select="@xml:id" />
+        <!-- <xsl:apply-templates select="@*[not(self::@xml:id)]" /> -->
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:copy-of select="caption" />
+        <xsl:text>&#xa;    </xsl:text>
+        <sidebyside>
+            <xsl:apply-templates select="@*[name()!='xml:id'] | node()[not(self::caption)]" />
+        </sidebyside>
+        <xsl:text>&#xa;</xsl:text>
+    </figure>
+    <!--  -->
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2017-07-05</xsl:with-param>
+        <xsl:with-param name="message">Moving a &lt;<xsl:value-of select="local-name(.)" />&gt; with a &lt;caption&gt; into a new &lt;figure&gt; with the same &lt;caption&gt; and @xml:id</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- 2017-07-05:  convert top-level caption-less figure/table/listing to a side-by-side  -->
+<xsl:template match="figure[not(caption) and not(parent::sidebyside)] | table[not(caption) and not(parent::sidebyside)] | listing[not(caption) and not(parent::sidebyside)]">
+    <sidebyside>
+        <!-- migrate an image width attribute -->
+        <xsl:if test="self::figure and image[@width]">
+            <xsl:copy-of select="image/@width" />
+        </xsl:if>
+        <xsl:apply-templates select="@* | node()" />
+    </sidebyside>
+    <!--  -->
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2017-07-05</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;<xsl:value-of select="local-name(.)" />&gt; that is a child of a division, and has no &lt;caption&gt;, by an equivalent &lt;sidebyside&gt;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<!-- @width moves above, now trash it at origin -->
+<xsl:template match="figure[not(caption) and not(parent::sidebyside)]/image">
+    <image>
+        <xsl:apply-templates select="@*[name()!='width'] | node()" />
+    </image>
+</xsl:template>
+
+<xsl:template match="figure[not(caption) and parent::sidebyside] | table[not(caption) and parent::sidebyside] | listing[not(caption) and parent::sidebyside]">
+    <xsl:if test="@xml:id">
+        <xsl:comment>NOTE: @xml:id=<xsl:value-of select="@xml:id" /> from a &lt;<xsl:value-of select="local-name(.)" />&gt; was dropped while fixing deprecations.  The @xml:id may belong on an element just below, though it is unlikely a caption-less item was ever the target of a cross-reference.</xsl:comment>
+    </xsl:if>
+    <xsl:apply-templates select="node()" />
+    <!--  -->
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2017-07-05</xsl:with-param>
+        <xsl:with-param name="message">Replacing a &lt;<xsl:value-of select="local-name(.)" />&gt; that is a child of a division, and has no &lt;caption&gt;, by an equivalent &lt;sidebyside&gt;.  NOTE: attributes, such as an  @xml:id  might be lost in the process, see comment in the resulting source</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
 <!-- 2017-02-05:  replace hyphen element by hyphen-minus element -->
 <xsl:template match="hyphen">
     <hyphen-minus/>
