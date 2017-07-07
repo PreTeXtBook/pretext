@@ -1881,7 +1881,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
 
     <xsl:if test="frontmatter/colophon/edition" >
-        <xsl:text>\noindent{\bf </xsl:text>
+        <xsl:text>\noindent{\bfseries </xsl:text>
         <xsl:apply-templates select="frontmatter/colophon/edition" mode="type-name" />
         <xsl:text>}: </xsl:text>
         <xsl:apply-templates select="frontmatter/colophon/edition" />
@@ -1889,7 +1889,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 
     <xsl:if test="frontmatter/colophon/website" >
-        <xsl:text>\noindent{\bf </xsl:text>
+        <xsl:text>\noindent{\bfseries </xsl:text>
         <xsl:apply-templates select="frontmatter/colophon/website" mode="type-name" />
         <xsl:text>}: </xsl:text>
         <xsl:apply-templates select="frontmatter/colophon/website" />
