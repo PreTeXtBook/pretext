@@ -91,7 +91,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.knowl.figure" select="'no'" />
 <xsl:param name="html.knowl.table" select="'no'" />
 <xsl:param name="html.knowl.listing" select="'no'" />
-<xsl:param name="html.knowl.sidebyside" select="'no'" />
 <xsl:param name="html.knowl.webwork.inline" select="'no'" />
 <xsl:param name="html.knowl.webwork.sectional" select="'yes'" />
 <xsl:param name="html.knowl.exercise.inline" select="'yes'" />
@@ -1377,7 +1376,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- build xref-knowl, and optionally a hidden-knowl duplicate -->
-<xsl:template match="fn|li|men|md|mdn|p|blockquote|&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|&FIGURE-LIKE;|exercise|exercisegroup|webwork[*|@*]|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|biblio|biblio/note|contributor" mode="xref-knowl">
+<xsl:template match="fn|li|men|md|mdn|p|blockquote|&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|figure|table|listing|exercise|exercisegroup|webwork[*|@*]|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|biblio|biblio/note|contributor" mode="xref-knowl">
     <!-- a generally available cross-reference knowl file, of duplicated content -->
     <xsl:apply-templates select="." mode="manufacture-knowl">
         <xsl:with-param name="knowl-type" select="'xref'" />
@@ -2087,10 +2086,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="listing" mode="is-hidden">
     <xsl:value-of select="$html.knowl.listing = 'yes'" />
-</xsl:template>
-
-<xsl:template match="sidebyside" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.sidebyside = 'yes'" />
 </xsl:template>
 
 <xsl:template match="sidebyside/figure|sidebyside/table|side-byside/listing" mode="is-hidden">
@@ -3786,7 +3781,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- so must manage contents independent of other templates -->
         <xsl:if test="caption">
             <xsl:choose>
-                <xsl:when test="parent::sidebyside[caption] or ancestor::sbsgroup[caption]">
+                <xsl:when test="parent::sidebyside/parent::figure">
                     <span class="codenumber">
                         <xsl:apply-templates select="." mode="serial-number"/>
                     </span>
@@ -4627,7 +4622,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a sidebyside even though this is not necessary           -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|objectives|exercise|webwork|hint|answer|solution|exercisegroup|me|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|blockquote|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|figure|table|listing|list|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|objectives|exercise|webwork|hint|answer|solution|exercisegroup|me|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">

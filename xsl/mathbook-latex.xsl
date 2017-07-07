@@ -1041,7 +1041,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usepackage{float}&#xa;</xsl:text>
         <xsl:text>\usepackage[bf]{caption} % http://tex.stackexchange.com/questions/95631/defining-a-new-type-of-floating-environment &#xa;</xsl:text>
         <xsl:text>\usepackage{newfloat}&#xa;</xsl:text>
-        <xsl:if test="//sidebyside/caption">
+        <!-- captioned items subsidiary to a captioned figure -->
+        <xsl:if test="//figure/sidebyside/*[caption]">
             <xsl:text>\usepackage{subcaption}&#xa;</xsl:text>
             <xsl:text>\captionsetup[subfigure]{labelformat=simple}&#xa;</xsl:text>
             <xsl:text>\captionsetup[subtable]{labelformat=simple}&#xa;</xsl:text>
@@ -5420,8 +5421,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- a figure or table is the only way to introduce a      -->
-<!-- subcaption, switch on presence of caption in ancestor -->
+<!-- a figure or table must have a caption,         -->
+<!-- and is a subcaption if sbs parent is captioned -->
 <xsl:template match="figure|table" mode="panel-caption">
     <xsl:param name="width" />
     <xsl:if test="caption">
@@ -5433,7 +5434,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="substring-before($width,'%') div 100" />
         <xsl:text>\textwidth}{</xsl:text>
         <xsl:choose>
-            <xsl:when test="parent::sidebyside[caption] or ancestor::sbsgroup[caption]">
+            <xsl:when test="parent::sidebyside/parent::figure">
                 <xsl:apply-templates select="caption" mode="subcaption" />
             </xsl:when>
             <xsl:otherwise>
