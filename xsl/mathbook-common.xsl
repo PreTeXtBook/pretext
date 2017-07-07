@@ -2569,25 +2569,24 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:value-of select="$raw-subtree-level + $root-level" />
 </xsl:template>
 
-<!-- Note on tables and figures:                                         -->
-<!-- no caption, no number (mirrors LaTeX behavior),                     -->
-<!-- caption on a sibling indicates a subitem of a sidebyside,           -->
-<!-- where the subitem is subnumbered due to caption/number on container -->
-<!-- TODO: investigate entities for "number='no'" upgrade -->
-<!-- http://pimpmyxslt.com/articles/entity-tricks-part1/  -->
-<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise|figure|table|listing|sidebyside" mode="serial-number">
+<!-- Note on tables and figures:                      -->
+<!-- If these live in "sidebyside", which is in       -->
+<!-- turn contained in a "figure", then they will     -->
+<!-- earn a subcaption with a subnumber, so we ignore -->
+<!-- them in these counts of top-level numbered items -->
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise|figure|table|listing" mode="serial-number">
     <xsl:variable name="subtree-level">
         <xsl:apply-templates select="." mode="absolute-subtree-level">
             <xsl:with-param name="numbering-items" select="$numbering-theorems" />
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/backmatter/appendix" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/backmatter/appendix" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=3"><xsl:number from="subsection" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=4"><xsl:number from="subsubsection" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|table[not(preceding-sibling::caption or following-sibling::caption) and child::caption]|listing[caption]|sidebyside[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure)]|table[not(parent::sidebyside/parent::figure)]|listing[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure)]|table[not(parent::sidebyside/parent::figure)]|listing[caption]|" /></xsl:when>
+        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/backmatter/appendix" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure)]|table[not(parent::sidebyside/parent::figure)]|listing[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/backmatter/appendix" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure)]|table[not(parent::sidebyside/parent::figure)]|listing[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=3"><xsl:number from="subsection" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure)]|table[not(parent::sidebyside/parent::figure)]|listing[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=4"><xsl:number from="subsubsection" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure)]|table[not(parent::sidebyside/parent::figure)]|listing[caption]" /></xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for theorem number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>
@@ -2686,13 +2685,19 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Serial Numbers: Subfigures, Subtables -->
-<!-- A caption on a side-by-side indicates             -->
-<!-- subnumbering for enclosed figures and tables      -->
+<!-- Subcaptioning only happens with figures  -->
+<!-- or tables arranged in a sidebyside, which  -->
+<!-- is again contained inside a figure, the  -->
+<!-- element providing the overall caption -->
 <!-- The serial number is a sub-number, (a), (b), (c), -->
 <!-- *Always* with the parenthetical formatting        -->
+
+
 <!-- In this case the structure number is the          -->
 <!-- full number of the enclosing side-by-side         -->
-<xsl:template match="sidebyside[caption]/figure|sidebyside[caption]/table" mode="serial-number">
+
+
+<xsl:template match="figure/sidebyside/figure | figure/sidebyside/table" mode="serial-number">
     <xsl:text>(</xsl:text>
     <xsl:number format="a" count="figure|table"/>
     <xsl:text>)</xsl:text>
@@ -2728,20 +2733,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Empty string signifies not numbered -->
 <!-- We do provide a "xref number" of an -->
 <!-- exercisegroup, but otherwise not    -->
-<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|paragraph|blockquote|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|index-part|colophon|backmatter|exercisegroup|webwork|p|assemblage|aside|biographical|historical|case|contributor" mode="serial-number" />
+<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|paragraph|blockquote|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|index-part|colophon|backmatter|exercisegroup|webwork|p|sidebyside|assemblage|aside|biographical|historical|case|contributor" mode="serial-number" />
 
 <!-- If a list item has any ancestor that is not  -->
 <!-- an ordered list, then it gets no number      -->
 <xsl:template match="ul//li|dl//li" mode="serial-number" />
-
-<!-- A sidebyside without a caption *always*         -->
-<!-- indicates no number for the sidebyside.         -->
-<!-- (Relevant subcomponents get their own numbers.) -->
-<xsl:template match="sidebyside[not(caption)]" mode="serial-number" />
-
-<!-- Figures, tables, listings without captions do not get numbers either -->
-<!-- If they have a title, they can be referenced by that string          -->
-<xsl:template match="figure[not(caption)]|table[not(caption)]|listing[not(caption)]" mode="serial-number" />
 
 <!-- References in the backmatter are the "master" version -->
 <!-- The subdivision gets no number and the references     -->
@@ -2872,7 +2868,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Structure Numbers: Theorems, Examples, Projects, Inline Exercises, Figures -->
-<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise|figure|table|listing|sidebyside" mode="structure-number">
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise|figure|table|listing" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-theorems" />
         <xsl:with-param name="pad" select="'yes'" />
@@ -2890,10 +2886,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:apply-templates select="parent::*" mode="number" />
     <xsl:text>.</xsl:text>
 </xsl:template>
-<!-- Caption'ed side-by-side indicate subnumbering on enclosed figures and tables   -->
-<!-- So the structure number of subitems is the full number of enclosing sidebyside -->
-<xsl:template match="sidebyside[caption]/figure|sidebyside[caption]/table" mode="structure-number">
-    <xsl:apply-templates select="parent::*" mode="number" />
+<!-- Captioned items, arranged in a side-by-side,  -->
+<!-- then inside a captioned figure, earn a serial -->
+<!-- number that is a letter.  So their structure  -->
+<!-- number comes from their grandparent figure    -->
+<xsl:template match="figure/sidebyside/figure | figure/sidebyside/table" mode="structure-number">
+    <xsl:apply-templates select="parent::sidebyside/parent::figure" mode="number" />
     <xsl:text>.</xsl:text>
 </xsl:template>
 
