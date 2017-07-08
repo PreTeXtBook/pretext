@@ -303,6 +303,8 @@
                     <statement>
                         <p>Use the properties of exponents to simplify <m><var name="$expression" /></m>.</p>
 
+                        <instruction>To enter a power, use a <c>^</c>, as in <c>x^2</c> for <m>x^2</m>.</instruction>
+
                         <p><m><var name="$expression" />=</m><var name="$answer" evaluator="$evaluator" width="8" /></p>
 
                     </statement>

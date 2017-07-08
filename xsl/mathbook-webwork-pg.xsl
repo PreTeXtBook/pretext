@@ -326,6 +326,10 @@
         <xsl:if test=".//image[@pg-name]">
             <xsl:text>  "PGgraphmacros.pl",&#xa;</xsl:text>
         </xsl:if>
+        <!-- instructions for entering answers into HTML forms -->
+        <xsl:if test=".//instruction">
+            <xsl:text>  "PCCmacros.pl",&#xa;</xsl:text>
+        </xsl:if>
         <!-- ################### -->
         <!-- Parser Enhancements -->
         <!-- ################### -->
@@ -769,6 +773,17 @@
         <xsl:text>&#xa;</xsl:text>
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<xsl:template match="webwork//instruction">
+    <xsl:if test="preceding-sibling::p|preceding-sibling::image|preceding-sibling::tabular and not(child::*[1][self::ol] or child::*[1][self::ul])">
+        <xsl:call-template name="potential-list-indent" />
+    </xsl:if>
+    <xsl:text>[@KeyboardInstructions(q?</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>?)@]**</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ######### -->
