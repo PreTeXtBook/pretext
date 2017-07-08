@@ -2151,6 +2151,18 @@ the xsltproc executable.
 
                 <p>In the early stages of a writing project, it may be best not to track provisional image files built with <c>mbx</c> under version control, and just regenerate them periodically (see the <c>-r</c> option for <c>mbx</c>).  As a project matures, then it makes sense to put stable files under version control for collaborators and others.  In every case, managing graphics files (and other aspects of production), is much more pleasurable with a script (shell, Makefile, etc.)</p>
             </subsection>
+
+            <subsection>
+                <title>Caption Testing</title>
+
+                <p>A caption could be as substantial as a paragraph, here we test out one such example.</p>
+
+                <figure xml:id="figure-long-caption">
+                    <caption>A caption can be a whole paragraph with lots of technical details, and maybe a hyperlink to something external, such as <url href="http://mathbook.pugetsound.edu"><c>mathbook.pugetsound.edu</c></url>.  There could be some inline mathematics, such as <m>x^2 + y^2 = c^2</m>.  Would a knowl open here?  Recursively?  Let's see: <xref ref="figure-long-caption" />.  Display mathematics, side-by-sides, theorems, and lots of other things should be banned.  Footnotes sound like a bad idea.  Strange characters should be fine: <section-mark />.</caption>
+
+                    <image source="images/cross-square.png" width="20%" />
+                </figure>
+            </subsection>
         </section>
 
         <section>
@@ -5296,6 +5308,18 @@ the xsltproc executable.
                     </sidebyside>
                     <!--  -->
                 </sbsgroup>
+            </subsection>
+
+            <subsection>
+                <title>Testing Styling of Related Elements</title>
+
+                <p>This subsection has non-side-by-side structures, to aid with the effects of styling decisions across the range of possibilities.  First a <c>figure</c> with a <c>caption</c> holding a scaled image and a cross-reference for knowl testing: <xref ref="figure-traditional" autoname="yes" />.</p>
+
+                <figure xml:id="figure-traditional">
+                    <caption>A traditional figure</caption>
+
+                    <image source="images/cross-square.png" width="20%" />
+                </figure>
             </subsection>
         </section>
 
