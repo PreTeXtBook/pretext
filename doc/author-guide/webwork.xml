@@ -199,6 +199,7 @@
 
                 <statement>
                     <p>Compute <m><var name="$a" />+<var name="$b" /></m>.</p>
+                    <instruction>Type your answer without using the <c>+</c> sign.</instruction>
                     <p>The sum is <var name="$c" width="2" />.</p>
                 </statement>
 
@@ -222,6 +223,8 @@
             <p>If you are writing a multiple choice question and using <attribute>form="popup"</attribute> or <attribute>form="buttons"</attribute> in your <tag>var</tag>, instead of a <tag>static</tag> in the corresponding <tag>var</tag> from the <tag>setup</tag>, use a <tag>set</tag> tag, with <tag>member</tag> children. The <tag>member</tag> tags would be the multiple choice options, and each can have a <attribute>correct="yes"</attribute> attribute to identify the correct choice(s). There is some unavoidable redundancy between listing these <tag>member</tag> tags in the <tag>setup</tag> and listing them again in the actual <tag>pg-code</tag>.</p> 
 
             <p>If you are familiar with PG, then in your <tag>pg-code</tag> you might write a custom evaluator (a combination of a custom answer checker, post filters, pre filters, <etc />). If you store this similar to</p><pre>$my_evaluator = $answer -> cmp(...);</pre><p>then the <tag>var</tag> can have <attribute>evaluator="$my_evaluator"</attribute>.</p>
+
+            <p>An <tag>instruction</tag> is specific instructions for how the reader might type or otherwise electronically submit their answer. Contents of an <tag>instruction</tag> will be omitted from print and other static output forms. The <tag>instruction</tag> is a peer to <tag>p</tag>, but may only contain <q>short text</q> children.</p>
 
         </subsection>
 
