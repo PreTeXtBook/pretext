@@ -1747,7 +1747,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- is original flag pass-thru necessary?  always true()? -->
                 <!-- Hack: WW not working from embedded knowls,            -->
                 <!-- so go with external file of duplicated content        -->
-                <xsl:when test="$b-original and not(self::webwork)">
+                <xsl:when test="$b-original">
                     <xsl:apply-templates select="." mode="born-hidden">
                         <xsl:with-param name="b-original" select="$b-original" />
                     </xsl:apply-templates>
