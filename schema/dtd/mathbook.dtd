@@ -339,7 +339,7 @@
 <!-- Caption -->
 <!ELEMENT caption  (#PCDATA|%linear;)*>
 
-<!ELEMENT table   (title?, index*, caption?, tabular)>
+<!ELEMENT table   (title?, index*, caption, tabular)>
     <!ATTLIST table xml:id ID #IMPLIED>
     <!ATTLIST table width     CDATA                 #IMPLIED>
 
@@ -371,11 +371,11 @@
     <!ATTLIST cell colspan      CDATA                        #IMPLIED>
 
 <!-- Allowing multiple p allows for things like math displays -->
-<!ELEMENT figure  (title?, index*, caption?, (image|video|latex-image-code|p*)*)>
+<!ELEMENT figure  (title?, index*, caption, (image|video|sidebyside|latex-image-code|p*)*)>
     <!ATTLIST figure xml:id ID #IMPLIED>
     <!ATTLIST figure   width    CDATA                 #IMPLIED>
 
-<!ELEMENT listing  (title?, index*, caption?, (pre|program|console)*)>
+<!ELEMENT listing  (title?, index*, caption, (pre|program|console)*)>
     <!ATTLIST listing xml:id ID #IMPLIED>
     <!ATTLIST listing   width    CDATA                 #IMPLIED>
 
@@ -383,7 +383,7 @@
 <!-- Side By Side -->
 <!-- ############ -->
 
-<!ELEMENT sidebyside  (caption?, (figure|image|table|tabular|paragraphs|p|ol|ul|dl|list|pre)*)>
+<!ELEMENT sidebyside  (figure|image|table|tabular|paragraphs|p|ol|ul|dl|list|pre)*>
     <!ATTLIST sidebyside xml:id ID #IMPLIED>
     <!ATTLIST sidebyside   margins   CDATA                 #IMPLIED>
     <!ATTLIST sidebyside   width     CDATA                 #IMPLIED>
