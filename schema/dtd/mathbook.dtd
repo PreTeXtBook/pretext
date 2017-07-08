@@ -253,8 +253,12 @@
     <!ATTLIST project xml:id ID #IMPLIED>
 <!ELEMENT activity (title?, index*, ((%para;)*|(statement, hint*, answer*, solution*)))>
     <!ATTLIST activity xml:id ID #IMPLIED>
+    <!ATTLIST activity xml:base CDATA    #IMPLIED>
+    <!ATTLIST activity xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 <!ELEMENT exploration (title?, index*, ((%para;)*|(statement, hint*, answer*, solution*)))>
     <!ATTLIST exploration xml:id ID #IMPLIED>
+    <!ATTLIST exploration xml:base CDATA    #IMPLIED>
+    <!ATTLIST exploration xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 <!ELEMENT task (title?, index*, ((%para;)*|(statement, hint*, answer*, solution*)))>
     <!ATTLIST task xml:id ID #IMPLIED>
 <!ELEMENT investigation (title?, index*, ((%para;)*|(statement, hint*, answer*, solution*)))>
@@ -603,6 +607,7 @@
 <!ELEMENT exercises (title?, index*, introduction?, (exercise|exercisegroup|todo)*, conclusion?)>
     <!ATTLIST exercises xml:id   ID       #IMPLIED>
     <!ATTLIST exercises xml:base CDATA    #IMPLIED>
+    <!ATTLIST exercises xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">
 
 <!ELEMENT exercisegroup (introduction?, exercise+, conclusion?)>
     <!ATTLIST exercisegroup xml:id ID             #IMPLIED>
