@@ -645,6 +645,9 @@
 <!ELEMENT member (#PCDATA)>
     <!ATTLIST member correct   (yes|no)  #IMPLIED>
 
+<!-- instruction is allowed only within a webwork problem         -->
+<!ELEMENT instruction (#PCDATA|%linear;)*>
+
 <!ELEMENT pg-code (#PCDATA)>
 
 <!-- Video -->
