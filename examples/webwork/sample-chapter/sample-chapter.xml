@@ -859,7 +859,7 @@
                     <statement>
                         <p>Complete this multiplication table.</p>
 
-                        <table>
+                        <sidebyside>
                             <tabular bottom="minor" right="minor" halign="center">
                                 <col halign="right" right="major"/>
                                 <col />
@@ -880,11 +880,11 @@
                                     <cell><var name="$p[3]" form="none"/></cell>
                                 </row>
                             </tabular>
-                        </table>
+                        </sidebyside>
                     </statement>
 
                     <solution>
-                        <table>
+                        <sidebyside>
                             <tabular bottom="minor" right="minor" halign="center">
                                 <col halign="right" right="major"/>
                                 <col />
@@ -905,7 +905,7 @@
                                     <cell><m><var name="$p[3]"/></m></cell>
                                 </row>
                             </tabular>
-                        </table>
+                        </sidebyside>
 
                     </solution>
                 </webwork>
@@ -958,11 +958,11 @@
                     <statement>
                         <p>The graph below is a graph of <m>y=f(x)</m>. Use the graph to solve the equation <m>f(x)=1</m>.</p>
 
-                        <figure>
+                        <sidebyside>
                             <image pg-name="$gr">
                                 <description>a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$answer"/>,1) and (<var name="$second_x"/>,2) before leaving the graph moving more and more upward and to the right.</description>
                             </image>
-                        </figure>
+                        </sidebyside>
 
                         <p><m>x=</m> <var name="$answer" width="5"/></p>
                     </statement>
@@ -971,11 +971,11 @@
 
                         <p>The graph reveals that the only solution to <m>f(x)=1</m> is <m>x=<var name="$answer"/></m>.</p>
 
-                        <figure>
+                        <sidebyside>
                             <image pg-name="$solgr">
                                 <description>a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points ($answer,1) and ($second_x,2) before leaving the graph moving more and more upward and to the right; a horizontal line segment moves rightward from y=1 on the y-axis until it reaches a point on the curve; a vertical line segment moves down from this point to x=$answer on the x-axis.</description>
                             </image>
-                        </figure>
+                        </sidebyside>
 
                     </solution>
 
@@ -1188,7 +1188,7 @@
                     <statement>
                         <p>A table with minimal XML source.</p>
 
-                        <table>
+                        <sidebyside>
                             <tabular>
                                 <row>
                                     <cell>A</cell>
@@ -1206,7 +1206,7 @@
                                     <cell>I</cell>
                                 </row>
                             </tabular>
-                        </table>
+                        </sidebyside>
                         <p>Finish this table.</p>
 
                         <table>
@@ -1264,18 +1264,18 @@
                     </setup>
                     <stage>
                         <statement>
-                            <figure><image pg-name="$gr[0]" width="150" height="150" tex_size="150"/></figure>
-                            <figure><image pg-name="$gr[1]" width="150" height="150" tex_size="150"/></figure>
+                            <sidebyside><image pg-name="$gr[0]" width="150" height="150" tex_size="150"/></sidebyside>
+                            <sidebyside><image pg-name="$gr[1]" width="150" height="150" tex_size="150"/></sidebyside>
                         </statement>
                         <solution>
-                            <figure><image pg-name="$gr[2]" width="150" height="150" tex_size="150"/></figure>
+                            <sidebyside><image pg-name="$gr[2]" width="150" height="150" tex_size="150"/></sidebyside>
                         </solution>
                     </stage>
                     <stage>
                         <statement>
-                            <figure><image pg-name="$gr[3]" width="150" height="150" tex_size="150"/></figure>
-                            <figure><image pg-name="$gr[4]" width="150" height="150" tex_size="150"/></figure>
-                            <figure><image pg-name="$gr[5]" width="150" height="150" tex_size="150"/></figure>
+                            <sidebyside><image pg-name="$gr[3]" width="150" height="150" tex_size="150"/></sidebyside>
+                            <sidebyside><image pg-name="$gr[4]" width="150" height="150" tex_size="150"/></sidebyside>
+                            <sidebyside><image pg-name="$gr[5]" width="150" height="150" tex_size="150"/></sidebyside>
                         </statement>
                         <!-- No hints for now because with displayMode=tex, the anonymous problem rendering is not -->
                         <!--generating a hints section at all. Will have to work with Mike to investigate this.    -->
@@ -1283,7 +1283,7 @@
                             <figure><image pg-name="$gr[6]" width="150" height="150" tex_size="150"/></figure>
                         </hint>-->
                         <solution>
-                            <figure><image pg-name="$gr[7]" width="150" height="150" tex_size="150"/></figure>
+                            <sidebyside><image pg-name="$gr[7]" width="150" height="150" tex_size="150"/></sidebyside>
                         </solution>
                   </stage>
                 </webwork>
