@@ -168,36 +168,54 @@
             </ul></p>
         </example>
     </section>
-
+    <section xml:id="time-signatures">
+        <title>Time Signatures</title>
+        <p>Time signatures are created using <c>&lt;timesignature&gt;</c>, <c>&lt;meter&gt;</c>, <c>&lt;top&gt;</c>, and <c>&lt;bottom&gt;</c> tags, though not all are used in every case.</p>
+        <p>The <q>symbolic</q> time signatures<mdash/><timesignature symbol="common"/> and <timesignature symbol="cut"/><mdash/>are produced by using <c>&lt;timesignature symbol="common"/&gt;</c> and <c>&lt;timesignature symbol="cut"/&gt;</c> respectively.</p>
+        <p>We may create basic time signatures like <timesignature><top>3</top><bottom>4</bottom></timesignature> by wrapping the <q>top</q> number in a <c>&lt;top&gt;</c> tag and the <q>bottom</q> number in a <c>&lt;bottom&gt;</c> tag, all of which is wrapped in a <c>&lt;timesignature&gt;</c> tag. Within these we may also create more complicated time signatures by inserting an additive numerator (<eg/>, <c>2+3+2</c>) in the <c>&lt;top&gt;</c> tag to get a time signature like <timesignature><top>2+3+2</top><bottom>8</bottom></timesignature>.</p>
+        <p>In addition, we can create additive time signatures that use different denominators, such as <timesignature><meter><top>3</top><bottom>4</bottom></meter><meter><top>3</top><bottom>8</bottom></meter></timesignature> by wrapping each <q>sub time signature</q> (<ie/>, each portion of the time signature that could as a time signature on its own) in a <c>&lt;meter&gt;</c> tag. Thus, to get <timesignature><meter><top>3</top><bottom>4</bottom></meter><meter><top>3</top><bottom>8</bottom></meter></timesignature>, we would write:<cd>
+            <cline>&lt;timesignature&gt;</cline>
+            <cline>    &lt;meter&gt;</cline>
+            <cline>        &lt;top&gt;3&lt;/top&gt;</cline>
+            <cline>        &lt;bottom&gt;4&lt;/bottom&gt;</cline>
+            <cline>    &lt;/meter&gt;</cline>
+            <cline>    &lt;meter&gt;</cline>
+            <cline>        &lt;top&gt;3&lt;/top&gt;</cline>
+            <cline>        &lt;bottom&gt;8&lt;/bottom&gt;</cline>
+            <cline>    &lt;/meter&gt;</cline>
+            <cline>&lt;/timesignature&gt;</cline>
+        </cd></p>
+        <p>While not commonly used, time signatures such as <timesignature><meter><top>2+3</top><bottom>4</bottom></meter><meter><top>3</top><bottom>8</bottom></meter></timesignature> can be created simply by combining the previous two constructions in the natural way.</p>
+        <!-- As a note, time signatures like (2 1/2)/4 do not work in LilyGlyphs (the package used with XeLaTeX), presumably because the solidus/slash's location in the Feta font is not its canonical font location. -->
+    </section>
     <section xml:id="scores">
         <title>Scores</title>
 
         <introduction>
-            <p>A score may be represented in several formats: <init>PDF</init> output from a scorewriter (not a scan of printed sheet music), an <init>XML</init> file in the MusicXML format, online within MuseScore, or in Lilypond syntax.  We plan to support various output options and conversions, but at this writing support is rudimentary, but evolving.</p>
+            <p>A score may be represented in several formats: <init>PDF</init> output from <term>notation software</term> (not a scan of printed sheet music), an <init>XML</init> file in the MusicXML format, online within MuseScore, or in LilyPond syntax. We plan to support various output options and conversions, but at this writing support is rudimentary, but evolving.</p>
         </introduction>
 
         <subsection>
             <title><init>PDF</init> Source</title>
 
-            <p>Starting with a <init>PDF</init> that is <q>born digital</q> such as output from a <term>scorewriter</term> like Finale, it is possible to treat the score simply as we would any other image.  The <init>PDF</init> version will be incorporated into the <init>PDF</init> output when the <latex /> output is compiled, presuming the file is placed in the right location relative to the main <tex /> file.  For <init>HTML</init> output the utilities <c>pdfcrop</c> and <c>pdf2svg</c> will produce an <init>SVG</init> image that will work well.</p>
+            <p>Starting with a <init>PDF</init> that is <q>born digital</q>, such as output from <term>notation software</term> (<eg/>, Finale), it is possible to treat the score simply as we would any other image. The <init>PDF</init> version will be incorporated into the <init>PDF</init> output when the <latex/> output is compiled, presuming the file is placed in the right location relative to the main <tex/> file. For <init>HTML</init> output the utilities <c>pdfcrop</c> and <c>pdf2svg</c> will produce an <init>SVG</init> image that will work well.</p>
 
-            <p>This procedure will work best for very short scores, since it is treated as an indivisible image.  For <latex /> output, a longer score can lead to very poor page breaks, and large vertical gaps, especially in a preceding page.  Or worse, the score might be longer than a single page, for which there is no solution. The piece below is inadvisably long and will likely demonstrate this behavior, though it is shorter than a page.  Using scores authored, or converted to, Lilypond syntax should allow for better behavior of longer scores within a <latex /> document.</p>
+            <p>This procedure will work best for very short scores, since it is treated as an indivisible image. For <latex/> output, a longer score can lead to very poor page breaks, and large vertical gaps, especially in a preceding page. Or worse, the score might be longer than a single page, for which there is no (current) solution. The piece below is inadvisedly long and will likely demonstrate this behavior, though it is shorter than a page. Using scores authored, or converted to, LilyPond syntax should allow for better behavior of longer scores within a <latex/> document.</p>
 
             <figure>
                 <caption>Allegretto in F, Rob Hutchinson</caption>
-                <image source="images/allegretto-in-F-hutchinson" />
+                <image source="images/allegretto-in-F-hutchinson"/>
             </figure>
         </subsection>
 
         <subsection>
             <title>Embedded Interactive Musical Scores</title>
 
-            <p>A score hosted on <url href="http://musescore.com">MuseScore</url> is easy to specify with two ID numbers: the user number and the score number (examine the source for details).  Then an embedded interactive player is nearly trivial to embed into <init>HTML</init> output.  Work continues on a process to realize the score within <latex /> output.</p>
+            <p>A score hosted on <url href="http://musescore.com">MuseScore</url> is easy to specify with two ID numbers: the user number and the score number (examine the source for details). Then an embedded interactive player is nearly trivial to embed into <init>HTML</init> output. Work continues on a process to realize the score within <latex/> output.</p>
 
             <figure>
                 <caption><url href="https://musescore.com/user/141988/scores/3113841">String Quartet 1</url> by <url href="https://musescore.com/user/141988">Lily He</url></caption>
-
-                <score musescoreuser="141988" musescore="3113841" />
+                <score musescoreuser="141988" musescore="3113841"/>
             </figure>
         </subsection>
     </section>
