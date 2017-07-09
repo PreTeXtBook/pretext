@@ -6737,6 +6737,63 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x00F8;</xsl:text>
 </xsl:template>
 
+<!--                 -->
+<!-- Time Signatures -->
+<!--                 -->
+
+<!-- Common Time -->
+<xsl:template name="common-time">
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="12px" height="18px">
+        <title>4/4</title>
+        <desc>The symbolic time signature equivalent to 4/4.</desc>
+        <path unicode="&#x1D134;" transform="translate(0,9) scale(0.025,0.025)" d="M359 27c-49 0 -75 42 -75 75c0 38 27 77 72 77c4 0 9 0 14 -1c-28 37 -72 59 -120 59c-106 0 -113 -73 -113 -186v-51v-51c0 -113 7 -187 113 -187c80 0 139 70 158 151c2 7 7 10 12 10c6 0 13 -4 13 -12c0 -94 -105 -174 -183 -174c-68 0 -137 21 -184 70 c-49 51 -66 122 -66 193s17 142 66 193c47 49 116 69 184 69c87 0 160 -64 175 -150c1 -5 1 -9 1 -13c0 -40 -30 -72 -67 -72z"></path>
+    </svg>
+</xsl:template>
+
+<!-- Cut Time -->
+<xsl:template name="cut-time">
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="12px" height="18px">
+        <title>2/2</title>
+        <desc>The symbolic time signature equivalent to 2/2.</desc>
+        <path unicode="&#x1D135;" transform="translate(0,9) scale(0.025,0.025)" d="M359 27c-49 0 -75 42 -75 75c0 38 27 77 72 77c4 0 9 0 14 -1c-28 37 -72 59 -120 59h-13v-474c4 0 9 -1 13 -1c80 0 139 70 158 151c2 7 7 10 12 10c6 0 13 -4 13 -12c0 -94 -105 -174 -183 -174c-4 0 -9 1 -13 1v-78c0 -6 -4 -10 -10 -10h-17c-6 0 -10 4 -10 10v81 c-51 8 -99 29 -134 66c-49 51 -66 122 -66 193s17 142 66 193c35 37 83 58 134 66v81c0 6 4 10 10 10h17c6 0 10 -4 10 -10v-78h13c87 0 160 -64 175 -150c1 -5 1 -9 1 -13c0 -40 -30 -72 -67 -72zM200 -230v460c-58 -22 -63 -87 -63 -179v-51v-51c0 -92 5 -157 63 -179z"></path>
+    </svg>
+</xsl:template>
+
+<!-- Numeric Time Signatures -->
+<!-- Note: As of now, the numeric time signatures produced by pdfLaTeX are rather ugly -->
+<!-- If using timesignatures, it is HIGHLY recommended to use XeLaTeX for PDF creation -->
+<xsl:template match="timesignature">
+    <xsl:choose>
+        <xsl:when test="@symbol = 'common'">
+            <xsl:call-template name="common-time"/>
+        </xsl:when>
+        <xsl:when test="@symbol = 'cut'">
+            <xsl:call-template name="cut-time"/>
+        </xsl:when>
+        <xsl:when test="not(meter)">
+            <xsl:call-template name="single-meter"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="meter">
+    <xsl:text>(</xsl:text>
+    <xsl:call-template name="single-meter"/>
+    <xsl:text>)</xsl:text>
+    <xsl:if test="following-sibling::meter">
+        <xsl:text>+</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template name="single-meter">
+    <xsl:value-of select="top"/>
+    <xsl:text>/</xsl:text>
+    <xsl:value-of select="bottom"/>
+</xsl:template>
+
 <!-- Raw Bibliographic Entry Formatting              -->
 <!-- Markup really, not full-blown data preservation -->
 
