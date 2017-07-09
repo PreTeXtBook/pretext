@@ -1224,7 +1224,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\poemlineright}[1]{{\raggedleft{#1}\par}\vspace{-\parskip}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Music -->
-    <xsl:if test="//n or //scaledeg or //chord">
+    <xsl:if test="//n or //scaledeg or //chord or //timesignature">
         <xsl:text>%% Musical Symbol Support&#xa;</xsl:text>
         <xsl:text>\ifthenelse{\boolean{xetex}}{&#xa;</xsl:text>
         <xsl:text>%% begin: xelatex-specific configuration&#xa;</xsl:text>
@@ -1232,6 +1232,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\lilyGlobalOptions{scale=0.8}&#xa;</xsl:text>
         <!-- Create alias to lilyglyphs command with common name -->
         <xsl:text>\newcommand*{\doubleflat}{\flatflat}&#xa;</xsl:text>
+        <xsl:text>\newcommand*{\meterC}{\lilyTimeC{}}&#xa;</xsl:text>
+        <xsl:text>\newcommand*{\meterCHalf}{\lilyTimeCHalf{}}&#xa;</xsl:text>
+        <xsl:text>\newcommand*{\timeSignature}[2]{\lilyTimeSignature[scale=1.25]{#1}{#2}}&#xa;</xsl:text>
+        <xsl:text>\newcommand*{\timeSignatureGroup}[1]{#1}&#xa;</xsl:text>
+        <xsl:text>\newcommand*{\timeSignaturePlus}{\lilyText[scale=1.875,raise=-0.25]{+}}&#xa;</xsl:text>
         <xsl:text>%% end: xelatex-specific configuration&#xa;</xsl:text>
         <xsl:text>}{&#xa;</xsl:text>
         <xsl:text>%% begin: pdflatex-specific configuration&#xa;</xsl:text>
@@ -1251,6 +1256,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\renewcommand*\sharp{\raisebox{0.5ex}{\usefont{U}{musix}{m}{n}\selectfont{4}}}&#xa;</xsl:text>
         <xsl:text>\newcommand*\doublesharp{\raisebox{0.5ex}{\usefont{U}{musix}{m}{n}\selectfont{5}}}&#xa;</xsl:text>
         <xsl:text>\renewcommand*\natural{\raisebox{0.5ex}{\usefont{U}{musix}{m}{n}\selectfont{6}}}&#xa;</xsl:text>
+        <xsl:text>\newcommand*\meterC{\raisebox{0.65ex}{\usefont{U}{musix}{m}{n}\selectfont{S}}}&#xa;</xsl:text>
+        <xsl:text>\newcommand*\meterCHalf{\meterC{\kern-0.45ex}\rule[-0.3ex]{0.1ex}{1.9ex}{\kern0.5ex}}&#xa;</xsl:text>
+        <xsl:text>\newcommand*{\timeSignature}[2]{\ensuremath{\genfrac{}{}{0pt}{1}{#1}{#2}}}&#xa;</xsl:text>
+        <xsl:text>\newcommand*{\timeSignatureGroup}[1]{\(#1\)}&#xa;</xsl:text>
+        <xsl:text>\newcommand*{\timeSignaturePlus}{+}&#xa;</xsl:text>
         <xsl:text>%% end: pdflatex-specific configuration&#xa;</xsl:text>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
@@ -7365,6 +7375,55 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Double Flat -->
 <xsl:template name="doubleflat">
     <xsl:text>{\doubleflat}</xsl:text>
+</xsl:template>
+
+<!-- Time Signatures -->
+
+<!-- Common Time -->
+<xsl:template name="common-time">
+    <xsl:text>{\meterC}</xsl:text>
+</xsl:template>
+
+<!-- Cut Time -->
+<xsl:template name="cut-time">
+    <xsl:text>{\meterCHalf}</xsl:text>
+</xsl:template>
+
+<!-- Numeric Time Signatures -->
+<!-- Note: As of now, the numeric time signatures produced by pdfLaTeX are rather ugly -->
+<!-- If using timesignatures, it is HIGHLY recommended to use XeLaTeX for PDF creation -->
+<xsl:template match="timesignature">
+    <xsl:choose>
+        <xsl:when test="@symbol = 'common'">
+            <xsl:call-template name="common-time"/>
+        </xsl:when>
+        <xsl:when test="@symbol = 'cut'">
+            <xsl:call-template name="cut-time"/>
+        </xsl:when>
+        <xsl:when test="not(meter)">
+            <xsl:call-template name="single-meter"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\timeSignatureGroup{</xsl:text>
+            <xsl:apply-templates/>
+            <xsl:text>}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="meter">
+    <xsl:call-template name="single-meter"/>
+    <xsl:if test="following-sibling::meter">
+        <xsl:text>{\timeSignaturePlus}</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template name="single-meter">
+    <xsl:text>\timeSignature{</xsl:text>
+    <xsl:value-of select="top"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:value-of select="bottom"/>
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- Footnotes               -->
