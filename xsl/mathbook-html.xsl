@@ -1033,6 +1033,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Index Creation -->
 <!-- ############## -->
 
+<!-- "print-index":                                          -->
+<!--     build a sorted list of every "index" in text        -->
+<!-- "group-by-letter":                                      -->
+<!--     accumale common first-letter entries,               -->
+<!--     send to their own div for spacing, "jump to" device -->
+<!-- "group-by-heading":                                     -->
+<!--     consolidate/accumulate entries with common heading  -->
+<!-- "knowl-list":                                           -->
+<!--     output the cross-references                         -->
 <xsl:template name="print-index">
     <!-- <index> with single mixed-content heading -->
     <!-- start attribute is actual end of a        -->
@@ -1044,9 +1053,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:variable>
             <index>
                 <!-- text, key-value for single index heading -->
-                <!-- convert $content from a string to proper HTML nodes -->
                 <text>
-                    <xsl:copy-of select="exsl:node-set($content)" />
+                    <xsl:copy-of select="$content" />
                 </text>
                 <key>
                     <xsl:choose>
@@ -1060,6 +1068,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:otherwise>
                     </xsl:choose>
                 </key>
+                <!-- plus two more empty keys -->
+                <key><text /></key>
+                <key><text /></key>
                 <!-- write/preserve info about the location's surroundings -->
                 <!-- as "knowl" and "typename" temporary elements          -->
                 <xsl:apply-templates select="." mode="index-enclosure" />
@@ -1070,14 +1081,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="structured-index">
         <xsl:for-each select="//index[main and not(@start)]">
             <index>
-                <!-- text, key-value of index headings -->
                 <xsl:for-each select="main|sub">
                     <xsl:variable name="content">
                         <xsl:apply-templates select="*|text()" />
                     </xsl:variable>
-                    <!-- convert $content from a string to proper HTML nodes -->
                     <text>
-                        <xsl:copy-of select="exsl:node-set($content)" />
+                        <xsl:copy-of select="$content" />
                     </text>
                     <key>
                         <xsl:choose>
@@ -1114,31 +1123,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </link>
                     </xsl:if>
                 </xsl:for-each>
+                <!-- add empty strings in additional "missing" keys -->
+                <xsl:if test="not(sub[1])">
+                    <key><xsl:text /></key>
+                </xsl:if>
+                <xsl:if test="not(sub[2])">
+                    <key><xsl:text /></key>
+                </xsl:if>
                 <!-- write/preserve info about the location's surroundings -->
+                <!-- context will be lost as RTF is converted, so grab it  -->
                 <!-- as "knowl" and "typename" temporary elements          -->
                 <xsl:apply-templates select="." mode="index-enclosure" />
                 <!-- there is at most one "see" or "seealso" total -->
                 <!-- these replace the knowls, so perhaps condition here -->
                 <xsl:for-each select="see">
-                    <xsl:variable name="content">
-                        <xsl:apply-templates select="*|text()" />
-                    </xsl:variable>
                     <see>
-                        <xsl:copy-of select="exsl:node-set($content)" />
+                        <xsl:apply-templates select="*|text()" />
                     </see>
                 </xsl:for-each>
                 <xsl:for-each select="seealso">
-                    <xsl:variable name="content">
-                        <xsl:apply-templates select="*|text()" />
-                    </xsl:variable>
                     <seealso>
-                        <xsl:copy-of select="exsl:node-set($content)" />
+                        <xsl:apply-templates select="*|text()" />
                     </seealso>
                 </xsl:for-each>
             </index>
         </xsl:for-each>
     </xsl:variable>
     <!-- sort now that info from document tree ordering is recorded -->
+    <!-- perhaps one big variable/RTF once deprecation takes place  -->
     <xsl:variable name="sorted-index">
         <xsl:for-each select="exsl:node-set($unstructured-index)/*|exsl:node-set($structured-index)/*">
             <xsl:sort select="./key[1]" />
@@ -1148,160 +1160,197 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:copy-of select="." />
         </xsl:for-each>
     </xsl:variable>
-    <!-- work out if each new entry needs some material in      -->
-    <!-- the index prior to simply making a knowl for the entry -->
-    <xsl:for-each select="exsl:node-set($sorted-index)/*">
-        <!-- strings for comparisons, this item first -->
-        <xsl:variable name="key1"><xsl:value-of select="key[1]" /></xsl:variable>
-        <xsl:variable name="key2"><xsl:value-of select="key[2]" /></xsl:variable>
-        <xsl:variable name="key3"><xsl:value-of select="key[3]" /></xsl:variable>
-        <!-- Debugging code follows, maybe not correct or useful, remove later -->
-        <!-- 
-        <xsl:variable name="con">
-            <xsl:copy-of select="text" />
-        </xsl:variable>
-        <xsl:message><xsl:value-of select="$key1" />:<xsl:value-of select="$key2" />:<xsl:value-of select="$key3" />:<xsl:copy-of select="$con" />:</xsl:message>
-        -->
-         <!-- strings for second item -->
-        <xsl:variable name="previous" select="preceding-sibling::*[1]" />
-        <xsl:variable name="prev1"><xsl:value-of select="$previous/key[1]" /></xsl:variable>
-        <xsl:variable name="prev2"><xsl:value-of select="$previous/key[2]" /></xsl:variable>
-        <xsl:variable name="prev3"><xsl:value-of select="$previous/key[3]" /></xsl:variable>
-        <!-- flatten the sorted structure, with breaks -->
+    <!-- ship start of a node-set to be grouped by letter   -->
+    <!-- conversion to node-set is necessary for subsequent -->
+    <xsl:apply-templates select="exsl:node-set($sorted-index)/*[1]" mode="group-by-letter">
+        <xsl:with-param name="letter-group" select="/.." />
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- Accumulate index entries with a common first letter   -->
+<!-- in $letter-group and then pass to grouping by heading -->
+<xsl:template match="*" mode="group-by-letter">
+    <!-- Empty node list from parent of root node -->
+    <xsl:param name="letter-group" select="/.."/>
+    <!-- look ahead at next index entry -->
+    <xsl:variable name="next-index" select="following-sibling::*[1]" />
+    <!-- check if we have run out all of the index entries -->
+    <xsl:if test=".">
+        <!-- always accumulate context node in node-list (first, or $next-index inspected) -->
+        <xsl:variable name="new-letter-group" select="$letter-group | ." />
         <xsl:choose>
-            <!-- new key1, so finish knowl list and start new level one list -->
-            <!-- (if not simply starting out)                                -->
-            <!-- Extraordinary: perhaps time for a new prominent letter      -->
-            <xsl:when test="not($key1 = $prev1)">
-                <xsl:if test="not($prev1='')">
-                    <xsl:call-template name="end-index-knowl-list" />
-                </xsl:if>
-                <!-- Compare lower-cased leading letters, break if changed -->
-                <!--   End wrapping (if not first letter)                  -->
-                <!--   Begin a new group                                   -->
-                <xsl:if test="not(substring($prev1, 1,1) = substring($key1, 1,1))">
-                    <xsl:if test="$previous">
-                        <xsl:text disable-output-escaping="yes">&lt;/div></xsl:text>
-                    </xsl:if>
-                    <xsl:text disable-output-escaping="yes">&lt;div</xsl:text>
-                    <xsl:text disable-output-escaping="yes"> class="indexletter"</xsl:text>
-                    <xsl:text disable-output-escaping="yes"> id="</xsl:text>
-                    <xsl:text disable-output-escaping="yes">indexletter-</xsl:text>
-                    <xsl:value-of select="substring($key1, 1, 1)" />
-                    <xsl:text disable-output-escaping="yes">"</xsl:text>
-                    <xsl:text disable-output-escaping="yes">></xsl:text>
-                </xsl:if>
-                <!--  -->
-                <xsl:text disable-output-escaping="yes">&lt;div class="indexitem"></xsl:text>
-                <!-- use copy-of to do deep copy of nodes under first text -->
-                <xsl:copy-of select="text[1]/node()" />
-                <xsl:choose>
-                    <xsl:when test="not($key2='')">
-                        <!-- no links yet, so close index item w/o links (?), open subitem -->
-                        <xsl:text disable-output-escaping="yes">&lt;/div></xsl:text>
-                        <xsl:text disable-output-escaping="yes">&lt;div class="subindexitem"></xsl:text>
-                        <xsl:copy-of select="text[2]/node()" />
-                        <xsl:choose>
-                            <xsl:when test="not($key3='')">
-                                <!-- no links yet, so close subindex item w/o links, open subsubitem -->
-                                <xsl:text disable-output-escaping="yes">&lt;/div></xsl:text>
-                                <xsl:text disable-output-escaping="yes">&lt;div class="subsubindexitem"></xsl:text>
-                                <xsl:copy-of select="text[3]/node()" />
-                                <!-- terminal so start knowl list -->
-                                <xsl:call-template name="begin-index-knowl-list" />
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <!-- no subsubitems, so start knowl span -->
-                                <xsl:call-template name="begin-index-knowl-list" />
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <!-- no subitems, so start knowl span -->
-                        <xsl:call-template name="begin-index-knowl-list" />
-                    </xsl:otherwise>
-                </xsl:choose>
+            <!-- next index item has same lead letter, so iterate -->
+            <xsl:when test="substring($next-index/key[1], 1, 1) = substring(key[1], 1,1)">
+                <xsl:apply-templates select="$next-index" mode="group-by-letter">
+                    <xsl:with-param name="letter-group" select="$new-letter-group" />
+                </xsl:apply-templates>
             </xsl:when>
-            <!-- key1 unchanged, but new key2 -->
-            <!-- so finish knowl list and start new level two list -->
-            <xsl:when test="not($key2 = $prev2)">
-                <xsl:call-template name="end-index-knowl-list" />
-                <xsl:text disable-output-escaping="yes">&lt;div class="subindexitem"></xsl:text>
-                <xsl:copy-of select="text[2]/node()" />
-                <xsl:choose>
-                    <xsl:when test="not($key3='')">
-                        <!-- no links yet, so close subindex item w/o links, open subsubitem -->
-                        <xsl:text disable-output-escaping="yes">&lt;/div></xsl:text>
-                        <xsl:text disable-output-escaping="yes">&lt;div class="subsubindexitem"></xsl:text>
-                        <xsl:copy-of select="text[3]/node()" />
-                        <!-- terminal so start knowl list -->
-                        <xsl:call-template name="begin-index-knowl-list" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <!-- no subsubitems, so start knowl span -->
-                        <xsl:call-template name="begin-index-knowl-list" />
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:when>
-            <!-- key1 and key 2 unchanged, but new key3              -->
-            <!-- so finish knowl list and start new level three list -->
-            <xsl:when test="not($key3 = $prev3)">
-                <xsl:call-template name="end-index-knowl-list" />
-                <xsl:text disable-output-escaping="yes">&lt;div class="subsubindexitem"></xsl:text>
-                <xsl:copy-of select="text[3]/node()" />
-                <xsl:call-template name="begin-index-knowl-list" />
-            </xsl:when>
-            <!-- if here then key1, key2, key3 all unchanged, so just drop a link -->
-        </xsl:choose>
-        <!-- every item has a reference, either a knowl, or a see/seealso -->
-        <!-- above we just place breaks into the list                     -->
-        <!-- TODO: comma as first char of next element, looks just like LaTeX -->
-        <xsl:text>, </xsl:text>
-        <xsl:choose>
-            <xsl:when test="see">
-                <i>
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'see'" />
-                    </xsl:call-template>
-                </i>
-                <xsl:text> </xsl:text>
-                <xsl:copy-of select="see/node()" />
-            </xsl:when>
-            <xsl:when test="seealso">
-                <i>
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'also'" />
-                    </xsl:call-template>
-                </i>
-                <xsl:text> </xsl:text>
-                <xsl:copy-of select="seealso/node()" />
-            </xsl:when>
-            <!-- else a real content reference, knowl or hyperlink -->
-            <!-- TODO: split into two more when, otherwise as error? -->
+            <!-- next index item has different lead letter      -->
+            <!-- wrap the letter-group in a div with correct id -->
+            <!-- and course through to group by headings        -->
             <xsl:otherwise>
-                <xsl:element name="a">
-                    <!-- knowl or traditional hyperlink     -->
-                    <!-- mutually exclusive by construction -->
-                    <xsl:if test="knowl">
-                        <xsl:attribute name="knowl">
-                            <xsl:value-of select="knowl" />
-                        </xsl:attribute>
-                    </xsl:if>
-                    <xsl:if test="hyperlink">
-                        <xsl:attribute name="href">
-                            <xsl:value-of select="hyperlink" />
-                        </xsl:attribute>
-                    </xsl:if>
-                    <!-- content: replace with localized short-names -->
-                    <xsl:value-of select="typename" />
-                </xsl:element>
+                <xsl:variable name="lead" select="substring(key[1], 1, 1)" />
+                <div class="indexletter" id="indexletter-{$lead}">
+                    <!-- send to group headings, pass letter-group through -->
+                    <xsl:apply-templates select="$new-letter-group[1]" mode="group-by-heading">
+                        <xsl:with-param name="heading-group" select="/.." />
+                        <xsl:with-param name="letter-group" select="$new-letter-group" />
+                    </xsl:apply-templates>
+                </div>
+                <!-- restart letter grouping with node having new letter -->
+                <xsl:apply-templates select="$next-index" mode="group-by-letter">
+                    <xsl:with-param name="letter-group" select="/.." />
+                </xsl:apply-templates>
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:for-each>
-    <!-- we fall out with one unbalanced item at very end -->
-    <xsl:call-template name="end-index-knowl-list" />
-    <!-- we fall out needing to close last indexletter div -->
-    <xsl:text disable-output-escaping="yes">&lt;/div></xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- Accumulate index entries with identical heading -->
+<!-- quit accumulating when next entry differs       -->
+<!-- Output heading, xrefs, before restarting        -->
+<xsl:template match="*" mode="group-by-heading">
+    <!-- Empty node list from parent of root node -->
+    <xsl:param name="heading-group" select="/.."/>
+    <xsl:param name="letter-group" select="/.."/>
+    <!-- look ahead at next index entry -->
+    <xsl:variable name="next-index" select="following-sibling::*[1]" />
+    <!-- check if context node is still in the letter-group -->
+    <xsl:if test="count(. | $letter-group) = count($letter-group)">
+        <xsl:variable name="new-heading-group" select="$heading-group | ." />
+        <xsl:choose>
+            <!-- same heading, accumulate and iterate -->
+            <xsl:when test="($next-index/key[1] = ./key[1]) and ($next-index/key[2] = ./key[2]) and ($next-index/key[3] = ./key[3])">
+                <xsl:apply-templates select="$next-index" mode="group-by-heading">
+                    <xsl:with-param name="heading-group" select="$new-heading-group" />
+                    <xsl:with-param name="letter-group" select="$letter-group"/>
+                </xsl:apply-templates>
+            </xsl:when>
+            <!-- some key differs in next index entry,  -->
+            <!-- write and restart heading accumulation -->
+            <xsl:otherwise>
+                <xsl:call-template name="output-one-heading">
+                    <xsl:with-param name="heading-group" select="$new-heading-group" />
+                </xsl:call-template>
+                <!-- restart grouping by heading, pass through letter-group -->
+                <xsl:apply-templates select="$next-index" mode="group-by-heading">
+                    <xsl:with-param name="heading-group" select="/.." />
+                    <xsl:with-param name="letter-group" select="$letter-group"/>
+                </xsl:apply-templates>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:if>
+</xsl:template>
+
+<!-- Place the (possibly three) components of -->
+<!-- the heading(s) into their proper divs.   -->
+<!-- Do not duplicate prior components that   -->
+<!-- match, do not write an empty heading.    -->
+<xsl:template name="output-one-heading">
+    <xsl:param name="heading-group" />
+    <xsl:variable name="pattern" select="$heading-group[1]" />
+    <xsl:variable name="pred" select="$pattern/preceding-sibling::*[1]" />
+    <!-- booleans for analysis of format of heading, xrefs -->
+    <xsl:variable name="match1" select="($pred/key[1] = $pattern/key[1]) and $pred" />
+    <xsl:variable name="match2" select="($pred/key[2] = $pattern/key[2]) and $pred" />
+    <xsl:variable name="match3" select="($pred/key[3] = $pattern/key[3]) and $pred" />
+    <xsl:variable name="empty2" select="boolean($pattern/key[2] = '')" />
+    <xsl:variable name="empty3" select="boolean($pattern/key[3] = '')" />
+    <!-- write an "indexitem", "subindexitem", "subsubindexitem" as     -->
+    <!-- necessary to identify chnages in headings, without duplicating -->
+    <!-- headings from prior entries. Add xref when keys go blank       -->
+    <!--  -->
+    <!-- first key differs from predecessor, or leads letter group -->
+    <xsl:if test="not($match1)">
+        <div class="indexitem">
+            <xsl:copy-of select="$pattern/text[1]/node()" />
+            <!-- next key is blank, hence done, so write xrefs        -->
+            <!-- the next outermost tests will fail so no duplication -->
+            <xsl:if test="$empty2">
+                <xsl:call-template name="knowl-list">
+                    <xsl:with-param name="heading-group" select="$heading-group" />
+                </xsl:call-template>
+            </xsl:if>
+        </div>
+    </xsl:if>
+    <!-- second key is substantial, and mis-match is in   -->
+    <!-- the second key, or first key (ie to to the left) -->
+    <xsl:if test="not($empty2) and (not($match1) or not($match2))">
+        <div class="subindexitem">
+            <xsl:copy-of select="$pattern/text[2]/node()" />
+            <!-- next key is blank, hence done, so write xrefs       -->
+            <!-- the next outermost test will fail so no duplication -->
+            <xsl:if test="$empty3">
+                <xsl:call-template name="knowl-list">
+                    <xsl:with-param name="heading-group" select="$heading-group" />
+                </xsl:call-template>
+            </xsl:if>
+        </div>
+    </xsl:if>
+    <!-- third key is substantial, and mis-match is in the first   -->
+    <!-- key, the second key, or the third key (ie to to the left) -->
+    <xsl:if test="not($empty3) and (not($match1) or not($match2) or not($match3))">
+        <div class="subsubindexitem">
+            <xsl:copy-of select="$pattern/text[3]/node()" />
+            <!-- last chance to write xref list -->
+            <xsl:call-template name="knowl-list">
+                <xsl:with-param name="heading-group" select="$heading-group" />
+            </xsl:call-template>
+        </div>
+    </xsl:if>
+</xsl:template>
+
+<!-- Place all the cross-references in the div -->
+<!-- for the final (sub)item in its own span.  -->
+<!-- N.B. Some commas may not be correct here  -->
+<xsl:template name="knowl-list">
+    <xsl:param name="heading-group" />
+    <!-- range through node-list, making cross-references -->
+    <span class="indexknowl">
+        <xsl:text>, </xsl:text>
+        <xsl:for-each select="$heading-group">
+            <xsl:choose>
+                <xsl:when test="see">
+                    <i>
+                        <xsl:call-template name="type-name">
+                            <xsl:with-param name="string-id" select="'see'" />
+                        </xsl:call-template>
+                    </i>
+                    <xsl:text> </xsl:text>
+                    <xsl:copy-of select="see/node()" />
+                </xsl:when>
+                <xsl:when test="seealso">
+                    <i>
+                        <xsl:call-template name="type-name">
+                            <xsl:with-param name="string-id" select="'also'" />
+                        </xsl:call-template>
+                    </i>
+                    <xsl:text> </xsl:text>
+                    <xsl:copy-of select="seealso/node()" />
+                </xsl:when>
+                <!-- else a real content reference, knowl or hyperlink -->
+                <!-- TODO: split into two more when, otherwise as error? -->
+                <xsl:otherwise>
+                    <xsl:element name="a">
+                        <!-- knowl or traditional hyperlink     -->
+                        <!-- mutually exclusive by construction -->
+                        <xsl:if test="knowl">
+                            <xsl:attribute name="knowl">
+                                <xsl:value-of select="knowl" />
+                            </xsl:attribute>
+                        </xsl:if>
+                        <xsl:if test="hyperlink">
+                            <xsl:attribute name="href">
+                                <xsl:value-of select="hyperlink" />
+                            </xsl:attribute>
+                        </xsl:if>
+                        <!-- content: replace with localized short-names -->
+                        <xsl:value-of select="typename" />
+                    </xsl:element>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:for-each>
+    </span>
 </xsl:template>
 
 <!-- Climb the tree looking for an enclosing structure of        -->
@@ -1342,18 +1391,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="parent::*" mode="index-enclosure" />
         </xsl:otherwise>
     </xsl:choose>
-</xsl:template>
-
-<!-- Start markup for a list of knowls representing entries -->
-<xsl:template name="begin-index-knowl-list">
-    <xsl:text disable-output-escaping="yes">&lt;span class="indexknowl"></xsl:text>
-</xsl:template>
-
-<!-- End markup for a list of knowls representing entries -->
-<!-- End markup for the actual index entry text           -->
-<xsl:template name="end-index-knowl-list">
-    <xsl:text disable-output-escaping="yes">&lt;/span></xsl:text>
-    <xsl:text disable-output-escaping="yes">&lt;/div></xsl:text>
 </xsl:template>
 
 <!-- ################################### -->
