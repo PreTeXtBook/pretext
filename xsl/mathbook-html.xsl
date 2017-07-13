@@ -1782,8 +1782,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:choose>
                 <!-- primary occurrence, born hidden as embedded knowl     -->
                 <!-- is original flag pass-thru necessary?  always true()? -->
-                <!-- Hack: WW not working from embedded knowls,            -->
-                <!-- so go with external file of duplicated content        -->
                 <xsl:when test="$b-original">
                     <xsl:apply-templates select="." mode="born-hidden">
                         <xsl:with-param name="b-original" select="$b-original" />
@@ -1848,28 +1846,56 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>hidden-knowl-wrapper</xsl:text>
         </xsl:attribute>
         <xsl:element name="a">
-            <!-- Point to the file version, which is ineffective -->
-            <xsl:attribute name="knowl">
-                <xsl:apply-templates select="." mode="xref-knowl-filename" />
-            </xsl:attribute>
-            <!-- empty, indicates content *not* in a file -->
-            <xsl:attribute name="knowl" />
-            <!-- class indicates content is in div referenced by id -->
-            <xsl:attribute name="class">
-                <xsl:text>id-ref</xsl:text>
-            </xsl:attribute>
-            <!-- and the id via a template for consistency -->
-            <xsl:attribute name="refid">
-                <xsl:apply-templates select="." mode="hidden-knowl-id" />
-            </xsl:attribute>
-            <!-- make the anchor a target, eg of an in-context link -->
-            <!-- label original -->
-            <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="internal-id" />
-            </xsl:attribute>
-            <!-- marked-up knowl text link *inside* of knowl anchor to be effective -->
-            <!-- heading in an HTML container -->
-            <xsl:apply-templates select="." mode="hidden-knowl-text" />
+            <xsl:choose>
+                <!-- Hack: WW not working from embedded knowls,     -->
+                <!-- so go with external file of duplicated content -->
+                <!-- as the form og the "a" tag, preserving styling -->
+                <xsl:when test="self::webwork">
+                    <!-- copied from "xref-link" template,  -->
+                    <!-- maybe build a 2-parameter template -->
+                    <xsl:attribute name="knowl">
+                        <xsl:apply-templates select="." mode="hidden-knowl-filename" />
+                    </xsl:attribute>
+                    <!-- TODO: check if this "knowl-id" is needed, knowl.js implies it is -->
+                    <xsl:attribute name="knowl-id">
+                        <xsl:text>hidden-</xsl:text>
+                        <xsl:apply-templates select="." mode="internal-id" />
+                    </xsl:attribute>
+                    <!-- add HTML title and alt attributes to the link -->
+                    <xsl:attribute name="alt">
+                        <xsl:apply-templates select="." mode="tooltip-text" />
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                        <xsl:apply-templates select="." mode="tooltip-text" />
+                    </xsl:attribute>
+                    <xsl:apply-templates select="." mode="hidden-knowl-text" />
+                </xsl:when>
+                <!-- this is the "real" code, bust out once WW fixed -->
+                <xsl:otherwise>
+                    <!-- Point to the file version, which is ineffective -->
+                    <xsl:attribute name="knowl">
+                        <xsl:apply-templates select="." mode="xref-knowl-filename" />
+                    </xsl:attribute>
+                    <!-- empty, indicates content *not* in a file -->
+                    <xsl:attribute name="knowl" />
+                    <!-- class indicates content is in div referenced by id -->
+                    <xsl:attribute name="class">
+                        <xsl:text>id-ref</xsl:text>
+                    </xsl:attribute>
+                    <!-- and the id via a template for consistency -->
+                    <xsl:attribute name="refid">
+                        <xsl:apply-templates select="." mode="hidden-knowl-id" />
+                    </xsl:attribute>
+                    <!-- make the anchor a target, eg of an in-context link -->
+                    <!-- label original -->
+                    <xsl:attribute name="id">
+                        <xsl:apply-templates select="." mode="internal-id" />
+                    </xsl:attribute>
+                    <!-- marked-up knowl text link *inside* of knowl anchor to be effective -->
+                    <!-- heading in an HTML container -->
+                    <xsl:apply-templates select="." mode="hidden-knowl-text" />
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:element>
     </xsl:element>
     <!-- Second: the content of the knowl, to be revealed/parsed later -->
