@@ -1658,14 +1658,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- Title only, eg on an assemblage or aside -->
+<!-- Title only: on assemblage, aside, or paragraphs -->
 <xsl:template match="*" mode="heading-title">
-    <xsl:element name="h5">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
-        </xsl:attribute>
-        <xsl:apply-templates select="." mode="title-full" />
-    </xsl:element>
+    <h5 class="heading">
+        <span class="title">
+            <xsl:apply-templates select="." mode="title-full" />
+        </span>
+    </h5>
 </xsl:template>
 
 <!-- eg "Solution 5" as text of knowl-clickable, no h5 wrapping -->
