@@ -73,6 +73,10 @@ systems.
             <p>The <q>detail</q> attribute of a cross-reference is only implemented for a reference to a bibliographic item: <xref ref="errors-and-warnings" detail="blah"/>.</p>
 
             <p>The <q>plural</q> attribute of a cross-reference is deprecated with no equivalent replacment: <xref ref="errors-and-warnings" autoname="plural"/>.</p>
+
+            <p>A cross-reference to a range with incompatible targets (article and section):  <xref first="errors-and-warnings" last="introduction-id" />.</p>
+
+            <p>A cross-reference to a range where the two targets are in the wrong order, so generates a warning:  <xref first="section-images" last="introduction-id" />.</p>
         </section>
 
         <section>
