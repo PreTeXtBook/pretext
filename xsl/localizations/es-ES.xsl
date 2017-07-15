@@ -155,12 +155,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='dedication'><xsl:text>Dedicatoria</xsl:text></localization>
     <localization string-id='colophon'><xsl:text>Colofón</xsl:text></localization>
     <!-- Back matter components -->
-    <!-- Following is temporary, "index-part" to be deprecated -->
-    <!-- NB: repurpose translations, replace "indexsection below", maybe move appendix here -->
-    <!-- <localization string-id='index-part'><xsl:text>Index</xsl:text></localization> -->
+    <!-- index-part is deprecated, but not abandoned          -->
+    <!-- NB: repurpose translations, maybe move appendix here -->
+    <localization string-id='index-part'><xsl:text>Índice alfabético</xsl:text></localization>
     <!-- <localization string-id='jump-to'><xsl:text>Jump to:</xsl:text></localization> -->
     <!-- Parts of the Index -->
-    <localization string-id='indexsection'><xsl:text>Índice alfabético</xsl:text></localization>
+    <localization string-id='index'><xsl:text>Índice alfabético</xsl:text></localization>
     <localization string-id='see'><xsl:text>véase</xsl:text></localization>
     <localization string-id='also'><xsl:text>véase también</xsl:text></localization>
     <!-- Translation needed for Spain Spanish -->

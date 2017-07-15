@@ -181,7 +181,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
 <!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
 <xsl:strip-space elements="mathbook book article memo letter" />
-<xsl:strip-space elements="frontmatter chapter appendix index-part section subsection subsubsection exercises references introduction conclusion paragraphs paragraph subparagraph backmatter" />
+<xsl:strip-space elements="frontmatter chapter appendix index-part index section subsection subsubsection exercises references introduction conclusion paragraphs paragraph subparagraph backmatter" />
 <xsl:strip-space elements="docinfo author abstract" />
 <xsl:strip-space elements="titlepage preface acknowledgement biography foreword dedication colophon" />
 <!-- List is elements in DEFINITION-LIKE entity -->
@@ -2132,7 +2132,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Some items have default titles that make sense         -->
 <!-- Typically these are one-off subdivisions (eg preface), -->
 <!-- or repeated generic divisions (eg exercises)           -->
-<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter|index-part" mode="has-default-title">
+<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter|index-part|index[index-list]" mode="has-default-title">
     <xsl:text>true</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="has-default-title">
@@ -2724,7 +2724,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Empty string signifies not numbered -->
 <!-- We do provide a "xref number" of an -->
 <!-- exercisegroup, but otherwise not    -->
-<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|paragraph|blockquote|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|index-part|colophon|backmatter|exercisegroup|webwork|p|sidebyside|assemblage|aside|biographical|historical|case|contributor" mode="serial-number" />
+<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|paragraph|blockquote|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|index-part|index[index-list]|colophon|backmatter|exercisegroup|webwork|p|sidebyside|assemblage|aside|biographical|historical|case|contributor" mode="serial-number" />
 
 <!-- If a list item has any ancestor that is not  -->
 <!-- an ordered list, then it gets no number      -->
@@ -5500,6 +5500,25 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2017-07-05'" />
         <xsl:with-param name="message" select="'the  html.knowl.sidebyside  parameter is now obsolete and will be ignored'" />
         <xsl:with-param name="incorrect-use" select="($html.knowl.sidebyside != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2017-07-14  index specification and production reworked -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurences" select="$document-root//index-part" />
+        <xsl:with-param name="date-string" select="'2017-07-14'" />
+        <xsl:with-param name="message" select="'the &quot;index-part&quot; element is deprecated, replaced by functional equivalent &quot;index&quot;'" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurences" select="$document-root//index[not(main) and not(index-list)]" />
+        <xsl:with-param name="date-string" select="'2017-07-14'" />
+        <xsl:with-param name="message" select="'a &quot;index&quot; element is deprecated, replaced by functional equivalent &quot;idx&quot;'" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurences" select="$document-root//index[main]" />
+        <xsl:with-param name="date-string" select="'2017-07-14'" />
+        <xsl:with-param name="message" select="'a &quot;index&quot; element with &quot;main&quot; and &quot;sub&quot; headings is deprecated, replaced by functional equivalent &quot;idx&quot; with &quot;h&quot; headings'" />
     </xsl:call-template>
     <!--  -->
 </xsl:template>

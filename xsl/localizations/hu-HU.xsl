@@ -147,12 +147,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='dedication'><xsl:text>Ajánlás</xsl:text></localization>
     <localization string-id='colophon'><xsl:text>Záradék</xsl:text></localization>
     <!-- Back matter components -->
-    <!-- Following is temporary, "index-part" to be deprecated -->
-    <!-- NB: repurpose translations, replace "indexsection below", maybe move appendix here -->
+    <!-- index-part is deprecated, but not abandoned          -->
+    <!-- NB: repurpose translations, maybe move appendix here -->
     <localization string-id='index-part'><xsl:text>Index</xsl:text></localization>
     <localization string-id='jump-to'><xsl:text>Ugrás ide:</xsl:text></localization>
     <!-- Parts of the Index -->
-    <localization string-id='indexsection'><xsl:text>Index</xsl:text></localization>
+    <localization string-id='index'><xsl:text>Index</xsl:text></localization>
     <localization string-id='see'><xsl:text>lásd</xsl:text></localization>
     <localization string-id='also'><xsl:text>lásd még</xsl:text></localization>
     <!-- Notation List headings/foot -->

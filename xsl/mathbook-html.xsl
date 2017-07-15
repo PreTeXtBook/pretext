@@ -1042,10 +1042,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     output the cross-references                         -->
 <xsl:template name="print-index">
     <!-- <index> with single mixed-content heading -->
+    <!-- or replacement <idx> as mixed-content     -->
     <!-- start attribute is actual end of a        -->
     <!-- "page range", goodies at @finish          -->
     <xsl:variable name="unstructured-index">
-        <xsl:for-each select="//index[not(main) and not(@start)]">
+        <xsl:for-each select="//index[not(main) and not(@start) and not(index-list)] | $document-root//idx[not(h) and not(@start)]">
             <xsl:variable name="content">
                 <xsl:apply-templates select="*|text()" />
             </xsl:variable>
@@ -1077,9 +1078,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- index entries with structure, cant't be end of a "page range" -->
     <xsl:variable name="structured-index">
-        <xsl:for-each select="//index[main and not(@start)]">
+        <xsl:for-each select="//index[main and not(@start)] | $document-root//idx[h and not(@start)]">
             <index>
-                <xsl:for-each select="main|sub">
+                <xsl:for-each select="main|sub|h">
                     <xsl:variable name="content">
                         <xsl:apply-templates select="*|text()" />
                     </xsl:variable>
@@ -1105,7 +1106,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <!--   1 - has "see"                     -->
                     <!--   2 - is knowl/hyperlink reference  -->
                     <!-- condition on last level of headings -->
-                    <xsl:if test="not(following-sibling::*[self::sub])">
+                    <xsl:if test="not(following-sibling::*[self::sub]) and not(following-sibling::*[self::h])">
                         <link>
                             <xsl:choose>
                                 <xsl:when test="../seealso">
@@ -1122,10 +1123,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:if>
                 </xsl:for-each>
                 <!-- add empty strings in additional "missing" keys -->
-                <xsl:if test="not(sub[1])">
+                <xsl:if test="(count(h) = 1) or (count(h) = 2)">
                     <key><xsl:text /></key>
                 </xsl:if>
-                <xsl:if test="not(sub[2])">
+                <xsl:if test="count(h) = 1">
+                    <key><xsl:text /></key>
+                </xsl:if>
+                <xsl:if test="(main and not(sub[1]))">
+                    <key><xsl:text /></key>
+                </xsl:if>
+                <xsl:if test="(main and not(sub[2]))">
                     <key><xsl:text /></key>
                 </xsl:if>
                 <!-- write/preserve info about the location's surroundings -->
@@ -5664,10 +5671,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="biblio[@type='raw']/ibid">
     <xsl:text>Ibid.</xsl:text>
 </xsl:template>
-<!-- Index -->
-<!-- Only implemented for LaTeX, where it -->
-<!-- makes sense, otherwise just kill it  -->
-<xsl:template match="index" />
+<!-- Index Entries -->
+<!-- Kill on sight, collect later to build index  -->
+<xsl:template match="index[not(index-list)]" />
+<xsl:template match="idx" />
 
 
 <!-- Demonstrations -->
@@ -6401,7 +6408,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 
 <!-- We assume 0 or 1 "index-part" present -->
 <xsl:template match="*" mode="index-button">
-    <xsl:variable name="indices" select="//index-part" />
+    <xsl:variable name="indices" select="$document-root//index-part | $document-root//index[index-list]" />
     <xsl:if test="$indices">
         <xsl:variable name="url">
             <xsl:apply-templates select="$indices[1]" mode="url" />

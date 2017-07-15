@@ -1449,7 +1449,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="/mathbook/*/backmatter/index-part">
+    <xsl:if test="/mathbook/*/backmatter/index-part | $document-root//index-list">
         <!-- See http://tex.blogoverflow.com/2012/09/dont-forget-to-run-makeindex/ for "imakeidx" usage -->
         <xsl:text>%% Support for index creation&#xa;</xsl:text>
         <xsl:if test="$author-tools='no'">
@@ -1459,7 +1459,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\usepackage{imakeidx}&#xa;</xsl:text>
             <xsl:text>\makeindex[title=</xsl:text>
             <xsl:call-template name="type-name">
-                <xsl:with-param name="string-id" select="'indexsection'" />
+                <xsl:with-param name="string-id" select="'index'" />
             </xsl:call-template>
             <xsl:text>, intoc=true]&#xa;</xsl:text>
             <xsl:text>\renewcommand{\seename}{</xsl:text>
@@ -2390,7 +2390,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and a compulsory "index-list"              -->
 <!-- LaTeX does sectioning via \printindex      -->
 <!-- TODO: multiple indices, with different titles -->
-<xsl:template match="index-part">
+<xsl:template match="index-part|index[index-list]">
     <xsl:apply-templates />
 </xsl:template>
 
@@ -3928,7 +3928,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Unstructured                       -->
 <!-- simple and quick, minimal features -->
 <!-- Only supports  @sortby  attribute  -->
-<xsl:template match="index[not(main)]">
+<xsl:template match="index[not(main) and not(index-list)] | idx[not(h)]">
     <xsl:text>\index{</xsl:text>
     <xsl:apply-templates select="@sortby" />
     <xsl:apply-templates />
@@ -3940,8 +3940,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   sub - up two, optional, with optional @sortby -->
 <!--   see, seealso - one total                      -->
 <!--   @start, @finish support page ranges for print -->
-<xsl:template match="index[main]">
+<xsl:template match="index[main] | idx[h]">
     <xsl:text>\index{</xsl:text>
+    <xsl:apply-templates select="h" />
     <xsl:apply-templates select="main" />
     <xsl:apply-templates select="sub" />
     <xsl:apply-templates select="see" />
@@ -3953,9 +3954,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Page Range, Finish Variant              -->
 <!-- @start is a marker for END of a range   -->
 <!-- End of page range duplicates it's start -->
-<xsl:template match="index[@start]">
+<xsl:template match="index[@start] | idx[@start]">
     <xsl:variable name="start" select="id(@start)" />
     <xsl:text>\index{</xsl:text>
+    <xsl:apply-templates select="$start/h" />
     <xsl:apply-templates select="$start/main" />
     <xsl:apply-templates select="$start/sub" />
     <xsl:apply-templates select="$start/see" />
@@ -3969,7 +3971,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
-<xsl:template match="index/@sortby|main/@sortby|sub/@sortby">
+<xsl:template match="index/@sortby|main/@sortby|sub/@sortby|idx/@sortby|h/@sortby">
     <xsl:value-of select="." />
     <xsl:text>@</xsl:text>
 </xsl:template>
@@ -3980,13 +3982,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
-<xsl:template match="index/see">
+<xsl:template match="idx/h">
+    <xsl:if test="preceding-sibling::h">
+        <xsl:text>!</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="@sortby" />
+    <xsl:apply-templates />
+</xsl:template>
+
+<xsl:template match="index/see|idx/see">
     <xsl:text>|see{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<xsl:template match="index/seealso">
+<xsl:template match="index/seealso|idx/seealso">
     <xsl:text>|seealso{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
@@ -5559,7 +5569,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- named list, ignore title -->
         <xsl:when test="self::list">
-            <xsl:apply-templates select="index" />
+            <xsl:apply-templates select="index|idx" />
             <xsl:apply-templates select="introduction" />
             <xsl:apply-templates select="ol|ul|dl" />
             <xsl:apply-templates select="conclusion" />

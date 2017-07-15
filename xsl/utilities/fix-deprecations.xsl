@@ -34,6 +34,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecations that can be fixed with a transformation -->
 <!-- In reverse chronological order, with dates           -->
 
+<!-- 2017-07-14:  cosmetic changes to index specification and production -->
+<xsl:template match="index-part">
+    <index>
+        <xsl:apply-templates select="@* | node()" />
+    </index>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2017-07-14</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;index-part&gt; by &lt;index&gt;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<!--  -->
+<!-- try not to clobber new "index" division on subsequent run -->
+<xsl:template match="index[not(index-list)]">
+    <idx>
+        <xsl:apply-templates select="@* | node()" />
+    </idx>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2017-07-14</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;index&gt; by &lt;idx&gt;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<!--  -->
+<xsl:template match="index/main">
+    <h>
+        <xsl:apply-templates select="@* | node()" />
+    </h>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2017-07-14</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;index&gt;/&lt;main&gt; by &lt;idx&gt;/&lt;h&gt;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<!--  -->
+<xsl:template match="index/sub">
+    <h>
+        <xsl:apply-templates select="@* | node()" />
+    </h>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2017-07-14</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;index&gt;/&lt;sub&gt; by &lt;idx&gt;/&lt;h&gt;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
 <!-- 2017-07-05:  wrap a captioned side-by-side as a captioned figure -->
 <xsl:template match="sidebyside[caption]">
     <figure>
