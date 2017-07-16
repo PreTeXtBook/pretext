@@ -88,5 +88,5 @@
 <!ENTITY PROJECT-FILTER "self::project or self::activity or self::exploration or self::task or self::investigation">
 
 <!-- displays with captions -->
-<!ENTITY FIGURE-LIKE "figure|table|listing|sidebyside">
-<!ENTITY FIGURE-FILTER "self::figure or self::table or self::listing or self::sidebyside">
+<!ENTITY FIGURE-LIKE "figure|table|listing">
+<!ENTITY FIGURE-FILTER "self::figure or self::table or self::listing">
