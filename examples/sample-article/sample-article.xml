@@ -292,10 +292,10 @@ the xsltproc executable.
             -->
             <theorem xml:id="theorem-FTC">
                 <title>The Fundamental Theorem of Calculus</title>
-                <index><main>Fundamental Theorem of Calculus</main></index>
+                <idx><h>Fundamental Theorem of Calculus</h></idx>
 
                 <statement>
-                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me><index><main>test: buried in theorem/statement/p</main></index></p>
+                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me><idx><h>test: buried in theorem/statement/p</h></idx></p>
                 </statement>
                 <proof>
                     <p>Left to the reader.</p>
@@ -364,32 +364,32 @@ the xsltproc executable.
         <section xml:id="section-sage-cells">
             <title>Computing Integrals with Sage (<m>\int</m>)</title>
             <!-- Index testing, semi-realistic -->
-            <index><main>Sage</main><sub>integration</sub></index>
-            <index><main>Sage</main><sub>integration</sub><sub>cell</sub></index>
-            <index><main>Sage</main><sub>integration</sub><sub>numerical</sub></index>
-            <index><main>numerical</main><see>Sage integration</see></index>
-            <index><main>numerical</main><see>Sage</see></index>
-            <index><main>numerics</main><seealso>Sage</seealso></index>
-            <index><main>numerical integration</main><sub>Sage</sub><sub>cell</sub></index>
-            <index><main>numerical integration</main><sub>Sage</sub><sub>cell</sub><see>Sage</see></index>
+            <idx><h>Sage</h><h>integration</h></idx>
+            <idx><h>Sage</h><h>integration</h><h>cell</h></idx>
+            <idx><h>Sage</h><h>integration</h><h>numerical</h></idx>
+            <idx><h>numerical</h><see>Sage integration</see></idx>
+            <idx><h>numerical</h><see>Sage</see></idx>
+            <idx><h>numerics</h><seealso>Sage</seealso></idx>
+            <idx><h>numerical integration</h><h>Sage</h><h>cell</h></idx>
+            <idx><h>numerical integration</h><h>Sage</h><h>cell</h><see>Sage</see></idx>
             <!-- Index testing, at most one see/seealso per index -->
-            <index><main>A</main></index>
-            <index><main>A</main><see>F</see></index>
-            <index><main>A</main><see>G</see></index>
-            <index><main>A</main><seealso>H</seealso></index>
-            <index><main>A</main><sub>B</sub><seealso>C</seealso></index>
-            <index><main>A</main><sub>B</sub><sub>C</sub><see>D</see></index>
+            <idx><h>A</h></idx>
+            <idx><h>A</h><see>F</see></idx>
+            <idx><h>A</h><see>G</see></idx>
+            <idx><h>A</h><seealso>H</seealso></idx>
+            <idx><h>A</h><h>B</h><seealso>C</seealso></idx>
+            <idx><h>A</h><h>B</h><h>C</h><see>D</see></idx>
             <!--  -->
             <!-- Index testing, fancy variant -->
-            <index>mixed-content <em>emphasized</em></index>
-            <index><main>structured-content <em>emphasized</em></main></index>
-            <index><main sortby="cat">sorted as if <q>Cat</q></main></index>
-            <index sortby="quorum">sorted as if <q>Quorum</q></index>
-            <index><main>units</main><sub sortby="A">Z (<alert>sort as</alert> A)</sub></index>
-            <index><main>units</main><sub sortby="Z">A (<alert>sort as</alert> Z)</sub></index>
-            <index><c>verbatim text</c>, use sortby</index>
+            <idx>mixed-content <em>emphasized</em></idx>
+            <idx><h>structured-content <em>emphasized</em></h></idx>
+            <idx><h sortby="cat">sorted as if <q>Cat</q></h></idx>
+            <idx sortby="quorum">sorted as if <q>Quorum</q></idx>
+            <idx><h>units</h><h sortby="A">Z (<alert>sort as</alert> A)</h></idx>
+            <idx><h>units</h><h sortby="Z">A (<alert>sort as</alert> Z)</h></idx>
+            <idx><c>verbatim text</c>, use sortby</idx>
             <!-- keep this, collides with real "R" entry elsewhere -->
-            <index sortby="R"><m>\rho</m><ndash />fibers</index>
+            <idx sortby="R"><m>\rho</m><ndash />fibers</idx>
 
             <p>Sage can compute definite integrals.  The output contains the approximate numerical value of the definite integral, followed by an upper bound  of the error in the approximation.</p>
 
@@ -438,7 +438,7 @@ the xsltproc executable.
             </sage>
 
             <!-- keep R index entry, collides with sortby attribute elsewhere -->
-            <p>Sage, and by extension, the Sage Cell Server, can interpret several languages.  The next example has code in the <c>R</c> language,<index><main>R</main></index> a popular open source language for statistics.  As an author, you add the attribute <c>language="r"</c> to your <c>sage</c> element.  (The default language is Sage, so you do not need to indicate that repeatedly.)  Note that a language like <c>R</c> likes to use a <q>less than</q> character, the second most-dangerous special character in XML.  You need to escape it by writing <c>&amp;lt;</c> as we have done in the source for this example.  (See the discussion and summary in <xref ref="subsection-reserved-characters" autoname="yes" />.)</p>
+            <p>Sage, and by extension, the Sage Cell Server, can interpret several languages.  The next example has code in the <c>R</c> language,<idx><h>R</h></idx> a popular open source language for statistics.  As an author, you add the attribute <c>language="r"</c> to your <c>sage</c> element.  (The default language is Sage, so you do not need to indicate that repeatedly.)  Note that a language like <c>R</c> likes to use a <q>less than</q> character, the second most-dangerous special character in XML.  You need to escape it by writing <c>&amp;lt;</c> as we have done in the source for this example.  (See the discussion and summary in <xref ref="subsection-reserved-characters" autoname="yes" />.)</p>
 
             <p>As a reader you learn that the <q>Evaluate</q> button for a pre-loaded Sage cell will indicate the language in use.</p>
 
@@ -505,7 +505,7 @@ the xsltproc executable.
 
             <paragraphs>
                 <title>Titled Sage Cells</title>
-                <index><main>Sage cell</main><sub>with a title</sub></index>
+                <idx><h>Sage cell</h><h>with a title</h></idx>
 
                 <sage>
                     <input>integral(sin(x)^2, x)</input>
@@ -722,7 +722,7 @@ the xsltproc executable.
                         </solution>
                     </exercise>
 
-                    <p>There are many different blocks you can employ, and they mostly behave the same way.  A <c>&lt;project&gt;</c><index><main>project</main></index> is very similar to a <c>&lt;question&gt;</c><index><main>question</main></index> or <c>&lt;problem&gt;</c><index><main>problem</main></index></p>
+                    <p>There are many different blocks you can employ, and they mostly behave the same way.  A <c>&lt;project&gt;</c><idx><h>project</h></idx> is very similar to a <c>&lt;question&gt;</c><idx><h>question</h></idx> or <c>&lt;problem&gt;</c><idx><h>problem</h></idx></p>
 
                     <project>
                         <title>Start Exploring <pretext /></title>
@@ -737,9 +737,9 @@ the xsltproc executable.
                         <title>Exploring Explorations</title>
 
                         <statement>
-                            <p>This is an <c>&lt;exploration&gt;</c>.<index><main>exploration</main></index>  Other similar possibilities are <c>&lt;project&gt;</c><index><main>project</main></index>, <c>&lt;activity&gt;</c><index><main>activity</main></index>, <c>&lt;task&gt;</c><index><main>task</main></index>, and <c>&lt;investigation&gt;</c><index><main>investigation</main></index>.</p>
+                            <p>This is an <c>&lt;exploration&gt;</c>.<idx><h>exploration</h></idx>  Other similar possibilities are <c>&lt;project&gt;</c><idx><h>project</h></idx>, <c>&lt;activity&gt;</c><idx><h>activity</h></idx>, <c>&lt;task&gt;</c><idx><h>task</h></idx>, and <c>&lt;investigation&gt;</c><idx><h>investigation</h></idx>.</p>
 
-                            <p>Note that projects, activities, explorations, tasks and investigations <em>share</em> the independent numbering scheme, so it is really only intended you use one of these.  If you want a variant of the name (<eg /> <q>Directed Activity</q>) you can use the <c>&lt;rename&gt;</c><index><main>rename an environment</main></index> facility (<xref ref="rename-facility" autoname="yes" />).</p>
+                            <p>Note that projects, activities, explorations, tasks and investigations <em>share</em> the independent numbering scheme, so it is really only intended you use one of these.  If you want a variant of the name (<eg /> <q>Directed Activity</q>) you can use the <c>&lt;rename&gt;</c><idx><h>rename an environment</h></idx> facility (<xref ref="rename-facility" autoname="yes" />).</p>
                         </statement>
 
                         <solution>
@@ -822,7 +822,7 @@ the xsltproc executable.
 
             <subsection>
                 <title>Linking Sage Cells</title>
-                <index><main>Sage cells</main><sub>linking</sub></index>
+                <idx><h>Sage cells</h><h>linking</h></idx>
 
                 <p>Sage cells share their results on a per-webpage basis, so if you move to a new chapter, section, or subsection that happens to be on another webpage, your Sage computations are gone and you start fresh.  But maybe you need some results from elsewhere.  As an author, you can make an exact copy of a cell in another location.  As a reader you are suggested to <q>replay</q> the cell.  You have seen the next cell before.  More typically such a cell might define a function or set some values of a variable.</p>
 
@@ -850,7 +850,7 @@ the xsltproc executable.
                 <assemblage xml:id="assemblage-basics">
                     <title>Assemblages: Collections and Summaries</title>
 
-                    <p>An <c>&lt;assemblage&gt;</c> is a collection, or summary, that does not have much structure to it.  So you are limited to paragraphs (<c>p</c>) and side-by-sides.  The intent is that these do not have captions, so are not numbered, so cannot be cross-referenced and so do not become knowls (inside of the knowled assemblage).  You may place <c>&lt;image&gt;</c>, <c>&lt;tabular&gt;</c>, and <c>&lt;program&gt;</c> inside a <c>&lt;sidebyside&gt;</c>, in addition to other objects that do not have captions.  Note that <c>p</c> may by extension contain lists (<c>ol</c>, <c>ul</c>, <c>dl</c>).  Despite limited structure, the presentation should draw attention to it, because the contents should be seen as more important in some way.  It should be <q>highlighted</q> in some manner.  If you need to connect the assemblage with material elsewhere, you can do that with the usual <c>xref/xml:id</c> mechanism.<index><main>assemblage</main></index></p>
+                    <p>An <c>&lt;assemblage&gt;</c> is a collection, or summary, that does not have much structure to it.  So you are limited to paragraphs (<c>p</c>) and side-by-sides.  The intent is that these do not have captions, so are not numbered, so cannot be cross-referenced and so do not become knowls (inside of the knowled assemblage).  You may place <c>&lt;image&gt;</c>, <c>&lt;tabular&gt;</c>, and <c>&lt;program&gt;</c> inside a <c>&lt;sidebyside&gt;</c>, in addition to other objects that do not have captions.  Note that <c>p</c> may by extension contain lists (<c>ol</c>, <c>ul</c>, <c>dl</c>).  Despite limited structure, the presentation should draw attention to it, because the contents should be seen as more important in some way.  It should be <q>highlighted</q> in some manner.  If you need to connect the assemblage with material elsewhere, you can do that with the usual <c>xref/xml:id</c> mechanism.<idx><h>assemblage</h></idx></p>
 
                     <p>What have we seen so far in this (disorganized) sample?<ul>
                         <li><p>Theorems, definitions and corollaries. (<xref ref="section-fundamental-theorem" autoname="yes" />)</p></li>
@@ -980,7 +980,7 @@ the xsltproc executable.
                 </image>
             </figure>
 
-            <p>Lists can have multiple columns.  With <init>HTML</init> items displayed in row-major order (horizontally first) and with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items <mdash /> derivatives and integrals <mdash /> where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.<index xml:id="index-start-multicolumn" finish="index-finish-multicolumn"><main>Lists</main><sub>multicolumn</sub></index><ol cols="5">
+            <p>Lists can have multiple columns.  With <init>HTML</init> items displayed in row-major order (horizontally first) and with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items <mdash /> derivatives and integrals <mdash /> where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.<idx xml:id="index-start-multicolumn" finish="index-finish-multicolumn"><h>Lists</h><h>multicolumn</h></idx><ol cols="5">
                 <li><p>Red</p></li>
                 <li><p>Blue</p></li>
                 <li><p>Green</p></li>
@@ -989,10 +989,10 @@ the xsltproc executable.
                 <li><p>Black</p></li>
                 <li><p>Orange</p></li>
                 <li><p>Pink</p></li>
-                <li><p>Salmon<index><main>strange colors</main></index></p></li>
+                <li><p>Salmon<idx><h>strange colors</h></idx></p></li>
                 <li><p>Aqua</p></li>
                 <li><p>Cyan</p></li>
-                <li><p>Puce<index><main>strange colors</main></index></p></li>
+                <li><p>Puce<idx><h>strange colors</h></idx></p></li>
             </ol><ul cols="2">
                 <li>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin lorem diam, convallis in nulla sed, accumsan fermentum urna. Pellentesque aliquet leo elit, ut consequat nunc dapibus ac. Sed lobortis leo tincidunt, vulputate nunc at, ultricies leo. Vivamus purus diam, tristique laoreet purus eget, mollis gravida sapien. Nunc vulputate nisl ac mauris hendrerit cursus. Sed vel molestie velit. Suspendisse sem sem, elementum at vehicula id, volutpat ac mi. Nullam ullamcorper fringilla purus in accumsan. Mauris at nunc accumsan orci dictum vulputate id id augue. Suspendisse at dignissim elit, non euismod nunc. Aliquam faucibus magna ac molestie semper. Aliquam hendrerit sem sit amet metus congue tempor. Donec laoreet laoreet metus, id interdum purus mattis vulputate. Proin condimentum vitae erat varius mollis. Donec venenatis libero sed turpis pretium tempor.</p>
@@ -1047,7 +1047,7 @@ the xsltproc executable.
 
             <todo>Move index-finish marker back once it is allowed other places</todo>
 
-            <p><index xml:id="index-finish-multicolumn" start="index-start-multicolumn" />The multi-row displayed mathematics in the proof of the Fundamental Theorem had equations aligned on the equals signs via the <ampersand /> character.  Sometimes you don't want that.  Here is an example with some differential equations, with each equation centered and unnumbered,<md>
+            <p><idx xml:id="index-finish-multicolumn" start="index-start-multicolumn" />The multi-row displayed mathematics in the proof of the Fundamental Theorem had equations aligned on the equals signs via the <ampersand /> character.  Sometimes you don't want that.  Here is an example with some differential equations, with each equation centered and unnumbered,<md>
                 <mrow>{\mathcal L}(y')(s) = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0)</mrow>
             </md>.</p>
@@ -1318,7 +1318,7 @@ the xsltproc executable.
 
                 <p>If you would like to use macros from a <latex /> package <em>and</em> there is a MathJax extension <em>of the same name</em> which implements the same macros, then you may use these with your mathematics as we demonstrate here.</p>
 
-                <p>This example is from Jason Underdown.<index><main>Underdown, Jason</main></index>  The package is named <c>cancel</c> and is included in the TeXLive distribution, so is fairly standard.  The particular macro being demonstrated is <c>\cancelto{}{}</c>.  <me>\lim_{b \rightarrow \infty}\left[\cancelto{0}{-\frac{1}{s}e^{-sb}} + \frac{1}{s}\right]</me>.   Look at the source of this article to see the package name being supplied in a <c>latex-preamble/package</c> element within the <c>docinfo</c> section.  That is the only setup required to make the macro usable in <latex /> and <init>HTML</init> output.<index><main>canceling a term</main></index><index sortby="cancelto macro"><c>cancelto</c> macro</index></p>
+                <p>This example is from Jason Underdown.<idx><h>Underdown, Jason</h></idx>  The package is named <c>cancel</c> and is included in the TeXLive distribution, so is fairly standard.  The particular macro being demonstrated is <c>\cancelto{}{}</c>.  <me>\lim_{b \rightarrow \infty}\left[\cancelto{0}{-\frac{1}{s}e^{-sb}} + \frac{1}{s}\right]</me>.   Look at the source of this article to see the package name being supplied in a <c>latex-preamble/package</c> element within the <c>docinfo</c> section.  That is the only setup required to make the macro usable in <latex /> and <init>HTML</init> output.<idx><h>canceling a term</h></idx><idx sortby="cancelto macro"><c>cancelto</c> macro</idx></p>
 
                 <p>The packages appear before the author-supplied macros, so you can use macros from the packages as building blocks for document-specific macros.  We cannot guarantee there will be no conflicts between additional packages and those in use normally, or added in the future.  So use at your own risk.</p>
             </subsection>
@@ -1461,7 +1461,7 @@ the xsltproc executable.
             <subsection xml:id="section-urls">
                 <title>URLs</title>
 
-                <p>An internet <init>URL</init><index><main>URLs</main></index> can very well contain some of the characters that <latex /> needs to escape.  But the packages we use for embedded links should be smart about this.  So we include a long <init>URL</init> for testing <latex /> output, with one reserved character, though maybe someday it will become stale and we need to change it out:  <url href="http://www.pcc.edu/enroll/registration/dropping.html#withdraw">www.pcc.edu/enroll/registration/dropping.html<hash />withdraw</url>.  Notice in the source that you <em>cannot</em> put a tag inside the <c>href</c> attribute, and do need to use an element within the content (unless you like to wrap the content in a <c>c</c> element).  Here is a totally bogus <init>URL</init>, which contains every possible legal character, so if this fails to convert there is some problematic character.  Four combinations: with the content as normal text versus with the characters as verbatim text, and as a <init>URL</init> versus not.</p>
+                <p>An internet <init>URL</init><idx><h>URLs</h></idx> can very well contain some of the characters that <latex /> needs to escape.  But the packages we use for embedded links should be smart about this.  So we include a long <init>URL</init> for testing <latex /> output, with one reserved character, though maybe someday it will become stale and we need to change it out:  <url href="http://www.pcc.edu/enroll/registration/dropping.html#withdraw">www.pcc.edu/enroll/registration/dropping.html<hash />withdraw</url>.  Notice in the source that you <em>cannot</em> put a tag inside the <c>href</c> attribute, and do need to use an element within the content (unless you like to wrap the content in a <c>c</c> element).  Here is a totally bogus <init>URL</init>, which contains every possible legal character, so if this fails to convert there is some problematic character.  Four combinations: with the content as normal text versus with the characters as verbatim text, and as a <init>URL</init> versus not.</p>
 
                 <blockquote>
 
@@ -1494,7 +1494,7 @@ the xsltproc executable.
             <subsection>
                 <title>Quotations</title>
 
-                <p>The <c>q</c><index><main>quotations</main></index> tag will provide beginning and ending double quotations, while the <c>sq</c> tag will behave similarly but provide single quotes.</p>
+                <p>The <c>q</c><idx><h>quotations</h></idx> tag will provide beginning and ending double quotations, while the <c>sq</c> tag will behave similarly but provide single quotes.</p>
 
                 <p><q>The roots of education are bitter, but the fruit is sweet.</q> (Aristotle)</p>
 
@@ -1827,7 +1827,7 @@ the xsltproc executable.
             <subsection>
                 <title>Asymptote</title>
 
-                <p>The Asymptote<index><main>asymptote graphics language</main></index> graphics language may be placed in your source to draw graphs, diagrams or pictures.  Rules for formatting code are identical to those for Sage code.  For more on Asymptote see <url href="http://asymptote.sourceforge.net/" />.</p>
+                <p>The Asymptote<idx><h>asymptote graphics language</h></idx> graphics language may be placed in your source to draw graphs, diagrams or pictures.  Rules for formatting code are identical to those for Sage code.  For more on Asymptote see <url href="http://asymptote.sourceforge.net/" />.</p>
 
                 <!--
                 See a different (more traditional) variant of URL usage
@@ -1970,7 +1970,7 @@ the xsltproc executable.
 
             <subsection>
                 <title>Sage Plots</title>
-                <index><main>Sage plots</main></index>
+                <idx><h>Sage plots</h></idx>
 
                 <p>Any of the numerous capabilities of Sage may be used to produce any graphics object, be it the simple graph of a single-variable function or some realization of a more complicated object.  All of the usual rules about formatting Sage code (esp. indentation) apply, along with one more caveat.  The last line of your Sage code <alert>must</alert> return a Sage <c>Graphics</c> object (or 3D plot).  The <c>mbx</c> script will isolate this last line, use it as the RHS of an assignment statement, and the Sage <c>.save()</c> method will be called to generate the image, which is either a Portable Document Format (PDF) file amenable to <latex /> output, or a Scalable Vector Graphics (SVG) file amenable to HTML output.  For visualizations of 3D plots, Sage will only produce Portable Network Graphics (PNG) files, which can be included in HTML pages or <latex /> output.</p>
 
@@ -2186,7 +2186,7 @@ the xsltproc executable.
 
             <references>
                 <title>References</title>
-                <index><main>references</main><sub>within a section</sub></index>
+                <idx><h>references</h><h>within a section</h></idx>
 
                 <introduction>
                     <p>These items are here to test basic formatting of references.</p>
@@ -2248,7 +2248,7 @@ the xsltproc executable.
 
                 <exercise>
                     <statement>
-                        <p>One of the few things you can place inside of mathematics is a <q>fill-in</q> blank.<index><main>fill-in blank</main></index>  We demonstrate a few scenarios here.  See details on syntax in <xref ref="subsection-paragraph-markup" autoname="yes" /><ndash />the use is identical within mathematics.<ul>
+                        <p>One of the few things you can place inside of mathematics is a <q>fill-in</q> blank.<idx><h>fill-in blank</h></idx>  We demonstrate a few scenarios here.  See details on syntax in <xref ref="subsection-paragraph-markup" autoname="yes" /><ndash />the use is identical within mathematics.<ul>
                             <li><p>Inside inline math (short, 4 characters): <m>\sin(<fillin characters="4" />)</m></p></li>
 
                             <li><p>Inside inline math (default, 10 characters): <m>\sin(<fillin characters="10" />)</m></p></li>
@@ -2329,10 +2329,10 @@ the xsltproc executable.
 
             <subsection>
                 <title>Lists, Generally</title>
-                <index><main>ordered list</main></index>
-                <index><main>list</main><sub>ordered</sub></index>
-                <index><main>unordered list</main></index>
-                <index><main>list</main><sub>unordered</sub></index>
+                <idx><h>ordered list</h></idx>
+                <idx><h>list</h><h>ordered</h></idx>
+                <idx><h>unordered list</h></idx>
+                <idx><h>list</h><h>unordered</h></idx>
 
                 <p>This section contains nested lists, to demonstrate how they get assigned labels (numbering, symbols).  But we begin with two simple lists, demonstrating an ordered list and an unordered list.  See the end of section for an example of a description list.  Since Jupyter notebooks use markdown syntax, their lists are less flexible.  So some assertions here may be wrong when viewed as a Jupyter notebook.  Note in the source the optional use of a paragraph (<c>p</c>) for the list items.</p>
 
@@ -2563,7 +2563,7 @@ the xsltproc executable.
             <subsection>
                 <title>Description Lists</title>
 
-                <p>A <q>description</q><index><main>description list</main></index><index><main>list</main><sub>description</sub></index> list has a short term or phrase that is prominent, followed by a short description.  It is modeled on the lists of similar structure in both <latex /> and HTML.  It makes for a nice medium-weight way to define terms, somewhere in-between the <c>term</c> tag which just makes a term prominent in a sentence, and a <c>definition</c>, which is set off, has a heading, a number, and a title.  This example is from Bob Plantz.<dl>
+                <p>A <q>description</q><idx><h>description list</h></idx><idx><h>list</h><h>description</h></idx> list has a short term or phrase that is prominent, followed by a short description.  It is modeled on the lists of similar structure in both <latex /> and HTML.  It makes for a nice medium-weight way to define terms, somewhere in-between the <c>term</c> tag which just makes a term prominent in a sentence, and a <c>definition</c>, which is set off, has a heading, a number, and a title.  This example is from Bob Plantz.<dl>
                     <li>
                         <title>Central Processing Unit (CPU)</title>
                         <p>Controls most of the activities of the computer, performs the arithmetic and logical operations, and contains a small amount of very fast memory.</p>
@@ -2632,7 +2632,7 @@ the xsltproc executable.
                     </conclusion>
                 </list>
 
-                <p><index><main>list</main></index>This is a paragraph with three lists contained within it.  For HTML output we have to <q>inside-out</q> the lists.<ol>
+                <p><idx><h>list</h></idx>This is a paragraph with three lists contained within it.  For HTML output we have to <q>inside-out</q> the lists.<ol>
                     <li>A one item ordered list.</li>
                 </ol>In other words, the text before, after, and between, needs to each be encapsulated as an HTML <c>p</c> element of its own.<ul>
                     <li>A one item unordered list.</li>
@@ -2656,12 +2656,12 @@ the xsltproc executable.
             <subsection>
                 <title>Testing List Decompositions</title>
 
-                <p>A list in a paragraph is a construction in HTML that browsers try to correct, which leads to unpredictable results, so we have to decompose an author's paragraph with lists into a sequence of HTML paragraphs, interrupted by lists.  This subsection is only relevant to HTML output, and only for testing.<index><main>paragraph</main><sub>normal</sub></index></p>
+                <p>A list in a paragraph is a construction in HTML that browsers try to correct, which leads to unpredictable results, so we have to decompose an author's paragraph with lists into a sequence of HTML paragraphs, interrupted by lists.  This subsection is only relevant to HTML output, and only for testing.<idx><h>paragraph</h><h>normal</h></idx></p>
 
                 <p><ol>
                     <li>This paragraph opens with an ordered list.</li>
                     <li>Testing the id, and other info that should be at the top of the paragraph.</li>
-                </ol>Now the paragraph continues, and we have an index item here, so we can test cross-references back here.<index><main>paragraph</main><sub>opens with list</sub></index></p>
+                </ol>Now the paragraph continues, and we have an index item here, so we can test cross-references back here.<idx><h>paragraph</h><h>opens with list</h></idx></p>
 
             </subsection>
 
@@ -3393,7 +3393,7 @@ the xsltproc executable.
 
             <subsection>
                 <title>GeoGebra</title>
-                <index><main>GeoGebra</main></index>
+                <idx><h>GeoGebra</h></idx>
 
                 <p>This first example of a  GeoGebra demonstration has just the controls for moving the three vertices on the circumfrence of the circle.  This is courtesy of Danny Parsons at the African Institute of Mathematical Sciences.  This demo requires Java, which could be problematic.</p>
 
@@ -3556,7 +3556,7 @@ the xsltproc executable.
                 <video source="images/ups-visitor-guide-360" width="80%"/>
             </figure>
 
-            <p>YouTube<index><main>YouTube videos</main></index><index><main>videos</main><sub>YouTube</sub></index> videos may be embedded with only knowledge of the <q>ID</q>.  This a string of eleven seemingly random characters that show up in the URL when you watch a video.  For the Led Zeppelin performance below, the ID is <c>hAzdgU_kpGo</c>, which you might normally watch directly from the URL <url href="https://www.youtube.com/watch?v=hAzdgU_kpGo" />.  Screen real estate is determined by specifying an optional <c>@width</c> attribute as a percentage, and aspect ratio is preserved on the assumption of HD video (16:9).</p>
+            <p>YouTube<idx><h>YouTube videos</h></idx><idx><h>videos</h><h>YouTube</h></idx> videos may be embedded with only knowledge of the <q>ID</q>.  This a string of eleven seemingly random characters that show up in the URL when you watch a video.  For the Led Zeppelin performance below, the ID is <c>hAzdgU_kpGo</c>, which you might normally watch directly from the URL <url href="https://www.youtube.com/watch?v=hAzdgU_kpGo" />.  Screen real estate is determined by specifying an optional <c>@width</c> attribute as a percentage, and aspect ratio is preserved on the assumption of HD video (16:9).</p>
 
             <p>Enhancements could include other aspect ratios, and attributes for a start and stop time.</p>
 
@@ -3565,7 +3565,7 @@ the xsltproc executable.
             <figure>
                 <title>Kashmir (Live), Led Zeppelin</title>
                 <caption>Kashmir (Live), Led Zeppelin. O2 Arena, London. December 10, 2007. (8:55)</caption>
-                <index><main>Led Zeppelin video</main></index>
+                <idx><h>Led Zeppelin video</h></idx>
 
                 <video youtube="hAzdgU_kpGo" width="70%" xml:id="led-zeppelin-kashmir" />
             </figure>
@@ -3661,7 +3661,7 @@ the xsltproc executable.
         <section xml:id="section-cross-referencing">
             <title>Cross-Referencing</title>
 
-            <p>Cross-references are easy, since that is a key reason for having a highly structured document.  Here is a useful feature if you elect to use it.  Any <c>&lt;xref&gt;</c> will <q>know</q> what it points to, so you can let it provide the <q>naming</q> part of the cross-reference text.  You can turn this on globally with the command-line parameter <c>autoname</c><index><main>autoname</main></index> set to <c>'yes'</c>.  If you do that, you will see most of the names in this document doubled, since the names are written into the source already in most places outside of this section.  Try it and see: use <c>--stringparam autoname 'yes'</c> as an argument to <c>xsltproc</c>.</p>
+            <p>Cross-references are easy, since that is a key reason for having a highly structured document.  Here is a useful feature if you elect to use it.  Any <c>&lt;xref&gt;</c> will <q>know</q> what it points to, so you can let it provide the <q>naming</q> part of the cross-reference text.  You can turn this on globally with the command-line parameter <c>autoname</c><idx><h>autoname</h></idx> set to <c>'yes'</c>.  If you do that, you will see most of the names in this document doubled, since the names are written into the source already in most places outside of this section.  Try it and see: use <c>--stringparam autoname 'yes'</c> as an argument to <c>xsltproc</c>.</p>
 
             <p>Moreover, the names themselves will change with the use of the one language dependent file.  And another bonus is that with an autoname, you automatically get a <em>non-breaking</em> space between the name and the reference.  The autoname switch makes no sense for <q>provisional</q> cross-references, since there is no information about what they point to.</p>
 
@@ -4061,7 +4061,7 @@ the xsltproc executable.
 
             <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt or Brython (in-browser Python) or the Python language argument to the Sage Cell Server.  To see examples of authoring Sage cells, have a look at Section<nbsp /><xref ref="section-sage-cells" />.</p>
 
-            <p>In the meantime, program listings,<index><main>listing</main></index><index><main>program listing</main></index> especially with syntax highlighting, is useful all by itself.  The <q>R</q> language might not be a bad stand-in for pseudo-code, as it supports assignment with a left arrow and has fairly generic procedural syntax for control structures and data structures.  Or maybe Pascal would be a good choice?  Here is an example of R.  Note in the source that the entire block of code is wrapped in a CDATA section due to the four left angle brackets.</p>
+            <p>In the meantime, program listings,<idx><h>listing</h></idx><idx><h>program listing</h></idx> especially with syntax highlighting, is useful all by itself.  The <q>R</q> language might not be a bad stand-in for pseudo-code, as it supports assignment with a left arrow and has fairly generic procedural syntax for control structures and data structures.  Or maybe Pascal would be a good choice?  Here is an example of R.  Note in the source that the entire block of code is wrapped in a CDATA section due to the four left angle brackets.</p>
 
             <!-- Output in knowls?? -->
 
@@ -4353,7 +4353,7 @@ the xsltproc executable.
         <section>
             <title>Units of Measure</title>
 
-            <p>Units of measure can be given xml treatment too with the <c>quantity</c> element. In <latex />, the <c>siunitx</c><index><main>siunitx package</main></index><index><main>package</main><sub>siunitx</sub></index><index><main>units</main></index> package is loaded to achive unit handling. Since that package only offers SI units, some other common units will be added by MBX in the preamble. In HTML, the capabilities of <c>siunitx</c> are simulated, weakly. Note that at present, you should not attempt to use the <c>quantity</c> element within a math environment.</p>
+            <p>Units of measure can be given xml treatment too with the <c>quantity</c> element. In <latex />, the <c>siunitx</c><idx><h>siunitx package</h></idx><idx><h>package</h><h>siunitx</h></idx><idx><h>units</h></idx> package is loaded to achive unit handling. Since that package only offers SI units, some other common units will be added by MBX in the preamble. In HTML, the capabilities of <c>siunitx</c> are simulated, weakly. Note that at present, you should not attempt to use the <c>quantity</c> element within a math environment.</p>
             <p>The value of gravitational constant <m>g</m> is <quantity><mag>9.8</mag><unit base="meter"/><per base="second" exp="2"/></quantity>. Force is measured in <quantity><unit prefix="kilo" base="gram"/><unit base="meter"/><per base="second" exp="2"/></quantity>, also known as one <quantity><unit base="newton"/></quantity>. A quantity with rather ridiculous units is <quantity><mag>23</mag><unit prefix='micro' base='hectare' exp='23'/><per base='degreeCelsius'/><per base='second' exp='2'/></quantity>. One <quantity><unit base="hertz"/></quantity> is the same as <quantity><per base='second'/></quantity>. You can have a unitless quantity, like <quantity><mag>42</mag></quantity>, which may help with consistency between such numbers and units in the <latex /> output. Some non-SI units are available, such as the absurd <quantity><unit base="degreeFahrenheit"/><unit base="foot"/><unit base="pound"/><per base="gallon"/></quantity>.  The <latex /> command <c>\pi</c> is recognized within <c>mag</c> in conversions to HTML, which is consistent with the behavior with a conversion to <latex />, for example there are <quantity><mag>2\pi</mag><unit base="radian"/></quantity> in a full circle.</p>
 
             <p>For a full list of the allowed units and prefixes, see <c>mathbook-units.xsl</c>. If you have a need for more units, they need to be added to <c>mathbook-units.xsl</c> in the section that deals with units which are not part of <c>siunitx</c> by default.  Note that the <c>mag</c> element should come first, followed by the <c>unit</c> element, followed by the <c>per</c> element.</p>
@@ -5002,7 +5002,7 @@ the xsltproc executable.
                         </list>
                         <list xml:id="color-list-as-panel">
                             <title>Color Shades</title>
-                            <index><main>colors</main><sub>shades</sub></index>
+                            <idx><h>colors</h><h>shades</h></idx>
                             <ol>
                                 <li><p>Blue<ol>
                                     <li>Light</li>
@@ -5550,7 +5550,7 @@ the xsltproc executable.
 
                 <p><q>Names</q> for various parts of a document are determined exactly once for each language, ensuring consistency and saving you the bother of always typing them in.</p>
 
-                <p>However, you may want to have <q>Conundrum</q>s<index><main>conundrum</main><sub>repurposed from proposition</sub></index> in your document and you have no use for any <q>Proposition</q>s.  So you can repurpose the <c>proposition</c> tag to render a different name.  Or you might have a Lab Manual and want to rename <c>subsection</c> as <q>Activity</q>.  See the <c>docinfo</c> portion of this sample article to see how this is done, in concert with the example below.</p>
+                <p>However, you may want to have <q>Conundrum</q>s<idx><h>conundrum</h><h>repurposed from proposition</h></idx> in your document and you have no use for any <q>Proposition</q>s.  So you can repurpose the <c>proposition</c> tag to render a different name.  Or you might have a Lab Manual and want to rename <c>subsection</c> as <q>Activity</q>.  See the <c>docinfo</c> portion of this sample article to see how this is done, in concert with the example below.</p>
 
                 <proposition xml:id="proposition-as-conundrum">
                     <statement>
@@ -5628,10 +5628,10 @@ the xsltproc executable.
                 </conclusion>
             </references>
 
-            <index-part >
+            <index>
                 <title>Index</title>
                 <index-list />
-            </index-part>
+            </index>
 
             <colophon>
                 <p>This article was authored in <pretext />.</p>
