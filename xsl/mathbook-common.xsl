@@ -1879,7 +1879,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- it is a direct descendant of a structural node or a directly    -->
 <!-- descended introduction or conclusion .                          -->
 <!-- Also, list items are considered blocks.                         -->
-<xsl:template match="md|mdn|ul|ol|dl|blockquote|pre|sidebyside|sage|&FIGURE-LIKE;|poem|program|image|tabular|paragraphs|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|exercise|li" mode="is-block">
+<!-- NB: we don't point to a sidebyside, so not included here        -->
+<xsl:template match="md|mdn|ul|ol|dl|blockquote|pre|sage|&FIGURE-LIKE;|poem|program|image|tabular|paragraphs|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|exercise|li" mode="is-block">
     <xsl:value-of select="true()" />
 </xsl:template>
 

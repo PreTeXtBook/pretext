@@ -1776,7 +1776,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (7) TODO: "wrapped-content" called by "body" to separate code. -->
 
-<xsl:template match="li|me|men|md|mdn|fn|biblio|p|blockquote|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|sidebyside|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|webwork[*|@*]|paragraphs|exercise|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|biblio/note|contributor">
+<xsl:template match="li|me|men|md|mdn|fn|biblio|p|blockquote|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|webwork[*|@*]|paragraphs|exercise|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|biblio/note|contributor">
     <xsl:param name="b-original" select="true()" />
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
@@ -2238,9 +2238,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>figure</xsl:text>
 </xsl:template>
 
-<!-- we have a separate body template for sidebyside, so this is OK -->
-<xsl:template match="sidebyside" mode="body-element" />
-
 <xsl:template match="hint|answer|solution|biblio/note" mode="body-element">
     <xsl:text>span</xsl:text>
 </xsl:template>
@@ -2318,9 +2315,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&FIGURE-LIKE;" mode="body-css-class">
     <xsl:text>figure-like</xsl:text>
 </xsl:template>
-
-<!-- we have a separate body template for sidebyside, so this is OK -->
-<xsl:template match="sidebyside" mode="body-css-class" />
 
 <!-- TOD: overall, even, this is not really right -->
 <xsl:template match="hint|answer|solution" mode="body-css-class">
@@ -2586,7 +2580,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
             </xsl:when>
-            <!-- includes sidebyside, but never happens via match -->
             <xsl:when test="&FIGURE-FILTER;">
                 <!-- do we just kill captions as metadata? -->
                 <xsl:apply-templates select="*[not(self::caption)]">
@@ -2729,19 +2722,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:apply-templates>
     </xsl:if>
 </xsl:template>
-
-<!-- A specialization for sidebyside, which we should           -->
-<!-- incorporate into above scheme via template for            -->
-<!-- "plain" old sidebyside, not a diversion into common-setup -->
-<!-- call main template in common -->
-<xsl:template match="sidebyside" mode="body">
-    <xsl:param name="block-type" />
-    <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="." mode="common-setup">
-        <xsl:with-param name="b-original" select="$b-original" />
-    </xsl:apply-templates>
-</xsl:template>
-
 
 <xsl:template match="fn" mode="heading-xref-knowl">
     <xsl:apply-templates select="." mode="heading-full" />
@@ -3757,6 +3737,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See xsl/mathbook-common.xsl for descriptions of the  -->
 <!-- five modal templates which must be implemented here -->
 
+<!-- We begin the chain of events by calling the            -->
+<!-- "common-setup" modal template in mathbook-common.xsl,  -->
+<!-- which isolates analysis of the widths, etc.  As a pure -->
+<!-- container, we pass the original flag down into content -->
+<xsl:template match="sidebyside">
+    <xsl:param name="b-original" select="true()" />
+    <xsl:apply-templates select="." mode="common-setup">
+        <xsl:with-param name="b-original" select="$b-original" />
+    </xsl:apply-templates>
+</xsl:template>
+
 <!-- When we use CSS margins (or padding), then percentage        -->
 <!-- widths are relative to the remaining space.  This utility    -->
 <!-- takes in a width relative to full-text-width and the margins -->
@@ -4726,8 +4717,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Cross-references as knowls                               -->
 <!-- Override to turn off cross-references as knowls          -->
-<!-- We explicitly include figures and tables from within     -->
-<!-- a sidebyside even though this is not necessary           -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
 <xsl:template match="fn|p|blockquote|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|paragraphs|objectives|exercise|webwork|hint|answer|solution|exercisegroup|me|men|mrow|li|contributor" mode="xref-as-knowl">
