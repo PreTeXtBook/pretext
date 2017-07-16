@@ -2561,11 +2561,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:apply-templates>
             </xsl:when>
             <xsl:when test="self::assemblage">
-                <xsl:apply-templates select="p|table|figure|sidebyside" >
+                <xsl:apply-templates select="p|&FIGURE-LIKE;|sidebyside" >
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
             </xsl:when>
-            <xsl:when test="&DEFINITION-FILTER; or &REMARK-FILTER; or &ASIDE-FILTER; or self::case or self::proof">
+            <xsl:when test="&ASIDE-FILTER;">
+                <xsl:apply-templates select="p|&FIGURE-LIKE;|sidebyside" >
+                    <xsl:with-param name="b-original" select="$b-original" />
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:when test="&DEFINITION-FILTER; or &REMARK-FILTER; or self::case or self::proof">
                 <xsl:apply-templates select="*" >
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>

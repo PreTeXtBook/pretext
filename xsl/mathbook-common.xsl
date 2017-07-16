@@ -2565,12 +2565,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure)]|table[not(parent::sidebyside/parent::figure)]|listing[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure)]|table[not(parent::sidebyside/parent::figure)]|listing[caption]|" /></xsl:when>
-        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/backmatter/appendix" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure)]|table[not(parent::sidebyside/parent::figure)]|listing[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/backmatter/appendix" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure)]|table[not(parent::sidebyside/parent::figure)]|listing[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=3"><xsl:number from="subsection" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure)]|table[not(parent::sidebyside/parent::figure)]|listing[caption]" /></xsl:when>
-        <xsl:when test="$subtree-level=4"><xsl:number from="subsubsection" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure)]|table[not(parent::sidebyside/parent::figure)]|listing[caption]" /></xsl:when>
+        <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure)]|table[not(parent::sidebyside/parent::figure)]|listing[not(parent::sidebyside/parent::figure)]" /></xsl:when>
+        <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure)]|table[not(parent::sidebyside/parent::figure)]|listing[not(parent::sidebyside/parent::figure)]|" /></xsl:when>
+        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/backmatter/appendix" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure)]|table[not(parent::sidebyside/parent::figure)]|listing[not(parent::sidebyside/parent::figure)]" /></xsl:when>
+        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/backmatter/appendix" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure)]|table[not(parent::sidebyside/parent::figure)]|listing[not(parent::sidebyside/parent::figure)]" /></xsl:when>
+        <xsl:when test="$subtree-level=3"><xsl:number from="subsection" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure)]|table[not(parent::sidebyside/parent::figure)]|listing[not(parent::sidebyside/parent::figure)]" /></xsl:when>
+        <xsl:when test="$subtree-level=4"><xsl:number from="subsubsection" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure)]|table[not(parent::sidebyside/parent::figure)]|listing[not(parent::sidebyside/parent::figure)]" /></xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for theorem number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>
@@ -2668,7 +2668,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
-<!-- Serial Numbers: Subfigures, Subtables -->
+<!-- Serial Numbers: Subfigures, Subtables, Sublisting-->
 <!-- Subcaptioning only happens with figures  -->
 <!-- or tables arranged in a sidebyside, which  -->
 <!-- is again contained inside a figure, the  -->
@@ -2681,9 +2681,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- full number of the enclosing side-by-side         -->
 
 
-<xsl:template match="figure/sidebyside/figure | figure/sidebyside/table" mode="serial-number">
+<xsl:template match="figure/sidebyside/figure | figure/sidebyside/table | figure/sidebyside/listing" mode="serial-number">
     <xsl:text>(</xsl:text>
-    <xsl:number format="a" count="figure|table"/>
+    <xsl:number format="a" count="figure|table|listing"/>
     <xsl:text>)</xsl:text>
 </xsl:template>
 
@@ -2874,7 +2874,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- then inside a captioned figure, earn a serial -->
 <!-- number that is a letter.  So their structure  -->
 <!-- number comes from their grandparent figure    -->
-<xsl:template match="figure/sidebyside/figure | figure/sidebyside/table" mode="structure-number">
+<xsl:template match="figure/sidebyside/figure | figure/sidebyside/table | figure/sidebyside/listing" mode="structure-number">
     <xsl:apply-templates select="parent::sidebyside/parent::figure" mode="number" />
     <xsl:text>.</xsl:text>
 </xsl:template>
