@@ -1539,130 +1539,82 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- h5, type name, number (if exists), title (if exists) -->
 <xsl:template match="*" mode="heading-full">
-    <xsl:element name="h5">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
-        </xsl:attribute>
-        <xsl:element name="span">
-            <xsl:attribute name="class">
-                <xsl:text>type</xsl:text>
-            </xsl:attribute>
+    <h5 class="heading">
+        <span class="type">
             <xsl:apply-templates select="." mode="type-name" />
-        </xsl:element>
+        </span>
         <xsl:variable name="the-number">
             <xsl:apply-templates select="." mode="number" />
         </xsl:variable>
         <xsl:if test="not($the-number='')">
-            <xsl:element name="span">
-                <xsl:attribute name="class">
-                    <xsl:text>codenumber</xsl:text>
-                </xsl:attribute>
+            <span class="codenumber">
                 <xsl:value-of select="$the-number" />
-            </xsl:element>
+            </span>
         </xsl:if>
         <xsl:if test="title">
-            <xsl:element name="span">
-                <xsl:attribute name="class">
-                    <xsl:text>title</xsl:text>
-                </xsl:attribute>
+            <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
-            </xsl:element>
+            </span>
         </xsl:if>
-    </xsl:element>
+    </h5>
 </xsl:template>
 
 <!-- h5, no type name, serial number, title (if exists) -->
 <xsl:template match="*" mode="heading-sectional-exercise">
-    <xsl:element name="h5">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
-        </xsl:attribute>
-        <xsl:element name="span">
-            <xsl:attribute name="class">
-                <xsl:text>codenumber</xsl:text>
-            </xsl:attribute>
+    <h5 class="heading">
+        <span class="codenumber">
             <xsl:apply-templates select="." mode="serial-number" />
-        </xsl:element>
+        </span>
         <xsl:if test="title">
-            <xsl:element name="span">
-                <xsl:attribute name="class">
-                    <xsl:text>title</xsl:text>
-                </xsl:attribute>
+            <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
-            </xsl:element>
+            </span>
         </xsl:if>
-    </xsl:element>
+    </h5>
 </xsl:template>
 
 <!-- h5, type name, serial number, title (if exists) -->
 <!-- For the knowl text of a sectional exercise      -->
 <xsl:template match="*" mode="heading-sectional-exercise-typed">
-    <xsl:element name="h5">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
-        </xsl:attribute>
-        <xsl:element name="span">
-            <xsl:attribute name="class">
-                <xsl:text>type</xsl:text>
-            </xsl:attribute>
+    <h5 class="heading">
+        <span class="type">
             <xsl:apply-templates select="." mode="type-name" />
-        </xsl:element>
-        <xsl:element name="span">
-            <xsl:attribute name="class">
-                <xsl:text>codenumber</xsl:text>
-            </xsl:attribute>
+        </span>
+        <span class="codenumber">
             <xsl:apply-templates select="." mode="serial-number" />
-        </xsl:element>
+        </span>
         <xsl:if test="title">
-            <xsl:element name="span">
-                <xsl:attribute name="class">
-                    <xsl:text>title</xsl:text>
-                </xsl:attribute>
+            <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
-            </xsl:element>
+            </span>
         </xsl:if>
-    </xsl:element>
+    </h5>
 </xsl:template>
 
 <!-- h5, type name, no number (even if exists), title (if exists) -->
 <!-- eg, objectives is one-per-subdivison, max,                   -->
 <!-- so no need to display at birth, but is needed in xref        -->
 <xsl:template match="*" mode="heading-full-implicit-number">
-    <xsl:element name="h5">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
-        </xsl:attribute>
-        <xsl:element name="span">
-            <xsl:attribute name="class">
-                <xsl:text>type</xsl:text>
-            </xsl:attribute>
+    <h5 class="heading">
+        <span class="type">
             <xsl:apply-templates select="." mode="type-name" />
-        </xsl:element>
+        </span>
         <!-- codenumber is implicit via placement -->
         <xsl:if test="title">
-            <xsl:element name="span">
-                <xsl:attribute name="class">
-                    <xsl:text>title</xsl:text>
-                </xsl:attribute>
+            <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
-            </xsl:element>
+            </span>
         </xsl:if>
-    </xsl:element>
+    </h5>
 </xsl:template>
 
 <!-- eg "Paragraph" displayed in content of an xref-knowl -->
 <xsl:template match="*" mode="heading-type">
-    <xsl:element name="h5">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
-        </xsl:attribute>
-        <xsl:element name="span">
-            <xsl:attribute name="class">
-                <xsl:text>type</xsl:text>
-            </xsl:attribute>
+    <h5 class="heading">
+        <span class="type">
             <xsl:apply-templates select="." mode="type-name" />
-        </xsl:element>
-    </xsl:element>
+        </span>
+    </h5>
 </xsl:template>
 
 <!-- Title only: on assemblage, aside, or paragraphs -->
@@ -1677,33 +1629,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- eg "Solution 5" as text of knowl-clickable, no h5 wrapping -->
 <xsl:template match="*" mode="heading-simple">
     <!-- the name of the object, its "type" -->
-    <xsl:element name="span">
-        <xsl:attribute name="class">
-            <xsl:text>type</xsl:text>
-        </xsl:attribute>
+    <span class="type">
         <xsl:apply-templates select="." mode="type-name" />
-    </xsl:element>
+    </span>
     <!-- A simple number, this should be in -common perhaps? -->
     <!-- The work here is to see if the count exceeds 1      -->
     <xsl:variable name="elt-name" select="local-name(.)" />
     <xsl:variable name="siblings" select="parent::*/child::*[local-name(.) = $elt-name]" />
     <xsl:if test="count($siblings) > 1">
         <xsl:text> </xsl:text>
-        <xsl:element name="span">
-            <xsl:attribute name="class">
-                <xsl:text>codenumber</xsl:text>
-            </xsl:attribute>
+        <span class="codenumber">
             <xsl:number />
-        </xsl:element>
+        </span>
     </xsl:if>
 </xsl:template>
 
 <!-- A case in a proof, eg "(=>) Necessity." -->
 <xsl:template match="*" mode="heading-case">
-    <xsl:element name="h6">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
-        </xsl:attribute>
+    <h6 class="heading">
         <xsl:choose>
             <!-- 'RIGHTWARDS DOUBLE ARROW' (U+21D2) -->
             <xsl:when test="@direction='forward'">
@@ -1722,7 +1665,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="title-full" />
             <xsl:text>.</xsl:text>
         </xsl:if>
-    </xsl:element>
+    </h6>
 </xsl:template>
 
 
