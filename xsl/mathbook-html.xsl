@@ -485,26 +485,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Bits and Pieces -->
 <!-- ############### -->
 
-<!-- Paragraphs -->
-<!-- Never structural, never named, somewhat distinct  -->
-<xsl:template match="paragraph">
-    <xsl:message>MBX:WARNING: the "paragraph" element is deprecated (2015/03/13), use "paragraphs" instead</xsl:message>
-    <xsl:apply-templates select="." mode="location-report" />
-    <xsl:variable name="ident">
-        <xsl:apply-templates select="." mode="internal-id" />
-    </xsl:variable>
-    <article class="paragraphs" id="{$ident}">
-        <xsl:if test="title">
-            <h5 class="heading">
-                <span class="title">
-                    <xsl:apply-templates select="." mode="title-full" />
-                </span>
-            </h5>
-        </xsl:if>
-        <xsl:apply-templates select="*"/>
-    </article>
-</xsl:template>
-
 <!-- Header for Document Nodes -->
 <!-- Every document node goes the same way, a    -->
 <!-- heading followed by its subsidiary elements -->

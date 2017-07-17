@@ -181,7 +181,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
 <!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
 <xsl:strip-space elements="mathbook book article memo letter" />
-<xsl:strip-space elements="frontmatter chapter appendix index-part index section subsection subsubsection exercises references introduction conclusion paragraphs paragraph subparagraph backmatter" />
+<xsl:strip-space elements="frontmatter chapter appendix index-part index section subsection subsubsection exercises references introduction conclusion paragraphs subparagraph backmatter" />
 <xsl:strip-space elements="docinfo author abstract" />
 <xsl:strip-space elements="titlepage preface acknowledgement biography foreword dedication colophon" />
 <!-- List is elements in DEFINITION-LIKE entity -->
@@ -2718,7 +2718,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Empty string signifies not numbered -->
 <!-- We do provide a "xref number" of an -->
 <!-- exercisegroup, but otherwise not    -->
-<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|paragraph|blockquote|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|index-part|index[index-list]|colophon|backmatter|exercisegroup|webwork|p|sidebyside|assemblage|aside|biographical|historical|case|contributor" mode="serial-number" />
+<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|blockquote|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|index-part|index[index-list]|colophon|backmatter|exercisegroup|webwork|p|sidebyside|assemblage|aside|biographical|historical|case|contributor" mode="serial-number" />
 
 <!-- If a list item has any ancestor that is not  -->
 <!-- an ordered list, then it gets no number      -->
@@ -5391,11 +5391,12 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the &quot;tikz&quot; element is deprecated, convert to &quot;latex-image-code&quot; inside &quot;image&quot;'" />
     </xsl:call-template>
     <!--  -->
-    <!-- 2015-03-13  paragraph is renamed more accurately to paragraphs -->
+    <!-- 2015-03-13  paragraph is renamed more accurately to paragraphs           -->
+    <!-- 2017-07-16  removed all backwards compatibility and added empty template -->
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurences" select="$document-root//paragraph" />
         <xsl:with-param name="date-string" select="'2015-03-13'" />
-        <xsl:with-param name="message" select="'the &quot;paragraph&quot; element is deprecated, replaced by functional equivalent &quot;paragraphs&quot;'" />
+        <xsl:with-param name="message" select="'the &quot;paragraph&quot; element is deprecated and any contained content will silently not appear, replaced by functional equivalent &quot;paragraphs&quot;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2015-03-17  various indicators of table rearrangement -->
@@ -5640,6 +5641,15 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:value-of select="concat($percent,'%')" />
 </xsl:template>
 
+<!-- ######## -->
+<!-- Bad Bank -->
+<!-- ######## -->
+
+<!-- This where old elements go to die.        -->
+<!-- Deprecated, then totally discarded later. -->
+
+<!-- 2017-07-16  killed, from 2015-03-13 deprecation -->
+<xsl:template match="paragraph" />
 
 
 </xsl:stylesheet>

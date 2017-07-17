@@ -77,7 +77,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='backmatter'><xsl:text>Závěrečná část</xsl:text></localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'><xsl:text>Odstavce</xsl:text></localization>
-    <localization string-id='paragraph'><xsl:text>Odstavec</xsl:text></localization>
     <localization string-id='subparagraph'><xsl:text>Pododstavec</xsl:text></localization>
     <!-- <localization string-id='case'><xsl:text>Case</xsl:text></localization> -->
     <!-- Components of the narrative -->

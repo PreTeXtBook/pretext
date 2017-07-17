@@ -79,7 +79,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='backmatter'><xsl:text>Záró rész</xsl:text></localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'><xsl:text>Paragrafusok</xsl:text></localization>
-    <localization string-id='paragraph'><xsl:text>Paragrafus</xsl:text></localization>
     <localization string-id='subparagraph'><xsl:text>Al-paragrafus</xsl:text></localization>
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->

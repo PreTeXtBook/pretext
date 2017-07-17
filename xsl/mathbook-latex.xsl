@@ -2828,12 +2828,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Note: Presumes we never go below subsubsection  -->
 <!-- in our MBX hierarchy and bump into this level   -->
 <!-- Maybe then migrate to "subparagraph"?           -->
-<xsl:template match="paragraphs|paragraph">
+<xsl:template match="paragraphs">
     <!-- Warn about paragraph deprecation -->
-    <xsl:if test="self::paragraph">
-        <xsl:message>MBX:WARNING: the "paragraph" element is deprecated (2015/03/13), use "paragraphs" instead</xsl:message>
-        <xsl:apply-templates select="." mode="location-report" />
-    </xsl:if>
     <xsl:apply-templates select="." mode="console-typeout" />
     <xsl:text>\paragraph</xsl:text>
     <!-- keep optional title if LaTeX source is re-purposed -->
