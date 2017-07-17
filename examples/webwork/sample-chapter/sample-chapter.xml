@@ -562,48 +562,51 @@
         <section>
             <title>Antidifferentiation</title>
 
-            <!-- with only an Exercises subdivision, we do not need to structure remainder -->
-            <p>This section demonstrates a few more features.</p>
+            <subsection>
+                <title>A Few More Features</title>
 
-            <p>The derivative and antiderivative of a function can be understood through study of their graphical relationships.</p>
+                <p>This subsection demonstrates a few more features.</p>
 
-            <definition xml:id="definition-antiderivative">
-                <title>Antiderivative of a Function</title>
+                <p>The derivative and antiderivative of a function can be understood through study of their graphical relationships.</p>
 
-                <statement>
-                    <p>Suppose that <m>f(x)</m> and <m>F(x)</m> are two functions such that <me>F^\prime(x) = f(x).</me>  Then we say <m>F</m> is an <term>antiderivative</term> of <m>f</m>.</p>
-                </statement>
-            </definition>
+                <definition xml:id="definition-antiderivative">
+                    <title>Antiderivative of a Function</title>
 
-            <p>The Fundamental Theorem of Calculus in one of the high points of a course in single-variable course.</p>
+                    <statement>
+                        <p>Suppose that <m>f(x)</m> and <m>F(x)</m> are two functions such that <me>F^\prime(x) = f(x).</me>  Then we say <m>F</m> is an <term>antiderivative</term> of <m>f</m>.</p>
+                    </statement>
+                </definition>
 
-            <theorem xml:id="theorem-FTC">
-                <title>The Fundamental Theorem of Calculus</title>
-                <index><main>Fundamental Theorem of Calculus</main></index>
-                <statement>
-                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me></p>
-                </statement>
-                <proof>
-                    <p>Left to the reader.</p>
-                </proof>
-            </theorem>
+                <p>The Fundamental Theorem of Calculus in one of the high points of a course in single-variable course.</p>
 
-            <p>We state an equivalent version of the FTC, which is less-suited for computation, but which perhaps is a more interesting theoretical statement.</p>
+                <theorem xml:id="theorem-FTC">
+                    <title>The Fundamental Theorem of Calculus</title>
+                    <idx>Fundamental Theorem of Calculus</idx>
+                    <statement>
+                        <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me></p>
+                    </statement>
+                    <proof>
+                        <p>Left to the reader.</p>
+                    </proof>
+                </theorem>
 
-            <todo>Should equation references come with parentheses?</todo>
+                <p>We state an equivalent version of the FTC, which is less-suited for computation, but which perhaps is a more interesting theoretical statement.</p>
 
-            <corollary xml:id="corollary-FTC-derivative">
-                <statement>
-                    <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men></p>
-                </statement>
-                <proof xml:id="proof-FTC-corollary">
-                    <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.<mdn>
-                        <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
-                        <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
-                        <mrow>&amp;=f(x)-0 = f(x)</mrow>
-                    </mdn></p>
-                </proof>
-            </corollary>
+                <todo>Should equation references come with parentheses?</todo>
+
+                <corollary xml:id="corollary-FTC-derivative">
+                    <statement>
+                        <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men></p>
+                    </statement>
+                    <proof xml:id="proof-FTC-corollary">
+                        <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.<mdn>
+                            <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
+                            <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
+                            <mrow>&amp;=f(x)-0 = f(x)</mrow>
+                        </mdn></p>
+                    </proof>
+                </corollary>
+            </subsection>
 
             <exercises>
                 <title><webwork /> Exercises</title>
@@ -1686,93 +1689,102 @@
 
         <section>
             <title>Layout Configuration Testing</title>
-            <p>This section is to provide a single page demonstrating all of the combinations that may factor into a problem's layout.</p>
 
-            <exercise>
-                <webwork>
-                    <statement>
-                        <p><m>1+1=2</m></p>
-                    </statement>
-                </webwork>
-            </exercise>
-            <exercise>
-                <title>Has a Title</title>
-                <webwork>
-                    <statement>
-                        <p><m>1+1=2</m></p>
-                    </statement>
-                </webwork>
-            </exercise>
-            <exercise>
-                <introduction>
-                    <p>Has an introduction.</p>
-                </introduction>
-                <webwork>
-                    <statement>
-                        <p><m>1+1=2</m></p>
-                    </statement>
-                </webwork>
-            </exercise>
-            <exercise>
-                <title>Has a Title</title>
-                <introduction>
-                    <p>Has an introduction.</p>
-                </introduction>
-                <webwork>
-                    <statement>
-                        <p><m>1+1=2</m></p>
-                    </statement>
-                </webwork>
-            </exercise>
-            <exercise>
-                <webwork>
-                    <statement>
-                        <p><m>1+1=2</m></p>
-                    </statement>
-                </webwork>
-                <conclusion>
-                    <p>Has a conclusion.</p>
-                </conclusion>
-            </exercise>
-            <exercise>
-                <title>Has a Title</title>
-                <webwork>
-                    <statement>
-                        <p><m>1+1=2</m></p>
-                    </statement>
-                </webwork>
-                <conclusion>
-                    <p>Has a conclusion.</p>
-                </conclusion>
-            </exercise>
-            <exercise>
-                <introduction>
-                    <p>Has an introduction.</p>
-                </introduction>
-                <webwork>
-                    <statement>
-                        <p><m>1+1=2</m></p>
-                    </statement>
-                </webwork>
-                <conclusion>
-                    <p>Has a conclusion.</p>
-                </conclusion>
-            </exercise>
-            <exercise>
-                <title>Has a Title</title>
-                <introduction>
-                    <p>Has an introduction.</p>
-                </introduction>
-                <webwork>
-                    <statement>
-                        <p><m>1+1=2</m></p>
-                    </statement>
-                </webwork>
-                <conclusion>
-                    <p>Has a conclusion.</p>
-                </conclusion>
-            </exercise>
+            <introduction>
+                <p>This section is to provide a single page demonstrating all of the combinations that may factor into a problem's layout.</p>
+            </introduction>
+
+            <subsection>
+                <title>Inline Exercises</title>
+                <p>Some <q>inline</q> exercises, as distinguished from the <q>sectional</q> exercises below.</p>
+                <exercise>
+                    <webwork>
+                        <statement>
+                            <p><m>1+1=2</m></p>
+                        </statement>
+                    </webwork>
+                </exercise>
+                <exercise>
+                    <title>Has a Title</title>
+                    <webwork>
+                        <statement>
+                            <p><m>1+1=2</m></p>
+                        </statement>
+                    </webwork>
+                </exercise>
+                <exercise>
+                    <introduction>
+                        <p>Has an introduction.</p>
+                    </introduction>
+                    <webwork>
+                        <statement>
+                            <p><m>1+1=2</m></p>
+                        </statement>
+                    </webwork>
+                </exercise>
+                <exercise>
+                    <title>Has a Title</title>
+                    <introduction>
+                        <p>Has an introduction.</p>
+                    </introduction>
+                    <webwork>
+                        <statement>
+                            <p><m>1+1=2</m></p>
+                        </statement>
+                    </webwork>
+                </exercise>
+                <exercise>
+                    <webwork>
+                        <statement>
+                            <p><m>1+1=2</m></p>
+                        </statement>
+                    </webwork>
+                    <conclusion>
+                        <p>Has a conclusion.</p>
+                    </conclusion>
+                </exercise>
+                <exercise>
+                    <title>Has a Title</title>
+                    <webwork>
+                        <statement>
+                            <p><m>1+1=2</m></p>
+                        </statement>
+                    </webwork>
+                    <conclusion>
+                        <p>Has a conclusion.</p>
+                    </conclusion>
+                </exercise>
+                <exercise>
+                    <introduction>
+                        <p>Has an introduction.</p>
+                    </introduction>
+                    <webwork>
+                        <statement>
+                            <p><m>1+1=2</m></p>
+                        </statement>
+                    </webwork>
+                    <conclusion>
+                        <p>Has a conclusion.</p>
+                    </conclusion>
+                </exercise>
+                <exercise>
+                    <title>Has a Title</title>
+                    <introduction>
+                        <p>Has an introduction.</p>
+                    </introduction>
+                    <webwork>
+                        <statement>
+                            <p><m>1+1=2</m></p>
+                        </statement>
+                    </webwork>
+                    <conclusion>
+                        <p>Has a conclusion.</p>
+                    </conclusion>
+                </exercise>
+            </subsection>
+
             <exercises>
+                <title>Sectional Exercises</title>
                 <exercise>
                     <webwork>
                         <statement>
