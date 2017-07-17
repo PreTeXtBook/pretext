@@ -44,10 +44,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xi:include href="./gfdl-mathbook.xml" />           <!-- GFDL License text -->
 
     <!-- Index follows appendices, preceded only colophon -->
-    <index-part>
+    <index>
 
         <index-list />
-    </index-part>
+    </index>
 
     <colophon>
         <p>This book was authored in MathBook XML.</p>
