@@ -5059,6 +5059,15 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:text>WeBWorK</xsl:text>
 </xsl:template>
 
+<!-- ##############-->
+<!-- Prophylactics -->
+<!-- ############# -->
+
+<!-- We nullify certain elements here that should only be active -->
+<!-- in some formats, and templates there can override these     -->
+
+<xsl:template match="instruction" />
+
 <!-- ################### -->
 <!-- Errors and Warnings -->
 <!-- ################### -->
