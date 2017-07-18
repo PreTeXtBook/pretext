@@ -100,9 +100,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <acknowledgement>
 
-        <p>I would like to acknowledge the following reviewers for their helpful comments and suggestions. </p>
-
-        <ul>
+        <p>I would like to acknowledge the following reviewers for their helpful comments and suggestions.<ul>
             <li><p>David Anderson, University of Tennessee, Knoxville</p></li>
             <li><p>Robert Beezer, University of Puget Sound</p></li>
             <li><p>Myron Hood, California Polytechnic State University</p></li>
@@ -113,7 +111,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <li><p>Bruce Mericle, Mankato State University</p></li>
             <li><p>Kimmo Rosenthal, Union College</p></li>
             <li><p>Mark Teply, University of Wisconsin</p></li>
-        </ul>
+        </ul></p>
 
         <p>I would also like to thank Steve Quigley, Marnie Pommett, Cathie Griffin, Kelle Karshick, and the rest of the staff at PWS Publishing for their guidance throughout this project. It has been a pleasure to work with them.</p>
 

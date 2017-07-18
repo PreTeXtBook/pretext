@@ -44,18 +44,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Abstract mathematics is different from other sciences. In laboratory sciences such as chemistry and physics, scientists perform experiments to discover new principles and verify theories.  Although mathematics is often motivated by physical experimentation or by computer simulations, it is made rigorous through the use of logical arguments.  In studying abstract mathematics, we take what is called an  axiomatic approach; that is, we take a collection of objects <m>\mathcal S</m> and assume some rules about their structure.  These rules are called <term>axioms</term>.  Using the axioms for <m>\mathcal S</m>, we wish to derive other information about <m>\mathcal S</m> by using logical arguments.  We require that our axioms be consistent; that is, they should not contradict one another.  We also demand that there not be too many axioms. If a system of axioms is too restrictive,  there will be few examples of the mathematical structure.</p>  
 
-            <p>A <term>statement</term> in logic or mathematics is an assertion that is either true or false.  Consider the following examples:</p>
-
-                <ul>
-                    <li><p><m>3 + 56 - 13 + 8/2 </m>.</p></li>
-                    <li><p>All cats are black.</p></li>
-                    <li><p><m>2 + 3 = 5</m>.</p></li>
-                    <li><p><m>2x = 6</m> exactly when <m>x = 4</m>.</p></li>
-                    <li><p>If <m>ax^2 + bx + c = 0</m> and <m>a \neq 0</m>, then <me>x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.</me></p></li>
-                    <li><p><m>x^3 - 4x^2 + 5 x - 6</m>.</p></li>
-                </ul>
-
-            <p>All but the first  and last examples are statements, and must be either true or false.</p> 
+            <p>A <term>statement</term> in logic or mathematics is an assertion that is either true or false.  Consider the following examples:<ul>
+                <li><p><m>3 + 56 - 13 + 8/2 </m>.</p></li>
+                <li><p>All cats are black.</p></li>
+                <li><p><m>2 + 3 = 5</m>.</p></li>
+                <li><p><m>2x = 6</m> exactly when <m>x = 4</m>.</p></li>
+                <li><p>If <m>ax^2 + bx + c = 0</m> and <m>a \neq 0</m>, then <me>x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.</me></p></li>
+                <li><p><m>x^3 - 4x^2 + 5 x - 6</m>.</p></li>
+            </ul>All but the first and last examples are statements, and must be either true or false.</p> 
 
             <p>A <term>mathematical proof</term> is nothing more than a convincing argument about the accuracy  of a statement. Such an argument should contain enough detail to convince the audience; for instance, we can see that the statement <q><m>2x = 6</m> exactly when <m>x = 4</m></q> is false by evaluating <m>2 \cdot 4</m> and noting that <m>6 \neq 8</m>, an argument that would satisfy anyone. Of course, audiences may vary widely: proofs can be addressed to another student, to a professor, or to the reader of a text.  If more detail than  needed is presented in the proof, then the  explanation will be either long-winded or poorly written.  If too much detail is omitted, then the proof may  not be convincing.  Again it is important to keep the audience in mind.  High school students require much more detail than do graduate students.  A good rule of thumb for an argument in an introductory abstract algebra course is that it should be written to convince one's peers, whether those peers be other students or other readers of the text.</p>
 
@@ -79,16 +75,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <subsection>
             <title>Some Cautions and Suggestions</title>
 
-            <p>There are several different strategies for proving propositions.  In addition to using different methods of proof, students often make some common mistakes when they are first learning how to prove theorems. To aid students who are studying abstract mathematics for the first time, we list here some of the difficulties that they may encounter and some of the strategies of proof available to them. It is a good idea to keep referring back to this list as a reminder. (Other techniques of proof will become apparent throughout this chapter and the remainder of the text.)</p>
-
-            <ul>
+            <p>There are several different strategies for proving propositions.  In addition to using different methods of proof, students often make some common mistakes when they are first learning how to prove theorems. To aid students who are studying abstract mathematics for the first time, we list here some of the difficulties that they may encounter and some of the strategies of proof available to them. It is a good idea to keep referring back to this list as a reminder. (Other techniques of proof will become apparent throughout this chapter and the remainder of the text.)<ul>
                 <li><p>A theorem cannot be proved by example; however, the standard way to show that a statement is not a theorem is to provide a counterexample.</p></li>
                 <li><p>Quantifiers are important. Words and phrases such as <em>only</em>, <em>for all</em>, <em>for every</em>, and <em>for some</em> possess different meanings.</p></li>
                 <li><p>Never assume any hypothesis that is not explicitly stated in the theorem.  <em>You cannot take things for granted.</em></p></li>
                 <li><p>Suppose you wish to show that an object <em>exists</em> and is <em>unique</em>.  First show that there actually is such an object.  To show that it is unique, assume that there are two such objects, say <m>r</m> and <m>s</m>, and then show that <m>r = s</m>.</p></li>
                 <li><p>Sometimes it is easier to prove the contrapositive of a statement.  Proving the statement <q>If <m>p</m>, then <m>q</m></q> is exactly the same as proving the statement <q>If not <m>q</m>, then not <m>p</m>.</q></p></li>
                 <li><p>Although it is usually better to find a direct proof of a theorem, this task  can sometimes be difficult. It may be easier to assume that the theorem that you are trying to prove is false, and to hope that in the course of your argument you are forced to make some statement that cannot possibly be true.</p></li>
-            </ul>
+            </ul></p>
 
             <p>Remember that one of the main objectives of higher mathematics is proving theorems. Theorems are tools that make new and productive applications of mathematics possible.  We use examples to give insight  into existing theorems and to foster intuitions as to what new theorems might be true.  Applications, examples, and proofs are tightly interconnected<mdash />much more so than they may seem at first appearance.</p>
 
@@ -181,16 +175,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <proposition>
             <statement>
-                <p>Let <m>A</m>, <m>B</m>, and <m>C</m> be sets. Then</p>
-
-                <ol>
+                <p>Let <m>A</m>, <m>B</m>, and <m>C</m> be sets. Then<ol>
                     <li><p><m>A \cup A = A</m>, <m>A \cap A = A</m>, and <m>A \setminus A = \emptyset</m>;</p></li>
                     <li><p><m>A \cup \emptyset = A</m> and <m>A \cap \emptyset = \emptyset</m>;</p></li>
                     <li><p><m>A \cup (B \cup C) = (A \cup B) \cup C</m> and  <m>A \cap (B \cap C) = (A \cap B) \cap C</m>;</p></li>
                     <li><p><m>A \cup B = B \cup A</m> and <m>A \cap B = B \cap A</m>;</p></li>
                     <li><p><m>A \cup (B \cap C) = (A \cup B) \cap (A \cup C)</m>;</p></li>
                     <li><p><m>A \cap (B \cup C) = (A \cap B) \cup (A \cap C)</m>.</p></li>
-                </ol>
+                </ol></p>
             </statement>
             <proof>
                 <p>We will prove (1) and (3) and leave the remaining results to be proven in the exercises.</p>
@@ -222,12 +214,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>De Morgan's Laws</title>
             <idx><h>De Morgan's laws</h><h>for sets</h></idx>
             <statement>
-                <p>Let <m>A</m> and <m>B</m> be sets. Then</p>
-
-                <ol>
+                <p>Let <m>A</m> and <m>B</m> be sets. Then<ol>
                     <li><p><m>(A \cup B)' = A' \cap B'</m>;</p></li>
                     <li><p><m>(A \cap B)' = A' \cup B'</m>.</p></li>
-                </ol>
+                </ol></p>
             </statement>
             <proof>
                 <p>(1) We must show that <m>(A \cup B)' \subset A' \cap B'</m> and <m>(A \cup B)' \supset A' \cap B'</m>. Let <m>x \in (A \cup B)'</m>.  Then <m>x \notin A \cup B</m>. So <m>x</m> is neither in <m>A</m> nor in <m>B</m>, by the definition of the union of sets.  By the definition of the complement, <m>x \in A'</m> and <m>x \in B'</m>.  Therefore, <m>x \in A' \cap B'</m> and we have <m>(A \cup B)' \subset A' \cap B'</m>.</p>
@@ -454,14 +444,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <theorem>
             <statement>
-                <p>Let <m>f : A \rightarrow B</m>, <m>g : B \rightarrow C</m>, and <m>h : C \rightarrow D</m>. Then</p>
-
-                <ol>
+                <p>Let <m>f : A \rightarrow B</m>, <m>g : B \rightarrow C</m>, and <m>h : C \rightarrow D</m>. Then<ol>
                     <li><p>The composition of mappings is associative; that is, <m>(h \circ g) \circ f = h \circ (g \circ f)</m>;</p></li>
                     <li><p>If <m>f</m> and <m>g</m> are both one-to-one, then the mapping <m>g \circ f</m> is one-to-one;</p></li> 
                     <li><p>If <m>f</m> and <m>g</m> are both onto, then the mapping <m>g \circ f</m> is onto;</p></li>  
                     <li><p>If <m>f</m> and <m>g</m> are bijective, then so is <m>g \circ f</m>.</p></li>
-                </ol>
+                </ol></p>
             </statement>
             <proof>
                 <p>We will prove (1) and (3). Part (2) is left as an exercise.  Part (4) follows directly from (2) and (3).</p> 
@@ -560,13 +548,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <subsection>
             <title>Equivalence Relations and Partitions</title>
 
-            <p>A fundamental notion in mathematics is that of equality.  We can generalize equality with equivalence relations and equivalence classes.  An <term>equivalence relation</term><idx><h>Equivalence relation</h></idx> on a set <m>X</m> is a relation <m>R \subset X \times X</m> such that</p>
-
-            <ul>
+            <p>A fundamental notion in mathematics is that of equality.  We can generalize equality with equivalence relations and equivalence classes.  An <term>equivalence relation</term><idx><h>Equivalence relation</h></idx> on a set <m>X</m> is a relation <m>R \subset X \times X</m> such that<ul>
                 <li><p><m>(x, x) \in R</m> for all <m>x \in X</m> (<term>reflexive property</term>);</p></li>
                 <li><p><m>(x, y) \in R</m> implies <m>(y, x) \in R</m> (<term>symmetric property</term>);</p></li>
                 <li><p><m>(x, y)</m> and <m>(y, z) \in R</m> imply <m>(x, z) \in R</m> (<term>transitive property</term>).</p></li>
-            </ul>
+            </ul></p>
 
             <p>Given an equivalence relation <m>R</m>  on a set <m>X</m>, we usually write  <m>x \sim y</m> instead of <m>(x, y) \in R</m>. If the equivalence relation already has an associated notation such as <m>=</m>, <m>\equiv</m>, or <m>\cong</m>, we will use that notation.</p>
 

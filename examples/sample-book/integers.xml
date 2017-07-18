@@ -151,12 +151,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <!-- wording change.  Suggested by P. Diethelm.  TWJ 22/4/2013 -->
 
-        <p>Induction can also be very useful in formulating definitions. For instance, there are two ways to define <m>n!</m>, the factorial of a positive integer <m>n</m>.</p>
-
-        <ul>
+        <p>Induction can also be very useful in formulating definitions. For instance, there are two ways to define <m>n!</m>, the factorial of a positive integer <m>n</m>.<ul>
             <li><p>The <em>explicit</em> definition: <m>n! = 1 \cdot 2 \cdot 3 \cdots (n - 1) \cdot n</m>.</p></li>
             <li><p>The <em>inductive</em> or <em>recursive</em> definition: <m>1! = 1</m> and <m>n! = n(n - 1)!</m> for <m>n \gt 1</m>.</p></li>
-        </ul>
+        </ul></p>
 
         <p>Every good mathematician or computer scientist knows that looking at problems recursively, as opposed to explicitly, often results in better understanding of complex issues.</p>
     </section>
