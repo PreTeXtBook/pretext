@@ -34,6 +34,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecations that can be fixed with a transformation -->
 <!-- In reverse chronological order, with dates           -->
 
+<!-- 2017-07-18:  cosmetic changes to WeBWorK image attribute -->
+<xsl:template match="@tex_size">
+    <xsl:attribute name="tex-size">
+        <xsl:value-of select="." />
+    </xsl:attribute>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2017-07-18</xsl:with-param>
+        <xsl:with-param name="message">Replacing @tex_size by @tex-size in WeBWorK &lt;image&gt;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<!--  -->
 <!-- 2017-07-14:  cosmetic changes to index specification and production -->
 <xsl:template match="index-part">
     <index>

@@ -715,8 +715,8 @@
     </xsl:choose>
     <xsl:text>, tex_size=&gt;</xsl:text>
     <xsl:choose>
-        <xsl:when test="@tex_size">
-            <xsl:value-of select="@tex_size"/>
+        <xsl:when test="@tex-size">
+            <xsl:value-of select="@tex-size"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>800</xsl:text>

@@ -1267,26 +1267,26 @@
                     </setup>
                     <stage>
                         <statement>
-                            <sidebyside><image pg-name="$gr[0]" width="150" height="150" tex_size="150"/></sidebyside>
-                            <sidebyside><image pg-name="$gr[1]" width="150" height="150" tex_size="150"/></sidebyside>
+                            <sidebyside><image pg-name="$gr[0]" width="150" height="150" tex-size="150"/></sidebyside>
+                            <sidebyside><image pg-name="$gr[1]" width="150" height="150" tex-size="150"/></sidebyside>
                         </statement>
                         <solution>
-                            <sidebyside><image pg-name="$gr[2]" width="150" height="150" tex_size="150"/></sidebyside>
+                            <sidebyside><image pg-name="$gr[2]" width="150" height="150" tex-size="150"/></sidebyside>
                         </solution>
                     </stage>
                     <stage>
                         <statement>
-                            <sidebyside><image pg-name="$gr[3]" width="150" height="150" tex_size="150"/></sidebyside>
-                            <sidebyside><image pg-name="$gr[4]" width="150" height="150" tex_size="150"/></sidebyside>
-                            <sidebyside><image pg-name="$gr[5]" width="150" height="150" tex_size="150"/></sidebyside>
+                            <sidebyside><image pg-name="$gr[3]" width="150" height="150" tex-size="150"/></sidebyside>
+                            <sidebyside><image pg-name="$gr[4]" width="150" height="150" tex-size="150"/></sidebyside>
+                            <sidebyside><image pg-name="$gr[5]" width="150" height="150" tex-size="150"/></sidebyside>
                         </statement>
                         <!-- No hints for now because with displayMode=tex, the anonymous problem rendering is not -->
                         <!--generating a hints section at all. Will have to work with Mike to investigate this.    -->
                         <!--<hint>
-                            <figure><image pg-name="$gr[6]" width="150" height="150" tex_size="150"/></figure>
+                            <figure><image pg-name="$gr[6]" width="150" height="150" tex-size="150"/></figure>
                         </hint>-->
                         <solution>
-                            <sidebyside><image pg-name="$gr[7]" width="150" height="150" tex_size="150"/></sidebyside>
+                            <sidebyside><image pg-name="$gr[7]" width="150" height="150" tex-size="150"/></sidebyside>
                         </solution>
                   </stage>
                 </webwork>

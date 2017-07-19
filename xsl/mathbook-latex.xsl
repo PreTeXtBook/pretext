@@ -3375,18 +3375,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- created by the mbx script with a predictable name     -->
 <!-- For such images, width and height are pixel counts    -->
 <!-- sent to the PG image creator, intended to define the  -->
-<!-- width of HTML output. A separate tex_size is intended -->
-<!-- to define width of LaTeX output. tex_size of say 800  -->
+<!-- width of HTML output. A separate tex-size is intended -->
+<!-- to define width of LaTeX output. tex-size of say 800  -->
 <!-- means 0.800\linewidth. We use 400px for the default   -->
 <!-- width in mathbook-webwork-pg. Since 600px is the      -->
 <!-- default design width in html, we use 667 as the       -->
-<!-- default for tex_size                                  -->
+<!-- default for tex-size                                  -->
 
 <xsl:template match="webwork//image[@pg-name]">
     <xsl:text>\includegraphics[width=</xsl:text>
     <xsl:choose>
-        <xsl:when test="@tex_size">
-            <xsl:value-of select="@tex_size*0.001"/>
+        <xsl:when test="@tex-size">
+            <xsl:value-of select="@tex-size*0.001"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>0.667</xsl:text>
