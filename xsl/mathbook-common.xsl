@@ -4734,6 +4734,17 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:call-template>
 </xsl:template>
 
+<!-- #################### -->
+<!-- Common Constructions -->
+<!-- #################### -->
+
+<!-- With no special formatting  -->
+<!-- "PreTeXt" can be in -common -->
+<xsl:template match="pretext">
+    <xsl:text>PreTeXt</xsl:text>
+</xsl:template>
+
+
 <!-- ################## -->
 <!-- Special Characters -->
 <!-- ################## -->
