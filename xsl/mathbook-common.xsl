@@ -5078,7 +5078,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- an author will recognize, and then report it -->
 <!-- Useful for warnings that do not contain any  -->
 <!-- identifying information themselves           -->
-<xsl:template match="*" mode="location-report">
+<xsl:template match="*|@*" mode="location-report">
     <xsl:choose>
         <xsl:when test="@xml:id or title">
             <!-- print information about location -->
