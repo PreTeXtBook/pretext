@@ -1870,8 +1870,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>  {}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="$document-root//console or $document-root//pre or $document-root//cd">
-        <xsl:text>%% Fancy Verbatim for consoles, preformatted, code display&#xa;</xsl:text>
+    <xsl:if test="$document-root//console or $document-root//pre or $document-root//cd or $document-root//fragment">
+        <xsl:text>%% Fancy Verbatim for consoles, preformatted, code display, literate programming&#xa;</xsl:text>
         <xsl:text>\usepackage{fancyvrb}&#xa;</xsl:text>
         <xsl:if test="//pre">
             <xsl:text>%% Pre-formatted text, a peer of paragraphs&#xa;</xsl:text>
@@ -9867,6 +9867,75 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{definedterm}&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
+
+<!-- ############################ -->
+<!-- Literate Programming Support -->
+<!-- ############################ -->
+
+<!-- common template so we can preferentially handle the filename  -->
+<!-- case first, then have an xml:id on *any* fragment -->
+<xsl:template match="fragment[@xml:id]|fragment[@filename]">
+    <xsl:choose>
+        <!-- filename fragments are the top of their trees, but -->
+        <!-- can have an @xml:id so they can be referenced      -->
+        <xsl:when test="@filename">
+            <xsl:text>\par\medskip\noindent\textbf{Begin File:} \texttt{</xsl:text>
+            <xsl:value-of select="@filename" />
+            <xsl:text>}</xsl:text>
+            <xsl:text>\index{file root!\texttt{</xsl:text>
+            <xsl:value-of select="@filename" />
+            <xsl:text>}}</xsl:text>
+        </xsl:when>
+        <!-- other fragments are known by their xml:id strings -->
+        <xsl:when test="@xml:id">
+            <xsl:text>\par\medskip\noindent\textbf{Fragment:} \texttt{</xsl:text>
+            <xsl:value-of select="@xml:id" />
+            <xsl:text>}</xsl:text>
+            <!-- sortby first, @ separator, then tt version -->
+            <xsl:text>\index{</xsl:text>
+            <xsl:value-of select="@xml:id" />
+            <xsl:text>@\texttt{</xsl:text>
+            <xsl:value-of select="@xml:id" />
+            <xsl:text>}}</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+    <!-- always possible to label (universal PTX capability) -->
+    <xsl:text>\phantomsection</xsl:text>
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>\\&#xa;</xsl:text>
+    <!-- now the guts, in pieces -->
+    <xsl:apply-templates select="text()|fragment[@ref]" />
+</xsl:template>
+
+<!-- convert fragment pointer to text -->
+<!-- in monospace font                -->
+<xsl:template match="fragment[@ref]">
+    <xsl:text>\mono{</xsl:text>
+    <xsl:text>&lt;code: </xsl:text>
+    <xsl:value-of select="@ref" />
+    <xsl:text>\space\space\pageref{</xsl:text>
+    <xsl:apply-templates select="id(@ref)" mode="internal-id"/>
+    <xsl:text>}</xsl:text>
+    <xsl:text>&gt;</xsl:text>
+    <xsl:text>}</xsl:text>
+    <xsl:text>\\&#xa;</xsl:text>
+</xsl:template>
+
+<!-- wrap code in a Verbatim environment, though perhaps another -->
+<!-- LaTeX environment or a tcolor box would work better         -->
+<!-- Drop whitespace only text() nodes                           -->
+<xsl:template match="fragment/text()">
+    <xsl:variable name="normalized-frag" select="normalize-space(.)"/>
+    <xsl:if test="not($normalized-frag = '')">
+        <xsl:text>\begin{Verbatim}</xsl:text>
+        <xsl:text>&#xa;</xsl:text>  <!-- required by fancyvrb -->
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="." />
+        </xsl:call-template>
+        <xsl:text>\end{Verbatim}&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- References Sections -->
 <!-- We use description lists to manage bibliographies,  -->
