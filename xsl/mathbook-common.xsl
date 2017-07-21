@@ -5155,11 +5155,27 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- if done repeatedly, so a pre-processing step   -->
 <!-- Calling context should be "mathbook" element   -->
 <xsl:template match="mathbook" mode="generic-warnings">
+    <xsl:apply-templates select="." mode="literate-programming-warning" />
     <xsl:apply-templates select="." mode="xinclude-warnings" />
     <xsl:apply-templates select="." mode="xmlid-warning" />
     <xsl:apply-templates select="." mode="webwork-warnings" />
     <xsl:apply-templates select="." mode="text-element-warning" />
     <xsl:apply-templates select="." mode="subdivision-structure-warning" />
+</xsl:template>
+
+<!-- Literate Programming support is half-baked, 2017-07-21 -->
+<xsl:template match="mathbook" mode="literate-programming-warning">
+    <xsl:if test="$document-root//fragment">
+        <xsl:call-template name="banner-warning">
+            <xsl:with-param name="warning">
+                <xsl:text>  Literate Programming support is experimental&#xa;</xsl:text>
+                <xsl:text>&#xa;</xsl:text>
+                <xsl:text>    1.  Code generation is functional, but does not respect indentation&#xa;</xsl:text>
+                <xsl:text>    2.  LaTeX generation is in development, 2017-07-20&#xa;</xsl:text>
+                <xsl:text>    3.  MTML generation has not begun&#xa;</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
 </xsl:template>
 
 <!-- Using the modular  xinclude  scheme at the top level,      -->
