@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file is part of the documentation of MathBook XML   -->
+<!--                                                          -->
+<!--    MathBook XML Author's Guide                           -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<appendix xml:id="schema-install">
+    <title>Schema Tools</title>
+
+    <introduction>
+        <p>This appendix has technical information about tools that work with the <acro>RELAX-NG</acro> schema.</p>
+    </introduction>
+
+    <section xml:id="jing-trang">
+        <title>Jing and Trang</title>
+
+        <p>These tools come from James Clark, an author of the <acro>RELAX-NG</acro> syntax.  <c>trang</c> is a converter between different formats for schemas.  An author should not need it.  A <pretext /> developer might find it useful, and it is a by-product the <c>jing</c> install described below, and is also packaged for Debian and Ubuntu Linux (which is how we use it).</p>
+
+        <p><c>jing</c> is our recommendation for validation by authors, and works very well.  It is also packaged for Debian and Ubuntu Linux.  Reports of other similarly easy installations for other operating systems are especially welcome.  We have only used the installation from source described below, so in particular have not tested <c>xinclude</c> support in the packaged versions.</p>
+
+        <p>Installation notes for <c>jing</c> and <c>trang</c>.<ol>
+            <li>Clone the <c>git</c> repository at <url href="https://github.com/relaxng/jing-trang"><c>github.com/relaxng/jing-trang</c></url>.  You will end up with a new <c>jing-trang</c> directory, which we reference below in a relative fashion.</li>
+            <li><p>Follow the instructions in the <c>readme.txt</c>.  Note:<ol>
+                <li>The <c>JAVA_HOME</c> environment variable may be set already (step 2).  See if <c>echo ${JAVA_HOME}</c> produces anything sensible.</li>
+                <li>There are special instructions for the Apache Ant build task on Windows.  Reports of success here would be appreciated.</li>
+            </ol></p></li>
+            <li>The <c>jing-trang/build</c> directory should now contain the necessary Java archives:  <c>jing.jar</c>,  <c>trang.jar</c>, <c>xercesImpl.jar</c>.  The latter provides support for the <c>xinclude</c> mechanism.</li>
+            <li>Note that the commands below require the <init>XML</init> version of the schema.</li>
+        </ol></p>.
+
+        <p>For a document contained in a single file, run (with suitable working directory and path prefixes).<cd>
+            <cline>java -jar jing-trang/build/jing.jar pretext.rng my-book.xml</cline>
+        </cd>For a document modularized across several files using the <c>xinclude</c> mechanism, issue as one single command line (again, with suitable working directory and path prefixes).<cd>
+            <cline>java -classpath jing-trang/build</cline>
+            <cline>-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration</cline>
+            <cline>-jar jing-trang/build/jing.jar pretext.rng my-book.xml</cline>
+        </cd>It may go without saying that scripting this task will make you more likely to do it as often as is necessary and you will save yourself much time and a little frustration in the process.</p>
+    </section>
+</appendix>

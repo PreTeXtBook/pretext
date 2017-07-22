@@ -12,6 +12,7 @@
 
     <xi:include href="faq.xml" />
     <xi:include href="editors.xml" />
+    <xi:include href="schema-install.xml" />
     <xi:include href="git.xml" />
     <xi:include href="windows.xml" />
     <xi:include href="windows-wsl.xml" />

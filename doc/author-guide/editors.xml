@@ -11,7 +11,7 @@
     <title>(*) Text Editors</title>
 
     <introduction>
-        <p>This appendix has information about using various text editors efficiently with MathBook <init>XML</init> source.  The choice of an editor that suits you is a big part of being a productive author.  Despite not being open source, we are partial to Sublime Text, due to its unlimited trial period, reasonable licensing (cost and terms), range of features, and cross-platform support.  So we lead with Sublime Text, but also include Emacs and XML Copy Editor.</p>
+        <p>This appendix has information about using various text editors efficiently with MathBook <init>XML</init> source.  The choice of an editor that suits you is a big part of being a productive author.  Despite not being open source, we are partial to Sublime Text, due to its unlimited trial period, reasonable licensing (cost and terms), range of features, and cross-platform support.  So we lead with Sublime Text, but also include Emacs and XML Copy Editor.  A summary table of schema-aware editors can be found at <xref ref="editors-supporting-schema" />.</p>
     </introduction>
 
     <section xml:id="section-sublime-text">
