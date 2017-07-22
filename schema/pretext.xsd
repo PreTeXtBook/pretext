@@ -1,0 +1,3072 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+  <xs:element name="mathbook">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="docinfo"/>
+        <xs:choice>
+          <xs:element ref="book"/>
+          <xs:element ref="article"/>
+          <xs:element ref="letter"/>
+          <xs:element ref="memo"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute ref="xml:lang"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="article">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="MetaDataSubtitle">
+          <xs:sequence>
+            <xs:group ref="ArticleFrontMatter"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element ref="section"/>
+              <xs:element ref="exercises"/>
+              <xs:element ref="references"/>
+            </xs:choice>
+            <xs:element minOccurs="0" ref="backmatter"/>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="book">
+    <xs:annotation>
+      <xs:documentation>Here is what a book looks like.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="MetaDataSubtitle">
+          <xs:sequence>
+            <xs:group ref="BookFrontMatter"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element ref="chapter"/>
+              <xs:element ref="exercises"/>
+              <xs:element ref="references"/>
+            </xs:choice>
+            <xs:element minOccurs="0" ref="backmatter"/>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="letter">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="memo">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="chapter">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="MetaDataTitle">
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="objectives"/>
+            <xs:choice>
+              <xs:choice maxOccurs="unbounded">
+                <xs:group ref="BlockDivision"/>
+                <xs:element ref="paragraphs"/>
+              </xs:choice>
+              <xs:sequence>
+                <xs:group minOccurs="0" ref="IntroductionDivision"/>
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                  <xs:element ref="section"/>
+                  <xs:element ref="exercises"/>
+                  <xs:element ref="references"/>
+                </xs:choice>
+                <xs:group minOccurs="0" ref="ConclusionDivision"/>
+              </xs:sequence>
+            </xs:choice>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="section">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="MetaDataTitle">
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="objectives"/>
+            <xs:choice>
+              <xs:choice maxOccurs="unbounded">
+                <xs:group ref="BlockDivision"/>
+                <xs:element ref="paragraphs"/>
+              </xs:choice>
+              <xs:sequence>
+                <xs:group minOccurs="0" ref="IntroductionDivision"/>
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                  <xs:element ref="subsection"/>
+                  <xs:element ref="exercises"/>
+                  <xs:element ref="references"/>
+                </xs:choice>
+                <xs:group minOccurs="0" ref="ConclusionDivision"/>
+              </xs:sequence>
+            </xs:choice>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="subsection">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="MetaDataTitle">
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="objectives"/>
+            <xs:choice>
+              <xs:choice maxOccurs="unbounded">
+                <xs:group ref="BlockDivision"/>
+                <xs:element ref="paragraphs"/>
+              </xs:choice>
+              <xs:sequence>
+                <xs:group minOccurs="0" ref="IntroductionDivision"/>
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                  <xs:element ref="subsubsection"/>
+                  <xs:element ref="exercises"/>
+                  <xs:element ref="references"/>
+                </xs:choice>
+                <xs:group minOccurs="0" ref="ConclusionDivision"/>
+              </xs:sequence>
+            </xs:choice>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="subsubsection">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="MetaDataTitle">
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="objectives"/>
+            <xs:choice maxOccurs="unbounded">
+              <xs:group ref="BlockDivision"/>
+              <xs:element ref="paragraphs"/>
+            </xs:choice>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="appendix">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="MetaDataTitle">
+          <xs:choice maxOccurs="unbounded">
+            <xs:group ref="BlockDivision"/>
+            <xs:element ref="paragraphs"/>
+            <xs:element ref="notation-list"/>
+            <xs:element ref="solution-list"/>
+          </xs:choice>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="index">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:element ref="index-list"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="IntroductionDivision">
+    <xs:sequence>
+      <xs:element name="introduction">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="MetaDataTitleOptional"/>
+            <xs:group maxOccurs="unbounded" ref="BlockDivision"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="MetaDataTitleOptional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="ConclusionDivision">
+    <xs:sequence>
+      <xs:element name="conclusion">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group minOccurs="0" ref="MetaDataTitleOptional"/>
+            <xs:group maxOccurs="unbounded" ref="BlockDivision"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="MetaDataTitleOptional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="ArticleFrontMatter">
+    <xs:sequence>
+      <xs:element name="frontmatter">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="MetaDataTitleOptional"/>
+            <xs:element ref="titlepage"/>
+            <xs:element minOccurs="0" ref="abstract"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="MetaDataTitleOptional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="BookFrontMatter">
+    <xs:sequence>
+      <xs:element name="frontmatter">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="MetaDataTitleOptional"/>
+            <xs:element minOccurs="0" ref="titlepage"/>
+            <xs:group minOccurs="0" ref="ColophonFront"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="biography"/>
+            <xs:element minOccurs="0" ref="dedication"/>
+            <xs:element minOccurs="0" ref="acknowledgement"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="preface"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="MetaDataTitleOptional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="titlepage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="author"/>
+        <xs:element minOccurs="0" ref="credit"/>
+        <xs:element minOccurs="0" ref="date"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="author">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="personname"/>
+        <xs:element minOccurs="0" name="department">
+          <xs:complexType mixed="true">
+            <xs:choice>
+              <xs:group ref="TextSimple"/>
+              <xs:group maxOccurs="unbounded" ref="Line"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" name="institution">
+          <xs:complexType mixed="true">
+            <xs:choice>
+              <xs:group ref="TextSimple"/>
+              <xs:group maxOccurs="unbounded" ref="Line"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" ref="email"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="personname">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextSimple"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="email" type="xs:string"/>
+  <xs:element name="credit">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="title"/>
+        <xs:element ref="author"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="title">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextShort"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="date">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="Character"/>
+        <xs:group ref="Generator"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="abstract">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:group maxOccurs="unbounded" ref="BlockText"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="ColophonFront">
+    <xs:sequence>
+      <xs:element name="colophon">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="edition"/>
+            <xs:element minOccurs="0" ref="website"/>
+            <xs:element minOccurs="0" name="copyright">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="year">
+                    <xs:complexType mixed="true">
+                      <xs:group ref="TextShort"/>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element ref="holder"/>
+                  <xs:element minOccurs="0" ref="minilicense"/>
+                  <xs:element minOccurs="0" ref="shortlicense"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="edition" type="xs:string"/>
+  <xs:element name="website">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="name"/>
+        <xs:element ref="address"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="name">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextShort"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="address" type="xs:string"/>
+  <xs:element name="holder" type="xs:string"/>
+  <xs:element name="minilicense">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextShort"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="shortlicense">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextShort"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="biography">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:group maxOccurs="unbounded" ref="BlockText"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="dedication">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:choice maxOccurs="unbounded">
+          <xs:group ref="Paragraph"/>
+          <xs:group ref="ParagraphLined"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="acknowledgement">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:group maxOccurs="unbounded" ref="BlockText"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="preface">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:choice>
+          <xs:sequence>
+            <xs:choice maxOccurs="unbounded">
+              <xs:group ref="BlockText"/>
+              <xs:group ref="SideBySideNoNumber"/>
+            </xs:choice>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="attribution"/>
+          </xs:sequence>
+          <xs:element ref="contributors"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="backmatter">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="appendix"/>
+        <xs:element minOccurs="0" ref="references"/>
+        <xs:element minOccurs="0" ref="index"/>
+        <xs:group minOccurs="0" ref="ColophonBack"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="ColophonBack">
+    <xs:sequence>
+      <xs:element name="colophon">
+        <xs:complexType>
+          <xs:choice maxOccurs="unbounded">
+            <xs:group ref="BlockText"/>
+            <xs:group ref="SideBySideNoNumber"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="paragraphs">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
+        <xs:group maxOccurs="unbounded" ref="BlockDivision"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="exercises">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:group minOccurs="0" ref="IntroductionDivision"/>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element ref="todo"/>
+          <xs:element ref="exercise"/>
+          <xs:element ref="exercisegroup"/>
+        </xs:choice>
+        <xs:group minOccurs="0" ref="ConclusionDivision"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="references">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:group minOccurs="0" ref="IntroductionDivision"/>
+        <xs:element maxOccurs="unbounded" ref="biblio"/>
+        <xs:group minOccurs="0" ref="ConclusionDivision"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="BlockText">
+    <xs:choice>
+      <xs:group ref="Paragraph"/>
+      <xs:element ref="blockquote"/>
+      <xs:element ref="pre"/>
+      <xs:element ref="todo"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="BlockDivision">
+    <xs:choice>
+      <xs:group ref="BlockText"/>
+      <xs:group ref="Figure"/>
+      <xs:group ref="Remark"/>
+      <xs:group ref="Theorem"/>
+      <xs:element ref="proof"/>
+      <xs:element ref="definition"/>
+      <xs:group ref="Axiom"/>
+      <xs:group ref="Example"/>
+      <xs:element ref="exercise"/>
+      <xs:element ref="list"/>
+      <xs:group ref="Project"/>
+      <xs:element ref="poem"/>
+      <xs:element ref="aside"/>
+      <xs:element ref="assemblage"/>
+      <xs:element ref="list-of"/>
+      <xs:group ref="SideBySide"/>
+      <xs:element ref="sbsgroup"/>
+      <xs:element ref="sage"/>
+      <xs:element ref="console"/>
+      <xs:element ref="program"/>
+      <xs:element ref="geogebra-applet"/>
+      <xs:element ref="demonstration"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="BlockStatement">
+    <xs:choice>
+      <xs:group ref="BlockText"/>
+      <xs:group ref="Figure"/>
+      <xs:element ref="aside"/>
+      <xs:group ref="SideBySide"/>
+      <xs:element ref="sbsgroup"/>
+      <xs:element ref="sage"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="IntroductionBlock">
+    <xs:sequence>
+      <xs:element name="introduction">
+        <xs:complexType>
+          <xs:group maxOccurs="unbounded" ref="BlockText"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="ConclusionBlock">
+    <xs:sequence>
+      <xs:element name="conclusion">
+        <xs:complexType>
+          <xs:group maxOccurs="unbounded" ref="BlockText"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="prelude">
+    <xs:complexType>
+      <xs:group maxOccurs="unbounded" ref="BlockText"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="interlude">
+    <xs:complexType>
+      <xs:group maxOccurs="unbounded" ref="BlockText"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="postlude">
+    <xs:complexType>
+      <xs:group maxOccurs="unbounded" ref="BlockText"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="Statement">
+    <xs:sequence>
+      <xs:element name="statement">
+        <xs:complexType>
+          <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="Hint">
+    <xs:sequence>
+      <xs:element name="hint">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="MetaDataTarget"/>
+            <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="MetaDataTarget"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="answer">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTarget"/>
+        <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTarget"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="Solution">
+    <xs:sequence>
+      <xs:element name="solution">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="MetaDataTarget"/>
+            <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="MetaDataTarget"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="objectives">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:group minOccurs="0" ref="IntroductionBlock"/>
+        <xs:group ref="List"/>
+        <xs:group minOccurs="0" ref="ConclusionBlock"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="blockquote">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:group maxOccurs="unbounded" ref="Paragraph"/>
+        <xs:element minOccurs="0" ref="attribution"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="Line">
+    <xs:sequence>
+      <xs:element name="line">
+        <xs:complexType mixed="true">
+          <xs:group ref="TextShort"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="cline" type="xs:string"/>
+  <xs:element name="cd">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="cline"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="pre">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="cline"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="console">
+    <xs:complexType>
+      <xs:sequence maxOccurs="unbounded">
+        <xs:element minOccurs="0" ref="prompt"/>
+        <xs:element minOccurs="0" ref="input"/>
+        <xs:element minOccurs="0" ref="output"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="prompt" type="xs:string"/>
+  <xs:element name="input" type="xs:string"/>
+  <xs:element name="output" type="xs:string"/>
+  <xs:element name="program">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="input"/>
+      </xs:sequence>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute name="language"/>
+      <xs:attribute name="interactive">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="pythontutor"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="List">
+    <xs:choice>
+      <xs:element name="ol">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="li">
+              <xs:complexType mixed="true">
+                <xs:sequence>
+                  <xs:group ref="MetaDataTarget"/>
+                  <xs:choice>
+                    <xs:group ref="TextParagraph"/>
+                    <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+                  </xs:choice>
+                </xs:sequence>
+                <xs:attributeGroup ref="MetaDataTarget"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="cols">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="2"/>
+                <xs:enumeration value="3"/>
+                <xs:enumeration value="4"/>
+                <xs:enumeration value="5"/>
+                <xs:enumeration value="6"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="label"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ul">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="li">
+              <xs:complexType mixed="true">
+                <xs:choice>
+                  <xs:group ref="TextParagraph"/>
+                  <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+                </xs:choice>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="cols">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="2"/>
+                <xs:enumeration value="3"/>
+                <xs:enumeration value="4"/>
+                <xs:enumeration value="5"/>
+                <xs:enumeration value="6"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="label">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="disc"/>
+                <xs:enumeration value="circle"/>
+                <xs:enumeration value="square"/>
+                <xs:enumeration value=""/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="dl">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="li">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="MetaDataTitle">
+                    <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+                  </xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="width">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="narrow"/>
+                <xs:enumeration value="medium"/>
+                <xs:enumeration value="wide"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="ListWW">
+    <xs:choice>
+      <xs:element name="ol">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="li">
+              <xs:complexType mixed="true">
+                <xs:sequence>
+                  <xs:group ref="MetaDataTarget"/>
+                  <xs:choice>
+                    <xs:group ref="TextParagraphWW"/>
+                    <xs:group maxOccurs="unbounded" ref="ParagraphWW"/>
+                  </xs:choice>
+                </xs:sequence>
+                <xs:attributeGroup ref="MetaDataTarget"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="cols">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="2"/>
+                <xs:enumeration value="3"/>
+                <xs:enumeration value="4"/>
+                <xs:enumeration value="5"/>
+                <xs:enumeration value="6"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="label"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ul">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="li">
+              <xs:complexType mixed="true">
+                <xs:choice>
+                  <xs:group ref="TextParagraphWW"/>
+                  <xs:group maxOccurs="unbounded" ref="ParagraphWW"/>
+                </xs:choice>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="cols">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="2"/>
+                <xs:enumeration value="3"/>
+                <xs:enumeration value="4"/>
+                <xs:enumeration value="5"/>
+                <xs:enumeration value="6"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="label">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value=""/>
+                <xs:enumeration value="square"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="dl">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="li">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="MetaDataTitle">
+                    <xs:group maxOccurs="unbounded" ref="ParagraphWW"/>
+                  </xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="width">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="narrow"/>
+                <xs:enumeration value="medium"/>
+                <xs:enumeration value="wide"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="list">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:group minOccurs="0" ref="IntroductionBlock"/>
+        <xs:group ref="List"/>
+        <xs:group minOccurs="0" ref="ConclusionBlock"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="DefinitionLike">
+    <xs:sequence>
+      <xs:group ref="MetaDataTitleOptional"/>
+      <xs:element minOccurs="0" maxOccurs="unbounded" ref="notation"/>
+      <xs:group ref="Statement"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="MetaDataTitleOptional"/>
+  </xs:complexType>
+  <xs:element name="definition" type="DefinitionLike"/>
+  <xs:element name="case">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+      <xs:attribute name="direction"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="proof">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:choice maxOccurs="unbounded">
+          <xs:group ref="BlockStatement"/>
+          <xs:element ref="case"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="TheoremLike">
+    <xs:sequence>
+      <xs:group ref="MetaDataTitleOptional"/>
+      <xs:choice>
+        <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+        <xs:sequence>
+          <xs:group ref="Statement"/>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="proof"/>
+        </xs:sequence>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attributeGroup ref="MetaDataTitleOptional"/>
+  </xs:complexType>
+  <xs:group name="Theorem">
+    <xs:choice>
+      <xs:element ref="theorem"/>
+      <xs:element ref="lemma"/>
+      <xs:element ref="corollary"/>
+      <xs:element ref="claim"/>
+      <xs:element ref="proposition"/>
+      <xs:element ref="algorithm"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="theorem" type="TheoremLike"/>
+  <xs:element name="lemma" type="TheoremLike"/>
+  <xs:element name="corollary" type="TheoremLike"/>
+  <xs:element name="claim" type="TheoremLike"/>
+  <xs:element name="proposition" type="TheoremLike"/>
+  <xs:element name="algorithm" type="TheoremLike"/>
+  <xs:complexType name="AxiomLike">
+    <xs:sequence>
+      <xs:group ref="MetaDataTitleOptional"/>
+      <xs:group ref="Statement"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="MetaDataTitleOptional"/>
+  </xs:complexType>
+  <xs:group name="Axiom">
+    <xs:choice>
+      <xs:element ref="axiom"/>
+      <xs:element ref="principle"/>
+      <xs:element ref="conjecture"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="axiom" type="AxiomLike"/>
+  <xs:element name="principle" type="AxiomLike"/>
+  <xs:element name="conjecture" type="AxiomLike"/>
+  <xs:complexType name="ExampleLike">
+    <xs:sequence>
+      <xs:group ref="MetaDataTitleOptional"/>
+      <xs:choice>
+        <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+        <xs:sequence>
+          <xs:group ref="Statement"/>
+          <xs:group minOccurs="0" maxOccurs="unbounded" ref="Hint"/>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="answer"/>
+          <xs:group minOccurs="0" maxOccurs="unbounded" ref="Solution"/>
+        </xs:sequence>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attributeGroup ref="MetaDataTitleOptional"/>
+  </xs:complexType>
+  <xs:group name="Example">
+    <xs:choice>
+      <xs:element ref="example"/>
+      <xs:element ref="question"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="example" type="ExampleLike"/>
+  <xs:element name="question" type="ExampleLike"/>
+  <xs:complexType name="ProjectLike">
+    <xs:sequence>
+      <xs:group ref="MetaDataTitleOptional"/>
+      <xs:choice>
+        <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="prelude"/>
+          <xs:group ref="Statement"/>
+          <xs:group minOccurs="0" maxOccurs="unbounded" ref="Hint"/>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="answer"/>
+          <xs:group minOccurs="0" maxOccurs="unbounded" ref="Solution"/>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="postlude"/>
+        </xs:sequence>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attributeGroup ref="MetaDataTitleOptional"/>
+  </xs:complexType>
+  <xs:group name="Project">
+    <xs:choice>
+      <xs:element ref="activity"/>
+      <xs:element ref="exploration"/>
+      <xs:element ref="project"/>
+      <xs:element ref="task"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="activity" type="ProjectLike"/>
+  <xs:element name="exploration" type="ProjectLike"/>
+  <xs:element name="project" type="ProjectLike"/>
+  <xs:element name="task" type="ProjectLike"/>
+  <xs:complexType name="RemarkLike">
+    <xs:sequence>
+      <xs:group ref="MetaDataTitleOptional"/>
+      <xs:group maxOccurs="unbounded" ref="BlockText"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="MetaDataTitleOptional"/>
+  </xs:complexType>
+  <xs:group name="Remark">
+    <xs:choice>
+      <xs:element ref="remark"/>
+      <xs:element name="note" type="RemarkLike"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="remark" type="RemarkLike"/>
+  <xs:element name="aside">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="assemblage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:choice maxOccurs="unbounded">
+          <xs:group ref="BlockStatement"/>
+          <xs:group ref="List"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="caption">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextLong"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="Figure">
+    <xs:choice>
+      <xs:element ref="figure"/>
+      <xs:element ref="table"/>
+      <xs:element ref="listing"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="figure">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="MetaDataCaption">
+          <xs:choice>
+            <xs:group ref="Image"/>
+            <xs:group ref="SideBySide"/>
+            <xs:element ref="sbsgroup"/>
+            <xs:element ref="video"/>
+            <xs:element ref="jsxgraph"/>
+            <xs:element ref="score"/>
+          </xs:choice>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="table">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="MetaDataCaption">
+          <xs:group ref="Tabular"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="listing">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="MetaDataCaption">
+          <xs:choice>
+            <xs:element ref="program"/>
+            <xs:element ref="console"/>
+          </xs:choice>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="SideBySide">
+    <xs:sequence>
+      <xs:element name="sidebyside">
+        <xs:complexType>
+          <xs:choice maxOccurs="unbounded">
+            <xs:group ref="Figure"/>
+            <xs:element ref="list"/>
+            <xs:element ref="poem"/>
+            <xs:group ref="Tabular"/>
+            <xs:group ref="Image"/>
+            <xs:element ref="program"/>
+            <xs:element ref="console"/>
+            <xs:group ref="Paragraph"/>
+            <xs:element ref="pre"/>
+            <xs:element ref="paragraphs"/>
+            <xs:group ref="List"/>
+          </xs:choice>
+          <xs:attribute name="margins"/>
+          <xs:attribute name="width"/>
+          <xs:attribute name="widths"/>
+          <xs:attribute name="valign">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="top"/>
+                <xs:enumeration value="middle"/>
+                <xs:enumeration value="bottom"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="valigns"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="SideBySideNoNumber">
+    <xs:sequence>
+      <xs:element name="sidebyside">
+        <xs:complexType>
+          <xs:choice maxOccurs="unbounded">
+            <xs:element ref="poem"/>
+            <xs:group ref="Tabular"/>
+            <xs:group ref="Image"/>
+            <xs:element ref="program"/>
+            <xs:element ref="console"/>
+            <xs:group ref="Paragraph"/>
+            <xs:element ref="pre"/>
+            <xs:element ref="paragraphs"/>
+            <xs:group ref="List"/>
+          </xs:choice>
+          <xs:attribute name="margins"/>
+          <xs:attribute name="width"/>
+          <xs:attribute name="widths"/>
+          <xs:attribute name="valign">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="top"/>
+                <xs:enumeration value="middle"/>
+                <xs:enumeration value="bottom"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="valigns"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="sbsgroup">
+    <xs:complexType>
+      <xs:group maxOccurs="unbounded" ref="SideBySide"/>
+      <xs:attribute name="margins"/>
+      <xs:attribute name="width"/>
+      <xs:attribute name="widths"/>
+      <xs:attribute name="valign"/>
+      <xs:attribute name="valigns"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="SideBySideWW">
+    <xs:sequence>
+      <xs:element name="sidebyside">
+        <xs:complexType>
+          <xs:choice maxOccurs="unbounded">
+            <xs:group ref="TabularWW"/>
+            <xs:group ref="ImageWW"/>
+          </xs:choice>
+          <xs:attribute name="margins"/>
+          <xs:attribute name="width"/>
+          <xs:attribute name="widths"/>
+          <xs:attribute name="valign"/>
+          <xs:attribute name="valigns"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="Image">
+    <xs:choice>
+      <xs:group ref="ImageRaster"/>
+      <xs:group ref="ImageCode"/>
+      <xs:group ref="ImageCopy"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="ImageRaster">
+    <xs:sequence>
+      <xs:element name="image">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="description">
+              <xs:complexType mixed="true">
+                <xs:group ref="TextShort"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute ref="xml:id"/>
+          <xs:attribute name="width"/>
+          <xs:attribute name="archive"/>
+          <xs:attribute name="source" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="ImageCode">
+    <xs:sequence>
+      <xs:element name="image">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="description">
+              <xs:complexType mixed="true">
+                <xs:group ref="TextShort"/>
+              </xs:complexType>
+            </xs:element>
+            <xs:choice>
+              <xs:element ref="latex-image-code"/>
+              <xs:element ref="asymptote"/>
+              <xs:element ref="sageplot"/>
+            </xs:choice>
+          </xs:sequence>
+          <xs:attribute ref="xml:id"/>
+          <xs:attribute name="width"/>
+          <xs:attribute name="archive"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="latex-image-code" type="xs:string"/>
+  <xs:element name="asymptote" type="xs:string"/>
+  <xs:element name="sageplot" type="xs:string"/>
+  <xs:group name="ImageCopy">
+    <xs:sequence>
+      <xs:element name="image">
+        <xs:complexType>
+          <xs:attribute ref="xml:id"/>
+          <xs:attribute name="copy" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="ImageWW">
+    <xs:sequence>
+      <xs:element name="image">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="description">
+              <xs:complexType mixed="true">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                  <xs:group ref="TextShort"/>
+                  <xs:group ref="WWVariableUse"/>
+                </xs:choice>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="pg-name"/>
+          <xs:attribute name="width" type="xs:integer"/>
+          <xs:attribute name="height" type="xs:integer"/>
+          <xs:attribute name="tex-size" type="xs:integer"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:simpleType name="BorderThickness">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="none"/>
+      <xs:enumeration value="minor"/>
+      <xs:enumeration value="medium"/>
+      <xs:enumeration value="major"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:attributeGroup name="BorderTop">
+    <xs:attribute name="top" use="required" type="BorderThickness"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="BorderBottom">
+    <xs:attribute name="bottom" use="required" type="BorderThickness"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="BorderLeft">
+    <xs:attribute name="left" use="required" type="BorderThickness"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="BorderRight">
+    <xs:attribute name="right" use="required" type="BorderThickness"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="AlignmentHorizontal">
+    <xs:attribute name="halign" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="left"/>
+          <xs:enumeration value="center"/>
+          <xs:enumeration value="right"/>
+          <xs:enumeration value="justify"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="AlignmentVertical">
+    <xs:attribute name="valign" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="top"/>
+          <xs:enumeration value="middle"/>
+          <xs:enumeration value="bottom"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:group name="TableCell">
+    <xs:sequence>
+      <xs:element name="cell">
+        <xs:complexType mixed="true">
+          <xs:choice>
+            <xs:group ref="TextLong"/>
+            <xs:group maxOccurs="unbounded" ref="Line"/>
+            <xs:group maxOccurs="unbounded" ref="Paragraph"/>
+          </xs:choice>
+          <xs:attribute name="halign">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="left"/>
+                <xs:enumeration value="center"/>
+                <xs:enumeration value="right"/>
+                <xs:enumeration value="justify"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="bottom" type="BorderThickness"/>
+          <xs:attribute name="right" type="BorderThickness"/>
+          <xs:attribute name="colspan"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="TableRow">
+    <xs:sequence>
+      <xs:element name="row">
+        <xs:complexType>
+          <xs:group maxOccurs="unbounded" ref="TableCell"/>
+          <xs:attribute name="halign">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="left"/>
+                <xs:enumeration value="center"/>
+                <xs:enumeration value="right"/>
+                <xs:enumeration value="justify"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="valign">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="top"/>
+                <xs:enumeration value="middle"/>
+                <xs:enumeration value="bottom"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="bottom" type="BorderThickness"/>
+          <xs:attribute name="left" type="BorderThickness"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="col">
+    <xs:complexType>
+      <xs:attribute name="halign">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="left"/>
+            <xs:enumeration value="center"/>
+            <xs:enumeration value="right"/>
+            <xs:enumeration value="justify"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="top" type="BorderThickness"/>
+      <xs:attribute name="right" type="BorderThickness"/>
+      <xs:attribute name="width"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="Tabular">
+    <xs:sequence>
+      <xs:element name="tabular">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="col"/>
+            <xs:group maxOccurs="unbounded" ref="TableRow"/>
+          </xs:sequence>
+          <xs:attribute name="halign">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="left"/>
+                <xs:enumeration value="center"/>
+                <xs:enumeration value="right"/>
+                <xs:enumeration value="justify"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="valign">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="top"/>
+                <xs:enumeration value="middle"/>
+                <xs:enumeration value="bottom"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="top" type="BorderThickness"/>
+          <xs:attribute name="bottom" type="BorderThickness"/>
+          <xs:attribute name="left" type="BorderThickness"/>
+          <xs:attribute name="right" type="BorderThickness"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="TableCellWW">
+    <xs:sequence>
+      <xs:element name="cell">
+        <xs:complexType mixed="true">
+          <xs:choice>
+            <xs:group ref="TextLongWW"/>
+            <xs:group maxOccurs="unbounded" ref="Line"/>
+            <xs:group maxOccurs="unbounded" ref="ParagraphWW"/>
+          </xs:choice>
+          <xs:attribute name="halign">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="left"/>
+                <xs:enumeration value="center"/>
+                <xs:enumeration value="right"/>
+                <xs:enumeration value="justify"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="bottom" type="BorderThickness"/>
+          <xs:attribute name="right" type="BorderThickness"/>
+          <xs:attribute name="colspan"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="TableRowWW">
+    <xs:sequence>
+      <xs:element name="row">
+        <xs:complexType>
+          <xs:group maxOccurs="unbounded" ref="TableCellWW"/>
+          <xs:attribute name="halign">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="left"/>
+                <xs:enumeration value="center"/>
+                <xs:enumeration value="right"/>
+                <xs:enumeration value="justify"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="valign">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="top"/>
+                <xs:enumeration value="middle"/>
+                <xs:enumeration value="bottom"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="bottom" type="BorderThickness"/>
+          <xs:attribute name="left" type="BorderThickness"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="TabularWW">
+    <xs:sequence>
+      <xs:element name="tabular">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="col"/>
+            <xs:group maxOccurs="unbounded" ref="TableRowWW"/>
+          </xs:sequence>
+          <xs:attribute name="halign">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="left"/>
+                <xs:enumeration value="center"/>
+                <xs:enumeration value="right"/>
+                <xs:enumeration value="justify"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="valign">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="top"/>
+                <xs:enumeration value="middle"/>
+                <xs:enumeration value="bottom"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="top" type="BorderThickness"/>
+          <xs:attribute name="bottom" type="BorderThickness"/>
+          <xs:attribute name="left" type="BorderThickness"/>
+          <xs:attribute name="right" type="BorderThickness"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="sage">
+    <xs:complexType>
+      <xs:sequence minOccurs="0">
+        <xs:element ref="input"/>
+        <xs:element minOccurs="0" ref="output"/>
+      </xs:sequence>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute name="copy"/>
+      <xs:attribute name="doctest"/>
+      <xs:attribute name="tolerance"/>
+      <xs:attribute name="language"/>
+      <xs:attribute name="type"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="jsxgraph">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="input"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="UniqueID"/>
+      <xs:attribute name="width"/>
+      <xs:attribute name="aspect"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="score">
+    <xs:complexType>
+      <xs:attribute name="musescoreuser" use="required"/>
+      <xs:attribute name="musescore" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="video">
+    <xs:complexType>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute name="width"/>
+      <xs:attribute name="source"/>
+      <xs:attribute name="youtube"/>
+      <xs:attribute name="start"/>
+      <xs:attribute name="end"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="AttributesSourceFile">
+    <xs:attribute name="source" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="AttributesYouTube">
+    <xs:attribute name="youtube" use="required"/>
+    <xs:attribute name="start"/>
+    <xs:attribute name="end"/>
+  </xs:attributeGroup>
+  <xs:group name="StatementExercise">
+    <xs:sequence>
+      <xs:element name="statement">
+        <xs:complexType>
+          <xs:choice maxOccurs="unbounded">
+            <xs:group ref="BlockStatement"/>
+            <xs:element name="ol">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element maxOccurs="unbounded" name="li">
+                    <xs:complexType mixed="true">
+                      <xs:sequence>
+                        <xs:group ref="MetaDataTarget"/>
+                        <xs:choice>
+                          <xs:group ref="TextParagraph"/>
+                          <xs:group maxOccurs="unbounded" ref="BlockText"/>
+                        </xs:choice>
+                      </xs:sequence>
+                      <xs:attributeGroup ref="MetaDataTarget"/>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+                <xs:attribute name="cols"/>
+                <xs:attribute name="label"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="exercise">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:choice>
+          <xs:sequence>
+            <xs:group ref="StatementExercise"/>
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="Hint"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="answer"/>
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="Solution"/>
+          </xs:sequence>
+          <xs:sequence>
+            <xs:group minOccurs="0" ref="IntroductionBlock"/>
+            <xs:group ref="WebWork"/>
+            <xs:group minOccurs="0" ref="ConclusionBlock"/>
+          </xs:sequence>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+      <xs:attribute name="number"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="exercisegroup">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTarget"/>
+        <xs:group minOccurs="0" ref="IntroductionBlock"/>
+        <xs:element maxOccurs="unbounded" ref="exercise"/>
+        <xs:group minOccurs="0" ref="ConclusionBlock"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTarget"/>
+      <xs:attribute name="cols">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="2"/>
+            <xs:enumeration value="3"/>
+            <xs:enumeration value="4"/>
+            <xs:enumeration value="5"/>
+            <xs:enumeration value="6"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="AlignmentPoem">
+    <xs:attribute name="halign" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="left"/>
+          <xs:enumeration value="center"/>
+          <xs:enumeration value="right"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:element name="poem">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:element minOccurs="0" name="author">
+          <xs:complexType mixed="true">
+            <xs:group ref="TextShort"/>
+            <xs:attribute name="halign">
+              <xs:simpleType>
+                <xs:restriction base="xs:token">
+                  <xs:enumeration value="left"/>
+                  <xs:enumeration value="center"/>
+                  <xs:enumeration value="right"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:choice>
+          <xs:group maxOccurs="unbounded" ref="PoemLine"/>
+          <xs:element maxOccurs="unbounded" ref="stanza"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+      <xs:attribute name="halign">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="left"/>
+            <xs:enumeration value="center"/>
+            <xs:enumeration value="right"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="stanza">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:group maxOccurs="unbounded" ref="PoemLine"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="PoemLine">
+    <xs:sequence>
+      <xs:element name="line">
+        <xs:complexType mixed="true">
+          <xs:group ref="TextShort"/>
+          <xs:attribute name="indent" type="xs:integer"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="biblio">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="TextShort"/>
+        <xs:element ref="ibid"/>
+        <xs:element ref="title"/>
+        <xs:element ref="year"/>
+        <xs:element ref="journal"/>
+        <xs:element ref="number"/>
+        <xs:element ref="volume"/>
+        <xs:group ref="BibNote"/>
+      </xs:choice>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute name="type">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="raw"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ibid">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="year" type="xs:string"/>
+  <xs:element name="journal" type="xs:string"/>
+  <xs:element name="number" type="xs:string"/>
+  <xs:element name="volume" type="xs:string"/>
+  <xs:group name="BibNote">
+    <xs:sequence>
+      <xs:element name="note">
+        <xs:complexType>
+          <xs:group maxOccurs="unbounded" ref="Paragraph"/>
+          <xs:attribute ref="xml:id"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="contributor">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTarget"/>
+        <xs:element ref="personname"/>
+        <xs:element minOccurs="0" name="department">
+          <xs:complexType mixed="true">
+            <xs:group ref="TextSimple"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" name="institution">
+          <xs:complexType mixed="true">
+            <xs:group ref="TextSimple"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" ref="email"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTarget"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="contributors">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="contributor"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="WebWork">
+    <xs:choice>
+      <xs:group ref="WebWorkAuthored"/>
+      <xs:group ref="WebWorkSource"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="WebWorkSource">
+    <xs:sequence>
+      <xs:element name="webwork">
+        <xs:complexType>
+          <xs:attribute name="source"/>
+          <xs:attribute name="seed" type="xs:integer"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="WebWorkAuthored">
+    <xs:sequence>
+      <xs:element name="webwork">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="MetaDataTitleOptional"/>
+            <xs:element minOccurs="0" ref="pg-macros"/>
+            <xs:element minOccurs="0" ref="setup"/>
+            <xs:choice>
+              <xs:sequence>
+                <xs:group ref="StatementExerciseWW"/>
+                <xs:group minOccurs="0" ref="HintWW"/>
+                <xs:group minOccurs="0" ref="SolutionWW"/>
+              </xs:sequence>
+              <xs:element maxOccurs="unbounded" ref="stage"/>
+            </xs:choice>
+          </xs:sequence>
+          <xs:attributeGroup ref="MetaDataTitleOptional"/>
+          <xs:attribute name="seed" type="xs:integer"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="stage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="title"/>
+        <xs:group ref="StatementExerciseWW"/>
+        <xs:group minOccurs="0" ref="HintWW"/>
+        <xs:group minOccurs="0" ref="SolutionWW"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="StatementExerciseWW">
+    <xs:sequence>
+      <xs:element name="statement">
+        <xs:complexType>
+          <xs:choice maxOccurs="unbounded">
+            <xs:group ref="ParagraphWW"/>
+            <xs:element ref="pre"/>
+            <xs:group ref="SideBySideWW"/>
+            <xs:group ref="ImageWW"/>
+            <xs:group ref="TabularWW"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="pg-macros">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="macro-file"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="macro-file" type="xs:string"/>
+  <xs:element name="setup">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="WWVariableSetup"/>
+        <xs:element minOccurs="0" ref="pg-code"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="pg-code" type="xs:string"/>
+  <xs:group name="WWVariableSetup">
+    <xs:sequence>
+      <xs:element name="var">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" ref="static"/>
+            <xs:element minOccurs="0" ref="set"/>
+          </xs:sequence>
+          <xs:attribute name="name" use="required"/>
+          <xs:attribute name="category">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="integer"/>
+                <xs:enumeration value="number"/>
+                <xs:enumeration value="formula"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="static" type="xs:string"/>
+  <xs:element name="set">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="member"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="member">
+    <xs:complexType mixed="true">
+      <xs:attribute name="correct">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="WWVariableUse">
+    <xs:sequence>
+      <xs:element name="var">
+        <xs:complexType>
+          <xs:attribute name="form">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="popup"/>
+                <xs:enumeration value="buttons"/>
+                <xs:enumeration value="none"/>
+                <xs:enumeration value="essay"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="name"/>
+          <xs:attribute name="evaluator"/>
+          <xs:attribute name="width"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="HintWW">
+    <xs:sequence>
+      <xs:element name="hint">
+        <xs:complexType>
+          <xs:choice maxOccurs="unbounded">
+            <xs:group ref="ParagraphWW"/>
+            <xs:element ref="pre"/>
+            <xs:group ref="SideBySideWW"/>
+            <xs:group ref="ImageWW"/>
+            <xs:group ref="TabularWW"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="SolutionWW">
+    <xs:sequence>
+      <xs:element name="solution">
+        <xs:complexType>
+          <xs:choice maxOccurs="unbounded">
+            <xs:group ref="ParagraphWW"/>
+            <xs:element ref="pre"/>
+            <xs:group ref="SideBySideWW"/>
+            <xs:group ref="ImageWW"/>
+            <xs:group ref="TabularWW"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="todo" type="xs:string"/>
+  <xs:element name="attribution">
+    <xs:complexType mixed="true">
+      <xs:choice>
+        <xs:group ref="TextShort"/>
+        <xs:group maxOccurs="unbounded" ref="Line"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="UniqueID">
+    <xs:attribute ref="xml:id" use="required"/>
+  </xs:attributeGroup>
+  <xs:element name="subtitle">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextShort"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="XMLBase">
+    <xs:attribute ref="xml:base" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="XMLLang">
+    <xs:attribute ref="xml:lang" use="required"/>
+  </xs:attributeGroup>
+  <xs:group name="MetaDataTarget">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="MetaDataTarget">
+    <xs:attribute ref="xml:id"/>
+  </xs:attributeGroup>
+  <xs:complexType name="MetaDataTitle">
+    <xs:sequence>
+      <xs:element ref="title"/>
+      <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
+    </xs:sequence>
+    <xs:attribute ref="xml:id"/>
+    <xs:attribute ref="xml:base"/>
+    <xs:attribute ref="xml:lang"/>
+  </xs:complexType>
+  <xs:complexType name="MetaDataSubtitle">
+    <xs:sequence>
+      <xs:element ref="title"/>
+      <xs:element minOccurs="0" ref="subtitle"/>
+      <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
+    </xs:sequence>
+    <xs:attribute ref="xml:id"/>
+    <xs:attribute ref="xml:base"/>
+    <xs:attribute ref="xml:lang"/>
+  </xs:complexType>
+  <xs:group name="MetaDataTitleOptional">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="title"/>
+      <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="MetaDataTitleOptional">
+    <xs:attribute ref="xml:id"/>
+    <xs:attribute ref="xml:base"/>
+    <xs:attribute ref="xml:lang"/>
+  </xs:attributeGroup>
+  <xs:complexType name="MetaDataCaption">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="title"/>
+      <xs:element ref="caption"/>
+      <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
+    </xs:sequence>
+    <xs:attribute ref="xml:id"/>
+    <xs:attribute ref="xml:base"/>
+    <xs:attribute ref="xml:lang"/>
+  </xs:complexType>
+  <xs:group name="TextParagraph">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="Character"/>
+        <xs:group ref="Generator"/>
+        <xs:group ref="Verbatim"/>
+        <xs:group ref="Group"/>
+        <xs:group ref="MathInline"/>
+        <xs:group ref="Music"/>
+        <xs:group ref="Reference"/>
+        <xs:element ref="cd"/>
+        <xs:group ref="MathDisplay"/>
+        <xs:group ref="List"/>
+        <xs:element ref="fn"/>
+        <xs:element ref="notation"/>
+        <xs:element ref="idx"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="Paragraph">
+    <xs:sequence>
+      <xs:element name="p">
+        <xs:complexType mixed="true">
+          <xs:group ref="TextParagraph"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="TextParagraphWW">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="Character"/>
+        <xs:group ref="Generator"/>
+        <xs:group ref="Verbatim"/>
+        <xs:group ref="Group"/>
+        <xs:group ref="WWVariableUse"/>
+        <xs:group ref="MathInlineWW"/>
+        <xs:group ref="Music"/>
+        <xs:group ref="Reference"/>
+        <xs:element ref="cd"/>
+        <xs:group ref="MathDisplayWW"/>
+        <xs:group ref="ListWW"/>
+        <xs:element ref="fn"/>
+        <xs:element ref="notation"/>
+        <xs:element ref="idx"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="ParagraphWW">
+    <xs:sequence>
+      <xs:element name="p">
+        <xs:complexType mixed="true">
+          <xs:group ref="TextParagraphWW"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="ParagraphLined">
+    <xs:sequence>
+      <xs:element name="p">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="line">
+              <xs:complexType mixed="true">
+                <xs:group ref="TextShort"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="TextSimple">
+    <xs:sequence>
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="Character"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="TextShort">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="Character"/>
+        <xs:group ref="Generator"/>
+        <xs:group ref="Verbatim"/>
+        <xs:group ref="Group"/>
+        <xs:group ref="MathInline"/>
+        <xs:group ref="Music"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="TextLong">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="Character"/>
+        <xs:group ref="Generator"/>
+        <xs:group ref="Verbatim"/>
+        <xs:group ref="Group"/>
+        <xs:group ref="MathInline"/>
+        <xs:group ref="Music"/>
+        <xs:group ref="Reference"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="TextLongWW">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="Character"/>
+        <xs:group ref="Generator"/>
+        <xs:group ref="Verbatim"/>
+        <xs:group ref="Group"/>
+        <xs:group ref="MathInlineWW"/>
+        <xs:group ref="Music"/>
+        <xs:group ref="Reference"/>
+        <xs:group ref="WWVariableUse"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="fn">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:group ref="MetaDataTarget"/>
+        <xs:group ref="TextLong"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTarget"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="h">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextShort"/>
+      <xs:attribute name="sortby"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="idx">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:group ref="MetaDataTarget"/>
+        <xs:choice>
+          <xs:group ref="TextShort"/>
+          <xs:sequence>
+            <xs:element ref="h"/>
+            <xs:element minOccurs="0" ref="h"/>
+            <xs:element minOccurs="0" ref="h"/>
+            <xs:choice minOccurs="0">
+              <xs:element ref="see"/>
+              <xs:element ref="seealso"/>
+            </xs:choice>
+          </xs:sequence>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTarget"/>
+      <xs:attribute name="sortby"/>
+      <xs:attribute name="start"/>
+      <xs:attribute name="finish"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="see">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextShort"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="seealso">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextShort"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="index-list">
+    <xs:complexType/>
+  </xs:element>
+  <xs:group name="Reference">
+    <xs:choice>
+      <xs:element ref="url"/>
+      <xs:element ref="xref"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="url">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextShort"/>
+      <xs:attribute name="href" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="xref">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextShort"/>
+      <xs:attribute name="ref"/>
+      <xs:attribute name="first"/>
+      <xs:attribute name="last"/>
+      <xs:attribute name="provisional"/>
+      <xs:attribute name="autoname"/>
+      <xs:attribute name="detail"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="notation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="usage"/>
+        <xs:element name="description">
+          <xs:complexType mixed="true">
+            <xs:group ref="TextShort"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="usage" type="xs:string"/>
+  <xs:group name="MathInline">
+    <xs:sequence>
+      <xs:element name="m">
+        <xs:complexType mixed="true">
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="fillin"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="MathRow">
+    <xs:sequence>
+      <xs:element name="mrow">
+        <xs:complexType mixed="true">
+          <xs:sequence>
+            <xs:group ref="MetaDataTarget"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element ref="xref"/>
+              <xs:element ref="fillin"/>
+            </xs:choice>
+          </xs:sequence>
+          <xs:attributeGroup ref="MetaDataTarget"/>
+          <xs:attribute name="number">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="break">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="intertext">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextShort"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="MathDisplay">
+    <xs:choice>
+      <xs:element name="me">
+        <xs:complexType mixed="true">
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="fillin"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="men">
+        <xs:complexType mixed="true">
+          <xs:sequence>
+            <xs:group ref="MetaDataTarget"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="fillin"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="MetaDataTarget"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="md">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="MathRow"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:group ref="MathRow"/>
+              <xs:element ref="intertext"/>
+            </xs:choice>
+          </xs:sequence>
+          <xs:attribute name="number">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="break">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="alignment"/>
+          <xs:attribute name="alignat-columns"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="mdn">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="MathRow"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:group ref="MathRow"/>
+              <xs:element ref="intertext"/>
+            </xs:choice>
+          </xs:sequence>
+          <xs:attribute name="number">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="break">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="alignment"/>
+          <xs:attribute name="alignat-columns"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="MathInlineWW">
+    <xs:sequence>
+      <xs:element name="m">
+        <xs:complexType mixed="true">
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="fillin"/>
+            <xs:group ref="WWVariableUse"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="MathRowWW">
+    <xs:sequence>
+      <xs:element name="mrow">
+        <xs:complexType mixed="true">
+          <xs:sequence>
+            <xs:group ref="MetaDataTarget"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element ref="xref"/>
+              <xs:element ref="fillin"/>
+              <xs:group ref="WWVariableUse"/>
+            </xs:choice>
+          </xs:sequence>
+          <xs:attributeGroup ref="MetaDataTarget"/>
+          <xs:attribute name="number">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="break">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="MathDisplayWW">
+    <xs:choice>
+      <xs:element name="me">
+        <xs:complexType mixed="true">
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="fillin"/>
+            <xs:group ref="WWVariableUse"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="men">
+        <xs:complexType mixed="true">
+          <xs:sequence>
+            <xs:group ref="MetaDataTarget"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element ref="fillin"/>
+              <xs:group ref="WWVariableUse"/>
+            </xs:choice>
+          </xs:sequence>
+          <xs:attributeGroup ref="MetaDataTarget"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="md">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="MathRowWW"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:group ref="MathRowWW"/>
+              <xs:element ref="intertext"/>
+            </xs:choice>
+          </xs:sequence>
+          <xs:attribute name="number">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="break">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="alignment"/>
+          <xs:attribute name="alignat-columns"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="mdn">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="MathRowWW"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:group ref="MathRowWW"/>
+              <xs:element ref="intertext"/>
+            </xs:choice>
+          </xs:sequence>
+          <xs:attribute name="number">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="break">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="alignment"/>
+          <xs:attribute name="alignat-columns"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="Verbatim">
+    <xs:choice>
+      <xs:element ref="c"/>
+      <xs:element ref="email"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="c">
+    <xs:complexType mixed="true">
+      <xs:attribute name="latexsep"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="Group">
+    <xs:choice>
+      <xs:choice>
+        <xs:element ref="abbr"/>
+        <xs:element ref="acro"/>
+        <xs:element ref="init"/>
+      </xs:choice>
+      <xs:choice>
+        <xs:element ref="q"/>
+        <xs:element ref="sq"/>
+        <xs:element ref="braces"/>
+        <xs:element ref="angles"/>
+        <xs:element ref="brackets"/>
+        <xs:element ref="dblbrackets"/>
+      </xs:choice>
+      <xs:choice>
+        <xs:element ref="em"/>
+        <xs:element ref="term"/>
+        <xs:element ref="alert"/>
+        <xs:element ref="foreign"/>
+        <xs:element ref="booktitle"/>
+      </xs:choice>
+      <xs:choice>
+        <xs:element ref="delete"/>
+        <xs:element ref="insert"/>
+        <xs:element ref="stale"/>
+      </xs:choice>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="abbr">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextSimple"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="acro">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextSimple"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="init">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextSimple"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="q">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextLong"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="sq">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextLong"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="braces">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextLong"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="angles">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextLong"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="brackets">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextLong"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="dblbrackets">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextLong"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="em">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextLong"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="term">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextLong"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="alert">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextLong"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="foreign">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextLong"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="booktitle">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextLong"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="delete">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextLong"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="insert">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextLong"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="stale">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextLong"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="Generator">
+    <xs:choice>
+      <xs:choice>
+        <xs:element ref="today"/>
+        <xs:element ref="timeofday"/>
+        <xs:element ref="tex"/>
+        <xs:element ref="latex"/>
+        <xs:element ref="pretext"/>
+        <xs:element name="webwork">
+          <xs:complexType/>
+        </xs:element>
+        <xs:element ref="eg"/>
+        <xs:element ref="ie"/>
+        <xs:element ref="circa"/>
+        <xs:element ref="etc"/>
+      </xs:choice>
+      <xs:element ref="quantity"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="today">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="timeofday">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="tex">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="latex">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="pretext">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="eg">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="ie">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="circa">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="etc">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="quantity">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="mag"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="unit"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="per"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mag" type="xs:string"/>
+  <xs:element name="unit">
+    <xs:complexType>
+      <xs:attributeGroup ref="UnitSpecification"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="per">
+    <xs:complexType>
+      <xs:attributeGroup ref="UnitSpecification"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="UnitSpecification">
+    <xs:attribute name="prefix"/>
+    <xs:attribute name="base" use="required"/>
+    <xs:attribute name="exp" type="xs:integer"/>
+  </xs:attributeGroup>
+  <xs:group name="Character">
+    <xs:choice>
+      <xs:choice>
+        <xs:element ref="ampersand"/>
+        <xs:element ref="less"/>
+        <xs:element ref="greater"/>
+      </xs:choice>
+      <xs:choice>
+        <xs:element ref="hash"/>
+        <xs:element ref="dollar"/>
+        <xs:element ref="percent"/>
+        <xs:element ref="tilde"/>
+        <xs:element ref="underscore"/>
+        <xs:element ref="circumflex"/>
+        <xs:element ref="backslash"/>
+        <xs:element ref="lbrace"/>
+        <xs:element ref="rbrace"/>
+      </xs:choice>
+      <xs:choice>
+        <xs:element ref="nbsp"/>
+        <xs:element ref="ndash"/>
+        <xs:element ref="mdash"/>
+      </xs:choice>
+      <xs:element ref="fillin"/>
+      <xs:choice>
+        <xs:element ref="lsq"/>
+        <xs:element ref="rsq"/>
+        <xs:element ref="rq"/>
+        <xs:element ref="lq"/>
+      </xs:choice>
+      <xs:choice>
+        <xs:element ref="solidus"/>
+        <xs:element ref="times"/>
+      </xs:choice>
+      <xs:choice>
+        <xs:element ref="ellipsis"/>
+        <xs:element ref="asterisk"/>
+        <xs:element ref="slash"/>
+        <xs:element ref="midpoint"/>
+        <xs:element ref="swungdash"/>
+        <xs:element ref="permille"/>
+        <xs:element ref="pilcrow"/>
+        <xs:element ref="section-mark"/>
+        <xs:element ref="copyright"/>
+        <xs:element ref="registered"/>
+        <xs:element ref="trademark"/>
+      </xs:choice>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="ampersand">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="less">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="greater">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="hash">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="dollar">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="percent">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="tilde">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="underscore">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="circumflex">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="backslash">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="lbrace">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="rbrace">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="nbsp">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="ndash">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="mdash">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="lsq">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="rsq">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="rq">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="lq">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="solidus">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="times">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="ellipsis">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="asterisk">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="slash">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="midpoint">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="swungdash">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="permille">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="pilcrow">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="section-mark">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="copyright">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="registered">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="trademark">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="fillin">
+    <xs:complexType>
+      <xs:attribute name="characters" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="Music">
+    <xs:choice>
+      <xs:element ref="doublesharp"/>
+      <xs:element ref="sharp"/>
+      <xs:element ref="natural"/>
+      <xs:element ref="flat"/>
+      <xs:element ref="doubleflat"/>
+      <xs:element ref="scaledeg"/>
+      <xs:element ref="n"/>
+      <xs:element ref="chord"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="doublesharp">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="sharp">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="natural">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="flat">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="doubleflat">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="scaledeg">
+    <xs:simpleType>
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="0"/>
+        <xs:enumeration value="1"/>
+        <xs:enumeration value="2"/>
+        <xs:enumeration value="3"/>
+        <xs:enumeration value="4"/>
+        <xs:enumeration value="5"/>
+        <xs:enumeration value="6"/>
+        <xs:enumeration value="7"/>
+        <xs:enumeration value="8"/>
+        <xs:enumeration value="9"/>
+        <xs:enumeration value="10"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="n">
+    <xs:complexType>
+      <xs:attribute name="pc" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="A"/>
+            <xs:enumeration value="B"/>
+            <xs:enumeration value="C"/>
+            <xs:enumeration value="D"/>
+            <xs:enumeration value="E"/>
+            <xs:enumeration value="F"/>
+            <xs:enumeration value="G"/>
+            <xs:enumeration value="a"/>
+            <xs:enumeration value="b"/>
+            <xs:enumeration value="c"/>
+            <xs:enumeration value="d"/>
+            <xs:enumeration value="e"/>
+            <xs:enumeration value="f"/>
+            <xs:enumeration value="g"/>
+            <xs:enumeration value="1"/>
+            <xs:enumeration value="2"/>
+            <xs:enumeration value="3"/>
+            <xs:enumeration value="4"/>
+            <xs:enumeration value="5"/>
+            <xs:enumeration value="6"/>
+            <xs:enumeration value="7"/>
+            <xs:enumeration value="8"/>
+            <xs:enumeration value="9"/>
+            <xs:enumeration value="10"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="acc">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="doublesharp"/>
+            <xs:enumeration value="sharp"/>
+            <xs:enumeration value="flat"/>
+            <xs:enumeration value="doubleflat"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="octave">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="1"/>
+            <xs:enumeration value="2"/>
+            <xs:enumeration value="3"/>
+            <xs:enumeration value="4"/>
+            <xs:enumeration value="5"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="chord">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="alteration"/>
+      </xs:sequence>
+      <xs:attribute name="root"/>
+      <xs:attribute name="mode"/>
+      <xs:attribute name="bps"/>
+      <xs:attribute name="bass"/>
+      <xs:attribute name="suspended">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="parentheses">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="alteration">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextSimple"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="list-of">
+    <xs:complexType>
+      <xs:attribute name="elements" use="required"/>
+      <xs:attribute name="scope"/>
+      <xs:attribute name="divisions"/>
+      <xs:attribute name="empty">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="notation-list">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="solution-list">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="geogebra-applet">
+    <xs:complexType>
+      <xs:sequence minOccurs="0">
+        <xs:element ref="ggbBase64"/>
+        <xs:group ref="Figure"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ggbBase64" type="xs:string"/>
+  <xs:element name="demonstration">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="title"/>
+        <xs:group ref="Paragraph"/>
+        <xs:element ref="sage"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="docinfo">
+    <xs:complexType>
+      <xs:group maxOccurs="unbounded" ref="Configuration"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute ref="xml:lang"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="Configuration">
+    <xs:choice>
+      <xs:element ref="brandlogo"/>
+      <xs:element ref="latex-preamble"/>
+      <xs:element ref="macros"/>
+      <xs:element ref="latex-image-preamble"/>
+      <xs:element ref="initialism"/>
+      <xs:element ref="feedback"/>
+      <xs:element ref="rename"/>
+      <xs:element ref="images"/>
+      <xs:element ref="author-biographies"/>
+      <xs:choice>
+        <xs:element ref="search"/>
+        <xs:element ref="analytics"/>
+      </xs:choice>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="brandlogo">
+    <xs:complexType>
+      <xs:attribute name="url"/>
+      <xs:attribute name="source" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="latex-preamble">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="package"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="package" type="xs:string"/>
+  <xs:element name="macros" type="xs:string"/>
+  <xs:element name="latex-image-preamble" type="xs:string"/>
+  <xs:element name="initialism" type="xs:string"/>
+  <xs:element name="feedback">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="url" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="rename">
+    <xs:complexType mixed="true">
+      <xs:attribute name="element" use="required"/>
+      <xs:attribute name="lang" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="images">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="archive"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="archive">
+    <xs:complexType mixed="true">
+      <xs:attribute name="from"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="author-biographies">
+    <xs:complexType>
+      <xs:attribute name="length" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="short"/>
+            <xs:enumeration value="long"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="search">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="google">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="cx"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cx" type="xs:string"/>
+  <xs:element name="analytics">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element name="google">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="tracking"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ref="statcounter"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tracking" type="xs:string"/>
+  <xs:element name="statcounter">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="project" type="xs:string"/>
+        <xs:element ref="security"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="security" type="xs:string"/>
+</xs:schema>
