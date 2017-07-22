@@ -1050,12 +1050,7 @@ the xsltproc executable.
             <p><idx xml:id="index-finish-multicolumn" start="index-start-multicolumn" />The multi-row displayed mathematics in the proof of the Fundamental Theorem had equations aligned on the equals signs via the <ampersand /> character.  Sometimes you don't want that.  Here is an example with some differential equations, with each equation centered and unnumbered,<md>
                 <mrow>{\mathcal L}(y')(s) = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0)</mrow>
-            </md>.</p>
-
-            <notation>
-                <usage>\rho</usage>
-                <description>this symbol could be used for lots of things, but we are just trying to make a super-long description to get it to wrap within the column where it belongs, which is sometimes set to a fixed width to accomodate really complicated explanations</description>
-            </notation>
+            </md>.<notation><usage>\rho</usage><description>this symbol could be used for lots of things, but we are just trying to make a super-long description to get it to wrap within the column where it belongs, which is sometimes set to a fixed width to accomodate really complicated explanations</description></notation></p>
 
             <p><latex /> has a device where you can interrupt a sequence of equations with a small amout of text and preserve the equation alignment on either side.  Here are two tests of that device, with aligned equations and non-aligned equations.  Study the source to see use and differences.  (The math does not make sense.)</p>
 
@@ -1121,12 +1116,7 @@ the xsltproc executable.
                     <mrow>\nabla \cdot \vec{\mathbf{E}} &amp; = 4 \pi \rho</mrow>
                     <mrow>\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}}</mrow>
                     <mrow>\nabla \cdot \vec{\mathbf{B}} &amp; = 0</mrow>
-                </md></p>
-
-                <notation>
-                    <usage>\nabla</usage>
-                    <description>gradient operator</description>
-                </notation>
+                </md><notation><usage>\nabla</usage><description>gradient operator</description></notation></p>
 
                 <p>A small test that the extensible arrows library is included properly:<me>A\xmapsto[\text{bijection}]{\Phi+\Psi+\Theta}B</me></p>
 
@@ -1244,7 +1234,7 @@ the xsltproc executable.
                         <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
                         <mrow>m^2+n^2=p^2</mrow>
                         <!--  -->
-                    </md></p>.
+                    </md>.</p>
                     <p>In this version we have turned off page breaking for the entire display, but then allowed a break at every fourth equation, so you should see a reasonably attractive page break right after one of the <m>m^2+n^2=p^2</m> equations.<mdn break="no">
                         <mrow>x^2+y^2=z^2</mrow>
                         <mrow>a^2+b^2=c^2</mrow>
@@ -1306,7 +1296,7 @@ the xsltproc executable.
                         <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
                         <mrow break="yes">m^2+n^2=p^2</mrow>
                         <!--  -->
-                    </mdn></p>.
+                    </mdn>.</p>
                     <p>So.  Do not take any extra steps and let <latex /> figure out the breaks.  If you do not like a break, modify the <c>md</c> or <c>mdn</c> to go back to the AMSmath default behavior and not break at all.  Ever.  Or rather, go further and modify an individual <c>mrow</c> to suggest that it is a good place for a break.</p>
                 </example>
 
@@ -2182,7 +2172,11 @@ the xsltproc executable.
         <section>
             <title>Further Reading</title>
 
-            <p>In a longer work you might wish to have some references on a per-chapter basis, or similar.  You can make a <q>references</q> subdivision anywhere to hold bibliographic items, and you can reference the items like any other item.  For example, we can cite the article below <xref ref="biblio-beezer-fcla" detail="Chapter R" />, included an indication that a specific chapter may be relevant.</p>
+            <subsection>
+                <title>Specialized Subdivisions</title>
+
+                <p>In a longer work you might wish to have some references on a per-chapter basis, or similar.  You can make a <q>references</q> subdivision anywhere to hold bibliographic items, and you can reference the items like any other item.  For example, we can cite the article below <xref ref="biblio-beezer-fcla" detail="Chapter R" />, included an indication that a specific chapter may be relevant.</p>
+            </subsection>
 
             <references>
                 <title>References</title>
@@ -2472,7 +2466,7 @@ the xsltproc executable.
                             <li>There is a binary operation, denoted <q><m>\cdot</m></q>.</li>
                             <li>The operation is associative.</li>
                             <li>There is an identity element, <m>e</m>.</li>
-                            <li>For every element <m>b</m>, there is an element <m>c</m> (the inverse), such that <me>b\cdot c=c\cdot b = e.</me></li>
+                            <li><p>For every element <m>b</m>, there is an element <m>c</m> (the inverse), such that <me>b\cdot c=c\cdot b = e</me>.</p></li>
                         </ol></p>
                         <p>If these conditions are met for a set <m>G</m>, then we say <m>G</m> is a <term>group</term>.</p>
                     </statement>
@@ -3019,7 +3013,7 @@ the xsltproc executable.
 
             <p>For a table without a caption, create a <c>&lt;tabular&gt;</c> and place it inside a <c>&lt;sidebyside&gt;</c>.  This will allow control over the horizontal placment, but without a caption, there is no number, and the tabular cannot be cross-referenced.</p>
 
-            <sidebyside xml:id="table-captionless-titleless-minimal">
+            <sidebyside>
                 <tabular top="medium"><row bottom="medium" left="minor"><cell right="minor">One</cell></row></tabular>
             </sidebyside>
 
@@ -4334,18 +4328,20 @@ the xsltproc executable.
             <listing xml:id="program-interactive">
                 <caption>An interactive Python program, using <booktitle>Python Tutor</booktitle></caption>
                 <program xml:id="happy" language="python" interactive="pythontutor">
-                # From "Teaching with Python" by John Zelle
-                def happy():
-                    print("Happy Birthday to you!")
+                    <input>
+                    # From "Teaching with Python" by John Zelle
+                    def happy():
+                        print("Happy Birthday to you!")
 
-                def sing(P):
-                    happy()
-                    happy()
-                    print("Happy Birthday dear " + P + "!")
-                    happy()
+                    def sing(P):
+                        happy()
+                        happy()
+                        print("Happy Birthday dear " + P + "!")
+                        happy()
 
-                # main
-                sing("Fred")
+                    # main
+                    sing("Fred")
+                    </input>
                 </program>
             </listing>
         </section>
@@ -4364,13 +4360,13 @@ the xsltproc executable.
             <title>Side-By-Side Panels</title>
 
             <introduction>
-              <title>Introduction</title>
+                <title>Introduction</title>
 
-              <p>The flow of a page is almost universally top-to-bottom.  But at times you would like to go <em>across</em> a page, perhaps to compare items (identical content in two different languages), or to make good use of a page real estate by grouping several small items together (<eg /> images).  So the <c>&lt;sidebyside&gt;</c> tag is strictly a layout device, though it does convey some meaning by grouping certain objects together. A variety of different objects can be put side-by-side using the <c>sidebyside</c> element.  Specifically, <c>figure</c>, <c>table</c>, <c>listing</c>, <c>paragraphs</c>, <c>image</c>, <c>tabular</c>, <c>p</c>, <c>ol</c>, <c>ul</c>, <c>dl</c>, <c>pre</c>, <c>poem</c>, and more.  The individual components of a <c>&lt;sidebyside&gt;</c> are generically called <term>panels</term>.</p>
+                <p>The flow of a page is almost universally top-to-bottom.  But at times you would like to go <em>across</em> a page, perhaps to compare items (identical content in two different languages), or to make good use of a page real estate by grouping several small items together (<eg /> images).  So the <c>&lt;sidebyside&gt;</c> tag is strictly a layout device, though it does convey some meaning by grouping certain objects together. A variety of different objects can be put side-by-side using the <c>sidebyside</c> element.  Specifically, <c>figure</c>, <c>table</c>, <c>listing</c>, <c>paragraphs</c>, <c>image</c>, <c>tabular</c>, <c>p</c>, <c>ol</c>, <c>ul</c>, <c>dl</c>, <c>pre</c>, <c>poem</c>, and more.  The individual components of a <c>&lt;sidebyside&gt;</c> are generically called <term>panels</term>.</p>
 
-              <p>As a layout device, the <c>&lt;sidebyside&gt;</c> does not allow a <c>&lt;caption&gt;</c>, is never numbered, and therefore cannot be cross-referenced.  You may cross-reference whatever element holds the <c>&lt;sidebyside&gt;</c>, and many of the panels may be cross-referenced individually.</p>
+                <p>As a layout device, the <c>&lt;sidebyside&gt;</c> does not allow a <c>&lt;caption&gt;</c>, is never numbered, and therefore cannot be cross-referenced.  You may cross-reference whatever element holds the <c>&lt;sidebyside&gt;</c>, and many of the panels may be cross-referenced individually.</p>
 
-              <p>As a first example, we have two single paragraphs, laid out with different widths, and slight margins on each side.  The widths have been chosen experimentally to get roughly identical heights for the two paragraphs of varying length.</p>
+                <p>As a first example, we have two single paragraphs, laid out with different widths, and slight margins on each side.  The widths have been chosen experimentally to get roughly identical heights for the two paragraphs of varying length.</p>
 
                 <sidebyside widths="60% 31%" margins="3%">
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin lorem diam, convallis in nulla sed, accumsan fermentum urna. Pellentesque aliquet leo elit, ut consequat nunc dapibus ac. Sed lobortis leo tincidunt, vulputate nunc at, ultricies leo. Vivamus purus diam, tristique laoreet purus eget, mollis gravida sapien. Nunc vulputate nisl ac mauris hendrerit cursus. Sed vel molestie velit. Suspendisse sem sem, elementum at vehicula id, volutpat ac mi. Nullam ullamcorper fringilla purus in accumsan. Mauris at nunc accumsan orci dictum vulputate id id augue. Suspendisse at dignissim elit, non euismod nunc. Aliquam faucibus magna ac molestie semper. Aliquam hendrerit sem sit amet metus congue tempor. Donec laoreet laoreet metus, id interdum purus mattis vulputate. Proin condimentum vitae erat varius mollis. Donec venenatis libero sed turpis pretium tempor.</p>
@@ -5186,20 +5182,21 @@ the xsltproc executable.
                     <li>If the only captions present are for individual panels, then they get regular numbering, not sub-numbering.</li>
                 </ul>The next example demonstrates some of this behavior.</p>
 
-                <sbsgroup widths="5% 5% 5%" margins="30%">
+                <figure>
                     <caption>Overall SBS Group</caption>
-                    <sidebyside>
-                        <!-- <caption>This is an error if un-commented.</caption> -->
-                        <p>One.</p>
-                        <p>Two.</p>
-                        <p>Three.</p>
-                    </sidebyside>
-                    <sidebyside widths="25% 20% 15%" margins="5%">
-                        <p>Four.</p>
-                        <p>Five.</p>
-                        <p>Six.</p>
-                    </sidebyside>
-                </sbsgroup>
+                    <sbsgroup widths="5% 5% 5%" margins="30%">
+                        <sidebyside>
+                            <p>One.</p>
+                            <p>Two.</p>
+                            <p>Three.</p>
+                        </sidebyside>
+                        <sidebyside widths="25% 20% 15%" margins="5%">
+                            <p>Four.</p>
+                            <p>Five.</p>
+                            <p>Six.</p>
+                        </sidebyside>
+                    </sbsgroup>
+                </figure>
 
                 <p>A long poem, when placed into a <c>sidebyside</c> will not fit onto a physical page and will not break across pages.  With a <c>sbsgroup</c> you can put each stanza (say) into its own <c>sidebyside</c> and place something (commentary) next to it.  We include the <c>title</c> with the first stanza and the <c>author</c> with the last stanza.  This device can also be useful to attach commentary to specific stanzas.</p>
 
@@ -5594,6 +5591,28 @@ the xsltproc executable.
                 <list-of elements="  theorem corollary" divisions="section    subsection " empty="no" />
             </appendix>
 
+            <appendix>
+                <title>Index</title>
+
+                <p>There is an index manufactured at the end of the back matter.  So we are talking about it here, rather than within the index, which is an impossibility.  It contains some sample entries, and is not meant to be comprehensive.  Look at the source of this XML file, searching on <c>&lt;index&gt;</c>, to see how they are written.  They may be placed inside of a a variety of structures, and their location greatly influences the cross-references produced in the HTML version of the index.</p>
+
+                <p>The <latex /> version of the index is more traditional, using page numbers to reference locations.  A newer package is used to create the index, and so there is no extra intermediate step required to process the index.  The one downside of this convenience is that index entries may not be placed in the back colophon (which is the only subdivision that may follow the index).</p>
+
+                <p>There is an index entry about multicolumn lists which spans more than one page.  This requires doubly-linked index entries, the first has the index content and points to the <c>xml:id</c> of the second.  The second is an empty element, but points back to the <c>xml:id</c> of the first entry.  So each has a marker and a reference, which allows the span of the index topic to cut across XML boundaries in the source.  This is the mechanism to produce a page range in the <latex /> index.  See the source of this article for syntax details.</p>
+
+                <paragraphs>
+                    <title>Bully Pulpit: Index Headings</title>
+
+                    <p>Professionals do not capitalize the headings (entries) of an index, unless it is a proper noun (name, place, <etc />).  We do not provide any enforcement of this advice, nor any assistance.  It is your responsibility to provide quality source material in this regard.</p>
+                </paragraphs>
+
+                <paragraphs>
+                    <title>Note</title>
+
+                    <p>Most all of the index entries below to page 2 (PDF output) are just from a suite of non-sensical tests.  These are harder to recognize in the <init>HTML</init> output.</p>
+                </paragraphs>
+            </appendix>
+
             <!-- Bibliography/References can appear anywhere, -->
             <!-- but these are in the backmatter              -->
 
@@ -5606,26 +5625,6 @@ the xsltproc executable.
 
                 <biblio type="raw" xml:id="biblio-lay-article">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash />62.</biblio>
 
-                <conclusion>
-                    <p>There is an index manufactured in the next subdivision (so we are talking about  it here, rather than within the index, an impossibility).  It contains some sample entries, and is not meant to be comprehensive.  Look at the source of this XML file, searching on <c>&lt;index&gt;</c>, to see how they are written.  They may be placed inside of a a variety of structures, and their location greatly influences the cross-references produced in the HTML version of the index.</p>
-
-                    <p>The <latex /> version of the index is more traditional, using page numbers to reference locations.  A newer package is used to create the index, and so there is no extra intermediate step required to process the index.  The one downside of this convenience is that index entries may not be placed in the back colophon (which is the only subdivision that may follow the index).</p>
-
-                    <p>There is an index entry about multicolumn lists which spans more than one page.  This requires doubly-linked index entries, the first has the index content and points to the <c>xml:id</c> of the second.  The second is an empty element, but points back to the <c>xml:id</c> of the first entry.  So each has a marker and a reference, which allows the span of the index topic to cut across XML boundaries in the source.  This is the mechanism to produce a page range in the <latex /> index.  See the source of this article for syntax details.</p>
-
-                    <paragraphs>
-                        <title>Bully Pulpit: Index Headings</title>
-
-                        <p>Professionals do not capitalize the headings (entries) of an index, unless it is a proper noun (name, place, <etc />).  We do not provide any enforcement of this advice, nor any assistance.  It is your responsibility to provide quality source material in this regard.</p>
-                    </paragraphs>
-
-                    <paragraphs>
-                        <title>Note</title>
-
-                        <p>Most all of the index entries below to page 2 (PDF output) are just from a suite of non-sensical tests.  These are harder to recognize in the <init>HTML</init> output.</p>
-                    </paragraphs>
-
-                </conclusion>
             </references>
 
             <index>
