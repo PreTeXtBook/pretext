@@ -1058,7 +1058,7 @@
                         (attribute first {text}, attribute last {text}) | 
                         attribute provisional {text}
                     ),
-                    attribute autoname {text}?,
+                    attribute text {"global"|"type-global"|"title"}?,
                     attribute detail {text}?,
                     TextShort
             }

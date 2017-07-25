@@ -587,7 +587,7 @@
 
         <p>A <term>statement block</term> is used in statements.  What are those?  Theorems have statements, exercises have statements, questions have statements.  Some of these blocks also have proofs, hints, and solutions.  In statements, and their peers, we include text blocks, captioned items, asides, side-by-side layouts, and Sage computations, but exclude many of the numbered and titled division blocks.</p>
 
-        <p><c>geogebra-applet</c> and <c>demonstration</c> are slated for removal or an overhaul, and so are in the <xref ref="badbank" autoname="title" />.  Avoid using them for now.</p>
+        <p><c>geogebra-applet</c> and <c>demonstration</c> are slated for removal or an overhaul, and so are in the <xref ref="badbank" text="title" />.  Avoid using them for now.</p>
 
         <fragment xml:id="block">
         BlockText =
@@ -660,7 +660,7 @@
                         (attribute first {text}, attribute last {text}) | 
                         attribute provisional {text}
                     ),
-                    attribute autoname {text}?,
+                    attribute text {"global"|"type-global"|"title"}?,
                     attribute detail {text}?,
                     TextShort
             }
