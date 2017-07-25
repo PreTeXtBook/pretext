@@ -498,7 +498,7 @@
                         <title>Part 1: Identify the coefficients</title>
 
                         <statement>
-                            <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" autoname="yes" /></p>
+                            <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" text="type-global" /></p>
 
                             <p halign='center'><m>a=</m> <var name="$a" width="4" evaluator="$evaluatorfora"/>, <m>b=</m> <var name="$b" width="4" evaluator="$evaluatorforb"/>, <m>c=</m> <var name="$c" width="4" evaluator="$evaluatorforc"/></p>
                         </statement>
@@ -517,7 +517,7 @@
                         </statement>
 
                         <solution>
-                            <p>Recall that the quadratic formula is given in <xref ref="theorem-quadratic-formula" autoname="yes" />.</p>
+                            <p>Recall that the quadratic formula is given in <xref ref="theorem-quadratic-formula" text="type-global" />.</p>
 
                             <p>You already identified <m>a = <var name="$a"/></m>, <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>, so the results are: <me>x = {<var name="$solnum1"/> \over 2(<var name="$a"/>)} = <var name="$x1"/></me> or <me>x = {<var name="$solnum2"/> \over 2(<var name="$a"/>)} = <var name="$x2"/></me></p>
                         </solution>
@@ -619,7 +619,7 @@
                     <title>Graphical Antiderivatives</title>
 
                     <introduction>
-                        <p>Consult <xref ref="definition-antiderivative" autoname="yes" /> and the <xref ref="theorem-FTC" autoname="title" /> to assist you with the following problem.</p>
+                        <p>Consult <xref ref="definition-antiderivative" text="type-global" /> and the <xref ref="theorem-FTC" text="title" /> to assist you with the following problem.</p>
                     </introduction>
 
                     <webwork source="Library/Rochester/setIntegrals4FTC/S05.03.FundThmCalc.PTP01.pg" />
@@ -634,7 +634,7 @@
 
                     <webwork>
                         <statement>
-                            <p>Explain how we can use <xref ref="corollary-FTC-derivative" autoname="yes" /> to say that every continuous function <em>always</em> has a derivative. (And we will demonstrate here that you can use a  macro from <c>docinfo</c>: <m>\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)</m>. It will work in the <webwork /> problem, regardless of whether you are using images, MathJax, or hardcopy.)</p>
+                            <p>Explain how we can use <xref ref="corollary-FTC-derivative" text="type-global" /> to say that every continuous function <em>always</em> has a derivative. (And we will demonstrate here that you can use a  macro from <c>docinfo</c>: <m>\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)</m>. It will work in the <webwork /> problem, regardless of whether you are using images, MathJax, or hardcopy.)</p>
                             <p><var form="essay" /></p>
                         </statement>
                     </webwork>

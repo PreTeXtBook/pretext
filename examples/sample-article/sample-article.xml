@@ -438,7 +438,7 @@ the xsltproc executable.
             </sage>
 
             <!-- keep R index entry, collides with sortby attribute elsewhere -->
-            <p>Sage, and by extension, the Sage Cell Server, can interpret several languages.  The next example has code in the <c>R</c> language,<idx><h>R</h></idx> a popular open source language for statistics.  As an author, you add the attribute <c>language="r"</c> to your <c>sage</c> element.  (The default language is Sage, so you do not need to indicate that repeatedly.)  Note that a language like <c>R</c> likes to use a <q>less than</q> character, the second most-dangerous special character in XML.  You need to escape it by writing <c>&amp;lt;</c> as we have done in the source for this example.  (See the discussion and summary in <xref ref="subsection-reserved-characters" autoname="yes" />.)</p>
+            <p>Sage, and by extension, the Sage Cell Server, can interpret several languages.  The next example has code in the <c>R</c> language,<idx><h>R</h></idx> a popular open source language for statistics.  As an author, you add the attribute <c>language="r"</c> to your <c>sage</c> element.  (The default language is Sage, so you do not need to indicate that repeatedly.)  Note that a language like <c>R</c> likes to use a <q>less than</q> character, the second most-dangerous special character in XML.  You need to escape it by writing <c>&amp;lt;</c> as we have done in the source for this example.  (See the discussion and summary in <xref ref="subsection-reserved-characters" text="type-global" />.)</p>
 
             <p>As a reader you learn that the <q>Evaluate</q> button for a pre-loaded Sage cell will indicate the language in use.</p>
 
@@ -609,7 +609,7 @@ the xsltproc executable.
                     </sage>
                 </example>
 
-                <p>We cross-reference the example just prior, <xref ref="example-mysterious" autoname="yes" />, to test the simple Sage cell that will now be part of a cross-reference knowl (an external file).</p>
+                <p>We cross-reference the example just prior, <xref ref="example-mysterious" text="type-global" />, to test the simple Sage cell that will now be part of a cross-reference knowl (an external file).</p>
 
                 <claim xml:id="claim-with-cases">
                     <title>An Equivalent Claim</title>
@@ -739,7 +739,7 @@ the xsltproc executable.
                         <statement>
                             <p>This is an <c>&lt;exploration&gt;</c>.<idx><h>exploration</h></idx>  Other similar possibilities are <c>&lt;project&gt;</c><idx><h>project</h></idx>, <c>&lt;activity&gt;</c><idx><h>activity</h></idx>, <c>&lt;task&gt;</c><idx><h>task</h></idx>, and <c>&lt;investigation&gt;</c><idx><h>investigation</h></idx>.</p>
 
-                            <p>Note that projects, activities, explorations, tasks and investigations <em>share</em> the independent numbering scheme, so it is really only intended you use one of these.  If you want a variant of the name (<eg /> <q>Directed Activity</q>) you can use the <c>&lt;rename&gt;</c><idx><h>rename an environment</h></idx> facility (<xref ref="rename-facility" autoname="yes" />).</p>
+                            <p>Note that projects, activities, explorations, tasks and investigations <em>share</em> the independent numbering scheme, so it is really only intended you use one of these.  If you want a variant of the name (<eg /> <q>Directed Activity</q>) you can use the <c>&lt;rename&gt;</c><idx><h>rename an environment</h></idx> facility (<xref ref="rename-facility" text="type-global" />).</p>
                         </statement>
 
                         <solution>
@@ -853,9 +853,9 @@ the xsltproc executable.
                     <p>An <c>&lt;assemblage&gt;</c> is a collection, or summary, that does not have much structure to it.  So you are limited to paragraphs (<c>p</c>) and side-by-sides.  The intent is that these do not have captions, so are not numbered, so cannot be cross-referenced and so do not become knowls (inside of the knowled assemblage).  You may place <c>&lt;image&gt;</c>, <c>&lt;tabular&gt;</c>, and <c>&lt;program&gt;</c> inside a <c>&lt;sidebyside&gt;</c>, in addition to other objects that do not have captions.  Note that <c>p</c> may by extension contain lists (<c>ol</c>, <c>ul</c>, <c>dl</c>).  Despite limited structure, the presentation should draw attention to it, because the contents should be seen as more important in some way.  It should be <q>highlighted</q> in some manner.  If you need to connect the assemblage with material elsewhere, you can do that with the usual <c>xref/xml:id</c> mechanism.<idx><h>assemblage</h></idx></p>
 
                     <p>What have we seen so far in this (disorganized) sample?<ul>
-                        <li><p>Theorems, definitions and corollaries. (<xref ref="section-fundamental-theorem" autoname="yes" />)</p></li>
-                        <li><p>Sage cells, including with R. (<xref ref="section-sage-cells" autoname="yes" />)</p></li>
-                        <li><p>Lots of document structure, like introductions and conclusions (next). (<xref ref="interesting-corollary" autoname="yes" />)</p></li>
+                        <li><p>Theorems, definitions and corollaries. (<xref ref="section-fundamental-theorem" text="type-global" />)</p></li>
+                        <li><p>Sage cells, including with R. (<xref ref="section-sage-cells" text="type-global" />)</p></li>
+                        <li><p>Lots of document structure, like introductions and conclusions (next). (<xref ref="interesting-corollary" text="type-global" />)</p></li>
                     </ul></p>
 
                     <p>A sample table, with no caption, follows.</p>
@@ -1141,7 +1141,7 @@ the xsltproc executable.
                     <mrow>\frac{dy}{dt} = x^3 - y.</mrow>
                 </md></p>
 
-                <p>An ampersand is used, in two ways, to describe positioning several equations per line, organized in columns.  We suggest in <xref ref="subsection-reserved-characters" autoname="yes" /> that the pre-defined <latex /> macro <c>\amp</c> is the safest way to specify these.  The second, fourth, sixth, <ellipsis /> ampersands separate columns, and the spacing between columns will be provided automatically.  The first, third, fifth, <ellipsis /> ampersands are alignment points for the equations in each column.  Typically this is placed just prior to a binary operator, such as an equal sign (<c>\amp = </c>), or for a column of explanations or commentary, just prior to the <c>\text{}</c> macro.  Note that this scenario suggests always having an odd number of amersands in each <c>mrow</c>.  In the example below, alignment is on the equals sign in the first two columns, and provides left-justification to the explanations in the third column.  N.B.: the use below of the <c>\text{}</c> macro does not include mathematics within its argument.  Doing so may yield unpredictable results depending on your choice of delimiters for the mathematics (and using an <c>m</c> tag will be ineffective).<md>
+                <p>An ampersand is used, in two ways, to describe positioning several equations per line, organized in columns.  We suggest in <xref ref="subsection-reserved-characters" text="type-global" /> that the pre-defined <latex /> macro <c>\amp</c> is the safest way to specify these.  The second, fourth, sixth, <ellipsis /> ampersands separate columns, and the spacing between columns will be provided automatically.  The first, third, fifth, <ellipsis /> ampersands are alignment points for the equations in each column.  Typically this is placed just prior to a binary operator, such as an equal sign (<c>\amp = </c>), or for a column of explanations or commentary, just prior to the <c>\text{}</c> macro.  Note that this scenario suggests always having an odd number of amersands in each <c>mrow</c>.  In the example below, alignment is on the equals sign in the first two columns, and provides left-justification to the explanations in the third column.  N.B.: the use below of the <c>\text{}</c> macro does not include mathematics within its argument.  Doing so may yield unpredictable results depending on your choice of delimiters for the mathematics (and using an <c>m</c> tag will be ineffective).<md>
                     <mrow>\frac{dx}{dt} \amp = x^2 - 4x - y + 4 \amp \frac{dy}{dt} \amp = x^3 - y          \amp\amp x, y\text{ version}</mrow>
                     <mrow>\frac{dw}{dt} \amp = z^3 - w          \amp \frac{dz}{dt} \amp = z^2 - 4z - w + 4 \amp\amp z, w\text{ version}</mrow>
                 </md></p>
@@ -1331,8 +1331,8 @@ the xsltproc executable.
                 </md></p>
 
                 <p>Generally, you cannot use any <init>XML</init> elements inside of the mathematics elements.  An exception is the <c>xref</c> element which you might want to use to provide justifications for the steps of a derivation.  Here is a visual example that is mathematically meaningless,<md>
-                    <mrow>A&amp;=B+C&amp;&amp;<xref ref="corollary-FTC-derivative" autoname="yes" /></mrow>
-                    <mrow>&amp;=D+E&amp;&amp;<xref ref="theorem-FTC" autoname="title" /></mrow>
+                    <mrow>A&amp;=B+C&amp;&amp;<xref ref="corollary-FTC-derivative" text="type-global" /></mrow>
+                    <mrow>&amp;=D+E&amp;&amp;<xref ref="theorem-FTC" text="title" /></mrow>
                 </md>.</p>
             </subsection>
         </section>
@@ -1990,7 +1990,7 @@ the xsltproc executable.
                     </image>
                 </figure>
 
-                <p>The following examples are from the <url href="http://www.sagemath.org/tour-graphics.html">Sage Tour</url>.  We package them into a <c>sidebyside</c> layout element, see <xref ref="section-side-by-side" autoname="yes" />.</p>
+                <p>The following examples are from the <url href="http://www.sagemath.org/tour-graphics.html">Sage Tour</url>.  We package them into a <c>sidebyside</c> layout element, see <xref ref="section-side-by-side" text="type-global" />.</p>
 
                 <sidebyside width="40%" margins="auto">
                     <!-- Tour example modified: figsize moved from show() into plot() -->
@@ -2242,7 +2242,7 @@ the xsltproc executable.
 
                 <exercise>
                     <statement>
-                        <p>One of the few things you can place inside of mathematics is a <q>fill-in</q> blank.<idx><h>fill-in blank</h></idx>  We demonstrate a few scenarios here.  See details on syntax in <xref ref="subsection-paragraph-markup" autoname="yes" /><ndash />the use is identical within mathematics.<ul>
+                        <p>One of the few things you can place inside of mathematics is a <q>fill-in</q> blank.<idx><h>fill-in blank</h></idx>  We demonstrate a few scenarios here.  See details on syntax in <xref ref="subsection-paragraph-markup" text="type-global" /><ndash />the use is identical within mathematics.<ul>
                             <li><p>Inside inline math (short, 4 characters): <m>\sin(<fillin characters="4" />)</m></p></li>
 
                             <li><p>Inside inline math (default, 10 characters): <m>\sin(<fillin characters="10" />)</m></p></li>
@@ -3659,85 +3659,85 @@ the xsltproc executable.
 
             <p>Moreover, the names themselves will change with the use of the one language dependent file.  And another bonus is that with an autoname, you automatically get a <em>non-breaking</em> space between the name and the reference.  The autoname switch makes no sense for <q>provisional</q> cross-references, since there is no information about what they point to.</p>
 
-            <p>Here is a reference that has no indication of its type in the source:  <xref ref="theorem-FTC" />.  So by default you will just see a number that you can click on.  If you use the <c>autoname="yes"</c> switch then you should see <q>Theorem</q> prepended.  Note that if you changed the theorem to a lemma, then that change would be reflected here automatically when autonaming is in effect.</p>
+            <p>Here is a reference that has no indication of its type in the source:  <xref ref="theorem-FTC" />.  So by default you will just see a number that you can click on.  If you use the <c>text="type-global"</c> switch then you should see <q>Theorem</q> prepended.  Note that if you changed the theorem to a lemma, then that change would be reflected here automatically when autonaming is in effect.</p>
 
-            <p>If you set the autonaming behavior globally, or accept the default behavior, there will still be instances where you want to override that choice.  Simple: just say <c>autoname="yes"</c> or <c>autoname="no"</c> as part of the <c>xref</c>.  Each example below should look the same each time this article is processed, no matter how the global <c>autoname</c> is set.<ul>
-                <li><p>No name ever: <xref ref="corollary-FTC-derivative" autoname="no" /></p></li>
-                <li><p>Always named: <xref ref="corollary-FTC-derivative" autoname="yes" /></p></li>
+            <p>If you set the autonaming behavior globally, or accept the default behavior, there will still be instances where you want to override that choice.  Simple: just say <c>text="type-global"</c> or <c>text="global"</c> as part of the <c>xref</c>.  Each example below should look the same each time this article is processed, no matter how the global <c>autoname</c> is set.<ul>
+                <li><p>No name ever: <xref ref="corollary-FTC-derivative" text="global" /></p></li>
+                <li><p>Always named: <xref ref="corollary-FTC-derivative" text="type-global" /></p></li>
             </ul></p>
 
             <p>You might also wish to provide a prefix to a cross-reference and have it incorporated into the text of what you would click on in an electronic version.  So if you make an <c>xref</c> with some content, then that content will prefix the cross-reference within the clickable/pokeable text and be attached with a non-breaking space.  This <c>xref</c> content totally overrides any prefix that might happen otherwise.  So the name of an item (<eg /> <q>corollary</q>) could be replaced, and if you make a cross-reference with a title as the clickable, then that text can be replaced also.  An example:<ul>
                 <li><p>A grand result: <xref ref="corollary-FTC-derivative">Major Corollary</xref></p></li>
-                <li><p>A grand result: <xref ref="corollary-FTC-derivative" autoname="title">a nice corollary</xref></p></li>
+                <li><p>A grand result: <xref ref="corollary-FTC-derivative" text="title">a nice corollary</xref></p></li>
             </ul></p>
 
-            <p>Suppose you want to reference two theorems, so you might want to say something like <q>Theorems 4.6 and 5.2.</q>  With global autonaming on, you can override the first <c>Theorem</c> by providing the content <c>Theorems</c> on the first <c>xref</c> and <c>autoname="no"</c> on the second <c>xref</c>.  (With global autonaming off, you will also get what you want/expect.)   Here is the test, which should look correct no matter what the global switch is:  <xref ref="section-cross-referencing">Sections</xref> and <xref ref="section-internationalization" autoname="no" />.  (But notice that it is up to you to be certain the types of these targets do not change without you changing the content of the first <c>xref</c>.  The <q>author-tools</q> mode and careful choices of <c>xml:id</c> strings can help avoid this trap.)</p>
+            <p>Suppose you want to reference two theorems, so you might want to say something like <q>Theorems 4.6 and 5.2.</q>  With global autonaming on, you can override the first <c>Theorem</c> by providing the content <c>Theorems</c> on the first <c>xref</c> and <c>text="global"</c> on the second <c>xref</c>.  (With global autonaming off, you will also get what you want/expect.)   Here is the test, which should look correct no matter what the global switch is:  <xref ref="section-cross-referencing">Sections</xref> and <xref ref="section-internationalization" text="global" />.  (But notice that it is up to you to be certain the types of these targets do not change without you changing the content of the first <c>xref</c>.  The <q>author-tools</q> mode and careful choices of <c>xml:id</c> strings can help avoid this trap.)</p>
 
-            <p>One final twist.  If you say <c>autoname="title"</c>, then the title you assigned to the theorem will prefix the number.  Here is a the final example, which should always refer to a fundamental theorem by name <xref ref="theorem-FTC" autoname="title" />.</p>
+            <p>One final twist.  If you say <c>text="title"</c>, then the title you assigned to the theorem will prefix the number.  Here is a the final example, which should always refer to a fundamental theorem by name <xref ref="theorem-FTC" text="title" />.</p>
 
             <p>Cross-references to exercises with hard-coded numbers should respect the supplied number.  Exercise<nbsp /><xref ref="exercise-with-hardcoded-number" /> should reference problem 42a.</p>
 
             <p>Here we form a list to test pointing at various structures.  Each of the following should open a knowl in the HTML version, otherwise it will be a traditional hyperlink (if possible).  Note that if a knowl opens, there will always be an <q>in-context</q> link which will take you to the actual location, should you have  wished instead to just go there.<ul>
                 <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" />.</p></li>
                 <li><p>Citations: Judson's AATA with annotation at <xref ref="biblio-judson-AATA" /></p></li>
-                <li><p>Citations: Judson's AATA with autoname that should have zero effect <xref ref="biblio-judson-AATA" autoname="yes"/></p></li>
+                <li><p>Citations: Judson's AATA with autoname that should have zero effect <xref ref="biblio-judson-AATA" text="type-global"/></p></li>
                 <li><p>Note: just the annotation of previous citation at <xref ref="note-judson-AATA" /></p></li>
                 <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" />, or a question at <xref ref="sample-question" />.</p></li>
                 <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" />.</p></li>
                 <li><p>A numbered Note: <xref ref="note-remark" /></p></li>
-                <li><p>A link to a <c>proposition</c> element, while this document has globally renamed <c>proposition</c>s as <q>Conundrum</q>s, so this link should use the new name: <xref ref="proposition-as-conundrum" autoname="yes" /></p></li>
+                <li><p>A link to a <c>proposition</c> element, while this document has globally renamed <c>proposition</c>s as <q>Conundrum</q>s, so this link should use the new name: <xref ref="proposition-as-conundrum" text="type-global" /></p></li>
                 <li><p>Theorems: Fundamental Theorem of Calculus, with proof at <xref ref="theorem-FTC" /></p></li>
                 <li><p>Proof: of second version of FTC at <xref ref="proof-FTC-corollary" /></p></li>
                 <li><p>Figures: A plot with a derivative at <xref ref="figure-function-derivative" />.</p></li>
                 <li><p>A Figure within a side-by-side panel, with its own number: <xref ref="another-regular-figure" /></p></li>
                 <li><p>A Table within a side-by-side panel, with a subnumber: <xref ref="table-sidebyside-subtable" /></p></li>
                 <li><p>A Figure, containing a side-by-side with two sub-captioned images: <xref ref="fig-sidebyside-global" /></p></li>
-                <li><p>Display Mathematics: single, first with no name: <xref ref="equation-alternate-FTC" />.  Then with an autoname: <xref ref="equation-alternate-FTC" autoname="yes" />.</p></li>
-                <li><p>Display Mathematics: multi-row, first with no name: <xref ref="equation-use-FTC" />.  Then with an autoname: <xref ref="equation-use-FTC" autoname="yes" />.  And two, with a plural form: <xref ref="equation-alternate-FTC">Equations</xref> and <xref ref="equation-use-FTC" autoname="no" />.</p></li>
+                <li><p>Display Mathematics: single, first with no name: <xref ref="equation-alternate-FTC" />.  Then with an autoname: <xref ref="equation-alternate-FTC" text="type-global" />.</p></li>
+                <li><p>Display Mathematics: multi-row, first with no name: <xref ref="equation-use-FTC" />.  Then with an autoname: <xref ref="equation-use-FTC" text="type-global" />.  And two, with a plural form: <xref ref="equation-alternate-FTC">Equations</xref> and <xref ref="equation-use-FTC" text="global" />.</p></li>
                 <li><p>Exercises (sectional), a range, with plural form provided to override autonaming: <xref first="exercises-null-problem" last="exercises-cosine-derivative">Exercises</xref>.</p></li>
                 <li><p>Exercise (inline): with enclosed hint at <xref ref="exercise-essay" /></p></li>
-                <li><p>A group of two exercises, with introduction, conclusion: <xref ref="exercisegroup-two-problems" autoname="yes" /></p></li>
-                <li><p>Solution: An autonamed portion of an exercise: <xref ref="solution-antiderivative" autoname="yes" /></p></li>
-                <li><p>Parts of a complicated exercise: <xref ref="exercise-complicated-second-hint" autoname="yes" /> <xref ref="exercise-complicated-first-answer" autoname="yes" /></p></li>
-                <li><p>An item buried in nested ordered lists (local reference): <xref ref="list-two-two-two-three" autoname="yes"/></p></li>
+                <li><p>A group of two exercises, with introduction, conclusion: <xref ref="exercisegroup-two-problems" text="type-global" /></p></li>
+                <li><p>Solution: An autonamed portion of an exercise: <xref ref="solution-antiderivative" text="type-global" /></p></li>
+                <li><p>Parts of a complicated exercise: <xref ref="exercise-complicated-second-hint" text="type-global" /> <xref ref="exercise-complicated-first-answer" text="type-global" /></p></li>
+                <li><p>An item buried in nested ordered lists (local reference): <xref ref="list-two-two-two-three" text="type-global"/></p></li>
                 <li><p>A subsidary part of an exercise (fully-qualified reference): <xref ref="exercise-one-two-one" /></p></li>
-                <li><p>List item as knowls in HTML, including nested lists: <xref ref="list-two" />, <xref ref="list-two-two-two" autoname="yes" /></p></li>
+                <li><p>List item as knowls in HTML, including nested lists: <xref ref="list-two" />, <xref ref="list-two-two-two" text="type-global" /></p></li>
                 <li><p>A titled list: <xref ref="list-colors-rainbow" /></p></li>
-                <li><p>List item inside a named list, second color in rainbow list: <xref ref="rainbow-orange" autoname="yes" /></p></li>
+                <li><p>List item inside a named list, second color in rainbow list: <xref ref="rainbow-orange" text="type-global" /></p></li>
                 <li><p>An assemblage, which never has a number.  A cross-reference now requires content in the <c>xref</c> element: <xref ref="assemblage-basics">text to xref an assemblage</xref></p></li>
-                <li><p>A cross-reference to a list item in a description list, which has a title, but never a number: <xref ref="reserved-characters-mathematics" autoname="title" />.  Note that you need to include the attribute <c>autoname="number"</c> even if that is obvious from the situation.  This requirement may be relaxed in a future refactoring of the cross-reference system.</p></li>
-                <li><p>A cross-reference to a <q>paragraphs</q> subdivision, which never has a number (so comments above about description list items and titles applies here too): <xref ref="hierarchy-structure" autoname="title" /></p></li>
-                <li><p>A case within the proof of <xref ref="claim-with-cases" autoname="yes" />: <xref ref="inductive-step" autoname="title" /></p></li>
-                <li><p>A cross-reference to a description list item with a title containing math: <xref ref="description-list-math-title" autoname="title" /></p></li>
-                <li><p>A cross-reference to an aside, by title necessarily: <xref ref="an-aside" autoname="title" /></p></li>
-                <li><p>A cross-reference to an <c>objectives</c> block, with an autoname.  This demonstrates the number of the Objectives here, which is not shown in the original version since it is implicit: <xref ref="objectives-structures" autoname="yes" /></p></li>
-                <li><p>A cross-reference to an individual objective.  This is authored as a list item, but displayed as an objective (singular) via an autoname: <xref ref="objective-structure" autoname="yes" /></p></li>
+                <li><p>A cross-reference to a list item in a description list, which has a title, but never a number: <xref ref="reserved-characters-mathematics" text="title" />.  Note that you need to include the attribute <c>autoname="number"</c> even if that is obvious from the situation.  This requirement may be relaxed in a future refactoring of the cross-reference system.</p></li>
+                <li><p>A cross-reference to a <q>paragraphs</q> subdivision, which never has a number (so comments above about description list items and titles applies here too): <xref ref="hierarchy-structure" text="title" /></p></li>
+                <li><p>A case within the proof of <xref ref="claim-with-cases" text="type-global" />: <xref ref="inductive-step" text="title" /></p></li>
+                <li><p>A cross-reference to a description list item with a title containing math: <xref ref="description-list-math-title" text="title" /></p></li>
+                <li><p>A cross-reference to an aside, by title necessarily: <xref ref="an-aside" text="title" /></p></li>
+                <li><p>A cross-reference to an <c>objectives</c> block, with an autoname.  This demonstrates the number of the Objectives here, which is not shown in the original version since it is implicit: <xref ref="objectives-structures" text="type-global" /></p></li>
+                <li><p>A cross-reference to an individual objective.  This is authored as a list item, but displayed as an objective (singular) via an autoname: <xref ref="objective-structure" text="type-global" /></p></li>
                 <li><p>A cross-reference to the top-level element (<eg /><c>book</c>) will point to a summary page similar to a Table of Contents in HTML.  For LaTeX output it will behave similarly, unless there is no Table of Contents, then it will go to the main title page:  <xref ref="derivatives">ToC or Title</xref></p></li>
-                <li><p><q>Cross-references inside quotations previously lost track of their target, so this tests correcting that, not so much the cross-reference itself: <xref ref="theorem-FTC" autoname="yes" /></q></p></li>
+                <li><p><q>Cross-references inside quotations previously lost track of their target, so this tests correcting that, not so much the cross-reference itself: <xref ref="theorem-FTC" text="type-global" /></q></p></li>
                 <li><p>An activity with full details following: <xref ref="activity-with-hint-answer-solution" /></p></li>
                 <li><p>An interactive program inside a program listing, to test if the Javascript will execute properly within a knowl: <xref ref="program-interactive" /></p></li>
-                <li><p>A cross-reference to a block quotation (which is never numbered): <xref ref="blockquote-seuss" autoname="title">Quote by Dr Seuss</xref></p></li>
+                <li><p>A cross-reference to a block quotation (which is never numbered): <xref ref="blockquote-seuss" text="title">Quote by Dr Seuss</xref></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul></p>
 
-            <p>Cross-references to structural elements of the document will always take you there directly, since even in the HTML version these parts never get realized as knowls.  You will find such links sprinkled through this document, but here is an autonamed link to a subsubsection:  <xref ref="subsubsection-different-integrals" autoname="yes" />.</p>
+            <p>Cross-references to structural elements of the document will always take you there directly, since even in the HTML version these parts never get realized as knowls.  You will find such links sprinkled through this document, but here is an autonamed link to a subsubsection:  <xref ref="subsubsection-different-integrals" text="type-global" />.</p>
 
             <p>Cross-references can be built into display mathematics, but they can only point to one item (<ie /> a comma-delimited list of targets is not supported).  Examples below should test the distinction in HTML output between a link that opens a knowl and a link that jumps to a larger chunk of content.  Notice that display mathematics is entirely <latex /> syntax, no matter which output format you create.  So if you do not use the <c>autoname</c> facility, you need to wrap non-math text in <c>\text{}</c> and perhaps use a tilde (<c>~</c>) as a non-breaking space (examine the source of this article).</p>
 
             <p><md>
-                <mrow>x^2 + y^2 &amp;= z^2&amp;&amp;<xref ref="theorem-FTC" autoname="yes" /></mrow>
+                <mrow>x^2 + y^2 &amp;= z^2&amp;&amp;<xref ref="theorem-FTC" text="type-global" /></mrow>
                 <mrow>a^2 + b^2 &amp;= c^2&amp;&amp;\text{Section}~<xref ref="section-fundamental-theorem" /></mrow>
             </md></p>
 
             <p>Variations on the above include multiple <c>xml:id</c> as the value of a single <c>ref</c> attribute on an <c>xref</c>, in the form of a comma-separated list.  In this case, only the numbers are links/knowls and the autonaming attribute is based on the type of the first <c>ref</c>.  Wrapping with brackets (citations) or parentheses (equations) is also controlled by the type of the first <c>ref</c>.  And the <c>detail</c> attribute for a bibliographic reference is silently ignored.  So you can do silly things like have a reference to a theorem within a list of equation numbers and there will be no error message.  Handle with care.  Spaces after commas in the list will migrate to the output as spaces, so if you don't have any, you won't get any.<ul>
-                <li><p>Three theorems, with spaces, autonamed: <xref ref="theorem-FTC, theorem-number-01, theorem-number-03" autoname="yes"/></p></li>
-                <li><p>Two equations, no spaces, autonamed: <xref ref="equation-alternate-FTC,equation-use-FTC" autoname="yes"/></p></li>
+                <li><p>Three theorems, with spaces, autonamed: <xref ref="theorem-FTC, theorem-number-01, theorem-number-03" text="type-global"/></p></li>
+                <li><p>Two equations, no spaces, autonamed: <xref ref="equation-alternate-FTC,equation-use-FTC" text="type-global"/></p></li>
                 <li><p>Two bibliographic items, no autoname: <xref ref="biblio-judson-AATA, biblio-lay-article" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul></p>
 
             <p>If you have a long list of items (such as homework exercises, not in an <c>exercisegroup</c>, or perhaps several chapters, you can get a cross-reference that prints as a range by using <c>xref</c> with two attributes <c>first</c> and <c>last</c>, which may contain a single <c>xml:id</c> each.  As with multiple references, <c>first</c> will control autonaming and other features.<ul>
-                <li><p>A range of exercises, autonamed (this range appears <q>out-of-order</q> since the two <c>exercise</c> are numbered under two different schemes): <xref first="exercise-essay" last="exercise-test-number" autoname="yes"/></p></li>
+                <li><p>A range of exercises, autonamed (this range appears <q>out-of-order</q> since the two <c>exercise</c> are numbered under two different schemes): <xref first="exercise-essay" last="exercise-test-number" text="type-global"/></p></li>
                 <li><p>A range of equations: <xref first="equation-use-FTC" last="equation-conclude" /></p></li>
                 <li><p>A system of equations, given as range from first to last: <xref first="equation-system-begin" last="equation-system-end" /></p></li>
                 <li><p>A range of sections, hand-named to be plural: Sections<nbsp /><xref first="section-sage-cells" last="section-cross-referencing" /></p></li>
@@ -4107,7 +4107,7 @@ the xsltproc executable.
 
             <p>Look in the <c>mathbook-common.xsl</c> file to see the strings to use to identify languages.  Always all-lowercase, no symbols, no punctuation.</p>
 
-            <p>A <c>program</c> may be nested inside a <c>listing</c>, which behaves similar to a <c>figure</c>.  You can provide a <c>caption</c>, and the listing will be numbered along with tables and figures.  This then makes it possible to cross-reference the listing, such as <xref ref="listing-c-hello" autoname="yes" />.</p>
+            <p>A <c>program</c> may be nested inside a <c>listing</c>, which behaves similar to a <c>figure</c>.  You can provide a <c>caption</c>, and the listing will be numbered along with tables and figures.  This then makes it possible to cross-reference the listing, such as <xref ref="listing-c-hello" text="type-global" />.</p>
 
             <listing xml:id="listing-c-hello">
                 <caption>C Version of <q>Hello, World!</q></caption>
@@ -4378,9 +4378,9 @@ the xsltproc executable.
             <subsection>
                 <title>Figures with Numbers Side-By-Side</title>
 
-                <p>Figures, or other captioned items such as tables or listings, can be placed side-by-side using the <c>sidebyside</c> element.  The figures will be captioned and numbered as if they were part of the vertical flow of the document.  For example, see <xref ref="regular-figure" autoname="yes"/> and <xref ref="another-regular-figure" autoname="yes"/></p>
+                <p>Figures, or other captioned items such as tables or listings, can be placed side-by-side using the <c>sidebyside</c> element.  The figures will be captioned and numbered as if they were part of the vertical flow of the document.  For example, see <xref ref="regular-figure" text="type-global"/> and <xref ref="another-regular-figure" text="type-global"/></p>
 
-                <p>However, if the <c>&lt;sidebyside&gt;</c> is placed inside another <c>&lt;figure&gt;</c>, then the outer figure gets an overall caption and a <q>regular</q> number, while the captions of the interior items will be labelled as (a), (b), (c), etc; for example, see the subfigures in <xref ref="fig-sidebyside-global" autoname="yes"/>. You can also cross-reference the subfigures individually, for example: <xref ref="fig-sidebyside-subfigure" autoname="yes"/>.</p>
+                <p>However, if the <c>&lt;sidebyside&gt;</c> is placed inside another <c>&lt;figure&gt;</c>, then the outer figure gets an overall caption and a <q>regular</q> number, while the captions of the interior items will be labelled as (a), (b), (c), etc; for example, see the subfigures in <xref ref="fig-sidebyside-global" text="type-global"/>. You can also cross-reference the subfigures individually, for example: <xref ref="fig-sidebyside-subfigure" text="type-global"/>.</p>
 
                 <p>The <c>sidebyside</c> tag can have an attribute <c>widths</c> that specifies a percentage width of the page for each panel of the layout.  There is no margin by default, and any remaining width is divided evenly to space out the panels.  When the <c>margins</c> attribute is given as <c>auto</c>, then a margin is provided that equals half of the inter-panel space.</p>
 
@@ -4470,7 +4470,7 @@ the xsltproc executable.
                     <image source="images/cross-square.png"/>
                 </sidebyside>
 
-                <p>If you want an overall caption to a group of images, but no sub-captions on your images, that is also straightforward.  This example has no attributes specified.  The overall <c>&lt;figure&gt;</c> may be cross-referenced, as <xref ref="figure-double-image" autoname="yes" /></p>
+                <p>If you want an overall caption to a group of images, but no sub-captions on your images, that is also straightforward.  This example has no attributes specified.  The overall <c>&lt;figure&gt;</c> may be cross-referenced, as <xref ref="figure-double-image" text="type-global" /></p>
 
                 <figure xml:id="figure-double-image">
                     <caption>Two equally-spaced (identical) images</caption>
@@ -4537,15 +4537,15 @@ the xsltproc executable.
                 <p>Similarly, text can be put next to images.</p>
 
                 <sidebyside widths="50% 20%" valigns="middle top">
-                    <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text cross reference: <xref ref="text-next-to-figure" autoname="yes"/> and math: <m>x^2</m></p>
+                    <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text cross reference: <xref ref="text-next-to-figure" text="type-global"/> and math: <m>x^2</m></p>
                     <image source="images/cross-square.png"/>
                 </sidebyside>
 
-                <p>You can place text next to numbered figures, as shown below in <xref ref="text-next-to-figure" autoname="yes"/>.</p>
+                <p>You can place text next to numbered figures, as shown below in <xref ref="text-next-to-figure" text="type-global"/>.</p>
 
                 <sidebyside widths="50% 20%" valigns="middle top">
                     <paragraphs>
-                        <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text; cross reference: <xref ref="text-next-to-figure" autoname="yes"/> and math: <m>x^2</m></p>
+                        <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text; cross reference: <xref ref="text-next-to-figure" text="type-global"/> and math: <m>x^2</m></p>
                     </paragraphs>
                     <figure xml:id="text-next-to-figure">
                         <caption>Text next to a figure</caption>
@@ -4557,7 +4557,7 @@ the xsltproc executable.
             <subsection>
                 <title>Image Formats, Side-by-Sides</title>
 
-                <p>Most of our demonstrations here use our square <q>blue cross</q> test image, which is provided as a <init>PNG</init> image.  You may specify images by any of the methods described in the section on graphics, <xref ref="graphics" autoname="yes" />.  The complete graph below is specified with no file extension, on the assumption that an <init>SVG</init> version exists for <init>HTML</init> output, and a <init>PDF</init> version exists for <latex /> output.  The second is a <init>JPEG</init> image that we use elsewhere for a YouTube video, but recycle here as an image provided in that format.  By default, they are aligned at their tops.</p>
+                <p>Most of our demonstrations here use our square <q>blue cross</q> test image, which is provided as a <init>PNG</init> image.  You may specify images by any of the methods described in the section on graphics, <xref ref="graphics" text="type-global" />.  The complete graph below is specified with no file extension, on the assumption that an <init>SVG</init> version exists for <init>HTML</init> output, and a <init>PDF</init> version exists for <latex /> output.  The second is a <init>JPEG</init> image that we use elsewhere for a YouTube video, but recycle here as an image provided in that format.  By default, they are aligned at their tops.</p>
 
                 <sidebyside widths="30% 30%" margins="auto">
                     <image source="images/complete-graph" />
@@ -4616,7 +4616,7 @@ the xsltproc executable.
             <subsection>
                 <title>Tables Side-By-Side</title>
 
-                <p>Tables can also be put side-by-side, as demonstrated below in <xref ref="table-sidebyside-global" autoname="yes"/>; naturally, subtables can be referenced as in <xref ref="table-sidebyside-subtable" autoname="yes"/>.</p>
+                <p>Tables can also be put side-by-side, as demonstrated below in <xref ref="table-sidebyside-global" text="type-global"/>; naturally, subtables can be referenced as in <xref ref="table-sidebyside-subtable" text="type-global"/>.</p>
 
                 <figure xml:id="table-sidebyside-global">
                     <caption>Side-by-Side, with tables as children</caption>
@@ -4788,7 +4788,7 @@ the xsltproc executable.
             <subsection>
                 <title>Tables Next to Figures</title>
 
-                <p>Tables and figures can go next to each other, as demonstrated in <xref ref="table-next-figure" autoname="yes"/> and <xref ref="figure-next-table" autoname="yes"/>, plus within an overall captioned figure, <xref ref="figure-table-captioned" autoname="yes"/>.</p>
+                <p>Tables and figures can go next to each other, as demonstrated in <xref ref="table-next-figure" text="type-global"/> and <xref ref="figure-next-table" text="type-global"/>, plus within an overall captioned figure, <xref ref="figure-table-captioned" text="type-global"/>.</p>
 
                 <sidebyside>
                     <table xml:id="table-next-figure">
@@ -4979,7 +4979,7 @@ the xsltproc executable.
             <subsection>
                 <title>Lists in Side-by-Sides</title>
 
-                <p>A <q>regular</q> list normally belongs in a <c>p</c> but it can be placed unadorned into a panel of a side-by-side, as demonstrated below in <xref ref="subsection-sbs-other-panels" autoname="yes" />.  You can also put <q>named</q> lists into a panel, and then the title, introduction, and conclusion will behave as expected, along with a number that might be used in a cross-reference, or perhaps we might cross-reference by title, <xref ref="color-list-as-panel" autoname="title" />.</p>
+                <p>A <q>regular</q> list normally belongs in a <c>p</c> but it can be placed unadorned into a panel of a side-by-side, as demonstrated below in <xref ref="subsection-sbs-other-panels" text="type-global" />.  You can also put <q>named</q> lists into a panel, and then the title, introduction, and conclusion will behave as expected, along with a number that might be used in a cross-reference, or perhaps we might cross-reference by title, <xref ref="color-list-as-panel" text="title" />.</p>
 
                 <figure>
                     <caption>Two named lists</caption>
@@ -5110,7 +5110,7 @@ the xsltproc executable.
                 <title>Poems as Side-By-Side Panels</title>
 
 
-                <p>Poems may be panels of a side-by-side layout.  Here we place some commentary alongside.  See <xref ref="poetry" autoname="yes" /> for general information about poetry.</p>
+                <p>Poems may be panels of a side-by-side layout.  Here we place some commentary alongside.  See <xref ref="poetry" text="type-global" /> for general information about poetry.</p>
 
                 <sidebyside widths="50% 50%">
                     <poem>
@@ -5310,7 +5310,7 @@ the xsltproc executable.
             <subsection>
                 <title>Testing Styling of Related Elements</title>
 
-                <p>This subsection has non-side-by-side structures, to aid with the effects of styling decisions across the range of possibilities.  First a <c>figure</c> with a <c>caption</c> holding a scaled image and a cross-reference for knowl testing: <xref ref="figure-traditional" autoname="yes" />.</p>
+                <p>This subsection has non-side-by-side structures, to aid with the effects of styling decisions across the range of possibilities.  First a <c>figure</c> with a <c>caption</c> holding a scaled image and a cross-reference for knowl testing: <xref ref="figure-traditional" text="type-global" />.</p>
 
                 <figure xml:id="figure-traditional">
                     <caption>A traditional figure</caption>
@@ -5527,7 +5527,7 @@ the xsltproc executable.
             <subsection xml:id="subsection-local-theorems">
                 <title>Theorems in This Section</title>
 
-                <p>We have a lot of theorems in this section, so we illustrate including an automatic list of these here.  We use the <c>elements</c> attribute to limit the list to <c>theorem</c> elements, and we use the <c>scope</c> attribute to limit the list to this <c>section</c>.  You can use an introductory <c>p</c> like this one, or not.  The list gets no title or visual separation, so use the usual subdivision elements to make that happen.  The <c>elements</c> attribute can be a space-delimited list of many different elements.  This list should not include the Fundamental Theorem of Calculus, Theorem<nbsp /><xref ref="theorem-FTC" />.  See a slightly different example in <xref ref="appendix-results" autoname="yes" />.</p>
+                <p>We have a lot of theorems in this section, so we illustrate including an automatic list of these here.  We use the <c>elements</c> attribute to limit the list to <c>theorem</c> elements, and we use the <c>scope</c> attribute to limit the list to this <c>section</c>.  You can use an introductory <c>p</c> like this one, or not.  The list gets no title or visual separation, so use the usual subdivision elements to make that happen.  The <c>elements</c> attribute can be a space-delimited list of many different elements.  This list should not include the Fundamental Theorem of Calculus, Theorem<nbsp /><xref ref="theorem-FTC" />.  See a slightly different example in <xref ref="appendix-results" text="type-global" />.</p>
 
                 <list-of elements="theorem" scope="section" />
             </subsection>
@@ -5586,7 +5586,7 @@ the xsltproc executable.
             <appendix xml:id="appendix-results">
                 <title>List of Results</title>
 
-                <p>We had an automatic list of theorems for just one section, back in <xref ref="subsection-local-theorems" autoname="yes" />.  Here we expand to include <c>corollary</c> in our space-delimited list of <c>elements</c> and we request <c>divisions</c> (headings) at each <c>subsection</c> and <c>section</c>.  The default <c>scope</c> is the entire document, which is appropriate here in the backmatter.  There are many subsections with no results, so we set the <c>empty</c> attribute to <c>no</c> to suppress them, though this is the default behavior (<c>yes</c> being the other option to see divisions with no list items).  These lists are most valuable if you are in the practice of giving items titles.</p>
+                <p>We had an automatic list of theorems for just one section, back in <xref ref="subsection-local-theorems" text="type-global" />.  Here we expand to include <c>corollary</c> in our space-delimited list of <c>elements</c> and we request <c>divisions</c> (headings) at each <c>subsection</c> and <c>section</c>.  The default <c>scope</c> is the entire document, which is appropriate here in the backmatter.  There are many subsections with no results, so we set the <c>empty</c> attribute to <c>no</c> to suppress them, though this is the default behavior (<c>yes</c> being the other option to see divisions with no list items).  These lists are most valuable if you are in the practice of giving items titles.</p>
 
                 <list-of elements="  theorem corollary" divisions="section    subsection " empty="no" />
             </appendix>
