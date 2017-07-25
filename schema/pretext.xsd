@@ -2148,6 +2148,13 @@
   <xs:element name="index-list">
     <xs:complexType/>
   </xs:element>
+  <xs:simpleType name="XrefTextStyle">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="global"/>
+      <xs:enumeration value="type-global"/>
+      <xs:enumeration value="title"/>
+    </xs:restriction>
+  </xs:simpleType>
   <xs:group name="Reference">
     <xs:choice>
       <xs:element ref="url"/>
@@ -2167,15 +2174,7 @@
       <xs:attribute name="first"/>
       <xs:attribute name="last"/>
       <xs:attribute name="provisional"/>
-      <xs:attribute name="text">
-        <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="global"/>
-            <xs:enumeration value="type-global"/>
-            <xs:enumeration value="title"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
+      <xs:attribute name="text" type="XrefTextStyle"/>
       <xs:attribute name="detail"/>
     </xs:complexType>
   </xs:element>
@@ -2973,6 +2972,7 @@
       <xs:element ref="brandlogo"/>
       <xs:element ref="latex-preamble"/>
       <xs:element ref="macros"/>
+      <xs:element ref="cross-references"/>
       <xs:element ref="latex-image-preamble"/>
       <xs:element ref="initialism"/>
       <xs:element ref="feedback"/>
@@ -3000,6 +3000,11 @@
   </xs:element>
   <xs:element name="package" type="xs:string"/>
   <xs:element name="macros" type="xs:string"/>
+  <xs:element name="cross-references">
+    <xs:complexType>
+      <xs:attribute name="text" use="required" type="XrefTextStyle"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="latex-image-preamble" type="xs:string"/>
   <xs:element name="initialism" type="xs:string"/>
   <xs:element name="feedback">

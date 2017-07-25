@@ -647,6 +647,7 @@
         <p>There are a variety of referencing mechanisms, external references, internal cross-references, index entries, and specialized support for a table of mathematical notation.</p>
 
         <fragment xml:id="reference">
+        XrefTextStyle = "global"| "type-global" | "title"
         Reference = Url | Xref
         Url =
             element url {
@@ -660,7 +661,7 @@
                         (attribute first {text}, attribute last {text}) | 
                         attribute provisional {text}
                     ),
-                    attribute text {"global"|"type-global"|"title"}?,
+                    attribute text { XrefTextStyle }?,
                     attribute detail {text}?,
                     TextShort
             }
@@ -1761,6 +1762,7 @@
         <fragment ref="brandlogo" />
         <fragment ref="latexpreamble" />
         <fragment ref="macros" />
+        <fragment ref="cross-references" />
         <fragment ref="lateximagepreamble" />
         <fragment ref="initialism" />
         <fragment ref="feedback" />
@@ -1794,6 +1796,16 @@
         <fragment xml:id="macros">
         Configuration |=
             element macros {text}
+        </fragment>
+
+        <p>The style of text used in a cross-reference (the <c>xref</c> element) is contained in the source and uses the same per-item choices.</p>
+
+        <fragment xml:id="cross-references">
+        Configuration |=
+            element
+                cross-references {
+                    attribute text { XrefTextStyle }
+                }
         </fragment>
 
         <p>Images specified by <latex /> syntax sometimes need extra information in their preambles.</p>

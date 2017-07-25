@@ -2289,6 +2289,13 @@
       <empty/>
     </element>
   </define>
+  <define name="XrefTextStyle">
+    <choice>
+      <value>global</value>
+      <value>type-global</value>
+      <value>title</value>
+    </choice>
+  </define>
   <define name="Reference">
     <choice>
       <ref name="Url"/>
@@ -2313,11 +2320,7 @@
       </choice>
       <optional>
         <attribute name="text">
-          <choice>
-            <value>global</value>
-            <value>type-global</value>
-            <value>title</value>
-          </choice>
+          <ref name="XrefTextStyle"/>
         </attribute>
       </optional>
       <optional>
@@ -3068,6 +3071,13 @@
   <define name="Configuration" combine="choice">
     <element name="macros">
       <text/>
+    </element>
+  </define>
+  <define name="Configuration" combine="choice">
+    <element name="cross-references">
+      <attribute name="text">
+        <ref name="XrefTextStyle"/>
+      </attribute>
     </element>
   </define>
   <define name="Configuration" combine="choice">
