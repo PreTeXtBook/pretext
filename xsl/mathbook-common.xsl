@@ -4681,7 +4681,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!--   title:       Smith's Theorem      -->
 <xsl:template match="xref" mode="get-text-style">
     <xsl:choose>
-        <!-- local specification is override of global -->
+        <!-- local specification is override of global  -->
+        <!-- new @text attribute first, and if so, bail -->
+        <xsl:when test="@text='global'">
+            <xsl:text>global</xsl:text>
+        </xsl:when>
+        <xsl:when test="@text='type-global'">
+            <xsl:text>type-global</xsl:text>
+        </xsl:when>
+        <xsl:when test="@text='title'">
+            <xsl:text>title</xsl:text>
+        </xsl:when>
+        <!-- old (deprecated, 2017-07-25) autoname attribute -->
         <xsl:when test="@autoname='no'">
             <xsl:text>global</xsl:text>
         </xsl:when>
@@ -4691,7 +4702,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="@autoname='title'">
             <xsl:text>title</xsl:text>
         </xsl:when>
-        <!-- global setting otherwise -->
+        <!-- global setting via switches otherwise -->
         <xsl:when test="$autoname='no'">
             <xsl:text>global</xsl:text>
         </xsl:when>
@@ -5630,6 +5641,23 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurences" select="$document-root//@tex_size" />
         <xsl:with-param name="date-string" select="'2017-07-18'" />
         <xsl:with-param name="message" select="'the &quot;tex_size&quot; attribute is deprecated, replaced by functional equivalent &quot;tex-size&quot;'" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2017-07-25  replacement of three xref/@autoname attributes by @text -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurences" select="$document-root//xref[@autoname='no']" />
+        <xsl:with-param name="date-string" select="'2017-07-25'" />
+        <xsl:with-param name="message" select="'the &quot;xref/autoname&quot; attribute is deprecated, replace  autoname=&quot;no&quot;  by functional equivalent  text=&quot;global&quot;'" />
+    </xsl:call-template>
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurences" select="$document-root//xref[@autoname='yes']" />
+        <xsl:with-param name="date-string" select="'2017-07-25'" />
+        <xsl:with-param name="message" select="'the &quot;xref/autoname&quot; attribute is deprecated, replace  autoname=&quot;yes&quot;  by functional equivalent  text=&quot;type-global&quot;'" />
+    </xsl:call-template>
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurences" select="$document-root//xref[@autoname='title']" />
+        <xsl:with-param name="date-string" select="'2017-07-25'" />
+        <xsl:with-param name="message" select="'the &quot;xref/autoname&quot; attribute is deprecated, replace  autoname=&quot;title&quot;  by functional equivalent  text=&quot;title&quot;'" />
     </xsl:call-template>
     <!--  -->
 </xsl:template>

@@ -34,6 +34,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecations that can be fixed with a transformation -->
 <!-- In reverse chronological order, with dates           -->
 
+
+<!-- 2017-07-25  replacement of three xref/@autoname attributes by @text -->
+<xsl:template match="@autoname">
+    <xsl:variable name="old-value" select="string(.)" />
+    <xsl:attribute name="text">
+        <xsl:choose>
+            <xsl:when test="$old-value = 'no'">global</xsl:when>
+            <xsl:when test="$old-value = 'yes'">type-global</xsl:when>
+            <xsl:when test="$old-value = 'title'">title</xsl:when>
+        </xsl:choose>
+    </xsl:attribute>
+</xsl:template>
+
 <!-- 2017-07-18:  cosmetic changes to WeBWorK image attribute -->
 <xsl:template match="@tex_size">
     <xsl:attribute name="tex-size">
