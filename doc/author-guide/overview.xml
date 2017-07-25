@@ -11,7 +11,7 @@
     <title>Overview of Features</title>
 
     <introduction>
-        <p>This chapter is a high-level view of the important concepts, features and design decisions that go into the creation of MathBook XML.  For careful exact descriptions of details, we will direct you to one of the many sections in the <xref ref="topics" autoname="title" /> chapter.  So this chapter should make you aware of what is possible and expand on the philosophy described earlier in <xref ref="philosophy" />, while also giving you examples of many basic constructions you can use to get started quickly.</p>
+        <p>This chapter is a high-level view of the important concepts, features and design decisions that go into the creation of MathBook XML.  For careful exact descriptions of details, we will direct you to one of the many sections in the <xref ref="topics" text="title" /> chapter.  So this chapter should make you aware of what is possible and expand on the philosophy described earlier in <xref ref="philosophy" />, while also giving you examples of many basic constructions you can use to get started quickly.</p>
     </introduction>
 
     <section xml:id="overview-structure">
@@ -47,7 +47,7 @@
 
         <p>Since the value of an <attribute>xml:id</attribute> is also used in a variety of ways, such as to construct some file names, some care should be taken in how you author them.  We limit the possible characters to letters and numbers (<c>a-z</c>, <c>A-Z</c>, <c>0-9</c>), with hyphens and underscores (<c>-_</c>) available as word-separators.  Our advice is to stick to lowercase letters, though we are not yet aware of any problems with case-insensitivity.  So in short, use <term>kebab-case</term> or <term>snake-case</term> for your <attribute>xml:id</attribute> values.</p>
 
-        <p>For more, see <xref ref="topic-cross-referencing" /> because cross-references have many features. But first, here are two features you do not want to miss.  In the early stages of writing, you can author <c>&lt;xref provisional="subsection-flowers" /&gt;</c> to point to a subsection you are contemplating (but have not written yet) and you will get various polite reminders to get that straightened out eventually.  Also there is an <term>autoname</term> feature that will automatically provide the generic name of the target, so you will get something like <q>Subsection 4.3.2</q> without ever typing the <q>Subsection</q> part.  If you move the target, the generic name will adjust if necessary, and if you switch to to one of the supported languages, the generic name will switch language (see <xref provisional="topic-on-languages" />.</p>
+        <p>For more, see <xref ref="topic-cross-referencing" /> because cross-references have many features. But first, here are two features you do not want to miss.  In the early stages of writing, you can author <c>&lt;xref provisional="subsection-flowers" /&gt;</c> to point to a subsection you are contemplating (but have not written yet) and you will get various polite reminders to get that straightened out eventually.  Also the default behavior is to automatically provide the generic name of the target, so you will get something like <q>Subsection 4.3.2</q> without ever typing the <q>Subsection</q> part.  If you move the target, the generic name will adjust if necessary, and if you switch to one of the supported languages, the generic name will switch language (see <xref provisional="topic-on-languages" />.</p>
     </section>
 
     <section xml:id="overview-title">

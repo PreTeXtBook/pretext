@@ -55,6 +55,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     \newcommand{\Null}{\operatorname{Null}}
     </macros>
 
+    <!-- this is the default, but supresses a warning -->
+    <cross-references text="type-global" />
+
     <!-- tikz package and libraries for images -->
     <latex-image-preamble>
     \usepackage{tikz}

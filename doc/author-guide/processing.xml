@@ -97,7 +97,7 @@
 
         <p>These parameters are documented in the XSL files themselves, principally <c>-common</c>, <c>-latex</c> and <c>-html</c>, and occur near the top.  They assume sensible defaults for beginners, and error-checking is careful and robust.  They will be easier to locate and use when we have the time to document them more carefully here in the Author's Guide.</p>
 
-        <p>One caveat for using these is that experience has taught us that some of the parameters we created early on really do affect your content.  A good example is the <c>autoname</c> switch, since what you type as source is greatly influenced by what assumptions you have for the value of this switch, and you are unlikely to get decent output if you change it.  So this decision should really be reflected in, and run with, the source.  We will change some of these, but always provide a smooth upgrade path through deprecations, with little or no disruption to your workflow.</p>
+        <p>One caveat for using these is that experience has taught us that some of the parameters we created early on really do affect your content.  We will change some of these, but always provide a smooth upgrade path through deprecations, with little or no disruption to your workflow.</p>
     </section>
 
     <section xml:id="processing-thin-xsl">

@@ -80,7 +80,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <section xml:id="section-interesting">
             <title>A Bit More Interesting</title>
 
-            <p>The previous section (<xref ref="section-textual" autoname="yes"/>) was a bit boring.</p>
+            <p>The previous section (<xref ref="section-textual" />) was a bit boring.</p>
 
             <p>This paragraph has some inline math, a Diophantine equation, <m>x^2 + \doubler{y^2} = z^2</m>.  And some display math about infinite series: <me>\sum_{n=1}^\infty\,\frac{1}{n^2} = \frac{\pi^2}{6}.</me>  Look at the XML source to see how <latex /> macros are employed universally across all possible output formats.</p>
         </section>

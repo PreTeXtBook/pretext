@@ -85,6 +85,15 @@ the xsltproc executable.
         \newcommand{\indefiniteintegral}[2]{\int#1\,d#2}
         \newcommand{\testingescapedpercent}{ \% } % just testing
         </macros>
+        <!-- We control the appearance of the text of cross-references here           -->
+        <!-- (these are the "xref" elements).  Because this changes the words         -->
+        <!-- that appear in your output, it is a decision with stays with the source. -->
+        <!-- Experiment here with different choices and a few different "xref"        -->
+        <!-- elements before you decide on a final choice.  We set this to 'global',  -->
+        <!-- not because we think it is a good choice, but for historical reasons.    -->
+        <!-- The default is 'type-global', which produces text like "Theorem 5.2",    -->
+        <!-- where "Theorem" will be translated into the document language            -->
+        <cross-references text="global" />
         <!--
         Extra packages, package options, and package settings for latex-based images.
         Inserted in the preamble for LaTeX output.

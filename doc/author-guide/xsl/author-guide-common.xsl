@@ -14,9 +14,6 @@
 
 <!-- Copy three author-guide-*.xsl to $MATHBOOK/user -->
 
-<!-- We run with autonaming by default -->
-<xsl:param name="autoname" select="'yes'" />
-
 <!-- XML syntax simplified -->
 <!-- TODO: move into mathbook-common for long-term use -->
 
