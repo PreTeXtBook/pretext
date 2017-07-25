@@ -410,7 +410,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The main "mathbook" element only has two possible children     -->
 <!-- One is "docinfo", the other is "book", "article", etc.         -->
 <!-- This is of interest by itself, or the root of content searches -->
+<!-- And docinfo is the other child                                 -->
+<!-- These help prevent searching the wrong half                    -->
 <xsl:variable name="document-root" select="/mathbook/*[not(self::docinfo)]" />
+<xsl:variable name="docinfo" select="/mathbook/docinfo" />
 
 <!-- Source Analysis -->
 <!-- Some boolean variables ("b-*") for -->
