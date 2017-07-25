@@ -508,6 +508,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- Employing variants of the text displayed for a cross-reference -->
+<!-- affects the words shown to the reader, and hence is a choice   -->
+<!-- preserved in the source, and is not just a processing decision -->
+<!-- $xref-text-style is the global choice, based on                -->
+<!--   docinfo/cross-references/@text                               -->
+<!-- We control the possible values with the schema, allowing junk  -->
+<!-- NB: blank is not set, and is ignored so the legacy-autoname    -->
+<!-- scheme controls the global default.  When that goes away, we   -->
+<!-- should set the default here when there is no attribute.        -->
+<xsl:variable name="xref-text-style">
+    <xsl:choose>
+        <xsl:when test="$docinfo/cross-references/@text">
+            <xsl:value-of select="$docinfo/cross-references/@text" />
+        </xsl:when>
+        <xsl:otherwise>
+            <text />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+
 <!-- Sometimes  xsltproc fails, and fails spectacularly,        -->
 <!-- setting this switch will dump lots of location info to the -->
 <!-- console, and perhaps will be helpful in locating a failure -->
@@ -4723,7 +4744,25 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="@autoname='title'">
             <xsl:text>title</xsl:text>
         </xsl:when>
-        <!-- global setting via switches otherwise          -->
+        <!-- otherwise, global setting via attribute/switch  -->
+        <!-- New scheme is set from docinfo attribute        -->
+        <!-- No setting in docinfo yields empty string for   -->
+        <!-- $xref-text-style, so we drop into legacy scheme -->
+        <!-- for the default, which is 'yes'/'type-global'   -->
+        <xsl:when test="$xref-text-style='global'">
+            <xsl:text>global</xsl:text>
+        </xsl:when>
+        <xsl:when test="$xref-text-style='type-global'">
+            <xsl:text>type-global</xsl:text>
+        </xsl:when>
+        <xsl:when test="$xref-text-style='title'">
+            <xsl:text>title</xsl:text>
+        </xsl:when>
+        <!-- use this when choose goes away
+        <xsl:if test="not($xref-text-style = '')">
+            <xsl:value-of select="$xref-text-style" />
+        </xsl:if>
+        -->
         <!-- legacy-autoname is a pass-thru of old autoname -->
         <!-- except with no command-line, no docinfo, then  -->
         <!-- a 'yes' will appear here as new default        -->
