@@ -135,13 +135,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Default is to hide todo's, inline provisionals                   -->
 <!-- Otherwise ('yes'), todo's in red paragraphs, provisionals in red -->
 <xsl:param name="author-tools" select="'no'" />
-<!-- Cross-references like Section 5.2, Theorem 6.7.89    -->
-<!-- "know" what they point to, so we can get the "name"  -->
-<!-- part automatically (and have it change with editing) -->
-<!-- This switch is global, override with @autoname='no'  -->
-<!-- on an <xref> where it is unjustified or a problem    -->
-<!-- Default is to have this feature off                  -->
-<xsl:param name="autoname" select="'no'" />
+<!-- The autoname parameter is deprecated (2017-07-25) -->
+<!-- Replace with docinfo/cross-references/@text       -->
+<xsl:param name="autoname" select="''" />
 <!-- How many levels to table of contents  -->
 <!-- Not peculiar to HTML or LaTeX or etc. -->
 <!-- Sentinel indicates no choice made     -->
@@ -483,6 +479,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="$whitespace" />
                 <xsl:text>'</xsl:text>
             </xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- We preserve action of the "autoname" parameter         -->
+<!-- But originally the default was "no", and now is        -->
+<!-- equivalent to "yes".  We set to blank on creation,     -->
+<!-- so we can see if there is command-line action          -->
+<!-- There is a warning that the default behavior has       -->
+<!-- changed, and a warning that setting this is deprecated -->
+<!-- (Deprecation 2017-07-25) -->
+<xsl:variable name="legacy-autoname">
+    <xsl:choose>
+        <!-- nothing on command-line, nothing in docinfo    -->
+        <!-- then this is what will be used globally        -->
+        <!-- so preserve this behavior when this is removed -->
+        <xsl:when test="$autoname = ''">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <!-- legacy had zero error-checking -->
+        <xsl:otherwise>
+            <xsl:value-of select="$autoname" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -4702,14 +4720,17 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="@autoname='title'">
             <xsl:text>title</xsl:text>
         </xsl:when>
-        <!-- global setting via switches otherwise -->
-        <xsl:when test="$autoname='no'">
+        <!-- global setting via switches otherwise          -->
+        <!-- legacy-autoname is a pass-thru of old autoname -->
+        <!-- except with no command-line, no docinfo, then  -->
+        <!-- a 'yes' will appear here as new default        -->
+        <xsl:when test="$legacy-autoname='no'">
             <xsl:text>global</xsl:text>
         </xsl:when>
-        <xsl:when test="$autoname='yes'">
+        <xsl:when test="$legacy-autoname='yes'">
             <xsl:text>type-global</xsl:text>
         </xsl:when>
-        <xsl:when test="$autoname='title'">
+        <xsl:when test="$legacy-autoname='title'">
             <xsl:text>title</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -5660,6 +5681,33 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the &quot;xref/autoname&quot; attribute is deprecated, replace  autoname=&quot;title&quot;  by functional equivalent  text=&quot;title&quot;'" />
     </xsl:call-template>
     <!--  -->
+    <!-- 2017-07-25  deprecate null autoname, and warn about switch of default -->
+    <!-- We include the existence of "docinfo" as a marker of a mature, non-beginner project -->
+    <xsl:if test="($autoname = '') and $docinfo and not(//docinfo/cross-references)">
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2017-07-25'" />
+        <xsl:with-param name="message" select="'the default version of text for cross-references has changed.  Rather than simply numbers, they will be prefixed by type-names as well.  So you could see duplicates like &quot;Theorem Theorem 5.2&quot;.  Set  &quot;docinfo/cross-references/@text&quot;  to  &quot;global&quot;  to restore old behavior'" />
+            <xsl:with-param name="incorrect-use" select="($autoname = '') and $docinfo and not(//docinfo/cross-references)" />
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <!-- 2017-07-25  deprecate intentional autoname without new setting -->
+    <xsl:if test="not($autoname = '') and not(//docinfo/cross-references)">
+        <xsl:call-template name="parameter-deprecation-message">
+            <xsl:with-param name="date-string" select="'2017-07-25'" />
+            <xsl:with-param name="message" select="'the  autoname  parameter is deprecated, but is still effective since  &quot;docinfo/cross-references/@text&quot;  has not been set.  The following parameter values equate to the attribute values: &quot;no&quot; is &quot;global&quot;, &quot;yes&quot; is &quot;type-global&quot;, &quot;title&quot; is &quot;title&quot;'" />
+            <xsl:with-param name="incorrect-use" select="not($autoname = '') and not(//docinfo/cross-references)" />
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <!-- 2017-07-25  deprecate intentional autoname also with new setting -->
+    <xsl:if test="not($autoname = '') and //docinfo/cross-references">
+        <xsl:call-template name="parameter-deprecation-message">
+            <xsl:with-param name="date-string" select="'2017-07-25'" />
+            <xsl:with-param name="message" select="'the  autoname  parameter is deprecated, and is being overidden by a  &quot;docinfo/cross-references/@text&quot;  and so is totally ineffective and can be removed'" />
+                <xsl:with-param name="incorrect-use" select="not($autoname = '') and //docinfo/cross-references" />
+        </xsl:call-template>
+    </xsl:if>
 </xsl:template>
 
 <!-- Miscellaneous -->
