@@ -4425,6 +4425,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <!-- form text of the clickable, wrap biblio target -->
     <!-- since xref-text outputs just a number          -->
     <xsl:variable name="text">
+        <xsl:if test="parent::mrow">
+            <xsl:text>\text{</xsl:text>
+        </xsl:if>
         <xsl:if test="$b-is-biblio-target">
             <xsl:text>[</xsl:text>
         </xsl:if>
@@ -4455,13 +4458,19 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:if test="$b-is-biblio-target">
             <xsl:text>]</xsl:text>
         </xsl:if>
+        <xsl:if test="parent::mrow">
+            <xsl:text>}</xsl:text>
+        </xsl:if>
     </xsl:variable>
-    <!-- Send the target and text representation for link to a -->
-    <!-- format-specific and target-specific link manufacture. -->
-    <!-- LaTeX uses \hyperref and \hyperlink, while HTML uses  -->
-    <!-- traditional hyperlinks and also modern knowls.        -->
-    <!-- If the xref lives in a math display we need to call   -->
-    <!-- a specialized template due to LaTeX/MathJax dichotomy -->
+    <!-- Send the target and text representation for link to a   -->
+    <!-- format-specific and target-specific link manufacture.   -->
+    <!-- This depends primarly on the $target, but we also       -->
+    <!-- send the location of the link.  Example: a link in      -->
+    <!-- display mathematics (rendered by MathJax for HTML)      -->
+    <!-- requires radically different constructions as a knowl,  -->
+    <!-- or as a hyperlink.  LaTeX barely cares.  We do wrap the -->
+    <!-- xref-text in \text{} for receipt in display mathematics. -->
+    <!-- NB: could a xref with title text have math in it and mess-up here? -->
     <xsl:choose>
         <xsl:when test="parent::mrow">
             <xsl:apply-templates select="$target" mode="xref-link-md">
@@ -4533,6 +4542,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="b-is-biblio-target" select="boolean($target-one/self::biblio)" />
     <!-- Compose two text parts with an ndash, perhaps wrappped -->
     <xsl:variable name="text">
+        <xsl:if test="parent::mrow">
+            <xsl:text>\text{</xsl:text>
+        </xsl:if>
         <xsl:if test="$b-is-biblio-target">
             <xsl:text>[</xsl:text>
         </xsl:if>
@@ -4552,13 +4564,19 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:if test="$b-is-biblio-target">
             <xsl:text>]</xsl:text>
         </xsl:if>
+        <xsl:if test="parent::mrow">
+            <xsl:text>}</xsl:text>
+        </xsl:if>
     </xsl:variable>
-    <!-- Send the target and text representation for link to a -->
-    <!-- format-specific and target-specific link manufacture. -->
-    <!-- LaTeX uses \hyperref and \hyperlink, while HTML uses  -->
-    <!-- traditional hyperlinks and also modern knowls.        -->
-    <!-- If the xref lives in a math display we need to call   -->
-    <!-- a specialized template due to LaTeX/MathJax dichotomy -->
+    <!-- Send the target and text representation for link to a   -->
+    <!-- format-specific and target-specific link manufacture.   -->
+    <!-- This depends primarly on the $target, but we also       -->
+    <!-- send the location of the link.  Example: a link in      -->
+    <!-- display mathematics (rendered by MathJax for HTML)      -->
+    <!-- requires radically different constructions as a knowl,  -->
+    <!-- or as a hyperlink.  LaTeX barely cares.  We do wrap the -->
+    <!-- xref-text in \text{} for receipt in display mathematics. -->
+    <!-- NB: could a xref with title text have math in it and mess-up here? -->
     <xsl:choose>
         <xsl:when test="parent::mrow">
             <xsl:apply-templates select="$target-one" mode="xref-link-md">
@@ -4621,23 +4639,39 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:text>[</xsl:text>
     </xsl:if>
     <!-- output a seperator, if not just starting -->
+    <!-- protect text in a math display           -->
     <xsl:if test="$previous-target">
+        <xsl:if test="parent::mrow">
+            <xsl:text>\text{</xsl:text>
+        </xsl:if>
         <xsl:text>, </xsl:text>
+        <xsl:if test="parent::mrow">
+            <xsl:text>}</xsl:text>
+        </xsl:if>
     </xsl:if>
     <!-- create the visual/clickable/readable text      -->
     <!-- no content is passed, so no override in effect -->
     <xsl:variable name="text">
+        <xsl:if test="parent::mrow">
+            <xsl:text>\text{</xsl:text>
+        </xsl:if>
         <xsl:apply-templates select="." mode="xref-text">
             <xsl:with-param name="target" select="$target" />
             <xsl:with-param name="text-style" select="$text-style" />
         </xsl:apply-templates>
+        <xsl:if test="parent::mrow">
+            <xsl:text>}</xsl:text>
+        </xsl:if>
     </xsl:variable>
-    <!-- Send the target and text representation for link to a -->
-    <!-- format-specific and target-specific link manufacture. -->
-    <!-- LaTeX uses \hyperref and \hyperlink, while HTML uses  -->
-    <!-- traditional hyperlinks and also modern knowls.        -->
-    <!-- If the xref lives in a math display we need to call   -->
-    <!-- a specialized template due to LaTeX/MathJax dichotomy -->
+    <!-- Send the target and text representation for link to a   -->
+    <!-- format-specific and target-specific link manufacture.   -->
+    <!-- This depends primarly on the $target, but we also       -->
+    <!-- send the location of the link.  Example: a link in      -->
+    <!-- display mathematics (rendered by MathJax for HTML)      -->
+    <!-- requires radically different constructions as a knowl,  -->
+    <!-- or as a hyperlink.  LaTeX barely cares.  We do wrap the -->
+    <!-- xref-text in \text{} for receipt in display mathematics. -->
+    <!-- NB: could a xref with title text have math in it and mess-up here? -->
     <xsl:choose>
         <xsl:when test="parent::mrow">
             <xsl:apply-templates select="$target" mode="xref-link-md">

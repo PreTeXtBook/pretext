@@ -4725,9 +4725,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="url" />
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>}{\text{</xsl:text>
+    <xsl:text>}{</xsl:text>
     <xsl:value-of select="$content" />
-    <xsl:text>}}</xsl:text>
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 

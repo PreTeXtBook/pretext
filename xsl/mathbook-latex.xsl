@@ -6698,9 +6698,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="content" />
     <xsl:text>\hyperref[</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>]{\text{</xsl:text>
+    <xsl:text>]{</xsl:text>
     <xsl:value-of select="$content" />
-    <xsl:text>}}</xsl:text>
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 
