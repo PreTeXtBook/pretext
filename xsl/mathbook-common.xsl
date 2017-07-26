@@ -4764,6 +4764,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="@text='type-global'">
             <xsl:text>type-global</xsl:text>
         </xsl:when>
+        <xsl:when test="@text='type-local'">
+            <xsl:text>type-local</xsl:text>
+        </xsl:when>
         <xsl:when test="@text='title'">
             <xsl:text>title</xsl:text>
         </xsl:when>
@@ -4790,6 +4793,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
         <xsl:when test="$xref-text-style='type-global'">
             <xsl:text>type-global</xsl:text>
+        </xsl:when>
+        <xsl:when test="$xref-text-style='type-local'">
+            <xsl:text>type-local</xsl:text>
         </xsl:when>
         <xsl:when test="$xref-text-style='title'">
             <xsl:text>title</xsl:text>
@@ -4881,6 +4887,22 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                     <xsl:apply-templates select="$target" mode="type-name" />
                     <xsl:apply-templates select="." mode="nbsp"/>
                     <xsl:apply-templates select="$target" mode="xref-number" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="$text-style = 'type-local'">
+            <xsl:choose>
+                <!-- content override of type-prefix -->
+                <xsl:when test="$b-has-content">
+                    <xsl:copy-of select="$custom-text" />
+                    <xsl:apply-templates select="." mode="nbsp"/>
+                    <xsl:apply-templates select="$target" mode="serial-number" />
+                </xsl:when>
+                <!-- usual, default case -->
+                <xsl:otherwise>
+                    <xsl:apply-templates select="$target" mode="type-name" />
+                    <xsl:apply-templates select="." mode="nbsp"/>
+                    <xsl:apply-templates select="$target" mode="serial-number" />
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
