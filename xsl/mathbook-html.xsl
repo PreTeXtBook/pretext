@@ -4657,12 +4657,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 
-<!-- In common template, but have to point -->
-<!-- to it since it is a modal template    -->
-<xsl:template match="exercisegroup" mode="xref-number">
-    <xsl:apply-imports />
-</xsl:template>
-
 <!-- The second abstract template, we condition   -->
 <!-- on if the link is rendered as a knowl or not -->
 <xsl:template match="*" mode="xref-link">

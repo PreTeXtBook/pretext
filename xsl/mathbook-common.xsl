@@ -2756,11 +2756,20 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:apply-templates select="." mode="item-number" />
 </xsl:template>
 
+
+<!-- Serial Numbers: Exercise Groups -->
+<!-- We provide the range of the     -->
+<!-- group as its serial number.     -->
+<xsl:template match="exercisegroup" mode="serial-number">
+    <xsl:apply-templates select="exercise[1]" mode="serial-number" />
+    <xsl:apply-templates select="." mode="ndash"/>
+    <xsl:apply-templates select="exercise[last()]" mode="serial-number" />
+</xsl:template>
+
+
 <!-- Serial Numbers: the unnumbered     -->
 <!-- Empty string signifies not numbered -->
-<!-- We do provide a "xref number" of an -->
-<!-- exercisegroup, but otherwise not    -->
-<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|blockquote|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|index-part|index[index-list]|colophon|backmatter|exercisegroup|webwork|p|sidebyside|assemblage|aside|biographical|historical|case|contributor" mode="serial-number" />
+<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|blockquote|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|index-part|index[index-list]|colophon|backmatter|webwork|p|sidebyside|assemblage|aside|biographical|historical|case|contributor" mode="serial-number" />
 
 <!-- If a list item has any ancestor that is not  -->
 <!-- an ordered list, then it gets no number      -->
@@ -2991,6 +3000,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- NB: these templates have equal priority, so order matters -->
 <xsl:template match="exercise//ol/li" mode="structure-number">
     <xsl:apply-templates select="ancestor::exercise[1]" mode="number" />
+    <xsl:text>.</xsl:text>
+</xsl:template>
+
+<!-- Structure Numbers: Exercise Groups -->
+<!-- An exercisegroup gets it structure number from the parent exercises -->
+<xsl:template match="exercisegroup" mode="structure-number">
+    <xsl:apply-templates select="parent::*" mode="number" />
     <xsl:text>.</xsl:text>
 </xsl:template>
 
@@ -4880,14 +4896,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- \ref and \label mechanism                   -->
 <xsl:template match="*" mode="xref-number">
     <xsl:text>[XREFNUM]</xsl:text>
-</xsl:template>
-<!-- For an exercisegroup we meld the "xref-number"     -->
-<!-- for the first and last exercise of the group       -->
-<!-- An exercise group is only ever numbered for a xref -->
-<xsl:template match="exercisegroup" mode="xref-number">
-    <xsl:apply-templates select="exercise[1]" mode="xref-number" />
-    <xsl:apply-templates select="." mode="ndash"/>
-    <xsl:apply-templates select="exercise[last()]" mode="xref-number" />
 </xsl:template>
 
 

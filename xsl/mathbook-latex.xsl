@@ -6660,7 +6660,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (See also modal templates for "label" and "xref-link") -->
 <!-- Exercises in sets may have hard-coded numbers, -->
 <!-- so we provide a hard-coded number              -->
-<xsl:template match="exercises//exercise|biblio|biblio/note|proof|ol/li|hint|answer|solution" mode="xref-number">
+<xsl:template match="exercises//exercise|biblio|biblio/note|proof|exercisegroup|ol/li|hint|answer|solution" mode="xref-number">
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 
@@ -6677,12 +6677,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="fn" mode="xref-number">
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
-
-<!-- In common template, but have to point to it -->
-<xsl:template match="exercisegroup" mode="xref-number">
-    <xsl:apply-imports />
-</xsl:template>
-
 
 <!-- We implement every cross-reference with hyperref. -->
 <!-- For pure print, we can turn off the actual links  -->
@@ -6756,16 +6750,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- vertical space when used in list items and it seems          -->
 <!-- to now behave well without it  (2015-12-12)                  -->
 <!-- (See also modal templates for "xref-link" and "xref-number") -->
-<xsl:template match="paragraphs|blockquote|exercises//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|contributor" mode="label">
-    <xsl:text>\hypertarget{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>}{}</xsl:text>
-</xsl:template>
-
-<!-- Exercise groups are not even really numbered.   -->
-<!-- (They inherit from their first/last exercises.) -->
-<!-- We want to point to their introductions.        -->
-<xsl:template match="exercisegroup" mode="label">
+<xsl:template match="paragraphs|blockquote|exercises//exercise|biblio|biblio/note|proof|exercisegroup|case|ol/li|dl/li|hint|answer|solution|contributor" mode="label">
     <xsl:text>\hypertarget{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}{}</xsl:text>
