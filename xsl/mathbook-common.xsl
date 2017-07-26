@@ -4758,6 +4758,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="@text='global'">
             <xsl:text>global</xsl:text>
         </xsl:when>
+        <xsl:when test="@text='local'">
+            <xsl:text>local</xsl:text>
+        </xsl:when>
         <xsl:when test="@text='type-global'">
             <xsl:text>type-global</xsl:text>
         </xsl:when>
@@ -4781,6 +4784,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <!-- for the default, which is 'yes'/'type-global'   -->
         <xsl:when test="$xref-text-style='global'">
             <xsl:text>global</xsl:text>
+        </xsl:when>
+        <xsl:when test="$xref-text-style='local'">
+            <xsl:text>local</xsl:text>
         </xsl:when>
         <xsl:when test="$xref-text-style='type-global'">
             <xsl:text>type-global</xsl:text>
@@ -4853,6 +4859,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:apply-templates select="." mode="nbsp"/>
             </xsl:if>
             <xsl:apply-templates select="$target" mode="xref-number" />
+        </xsl:when>
+        <!-- custom text is additional, as prefix, with no type -->
+        <xsl:when test="$text-style = 'local'">
+            <xsl:if test="$b-has-content">
+                <xsl:copy-of select="$custom-text" />
+                <xsl:apply-templates select="." mode="nbsp"/>
+            </xsl:if>
+            <xsl:apply-templates select="$target" mode="serial-number" />
         </xsl:when>
         <xsl:when test="$text-style = 'type-global'">
             <xsl:choose>
