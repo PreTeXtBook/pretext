@@ -6678,24 +6678,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 
-<!-- We implement every cross-reference with hyperref. -->
-<!-- For pure print, we can turn off the actual links  -->
-<!-- in the PDF (and/or control color etc)             -->
-<!-- Mostly this is for consistency in the source      -->
+<!-- This is the second abstract template                -->
+<!-- We implement every cross-reference with hyperref.   -->
+<!-- For pure print, we can turn off the actual links    -->
+<!-- in the PDF (and/or control color etc)               -->
+<!-- Mostly this is for consistency in the source        -->
+<!-- LaTeX linking is not sensitive to being located     -->
+<!-- in display mathematics, and so $location is ignored -->
+<!-- See xsl/mathbook-common.xsl for more info           -->
 <xsl:template match="*" mode="xref-link">
-    <xsl:param name="content" />
-    <xsl:text>\hyperref[</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>]{</xsl:text>
-    <xsl:value-of select="$content" />
-    <xsl:text>}</xsl:text>
-</xsl:template>
-
-<!-- This is a nearly exact duplicate, which we could remove if we -->
-<!-- reorganized xref-link to match on the xref and not its target -->
-<!-- We wrap link text ($content) in \text{} since in math-mode    -->
-<xsl:template match="*" mode="xref-link-md">
-    <xsl:param name="content" />
+    <xsl:param name="content" select="'MISSING LINK CONTENT'"/>
+    <xsl:param name="xref" select="/.." />
     <xsl:text>\hyperref[</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>]{</xsl:text>

@@ -4659,77 +4659,80 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The second abstract template, we condition   -->
 <!-- on if the link is rendered as a knowl or not -->
+<!-- and then condition on the location of the    -->
+<!-- actual link, which is sensitive to display   -->
+<!-- math in particular                           -->
+<!-- See xsl/mathbook-common.xsl for more info    -->
 <xsl:template match="*" mode="xref-link">
-    <xsl:param name="content" />
+    <xsl:param name="content" select="'MISSING LINK CONTENT'"/>
+    <xsl:param name="xref" select="/.." />
     <xsl:variable name="knowl">
         <xsl:apply-templates select="." mode="xref-as-knowl" />
     </xsl:variable>
-    <xsl:element name="a">
-        <xsl:choose>
-            <xsl:when test="$knowl='true'">
-                <!-- build a modern knowl -->
-                <xsl:attribute name="knowl">
-                    <xsl:apply-templates select="." mode="xref-knowl-filename" />
-                </xsl:attribute>
-                <!-- TODO: check if this "knowl-id" is needed, knowl.js implies it is -->
-                <xsl:attribute name="knowl-id">
-                    <xsl:text>xref-</xsl:text>
-                    <xsl:apply-templates select="." mode="internal-id" />
-                </xsl:attribute>
-            </xsl:when>
-            <xsl:otherwise>
-                <!-- build traditional hyperlink -->
-                <xsl:attribute name="href">
-                    <xsl:apply-templates select="." mode="url" />
-                </xsl:attribute>
-            </xsl:otherwise>
-        </xsl:choose>
-        <!-- add HTML title and alt attributes to the link -->
-        <xsl:attribute name="alt">
-            <xsl:apply-templates select="." mode="tooltip-text" />
-        </xsl:attribute>
-        <xsl:attribute name="title">
-            <xsl:apply-templates select="." mode="tooltip-text" />
-        </xsl:attribute>
-        <!-- link content from common template -->
-        <!-- For a contributor we bypass autonaming, etc -->
-        <xsl:choose>
-            <xsl:when test="self::contributor">
-                <xsl:apply-templates select="personname" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$content" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:element>
-</xsl:template>
-
-<!-- This is a third abstract template, which creates a    -->
-<!-- hyperlink or knowl (as possible) that can be realized -->
-<!-- as MathJax processes display math. It requires        -->
-<!-- http://aimath.org/mathbook/mathjaxknowl.js be loaded  -->
-<!-- as a MathJax extension for knowls to render           -->
-<xsl:template match="*" mode="xref-link-md">
-    <xsl:param name="content" />
-    <xsl:variable name="knowl">
-        <xsl:apply-templates select="." mode="xref-as-knowl" />
-    </xsl:variable>
-    <!-- MathJax expects similar constructions, variation is here -->
     <xsl:choose>
-        <xsl:when test="$knowl='true'">
-            <xsl:text>\knowl{</xsl:text>
-            <xsl:apply-templates select="." mode="xref-knowl-filename" />
+        <!-- exceptional case, xref in mrow of display math      -->
+        <!-- Requires http://aimath.org/mathbook/mathjaxknowl.js -->
+        <!-- loaded as a MathJax extension for knowls to render  -->
+        <xsl:when test="$xref/parent::mrow">
+            <!-- MathJax expects similar constructions, variation is here -->
+            <xsl:choose>
+                <xsl:when test="$knowl='true'">
+                    <xsl:text>\knowl{</xsl:text>
+                    <xsl:apply-templates select="." mode="xref-knowl-filename" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>\href{</xsl:text>
+                    <xsl:apply-templates select="." mode="url" />
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>}{</xsl:text>
+            <xsl:value-of select="$content" />
+            <xsl:text>}</xsl:text>
         </xsl:when>
+        <!-- usual case, always an "a" element (anchor) -->
         <xsl:otherwise>
-            <xsl:text>\href{</xsl:text>
-            <xsl:apply-templates select="." mode="url" />
+            <xsl:element name="a">
+                <!-- knowl/hyperlink variability here -->
+                <xsl:choose>
+                    <xsl:when test="$knowl='true'">
+                        <!-- build a modern knowl -->
+                        <xsl:attribute name="knowl">
+                            <xsl:apply-templates select="." mode="xref-knowl-filename" />
+                        </xsl:attribute>
+                        <!-- TODO: check if this "knowl-id" is needed, knowl.js implies it is -->
+                        <xsl:attribute name="knowl-id">
+                            <xsl:text>xref-</xsl:text>
+                            <xsl:apply-templates select="." mode="internal-id" />
+                        </xsl:attribute>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!-- build traditional hyperlink -->
+                        <xsl:attribute name="href">
+                            <xsl:apply-templates select="." mode="url" />
+                        </xsl:attribute>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <!-- add HTML title and alt attributes to the link -->
+                <xsl:attribute name="alt">
+                    <xsl:apply-templates select="." mode="tooltip-text" />
+                </xsl:attribute>
+                <xsl:attribute name="title">
+                    <xsl:apply-templates select="." mode="tooltip-text" />
+                </xsl:attribute>
+                <!-- link content from common template -->
+                <!-- For a contributor we bypass autonaming, etc -->
+                <xsl:choose>
+                    <xsl:when test="self::contributor">
+                        <xsl:apply-templates select="personname" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$content" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:element>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>}{</xsl:text>
-    <xsl:value-of select="$content" />
-    <xsl:text>}</xsl:text>
 </xsl:template>
-
 
 <!-- Numbers, units, quantities                     -->
 <!-- quantity                                       -->
