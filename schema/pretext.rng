@@ -2293,6 +2293,8 @@
     <choice>
       <value>global</value>
       <value>type-global</value>
+      <value>local</value>
+      <value>type-local</value>
       <value>title</value>
     </choice>
   </define>

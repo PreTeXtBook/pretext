@@ -1045,7 +1045,7 @@
         IndexList = element index-list {empty}
         
         
-        XrefTextStyle = "global"| "type-global" | "title"
+        XrefTextStyle = "global"| "type-global" | "local" | "type-local" | "title"
         Reference = Url | Xref
         Url =
             element url {

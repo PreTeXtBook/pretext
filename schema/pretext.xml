@@ -4,7 +4,7 @@
 <mathbook>
 
     <docinfo>
-
+        <cross-references text="type-global" />
     </docinfo>
 
     <!--
@@ -647,7 +647,7 @@
         <p>There are a variety of referencing mechanisms, external references, internal cross-references, index entries, and specialized support for a table of mathematical notation.</p>
 
         <fragment xml:id="reference">
-        XrefTextStyle = "global"| "type-global" | "title"
+        XrefTextStyle = "global"| "type-global" | "local" | "type-local" | "title"
         Reference = Url | Xref
         Url =
             element url {
