@@ -19,6 +19,11 @@
 
     </section>
 
+    <section xml:id="topic-references">
+        <title>(*) Lists of Works Cited (References)</title>
+
+    </section>
+
     <section xml:id="topic-verbatim-literal">
         <title>Verbatim and Literal Text</title>
 
@@ -66,15 +71,100 @@
         </subsection>
     </section>
 
-    <section xml:id="topic-references">
-        <title>(*) References and Citations</title>
-
-    </section>
-
     <section xml:id="topic-cross-referencing">
-        <title>(*) Cross-Referencing Information</title>
+        <title>References and Citations</title>
 
+        <p>When you read a novel, you would likely read it cover-to-cover (in one sitting?) and then put it away and never read it again.  But for a textbook, you may read cover-to-cover, but you may also frequently skip around, especially at exam time.  And once read, it might become a reference work for you, since you know it so well.  So years later you might come back looking for something.  Cross-references help with all this, so use them liberally.  Recognize that an index is really just a specialized way to provide an abundance of cross-references.</p>
+
+        <p>It is a two-step process to make a cross-reference.<ol>
+            <li>Put an <attribute>xml:id</attribute> attribute on any element you think you might want to reference later.  Be organized about the values of these attributes, and in particular do not number them, as this has no place in your source, and you do not want to maintain the changing numbers over the life of your project.  See the advice in <xref ref="overview-cross-references" /> about banned characters.  Some elements do not accept this attribute because the element has nothing to identify it (no number, no title).  Typically these are <term>containers</term> like <tag>sidebyside</tag> or <tag>statement</tag>.  In these cases, put the attribute on the closest enclosing element.</li>
+
+            <li>To make a cross reference, you create an <tage>xref</tage> element with a <attribute>ref</attribute> attribute with the same value as <attribute>xml:id</attribute> attribute on the element you want to reference.</li>
+        </ol>Simple.  It is meant to be, so you can use it liberally.  But we also know authors want some flexibility.</p>
+
+        <p>By default, a cross-reference will visually be text like Theorem 5.2.  Depending on your output format, it may have various devices to help you locate that theorem.  Maybe a page number, or it is a hyperlink, or the whole theorem is the content of a knowl.  You can change the default look of cross-references by setting the <attribute>text</attribute> attribute in <c>docinfo/cross-references</c>.  But you can also change the visual appearance of a cross-reference on a case-by-case basis.  Add a <attribute>text</attribute> attribute to your <tage>xref</tage> element to override the document-wide setting.  This table lists the attribute values, and gives an example of what it will look like.  These are all live cross-references to this section.</p>
+
+        <table>
+            <caption>Cross-reference visual text styles</caption>
+            <tabular>
+                <row bottom="major">
+                    <cell><attribute>text</attribute></cell>
+                    <cell>Example</cell>
+                    <cell>Notes</cell>
+                </row>
+                <row>
+                    <cell><c>'global'</c></cell>
+                    <cell><xref ref="topic-cross-referencing" text="global" /></cell>
+                    <cell></cell>
+                </row>
+
+                <row>
+                    <cell><c>'type-global'</c></cell>
+                    <cell><xref ref="topic-cross-referencing" text="type-global" /></cell>
+                    <cell>stock default</cell>
+                </row>
+
+                <row>
+                    <cell><c>'local'</c></cell>
+                    <cell><xref ref="topic-cross-referencing" text="local" /></cell>
+                    <cell></cell>
+                </row>
+
+                <row>
+                    <cell><c>'type-local'</c></cell>
+                    <cell><xref ref="topic-cross-referencing" text="type-local" /></cell>
+                    <cell></cell>
+                </row>
+
+                <row>
+                    <cell><c>'title'</c></cell>
+                    <cell><xref ref="topic-cross-referencing" text="title" /></cell>
+                    <cell>if available</cell>
+                </row>
+            </tabular>
+        </table>
+
+        <p>Note that <c>local/global</c> describes the uniqueness of the number (and is affected by your choice of numbering schemes), while <c>type</c> refers to an automatic prefix of the number.  The text of the type will vary according to the document's language.</p>
+
+        <p>You can also override the text used in a cross-reference link.  You do this by providing content to the <tag>xref</tag> element.  In other words, do not use an empty tag, but put some (simple) text in the element.  Generally, this additional text becomes a prefix of a number, a replacement of a type, or a replacement of a title.  It is better to use these overrides, since in electronic formats, the text of the override will be incorporated into the <q>clickable</q> portion of the resulting link, making a larger item to hit.</p>
+
+        <p>Here are careful examples, where we have provided the content <q>Division</q> in the live examples.  The list is not exhaustive.  Note that overriding a title provides a way to provide any text you would like.</p>
+
+        <table>
+            <caption>Cross-reference text overrides</caption>
+            <tabular>
+                <row bottom="major">
+                    <cell><attribute>text</attribute></cell>
+                    <cell>Example</cell>
+                </row>
+                <row>
+                    <cell><c>'global'</c></cell>
+                    <cell><xref ref="topic-cross-referencing" text="global">Division</xref></cell>
+                </row>
+                <row>
+                    <cell><c>'type-global'</c></cell>
+                    <cell><xref ref="topic-cross-referencing" text="type-global">Division</xref></cell>
+                </row>
+                <row>
+                    <cell><c>'title'</c></cell>
+                    <cell><xref ref="topic-cross-referencing" text="title">Division</xref></cell>
+                </row>
+            </tabular>
+        </table>
+
+        <p>Citations, which are cross-references to <tag>biblio</tag> elements behave the same way, but will always visually look like [23].  References to equations (<tag>men</tag> and <tag>mrow</tag> elements) will visually look like (4.2), where the type is implied by the parentheses.  Notice that you cannot cross-reference an <tag>me</tag> (no number) or <tag>md</tag> (just a container).</p>
+
+        <p>Further, there are some variant formats.<ul>
+            <li>Replace <attribute>ref</attribute> by <attribute>provisional</attribute> and give it a value with some simple text like <c>subsection on eagle habitat</c> and you will get reminders that once you write this future subsection you need to link it in right here.  This is just a convenience for authors during the early stages of a writing project.</li>
+
+            <li>Replace <attribute>ref</attribute> by the pair <attribute>first</attribute> and <attribute>last</attribute>.  Provide attribute values just as you would for <attribute>ref</attribute>.  The code will check that the targets have the exact same tag, and that the order is correct.  You will get a link that looks like a range, separated by an en-dash.  As a link, only <attribute>first</attribute> will be used for the linking mechanism (<ie />, one link is generated, not two).  Experiment with <attribute>text</attribute> and content overrides.</li>
+
+            <li>The <attribute>ref</attribute> attribute may be a list of <attribute>xml:id</attribute>, separated by commas or by spaces.  Then you will get back a list of cross-references.  This is meant for a list of citations, producing a look like [5, 9, 22], but it makes no restriction to this case.  Use it generally, but it is unlikely to get any more capable.  If you want a different list, just use multiple <tag>xref</tag> and format as you desire.</li>
+        </ul></p>
+
+        <p>Finally, there is fairly robust error-checking to protect against typographical errors in the attribute values that need to match up for all this to work.  Also, there is a check that the <attribute>xml:id</attribute> are unique.  But all this checking happens at processing-time, not at the validation step.  Any suggestions for improvements that make these checks even more robust are welcome.</p>
     </section>
+
 
     <section xml:id="topic-subdivisions">
         <title>Subdivisions</title>
@@ -240,7 +330,7 @@
         <subsection>
             <title><init>URL</init>s to External Web Pages</title>
 
-            <p>The <tag>url</tag> tag can be used to point to external items (as distinct from other portions of your current document, which is accomplished with the <tag>xref</tag> element, <xref ref="overview-cross-references" />).  It always needs a value for the <attribute>href</attribute> attribute, most likely a <init>URL</init>.  Most of this time, this will point to some resource available on the Internet but it could be a file on the system hosting your document, perhaps using a relative address (but see the rest of this section for some cautions).  Here are three scenarios:<ul>
+            <p>The <tag>url</tag> tag can be used to point to external items (as distinct from other portions of your current document, which is accomplished with the <tage>xref</tage> element, <xref ref="overview-cross-references" />).  It always needs a value for the <attribute>href</attribute> attribute, most likely a <init>URL</init>.  Most of this time, this will point to some resource available on the Internet but it could be a file on the system hosting your document, perhaps using a relative address (but see the rest of this section for some cautions).  Here are three scenarios:<ul>
                 <li><p>The <tag>url</tag> element is empty.  Then the value of the <attribute>href</attribute> is also used for the visible text of the link, verbatim, and usually in a monospace font.  Use <term>percent-encoding</term> (aka <term>URL encoding</term>) for the <attribute>href</attribute> attribute to include special characters, such as spaces.</p></li>
 
                 <li><p>The <tag>url</tag> element has content.  Now the content should be authored as you would any other text in a sentence.  Potentially problematic characters, such as a tilde should be authored with provided empty elements, but authored literally in the <attribute>href</attribute> attribute.</p></li>

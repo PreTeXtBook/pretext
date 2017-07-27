@@ -43,6 +43,8 @@
     <section xml:id="overview-cross-references">
         <title>Cross-References</title>
 
+        <p>Cross-references in a <pretext /> document are easy, powerful and flexible.  So it is worth familiarizing yourselves with them early, here and then ahead in <xref ref="topic-cross-referencing" />.</p>
+
         <p>Any element that you place a <attribute>xml:id</attribute> on can become the target of a cross-reference.  This could be a subdivision, a remark, a bibliographic entry, or a figure.  So for example, suppose your source had <c>&lt;subsection xml:id="subsection-flowers"&gt;</c> and someplace else you wrote <c>&lt;xref ref="subsection-flowers" /&gt;</c>.  Then at the latter location you would get a reference to the Subsection that discusses flowers.  In print this might just be the number for the subsection, but in various electronic output formats, these cross-references can be very powerful interactive ways to explore the content.  And the mechanism is always the same, pair up an <attribute>xml:id</attribute> on a target with a <attribute>ref</attribute> on an <tag>xref</tag> cross-reference.</p>
 
         <p>Since the value of an <attribute>xml:id</attribute> is also used in a variety of ways, such as to construct some file names, some care should be taken in how you author them.  We limit the possible characters to letters and numbers (<c>a-z</c>, <c>A-Z</c>, <c>0-9</c>), with hyphens and underscores (<c>-_</c>) available as word-separators.  Our advice is to stick to lowercase letters, though we are not yet aware of any problems with case-insensitivity.  So in short, use <term>kebab-case</term> or <term>snake-case</term> for your <attribute>xml:id</attribute> values.</p>
