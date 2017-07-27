@@ -2769,7 +2769,20 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Serial Numbers: the unnumbered     -->
 <!-- Empty string signifies not numbered -->
-<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|blockquote|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|index-part|index[index-list]|colophon|backmatter|webwork|p|sidebyside|assemblage|aside|biographical|historical|case|contributor" mode="serial-number" />
+
+<!-- We choose not to number unique, or semi-unique      -->
+<!-- (eg prefaces, colophons), elements.  Other elements -->
+<!-- are meant as local commentary, and may also carry   -->
+<!-- a title for identification and cross-referencing.   -->
+<xsl:template match="book|article|letter|memo|paragraphs|blockquote|preface|abstract|acknowledgement|biography|foreword|dedication|index-part|index[index-list]|colophon|webwork|p|assemblage|aside|biographical|historical|case|contributor" mode="serial-number" />
+
+<!-- Some items are "containers".  They are not numbered, you  -->
+<!-- cannot point to them, they are invisible to the reader    -->
+<!-- in a way.  We kill their serial nuumbers explicitly here. -->
+<!-- Lists live in paragraphs, exercises, objectives, so       -->
+<!-- should be referenced as part of some enclosing element.   -->
+<!-- "mathbook" helps some tree-climbing routines halt -->
+<xsl:template match="mathbook|introduction|conclusion|frontmatter|backmatter|sidebyside|ol|ul|dl|statement" mode="serial-number" />
 
 <!-- If a list item has any ancestor that is not  -->
 <!-- an ordered list, then it gets no number      -->
