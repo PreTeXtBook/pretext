@@ -2152,6 +2152,7 @@
     <xs:restriction base="xs:token">
       <xs:enumeration value="global"/>
       <xs:enumeration value="type-global"/>
+      <xs:enumeration value="phrase-global"/>
       <xs:enumeration value="local"/>
       <xs:enumeration value="type-local"/>
       <xs:enumeration value="title"/>

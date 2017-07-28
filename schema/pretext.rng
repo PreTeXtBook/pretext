@@ -2293,6 +2293,7 @@
     <choice>
       <value>global</value>
       <value>type-global</value>
+      <value>phrase-global</value>
       <value>local</value>
       <value>type-local</value>
       <value>title</value>
