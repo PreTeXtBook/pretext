@@ -572,6 +572,8 @@ the xsltproc executable.
 
 
             <introduction>
+                <p>This is across-reference to one of the objectives above, forced to always using the <c>type-global</c> form of the text.  It should describe the objective as belonging to the <em>section</em> (rather than the <em>objectives</em>), since objectives are one-per-subdivision and are numbered based upon the chapter number: <xref ref="objective-structure" text="phrase-global" />.  For comparison this is the (forced) <c>type-global</c> cross-reference: <xref ref="objective-structure" text="type-global" />.</p>
+
                 <p>The Fundamental Theorem comes in two flavors, where usually one is a corollary of the other.</p>
             </introduction>
 
@@ -2228,6 +2230,7 @@ the xsltproc executable.
                     <exercise>
                         <statement>
                             <p><m>f(x)=x^3</m>, <m>\frac{df}{dx}</m>.  This sentence is just a bunch of gibberish to check where the second line of the problem begins relative to the first line.</p>
+                            <p>We cross-reference the next problem in this exercise group.  For the <c>phrase-global</c> form, the common element of the cross-reference and the target should be the <c>exercises</c> division, and not the enclosing <c>exercisegroup</c>:  <xref ref="exercises-cosine-derivative" text="phrase-global" />.</p>
                         </statement>
                     </exercise>
 
