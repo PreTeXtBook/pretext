@@ -4782,14 +4782,23 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="@text='local'">
             <xsl:text>local</xsl:text>
         </xsl:when>
+        <xsl:when test="@text='hybrid'">
+            <xsl:text>hybrid</xsl:text>
+        </xsl:when>
         <xsl:when test="@text='type-global'">
             <xsl:text>type-global</xsl:text>
         </xsl:when>
         <xsl:when test="@text='type-local'">
             <xsl:text>type-local</xsl:text>
         </xsl:when>
+        <xsl:when test="@text='type-hybrid'">
+            <xsl:text>type-hybrid</xsl:text>
+        </xsl:when>
         <xsl:when test="@text='phrase-global'">
             <xsl:text>phrase-global</xsl:text>
+        </xsl:when>
+        <xsl:when test="@text='phrase-hybrid'">
+            <xsl:text>phrase-hybrid</xsl:text>
         </xsl:when>
         <xsl:when test="@text='title'">
             <xsl:text>title</xsl:text>
@@ -4815,14 +4824,23 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="$xref-text-style='local'">
             <xsl:text>local</xsl:text>
         </xsl:when>
+        <xsl:when test="$xref-text-style='hybrid'">
+            <xsl:text>hybrid</xsl:text>
+        </xsl:when>
         <xsl:when test="$xref-text-style='type-global'">
             <xsl:text>type-global</xsl:text>
         </xsl:when>
         <xsl:when test="$xref-text-style='type-local'">
             <xsl:text>type-local</xsl:text>
         </xsl:when>
+        <xsl:when test="$xref-text-style='type-hybrid'">
+            <xsl:text>type-hybrid</xsl:text>
+        </xsl:when>
         <xsl:when test="$xref-text-style='phrase-global'">
             <xsl:text>phrase-global</xsl:text>
+        </xsl:when>
+        <xsl:when test="$xref-text-style='phrase-hybrid'">
+            <xsl:text>phrase-hybrid</xsl:text>
         </xsl:when>
         <xsl:when test="$xref-text-style='title'">
             <xsl:text>title</xsl:text>
@@ -4854,9 +4872,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Bibliography items return a naked number,      -->
 <!-- caller is responsible for adjusting text with  -->
 <!-- brackets prior to shipping to link manufacture -->
-<!-- For "Theorem 5 from Section 8", we may need    -->
-<!-- two templates like this, the clickable part    -->
-<!-- and the "from..." part                         -->
 <xsl:template match="xref" mode="xref-text">
     <xsl:param name="target" />
     <xsl:param name="text-style" />
@@ -4933,21 +4948,56 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
-        <xsl:when test="$text-style = 'phrase-global'">
+        <xsl:when test="$text-style = 'phrase-global' or $text-style = 'phrase-hybrid'">
             <!-- no content override in this case -->
             <!-- maybe we can relax this somehow? -->
             <xsl:if test="$b-has-content">
-                <xsl:message>MBX:WARNING: providing content ("<xsl:value-of select="." />") for an "xref" element is ignored for 'phrase-global' style of the xref text</xsl:message>
+                <xsl:message>MBX:WARNING: providing content ("<xsl:value-of select="." />") for an "xref" element is ignored for 'phrase-global' and 'phrase-hybrid' styles for xref text</xsl:message>
                 <xsl:apply-templates select="." mode="location-report" />
             </xsl:if>
-            <!-- type-local first, no matter what -->
+            <!-- type-local first, no matter what    -->
+            <!-- for each of the two phrase styles   -->
             <xsl:apply-templates select="$target" mode="type-name" />
             <xsl:apply-templates select="." mode="nbsp"/>
             <xsl:apply-templates select="$target" mode="serial-number" />
             <!-- climb up tree to find highest matching structure numbers -->
-            <!-- this will write "of Section 37" for Theorem 37.8         -->
-            <xsl:apply-templates select="$target" mode="ancestor-for-structure">
+            <!-- we pass through the two styles so reaction can occur     -->
+            <!-- For example for the target Theorem 37.8 of an article,   -->
+            <!-- phrase-global: "of Section 37" always                    -->
+            <!-- phrase-hybrid: "of Section 37" only if necessary         -->
+            <xsl:apply-templates select="$target" mode="smart-xref-text">
+                <xsl:with-param name="text-style" select="$text-style" />
                 <xsl:with-param name="xref" select="." />
+                <xsl:with-param name="target" select="$target"/>
+                <xsl:with-param name="highest-match" select="/.." />
+                <xsl:with-param name="target-structure-number">
+                    <xsl:apply-templates select="$target" mode="structure-number" />
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:when test="($text-style = 'hybrid') or ($text-style = 'type-hybrid')">
+            <xsl:choose>
+                <!-- content override of type-prefix -->
+                <!-- or addtion to plain number      -->
+                <xsl:when test="$b-has-content">
+                    <xsl:copy-of select="$custom-text" />
+                    <xsl:apply-templates select="." mode="nbsp"/>
+                </xsl:when>
+                <!-- no override, use type as prefix -->
+                <xsl:when test="$text-style = 'type-hybrid'">
+                    <xsl:apply-templates select="$target" mode="type-name" />
+                    <xsl:apply-templates select="." mode="nbsp"/>
+                </xsl:when>
+                <!-- just a plain number, do nothing at all -->
+                <xsl:otherwise />
+            </xsl:choose>
+            <!-- For example for the target Theorem 37.8 of an article, -->
+            <!-- hybrid: 8 or if necessary, 37.8                        -->
+            <!-- type-hybrid: Theorem 8 or if necessary, Theorem 37.8   -->
+            <xsl:apply-templates select="$target" mode="smart-xref-text">
+                <xsl:with-param name="text-style" select="$text-style" />
+                <xsl:with-param name="xref" select="." />
+                <xsl:with-param name="target" select="$target"/>
                 <xsl:with-param name="highest-match" select="/.." />
                 <xsl:with-param name="target-structure-number">
                     <xsl:apply-templates select="$target" mode="structure-number" />
@@ -4972,9 +5022,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 
-<!-- ######################### -->
-<!-- Cross-Reference Numbering -->
-<!-- ######################### -->
+<!-- ###################### -->
+<!-- Smart Cross-References -->
+<!-- ###################### -->
 
 <!-- We climb the tree upward (ancestors) until we hit    -->
 <!-- the "mathbook" element, and then quit and assess.    -->
@@ -4993,17 +5043,32 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- is this way, it shares numbering with its containing -->
 <!-- division.  So we track through all the ancestors.    -->
 <!--                                                      -->
+<!-- To see if a xref is close to its target, we add the  -->
+<!-- *single* xref node to the subtree of the (highest)   -->
+<!-- node that provides the target's structure number.    -->
+<!-- By comparing the sizes of these node-sets, we can    -->
+<!-- determine if the xref lies outside the subtree and   -->
+<!-- then stick with global numbers.                      -->
+<!--                                                      -->
+<!-- $text-style                                          -->
+<!--   gets passed through, in order to consolidate       -->
 <!-- $xref                                                -->
-<!--   gets passed through until needed                   -->
+<!--   gets passed through for eventual membership test   -->
+<!-- $target                                              -->
+<!--   gets passed through for producing hybrid numbers   -->
 <!-- $highest-match                                       -->
 <!--   starts empty and is updated, if it finishes        -->
-<!--   empty then the number is a singleton already       -->
-<!--   and no "of..." is produced                         -->
+<!--   empty then the target is high in the tree          -->
+<!--   or a match is a root for the structure number      -->
 <!-- $target-structure-number                             -->
 <!--   is produced once as a string, and passed through   -->
 <!--                                                      -->
-<xsl:template match="*" mode="ancestor-for-structure">
+<!-- Result is a string that completes the xref text      -->
+<!--                                                      -->
+<xsl:template match="*" mode="smart-xref-text">
+    <xsl:param name="text-style" />
     <xsl:param name="xref" />
+    <xsl:param name="target" />
     <xsl:param name="highest-match" select="/.." />
     <xsl:param name="target-structure-number" />
     <!-- step up immediately, else test on  -->
@@ -5013,37 +5078,74 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:apply-templates select="$parent" mode="number" />
     </xsl:variable>
     <xsl:choose>
-        <!-- quit at the top, condition on highest-match      -->
-        <!-- empty: no connector, no nothing, just bare local -->
-        <!-- non-empty: type-global for ancestor              -->
+        <!-- quit at the top, and examine highest-match,    -->
+        <!-- and for phrase-hybrid, we do a membership test -->
         <xsl:when test="$parent/self::mathbook">
-            <xsl:if test="$highest-match">
-                <!-- connector, internationalize -->
-                <xsl:text> of </xsl:text>
-                <xsl:apply-templates select="$highest-match" mode="type-name" />
-                <xsl:apply-templates select="." mode="nbsp" />
-                <xsl:apply-templates select="$highest-match" mode="number" />
-                <!-- testing if xref is local or not, to come -->
-                <!-- <xsl:variable name="struct-size" select="count($highest-match/descendant-or-self::*)" /> -->
-                <!-- <xsl:variable name="bigger-size" select="count(($highest-match/descendant-or-self::*)|$xref)" /> -->
-            </xsl:if>
+            <xsl:variable name="requires-global">
+                <xsl:choose>
+                    <!-- no match, already high up tree, so no  -->
+                    <!-- qualification is needed in either case -->
+                    <xsl:when test="not($highest-match)">
+                        <xsl:text>false</xsl:text>
+                    </xsl:when>
+                    <!-- now have a match, so for phrase-global -->
+                    <!-- we will always print the global info   -->
+                    <xsl:when test="$text-style='phrase-global'">
+                        <xsl:text>true</xsl:text>
+                    </xsl:when>
+                    <!-- now have a match, so for all other styles -->
+                    <!-- we check to see if xref is in subtree     -->
+                    <xsl:otherwise>
+                        <xsl:variable name="target-tree-size" select="count($highest-match/descendant-or-self::*)" />
+                        <xsl:variable name="xref-union-tree-size" select="count(($xref | $highest-match/descendant-or-self::*))" />
+                        <xsl:value-of select="$xref-union-tree-size = $target-tree-size + 1" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <!-- now know local/global, write trailing portion of text -->
+            <!-- here based on the style and the global requirement    -->
+            <xsl:choose>
+                <!-- phrase styles may need remainder of phrase -->
+                <xsl:when test="(($text-style='phrase-global') or ($text-style='phrase-hybrid')) and ($requires-global = 'true')">
+                    <!-- connector, internationalize -->
+                    <xsl:text> of </xsl:text>
+                    <xsl:apply-templates select="$highest-match" mode="type-name" />
+                    <xsl:apply-templates select="." mode="nbsp" />
+                    <xsl:apply-templates select="$highest-match" mode="xref-number" />
+                </xsl:when>
+                <!-- hybrid styles need number for remainder -->
+                <xsl:when test="($text-style='hybrid') or ($text-style='type-hybrid')">
+                    <xsl:choose>
+                        <xsl:when test="$requires-global = 'true'">
+                            <xsl:apply-templates select="$target" mode="xref-number" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:apply-templates select="$target" mode="serial-number" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+            </xsl:choose>
         </xsl:when>
         <!-- possible missing implementation bug in numbering -->
         <xsl:when test="$parent-number = '[NUM]'">
-            <xsl:message>MBX:BUG:     Looks like a [<xsl:value-of select="local-name($parent)" />] element has an ambiguous number, found while making 'phrase-global' text for a cross-reference</xsl:message>
+            <xsl:message>MBX:BUG:     Looks like a [<xsl:value-of select="local-name($parent)" />] element has an ambiguous number, found while making cross-reference text</xsl:message>
         </xsl:when>
         <!-- no match, just recurse, and preserve $highest-match -->
         <xsl:when test="not(concat($parent-number, '.') = $target-structure-number)">
-            <xsl:apply-templates select="$parent" mode="ancestor-for-structure">
+            <xsl:apply-templates select="$parent" mode="smart-xref-text">
+                <xsl:with-param name="text-style" select="$text-style" />
                 <xsl:with-param name="xref" select="$xref" />
+                <xsl:with-param name="target" select="$target"/>
                 <xsl:with-param name="highest-match" select="$highest-match" />
                 <xsl:with-param name="target-structure-number" select="$target-structure-number" />
             </xsl:apply-templates>
         </xsl:when>
         <!-- a match, record in updated $highest-match -->
         <xsl:when test="concat($parent-number, '.') = $target-structure-number">
-            <xsl:apply-templates select="$parent" mode="ancestor-for-structure">
+            <xsl:apply-templates select="$parent" mode="smart-xref-text">
+                <xsl:with-param name="text-style" select="$text-style" />
                 <xsl:with-param name="xref" select="$xref" />
+                <xsl:with-param name="target" select="$target"/>
                 <xsl:with-param name="highest-match" select="$parent" />
                 <xsl:with-param name="target-structure-number" select="$target-structure-number" />
             </xsl:apply-templates>
