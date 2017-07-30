@@ -499,7 +499,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- then this is what will be used globally        -->
         <!-- so preserve this behavior when this is removed -->
         <xsl:when test="$autoname = ''">
-            <xsl:text>yes</xsl:text>
+            <xsl:text>unset</xsl:text>
         </xsl:when>
         <!-- legacy had zero error-checking -->
         <xsl:otherwise>
@@ -4850,9 +4850,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:value-of select="$xref-text-style" />
         </xsl:if>
         -->
-        <!-- legacy-autoname is a pass-thru of old autoname -->
-        <!-- except with no command-line, no docinfo, then  -->
-        <!-- a 'yes' will appear here as new default        -->
+        <!-- legacy-autoname is a pass-thru of old autoname  -->
+        <!-- except with no command-line, no docinfo, then   -->
+        <!-- a 'unset' will appear here to activate new      -->
+        <!-- default this could move later to the "otherwise"-->
+        <xsl:when test="$legacy-autoname='unset'">
+            <xsl:text>type-hybrid</xsl:text>
+        </xsl:when>
         <xsl:when test="$legacy-autoname='no'">
             <xsl:text>global</xsl:text>
         </xsl:when>
