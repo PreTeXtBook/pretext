@@ -2150,11 +2150,14 @@
   </xs:element>
   <xs:simpleType name="XrefTextStyle">
     <xs:restriction base="xs:token">
-      <xs:enumeration value="global"/>
-      <xs:enumeration value="type-global"/>
-      <xs:enumeration value="phrase-global"/>
       <xs:enumeration value="local"/>
+      <xs:enumeration value="global"/>
+      <xs:enumeration value="hybrid"/>
       <xs:enumeration value="type-local"/>
+      <xs:enumeration value="type-global"/>
+      <xs:enumeration value="type-hybrid"/>
+      <xs:enumeration value="phrase-global"/>
+      <xs:enumeration value="phrase-hybrid"/>
       <xs:enumeration value="title"/>
     </xs:restriction>
   </xs:simpleType>

@@ -2291,11 +2291,14 @@
   </define>
   <define name="XrefTextStyle">
     <choice>
-      <value>global</value>
-      <value>type-global</value>
-      <value>phrase-global</value>
       <value>local</value>
+      <value>global</value>
+      <value>hybrid</value>
       <value>type-local</value>
+      <value>type-global</value>
+      <value>type-hybrid</value>
+      <value>phrase-global</value>
+      <value>phrase-hybrid</value>
       <value>title</value>
     </choice>
   </define>
