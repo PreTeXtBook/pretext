@@ -3642,18 +3642,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################## -->
 
 <!-- See xsl/mathbook-common.xsl for descriptions of the  -->
-<!-- five modal templates which must be implemented here -->
-
-<!-- We begin the chain of events by calling the            -->
-<!-- "common-setup" modal template in mathbook-common.xsl,  -->
-<!-- which isolates analysis of the widths, etc.  As a pure -->
-<!-- container, we pass the original flag down into content -->
-<xsl:template match="sidebyside">
-    <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="." mode="common-setup">
-        <xsl:with-param name="b-original" select="$b-original" />
-    </xsl:apply-templates>
-</xsl:template>
+<!-- five modal templates which must be implemented here  -->
+<!-- The main templates for "sidebyside" and "sbsgroup"   -->
+<!-- are in xsl/mathbook-common.xsl, as befits containers -->
 
 <!-- When we use CSS margins (or padding), then percentage        -->
 <!-- widths are relative to the remaining space.  This utility    -->
@@ -3814,12 +3805,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="sidebyside" mode="compose-panels">
     <xsl:param name="b-original" select="true()" />
 
-    <xsl:param name="margins" />
+    <xsl:param name="layout" />
     <xsl:param name="has-headings" />
     <xsl:param name="has-captions" />
     <xsl:param name="headings" />
     <xsl:param name="panels" />
     <xsl:param name="captions" />
+
+    <xsl:variable name="margins" select="$layout/margins" />
 
     <!-- A "sidebyside" div, to contain headings,  -->
     <!-- panels, captions rows as "sbsrow" divs -->

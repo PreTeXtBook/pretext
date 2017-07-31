@@ -5277,7 +5277,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################## -->
 
 <!-- See xsl/mathbook-common.xsl for descriptions of the  -->
-<!-- five modal templates which must be implemented here -->
+<!-- five modal templates which must be implemented here  -->
+<!-- The main templates for "sidebyside" and "sbsgroup"   -->
+<!-- are in xsl/mathbook-common.xsl, as befits containers -->
 
 <!-- cut/paste, remove fbox end/begin in dual placement
     <xsl:if test="$sbsdebug">
@@ -5286,12 +5288,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}</xsl:text>
     </xsl:if>
  -->
-
-<!-- We call a common template, which in turn calls -->
-<!-- the modal templates implemented below          -->
-<xsl:template match="sidebyside">
-    <xsl:apply-templates select="." mode="common-setup" />
-</xsl:template>
 
 <!-- Utility template to make a name for a LaTeX box -->
 <!-- Unique (element + count), all letters for LaTeX -->
@@ -5465,15 +5461,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We take in all three rows of a LaTeX    -->
 <!-- table and package them up appropriately -->
 <xsl:template match="sidebyside" mode="compose-panels">
-    <xsl:param name="number-panels" />
-    <xsl:param name="margins" />
-    <xsl:param name="space-width" />
+    <xsl:param name="layout" />
     <xsl:param name="has-headings" />
     <xsl:param name="has-captions" />
     <xsl:param name="setup" />
     <xsl:param name="headings" />
     <xsl:param name="panels" />
     <xsl:param name="captions" />
+
+    <xsl:variable name="number-panels" select="$layout/number-panels" />
+    <xsl:variable name="margins" select="$layout/margins" />
+    <xsl:variable name="space-width" select="$layout/space-width" />
 
     <!-- protect a single side-by-side -->
     <!-- Local/global newsavebox: http://tex.stackexchange.com/questions/18170 -->
