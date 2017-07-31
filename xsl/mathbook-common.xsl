@@ -3504,18 +3504,30 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:message>~~~~~~~~~~~~~~~~~~~~</xsl:message>
      -->
 
+    <!-- Metadata banned, roughly 2017-07, now pure container  -->
+    <!-- Retain filter for backward compatibility              -->
+     <xsl:variable name="panels" select="*[not(&METADATA-FILTER;)]" />
+
+     <!-- compute necessity of headings (titles) and captions here -->
+     <!-- 100% pass-through now, but will unwind cleanly -->
+     <xsl:variable name="has-headings" select="boolean($panels[title])" />
+     <xsl:variable name="has-captions" select="boolean($panels[caption])" />
+     <xsl:if test="$sbsdebug">
+        <xsl:message>HH: <xsl:value-of select="$has-headings" /> :HH</xsl:message>
+        <xsl:message>HC: <xsl:value-of select="$has-captions" /> :HC</xsl:message>
+        <xsl:message>----</xsl:message>
+    </xsl:if>
+
     <!-- initiate recursing through panels,     -->
     <!-- building up headings, captions, panels -->
     <!-- metadata elements skipped in recursion -->
-    <!-- Metadata banned, roughly 2017-07, now pure container  -->
-    <!-- Retain filter for backward compatibility              -->
     <xsl:apply-templates select="." mode="sbs-panel">
         <xsl:with-param name="b-original" select="$b-original" />
 
         <xsl:with-param name="layout" select="$layout" />
         <xsl:with-param name="the-panel" select="*[not(&METADATA-FILTER;)][1]" />
-        <xsl:with-param name="has-headings" select="false()" />
-        <xsl:with-param name="has-captions" select="false()" />
+        <xsl:with-param name="has-headings" select="$has-headings" />
+        <xsl:with-param name="has-captions" select="$has-captions" />
         <xsl:with-param name="setup" select="''" />
         <xsl:with-param name="headings" select="''" />
         <xsl:with-param name="panels" select="''" />
@@ -3542,8 +3554,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
     <xsl:param name="layout" />
     <xsl:param name="the-panel" />
-    <xsl:param name="has-headings" select="false()" />
-    <xsl:param name="has-captions" select="false()" />
+    <xsl:param name="has-headings" />
+    <xsl:param name="has-captions" />
     <xsl:param name="setup" />
     <xsl:param name="headings" />
     <xsl:param name="panels" />
@@ -3558,11 +3570,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:choose>
         <!-- no more panels -->
         <xsl:when test="not($the-panel)">
-             <xsl:if test="$sbsdebug">
-                <xsl:message>HH: <xsl:value-of select="$has-headings" /> :HH</xsl:message>
-                <xsl:message>HC: <xsl:value-of select="$has-captions" /> :HC</xsl:message>
-                <xsl:message>----</xsl:message>
-            </xsl:if>
             <!-- if there are no headers or captions, we *could* set to an empty string -->
             <!-- now collect components into output wrappers -->
             <xsl:apply-templates select="." mode="compose-panels">
@@ -3622,8 +3629,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
                 <xsl:with-param name="layout" select="$layout" />
                 <xsl:with-param name="the-panel" select="$the-panel/following-sibling::*[not(&METADATA-FILTER;)][1]" />
-                <xsl:with-param name="has-headings" select="$has-headings or $the-panel/title" />
-                <xsl:with-param name="has-captions" select="$has-captions or $the-panel/caption" />
+                <xsl:with-param name="has-headings" select="$has-headings" />
+                <xsl:with-param name="has-captions" select="$has-captions" />
                 <xsl:with-param name="setup" select="$new-setup" />
                 <xsl:with-param name="headings" select="$new-headings" />
                 <xsl:with-param name="panels" select="$new-panels" />
