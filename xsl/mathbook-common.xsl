@@ -3076,25 +3076,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:param name="sbs.debug" select="'no'" />
 <xsl:variable name="sbsdebug" select="boolean($sbs.debug = 'yes')" />
 
-<!-- A side-by-side group ("sbsgroup") is a wrapper     -->
-<!-- around a sequence of "sidebyside".  It provides    -->
-<!--                                                    -->
-<!--   (a) overall title                                -->
-<!--   (b) overall caption                              -->
-<!--   (c) common margins, widths, vertical alignments  -->
-<!--   (d) subcaptioning across entire group            -->
-<!--                                                    -->
-<!-- The implementation here is a working stub, but     -->
-<!-- should be overridden, perhaps with "apply-imports" -->
-
-<xsl:template match="sbsgroup">
-    <!-- start any wrapper -->
-    <!-- handle title -->
-    <xsl:apply-templates select="sidebyside" />
-    <!-- handle (optional) overall caption -->
-    <!-- finish wrapper -->
-</xsl:template>
-
 <!-- A "sidebyside" is a sequence of objects laid out       -->
 <!-- horizontally in panels.  This is a deviation from      -->
 <!-- the usual vertical rythym of a page.  The "best"       -->
@@ -3651,6 +3632,26 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- ########################################### -->
+<!-- Side-By-Side Group (sbsgroup) main template -->
+<!-- ########################################### -->
+
+<!-- A side-by-side group ("sbsgroup") is a wrapper    -->
+<!-- around a sequence of "sidebyside".  It provides   -->
+<!-- a place to specify common parameters for several  -->
+<!-- side-by-side, for uniformity.  Also sub-captions  -->
+<!-- should respect the grouping.  It is as pure a     -->
+<!-- container as there can be.  Output is to just     -->
+<!-- pile them up vertically.  Note, layout parameters -->
+<!-- on enclosed "sidebyside" take precedence, and     -->
+<!-- it is the layout template for each sidebyside     -->
+<!-- that goes out to the enclosing group to get them  -->
+
+<xsl:template match="sbsgroup">
+    <xsl:apply-templates select="sidebyside" />
+</xsl:template>
+
 
 <!-- ############## -->
 <!-- List Utilities -->

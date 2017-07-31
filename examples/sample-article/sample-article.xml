@@ -5188,11 +5188,7 @@ the xsltproc executable.
             <subsection>
                 <title>Side-By-Side Groups</title>
 
-                <p>A <q>side-by-side group,</q> <c>&lt;sbsgroup&gt;</c>, is experimental.  It is a sequence of <c>sidebyside</c>, which may conceivably use the same margins, widths and vertical alignments for each horizontal run of panels.  Here are the planned distinctions:<ul>
-                    <li>Attributes on the <c>sbsgroup</c> are global and will be used by each contained <c>sidebyside</c>.  If attributes are present on an individual <c>sidebyside</c>, they override the global values.</li>
-                    <li>With an overall caption on the <c>sbsgroup</c>, the sub-numbering of the panels is consecutive across all of the panels.  So it is an error to have a caption on any <c>sidebyside</c> within an <c>sbsgroup</c>.</li>
-                    <li>If the only captions present are for individual panels, then they get regular numbering, not sub-numbering.</li>
-                </ul>The next example demonstrates some of this behavior.</p>
+                <p>A <q>side-by-side group,</q> <c>&lt;sbsgroup&gt;</c>, is still in development.  (notably, subcaptions may not behave as expected.)  It is a sequence of <c>sidebyside</c>, which may conceivably use the same margins, widths and vertical alignments for each horizontal run of panels.  Attributes on the <c>sbsgroup</c> are global to the group's enclosed <c>sidebyside</c>, and will be used by each contained <c>sidebyside</c>.  If attributes are present on an individual <c>sidebyside</c>, they override the global values.  The next two examples demonstrate some of this behavior, in a limited way.</p>
 
                 <figure>
                     <caption>Overall SBS Group</caption>
