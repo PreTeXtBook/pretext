@@ -2947,23 +2947,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- isolate some routines in "xsl/mathbook-common.xsl". -->
 
 <!-- Numbering -->
-<!-- We manually "tag" numbered equations in HTML output,       -->
-<!-- with the exact same numbers that LaTeX would provide       -->
-<!-- automatically.  We also "\label{}" the equations where     -->
-<!-- they are born, and then the MathJax configuration          -->
-<!-- provides a predictable HTML anchor so our cross-reference  -->
-<!-- scheme can point to the right place.  The implies that we  -->
-<!-- do not need/want to "\label{}" equations in knowl files    -->
-<!-- serving as cross-references.  And indeed, including        -->
-<!-- labels in cross-reference knowls led to a serious bug.     -->
-<!-- https://github.com/rbeezer/mathbook/issues/143             -->
+<!-- We manually "tag" numbered equations in HTML output,    -->
+<!-- with the exact same numbers that LaTeX would provide    -->
+<!-- automatically.  MathJax allows for custom labels, but   -->
+<!-- we handle cross-references with knowls.  So no need to  -->
+<!-- \label{} equations even, and indeed it once was a real  -->
+<!-- problem: https://github.com/rbeezer/mathbook/issues/143 -->
+
 
 <!-- NOTE -->
 <!-- The remainder should look very similar to that   -->
 <!-- of the LaTeX/MathJax version in terms of result. -->
 <!-- Notably, "intertext" elements are implemented    -->
-<!-- differently, and we need to be careful not to    -->
-<!-- place LaTeX "\label{}" in know'ed content.       -->
+<!-- differently.                                     -->
 
 <!-- Inline Math ("m") -->
 <!-- Never labeled, so not ever knowled,        -->
@@ -3084,10 +3080,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-original or not($b-top-level)">
             <xsl:apply-templates select="." mode="get-clause-punctuation" />
         </xsl:if>
-        <!-- label original -->
-        <xsl:if test="$b-original">
-            <xsl:apply-templates select="." mode="label" />
-        </xsl:if>
         <xsl:apply-templates select="." mode="tag" />
     </xsl:variable>
     <!-- we provide a newline for visual appeal -->
@@ -3174,10 +3166,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
     </xsl:if>
     <xsl:if test="@number='yes'">
-        <!-- label original -->
-        <xsl:if test="$b-original">
-            <xsl:apply-templates select="." mode="label" />
-        </xsl:if>
         <xsl:apply-templates select="." mode="tag"/>
     </xsl:if>
     <xsl:if test="following-sibling::mrow">
@@ -3208,10 +3196,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\notag</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <!-- label original -->
-            <xsl:if test="$b-original">
-                <xsl:apply-templates select="." mode="label" />
-            </xsl:if>
             <xsl:apply-templates select="." mode="tag"/>
         </xsl:otherwise>
     </xsl:choose>
@@ -5607,7 +5591,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Sage Cells -->
 <!-- TODO: make hidden autoeval cells link against sage-compute cells -->
 
-<!-- Never an @id or a \label, so just repeat -->
+<!-- Never an @id , so just repeat -->
 <xsl:template match="sage" mode="duplicate">
     <xsl:apply-templates select="." />
 </xsl:template>
@@ -6881,14 +6865,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <xsl:text>        extensions: ["extpfeil.js", "autobold.js", "https://aimath.org/mathbook/mathjaxknowl.js", ],&#xa;</xsl:text>
         <xsl:text>        // scrolling to fragment identifiers is controlled by other Javascript&#xa;</xsl:text>
         <xsl:text>        positionToHash: false,&#xa;</xsl:text>
-        <xsl:text>        equationNumbers: { autoNumber: "none",&#xa;</xsl:text>
-        <xsl:text>                           useLabelIds: true,&#xa;</xsl:text>
-        <xsl:text>                           // JS comment, XML CDATA protect XHTML quality of file&#xa;</xsl:text>
-        <xsl:text>                           // if removed in XSL, use entities&#xa;</xsl:text>
-        <xsl:text>                           //&lt;![CDATA[&#xa;</xsl:text>
-        <xsl:text>                           formatID: function (n) {return String(n).replace(/[:'"&lt;&gt;&amp;]/g,"")},&#xa;</xsl:text>
-        <xsl:text>                           //]]&gt;&#xa;</xsl:text>
-        <xsl:text>                         },&#xa;</xsl:text>
+        <xsl:text>        equationNumbers: { autoNumber: "none", },&#xa;</xsl:text>
         <xsl:text>        TagSide: "right",&#xa;</xsl:text>
         <xsl:text>        TagIndent: ".8em",&#xa;</xsl:text>
         <xsl:text>    },&#xa;</xsl:text>
