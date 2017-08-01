@@ -4394,12 +4394,12 @@ the xsltproc executable.
 
                 <p>However, if the <c>&lt;sidebyside&gt;</c> is placed inside another <c>&lt;figure&gt;</c>, then the outer figure gets an overall caption and a <q>regular</q> number, while the captions of the interior items will be labelled as (a), (b), (c), etc; for example, see the subfigures in <xref ref="fig-sidebyside-global" text="type-global"/>. You can also cross-reference the subfigures individually, for example: <xref ref="fig-sidebyside-subfigure" text="type-global"/>.</p>
 
-                <p>The <c>sidebyside</c> tag can have an attribute <c>widths</c> that specifies a percentage width of the page for each panel of the layout.  There is no margin by default, and any remaining width is divided evenly to space out the panels.  When the <c>margins</c> attribute is given as <c>auto</c>, then a margin is provided that equals half of the inter-panel space.</p>
+                <p>The <c>sidebyside</c> tag can have an attribute <c>widths</c> that specifies a percentage width of the page for each panel of the layout.  There are automatic margins by default, and any remaining width is divided evenly to space out the panels.  When the <c>margins</c> attribute is given as <c>auto</c>, or in the default case, the margins provided each equal half of the inter-panel space.</p>
 
-                <p>With no attributes on the <c>sidebyside</c>, there is no margin, there is no inter-panel space, and each panel is the same width.</p>
+                <p>With no attributes on the <c>sidebyside</c>, each panel is the same width and there is no inter-panel space and no margin.  For a <c>sidebyside</c> with a single panel, with its width specified, the panel will be centered.</p>
 
                 <figure xml:id="fig-sidebyside-global">
-                    <caption>Side-by-Side, with figures as children, no margin</caption>
+                    <caption>Side-by-Side, with figures as children, automatic margin</caption>
                     <sidebyside widths="25.67% 25%">
                         <figure xml:id="fig-sidebyside-subfigure">
                             <caption></caption>
@@ -4415,8 +4415,8 @@ the xsltproc executable.
                 </figure>
 
                 <figure>
-                    <caption>Side-by-Side, with figures as children, automatic margin</caption>
-                    <sidebyside widths="50% 25%" margins="auto">
+                    <caption>Side-by-Side, with figures as children, margin set to zero</caption>
+                    <sidebyside widths="50% 25%" margins="0%">
                         <figure>
                             <caption>width=50<percent/></caption>
                             <image source="images/cross-square.png"/>
@@ -4429,7 +4429,7 @@ the xsltproc executable.
                 </figure>
 
                 <figure>
-                    <caption>Widths calculated automatically</caption>
+                    <caption>Widths calculated automatically, all defaults</caption>
                     <sidebyside>
                         <figure>
                             <caption></caption>
@@ -4465,7 +4465,7 @@ the xsltproc executable.
             <subsection>
                 <title>Images</title>
 
-                <p>We can use the <c>sidebyside</c> element to put <c>images</c> next to each other.  These will illustratre a text, but with no captions or numbers, cannot be cross-referenced.This next example has <c>10%</c> margins, and the panels have widths <c>25%</c> and <c>40%</c>, leaving <c>15%</c> computed as the one inter-panel space.</p>
+                <p>We can use the <c>sidebyside</c> element to put <c>images</c> next to each other.  These will illustrate a text, but with no captions or numbers, cannot be cross-referenced.  This next example has <c>10%</c> margins, and the panels have widths <c>25%</c> and <c>40%</c>, leaving <c>15%</c> computed as the one inter-panel space.</p>
 
                 <sidebyside widths="25% 40%" margins="10%">
                     <image source="images/cross-square.png"/>
@@ -5072,7 +5072,7 @@ the xsltproc executable.
                     </paragraphs>
                 </sidebyside>
 
-                <p>Pre-formatted text may be included by using the <c>pre</c> element.  This content is horizontally-rigid, so as the author, you need to be sure to provide enough width for the panel to contain the content.  It is easy to see the boundary of the panels when rendered in HTML since there is a background that fills the panel.  (The graph image is broken in HTML output, but should be fixed soon.)</p>
+                <p>Pre-formatted text may be included by using the <c>pre</c> element.  This content is horizontally-rigid, so as the author, you need to be sure to provide enough width for the panel to contain the content.  It is easy to see the boundary of the panels when rendered in HTML since there is a background that fills the panel.</p>
 
                 <!-- https://excelwithbusiness.com/blog/post/web-design/say-hello-world-in-28-different-programming-languages -->
                 <figure>
@@ -5188,7 +5188,7 @@ the xsltproc executable.
             <subsection>
                 <title>Side-By-Side Groups</title>
 
-                <p>A <q>side-by-side group,</q> <c>&lt;sbsgroup&gt;</c>, is still in development.  (notably, subcaptions may not behave as expected.)  It is a sequence of <c>sidebyside</c>, which may conceivably use the same margins, widths and vertical alignments for each horizontal run of panels.  Attributes on the <c>sbsgroup</c> are global to the group's enclosed <c>sidebyside</c>, and will be used by each contained <c>sidebyside</c>.  If attributes are present on an individual <c>sidebyside</c>, they override the global values.  The next two examples demonstrate some of this behavior, in a limited way.</p>
+                <p>A <q>side-by-side group,</q> <c>&lt;sbsgroup&gt;</c>, is still in development.  (Notably, subcaptions may not behave as expected.)  It is a sequence of <c>sidebyside</c>, which may conceivably use the same margins, widths and vertical alignments for each horizontal run of panels.  Attributes on the <c>sbsgroup</c> are global to the group's enclosed <c>sidebyside</c>, and will be used by each contained <c>sidebyside</c>.  If attributes are present on an individual <c>sidebyside</c>, they override the global values.  The next two examples demonstrate some of this behavior, in a limited way.</p>
 
                 <figure>
                     <caption>Overall SBS Group</caption>
