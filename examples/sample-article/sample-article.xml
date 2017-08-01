@@ -4491,7 +4491,33 @@ the xsltproc executable.
                         <image source="images/cross-square.png"/>
                     </sidebyside>
                 </figure>
+            </subsection>
 
+            <subsection>
+                <title>Common Side-By-Side Constructions</title>
+
+                <p>We have now seen at least one example of each of the four most common constructions involving <c>sidebyside</c>.  Working from the exterior inward, we can go <c>figure</c>, <c>sidebyside</c>, <c>figure</c>, <c>X</c>, where <c>X</c> is some atomic (unnumbered) item we might use elsewhere in a <pretext /> document, the inner <c>figure</c> may be repeated with different objects <c>X</c>, and the <c>figure</c>s have captions.  Each <c>figure</c> is independently optional, leading to the four combinations in this table.  Note this applies to any captioned item used inside the <c>sidebyside</c>, but a <c>figure</c> is the most flexible.</p>
+
+                <table>
+                    <caption><c>sidebyside</c> and <c>figure</c> interactions</caption>
+                    <tabular>
+                        <row bottom="major">
+                            <cell>Outer Figure</cell><cell>Inner Figure</cell><cell>Effect</cell>
+                        </row>
+                        <row>
+                            <cell>Absent</cell><cell>Absent</cell><cell>Layout only, no numbers nor captions</cell>
+                        </row>
+                        <row>
+                            <cell>Absent</cell><cell>Present</cell>Numbers and captions on figure(s)<cell>Numbers and captions on figure(s)</cell>
+                        </row>
+                        <row>
+                            <cell>Present</cell><cell>Absent</cell><cell>Number and overall caption</cell>
+                        </row>
+                        <row valign="top">
+                            <cell>Present</cell><cell>Present</cell><cell><line>Number and overall caption,</line><line>sub-numbers and captions on figure(s)</line></cell>
+                        </row>
+                    </tabular>
+                </table>
             </subsection>
 
             <subsection>
