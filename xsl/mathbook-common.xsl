@@ -3089,8 +3089,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!--                                                        -->
 <!-- (a) "margins"                                          -->
 <!--  - one percentage for both left and right (nn%)        -->
-<!--  - default is 0%                                       -->
 <!--  - "auto" => margins are half the space between panels -->
+<!--  - default is "auto"                                   -->
 <!-- (b) "widths"                                           -->
 <!--  - widths of panels, one per panel                     -->
 <!--  - space separated list of percentages                 -->
@@ -3101,7 +3101,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!--  - singular is common alignment for all panels         -->
 <!--  - default is top                                      -->
 <!--                                                        -->
-<!-- Default behavior is no margins, no spacing             -->
+<!-- Default behavior is automatic margins, no spacing      -->
 <!-- between panels and equally wide panels.                -->
 <!--                                                        -->
 <!-- With widths specified, remaining space is              -->
@@ -3237,8 +3237,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:when test="parent::sbsgroup[@margins]">
                 <xsl:value-of select="normalize-space(parent::sbsgroup/@margins)" />
             </xsl:when>
+            <!-- default will make pleasing layout: -->
+            <!--   (a) for one panel, no settings -->
+            <!--   (b) no margin given, all sensible widths -->
             <xsl:otherwise>
-                <xsl:text>0%</xsl:text>
+                <xsl:text>auto</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -3251,7 +3254,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <!-- TOD: error-check that sum is 100 or less -->
     <xsl:variable name="sum-widths">
         <xsl:choose>
-            <xsl:when test="$normalized-widths = ' ' and $normalized-margins = ''">
+            <xsl:when test="$normalized-widths = ' ' and $normalized-margins = 'auto'">
                 <xsl:text>100</xsl:text>
             </xsl:when>
             <xsl:when test="$normalized-widths = ' '">
