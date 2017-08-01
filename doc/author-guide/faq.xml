@@ -62,6 +62,11 @@
             <title>I do not want my examples in knowls.</title>
             <p>You can change that!  Read <xref ref="conversions" />.</p>
         </li>
+
+        <li>
+            <title>Why are my knowls empty?</title>
+            <p>When viewing the HTML version on your laptop or local computer, do not expect knowls to render properly.  This is a known bug/feature, and there is nothing to be done about it. Think of it this way: the knowl content comes from a server, but on your laptop there is no web server.  You are just looking at files.</p>
+        </li>
     </dl>
 </appendix>
 
