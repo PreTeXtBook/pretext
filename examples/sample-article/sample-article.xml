@@ -5188,7 +5188,7 @@ the xsltproc executable.
             <subsection>
                 <title>Side-By-Side Groups</title>
 
-                <p>A <q>side-by-side group,</q> <c>&lt;sbsgroup&gt;</c>, is still in development.  (Notably, subcaptions may not behave as expected.)  It is a sequence of <c>sidebyside</c>, which may conceivably use the same margins, widths and vertical alignments for each horizontal run of panels.  Attributes on the <c>sbsgroup</c> are global to the group's enclosed <c>sidebyside</c>, and will be used by each contained <c>sidebyside</c>.  If attributes are present on an individual <c>sidebyside</c>, they override the global values.  The next two examples demonstrate some of this behavior, in a limited way.</p>
+                <p>A <q>side-by-side group,</q> <c>&lt;sbsgroup&gt;</c>, is still in development.  (Notably, subcaptions do not behave as expected.)  It is a sequence of <c>sidebyside</c>, which may conceivably use the same margins, widths and vertical alignments for each horizontal run of panels.  Attributes on the <c>sbsgroup</c> are global to the group's enclosed <c>sidebyside</c>, and will be used by each contained <c>sidebyside</c>.  If attributes are present on an individual <c>sidebyside</c>, they override the global values.  The next two examples demonstrate some of this behavior, in a limited way.</p>
 
                 <figure>
                     <caption>Overall SBS Group</caption>
@@ -5313,6 +5313,190 @@ the xsltproc executable.
                     </sidebyside>
                     <!--  -->
                 </sbsgroup>
+
+                <p>The main rationale for <c>sbsgroup</c> is to layout a grid of items, and by placing the layout parameters on the <c>sbsgroup</c> element, the items can line up across <c>sidebyside</c> and subcaptioning can run across the whole group.  So, for example, if you have images to compare by placing in a grid, then making them all the same size, or of the same aspect ratio, can help with the overall consistency.</p>
+
+                <p>This example has three <c>sidebyside</c>, each with four <c>figure</c> containing an identical <c>image</c>.  Since the images are identical and the <c>width</c> is set to 20<percent /> they should all line up nicely with little effort.  Since the default for margins is automatic, the remaining 20<percent /> of the overall width will be used for three inter-panel spaces of 5<percent /> and two margins of 2.5<percent /> each.  Note the numbering of these as independent figures.  We have left the captions empty for reasons of space, but you could add more information.  Note that in print, a page break is allowed between any two of the <c>sidebyside</c> and cannot be suppressed.</p>
+
+                <sbsgroup width="20%">
+                    <sidebyside>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                    </sidebyside>
+                    <sidebyside>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                    </sidebyside>
+                    <sidebyside>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                    </sidebyside>
+                </sbsgroup>
+
+                <p>We recycle the prior <c>sbsgroup</c> but now put it in its own overall figure.  That will allow a caption for the whole group, and will cause the twelve figures to be subcaptioned.  Except the subcaptioning is not implemented.  Soon.</p>
+
+                <figure>
+                    <caption>Twelve images, arranged in a grid</caption>
+                    <sbsgroup width="20%">
+                        <sidebyside>
+                            <figure>
+                                <caption></caption>
+                                <image source="images/cross-rectangle.png" />
+                            </figure>
+                            <figure>
+                                <caption></caption>
+                                <image source="images/cross-rectangle.png" />
+                            </figure>
+                            <figure>
+                                <caption></caption>
+                                <image source="images/cross-rectangle.png" />
+                            </figure>
+                            <figure>
+                                <caption></caption>
+                                <image source="images/cross-rectangle.png" />
+                            </figure>
+                        </sidebyside>
+                        <sidebyside>
+                            <figure>
+                                <caption></caption>
+                                <image source="images/cross-rectangle.png" />
+                            </figure>
+                            <figure>
+                                <caption></caption>
+                                <image source="images/cross-rectangle.png" />
+                            </figure>
+                            <figure>
+                                <caption></caption>
+                                <image source="images/cross-rectangle.png" />
+                            </figure>
+                            <figure>
+                                <caption></caption>
+                                <image source="images/cross-rectangle.png" />
+                            </figure>
+                        </sidebyside>
+                        <sidebyside>
+                            <figure>
+                                <caption></caption>
+                                <image source="images/cross-rectangle.png" />
+                            </figure>
+                            <figure>
+                                <caption></caption>
+                                <image source="images/cross-rectangle.png" />
+                            </figure>
+                            <figure>
+                                <caption></caption>
+                                <image source="images/cross-rectangle.png" />
+                            </figure>
+                            <figure>
+                                <caption></caption>
+                                <image source="images/cross-rectangle.png" />
+                            </figure>
+                        </sidebyside>
+                    </sbsgroup>
+                </figure>
+
+                <p>One more test.  We override the spacing and vertical alignments of the middle <c>sidebyside</c>.  Note that it is easy to make a panel so skinny that even the smallest possible caption does not fit in the width.</p>
+
+                <sbsgroup width="20%">
+                    <sidebyside>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                    </sidebyside>
+                    <sidebyside margins="0%" widths="5% 10% 20% 30%" valigns="middle top bottom middle">
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                    </sidebyside>
+                    <sidebyside>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                    </sidebyside>
+                </sbsgroup>
+
+
             </subsection>
 
             <subsection>
