@@ -3509,7 +3509,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
      <xsl:variable name="panels" select="*[not(&METADATA-FILTER;)]" />
 
      <!-- compute necessity of headings (titles) and captions here -->
-     <!-- 100% pass-through now, but will unwind cleanly -->
      <xsl:variable name="has-headings" select="boolean($panels[title])" />
      <xsl:variable name="has-captions" select="boolean($panels[caption])" />
      <xsl:if test="$sbsdebug">
@@ -3518,126 +3517,77 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:message>----</xsl:message>
     </xsl:if>
 
-    <!-- initiate recursing through panels,     -->
-    <!-- building up headings, captions, panels -->
-    <!-- metadata elements skipped in recursion -->
-    <xsl:apply-templates select="." mode="sbs-panel">
+    <!-- We build up lists of various parts of a panel      -->
+    <!-- It has setup (LaTeX), headings (titles), panels,   -->
+    <!-- and captions.  These then go to "compose-panels".  -->
+    <!-- Implementations need to define modal templates     -->
+    <!--   panel-setup, panel-heading,                      -->
+    <!--   panel-panel, panel-caption                       -->
+    <!-- The parameters passed to each is the union of what -->
+    <!-- is needed for LaTeX and HTML implementations.      -->
+    <!-- Final results are collectively sent to modal       -->
+    <!--   compose-panels                                   -->
+    <!-- template to be arranged                            -->
+    <!-- TODO: Instead we could pass the $layout to the four,    -->
+    <!-- and infer the $panel-number in the receiving templates. -->
+
+    <xsl:variable name="setup">
+        <xsl:for-each select="$panels">
+            <!-- context is now a particular panel -->
+            <xsl:variable name="panel-number" select="count(preceding-sibling::*) + 1" />
+            <xsl:apply-templates select="." mode="panel-setup">
+                <xsl:with-param name="width" select="$layout/width[$panel-number]" />
+            </xsl:apply-templates>
+        </xsl:for-each>
+    </xsl:variable>
+
+    <xsl:variable name="headings">
+        <xsl:for-each select="$panels">
+            <!-- context is now a particular panel -->
+            <xsl:variable name="panel-number" select="count(preceding-sibling::*) + 1" />
+                <xsl:apply-templates select="." mode="panel-heading">
+                    <xsl:with-param name="width" select="$layout/width[$panel-number]" />
+                    <xsl:with-param name="margins" select="$layout/margins" />
+                </xsl:apply-templates>
+        </xsl:for-each>
+    </xsl:variable>
+
+    <xsl:variable name="panel-panels">
+        <xsl:for-each select="$panels">
+            <!-- context is now a particular panel -->
+            <xsl:variable name="panel-number" select="count(preceding-sibling::*) + 1" />
+            <xsl:apply-templates select="." mode="panel-panel">
+                <xsl:with-param name="b-original" select="$b-original" />
+                <xsl:with-param name="width" select="$layout/width[$panel-number]" />
+                <xsl:with-param name="margins" select="$layout/margins" />
+                <xsl:with-param name="valign" select="$layout/valign[$panel-number]" />
+            </xsl:apply-templates>
+        </xsl:for-each>
+    </xsl:variable>
+
+    <xsl:variable name="captions">
+        <xsl:for-each select="$panels">
+            <!-- context is now a particular panel -->
+            <xsl:variable name="panel-number" select="count(preceding-sibling::*) + 1" />
+            <xsl:apply-templates select="." mode="panel-caption">
+                <xsl:with-param name="width" select="$layout/width[$panel-number]" />
+                <xsl:with-param name="margins" select="$layout/margins" />
+            </xsl:apply-templates>
+        </xsl:for-each>
+    </xsl:variable>
+
+    <!-- now collect components into output wrappers -->
+    <xsl:apply-templates select="." mode="compose-panels">
         <xsl:with-param name="b-original" select="$b-original" />
 
         <xsl:with-param name="layout" select="$layout" />
-        <xsl:with-param name="the-panel" select="*[not(&METADATA-FILTER;)][1]" />
         <xsl:with-param name="has-headings" select="$has-headings" />
         <xsl:with-param name="has-captions" select="$has-captions" />
-        <xsl:with-param name="setup" select="''" />
-        <xsl:with-param name="headings" select="''" />
-        <xsl:with-param name="panels" select="''" />
-        <xsl:with-param name="captions" select="''" />
-
+        <xsl:with-param name="setup" select="$setup" />
+        <xsl:with-param name="headings" select="$headings" />
+        <xsl:with-param name="panels" select="$panel-panels" />
+        <xsl:with-param name="captions" select="$captions" />
     </xsl:apply-templates>
-</xsl:template>
-
-<!-- Recursively handle one panel at a time                   -->
-<!-- Implementations need to define modal templates           -->
-<!--   panel-setup, panel-heading, panel-panel, panel-caption -->
-<!-- Final results are collectively sent to modal             -->
-<!--   compose-panels                                         -->
-<!-- template to be arranged                                  -->
-<!-- has-headings and has-captions are updated per panel,     -->
-<!-- so compose-panels can avoid outputting empty space       -->
-
-<!-- TODO: unwind recursion here and replace with four -->
-<!-- "for-each" routines to build the four lists sent  -->
-<!-- to the "compose-panels" routine.                  -->
-<!-- the "has-" variables could be done outside recursion -->
-<xsl:template match="sidebyside" mode="sbs-panel">
-    <xsl:param name="b-original" select="true()" />
-
-    <xsl:param name="layout" />
-    <xsl:param name="the-panel" />
-    <xsl:param name="has-headings" />
-    <xsl:param name="has-captions" />
-    <xsl:param name="setup" />
-    <xsl:param name="headings" />
-    <xsl:param name="panels" />
-    <xsl:param name="captions" />
-
-    <xsl:variable name="panel-number" select="count($the-panel/preceding-sibling::*) + 1" />
-
-    <xsl:variable name="valign" select="$layout/valign[$panel-number]" />
-    <xsl:variable name="margins" select="$layout/margins" />
-    <xsl:variable name="width" select="$layout/width[$panel-number]" />
-
-    <xsl:choose>
-        <!-- no more panels -->
-        <xsl:when test="not($the-panel)">
-            <!-- if there are no headers or captions, we *could* set to an empty string -->
-            <!-- now collect components into output wrappers -->
-            <xsl:apply-templates select="." mode="compose-panels">
-                <xsl:with-param name="b-original" select="$b-original" />
-
-                <xsl:with-param name="layout" select="$layout" />
-                <xsl:with-param name="has-headings" select="$has-headings" />
-                <xsl:with-param name="has-captions" select="$has-captions" />
-                <xsl:with-param name="setup" select="$setup" />
-                <xsl:with-param name="headings" select="$headings" />
-                <xsl:with-param name="panels" select="$panels" />
-                <xsl:with-param name="captions" select="$captions" />
-            </xsl:apply-templates>
-        </xsl:when>
-        <xsl:otherwise>
-            <!-- update outputs by appending to recursive calls -->
-            <!-- parameter passing is maximum amount, the       -->
-            <!-- union of LaTeX and HTML implementations        -->
-            <xsl:variable name="new-setup">
-                <xsl:value-of select="$setup" />
-                <xsl:apply-templates select="$the-panel" mode="panel-setup">
-                    <xsl:with-param name="width" select="$width" />
-                </xsl:apply-templates>
-            </xsl:variable>
-
-            <xsl:variable name="new-headings">
-                <xsl:copy-of select="$headings" />
-                <xsl:apply-templates select="$the-panel" mode="panel-heading">
-                    <xsl:with-param name="width" select="$width" />
-                    <xsl:with-param name="margins" select="$margins" />
-                </xsl:apply-templates>
-            </xsl:variable>
-
-            <xsl:variable name="new-panels">
-                <xsl:copy-of select="$panels" />
-                <xsl:apply-templates select="$the-panel" mode="panel-panel">
-                    <xsl:with-param name="b-original" select="$b-original" />
-
-                    <xsl:with-param name="width" select="$width" />
-                    <xsl:with-param name="margins" select="$margins" />
-                    <xsl:with-param name="valign" select="$valign" />
-                </xsl:apply-templates>
-            </xsl:variable>
-
-            <xsl:variable name="new-captions">
-                <xsl:copy-of select="$captions" />
-                <xsl:apply-templates select="$the-panel" mode="panel-caption">
-                    <xsl:with-param name="width" select="$width" />
-                    <xsl:with-param name="margins" select="$margins" />
-                </xsl:apply-templates>
-            </xsl:variable>
-
-            <!-- move to next panel, passing updated components        -->
-            <!-- update booleans for necessity of headings or captions -->
-            <xsl:apply-templates select="." mode="sbs-panel">
-                <xsl:with-param name="b-original" select="$b-original" />
-
-                <xsl:with-param name="layout" select="$layout" />
-                <xsl:with-param name="the-panel" select="$the-panel/following-sibling::*[not(&METADATA-FILTER;)][1]" />
-                <xsl:with-param name="has-headings" select="$has-headings" />
-                <xsl:with-param name="has-captions" select="$has-captions" />
-                <xsl:with-param name="setup" select="$new-setup" />
-                <xsl:with-param name="headings" select="$new-headings" />
-                <xsl:with-param name="panels" select="$new-panels" />
-                <xsl:with-param name="captions" select="$new-captions" />
-            </xsl:apply-templates>
-        </xsl:otherwise>
-    </xsl:choose>
 </xsl:template>
 
 <!-- ########################################### -->
