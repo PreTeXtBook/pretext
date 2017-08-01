@@ -39,21 +39,23 @@
         <p>For a large project, such as a book, you will likely want to split up your source into logical units, such as chapters and sections.  <c>xsltproc</c> supports an include mechanism that makes this possible.  Let us suppose that a section of your book on animals has a chapter on mammals with a section on monkeys.  Then you need to do the following:</p>
 
         <ol>
-            <li><p>For the file containing the <tag>chapter</tag> tag for the chapter on mammals, place the attribute <c>xmlns:xi="http://www.w3.org/2001/XInclude"</c> on the outermost tag in the file.</p></li>
+            <li><p>For the file containing the <tag>chapter</tag> tag for the chapter on mammals, place the attribute <cd>
+                <cline>xmlns:xi="http://www.w3.org/2001/XInclude"</cline>
+            </cd> on the outermost tag in the file.</p></li>
             <li><p>Within the <tag>chapter</tag> element for the chapter on mammals, add the line <c>&lt;xi:include href="monkeys.xml" /&gt;</c> to <q>pull in</q> the section on monkeys at that location.  The <attribute>href</attribute> attribute can point to a file in a subdirectory, but will be interpreted relative to the location of the file containing the mammal chapter element.</p></li>
-            <li><p>Add the switch <c>--xinclude</c> to your invocation of <c>xsltproc</c>.</p></li>
+            <li><p>Add the switch <c>-xinclude</c> to your invocation of <c>xsltproc</c>.</p></li>
         </ol>
 
         <p>Note that when you invoke <c>xsltproc</c> the default directory can be far away from your source, and the processor will locate all the component files of your project through the relative file locations in the <attribute>href</attribute> attribute.  Several comments are in order.</p>
 
         <ul>
             <li><p>Begin small and start a project <em>without</em> using modular files.  Modularizing seems to add a layer of complexity that sometimes obscures other beginner's errors.  So get comfortable with a single source file before branching out.</p></li>
-            <li><p>I am forever forgetting the <c>--xinclude</c> switch.  Empty output, or cryptic error messages, are your first clue to this simple, but common, mistake.</p></li>
+            <li><p>I am forever forgetting the <c>-xinclude</c> switch.  Empty output, or cryptic error messages, are your first clue to this simple, but common, mistake.</p></li>
             <li><p>The XML specification requires that a source file only contain a single outer-most element.  So for example, two <tag>chapter</tag> elements cannot go into the same file as simultaneous outer-most elements.</p></li>
-            <li><p>  In practice, there is not a lot to be gained by creating a subdirectory structure mirroring your modularization<mdash />all your source files can go into one big directory and the XML hierarchy will take care of the organization.  I do sometimes like to name my files accordingly, so for example <c>chapter-mammals.xml</c> and <c>section-monkeys.xml</c>.</p></li>
+            <li><p>In practice, there is not a lot to be gained by creating a subdirectory structure mirroring your modularization<mdash />all your source files can go into one big directory and the XML hierarchy will take care of the organization.  I do sometimes like to name my files accordingly, so for example <c>chapter-mammals.xml</c> and <c>section-monkeys.xml</c>.</p></li>
         </ul>
 
-        <p>The sample book in <c>examples/sample-book</c> amply demonstrates different ways to modularize parts of a project (but should not be taken as best practice in this regard).  This guide, in <c>doc/author-guide</c> is a simple example of modular source files, and might be a good template to follow for your book.</p>
+        <p>The sample book in <c>examples/sample-book</c> amply demonstrates different ways to modularize parts of a project (but in no way should be taken as best practice in this regard).  This guide, in <c>doc/author-guide</c> is a simple example of modular source files, and might be a good template to follow for your book.  See <xref ref="topic-xinclude" /> for some of the finer points of this topic.</p>
     </section>
 
     <section xml:id="processing-dtd">
