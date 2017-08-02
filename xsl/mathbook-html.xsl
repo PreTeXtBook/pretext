@@ -2508,7 +2508,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="*[not(self::caption)]">
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
-                <xsl:apply-templates select="caption"/>
+                <xsl:apply-templates select="caption" />
             </xsl:when>
             <xsl:when test="self::hint or self::answer or self::solution or self::note">
                 <xsl:apply-templates select="*|text()">
@@ -3750,54 +3750,69 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- If an object carries a caption, we add it to the -->
-<!-- row of captions across the bottom of the table   -->
-<!-- else we write an empty div to occupy the space   -->
+<!-- If an object carries a caption, we add it to the    -->
+<!-- row of captions across the bottom of the table else -->
+<!-- we write an empty figcaption to occupy the space    -->
+<!-- See more at utility template immediately following  -->
 <xsl:template match="*" mode="panel-caption">
     <xsl:param name="width" />
     <xsl:param name="margins" />
-    <xsl:element name="figcaption">
-        <xsl:attribute name="class">
-            <xsl:text>sbscaption</xsl:text>
-        </xsl:attribute>
-        <xsl:attribute name="style">
-            <xsl:text>width:</xsl:text>
-            <xsl:call-template name="relative-width">
+
+    <xsl:choose>
+        <!-- interior to a figure'd sidebyside        -->
+        <!-- width and margins are sentinels from sbs -->
+        <xsl:when test="caption and (parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)">
+            <xsl:apply-templates select="caption" mode="subcaption">
                 <xsl:with-param name="width" select="$width" />
                 <xsl:with-param name="margins" select="$margins" />
-            </xsl:call-template>
-            <xsl:text>;</xsl:text>
-            <xsl:if test="$sbsdebug">
-                <xsl:text>box-sizing: border-box;</xsl:text>
-                <xsl:text>-moz-box-sizing: border-box;</xsl:text>
-                <xsl:text>-webkit-box-sizing: border-box;</xsl:text>
-                <xsl:text>border: 2px solid Chocolate;</xsl:text>
-            </xsl:if>
-        </xsl:attribute>
-        <!-- we add lots of class information on "figcaption" above, -->
-        <!-- so must manage contents independent of other templates -->
-        <xsl:if test="caption">
-            <xsl:choose>
-                <xsl:when test="parent::sidebyside/parent::figure">
-                    <span class="codenumber">
-                        <xsl:apply-templates select="." mode="serial-number"/>
-                    </span>
-                    <xsl:apply-templates select="caption/*|caption/text()" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <span class="heading">
-                        <xsl:apply-templates select="." mode="type-name"/>
-                    </span>
-                    <span class="codenumber">
-                        <xsl:apply-templates select="." mode="number"/>
-                    </span>
-                    <xsl:apply-templates select="caption/*|caption/text()" />
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
-    </xsl:element>
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- a caption'ed item, normal numbering      -->
+        <!-- width and margins are sentinels from sbs -->
+        <xsl:when test="caption">
+            <xsl:apply-templates select="caption" >
+                <xsl:with-param name="width" select="$width" />
+                <xsl:with-param name="margins" select="$margins" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- fill the space (properly) -->
+        <xsl:otherwise>
+            <figcaption>
+                <xsl:call-template name="sbs-caption-attributes">
+                    <xsl:with-param name="width" select="$width" />
+                    <xsl:with-param name="margins" select="$margins" />
+                </xsl:call-template>
+            </figcaption>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
+<!-- this utility template provides extra class, width   -->
+<!-- and degugging information on a "figcaption" element -->
+<!-- when employed on a panel of a sidebyside            -->
+<!-- It is used above on an empty caption, and by the    -->
+<!-- two modal templates for a caption when signaled     -->
+<xsl:template name="sbs-caption-attributes">
+    <xsl:param name="width" />
+    <xsl:param name="margins" />
+    <xsl:attribute name="class">
+        <xsl:text>sbscaption</xsl:text>
+    </xsl:attribute>
+    <xsl:attribute name="style">
+        <xsl:text>width:</xsl:text>
+        <xsl:call-template name="relative-width">
+            <xsl:with-param name="width" select="$width" />
+            <xsl:with-param name="margins" select="$margins" />
+        </xsl:call-template>
+        <xsl:text>;</xsl:text>
+        <xsl:if test="$sbsdebug">
+            <xsl:text>box-sizing: border-box;</xsl:text>
+            <xsl:text>-moz-box-sizing: border-box;</xsl:text>
+            <xsl:text>-webkit-box-sizing: border-box;</xsl:text>
+            <xsl:text>border: 2px solid Chocolate;</xsl:text>
+        </xsl:if>
+    </xsl:attribute>
+</xsl:template>
 
 <!-- We take in all three rows and package  -->
 <!-- them up inside an overriding "sidebyside" -->
@@ -3909,12 +3924,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:attribute>
                 <xsl:copy-of select="$captions" />
             </xsl:element>
-        </xsl:if>
-
-        <!-- Global caption on sidebyside, always numbered -->
-        <!-- TODO: apply margins if ever unequal (left/right) -->
-        <xsl:if test="caption and not(parent::sbsgroup)">
-            <xsl:apply-templates select="caption" />
         </xsl:if>
 
     </xsl:element>
@@ -4556,7 +4565,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Caption of a numbered figure, table or listing -->
 <!-- All the relevant information is in the parent  -->
 <xsl:template match="caption">
+    <xsl:param name="width" />
+    <xsl:param name="margins" />
     <figcaption>
+        <!-- $width and $margins are sentinels for -->
+        <!-- sidebyside width control attributes   -->
+        <xsl:if test="$width or $margins">
+            <xsl:call-template name="sbs-caption-attributes">
+                <xsl:with-param name="width" select="$width" />
+                <xsl:with-param name="margins" select="$margins" />
+            </xsl:call-template>
+        </xsl:if>
         <span class="heading">
             <xsl:apply-templates select="parent::*" mode="type-name"/>
         </span>
@@ -4567,21 +4586,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </figcaption>
 </xsl:template>
 
-<!-- Caption'ed sidebyside indicate subfigures and subtables are subsidiary -->
-<!-- so we number with just their serial number, a formatted (a), (b), (c), -->
-<!-- <xsl:template match="sidebyside-foobar[caption]/figure/caption|sidebyside-foobar[caption]/table/caption">
-    <figcaption>
-        <span class="codenumber">
-            <xsl:apply-templates select="parent::*" mode="serial-number"/>
-        </span>
-        <xsl:apply-templates />
-    </figcaption>
-</xsl:template>
- -->
 <!-- sub caption is numbered by the serial number -->
 <!-- which is a formatted  (a), (b), (c),...      -->
 <xsl:template match="caption" mode="subcaption">
+    <xsl:param name="width" />
+    <xsl:param name="margins" />
     <figcaption>
+        <!-- $width and $margins are sentinels for -->
+        <!-- sidebyside width control attributes   -->
+        <xsl:if test="$width or $margins">
+            <xsl:call-template name="sbs-caption-attributes">
+                <xsl:with-param name="width" select="$width" />
+                <xsl:with-param name="margins" select="$margins" />
+            </xsl:call-template>
+        </xsl:if>
+        <!-- no heading info in subcaption -->
         <span class="codenumber">
             <xsl:apply-templates select="parent::*" mode="serial-number"/>
         </span>
