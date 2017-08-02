@@ -3596,7 +3596,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: maybe we could look backward at the end of a paragraph       -->
 <!-- to see if the above scenario happens, and we could end gracefully. -->
 <xsl:template match="p">
-    <xsl:if test="preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)][1][self::p or self::paragraphs]">
+    <xsl:if test="preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)][1][self::p or self::paragraphs or self::sidebyside]">
         <xsl:text>\par&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates />
@@ -5433,7 +5433,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="substring-before($width,'%') div 100" />
     <xsl:text>\textwidth}{</xsl:text>
     <xsl:choose>
-        <xsl:when test="parent::sidebyside/parent::figure">
+        <xsl:when test="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure">
             <xsl:apply-templates select="caption" mode="subcaption" />
         </xsl:when>
         <xsl:otherwise>
@@ -5482,23 +5482,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$setup" />
 
     <xsl:call-template name="leave-vertical-mode" />
-    <xsl:text>% begin: side-by-side as figure/tabular&#xa;</xsl:text>
+    <xsl:text>% begin: side-by-side as tabular&#xa;</xsl:text>
     <xsl:text>% \tabcolsep change local to group&#xa;</xsl:text>
     <xsl:text>\setlength{\tabcolsep}{</xsl:text>
     <xsl:value-of select="0.5 * substring-before($space-width, '%') div 100" />
     <xsl:text>\textwidth}&#xa;</xsl:text>
-    <!-- figure environment, for spacing, etc      -->
-    <!-- @{} strips extreme left, right colsep and -->
-    <!-- allows us to get flush left (zero margin) -->
     <xsl:text>% @{} suppress \tabcolsep at extremes, so margins behave as intended&#xa;</xsl:text>
-    <xsl:text>\begin{figure}&#xa;</xsl:text>
     <!-- set spacing, centering provide half at each end -->
     <!-- LaTeX parameter is half of the column space     -->
+    <xsl:if test="not(parent::figure) or not(parent::sbsgroup and preceding-sibling::sidebyside)">
+        <xsl:text>\par\medskip\noindent&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="not($margins = '0%')">
         <xsl:text>\hspace*{</xsl:text>
         <xsl:value-of select="substring-before($margins, '%') div 100" />
         <xsl:text>\textwidth}%&#xa;</xsl:text>
     </xsl:if>
+    <!-- @{} strips extreme left, right colsep and -->
+    <!-- allows us to get flush left (zero margin) -->
     <xsl:text>\begin{tabular}{@{}*{</xsl:text>
     <xsl:value-of select="$number-panels" />
     <xsl:text>}{c}@{}}&#xa;</xsl:text>
@@ -5514,14 +5515,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\tabularnewline&#xa;</xsl:text>
         <xsl:value-of select="$captions" />
     </xsl:if>
-    <xsl:text>\end{tabular}&#xa;</xsl:text>
-    <!-- global caption               -->
-    <!-- but ignore it in a sbs group -->
-    <xsl:if test="not(parent::sbsgroup)">
-        <xsl:apply-templates select="caption" />
-    </xsl:if>
-    <xsl:text>\end{figure}&#xa;</xsl:text>
-    <xsl:text>% end: side-by-side as tabular/figure&#xa;</xsl:text>
+    <!-- end on a newline, ready for resumption of text  -->
+    <!-- or perhaps a follow-on sidebyside in a sbsgroup -->
+    <xsl:text>\end{tabular}\\&#xa;</xsl:text>
+    <xsl:text>% end: side-by-side as tabular&#xa;</xsl:text>
     <xsl:text>}% end: group for a single side-by-side&#xa;</xsl:text>
 </xsl:template>
 
@@ -5585,6 +5582,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- is made into a LaTeX box with the  fancyvrb "BVerbatim" -->
 <!-- environment, which is then saved in an LR box above     -->
 <!-- We cannot see an easy way to get the debugging wrapper  -->
+<!-- NOTE: adjust panel-setup to produce an LR box           -->
 <xsl:template match="pre" mode="panel-latex-box">
     <xsl:param name="width" />
     <xsl:variable name="percent" select="substring-before($width,'%') div 100" />
