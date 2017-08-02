@@ -4508,7 +4508,7 @@ the xsltproc executable.
                             <cell>Absent</cell><cell>Absent</cell><cell>Layout only, no numbers nor captions</cell>
                         </row>
                         <row>
-                            <cell>Absent</cell><cell>Present</cell>Numbers and captions on figure(s)<cell>Numbers and captions on figure(s)</cell>
+                            <cell>Absent</cell><cell>Present</cell><cell>Numbers and captions on figure(s)</cell>
                         </row>
                         <row>
                             <cell>Present</cell><cell>Absent</cell><cell>Number and overall caption</cell>
@@ -5536,6 +5536,227 @@ the xsltproc executable.
                     <image source="images/cross-square.png" width="20%" />
                 </figure>
             </subsection>
+
+            <subsection>
+                <title>Gallery</title>
+                <!-- 
+                Temporary Notes on Gallery construction
+                No Number: Done -  Paragraph | Paragraphs | List | Preformatted | Poem | Tabular | Image  
+                No Number: To Do - (allowed in figure: Video | JSXGraph | MuseScore)
+
+                Needs work: Program | Console (LaTeX side only?)
+
+                Captioned (sort of) NamedList | Figure (figure table listing)
+                 -->
+                <p>This subsection has.............The layout is identical for each <c>sidebyside</c>, 5<percent /> margins, panel widths of 40<percent /> and 45<percent />, leaving 5<percent /> for the space between the panels.  The vertical alignment is left at the default, <c>top</c>.</p>
+
+                <p>We begin with <q>simpler</q> atomic items.  If necessary, comments follow each.</p>
+
+                <figure>
+                    <caption>Single <c>p</c> (left), <c>paragraphs</c> (right)</caption>
+                    <sidebyside margins="5%" widths="40% 45%">
+                        <p>Vestibulum sit amet est non lacus accumsan iaculis aliquam nec leo. Maecenas placerat consequat quam, a lobortis odio convallis vitae. Curabitur sagittis, risus non suscipit pulvinar, enim tortor posuere purus, id dignissim sapien sapien non dui. Vestibulum ultrices, enim a ornare consectetur, nisl est iaculis arcu, eget scelerisque nunc magna a nisl. Vestibulum vestibulum ante sit amet ex vulputate, eu facilisis sapien tempor.</p>
+                        <paragraphs>
+                            <title>Lorem Ipsum</title>
+                            <p>Aliquam dui nisi, pharetra id enim vel, imperdiet laoreet risus. Nunc convallis elit eu erat imperdiet tincidunt. Sed eget augue et nunc mollis tempor. Suspendisse luctus elit non lorem scelerisque, nec lacinia lectus dictum.</p>
+                            <p>Vivamus ut orci nisl. Donec eleifend ultricies tortor, a pellentesque neque dignissim in. Praesent maximus, augue eu pretium auctor, dolor quam feugiat augue, ut vulputate nunc eros vitae massa. Phasellus quis ante quis est venenatis dapibus eget luctus ipsum.</p>
+                        </paragraphs>
+                    </sidebyside>
+                </figure>
+
+
+                <figure>
+                    <caption>An <c>ol</c> with simple items, a <c>ul</c> with items with paragraphs</caption>
+                    <sidebyside margins="5%" widths="40% 45%">
+                        <ol>
+                            <li>Blue</li>
+                            <li>Red</li>
+                            <li>Green</li>
+                            <li>Purple</li>
+                            <li>Violet</li>
+                            <li>Brown</li>
+                        </ol>
+                        <ul>
+                            <li><p>Vestibulum sit amet est non lacus accumsan iaculis aliquam nec leo. Maecenas placerat consequat quam, a lobortis odio convallis vitae.</p>
+                            <p>Curabitur sagittis, risus non suscipit pulvinar, enim tortor posuere purus, id dignissim sapien sapien non dui.</p></li>
+                            <li><p>Vestibulum ultrices, enim a ornare consectetur, nisl est iaculis arcu, eget scelerisque nunc magna a nisl.</p>
+                            <p>Vestibulum vestibulum ante sit amet ex vulputate, eu facilisis sapien tempor.</p></li>
+                        </ul>
+                    </sidebyside>
+                </figure>
+
+
+                <figure>
+                    <caption>A <c>program</c> and a <c>console</c></caption>
+                    <sidebyside margins="5%" widths="40% 45%">
+                        <program language="r">
+                            <input>
+                            n_loops &lt;- 10
+                            x.means &lt;- numeric(n_loops)
+                            for (i in 1:n_loops){
+                                x &lt;- as.integer(runif(100, 1, 7))
+                                x.means[i] &lt;- mean(x)
+                            }
+                            x.means
+                            </input>
+                        </program>
+                        <console>
+                            <prompt>pi@rpi ~$ </prompt>
+                            <input>gcc -o intAndFloat intAndFloat.c</input>
+                            <prompt>pi@rpi ~$ </prompt>
+                            <input>./intAndFloat</input>
+                            <output>
+                            19088743 (integer) and 19088.742188 (float)
+                            </output>
+                            <prompt>pi@rpi ~$ </prompt>
+                            <input />
+                        </console>
+                    </sidebyside>
+                </figure>
+
+                <p>Note that these two chunks of verbatim text will very likely exceed the right side of a too-skinny panel.  We have severly edited these two examples from previous appearances just to fit here.</p>
+
+                <figure>
+                    <caption>An <c>poem</c> and a <c>tabular</c></caption>
+                    <sidebyside margins="5%" widths="40% 45%">
+                        <poem>
+                            <title>To A Friend Whose Work Has Come To Nothing</title>
+                            <author>William Butler Yeats</author>
+                            <stanza>
+                                <line>Now all the truth is out,</line>
+                                <line>Be secret and take defeat</line>
+                                <line>From any brazen throat,</line>
+                                <line>For how can you compete,</line>
+                                <line>Being honour bred, with one</line>
+                                <line>Who, were it proved he lies,</line>
+                                <line>Were neither shamed in his own</line>
+                                <line>Nor in his neighbours' eyes?</line>
+                                <line>Bred to a harder thing</line>
+                                <line>Than Triumph, turn away</line>
+                                <line>And like a laughing string</line>
+                                <line>Whereon mad fingers play</line>
+                                <line>Amid a place of stone,</line>
+                                <line>Be secret and exult,</line>
+                                <line>Because of all things known</line>
+                                <line>That is most difficult.</line>
+                            </stanza>
+                        </poem>
+                        <tabular>
+                            <row bottom="major">
+                                 <cell>Organism</cell><cell>Classification</cell>
+                             </row>
+                            <row><cell>Trout</cell><cell>Fish</cell></row>
+                            <row><cell>Monkey</cell><cell>Mammal</cell></row>
+                            <row><cell>Crow</cell><cell>Bird</cell></row>
+                            <row><cell>Crimini</cell><cell>Fungus</cell></row>
+                            <row><cell>Bee</cell><cell>Insect</cell></row>
+                        </tabular>
+                    </sidebyside>
+                </figure>
+
+                <p>A <c>tabular</c> can exceed the width of its panel in print, while in <c>HTML</c> it may reflow individual cells to stay within a panel, depending on their contents.</p>
+
+                <figure>
+                    <caption>A <c>pre</c>, and a <c>pre</c> employing <c>cline</c></caption>
+                    <sidebyside margins="5%" widths="40% 45%">
+                        <pre>
+                        Vestibulum sit amet est non
+                            lacus accumsan iaculis
+                        aliquam nec leo. Maecenas
+                        placerat consequat quam, a
+                        lobortis odio convallis
+                        vitae.
+                        </pre>
+                        <pre>
+                            <cline>Vestibulum sit amet est non</cline>
+                            <cline>    lacus accumsan iaculis</cline>
+                            <cline>aliquam nec leo. Maecenas</cline>
+                            <cline>    placerat consequat quam,</cline>
+                            <cline>a lobortis odio convallis</cline>
+                            <cline>        vitae.</cline>
+                        </pre>
+                    </sidebyside>
+                </figure>
+
+                <p>Be aware that the lines of <c>pre</c> can spill outside of its panel without any word-wrapping.  So you may need to vary panel widths or rearrange line breaks manually.  Page width is a scarce resource.</p>
+
+                <figure>
+                    <caption>An identical <c>image</c>, twice</caption>
+                    <sidebyside margins="5%" widths="40% 45%">
+                        <image source="images/cross-rectangle.png" />
+                        <image source="images/cross-rectangle.png" />
+                    </sidebyside>
+                </figure>
+
+                <p>Images will scale to fill their panel's width.  We provide no services to change the aspect ratio of your images, that is your responsibility to accomplish elsewhere.  This rectangular image will have slightly different widths, and so will be slightly deeper in the right panel (at a 45:40 ratio).  Remember, vertical alignment is at the top.</p>
+
+                <p>Now we turn to <q>captioned</q> items: <c>figure</c>, <c>table</c>, <c>listing</c>, and the anomalous <q>named list</q>, <c>list</c>, whose future is uncertain.  We test subcaptions here.  Note that many different atomic items can go in a figure, and largely they will behave in a <c>sidebyside</c> much as they do when placed in a panel all by themselves (<ie /> captionless).</p>
+
+                <figure>
+                    <caption>A <c>figure</c> and a <c>table</c></caption>
+                    <sidebyside margins="5%" widths="40% 45%">
+                        <figure>
+                            <caption>A Rectangular Test Image</caption>
+                            <image source="images/cross-rectangle.png" />
+                        </figure>
+                        <table>
+                            <caption>Classifying Organisms</caption>
+                            <tabular>
+                                <row bottom="major">
+                                     <cell>Organism</cell><cell>Classification</cell>
+                                 </row>
+                                <row><cell>Trout</cell><cell>Fish</cell></row>
+                                <row><cell>Monkey</cell><cell>Mammal</cell></row>
+                                <row><cell>Crow</cell><cell>Bird</cell></row>
+                                <row><cell>Crimini</cell><cell>Fungus</cell></row>
+                                <row><cell>Bee</cell><cell>Insect</cell></row>
+                            </tabular>
+                        </table>
+                    </sidebyside>
+                </figure>
+
+                <figure>
+                    <caption>A <c>listing</c> and a <c>list</c></caption>
+                    <sidebyside margins="5%" widths="40% 45%">
+                        <listing>
+                            <caption>A statistical computation</caption>
+                            <program language="r">
+                                <input>
+                                n_loops &lt;- 10
+                                x.means &lt;- numeric(n_loops)
+                                for (i in 1:n_loops){
+                                    x &lt;- as.integer(runif(100, 1, 7))
+                                    x.means[i] &lt;- mean(x)
+                                }
+                                x.means
+                                </input>
+                            </program>
+                        </listing>
+                        <list>
+                            <title>Colors Again</title>
+                            <introduction>
+                                <p>We have named list of colors.</p>
+                            </introduction>
+                            <ol>
+                                <li>Blue</li>
+                                <li>Red</li>
+                                <li>Green</li>
+                                <li>Purple</li>
+                                <li>Violet</li>
+                                <li>Brown</li>
+                            </ol>
+                            <conclusion>
+                                <p>That was nice.</p>
+                            </conclusion>
+                        </list>
+                    </sidebyside>
+                </figure>
+
+
+            </subsection>
+
+
+
         </section>
 
         <section xml:id="poetry">
