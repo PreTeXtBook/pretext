@@ -4044,6 +4044,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+<xsl:template match="program|console" mode="panel-html-box">
+    <xsl:param name="b-original" select="true()" />
+    <xsl:apply-templates select=".">
+        <xsl:with-param name="b-original" select="$b-original" />
+    </xsl:apply-templates>
+</xsl:template>
+
 <!-- Process intro, the list, conclusion     -->
 <!-- title is killed -->
 <xsl:template match="list" mode="panel-html-box">
@@ -4117,6 +4124,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-html-box" >
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="width" select="$width"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="listing" mode="panel-html-box">
+    <xsl:param name="b-original" select="true()" />
+    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-html-box">
+        <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
 
