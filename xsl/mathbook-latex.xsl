@@ -1024,7 +1024,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- New names are necessary to make "within" numbering possible -->
     <!-- http://tex.stackexchange.com/questions/127914/custom-counter-steps-twice-when-invoked-from-caption-using-caption-package -->
     <!-- http://tex.stackexchange.com/questions/160207/side-effect-of-caption-package-with-custom-counter                         -->
-    <xsl:if test="//figure or //table or //listing or //sidebyside">
+    <xsl:if test="//figure or //table or //listing">
         <xsl:text>%% Figures, Tables, Listings, Floats&#xa;</xsl:text>
         <xsl:text>%% The [H]ere option of the float package fixes floats in-place,&#xa;</xsl:text>
         <xsl:text>%% in deference to web usage, where floats are totally irrelevant&#xa;</xsl:text>
@@ -1052,7 +1052,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\@addtoreset{subtable}{figure}&#xa;</xsl:text>
             <xsl:text>\makeatother&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="//figure or //sidebyside">
+        <xsl:if test="//figure">
             <xsl:text>% Figure environment setup so that it no longer floats&#xa;</xsl:text>
             <xsl:text>\SetupFloatingEnvironment{figure}{fileext=lof,placement={H},within=</xsl:text>
             <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
@@ -5194,28 +5194,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\par\smallskip\centerline{A JSXGraph interactive demonstration goes here in interactive output.}\smallskip&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Captions for Figures and Tables -->
+<!-- Captions for Figures, Tables, Listings -->
 <!-- xml:id is on parent, but LaTeX generates number with caption -->
 <xsl:template match="caption">
     <xsl:choose>
-      <xsl:when test="ancestor::sidebyside and ancestor::table and not(ancestor::sidebyside/caption)">
+      <xsl:when test="parent::table/parent::sidebyside">
             <xsl:text>\captionof{table}{</xsl:text>
       </xsl:when>
-      <xsl:when test="ancestor::sidebyside and ancestor::figure and not(ancestor::sidebyside/caption)">
+      <xsl:when test="parent::figure/parent::sidebyside">
             <xsl:text>\captionof{figure}{</xsl:text>
       </xsl:when>
+      <xsl:when test="parent::listing">
+            <xsl:text>\captionof{listingcaption}{</xsl:text>
+        </xsl:when>
       <xsl:otherwise>
           <xsl:text>\caption{</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:apply-templates />
-    <xsl:apply-templates select=".." mode="label" />
+    <xsl:apply-templates select="parent::*" mode="label" />
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Subcaptions showup in side-by-side, we try    -->
-<!-- something minimal, but similar to above, and  -->
-<!-- will experiment later                         -->
+<!-- Subcaptions showup in side-by-side -->
 <xsl:template match="caption" mode="subcaption">
     <xsl:text>\subcaption{</xsl:text>
     <xsl:apply-templates />
@@ -5224,7 +5225,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Figures, (SideBySide), Tables and Listings are floats            -->
+<!-- Figures, Tables and Listings are floats                          -->
 <!-- We try to fix their location with the [H] specifier, but         -->
 <!-- if the first item of an AMS environment, they may float up       -->
 <!-- Seems LaTeX is stacking boxes vertically, and we need to go to   -->
@@ -5263,10 +5264,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{listing}&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]"/>
     <xsl:text>\par&#xa;</xsl:text>
-    <xsl:text>\captionof{listingcaption}{</xsl:text>
-    <xsl:apply-templates select="caption/text()|caption/*" />
-    <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
+    <xsl:apply-templates select="caption" />
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>\end{listing}&#xa;</xsl:text>
 </xsl:template>
@@ -5423,7 +5421,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- a figure or table must have a caption,         -->
 <!-- and is a subcaption if sbs parent is captioned -->
-<xsl:template match="figure|table" mode="panel-caption">
+<xsl:template match="figure|table|listing" mode="panel-caption">
     <xsl:param name="width" />
     <xsl:if test="$sbsdebug">
         <xsl:text>\fbox{</xsl:text>
