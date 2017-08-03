@@ -361,7 +361,7 @@
           </optional>
           <optional>
             <element name="shortlicense">
-              <ref name="TextShort"/>
+              <ref name="TextLong"/>
             </element>
           </optional>
         </element>

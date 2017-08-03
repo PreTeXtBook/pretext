@@ -350,7 +350,7 @@
   </xs:element>
   <xs:element name="shortlicense">
     <xs:complexType mixed="true">
-      <xs:group ref="TextShort"/>
+      <xs:group ref="TextLong"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="biography">

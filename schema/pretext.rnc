@@ -159,7 +159,7 @@
                     element year {TextShort},
                     element holder {text},
                     element minilicense {TextShort}?,
-                    element shortlicense {TextShort}?
+                    element shortlicense {TextLong}?
                 }?
             }
         Biography = 

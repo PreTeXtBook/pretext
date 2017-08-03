@@ -1625,7 +1625,7 @@
     <section>
         <title>Front Matter</title>
 
-        <p>Articles and books have material at the start, which gets organized in interesting ways.</p>
+        <p>Articles and books have material at the start, which gets organized in interesting ways. <c>minilicense</c> is very restrictive, <c>shortlicense</c> allows references (<eg /> <init>URL</init>s).</p>
 
         <fragment xml:id="frontmatter">
         ArticleFrontMatter = 
@@ -1681,7 +1681,7 @@
                     element year {TextShort},
                     element holder {text},
                     element minilicense {TextShort}?,
-                    element shortlicense {TextShort}?
+                    element shortlicense {TextLong}?
                 }?
             }
         Biography = 
