@@ -977,6 +977,9 @@
       <element name="question">
         <ref name="ExampleLike"/>
       </element>
+      <element name="problem">
+        <ref name="ExampleLike"/>
+      </element>
     </choice>
   </define>
   <define name="ProjectLike">
