@@ -87,7 +87,18 @@
         Appendix =
             element appendix {
                 MetaDataTitle,
-                (BlockDivision | Paragraphs | NotationList | SolutionList )+
+                (
+                    (BlockDivision | Paragraphs | NotationList | SolutionList )+ |
+                    (
+                        IntroductionDivision?,
+                        (
+                            Section+ &
+                            Exercises* &
+                            References*
+                        ),
+                        ConclusionDivision?)
+                    )
+                )
             }
         IndexDivision =
             element index {
