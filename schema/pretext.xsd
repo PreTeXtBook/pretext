@@ -494,7 +494,7 @@
       <xs:element ref="list"/>
       <xs:group ref="Project"/>
       <xs:element ref="poem"/>
-      <xs:element ref="aside"/>
+      <xs:group ref="Aside"/>
       <xs:element ref="assemblage"/>
       <xs:element ref="list-of"/>
       <xs:group ref="SideBySide"/>
@@ -510,7 +510,7 @@
     <xs:choice>
       <xs:group ref="BlockText"/>
       <xs:group ref="Figure"/>
-      <xs:element ref="aside"/>
+      <xs:group ref="Aside"/>
       <xs:group ref="SideBySide"/>
       <xs:element ref="sbsgroup"/>
       <xs:element ref="sage"/>
@@ -913,6 +913,8 @@
       <xs:element ref="claim"/>
       <xs:element ref="proposition"/>
       <xs:element ref="algorithm"/>
+      <xs:element ref="fact"/>
+      <xs:element ref="identity"/>
     </xs:choice>
   </xs:group>
   <xs:element name="theorem" type="TheoremLike"/>
@@ -921,6 +923,8 @@
   <xs:element name="claim" type="TheoremLike"/>
   <xs:element name="proposition" type="TheoremLike"/>
   <xs:element name="algorithm" type="TheoremLike"/>
+  <xs:element name="fact" type="TheoremLike"/>
+  <xs:element name="identity" type="TheoremLike"/>
   <xs:complexType name="AxiomLike">
     <xs:sequence>
       <xs:group ref="MetaDataTitleOptional"/>
@@ -933,11 +937,17 @@
       <xs:element ref="axiom"/>
       <xs:element ref="principle"/>
       <xs:element ref="conjecture"/>
+      <xs:element ref="heuristic"/>
+      <xs:element ref="hypothesis"/>
+      <xs:element ref="assumption"/>
     </xs:choice>
   </xs:group>
   <xs:element name="axiom" type="AxiomLike"/>
   <xs:element name="principle" type="AxiomLike"/>
   <xs:element name="conjecture" type="AxiomLike"/>
+  <xs:element name="heuristic" type="AxiomLike"/>
+  <xs:element name="hypothesis" type="AxiomLike"/>
+  <xs:element name="assumption" type="AxiomLike"/>
   <xs:complexType name="ExampleLike">
     <xs:sequence>
       <xs:group ref="MetaDataTitleOptional"/>
@@ -983,12 +993,14 @@
   <xs:group name="Project">
     <xs:choice>
       <xs:element ref="activity"/>
+      <xs:element ref="investigation"/>
       <xs:element ref="exploration"/>
       <xs:element ref="project"/>
       <xs:element ref="task"/>
     </xs:choice>
   </xs:group>
   <xs:element name="activity" type="ProjectLike"/>
+  <xs:element name="investigation" type="ProjectLike"/>
   <xs:element name="exploration" type="ProjectLike"/>
   <xs:element name="project" type="ProjectLike"/>
   <xs:element name="task" type="ProjectLike"/>
@@ -1002,19 +1014,39 @@
   <xs:group name="Remark">
     <xs:choice>
       <xs:element ref="remark"/>
+      <xs:element ref="convention"/>
       <xs:element name="note" type="RemarkLike"/>
+      <xs:element ref="observation"/>
+      <xs:element ref="warning"/>
+      <xs:element ref="insight"/>
+      <xs:element ref="computation"/>
+      <xs:element ref="technology"/>
     </xs:choice>
   </xs:group>
   <xs:element name="remark" type="RemarkLike"/>
-  <xs:element name="aside">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:group ref="MetaDataTitleOptional"/>
-        <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
-      </xs:sequence>
-      <xs:attributeGroup ref="MetaDataTitleOptional"/>
-    </xs:complexType>
-  </xs:element>
+  <xs:element name="convention" type="RemarkLike"/>
+  <xs:element name="observation" type="RemarkLike"/>
+  <xs:element name="warning" type="RemarkLike"/>
+  <xs:element name="insight" type="RemarkLike"/>
+  <xs:element name="computation" type="RemarkLike"/>
+  <xs:element name="technology" type="RemarkLike"/>
+  <xs:complexType name="AsideLike">
+    <xs:sequence>
+      <xs:group ref="MetaDataTitleOptional"/>
+      <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="MetaDataTitleOptional"/>
+  </xs:complexType>
+  <xs:group name="Aside">
+    <xs:choice>
+      <xs:element ref="aside"/>
+      <xs:element ref="biographical"/>
+      <xs:element ref="historical"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="aside" type="AsideLike"/>
+  <xs:element name="biographical" type="AsideLike"/>
+  <xs:element name="historical" type="AsideLike"/>
   <xs:element name="assemblage">
     <xs:complexType>
       <xs:sequence>

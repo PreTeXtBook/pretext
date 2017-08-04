@@ -420,6 +420,10 @@
             element proposition {TheoremLike}
         |
             element algorithm {TheoremLike}
+        |
+            element fact {TheoremLike}
+        |
+            element identity {TheoremLike}
         
         
         AxiomLike =
@@ -431,6 +435,12 @@
             element principle {AxiomLike}
         |
             element conjecture {AxiomLike}
+        |
+            element heuristic {AxiomLike}
+        |
+            element hypothesis {AxiomLike}
+        |
+            element assumption {AxiomLike}
         
         
         ExampleLike =
@@ -453,6 +463,8 @@
         Project =
             element activity {ProjectLike}
         |
+            element investigation {ProjectLike}
+        |
             element exploration {ProjectLike}
         |
             element project {ProjectLike}
@@ -466,14 +478,32 @@
         Remark = 
             element remark {RemarkLike}
         |
+            element convention {RemarkLike}
+        |
             element note {RemarkLike}
+        |
+            element observation {RemarkLike}
+        |
+            element warning {RemarkLike}
+        |
+            element insight {RemarkLike}
+        |
+            element computation {RemarkLike}
+        |
+            element technology {RemarkLike}
         
         
+        AsideLike =
+            MetaDataTitleOptional,
+            BlockStatement+
         Aside =
-            element aside {
-                MetaDataTitleOptional,
-                BlockStatement+
-            }
+            element aside {AsideLike}
+            |
+            element biographical {AsideLike}
+            |
+            element historical {AsideLike}
+        
+        
         Assemblage =
             element assemblage {
                 MetaDataTitleOptional,

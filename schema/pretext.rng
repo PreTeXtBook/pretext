@@ -951,6 +951,12 @@
       <element name="algorithm">
         <ref name="TheoremLike"/>
       </element>
+      <element name="fact">
+        <ref name="TheoremLike"/>
+      </element>
+      <element name="identity">
+        <ref name="TheoremLike"/>
+      </element>
     </choice>
   </define>
   <define name="AxiomLike">
@@ -966,6 +972,15 @@
         <ref name="AxiomLike"/>
       </element>
       <element name="conjecture">
+        <ref name="AxiomLike"/>
+      </element>
+      <element name="heuristic">
+        <ref name="AxiomLike"/>
+      </element>
+      <element name="hypothesis">
+        <ref name="AxiomLike"/>
+      </element>
+      <element name="assumption">
         <ref name="AxiomLike"/>
       </element>
     </choice>
@@ -1034,6 +1049,9 @@
       <element name="activity">
         <ref name="ProjectLike"/>
       </element>
+      <element name="investigation">
+        <ref name="ProjectLike"/>
+      </element>
       <element name="exploration">
         <ref name="ProjectLike"/>
       </element>
@@ -1056,18 +1074,47 @@
       <element name="remark">
         <ref name="RemarkLike"/>
       </element>
+      <element name="convention">
+        <ref name="RemarkLike"/>
+      </element>
       <element name="note">
+        <ref name="RemarkLike"/>
+      </element>
+      <element name="observation">
+        <ref name="RemarkLike"/>
+      </element>
+      <element name="warning">
+        <ref name="RemarkLike"/>
+      </element>
+      <element name="insight">
+        <ref name="RemarkLike"/>
+      </element>
+      <element name="computation">
+        <ref name="RemarkLike"/>
+      </element>
+      <element name="technology">
         <ref name="RemarkLike"/>
       </element>
     </choice>
   </define>
+  <define name="AsideLike">
+    <ref name="MetaDataTitleOptional"/>
+    <oneOrMore>
+      <ref name="BlockStatement"/>
+    </oneOrMore>
+  </define>
   <define name="Aside">
-    <element name="aside">
-      <ref name="MetaDataTitleOptional"/>
-      <oneOrMore>
-        <ref name="BlockStatement"/>
-      </oneOrMore>
-    </element>
+    <choice>
+      <element name="aside">
+        <ref name="AsideLike"/>
+      </element>
+      <element name="biographical">
+        <ref name="AsideLike"/>
+      </element>
+      <element name="historical">
+        <ref name="AsideLike"/>
+      </element>
+    </choice>
   </define>
   <define name="Assemblage">
     <element name="assemblage">

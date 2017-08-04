@@ -926,6 +926,10 @@
             element proposition {TheoremLike}
         |
             element algorithm {TheoremLike}
+        |
+            element fact {TheoremLike}
+        |
+            element identity {TheoremLike}
         </fragment>
     </section>
 
@@ -944,6 +948,12 @@
             element principle {AxiomLike}
         |
             element conjecture {AxiomLike}
+        |
+            element heuristic {AxiomLike}
+        |
+            element hypothesis {AxiomLike}
+        |
+            element assumption {AxiomLike}
         </fragment>
     </section>
 
@@ -961,6 +971,8 @@
             )
         Project =
             element activity {ProjectLike}
+        |
+            element investigation {ProjectLike}
         |
             element exploration {ProjectLike}
         |
@@ -982,22 +994,47 @@
         Remark = 
             element remark {RemarkLike}
         |
+            element convention {RemarkLike}
+        |
             element note {RemarkLike}
+        |
+            element observation {RemarkLike}
+        |
+            element warning {RemarkLike}
+        |
+            element insight {RemarkLike}
+        |
+            element computation {RemarkLike}
+        |
+            element technology {RemarkLike}
         </fragment>
     </section>
 
 
     <section>
-        <title>Asides and Assemblages</title>
+        <title>Asides</title>
 
-        <p>An aside is a deviation from the narrative, and might physically move in the presentation (say, to a margin, or to a knowl).  Since an <c>assemblage</c> is meant to accumulate significant content (as a review or summary, or for initial presentation) lists are allowed here, an exception to their restriction to paragraphs.  We are also mildly restrictive about what can be content here<mdash />in particular blocks are excluded, despite not strictly being blocks themselves.</p>
+        <p>An aside is a deviation from the narrative, and might physically move in the presentation (say, to a margin, or to a knowl).  <c>biographical</c> and <c>historical</c> may be further developed.</p>
 
         <fragment xml:id="aside">
+        AsideLike =
+            MetaDataTitleOptional,
+            BlockStatement+
         Aside =
-            element aside {
-                MetaDataTitleOptional,
-                BlockStatement+
-            }
+            element aside {AsideLike}
+            |
+            element biographical {AsideLike}
+            |
+            element historical {AsideLike}
+        </fragment>
+    </section>
+
+    <section>
+        <title>Assemblages</title>
+
+        <p>Since an <c>assemblage</c> is meant to accumulate significant content (as a review or summary, or for initial presentation) lists are allowed here, an exception to their restriction to paragraphs.  We are also mildly restrictive about what can be content here<mdash />in particular blocks are excluded, despite not strictly being blocks themselves.</p>
+
+        <fragment xml:id="assemblage">
         Assemblage =
             element assemblage {
                 MetaDataTitleOptional,
@@ -1933,6 +1970,7 @@
         <fragment ref="project-like" />
         <fragment ref="remark-like" />
         <fragment ref="aside" />
+        <fragment ref="assemblage" />
         <fragment ref="table-figure" />
         <fragment ref="sidebyside" />
         <fragment ref="image" />
