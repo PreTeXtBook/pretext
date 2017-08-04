@@ -189,14 +189,35 @@
   <define name="Appendix">
     <element name="appendix">
       <ref name="MetaDataTitle"/>
-      <oneOrMore>
-        <choice>
-          <ref name="BlockDivision"/>
-          <ref name="Paragraphs"/>
-          <ref name="NotationList"/>
-          <ref name="SolutionList"/>
-        </choice>
-      </oneOrMore>
+      <choice>
+        <oneOrMore>
+          <choice>
+            <ref name="BlockDivision"/>
+            <ref name="Paragraphs"/>
+            <ref name="NotationList"/>
+            <ref name="SolutionList"/>
+          </choice>
+        </oneOrMore>
+        <group>
+          <optional>
+            <ref name="IntroductionDivision"/>
+          </optional>
+          <interleave>
+            <oneOrMore>
+              <ref name="Section"/>
+            </oneOrMore>
+            <zeroOrMore>
+              <ref name="Exercises"/>
+            </zeroOrMore>
+            <zeroOrMore>
+              <ref name="References"/>
+            </zeroOrMore>
+          </interleave>
+          <optional>
+            <ref name="ConclusionDivision"/>
+          </optional>
+        </group>
+      </choice>
     </element>
   </define>
   <define name="IndexDivision">

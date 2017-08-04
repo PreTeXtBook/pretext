@@ -155,11 +155,22 @@
     <xs:complexType>
       <xs:complexContent>
         <xs:extension base="MetaDataTitle">
-          <xs:choice maxOccurs="unbounded">
-            <xs:group ref="BlockDivision"/>
-            <xs:element ref="paragraphs"/>
-            <xs:element ref="notation-list"/>
-            <xs:element ref="solution-list"/>
+          <xs:choice>
+            <xs:choice maxOccurs="unbounded">
+              <xs:group ref="BlockDivision"/>
+              <xs:element ref="paragraphs"/>
+              <xs:element ref="notation-list"/>
+              <xs:element ref="solution-list"/>
+            </xs:choice>
+            <xs:sequence>
+              <xs:group minOccurs="0" ref="IntroductionDivision"/>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="section"/>
+                <xs:element ref="exercises"/>
+                <xs:element ref="references"/>
+              </xs:choice>
+              <xs:group minOccurs="0" ref="ConclusionDivision"/>
+            </xs:sequence>
           </xs:choice>
         </xs:extension>
       </xs:complexContent>
