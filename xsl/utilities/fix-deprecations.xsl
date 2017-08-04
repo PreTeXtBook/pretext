@@ -34,6 +34,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecations that can be fixed with a transformation -->
 <!-- In reverse chronological order, with dates           -->
 
+<!-- 2017-08-04  top-level "task" become "exploration" -->
+<xsl:template match="task[parent::chapter or parent::appendix or parent::section or parent::subsection or parent::subsubsection or parent::paragraphs or parent::introduction or parent::conclusion]">
+    <exploration>
+        <xsl:apply-templates select="@* | node()" />
+    </exploration>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2017-08-04</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;task&gt; by &lt;exploration&gt;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
 
 <!-- 2017-07-25  replacement of three xref/@autoname attributes by @text -->
 <xsl:template match="@autoname">

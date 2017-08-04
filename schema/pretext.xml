@@ -960,7 +960,7 @@
     <section>
         <title>Projects and Activities</title>
 
-        <p>A favorite of Inquiry-Based Learning textbooks.  Numbered independently.  Will be semi-structured by the <c>task</c> element soon, so avoid that element for now.</p>
+        <p>A favorite of Inquiry-Based Learning textbooks.  Numbered independently.</p>
 
         <fragment xml:id="project-like">
         ProjectLike =
@@ -977,8 +977,6 @@
             element exploration {ProjectLike}
         |
             element project {ProjectLike}
-        |
-            element task {ProjectLike}
         </fragment>
     </section>
 

@@ -110,6 +110,17 @@ systems.
                 </sageplot>
             </figure>
 
+            <p>And the <c>task</c> element has a new purpose and should not exist at the top-level of a division.  We include a <c>project</c> with a real <c>task</c> to test effect.</p>
+
+            <task>
+                <p>I should not be here.</p>
+            </task>
+
+            <project>
+                <task><p>First real task.</p></task>
+                <task><p>Secind real task.</p></task>
+            </project>
+
         </section>
 
         <section>

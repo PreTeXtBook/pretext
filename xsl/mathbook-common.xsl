@@ -6108,6 +6108,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
                 <xsl:with-param name="incorrect-use" select="not($autoname = '') and //docinfo/cross-references" />
         </xsl:call-template>
     </xsl:if>
+    <!--  -->
+    <!-- 2017-08-04  repurpose task block for division of project-like -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurences" select="$document-root//task[parent::chapter or parent::appendix or parent::section or parent::subsection or parent::subsubsection or parent::paragraphs or parent::introduction or parent::conclusion]" />
+        <xsl:with-param name="date-string" select="'2017-08-04'" />
+        <xsl:with-param name="message" select="'the &quot;task&quot; element is no longer used as a child of a top-level division, but is instead being used to divide the other &quot;project-like&quot; elements.  It can be replaced by a functional equivalent: &quot;project&quot;, &quot;activity&quot;, &quot;exploration&quot;, or &quot;investigation&quot;'" />
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->

@@ -468,8 +468,6 @@
             element exploration {ProjectLike}
         |
             element project {ProjectLike}
-        |
-            element task {ProjectLike}
         
         
         RemarkLike =

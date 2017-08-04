@@ -828,7 +828,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
     </xsl:if>
     <!-- PROJECT-LIKE blocks -->
-    <xsl:if test="//project or //activity or //exploration or //task or //investigation">
+    <xsl:if test="//project or //activity or //exploration or //investigation">
         <xsl:text>%% Numbering for Projects (independent of others)&#xa;</xsl:text>
         <xsl:text>%% Controlled by  numbering.projects.level  processing parameter&#xa;</xsl:text>
         <xsl:text>%% Always need a project environment to set base numbering scheme&#xa;</xsl:text>
@@ -855,11 +855,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="//exploration">
             <xsl:text>\newtheorem{exploration}[project]{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'exploration'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="//task">
-            <xsl:text>\newtheorem{task}[project]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'task'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="//investigation">

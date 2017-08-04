@@ -1058,9 +1058,6 @@
       <element name="project">
         <ref name="ProjectLike"/>
       </element>
-      <element name="task">
-        <ref name="ProjectLike"/>
-      </element>
     </choice>
   </define>
   <define name="RemarkLike">

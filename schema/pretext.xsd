@@ -996,14 +996,12 @@
       <xs:element ref="investigation"/>
       <xs:element ref="exploration"/>
       <xs:element ref="project"/>
-      <xs:element ref="task"/>
     </xs:choice>
   </xs:group>
   <xs:element name="activity" type="ProjectLike"/>
   <xs:element name="investigation" type="ProjectLike"/>
   <xs:element name="exploration" type="ProjectLike"/>
   <xs:element name="project" type="ProjectLike"/>
-  <xs:element name="task" type="ProjectLike"/>
   <xs:complexType name="RemarkLike">
     <xs:sequence>
       <xs:group ref="MetaDataTitleOptional"/>
