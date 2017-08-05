@@ -1431,7 +1431,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- write file infrastructure first -->
     <exsl:document href="{$knowl-file}" method="html">
         <xsl:text disable-output-escaping="yes">&lt;!doctype html&gt;&#xa;</xsl:text>
-        <html>
+            <html lang="{$document-language}"> <!-- dir="rtl" here -->
             <!-- header since separate file -->
             <xsl:text>&#xa;</xsl:text>
             <xsl:call-template name="converter-blurb-html" />
@@ -5993,7 +5993,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <!-- Need to be careful for format of this initial string     -->
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
     <xsl:call-template name="converter-blurb-html" />
-    <html> <!-- lang="", and/or dir="rtl" here -->
+    <html lang="{$document-language}"> <!-- dir="rtl" here -->
         <head>
             <title>
                 <!-- Leading with initials is useful for small tabs -->
@@ -6101,7 +6101,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <!-- Need to be careful for format of this initial string     -->
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
     <xsl:call-template name="converter-blurb-html" />
-    <html> <!-- lang="", and/or dir="rtl" here -->
+    <html lang="{$document-language}"> <!-- dir="rtl" here -->
         <head>
             <meta name="Keywords" content="Authored in PreTeXt" />
             <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
