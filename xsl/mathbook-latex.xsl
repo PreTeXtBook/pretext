@@ -5460,7 +5460,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:text>\parbox[t]{</xsl:text>
         <xsl:value-of select="substring-before($width,'%') div 100" />
-        <xsl:text>\textwidth}{\centering{}</xsl:text>
+        <xsl:text>\linewidth}{\centering{}</xsl:text>
         <xsl:apply-templates select="." mode="title-full" />
         <xsl:text>}</xsl:text>
         <xsl:if test="$sbsdebug">
@@ -5500,7 +5500,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:value-of select="substring-before($width,'%') div 100" />
-    <xsl:text>\textwidth}</xsl:text>
+    <xsl:text>\linewidth}</xsl:text>
     <xsl:text>\usebox{\panelbox</xsl:text>
     <xsl:apply-templates select="." mode="panel-id" />
     <xsl:text>}</xsl:text>
@@ -5524,7 +5524,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>\parbox[t]{</xsl:text>
     <xsl:value-of select="substring-before($width,'%') div 100" />
-    <xsl:text>\textwidth}{</xsl:text>
+    <xsl:text>\linewidth}{</xsl:text>
     <xsl:choose>
         <xsl:when test="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure">
             <xsl:apply-templates select="caption" mode="subcaption" />
@@ -5579,7 +5579,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>% \tabcolsep change local to group&#xa;</xsl:text>
     <xsl:text>\setlength{\tabcolsep}{</xsl:text>
     <xsl:value-of select="0.5 * substring-before($space-width, '%') div 100" />
-    <xsl:text>\textwidth}&#xa;</xsl:text>
+    <xsl:text>\linewidth}&#xa;</xsl:text>
     <xsl:text>% @{} suppress \tabcolsep at extremes, so margins behave as intended&#xa;</xsl:text>
     <!-- set spacing, centering provide half at each end -->
     <!-- LaTeX parameter is half of the column space     -->
@@ -5589,7 +5589,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not($margins = '0%')">
         <xsl:text>\hspace*{</xsl:text>
         <xsl:value-of select="substring-before($margins, '%') div 100" />
-        <xsl:text>\textwidth}%&#xa;</xsl:text>
+        <xsl:text>\linewidth}%&#xa;</xsl:text>
     </xsl:if>
     <!-- @{} strips extreme left, right colsep and -->
     <!-- allows us to get flush left (zero margin) -->
@@ -5633,7 +5633,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>\raisebox{\depth}{\parbox{</xsl:text>
     <xsl:value-of select="substring-before($width,'%') div 100" />
-    <xsl:text>\textwidth}{</xsl:text>
+    <xsl:text>\linewidth}{</xsl:text>
     <!-- center tables here or below -->
     <xsl:choose>
         <xsl:when test="self::p">
