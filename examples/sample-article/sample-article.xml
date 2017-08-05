@@ -3629,7 +3629,7 @@ the xsltproc executable.
             </subsection>
         </section>
 
-        <section>
+        <section xml:id="section-video">
             <title>Video</title>
 
             <p>First, a gratuitous reference to Exercise<nbsp /><xref ref="exercises-cosine-derivative" /> about the derivative of a cosine.</p>
@@ -3643,7 +3643,7 @@ the xsltproc executable.
 
             <p>YouTube<idx><h>YouTube videos</h></idx><idx><h>videos</h><h>YouTube</h></idx> videos may be embedded with only knowledge of the <q>ID</q>.  This a string of eleven seemingly random characters that show up in the URL when you watch a video.  For the Led Zeppelin performance below, the ID is <c>hAzdgU_kpGo</c>, which you might normally watch directly from the URL <url href="https://www.youtube.com/watch?v=hAzdgU_kpGo" />.  Screen real estate is determined by specifying an optional <c>@width</c> attribute as a percentage, and aspect ratio is preserved on the assumption of HD video (16:9).</p>
 
-            <p>Enhancements could include other aspect ratios, and attributes for a start and stop time.</p>
+            <p>Enhancements will include other aspect ratios.</p>
 
             <p>These may be placed <q>standalone</q> in a <c>&lt;sidebyside&gt;</c>, but are designed mostly on the assumption that they are wrapped in a <c>figure</c> with a <c>title</c> (which is distinct from a <c>caption</c>).</p>
 
@@ -3671,6 +3671,29 @@ the xsltproc executable.
                 <video youtube="VsHMjWORFvI" start="54" end="72" />
             </figure>
 
+            <p>We can pack two videos side-by-side, with a lot of horizontal control, using two panels in the <c>sidebyside</c> element.  We have simply chose not to provide a caption (overall, or separately) as an illustration.  The sizes are purposely a bit odd.  See <xref ref="section-side-by-side" text="type-global" /> for much more on side-by-side panels.  These videos come from the <q>Topic</q> and <q>VEVO</q> areas of YouTube (respectively) and both have start/end times.</p>
+
+            <sidebyside margins="auto" widths="20% 40%" valign="middle">
+                <!-- Liza Minelli -->
+                <video xml:id="minelli-newyork-newyork" youtube="5-pyc_z7WbY" start="16" end="35" />
+                <!-- Sara Bareilles -->
+                <video xml:id="bareilles-love-song" youtube="qi7Yh16dA0w" start="60" end="120" />
+            </sidebyside>
+
+            <p>These next two videos are evenly spaced, one from YouTube, one from a source file hosted by the author.  Now with separate captions, but identical margins (through very different choices of layout parameters).</p>
+
+            <sidebyside margins="10%" widths="35% 35%">
+                <!-- drone flight again-->
+                <figure>
+                    <caption>Drone Flight</caption>
+                    <video xml:id="drone-flight-sbs" youtube="VsHMjWORFvI" />
+                </figure>
+                <!-- UPS promo -->
+                <figure>
+                    <caption>UPS Promo</caption>
+                    <video xml:id="ups-promo-sbs" source="images/ups-visitor-guide-360" />
+                </figure>
+            </sidebyside>
         </section>
 
         <exercises xml:id="exercises">
@@ -5291,7 +5314,7 @@ the xsltproc executable.
                 </sidebyside>
             </subsection>
 
-            <subsection>
+            <subsection xml:id="subsection-sbsgroup">
                 <title>Side-By-Side Groups</title>
 
                 <p>A <q>side-by-side group,</q> <c>&lt;sbsgroup&gt;</c>, is still in development.  (Notably, subcaptions do not behave as expected.)  It is a sequence of <c>sidebyside</c>, which may conceivably use the same margins, widths and vertical alignments for each horizontal run of panels.  Attributes on the <c>sbsgroup</c> are global to the group's enclosed <c>sidebyside</c>, and will be used by each contained <c>sidebyside</c>.  If attributes are present on an individual <c>sidebyside</c>, they override the global values.  The next two examples demonstrate some of this behavior, in a limited way.</p>
@@ -5621,8 +5644,8 @@ the xsltproc executable.
                 <title>Gallery</title>
                 <!-- 
                 Temporary Notes on Gallery construction
-                No Number: Done -  Paragraph | Paragraphs | List | Preformatted | Poem | Tabular | Image  
-                No Number: To Do - (allowed in figure: Video | JSXGraph | MuseScore)
+                No Number: Done -  Paragraph | Paragraphs | List | Preformatted | Poem | Tabular | Image | Video | JSXGraph 
+                No Number: To Do - (allowed in figure: | MuseScore)
 
                 Needs work: Program | Console (LaTeX side only?)
 
@@ -5831,6 +5854,30 @@ the xsltproc executable.
                         </list>
                     </sidebyside>
                 </figure>
+
+                <p>Now we have some more interactive elements</p>
+
+                <sidebyside  margins="5%" widths="40% 45%">
+                    <!-- Hosted -->
+                    <video source="images/ups-visitor-guide-360" width="80%"/>
+                    <!-- Airborne Toxic Event -->
+                    <video xml:id="airborne-midnight-1" youtube="UYPoMjR6-Ao" />
+                </sidebyside>
+
+            <p>Videos can be placed quite compactly for HTML output, but we display a fair amount of information for a YouTube video in print, and therefore two videos side-by-side gets pretty crowded.  The examples above have the bare minimum amount of information attached (not in an overarching <c>figure</c>), and the bare amount which which is displayed in print.  We could relax our common spacing to make it a bit better.  For other examples see <xref ref="section-video" text="type-global" />.</p>
+
+            <figure>
+                <caption>A <c>sidebyside</c> with one large panel</caption>
+                <sidebyside margins="10%">
+                    <figure>
+                        <title>Sometime Around Midnight</title>
+                        <caption><booktitle>Sometime Around Midnight</booktitle>, Airborne Toxic Event, 2009</caption>
+                        <video xml:id="airborne-midnight-2" youtube="UYPoMjR6-Ao" start="48" end="100" />
+                    </figure>
+                </sidebyside>
+            </figure>
+
+            <p>We make an exception to our common layout and put one YouTube video, with a start and end time into a single panel of a <c>sidebyside</c> as a <c>figure</c> with a <c>title</c> and a <c>caption</c> that is rendered as a sub-caption.  Read about <q>side-by-side</q> groups (<c>sbsgroup</c>) and experiment with stacking several sub-captioned videos into an overall captioned figure (<xref ref="subsection-sbsgroup" text="type-global" />).</p>
 
 
             </subsection>
