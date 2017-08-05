@@ -120,16 +120,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="exercise.backmatter.hint" select="'yes'" />
 <xsl:param name="exercise.backmatter.answer" select="'yes'" />
 <xsl:param name="exercise.backmatter.solution" select="'yes'" />
-<!-- Now project-like elements, in main text.              -->
+<!-- Now project-like elements, in main text.  -->
+<!-- A task is a division of a project         -->
 <xsl:param name="project.text.statement" select="'yes'" /> <!-- not implemented -->
 <xsl:param name="project.text.hint" select="'yes'" />
 <xsl:param name="project.text.answer" select="'yes'" />
 <xsl:param name="project.text.solution" select="'yes'" />
+<xsl:param name="task.text.statement" select="'yes'" /> <!-- not implemented -->
+<xsl:param name="task.text.hint" select="'yes'" />
+<xsl:param name="task.text.answer" select="'yes'" />
+<xsl:param name="task.text.solution" select="'yes'" />
 <!-- And project-like elements, in back matter (none implemented). -->
 <xsl:param name="project.backmatter.statement" select="'yes'" />
 <xsl:param name="project.backmatter.hint" select="'yes'" />
 <xsl:param name="project.backmatter.answer" select="'yes'" />
 <xsl:param name="project.backmatter.solution" select="'yes'" />
+<xsl:param name="task.backmatter.statement" select="'yes'" />
+<xsl:param name="task.backmatter.hint" select="'yes'" />
+<xsl:param name="task.backmatter.answer" select="'yes'" />
+<xsl:param name="task.backmatter.solution" select="'yes'" />
 <!-- Author tools are for drafts, mostly "todo" items                 -->
 <!-- and "provisional" citations and cross-references                 -->
 <!-- Default is to hide todo's, inline provisionals                   -->
@@ -198,12 +207,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- example|question|problem                -->
 <xsl:strip-space elements="example question problem" />
 <!-- List is elements in PROJECT-LIKE entity -->
-<!-- project|activity|exploration|task|investigation -->
-<xsl:strip-space elements="project activity exploration task investigation" />
+<!-- project|activity|exploration|investigation -->
+<xsl:strip-space elements="project activity exploration investigation" />
 <xsl:strip-space elements="exercise hint answer solution" />
 <xsl:strip-space elements="blockquote" />
 <xsl:strip-space elements="list" />
-<xsl:strip-space elements="sage program console" />
+<xsl:strip-space elements="sage program console task" />
 <xsl:strip-space elements="exercisegroup" />
 <xsl:strip-space elements="ul ol dl" />
 <xsl:strip-space elements="md mdn" />
@@ -2773,6 +2782,33 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:apply-templates select="exercise[last()]" mode="serial-number" />
 </xsl:template>
 
+<!-- Serial Numbers: Tasks (in Projects) -->
+<!-- Tasks have "list" numbers, which we use on labels -->
+<!-- (we could use serial numbers for a more complex look) -->
+<xsl:template match="task" mode="list-number">
+    <xsl:number format="a" />
+</xsl:template>
+<xsl:template match="task/task" mode="list-number">
+    <xsl:number format="i" />
+</xsl:template>
+<xsl:template match="task/task/task" mode="list-number">
+    <xsl:number format="A" />
+</xsl:template>
+<!-- concatenate list numbers to get serial numbers, eg a.i.A -->
+<xsl:template match="task" mode="serial-number">
+    <xsl:apply-templates select="." mode="list-number" />
+</xsl:template>
+<xsl:template match="task/task" mode="serial-number">
+    <xsl:apply-templates select="parent::task" mode="serial-number" />
+    <xsl:text>.</xsl:text>
+    <xsl:apply-templates select="." mode="list-number" />
+</xsl:template>
+<xsl:template match="task/task/task" mode="serial-number">
+    <xsl:apply-templates select="parent::task" mode="serial-number" />
+    <xsl:text>.</xsl:text>
+    <xsl:apply-templates select="." mode="list-number" />
+</xsl:template>
+
 
 <!-- Serial Numbers: the unnumbered     -->
 <!-- Empty string signifies not numbered -->
@@ -3032,6 +3068,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- An exercisegroup gets it structure number from the parent exercises -->
 <xsl:template match="exercisegroup" mode="structure-number">
     <xsl:apply-templates select="parent::*" mode="number" />
+    <xsl:text>.</xsl:text>
+</xsl:template>
+
+<!-- Structure Numbers: Tasks (in projects) -->
+<!-- A task gets it structure number from the parent project-like -->
+<xsl:template match="task" mode="structure-number">
+    <!-- ancestors, strip tasks, get number of next enclosure -->
+    <xsl:apply-templates select="ancestor::*[not(self::task)][1]" mode="number" />
     <xsl:text>.</xsl:text>
 </xsl:template>
 

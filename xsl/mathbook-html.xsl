@@ -85,6 +85,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.knowl.definition" select="'no'" />
 <xsl:param name="html.knowl.example" select="'yes'" />
 <xsl:param name="html.knowl.project" select="'no'" />
+<xsl:param name="html.knowl.task" select="'no'" />
 <xsl:param name="html.knowl.list" select="'no'" />
 <xsl:param name="html.knowl.remark" select="'no'" />
 <xsl:param name="html.knowl.objectives" select="'no'" />
@@ -1398,7 +1399,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- build xref-knowl, and optionally a hidden-knowl duplicate -->
-<xsl:template match="fn|li|men|md|mdn|p|blockquote|&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|&FIGURE-LIKE;|paragraphs|exercise|exercisegroup|webwork[*|@*]|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|biblio|biblio/note|contributor" mode="xref-knowl">
+<xsl:template match="fn|li|men|md|mdn|p|blockquote|&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|list|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|&FIGURE-LIKE;|paragraphs|exercise|exercisegroup|webwork[*|@*]|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|biblio|biblio/note|contributor" mode="xref-knowl">
     <!-- a generally available cross-reference knowl file, of duplicated content -->
     <xsl:apply-templates select="." mode="manufacture-knowl">
         <xsl:with-param name="knowl-type" select="'xref'" />
@@ -1571,6 +1572,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </h5>
 </xsl:template>
 
+<!-- h5, no type name, just simple list number, no title -->
+<xsl:template match="*" mode="heading-list-number">
+    <h5 class="heading">
+        <span class="codenumber">
+            <xsl:text>(</xsl:text>
+            <xsl:apply-templates select="." mode="list-number" />
+            <xsl:text>)</xsl:text>
+        </span>
+    </h5>
+</xsl:template>
+
 <!-- h5, type name, no number (even if exists), title (if exists) -->
 <!-- eg, objectives is one-per-subdivison, max,                   -->
 <!-- so no need to display at birth, but is needed in xref        -->
@@ -1699,7 +1711,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (7) TODO: "wrapped-content" called by "body" to separate code. -->
 
-<xsl:template match="li|me|men|md|mdn|fn|biblio|p|blockquote|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|webwork[*|@*]|paragraphs|exercise|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|biblio/note|contributor">
+<xsl:template match="li|me|men|md|mdn|fn|biblio|p|blockquote|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|webwork[*|@*]|paragraphs|exercise|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|biblio/note|contributor">
     <xsl:param name="b-original" select="true()" />
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
@@ -2085,6 +2097,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$html.knowl.project = 'yes'" />
 </xsl:template>
 
+<xsl:template match="task" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.task = 'yes'" />
+</xsl:template>
+
 <xsl:template match="list" mode="is-hidden">
     <xsl:value-of select="$html.knowl.list = 'yes'" />
 </xsl:template>
@@ -2153,7 +2169,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>article</xsl:text>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;" mode="body-element">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|list|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;" mode="body-element">
     <xsl:text>article</xsl:text>
 </xsl:template>
 
@@ -2227,6 +2243,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>example-like</xsl:text>
 </xsl:template>
 
+<xsl:template match="task" mode="body-css-class">
+    <xsl:text>exercise-like</xsl:text>
+</xsl:template>
+
 <xsl:template match="objectives" mode="body-css-class">
     <xsl:text>objectives</xsl:text>
 </xsl:template>
@@ -2291,7 +2311,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|&FIGURE-LIKE;" mode="birth-element">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|list|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|&FIGURE-LIKE;" mode="birth-element">
     <xsl:text>div</xsl:text>
 </xsl:template>
 
@@ -2349,6 +2369,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 
+<xsl:template match="task" mode="heading-birth">
+    <xsl:apply-templates select="." mode="heading-list-number" />
+</xsl:template>
+
 <xsl:template match="objectives" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-full-implicit-number" />
 </xsl:template>
@@ -2384,7 +2408,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&PROJECT-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:choose>
-        <!-- structured version first      -->
+        <!-- structured versions first      -->
+        <!-- prelude?, introduction?, task+,   -->
+        <!-- conclusion?, postlude? -->
+        <xsl:when test="(&PROJECT-FILTER;) and task">
+            <xsl:apply-templates select="introduction"/>
+            <xsl:apply-templates select="task"/>
+            <xsl:apply-templates select="conclusion"/>
+        </xsl:when>
+        <!-- Now no project/task possibility -->
         <!-- prelude?, statement, hint*,   -->
         <!-- answer*, solution*, postlude? -->
         <xsl:when test="statement">
@@ -2427,8 +2459,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-
-<xsl:template match="fn|blockquote|&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|case|proof|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|&FIGURE-LIKE;|paragraphs|exercisegroup|exercise|hint|answer|solution|biblio|biblio/note|contributor" mode="body">
+<xsl:template match="fn|blockquote|&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|case|proof|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|list|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|&FIGURE-LIKE;|paragraphs|exercisegroup|exercise|hint|answer|solution|biblio|biblio/note|contributor" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
     <!-- prelude beforehand, when original -->
@@ -2514,6 +2545,52 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="*|text()">
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
+            </xsl:when>
+            <xsl:when test="self::task">
+                <!-- more structured versions first -->
+                <xsl:choose>
+                    <!-- introduction?, task+, conclusion? -->
+                    <xsl:when test="task">
+                        <xsl:apply-templates select="introduction"/>
+                        <xsl:apply-templates select="task"/>
+                        <xsl:apply-templates select="conclusion"/>
+                    </xsl:when>
+                    <!-- statement, hint*, answer*, solution* -->
+                    <xsl:when test="statement">
+                        <xsl:if test="$task.text.statement='yes'">
+                            <xsl:apply-templates select="statement">
+                                <xsl:with-param name="b-original" select="$b-original" />
+                            </xsl:apply-templates>
+                        </xsl:if>
+                        <xsl:if test="$task.text.hint='yes'">
+                            <xsl:for-each select="hint">
+                                <xsl:apply-templates select=".">
+                                    <xsl:with-param name="b-original" select="$b-original" />
+                                </xsl:apply-templates>
+                            </xsl:for-each>
+                        </xsl:if>
+                        <xsl:if test="$task.text.answer='yes'">
+                            <xsl:for-each select="answer">
+                                <xsl:apply-templates select=".">
+                                    <xsl:with-param name="b-original" select="$b-original" />
+                                </xsl:apply-templates>
+                                <xsl:text> </xsl:text>
+                            </xsl:for-each>
+                        </xsl:if>
+                        <xsl:if test="$task.text.solution='yes'">
+                            <xsl:for-each select="solution">
+                                <xsl:apply-templates select=".">
+                                    <xsl:with-param name="b-original" select="$b-original" />
+                                </xsl:apply-templates>
+                                <xsl:text> </xsl:text>
+                            </xsl:for-each>
+                        </xsl:if>
+                    </xsl:when>
+                    <!-- unstructured -->
+                    <xsl:otherwise>
+                        <xsl:apply-templates />
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:when>
             <xsl:when test="self::exercisegroup">
                 <!-- Then actual content -->
@@ -2631,7 +2708,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- create posterior for appendages                  -->
     <!-- could condition on block too, rather than schema -->
     <!-- exercises have selectors, activities do not, think how to refactor this -->
-    <xsl:if test="(hint|answer|solution and not(self::exercise) and not(&PROJECT-FILTER;)) or proof or note">
+    <xsl:if test="(hint|answer|solution and not(self::exercise) and not(&PROJECT-FILTER;) and not(self::task)) or proof or note">
         <div class="posterior">
             <xsl:apply-templates select="hint|answer|solution|proof|note">
                 <xsl:with-param name="b-original" select="$b-original" />
@@ -2671,7 +2748,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="heading-type" />
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|objectives" mode="heading-xref-knowl">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|list|objectives" mode="heading-xref-knowl">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 
@@ -4638,7 +4715,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Override to turn off cross-references as knowls          -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|paragraphs|objectives|exercise|webwork|hint|answer|solution|exercisegroup|me|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|blockquote|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|list|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|paragraphs|objectives|exercise|webwork|hint|answer|solution|exercisegroup|me|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">

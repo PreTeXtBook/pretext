@@ -3402,7 +3402,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Simpler than theorems, definitions, etc            -->
 <!-- Information comes from self, so slightly different -->
 <xsl:template match="&REMARK-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;">
-    <xsl:if test="statement">
+    <xsl:if test="statement or ((&PROJECT-FILTER;) and task)">
         <xsl:apply-templates select="prelude" />
     </xsl:if>
     <xsl:text>\begin{</xsl:text>
@@ -3416,7 +3416,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:choose>
-        <!-- structured version first      -->
+        <!-- structured versions first      -->
+        <!-- prelude?, introduction?, task+,   -->
+        <!-- conclusion?, postlude? -->
+        <xsl:when test="(&PROJECT-FILTER;) and task">
+            <xsl:apply-templates select="introduction"/>
+            <xsl:apply-templates select="task"/>
+            <xsl:apply-templates select="conclusion"/>
+        </xsl:when>
+        <!-- Now no project/task possibility -->
         <!-- prelude?, statement, hint*,   -->
         <!-- answer*, solution*, postlude? -->
         <xsl:when test="statement">
@@ -3438,8 +3446,61 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:if test="statement">
+    <xsl:if test="statement or ((&PROJECT-FILTER;) and task)">
         <xsl:apply-templates select="postlude" />
+    </xsl:if>
+</xsl:template>
+
+<!-- Task (a part of a project) -->
+<xsl:template match="task">
+    <!-- if first at its level, start the list environment -->
+    <xsl:if test="not(preceding-sibling::task)">
+        <!-- set the label style of this list       -->
+        <!-- using features of the enumitem package -->
+        <xsl:text>\begin{enumerate}[font=\bfseries,label=&#xa;</xsl:text>
+        <xsl:choose>
+            <!-- three deep -->
+            <xsl:when test="parent::task/parent::task">
+                <xsl:text>(\Alph*),ref=\theenumi.\theenumii.\Alph*&#xa;</xsl:text>
+            </xsl:when>
+            <!-- two deep -->
+            <xsl:when test="parent::task">
+                <xsl:text>(\roman*),ref=\theenumi.\roman*&#xa;</xsl:text>
+            </xsl:when>
+            <!-- one deep -->
+            <xsl:otherwise>
+                <xsl:text>(\alph*),ref=\alph*&#xa;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>]&#xa;</xsl:text>
+    </xsl:if>
+    <!-- always a list item, note space -->
+    <xsl:text>\item</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text> </xsl:text>
+    <!-- more structured versions first -->
+    <xsl:choose>
+        <!-- introduction?, task+, conclusion? -->
+        <xsl:when test="task">
+            <xsl:apply-templates select="introduction"/>
+            <xsl:apply-templates select="task"/>
+            <xsl:apply-templates select="conclusion"/>
+        </xsl:when>
+        <!-- statement, hint*, answer*, solution* -->
+        <xsl:when test="statement">
+            <xsl:apply-templates select="statement"/>
+            <xsl:apply-templates select="hint"/>
+            <xsl:apply-templates select="answer"/>
+            <xsl:apply-templates select="solution"/>
+        </xsl:when>
+        <!-- unstructured -->
+        <xsl:otherwise>
+            <xsl:apply-templates />
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- if last at its level, end the list environment -->
+    <xsl:if test="not(following-sibling::task)">
+        <xsl:text>\end{enumerate}&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 
@@ -3539,6 +3600,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A project may have a solution -->
 <xsl:template match="solution[parent::*[&PROJECT-FILTER;]]">
     <xsl:if test="$project.text.solution = 'yes'">
+        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
+        <xsl:text>\textbf{</xsl:text>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'solution'" />
+        </xsl:call-template>
+        <xsl:text>.}\quad </xsl:text>
+        <xsl:apply-templates />
+    </xsl:if>
+</xsl:template>
+
+<!-- A task may have a hint -->
+<xsl:template match="hint[parent::task]">
+    <xsl:if test="$task.text.hint = 'yes'">
+        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
+        <xsl:text>\textbf{</xsl:text>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'hint'" />
+        </xsl:call-template>
+        <xsl:text>.}\quad </xsl:text>
+        <xsl:apply-templates />
+    </xsl:if>
+</xsl:template>
+
+<!-- A project may have an answer -->
+<xsl:template match="answer[parent::task]">
+    <xsl:if test="$task.text.answer = 'yes'">
+        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
+        <xsl:text>\textbf{</xsl:text>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'answer'" />
+        </xsl:call-template>
+        <xsl:text>.}\quad </xsl:text>
+        <xsl:apply-templates />
+    </xsl:if>
+</xsl:template>
+
+<!-- A project may have a solution -->
+<xsl:template match="solution[parent::task]">
+    <xsl:if test="$task.text.solution = 'yes'">
         <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
         <xsl:text>\textbf{</xsl:text>
         <xsl:call-template name="type-name">
@@ -6665,6 +6765,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- leaving the label/ref mechanism in place.  -->
 <xsl:template match="fn" mode="xref-number">
     <xsl:apply-templates select="." mode="number" />
+</xsl:template>
+
+<!-- Tasks have a structure number from the enclosing project   -->
+<!-- and a serial number from the enumitem package on the lists -->
+<!-- We compose the two LaTeX \ref{}                            -->
+<xsl:template match="task" mode="xref-number">
+    <!-- ancestors, strip tasks, get number of next enclosure -->
+    <xsl:apply-templates select="ancestor::*[not(self::task)][1]" mode="xref-number" />
+    <xsl:text>.</xsl:text>
+    <!-- task always gets a number, but we have to avoid recursion -->
+    <!-- that would result by just getting a \ref from xref-number -->
+    <xsl:text>\ref{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- This is the second abstract template                -->
