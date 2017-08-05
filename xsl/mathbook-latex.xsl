@@ -3421,6 +3421,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- conclusion?, postlude? -->
         <xsl:when test="(&PROJECT-FILTER;) and task">
             <xsl:apply-templates select="introduction"/>
+            <!-- careful right after project heading -->
+            <xsl:if test="not(introduction)">
+                <xsl:call-template name="leave-vertical-mode" />
+            </xsl:if>
             <xsl:apply-templates select="task"/>
             <xsl:apply-templates select="conclusion"/>
         </xsl:when>
