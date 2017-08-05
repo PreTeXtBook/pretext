@@ -458,7 +458,8 @@
             MetaDataTitleOptional,
             (
                 (BlockStatement+) |
-                (Prelude*, Statement, Hint*, Answer*, Solution*, Postlude*)
+                (Prelude?, Statement, Hint*, Answer*, Solution*, Postlude?) |
+                (Prelude?, IntroductionBlock?, Task+, ConclusionBlock?, Postlude?)
             )
         Project =
             element activity {ProjectLike}
@@ -468,6 +469,15 @@
             element exploration {ProjectLike}
         |
             element project {ProjectLike}
+        Task =
+            element task {
+                MetaDataTarget,
+                (
+                    BlockStatement+ |
+                    (Statement, Hint*, Answer*, Solution*) |
+                    (IntroductionBlock?, Task+, ConclusionBlock?)
+                )
+            }
         
         
         RemarkLike =

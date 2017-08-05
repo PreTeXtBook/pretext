@@ -1025,9 +1025,9 @@
         <ref name="BlockStatement"/>
       </oneOrMore>
       <group>
-        <zeroOrMore>
+        <optional>
           <ref name="Prelude"/>
-        </zeroOrMore>
+        </optional>
         <ref name="Statement"/>
         <zeroOrMore>
           <ref name="Hint"/>
@@ -1038,9 +1038,26 @@
         <zeroOrMore>
           <ref name="Solution"/>
         </zeroOrMore>
-        <zeroOrMore>
+        <optional>
           <ref name="Postlude"/>
-        </zeroOrMore>
+        </optional>
+      </group>
+      <group>
+        <optional>
+          <ref name="Prelude"/>
+        </optional>
+        <optional>
+          <ref name="IntroductionBlock"/>
+        </optional>
+        <oneOrMore>
+          <ref name="Task"/>
+        </oneOrMore>
+        <optional>
+          <ref name="ConclusionBlock"/>
+        </optional>
+        <optional>
+          <ref name="Postlude"/>
+        </optional>
       </group>
     </choice>
   </define>
@@ -1059,6 +1076,39 @@
         <ref name="ProjectLike"/>
       </element>
     </choice>
+  </define>
+  <define name="Task">
+    <element name="task">
+      <ref name="MetaDataTarget"/>
+      <choice>
+        <oneOrMore>
+          <ref name="BlockStatement"/>
+        </oneOrMore>
+        <group>
+          <ref name="Statement"/>
+          <zeroOrMore>
+            <ref name="Hint"/>
+          </zeroOrMore>
+          <zeroOrMore>
+            <ref name="Answer"/>
+          </zeroOrMore>
+          <zeroOrMore>
+            <ref name="Solution"/>
+          </zeroOrMore>
+        </group>
+        <group>
+          <optional>
+            <ref name="IntroductionBlock"/>
+          </optional>
+          <oneOrMore>
+            <ref name="Task"/>
+          </oneOrMore>
+          <optional>
+            <ref name="ConclusionBlock"/>
+          </optional>
+        </group>
+      </choice>
+    </element>
   </define>
   <define name="RemarkLike">
     <ref name="MetaDataTitleOptional"/>
