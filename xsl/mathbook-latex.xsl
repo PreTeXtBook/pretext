@@ -4314,16 +4314,46 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- Video -->
+<!-- Hosted Video -->
+<!-- not implemented, perhaps we'll use <static> -->
+<xsl:template match="video[@source]">
+    <xsl:text>[video]</xsl:text>
+</xsl:template>
+
+<!-- YouTube Video -->
 <!-- Assuming thumbnails have been scraped with the    -->
 <!-- mbx script, we make a short static display, using -->
 <!-- a title of an enclosing figure, if available      -->
 <xsl:template match="video[@youtube]">
-    <xsl:variable name="youtube-url">
-        <xsl:text>https://www.youtube.com/watch?v=</xsl:text>
+    <!-- we analyze width to figure out -->
+    <!-- how long a link to write       -->
+    <xsl:variable name="width">
+        <xsl:apply-templates select="." mode="get-width-percentage" />
+    </xsl:variable>
+    <xsl:variable name="youtube-url-visible">
+        <xsl:choose>
+            <xsl:when test="substring-before($width,'%') &lt; 50">
+                <xsl:text>YouTube: </xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>www.youtube.com/watch?v=</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:value-of select="@youtube" />
     </xsl:variable>
-    <xsl:text>\begin{tabular}{m{.1\linewidth}m{.7\linewidth}}&#xa;</xsl:text>
+    <xsl:variable name="youtube-url-link">
+        <xsl:text>https://www.youtube.com/watch?v=</xsl:text>
+        <xsl:value-of select="@youtube" />
+        <xsl:if test="@start">
+            <xsl:text>\&amp;start=</xsl:text>
+            <xsl:value-of select="@start" />
+        </xsl:if>
+        <xsl:if test="@end">
+            <xsl:text>\&amp;end=</xsl:text>
+            <xsl:value-of select="@end" />
+        </xsl:if>
+    </xsl:variable>
+    <xsl:text>\begin{tabular}{m{.2\linewidth}m{.6\linewidth}}&#xa;</xsl:text>
     <xsl:text>\includegraphics[width=\linewidth]{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
@@ -4334,10 +4364,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newline%&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\href{</xsl:text>
-    <xsl:value-of select="$youtube-url" />
+    <xsl:value-of select="$youtube-url-link" />
     <xsl:text>}{\texttt{\nolinkurl{</xsl:text>
-    <xsl:value-of select="$youtube-url" />
+    <xsl:value-of select="$youtube-url-visible" />
     <xsl:text>}}}&#xa;</xsl:text>
+    <!-- join spaces in string so cell wraps nicely, perhaps -->
+    <xsl:if test="@start or @end">
+        <xsl:text> (</xsl:text>
+        <xsl:if test="@start">
+            <xsl:text>Start:~</xsl:text>
+            <xsl:value-of select="@start" />
+            <xsl:text>s</xsl:text>
+        </xsl:if>
+        <xsl:if test="@start and @end">
+            <xsl:text>,~</xsl:text>
+        </xsl:if>
+        <xsl:if test="@end">
+            <xsl:text>End:~</xsl:text>
+            <xsl:value-of select="@end" />
+            <xsl:text>s</xsl:text>
+        </xsl:if>
+        <xsl:text>)</xsl:text>
+    </xsl:if>
     <xsl:text>\end{tabular}&#xa;</xsl:text>
 </xsl:template>
 
