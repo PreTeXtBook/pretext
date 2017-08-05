@@ -1145,6 +1145,7 @@
             <xs:element ref="poem"/>
             <xs:group ref="Tabular"/>
             <xs:group ref="Image"/>
+            <xs:element ref="video"/>
             <xs:element ref="program"/>
             <xs:element ref="console"/>
             <xs:group ref="Paragraph"/>
@@ -1177,6 +1178,7 @@
             <xs:element ref="poem"/>
             <xs:group ref="Tabular"/>
             <xs:group ref="Image"/>
+            <xs:element ref="video"/>
             <xs:element ref="program"/>
             <xs:element ref="console"/>
             <xs:group ref="Paragraph"/>
