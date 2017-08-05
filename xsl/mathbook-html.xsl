@@ -7356,7 +7356,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <xsl:choose>
         <xsl:when test="/mathbook/docinfo/brandlogo">
             <a id="logo-link" href="{/mathbook/docinfo/brandlogo/@url}" target="_blank" >
-                <img src="{/mathbook/docinfo/brandlogo/@source}" />
+                <img src="{/mathbook/docinfo/brandlogo/@source}" alt="Logo image for document"/>
             </a>
         </xsl:when>
         <xsl:otherwise>
