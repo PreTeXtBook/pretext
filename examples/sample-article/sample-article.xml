@@ -5475,6 +5475,20 @@ the xsltproc executable.
                         </list>
                     </sidebyside>
                 </figure>
+
+                <p>We also need to test a <c>sidebyside</c> in a list.  The widths are now relative to the space given over to an indented item.  Here we nest and nest and nest and nest to get a big, obvious indentation, and then include an image at 100<percent /> width and no margin.  In your mind's eye, or with a ruler, check that the image spans all the way over to the right margin.<ol>
+                    <li><p>This is<ol>
+                        <li><p>a very<ol>
+                            <li><p>wide<ol>
+                                    <li><p>rectangle</p>
+                                        <sidebyside margins="0%" width="100%" >
+                                            <image source="images/cross-rectangle.png" />
+                                        </sidebyside>
+                                    </li>
+                            </ol></p></li>
+                        </ol></p></li>
+                    </ol></p></li>
+                </ol></p>
             </subsection>
 
             <subsection xml:id="subsection-sbs-other-panels">
