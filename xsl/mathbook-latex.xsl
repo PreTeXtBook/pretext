@@ -3457,19 +3457,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(preceding-sibling::task)">
         <!-- set the label style of this list       -->
         <!-- using features of the enumitem package -->
-        <xsl:text>\begin{enumerate}[font=\bfseries,label=&#xa;</xsl:text>
+        <xsl:text>\begin{enumerate}[font=\bfseries,label=</xsl:text>
         <xsl:choose>
             <!-- three deep -->
             <xsl:when test="parent::task/parent::task">
-                <xsl:text>(\Alph*),ref=\theenumi.\theenumii.\Alph*&#xa;</xsl:text>
+                <xsl:text>(\Alph*),ref=\theenumi.\theenumii.\Alph*</xsl:text>
             </xsl:when>
             <!-- two deep -->
             <xsl:when test="parent::task">
-                <xsl:text>(\roman*),ref=\theenumi.\roman*&#xa;</xsl:text>
+                <xsl:text>(\roman*),ref=\theenumi.\roman*</xsl:text>
             </xsl:when>
             <!-- one deep -->
             <xsl:otherwise>
-                <xsl:text>(\alph*),ref=\alph*&#xa;</xsl:text>
+                <xsl:text>(\alph*),ref=\alph*</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:text>]&#xa;</xsl:text>
