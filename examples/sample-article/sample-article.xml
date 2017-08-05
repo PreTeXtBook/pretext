@@ -3626,6 +3626,269 @@ the xsltproc executable.
                         </input>
                     </jsxgraph>
                 </figure>
+
+
+                <p>Here are the two previous examples, but the first has been given a different aspect ratio, and both are smaller overall.  They have been included in a <c>sidebyside</c> layout element (see <xref ref="section-side-by-side" text="type-global" />) so they can be placed horizontally across the page.  (Note: placement in a <c>sidebyside</c> is not yet reflected in the <pretext /> schema.)</p>
+
+                <sidebyside widths="35% 55%">
+                    <jsxgraph xml:id="jsxgraph-archimedian-spiral-in-sidebyside" aspect="3:4">
+                        <!-- http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral -->
+                        <input>
+                        var board = JXG.JSXGraph.initBoard('jsxgraph-archimedian-spiral-in-sidebyside', {boundingbox: [-10, 10, 10, -10]});
+                        var a = board.create('slider', [[1,8],[5,8],[0,1,4]],{name:'a'});
+                        var b = board.create('slider', [[1,9],[5,9],[0,0.25,4]],{name:'b'});
+
+                        var c = board.create('curve', [function(phi){return a.Value()+b.Value()*phi; }, [0, 0],0, 8*Math.PI],
+                                     {curveType:'polar', strokewidth:4});
+
+                        var g = board.create('glider', [c]);
+                        var t = board.create('tangent', [g], {dash:2,strokeColor:'#a612a9'});
+                        var n = board.create('normal', [g], {dash:2,strokeColor:'#a612a9'});
+                        </input>
+                    </jsxgraph>
+                    <jsxgraph xml:id="jsxgraph-infinity-in-sidebyside">
+                        <!-- http://jsxgraph.uni-bayreuth.de/showcase/infinity.html -->
+                        <input><![CDATA[
+                        JXG.Options.renderer = 'canvas';
+                        var board = JXG.JSXGraph.initBoard('jsxgraph-infinity-in-sidebyside', {
+                                boundingbox: [-9, 8, 9, -10],
+                                keepaspectreatio: true,
+                                axis: false,
+                                grid: false,
+                                shownavigation: false
+                            });
+
+                        // construction
+                        board.suspendUpdate();
+                        var S = board.create('slider', [[-5,-6],[5,-6],[0,0.85,1]], {
+                            name:'Whirl'
+                        });
+                        var hue = board.create('slider', [[-5,-7],[5,-7],[0,20.5,36]], {
+                            name:'Colors'
+                        });
+
+                        var points = new Array();
+                        points[0] = board.create('point',[5, 5], {name:' '});
+                        points[1] = board.create('point',[-5, 5], {name:' '});
+                        points[2] = board.create('point',[-5, -5], {name:' '});
+                        points[3] = board.create('point',[5, -5], {name:' '});
+
+                        function quadrangle(pt, n) {
+                            var col;
+                            var arr = new Array();
+                            for(var i = 0; i < 4; i++) {
+                                arr[i] = board.create('point',
+                                    [function(t) {
+                                        return function () {var x = pt[t].X();
+                                                var x1 = pt[(t+1)%4].X();
+                                                var s = S.Value();
+                                                return x+(x1-x)*s;
+                                         }}(i),
+                                    function(t) {
+                                        return function () {var y = pt[t].Y();
+                                                var y1 = pt[(t+1)%4].Y();
+                                                var s = S.Value();
+                                                return y+(y1-y)*s;
+                                         }}(i)
+                                    ],
+                                {size:1, name: "", withLabel: false, visible: false});
+                            }
+                            col =  function(){return JXG.hsv2rgb(hue.Value()*n,0.7,0.9);};
+                            board.create('polygon',pt, {fillColor:col});
+                            if(n>0)
+                                quadrangle(arr, --n);
+                        }
+                        quadrangle(points,30);
+
+                        board.unsuspendUpdate();
+                        ]]>
+                        </input>
+                    </jsxgraph>
+                </sidebyside>
+
+
+                <p>Now, a piecewise function you can control, with traces of the domain values and range values in two separate JSXGraph boards, laid out using the <c>sidebyside</c> layout element.</p>
+
+                <figure>
+                    <caption>Piecewise Function</caption>
+                    <jsxgraph xml:id="box_p3" width="40%">
+
+                        <controls>
+                            <input type="button" value="Animate On/Off" onkeypress="animate_p3(s_p3,75,100);" onclick="animate_p3(s_p3,75,100);" style="font-size:16px;"/>
+                            <input type="button" value="Clear Traces" onkeypress="clearTraces_p3();" onclick="clearTraces_p3();" style="font-size:16px;"/>
+                        </controls>
+                    </jsxgraph>
+                </figure>
+
+                <sidebyside widths="40% 40%" margins="auto">
+                    <figure>
+                        <caption>Domain</caption>
+                        <jsxgraph xml:id="box2_p3" />
+                    </figure>
+
+                    <figure>
+                        <caption>Range</caption>
+                        <jsxgraph xml:id="box3_p3">
+                            <input><![CDATA[
+                            var board_p3 = JXG.JSXGraph.initBoard('box_p3', {boundingbox: [-6, 8, 4, -8], axis: true,grid:true,showCopyright:false,showNavigation:false});
+                            var board2_p3 = JXG.JSXGraph.initBoard('box2_p3', {boundingbox: [-6, 8, 4, -8],axis:true,grid:true,showCopyright:false,showNavigation:false});
+                            var board3_p3 = JXG.JSXGraph.initBoard('box3_p3', {boundingbox: [-6, 8, 4, -8],axis:true,grid:true,showCopyright:false,showNavigation:false});
+                            board_p3.renderer.container.style.backgroundColor = '#ffcc99';          // background color board
+                            board2_p3.renderer.container.style.backgroundColor = '#ffcc99';
+                            board3_p3.renderer.container.style.backgroundColor = '#ffcc99';
+                            var xax1_p3 = board_p3.create('axis', [[0,0], [0,1]]);
+                            var yax1_p3 = board_p3.create('axis', [[0,0], [1,0]]);
+                            var xax2_p3 = board2_p3.create('axis', [[0,0], [0,1]]);
+                            var yax2_p3 = board2_p3.create('axis',[[0,0],[1,0]]);
+                            var xax3_p3 = board3_p3.create('axis',[[0,0], [0,1]]);
+                            var yax3_p3 = board3_p3.create('axis',[[0,0],[1,0]]);
+                            board_p3.create('ticks',[xax1_p3,[-6,-5,-4,-3,-2,-1,0,1,2,3,4]]);
+                            board_p3.create('ticks',[yax1_p3,[-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8]]);
+                            board2_p3.create('axis', [[0,0], [0,1]]);
+                            board2_p3.create('ticks',[xax2_p3,[-6,-5,-4,-3,-2,-1,0,1,2,3,4]]);
+                            board2_p3.create('ticks',[yax2_p3,[-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8]]);
+                            board3_p3.create('axis',[[0,0],[0,1]]);
+                            board3_p3.create('ticks',[xax3_p3,[-6,-5,-4,-3,-2,-1,0,1,2,3,4]]);
+                            board3_p3.create('ticks',[yax3_p3,[-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8]]);
+
+                            var f_p3 = function(x) {
+                                if (x >=-4 && x < 1) {
+                                    return -(x+2)*(x+2) + 2;
+                                }
+                                else if (x >= 1 && x <= 3) {
+                                    return x*x-x;
+                                }
+                                else {return -1000;
+                                }
+                            };
+
+                            var dfun_p3 = function(x) {
+                                if (x>=-4 && x<0.7) {
+                                    return x;
+                                }
+                                else if (x> 1.3 && x <= 3) {
+                                    return x;
+                                }
+                                else {return -1000;
+                                }
+                            };
+
+                            graph_p3=board_p3.createElement('functiongraph',[f_p3,-4,3],{strokeColor:'#000000'});
+                            var ep1_p3=board_p3.create('point',[-4,-2],{strokeColor:'#000000',fillColor:'#000000',name:''});
+                            var ep2_p3=board_p3.create('point',[1,-7],{strokeColor:'#000000',fillColor:'#FFFFFF',name:''});
+                            var ep3_p3=board_p3.create('point',[1,0],{strokeColor:'#000000',fillColor:'#FFFFFF',name:''});
+                            var ep4_p3=board_p3.create('point',[3,6],{strokeColor:'#000000',fillColor:'#000000',name:''});
+                            ep1_p3.setProperty({fixed:true});
+                            ep2_p3.setProperty({fixed:true});
+                            ep3_p3.setProperty({fixed:true});
+                            ep4_p3.setProperty({fixed:true});
+
+                            var s_p3 = board_p3.createElement('slider',[[-4.5,-7],[-1,-7],[-4,-4,3]]);
+                            var tracepoint_p3=board_p3.create('point',[function() {return dfun_p3(s_p3.Value());},function() {return f_p3(s_p3.Value());}],{name:''});
+                            // domain:
+                            var b2p1_p3 = board2_p3.create('point', [function(){return tracepoint_p3.X()},0], 
+                                        {fixed: true, trace: true, strokeColor: '#ff0000', name: 'D'});
+                            // cosine:
+                            var b2p2_p3 = board3_p3.create('point', [
+                                        0, function(){return tracepoint_p3.Y();}], 
+                                        {fixed: true, trace: true, strokeColor: '#0000ff', fillColor:'#0000ff',name: 'R'});
+                            // Dependencies (only necessary if b2p1 or b2p2 is deleted)
+
+                            board_p3.addChild(board2_p3);
+                            board_p3.addChild(board3_p3);
+
+                            function clearTraces_p3() {
+                            JXG.JSXGraph.freeBoard(board_p3);
+                            JXG.JSXGraph.freeBoard(board2_p3);
+                            JXG.JSXGraph.freeBoard(board3_p3);
+                            board_p3 = JXG.JSXGraph.initBoard('box_p3', {boundingbox: [-6, 8, 4, -8],axis: true,grid:true,showCopyright:false,showNavigation:false});
+                            board2_p3 = JXG.JSXGraph.initBoard('box2_p3', {boundingbox: [-6, 8, 4, -8],axis:true,grid:true,showCopyright:false,showNavigation:false});
+                            board3_p3 = JXG.JSXGraph.initBoard('box3_p3', {boundingbox: [-6, 8, 4, -8],axis:true,grid:true,showCopyright:false,showNavigation:false});
+                            xax1_p3 = board_p3.create('axis', [[0,0], [0,1]]);
+                            yax1_p3 = board_p3.create('axis', [[0,0], [1,0]]);
+                            xax2_p3 = board2_p3.create('axis', [[0,0], [0,1]]);
+                            yax2_p3 = board2_p3.create('axis',[[0,0],[1,0]]);
+                            xax3_p3 = board3_p3.create('axis',[[0,0], [0,1]]);
+                            yax3_p3 = board3_p3.create('axis',[[0,0],[1,0]]);
+                            board_p3.create('ticks',[xax1_p3,[-6,-5,-4,-3,-2,-1,0,1,2,3,4]]);
+                            board_p3.create('ticks',[yax1_p3,[-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8]]);
+                            board2_p3.create('axis', [[0,0], [0,1]]);
+                            board2_p3.create('ticks',[xax2_p3,[-6,-5,-4,-3,-2,-1,0,1,2,3,4]]);
+                            board2_p3.create('ticks',[yax2_p3,[-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8]]);
+                            board3_p3.create('axis',[[0,0],[0,1]]);
+                            board3_p3.create('ticks',[xax3_p3,[-6,-5,-4,-3,-2,-1,0,1,2,3,4]]);
+                            board3_p3.create('ticks',[yax3_p3,[-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8]]);
+
+                            f_p3 = function(x) {
+                                if (x >=-4 && x < 1) {
+                                    return -(x+2)*(x+2) + 2;
+                                }
+                                else if (x >= 1 && x <= 3) {
+                                    return x*x-x;
+                                }
+                                else {return -1000;
+                                }
+                            };
+
+                            dfun_p3 = function(x) {
+                                if (x>=-4 && x<0.7) {
+                                    return x;
+                                }
+                                else if (x> 1.3 && x <= 3) {
+                                    return x;
+                                }
+                                else {return -1000;
+                                }
+                            };
+
+                            graph_p3=board_p3.createElement('functiongraph',[f_p3,-4,3],{strokeColor:'#000000'});
+                            ep1_p3=board_p3.create('point',[-4,-2],{strokeColor:'#000000',fillColor:'#000000',name:''});
+                            ep2_p3=board_p3.create('point',[1,-7],{strokeColor:'#000000',fillColor:'#FFFFFF',name:''});
+                            ep3_p3=board_p3.create('point',[1,0],{strokeColor:'#000000',fillColor:'#FFFFFF',name:''});
+                            ep4_p3=board_p3.create('point',[3,6],{strokeColor:'#000000',fillColor:'#000000',name:''});
+                            ep1_p3.setProperty({fixed:true});
+                            ep2_p3.setProperty({fixed:true});
+                            ep3_p3.setProperty({fixed:true});
+                            ep4_p3.setProperty({fixed:true});
+                            s_p3 = board_p3.createElement('slider',[[-4.5,-7],[-1,-7],[-4,-4,3]]);
+                            tracepoint_p3=board_p3.create('point',[function() {return dfun_p3(s_p3.Value());},function() {return f_p3(s_p3.Value());}],{name:''});// domain:
+                            b2p1_p3 = board2_p3.create('point', [function(){return tracepoint_p3.X()},0], 
+                                         {fixed: true, trace: true, strokeColor: '#ff0000', name: 'D'});
+                            // cosine:
+                            b2p2_p3 = board3_p3.create('point', [
+                                         0, function(){return tracepoint_p3.Y();}], 
+                                         {fixed: true, trace: true, strokeColor: '#0000ff', fillColor:'#0000ff',name: 'R'});
+                            // Dependencies (only necessary if b2p1 or b2p2 is deleted)
+
+                            board_p3.addChild(board2_p3);
+                            board_p3.addChild(board3_p3);
+                            }
+                            // Animation
+                            var animated = false;
+                            function animate_p3(point, direction, count) {
+                               if(animated) {
+                                  point.stopAnimation();
+                                  animated = false;
+                               } else {
+                                  point.startAnimation(direction, count);
+                                  animated = true;
+                               }
+                            }
+                            // Generic Hide/Show
+                            function toggle(id) {
+                                    var state = document.getElementById(id).style.display;
+                                        if (state == 'block') {
+                                            document.getElementById(id).style.display = 'none';
+                                        } else {
+                                            document.getElementById(id).style.display = 'block';
+                                        }
+                                    }
+                            ]]>
+                            </input>
+                        </jsxgraph>
+                    </figure>
+                </sidebyside>
+                <p>A mock paragraph, just to test spacing.</p>
             </subsection>
         </section>
 

@@ -4134,6 +4134,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+<xsl:template match="jsxgraph" mode="panel-html-box">
+    <xsl:param name="b-original" select="true()" />
+    <xsl:apply-templates select="." />
+</xsl:template>
 
 <!-- Just temporary markers of unimplemented stuff -->
 <xsl:template match="*" mode="panel-html-box">
@@ -5977,6 +5981,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:with-param name="text" select="input" />
         </xsl:call-template>
     </xsl:element>
+    <xsl:copy-of select="controls" />
 </xsl:template>
 
 <!-- ########################## -->
