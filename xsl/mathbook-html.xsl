@@ -3454,6 +3454,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- ############################# -->
+<!-- Widths of Images, Videos, Etc -->
+<!-- ############################# -->
+
+<!-- Anyway that an image gets placed in a sidebyside  -->
+<!-- panel it should have a relative size filling that -->
+<!-- panel, so this is easy, just 100% all the time    -->
+<xsl:template match="image[ancestor::sidebyside]" mode="get-width-percentage">
+    <xsl:text>100%</xsl:text>
+</xsl:template>
 
 
 <!-- ###### -->
@@ -3482,7 +3492,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:with-param>
                 <xsl:with-param name="png-fallback-filename" />
                 <xsl:with-param name="image-width">
-                    <xsl:apply-templates select="." mode="image-width" />
+                    <xsl:apply-templates select="." mode="get-width-percentage" />
                 </xsl:with-param>
                 <xsl:with-param name="image-description">
                     <xsl:apply-templates select="description" />
@@ -3497,7 +3507,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <xsl:element name="img">
                 <xsl:attribute name="width">
-                    <xsl:apply-templates select="." mode="image-width" />
+                    <xsl:apply-templates select="." mode="get-width-percentage" />
                 </xsl:attribute>
                 <xsl:attribute name="src">
                     <xsl:value-of select="@source" />
@@ -3540,7 +3550,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:with-param>
         <xsl:with-param name="image-width">
-            <xsl:apply-templates select="." mode="image-width" />
+            <xsl:apply-templates select="." mode="get-width-percentage" />
         </xsl:with-param>
         <xsl:with-param name="image-description">
             <xsl:apply-templates select="description" />
@@ -4071,14 +4081,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
-<!-- "image-width" modal template can override a width        -->
-<!-- For an image inside a width-constrained panel, we simply -->
-<!-- require the image to fill the panel with a 100% width    -->
-<!-- Otherwise, just do the usual                             -->
+<!-- An image "knows" how to look outward         -->
+<!-- for side-by-side layout, or other width      -->
+<!-- specification so we do nothing extraordinary -->
 <xsl:template match="image" mode="panel-html-box">
-    <xsl:apply-templates select=".">
-        <xsl:with-param name="width-override" select="'100%'" />
-    </xsl:apply-templates>
+    <xsl:apply-templates select="." />
+</xsl:template>
+
+<!-- An video "knows" how to look outward         -->
+<!-- for side-by-side layout, or other width      -->
+<!-- specification so we do nothing extraordinary -->
+<xsl:template match="video" mode="panel-html-box">
+    <xsl:apply-templates select="." />
 </xsl:template>
 
 <!-- A figure or table is just a container to hold a -->
@@ -4087,10 +4101,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- to the other routines                           -->
 <!-- table needs to pass width to tabular in case    -->
 <!-- there is a paragraph cell                       -->
+<!-- and generically to other contained objects      -->
 <xsl:template match="figure" mode="panel-html-box">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="width" select="''" />
     <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-html-box">
         <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="width" select="$width" />
     </xsl:apply-templates>
 </xsl:template>
 
@@ -4178,13 +4195,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Video -->
 <xsl:template match="video">
+    <xsl:variable name="width">
+        <xsl:apply-templates select="." mode="get-width-percentage" />
+    </xsl:variable>
+    <xsl:variable name="width-fraction">
+        <xsl:value-of select="substring-before($width,'%') div 100" />
+    </xsl:variable>
     <xsl:element name="video">
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="internal-id"/>
         </xsl:attribute>
         <xsl:attribute name="width">
-            <xsl:apply-templates select="." mode="image-width" />
+            <xsl:value-of select="$design-width * $width-fraction" />
         </xsl:attribute>
+        <!-- look to YouTube/jsxgraph code for aspect-ratio handling -->
         <!-- an empty string is equivalent to the "value-less" syntax -->
         <xsl:attribute name="controls" />
         <xsl:element name="source">
@@ -4230,7 +4254,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- start/end time parameters -->
 <xsl:template match="video[@youtube]">
     <xsl:variable name="width">
-        <xsl:apply-templates select="." mode="image-width" />
+        <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
     <xsl:variable name="width-fraction">
         <xsl:value-of select="substring-before($width,'%') div 100" />
@@ -5893,7 +5917,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <xsl:template match="jsxgraph">
     <!-- interpret @width percentage and @aspect ratio -->
     <xsl:variable name="width-percentage">
-        <xsl:apply-templates select="." mode="image-width" />
+        <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
     <xsl:variable name="aspect-ratio">
         <xsl:apply-templates select="." mode="aspect-ratio" />

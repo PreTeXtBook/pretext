@@ -2285,29 +2285,75 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Widths of Images, Videos, Etc -->
 <!-- ############################# -->
 
-<xsl:template match="image|video|jsxgraph" mode="image-width">
-    <xsl:param name="width-override" select="''" />
-    <!-- every (?) image comes here for width              -->
-    <!-- test for author-provided poorly-constructed width -->
-    <xsl:if test="@width">
-        <xsl:variable name="improved-width" select="normalize-space(@width)" />
-    </xsl:if>
-    <!-- overrides, global default, should be error-checked, sanitized elsewhere -->
+<!-- Because we allow width settings as consequences of sidebyside     -->
+<!-- layout parameters, we need to "reach up" and get these widths     -->
+<!-- on occassion.  So we consider the PreTeXt markup/situation and    -->
+<!-- produce a percentage as a string.  Consumers need to convert to   -->
+<!-- a percentage, pixels, fractional linewidths - whatever is needed. -->
+
+<!-- An image appears -->
+<!--                                                                      -->
+<!--   1.  in a figure (itself not in a sidebyside) where it              -->
+<!--       can have a width specification on itself                       -->
+<!--   2.  in a sidebyside directly, or a figure in a sidebyside.         -->
+<!--       These widths come from the layout, and are converter dependent -->
+<!--                                                                      -->
+<!-- Entirely similar for jsxgraph and video but we do                    -->
+<!-- not consult default *image* width in docinfo                         -->
+
+<xsl:template match="image[not(ancestor::sidebyside)]|video[not(ancestor::sidebyside)]|jsxgraph[not(ancestor::sidebyside)]" mode="get-width-percentage">
     <xsl:choose>
-        <!-- in sidebyside, or contained figure, then fill panel -->
-        <!-- TODO:  warn if @width on sidebyside/*/image -->
-        <xsl:when test="$width-override">
-            <xsl:value-of select="$width-override" />
-        </xsl:when>
-        <!-- if given, use it -->
+         <!-- check for @width on the image itself -->
+         <!-- a good place to check author input   -->
         <xsl:when test="@width">
-            <xsl:value-of select="normalize-space(@width)" />
+            <xsl:variable name="normalized-width" select="normalize-space(@width)" />
+            <xsl:choose>
+                <xsl:when test="not(substring($normalized-width, string-length($normalized-width)) = '%')">
+                    <xsl:message>MBX:ERROR:   a "width" attribute should be given as a percentage (such as "40%", not as "<xsl:value-of select="$normalized-width" />"</xsl:message>
+                    <xsl:apply-templates select="." mode="location-report" />
+                    <!-- replace by 100% -->
+                    <xsl:text>100%</xsl:text>
+                </xsl:when>
+                <!-- test for stray spaces? -->
+                <xsl:otherwise>
+                    <xsl:value-of select="$normalized-width" />
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
-        <xsl:when test="/mathbook/docinfo/defaults/image-width">
-            <xsl:value-of select="normalize-space(/mathbook/docinfo/defaults/image-width)" />
+        <!-- perhaps an author-specific default width for images -->
+        <xsl:when test="self::image and $docinfo/defaults/image-width">
+            <xsl:value-of select="normalize-space($docinfo/defaults/image-width)" />
         </xsl:when>
+        <!-- what else to do? Author will figure it out if too extreme -->
         <xsl:otherwise>
             <xsl:text>100%</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- We need to get the right entry from the sidebyside layout.         -->
+<!-- This is complicated slightly by two possibilities for the element  -->
+<!-- of the sidebyside, a naked object, or a figure holding the object  -->
+<!-- Widths from sidebyside layouts have been error-checked as input    -->
+
+<!-- occurs in a figure, not contained in a sidebyside -->
+<xsl:template match="video[ancestor::sidebyside]|jsxgraph[ancestor::sidebyside]" mode="get-width-percentage">
+    <!-- in a side-by-side, get layout, locate in layout -->
+    <!-- and get width.  The layout-parameters template  -->
+    <!-- will analyze an enclosing sbsgroup              -->
+    <xsl:variable name="enclosing-sbs" select="ancestor::sidebyside" />
+    <xsl:variable name="rtf-layout">
+        <xsl:apply-templates select="$enclosing-sbs" mode="layout-parameters" />
+    </xsl:variable>
+    <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
+    <xsl:choose>
+        <xsl:when test="parent::figure">
+            <xsl:variable name="panel-number" select="count(parent::figure/preceding-sibling::*) + 1" />
+            <xsl:value-of select="$layout/width[$panel-number]" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:variable name="panel-number" select="count(preceding-sibling::*) + 1" />
+            <xsl:value-of select="$layout/width[$panel-number]" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>

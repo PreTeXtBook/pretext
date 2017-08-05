@@ -5625,7 +5625,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- behaves in minipages.                                      -->
 <!-- Called in -setup and saved results recycled in -panel      -->
 
-<xsl:template match="p|paragraphs|tabular|ol|ul|dl|list|poem" mode="panel-latex-box">
+<xsl:template match="p|paragraphs|tabular|video[@youtube]|ol|ul|dl|list|poem" mode="panel-latex-box">
     <xsl:param name="width" />
     <xsl:variable name="percent" select="substring-before($width,'%') div 100" />
     <xsl:if test="$sbsdebug">
@@ -5642,7 +5642,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="self::paragraphs">
             <xsl:apply-templates select="p|blockquote" />
         </xsl:when>
-        <xsl:when test="self::tabular">
+        <xsl:when test="self::tabular or self::video[@youtube]">
             <xsl:text>\centering</xsl:text>
             <xsl:apply-templates select="." />
         </xsl:when>
@@ -5688,21 +5688,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{BVerbatim}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- "image-width" modal template will eventually receive -->
-<!-- the panel width as an override, routed through every -->
-<!-- version of an image template, since we must size the -->
-<!-- image *before* building a LaTeX box around it        -->
-<!-- Otherwise, we just do the usual                      -->
-<!-- Baseline is automatically at the bottom of the box   -->
+<!-- The image "knows" how to size itself for a panel   -->
+<!-- Baseline is automatically at the bottom of the box -->
 <xsl:template match="image" mode="panel-latex-box">
     <xsl:param name="width" />
     <xsl:if test="$sbsdebug">
         <xsl:text>\fbox{</xsl:text>
         <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select=".">
-        <xsl:with-param name="width-override" select="$width" />
-    </xsl:apply-templates>
+    <xsl:apply-templates select="." />
     <xsl:if test="$sbsdebug">
         <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
         <xsl:text>}</xsl:text>
@@ -5754,17 +5748,44 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- ############################# -->
+<!-- Widths of Images, Videos, Etc -->
+<!-- ############################# -->
+
+<!-- For LaTeX, we need a fixed fraction of the linewidth,             -->
+<!-- so we need to get the right entry from the sidebyside layout.     -->
+<!-- This is complicated slightly by two possibilities for the element -->
+<!-- of the sidebyside, a naked image, or a figure holding an image    -->
+<!-- See xsl/mathbook-common.xsl for more information                  -->
+<xsl:template match="image[ancestor::sidebyside]" mode="get-width-percentage">
+    <!-- in a side-by-side, get layout, locate in layout -->
+    <!-- and get width.  The layout-parameters template  -->
+    <!-- will analyze an enclosing sbsgroup              -->
+    <xsl:variable name="enclosing-sbs" select="ancestor::sidebyside" />
+    <xsl:variable name="rtf-layout">
+        <xsl:apply-templates select="$enclosing-sbs" mode="layout-parameters" />
+    </xsl:variable>
+    <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
+    <xsl:choose>
+        <xsl:when test="parent::figure">
+            <xsl:variable name="panel-number" select="count(parent::figure/preceding-sibling::*) + 1" />
+            <xsl:value-of select="$layout/width[$panel-number]" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:variable name="panel-number" select="count(preceding-sibling::*) + 1" />
+            <xsl:value-of select="$layout/width[$panel-number]" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- ###### -->
 <!-- Images -->
 <!-- ###### -->
 
 <!-- With full source specified, default to PDF format -->
 <xsl:template match="image[@source]" >
-    <xsl:param name="width-override" select="''" />
     <xsl:variable name="width">
-        <xsl:apply-templates select="." mode="image-width">
-            <xsl:with-param name="width-override" select="$width-override" />
-        </xsl:apply-templates>
+        <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
     <xsl:variable name="extension">
         <xsl:call-template name="file-extension">
@@ -5785,11 +5806,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Asymptote graphics language  -->
 <!-- PDF's produced by mbx script -->
 <xsl:template match="image[asymptote]">
-    <xsl:param name="width-override" select="''" />
     <xsl:variable name="width">
-        <xsl:apply-templates select="." mode="image-width">
-            <xsl:with-param name="width-override" select="$width-override" />
-        </xsl:apply-templates>
+        <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
     <xsl:text>\includegraphics[width=</xsl:text>
     <xsl:value-of select="substring-before($width,'%') div 100" />
@@ -5805,11 +5823,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- PDF's produced by mbx script -->
 <!-- PNGs are fallback for 3D     -->
 <xsl:template match="image[sageplot]">
-    <xsl:param name="width-override" select="''" />
     <xsl:variable name="width">
-        <xsl:apply-templates select="." mode="image-width">
-            <xsl:with-param name="width-override" select="$width-override" />
-        </xsl:apply-templates>
+        <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
     <xsl:text>\IfFileExists{</xsl:text>
     <xsl:value-of select="$directory.images" />
