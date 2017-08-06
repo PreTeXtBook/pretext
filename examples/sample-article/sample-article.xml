@@ -5670,7 +5670,7 @@ the xsltproc executable.
         <section>
             <title>Side-by-Side Gallery</title>
 
-            <p>This subsection attempts to survey all the possible items that can be placed into a <c>sidebyside</c> element, in various combinations.  While intended to be exhaustive across contents, it does not test all possibilities, and is not meant to be instructive (see <xref ref="section-side-by-side" type="type-global" /> for that). The layout is identical for each <c>sidebyside</c>, 5<percent /> margins, panel widths of 40<percent /> and 45<percent />, leaving 5<percent /> for the space between the panels.  The vertical alignment is left at the default, <c>top</c>.</p>
+            <p>This subsection attempts to survey all the possible items that can be placed into a <c>sidebyside</c> element, in various combinations.  While intended to be exhaustive across contents, it does not test all possibilities, and is not meant to be instructive (see <xref ref="section-side-by-side" text="type-global" /> for that). The layout is identical for each <c>sidebyside</c>, 5<percent /> margins, panel widths of 40<percent /> and 45<percent />, leaving 5<percent /> for the space between the panels.  The vertical alignment is left at the default, <c>top</c>.</p>
 
             <p>We begin with <q>simpler</q> atomic items.  If necessary, comments follow each.</p>
 
