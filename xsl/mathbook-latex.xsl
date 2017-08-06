@@ -5234,14 +5234,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Program Listings -->
 <!-- The "listings-language" template is in the common file -->
 <xsl:template match="program">
-    <xsl:variable name="language"><xsl:apply-templates select="." mode="listings-language" /></xsl:variable>
+    <xsl:param name="width" select="''" />
+    <xsl:variable name="language">
+        <xsl:apply-templates select="." mode="listings-language" />
+    </xsl:variable>
     <xsl:text>\begin{lstlisting}[style=genericinput</xsl:text>
-    <xsl:if test="$language!=''">
+    <xsl:if test="not($language = '')">
         <xsl:text>, language=</xsl:text>
         <xsl:value-of select="$language" />
     </xsl:if>
-    <!-- lstlisting can be captioned: captionpos, title (hard-coded) -->
+    <xsl:if test="not($width = '')">
+        <xsl:text>, linewidth=</xsl:text>
+        <xsl:value-of select="$width" />
+    </xsl:if>
     <xsl:text>]&#xa;</xsl:text>
+    <!-- lstlisting can be captioned: captionpos, title (hard-coded) -->
     <xsl:call-template name="sanitize-text">
         <xsl:with-param name="text" select="input" />
     </xsl:call-template>
@@ -5471,7 +5478,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Most panel content is amenable to a \savebox           -->
     <!-- Exceptions require different constructions as a LR box -->
     <xsl:choose>
-        <xsl:when test="self::pre or self::console">
+        <xsl:when test="self::pre or self::console or self::program">
             <xsl:text>\begin{lrbox}{\panelbox</xsl:text>
             <xsl:apply-templates select="." mode="panel-id" />
             <xsl:text>}&#xa;</xsl:text>
@@ -5761,6 +5768,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- width parameter enters as a percentage              -->
 <!-- TODO: make enviroments for "pre" and consolidate    -->
 <xsl:template match="console" mode="panel-latex-box">
+    <xsl:param name="width" />
+    <xsl:apply-templates select=".">
+        <xsl:with-param name="width">
+            <xsl:value-of select="substring-before($width,'%') div 100" />
+            <xsl:text>\linewidth</xsl:text>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="program" mode="panel-latex-box">
     <xsl:param name="width" />
     <xsl:apply-templates select=".">
         <xsl:with-param name="width">
