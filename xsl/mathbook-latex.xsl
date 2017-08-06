@@ -1100,7 +1100,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- http://tex.stackexchange.com/questions/117531/styling-a-lstlisting-caption-using-caption-package -->
         <xsl:if test="//listing">
             <xsl:text>% Listing environment declared as new environment&#xa;</xsl:text>
-            <xsl:text>\newenvironment{listing}{}{}&#xa;</xsl:text>
+            <xsl:text>\newenvironment{listing}{\par\bigskip\noindent}{}&#xa;</xsl:text>
             <xsl:text>% New caption type for numbering, style, etc.&#xa;</xsl:text>
             <xsl:text>\DeclareCaptionType[within=</xsl:text>
             <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
@@ -1119,7 +1119,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="string-id" select="'listing'" />
             </xsl:call-template>
             <xsl:text>]&#xa;</xsl:text>
-            <xsl:text>\captionsetup[listingcaption]{aboveskip=0.5ex,belowskip=\baselineskip}&#xa;</xsl:text>
+            <xsl:text>\captionsetup[listingcaption]{aboveskip=1.0ex,belowskip=\baselineskip}&#xa;</xsl:text>
             <xsl:text>%% listings have the same number as theorems:&#xa;</xsl:text>
             <xsl:text>%% http://tex.stackexchange.com/questions/16195/how-to-make-equations-figures-and-theorems-use-the-same-numbering-scheme &#xa;</xsl:text>
             <xsl:text>\makeatletter&#xa;</xsl:text>
@@ -5477,8 +5477,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
     <!-- Most panel content is amenable to a \savebox           -->
     <!-- Exceptions require different constructions as a LR box -->
+    <!-- The contents of a "listing" are invariably atomic      -->
+    <!-- items which are treated in an "lrbox anyway            -->
     <xsl:choose>
-        <xsl:when test="self::pre or self::console or self::program">
+        <xsl:when test="self::pre or self::console or self::program or self::listing">
             <xsl:text>\begin{lrbox}{\panelbox</xsl:text>
             <xsl:apply-templates select="." mode="panel-id" />
             <xsl:text>}&#xa;</xsl:text>
@@ -5823,11 +5825,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- A figure or table is just a container to hold a -->
-<!-- title and/or caption, plus perhaps an xml:id,   -->
-<!-- so we just pawn off the contents (one only!)    -->
-<!-- to the other routines                           -->
-<xsl:template match="figure|table" mode="panel-latex-box">
+<!-- A figure, table, or listing is just a container -->
+<!-- to hold a title and/or caption, plus perhaps an -->
+<!-- xml:id, so we just pawn off the contents        -->
+<!-- (one only!) to the other routines               -->
+<!-- NB: sync with "panel-id" hack below             -->
+<xsl:template match="figure|table|listing" mode="panel-latex-box">
     <xsl:param name="width" />
     <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-latex-box">
         <xsl:with-param name="width" select="$width" />
@@ -5835,7 +5838,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- We need to do identically for the panel-id -->
-<xsl:template match="figure|table" mode="panel-id">
+<xsl:template match="figure|table|listing" mode="panel-id">
     <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-id" />
 </xsl:template>
 
