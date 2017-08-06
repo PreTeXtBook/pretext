@@ -5523,6 +5523,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- If an object carries a title, we add it to the -->
 <!-- row of titles across the top of the table      -->
+<!-- Bold, but not with a font-size increase, given -->
+<!-- width is constrained for panels                -->
 <xsl:template match="*" mode="panel-heading">
     <xsl:param name="width" />
     <xsl:if test="title">
@@ -5532,9 +5534,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:text>\parbox[t]{</xsl:text>
         <xsl:value-of select="substring-before($width,'%') div 100" />
-        <xsl:text>\linewidth}{\centering{}</xsl:text>
+        <xsl:text>\linewidth}{\centering{}\textbf{</xsl:text>
         <xsl:apply-templates select="." mode="title-full" />
-        <xsl:text>}</xsl:text>
+        <xsl:text>}}</xsl:text>
         <xsl:if test="$sbsdebug">
             <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
             <xsl:text>}</xsl:text>
