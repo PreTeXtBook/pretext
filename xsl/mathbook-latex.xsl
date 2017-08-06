@@ -1374,18 +1374,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
     </xsl:if>
     <xsl:if test="//console or //sidebyside/pre">
-        <!-- fancyvrb Verbatim used for consoles                    -->
+        <!-- fancyvrb BVerbatim used for consoles                   -->
         <!-- fancyvrb BVerbatim used for "pre" as sidebyside panel  -->
         <!-- perhaps use fancyvrb more widely, eg regular "pre"     -->
         <xsl:text>%% Fancy Verbatim for consoles and "pre" in sidebyside panels&#xa;</xsl:text>
         <xsl:text>\usepackage{fancyvrb}&#xa;</xsl:text>
         <xsl:if test="//console">
             <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
-            <xsl:text>%% Make a console environment from fancyvrb Verbatim environment&#xa;</xsl:text>
+            <xsl:text>%% Make a console environment from fancyvrb BVerbatim environment&#xa;</xsl:text>
             <xsl:text>%% with three command characters, to allow boldfacing input&#xa;</xsl:text>
             <xsl:text>%% The command characters may be escaped here when specified&#xa;</xsl:text>
-            <xsl:text>%% (Verbatim environment allows for line numbers, make feature request)&#xa;</xsl:text>
-            <xsl:text>\DefineVerbatimEnvironment{console}{Verbatim}%&#xa;</xsl:text>
+            <xsl:text>%% (boxed variant is useful for constructing sidebyside panels)&#xa;</xsl:text>
+            <xsl:text>%% (BVerbatim environment allows for line numbers, make feature request?)&#xa;</xsl:text>
+            <!-- "box verbatim" since could be used in a sidebyside panel -->
+            <xsl:text>\DefineVerbatimEnvironment{console}{BVerbatim}%&#xa;</xsl:text>
             <!-- numbers=left, stepnumber=5 trivial (can mimic in HTML with counting recursive routine) -->
             <xsl:text>{fontsize=\small,commandchars=</xsl:text>
             <xsl:variable name="latex-escaped" select="'&amp;%$#_{}~^\@'" />
@@ -5248,7 +5250,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Console Session -->
 <!-- An interactive command-line session with a prompt, input and output -->
+<!-- The width parameter supports use in a sidebyside panel              -->
 <xsl:template match="console">
+    <xsl:param name="width" select="''" />
     <!-- Grab all the characters, look for problems and warn -->
     <xsl:variable name="all-console-chars">
         <xsl:for-each select="prompt|input|output">
@@ -5268,8 +5272,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:message>MBX:ERROR:   a console session contains the LaTeX character in use for ending a group ("<xsl:value-of select="$console-end" />") and your LaTeX is unlikely to compile.  So use the "latex.console.end-char" parameter to set a different character, one not in use in any console session</xsl:message>
         <xsl:apply-templates select="." mode="location-report" />
     </xsl:if>
-    <!-- ignore prompt, and pick it up in trailing input -->
-    <xsl:text>\begin{console}&#xa;</xsl:text>
+    <!-- ignore prompt, and pick it up in trailing input  -->
+    <!-- optional width override is supported by fancyvrb -->
+    <xsl:text>\begin{console}</xsl:text>
+    <xsl:if test="not($width='')">
+        <xsl:text>[boxwidth=</xsl:text>
+        <xsl:value-of select="$width" />
+        <xsl:text>]</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="input|output" />
     <xsl:text>\end{console}&#xa;</xsl:text>
 </xsl:template>
@@ -5460,7 +5471,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Most panel content is amenable to a \savebox           -->
     <!-- Exceptions require different constructions as a LR box -->
     <xsl:choose>
-        <xsl:when test="self::pre">
+        <xsl:when test="self::pre or self::console">
             <xsl:text>\begin{lrbox}{\panelbox</xsl:text>
             <xsl:apply-templates select="." mode="panel-id" />
             <xsl:text>}&#xa;</xsl:text>
@@ -5738,6 +5749,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="interior"/>
     <xsl:text>\end{BVerbatim}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- A "console" is handled differently than a "pre"     -->
+<!-- (and it may be a superior approach).  The fancyvrb  -->
+<!-- "BVerbatim" environment produces a TeX box that may -->
+<!-- be digested by an lrbox where panels get measured,  -->
+<!-- then the PTX "console" enviroment is defined via a  -->
+<!-- fancyvrb mechanism, which allows an override of the -->
+<!-- width of the box.                                   -->
+<!-- width parameter enters as a percentage              -->
+<!-- TODO: make enviroments for "pre" and consolidate    -->
+<xsl:template match="console" mode="panel-latex-box">
+    <xsl:param name="width" />
+    <xsl:apply-templates select=".">
+        <xsl:with-param name="width">
+            <xsl:value-of select="substring-before($width,'%') div 100" />
+            <xsl:text>\linewidth</xsl:text>
+        </xsl:with-param>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- The image "knows" how to size itself for a panel   -->
