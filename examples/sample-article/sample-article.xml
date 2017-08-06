@@ -4090,14 +4090,16 @@ the xsltproc executable.
 
                 <p>The <c>console</c> tag is also implemented with <c>fancyvrb</c>, with adjustments for the input lines.  It will not look like it, but these are 8 such inputs, with similar results to above, but now bolded.</p>
 
-                <console>
-                    <input>  &#x00A1; &#x00A2; &#x00A3; &#x00A4; &#x00A5; &#x00A6; &#x00A7; &#x00A8; &#x00A9; &#x00AA; &#x00AB; &#x00AC;   &#x00AE; &#x00AF;</input>
-                    <input>&#x00B0; &#x00B1; &#x00B2; &#x00B3; &#x00B4; &#x00B5; &#x00B6; &#x00B7; &#x00B8; &#x00B9; &#x00BA; &#x00BB; &#x00BC; &#x00BD; &#x00BE; &#x00BF;</input>
-                    <input>&#x00C0; &#x00C1; &#x00C2; &#x00C3; &#x00C4; &#x00C5; &#x00C6; &#x00C7; &#x00C8; &#x00C9; &#x00CA; &#x00CB; &#x00CC; &#x00CD; &#x00CE; &#x00CF;</input>
-                    <input>&#x00D0; &#x00D1; &#x00D2; &#x00D3; &#x00D4; &#x00D5; &#x00D6; &#x00D7; &#x00D8; &#x00D9; &#x00DA; &#x00DB; &#x00DC; &#x00DD; &#x00DE; &#x00DF;</input>
-                    <input>&#x00E0; &#x00E1; &#x00E2; &#x00E3; &#x00E4; &#x00E5; &#x00E6; &#x00E7; &#x00E8; &#x00E9; &#x00EA; &#x00EB; &#x00EC; &#x00ED; &#x00EE; &#x00EF;</input>
-                    <input>&#x00F0; &#x00F1; &#x00F2; &#x00F3; &#x00F4; &#x00F5; &#x00F6; &#x00F7; &#x00F8; &#x00F9; &#x00FA; &#x00FB; &#x00FC; &#x00FD; &#x00FE; &#x00FF;</input>
-                </console>
+                <sidebyside margins="0%">
+                    <console>
+                        <input>  &#x00A1; &#x00A2; &#x00A3; &#x00A4; &#x00A5; &#x00A6; &#x00A7; &#x00A8; &#x00A9; &#x00AA; &#x00AB; &#x00AC;   &#x00AE; &#x00AF;</input>
+                        <input>&#x00B0; &#x00B1; &#x00B2; &#x00B3; &#x00B4; &#x00B5; &#x00B6; &#x00B7; &#x00B8; &#x00B9; &#x00BA; &#x00BB; &#x00BC; &#x00BD; &#x00BE; &#x00BF;</input>
+                        <input>&#x00C0; &#x00C1; &#x00C2; &#x00C3; &#x00C4; &#x00C5; &#x00C6; &#x00C7; &#x00C8; &#x00C9; &#x00CA; &#x00CB; &#x00CC; &#x00CD; &#x00CE; &#x00CF;</input>
+                        <input>&#x00D0; &#x00D1; &#x00D2; &#x00D3; &#x00D4; &#x00D5; &#x00D6; &#x00D7; &#x00D8; &#x00D9; &#x00DA; &#x00DB; &#x00DC; &#x00DD; &#x00DE; &#x00DF;</input>
+                        <input>&#x00E0; &#x00E1; &#x00E2; &#x00E3; &#x00E4; &#x00E5; &#x00E6; &#x00E7; &#x00E8; &#x00E9; &#x00EA; &#x00EB; &#x00EC; &#x00ED; &#x00EE; &#x00EF;</input>
+                        <input>&#x00F0; &#x00F1; &#x00F2; &#x00F3; &#x00F4; &#x00F5; &#x00F6; &#x00F7; &#x00F8; &#x00F9; &#x00FA; &#x00FB; &#x00FC; &#x00FD; &#x00FE; &#x00FF;</input>
+                    </console>
+                </sidebyside>
 
             </paragraphs>
 
@@ -4170,59 +4172,67 @@ the xsltproc executable.
 
             <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt or Brython (in-browser Python) or the Python language argument to the Sage Cell Server.  To see examples of authoring Sage cells, have a look at Section<nbsp /><xref ref="section-sage-cells" />.</p>
 
-            <p>In the meantime, program listings,<idx><h>listing</h></idx><idx><h>program listing</h></idx> especially with syntax highlighting, is useful all by itself.  The <q>R</q> language might not be a bad stand-in for pseudo-code, as it supports assignment with a left arrow and has fairly generic procedural syntax for control structures and data structures.  Or maybe Pascal would be a good choice?  Here is an example of R.  Note in the source that the entire block of code is wrapped in a CDATA section due to the four left angle brackets.</p>
+            <p>In the meantime, program listings,<idx><h>listing</h></idx><idx><h>program listing</h></idx> especially with syntax highlighting, is useful all by itself.  The <q>R</q> language might not be a bad stand-in for pseudo-code, as it supports assignment with a left arrow and has fairly generic procedural syntax for control structures and data structures.  Or maybe Pascal would be a good choice?  Here is an example of R.  Note in the source that the entire block of code is wrapped in a CDATA section due to the four left angle brackets.  We do not recommend this technique for isolated problem characters, but it is a life-saver for situations like the <init>XSLT</init> code just following.</p>
 
             <!-- Output in knowls?? -->
 
             <!-- Comments edited for length                                                         -->
             <!-- http://connectmv.com/tutorials/r-tutorial/programming-in-r-loops-and-flow-control/ -->
-            <program language="r">
-                <input>
-                <![CDATA[n_loops <- 10
-                x.means <- numeric(n_loops)  # create a vector of zeros for results
-                for (i in 1:n_loops){
-                    x <- as.integer(runif(100, 1, 7))  # 1 to 6, uniformly
-                    x.means[i] <- mean(x)
-                }
-                x.means]]>
-                </input>
-            </program>
+            <sidebyside width="100%">
+                <program language="r">
+                    <input>
+                    <![CDATA[n_loops <- 10
+                    x.means <- numeric(n_loops)  # create a vector of zeros for results
+                    for (i in 1:n_loops){
+                        x <- as.integer(runif(100, 1, 7))  # 1 to 6, uniformly
+                        x.means[i] <- mean(x)
+                    }
+                    x.means]]>
+                    </input>
+                </program>
+            </sidebyside>
 
             <p>And some self-referential XSL:</p>
 
-            <program language="xslt">
-                <input>
-                <![CDATA[<xsl:template match="biblio" mode="number">
-                    <xsl:apply-templates select="." mode="structural-number" />
-                    <xsl:text>.</xsl:text>
-                    <xsl:number from="references" level="any" count="biblio" />
-                </xsl:template>]]>
-                </input>
-            </program>
+            <sidebyside margins="15%">
+                <program language="xslt">
+                    <input>
+                    <![CDATA[<xsl:template match="biblio" mode="number">
+                        <xsl:apply-templates select="." mode="structural-number" />
+                        <xsl:text>.</xsl:text>
+                        <xsl:number from="references" level="any" count="biblio" />
+                    </xsl:template>]]>
+                    </input>
+                </program>
+            </sidebyside>
 
             <p>You can write made-up pseudo-code and get reasonable syntax highlighting, but you might explain to a reader what your symbols all mean.  This routine takes the <m>m\times n</m> marix <m>A</m> to reduced row-echelon form.  Note in the source the use of escaped characters for the four angle brackets.</p>
 
-            <program>
-                <input>
-                input m, n and A
-                r := 0
-                for j := 1 to n
-                   i := r+1
-                   while i &lt;= m and A[i,j] == 0
-                       i := i+1
-                   if i &lt; m+1
-                       r := r+1
-                       swap rows i and r of A (row op 1)
-                       scale A[r,j] to a leading 1 (row op 2)
-                       for k := 1 to m, k &lt;&gt; r
-                           make A[k,j] zero (row op 3, employing row r)
-                output r and A
-                </input>
-            </program>
+            <sidebyside margins="5%">
+                <program>
+                    <input>
+                    input m, n and A
+                    r := 0
+                    for j := 1 to n
+                       i := r+1
+                       while i &lt;= m and A[i,j] == 0
+                           i := i+1
+                       if i &lt; m+1
+                           r := r+1
+                           swap rows i and r of A (row op 1)
+                           scale A[r,j] to a leading 1 (row op 2)
+                           for k := 1 to m, k &lt;&gt; r
+                               make A[k,j] zero (row op 3, employing row r)
+                    output r and A
+                    </input>
+                </program>
+            </sidebyside>
 
             <p>Look in the <c>mathbook-common.xsl</c> file to see the strings to use to identify languages.  Always all-lowercase, no symbols, no punctuation.</p>
 
-            <p>A <c>program</c> may be nested inside a <c>listing</c>, which behaves similar to a <c>figure</c>.  You can provide a <c>caption</c>, and the listing will be numbered along with tables and figures.  This then makes it possible to cross-reference the listing, such as <xref ref="listing-c-hello" text="type-global" />.</p>
+            <p>Note that the above examples all have slightly different widths (theser are very evident in print with the frames).  As 2-D atomic objects, to place them in the narrative requires the layout features of a <c>sidebyside</c> element.  Then <c>width</c> and/or <c>margin</c> attributes will influence the width of the panel.</p>
+
+            <p>A <c>program</c> may also be nested inside a <c>listing</c>, which behaves similar to a <c>figure</c>.  You can provide a <c>caption</c>, and the listing will be numbered along with tables and figures.  This then makes it possible to cross-reference the listing, such as <xref ref="listing-c-hello" text="type-global" />.  It also removes the requirement of wrapping the <c>program</c> in a <c>sidebyside</c>.  For technical reasons, the three examples above will not split across a page break in PDF output, but the placement inside a <c>listing</c> will allow splits, as you should see in at least one example following.</p>
 
             <listing xml:id="listing-c-hello">
                 <caption>C Version of <q>Hello, World!</q></caption>
@@ -4278,7 +4288,7 @@ the xsltproc executable.
                 <p>This is a proof that is authored <q>detached.</q>  It is not associated with the theorem above in a way other than simply following it.</p>
             </proof>
 
-            <p>A specialized version of a program listing is an interactive command/response session at a command-line, where differing fonts are used to differentiate the system prompt, the user's commands, and the system's reaction.  A   <c>console</c> session may be used by itself, or it can be wrapped in a listing to get a number and a caption.  As elsewhere, you will need to escape ampersands and angle brackets (such as if you have a command using redirection), using <c>&amp;amp;</c>, <c>&amp;lt;</c>, and <c>&amp;gt;</c> in your source.</p>
+            <p>A specialized version of a program listing is an interactive command/response session at a command-line, where differing fonts are used to differentiate the system prompt, the user's commands, and the system's reaction.  A   <c>console</c> session may be used by itself inside a <c>sidebyside</c>, or it can be wrapped in a listing to get a number and a caption.  As elsewhere, you will need to escape ampersands and angle brackets (such as if you have a command using redirection), using <c>&amp;amp;</c>, <c>&amp;lt;</c>, and <c>&amp;gt;</c> in your source.</p>
 
             <listing xml:id="console-raspberry-pi">
                 <caption>Console Session: <c>int</c> and <c>float</c></caption>
@@ -4294,6 +4304,22 @@ the xsltproc executable.
                     <input />
                 </console>
             </listing>
+
+            <p>Here is the plain version, placed inside a <c>sidebyside</c> for layout control.  We simply place a small margin on the left (at 4<percent />).</p>
+
+            <sidebyside margins="4%">
+                <console>
+                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                    <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
+                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                    <input>./intAndFloat</input>
+                    <output>
+                    The integer is 19088743 and the float is 19088.742188
+                    </output>
+                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                    <input />
+                </console>
+            </sidebyside>
 
             <p>If your console input exceeds more than one line, you can author it across several lines and your choice of line breaks will be reflected in the rendering.  You can decide to indent lines after the first one for clarity, if desired.  You can also decide if your audience needs line-continuation characters or not.  (But be careful, a backslash, <q><c>\</c>,</q> will require you to define the <c>latex.console.macro-char</c> xsltproc stringparam to something else, as explained below.)</p>
 
