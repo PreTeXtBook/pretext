@@ -246,6 +246,24 @@
         </paragraphs>
     </section>
 
+    <section xml:id="processing-testing-html">
+        <title>Testing <init>HTML</init> Output Locally</title>
+
+        <p>Certain complicated parts of <init>HTML</init> output will not always function when you look at <pretext /> output by just opening files in your web browser.  These include knowls, Sage cells, and YouTube videos.  This is a consequence of security policies and so will vary from browser to browser.  A solution is to run a web server on your own machine, which is much easier than it sounds.  The one prerequisite is that you have Python installed, as is normally the case on any Linux or Mac computer.  On Windows, you may need to install Python yourself, but you may eventually need it for the <c>mbx</c> script anyway (<xref ref="mbx-script" />).  The following has been tested on Ubuntu Linux 16.10 and MacOS 10.12 (2017-08-06).</p>
+
+        <p>Python 2 and Python 3 are different in some regards, and that is the case here.  Your system may have commands <c>python2</c>, <c>python3</c>, and/or plain <c>python</c>.  Experiment with variants of the following two commands.  First, at a command-line, set your working directory to be the location of a directory containing the <init>HTML</init> files you want to test.<cd>
+            <cline>python3 -m http.server</cline>
+            <cline />
+            <cline>python2 -m SimpleHTTPServer </cline>
+        </cd>Use <c>--help</c> if you want to see the (limited) options for configuration.  Then go to the address bar of your browser and use<cd>
+            <cline>http://0.0.0.0:8000/index.html</cline>
+        </cd>to actually view the files from a web server.  Running the Python command should tell you which address to use (the <c>0.0.0.0</c>) and your project might not have an <c>index.html</c> file, so adjust accordingly.</p>
+
+        <p>Official documentation: <url href="https://docs.python.org/3/library/http.server.html">Python 3</url> and <url href="https://docs.python.org/2/library/simplehttpserver.html">Python 2</url>.</p>
+
+        <p>You may also be able to configure your <c>hosts</c> file so that this webserver looks like it lives somewhere else.  Clues at <url href="https://bowerwebsolutions.com/how-to-edit-your-local-host-file-for-testing-web-sites/"><c>bowerwebsolutions.com</c></url>.</p>
+    </section>
+
     <section xml:id="processing-doctest-sage">
         <title>Doctesting Sage Code</title>
 
