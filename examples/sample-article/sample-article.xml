@@ -3628,79 +3628,54 @@ the xsltproc executable.
                 </figure>
 
 
-                <p>Here are the two previous examples, but the first has been given a different aspect ratio, and both are smaller overall.  They have been included in a <c>sidebyside</c> layout element (see <xref ref="section-side-by-side" text="type-global" />) so they can be placed horizontally across the page.  (Note: placement in a <c>sidebyside</c> is not yet reflected in the <pretext /> schema.)</p>
+                <p>Here are the two new examples, but the first has been given an extreme aspect ratio, and both are smaller overall.  They have been included in a <c>sidebyside</c> layout element (see <xref ref="section-side-by-side" text="type-global" />) so they can be placed horizontally across the page.  (Note: placement in a <c>sidebyside</c> is not yet reflected in the <pretext /> schema.)  These are again from the <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>, the left being Fermat's Spiral and the right being a demonstration of B-splines.</p>
 
                 <sidebyside widths="35% 55%">
-                    <jsxgraph xml:id="jsxgraph-archimedian-spiral-in-sidebyside" aspect="3:4">
-                        <!-- http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral -->
+                    <jsxgraph xml:id="jsxgraph-fermats-spiral" aspect="5:8">
+                        <!-- https://jsxgraph.uni-bayreuth.de/wiki/index.php/Fermat%27s_spiral -->
                         <input>
-                        var board = JXG.JSXGraph.initBoard('jsxgraph-archimedian-spiral-in-sidebyside', {boundingbox: [-10, 10, 10, -10]});
-                        var a = board.create('slider', [[1,8],[5,8],[0,1,4]],{name:'a'});
-                        var b = board.create('slider', [[1,9],[5,9],[0,0.25,4]],{name:'b'});
-
-                        var c = board.create('curve', [function(phi){return a.Value()+b.Value()*phi; }, [0, 0],0, 8*Math.PI],
+                        var board = JXG.JSXGraph.initBoard('jsxgraph-fermats-spiral', {boundingbox: [-10, 10, 10, -10]});
+                        var aa = board.create('slider', [[1,9],[5,9],[0,1,4]],{name:'a'});
+                        var c1 = board.create('curve', [function(phi){return aa.Value()*Math.sqrt(phi); }, [0, 0],0, 8*Math.PI],
+                                     {curveType:'polar', strokewidth:4});        
+                        var c2 = board.create('curve', [function(phi){return -aa.Value()*Math.sqrt(phi); }, [0, 0],0, 8*Math.PI],
                                      {curveType:'polar', strokewidth:4});
-
-                        var g = board.create('glider', [c]);
-                        var t = board.create('tangent', [g], {dash:2,strokeColor:'#a612a9'});
-                        var n = board.create('normal', [g], {dash:2,strokeColor:'#a612a9'});
                         </input>
                     </jsxgraph>
-                    <jsxgraph xml:id="jsxgraph-infinity-in-sidebyside">
-                        <!-- http://jsxgraph.uni-bayreuth.de/showcase/infinity.html -->
+                    <jsxgraph xml:id="jsxgraph-bspline">
+                        <!-- https://jsxgraph.uni-bayreuth.de/wiki/index.php/B-splines -->
                         <input><![CDATA[
-                        JXG.Options.renderer = 'canvas';
-                        var board = JXG.JSXGraph.initBoard('jsxgraph-infinity-in-sidebyside', {
-                                boundingbox: [-9, 8, 9, -10],
-                                keepaspectreatio: true,
-                                axis: false,
-                                grid: false,
-                                shownavigation: false
-                            });
+                        var brd = JXG.JSXGraph.initBoard('jsxgraph-bspline',
+                        {boundingbox:[-4,4,4,-4],keepaspectratio:true,axis:true});
 
-                        // construction
-                        board.suspendUpdate();
-                        var S = board.create('slider', [[-5,-6],[5,-6],[0,0.85,1]], {
-                            name:'Whirl'
-                        });
-                        var hue = board.create('slider', [[-5,-7],[5,-7],[0,20.5,36]], {
-                            name:'Colors'
-                        });
+                        var p = [], col = 'red'; 
+                        p.push(brd.create('point',[2,1],{strokeColor:col,fillColor:col})); 
+                        p.push(brd.create('point',[0.75,2.5],{strokeColor:col,fillColor:col})); 
+                        p.push(brd.create('point',[-0.3,0.3],{strokeColor:col,fillColor:col})); 
+                        p.push(brd.create('point',[-3,1],{strokeColor:col,fillColor:col}));      
+                        p.push(brd.create('point',[-0.75,-2.5],{strokeColor:col,fillColor:col}));
+                        p.push(brd.create('point',[1.5,-2.8],{strokeColor:col,fillColor:col}));  
+                        p.push(brd.create('point',[2,-0.5],{strokeColor:col,fillColor:col})); 
 
-                        var points = new Array();
-                        points[0] = board.create('point',[5, 5], {name:' '});
-                        points[1] = board.create('point',[-5, 5], {name:' '});
-                        points[2] = board.create('point',[-5, -5], {name:' '});
-                        points[3] = board.create('point',[5, -5], {name:' '});
+                        var c = brd.create('curve', JXG.Math.Numerics.bspline(p,4), 
+                                       {strokecolor:'blue', strokeOpacity:0.6, strokeWidth:5}); 
 
-                        function quadrangle(pt, n) {
-                            var col;
-                            var arr = new Array();
-                            for(var i = 0; i < 4; i++) {
-                                arr[i] = board.create('point',
-                                    [function(t) {
-                                        return function () {var x = pt[t].X();
-                                                var x1 = pt[(t+1)%4].X();
-                                                var s = S.Value();
-                                                return x+(x1-x)*s;
-                                         }}(i),
-                                    function(t) {
-                                        return function () {var y = pt[t].Y();
-                                                var y1 = pt[(t+1)%4].Y();
-                                                var s = S.Value();
-                                                return y+(y1-y)*s;
-                                         }}(i)
-                                    ],
-                                {size:1, name: "", withLabel: false, visible: false});
-                            }
-                            col =  function(){return JXG.hsv2rgb(hue.Value()*n,0.7,0.9);};
-                            board.create('polygon',pt, {fillColor:col});
-                            if(n>0)
-                                quadrangle(arr, --n);
-                        }
-                        quadrangle(points,30);
+                        var addSegment = function() {
+                           brd.suspendUpdate();
+                           p.push(brd.create('point',[Math.random()*8-4,Math.random()*8-4],
+                                   {strokeColor:col,fillColor:col})); 
+                           brd.unsuspendUpdate();
+                        };
 
-                        board.unsuspendUpdate();
+                        var removeSegment = function() {
+                           brd.suspendUpdate();
+
+                           if (p.length>2) {
+                               brd.removeObject(p[p.length-1]);  // remove the last point from the list of objects
+                               p.splice(p.length-1,1);           // remove the last point from the point array.
+                           }
+                           brd.unsuspendUpdate();
+                        };
                         ]]>
                         </input>
                     </jsxgraph>
@@ -3773,17 +3748,17 @@ the xsltproc executable.
                                 }
                             };
 
-                            graph_p3=board_p3.createElement('functiongraph',[f_p3,-4,3],{strokeColor:'#000000'});
+                            graph_p3=board_p3.create('functiongraph',[f_p3,-4,3],{strokeColor:'#000000'});
                             var ep1_p3=board_p3.create('point',[-4,-2],{strokeColor:'#000000',fillColor:'#000000',name:''});
                             var ep2_p3=board_p3.create('point',[1,-7],{strokeColor:'#000000',fillColor:'#FFFFFF',name:''});
                             var ep3_p3=board_p3.create('point',[1,0],{strokeColor:'#000000',fillColor:'#FFFFFF',name:''});
                             var ep4_p3=board_p3.create('point',[3,6],{strokeColor:'#000000',fillColor:'#000000',name:''});
-                            ep1_p3.setProperty({fixed:true});
-                            ep2_p3.setProperty({fixed:true});
-                            ep3_p3.setProperty({fixed:true});
-                            ep4_p3.setProperty({fixed:true});
+                            ep1_p3.setAttribute({fixed:true});
+                            ep2_p3.setAttribute({fixed:true});
+                            ep3_p3.setAttribute({fixed:true});
+                            ep4_p3.setAttribute({fixed:true});
 
-                            var s_p3 = board_p3.createElement('slider',[[-4.5,-7],[-1,-7],[-4,-4,3]]);
+                            var s_p3 = board_p3.create('slider',[[-4.5,-7],[-1,-7],[-4,-4,3]]);
                             var tracepoint_p3=board_p3.create('point',[function() {return dfun_p3(s_p3.Value());},function() {return f_p3(s_p3.Value());}],{name:''});
                             // domain:
                             var b2p1_p3 = board2_p3.create('point', [function(){return tracepoint_p3.X()},0], 
@@ -3841,16 +3816,16 @@ the xsltproc executable.
                                 }
                             };
 
-                            graph_p3=board_p3.createElement('functiongraph',[f_p3,-4,3],{strokeColor:'#000000'});
+                            graph_p3=board_p3.create('functiongraph',[f_p3,-4,3],{strokeColor:'#000000'});
                             ep1_p3=board_p3.create('point',[-4,-2],{strokeColor:'#000000',fillColor:'#000000',name:''});
                             ep2_p3=board_p3.create('point',[1,-7],{strokeColor:'#000000',fillColor:'#FFFFFF',name:''});
                             ep3_p3=board_p3.create('point',[1,0],{strokeColor:'#000000',fillColor:'#FFFFFF',name:''});
                             ep4_p3=board_p3.create('point',[3,6],{strokeColor:'#000000',fillColor:'#000000',name:''});
-                            ep1_p3.setProperty({fixed:true});
-                            ep2_p3.setProperty({fixed:true});
-                            ep3_p3.setProperty({fixed:true});
-                            ep4_p3.setProperty({fixed:true});
-                            s_p3 = board_p3.createElement('slider',[[-4.5,-7],[-1,-7],[-4,-4,3]]);
+                            ep1_p3.setAttribute({fixed:true});
+                            ep2_p3.setAttribute({fixed:true});
+                            ep3_p3.setAttribute({fixed:true});
+                            ep4_p3.setAttribute({fixed:true});
+                            s_p3 = board_p3.create('slider',[[-4.5,-7],[-1,-7],[-4,-4,3]]);
                             tracepoint_p3=board_p3.create('point',[function() {return dfun_p3(s_p3.Value());},function() {return f_p3(s_p3.Value());}],{name:''});// domain:
                             b2p1_p3 = board2_p3.create('point', [function(){return tracepoint_p3.X()},0], 
                                          {fixed: true, trace: true, strokeColor: '#ff0000', name: 'D'});
@@ -3888,7 +3863,8 @@ the xsltproc executable.
                         </jsxgraph>
                     </figure>
                 </sidebyside>
-                <p>A mock paragraph, just to test spacing.</p>
+
+                <p>Be careful about the Javascript code when there are several on the same page, as duplicate variables may affect one another's performance adversely.</p>
             </subsection>
         </section>
 
