@@ -4211,7 +4211,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################################## -->
 
 
+<!-- ##### -->
 <!-- Video -->
+<!-- ##### -->
+
+<!-- Author-hosted video -->
+<!-- not as fully-implemented as YouTube -->
 <xsl:template match="video">
     <xsl:variable name="width">
         <xsl:apply-templates select="." mode="get-width-percentage" />
@@ -4281,39 +4286,294 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="aspect-ratio">
         <xsl:text>0.5625</xsl:text>
     </xsl:variable>
-    <xsl:element name="iframe">
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id" />
-        </xsl:attribute>
-        <xsl:attribute name="type">text/html</xsl:attribute>
-        <xsl:attribute name="width">
-            <xsl:value-of select="$design-width * $width-fraction" />
-        </xsl:attribute>
-        <xsl:attribute name="height">
-            <xsl:value-of select="$design-width * $width-fraction * $aspect-ratio" />
-        </xsl:attribute>
-        <xsl:attribute name="frameborder">0</xsl:attribute>
-        <xsl:attribute name="src">
-            <xsl:text>https://www.youtube.com/embed/</xsl:text>
-            <xsl:value-of select="@youtube" />
-            <!-- alphabetical, ? separator first -->
-            <!-- enables keyboard controls       -->
-            <xsl:text>?disablekd=1</xsl:text>
-            <!-- use &amp; separator for remainder -->
-            <!-- modest branding -->
-            <xsl:text>&amp;modestbranding=1</xsl:text>
-            <!-- kill related videos at end -->
-            <xsl:text>&amp;rel=0</xsl:text>
-            <xsl:if test="@start">
-                <xsl:text>&amp;start=</xsl:text>
-                <xsl:value-of select="@start" />
+    <xsl:variable name="yt-width"  select="$design-width * $width-fraction" />
+    <xsl:variable name="yt-height" select="$design-width * $width-fraction * $aspect-ratio" />
+    <xsl:variable name="int-id">
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:variable>
+    <!-- construct a pop-out page when mandatory or electable -->
+    <!-- as a pop-out set YouTube autoplay parameter to true  -->
+    <xsl:if test="(@play-at = 'popout') or (@play-at = 'select')">
+    <!-- apparent width of content region of HTML page  -->
+    <!-- with no sidebar, subtract margins = 900 - 2*30 -->
+    <xsl:variable name="ptx-content-width" select="'840'" />
+    <xsl:variable name="ptx-content-height" select="$ptx-content-width * $aspect-ratio" />
+        <xsl:apply-templates select="." mode="masthead-only-page">
+            <xsl:with-param name="content">
+                <xsl:apply-templates select="." mode="youtube-iframe">
+                    <xsl:with-param name="iframe-width"  select="$ptx-content-width" />
+                    <xsl:with-param name="iframe-height" select="$ptx-content-height" />
+                    <xsl:with-param name="autoplay" select="'true'" />
+                </xsl:apply-templates>
+                <div style="text-align: center;">Reloading this page will reset a start location</div>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- nine combinations: embed|popout|select x default|generic|custom -->
+    <xsl:choose>
+        <xsl:when test="@play-at = 'popout'">
+            <a href="{$int-id}.html" target="_blank">
+            <!-- place a thumbnail as clickable for page already extant -->
+                <xsl:choose>
+                    <xsl:when test="@preview = 'generic'">
+                        <xsl:call-template name="generic-preview-svg">
+                            <xsl:with-param name="width" select="$yt-width" />
+                            <xsl:with-param name="height" select="$yt-height" />
+                        </xsl:call-template>
+                    </xsl:when>
+                    <!-- not implemented -->
+                    <xsl:when test="@preview = 'custom'" />
+                    <xsl:when test="(@preview = 'default') or not(@preview)">
+                        <xsl:variable name="thumbnail-image">
+                            <xsl:text>images/</xsl:text>
+                            <xsl:value-of select="$int-id" />
+                            <xsl:text>.jpg</xsl:text>
+                        </xsl:variable>
+                        <img src="{$thumbnail-image}" width="{$yt-width}" height="{$yt-height}"/>
+                    </xsl:when>
+                </xsl:choose>
+            </a>
+            <!-- until we get an overlay, explain popout -->
+            <div style="text-align: center;">
+                <xsl:text>Click Above to Play</xsl:text>
+            </div>
+        </xsl:when>
+        <xsl:when test="(@play-at = 'select') or (@play-at = 'embed') or not(@play-at)">
+            <xsl:choose>
+                <xsl:when test="@preview = 'generic'">
+                    <xsl:apply-templates select="." mode="youtube-iframe-generic">
+                        <xsl:with-param name="iframe-width"  select="$yt-width" />
+                        <xsl:with-param name="iframe-height" select="$yt-height" />
+                        <xsl:with-param name="autoplay" select="'true'" />
+                    </xsl:apply-templates>
+                </xsl:when>
+                <!-- not implemented -->
+                <!-- will require hiding device (make it a template?) -->
+                <xsl:when test="@preview = 'custom'" />
+                <xsl:when test="(@preview = 'default') or not(@preview)">
+                    <xsl:apply-templates select="." mode="youtube-iframe">
+                        <xsl:with-param name="iframe-width"  select="$yt-width" />
+                        <xsl:with-param name="iframe-height" select="$yt-height" />
+                        <xsl:with-param name="autoplay" select="'false'" />
+                    </xsl:apply-templates>
+                </xsl:when>
+            </xsl:choose>
+            <!-- for the reader-select case, we need a link as a "button" -->
+            <xsl:if test="@play-at = 'select'">
+                <div style="text-align: center;">
+                    <a href="{$int-id}.html" target="_blank">
+                        <xsl:text>Click to Pop-Out</xsl:text>
+                    </a>
+                </div>
             </xsl:if>
-            <xsl:if test="@end">
-                <xsl:text>&amp;end=</xsl:text>
-                <xsl:value-of select="@end" />
-            </xsl:if>
-        </xsl:attribute>
-    </xsl:element>
+        </xsl:when>
+        <xsl:otherwise />
+    </xsl:choose>
+</xsl:template>
+
+<!-- "Pop-Out Page" -->
+<!-- (A bit rough)                  -->
+<!-- no extra libraries, no sidebar -->
+<!-- 840px available (~900 - 2*30)  -->
+<!-- Page name comes from context node -->
+<!-- TODO:  one page template, super-parameterized      -->
+<!-- TODO:  trash navigation further in masthead        -->
+<!-- TODO:  replace libraries by hooks to add some back -->
+<xsl:template match="*" mode="masthead-only-page">
+    <xsl:param name="content" select="''" />
+    <xsl:variable name="int-id">
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:variable>
+    <exsl:document href="{$int-id}.html" method="html">
+        <!-- Need to be careful for format of this initial string     -->
+        <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
+        <xsl:call-template name="converter-blurb-html" />
+        <html lang="{$document-language}"> <!-- dir="rtl" here -->
+            <head>
+                <title>
+                    <!-- Leading with initials is useful for small tabs -->
+                    <xsl:if test="//docinfo/initialism">
+                        <xsl:apply-templates select="//docinfo/initialism" />
+                        <xsl:text> </xsl:text>
+                    </xsl:if>
+                <xsl:apply-templates select="." mode="title-simple" />
+                </title>
+                <meta name="Keywords" content="Authored in PreTeXt" />
+                <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
+                <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+                <!-- ########################################## -->
+                <!-- A variety of libraries were loaded here    -->
+                <!-- Only purpose of this page is YouTube video -->
+                <!-- A hook could go here for some extras       -->
+                <!-- ########################################## -->
+                <xsl:call-template name="knowl" />
+                <xsl:call-template name="mathbook-js" />
+                <xsl:call-template name="fonts" />
+                <xsl:call-template name="css" />
+            </head>
+            <xsl:element name="body">
+                <!-- the first class controls the default icon -->
+                <xsl:attribute name="class">
+                    <xsl:choose>
+                        <xsl:when test="/mathbook/book">mathbook-book</xsl:when>
+                        <xsl:when test="/mathbook/article">mathbook-article</xsl:when>
+                    </xsl:choose>
+                    <!-- ################################################# -->
+                    <!-- This is how the left sidebar goes away            -->
+                    <!-- <xsl:if test="$b-has-toc">                        -->
+                    <!--    <xsl:text> has-toc has-sidebar-left</xsl:text> -->
+                    <!-- </xsl:if>                                         -->
+                    <!-- ################################################# -->
+                </xsl:attribute>
+                <!-- assistive "Skip to main content" link    -->
+                <!-- this *must* be first for maximum utility -->
+                <xsl:call-template name="skip-to-content-link" />
+                <xsl:call-template name="latex-macros" />
+                 <header id="masthead" class="smallbuttons">
+                    <div class="banner">
+                        <!-- Seems to help clean up navigation some         -->
+                        <!-- <xsl:call-template name="google-search-box" /> -->
+                        <div class="container">
+                            <xsl:call-template name="brand-logo" />
+                            <div class="title-container">
+                                <h1 class="heading">
+                                    <xsl:element name="a">
+                                        <xsl:attribute name="href">
+                                            <xsl:apply-templates select="/mathbook/*[not(self::docinfo)]" mode="containing-filename" />
+                                        </xsl:attribute>
+                                        <span class="title">
+                                            <xsl:apply-templates select="/mathbook/book|/mathbook/article" mode="title-simple" />
+                                        </span>
+                                        <xsl:if test="normalize-space(/mathbook/book/subtitle|/mathbook/article/subtitle)">
+                                            <span class="subtitle">
+                                                <xsl:apply-templates select="/mathbook/book|/mathbook/article" mode="subtitle" />
+                                            </span>
+                                        </xsl:if>
+                                    </xsl:element>
+                                </h1>
+                                <!-- Serial list of authors/editors -->
+                                <p class="byline">
+                                    <xsl:apply-templates select="//frontmatter/titlepage/author" mode="name-list"/>
+                                    <xsl:apply-templates select="//frontmatter/titlepage/editor" mode="name-list"/>
+                                </p>
+                            </div>  <!-- title-container -->
+                        </div>  <!-- container -->
+                    </div> <!-- banner -->
+                    <!-- This seemed to not be enough, until Google Search went away  -->
+                    <!-- <xsl:apply-templates select="." mode="primary-navigation" /> -->
+                </header> <!-- masthead -->
+                <div class="page">
+                    <!-- With sidebars killed, this stuff is extraneous     -->
+                    <!-- <xsl:apply-templates select="." mode="sidebars" /> -->
+                    <main class="main">
+                        <div id="content" class="mathbook-content">
+                            <!-- This is content passed in as a parameter -->
+                            <xsl:copy-of select="$content" />
+                          </div>
+                    </main>
+                </div>
+                <xsl:apply-templates select="/mathbook/docinfo/analytics" />
+                <!-- <xsl:call-template name="pytutor-footer" /> -->
+            </xsl:element>
+        </html>
+    </exsl:document>
+</xsl:template>
+
+<!-- create iframe home for YouTube video -->
+<!-- dimensions and autoplay as parameters -->
+<xsl:template match="video[@youtube]" mode="youtube-iframe">
+    <xsl:param name="iframe-width" select="''" />
+    <xsl:param name="iframe-height" select="''" />
+    <xsl:param name="autoplay" select="'false'" />
+
+    <xsl:variable name="int-id">
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:variable>
+    <xsl:variable name="source-url">
+        <xsl:apply-templates select="." mode="youtube-embed-url">
+            <xsl:with-param name="autoplay" select="$autoplay" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <iframe id="{$int-id}"
+            type="text/html"
+            width="{$iframe-width}"
+            height="{$iframe-height}"
+            frameborder="0"
+            src="{$source-url}" />
+</xsl:template>
+
+<xsl:template name="generic-preview-svg">
+    <xsl:param name="width" select="''" />
+    <xsl:param name="height" select="''" />
+    <!-- viewbox was square (0,0), 96x96, now clipped 14 above and below                   -->
+    <!-- preserveAspectRatio="none" makes it amenable to matching video it hides           -->
+    <!-- SVG scaling, comprehensive: https://css-tricks.com/scale-svg/                     -->
+    <!-- Accessed: 2017-08-08                                                              -->
+    <!-- Page: https://commons.wikimedia.org/wiki/File:YouTube_Play_Button.svg             -->
+    <!-- File: https://upload.wikimedia.org/wikipedia/commons/d/d1/YouTube_Play_Button.svg -->
+    <!-- License text:  This image only consists of simple geometric shapes or text.       -->
+    <!-- It does not meet the threshold of originality needed for copyright protection,    -->
+    <!-- and is therefore in the public domain.                                            -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 14 96 68" width="{$width}" height="{$height}" style="cursor:pointer;" preserveAspectRatio="none">
+        <path fill="#e62117" d="M94.98,28.84c0,0-0.94-6.6-3.81-9.5c-3.64-3.81-7.72-3.83-9.59-4.05c-13.4-0.97-33.52-0.85-33.52-0.85s-20.12-0.12-33.52,0.85c-1.87,0.22-5.95,0.24-9.59,4.05c-2.87,2.9-3.81,9.5-3.81,9.5S0.18,36.58,0,44.33v7.26c0.18,7.75,1.14,15.49,1.14,15.49s0.93,6.6,3.81,9.5c3.64,3.81,8.43,3.69,10.56,4.09c7.53,0.72,31.7,0.89,32.54,0.9c0.01,0,20.14,0.03,33.54-0.94c1.87-0.22,5.95-0.24,9.59-4.05c2.87-2.9,3.81-9.5,3.81-9.5s0.96-7.75,1.02-15.49v-7.26C95.94,36.58,94.98,28.84,94.98,28.84z M38.28,61.41v-27l25.74,13.5L38.28,61.41z"/>
+    </svg>
+</xsl:template>
+
+<!-- Creates a YouTube URL for embedding, typically in an iframe -->
+<!-- autoplay for popout, otherwise not                          -->
+<xsl:template match="video[@youtube]" mode="youtube-embed-url">
+    <xsl:param name="autoplay" select="'false'" />
+    <xsl:text>https://www.youtube.com/embed/</xsl:text>
+    <xsl:value-of select="@youtube" />
+    <!-- alphabetical, ? separator first -->
+    <!-- enables keyboard controls       -->
+    <xsl:text>?disablekd=1</xsl:text>
+    <!-- use &amp; separator for remainder -->
+    <!-- modest branding -->
+    <xsl:text>&amp;modestbranding=1</xsl:text>
+    <!-- kill related videos at end -->
+    <xsl:text>&amp;rel=0</xsl:text>
+    <xsl:if test="@start">
+        <xsl:text>&amp;start=</xsl:text>
+        <xsl:value-of select="@start" />
+    </xsl:if>
+    <xsl:if test="@end">
+        <xsl:text>&amp;end=</xsl:text>
+        <xsl:value-of select="@end" />
+    </xsl:if>
+    <!-- default autoplay is 0, don't -->
+    <xsl:if test="$autoplay = 'true'">
+        <xsl:text>&amp;autoplay=1</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- create iframe home, but with cover image  -->
+<!-- And make cover image clickable            -->
+<!-- dimensions as parameters                  -->
+<xsl:template match="video[@youtube]" mode="youtube-iframe-generic">
+    <xsl:param name="iframe-width" select="''" />
+    <xsl:param name="iframe-height" select="''" />
+    <xsl:param name="autoplay" select="'false'" />
+
+    <xsl:variable name="int-id">
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:variable>
+    <!-- hide behind generic image, code from post at -->
+    <!-- https://stackoverflow.com/questions/7199624  -->
+    <div onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">
+        <xsl:call-template name="generic-preview-svg">
+            <xsl:with-param name="width" select="$iframe-width" />
+            <xsl:with-param name="height" select="$iframe-height" />
+        </xsl:call-template>
+    </div>
+    <div style="display:none">
+        <!-- Hidden content in here -->
+        <xsl:apply-templates select="." mode="youtube-iframe">
+            <xsl:with-param name="iframe-width"  select="$iframe-width" />
+            <xsl:with-param name="iframe-height" select="$iframe-height" />
+            <xsl:with-param name="autoplay" select="'false'" />
+        </xsl:apply-templates>
+    </div>
 </xsl:template>
 
 <!-- ############ -->
