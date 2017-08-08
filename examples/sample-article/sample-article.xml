@@ -3933,6 +3933,42 @@ the xsltproc executable.
                     <video xml:id="ups-promo-sbs" source="images/ups-visitor-guide-360" />
                 </figure>
             </sidebyside>
+
+            <figure>
+                <caption>YouTube Play Location Options (<c>play-at</c> attribute)</caption>
+                <sidebyside margins="0%" width="30%">
+                    <figure>
+                        <caption>Embedded Only</caption>
+                        <video xml:id="pre-roll-countdown-1" youtube="gFHQ6Y0nxWs" play-at="embed" />
+                    </figure>
+                    <figure>
+                        <caption>Pop-Out Only, w/ Start/End</caption>
+                        <video xml:id="pre-roll-countdown-2" youtube="gFHQ6Y0nxWs" start="2" end="4" play-at="popout" />
+                    </figure>
+                    <figure>
+                        <caption>User Selection</caption>
+                        <video xml:id="pre-roll-countdown-3" youtube="gFHQ6Y0nxWs" play-at="select" />
+                    </figure>
+                </sidebyside>
+            </figure>
+
+            <figure>
+                <caption>YouTube with Generic Preview</caption>
+                <sidebyside margins="0%" width="30%">
+                    <figure>
+                        <caption>Embedded Only</caption>
+                        <video xml:id="pre-roll-countdown-4" youtube="gFHQ6Y0nxWs" play-at="embed" preview="generic" />
+                    </figure>
+                    <figure>
+                        <caption>Pop-Out Only, w/ Start/End</caption>
+                        <video xml:id="pre-roll-countdown-5" youtube="gFHQ6Y0nxWs" start="2" end="4" play-at="popout" preview="generic" />
+                    </figure>
+                    <figure>
+                        <caption>User Selection</caption>
+                        <video xml:id="pre-roll-countdown-6" youtube="gFHQ6Y0nxWs" play-at="select" preview="generic" />
+                    </figure>
+                </sidebyside>
+            </figure>
         </section>
 
         <exercises xml:id="exercises">
