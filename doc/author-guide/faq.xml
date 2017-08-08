@@ -74,6 +74,11 @@
 
             <p>If the <latex /> error does not help you locate the problem, a good first step in this case is to validate your <pretext /> source<mdash />see <xref ref="schema" />.</p>
         </li>
+
+        <li>
+            <title>I'd like to make one small adjustment in my output.</title>
+            <p>There are no plans to make it easy to change one thing in the layout (such as changing the title of all sub-sub-sections from flush-left to centered).  If you know enough, then you can hack such things yourself.  But doing so is inadvisable, except in the case where you are the rare person who has done a lot of studying and put a lot of effort into learning book design.  If that is the case, then it would be better to make a completely new layout and then share it so it is an option for other people to use.  See <xref ref="principle-output-styles" text="type-local">Principle</xref>.</p>
+        </li>
     </dl>
 </appendix>
 

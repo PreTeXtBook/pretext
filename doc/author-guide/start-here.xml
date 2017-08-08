@@ -47,7 +47,7 @@
 
                     <li><p><init>MBX</init> supports online documents which make use of the full capabilities of the Web.</p></li>
 
-                    <li><p><init>MBX</init> output is styled by selecting from a list of available templates, relieving the author of the burden involved in micromanaging the output format.</p></li>
+                    <li xml:id="principle-output-styles"><p><init>MBX</init> output is styled by selecting from a list of available templates, relieving the author of the burden involved in micromanaging the output format.</p></li>
 
                     <li><p><init>MBX</init> is free: the software is available at no cost, with an open license. The use of <init>MBX</init> does not impose any constraints on documents prepared with the system.</p></li>
 
