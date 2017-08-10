@@ -4923,7 +4923,21 @@ the xsltproc executable.
                     </tabular>
                 </table>
             </subsection>
+            
+            <subsection>
+                <title>A Single Captionless Image</title>
 
+                <p>Sometimes you may want to include a single <c>image</c> or <c>table</c> in an example or exercise without a caption. You can also achieve this using <c>sidebyside</c>. The first has width <c>10%</c>, and the second has width <c>10%</c> and margins <c>25%</c>.</p>
+                    
+                <sidebyside width="10%">
+                    <image source="images/cross-square.png"/>
+                </sidebyside>
+
+                <sidebyside width="10%" margins="25%">
+                    <image source="images/cross-square.png"/>
+                </sidebyside>
+            </subsection>
+            
             <subsection>
                 <title>Vertical Alignment</title>
                 <p>Vertical alignment can be specified using the <c>valign</c> attribute which admits a space-separated list of <c>top</c>, <c>middle</c>, and <c>bottom</c>; the default is <c>top</c>.</p>
