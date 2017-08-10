@@ -804,78 +804,78 @@ the xsltproc executable.
                         <title>A very structured project</title>
 
                         <prelude>
-                            <p>The next block is a project, demonstrating the use of the <c>task</c> element to structure its parts.  You are reading the <c>prelude</c> now.</p>
+                            <p>The next block is a project, demonstrating the use of the <c>task</c> element to structure its parts.  You are reading the <c>prelude</c> now.  The project has lots of nonsense words, so we can test spacing the nested items.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                         </prelude>
 
                         <introduction>
-                            <p>This is an over-arching introduction to the whole project.  We follow with some tasks.</p>
+                            <p>This is an over-arching introduction to the whole project.  We follow with some tasks.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                         </introduction>
 
                         <task>
-                            <p>This first task is very simple, just a paragraph.</p>
+                            <p>This first task is very simple, just a paragraph.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                         </task>
 
                         <task>
                             <introduction>
-                                <p>This second task is further divided by more tasks.  This is its introduction.</p>
+                                <p>This second task is further divided by more tasks.  This is its introduction.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                             </introduction>
                             <task>
-                                <p>A really simple subtask.</p>
+                                <p>A really simple subtask.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                             </task>
                             <task>
                                 <statement>
-                                    <p>A subtask with an answer.</p>
+                                    <p>A subtask with an answer.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                 </statement>
                                 <answer>
-                                    <p>Right!</p>
+                                    <p>Right!  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                 </answer>
                             </task>
                             <task xml:id="project-task-level-two">
                                 <introduction>
-                                    <p>Two simple sub-sub-tasks.</p>
+                                    <p>Two simple sub-sub-tasks.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                 </introduction>
                                 <task>
-                                    <p>First subsubtask.</p>
+                                    <p>First subsubtask.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                 </task>
                                 <task>
-                                    <p>Second subsubtask.</p>
+                                    <p>Second subsubtask.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                 </task>
                                 <conclusion>
-                                    <p>The conclusion of the structured subtask.</p>
+                                    <p>The conclusion of the structured subtask.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                 </conclusion>
                             </task>
                             <task>
-                                <p>A simple task as the last subtask.</p>
+                                <p>A simple task as the last subtask.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                             </task>
                             <conclusion>
-                                <p>This concludes our structured second task.</p>
+                                <p>This concludes our structured second task.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                             </conclusion>
                         </task>
 
                         <task>
                             <statement>
-                                <p>This third top-level task is intermediate in complexity, you are reading the <c>statement</c>, which is followed by more items.</p>
+                                <p>This third top-level task is intermediate in complexity, you are reading the <c>statement</c>, which is followed by more items. In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                             </statement>
                             <hint>
-                                <p>One hint.</p>
+                                <p>One hint.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                             </hint>
                             <answer>
-                                <p>First answer.</p>
+                                <p>First answer.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                             </answer>
                             <answer>
-                                <p>Second answer.</p>
+                                <p>Second answer.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                             </answer>
                             <solution>
-                                <p>At last, the solution.</p>
+                                <p>At last, the solution.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                             </solution>
                         </task>
 
                         <conclusion>
-                            <p>This is a conclusion where you could summarize the project.</p>
+                            <p>This is a conclusion where you could summarize the project.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                         </conclusion>
 
                         <postlude>
-                            <p>This postlude appears visually outside the project, but is authored within, to make clear its attachment to the project.</p>
+                            <p>This postlude appears visually outside the project, but is authored within, to make clear its attachment to the project.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                         </postlude>
                     </project>
 
