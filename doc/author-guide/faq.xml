@@ -28,6 +28,15 @@
             <p>There is a good chance you have <q>modularized</q> your source files and have not included the <c>--xinclude</c> switch on the command-line when you ran <c>xsltproc</c>.  (See <xref ref="processing-modular" />.)  We can often recognize this mistake<mdash />did you not get a warning?  (If not, we can improve the warning if you tell us how your source was organized.  So please do, since we would love to hear about it.)</p>
         </li>
 
+        <li xml:id="faq-pull-regularly">
+            <title>I don't like surprises and have not updated in months.  Now I have a problem.</title>
+            <p>We almost never release mistaken code that breaks output produced from valid source (<xref ref="schema" />).  And when we have, the cause is usually a small typo, or something that gets fixed easily and quickly.  We do sometimes make backwards-incompatible changes, but you always get warnings, often the changes can wait, there are announcements on the mailing lists, and whenever possible, we update tools that automate the changes.</p>
+
+            <p>As volunteers, we cannot support problems from old versions, and sometimes we have to implement changes in reaction to third-party software (like MathJax), which is beyond our control.  So while development is rapid, we implore you to remain on the <c>dev</c> branch of the repository and <c>git pull</c> regularly.  Such as <em>daily</em>, with your morning coffee as you sit down to write, or with your last compilation of the evening.  You will have <em>far fewer unpleasant surprises</em> this way, and we can help you better.</p>
+
+            <p>We understand that <pretext /> is a moving target, but we are iterating to a better state, and it is best to have everybody along for the <em>whole</em> ride.</p>
+        </li>
+
         <!-- mathbook-xml-support:  2015-06-21:  Subscripts in custom lists -->
         <!-- mathbook-xml-support:  2016-06-19:  Formulas in list labels    -->
         <li>

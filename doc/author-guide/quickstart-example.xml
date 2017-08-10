@@ -63,11 +63,11 @@
         <paragraphs>
             <title>Step 1: MathBook XML</title>
 
-            <p>You need to obtain the MathBook XML stylesheets, which are the main part of MathBook XML.  Since you are reading this, it may be possible that you have this already.  You can use <c>git</c> to <term>clone</term> the MathBook XML from the GitHub repository, and then be sure to checkout the <c>dev</c> branch to have the latest version.  This is a good way to go, since you can then easily <q>pull</q> updates to the stylesheets.</p>
+            <p>You need to obtain the MathBook XML stylesheets, which are the main part of MathBook XML.  Since you are reading this, it may be possible that you have this already.  You can use <c>git</c> to <term>clone</term> the MathBook XML from the GitHub repository, and then be sure to checkout the <c>dev</c> branch to have the latest version.  This is the best way to go, and you should only download the repository as a zip file once for an initial experiment, and then switch to using a clone instead.</p>
 
-            <p>If you do not want to install <c>git</c> you can get an archive of all the files to unpack on your system. Just remember that you will need to redo this each time you want to get updates.</p>
+            <p>Once you have a clone of the repository, you can issue <c>git pull</c>, and git will update your local copy with any recent changes.  You should do this <em>regularly</em><mdash />meaning on the order of <em>daily</em>.  See the <xref ref="faq-pull-regularly" text="title">FAQ entry</xref> for more about why we <em>expect</em> you to do this.</p>
 
-            <p>See the website at <url href="https://mathbook.pugetsound.edu/"><c>mathbook.pugetsound.edu</c></url> for details and commands for this step.</p>
+            <p>See the website at <url href="https://mathbook.pugetsound.edu/"><c>mathbook.pugetsound.edu</c></url> for details and commands for this step, right on the main page.</p>
         </paragraphs>
 
         <paragraphs>
