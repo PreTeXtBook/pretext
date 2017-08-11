@@ -4018,19 +4018,19 @@ the xsltproc executable.
             </figure>
 
             <figure>
-                <caption>Author-Hosted with Generic Preview</caption>
+                <caption>Author-Hosted, Generic Preview, Experimental Aspect Ratios</caption>
                 <sidebyside margins="0%" width="30%">
                     <figure>
                         <caption>Embedded Only</caption>
-                        <video xml:id="ups-promo-4" source="images/ups-visitor-guide-360" play-at="embed" preview="generic" />
+                        <video xml:id="ups-promo-4" source="images/ups-visitor-guide-360" play-at="embed" preview="generic" aspect="4:3"/>
                     </figure>
                     <figure>
                         <caption>Pop-Out Only, w/ Start/End</caption>
-                        <video xml:id="ups-promo-5" source="images/ups-visitor-guide-360" start="15" end="21" play-at="popout" preview="generic" />
+                        <video xml:id="ups-promo-5" source="images/ups-visitor-guide-360" start="15" end="21" play-at="popout" preview="generic" aspect=".40"/>
                     </figure>
                     <figure>
                         <caption>User Selection</caption>
-                        <video xml:id="ups-promo-6" source="images/ups-visitor-guide-360" play-at="select" preview="generic" />
+                        <video xml:id="ups-promo-6" source="images/ups-visitor-guide-360" play-at="select" preview="generic" aspect="1.05" />
                     </figure>
                 </sidebyside>
             </figure>

@@ -2359,26 +2359,44 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Assumes element may have an @aspect attribute   -->
-<!-- Form:  "width:height" or decimal width/height   -->
-<!-- Return: real number, unitless for use by caller -->
-<!-- Totally blank means caller supplies default     -->
-<!-- TODO: add for video, not for image (warn?) -->
-<xsl:template match="jsxgraph" mode="aspect-ratio">
+<!-- Caller can provide a defalt for its context     -->
+<!-- Input:  "width:height", or decimal width/height -->
+<!-- Return: real number as fraction width/height    -->
+<!-- Totally blank means nothing could be determined -->
+<xsl:template match="jsxgraph|video" mode="get-aspect-ratio">
+    <xsl:param name="default-aspect" select="''" />
+
+    <!-- look to element first, then to supplied default          -->
+    <!-- this could be empty (default default), then return empty -->
+    <xsl:variable name="the-aspect">
+        <xsl:choose>
+            <xsl:when test="@aspect">
+                <xsl:value-of select="@aspect" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$default-aspect" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:choose>
-        <xsl:when test="not(@aspect)" />
-        <xsl:when test="contains(@aspect, ':')">
-            <xsl:variable name="width" select="substring-before(@aspect, ':')" />
-            <xsl:variable name="height" select="substring-after(@aspect, ':')" />
+        <!-- nothing provided by element or caller -->
+        <xsl:when test="$the-aspect = ''" />
+        <!-- test if a ratio is given, and assume parts are good -->
+        <xsl:when test="contains($the-aspect, ':')">
+            <xsl:variable name="width" select="substring-before($the-aspect, ':')" />
+            <xsl:variable name="height" select="substring-after($the-aspect, ':')" />
             <xsl:value-of select="$width div $height" />
         </xsl:when>
-        <!-- NaN does not equal *anything*, so tests if a number -->
-        <!-- http://stackoverflow.com/questions/6895870          -->
-        <xsl:when test="(number(@aspect)=number(@aspect)) and (@aspect > 0)">
-            <xsl:value-of select="@aspect" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>MBX:WARNING: the @aspect attribute should be a ratio, like 4:3, or a positive number, not "<xsl:value-of select="@aspect" />"</xsl:message>
+        <!-- assume a number and see if it is bad, return nothing -->
+        <!-- NaN does not equal *anything*, so tests if a number  -->
+        <!-- http://stackoverflow.com/questions/6895870           -->
+        <xsl:when test="not(number($the-aspect) = number($the-aspect)) or ($the-aspect &lt; 0)">
+            <xsl:message>MBX:WARNING: the @aspect attribute should be a ratio, like 4:3, or a positive number, not "<xsl:value-of select="$the-aspect" />"</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
+        </xsl:when>
+        <!-- survives as a number -->
+        <xsl:otherwise>
+            <xsl:value-of select="$the-aspect" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>

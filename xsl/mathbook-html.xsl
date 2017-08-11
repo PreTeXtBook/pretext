@@ -4228,12 +4228,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="width-fraction">
         <xsl:value-of select="substring-before($width-percent,'%') div 100" />
     </xsl:variable>
-    <!-- assumes 16:9 ratio (0.5625), make configurable -->
     <xsl:variable name="aspect-ratio">
-        <xsl:text>0.5625</xsl:text>
+        <xsl:apply-templates select="." mode="get-aspect-ratio">
+            <xsl:with-param name="default-aspect" select="'16:9'" />
+        </xsl:apply-templates>
     </xsl:variable>
     <xsl:variable name="width"  select="$design-width * $width-fraction" />
-    <xsl:variable name="height" select="$design-width * $width-fraction * $aspect-ratio" />
+    <xsl:variable name="height" select="$design-width * $width-fraction div $aspect-ratio" />
     <xsl:variable name="int-id">
         <xsl:apply-templates select="." mode="internal-id" />
     </xsl:variable>
@@ -4243,7 +4244,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- apparent width of content region of HTML page  -->
     <!-- with no sidebar, subtract margins = 900 - 2*30 -->
     <xsl:variable name="ptx-content-width" select="'840'" />
-    <xsl:variable name="ptx-content-height" select="$ptx-content-width * $aspect-ratio" />
+    <xsl:variable name="ptx-content-height" select="$ptx-content-width div $aspect-ratio" />
         <xsl:apply-templates select="." mode="masthead-only-page">
             <xsl:with-param name="content">
                 <xsl:apply-templates select="." mode="video-embed">
@@ -4502,6 +4503,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <xsl:attribute name="height">
             <xsl:value-of select="$height" />
+        </xsl:attribute>
+        <!-- This CSS allows us to break the aspect-ratio -->
+        <!-- https://stackoverflow.com/questions/4000818/ -->
+        <xsl:attribute name="style">
+            <text>object-fit: fill;</text>
         </xsl:attribute>
         <!-- empty forms work as boolean switches -->
         <xsl:attribute name="controls" />
@@ -6224,26 +6230,19 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- JSXGraph -->
 <xsl:template match="jsxgraph">
     <!-- interpret @width percentage and @aspect ratio -->
-    <xsl:variable name="width-percentage">
+    <xsl:variable name="width-percent">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
+    <xsl:variable name="width-fraction">
+        <xsl:value-of select="substring-before($width-percent,'%') div 100" />
+    </xsl:variable>
     <xsl:variable name="aspect-ratio">
-        <xsl:apply-templates select="." mode="aspect-ratio" />
+        <xsl:apply-templates select="." mode="get-aspect-ratio">
+            <xsl:with-param name="default-aspect" select="'1:1'" />
+        </xsl:apply-templates>
     </xsl:variable>
-    <xsl:variable name="width-pixels">
-        <xsl:value-of select="round((substring-before($width-percentage, '%') div 100) * $design-width)" />
-    </xsl:variable>
-    <xsl:variable name="height-pixels">
-        <xsl:choose>
-            <xsl:when test="not($aspect-ratio='')">
-                <xsl:value-of select="round($width-pixels div $aspect-ratio)" />
-            </xsl:when>
-            <!-- empty string means not specified, use 1:1, ie square -->
-            <xsl:otherwise>
-                <xsl:value-of select="$width-pixels" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
+    <xsl:variable name="width"  select="$design-width * $width-fraction" />
+    <xsl:variable name="height" select="$design-width * $width-fraction div $aspect-ratio" />
     <!-- the div to hold the JSX output -->
     <xsl:element name="div">
         <xsl:attribute name="id">
@@ -6254,9 +6253,9 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         </xsl:attribute>
         <xsl:attribute name="style">
             <xsl:text>width:</xsl:text>
-            <xsl:value-of select="$width-pixels" />
+            <xsl:value-of select="$width" />
             <xsl:text>px; height:</xsl:text>
-            <xsl:value-of select="$height-pixels" />
+            <xsl:value-of select="$height" />
             <xsl:text>px;</xsl:text>
         </xsl:attribute>
     </xsl:element>
