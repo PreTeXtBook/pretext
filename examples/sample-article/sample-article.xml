@@ -3957,6 +3957,8 @@ the xsltproc executable.
                 </figure>
             </sidebyside>
 
+            <p>Videos may be embedded, or popped-out to play in a new window or tab (at greater width), or a link will give the reader the option to choose either style of playback.  The automatic pop-out option requires a static thumbnail image is available.  (For YouTube, these iamges can be obtained automatically with the <c>mbx</c> script.)</p>
+
             <figure>
                 <caption>YouTube Play Location Options (<c>play-at</c> attribute)</caption>
                 <sidebyside margins="0%" width="30%">
@@ -3975,6 +3977,8 @@ the xsltproc executable.
                 </sidebyside>
             </figure>
 
+            <p>Each of the three options above may have a generic play button placed over the one provided by the video.</p>
+
             <figure>
                 <caption>YouTube with Generic Preview</caption>
                 <sidebyside margins="0%" width="30%">
@@ -3989,6 +3993,44 @@ the xsltproc executable.
                     <figure>
                         <caption>User Selection</caption>
                         <video xml:id="pre-roll-countdown-6" youtube="gFHQ6Y0nxWs" play-at="select" preview="generic" />
+                    </figure>
+                </sidebyside>
+            </figure>
+
+            <p>Now, the six combinations above with an author-hosted video.</p>
+
+            <figure>
+                <caption>Author-Hosted Play Location Options (<c>play-at</c> attribute)</caption>
+                <sidebyside margins="0%" width="30%">
+                    <figure>
+                        <caption>Embedded Only</caption>
+                        <video xml:id="ups-promo-1" source="images/ups-visitor-guide-360" play-at="embed" />
+                    </figure>
+                    <figure>
+                        <caption>Pop-Out Only, w/ Start/End</caption>
+                        <video xml:id="ups-promo-2" source="images/ups-visitor-guide-360" start="15" end="21" play-at="popout" />
+                    </figure>
+                    <figure>
+                        <caption>User Selection</caption>
+                        <video xml:id="ups-promo-3" source="images/ups-visitor-guide-360" play-at="select" />
+                    </figure>
+                </sidebyside>
+            </figure>
+
+            <figure>
+                <caption>Author-Hosted with Generic Preview</caption>
+                <sidebyside margins="0%" width="30%">
+                    <figure>
+                        <caption>Embedded Only</caption>
+                        <video xml:id="ups-promo-4" source="images/ups-visitor-guide-360" play-at="embed" preview="generic" />
+                    </figure>
+                    <figure>
+                        <caption>Pop-Out Only, w/ Start/End</caption>
+                        <video xml:id="ups-promo-5" source="images/ups-visitor-guide-360" start="15" end="21" play-at="popout" preview="generic" />
+                    </figure>
+                    <figure>
+                        <caption>User Selection</caption>
+                        <video xml:id="ups-promo-6" source="images/ups-visitor-guide-360" play-at="select" preview="generic" />
                     </figure>
                 </sidebyside>
             </figure>
