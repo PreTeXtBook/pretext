@@ -756,14 +756,17 @@
             element video {
                 UniqueID?,
                 attribute width {text}?,
+                attribute aspect {text}?,
+                attribute start {xsd:integer}?,
+                attribute end {xsd:integer}?,
+                attribute play-at {"embed" | "popout" | "select"}?,
+                attribute preview {"default" | "generic" }?,
                 (AttributesSourceFile | AttributesYouTube)
             }
         AttributesSourceFile =
             attribute source {text}
         AttributesYouTube =
-            attribute youtube {text},
-            attribute start {text}?,
-            attribute end {text}?
+            attribute youtube {text}
         
         
         StatementExercise = 

@@ -1682,6 +1682,36 @@
       <optional>
         <attribute name="width"/>
       </optional>
+      <optional>
+        <attribute name="aspect"/>
+      </optional>
+      <optional>
+        <attribute name="start">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="end">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="play-at">
+          <choice>
+            <value>embed</value>
+            <value>popout</value>
+            <value>select</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="preview">
+          <choice>
+            <value>default</value>
+            <value>generic</value>
+          </choice>
+        </attribute>
+      </optional>
       <choice>
         <ref name="AttributesSourceFile"/>
         <ref name="AttributesYouTube"/>
@@ -1693,12 +1723,6 @@
   </define>
   <define name="AttributesYouTube">
     <attribute name="youtube"/>
-    <optional>
-      <attribute name="start"/>
-    </optional>
-    <optional>
-      <attribute name="end"/>
-    </optional>
   </define>
   <define name="StatementExercise">
     <element name="statement">

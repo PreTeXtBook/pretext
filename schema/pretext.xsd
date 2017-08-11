@@ -1590,10 +1590,28 @@
     <xs:complexType>
       <xs:attribute ref="xml:id"/>
       <xs:attribute name="width"/>
+      <xs:attribute name="aspect"/>
+      <xs:attribute name="start" type="xs:integer"/>
+      <xs:attribute name="end" type="xs:integer"/>
+      <xs:attribute name="play-at">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="embed"/>
+            <xs:enumeration value="popout"/>
+            <xs:enumeration value="select"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="preview">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="default"/>
+            <xs:enumeration value="generic"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="source"/>
       <xs:attribute name="youtube"/>
-      <xs:attribute name="start"/>
-      <xs:attribute name="end"/>
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="AttributesSourceFile">
@@ -1601,8 +1619,6 @@
   </xs:attributeGroup>
   <xs:attributeGroup name="AttributesYouTube">
     <xs:attribute name="youtube" use="required"/>
-    <xs:attribute name="start"/>
-    <xs:attribute name="end"/>
   </xs:attributeGroup>
   <xs:group name="StatementExercise">
     <xs:sequence>

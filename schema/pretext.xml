@@ -1335,21 +1335,24 @@
     <section>
         <title>Audio and Video</title>
 
-        <p>Well, just video right now.  The <c>xml:id</c> is not used as a target, but rather as a name for an associated thumbnail file, hence optional.</p>
+        <p>Well, just video right now.  The <c>xml:id</c> is not used as a target, but rather as a name for an associated thumbnail file, hence optional.  <c>preview="custom"</c> is a possible future addition.  Vimeo video could be a third source of embedded content.</p>
 
         <fragment xml:id="audiovideo">
         Video = 
             element video {
                 UniqueID?,
                 attribute width {text}?,
+                attribute aspect {text}?,
+                attribute start {xsd:integer}?,
+                attribute end {xsd:integer}?,
+                attribute play-at {"embed" | "popout" | "select"}?,
+                attribute preview {"default" | "generic" }?,
                 (AttributesSourceFile | AttributesYouTube)
             }
         AttributesSourceFile =
             attribute source {text}
         AttributesYouTube =
-            attribute youtube {text},
-            attribute start {text}?,
-            attribute end {text}?
+            attribute youtube {text}
         </fragment>
     </section>
 
