@@ -4215,79 +4215,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Video -->
 <!-- ##### -->
 
-<!-- Author-hosted video -->
-<!-- not as fully-implemented as YouTube -->
+<!-- We begin with a general construction of various   -->
+<!-- options for embedding, pop-out, and previews.     -->
+<!-- An abstract modal method "video-embed" constructs -->
+<!-- an HTML object of the correct size and with the   -->
+<!-- right autoplay characteristic.                    -->
+
 <xsl:template match="video">
-    <xsl:variable name="width">
+    <xsl:variable name="width-percent">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
     <xsl:variable name="width-fraction">
-        <xsl:value-of select="substring-before($width,'%') div 100" />
-    </xsl:variable>
-    <xsl:element name="video">
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id"/>
-        </xsl:attribute>
-        <xsl:attribute name="width">
-            <xsl:value-of select="$design-width * $width-fraction" />
-        </xsl:attribute>
-        <!-- look to YouTube/jsxgraph code for aspect-ratio handling -->
-        <!-- an empty string is equivalent to the "value-less" syntax -->
-        <xsl:attribute name="controls" />
-        <xsl:element name="source">
-            <xsl:attribute name="src">
-                <xsl:value-of select="@source"/>
-                <xsl:text>.mp4</xsl:text>
-            </xsl:attribute>
-            <xsl:attribute name="type">
-                <xsl:text>video/mp4</xsl:text>
-            </xsl:attribute>
-        </xsl:element>
-        <xsl:element name="source">
-            <xsl:attribute name="src">
-                <xsl:value-of select="@source"/>
-                <xsl:text>.ogg</xsl:text>
-            </xsl:attribute>
-            <xsl:attribute name="type">
-                <xsl:text>video/ogg</xsl:text>
-            </xsl:attribute>
-        </xsl:element>
-        <xsl:element name="source">
-            <xsl:attribute name="src">
-                <xsl:value-of select="@source"/>
-                <xsl:text>.webm</xsl:text>
-            </xsl:attribute>
-            <xsl:attribute name="type">
-                <xsl:text>video/webm</xsl:text>
-            </xsl:attribute>
-        </xsl:element>
-        <xsl:text>Your browser does not support the video tag.</xsl:text>
-    </xsl:element>
-</xsl:template>
-
-<!-- You Tube -->
-<!-- Better sizing would require CSS classes (16:9, 4:3?)                      -->
-<!-- https://css-tricks.com/NetMag/FluidWidthVideo/Article-FluidWidthVideo.php -->
-
-<!-- Configurable options, we are considering academic uses -->
-<!-- https://developers.google.com/youtube/player_parameters#Manual_IFrame_Embeds -->
-<!-- hl parameter for language seems superfluous, user settings override       -->
-<!-- something to do with cross-domain scripting security? -->
-<!-- <xsl:text>&amp;origin=http://example.com</xsl:text>   -->
-<!-- start/end time parameters -->
-<xsl:template match="video[@youtube]">
-    <xsl:variable name="width">
-        <xsl:apply-templates select="." mode="get-width-percentage" />
-    </xsl:variable>
-    <xsl:variable name="width-fraction">
-        <xsl:value-of select="substring-before($width,'%') div 100" />
+        <xsl:value-of select="substring-before($width-percent,'%') div 100" />
     </xsl:variable>
     <!-- assumes 16:9 ratio (0.5625), make configurable -->
     <xsl:variable name="aspect-ratio">
         <xsl:text>0.5625</xsl:text>
     </xsl:variable>
-    <xsl:variable name="yt-width"  select="$design-width * $width-fraction" />
-    <xsl:variable name="yt-height" select="$design-width * $width-fraction * $aspect-ratio" />
+    <xsl:variable name="width"  select="$design-width * $width-fraction" />
+    <xsl:variable name="height" select="$design-width * $width-fraction * $aspect-ratio" />
     <xsl:variable name="int-id">
         <xsl:apply-templates select="." mode="internal-id" />
     </xsl:variable>
@@ -4300,16 +4246,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="ptx-content-height" select="$ptx-content-width * $aspect-ratio" />
         <xsl:apply-templates select="." mode="masthead-only-page">
             <xsl:with-param name="content">
-                <xsl:apply-templates select="." mode="youtube-iframe">
-                    <xsl:with-param name="iframe-width"  select="$ptx-content-width" />
-                    <xsl:with-param name="iframe-height" select="$ptx-content-height" />
+                <xsl:apply-templates select="." mode="video-embed">
+                    <xsl:with-param name="width"  select="$ptx-content-width" />
+                    <xsl:with-param name="height" select="$ptx-content-height" />
                     <xsl:with-param name="autoplay" select="'true'" />
                 </xsl:apply-templates>
                 <div style="text-align: center;">Reloading this page will reset a start location</div>
             </xsl:with-param>
         </xsl:apply-templates>
     </xsl:if>
-    <!-- nine combinations: embed|popout|select x default|generic|custom -->
+    <!-- nine combinations: {embed|popout|select} x {default|generic|custom} -->
     <xsl:choose>
         <xsl:when test="@play-at = 'popout'">
             <a href="{$int-id}.html" target="_blank">
@@ -4317,8 +4263,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:choose>
                     <xsl:when test="@preview = 'generic'">
                         <xsl:call-template name="generic-preview-svg">
-                            <xsl:with-param name="width" select="$yt-width" />
-                            <xsl:with-param name="height" select="$yt-height" />
+                            <xsl:with-param name="width" select="$width" />
+                            <xsl:with-param name="height" select="$height" />
                         </xsl:call-template>
                     </xsl:when>
                     <!-- not implemented -->
@@ -4329,7 +4275,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:value-of select="$int-id" />
                             <xsl:text>.jpg</xsl:text>
                         </xsl:variable>
-                        <img src="{$thumbnail-image}" width="{$yt-width}" height="{$yt-height}"/>
+                        <img src="{$thumbnail-image}" width="{$width}" height="{$height}"/>
                     </xsl:when>
                 </xsl:choose>
             </a>
@@ -4341,9 +4287,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="(@play-at = 'select') or (@play-at = 'embed') or not(@play-at)">
             <xsl:choose>
                 <xsl:when test="@preview = 'generic'">
-                    <xsl:apply-templates select="." mode="youtube-iframe-generic">
-                        <xsl:with-param name="iframe-width"  select="$yt-width" />
-                        <xsl:with-param name="iframe-height" select="$yt-height" />
+                    <xsl:apply-templates select="." mode="video-embed-generic">
+                        <xsl:with-param name="width"  select="$width" />
+                        <xsl:with-param name="height" select="$height" />
                         <xsl:with-param name="autoplay" select="'true'" />
                     </xsl:apply-templates>
                 </xsl:when>
@@ -4351,9 +4297,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- will require hiding device (make it a template?) -->
                 <xsl:when test="@preview = 'custom'" />
                 <xsl:when test="(@preview = 'default') or not(@preview)">
-                    <xsl:apply-templates select="." mode="youtube-iframe">
-                        <xsl:with-param name="iframe-width"  select="$yt-width" />
-                        <xsl:with-param name="iframe-height" select="$yt-height" />
+                    <xsl:apply-templates select="." mode="video-embed">
+                        <xsl:with-param name="width"  select="$width" />
+                        <xsl:with-param name="height" select="$height" />
                         <xsl:with-param name="autoplay" select="'false'" />
                     </xsl:apply-templates>
                 </xsl:when>
@@ -4479,11 +4425,87 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </exsl:document>
 </xsl:template>
 
+<!-- create a "video" element for author-hosted -->
+<!-- dimensions and autoplay as parameters      -->
+<xsl:template match="video[@source]" mode="video-embed">
+    <xsl:param name="width" select="''" />
+    <xsl:param name="height" select="''" />
+    <xsl:param name="autoplay" select="'false'" />
+
+    <!-- start/end times (read both, see 4.1, 4.2.1 at w3.org)    -->
+    <!-- Media Fragment URI: https://www.w3.org/TR/media-frags/   -->
+    <!-- Javascript: https://stackoverflow.com/questions/11212715 -->
+    <!-- variable is possibly empty, so no harm using that later  -->
+    <xsl:variable name="temporal-fragment">
+        <xsl:if test="@start or @end">
+            <xsl:text>#t=</xsl:text>
+        </xsl:if>
+        <xsl:if test="@start">
+            <xsl:value-of select="@start" />
+        </xsl:if>
+        <!-- can lead with comma, implies 0,xx -->
+        <xsl:if test="@end">
+            <xsl:text>,</xsl:text>
+            <xsl:value-of select="@end" />
+        </xsl:if>
+    </xsl:variable>
+    <!-- we need to build the element, since @autoplay is optional -->
+    <xsl:element name="video">
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id"/>
+        </xsl:attribute>
+        <xsl:attribute name="width">
+            <xsl:value-of select="$width" />
+        </xsl:attribute>
+        <xsl:attribute name="height">
+            <xsl:value-of select="$height" />
+        </xsl:attribute>
+        <!-- empty forms work as boolean switches -->
+        <xsl:attribute name="controls" />
+        <xsl:if test="$autoplay = 'true'">
+            <xsl:attribute name="autoplay" />
+        </xsl:if>
+        <!-- children "source" elements -->
+        <xsl:element name="source">
+            <xsl:attribute name="src">
+                <xsl:value-of select="@source"/>
+                <xsl:text>.mp4</xsl:text>
+                <xsl:value-of select="$temporal-fragment" />
+            </xsl:attribute>
+            <xsl:attribute name="type">
+                <xsl:text>video/mp4</xsl:text>
+            </xsl:attribute>
+        </xsl:element>
+        <xsl:element name="source">
+            <xsl:attribute name="src">
+                <xsl:value-of select="@source"/>
+                <xsl:text>.ogg</xsl:text>
+                <xsl:value-of select="$temporal-fragment" />
+            </xsl:attribute>
+            <xsl:attribute name="type">
+                <xsl:text>video/ogg</xsl:text>
+            </xsl:attribute>
+        </xsl:element>
+        <xsl:element name="source">
+            <xsl:attribute name="src">
+                <xsl:value-of select="@source"/>
+                <xsl:text>.webm</xsl:text>
+                <xsl:value-of select="$temporal-fragment" />
+            </xsl:attribute>
+            <xsl:attribute name="type">
+                <xsl:text>video/webm</xsl:text>
+            </xsl:attribute>
+        </xsl:element>
+        <!-- failure to perform -->
+        <xsl:text>Your browser does not support the &lt;video&gt; tag.</xsl:text>
+    </xsl:element>
+</xsl:template>
+
 <!-- create iframe home for YouTube video -->
 <!-- dimensions and autoplay as parameters -->
-<xsl:template match="video[@youtube]" mode="youtube-iframe">
-    <xsl:param name="iframe-width" select="''" />
-    <xsl:param name="iframe-height" select="''" />
+<xsl:template match="video[@youtube]" mode="video-embed">
+    <xsl:param name="width" select="''" />
+    <xsl:param name="height" select="''" />
     <xsl:param name="autoplay" select="'false'" />
 
     <xsl:variable name="int-id">
@@ -4496,8 +4518,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <iframe id="{$int-id}"
             type="text/html"
-            width="{$iframe-width}"
-            height="{$iframe-height}"
+            width="{$width}"
+            height="{$height}"
             frameborder="0"
             src="{$source-url}" />
 </xsl:template>
@@ -4518,6 +4540,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <path fill="#e62117" d="M94.98,28.84c0,0-0.94-6.6-3.81-9.5c-3.64-3.81-7.72-3.83-9.59-4.05c-13.4-0.97-33.52-0.85-33.52-0.85s-20.12-0.12-33.52,0.85c-1.87,0.22-5.95,0.24-9.59,4.05c-2.87,2.9-3.81,9.5-3.81,9.5S0.18,36.58,0,44.33v7.26c0.18,7.75,1.14,15.49,1.14,15.49s0.93,6.6,3.81,9.5c3.64,3.81,8.43,3.69,10.56,4.09c7.53,0.72,31.7,0.89,32.54,0.9c0.01,0,20.14,0.03,33.54-0.94c1.87-0.22,5.95-0.24,9.59-4.05c2.87-2.9,3.81-9.5,3.81-9.5s0.96-7.75,1.02-15.49v-7.26C95.94,36.58,94.98,28.84,94.98,28.84z M38.28,61.41v-27l25.74,13.5L38.28,61.41z"/>
     </svg>
 </xsl:template>
+
+<!-- You Tube -->
+<!-- Better sizing would require CSS classes (16:9, 4:3?)                      -->
+<!-- https://css-tricks.com/NetMag/FluidWidthVideo/Article-FluidWidthVideo.php -->
+
+<!-- Configurable options, we are considering academic uses -->
+<!-- https://developers.google.com/youtube/player_parameters#Manual_IFrame_Embeds -->
+<!-- hl parameter for language seems superfluous, user settings override       -->
+<!-- something to do with cross-domain scripting security? -->
+<!-- <xsl:text>&amp;origin=http://example.com</xsl:text>   -->
+<!-- start/end time parameters -->
 
 <!-- Creates a YouTube URL for embedding, typically in an iframe -->
 <!-- autoplay for popout, otherwise not                          -->
@@ -4547,30 +4580,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- create iframe home, but with cover image  -->
-<!-- And make cover image clickable            -->
-<!-- dimensions as parameters                  -->
-<xsl:template match="video[@youtube]" mode="youtube-iframe-generic">
-    <xsl:param name="iframe-width" select="''" />
-    <xsl:param name="iframe-height" select="''" />
+<!-- Cover up an embedded version with a generic preview -->
+<!-- Click to reveal, so do not autoplay the video       -->
+<xsl:template match="video" mode="video-embed-generic">
+    <xsl:param name="width" select="''" />
+    <xsl:param name="height" select="''" />
     <xsl:param name="autoplay" select="'false'" />
 
-    <xsl:variable name="int-id">
-        <xsl:apply-templates select="." mode="internal-id" />
-    </xsl:variable>
     <!-- hide behind generic image, code from post at -->
     <!-- https://stackoverflow.com/questions/7199624  -->
+    <!-- TODO: maybe event handlers can start playing via onclick? -->
     <div onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">
         <xsl:call-template name="generic-preview-svg">
-            <xsl:with-param name="width" select="$iframe-width" />
-            <xsl:with-param name="height" select="$iframe-height" />
+            <xsl:with-param name="width" select="$width" />
+            <xsl:with-param name="height" select="$height" />
         </xsl:call-template>
     </div>
     <div style="display:none">
         <!-- Hidden content in here -->
-        <xsl:apply-templates select="." mode="youtube-iframe">
-            <xsl:with-param name="iframe-width"  select="$iframe-width" />
-            <xsl:with-param name="iframe-height" select="$iframe-height" />
+        <xsl:apply-templates select="." mode="video-embed">
+            <xsl:with-param name="width"  select="$width" />
+            <xsl:with-param name="height" select="$height" />
             <xsl:with-param name="autoplay" select="'false'" />
         </xsl:apply-templates>
     </div>
