@@ -4425,6 +4425,49 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </exsl:document>
 </xsl:template>
 
+<!-- Cover up an embedded version with a generic preview -->
+<!-- Click to reveal, so do not autoplay the video       -->
+<xsl:template match="video" mode="video-embed-generic">
+    <xsl:param name="width" select="''" />
+    <xsl:param name="height" select="''" />
+    <xsl:param name="autoplay" select="'false'" />
+
+    <!-- hide behind generic image, code from post at -->
+    <!-- https://stackoverflow.com/questions/7199624  -->
+    <!-- TODO: maybe event handlers can start playing via onclick? -->
+    <div onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">
+        <xsl:call-template name="generic-preview-svg">
+            <xsl:with-param name="width" select="$width" />
+            <xsl:with-param name="height" select="$height" />
+        </xsl:call-template>
+    </div>
+    <div style="display:none">
+        <!-- Hidden content in here -->
+        <xsl:apply-templates select="." mode="video-embed">
+            <xsl:with-param name="width"  select="$width" />
+            <xsl:with-param name="height" select="$height" />
+            <xsl:with-param name="autoplay" select="'false'" />
+        </xsl:apply-templates>
+    </div>
+</xsl:template>
+
+<xsl:template name="generic-preview-svg">
+    <xsl:param name="width" select="''" />
+    <xsl:param name="height" select="''" />
+    <!-- viewbox was square (0,0), 96x96, now clipped 14 above and below                   -->
+    <!-- preserveAspectRatio="none" makes it amenable to matching video it hides           -->
+    <!-- SVG scaling, comprehensive: https://css-tricks.com/scale-svg/                     -->
+    <!-- Accessed: 2017-08-08                                                              -->
+    <!-- Page: https://commons.wikimedia.org/wiki/File:YouTube_Play_Button.svg             -->
+    <!-- File: https://upload.wikimedia.org/wikipedia/commons/d/d1/YouTube_Play_Button.svg -->
+    <!-- License text:  This image only consists of simple geometric shapes or text.       -->
+    <!-- It does not meet the threshold of originality needed for copyright protection,    -->
+    <!-- and is therefore in the public domain.                                            -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 14 96 68" width="{$width}" height="{$height}" style="cursor:pointer;" preserveAspectRatio="none">
+        <path fill="#e62117" d="M94.98,28.84c0,0-0.94-6.6-3.81-9.5c-3.64-3.81-7.72-3.83-9.59-4.05c-13.4-0.97-33.52-0.85-33.52-0.85s-20.12-0.12-33.52,0.85c-1.87,0.22-5.95,0.24-9.59,4.05c-2.87,2.9-3.81,9.5-3.81,9.5S0.18,36.58,0,44.33v7.26c0.18,7.75,1.14,15.49,1.14,15.49s0.93,6.6,3.81,9.5c3.64,3.81,8.43,3.69,10.56,4.09c7.53,0.72,31.7,0.89,32.54,0.9c0.01,0,20.14,0.03,33.54-0.94c1.87-0.22,5.95-0.24,9.59-4.05c2.87-2.9,3.81-9.5,3.81-9.5s0.96-7.75,1.02-15.49v-7.26C95.94,36.58,94.98,28.84,94.98,28.84z M38.28,61.41v-27l25.74,13.5L38.28,61.41z"/>
+    </svg>
+</xsl:template>
+
 <!-- create a "video" element for author-hosted -->
 <!-- dimensions and autoplay as parameters      -->
 <xsl:template match="video[@source]" mode="video-embed">
@@ -4501,6 +4544,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- You Tube -->
+<!-- Better sizing would require CSS classes (16:9, 4:3?)                      -->
+<!-- https://css-tricks.com/NetMag/FluidWidthVideo/Article-FluidWidthVideo.php -->
+
+<!-- Configurable options, we are considering academic uses -->
+<!-- https://developers.google.com/youtube/player_parameters#Manual_IFrame_Embeds -->
+<!-- hl parameter for language seems superfluous, user settings override       -->
+<!-- something to do with cross-domain scripting security? -->
+<!-- <xsl:text>&amp;origin=http://example.com</xsl:text>   -->
+<!-- start/end time parameters -->
+
 <!-- create iframe home for YouTube video -->
 <!-- dimensions and autoplay as parameters -->
 <xsl:template match="video[@youtube]" mode="video-embed">
@@ -4523,34 +4577,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             frameborder="0"
             src="{$source-url}" />
 </xsl:template>
-
-<xsl:template name="generic-preview-svg">
-    <xsl:param name="width" select="''" />
-    <xsl:param name="height" select="''" />
-    <!-- viewbox was square (0,0), 96x96, now clipped 14 above and below                   -->
-    <!-- preserveAspectRatio="none" makes it amenable to matching video it hides           -->
-    <!-- SVG scaling, comprehensive: https://css-tricks.com/scale-svg/                     -->
-    <!-- Accessed: 2017-08-08                                                              -->
-    <!-- Page: https://commons.wikimedia.org/wiki/File:YouTube_Play_Button.svg             -->
-    <!-- File: https://upload.wikimedia.org/wikipedia/commons/d/d1/YouTube_Play_Button.svg -->
-    <!-- License text:  This image only consists of simple geometric shapes or text.       -->
-    <!-- It does not meet the threshold of originality needed for copyright protection,    -->
-    <!-- and is therefore in the public domain.                                            -->
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 14 96 68" width="{$width}" height="{$height}" style="cursor:pointer;" preserveAspectRatio="none">
-        <path fill="#e62117" d="M94.98,28.84c0,0-0.94-6.6-3.81-9.5c-3.64-3.81-7.72-3.83-9.59-4.05c-13.4-0.97-33.52-0.85-33.52-0.85s-20.12-0.12-33.52,0.85c-1.87,0.22-5.95,0.24-9.59,4.05c-2.87,2.9-3.81,9.5-3.81,9.5S0.18,36.58,0,44.33v7.26c0.18,7.75,1.14,15.49,1.14,15.49s0.93,6.6,3.81,9.5c3.64,3.81,8.43,3.69,10.56,4.09c7.53,0.72,31.7,0.89,32.54,0.9c0.01,0,20.14,0.03,33.54-0.94c1.87-0.22,5.95-0.24,9.59-4.05c2.87-2.9,3.81-9.5,3.81-9.5s0.96-7.75,1.02-15.49v-7.26C95.94,36.58,94.98,28.84,94.98,28.84z M38.28,61.41v-27l25.74,13.5L38.28,61.41z"/>
-    </svg>
-</xsl:template>
-
-<!-- You Tube -->
-<!-- Better sizing would require CSS classes (16:9, 4:3?)                      -->
-<!-- https://css-tricks.com/NetMag/FluidWidthVideo/Article-FluidWidthVideo.php -->
-
-<!-- Configurable options, we are considering academic uses -->
-<!-- https://developers.google.com/youtube/player_parameters#Manual_IFrame_Embeds -->
-<!-- hl parameter for language seems superfluous, user settings override       -->
-<!-- something to do with cross-domain scripting security? -->
-<!-- <xsl:text>&amp;origin=http://example.com</xsl:text>   -->
-<!-- start/end time parameters -->
 
 <!-- Creates a YouTube URL for embedding, typically in an iframe -->
 <!-- autoplay for popout, otherwise not                          -->
@@ -4578,32 +4604,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$autoplay = 'true'">
         <xsl:text>&amp;autoplay=1</xsl:text>
     </xsl:if>
-</xsl:template>
-
-<!-- Cover up an embedded version with a generic preview -->
-<!-- Click to reveal, so do not autoplay the video       -->
-<xsl:template match="video" mode="video-embed-generic">
-    <xsl:param name="width" select="''" />
-    <xsl:param name="height" select="''" />
-    <xsl:param name="autoplay" select="'false'" />
-
-    <!-- hide behind generic image, code from post at -->
-    <!-- https://stackoverflow.com/questions/7199624  -->
-    <!-- TODO: maybe event handlers can start playing via onclick? -->
-    <div onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">
-        <xsl:call-template name="generic-preview-svg">
-            <xsl:with-param name="width" select="$width" />
-            <xsl:with-param name="height" select="$height" />
-        </xsl:call-template>
-    </div>
-    <div style="display:none">
-        <!-- Hidden content in here -->
-        <xsl:apply-templates select="." mode="video-embed">
-            <xsl:with-param name="width"  select="$width" />
-            <xsl:with-param name="height" select="$height" />
-            <xsl:with-param name="autoplay" select="'false'" />
-        </xsl:apply-templates>
-    </div>
 </xsl:template>
 
 <!-- ############ -->
