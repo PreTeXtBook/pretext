@@ -5475,12 +5475,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newsavebox{\panelbox</xsl:text>
     <xsl:apply-templates select="." mode="panel-id" />
     <xsl:text>}&#xa;</xsl:text>
-    <!-- Most panel content is amenable to a \savebox           -->
-    <!-- Exceptions require different constructions as a LR box -->
-    <!-- The contents of a "listing" are invariably atomic      -->
-    <!-- items which are treated in an "lrbox anyway            -->
+    <!-- If the "panel-latex-box" creates something actually  -->
+    <!-- in a box of predictable overall width (such as a     -->
+    <!-- BVerbatim, or an \includegraphics), then an "lrbox"  -->
+    <!-- *environment* will strip any leading and trailing    -->
+    <!-- whitespace that creeps in.  Otherwise, content is    -->
+    <!-- packed into a box of predictable width via \savebox. -->
+    <!-- Moving images (bare, or from figures) into "lrbox"   -->
+    <!-- cut down on spurious minor overfull-hboxes           -->
+    <!-- See: http://tex.loria.fr/ctan-doc/macros/latex/doc/html/usrguide/node19.html -->
+    <!-- TODO: maybe we can use "lrbox" exclusively?          -->
     <xsl:choose>
-        <xsl:when test="self::pre or self::console or self::program or self::listing">
+        <xsl:when test="self::pre or self::console or self::program or self::listing or self::image or self::figure/image">
             <xsl:text>\begin{lrbox}{\panelbox</xsl:text>
             <xsl:apply-templates select="." mode="panel-id" />
             <xsl:text>}&#xa;</xsl:text>
