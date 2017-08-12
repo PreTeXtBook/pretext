@@ -431,7 +431,21 @@
             <ref name="Attribution"/>
           </zeroOrMore>
         </group>
-        <ref name="Contributors"/>
+        <group>
+          <zeroOrMore>
+            <choice>
+              <ref name="BlockText"/>
+              <ref name="SideBySideNoNumber"/>
+            </choice>
+          </zeroOrMore>
+          <ref name="Contributors"/>
+          <zeroOrMore>
+            <choice>
+              <ref name="BlockText"/>
+              <ref name="SideBySideNoNumber"/>
+            </choice>
+          </zeroOrMore>
+        </group>
       </choice>
     </element>
   </define>

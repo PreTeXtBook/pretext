@@ -1767,7 +1767,7 @@
                 MetaDataTitleOptional,
                 (
                     ((BlockText | SideBySideNoNumber)+, Attribution*) |
-                    Contributors
+                    ((BlockText | SideBySideNoNumber)*, Contributors, (BlockText | SideBySideNoNumber)*)
                 )
             }
         </fragment>
@@ -1776,7 +1776,7 @@
     <section>
         <title>Contributors</title>
 
-        <p>The <c>contributors</c> element may be the sole content of a <c>preface</c> and is a list of <c>contributor</c>.</p>
+        <p>A single <c>contributors</c> element may be placed into a <c>preface</c> and is a list of <c>contributor</c>.  It can be optionally preceded, or followed, by all the usual things that can go into any preface.</p>
 
         <fragment xml:id="contributor">
         Contributor =

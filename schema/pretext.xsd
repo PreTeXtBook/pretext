@@ -406,7 +406,17 @@
             </xs:choice>
             <xs:element minOccurs="0" maxOccurs="unbounded" ref="attribution"/>
           </xs:sequence>
-          <xs:element ref="contributors"/>
+          <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:group ref="BlockText"/>
+              <xs:group ref="SideBySideNoNumber"/>
+            </xs:choice>
+            <xs:element ref="contributors"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:group ref="BlockText"/>
+              <xs:group ref="SideBySideNoNumber"/>
+            </xs:choice>
+          </xs:sequence>
         </xs:choice>
       </xs:sequence>
       <xs:attributeGroup ref="MetaDataTitleOptional"/>

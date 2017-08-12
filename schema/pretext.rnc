@@ -193,7 +193,7 @@
                 MetaDataTitleOptional,
                 (
                     ((BlockText | SideBySideNoNumber)+, Attribution*) |
-                    Contributors
+                    ((BlockText | SideBySideNoNumber)*, Contributors, (BlockText | SideBySideNoNumber)*)
                 )
             }
         
