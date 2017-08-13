@@ -1687,7 +1687,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="$document-root//contributors">
         <xsl:text>%% Semantic macros for contributor list&#xa;</xsl:text>
-        <xsl:text>\newcommand{\contributor}[1]{\noindent{}#1\par\bigskip}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\contributor}[1]{\parbox{\linewidth}{#1}\par\bigskip}&#xa;</xsl:text>
         <xsl:text>\newcommand{\contributorname}[1]{\textsc{#1}\\[0.25\baselineskip]}&#xa;</xsl:text>
         <xsl:text>\newcommand{\contributorinfo}[1]{\hspace*{0.05\linewidth}\parbox{0.95\linewidth}{\textsl{#1}}}&#xa;</xsl:text>
     </xsl:if>
