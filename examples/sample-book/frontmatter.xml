@@ -52,6 +52,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <colophon>
 
+        <credit>
+            <role>Cover Design</role>
+            <entity>Covers 4 U</entity>
+        </credit>
+        <credit>
+            <role>Production Editor</role>
+            <entity>Vilma Mesa</entity>
+        </credit>
+
         <edition>Annual Edition 2015</edition>
 
         <website>

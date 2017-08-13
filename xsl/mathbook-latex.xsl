@@ -1883,6 +1883,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
 
+    <xsl:if test="frontmatter/colophon/credit">
+        <xsl:text>\par\noindent&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="frontmatter/colophon/credit">
+        <xsl:text>\textbf{</xsl:text>
+        <xsl:apply-templates select="role" />
+        <xsl:text>}:\ \ </xsl:text>
+        <xsl:apply-templates select="entity" />
+        <xsl:if test="following-sibling::credit">
+            <xsl:text>\\</xsl:text>
+        </xsl:if>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:for-each>
+    <xsl:if test="frontmatter/colophon/credit">
+        <xsl:text>\par\vspace*{\stretch{2}}&#xa;</xsl:text>
+    </xsl:if>
+
     <xsl:if test="frontmatter/colophon/edition" >
         <xsl:text>\noindent{\bfseries </xsl:text>
         <xsl:apply-templates select="frontmatter/colophon/edition" mode="type-name" />

@@ -688,6 +688,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We process pieces, in document order -->
 <!-- TODO: edition, publisher, production notes, cover design, etc -->
 <!-- TODO: revision control commit hash -->
+<xsl:template match="frontmatter/colophon/credit">
+    <p>
+        <b>
+            <xsl:apply-templates select="role" />
+        </b>
+        <xsl:text>: </xsl:text>
+        <xsl:apply-templates select="entity"/>
+    </p>
+</xsl:template>
+
 <xsl:template match="frontmatter/colophon/edition">
     <xsl:element name="p">
         <xsl:element name="b">
