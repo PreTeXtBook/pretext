@@ -1968,6 +1968,11 @@
         </element>
       </optional>
       <optional>
+        <element name="location">
+          <ref name="TextSimple"/>
+        </element>
+      </optional>
+      <optional>
         <element name="email">
           <text/>
         </element>

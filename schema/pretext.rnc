@@ -853,6 +853,7 @@
                 element personname {TextSimple},
                 element department {TextSimple}?,
                 element institution {TextSimple}?,
+                element location {TextSimple}?,
                 element email {text}?
             }
         Contributors =

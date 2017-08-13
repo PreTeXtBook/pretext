@@ -1824,9 +1824,15 @@
             <xs:group ref="TextSimple"/>
           </xs:complexType>
         </xs:element>
+        <xs:element minOccurs="0" ref="location"/>
         <xs:element minOccurs="0" ref="email"/>
       </xs:sequence>
       <xs:attributeGroup ref="MetaDataTarget"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="location">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextSimple"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="contributors">
