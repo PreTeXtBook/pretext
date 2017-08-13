@@ -2682,6 +2682,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <br />
                         </xsl:if>
                     </xsl:if>
+                    <xsl:if test="location">
+                        <xsl:apply-templates select="location" />
+                        <xsl:if test="location/following-sibling::*">
+                            <br />
+                        </xsl:if>
+                    </xsl:if>
                     <xsl:if test="email">
                         <xsl:apply-templates select="email" />
                         <xsl:if test="email/following-sibling::*">

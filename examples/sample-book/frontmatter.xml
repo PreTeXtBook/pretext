@@ -254,10 +254,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <email>farmer@aimath.org</email>
             </contributor>
 
-            <contributor xml:id="rbeezer">
+            <contributor>
                 <personname>Robert Beezer</personname>
                 <department>Department of Mathematics and Computer Science</department>
                 <institution>University of Puget Sound</institution>
+                <location>Tacoma, Washington, USA</location>
+                <email>beezer@pugetsound.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>Alex Jordan</personname>
+                <department>Department of Mathematics</department>
+                <institution>Portland Community College</institution>
+                <location>Portland, OR</location>
+                <email>alex.jordan@pcc.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>Thomas Judson</personname>
+                <department>Department of Mathematics and Statistics</department>
+                <institution>Stephen F. Austin State University</institution>
+                <email>judsontw@sfasu.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>David Farmer</personname>
+                <institution>American Institute of Mathematics</institution>
+                <email>farmer@aimath.org</email>
+            </contributor>
+
+            <contributor>
+                <personname>Robert Beezer</personname>
+                <department>Department of Mathematics and Computer Science</department>
+                <institution>University of Puget Sound</institution>
+                <location>Tacoma, Washington, USA</location>
                 <email>beezer@pugetsound.edu</email>
             </contributor>
 
@@ -265,6 +295,94 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <personname>Alex Jordan</personname>
                 <department>Department of Mathematics</department>
                 <institution>Portland Community College</institution>
+                <location>Portland, OR</location>
+                <email>alex.jordan@pcc.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>Thomas Judson</personname>
+                <department>Department of Mathematics and Statistics</department>
+                <institution>Stephen F. Austin State University</institution>
+                <email>judsontw@sfasu.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>David Farmer</personname>
+                <institution>American Institute of Mathematics</institution>
+                <email>farmer@aimath.org</email>
+            </contributor>
+
+            <contributor>
+                <personname>Robert Beezer</personname>
+                <department>Department of Mathematics and Computer Science</department>
+                <institution>University of Puget Sound</institution>
+                <location>Tacoma, Washington, USA</location>
+                <email>beezer@pugetsound.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>Alex Jordan</personname>
+                <department>Department of Mathematics</department>
+                <institution>Portland Community College</institution>
+                <location>Portland, OR</location>
+                <email>alex.jordan@pcc.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>Thomas Judson</personname>
+                <department>Department of Mathematics and Statistics</department>
+                <institution>Stephen F. Austin State University</institution>
+                <email>judsontw@sfasu.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>David Farmer</personname>
+                <institution>American Institute of Mathematics</institution>
+                <email>farmer@aimath.org</email>
+            </contributor>
+
+            <contributor xml:id="rbeezer">
+                <personname>Robert Beezer</personname>
+                <department>Department of Mathematics and Computer Science</department>
+                <institution>University of Puget Sound</institution>
+                <location>Tacoma, Washington, USA</location>
+                <email>beezer@pugetsound.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>Alex Jordan</personname>
+                <department>Department of Mathematics</department>
+                <institution>Portland Community College</institution>
+                <location>Portland, OR</location>
+                <email>alex.jordan@pcc.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>Thomas Judson</personname>
+                <department>Department of Mathematics and Statistics</department>
+                <institution>Stephen F. Austin State University</institution>
+                <email>judsontw@sfasu.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>David Farmer</personname>
+                <institution>American Institute of Mathematics</institution>
+                <email>farmer@aimath.org</email>
+            </contributor>
+
+            <contributor>
+                <personname>Robert Beezer</personname>
+                <department>Department of Mathematics and Computer Science</department>
+                <institution>University of Puget Sound</institution>
+                <location>Tacoma, Washington, USA</location>
+                <email>beezer@pugetsound.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>Alex Jordan</personname>
+                <department>Department of Mathematics</department>
+                <institution>Portland Community College</institution>
+                <location>Portland, OR</location>
                 <email>alex.jordan@pcc.edu</email>
             </contributor>
         </contributors>
