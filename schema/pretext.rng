@@ -352,6 +352,16 @@
   </define>
   <define name="ColophonFront">
     <element name="colophon">
+      <zeroOrMore>
+        <element name="credit">
+          <element name="role">
+            <ref name="TextShort"/>
+          </element>
+          <element name="entity">
+            <ref name="TextLong"/>
+          </element>
+        </element>
+      </zeroOrMore>
       <optional>
         <element name="edition">
           <text/>

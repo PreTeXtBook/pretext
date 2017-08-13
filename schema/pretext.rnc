@@ -161,6 +161,10 @@
             }
         ColophonFront =
             element colophon {
+                element credit {
+                    element role {TextShort},
+                    element entity {TextLong}
+                }*,
                 element edition {text}?,
                 element website {
                     element name {TextShort},

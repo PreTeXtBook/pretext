@@ -317,6 +317,14 @@
       <xs:element name="colophon">
         <xs:complexType>
           <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="credit">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element ref="role"/>
+                  <xs:element ref="entity"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
             <xs:element minOccurs="0" ref="edition"/>
             <xs:element minOccurs="0" ref="website"/>
             <xs:element minOccurs="0" name="copyright">
@@ -338,6 +346,16 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
+  <xs:element name="role">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextShort"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextLong"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="edition" type="xs:string"/>
   <xs:element name="website">
     <xs:complexType>
