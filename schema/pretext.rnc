@@ -148,7 +148,7 @@
         Credit =
             element credit {
                 element title {TextShort},
-                Author
+                Author+
             }
         Date = 
             element date {

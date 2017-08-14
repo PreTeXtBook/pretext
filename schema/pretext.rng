@@ -326,7 +326,9 @@
       <element name="title">
         <ref name="TextShort"/>
       </element>
-      <ref name="Author"/>
+      <oneOrMore>
+        <ref name="Author"/>
+      </oneOrMore>
     </element>
   </define>
   <define name="Date">

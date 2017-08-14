@@ -286,7 +286,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="title"/>
-        <xs:element ref="author"/>
+        <xs:element maxOccurs="unbounded" ref="author"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
