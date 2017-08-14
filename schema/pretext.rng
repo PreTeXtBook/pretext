@@ -281,9 +281,9 @@
       <oneOrMore>
         <ref name="Author"/>
       </oneOrMore>
-      <optional>
+      <zeroOrMore>
         <ref name="Credit"/>
-      </optional>
+      </zeroOrMore>
       <optional>
         <ref name="Date"/>
       </optional>

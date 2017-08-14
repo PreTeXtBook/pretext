@@ -135,7 +135,7 @@
         TitlePage =
             element titlepage {
                 Author+,
-                Credit?,
+                Credit*,
                 Date?
             }
         Author =

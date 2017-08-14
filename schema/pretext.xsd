@@ -247,7 +247,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element maxOccurs="unbounded" ref="author"/>
-        <xs:element minOccurs="0" ref="credit"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="credit"/>
         <xs:element minOccurs="0" ref="date"/>
       </xs:sequence>
     </xs:complexType>
