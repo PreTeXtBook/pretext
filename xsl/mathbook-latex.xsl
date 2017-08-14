@@ -1847,19 +1847,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- One "title" per-credit, but multiple authors are OK -->
 <xsl:template match="credit" mode="title-page">
     <xsl:text>[3\baselineskip]&#xa;</xsl:text>
     <xsl:text>{\Large </xsl:text>
     <xsl:apply-templates  select="." mode="title-full" />
     <xsl:text>}\\[0.5\baselineskip]&#xa;</xsl:text>
-    <xsl:text>{\normalsize </xsl:text>
-    <xsl:apply-templates select="author/personname" />
-    <xsl:text>}\\</xsl:text>
-    <xsl:if test="author/institution">
-        <xsl:text>[0.25\baselineskip]&#xa;</xsl:text>
-        <xsl:apply-templates select="author/institution" />
-        <xsl:text>\\</xsl:text>
-    </xsl:if>
+    <xsl:for-each select="author">
+        <xsl:text>{\normalsize </xsl:text>
+        <xsl:apply-templates select="personname" />
+        <xsl:text>}\\</xsl:text>
+        <xsl:if test="institution">
+            <xsl:text>[0.25\baselineskip]&#xa;</xsl:text>
+            <xsl:apply-templates select="institution" />
+            <xsl:text>\\</xsl:text>
+        </xsl:if>
+        <xsl:if test="following-sibling::author">
+            <xsl:text>[0.5\baselineskip]&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:for-each>
 </xsl:template>
 
 <xsl:template match="date" mode="title-page">
