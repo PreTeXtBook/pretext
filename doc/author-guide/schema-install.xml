@@ -30,7 +30,7 @@
 
                 <li>
                     <title><c>readme.md</c></title>
-                    <p>Follow the instructions in the top-level <c>readme.md</c>, observing the following notes keyed to the four steps.  These helpful notes come courtesy of Jahrme Risner, Mitch Keller, Bruce Yoshiwara, Ken Levasseur, and Jessica Sklar.</p>
+                    <p>Follow the instructions in the top-level <c>readme.md</c>, observing the following notes keyed to the four steps. These helpful notes come courtesy of Jahrme Risner, Mitch Keller, Bruce Yoshiwara, Ken Levasseur, and Jessica Sklar.</p>
                 </li>
 
                 <li>
@@ -54,7 +54,7 @@
                 <li>
                     <title>4. ANT</title>
                     <p>You may need to install this tool, almost certainly on Windows.  Again, on Windows you may need to set an <c>ANT_HOME</c> environment variable.  On Linux, this may be all set for you already as a system tool.</p>
-                    <p>The README suggests changing slashes on Windows.  But you may already be using a shell that gives Unix-like behavior.  So try both directions, if necessary.</p>
+                    <p>The README suggests changing slashes on Windows.  But you may already be using a shell that gives Unix-like behavior.  So try both directions, if necessary.  Also, the README suggests running <c>./ant test</c> (or <c>.\ant test</c>). Doing this on Windows may yield a <c>BUILD FAILED</c> message, but <c>jing</c> may still work.</p>
                 </li>
 
                 <li>
