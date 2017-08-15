@@ -1452,7 +1452,7 @@
             element biblio {
                 UniqueID?,
                 attribute type {"raw"}?,
-                (TextShort* &amp;
+                (TextLong* &amp;
                 Ibid* &amp;
                 BibTitle* &amp;
                 BibYear* &amp;

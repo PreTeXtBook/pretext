@@ -1804,7 +1804,7 @@
   <xs:element name="biblio">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="TextShort"/>
+        <xs:group ref="TextLong"/>
         <xs:element ref="ibid"/>
         <xs:element ref="title"/>
         <xs:element ref="year"/>

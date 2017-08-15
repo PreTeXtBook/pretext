@@ -1906,7 +1906,7 @@
       </optional>
       <interleave>
         <zeroOrMore>
-          <ref name="TextShort"/>
+          <ref name="TextLong"/>
         </zeroOrMore>
         <zeroOrMore>
           <ref name="Ibid"/>
