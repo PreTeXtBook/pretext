@@ -4990,7 +4990,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Ellipsis (dots), for text, not math -->
 <xsl:template match="ellipsis">
-    <xsl:text>\dots{}</xsl:text>
+    <xsl:text>\textellipsis{}</xsl:text>
 </xsl:template>
 
 <!-- Midpoint -->
