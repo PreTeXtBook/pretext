@@ -226,24 +226,6 @@
       <ref name="IndexList"/>
     </element>
   </define>
-  <define name="IntroductionDivision">
-    <element name="introduction">
-      <ref name="MetaDataTitleOptional"/>
-      <oneOrMore>
-        <ref name="BlockDivision"/>
-      </oneOrMore>
-    </element>
-  </define>
-  <define name="ConclusionDivision">
-    <element name="conclusion">
-      <optional>
-        <ref name="MetaDataTitleOptional"/>
-      </optional>
-      <oneOrMore>
-        <ref name="BlockDivision"/>
-      </oneOrMore>
-    </element>
-  </define>
   <define name="ArticleFrontMatter">
     <element name="frontmatter">
       <ref name="MetaDataTitleOptional"/>
@@ -539,10 +521,20 @@
       <ref name="ToDo"/>
     </choice>
   </define>
-  <define name="BlockDivision">
+  <define name="BlockStatement">
     <choice>
       <ref name="BlockText"/>
       <ref name="Figure"/>
+      <ref name="NamedList"/>
+      <ref name="Aside"/>
+      <ref name="SideBySide"/>
+      <ref name="SideBySideGroup"/>
+      <ref name="Sage"/>
+    </choice>
+  </define>
+  <define name="BlockDivision">
+    <choice>
+      <ref name="BlockStatement"/>
       <ref name="Remark"/>
       <ref name="Theorem"/>
       <ref name="Proof"/>
@@ -550,44 +542,15 @@
       <ref name="Axiom"/>
       <ref name="Example"/>
       <ref name="Exercise"/>
-      <ref name="NamedList"/>
       <ref name="Project"/>
       <ref name="Poem"/>
-      <ref name="Aside"/>
       <ref name="Assemblage"/>
       <ref name="ListGenerator"/>
-      <ref name="SideBySide"/>
-      <ref name="SideBySideGroup"/>
-      <ref name="Sage"/>
       <ref name="Console"/>
       <ref name="Program"/>
       <ref name="GGB"/>
       <ref name="Demonstration"/>
     </choice>
-  </define>
-  <define name="BlockStatement">
-    <choice>
-      <ref name="BlockText"/>
-      <ref name="Figure"/>
-      <ref name="Aside"/>
-      <ref name="SideBySide"/>
-      <ref name="SideBySideGroup"/>
-      <ref name="Sage"/>
-    </choice>
-  </define>
-  <define name="IntroductionBlock">
-    <element name="introduction">
-      <oneOrMore>
-        <ref name="BlockText"/>
-      </oneOrMore>
-    </element>
-  </define>
-  <define name="ConclusionBlock">
-    <element name="conclusion">
-      <oneOrMore>
-        <ref name="BlockText"/>
-      </oneOrMore>
-    </element>
   </define>
   <define name="Prelude">
     <element name="prelude">
@@ -641,15 +604,61 @@
       </oneOrMore>
     </element>
   </define>
+  <define name="IntroductionText">
+    <element name="introduction">
+      <oneOrMore>
+        <ref name="BlockText"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="ConclusionText">
+    <element name="conclusion">
+      <oneOrMore>
+        <ref name="BlockText"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="IntroductionStatement">
+    <element name="introduction">
+      <oneOrMore>
+        <ref name="BlockStatement"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="ConclusionStatement">
+    <element name="conclusion">
+      <oneOrMore>
+        <ref name="BlockStatement"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="IntroductionDivision">
+    <element name="introduction">
+      <ref name="MetaDataTitleOptional"/>
+      <oneOrMore>
+        <ref name="BlockDivision"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="ConclusionDivision">
+    <element name="conclusion">
+      <optional>
+        <ref name="MetaDataTitleOptional"/>
+      </optional>
+      <oneOrMore>
+        <ref name="BlockDivision"/>
+      </oneOrMore>
+    </element>
+  </define>
   <define name="Objectives">
     <element name="objectives">
       <ref name="MetaDataTitleOptional"/>
       <optional>
-        <ref name="IntroductionBlock"/>
+        <ref name="IntroductionText"/>
       </optional>
       <ref name="List"/>
       <optional>
-        <ref name="ConclusionBlock"/>
+        <ref name="ConclusionText"/>
       </optional>
     </element>
   </define>
@@ -901,11 +910,11 @@
     <element name="list">
       <ref name="MetaDataTitleOptional"/>
       <optional>
-        <ref name="IntroductionBlock"/>
+        <ref name="IntroductionText"/>
       </optional>
       <ref name="List"/>
       <optional>
-        <ref name="ConclusionBlock"/>
+        <ref name="ConclusionText"/>
       </optional>
     </element>
   </define>
@@ -1073,13 +1082,13 @@
           <ref name="Prelude"/>
         </optional>
         <optional>
-          <ref name="IntroductionBlock"/>
+          <ref name="IntroductionStatement"/>
         </optional>
         <oneOrMore>
           <ref name="Task"/>
         </oneOrMore>
         <optional>
-          <ref name="ConclusionBlock"/>
+          <ref name="ConclusionStatement"/>
         </optional>
         <optional>
           <ref name="Postlude"/>
@@ -1124,13 +1133,13 @@
         </group>
         <group>
           <optional>
-            <ref name="IntroductionBlock"/>
+            <ref name="IntroductionText"/>
           </optional>
           <oneOrMore>
             <ref name="Task"/>
           </oneOrMore>
           <optional>
-            <ref name="ConclusionBlock"/>
+            <ref name="ConclusionText"/>
           </optional>
         </group>
       </choice>
@@ -1799,11 +1808,11 @@
         </group>
         <group>
           <optional>
-            <ref name="IntroductionBlock"/>
+            <ref name="IntroductionText"/>
           </optional>
           <ref name="WebWork"/>
           <optional>
-            <ref name="ConclusionBlock"/>
+            <ref name="ConclusionText"/>
           </optional>
         </group>
       </choice>
@@ -1824,13 +1833,13 @@
         </attribute>
       </optional>
       <optional>
-        <ref name="IntroductionBlock"/>
+        <ref name="IntroductionText"/>
       </optional>
       <oneOrMore>
         <ref name="Exercise"/>
       </oneOrMore>
       <optional>
-        <ref name="ConclusionBlock"/>
+        <ref name="ConclusionText"/>
       </optional>
     </element>
   </define>

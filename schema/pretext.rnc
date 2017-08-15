@@ -105,16 +105,6 @@
                 MetaDataTitleOptional,
                 IndexList
             }
-        IntroductionDivision =
-            element introduction {
-                MetaDataTitleOptional,
-                BlockDivision+
-            }
-        ConclusionDivision =
-            element conclusion {
-                MetaDataTitleOptional?,
-                BlockDivision+
-            }
         
         
         ArticleFrontMatter = 
@@ -240,22 +230,19 @@
         
         BlockText =
             Paragraph | BlockQuote | Preformatted | ToDo
+        BlockStatement =
+            BlockText |
+            Figure | NamedList | Aside |
+            SideBySide | SideBySideGroup | Sage
         BlockDivision =
-            BlockText | Figure |
-            Remark | Theorem | Proof | Definition | Axiom |
-            Example | Exercise | NamedList | Project |
-            Poem | Aside | Assemblage | ListGenerator |
-            SideBySide | SideBySideGroup | Sage |
+            BlockStatement |
+            Remark | Theorem | Proof | Definition |
+            Axiom | Example | Exercise | Project |
+            Poem | Assemblage | ListGenerator |
             Console | Program |
             GGB | Demonstration
-        BlockStatement =
-            BlockText | Figure | Aside | SideBySide | SideBySideGroup | Sage
         
         
-        IntroductionBlock =
-            element introduction {BlockText+}
-        ConclusionBlock =
-            element conclusion {BlockText+}
         Prelude =
             element prelude {BlockText+}
         Interlude =
@@ -283,12 +270,32 @@
             }
         
         
+        IntroductionText =
+            element introduction {BlockText+}
+        ConclusionText =
+            element conclusion {BlockText+}
+        IntroductionStatement =
+            element introduction {BlockStatement+}
+        ConclusionStatement =
+            element conclusion {BlockStatement+}
+        IntroductionDivision =
+            element introduction {
+                MetaDataTitleOptional,
+                BlockDivision+
+            }
+        ConclusionDivision =
+            element conclusion {
+                MetaDataTitleOptional?,
+                BlockDivision+
+            }
+        
+        
         Objectives =
             element objectives {
                 MetaDataTitleOptional,
-                IntroductionBlock?, 
+                IntroductionText?,
                 List,
-                ConclusionBlock?
+                ConclusionText?
             }
         
         
@@ -384,9 +391,9 @@
         NamedList =
             element list {
                 MetaDataTitleOptional,
-                IntroductionBlock?, 
+                IntroductionText?,
                 List,
-                ConclusionBlock?
+                ConclusionText?
             }
         
         
@@ -463,7 +470,7 @@
             (
                 (BlockStatement+) |
                 (Prelude?, Statement, Hint*, Answer*, Solution*, Postlude?) |
-                (Prelude?, IntroductionBlock?, Task+, ConclusionBlock?, Postlude?)
+                (Prelude?, IntroductionStatement?, Task+, ConclusionStatement?, Postlude?)
             )
         Project =
             element activity {ProjectLike}
@@ -479,7 +486,7 @@
                 (
                     BlockStatement+ |
                     (Statement, Hint*, Answer*, Solution*) |
-                    (IntroductionBlock?, Task+, ConclusionBlock?)
+                    (IntroductionText?, Task+, ConclusionText?)
                 )
             }
         
@@ -793,16 +800,16 @@
                 attribute number {text}?,
                 (
                 (StatementExercise, Hint*, Answer*, Solution*) |
-                (IntroductionBlock?, WebWork, ConclusionBlock?)
+                (IntroductionText?, WebWork, ConclusionText?)
                 )
             }
         ExerciseGroup =
             element exercisegroup {
                 MetaDataTarget,
                 attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                IntroductionBlock?,
+                IntroductionText?,
                 Exercise+,
-                ConclusionBlock?
+                ConclusionText?
             }
         
         

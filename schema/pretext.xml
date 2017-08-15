@@ -982,7 +982,7 @@
             (
                 (BlockStatement+) |
                 (Prelude?, Statement, Hint*, Answer*, Solution*, Postlude?) |
-                (Prelude?, IntroductionText?, Task+, ConclusionText?, Postlude?)
+                (Prelude?, IntroductionStatement?, Task+, ConclusionStatement?, Postlude?)
             )
         Project =
             element activity {ProjectLike}

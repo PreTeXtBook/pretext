@@ -185,32 +185,6 @@
       <xs:attributeGroup ref="MetaDataTitleOptional"/>
     </xs:complexType>
   </xs:element>
-  <xs:group name="IntroductionDivision">
-    <xs:sequence>
-      <xs:element name="introduction">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:group ref="MetaDataTitleOptional"/>
-            <xs:group maxOccurs="unbounded" ref="BlockDivision"/>
-          </xs:sequence>
-          <xs:attributeGroup ref="MetaDataTitleOptional"/>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
-  <xs:group name="ConclusionDivision">
-    <xs:sequence>
-      <xs:element name="conclusion">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:group minOccurs="0" ref="MetaDataTitleOptional"/>
-            <xs:group maxOccurs="unbounded" ref="BlockDivision"/>
-          </xs:sequence>
-          <xs:attributeGroup ref="MetaDataTitleOptional"/>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
   <xs:group name="ArticleFrontMatter">
     <xs:sequence>
       <xs:element name="frontmatter">
@@ -508,10 +482,20 @@
       <xs:element ref="todo"/>
     </xs:choice>
   </xs:group>
-  <xs:group name="BlockDivision">
+  <xs:group name="BlockStatement">
     <xs:choice>
       <xs:group ref="BlockText"/>
       <xs:group ref="Figure"/>
+      <xs:element ref="list"/>
+      <xs:group ref="Aside"/>
+      <xs:group ref="SideBySide"/>
+      <xs:element ref="sbsgroup"/>
+      <xs:element ref="sage"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="BlockDivision">
+    <xs:choice>
+      <xs:group ref="BlockStatement"/>
       <xs:group ref="Remark"/>
       <xs:group ref="Theorem"/>
       <xs:element ref="proof"/>
@@ -519,48 +503,15 @@
       <xs:group ref="Axiom"/>
       <xs:group ref="Example"/>
       <xs:element ref="exercise"/>
-      <xs:element ref="list"/>
       <xs:group ref="Project"/>
       <xs:element ref="poem"/>
-      <xs:group ref="Aside"/>
       <xs:element ref="assemblage"/>
       <xs:element ref="list-of"/>
-      <xs:group ref="SideBySide"/>
-      <xs:element ref="sbsgroup"/>
-      <xs:element ref="sage"/>
       <xs:element ref="console"/>
       <xs:element ref="program"/>
       <xs:element ref="geogebra-applet"/>
       <xs:element ref="demonstration"/>
     </xs:choice>
-  </xs:group>
-  <xs:group name="BlockStatement">
-    <xs:choice>
-      <xs:group ref="BlockText"/>
-      <xs:group ref="Figure"/>
-      <xs:group ref="Aside"/>
-      <xs:group ref="SideBySide"/>
-      <xs:element ref="sbsgroup"/>
-      <xs:element ref="sage"/>
-    </xs:choice>
-  </xs:group>
-  <xs:group name="IntroductionBlock">
-    <xs:sequence>
-      <xs:element name="introduction">
-        <xs:complexType>
-          <xs:group maxOccurs="unbounded" ref="BlockText"/>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
-  <xs:group name="ConclusionBlock">
-    <xs:sequence>
-      <xs:element name="conclusion">
-        <xs:complexType>
-          <xs:group maxOccurs="unbounded" ref="BlockText"/>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
   </xs:group>
   <xs:element name="prelude">
     <xs:complexType>
@@ -621,13 +572,75 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
+  <xs:group name="IntroductionText">
+    <xs:sequence>
+      <xs:element name="introduction">
+        <xs:complexType>
+          <xs:group maxOccurs="unbounded" ref="BlockText"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="ConclusionText">
+    <xs:sequence>
+      <xs:element name="conclusion">
+        <xs:complexType>
+          <xs:group maxOccurs="unbounded" ref="BlockText"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="IntroductionStatement">
+    <xs:sequence>
+      <xs:element name="introduction">
+        <xs:complexType>
+          <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="ConclusionStatement">
+    <xs:sequence>
+      <xs:element name="conclusion">
+        <xs:complexType>
+          <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="IntroductionDivision">
+    <xs:sequence>
+      <xs:element name="introduction">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="MetaDataTitleOptional"/>
+            <xs:group maxOccurs="unbounded" ref="BlockDivision"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="MetaDataTitleOptional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="ConclusionDivision">
+    <xs:sequence>
+      <xs:element name="conclusion">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group minOccurs="0" ref="MetaDataTitleOptional"/>
+            <xs:group maxOccurs="unbounded" ref="BlockDivision"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="MetaDataTitleOptional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
   <xs:element name="objectives">
     <xs:complexType>
       <xs:sequence>
         <xs:group ref="MetaDataTitleOptional"/>
-        <xs:group minOccurs="0" ref="IntroductionBlock"/>
+        <xs:group minOccurs="0" ref="IntroductionText"/>
         <xs:group ref="List"/>
-        <xs:group minOccurs="0" ref="ConclusionBlock"/>
+        <xs:group minOccurs="0" ref="ConclusionText"/>
       </xs:sequence>
       <xs:attributeGroup ref="MetaDataTitleOptional"/>
     </xs:complexType>
@@ -882,9 +895,9 @@
     <xs:complexType>
       <xs:sequence>
         <xs:group ref="MetaDataTitleOptional"/>
-        <xs:group minOccurs="0" ref="IntroductionBlock"/>
+        <xs:group minOccurs="0" ref="IntroductionText"/>
         <xs:group ref="List"/>
-        <xs:group minOccurs="0" ref="ConclusionBlock"/>
+        <xs:group minOccurs="0" ref="ConclusionText"/>
       </xs:sequence>
       <xs:attributeGroup ref="MetaDataTitleOptional"/>
     </xs:complexType>
@@ -1016,9 +1029,9 @@
         </xs:sequence>
         <xs:sequence>
           <xs:element minOccurs="0" ref="prelude"/>
-          <xs:group minOccurs="0" ref="IntroductionBlock"/>
+          <xs:group minOccurs="0" ref="IntroductionStatement"/>
           <xs:element maxOccurs="unbounded" ref="task"/>
-          <xs:group minOccurs="0" ref="ConclusionBlock"/>
+          <xs:group minOccurs="0" ref="ConclusionStatement"/>
           <xs:element minOccurs="0" ref="postlude"/>
         </xs:sequence>
       </xs:choice>
@@ -1050,9 +1063,9 @@
             <xs:group minOccurs="0" maxOccurs="unbounded" ref="Solution"/>
           </xs:sequence>
           <xs:sequence>
-            <xs:group minOccurs="0" ref="IntroductionBlock"/>
+            <xs:group minOccurs="0" ref="IntroductionText"/>
             <xs:element maxOccurs="unbounded" ref="task"/>
-            <xs:group minOccurs="0" ref="ConclusionBlock"/>
+            <xs:group minOccurs="0" ref="ConclusionText"/>
           </xs:sequence>
         </xs:choice>
       </xs:sequence>
@@ -1691,9 +1704,9 @@
             <xs:group minOccurs="0" maxOccurs="unbounded" ref="Solution"/>
           </xs:sequence>
           <xs:sequence>
-            <xs:group minOccurs="0" ref="IntroductionBlock"/>
+            <xs:group minOccurs="0" ref="IntroductionText"/>
             <xs:group ref="WebWork"/>
-            <xs:group minOccurs="0" ref="ConclusionBlock"/>
+            <xs:group minOccurs="0" ref="ConclusionText"/>
           </xs:sequence>
         </xs:choice>
       </xs:sequence>
@@ -1705,9 +1718,9 @@
     <xs:complexType>
       <xs:sequence>
         <xs:group ref="MetaDataTarget"/>
-        <xs:group minOccurs="0" ref="IntroductionBlock"/>
+        <xs:group minOccurs="0" ref="IntroductionText"/>
         <xs:element maxOccurs="unbounded" ref="exercise"/>
-        <xs:group minOccurs="0" ref="ConclusionBlock"/>
+        <xs:group minOccurs="0" ref="ConclusionText"/>
       </xs:sequence>
       <xs:attributeGroup ref="MetaDataTarget"/>
       <xs:attribute name="cols">
