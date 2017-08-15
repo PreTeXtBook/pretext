@@ -592,29 +592,30 @@
     <section>
         <title>Blocks</title>
 
-        <p>A <term>text block</term> is very similar to a paragraph.  It can be a paragraph, a sequence of paragraphs enclosed as a block quote (with attribution, perhaps), or a large chunk of unformatted text presented typically in a monospace font.  A <c>todo</c> is text that is never printed in your output, unless you explicitly request that it be printed or inventoried.  Yu can put it anywhere you might put a paragraph, as a peer, but do not use it within a paragraph (or other places where you are authoring text, it can gum up processing).</p>
+        <p>A <term>text block</term> is very similar to a paragraph.  It can be an actual paragraph, a sequence of paragraphs enclosed as a block quote (with attribution, perhaps), or a large chunk of unformatted text presented typically in a monospace font.  A <c>todo</c> is text that is never printed in your output, unless you explicitly request that it be printed or inventoried.  You can put it anywhere you might put a paragraph, as a peer, but do not use it within a paragraph (or other places where you are authoring text, it can gum up processing).</p>
 
-        <p>A <term>division block</term> includes text blocks, plus topical chunks of text that can have numbered headings or numbered captions, with optional titles, and are set apart slightly from the surrounding narrative.  These are placed mostly as children of divisions, and so one cannot contain another, with captioned items being the exception.  They certainly contain paragraphs, and all that goes into them, such as mathematics (inline and display) and figures (and other captioned items).  The <c>sidebyside</c> element can be used to illustrate a division block with a variety of images and displayed text in flexible layouts.</p>
+        <p>A <term>statement block</term> is used in statements.  What are those?  Theorems have statements, exercises have statements, questions have statements.  Some of these blocks with statements also have proofs, hints, and solutions.  In statements, and their peers, we include text blocks, captioned items, asides, side-by-side layouts, and Sage computations, but exclude many of the numbered and titled division blocks.</p>
 
-        <p>Division blocks contain items which do not meet the strict definition of the paragraph above, but still can be used in the same places in similar ways.  <c>poem</c>, <c>aside</c>, and <c>assemblage</c> are never numbered, but can have titles.  The <c>list-of</c> mechanism is a convenience device to automatically create lists of contents, and so we leave surrounding divisional structure to the author.  A <c>sidebyside</c>, and its cousin, <c>sbsgroup</c>, are strictly layout devices.  The <c>sage</c> element is unique for its possibilities in certain electronic formats.</p>
+        <p>A <term>division block</term> includes text blocks, statement blocks, plus topical chunks of text that can have numbered headings or numbered captions, with optional titles, and are set apart slightly from the surrounding narrative.  These are placed mostly as children of divisions, and so one cannot contain another.  They certainly contain paragraphs, and all that goes into them, such as mathematics (inline and display) and figures (and other captioned items).  The <c>sidebyside</c> element can be used to illustrate a division block with a variety of images and displayed text in flexible layouts.</p>
 
-        <p>A <term>statement block</term> is used in statements.  What are those?  Theorems have statements, exercises have statements, questions have statements.  Some of these blocks also have proofs, hints, and solutions.  In statements, and their peers, we include text blocks, captioned items, asides, side-by-side layouts, and Sage computations, but exclude many of the numbered and titled division blocks.</p>
+        <p>Other division blocks include <c>poem</c>, <c>aside</c>, and <c>assemblage</c>.  These are never numbered, but can have titles.  The <c>list-of</c> mechanism is a convenience device to automatically create lists of contents, and so we leave surrounding divisional structure to the author.  A <c>sidebyside</c>, and its cousin, <c>sbsgroup</c>, are strictly layout devices.  The <c>sage</c> element is unique for its possibilities in certain electronic formats.</p>
 
         <p><c>geogebra-applet</c> and <c>demonstration</c> are slated for removal or an overhaul, and so are in the <xref ref="badbank" text="title" />.  Avoid using them for now.</p>
 
         <fragment xml:id="block">
         BlockText =
             Paragraph | BlockQuote | Preformatted | ToDo
+        BlockStatement =
+            BlockText |
+            Figure | NamedList | Aside |
+            SideBySide | SideBySideGroup | Sage
         BlockDivision =
-            BlockText | Figure |
-            Remark | Theorem | Proof | Definition | Axiom |
-            Example | Exercise | NamedList | Project |
-            Poem | Aside | Assemblage | ListGenerator |
-            SideBySide | SideBySideGroup | Sage |
+            BlockStatement |
+            Remark | Theorem | Proof | Definition |
+            Axiom | Example | Exercise | Project |
+            Poem | Assemblage | ListGenerator |
             Console | Program |
             GGB | Demonstration
-        BlockStatement =
-            BlockText | Figure | Aside | SideBySide | SideBySideGroup | Sage
         </fragment>
 
         <p>Blocks are often structured, in a light way.  Hints, answers, and solutions adorn exercises, examples, and projects.  A simple introduction or conclusion is sometimes useful.  A <c>prelude</c> or <c>postlude</c> are authored inside a block and so are associated with it.  But they are presented before and after the block visually.  An <c>interlude</c> will be used between the statment of a theorem and its proof.</p>
