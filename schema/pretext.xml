@@ -149,16 +149,6 @@
                 MetaDataTitleOptional,
                 IndexList
             }
-        IntroductionDivision =
-            element introduction {
-                MetaDataTitleOptional,
-                BlockDivision+
-            }
-        ConclusionDivision =
-            element conclusion {
-                MetaDataTitleOptional?,
-                BlockDivision+
-            }
         </fragment>
     </section>
 
@@ -623,10 +613,6 @@
         <p>When a block is structured to allow some of the ancillary parts, a <c>statement</c> element is used to structure the main part.  Hints, answers, and solutions can be the target of cross-references, but do not get author-supplied titles.</p>
 
         <fragment xml:id="block-component">
-        IntroductionBlock =
-            element introduction {BlockText+}
-        ConclusionBlock =
-            element conclusion {BlockText+}
         Prelude =
             element prelude {BlockText+}
         Interlude =
@@ -651,6 +637,33 @@
             element solution {
                 MetaDataTarget,
                 BlockStatement+
+            }
+        </fragment>
+    </section>
+
+    <section>
+        <title>Introductions and Conclusions</title>
+
+        <p>The <c>introduction</c> and <c>conclusion</c> containers can be used in a variety of other structured elements.  They come in three levels, according to what they can contain, and are meant to be consonant with their surroundings.  As children of a division, they may carry a <c>title</c>, which in turn allows them to be cross-referenced by that text.</p>
+
+        <fragment xml:id="introduction-conclusion">
+        IntroductionText =
+            element introduction {BlockText+}
+        ConclusionText =
+            element conclusion {BlockText+}
+        IntroductionStatement =
+            element introduction {BlockStatement+}
+        ConclusionStatement =
+            element conclusion {BlockStatement+}
+        IntroductionDivision =
+            element introduction {
+                MetaDataTitleOptional,
+                BlockDivision+
+            }
+        ConclusionDivision =
+            element conclusion {
+                MetaDataTitleOptional?,
+                BlockDivision+
             }
         </fragment>
     </section>
@@ -743,9 +756,9 @@
         Objectives =
             element objectives {
                 MetaDataTitleOptional,
-                IntroductionBlock?, 
+                IntroductionText?,
                 List,
-                ConclusionBlock?
+                ConclusionText?
             }
         </fragment>
     </section>
@@ -873,9 +886,9 @@
         NamedList =
             element list {
                 MetaDataTitleOptional,
-                IntroductionBlock?, 
+                IntroductionText?,
                 List,
-                ConclusionBlock?
+                ConclusionText?
             }
         </fragment>
     </section>
@@ -969,7 +982,7 @@
             (
                 (BlockStatement+) |
                 (Prelude?, Statement, Hint*, Answer*, Solution*, Postlude?) |
-                (Prelude?, IntroductionBlock?, Task+, ConclusionBlock?, Postlude?)
+                (Prelude?, IntroductionText?, Task+, ConclusionText?, Postlude?)
             )
         Project =
             element activity {ProjectLike}
@@ -985,7 +998,7 @@
                 (
                     BlockStatement+ |
                     (Statement, Hint*, Answer*, Solution*) |
-                    (IntroductionBlock?, Task+, ConclusionBlock?)
+                    (IntroductionText?, Task+, ConclusionText?)
                 )
             }
         </fragment>
@@ -1415,16 +1428,16 @@
                 attribute number {text}?,
                 (
                 (StatementExercise, Hint*, Answer*, Solution*) |
-                (IntroductionBlock?, WebWork, ConclusionBlock?)
+                (IntroductionText?, WebWork, ConclusionText?)
                 )
             }
         ExerciseGroup =
             element exercisegroup {
                 MetaDataTarget,
                 attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                IntroductionBlock?,
+                IntroductionText?,
                 Exercise+,
-                ConclusionBlock?
+                ConclusionText?
             }
         </fragment>
     </section>
@@ -1977,6 +1990,7 @@
         <fragment ref="universal" />
         <fragment ref="block" />
         <fragment ref="block-component" />
+        <fragment ref="introduction-conclusion" />
         <fragment ref="objectives" />
         <fragment ref="blockquote" />
         <fragment ref="verbatimdisplay" />
