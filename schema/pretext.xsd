@@ -2625,6 +2625,7 @@
         <xs:element ref="insert"/>
         <xs:element ref="stale"/>
       </xs:choice>
+      <xs:element ref="taxon"/>
     </xs:choice>
   </xs:group>
   <xs:element name="abbr">
@@ -2710,6 +2711,27 @@
   <xs:element name="stale">
     <xs:complexType mixed="true">
       <xs:group ref="TextLong"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="taxon">
+    <xs:complexType mixed="true">
+      <xs:choice>
+        <xs:group ref="TextSimple"/>
+        <xs:sequence>
+          <xs:element minOccurs="0" ref="genus"/>
+          <xs:element minOccurs="0" ref="species"/>
+        </xs:sequence>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="genus">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextSimple"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="species">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextSimple"/>
     </xs:complexType>
   </xs:element>
   <xs:group name="Generator">

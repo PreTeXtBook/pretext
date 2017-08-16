@@ -1255,6 +1255,16 @@
             element insert {TextLong} |
             element stale {TextLong}
         
+            
+        Group |=
+            element taxon {
+                TextSimple |
+                (
+                    element genus {TextSimple}?,
+                    element species {TextSimple}?
+                )
+            }
+        
         
         
         Generator = 

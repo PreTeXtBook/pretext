@@ -484,11 +484,25 @@
             element stale {TextLong}
         </fragment>
 
+        <p>An empty <c>taxon</c> will match either version.</p>
+
+        <fragment xml:id="scientific-name-group">
+        Group |=
+            element taxon {
+                TextSimple |
+                (
+                    element genus {TextSimple}?,
+                    element species {TextSimple}?
+                )
+            }
+        </fragment>
+
         <fragment xml:id="group">
             <fragment ref="abbreviation-group" />
             <fragment ref="delimiter-group" />
             <fragment ref="highlight-group" />
             <fragment ref="editing-group" />
+            <fragment ref="scientific-name-group" />
         </fragment>
     </section>
 

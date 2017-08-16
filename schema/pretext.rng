@@ -2862,6 +2862,25 @@
       </element>
     </choice>
   </define>
+  <define name="Group" combine="choice">
+    <element name="taxon">
+      <choice>
+        <ref name="TextSimple"/>
+        <group>
+          <optional>
+            <element name="genus">
+              <ref name="TextSimple"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="species">
+              <ref name="TextSimple"/>
+            </element>
+          </optional>
+        </group>
+      </choice>
+    </element>
+  </define>
   <define name="Generator">
     <choice>
       <element name="today">
