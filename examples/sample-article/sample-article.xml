@@ -1645,6 +1645,12 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
+                <title>Biological Names</title>
+
+                <p>The <c>taxon</c> element can be used all by itself to get an italicized scientific name, as in <taxon>Escherichia coli</taxon>.  It can also be structured with the elements <c>genus</c> and <c>species</c>, as in using both together in <taxon><genus>Cyclops</genus><species>kolensis</species></taxon>.  Or the subelements can be used individually.  Rules for capitalization are presently your responsibility as an author.  Possible improvements include new subelements, attributes for database identifiers, and checks on capitalization.  Also, we might automatically abbreviate the genus after first use.</p>
+            </subsection>
+
+            <subsection>
                 <title>Verbatim in titles, <c>\a&amp;b#c%d~e{f}g$h_i^j</c>, OK</title>
 
                 <p>You can test the migration of the <latex /> special characters in this section title by requesting a 2-deep Table of Contents with <c> --stringparam toc.level 2</c>.</p>

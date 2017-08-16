@@ -5814,6 +5814,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#8208;</xsl:text>
 </xsl:template>
 
+<!-- ################ -->
+<!-- Biological Names -->
+<!-- ################ -->
+
+<xsl:template match="taxon[not(genus) and not(species)]">
+    <span class="taxon">
+        <xsl:apply-templates />
+    </span>
+</xsl:template>
+
+<xsl:template match="taxon[genus or species]">
+    <span class="taxon">
+        <xsl:if test="genus">
+            <span class="genus">
+                <xsl:apply-templates select="genus"/>
+            </span>
+        </xsl:if>
+        <xsl:if test="genus and species">
+            <xsl:text> </xsl:text>
+        </xsl:if>
+        <xsl:if test="species">
+            <span class="species">
+                <xsl:apply-templates select="species"/>
+            </span>
+        </xsl:if>
+    </span>
+</xsl:template>
+
 <!-- Titles of Books and Articles -->
 <xsl:template match="booktitle">
     <span class="booktitle"><xsl:apply-templates /></span>
