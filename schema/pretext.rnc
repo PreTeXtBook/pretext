@@ -1258,10 +1258,13 @@
             
         Group |=
             element taxon {
-                TextSimple |
+                attribute ncbi {xsd:integer}?,
                 (
-                    element genus {TextSimple}?,
-                    element species {TextSimple}?
+                    TextSimple |
+                    (
+                        element genus {TextSimple}?,
+                        element species {TextSimple}?
+                    )
                 )
             }
         

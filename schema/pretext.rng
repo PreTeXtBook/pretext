@@ -2864,6 +2864,11 @@
   </define>
   <define name="Group" combine="choice">
     <element name="taxon">
+      <optional>
+        <attribute name="ncbi">
+          <data type="integer"/>
+        </attribute>
+      </optional>
       <choice>
         <ref name="TextSimple"/>
         <group>

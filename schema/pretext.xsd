@@ -2722,6 +2722,7 @@
           <xs:element minOccurs="0" ref="species"/>
         </xs:sequence>
       </xs:choice>
+      <xs:attribute name="ncbi" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="genus">
