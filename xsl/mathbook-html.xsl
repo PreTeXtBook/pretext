@@ -7262,10 +7262,11 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- Text from docinfo, or localized string           -->
 <!-- Target URL from docinfo                          -->
 <xsl:template name="feedback-link">
-    <xsl:variable name="feedback-text">
+    <!-- Possibly an empty URL -->
+    <a class="feedback-link" href="{$docinfo/feedback/url}" target="_blank">
         <xsl:choose>
-            <xsl:when test="/mathbook/docinfo/feedback/text">
-                <xsl:apply-templates select="/mathbook/docinfo/feedback/text" />
+            <xsl:when test="$docinfo/feedback/text">
+                <xsl:apply-templates select="$docinfo/feedback/text" />
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="type-name">
@@ -7273,13 +7274,6 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                 </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:variable>
-    <!-- Possibly an empty URL -->
-    <xsl:variable name="feedback-url">
-        <xsl:apply-templates select="/mathbook/docinfo/feedback/url" />
-    </xsl:variable>
-    <a class="feedback-link" href="{$feedback-url}">
-        <xsl:value-of select="$feedback-text" />
     </a>
 </xsl:template>
 
