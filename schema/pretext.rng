@@ -2071,6 +2071,7 @@
       <oneOrMore>
         <choice>
           <ref name="ParagraphWW"/>
+          <ref name="WWInstruction"/>
           <ref name="Preformatted"/>
           <ref name="SideBySideWW"/>
           <ref name="ImageWW"/>
@@ -2166,6 +2167,11 @@
           </optional>
         </group>
       </choice>
+    </element>
+  </define>
+  <define name="WWInstruction">
+    <element name="instruction">
+      <ref name="TextShort"/>
     </element>
   </define>
   <define name="HintWW">

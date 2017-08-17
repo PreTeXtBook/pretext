@@ -1928,6 +1928,7 @@
         <xs:complexType>
           <xs:choice maxOccurs="unbounded">
             <xs:group ref="ParagraphWW"/>
+            <xs:element ref="instruction"/>
             <xs:element ref="pre"/>
             <xs:group ref="SideBySideWW"/>
             <xs:group ref="ImageWW"/>
@@ -2017,6 +2018,11 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
+  <xs:element name="instruction">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextShort"/>
+    </xs:complexType>
+  </xs:element>
   <xs:group name="HintWW">
     <xs:sequence>
       <xs:element name="hint">

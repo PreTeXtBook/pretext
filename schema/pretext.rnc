@@ -900,6 +900,7 @@
             element statement {
                 (
                     ParagraphWW |
+                    WWInstruction |
                     Preformatted |
                     SideBySideWW |
                     ImageWW |
@@ -936,6 +937,8 @@
                 (attribute form {"essay"},
                 attribute width {text}?)
             }
+        WWInstruction =
+            element instruction {TextShort}
         HintWW =
             element hint {
                 (
