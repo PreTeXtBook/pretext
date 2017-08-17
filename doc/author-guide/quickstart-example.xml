@@ -83,30 +83,17 @@
     <section>
         <title>Processing</title>
 
-        <p>At a command prompt in your terminal or console adjust the pathnames for the two files and execute:</p>
+        <p>At a command prompt in your terminal or console adjust the pathnames for the two files and execute:<cd>
+            <cline>xsltproc /path/to/mathbook/xsl/mathbook-html.xsl /path/to/quickstart.xml</cline>
+        </cd>In the current working directory you should now find the file <c>article-1.html</c> which you can view in a web browser.  (You will want an internet connection since various parts of the page come from the network.  Someday we will create output for the offline situation.)  It will look very plain, but you should be able to read the sentence.</p>
 
-        <console>
-            <prompt>$ </prompt>
-            <input>xsltproc /path/to/mathbook/xsl/mathbook-html.xsl /path/to/quickstart.xml</input>
-        </console>
+        <p>Now, try the following, again with adjusted paths:<cd>
+            <cline>xsltproc /path/to/mathbook/xsl/mathbook-latex.xsl /path/to/quickstart.xml</cline>
+        </cd></p>
 
-        <p>In the current working directory you should now find the file <c>article-1.html</c> which you can view in a web browser.  (You will want an internet connection since various parts of the page come from the network.  Someday we will create output for the offline situation.)  It will look very plain, but you should be able to read the sentence.</p>
-
-        <p>Now, try the following, again with adjusted paths:</p>
-
-        <console>
-            <prompt>$ </prompt>
-            <input>xsltproc /path/to/mathbook/xsl/mathbook-latex.xsl /path/to/quickstart.xml</input>
-        </console>
-
-        <p>In the current working directory you should now find the file <c>article-1.tex</c> which you can process with <c>pdflatex</c> or <c>xelatex</c> at the command line as below.  If you do not have <latex /> installed on your system, you could process this file within a variety of online services, and CoCalc would be an obvious choice.</p>
-
-        <console>
-            <prompt>$ </prompt>
-            <input>pdflatex article-1.tex</input>
-        </console>
-
-        <p>In the current working directory you should now find the file <c>article-1.pdf</c> which you can view or print with standard PDF viewing software.  You could even send it to a print-on-demand service to get nice hardback books, though I suspect sales will not be great.</p>
+        <p>In the current working directory you should now find the file <c>article-1.tex</c> which you can process with <c>pdflatex</c> or <c>xelatex</c> at the command line as below.  If you do not have <latex /> installed on your system, you could process this file within a variety of online services, and CoCalc would be an obvious choice.<cd>
+            <cline>pdflatex article-1.tex</cline>
+        </cd>In the current working directory you should now find the file <c>article-1.pdf</c> which you can view or print with standard PDF viewing software.  You could even send it to a print-on-demand service to get nice hardback books, though I suspect sales will not be great.</p>
 
         <p>That's it.  You now know all the basics of authoring with MathBook XML, since you have produced two radically different output formats with identical content from the exact same structured input, via two different command lines.  Everything you need to author a complete article or textbook, and produce it in many different formats, is just an extension or variation on what you just did.  Let us look at a few simple extensions right away before being more methodical.</p>
     </section>
