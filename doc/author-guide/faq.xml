@@ -15,17 +15,26 @@
     <dl>
         <li>
             <title>Why is there no tag for bold?</title>
-            <p>That would be presentation, not content.  I will answer that question with a question: <em>why</em> do you want to print something in bold?  Is it emphasis? (See <tag>em</tag>.)  Is it the volume number of a journal? (See <tag>journal</tag>.)  Do you want to SHOUT?  Try <tag>alert</tag>.  And so on. There are lots of good answers, some of which are not yet implemented.  We would love to hear about elements you need that are about expressing content, and not about altering presentation.  See <xref ref="principle-markup" /> in the <xref ref="list-principles" autoname="title" />.</p>
+            <p>That would be presentation, not content.  I will answer that question with a question: <em>why</em> do you want to print something in bold?  Is it emphasis? (See <tag>em</tag>.)  Is it the volume number of a journal? (See <tag>journal</tag>.)  Do you want to SHOUT?  Try <tag>alert</tag>.  And so on. There are lots of good answers, some of which are not yet implemented.  We would love to hear about elements you need that are about expressing content, and not about altering presentation.  See <xref ref="principle-markup" /> in the <xref ref="list-principles" text="title" />.</p>
         </li>
 
         <li>
             <title>Why does your conversion to HTML use a fixed width for the text?</title>
-            <p>There is an optimal number of characters per line for human readers, based on research and centuries of book design.  So we set a fixed width such that that the default font comes close to achieving this optimal value.  We also use responsive design to accomodate the constraints of a small screen as best as possible.  A reader will not want to have to carefully resize a browser window to achieve the optimal width, nor should a line of text spread to many, many characters across a very expansive screen.  See <xref ref="principle-good-design" /> in the <xref ref="list-principles" autoname="title" />.</p>
+            <p>There is an optimal number of characters per line for human readers, based on research and centuries of book design.  So we set a fixed width such that that the default font comes close to achieving this optimal value.  We also use responsive design to accomodate the constraints of a small screen as best as possible.  A reader will not want to have to carefully resize a browser window to achieve the optimal width, nor should a line of text spread to many, many characters across a very expansive screen.  See <xref ref="principle-good-design" /> in the <xref ref="list-principles" text="title" />.</p>
         </li>
 
         <li>
             <title>Everything looks right, but why do I get empty output and some warnings about bugs?</title>
             <p>There is a good chance you have <q>modularized</q> your source files and have not included the <c>--xinclude</c> switch on the command-line when you ran <c>xsltproc</c>.  (See <xref ref="processing-modular" />.)  We can often recognize this mistake<mdash />did you not get a warning?  (If not, we can improve the warning if you tell us how your source was organized.  So please do, since we would love to hear about it.)</p>
+        </li>
+
+        <li xml:id="faq-pull-regularly">
+            <title>I don't like surprises and have not updated in months.  Now I have a problem.</title>
+            <p>We almost never release mistaken code that breaks output produced from valid source (<xref ref="schema" />).  And when we have, the cause is usually a small typo, or something that gets fixed easily and quickly.  We do sometimes make backwards-incompatible changes, but you always get warnings, often the changes can wait, there are announcements on the mailing lists, and whenever possible, we update tools that automate the changes.</p>
+
+            <p>As volunteers, we cannot support problems from old versions, and sometimes we have to implement changes in reaction to third-party software (like MathJax), which is beyond our control.  So while development is rapid, we implore you to remain on the <c>dev</c> branch of the repository and <c>git pull</c> regularly.  Such as <em>daily</em>, with your morning coffee as you sit down to write, or with your last compilation of the evening.  You will have <em>far fewer unpleasant surprises</em> this way, and we can help you better.</p>
+
+            <p>We understand that <pretext /> is a moving target, but we are iterating to a better state, and it is best to have everybody along for the <em>whole</em> ride.</p>
         </li>
 
         <!-- mathbook-xml-support:  2015-06-21:  Subscripts in custom lists -->
@@ -56,6 +65,28 @@
             <p>We plan to allow figures and tables to use different counters, since they look obviously different, so you can quickly distinguish the previous, or next, item as you scan a page.  Notice that it is their <em>distinctive appearance</em> that is the criteria for an independent counter.  For example, numbers for displayed equations meet this criteria.  They have their own counter, they are displayed distinctively when originlly formatted, and a cross-reference emphasizes their distinctive type through the use of parentheses (<eg />, Equation (2.4.7)).</p>
 
             <p>Also, as an author, recognize that there is a very flexible mechanism for making lists of objects that may be included in the <tag>backmatter</tag>.  To continue the example here, you could make a list of all the theorems in the book, and a separate list of all the examples.  Each list would be in the order of appearance, include the number (and a title if you provide one).  In HTML output, each is a knowl which will quickly provide the content (independent of location), and also provides an <q>in-context</q> link to take you to the location for surrounding material.  This useful feature requires very little additional effort, especially if you title your blocks as you author them.</p>
+        </li>
+
+        <li>
+            <title>I do not want my examples in knowls.</title>
+            <p>You can change that!  Read <xref ref="conversions" />.</p>
+        </li>
+
+        <li>
+            <title>Why are my knowls empty?</title>
+            <p>When viewing the HTML version on your laptop or local computer as files, do not expect knowls to render properly.  This is a known bug/feature, and there is nothing to be done about it, unless you run a web server on your own machine, which fortunately is a very easy thing to do (see <xref ref="processing-testing-html" />). Think of it this way: the knowl content comes from a server, but on your laptop there is no web server.  You are just looking at files.</p>
+        </li>
+
+        <li>
+            <title>My <latex /> output has errors.</title>
+            <p>Almost certainly your <pretext /> is not correct.  Or your <latex /> syntax within a math element (<tag>m</tag>, <tag>me</tag>, and friends) is not correct.  You have to be very deliberate to make legitimate <pretext /> that produces <latex /> that fails to compile.  The converse is that <latex /> compilation is a good check on the quality of your <pretext />, even if you do not care about print output for your project.</p>
+
+            <p>If the <latex /> error does not help you locate the problem, a good first step in this case is to validate your <pretext /> source<mdash />see <xref ref="schema" />.</p>
+        </li>
+
+        <li>
+            <title>I'd like to make one small adjustment in my output.</title>
+            <p>There are no plans to make it easy to change one thing in the layout (such as changing the title of all sub-sub-sections from flush-left to centered).  If you know enough, then you can hack such things yourself.  But doing so is inadvisable, except in the case where you are the rare person who has done a lot of studying and put a lot of effort into learning book design.  If that is the case, then it would be better to make a completely new layout and then share it so it is an option for other people to use.  See <xref ref="principle-output-styles" text="type-local">Principle</xref>.</p>
         </li>
     </dl>
 </appendix>

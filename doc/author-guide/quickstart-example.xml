@@ -58,16 +58,16 @@
 
         <p>There are two components to processing your document, the MathBook XML stylesheets and the <c>xsltproc</c> program.  We work at the <term>command-line</term> inside of a <term>terminal</term> or <term>console</term>.  If you do not know what this is, it will seem very primitive at first.  Sometimes the old ways are the best ways.  This will be called a <q>Command Prompt</q> in Windows or a <q>Terminal</q> on a Mac.  In Linux it may be known as a <q>console</q> or a <q>shell</q>.  A tutorial, which is Linux-specific, can be found at <url href="http://ryanstutorials.net/linuxtutorial/">Ryan's Tutorials</url> and certainly others exist.</p>
 
-        <p>The operating system on a Mac is built on Unix, which is very similar to Linux, so most of the directions here will be little changed between the two.  Procedures can be very different in Windows.  One alternative is <url href="https://cloud.sagemath.com/">SageMathCloud</url> which provides a full Linux computer for free in your web browser, so that may be an excellent place for initial experiments.</p>
+        <p>The operating system on a Mac is built on Unix, which is very similar to Linux, so most of the directions here will be little changed between the two.  Procedures can be very different in Windows (<xref ref="windows-install-notes" />, <xref ref="windows-subsystem-linux" />).  One alternative is <url href="https://cocalc.com/">CoCalc</url> which provides a full Linux computer for free in your web browser, so that may be an excellent place for initial experiments (<xref ref="topic-build-in-cocalc" />).</p>
 
         <paragraphs>
             <title>Step 1: MathBook XML</title>
 
-            <p>You need to obtain the MathBook XML stylesheets, which are the main part of MathBook XML.  Since you are reading this, it may be possible that you have this already.  You can use <c>git</c> to <term>clone</term> the MathBook XML from the GitHub repository, and then be sure to checkout the <c>dev</c> branch to have the latest version.  This is a good way to go, since you can then easily <q>pull</q> updates to the stylesheets.</p>
+            <p>You need to obtain the MathBook XML stylesheets, which are the main part of MathBook XML.  Since you are reading this, it may be possible that you have this already.  You can use <c>git</c> to <term>clone</term> the MathBook XML from the GitHub repository, and then be sure to checkout the <c>dev</c> branch to have the latest version.  This is the best way to go, and you should only download the repository as a zip file once for an initial experiment, and then switch to using a clone instead.</p>
 
-            <p>If you do not want to install <c>git</c> you can get an archive of all the files to unpack on your system. Just remember that you will need to redo this each time you want to get updates.</p>
+            <p>Once you have a clone of the repository, you can issue <c>git pull</c>, and git will update your local copy with any recent changes.  You should do this <em>regularly</em><mdash />meaning on the order of <em>daily</em>.  See the <xref ref="faq-pull-regularly" text="title">FAQ entry</xref> for more about why we <em>expect</em> you to do this.</p>
 
-            <p>See the website at <url href="https://mathbook.pugetsound.edu/"><c>mathbook.pugetsound.edu</c></url> for details and commands for this step.</p>
+            <p>See the website at <url href="https://mathbook.pugetsound.edu/"><c>mathbook.pugetsound.edu</c></url> for details and commands for this step, right on the main page.</p>
         </paragraphs>
 
         <paragraphs>
@@ -83,30 +83,17 @@
     <section>
         <title>Processing</title>
 
-        <p>At a command prompt in your terminal or console adjust the pathnames for the two files and execute:</p>
+        <p>At a command prompt in your terminal or console adjust the pathnames for the two files and execute:<cd>
+            <cline>xsltproc /path/to/mathbook/xsl/mathbook-html.xsl /path/to/quickstart.xml</cline>
+        </cd>In the current working directory you should now find the file <c>article-1.html</c> which you can view in a web browser.  (You will want an internet connection since various parts of the page come from the network.  Someday we will create output for the offline situation.)  It will look very plain, but you should be able to read the sentence.</p>
 
-        <console>
-            <prompt>$ </prompt>
-            <input>xsltproc /path/to/mathbook/xsl/mathbook-html.xsl /path/to/quickstart.xml</input>
-        </console>
+        <p>Now, try the following, again with adjusted paths:<cd>
+            <cline>xsltproc /path/to/mathbook/xsl/mathbook-latex.xsl /path/to/quickstart.xml</cline>
+        </cd></p>
 
-        <p>In the current working directory you should now find the file <c>article-1.html</c> which you can view in a web browser.  (You will want an internet connection since various parts of the page come from the network.  Someday we will create output for the offline situation.)  It will look very plain, but you should be able to read the sentence.</p>
-
-        <p>Now, try the following, again with adjusted paths:</p>
-
-        <console>
-            <prompt>$ </prompt>
-            <input>xsltproc /path/to/mathbook/xsl/mathbook-latex.xsl /path/to/quickstart.xml</input>
-        </console>
-
-        <p>In the current working directory you should now find the file <c>article-1.tex</c> which you can process with <c>pdflatex</c> or <c>xelatex</c> at the command line as below.  If you do not have <latex /> installed on your system, you could process this file within a variety of online services, and SageMathCloud would be an obvious choice.</p>
-
-        <console>
-            <prompt>$ </prompt>
-            <input>pdflatex article-1.tex</input>
-        </console>
-
-        <p>In the current working directory you should now find the file <c>article-1.pdf</c> which you can view or print with standard PDF viewing software.  You could even send it to a print-on-demand service to get nice hardback books, though I suspect sales will not be great.</p>
+        <p>In the current working directory you should now find the file <c>article-1.tex</c> which you can process with <c>pdflatex</c> or <c>xelatex</c> at the command line as below.  If you do not have <latex /> installed on your system, you could process this file within a variety of online services, and CoCalc would be an obvious choice.<cd>
+            <cline>pdflatex article-1.tex</cline>
+        </cd>In the current working directory you should now find the file <c>article-1.pdf</c> which you can view or print with standard PDF viewing software.  You could even send it to a print-on-demand service to get nice hardback books, though I suspect sales will not be great.</p>
 
         <p>That's it.  You now know all the basics of authoring with MathBook XML, since you have produced two radically different output formats with identical content from the exact same structured input, via two different command lines.  Everything you need to author a complete article or textbook, and produce it in many different formats, is just an extension or variation on what you just did.  Let us look at a few simple extensions right away before being more methodical.</p>
     </section>

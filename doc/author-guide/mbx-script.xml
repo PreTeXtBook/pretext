@@ -36,14 +36,32 @@
         </console>
 
         <p>This will extract every image described in <c>sample-article</c> by a <tag>sageplot</tag> element and produce output as SVG files (if possible), which will be deposited in the <c>images</c> subdirectory of the current working directory.</p>
+
+        <p>Some notes:<ul>
+            <li>If you have modularized your source across more than one <init>XML</init> file, then be sure to provide your <q>top-level</q> or <q>master</q> file as the final argument to the script, just like you would for an invocation of <c>xsltproc</c>.  It is important to understand that your source is one huge <q>source tree</q> and your file-by-file modularization is never respected or recognized in any way.  In particular, use of the <c>xinclude</c> mechanism is handled by the script, and you should not apply the script to each of your source files individually.  If image production (or some other task) takes a long time, see <xref ref="restrict-mbx-scope" /> for a way to have the script restrict its action to only a portion of your project.</li>
+
+            <li>Certain arguments that are filenames require a full (not relative) path to locate the right objects.  In the example above, you can see the source file requires this (where the shell in use here will expand the <tilde /> to the user's home directory).  The <c>-d</c> flag does not require a full path, and so can be specified relative to the current working directory.</li>
+
+            <li>Do not place the script, or configuration files, anywhere else (except as recommended for your personal copy of the configuration file).  The locations are important for locating other files, such as the stylesheets used to isolate parts of your project for processing.</li>
+
+            <li>Much of the work of this script happens in the temporary directory described above.  We leave a lot of intermediate work behind in this directory.  Sometimes exploring this directory is helpful when debugging problems.</li>
+        </ul></p>
     </section>
 
-    <section>
+    <section xml:id="restrict-mbx-scope">
         <title>Restricting the Scope</title>
 
         <p>The <c>-r</c> (<c>--restrict</c>) switch deserves special mention.  It is followed by the value of an <attribute>xml:id</attribute> attribute present in your source XML file.  Then whatever action the script is asked to perform, it will only act on a subtree of the hierarchy, rooted at the element with the given <attribute>xml:id</attribute> value.</p>
 
         <p>So if your images are complex or numerous (or both!) and take a long time to process, you can restrict attention to whatever part of the document you are actively editing, and you can even restrict to a single <tag>image</tag> and so produce just a single graphics file.</p>
+    </section>
+
+    <section>
+        <title>Configuring External Helper Programs</title>
+
+        <p>Our main processor, <c>xsltproc</c>, is not a general-purpose compiler, and does not <q>call</q> external programs.  That is the primary purpose of the <c>mbx</c> script.  You will see a configuration file, <c>script/mbx.cfg</c>, as part of the distribution.  Read the comments at the top of this file, but foremost, realize that you are not meant to edit this file.  It is a template, and any changes you make will be overwritten with an original version when you update.  Instead, make a copy and place it as <c>mathbook/user/mbx.cfg</c>.  The script will look for this copy first, then fallback to the generic version.</p>
+
+        <p>The entries of this file are the names of executable files that perform certain tasks as part of the script's functions.  If it seems the programs are not being found, you can provide full path names, and that may solve the problem.</p>
     </section>
 
     <section xml:id="section-mbx-on-windows">

@@ -10,6 +10,8 @@
 <mathbook xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <docinfo>
+        <!-- this is the default, but supresses a warning -->
+        <cross-references text="type-global" />
         <search>
             <google>
                 <cx>008832104071767086392:woji51c1uko</cx>
@@ -27,6 +29,7 @@
         <xi:include href="processing.xml" />
         <xi:include href="schema.xml" />
         <xi:include href="topics.xml" />
+        <xi:include href="conversions.xml" />
         <xi:include href="add-ons.xml" />
         <xi:include href="mbx-script.xml" />
         <xi:include href="webwork.xml" />

@@ -56,6 +56,12 @@
 <!-- to provide AnswerFormatHelp link.                            -->
 <xsl:param name="pg.answer.form.help" select="'yes'" />
 
+
+<!-- If the extraction style sheet is calling this style sheet, $static -->
+<!-- will be 'yes', and that influences certain templates here          -->
+<xsl:param name="static" select="'no'" />
+<xsl:variable name="b-static" select="$static = 'yes'" />
+
 <!-- ################# -->
 <!-- File Organization -->
 <!-- ################# -->
@@ -319,6 +325,10 @@
         <!-- when there is a PGgraphmacros graph -->
         <xsl:if test=".//image[@pg-name]">
             <xsl:text>  "PGgraphmacros.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <!-- instructions for entering answers into HTML forms -->
+        <xsl:if test=".//instruction">
+            <xsl:text>  "PCCmacros.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- ################### -->
         <!-- Parser Enhancements -->
@@ -709,8 +719,8 @@
     </xsl:choose>
     <xsl:text>, tex_size=&gt;</xsl:text>
     <xsl:choose>
-        <xsl:when test="@tex_size">
-            <xsl:value-of select="@tex_size"/>
+        <xsl:when test="@tex-size">
+            <xsl:value-of select="@tex-size"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>800</xsl:text>
@@ -765,6 +775,17 @@
     </xsl:if>
 </xsl:template>
 
+<xsl:template match="webwork//instruction">
+    <xsl:if test="preceding-sibling::p|preceding-sibling::image|preceding-sibling::tabular and not(child::*[1][self::ol] or child::*[1][self::ul])">
+        <xsl:call-template name="potential-list-indent" />
+    </xsl:if>
+    <xsl:text>[@KeyboardInstructions(q?</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>?)@]**</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
 <!-- ######### -->
 <!-- Numbering -->
 <!-- ######### -->
@@ -802,7 +823,9 @@
 
 <xsl:template match= "webwork//m">
     <xsl:text>[`</xsl:text>
-    <xsl:call-template name="select-latex-macros"/>
+    <xsl:if test="not($b-static)">
+        <xsl:call-template name="select-latex-macros"/>
+    </xsl:if>
     <xsl:apply-templates select="text()|var" />
     <!-- look ahead to absorb immediate clause-ending punctuation -->
     <xsl:apply-templates select="." mode="get-clause-punctuation" />
@@ -815,7 +838,9 @@
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:text>&gt;&gt; [``</xsl:text>
-    <xsl:call-template name="select-latex-macros"/>
+    <xsl:if test="not($b-static)">
+        <xsl:call-template name="select-latex-macros"/>
+    </xsl:if>
     <xsl:apply-templates select="text()|var" />
     <!-- look ahead to absorb immediate clause-ending punctuation -->
     <xsl:apply-templates select="." mode="get-clause-punctuation" />
@@ -834,14 +859,18 @@
     <xsl:choose>
         <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
             <xsl:text>[``</xsl:text>
-            <xsl:call-template name="select-latex-macros"/>
+            <xsl:if test="not($b-static)">
+                <xsl:call-template name="select-latex-macros"/>
+            </xsl:if>
             <xsl:text>\begin{aligned}&#xa;</xsl:text>
             <xsl:apply-templates select="mrow" />
             <xsl:text>\end{aligned}``]</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>[``</xsl:text>
-            <xsl:call-template name="select-latex-macros"/>
+            <xsl:if test="not($b-static)">
+                <xsl:call-template name="select-latex-macros"/>
+            </xsl:if>
             <xsl:text>\begin{gathered}&#xa;</xsl:text>
             <xsl:apply-templates select="mrow" />
             <xsl:text>\end{gathered}``]</xsl:text>

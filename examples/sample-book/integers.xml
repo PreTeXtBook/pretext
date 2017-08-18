@@ -53,7 +53,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <principle>
             <title>First Principle of Mathematical Induction</title>
-            <index><main>Induction</main><sub>first principle of</sub></index>
+            <idx><h>Induction</h><h>first principle of</h></idx>
             <statement>
                 <p>Let <m>S(n)</m> be a statement about integers for  <m>n \in {\mathbb N}</m> and suppose <m>S(n_0)</m> is true for some integer <m>n_0</m>.  If for all integers <m>k</m> with <m>k \geq n_0</m>, <m>S(k)</m> implies that <m>S(k+1)</m> is true, then <m>S(n)</m> is true for all integers <m>n</m> greater than or equal to <m>n_0</m>.</p>
             </statement>
@@ -109,7 +109,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <principle>
             <title>Second Principle of Mathematical Induction</title>
-            <index><main>Induction</main><sub>second principle of</sub></index>
+            <idx><h>Induction</h><h>second principle of</h></idx>
             <statement>
                 <p>Let <m>S(n)</m> be a statement about integers for  <m>n \in {\mathbb N}</m> and suppose <m>S(n_0)</m> is true for some integer <m>n_0</m>.  If <m>S(n_0), S(n_0 + 1), \ldots, S(k)</m> imply that <m>S(k + 1)</m> for <m>k \geq n_0</m>, then the statement <m>S(n)</m> is true for all integers <m>n \geq n_0</m>. </p>
             </statement>
@@ -117,7 +117,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <!-- wording change.  Suggested by P. Diethelm.  TWJ 22/4/2013 -->
 
-        <p>A  nonempty subset <m>S</m> of <m>{\mathbb Z}</m> is <term>well-ordered</term><index><main>Well-ordered set</main></index> if <m>S</m> contains a least element.  Notice that the set <m>{\mathbb Z}</m> is not well-ordered since it does not contain a smallest element.  However, the natural numbers are well-ordered.</p> 
+        <p>A  nonempty subset <m>S</m> of <m>{\mathbb Z}</m> is <term>well-ordered</term><idx><h>Well-ordered set</h></idx> if <m>S</m> contains a least element.  Notice that the set <m>{\mathbb Z}</m> is not well-ordered since it does not contain a smallest element.  However, the natural numbers are well-ordered.</p> 
 
         <principle>
             <title>Principle of Well-Ordering</title>
@@ -151,12 +151,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <!-- wording change.  Suggested by P. Diethelm.  TWJ 22/4/2013 -->
 
-        <p>Induction can also be very useful in formulating definitions. For instance, there are two ways to define <m>n!</m>, the factorial of a positive integer <m>n</m>.</p>
-
-        <ul>
+        <p>Induction can also be very useful in formulating definitions. For instance, there are two ways to define <m>n!</m>, the factorial of a positive integer <m>n</m>.<ul>
             <li><p>The <em>explicit</em> definition: <m>n! = 1 \cdot 2 \cdot 3 \cdots (n - 1) \cdot n</m>.</p></li>
             <li><p>The <em>inductive</em> or <em>recursive</em> definition: <m>1! = 1</m> and <m>n! = n(n - 1)!</m> for <m>n \gt 1</m>.</p></li>
-        </ul>
+        </ul></p>
 
         <p>Every good mathematician or computer scientist knows that looking at problems recursively, as opposed to explicitly, often results in better understanding of complex issues.</p>
     </section>
@@ -170,7 +168,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <theorem xml:id="theorem-integers-division_algorithm">
                 <title>Division Algorithm</title>
-                <index><main>Division algorithm</main><sub>for integers</sub></index>
+                <idx><h>Division algorithm</h><h>for integers</h></idx>
                 <statement>
                     <p>Let <m>a</m> and <m>b</m> be integers, with <m>b \gt 0</m>.  Then there exist unique integers <m>q</m> and <m>r</m> such that 
                         <me>a = bq + r</me>
@@ -191,7 +189,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </proof>
             </theorem>
 
-            <p>Let <m>a</m> and <m>b</m> be integers.  If <m>b = ak</m> for some integer <m>k</m>, we write <m>a \mid b</m>.  An integer <m>d</m> is called a <term>common divisor</term> of <m>a</m> and <m>b</m> if <m>d \mid a</m> and <m>d \mid b</m>.  The <term>greatest common divisor</term><index><main>Greatest common divisor</main><sub>of two integers</sub></index> of integers <m>a</m> and <m>b</m> is a positive integer <m>d</m> such that <m>d</m> is a common divisor  of <m>a</m> and <m>b</m> and if <m>d'</m> is any other common divisor of <m>a</m> and <m>b</m>, then <m>d' \mid d</m>. <notation><usage>a \mid b</usage><description><m>a</m> divides <m>b</m></description></notation><notation><usage>\gcd(a, b)</usage><description>greatest common divisor of <m>a</m> and <m>b</m></description></notation>  We write <m>d = \gcd(a, b)</m>; for example, <m>\gcd( 24, 36) = 12</m> and <m>\gcd(120, 102) = 6</m>.  We say that two integers <m>a</m> and <m>b</m> are <term>relatively prime</term> if <m>\gcd( a, b ) = 1</m>.</p>
+            <p>Let <m>a</m> and <m>b</m> be integers.  If <m>b = ak</m> for some integer <m>k</m>, we write <m>a \mid b</m>.  An integer <m>d</m> is called a <term>common divisor</term> of <m>a</m> and <m>b</m> if <m>d \mid a</m> and <m>d \mid b</m>.  The <term>greatest common divisor</term><idx><h>Greatest common divisor</h><h>of two integers</h></idx> of integers <m>a</m> and <m>b</m> is a positive integer <m>d</m> such that <m>d</m> is a common divisor  of <m>a</m> and <m>b</m> and if <m>d'</m> is any other common divisor of <m>a</m> and <m>b</m>, then <m>d' \mid d</m>. <notation><usage>a \mid b</usage><description><m>a</m> divides <m>b</m></description></notation><notation><usage>\gcd(a, b)</usage><description>greatest common divisor of <m>a</m> and <m>b</m></description></notation>  We write <m>d = \gcd(a, b)</m>; for example, <m>\gcd( 24, 36) = 12</m> and <m>\gcd(120, 102) = 6</m>.  We say that two integers <m>a</m> and <m>b</m> are <term>relatively prime</term> if <m>\gcd( a, b ) = 1</m>.</p>
 
             <theorem xml:id="theorem-integers-gcd">
                 <statement>
@@ -271,14 +269,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <mrow>&amp; = ra + sb.</mrow>
             </md></p>
 
-            <p>The algorithm that we have just used to find the greatest common divisor <m>d</m> of two integers <m>a</m> and <m>b</m> and to write <m>d</m> as the linear combination of <m>a</m> and <m>b</m> is known as the <term>Euclidean algorithm</term><index><main>Euclidean algorithm</main></index><index><main>Algorithm</main><sub>Euclidean</sub></index>.</p> 
+            <p>The algorithm that we have just used to find the greatest common divisor <m>d</m> of two integers <m>a</m> and <m>b</m> and to write <m>d</m> as the linear combination of <m>a</m> and <m>b</m> is known as the <term>Euclidean algorithm</term><idx><h>Euclidean algorithm</h></idx><idx><h>Algorithm</h><h>Euclidean</h></idx>.</p> 
 
         </subsection>
 
         <subsection>
             <title>Prime Numbers</title>
 
-            <p>Let <m>p</m> be an integer such that <m>p \gt 1</m>.  We say that <m>p</m> is a <term>prime number</term><index><main>Prime integer</main></index>, or simply <m>p</m> is <term>prime</term>, if the only positive numbers that divide <m>p</m> are 1 and <m>p</m> itself.  An integer <m>n \gt 1</m> that is not prime is said to be <term>composite</term><index><main>Composite integer</main></index>.</p>
+            <p>Let <m>p</m> be an integer such that <m>p \gt 1</m>.  We say that <m>p</m> is a <term>prime number</term><idx><h>Prime integer</h></idx>, or simply <m>p</m> is <term>prime</term>, if the only positive numbers that divide <m>p</m> are 1 and <m>p</m> itself.  An integer <m>n \gt 1</m> that is not prime is said to be <term>composite</term><idx><h>Composite integer</h></idx>.</p>
 
             <lemma xml:id="theorem-integers-prime-divisor">
                 <title>Euclid</title>
@@ -307,7 +305,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <theorem xml:id="theorem-fund-theorem-arithmetic">
                 <title>Fundamental Theorem of Arithmetic</title>
-                <index><main>Fundamental Theorem</main><sub>of Arithmetic</sub></index>
+                <idx><h>Fundamental Theorem</h><h>of Arithmetic</h></idx>
                 <statement>
                     <p>Let <m>n</m> be an integer such that <m>n \gt 1</m>. Then
                         <me>n = p_1 p_2 \cdots p_k,</me>
@@ -355,14 +353,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <exercise>
             <title>The Sieve of Eratosthenes</title>
-            <index><main>Sieve of Eratosthenes</main></index>  
+            <idx><h>Sieve of Eratosthenes</h></idx>  
             <statement>
                 <p>One method of computing all of the prime numbers less than a certain fixed positive integer <m>N</m> is to list all of the numbers <m>n</m> such that <m>1 \lt n \lt N</m>.  Begin by eliminating all of the multiples of 2.  Next eliminate all of the multiples of 3. Now eliminate all of the  multiples of 5.  Notice that 4 has already been crossed out.  Continue in this manner, noticing that we do not have to go all the way to <m>N</m>; it suffices to stop at <m>\sqrt{N}</m>. Using this method, compute all of the prime numbers less than <m>N = 250</m>.  We can also use this method to find all of the integers that are relatively prime to an integer <m>N</m>.  Simply eliminate the prime factors of <m>N</m> and all of their multiples.  Using this method, find all of the numbers that are relatively prime to <m>N= 120</m>.  Using the Sieve of Eratosthenes, write a program that will compute all of the primes less than an integer <m>N</m>. </p>
             </statement>
         </exercise>
 
         <exercise>
-            <index><main>Ackermann's function</main></index>
+            <idx><h>Ackermann's function</h></idx>
             <statement>
                 <p>Let <m>{\mathbb N}^0 = {\mathbb N} \cup \{ 0 \}</m>. Ackermann's function is the function <m>A :{\mathbb N}^0 \times {\mathbb N}^0 \rightarrow {\mathbb N}^0</m> defined by the equations<md>
                     <mrow>A(0, y) &amp; = y + 1,</mrow>

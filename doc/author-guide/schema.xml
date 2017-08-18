@@ -8,88 +8,167 @@
 <!-- See the file COPYING for copying conditions.             -->
 
 <chapter xml:id="schema">
-    <title>MathBook XML Syntax Specification</title>
-    <author>
-        <personname>Mitchel T. Keller</personname>
-        <department>Department of Mathematics</department>
-        <institution>
-            <line>Department of Mathematics</line>
-            <line>Washington and Lee University</line>
-        </institution>
-        <email>kellermt@wlu.edu</email>
-    </author>
+    <title><pretext /> Vocabulary Specification</title>
 
     <introduction>
-        <p>This MathBook XML Author's Guide, along with the sample article and sample book distributed with the MathBook XML source, provide a wealth of examples of how to author in MathBook XML. However, at some point, you will undoubtedly encounter a situation where some of your text fails to appear in your output or <c>xsltproc</c> produces an error. Those are good moments to start investigating the formal specifications of MathBook XML syntax, as most likely you tried to use something in a way incompatible with those specifications. This chapter will help you with the basics of reading these specifications.</p>
+        <p>This Author's Guide, along with the sample article and sample book distributed with the <pretext /> source, provide a wealth of examples of how to author in <pretext />. However, at some point, you will undoubtedly encounter a situation where some of your text fails to appear in your output or <c>xsltproc</c> produces an error. Those are good moments to start investigating the formal specifications of the <pretext /> vocabulary, as most likely you tried to use something in a way incompatible with those specifications.  This chapter will help you understand and work with the formal specification of <pretext />.</p>
     </introduction>
 
-    <section xml:id="schema-dtd">
-        <title>Document Type Definition (<init>DTD</init>)</title>
-        <introduction>
-            <p>A <term>document type definition</term> (usually abbreviated as <init>DTD</init>) is a way of specifying the formal structure of an XML document, such as a MathBook XML file. It describes things such as the tags that are defined, where they may be placed relative to one another, and attributes that may be applied. <init>DTD</init>s were developed early in the evolution of XML, and thus they are widely supported. However, they have some limitations. In particular, there are some subtelties to MathBook XML that a <init>DTD</init> cannot capture, so RAB intends to eventually produce a Relax NG schema (see <xref ref="schema-rng" />) that will cover these cases. Until then, we have the <init>DTD</init>.</p>
-        </introduction>
-        <subsection>
-            <title>Finding the <init>DTD</init></title>
-            <p>The MathBook XML distribution contains the <init>DTD</init> in the <c>schema/dtd</c> directory. However, as a plain text file, it is rather hard to read. Thus, we suggest that you take a look at the <url href="http://mathbook.pugetsound.edu/doc/dtd/">version on the MathBook XML website</url> that is displayed using LiveDTD, since it provides some nice clickable features. The version you get with the MathBook XML distribution is useful, however, as you can run the program <c>xmllint</c> to check your MathBook XML file for validity. See <xref ref="processing-dtd" /> for more information.</p>
-        </subsection>
+    <section xml:id="schema-relaxng">
+        <title><acro>RELAX-NG</acro> Schema</title>
 
-        <subsection>
-            <title>Reading the <init>DTD</init></title>
-            <p>Let us start by taking a look at how the <init>DTD</init> specifies the definition of a section, which is included below, but if you wouldd like a more interactive version of it, go to the <url href="http://mathbook.pugetsound.edu/doc/dtd/">LiveDTD version of the <init>DTD</init></url>, scroll down to <tag>section</tag> in the left panel, and click on it.</p>
-            <program language="xml">
-                <input><![CDATA[
-                <!ELEMENT section (title, index*, author*, (((%block;|references|exercises)*)|
-                    (introduction?, subsection,(subsection|references|exercises)*,conclusion?))) >
-                    <!ATTLIST section xml:id   ID       #IMPLIED>
-                    <!ATTLIST section xml:base CDATA    #IMPLIED>
-                    <!ATTLIST section xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude">]]>
-                </input>
-            </program>
-            <p>We will start with the first line. It starts off by telling us that we are defining an element called <tag>section</tag>, and everything from there to the end of the line tells us the composition of a <tag>section</tag>. First we see <c>title, index*, author*,</c>. This is telling us that the section <em>must</em> have a title, and <tag>title</tag> <em>must</em> come immediately after <tag>section</tag>. The <c>*</c> on <tag>index</tag> and <tag>author</tag> mean that the section title may be followed by zero or more <tag>index</tag> tags and zero or more <tag>author</tag> tags. (But do not think about putting <tag>author</tag> before <tag>index</tag>!) If you look at the source code for this chapter (which has a definition that begins identically to that for section), you will see that I (MTK) added an author tag to claim responsibility for any mistakes in this chapter for the time being. However, RAB did not put author tags in the other chapters, since he wrote them all, and so the overall author tag covers that.</p>
-            <p>The next section of the specification of <tag>section</tag> is where things get interesting. Carefully examining the parentheses, you will see that there are two groupings separated by <c>|</c>. This means that what comes after the <tag>title</tag>, <tag>index</tag>, and <tag>author</tag> must take one of two forms: <c>(%block;|references|exercises)*</c> or <c latexsep="!">introduction?, subsection,(subsection|references|exercises)*,conclusion?</c>.  The <c>*</c> on the first option tells us that we may have zero or more occurrences of what comes inside the parentheses. Thus, we could go straight to a <tag>section</tag> tag, which might be a good idea when outlining a document before you start writing. However, assuming you want a positive number of the things in the parentheses, this part of the specification allows you to jumble up  <c>%block;</c>s (whatever they are), <tag>references</tag> tags, and <tag>exercises</tag> tags to your heart's content. What is a <c>%block;</c>? If you click on the link for the LiveDTD, it will jump you to the definition of the block entity, and you will see that the things usuable here include theorem, corollary, fact, definition, exercise, <etc /> But there is also another mysterious thing beginning with a <percent />: <c>%para;</c>. One quick click jumps us up and shows us that <c>%para;</c> is shorthand for <tag>p</tag>, the various lists, and a number of other things including <tag>figure</tag> and <tag>table</tag>. Thus, you can shove lots and lots of things inside a <tag>section</tag> (with a wide variety of orders permitted). However, there are some things <em>not</em> encapsulated by <c>(%block;|references|exercises)*</c>. For instance, it would not make sense to put a <tag>chapter</tag> inside a <tag>section</tag>, so that is not allowed. On the other hand, a <tag>subsection</tag> inside a <tag>section</tag> makes perfect sense. To see how we can do that, we need to look at the second part of the specification of <tag>section</tag>. </p>
-            <p>When we look at the second part of the specification of <tag>section</tag>, we encounter most of the rest of the key ideas of reading the <init>DTD</init>: <c latexsep="!">introduction?, subsection,(subsection|references|exercises)*,conclusion?</c>. The commas separating these parts indicate order is important, just as with the <c>title, index*, author*</c> part. The <c>?</c> indicates that the <tag>section</tag> may have at most one <tag>introduction</tag>. There then <em>must</em> be a <tag>subsection</tag>, as indicated by the lack of decorations like <c>?</c> or <c>*</c> on <tag>subsection</tag>. That mandatory <tag>subsection</tag> may then be followed by zero or more occurrences of <tag>subsection</tag>, <tag>references</tag>, and <tag>exercises</tag> in any order you wish. (As an example, each <tag>subsection</tag> could be followed by a block of <tag>exercises</tag> and a list of <tag>references</tag> before the beginning of the next <tag>subsection</tag>. Finally, we see another <c latexsep="!">?</c> element: <tag>conclusion</tag>, which again is optional as indicated by the question mark.</p>
-            <p>After the <c>!ELEMENT</c> part of the definition of <tag>section</tag>, we see a list of <c>!ATTLIST</c> tags, which specify the attributes that can be assigned to <tag>section</tag>. The <attribute>xml:base</attribute> and <attribute>xmlns:xi</attribute> attributes are not particularly interesting, but <attribute>xml:id</attribute> is useful. This tells us that we may assign an identifier to the <tag>section</tag> by writing something of the form <c>&lt;section xml:id="schema-dtd"&gt;</c>, which then allows us to use the <tag>xref</tag> tag to insert a reference. (If you have a background in <latex />, think of <c>xml:id="blah"</c> as being like <c>\label{blah}</c> and <c>&lt;xref ref="blah" /&gt;</c> as being like <c>\ref{blah}</c>, although with some additional features. See <xref ref="overview-cross-references" />.</p>
-            <p>For another example, let us look at the specification of <tag>exercise</tag>: </p>
-            <program language="xml">
-                <input><![CDATA[
-                    <!ELEMENT exercise (title?, index*, ((statement, hint*, answer*, solution*)|(introduction?, webwork, conclusion?)))>
-                        <!ATTLIST exercise xml:id ID    #IMPLIED>
-                        <!ATTLIST exercise number CDATA #IMPLIED>]]>
-                </input>
-            </program>
-            <p>Here we see that an exercise may have at most one <tag>title</tag>, which can be followed by zero or more <tag>index</tag> tags. There are then two options: a <tag>statement</tag> (followed by zero or more <tag>hint</tag>s, followed by zero or more <tag>answer</tag>s, followed by zero or more <tag>solution</tag>s) or a singular <tag>webwork</tag> tag (optionally preceded by an <tag>introduction</tag> and/or followed by a <tag>conclusion</tag>). Again, the attributes include an <attribute>xml:id</attribute> for referencing purposes. Here we also have the option of a <attribute>number</attribute> attribute. See the <url href="http://mathbook.pugetsound.edu/examples/sample-article/html/exercises.html">Sample Article section on exercises</url> for more information.
-            </p>
-            <p>Let us look at one final example, which is the <init>DTD</init> entry for <tag>ul</tag>, the unordered list.</p>
-            <program language="xml">
-                <input><![CDATA[
-                    <!ELEMENT ul (li+)>
-                        <!ATTLIST ul cols  CDATA #IMPLIED>
-                        <!ATTLIST ul label CDATA #IMPLIED>]]>
-                </input>
-            </program>
-            <p>Here we see that there is exactly one thing that can be put inside a <tag>ul</tag> tag: <tag>li</tag>. The <c>+</c> after <tag>li</tag> tells us that we must have <em>at least</em> one <tag>li</tag> tag inside our list. That is, we may not have an empty list! The <attribute>cols</attribute> attribute allows a list to be formatted in a way that it consists of multiple columns. The <attribute>label</attribute> attribute determines what graphical markers are used for each list item. (Since these attributes are really metadata that describe how the MathBook XML file should be rendered into various output formats and not structural, the <init>DTD</init> does not give us this information, and we need to consult the documentation for MathBook XML to learn these facts.)</p>
-        </subsection>
-        <subsection>
-            <title>Where Can I Put That Tag?</title>
-            <p>After authoring in MathBook XML for a while, you will likely run into a situation where you put a lengthy passage in your source, wrapped in a particular tag, and the text never appears in your HTML or <latex /> output. Quite possibly, you have violated the <init>DTD</init>, and thus the call to <c>xsltproc</c> is silently dropping your text because it was not expecting it at that point. For example, suppose you tried putting an <tag>image</tag> inside a <tag>p</tag>. If you are lucky, you are using an editor such as emacs in nXML mode, which will highlight the <tag>image</tag> tag to tell you it is not valid. If you are unlucky, maybe <c>xsltproc</c> silently refuses to include your image in the output. (In between options include giving a warning or running <c>xmllint</c> to discover your MathBook XML is invalid. You may even find that, although your MathBook XML is invalid, <c>xsltproc</c> produces reasonable output. However, violating the MathBook XML specification means that you are not guaranteed to continue to get reasonable output in future updates, so you should correct the problem.) If you go to the LiveDTD and click on the + next to <q>image</q> in the left-hand column, you will get an entry telling you that the <tag>image</tag> element (tag) is seen in <tag>figure</tag> and <tag>sidebyside</tag> and the definition of the entity <c>%para;</c>. That tells you that if you want to have valid MathBook XML that will not lose your image, you need to put it inside a <tag>figure</tag> or <tag>sidebyside</tag> <em>or</em> anywhere that allows for a <c>%para;</c>. Ugh. What allows for the inclusion of the combination of things lumped together under <c>%para;</c>? At the top of the left frame of the LiveDTD, click on <c>% Entities</c>, and then click the <c>+</c> next to <c>para</c>. That will give you list of tags, including <tag>answer</tag>, <tag>proof</tag>, and <tag>statement</tag>, that can contain a <c>%para;</c> (and therefore an <tag>image</tag>). You will notice that <tag>p</tag> is nowhere to be found, which tips you off that you cannot nest an <tag>image</tag> inside a <tag>p</tag>, forcing you to edit your source. </p>
-        </subsection>
-        <conclusion>
-            <p>Although not a comprehensive overview of the contents of the MathBook XML <init>DTD</init>, hopefully this brief tutorial has empowered you to dig into the <init>DTD</init> as needed. As a result, you should be well on your way to writing valid MathBook XML (or being able to ask useful clarifying questions on the Google Group).</p>
-        </conclusion>
+        <p>A <term>schema</term> is a set of patterns which describe how the elements of a language may be combined.  The <pretext /> vocabulary is described by a <acro>RELAX-NG</acro> schema, which is included in the <pretext /> distribution.  (<acro>RELAX-NG</acro> stands for <q>REgular LAnguage for XML Next Generation</q> and is pronounced <q>relaxing</q>.)  In general terms, the schema tells you which elements are available, which attributes they may carry, and which other elements they may contain.  You can then infer where you can place an element.  The schema also indicates if an element is required or optional, if it may be repeated, or if it needs to appear in a prescribed order with other elements, and may limit attribute values.</p>
+
+        <p>Besides providing a concise formal description of the <pretext /> vocabulary, your <init>XML</init> source and the <acro>RELAX-NG</acro> schema can be provided to tools which will automatically <term>validate</term> your source against the formal definition.  The best validators will provide accurate and helpful messages about errors in your source.  Further, some editing tools will use a schema to provide context-sensitive assistance on available elements and attributes as you write, sparing you typographical errors, misplaced elements, and the need to frequently context-switch in order to consult reference material.</p>
+
+        <p>The schema does not tell you anything about how an element or attribute will behave.  But hopefully there is not much ambiguity about the behavior of the content of a <tag>title</tag> element nested within a <tag>chapter</tag> element.  You would not be surprised to see that content duplicated in the Table of Contents of a book.  The purpose of this guide, and other documentation, is to help you understand what to expect.  It is better to think of the schema as a contract between you and the developers of conversion tools.  If your source conforms to the schema, then a conversion tool will produce reasonable output that conveys the structure and meaning of your writing.  Twenty years from now, when <init>GEFF</init> is the dominant document format, a conversion of your source will preserve your meaning, while also taking advantage of the amazing features of <init>GEFF</init>.  (<init>GEFF</init> stands for <q>Great Electronic Format of the Future</q>.)</p>
+
+        <p>In summary, the <acro>RELAX-NG</acro> schema<ul>
+            <li>is the formal specification of the <pretext /> vocabulary,</li>
+            <li>is the key input to validation,</li>
+            <li>can be incredibly helpful in the editing process, and</li>
+            <li>provides guidance to implementors of conversions.</li>
+        </ul>As such, we are very deliberate about changes, and hope over time to make changes only very rarely.</p>
     </section>
 
-    <section xml:id="schema-rng">
-        <title>(*) Relax NG</title>
-        <p>This will get written once we have a Relax NG schema for MathBook XML other than the one <c>trang</c> automatically generates for us from the DTD.</p>
+    <section xml:id="schema-products">
+        <title>Versions of the Schema</title>
+
+        <p>The schema is born within a <pretext /> document, <c>schema/pretext.xml</c>, where surrounding text provides documentation and guidance on implementation.  The literate programming support in <pretext /> (see <xref provisional="literate programming documentation" />) is used to produce a file, <c>schema/pretext.rnc</c>, which is a <acro>RELAX-NG</acro> specification in compact syntax.  As the literate programming support improves from 2017-07-21, <init>HTML</init> and <init>PDF</init> versions will be made available on the <pretext /> website as documentation.  We provide some guidance below on reading the compact syntax.</p>
+
+        <p>The compact syntax is a faithful representation of the more verbose <init>XML</init> syntax.  And vice-versa, so it is possible to translate back-and-forth between the two syntaxes.  In practice, we convert the compact version to the <init>XML</init> version, producing a file <c>schema/pretext.rng</c>.  Some tools require this latter (100<percent /> equivalent) version.  We perform this conversion with <c>trang</c>, an open source program written by James Clark, one of the authors of <acro>RELAX-NG</acro>.  (<c>trang</c> stands for <q>TRAnslator for relax NG</q>.)  The compact syntax is often indicated as <init>RNC</init> and the <init>XML</init> syntax is often indicated as <init>RNG</init>.</p>
+        <!-- acronym suggested at bottom of: http://www.thaiopensource.com/relaxng/convert-to-xsd-talk.html -->
+
+        <p><init>XSD</init> (<init>XML</init> Schema Definition), from the World Wide Web Consortium (<init>W3C</init>), is an alternative to the <acro>RELAX-NG</acro> syntax.  It cannot express as many situations as the <acro>RELAX-NG</acro> syntax, but we have created the <pretext /> schema in a way that <c>trang</c> can convert to an <init>XSD</init> specification without introducing any more-permissive <q>approximations.</q>  But the <init>XSD</init> version seems to have a few small inaccuracies, and in particular should not be used for validation.  That said, <c>schema/pretext.xsd</c> may be useful for tools (<eg /> editors) that require it.</p>
+
+        <p>The files <c>pretext.xml</c>, <c>pretext.rnc</c>, <c>pretext.rng</c>, and <c>pretext.xsd</c> are all provided in the <c>schema</c> directory under revision control, and are updated by the <c>schema/build.sh</c> script when changes are made to <c>pretext.xml</c>.  So as an author, you do not need to install or run <c>trang</c> and should just link to the (continually updated) copies in your <c>mathbook</c> directory.</p>
+
+        <p>We once provided a <term>document type definition</term> (<init>DTD</init>) as a description of the <pretext /> vocabulary.  <url href="http://rellek.net/home/">Mitch Keller</url> wrote an excellent initial version of this chapter to help others understand similar principles in the context of the <init>DTD</init>.  However, the <init>DTD</init> was not sufficiently flexible to handle elements that behave differently in different locations, such as an <tag>introduction</tag> to a <tag>chapter</tag> versus an <tag>introduction</tag> to an <tag>exercisegroup</tag>.  As further evidence, <c>trang</c> will knowingly refuse to convert the <pretext /> schema to a <init>DTD</init> since the <init>DTD</init> syntax is not sufficiently expressive to describe <pretext />.</p>
+
+        <p>If you are intersted in conversions, more tools can be found at <url href="http://relaxng.org/"><c>relaxng.org</c></url> and we have information on installation in <xref ref="schema-install" />.  We would be pleased to learn more about authors' experiences with other converters.</p>
     </section>
 
+    <section>
+        <title>Reading <acro>RELAX-NG</acro> Compact Syntax</title>
 
-    <!--
-    <section xml:id="topic-">
-        <title></title>
+        <p>The compact syntax might remind you of Java or C++ syntax.  We do not provide a tutorial here, but do provide some hints on the various delimiters and special symbols, which may make it fairly easy to see your way through to the meaning.  The fundamental object of the schema is a <term>pattern</term>, and <term>named patterns</term> can be reused in order to reuse common patterns and modularize the description.  One approach to validation is to remove portions of your source that match required patterns until only optional material remains.  Notice that if you were to chase your way through substituting the named patterns with their employment, you would have a single (large) pattern which every possible <pretext /> document would match, and by definition an <init>XML</init> document that does not match is not <pretext />.  (OK, that is a slight exaggeration, see <xref ref="schematron" />.)</p>
 
+        <table>
+            <caption><acro>RELAX-NG</acro> Compact Syntax Summary</caption>
+
+            <tabular>
+                <!--  -->
+                <row><cell>element foo <lbrace /> <rbrace /></cell>
+                <cell>Define <tag>foo</tag> and children</cell></row>
+                <!--  -->
+                <row><cell>attribute bar <lbrace /> <rbrace /></cell>
+                <cell>Define <attribute>bar</attribute> and values</cell></row>
+                <!--  -->
+                <row><cell>text</cell>
+                <cell>Sequence of characters (any length)</cell></row>
+                <!--  -->
+                <row><cell>mixed <lbrace /> <rbrace /></cell>
+                <cell>Mixed-content, characters interleaved in pattern</cell></row>
+                <!--  -->
+                <row><cell></cell>
+                <cell>Exactly one (required)</cell></row>
+                <!--  -->
+                <row><cell>+</cell>
+                <cell>One or more (required)</cell></row>
+                <!--  -->
+                <row><cell>*</cell>
+                <cell>Zero or more (optional)</cell></row>
+                <!--  -->
+                <row><cell>?</cell>
+                <cell>Zero or one (optional)</cell></row>
+                <!--  -->
+                <row><cell>,</cell>
+                <cell>Sequence, in prescribed order</cell></row>
+                <!--  -->
+                <row><cell>|</cell>
+                <cell>Choice</cell></row>
+                <!--  -->
+                <row><cell><ampersand /></cell>
+                <cell>Sequence, any order</cell></row>
+                <!--  -->
+                <row><cell>(  )</cell>
+                <cell>Grouping</cell></row>
+                <!--  -->
+                <row><cell>=</cell>
+                <cell>Define named pattern</cell></row>
+                <!--  -->
+                <row><cell>|=</cell>
+                <cell>Accumulate named pattern as a choice</cell></row>
+            </tabular>
+        </table>
     </section>
 
-   -->
+    <section>
+        <title>Validation</title>
 
+        <p>We cannot stress enough the importance of validating your source early and frequently.  Error conditions and messages can be built into processing (we have some anyway), but they are much better accomodated by tools built for just this purpose.  If your processing with <c>xsltproc</c> suddenly fails, or if chunks of your content fail to materialize, it is highly likely that a validation check will tell you where the problem lies.  If you integrate regular checks into your workflow, then sudden problems can be traced to recent changes.  (Perhaps paired with using <c>git bisect</c>, in the extreme.  You are using revision control, aren't you?)</p>
+
+        <p>We use <c>jing</c> for validation, an open source companion to the <c>trang</c> converter described above.  As a Java program, it should be cross-platform.  It is also packaged for Debian and Ubuntu Linux.  It provides messages keyed to the line number and character number of your source, and the messages are very clear and informative.  See notes on installation in <xref ref="schema-install" />.  We would be pleased to learn more about authors' experiences with other validators.</p>
+
+        <p>You might get a lot of error messages the first time you use <c>jing</c>. If so, it might be that many of them are the same situation.  If you pipe the output of <c>jing</c> through <c>sort -k 2</c> then the output will group similar messages together.</p>
+
+        <p>If you use <c>xsltproc</c> as your <init>XSLT</init> processor, then you likely automatically also have the <c>xmllint</c> program, which will perform validation with <acro>RELAX-NG</acro> schema.  Our experience is that it bails out at the first warning, or at least does not process the remainder of the current subtree, and that the error messages are often very misleading.  We will not support questions about validation based on output from <c>xmllint</c>.</p>
+    </section>
+
+    <section>
+        <title>Schema Browser</title>
+
+        <p>We use the DocFlex/XML <url href="http://www.filigris.com/docflex-xml/xsddoc/">XML Schema Documentation Generator</url> to automatically produce hyperlinked documentation of the schema as part of the online documentation at the <pretext /> website, located at <url href="http://mathbook.pugetsound.edu/doc/schema/"><c>mathbook.pugetsound.edu/doc/schema/</c></url>.  Because this is produced from the <init>XSD</init> version of the schema, it will reproduce the small inaccuracies mentioned above.  But it is still a very convenient and informative way to explore the schema, or use it for reference.   If you know of a similar tool of the same quality, but which documents <acro>RELAX-NG</acro> schema, a report would be greatly appreciated.</p>
+
+        <p>Do not be intimidated by the list of roughly 300 elements in the left navigation panel.  Many are configuration options, many are special-purpose, and many you will never use.  (Someday we will do lexical analysis on a substantial range of <pretext /> texts to see just which elements do get used most frequently).  Instead, scroll down to the 70 or so <q>Element Groups</q>.  These are thematic bundles of related elements, named to help you locate them later.  The right panel will list the elements near the top as part of the <q>Complex Content Model.</q>  Just below you will see the <q>Known Usage Locations</q> which list places every element in the group may appear.  Similarly, if you explore a particular element, you can see the pattern describing the attributes and elements allowed as children, and lists of the possible parents.</p>
+
+        <p>The XML Schema Documentation Generator is a commercial program, but provides a free license allowing minimal customization and embeddeding promotion in the output.  (Thank-you, Filigris Works!)  In particular, as an author you should not need to install or use this program.</p>
+    </section>
+
+    <section xml:id="schematron">
+        <title>Schematron Rules</title>
+
+        <p>Schematron's inventor, Rick Jelliffe, described <url href="http://schematron.com/">Schematron</url> as <q>a feather duster to reach the parts other schema languages cannot reach.</q></p>
+        <!-- https://en.wikipedia.org/wiki/Schematron on 2017-07-21 -->
+
+        <p>We will augment the <acro>RELAX-NG</acro> schema with Schematron rules, and migrate source-specific error messages and special conditions away from the <init>XSLT</init> processing step.  It appears possible to integrate Schematron rules into the <pretext /> document describing the schema and to conduct processing with existing tools (<ie />, <c>xsltproc</c>).</p>
+    </section>
+
+    <section xml:id="editors-supporting-schema">
+        <title>Editor Support for Schema</title>
+
+        <p>We collect summary information about editors that make use of schema.  See <xref ref="editors" /> for more specific information, links, <etc />.</p>
+
+        <table>
+            <caption>Schema Support in Editors</caption>
+
+            <tabular>
+                <!--  -->
+                <row bottom="minor">
+                    <cell>Editor</cell>
+                    <cell>Formats</cell>
+                    <cell>Notes</cell>
+                </row>
+                <!--  -->
+                <row>
+                    <cell>emacs</cell>
+                    <cell>RNC</cell>
+                    <cell>Schema-sensitive editing, open source</cell>
+                </row>
+                <!--  -->
+                <row>
+                    <cell>XML Copy Editor</cell>
+                    <cell>RNG, XSD</cell>
+                    <cell>Validation, <q>tag completion</q>, open source</cell>
+                </row>
+                <!--  -->
+                <row>
+                    <cell>oXygen</cell>
+                    <cell>RNC, RNG</cell>
+                    <cell>Validation and completion, commercial</cell>
+                </row>
+                <!--  -->
+            </tabular>
+        </table>
+    </section>
 </chapter>

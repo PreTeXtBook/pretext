@@ -72,7 +72,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='backmatter'><xsl:text>Back Matter</xsl:text></localization> -->
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'><xsl:text>Paragraphes</xsl:text></localization>  <!--checked-->
-    <localization string-id='paragraph'><xsl:text>Paragraphe</xsl:text></localization> <!--checked-->
     <localization string-id='subparagraph'><xsl:text>Sous-paragraphe</xsl:text></localization> <!--checked-->
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
@@ -119,6 +118,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='blockquote'><xsl:text>Quotation</xsl:text></localization> -->
     <!-- Parts of an exercise and it's solution -->
     <localization string-id='exercise'><xsl:text>Exercice</xsl:text></localization>
+    <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Indication</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Réponse</xsl:text></localization>
     <localization string-id='solution'><xsl:text>Solution</xsl:text></localization>
@@ -135,12 +135,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='dedication'><xsl:text>Dédicace</xsl:text></localization>
     <localization string-id='colophon'><xsl:text>Colophon</xsl:text></localization>
     <!-- Back matter components -->
-    <!-- Following is temporary, "index-part" to be deprecated -->
-    <!-- NB: repurpose translations, replace "indexsection below", maybe move appendix here -->
-    <!-- <localization string-id='index-part'><xsl:text>Index</xsl:text></localization> -->
+    <!-- index-part is deprecated, but not abandoned          -->
+    <!-- NB: repurpose translations, maybe move appendix here -->
+    <localization string-id='index-part'><xsl:text>Index</xsl:text></localization>
     <!-- <localization string-id='jump-to'><xsl:text>Jump to:</xsl:text></localization> -->
     <!-- Parts of the Index -->
-    <localization string-id='indexsection'><xsl:text>Index</xsl:text></localization> <!--see latex mechanism-->
+    <localization string-id='index'><xsl:text>Index</xsl:text></localization> <!--see latex mechanism-->
     <localization string-id='see'><xsl:text>Visiter</xsl:text></localization> <!--see latex mechanism-->
     <localization string-id='also'><xsl:text>Voir Aussi</xsl:text></localization> <!--see latex mechanism-->
     <!-- Navigation Interface elements -->

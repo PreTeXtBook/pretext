@@ -3,6 +3,7 @@
 <!-- For TJ Hitchman's Linear Algebra Workbook     -->
 <!-- 2014/09/04  R. Beezer, page break at sections -->
 <!-- 2014/09/09  R. Beezer, implemented "tasks"    -->
+<!-- 2017/08/04  R. Beezer, removed "tasks"        -->
 
 <!-- Identify as a stylesheet -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
@@ -37,23 +38,5 @@
 	<xsl:apply-imports />
 	<xsl:text>\clearpage&#xa;</xsl:text>
 </xsl:template>
-
-<!-- ##### -->
-<!-- Tasks -->
-<!-- ##### -->
-
-<xsl:param name="latex.preamble.late">
-	<xsl:text>\newtheorem{task}{Task}&#xa;</xsl:text>
-</xsl:param>
-
-<xsl:template match="task">
-	<xsl:text>\begin{task}&#xa;</xsl:text>
-    <xsl:apply-templates select="title" mode="environment-option" />
-    <xsl:apply-templates select="." mode="label"/>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::title)]"/>
-	<xsl:text>\end{task}&#xa;</xsl:text>
-</xsl:template>
-
 
 </xsl:stylesheet>

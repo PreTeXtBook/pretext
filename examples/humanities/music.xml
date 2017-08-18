@@ -5,13 +5,13 @@
         <title>Musical Symbols</title>
         <example>
             <title>Accidentals</title>
-            <ul>
+            <p>The accidentals are<ul>
                 <li><p><c>&lt;doublesharp/&gt;</c>: <doublesharp/></p></li>
                 <li><p><c>&lt;sharp/&gt;</c>: <sharp/></p></li>
                 <li><p><c>&lt;natural/&gt;</c>: <natural/></p></li>
                 <li><p><c>&lt;flat/&gt;</c>: <flat/></p></li>
                 <li><p><c>&lt;doubleflat/&gt;</c>: <doubleflat/></p></li>
-            </ul>
+            </ul></p>
         </example>
     </section>
     <section xml:id="scaledegs">
@@ -19,7 +19,7 @@
         <p>Scale degrees are created using the <c>&lt;scaledeg&gt;</c> tag which places a <q>diacritic circumflex</q> over the degree. The circumflex looks best when attached to single-digit numbers.</p>
         <example>
             <title>Scale Degrees</title>
-            <ul cols="2">
+                <p>The scale degrees are<ul cols="2">
                 <li><p><c>&lt;scaledeg&gt;0&lt;/scaledeg&gt;</c>: <scaledeg>0</scaledeg></p></li>
                 <li><p><c>&lt;scaledeg&gt;1&lt;/scaledeg&gt;</c>: <scaledeg>1</scaledeg></p></li>
                 <li><p><c>&lt;scaledeg&gt;2&lt;/scaledeg&gt;</c>: <scaledeg>2</scaledeg></p></li>
@@ -31,7 +31,7 @@
                 <li><p><c>&lt;scaledeg&gt;8&lt;/scaledeg&gt;</c>: <scaledeg>8</scaledeg></p></li>
                 <li><p><c>&lt;scaledeg&gt;9&lt;/scaledeg&gt;</c>: <scaledeg>9</scaledeg></p></li>
                 <li><p><c>&lt;scaledeg&gt;10&lt;/scaledeg&gt;</c>: <scaledeg>10</scaledeg></p></li>
-            </ul>
+            </ul></p>
         </example>
     </section>
     <section xml:id="notes">
@@ -40,7 +40,7 @@
         <p>For example, <c>&lt;n pc="C" acc="sharp" octave="4"/&gt;</c> results in <n pc="C" acc="sharp" octave="4"/> while <c>&lt;n pc="5" acc="flat"/&gt;</c> results in <n pc="5" acc="flat"/>.</p>
         <example>
             <title>Alphabetic Pitch Classes</title>
-            <ul cols="5">
+            <p>The alphabetic pitch classes are<ul cols="5">
                 <li><p><n pc="A" acc="doublesharp" octave="2"/></p></li>
                 <li><p><n pc="B" acc="doublesharp"/></p></li>
                 <li><p><n pc="C" acc="doublesharp" octave="3"/></p></li>
@@ -80,11 +80,11 @@
                 <li><p><n pc="E" acc="doubleflat" octave="4"/></p></li>
                 <li><p><n pc="F" acc="doubleflat"/></p></li>
                 <li><p><n pc="G" acc="doubleflat" octave="5"/></p></li>
-            </ul>
+            </ul></p>
         </example>
         <example>
             <title>Numeric Pitch Classes</title>
-            <ul cols="5">
+            <p>The numeric pitch classes are<ul cols="5">
                 <li><p><n pc="1" acc="doublesharp" octave="5"/></p></li>
                 <li><p><n pc="2" acc="doublesharp"/></p></li>
                 <li><p><n pc="3" acc="sharp" octave="4"/></p></li>
@@ -95,7 +95,7 @@
                 <li><p><n pc="8" acc="flat"/></p></li>
                 <li><p><n pc="9" acc="doubleflat" octave="1"/></p></li>
                 <li><p><n pc="10" acc="doubleflat"/></p></li>
-            </ul>
+            </ul></p>
         </example>
     </section>
     <section xml:id="chords">
@@ -112,7 +112,7 @@
         <p>will result in <chord root="B doublesharp" mode="min major" bps="6 5" suspended="yes" parentheses="yes" bass="G"><alteration><sharp/>9</alteration><alteration>add 11</alteration></chord>.</p>
         <example>
             <title>Chords</title>
-            <ul cols="4">
+            <p>Examples of chaords are<ul cols="4">
                 <li><p><chord root="N.C."/></p></li>
                 <li><p><chord root="C"><alteration>bass</alteration></chord></p></li>
                 <li><p><chord root="A"/></p></li>
@@ -157,16 +157,15 @@
                 <li><p><chord root="E natural" mode="m" bps="7" suspended="yes" parentheses="no"><alteration>add 3</alteration></chord></p></li>
                 <li><p><chord root="F natural" bass="B doubleflat"/></p></li>
                 <li><p><chord root="G natural" mode="augmented"><alteration>add <sharp/>9</alteration><alteration>add <flat/>9</alteration></chord></p></li>
-            </ul>
+            </ul></p>
         </example>
         <example>
             <title>Chord Comparisons</title>
-            <p>While there are different ways to notate chords, some are clearer than others.</p>
-            <ul>
+            <p>While there are different ways to notate chords, some are clearer than others.<ul>
                 <li><p><chord root="F" mode="maj"/> vs <chord root="F" mode="M"/></p></li>
                 <li><p><chord root="C" mode="min major" bps="7"/> vs <chord root="C" mode="minor major" bps="7"/></p></li>
                 <li><p><chord root="C" mode="major" bps="7"><alteration><sharp/>5</alteration></chord> vs <chord root="C" mode="augmented major" bps="7"/> vs <chord root="C" mode="aug maj" bps="7"/></p></li>
-            </ul>
+            </ul></p>
         </example>
     </section>
 

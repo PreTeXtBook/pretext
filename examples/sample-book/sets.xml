@@ -44,18 +44,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Abstract mathematics is different from other sciences. In laboratory sciences such as chemistry and physics, scientists perform experiments to discover new principles and verify theories.  Although mathematics is often motivated by physical experimentation or by computer simulations, it is made rigorous through the use of logical arguments.  In studying abstract mathematics, we take what is called an  axiomatic approach; that is, we take a collection of objects <m>\mathcal S</m> and assume some rules about their structure.  These rules are called <term>axioms</term>.  Using the axioms for <m>\mathcal S</m>, we wish to derive other information about <m>\mathcal S</m> by using logical arguments.  We require that our axioms be consistent; that is, they should not contradict one another.  We also demand that there not be too many axioms. If a system of axioms is too restrictive,  there will be few examples of the mathematical structure.</p>  
 
-            <p>A <term>statement</term> in logic or mathematics is an assertion that is either true or false.  Consider the following examples:</p>
-
-                <ul>
-                    <li><p><m>3 + 56 - 13 + 8/2 </m>.</p></li>
-                    <li><p>All cats are black.</p></li>
-                    <li><p><m>2 + 3 = 5</m>.</p></li>
-                    <li><p><m>2x = 6</m> exactly when <m>x = 4</m>.</p></li>
-                    <li><p>If <m>ax^2 + bx + c = 0</m> and <m>a \neq 0</m>, then <me>x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.</me></p></li>
-                    <li><p><m>x^3 - 4x^2 + 5 x - 6</m>.</p></li>
-                </ul>
-
-            <p>All but the first  and last examples are statements, and must be either true or false.</p> 
+            <p>A <term>statement</term> in logic or mathematics is an assertion that is either true or false.  Consider the following examples:<ul>
+                <li><p><m>3 + 56 - 13 + 8/2 </m>.</p></li>
+                <li><p>All cats are black.</p></li>
+                <li><p><m>2 + 3 = 5</m>.</p></li>
+                <li><p><m>2x = 6</m> exactly when <m>x = 4</m>.</p></li>
+                <li><p>If <m>ax^2 + bx + c = 0</m> and <m>a \neq 0</m>, then <me>x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.</me></p></li>
+                <li><p><m>x^3 - 4x^2 + 5 x - 6</m>.</p></li>
+            </ul>All but the first and last examples are statements, and must be either true or false.</p> 
 
             <p>A <term>mathematical proof</term> is nothing more than a convincing argument about the accuracy  of a statement. Such an argument should contain enough detail to convince the audience; for instance, we can see that the statement <q><m>2x = 6</m> exactly when <m>x = 4</m></q> is false by evaluating <m>2 \cdot 4</m> and noting that <m>6 \neq 8</m>, an argument that would satisfy anyone. Of course, audiences may vary widely: proofs can be addressed to another student, to a professor, or to the reader of a text.  If more detail than  needed is presented in the proof, then the  explanation will be either long-winded or poorly written.  If too much detail is omitted, then the proof may  not be convincing.  Again it is important to keep the audience in mind.  High school students require much more detail than do graduate students.  A good rule of thumb for an argument in an introductory abstract algebra course is that it should be written to convince one's peers, whether those peers be other students or other readers of the text.</p>
 
@@ -79,16 +75,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <subsection>
             <title>Some Cautions and Suggestions</title>
 
-            <p>There are several different strategies for proving propositions.  In addition to using different methods of proof, students often make some common mistakes when they are first learning how to prove theorems. To aid students who are studying abstract mathematics for the first time, we list here some of the difficulties that they may encounter and some of the strategies of proof available to them. It is a good idea to keep referring back to this list as a reminder. (Other techniques of proof will become apparent throughout this chapter and the remainder of the text.)</p>
-
-            <ul>
+            <p>There are several different strategies for proving propositions.  In addition to using different methods of proof, students often make some common mistakes when they are first learning how to prove theorems. To aid students who are studying abstract mathematics for the first time, we list here some of the difficulties that they may encounter and some of the strategies of proof available to them. It is a good idea to keep referring back to this list as a reminder. (Other techniques of proof will become apparent throughout this chapter and the remainder of the text.)<ul>
                 <li><p>A theorem cannot be proved by example; however, the standard way to show that a statement is not a theorem is to provide a counterexample.</p></li>
                 <li><p>Quantifiers are important. Words and phrases such as <em>only</em>, <em>for all</em>, <em>for every</em>, and <em>for some</em> possess different meanings.</p></li>
                 <li><p>Never assume any hypothesis that is not explicitly stated in the theorem.  <em>You cannot take things for granted.</em></p></li>
                 <li><p>Suppose you wish to show that an object <em>exists</em> and is <em>unique</em>.  First show that there actually is such an object.  To show that it is unique, assume that there are two such objects, say <m>r</m> and <m>s</m>, and then show that <m>r = s</m>.</p></li>
                 <li><p>Sometimes it is easier to prove the contrapositive of a statement.  Proving the statement <q>If <m>p</m>, then <m>q</m></q> is exactly the same as proving the statement <q>If not <m>q</m>, then not <m>p</m>.</q></p></li>
                 <li><p>Although it is usually better to find a direct proof of a theorem, this task  can sometimes be difficult. It may be easier to assume that the theorem that you are trying to prove is false, and to hope that in the course of your argument you are forced to make some statement that cannot possibly be true.</p></li>
-            </ul>
+            </ul></p>
 
             <p>Remember that one of the main objectives of higher mathematics is proving theorems. Theorems are tools that make new and productive applications of mathematics possible.  We use examples to give insight  into existing theorems and to foster intuitions as to what new theorems might be true.  Applications, examples, and proofs are tightly interconnected<mdash />much more so than they may seem at first appearance.</p>
 
@@ -181,16 +175,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <proposition>
             <statement>
-                <p>Let <m>A</m>, <m>B</m>, and <m>C</m> be sets. Then</p>
-
-                <ol>
+                <p>Let <m>A</m>, <m>B</m>, and <m>C</m> be sets. Then<ol>
                     <li><p><m>A \cup A = A</m>, <m>A \cap A = A</m>, and <m>A \setminus A = \emptyset</m>;</p></li>
                     <li><p><m>A \cup \emptyset = A</m> and <m>A \cap \emptyset = \emptyset</m>;</p></li>
                     <li><p><m>A \cup (B \cup C) = (A \cup B) \cup C</m> and  <m>A \cap (B \cap C) = (A \cap B) \cap C</m>;</p></li>
                     <li><p><m>A \cup B = B \cup A</m> and <m>A \cap B = B \cap A</m>;</p></li>
                     <li><p><m>A \cup (B \cap C) = (A \cup B) \cap (A \cup C)</m>;</p></li>
                     <li><p><m>A \cap (B \cup C) = (A \cap B) \cup (A \cap C)</m>.</p></li>
-                </ol>
+                </ol></p>
             </statement>
             <proof>
                 <p>We will prove (1) and (3) and leave the remaining results to be proven in the exercises.</p>
@@ -220,14 +212,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <theorem>
             <title>De Morgan's Laws</title>
-            <index><main>De Morgan's laws</main><sub>for sets</sub></index>
+            <idx><h>De Morgan's laws</h><h>for sets</h></idx>
             <statement>
-                <p>Let <m>A</m> and <m>B</m> be sets. Then</p>
-
-                <ol>
+                <p>Let <m>A</m> and <m>B</m> be sets. Then<ol>
                     <li><p><m>(A \cup B)' = A' \cap B'</m>;</p></li>
                     <li><p><m>(A \cap B)' = A' \cup B'</m>.</p></li>
-                </ol>
+                </ol></p>
             </statement>
             <proof>
                 <p>(1) We must show that <m>(A \cup B)' \subset A' \cap B'</m> and <m>(A \cup B)' \supset A' \cap B'</m>. Let <m>x \in (A \cup B)'</m>.  Then <m>x \notin A \cup B</m>. So <m>x</m> is neither in <m>A</m> nor in <m>B</m>, by the definition of the union of sets.  By the definition of the complement, <m>x \in A'</m> and <m>x \in B'</m>.  Therefore, <m>x \in A' \cap B'</m> and we have <m>(A \cup B)' \subset A' \cap B'</m>.</p>
@@ -269,9 +259,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
-        <p>Subsets of <m>A \times B</m> are called <term>relations</term>.  We will define a  <term>mapping</term><index><main>Mapping</main><see>Function</see></index> or <term>function</term><index><main>Function</main><sub>definition of</sub></index> <m>f \subset A \times B</m> from a set <m>A</m> to a set <m>B</m> to be the special type of relation where <m>(a, b) \in f</m> if for every element <m>a \in A</m> there exists a unique element <m>b \in B</m>. Another way of saying this is that for every element in <m>A</m>, <m>f</m> assigns a unique element in <m>B</m>.  We usually write <m>f:A \rightarrow B</m> or <m>A \stackrel{f}{\rightarrow} B</m>.  Instead of writing down ordered pairs  <m>(a,b) \in A \times B</m>, we write <m>f(a) = b</m> or <m>f : a \mapsto b</m>.  The set  <m>A</m> is called the <term>domain</term><index><main>Function</main><sub>domain of</sub></index> of <m>f</m> and   
+        <p>Subsets of <m>A \times B</m> are called <term>relations</term>.  We will define a  <term>mapping</term><idx><h>Mapping</h><see>Function</see></idx> or <term>function</term><idx><h>Function</h><h>definition of</h></idx> <m>f \subset A \times B</m> from a set <m>A</m> to a set <m>B</m> to be the special type of relation where <m>(a, b) \in f</m> if for every element <m>a \in A</m> there exists a unique element <m>b \in B</m>. Another way of saying this is that for every element in <m>A</m>, <m>f</m> assigns a unique element in <m>B</m>.  We usually write <m>f:A \rightarrow B</m> or <m>A \stackrel{f}{\rightarrow} B</m>.  Instead of writing down ordered pairs  <m>(a,b) \in A \times B</m>, we write <m>f(a) = b</m> or <m>f : a \mapsto b</m>.  The set  <m>A</m> is called the <term>domain</term><idx><h>Function</h><h>domain of</h></idx> of <m>f</m> and   
             <me>f(A) = \{ f(a) : a \in A \} \subset B</me>
-        is called the <term>range</term><index><main>Function</main><sub>range of</sub></index> or <term>image</term> of <m>f</m>.  We can think of the elements in the function's domain as input values and the elements in the function's range as output values.</p>
+        is called the <term>range</term><idx><h>Function</h><h>range of</h></idx> or <term>image</term> of <m>f</m>.  We can think of the elements in the function's domain as input values and the elements in the function's range as output values.</p>
 
         <figure xml:id="figure-sets-mappings">
             <caption>Mappings and relations</caption>
@@ -322,9 +312,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>Given a function <m>f : A \rightarrow B</m>, it is often possible to write a list describing what the function does to each specific element in the domain.  However, not all functions can be described in this manner.  For example, the function <m>f: {\mathbb R} \rightarrow {\mathbb R}</m> that sends each real number to its cube is a mapping that must be described by writing <m>f(x) = x^3</m> or <m>f:x \mapsto x^3</m>.</p>
 
-        <p>Consider the relation <m>f : {\mathbb Q} \rightarrow {\mathbb Z}</m> given by <m>f(p/q) = p</m>.  We know that <m>1/2 = 2/4</m>, but is <m>f(1/2) = 1</m> or 2?  This relation cannot be a mapping because it is not well-defined.  A relation is <term>well-defined</term><index><main>Well-defined map</main></index> if each element in the domain is assigned to a <em>unique</em> element in the range.</p>
+        <p>Consider the relation <m>f : {\mathbb Q} \rightarrow {\mathbb Z}</m> given by <m>f(p/q) = p</m>.  We know that <m>1/2 = 2/4</m>, but is <m>f(1/2) = 1</m> or 2?  This relation cannot be a mapping because it is not well-defined.  A relation is <term>well-defined</term><idx><h>Well-defined map</h></idx> if each element in the domain is assigned to a <em>unique</em> element in the range.</p>
 
-        <p>If <m>f:A \rightarrow B</m> is a map and the image of <m>f</m> is <m>B</m>, i.e., <m>f(A) = B</m>, then <m>f</m> is said to be <term>onto</term><index><main>Function</main><sub>onto</sub></index> or <term>surjective</term><index><main>Function</main><sub>surjective</sub></index>. In other words, if there exists an <m>a \in A</m> for each <m>b \in B</m> such that <m>f(a) = b</m>, then <m>f</m> is onto. A map is <term>one-to-one</term><index><main>Function</main><sub>one-to-one</sub></index> or <term>injective</term><index><main>Function</main><sub>injective</sub></index> if <m>a_1 \neq a_2</m> implies <m>f(a_1) \neq f(a_2)</m>.  Equivalently, a function is one-to-one if <m>f(a_1) = f(a_2)</m> implies <m>a_1 = a_2</m>.  A map that is both one-to-one and onto is called <term>bijective</term><index><main>Function</main><sub>bijective</sub></index>.</p> 
+        <p>If <m>f:A \rightarrow B</m> is a map and the image of <m>f</m> is <m>B</m>, i.e., <m>f(A) = B</m>, then <m>f</m> is said to be <term>onto</term><idx><h>Function</h><h>onto</h></idx> or <term>surjective</term><idx><h>Function</h><h>surjective</h></idx>. In other words, if there exists an <m>a \in A</m> for each <m>b \in B</m> such that <m>f(a) = b</m>, then <m>f</m> is onto. A map is <term>one-to-one</term><idx><h>Function</h><h>one-to-one</h></idx> or <term>injective</term><idx><h>Function</h><h>injective</h></idx> if <m>a_1 \neq a_2</m> implies <m>f(a_1) \neq f(a_2)</m>.  Equivalently, a function is one-to-one if <m>f(a_1) = f(a_2)</m> implies <m>a_1 = a_2</m>.  A map that is both one-to-one and onto is called <term>bijective</term><idx><h>Function</h><h>bijective</h></idx>.</p> 
 
 <!-- Added explanation for onto map - TWJ 1/25/2011 -->
 
@@ -332,7 +322,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Let <m>f:{\mathbb Z} \rightarrow {\mathbb Q}</m> be defined by <m>f(n) = n/1</m>.  Then <m>f</m> is one-to-one but not onto.  Define <m>g : {\mathbb Q} \rightarrow {\mathbb Z}</m> by <m>g(p/q) = p</m> where <m>p/q</m> is a rational number expressed in its lowest terms with a positive denominator.  The function <m>g</m> is onto but not one-to-one.</p>
         </example>
 
-        <p>Given two functions, we can construct a new function by using the range of the first function as the domain of the second function.  Let <m>f : A \rightarrow B</m> and <m>g : B \rightarrow C</m> be mappings.  Define a new map, the <term>composition</term><index><main>Function</main><sub>composition of</sub></index> of <m>f</m> and <m>g</m> from <m>A</m> to <m>C</m>, by <m>(g \circ f)(x) = g(f(x))</m>.</p>
+        <p>Given two functions, we can construct a new function by using the range of the first function as the domain of the second function.  Let <m>f : A \rightarrow B</m> and <m>g : B \rightarrow C</m> be mappings.  Define a new map, the <term>composition</term><idx><h>Function</h><h>composition of</h></idx> of <m>f</m> and <m>g</m> from <m>A</m> to <m>C</m>, by <m>(g \circ f)(x) = g(f(x))</m>.</p>
 
         <figure xml:id="figure-sets-composition">
             <caption>Composition of maps</caption>
@@ -433,7 +423,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 ax + by \\
                 cx +dy
                 ]]>\end{pmatrix}.</me>
-            Maps from <m>{\mathbb R}^n</m> to <m>{\mathbb R}^m</m> given by matrices are called <term>linear maps</term> or <term>linear transformations</term><index><main>Linear transformation</main><sub>definition of</sub></index>.</p>
+            Maps from <m>{\mathbb R}^n</m> to <m>{\mathbb R}^m</m> given by matrices are called <term>linear maps</term> or <term>linear transformations</term><idx><h>Linear transformation</h><h>definition of</h></idx>.</p>
         </example>
 
         <example xml:id="example-sets-permutation">
@@ -449,19 +439,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 1 & 2 & 3 \\
                 2 & 1 & 3
                 ]]>\end{pmatrix}.</me>
-            For any set <m>S</m>, a one-to-one and onto mapping <m>\pi : S \rightarrow S</m> is called a <term>permutation</term><index><main>Permutation</main><sub>definition of</sub></index> of <m>S</m>.</p>
+            For any set <m>S</m>, a one-to-one and onto mapping <m>\pi : S \rightarrow S</m> is called a <term>permutation</term><idx><h>Permutation</h><h>definition of</h></idx> of <m>S</m>.</p>
         </example>
 
         <theorem>
             <statement>
-                <p>Let <m>f : A \rightarrow B</m>, <m>g : B \rightarrow C</m>, and <m>h : C \rightarrow D</m>. Then</p>
-
-                <ol>
+                <p>Let <m>f : A \rightarrow B</m>, <m>g : B \rightarrow C</m>, and <m>h : C \rightarrow D</m>. Then<ol>
                     <li><p>The composition of mappings is associative; that is, <m>(h \circ g) \circ f = h \circ (g \circ f)</m>;</p></li>
                     <li><p>If <m>f</m> and <m>g</m> are both one-to-one, then the mapping <m>g \circ f</m> is one-to-one;</p></li> 
                     <li><p>If <m>f</m> and <m>g</m> are both onto, then the mapping <m>g \circ f</m> is onto;</p></li>  
                     <li><p>If <m>f</m> and <m>g</m> are bijective, then so is <m>g \circ f</m>.</p></li>
-                </ol>
+                </ol></p>
             </statement>
             <proof>
                 <p>We will prove (1) and (3). Part (2) is left as an exercise.  Part (4) follows directly from (2) and (3).</p> 
@@ -480,7 +468,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </proof>
         </theorem>
 
-            <p>If <m>S</m> is any set, we will use <m>id_S</m> or <m>id</m> to denote the <term>identity mapping</term><index><main>Function</main><sub>identity</sub></index> from <m>S</m> to itself.  Define this map by <m>id(s) = s</m> for all <m>s \in S</m>.  A map <m>g: B \rightarrow A</m> is an <term>inverse mapping</term> of <m>f: A \rightarrow B</m> if <m>g \circ f = id_A</m> and <m>f \circ g = id_B</m>; in other words, the inverse function of a function simply <q>undoes</q> the function.   A map is said to be <term>invertible</term><index><main>Function</main><sub>invertible</sub></index> if it has an inverse.  We usually write <m>f^{-1}</m> for the inverse of <m>f</m>. <notation><usage>id</usage><description>identity mapping</description></notation><notation><usage>f^{-1}</usage><description>inverse of the function <m>f</m></description></notation></p> 
+            <p>If <m>S</m> is any set, we will use <m>id_S</m> or <m>id</m> to denote the <term>identity mapping</term><idx><h>Function</h><h>identity</h></idx> from <m>S</m> to itself.  Define this map by <m>id(s) = s</m> for all <m>s \in S</m>.  A map <m>g: B \rightarrow A</m> is an <term>inverse mapping</term> of <m>f: A \rightarrow B</m> if <m>g \circ f = id_A</m> and <m>f \circ g = id_B</m>; in other words, the inverse function of a function simply <q>undoes</q> the function.   A map is said to be <term>invertible</term><idx><h>Function</h><h>invertible</h></idx> if it has an inverse.  We usually write <m>f^{-1}</m> for the inverse of <m>f</m>. <notation><usage>id</usage><description>identity mapping</description></notation><notation><usage>f^{-1}</usage><description>inverse of the function <m>f</m></description></notation></p> 
 
         <example xml:id="example-sets-inverse-function">
             <p>The function <m>f(x) = x^3</m> has inverse <m>f^{-1}(x) = \sqrt[3]{x}</m> by Example<nbsp /><xref ref="example-sets-composition-commute" />.</p>
@@ -560,13 +548,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <subsection>
             <title>Equivalence Relations and Partitions</title>
 
-            <p>A fundamental notion in mathematics is that of equality.  We can generalize equality with equivalence relations and equivalence classes.  An <term>equivalence relation</term><index><main>Equivalence relation</main></index> on a set <m>X</m> is a relation <m>R \subset X \times X</m> such that</p>
-
-            <ul>
+            <p>A fundamental notion in mathematics is that of equality.  We can generalize equality with equivalence relations and equivalence classes.  An <term>equivalence relation</term><idx><h>Equivalence relation</h></idx> on a set <m>X</m> is a relation <m>R \subset X \times X</m> such that<ul>
                 <li><p><m>(x, x) \in R</m> for all <m>x \in X</m> (<term>reflexive property</term>);</p></li>
                 <li><p><m>(x, y) \in R</m> implies <m>(y, x) \in R</m> (<term>symmetric property</term>);</p></li>
                 <li><p><m>(x, y)</m> and <m>(y, z) \in R</m> imply <m>(x, z) \in R</m> (<term>transitive property</term>).</p></li>
-            </ul>
+            </ul></p>
 
             <p>Given an equivalence relation <m>R</m>  on a set <m>X</m>, we usually write  <m>x \sim y</m> instead of <m>(x, y) \in R</m>. If the equivalence relation already has an associated notation such as <m>=</m>, <m>\equiv</m>, or <m>\cong</m>, we will use that notation.</p>
 
@@ -615,10 +601,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <me>A = P^{-1} B P = P^{-1} B (P^{-1})^{-1}.</me>
                 Finally, suppose that <m>A \sim B</m> and <m>B \sim C</m>.  Then there exist invertible matrices <m>P</m> and <m>Q</m> such that <m>PAP^{-1} = B</m> and  <m>QBQ^{-1} = C</m>.  Since 
                     <me>C = QBQ^{-1} = QPAP^{-1} Q^{-1} = (QP)A(QP)^{-1},</me>
-                the relation is transitive.  Two matrices that are equivalent in this manner are said to be <term>similar</term><index><main>Matrix</main><sub>similar</sub></index>.</p>
+                the relation is transitive.  Two matrices that are equivalent in this manner are said to be <term>similar</term><idx><h>Matrix</h><h>similar</h></idx>.</p>
             </example>
 
-            <p>A <term>partition</term><index><main>Partitions</main></index> <m>{\mathcal P}</m> of a set <m>X</m> is a collection of nonempty sets <m>X_1, X_2, \ldots</m> such that <m>X_i \cap X_j = \emptyset</m> for <m>i  \neq j</m> and <m>\bigcup_k X_k = X</m>. Let <m>\sim</m> be an equivalence relation on a set <m>X</m> and let <m>x \in X</m>.  Then <m>[x] = \{ y \in X : y \sim x \}</m> is called the <term>equivalence class</term><index><main>Equivalence class</main></index> of <m>x</m>.  We will see that an equivalence relation gives rise to a partition via equivalence classes.  Also, whenever a partition of a set exists, there is some natural  underlying equivalence relation, as the following theorem demonstrates.</p>  
+            <p>A <term>partition</term><idx><h>Partitions</h></idx> <m>{\mathcal P}</m> of a set <m>X</m> is a collection of nonempty sets <m>X_1, X_2, \ldots</m> such that <m>X_i \cap X_j = \emptyset</m> for <m>i  \neq j</m> and <m>\bigcup_k X_k = X</m>. Let <m>\sim</m> be an equivalence relation on a set <m>X</m> and let <m>x \in X</m>.  Then <m>[x] = \{ y \in X : y \sim x \}</m> is called the <term>equivalence class</term><idx><h>Equivalence class</h></idx> of <m>x</m>.  We will see that an equivalence relation gives rise to a partition via equivalence classes.  Also, whenever a partition of a set exists, there is some natural  underlying equivalence relation, as the following theorem demonstrates.</p>  
 
             <theorem>
                 <statement>
@@ -652,7 +638,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </example>
 
             <example xml:id="example-sets-congruent-integers">
-                <p>Let <m>r</m> and <m>s</m> be two integers and suppose that <m>n \in {\mathbb N}</m>.  We say that <m>r</m> is <term>congruent</term><index><main>Congruence modulo <m>n</m></main></index> to <m>s</m> <term>modulo</term> <m>n</m>, or <m>r</m> is congruent to <m>s</m> mod <m>n</m>, if <m>r - s</m> is evenly divisible by <m>n</m>; that is, <m>r - s = nk</m>  for some <m>k \in {\mathbb Z}</m>.  In this case we write <m>r \equiv s \pmod{n}</m>.  <notation><usage>a \equiv b \pmod{n}</usage><description><m>a</m> is congruent to <m>b</m> modulo <m>n</m></description></notation>  For example, <m>41 \equiv 17 \pmod{ 8}</m> since <m>41 - 17=24</m> is divisible by 8.  We claim that congruence modulo <m>n</m> forms an equivalence relation of <m>{\mathbb Z}</m>.  Certainly any integer <m>r</m> is equivalent to itself since <m>r - r = 0</m> is divisible by <m>n</m>.  We will now show that the relation is symmetric.  If <m>r \equiv s \pmod{ n}</m>, then <m>r - s = -(s -r)</m> is divisible by <m>n</m>. So <m>s - r</m> is divisible by <m>n</m> and <m>s \equiv r \pmod{ n}</m>.  Now suppose that <m>r \equiv s \pmod{ n}</m> and <m>s \equiv t \pmod{ n}</m>.  Then there exist integers <m>k</m> and <m>l</m> such that <m>r -s = kn</m> and <m>s - t = ln</m>.  To show transitivity, it is necessary to prove that <m>r - t</m> is divisible by <m>n</m>.  However,   
+                <p>Let <m>r</m> and <m>s</m> be two integers and suppose that <m>n \in {\mathbb N}</m>.  We say that <m>r</m> is <term>congruent</term><idx><h>Congruence modulo <m>n</m></h></idx> to <m>s</m> <term>modulo</term> <m>n</m>, or <m>r</m> is congruent to <m>s</m> mod <m>n</m>, if <m>r - s</m> is evenly divisible by <m>n</m>; that is, <m>r - s = nk</m>  for some <m>k \in {\mathbb Z}</m>.  In this case we write <m>r \equiv s \pmod{n}</m>.  <notation><usage>a \equiv b \pmod{n}</usage><description><m>a</m> is congruent to <m>b</m> modulo <m>n</m></description></notation>  For example, <m>41 \equiv 17 \pmod{ 8}</m> since <m>41 - 17=24</m> is divisible by 8.  We claim that congruence modulo <m>n</m> forms an equivalence relation of <m>{\mathbb Z}</m>.  Certainly any integer <m>r</m> is equivalent to itself since <m>r - r = 0</m> is divisible by <m>n</m>.  We will now show that the relation is symmetric.  If <m>r \equiv s \pmod{ n}</m>, then <m>r - s = -(s -r)</m> is divisible by <m>n</m>. So <m>s - r</m> is divisible by <m>n</m> and <m>s \equiv r \pmod{ n}</m>.  Now suppose that <m>r \equiv s \pmod{ n}</m> and <m>s \equiv t \pmod{ n}</m>.  Then there exist integers <m>k</m> and <m>l</m> such that <m>r -s = kn</m> and <m>s - t = ln</m>.  To show transitivity, it is necessary to prove that <m>r - t</m> is divisible by <m>n</m>.  However,   
                     <me>r - t = r - s + s - t = kn + ln = (k + l)n,</me>
                 and so <m>r - t</m> is divisible by <m>n</m>.</p>
 

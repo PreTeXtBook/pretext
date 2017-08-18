@@ -46,6 +46,9 @@
         \newcommand{\indefiniteintegral}[2]{\int#1\,d#2} % comments get stripped
         </macros>
 
+        <!-- this is the default, but supresses a warning -->
+        <cross-references text="type-global" />
+
         <!-- An initialism is useful sometimes -->
         <initialism>WWSC</initialism>
         <!--
@@ -300,6 +303,8 @@
                     <statement>
                         <p>Use the properties of exponents to simplify <m><var name="$expression" /></m>.</p>
 
+                        <instruction>To enter a power, use a <c>^</c>, as in <c>x^2</c> for <m>x^2</m>.</instruction>
+
                         <p><m><var name="$expression" />=</m><var name="$answer" evaluator="$evaluator" width="8" /></p>
 
                     </statement>
@@ -498,7 +503,7 @@
                         <title>Part 1: Identify the coefficients</title>
 
                         <statement>
-                            <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" autoname="yes" /></p>
+                            <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" /></p>
 
                             <p halign='center'><m>a=</m> <var name="$a" width="4" evaluator="$evaluatorfora"/>, <m>b=</m> <var name="$b" width="4" evaluator="$evaluatorforb"/>, <m>c=</m> <var name="$c" width="4" evaluator="$evaluatorforc"/></p>
                         </statement>
@@ -517,7 +522,7 @@
                         </statement>
 
                         <solution>
-                            <p>Recall that the quadratic formula is given in <xref ref="theorem-quadratic-formula" autoname="yes" />.</p>
+                            <p>Recall that the quadratic formula is given in <xref ref="theorem-quadratic-formula" />.</p>
 
                             <p>You already identified <m>a = <var name="$a"/></m>, <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>, so the results are: <me>x = {<var name="$solnum1"/> \over 2(<var name="$a"/>)} = <var name="$x1"/></me> or <me>x = {<var name="$solnum2"/> \over 2(<var name="$a"/>)} = <var name="$x2"/></me></p>
                         </solution>
@@ -562,48 +567,51 @@
         <section>
             <title>Antidifferentiation</title>
 
-            <!-- with only an Exercises subdivision, we do not need to structure remainder -->
-            <p>This section demonstrates a few more features.</p>
+            <subsection>
+                <title>A Few More Features</title>
 
-            <p>The derivative and antiderivative of a function can be understood through study of their graphical relationships.</p>
+                <p>This subsection demonstrates a few more features.</p>
 
-            <definition xml:id="definition-antiderivative">
-                <title>Antiderivative of a Function</title>
+                <p>The derivative and antiderivative of a function can be understood through study of their graphical relationships.</p>
 
-                <statement>
-                    <p>Suppose that <m>f(x)</m> and <m>F(x)</m> are two functions such that <me>F^\prime(x) = f(x).</me>  Then we say <m>F</m> is an <term>antiderivative</term> of <m>f</m>.</p>
-                </statement>
-            </definition>
+                <definition xml:id="definition-antiderivative">
+                    <title>Antiderivative of a Function</title>
 
-            <p>The Fundamental Theorem of Calculus in one of the high points of a course in single-variable course.</p>
+                    <statement>
+                        <p>Suppose that <m>f(x)</m> and <m>F(x)</m> are two functions such that <me>F^\prime(x) = f(x).</me>  Then we say <m>F</m> is an <term>antiderivative</term> of <m>f</m>.</p>
+                    </statement>
+                </definition>
 
-            <theorem xml:id="theorem-FTC">
-                <title>The Fundamental Theorem of Calculus</title>
-                <index><main>Fundamental Theorem of Calculus</main></index>
-                <statement>
-                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me></p>
-                </statement>
-                <proof>
-                    <p>Left to the reader.</p>
-                </proof>
-            </theorem>
+                <p>The Fundamental Theorem of Calculus in one of the high points of a course in single-variable course.</p>
 
-            <p>We state an equivalent version of the FTC, which is less-suited for computation, but which perhaps is a more interesting theoretical statement.</p>
+                <theorem xml:id="theorem-FTC">
+                    <title>The Fundamental Theorem of Calculus</title>
+                    <idx>Fundamental Theorem of Calculus</idx>
+                    <statement>
+                        <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me></p>
+                    </statement>
+                    <proof>
+                        <p>Left to the reader.</p>
+                    </proof>
+                </theorem>
 
-            <todo>Should equation references come with parentheses?</todo>
+                <p>We state an equivalent version of the FTC, which is less-suited for computation, but which perhaps is a more interesting theoretical statement.</p>
 
-            <corollary xml:id="corollary-FTC-derivative">
-                <statement>
-                    <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men></p>
-                </statement>
-                <proof xml:id="proof-FTC-corollary">
-                    <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.<mdn>
-                        <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
-                        <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
-                        <mrow>&amp;=f(x)-0 = f(x)</mrow>
-                    </mdn></p>
-                </proof>
-            </corollary>
+                <todo>Should equation references come with parentheses?</todo>
+
+                <corollary xml:id="corollary-FTC-derivative">
+                    <statement>
+                        <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men></p>
+                    </statement>
+                    <proof xml:id="proof-FTC-corollary">
+                        <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.<mdn>
+                            <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
+                            <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
+                            <mrow>&amp;=f(x)-0 = f(x)</mrow>
+                        </mdn></p>
+                    </proof>
+                </corollary>
+            </subsection>
 
             <exercises>
                 <title><webwork /> Exercises</title>
@@ -616,7 +624,7 @@
                     <title>Graphical Antiderivatives</title>
 
                     <introduction>
-                        <p>Consult <xref ref="definition-antiderivative" autoname="yes" /> and the <xref ref="theorem-FTC" autoname="title" /> to assist you with the following problem.</p>
+                        <p>Consult <xref ref="definition-antiderivative" /> and the <xref ref="theorem-FTC" text="title" /> to assist you with the following problem.</p>
                     </introduction>
 
                     <webwork source="Library/Rochester/setIntegrals4FTC/S05.03.FundThmCalc.PTP01.pg" />
@@ -631,7 +639,7 @@
 
                     <webwork>
                         <statement>
-                            <p>Explain how we can use <xref ref="corollary-FTC-derivative" autoname="yes" /> to say that every continuous function <em>always</em> has a derivative. (And we will demonstrate here that you can use a  macro from <c>docinfo</c>: <m>\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)</m>. It will work in the <webwork /> problem, regardless of whether you are using images, MathJax, or hardcopy.)</p>
+                            <p>Explain how we can use <xref ref="corollary-FTC-derivative" /> to say that every continuous function <em>always</em> has a derivative. (And we will demonstrate here that you can use a  macro from <c>docinfo</c>: <m>\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)</m>. It will work in the <webwork /> problem, regardless of whether you are using images, MathJax, or hardcopy.)</p>
                             <p><var form="essay" /></p>
                         </statement>
                     </webwork>
@@ -859,7 +867,7 @@
                     <statement>
                         <p>Complete this multiplication table.</p>
 
-                        <table>
+                        <sidebyside>
                             <tabular bottom="minor" right="minor" halign="center">
                                 <col halign="right" right="major"/>
                                 <col />
@@ -880,11 +888,11 @@
                                     <cell><var name="$p[3]" form="none"/></cell>
                                 </row>
                             </tabular>
-                        </table>
+                        </sidebyside>
                     </statement>
 
                     <solution>
-                        <table>
+                        <sidebyside>
                             <tabular bottom="minor" right="minor" halign="center">
                                 <col halign="right" right="major"/>
                                 <col />
@@ -905,7 +913,7 @@
                                     <cell><m><var name="$p[3]"/></m></cell>
                                 </row>
                             </tabular>
-                        </table>
+                        </sidebyside>
 
                     </solution>
                 </webwork>
@@ -958,11 +966,11 @@
                     <statement>
                         <p>The graph below is a graph of <m>y=f(x)</m>. Use the graph to solve the equation <m>f(x)=1</m>.</p>
 
-                        <figure>
+                        <sidebyside>
                             <image pg-name="$gr">
                                 <description>a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$answer"/>,1) and (<var name="$second_x"/>,2) before leaving the graph moving more and more upward and to the right.</description>
                             </image>
-                        </figure>
+                        </sidebyside>
 
                         <p><m>x=</m> <var name="$answer" width="5"/></p>
                     </statement>
@@ -971,11 +979,11 @@
 
                         <p>The graph reveals that the only solution to <m>f(x)=1</m> is <m>x=<var name="$answer"/></m>.</p>
 
-                        <figure>
+                        <sidebyside>
                             <image pg-name="$solgr">
                                 <description>a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points ($answer,1) and ($second_x,2) before leaving the graph moving more and more upward and to the right; a horizontal line segment moves rightward from y=1 on the y-axis until it reaches a point on the curve; a vertical line segment moves down from this point to x=$answer on the x-axis.</description>
                             </image>
-                        </figure>
+                        </sidebyside>
 
                     </solution>
 
@@ -1188,7 +1196,7 @@
                     <statement>
                         <p>A table with minimal XML source.</p>
 
-                        <table>
+                        <sidebyside>
                             <tabular>
                                 <row>
                                     <cell>A</cell>
@@ -1206,7 +1214,7 @@
                                     <cell>I</cell>
                                 </row>
                             </tabular>
-                        </table>
+                        </sidebyside>
                         <p>Finish this table.</p>
 
                         <table>
@@ -1264,26 +1272,26 @@
                     </setup>
                     <stage>
                         <statement>
-                            <figure><image pg-name="$gr[0]" width="150" height="150" tex_size="150"/></figure>
-                            <figure><image pg-name="$gr[1]" width="150" height="150" tex_size="150"/></figure>
+                            <sidebyside><image pg-name="$gr[0]" width="150" height="150" tex-size="150"/></sidebyside>
+                            <sidebyside><image pg-name="$gr[1]" width="150" height="150" tex-size="150"/></sidebyside>
                         </statement>
                         <solution>
-                            <figure><image pg-name="$gr[2]" width="150" height="150" tex_size="150"/></figure>
+                            <sidebyside><image pg-name="$gr[2]" width="150" height="150" tex-size="150"/></sidebyside>
                         </solution>
                     </stage>
                     <stage>
                         <statement>
-                            <figure><image pg-name="$gr[3]" width="150" height="150" tex_size="150"/></figure>
-                            <figure><image pg-name="$gr[4]" width="150" height="150" tex_size="150"/></figure>
-                            <figure><image pg-name="$gr[5]" width="150" height="150" tex_size="150"/></figure>
+                            <sidebyside><image pg-name="$gr[3]" width="150" height="150" tex-size="150"/></sidebyside>
+                            <sidebyside><image pg-name="$gr[4]" width="150" height="150" tex-size="150"/></sidebyside>
+                            <sidebyside><image pg-name="$gr[5]" width="150" height="150" tex-size="150"/></sidebyside>
                         </statement>
                         <!-- No hints for now because with displayMode=tex, the anonymous problem rendering is not -->
                         <!--generating a hints section at all. Will have to work with Mike to investigate this.    -->
                         <!--<hint>
-                            <figure><image pg-name="$gr[6]" width="150" height="150" tex_size="150"/></figure>
+                            <figure><image pg-name="$gr[6]" width="150" height="150" tex-size="150"/></figure>
                         </hint>-->
                         <solution>
-                            <figure><image pg-name="$gr[7]" width="150" height="150" tex_size="150"/></figure>
+                            <sidebyside><image pg-name="$gr[7]" width="150" height="150" tex-size="150"/></sidebyside>
                         </solution>
                   </stage>
                 </webwork>
@@ -1686,93 +1694,102 @@
 
         <section>
             <title>Layout Configuration Testing</title>
-            <p>This section is to provide a single page demonstrating all of the combinations that may factor into a problem's layout.</p>
 
-            <exercise>
-                <webwork>
-                    <statement>
-                        <p><m>1+1=2</m></p>
-                    </statement>
-                </webwork>
-            </exercise>
-            <exercise>
-                <title>Has a Title</title>
-                <webwork>
-                    <statement>
-                        <p><m>1+1=2</m></p>
-                    </statement>
-                </webwork>
-            </exercise>
-            <exercise>
-                <introduction>
-                    <p>Has an introduction.</p>
-                </introduction>
-                <webwork>
-                    <statement>
-                        <p><m>1+1=2</m></p>
-                    </statement>
-                </webwork>
-            </exercise>
-            <exercise>
-                <title>Has a Title</title>
-                <introduction>
-                    <p>Has an introduction.</p>
-                </introduction>
-                <webwork>
-                    <statement>
-                        <p><m>1+1=2</m></p>
-                    </statement>
-                </webwork>
-            </exercise>
-            <exercise>
-                <webwork>
-                    <statement>
-                        <p><m>1+1=2</m></p>
-                    </statement>
-                </webwork>
-                <conclusion>
-                    <p>Has a conclusion.</p>
-                </conclusion>
-            </exercise>
-            <exercise>
-                <title>Has a Title</title>
-                <webwork>
-                    <statement>
-                        <p><m>1+1=2</m></p>
-                    </statement>
-                </webwork>
-                <conclusion>
-                    <p>Has a conclusion.</p>
-                </conclusion>
-            </exercise>
-            <exercise>
-                <introduction>
-                    <p>Has an introduction.</p>
-                </introduction>
-                <webwork>
-                    <statement>
-                        <p><m>1+1=2</m></p>
-                    </statement>
-                </webwork>
-                <conclusion>
-                    <p>Has a conclusion.</p>
-                </conclusion>
-            </exercise>
-            <exercise>
-                <title>Has a Title</title>
-                <introduction>
-                    <p>Has an introduction.</p>
-                </introduction>
-                <webwork>
-                    <statement>
-                        <p><m>1+1=2</m></p>
-                    </statement>
-                </webwork>
-                <conclusion>
-                    <p>Has a conclusion.</p>
-                </conclusion>
-            </exercise>
+            <introduction>
+                <p>This section is to provide a single page demonstrating all of the combinations that may factor into a problem's layout.</p>
+            </introduction>
+
+            <subsection>
+                <title>Inline Exercises</title>
+                <p>Some <q>inline</q> exercises, as distinguished from the <q>sectional</q> exercises below.</p>
+                <exercise>
+                    <webwork>
+                        <statement>
+                            <p><m>1+1=2</m></p>
+                        </statement>
+                    </webwork>
+                </exercise>
+                <exercise>
+                    <title>Has a Title</title>
+                    <webwork>
+                        <statement>
+                            <p><m>1+1=2</m></p>
+                        </statement>
+                    </webwork>
+                </exercise>
+                <exercise>
+                    <introduction>
+                        <p>Has an introduction.</p>
+                    </introduction>
+                    <webwork>
+                        <statement>
+                            <p><m>1+1=2</m></p>
+                        </statement>
+                    </webwork>
+                </exercise>
+                <exercise>
+                    <title>Has a Title</title>
+                    <introduction>
+                        <p>Has an introduction.</p>
+                    </introduction>
+                    <webwork>
+                        <statement>
+                            <p><m>1+1=2</m></p>
+                        </statement>
+                    </webwork>
+                </exercise>
+                <exercise>
+                    <webwork>
+                        <statement>
+                            <p><m>1+1=2</m></p>
+                        </statement>
+                    </webwork>
+                    <conclusion>
+                        <p>Has a conclusion.</p>
+                    </conclusion>
+                </exercise>
+                <exercise>
+                    <title>Has a Title</title>
+                    <webwork>
+                        <statement>
+                            <p><m>1+1=2</m></p>
+                        </statement>
+                    </webwork>
+                    <conclusion>
+                        <p>Has a conclusion.</p>
+                    </conclusion>
+                </exercise>
+                <exercise>
+                    <introduction>
+                        <p>Has an introduction.</p>
+                    </introduction>
+                    <webwork>
+                        <statement>
+                            <p><m>1+1=2</m></p>
+                        </statement>
+                    </webwork>
+                    <conclusion>
+                        <p>Has a conclusion.</p>
+                    </conclusion>
+                </exercise>
+                <exercise>
+                    <title>Has a Title</title>
+                    <introduction>
+                        <p>Has an introduction.</p>
+                    </introduction>
+                    <webwork>
+                        <statement>
+                            <p><m>1+1=2</m></p>
+                        </statement>
+                    </webwork>
+                    <conclusion>
+                        <p>Has a conclusion.</p>
+                    </conclusion>
+                </exercise>
+            </subsection>
+
             <exercises>
+                <title>Sectional Exercises</title>
                 <exercise>
                     <webwork>
                         <statement>

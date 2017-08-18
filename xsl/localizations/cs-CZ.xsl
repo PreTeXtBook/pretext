@@ -77,7 +77,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='backmatter'><xsl:text>Závěrečná část</xsl:text></localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'><xsl:text>Odstavce</xsl:text></localization>
-    <localization string-id='paragraph'><xsl:text>Odstavec</xsl:text></localization>
     <localization string-id='subparagraph'><xsl:text>Pododstavec</xsl:text></localization>
     <!-- <localization string-id='case'><xsl:text>Case</xsl:text></localization> -->
     <!-- Components of the narrative -->
@@ -126,6 +125,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='blockquote'><xsl:text>Quotation</xsl:text></localization> -->
     <!-- Parts of an exercise and it's solution -->
     <localization string-id='exercise'><xsl:text>Cvičení</xsl:text></localization>
+    <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Nápověda</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Odpověď</xsl:text></localization>
     <localization string-id='solution'><xsl:text>Řešení</xsl:text></localization>
@@ -146,12 +146,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='dedication'><xsl:text>Věnování</xsl:text></localization>
     <localization string-id='colophon'><xsl:text>Kolofon</xsl:text></localization>
     <!-- Back matter components -->
-    <!-- Following is temporary, "index-part" to be deprecated -->
-    <!-- NB: repurpose translations, replace "indexsection below", maybe move appendix here -->
-    <!-- <localization string-id='index-part'><xsl:text>Index</xsl:text></localization> -->
+    <!-- index-part is deprecated, but not abandoned          -->
+    <!-- NB: repurpose translations, maybe move appendix here -->
+    <localization string-id='index-part'><xsl:text>Rejstřík</xsl:text></localization>
     <!-- <localization string-id='jump-to'><xsl:text>Jump to:</xsl:text></localization> -->
     <!-- Parts of the Index -->
-    <localization string-id='indexsection'><xsl:text>Rejstřík</xsl:text></localization>
+    <localization string-id='index'><xsl:text>Rejstřík</xsl:text></localization>
     <localization string-id='see'><xsl:text>viz</xsl:text></localization>
     <localization string-id='also'><xsl:text>viz také</xsl:text></localization>
     <!-- Notation List headings/foot -->

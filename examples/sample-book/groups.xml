@@ -76,7 +76,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <figure xml:id="figure-z8-mult">
                 <caption>Multiplication table for <m>{\mathbb Z_8}</m></caption>
-                <p><me>\begin{array}{c|cccccccc}
+                <sidebyside>
+                    <p><me>\begin{array}{c|cccccccc}
                     <![CDATA[\cdot & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
                     \hline
                     0       & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
@@ -88,12 +89,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     6       & 0 & 6 & 4 & 2 & 0 & 6 & 4 & 2 \\
                     7       & 0 & 7 & 6 & 5 & 4 & 3 & 2 & 1 ]]>
                     \end{array}</me></p>
+                </sidebyside>
             </figure>
 
             <proposition xml:id="proposition-zn-equiv-classes">
                 <statement>
-                    <p>Let <m>{\mathbb Z}_n</m> be the set of equivalence classes of the integers mod <m>n</m> and <m>a, b, c \in {\mathbb Z}_n</m>.</p>
-                    <ol>
+                    <p>Let <m>{\mathbb Z}_n</m> be the set of equivalence classes of the integers mod <m>n</m> and <m>a, b, c \in {\mathbb Z}_n</m>.<ol>
                         <li>
                             <p>Addition and multiplication are commutative:<md>
                                 <mrow> a + b  &amp; \equiv  b + a \pmod{ n}</mrow>
@@ -130,7 +131,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <li>
                             <p>Let <m>a</m> be a nonzero integer.  Then <m>\gcd(a,n) = 1</m> if and only if there exists a multiplicative inverse <m>b</m> for <m>a \pmod{n}</m>; that is, a nonzero integer <m>b</m> such that <me> a  b  \equiv 1 \pmod{ n}.</me></p>
                         </li>
-                    </ol>
+                    </ol></p>
                 </statement>
 
                 <proof>
@@ -214,7 +215,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </image>
             </figure>
 
-            <p>A <term>symmetry</term> of a geometric figure is a rearrangement of the figure preserving the arrangement of its sides and vertices as well as its distances and angles.  A map from the plane to itself preserving the symmetry of an object is called a <term>rigid motion</term><index><main>Rigid motion</main></index>.  For example, if we look at the rectangle in Figure<nbsp /><xref ref="figure-groups-rectangle" />, it is easy to see that a rotation of <m>180^{\circ}</m> or <m>360^{\circ}</m> returns a rectangle in the plane with the same orientation as the original rectangle and the same relationship among the vertices.  A reflection of the rectangle across either the vertical axis or the horizontal axis can also be seen to be a symmetry.  However, a <m>90^{\circ}</m> rotation in either direction cannot be a symmetry unless the rectangle is a square.</p>
+            <p>A <term>symmetry</term> of a geometric figure is a rearrangement of the figure preserving the arrangement of its sides and vertices as well as its distances and angles.  A map from the plane to itself preserving the symmetry of an object is called a <term>rigid motion</term><idx><h>Rigid motion</h></idx>.  For example, if we look at the rectangle in Figure<nbsp /><xref ref="figure-groups-rectangle" />, it is easy to see that a rotation of <m>180^{\circ}</m> or <m>360^{\circ}</m> returns a rectangle in the plane with the same orientation as the original rectangle and the same relationship among the vertices.  A reflection of the rectangle across either the vertical axis or the horizontal axis can also be seen to be a symmetry.  However, a <m>90^{\circ}</m> rotation in either direction cannot be a symmetry unless the rectangle is a square.</p>
 
             <!-- Replaced diagram with a tikz figure - TWJ 5/5/2010 -->
             <figure xml:id="figure-s3-symmetry">
@@ -332,7 +333,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <figure xml:id="figure-s3">
                 <caption>Symmetries of an equilateral triangle</caption>
 
-                <p><me>\begin{array}{c|cccccc}
+                <sidebyside>
+                    <p><me>\begin{array}{c|cccccc}
                     <![CDATA[\circ  & id     & \rho_1 & \rho_2 & \mu_1 & \mu_2 & \mu_3 \\
                     \hline
                     id     & id     & \rho_1 & \rho_2 & \mu_1 & \mu_2 & \mu_3 \\
@@ -342,6 +344,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     \mu_2  & \mu_2  & \mu_3  & \mu_1  & \rho_2 & id    & \rho_1\\
                     \mu_3  & \mu_3  & \mu_1  & \mu_2  & \rho_1 & \rho_2& id]]>
                     \end{array}</me></p>
+                </sidebyside>
             </figure>
 
         </subsection>
@@ -354,15 +357,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- % Fixed the error  <m>(a,b) \in G \times G</m> -->
 
         <introduction>
-            <p>The integers mod <m>n</m> and the symmetries of a triangle or a rectangle are examples of groups.  A <term>binary operation</term><index><main>Binary operation</main></index> or <term>law of composition</term> on a set <m>G</m> is a function <m>G \times G \rightarrow G</m> that assigns to each pair <m>(a,b) \in G \times G</m> a unique element <m>a \circ b</m>, or <m>ab</m> in <m>G</m>, called the composition of <m>a</m> and <m>b</m>.  A <term>group</term><index><main>Group</main><sub>definition of</sub></index> <m>(G, \circ )</m> is a set <m>G</m> together with a law of composition <m>(a,b) \mapsto a \circ b</m> that satisfies the following axioms.</p>
-
-            <ul>
+            <p>The integers mod <m>n</m> and the symmetries of a triangle or a rectangle are examples of groups.  A <term>binary operation</term><idx><h>Binary operation</h></idx> or <term>law of composition</term> on a set <m>G</m> is a function <m>G \times G \rightarrow G</m> that assigns to each pair <m>(a,b) \in G \times G</m> a unique element <m>a \circ b</m>, or <m>ab</m> in <m>G</m>, called the composition of <m>a</m> and <m>b</m>.  A <term>group</term><idx><h>Group</h><h>definition of</h></idx> <m>(G, \circ )</m> is a set <m>G</m> together with a law of composition <m>(a,b) \mapsto a \circ b</m> that satisfies the following axioms.<ul>
                 <li><p> The law of composition is <term>associative</term>. That is, <me> (a \circ b) \circ c = a \circ (b \circ c) </me> for <m>a, b, c \in G</m>.</p></li>
-                <li><p> There exists an element <m>e \in G</m>, called the <term>identity element</term><index><main>Element</main><sub>identity</sub></index>, such that for any element <m>a \in G</m> <me> e \circ a = a \circ e = a. </me></p></li>
-                <li><p> For each element <m>a \in G</m>, there exists an <term>inverse element</term><index><main>Element</main><sub>inverse</sub></index> in G, denoted by <m>a^{-1}</m>, such that <me> a \circ a^{-1} = a^{-1} \circ a = e. </me></p></li>
-            </ul>
+                <li><p> There exists an element <m>e \in G</m>, called the <term>identity element</term><idx><h>Element</h><h>identity</h></idx>, such that for any element <m>a \in G</m> <me> e \circ a = a \circ e = a. </me></p></li>
+                <li><p> For each element <m>a \in G</m>, there exists an <term>inverse element</term><idx><h>Element</h><h>inverse</h></idx> in G, denoted by <m>a^{-1}</m>, such that <me> a \circ a^{-1} = a^{-1} \circ a = e. </me></p></li>
+            </ul></p>
 
-            <p>A group <m>G</m> with the property that <m>a \circ b = b \circ a</m> for all <m>a, b \in G</m> is called <term>abelian</term><index><main>Abelian group</main></index><index><main>Group</main><sub>abelian</sub></index> or <term>commutative</term><index><main>Group</main><sub>commutative</sub></index>.  Groups not satisfying this property are said to be  <term>nonabelian</term><index><main>Group</main><sub>nonabelian</sub></index> or <term>noncommutative</term><index><main>Group</main><sub>noncommutative</sub></index>.</p>
+            <p>A group <m>G</m> with the property that <m>a \circ b = b \circ a</m> for all <m>a, b \in G</m> is called <term>abelian</term><idx><h>Abelian group</h></idx><idx><h>Group</h><h>abelian</h></idx> or <term>commutative</term><idx><h>Group</h><h>commutative</h></idx>.  Groups not satisfying this property are said to be  <term>nonabelian</term><idx><h>Group</h><h>nonabelian</h></idx> or <term>noncommutative</term><idx><h>Group</h><h>noncommutative</h></idx>.</p>
 
             <example xml:id="example-groups-integers">
                 <p>The integers <m>{\mathbb Z } = \{ \ldots , -1, 0, 1, 2, \ldots \}</m> form a group under the operation of addition.  The binary operation on two integers <m>m, n \in {\mathbb Z}</m> is just their sum.  Since the integers under addition already have a well-established notation, we will use the operator <m>+</m> instead of <m>\circ</m>; that is, we shall write <m>m + n</m> instead of <m>m \circ n</m>.  The identity is 0, and the inverse of <m>n \in {\mathbb Z}</m> is written as <m>-n</m> instead of <m>n^{-1}</m>.  Notice that the set of integers under addition have the additional property that <m>m + n = n + m</m> and therefore form an abelian group.</p>
@@ -370,7 +371,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Most of the time we will write <m>ab</m> instead of <m>a \circ b</m>; however, if the group already has a natural operation such as addition in the integers, we will use that operation.  That is, if we are adding two integers, we still write <m>m + n</m>, <m>-n</m> for the inverse, and 0 for the identity as usual. We also write <m>m - n</m> instead of <m>m + (-n)</m>.</p>
 
-            <p>It is often convenient to describe a group in terms of an addition or multiplication table.  Such a table is called a <term>Cayley table</term><index><main>Cayley table</main></index>.</p>
+            <p>It is often convenient to describe a group in terms of an addition or multiplication table.  Such a table is called a <term>Cayley table</term><idx><h>Cayley table</h></idx>.</p>
 
             <example xml:id="example-groups-z5">
                 <p>The integers mod <m>n</m> form a group under addition modulo <m>n</m>.  Consider <m>{\mathbb Z}_5</m>, consisting of the equivalence classes of the integers 0, 1, 2, 3, and 4.  We define the group operation on <m>{\mathbb Z}_5</m> by modular addition.  We write the binary operation on the group additively; that is, we write <m>m + n</m>.  The element 0 is the identity of the group and each element in <m>{\mathbb Z}_5</m> has an inverse. For instance, <m>2 + 3 = 3 + 2 = 0</m>.  Figure<nbsp /><xref ref="figure-z5-cayley" /> is a Cayley table for <m>{\mathbb Z}_5</m>  (Contributed by <xref ref="rbeezer" />).  By Proposition<nbsp /><xref ref="proposition-zn-equiv-classes" />, <m>{\mathbb Z}_n = \{0, 1, \ldots, n-1 \}</m> is a group under the binary operation of addition mod <m>n</m>.</p>
@@ -379,7 +380,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <figure xml:id="figure-z5-cayley">
                 <caption>Cayley table for <m>({\mathbb Z_5}, +)</m></caption>
 
-                <p><me>\begin{array}{c|ccccc}
+                <sidebyside>
+                    <p><me>\begin{array}{c|ccccc}
                     <![CDATA[+ & 0 & 1 & 2 & 3 & 4 \\
                     \hline
                       0 & 0 & 1 & 2 & 3 & 4 \\
@@ -388,6 +390,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                       3 & 3 & 4 & 0 & 1 & 2 \\
                       4 & 4 & 0 & 1 & 2 & 3]]>
                     \end{array}</me></p>
+                </sidebyside>
 
             </figure>
 
@@ -398,12 +401,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <mrow> 4 \cdot 2 &amp; = 2 \qquad 5 \cdot 2 = 4.</mrow>
                 </md></p>
 
-                <p>By Proposition<nbsp /><xref ref="proposition-zn-equiv-classes" />, every nonzero <m>k</m> does have an inverse in <m>{\mathbb Z}_n</m> if <m>k</m> is relatively prime to <m>n</m>.  Denote the set of all such nonzero elements in <m>{\mathbb Z}_n</m> by <m>U(n)</m>. <notation><usage>U(n)</usage><description>group of units in <m>\mathbb Z_n</m></description></notation>  Then <m>U(n)</m> is a group called the <term>group of units</term><index><main>Group</main><sub>of units</sub></index> of <m>{\mathbb Z}_n</m>.  Figure<nbsp /><xref ref="figure-cayley-u8" /> is a Cayley table for the group <m>U(8)</m>.</p>
+                <p>By Proposition<nbsp /><xref ref="proposition-zn-equiv-classes" />, every nonzero <m>k</m> does have an inverse in <m>{\mathbb Z}_n</m> if <m>k</m> is relatively prime to <m>n</m>.  Denote the set of all such nonzero elements in <m>{\mathbb Z}_n</m> by <m>U(n)</m>. <notation><usage>U(n)</usage><description>group of units in <m>\mathbb Z_n</m></description></notation>  Then <m>U(n)</m> is a group called the <term>group of units</term><idx><h>Group</h><h>of units</h></idx> of <m>{\mathbb Z}_n</m>.  Figure<nbsp /><xref ref="figure-cayley-u8" /> is a Cayley table for the group <m>U(8)</m>.</p>
             </example>
 
             <figure xml:id="figure-cayley-u8">
                 <caption>Multiplication table for <m>U(8)</m></caption>
-                <p><me>\begin{array}{c|cccc}
+                <sidebyside>
+                    <p><me>\begin{array}{c|cccc}
                     <![CDATA[\cdot & 1 & 3 & 5 & 7 \\
                     \hline
                     1       & 1 & 3 & 5 & 7 \\
@@ -411,6 +415,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     5       & 5 & 7 & 1 & 3 \\
                     7       & 7 & 5 & 3 & 1]]>
                     \end{array}</me></p>
+                </sidebyside>
             </figure>
 
             <example xml:id="example-groups-nonabelian">
@@ -425,7 +430,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     c & d
                     ]]>\end{pmatrix}</me> 
                 is in  <m>GL_2( {\mathbb R})</m> if there exists a matrix <m>A^{-1}</m> such that
-                <m>A A^{-1} = A^{-1} A = I</m>, where <m>I</m> is the <m>2 \times 2</m> identity matrix. For <m>A</m> to have an inverse is equivalent to requiring that the determinant of <m>A</m> be nonzero; that is, <m>\det A = ad - bc \neq 0</m>. <notation><usage>\det A</usage><description>the determinant of <m>A</m></description></notation> The set of invertible matrices forms a group called the <term>general linear group</term><index><main>Group</main><sub>general linear</sub></index>.  <notation><usage>GL_n(\mathbb R)</usage><description>the general linear group</description></notation> The identity of the group is the identity matrix
+                <m>A A^{-1} = A^{-1} A = I</m>, where <m>I</m> is the <m>2 \times 2</m> identity matrix. For <m>A</m> to have an inverse is equivalent to requiring that the determinant of <m>A</m> be nonzero; that is, <m>\det A = ad - bc \neq 0</m>. <notation><usage>\det A</usage><description>the determinant of <m>A</m></description></notation> The set of invertible matrices forms a group called the <term>general linear group</term><idx><h>Group</h><h>general linear</h></idx>.  <notation><usage>GL_n(\mathbb R)</usage><description>the general linear group</description></notation> The identity of the group is the identity matrix
                     <me>I =
                     \begin{pmatrix}<![CDATA[
                     1 & 0 \\
@@ -471,19 +476,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </md>where <m>i^2 = -1</m>. Then the relations <m>I^2 = J^2 = K^2 = -1</m>, <m>IJ=K</m>, <m>JK = I</m>, <m>KI = J</m>, <m>JI = -K</m>, <m>KJ = -I</m>, and <m>IK = -J</m> hold. The set <m>Q_8 = \{\pm 1, \pm I, \pm J, \pm K  \}</m> is a group called the <term>quaternion group</term>. Notice that <m>Q_8</m> is noncommutative.<notation>
                     <usage>Q_8</usage>
                     <description>the group of quaternions</description>
-                </notation><index>
-                    <main>Group</main>
-                    <sub>quaternion</sub>
-                </index><index>
-                    <main>Quaternions</main>
-                </index></p>
+                </notation><idx>
+                    <h>Group</h>
+                    <h>quaternion</h>
+                </idx><idx>
+                    <h>Quaternions</h>
+                </idx></p>
             </example>
 
             <example xml:id="example-groups-c-star">
                 <p>Let <m>{\mathbb C}^\ast</m>be the set of nonzero complex numbers. <notation><usage>\mathbb C^*</usage><description>the multiplicative group of complex numbers</description></notation> Under the operation of multiplication <m>{\mathbb C}^\ast</m> forms a group.  The identity is 1. If <m>z = a+bi</m> is a nonzero complex number, then <me>z^{-1} = \frac{a -bi}{a^2 +b^2}</me> is the inverse of <m>z</m>.  It is easy to see that the remaining group axioms hold.</p>
             </example>
 
-            <p>A group is <term>finite</term><index><main>Group</main><sub>finite</sub></index>, or has <term>finite order</term>, if it contains a finite number of elements; otherwise, the group is said to be <term>infinite</term> or to have <term>infinite order</term><index><main>Group</main><sub>infinite</sub></index>. The <term>order</term><index><main>Group</main><sub>order of</sub></index> of a finite group is the number of elements that it contains. If <m>G</m> is a group containing <m>n</m> elements, we write <m>|G| = n</m>. <notation><usage>|G|</usage><description>the order of a group</description></notation> The group <m>{\mathbb Z}_5</m> is a finite group of order 5; the integers <m>{\mathbb Z}</m> form an infinite group under addition, and we sometimes write <m>|{\mathbb Z}| = \infty</m>.</p>
+            <p>A group is <term>finite</term><idx><h>Group</h><h>finite</h></idx>, or has <term>finite order</term>, if it contains a finite number of elements; otherwise, the group is said to be <term>infinite</term> or to have <term>infinite order</term><idx><h>Group</h><h>infinite</h></idx>. The <term>order</term><idx><h>Group</h><h>order of</h></idx> of a finite group is the number of elements that it contains. If <m>G</m> is a group containing <m>n</m> elements, we write <m>|G| = n</m>. <notation><usage>|G|</usage><description>the order of a group</description></notation> The group <m>{\mathbb Z}_5</m> is a finite group of order 5; the integers <m>{\mathbb Z}</m> form an infinite group under addition, and we sometimes write <m>|{\mathbb Z}| = \infty</m>.</p>
 
         </introduction>
 
@@ -548,7 +553,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </statement>
             </proposition>
 
-            <p>This proposition tells us that the <term>right and  left cancellation laws</term><index><main>Cancellation law</main><sub>for groups</sub></index> are true in groups.  We leave the proof as an exercise.</p>
+            <p>This proposition tells us that the <term>right and  left cancellation laws</term><idx><h>Cancellation law</h><h>for groups</h></idx> are true in groups.  We leave the proof as an exercise.</p>
 
             <p>We can use exponential notation for groups just as we do in ordinary algebra. If <m>G</m> is a group and <m>g \in G</m>, then we define <m>g^0 = e</m>. For <m>n \in {\mathbb N}</m>, we define 
             <me>g^n = \underbrace{g \cdot g \cdots g}_{n \; \text{times}} </me> 
@@ -557,23 +562,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <theorem xml:id="theorem-exponent-laws">
                 <statement>
-                    <p>In a group, the usual laws of exponents hold; that is, for all <m>g, h \in G</m>,</p>
-
-                    <ol>
+                    <p>In a group, the usual laws of exponents hold; that is, for all <m>g, h \in G</m>,<ol>
                         <li><p><m>g^mg^n = g^{m+n}</m> for all <m>m, n \in {\mathbb Z}</m>;</p></li>
                         <li><p><m>(g^m)^n = g^{mn}</m> for all <m>m, n \in {\mathbb Z}</m>;</p></li>
                         <li><p><m>(gh)^n = (h^{-1}g^{-1})^{-n}</m> for all <m>n \in {\mathbb Z}</m>. Furthermore, if <m>G</m> is abelian, then <m>(gh)^n = g^nh^n</m>.</p></li>
-                    </ol>
+                    </ol></p>
                 </statement>
             </theorem>
 
-                <p>We will leave the proof of this theorem as an exercise. Notice that <m>(gh)^n \neq g^nh^n</m> in general, since the group may not be abelian. If the group is <m>{\mathbb Z}</m> or <m>{\mathbb Z}_n</m>, we write the group operation additively and the exponential operation multiplicatively; that is, we write <m>ng</m> instead of <m>g^n</m>. The laws of exponents now become</p>
-
-                <ol>
+                <p>We will leave the proof of this theorem as an exercise. Notice that <m>(gh)^n \neq g^nh^n</m> in general, since the group may not be abelian. If the group is <m>{\mathbb Z}</m> or <m>{\mathbb Z}_n</m>, we write the group operation additively and the exponential operation multiplicatively; that is, we write <m>ng</m> instead of <m>g^n</m>. The laws of exponents now become<ol>
                     <li><p><m>mg + ng = (m+n)g</m> for all <m>m, n \in {\mathbb Z}</m>;</p></li>
                     <li><p><m>m(ng) = (mn)g</m> for all <m>m, n \in {\mathbb Z}</m>;</p></li>
                     <li><p><m>m(g + h) = mg + mh</m> for all <m>n \in {\mathbb Z}</m>.</p></li>
-                </ol>
+                </ol></p>
 
             <p>It is important to realize that the last statement can be made only because <m>{\mathbb Z}</m> and  <m>{\mathbb Z}_n</m> are commutative groups.</p>
 
@@ -584,9 +585,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Although the first clear axiomatic definition of a group was not given until the late 1800s, group-theoretic methods had been employed before this time in the development of  many areas of mathematics, including geometry and the theory of algebraic equations.</p>
 
-            <p>Joseph-Louis Lagrange<index><main>Lagrange, Joseph-Louis</main></index> used group-theoretic methods in a 1770<ndash />1771 memoir to study methods of solving polynomial equations.  Later, Évariste Galois<index><main>Galois, Évariste</main></index> (1811<ndash />1832) succeeded in developing the mathematics necessary to determine exactly which polynomial equations could be  solved in terms of the polynomials'coefficients. Galois' primary tool was group theory.</p>
+            <p>Joseph-Louis Lagrange<idx><h>Lagrange, Joseph-Louis</h></idx> used group-theoretic methods in a 1770<ndash />1771 memoir to study methods of solving polynomial equations.  Later, Évariste Galois<idx><h>Galois, Évariste</h></idx> (1811<ndash />1832) succeeded in developing the mathematics necessary to determine exactly which polynomial equations could be  solved in terms of the polynomials'coefficients. Galois' primary tool was group theory.</p>
 
-            <p>The study of geometry was revolutionized in 1872 when Felix Klein<index><main>Klein, Felix</main></index> proposed that geometric spaces should be studied by examining those properties that are invariant under a transformation of the space. Sophus Lie<index><main>Lie, Sophus</main></index>, a contemporary of Klein, used group theory to study solutions of partial differential equations.  One of the first modern treatments of group theory appeared in William Burnside's<index><main>Burnside, William</main></index> <booktitle>The Theory of Groups of Finite Order</booktitle> [1], first published in 1897.</p>
+            <p>The study of geometry was revolutionized in 1872 when Felix Klein<idx><h>Klein, Felix</h></idx> proposed that geometric spaces should be studied by examining those properties that are invariant under a transformation of the space. Sophus Lie<idx><h>Lie, Sophus</h></idx>, a contemporary of Klein, used group theory to study solutions of partial differential equations.  One of the first modern treatments of group theory appeared in William Burnside's<idx><h>Burnside, William</h></idx> <booktitle>The Theory of Groups of Finite Order</booktitle> [1], first published in 1897.</p>
         </subsection>
 
     </section>
@@ -597,7 +598,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <subsection>
             <title>Definitions and Examples</title>
 
-            <p>Sometimes we wish to investigate smaller groups sitting inside a larger group.   The set of even integers <m>2{\mathbb Z} = \{\ldots, -2, 0, 2, 4, \ldots \}</m> is a group  under the operation of addition. This smaller group sits naturally inside of the group of integers under addition.  We define a <term>subgroup</term><index><main>Subgroup</main><sub>definition of</sub></index> <m>H</m> of a group <m>G</m> to be a subset <m>H</m> of <m>G</m> such that when the group operation of <m>G</m> is restricted to <m>H</m>, <m>H</m> is a group in its own right. Observe that every group <m>G</m> with at least two elements will always have at least two subgroups, the subgroup consisting of the identity element alone and the entire group itself. The subgroup <m>H = \{ e \}</m> of a group <m>G</m> is called the <term>trivial subgroup</term><index><main>Subgroup</main><sub>trivial</sub></index>.  A subgroup that is a proper subset of <m>G</m> is called a <term>proper subgroup</term><index><main>Subgroup</main><sub>proper</sub></index>. In many of the examples that we have investigated up to this point, there exist other subgroups besides the trivial and improper subgroups.</p>
+            <p>Sometimes we wish to investigate smaller groups sitting inside a larger group.   The set of even integers <m>2{\mathbb Z} = \{\ldots, -2, 0, 2, 4, \ldots \}</m> is a group  under the operation of addition. This smaller group sits naturally inside of the group of integers under addition.  We define a <term>subgroup</term><idx><h>Subgroup</h><h>definition of</h></idx> <m>H</m> of a group <m>G</m> to be a subset <m>H</m> of <m>G</m> such that when the group operation of <m>G</m> is restricted to <m>H</m>, <m>H</m> is a group in its own right. Observe that every group <m>G</m> with at least two elements will always have at least two subgroups, the subgroup consisting of the identity element alone and the entire group itself. The subgroup <m>H = \{ e \}</m> of a group <m>G</m> is called the <term>trivial subgroup</term><idx><h>Subgroup</h><h>trivial</h></idx>.  A subgroup that is a proper subset of <m>G</m> is called a <term>proper subgroup</term><idx><h>Subgroup</h><h>proper</h></idx>. In many of the examples that we have investigated up to this point, there exist other subgroups besides the trivial and improper subgroups.</p>
 
             <example xml:id="example-groups-multiplicative-subgroup">
                 <p>Consider the set of nonzero real numbers, <m>{\mathbb R}^*</m>, with the group operation of multiplication. <notation><usage>\mathbb R^*</usage><description>the multiplicative group of real numbers</description></notation> The identity of this group is 1 and the inverse of any element <m>a \in {\mathbb R}^*</m> is just <m>1/a</m>. We will show that
@@ -622,7 +623,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 d  & -b \\
                 -c &  a
                 ]]>\end{pmatrix}.</me>
-                It remains to show that multiplication is closed; that is, that the product of two matrices of determinant one also has determinant one. We will leave this task as an exercise. The group <m>SL_2({\mathbb R})</m> is called the <term>special linear group</term><index><main>Group</main><sub>special linear</sub></index>.</p>
+                It remains to show that multiplication is closed; that is, that the product of two matrices of determinant one also has determinant one. We will leave this task as an exercise. The group <m>SL_2({\mathbb R})</m> is called the <term>special linear group</term><idx><h>Group</h><h>special linear</h></idx>.</p>
             </example>
 
             <example xml:id="example-groups-gl2-subgroup">
@@ -650,14 +651,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <figure xml:id="figure-z2xz2">
                 <caption>Addition table for <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m></caption>
 
-                <p><me>\begin{array}{c|cccc}
-                <![CDATA[+     & (0,0) & (0,1) & (1,0) & (1,1) \\
-                \hline
-                (0,0) & (0,0) & (0,1) & (1,0) & (1,1) \\
-                (0,1) & (0,1) & (0,0) & (1,1) & (1,0) \\
-                (1,0) & (1,0) & (1,1) & (0,0) & (0,1) \\
-                (1,1) & (1,1) & (1,0) & (0,1) & (0,0)]]>
-                \end{array}</me></p>
+                <sidebyside>
+                    <p><me>\begin{array}{c|cccc}
+                    <![CDATA[+     & (0,0) & (0,1) & (1,0) & (1,1) \\
+                    \hline
+                    (0,0) & (0,0) & (0,1) & (1,0) & (1,1) \\
+                    (0,1) & (0,1) & (0,0) & (1,1) & (1,0) \\
+                    (1,0) & (1,0) & (1,1) & (0,0) & (0,1) \\
+                    (1,1) & (1,1) & (1,0) & (0,1) & (0,0)]]>
+                    \end{array}</me></p>
+                </sidebyside>
             </figure>
 
         </subsection>
@@ -670,12 +673,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <proposition>
                 <statement>
-                    <p>A subset <m>H</m> of <m>G</m> is a subgroup if and only if it satisfies the following conditions.</p>
-                    <ol> 
+                    <p>A subset <m>H</m> of <m>G</m> is a subgroup if and only if it satisfies the following conditions.<ol> 
                         <li><p>The identity <m>e</m> of <m>G</m> is in <m>H</m>.</p></li>
                         <li><p>If <m>h_1, h_2 \in H</m>, then <m>h_1h_2 \in H</m>.</p></li>
                         <li><p>If <m>h \in H</m>, then <m>h^{-1} \in H</m>.</p></li>
-                    </ol>
+                    </ol></p>
                 </statement>
 
                 <proof>
@@ -729,7 +731,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>UPC Symbols</title>
 
             <statement>
-                <p>Universal Product Code<index><main>Universal Product Code</main></index> (UPC) symbols are found on most products in grocery and retail stores. The UPC symbol is a 12-digit code identifying the manufacturer of a product and the product itself (Figure<nbsp /><xref ref="figure-upc-codes" />). The first 11 digits contain information about the product; the twelfth digit is used for error detection. If <m>d_1 d_2 \cdots d_{12}</m> is a valid UPC number, then 
+                <p>Universal Product Code<idx><h>Universal Product Code</h></idx> (UPC) symbols are found on most products in grocery and retail stores. The UPC symbol is a 12-digit code identifying the manufacturer of a product and the product itself (Figure<nbsp /><xref ref="figure-upc-codes" />). The first 11 digits contain information about the product; the twelfth digit is used for error detection. If <m>d_1 d_2 \cdots d_{12}</m> is a valid UPC number, then 
                 <me>3 \cdot d_1 + 1 \cdot d_2 + 3 \cdot d_3 + \cdots + 3 \cdot d_{11} + 1 \cdot d_{12} \equiv 0 \pmod{10}.</me></p>
 
                 <ol>
@@ -769,7 +771,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>ISBN Codes</title>
 
             <statement>
-                <p>Every book has an International Standard Book Number<index><main>International standard book number</main></index> (ISBN) code.  This is a 10-digit code indicating the book's publisher and title.  The tenth digit is a check digit satisfying 
+                <p>Every book has an International Standard Book Number<idx><h>International standard book number</h></idx> (ISBN) code.  This is a 10-digit code indicating the book's publisher and title.  The tenth digit is a check digit satisfying 
                     <me>(d_1, d_2, \ldots, d_{10} ) \cdot (10, 9, \ldots, 1 )  \equiv 0 \pmod{11}.</me>
                 One problem is that <m>d_{10}</m> might have to be a 10 to make the inner product zero; in this case, 11 digits would be  needed to make this scheme work.  Therefore, the character X is used for the eleventh digit.  So ISBN 3-540-96035-X is a valid ISBN code.</p>
 

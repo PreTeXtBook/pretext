@@ -28,5 +28,5 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <remark>
     <title>Sage</title>
 
-    <p>Sage is free, open source, mathematical software, which has very impressive capabilities for the study of abstract algebra.  See the <xref ref="preface" autoname="yes" /> for more information about obtaining Sage and the supplementary material in the electronic versions of this text that describe how to use Sage in the study of abstract algebra.  In this non-electronic version, we will have a brief explanation of Sage's relevant capabilities at the end of each chapter in a Remark.  Much like this one.</p>
+    <p>Sage is free, open source, mathematical software, which has very impressive capabilities for the study of abstract algebra.  See the <xref ref="preface" text="title" /> for more information about obtaining Sage and the supplementary material in the electronic versions of this text that describe how to use Sage in the study of abstract algebra.  In this non-electronic version, we will have a brief explanation of Sage's relevant capabilities at the end of each chapter in a Remark.  Much like this one.</p>
 </remark>

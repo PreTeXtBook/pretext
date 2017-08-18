@@ -87,6 +87,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <base full='siemens'           short='S'/>
     <base full='tesla'             short='T'/>
     <base full='volt'              short='V'/>
+    <base full='electronvolt'      short='eV'/> <!-- http://units.wikia.com/wiki/Electronvolt -->
     <base full='weber'             short='Wb'/>
 
     <!-- Frequency and Catalytic Activity                                     -->
@@ -160,6 +161,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- Distance per Volume                                                        -->
     <base full='milepergallon'     short='mpg'      siunitx='none' />
+    <base full='kilometerpergallon'     short='kpg'      siunitx='none' />
 
 </xsl:variable>
 

@@ -336,7 +336,7 @@
             <p>You should see a dialog with two text fields. Your variable name should be <c>PATH</c>.</p>
           </li>
           <li>
-            <p>Place the cursor in the existing value and press the End key, so that the cursor moves to the back of the line. The <c>PATH</c> string is a <c>;</c>-delimited list of full path names, so append the string <c>C:\pdf2svg\dist-64bits;</c> or <c>C:\pdf2svg\dist-64bits;</c> (note the semicolon) to the existing value. </p>
+            <p>Place the cursor in the existing value and press the End key, so that the cursor moves to the back of the line. The <c>PATH</c> string is a <c>;</c>-delimited list of full path names, so append the string <c>C:\pdf2svg\dist-32bits;</c> or <c>C:\pdf2svg\dist-64bits;</c> (note the semicolon) to the existing value. </p>
           </li>
           <li>
             <p>Click OK to save changes.</p>
