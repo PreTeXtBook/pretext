@@ -9,7 +9,9 @@ GPL License.
 
 Quickstart instructions at project website:  [mathbook.pugetsound.edu](http://mathbook.pugetsound.edu)
 
-Help and development discussions: Google Group [mathboook-xml-support](https://groups.google.com/forum/?fromgroups#!forum/mathbook-xml-support)
+Help and development discussions:
+* Support forum/mailing-list: [pretext-support](https://groups.google.com/forum/#!forum/pretext-support)
+* Announcements only, low-volume: [pretext-announce](https://groups.google.com/forum/#!forum/pretext-announce)
 
 
 MathBook XML (MBX) is guided by the following principles:
