@@ -689,6 +689,16 @@
     </xsl:choose>
 </xsl:template>
 
+<!-- ############################################## -->
+<!-- Sidebyside in a WeBWorK expects only one child -->
+<!-- It should be in the captionless family         -->
+<!-- Just applies its tempaltes                     -->
+<!-- ############################################## -->
+
+<xsl:template match="webwork//sidebyside">
+    <xsl:apply-templates />
+</xsl:template>
+
 <!-- ####################### -->
 <!-- PGML Image Construction -->
 <!-- ####################### -->
