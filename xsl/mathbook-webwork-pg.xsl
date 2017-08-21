@@ -934,6 +934,22 @@
     </xsl:if>
 </xsl:template>
 
+<!-- ################ -->
+<!-- Cross-References -->
+<!-- ################ -->
+
+<!-- The visual text of a cross-reference is         -->
+<!-- formed in the xsl/mathbook-common.xsl routines. -->
+<!-- But we in the WW source we can't really form    -->
+<!-- a link to a target outside the problem.         -->
+<!-- So we just duplicate the text.                  -->
+<xsl:template match="*" mode="xref-link">
+    <xsl:param name="content" />
+    <xsl:param name="xref" />
+    <xsl:copy-of select="$content" />
+</xsl:template>
+
+
 <!-- ############## -->
 <!-- Various Markup -->
 <!-- ############## -->
