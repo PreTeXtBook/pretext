@@ -5352,7 +5352,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="content" />
     <xsl:param name="xref" />
     <xsl:text>[LINK: </xsl:text>
-    <xsl:apply-templates select="$content" />
+    <xsl:copy-of select="$content" />
     <xsl:text>]</xsl:text>
 </xsl:template>
 
