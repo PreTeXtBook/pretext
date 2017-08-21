@@ -17,6 +17,7 @@
 <xsl:param name="latex.preamble.late">
     <xsl:text>\usepackage{ulem}&#xa;</xsl:text>
     <xsl:text>\normalem&#xa;</xsl:text>
+    <xsl:text>\raggedbottom&#xa;</xsl:text>
 </xsl:param>
 
 <!-- General commands from the "ulem" package -->
