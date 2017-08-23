@@ -34,6 +34,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecations that can be fixed with a transformation -->
 <!-- In reverse chronological order, with dates           -->
 
+<!-- 2017-08-06  wrap "program" and "console" in "sidebyside" at full width -->
+<xsl:template match="program[not(parent::sidebyside or parent::listing)]">
+    <sidebyside width="100%">
+        <program>
+            <xsl:apply-templates select="@* | node()" />
+        </program>
+    </sidebyside>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2017-08-06</xsl:with-param>
+        <xsl:with-param name="message">Wrapping top-level &lt;program&gt; with full-width &lt;sidebyside&gt;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="console[not(parent::sidebyside or parent::listing)]">
+    <sidebyside width="100%">
+        <console>
+            <xsl:apply-templates select="@* | node()" />
+        </console>
+    </sidebyside>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2017-08-06</xsl:with-param>
+        <xsl:with-param name="message">Wrapping top-level &lt;console&gt; with full-width &lt;sidebyside&gt;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
 <!-- 2017-08-04  top-level "task" become "exploration" -->
 <xsl:template match="task[parent::chapter or parent::appendix or parent::section or parent::subsection or parent::subsubsection or parent::paragraphs or parent::introduction or parent::conclusion]">
     <exploration>

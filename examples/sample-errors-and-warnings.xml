@@ -118,8 +118,21 @@ systems.
 
             <project>
                 <task><p>First real task.</p></task>
-                <task><p>Secind real task.</p></task>
+                <task><p>Second real task.</p></task>
             </project>
+
+            <p>The <c>program</c> and <c>console</c> elements cannot occur without a wrapper, a <c>sidebyside</c> or a <c>console</c>.</p>
+
+            <console>
+                <input>cd</input>
+            </console>
+
+            <program language="r">
+                <input>
+                a = b + c
+                </input>
+            </program>
+
 
         </section>
 
