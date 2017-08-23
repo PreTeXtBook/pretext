@@ -11,8 +11,11 @@
 <xsl:import href="../xsl/mathbook-html.xsl" />
 
 <xsl:output method="html" />
+
 <xsl:param name="html.css.file" select="'mathbook-ups.css'"/>
 <xsl:param name="html.knowl.example" select="'no'"/>
+
+<xsl:param name="chunk.level" select="'3'" />
 
 <!-- Make marked <p>s hanging indented for citiation chapter. -->
 <xsl:template match="p[@indent='hanging']" mode="body">
