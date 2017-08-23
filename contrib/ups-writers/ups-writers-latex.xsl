@@ -3,6 +3,11 @@
 <!-- For University of Puget Sound, Writer's Handbook      -->
 <!-- 2016/07/29  R. Beezer, rough underline styles         -->
 
+<!DOCTYPE xsl:stylesheet [
+    <!ENTITY % entities SYSTEM "../xsl/entities.ent">
+    %entities;
+]>
+
 <!-- Identify as a stylesheet -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
@@ -11,6 +16,18 @@
 <xsl:import href="../xsl/mathbook-latex.xsl" />
 
 <xsl:output method="text" />
+
+<!-- Make marked <p>s hanging indented for citiation chapter. -->
+<xsl:template match="p[@indent='hanging']">
+    <xsl:if test="preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)][1][self::p or self::paragraphs or self::sidebyside]">
+        <xsl:text>\par&#xa;</xsl:text>
+    </xsl:if>
+    <!-- Beginning of customization -->
+    <xsl:text>\hangindent=\parindent{}\hangafter=1{}\noindent{}</xsl:text>
+    <!-- End of customization -->
+    <xsl:apply-templates/>
+    <xsl:text>%&#xa;</xsl:text>
+</xsl:template>
 
 <!-- If also loaded for insert, delete, stale,       -->
 <!-- presumably not a problem to attempt second load -->
