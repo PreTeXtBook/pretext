@@ -193,6 +193,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Sage Cell evaluate button      -->
     <!-- eg, "Evaluate (Maxima)"        -->
     <!-- 2017-05-14: 'code' is obsolete -->
+    <!-- This needs to be defined to *something* (always)       -->
+    <!-- else whatever crud ends up on the button kills the cell -->
+    <localization string-id='evaluate'><xsl:text>Evaluate</xsl:text></localization>
     <localization string-id='evaluate'><xsl:text>Evaluate</xsl:text></localization>
     <!-- <localization string-id='code'><xsl:text>Code</xsl:text></localization> -->
 </xsl:variable>

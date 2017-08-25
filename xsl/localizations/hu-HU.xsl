@@ -193,7 +193,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Sage Cell evaluate button      -->
     <!-- eg, "Evaluate (Maxima)"        -->
     <!-- 2017-05-14: 'code' is obsolete -->
-    <localization string-id='evaluate'><xsl:text>Kiértékelés</xsl:text></localization>
+    <!-- This needs to be defined to *something* (English)       -->
+    <!-- else whatever crud ends up on the button kills the cell -->
+    <!-- Translate at first opportunity, please                  -->
+    <localization string-id='evaluate'><xsl:text>Evaluate</xsl:text></localization>
     <!-- <localization string-id='code'><xsl:text>Kód</xsl:text></localization> -->
 </xsl:variable>
 
