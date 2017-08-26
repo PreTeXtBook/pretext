@@ -4267,7 +4267,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   Asymptote graphics language                 -->
 <!--   LaTeX source code images                    -->
 <!--   Sage graphics plots, w/ PNG fallback for 3D -->
-<xsl:template match="image[asymptote]|image[latex-image-code]|image[sageplot]">
+<xsl:template match="image[asymptote]|image[latex-image-code]|image[latex-image]|image[sageplot]">
     <xsl:variable name="base-pathname">
         <xsl:value-of select="$directory.images" />
         <xsl:text>/</xsl:text>

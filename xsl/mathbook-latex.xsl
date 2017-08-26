@@ -1645,7 +1645,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
     </xsl:if>
     <xsl:text>%% If tikz has been loaded, replace ampersand with \amp macro&#xa;</xsl:text>
-    <xsl:if test="//latex-image-code">
+    <xsl:if test="$document-root//latex-image-code|$document-root//latex-image">
         <xsl:text>\ifdefined\tikzset&#xa;</xsl:text>
         <xsl:text>    \tikzset{ampersand replacement = \amp}&#xa;</xsl:text>
         <xsl:text>\fi&#xa;</xsl:text>
@@ -5909,7 +5909,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- With raw LaTeX code, we use a \resizebox from the graphicx -->
 <!-- package to scale the image to the panel width, and then    -->
 <!-- we do not pass the width to the image template             -->
-<xsl:template match="image[latex-image-code]" mode="panel-latex-box">
+<xsl:template match="image[latex-image-code]|image[latex-image]" mode="panel-latex-box">
     <xsl:param name="width" />
     <xsl:variable name="percent" select="substring-before($width,'%') div 100" />
     <xsl:if test="$sbsdebug">
@@ -6028,11 +6028,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Clean indentation, drop into LaTeX               -->
 <!-- See "latex-image-preamble" for critical parts    -->
 <!-- Side-By-Side scaling happens there, could be here -->
-<xsl:template match="image[latex-image-code]">
+<xsl:template match="image[latex-image-code]|image[latex-image]">
     <!-- outer braces rein in the scope of any local graphics settings -->
     <xsl:text>{&#xa;</xsl:text>
     <xsl:call-template name="sanitize-text">
-        <xsl:with-param name="text" select="latex-image-code" />
+        <xsl:with-param name="text" select="latex-image-code|latex-image" />
     </xsl:call-template>
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>

@@ -19,10 +19,9 @@ You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!-- This stylesheet locates <latex-image-code> elements   -->
-<!-- and wraps them for LaTeX processing                   -->
-<!-- This includes the LaTeX macros present in docinfo     -->
-<!-- and the document's docinfo/latex-image-preamble       -->
+<!-- This stylesheet locates video/@youtube elements and -->
+<!-- prepares a Python dictionary necessary to extract a -->
+<!-- thumbnail for each video from the YouTube servers   -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
