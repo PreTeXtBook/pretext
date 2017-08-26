@@ -34,6 +34,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecations that can be fixed with a transformation -->
 <!-- In reverse chronological order, with dates           -->
 
+<!-- 2017-08-25  deprecate named lists to be captioned lists -->
+<xsl:template match="list[not(caption)]/title">
+    <caption>
+        <xsl:apply-templates select="@* | node()" />
+    </caption>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2017-08-25</xsl:with-param>
+        <xsl:with-param name="message">Converting a &lt;list&gt;/&lt;title&gt; to a &lt;list&gt;/&lt;caption&gt;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
 <!-- 2017-08-06  wrap "program" and "console" in "sidebyside" at full width -->
 <xsl:template match="program[not(parent::sidebyside or parent::listing)]">
     <sidebyside width="100%">

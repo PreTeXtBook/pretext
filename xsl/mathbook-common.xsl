@@ -6246,6 +6246,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2017-08-06'" />
         <xsl:with-param name="message" select="'the &quot;console&quot; element is no longer used as a child of a top-level division, but instead should be enclosed by a &quot;listing&quot; or &quot;sidebyside&quot;'" />
     </xsl:call-template>
+    <!--  -->
+    <!-- 2017-08-25  deprecate named lists to be captioned lists -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurences" select="$document-root//list[title and not(caption)]" />
+        <xsl:with-param name="date-string" select="'2017-08-25'" />
+        <xsl:with-param name="message" select="'the &quot;list&quot; element now requires a &quot;caption&quot; and the &quot;title&quot; is optional'" />
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->
