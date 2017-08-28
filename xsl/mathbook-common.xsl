@@ -2474,7 +2474,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- for use on the root element        -->
 <xsl:variable name="b-index-is-available" select="not(//@xml:id[.='index'])" />
 
-<!-- A *unique* text identifier for any element -->
+<!-- A *unique* text identifier for any element    -->
+<!-- NB: only count from root of content portion   -->
+<!-- (not duplicates that might appear in docinfo) -->
 <!-- Uses:                                      -->
 <!--   HTML: filenames (pages and knowls)       -->
 <!--   HTML: anchors for references into pages  -->
@@ -2496,7 +2498,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:otherwise>
             <xsl:value-of select="local-name(.)" />
             <xsl:text>-</xsl:text>
-            <xsl:number level="any" />
+            <xsl:number from="book|article|letter|memo" level="any" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
