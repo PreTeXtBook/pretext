@@ -357,8 +357,35 @@
     </section>
 
     <section xml:id="topic-sidebyside">
-        <title>(*) Side-by-Side Panels</title>
+        <title>Side-by-Side Panels</title>
 
+        <p>Documents, pages, and screens tend to run vertically from top to bottom.  But sometimes you want to control elements laid out horizontally.  A <tag>sidebyside</tag> is designed to play this role.  It is best thought of as a container, enclosing <term>panels</term>, and specifying their layout.  Examples include three images, all the same size and equally spaced.  Or a poem occupying two-thirds of the available width, with commentary adjacent in the remaining third.  Or an image next to a table.  But the most common use may be a single image (with no caption, and hence no number), whose width and horizontal placement are controlled by the layout.</p>
+
+        <p>See the schema for the exact items that are allowed in a <tag>sidebyside</tag>.  To author, just place these items within <tag>sidebyside</tag> in the order they should appear, left to right.  Then you add attributes to the <tag>sidebyside</tag> element to affect placement.</p>
+
+        <p>Instead of placing a <attribute>width</attribute> attribute on each item, instead place this on the <tag>sidebyside</tag> element.  A single <attribute>width</attribute> will use the same value for each panel.  For different widths, use the plural form <attribute>widths</attribute> and provide a space-separated list of percentages.  The default is to give each panel the same width, and as large as possible, which will result in no gap between panels.</p>
+
+        <p>The margins can be specified with the <attribute>margins</attribute> attribute, which is given as single percentage.  Soon it will be possible to specify left and right margins with two percentages, separated by a space.  An additional option is to use the value <c>auto</c> which will set each margin to half of the (common) space between panels.  This is also the default.</p>
+
+        <p>Once the widths and margins are known, any additional available width is used to create a common distance separating panels.</p>
+
+        <p>Independent of horizontal positioning, individual panels may be aligned vertically.  The attribute is <attribute>valigns</attribute> and its value is a space-separated list of <c>top</c>, <c>middle</c>, and <c>bottom</c>.  The singular version, <attribute>valign</attribute>, is used to give every panel the same alignment, using the same keywords.  The default is to have every panel at the <c>top</c>.</p>
+
+        <p>We could give lots of examples, but instead it might be best to just experiment.  Error-checking is very robust, so it is hard to get it too wrong.  OK, we will do just one to help explain.  Suppose a <tag>sidebyside</tag> contains three panels and has layout parameters given by<cd>
+            <cline>&lt;sidebyside widths="20% 40% 25%" margins="auto" valign="middle"&gt;</cline>
+        </cd>Then there will be 15<percent /> of the width left to space out the panels.  The two gaps are each 5<percent /> of the width, and the remaining 5<percent /> is split between the margins at 2.5<percent /> each.  And the vertical midlines of each panel are all aligned.</p>
+
+        <p>For a single panel with no attributes, the panel will occupy 100<percent /> of the width.  A single panel with a specified width will get equal (auto) margins, resulting in a centered panel.</p>
+
+        <p>Captioned items as panels deserve special mention.  These will continue to be numbered consecutively, with one exception.  If you place a <tag>sidebyside</tag> inside of a <tag>figure</tag>, then the <tag>figure</tag> will be numbered, and the captioned items inside the <tag>sidebyside</tag> will be <term>sub-captioned</term>.  In other words, the second captioned panel of a <tag>sidebyside</tag> inside Figure 5.2 would be referenced as Figure 5.2.b.</p>
+
+        <p>An <tag>sbsgroup</tag> (<q>side-by-side group</q>) contains only <tag>sidebyside</tag>, which are displayed in order.  However, all of the layout parameters allowed on a <tag>sidebyside</tag> may be used on an <tag>sbsgroup</tag>.  This might allow a collection of fifteen images to be laid out in three rows of five images each, with widths and spacing identical for each row because the parameters are specified on the <tag>sbsgroup</tag> element.  In this way, simple grids can be constructed.  Note that any layout parameters given on an enclosed <tag>sidebyside</tag> will take priority over those given on the <tag>sbsgroup</tag>.  Captioning behavior extends to an entire <tag>sbsgroup</tag>.</p>
+
+        <p>Since <tag>sidebyside</tag> and <tag>sbsgroup</tag> are containers they cannot be referenced and so do not have an <attribute>xml:id</attribute>.  However, you can reference their individual contents if they are captioned, and you can reference an enclosing <tag>figure</tag>.</p>
+
+        <p>Generally, a <tag>sidebyside</tag> or <tag>sbsgroup</tag> can be placed as a child of a division, or within various blocks, such as <tag>proof</tag> for example.  See the schema for (evolving) specifics.</p>
+
+        <p>It should be clear now that a <tag>sidebyside</tag> is more about presentation than most <pretext /> elements, though there is some semantic information being conveyed by grouping the panels with one another.</p>
     </section>
 
     <section xml:id="topic-front-back-matter">

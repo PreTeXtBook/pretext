@@ -197,7 +197,7 @@
     <section xml:id="overview-sidebyside">
         <title>Side-by-Side Panels</title>
 
-        <p>A <tag>sidebyside</tag> is a useful organization of elements in a horizontal layout, and so begins to blur the line between content and presentation.  While we default to organizing information in a vertical sequence, it is often desirable to organize smaller elements adjacent to each other horizontally.  Specifically, images, tabular, figures, tables, paragraphs may all be combined and there is some control over vertical and horizontal alignment.  Captioning, both overall and individually, is especially flexible.  See <xref ref="topic-sidebyside" /> for details.</p>
+        <p>A <tag>sidebyside</tag> is a useful organization of elements in a horizontal layout, and so begins to blur the line between content and presentation.  While we default to organizing information in a vertical sequence, it is often desirable to organize smaller elements adjacent to each other horizontally.  Specifically, images, tabular, figures, tables, paragraphs, and more, may all be combined and there is good control over vertical and horizontal alignment.  Captioning, both overall and individually, is especially flexible.  An <tag>sbsgroup</tag>  (<q>side-by-side group</q>) collects multiple <tag>sidebyside</tag> to stack vertically, which allows for displays in grids.  See <xref ref="topic-sidebyside" /> for details.</p>
     </section>
 
     <section xml:id="overview-math-results">
