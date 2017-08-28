@@ -5108,7 +5108,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="xref-as-knowl" />
     </xsl:variable>
     <xsl:choose>
-        <!-- exceptional case, xref in mrow of display math      -->
+        <!-- 1st exceptional case, xref in webwork -->
+        <!-- Just parrot the content               -->
+        <xsl:when test="$xref/ancestor::webwork">
+            <xsl:value-of select="$content" />
+        </xsl:when>
+        <!-- 2nd exceptional case, xref in mrow of display math  -->
         <!-- Requires http://aimath.org/mathbook/mathjaxknowl.js -->
         <!-- loaded as a MathJax extension for knowls to render  -->
         <xsl:when test="$xref/parent::mrow">

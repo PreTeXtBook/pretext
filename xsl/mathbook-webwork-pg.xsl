@@ -802,8 +802,9 @@
 <!-- The cross-reference numbering scheme uses \ref, \hyperref -->
 <!-- for LaTeX and numbers elsewhere, so it is unimplmented in -->
 <!-- mathbook-common.xsl, hence we implement it here           -->
+<!-- This is identical to mathbook-html.xsl                    -->
 
-<xsl:template match="webwork//*" mode="xref-number">
+<xsl:template match="*" mode="xref-number">
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 
@@ -952,7 +953,11 @@
 <!-- But we in the WW source we can't really form    -->
 <!-- a link to a target outside the problem.         -->
 <!-- So we just duplicate the text.                  -->
-<xsl:template match="webwork//*" mode="xref-link">
+<!-- HACK: low-priority, so                             -->
+<!--   (a) for problem extraction it is only version    -->
+<!--   (b) for HTML it is low, so see "xref-link" there -->
+<!-- Solution: reconsider import/override mechanism     -->
+<xsl:template match="*" mode="xref-link" priority="-1">
     <xsl:param name="content" />
     <xsl:param name="xref" />
     <xsl:copy-of select="$content" />
