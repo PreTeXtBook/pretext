@@ -13,7 +13,8 @@
             element article {
                 MetaDataSubtitle,
                 ArticleFrontMatter,
-                (Section+ & Exercises* & References*),
+                Section,
+                (Section | Exercises | References)*,
                 BackMatter?
             }
         Book =
@@ -21,7 +22,8 @@
             element book {
                 MetaDataSubtitle,
                 BookFrontMatter,
-                (Chapter+ & Exercises* & References*),
+                Chapter,
+                (Chapter | Exercises | References)*,
                 BackMatter?
             }
         Letter =
@@ -38,11 +40,12 @@
                     (BlockDivision | Paragraphs)+ |
                     (
                         IntroductionDivision?,
+                        Section,
                         (
-                            Section+ &
-                            Exercises* &
-                            References*
-                        ),
+                            Section |
+                            Exercises |
+                            References
+                        )*,
                         ConclusionDivision?)
                 )
             }
@@ -54,11 +57,12 @@
                     (BlockDivision | Paragraphs)+ |
                     (
                         IntroductionDivision?,
+                        Subsection,
                         (
-                            Subsection+ &
-                            Exercises* &
-                            References*
-                        ),
+                            Subsection |
+                            Exercises |
+                            References
+                        )*,
                         ConclusionDivision?)
                 )
             }
@@ -70,11 +74,12 @@
                     (BlockDivision | Paragraphs)+ |
                     (
                         IntroductionDivision?,
+                        Subsubsection,
                         (
-                            Subsubsection+ &
-                            Exercises* &
-                            References*
-                        ),
+                            Subsubsection |
+                            Exercises |
+                            References
+                        )*,
                         ConclusionDivision?)
                 )
             }
@@ -91,11 +96,12 @@
                     (BlockDivision | Paragraphs | NotationList | SolutionList )+ |
                     (
                         IntroductionDivision?,
+                        Section,
                         (
-                            Section+ &
-                            Exercises* &
-                            References*
-                        ),
+                            Section |
+                            Exercises |
+                            References
+                        )*,
                         ConclusionDivision?
                     )
                 )
@@ -142,7 +148,7 @@
             }
         Date = 
             element date {
-                text & Character* & Generator*
+                mixed {(Character | Generator)*}
             }
         Abstract =
             element abstract {
@@ -239,7 +245,6 @@
             Remark | Theorem | Proof | Definition |
             Axiom | Example | Exercise | Project |
             Poem | Assemblage | ListGenerator |
-            Console | Program |
             GGB | Demonstration
         
         
@@ -648,7 +653,7 @@
                 attribute width {xsd:integer}?,
                 attribute height {xsd:integer}?,
                 attribute tex-size {xsd:integer}?,
-                element description {TextShort & WWVariableUse*}?
+                element description {(TextShort | WWVariableUse)*}?
             }
         
         
@@ -840,14 +845,14 @@
             element biblio {
                 UniqueID?,
                 attribute type {"raw"}?,
-                (TextLong* &
-                Ibid* &
-                BibTitle* &
-                BibYear* &
-                BibJournal* &
-                BibNumber* &
-                BibVolume* &
-                BibNote*)
+                (TextLong |
+                Ibid |
+                BibTitle |
+                BibYear |
+                BibJournal |
+                BibNumber |
+                BibVolume |
+                BibNote)*
             }
         Ibid = element ibid {empty}
         BibYear = element year {text}

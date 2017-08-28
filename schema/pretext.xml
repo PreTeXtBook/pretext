@@ -46,7 +46,8 @@
             element article {
                 MetaDataSubtitle,
                 ArticleFrontMatter,
-                (Section+ &amp; Exercises* &amp; References*),
+                Section,
+                (Section | Exercises | References)*,
                 BackMatter?
             }
         Book =
@@ -54,7 +55,8 @@
             element book {
                 MetaDataSubtitle,
                 BookFrontMatter,
-                (Chapter+ &amp; Exercises* &amp; References*),
+                Chapter,
+                (Chapter | Exercises | References)*,
                 BackMatter?
             }
         Letter =
@@ -82,11 +84,12 @@
                     (BlockDivision | Paragraphs)+ |
                     (
                         IntroductionDivision?,
+                        Section,
                         (
-                            Section+ &amp;
-                            Exercises* &amp;
-                            References*
-                        ),
+                            Section |
+                            Exercises |
+                            References
+                        )*,
                         ConclusionDivision?)
                 )
             }
@@ -98,11 +101,12 @@
                     (BlockDivision | Paragraphs)+ |
                     (
                         IntroductionDivision?,
+                        Subsection,
                         (
-                            Subsection+ &amp;
-                            Exercises* &amp;
-                            References*
-                        ),
+                            Subsection |
+                            Exercises |
+                            References
+                        )*,
                         ConclusionDivision?)
                 )
             }
@@ -114,11 +118,12 @@
                     (BlockDivision | Paragraphs)+ |
                     (
                         IntroductionDivision?,
+                        Subsubsection,
                         (
-                            Subsubsection+ &amp;
-                            Exercises* &amp;
-                            References*
-                        ),
+                            Subsubsection |
+                            Exercises |
+                            References
+                        )*,
                         ConclusionDivision?)
                 )
             }
@@ -135,11 +140,12 @@
                     (BlockDivision | Paragraphs | NotationList | SolutionList )+ |
                     (
                         IntroductionDivision?,
+                        Section,
                         (
-                            Section+ &amp;
-                            Exercises* &amp;
-                            References*
-                        ),
+                            Section |
+                            Exercises |
+                            References
+                        )*,
                         ConclusionDivision?
                     )
                 )
@@ -1316,7 +1322,7 @@
                 attribute width {xsd:integer}?,
                 attribute height {xsd:integer}?,
                 attribute tex-size {xsd:integer}?,
-                element description {TextShort &amp; WWVariableUse*}?
+                element description {(TextShort | WWVariableUse)*}?
             }
         </fragment>
     </section>
@@ -1466,14 +1472,14 @@
             element biblio {
                 UniqueID?,
                 attribute type {"raw"}?,
-                (TextLong* &amp;
-                Ibid* &amp;
-                BibTitle* &amp;
-                BibYear* &amp;
-                BibJournal* &amp;
-                BibNumber* &amp;
-                BibVolume* &amp;
-                BibNote*)
+                (TextLong |
+                Ibid |
+                BibTitle |
+                BibYear |
+                BibJournal |
+                BibNumber |
+                BibVolume |
+                BibNote)*
             }
         Ibid = element ibid {empty}
         BibYear = element year {text}
@@ -1757,7 +1763,7 @@
             }
         Date = 
             element date {
-                text &amp; Character* &amp; Generator*
+                mixed {(Character | Generator)*}
             }
         Abstract =
             element abstract {

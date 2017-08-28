@@ -20,17 +20,14 @@
     <element name="article">
       <ref name="MetaDataSubtitle"/>
       <ref name="ArticleFrontMatter"/>
-      <interleave>
-        <oneOrMore>
+      <ref name="Section"/>
+      <zeroOrMore>
+        <choice>
           <ref name="Section"/>
-        </oneOrMore>
-        <zeroOrMore>
           <ref name="Exercises"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="References"/>
-        </zeroOrMore>
-      </interleave>
+        </choice>
+      </zeroOrMore>
       <optional>
         <ref name="BackMatter"/>
       </optional>
@@ -41,17 +38,14 @@
       <a:documentation>Here is what a book looks like.</a:documentation>
       <ref name="MetaDataSubtitle"/>
       <ref name="BookFrontMatter"/>
-      <interleave>
-        <oneOrMore>
+      <ref name="Chapter"/>
+      <zeroOrMore>
+        <choice>
           <ref name="Chapter"/>
-        </oneOrMore>
-        <zeroOrMore>
           <ref name="Exercises"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="References"/>
-        </zeroOrMore>
-      </interleave>
+        </choice>
+      </zeroOrMore>
       <optional>
         <ref name="BackMatter"/>
       </optional>
@@ -84,17 +78,14 @@
           <optional>
             <ref name="IntroductionDivision"/>
           </optional>
-          <interleave>
-            <oneOrMore>
+          <ref name="Section"/>
+          <zeroOrMore>
+            <choice>
               <ref name="Section"/>
-            </oneOrMore>
-            <zeroOrMore>
               <ref name="Exercises"/>
-            </zeroOrMore>
-            <zeroOrMore>
               <ref name="References"/>
-            </zeroOrMore>
-          </interleave>
+            </choice>
+          </zeroOrMore>
           <optional>
             <ref name="ConclusionDivision"/>
           </optional>
@@ -119,17 +110,14 @@
           <optional>
             <ref name="IntroductionDivision"/>
           </optional>
-          <interleave>
-            <oneOrMore>
+          <ref name="Subsection"/>
+          <zeroOrMore>
+            <choice>
               <ref name="Subsection"/>
-            </oneOrMore>
-            <zeroOrMore>
               <ref name="Exercises"/>
-            </zeroOrMore>
-            <zeroOrMore>
               <ref name="References"/>
-            </zeroOrMore>
-          </interleave>
+            </choice>
+          </zeroOrMore>
           <optional>
             <ref name="ConclusionDivision"/>
           </optional>
@@ -154,17 +142,14 @@
           <optional>
             <ref name="IntroductionDivision"/>
           </optional>
-          <interleave>
-            <oneOrMore>
+          <ref name="Subsubsection"/>
+          <zeroOrMore>
+            <choice>
               <ref name="Subsubsection"/>
-            </oneOrMore>
-            <zeroOrMore>
               <ref name="Exercises"/>
-            </zeroOrMore>
-            <zeroOrMore>
               <ref name="References"/>
-            </zeroOrMore>
-          </interleave>
+            </choice>
+          </zeroOrMore>
           <optional>
             <ref name="ConclusionDivision"/>
           </optional>
@@ -202,17 +187,14 @@
           <optional>
             <ref name="IntroductionDivision"/>
           </optional>
-          <interleave>
-            <oneOrMore>
+          <ref name="Section"/>
+          <zeroOrMore>
+            <choice>
               <ref name="Section"/>
-            </oneOrMore>
-            <zeroOrMore>
               <ref name="Exercises"/>
-            </zeroOrMore>
-            <zeroOrMore>
               <ref name="References"/>
-            </zeroOrMore>
-          </interleave>
+            </choice>
+          </zeroOrMore>
           <optional>
             <ref name="ConclusionDivision"/>
           </optional>
@@ -315,15 +297,14 @@
   </define>
   <define name="Date">
     <element name="date">
-      <interleave>
-        <text/>
+      <mixed>
         <zeroOrMore>
-          <ref name="Character"/>
+          <choice>
+            <ref name="Character"/>
+            <ref name="Generator"/>
+          </choice>
         </zeroOrMore>
-        <zeroOrMore>
-          <ref name="Generator"/>
-        </zeroOrMore>
-      </interleave>
+      </mixed>
     </element>
   </define>
   <define name="Abstract">
@@ -546,8 +527,6 @@
       <ref name="Poem"/>
       <ref name="Assemblage"/>
       <ref name="ListGenerator"/>
-      <ref name="Console"/>
-      <ref name="Program"/>
       <ref name="GGB"/>
       <ref name="Demonstration"/>
     </choice>
@@ -1440,12 +1419,12 @@
       </optional>
       <optional>
         <element name="description">
-          <interleave>
-            <ref name="TextShort"/>
-            <zeroOrMore>
+          <zeroOrMore>
+            <choice>
+              <ref name="TextShort"/>
               <ref name="WWVariableUse"/>
-            </zeroOrMore>
-          </interleave>
+            </choice>
+          </zeroOrMore>
         </element>
       </optional>
     </element>
@@ -1904,32 +1883,18 @@
           <value>raw</value>
         </attribute>
       </optional>
-      <interleave>
-        <zeroOrMore>
+      <zeroOrMore>
+        <choice>
           <ref name="TextLong"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="Ibid"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="BibTitle"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="BibYear"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="BibJournal"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="BibNumber"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="BibVolume"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="BibNote"/>
-        </zeroOrMore>
-      </interleave>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
   <define name="Ibid">

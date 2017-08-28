@@ -21,6 +21,7 @@
         <xs:extension base="MetaDataSubtitle">
           <xs:sequence>
             <xs:group ref="ArticleFrontMatter"/>
+            <xs:element ref="section"/>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
               <xs:element ref="section"/>
               <xs:element ref="exercises"/>
@@ -41,6 +42,7 @@
         <xs:extension base="MetaDataSubtitle">
           <xs:sequence>
             <xs:group ref="BookFrontMatter"/>
+            <xs:element ref="chapter"/>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
               <xs:element ref="chapter"/>
               <xs:element ref="exercises"/>
@@ -71,6 +73,7 @@
               </xs:choice>
               <xs:sequence>
                 <xs:group minOccurs="0" ref="IntroductionDivision"/>
+                <xs:element ref="section"/>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                   <xs:element ref="section"/>
                   <xs:element ref="exercises"/>
@@ -97,6 +100,7 @@
               </xs:choice>
               <xs:sequence>
                 <xs:group minOccurs="0" ref="IntroductionDivision"/>
+                <xs:element ref="subsection"/>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                   <xs:element ref="subsection"/>
                   <xs:element ref="exercises"/>
@@ -123,6 +127,7 @@
               </xs:choice>
               <xs:sequence>
                 <xs:group minOccurs="0" ref="IntroductionDivision"/>
+                <xs:element ref="subsubsection"/>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                   <xs:element ref="subsubsection"/>
                   <xs:element ref="exercises"/>
@@ -164,6 +169,7 @@
             </xs:choice>
             <xs:sequence>
               <xs:group minOccurs="0" ref="IntroductionDivision"/>
+              <xs:element ref="section"/>
               <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="section"/>
                 <xs:element ref="exercises"/>
@@ -507,8 +513,6 @@
       <xs:element ref="poem"/>
       <xs:element ref="assemblage"/>
       <xs:element ref="list-of"/>
-      <xs:element ref="console"/>
-      <xs:element ref="program"/>
       <xs:element ref="geogebra-applet"/>
       <xs:element ref="demonstration"/>
     </xs:choice>
