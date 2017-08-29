@@ -248,6 +248,12 @@
 
     </section>
 
+    <section xml:id="overview-video">
+        <title>Video</title>
+
+        <p>Videos, either author-hosted or hosted on YouTube, may be embedded in a <pretext /> document using <init>HTML</init>, or may be <q>popped-out</q> to view on another page.  For a YouTube video, an author need only supply the identification string, and all the details of the embedding are handled by <pretext />.  See <xref ref="topic-video" /> for details.</p>
+    </section>
+
     <section xml:id="overview-si-units">
         <title>Scientific Units</title>
 

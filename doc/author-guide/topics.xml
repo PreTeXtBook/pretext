@@ -430,6 +430,52 @@
         </subsection>
     </section>
 
+    <section xml:id="topic-video">
+        <title>Video</title>
+
+        <p>The <tag>video</tag> element is used to embed a video in output formed from <init>HTML</init>.  It may be placed inside a <tag>figure</tag> or can be a panel of a <tag>sidebyside</tag>.  The former will have a caption, be numbered, and hence can be the target of a cross-reference (<tag>xref</tag>).  The latter is anonymous, but allows for horizontal layout, and combinations with other panels.</p>
+
+        <p>Size is controlled by a <attribute>width</attribute> attribute expressed as a percentage (on the <tag>video</tag> element when used in a figure, or as part of the <tag>sidebyside</tag> layout parameters).  Height is controlled by giving the <term>aspect ratio</term> with the <attribute>aspect</attribute> attribute on the <tag>video</tag> element.  The value can be a ratio expressed like <c>4:3</c> or a decimal number computed from the width divided by the height, such as <c>1.333</c>.  The default for videos is a 16:9 aspect ratio, which is very common.</p>
+
+        <p>If you host the video content as part of your output, then the <attribute>source</attribute> should be a relative file name that points to the file containing the video, but <em>without an extension</em>.  The supported formats are MP4, Ogg, and WebM.  Browser capabilities and provided files are searched preferentially in that order.  In other words, you can provide files in more than one format and increase the likelihood that a reader's browser will find a format it can playback.</p>
+
+        <p>For a video hosted at YouTube, find the 11-character identification string in the address of a video you are viewing.  It will look something like <c>hAzdgU_kpGo</c>.  Then simply provide this with the <attribute>youtube</attribute> attribute, such as<cd>
+            <cline>youtube="hAzdgU_kpGo"</cline>
+        </cd></p>
+
+        <p>Options include specifying a <attribute>start</attribute> and an <attribute>end</attribute> in seconds as integers (no units) if you only want to highlight a key portion of a video.  The <attribute>play-at</attribute> attribute can take the following values<dl width="narrow">
+            <li>
+                <title><c>embed</c></title>
+                <p>Play in place (the default action).</p>
+            </li>
+            <li>
+                <title><c>popout</c></title>
+                <p>Play in new window or tab, at 150<percent /> width.</p>
+            </li>
+            <li>
+                <title><c>select</c></title>
+                <p>Provide the reader the choice of the other two options.</p>
+            </li>
+        </dl>In an educational setting, sometimes the preview images provided by YouTube can be distracting, or for an author-hosted video you may wish to provide your own preview image.  The <attribute>preview</attribute> attribute can take on the following values<dl width="narrow">
+            <li>
+                <title><c>default</c></title>
+                <p>Whatever the video playback provides (also the default action).</p>
+            </li>
+            <li>
+                <title><c>generic</c></title>
+                <p><pretext /> supplies a Play-button image.</p>
+            </li>
+            <li>
+                <title><c>custom</c></title>
+                <p>Not implemented yet (2017-08-28).  Send a request.</p>
+            </li>
+        </dl></p>
+
+        <p>The <c>mbx</c> script (<xref ref="mbx-script" />) may be used to download the provided preview images for YouTube videos.  Filenames will be formed from the <attribute>xml:id</attribute> of the <tag>video</tag> element.  These will be used in static versions of output, such as print.  Once custom preview images are implemented for author-hosted video, their static representation will improve.</p>
+
+        <p>Contemplated extensions, as of 2017-08-28, would be specifying content from Vimeo, and/or Google Drive.  Send requests if these are of use.</p>
+    </section>
+
     <section xml:id="topic-units-measure">
         <title>(*) Units of Measure</title>
 
