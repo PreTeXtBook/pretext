@@ -2111,10 +2111,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$html.knowl.task = 'yes'" />
 </xsl:template>
 
-<xsl:template match="list" mode="is-hidden">
-    <xsl:value-of select="$html.knowl.list = 'yes'" />
-</xsl:template>
-
 <xsl:template match="objectives" mode="is-hidden">
     <xsl:value-of select="$html.knowl.objectives = 'yes'" />
 </xsl:template>
@@ -2135,7 +2131,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$html.knowl.listing = 'yes'" />
 </xsl:template>
 
-<xsl:template match="sidebyside/figure|sidebyside/table|side-byside/listing" mode="is-hidden">
+<xsl:template match="list" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.list = 'yes'" />
+</xsl:template>
+
+<xsl:template match="sidebyside/figure|sidebyside/table|sidebyside/listing|sidebyside/list" mode="is-hidden">
     <xsl:value-of select="false()" />
 </xsl:template>
 
@@ -2179,11 +2179,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>article</xsl:text>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|list|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;" mode="body-element">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;" mode="body-element">
     <xsl:text>article</xsl:text>
 </xsl:template>
 
-<xsl:template match="&FIGURE-LIKE;" mode="body-element">
+<xsl:template match="&FIGURE-LIKE;|list" mode="body-element">
     <xsl:text>figure</xsl:text>
 </xsl:template>
 
@@ -2249,7 +2249,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|list" mode="body-css-class">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="body-css-class">
     <xsl:text>example-like</xsl:text>
 </xsl:template>
 
@@ -2265,7 +2265,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>theorem-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&FIGURE-LIKE;" mode="body-css-class">
+<xsl:template match="&FIGURE-LIKE;|list" mode="body-css-class">
     <xsl:text>figure-like</xsl:text>
 </xsl:template>
 
@@ -2321,7 +2321,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|list|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|&FIGURE-LIKE;" mode="birth-element">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|&FIGURE-LIKE;|list" mode="birth-element">
     <xsl:text>div</xsl:text>
 </xsl:template>
 
@@ -2375,7 +2375,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="heading-type" />
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|list" mode="heading-birth">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 
@@ -2393,6 +2393,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- no heading, since captioned -->
 <xsl:template match="&FIGURE-LIKE;" mode="heading-birth" />
+
+<!-- Sort of for backward compatibility, &FIGURE-LIKE; should be similar -->
+<xsl:template match="list" mode="heading-birth">
+    <xsl:apply-templates select="." mode="heading-title" />
+</xsl:template>
 
 <!-- always a knowl attached to an example -->
 <xsl:template match="hint|answer|solution|biblio/note" mode="heading-birth">
@@ -2469,7 +2474,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="fn|blockquote|&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|case|proof|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|list|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|&FIGURE-LIKE;|paragraphs|exercisegroup|exercise|hint|answer|solution|biblio|biblio/note|contributor" mode="body">
+<xsl:template match="fn|blockquote|&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|case|proof|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|&FIGURE-LIKE;|list|paragraphs|exercisegroup|exercise|hint|answer|solution|biblio|biblio/note|contributor" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
     <!-- prelude beforehand, when original -->
@@ -2533,7 +2538,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
             </xsl:when>
-            <xsl:when test="self::list or self::objectives">
+            <xsl:when test="self::objectives">
                 <xsl:apply-templates select="introduction">
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
@@ -2549,6 +2554,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="*[not(self::caption)]">
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
+                <xsl:apply-templates select="caption" />
+            </xsl:when>
+            <xsl:when test="self::list">
+                <div class="named-list-content">
+                    <xsl:apply-templates select="*[not(self::caption)]">
+                        <xsl:with-param name="b-original" select="$b-original" />
+                    </xsl:apply-templates>
+                </div>
+                <!-- Exceptional for backward compatibility, 2017-08-25 -->
+                <xsl:if test="title and not(caption)">
+                    <figcaption>
+                        <span class="heading">
+                            <xsl:apply-templates select="." mode="type-name"/>
+                        </span>
+                        <span class="codenumber">
+                            <xsl:apply-templates select="." mode="number"/>
+                        </span>
+                        <xsl:apply-templates select="." mode="title-full" />
+                    </figcaption>
+                </xsl:if>
                 <xsl:apply-templates select="caption" />
             </xsl:when>
             <xsl:when test="self::hint or self::answer or self::solution or self::note">
@@ -2775,7 +2800,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="heading-type" />
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|list|objectives" mode="heading-xref-knowl">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|objectives" mode="heading-xref-knowl">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 
@@ -2784,7 +2809,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- no heading, since captioned -->
-<xsl:template match="&FIGURE-LIKE;" mode="heading-xref-knowl" />
+<xsl:template match="&FIGURE-LIKE;|list" mode="heading-xref-knowl" />
 
 <xsl:template match="hint|answer|solution|biblio/note" mode="heading-xref-knowl">
     <xsl:apply-templates select="." mode="heading-full" />
@@ -4082,13 +4107,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- title is killed -->
 <xsl:template match="list" mode="panel-html-box">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="introduction">
-        <xsl:with-param name="b-original" select="$b-original" />
-    </xsl:apply-templates>
-    <xsl:apply-templates select="ol|ul|dl">
-        <xsl:with-param name="b-original" select="$b-original" />
-    </xsl:apply-templates>
-    <xsl:apply-templates select="conclusion">
+    <xsl:apply-templates select="introduction|ol|ul|dl|conclusion">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
