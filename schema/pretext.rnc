@@ -238,7 +238,7 @@
             Paragraph | BlockQuote | Preformatted | ToDo
         BlockStatement =
             BlockText |
-            Figure | NamedList | Aside |
+            Figure | Aside |
             SideBySide | SideBySideGroup | Sage
         BlockDivision =
             BlockStatement |
@@ -390,15 +390,6 @@
                     MetaDataTitle,
                     ParagraphWW+
                 }+
-            }
-        
-        
-        NamedList =
-            element list {
-                MetaDataTitleOptional,
-                IntroductionText?,
-                List,
-                ConclusionText?
             }
         
         
@@ -562,6 +553,13 @@
                     Console
                 )
             }
+        |
+            element list {
+                MetaDataCaption,
+                IntroductionText?,
+                List,
+                ConclusionText?
+            }
         
         
         SideBySide =
@@ -571,7 +569,6 @@
                 (AlignmentVertical | attribute valigns {text})?,
                 (
                     Figure |
-                    NamedList |
                     Poem |
                     Tabular |
                     Image |

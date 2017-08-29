@@ -620,7 +620,7 @@
             Paragraph | BlockQuote | Preformatted | ToDo
         BlockStatement =
             BlockText |
-            Figure | NamedList | Aside |
+            Figure | Aside |
             SideBySide | SideBySideGroup | Sage
         BlockDivision =
             BlockStatement |
@@ -898,22 +898,6 @@
     </section>
 
     <section>
-        <title>Named Lists</title>
-
-        <p>If you want to have a list standalone and be referenced later, then build a block that is a <term>named list</term>.</p>
-
-        <fragment xml:id="namedlist">
-        NamedList =
-            element list {
-                MetaDataTitleOptional,
-                IntroductionText?,
-                List,
-                ConclusionText?
-            }
-        </fragment>
-    </section>
-
-    <section>
         <title>Definitions</title>
 
         <p>Definitions are special, there is nothing else quite like them.  A statement, no proof, and also a natural place for notation entries.</p>
@@ -1086,7 +1070,7 @@
     </section>
 
     <section>
-        <title>Figures, Tables, and Listings</title>
+        <title>Figures, Tables, Listings and Named Lists</title>
 
         <p>These are containers that carry titles, captions, and numbers and need to be filled with other (indivisable) items.  They have a mandatory <c>caption</c> (which can have no text, but will still produce a numbered caption), and may have a <c>title</c>, which could more appropriately be called a <term>heading</term>.  These are also called <term>captioned items</term>.</p>
 
@@ -1117,6 +1101,13 @@
                     Program |
                     Console
                 )
+            }
+        |
+            element list {
+                MetaDataCaption,
+                IntroductionText?,
+                List,
+                ConclusionText?
             }
         </fragment>
 
@@ -1233,7 +1224,6 @@
                 (AlignmentVertical | attribute valigns {text})?,
                 (
                     Figure |
-                    NamedList |
                     Poem |
                     Tabular |
                     Image |
@@ -2018,7 +2008,6 @@
         <fragment ref="blockquote" />
         <fragment ref="verbatimdisplay" />
         <fragment ref="list" />
-        <fragment ref="namedlist" />
         <fragment ref="definition-like" />
         <fragment ref="theorem-like" />
         <fragment ref="axiom-like" />

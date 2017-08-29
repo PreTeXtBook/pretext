@@ -506,7 +506,6 @@
     <choice>
       <ref name="BlockText"/>
       <ref name="Figure"/>
-      <ref name="NamedList"/>
       <ref name="Aside"/>
       <ref name="SideBySide"/>
       <ref name="SideBySideGroup"/>
@@ -885,18 +884,6 @@
       </element>
     </choice>
   </define>
-  <define name="NamedList">
-    <element name="list">
-      <ref name="MetaDataTitleOptional"/>
-      <optional>
-        <ref name="IntroductionText"/>
-      </optional>
-      <ref name="List"/>
-      <optional>
-        <ref name="ConclusionText"/>
-      </optional>
-    </element>
-  </define>
   <define name="DefinitionLike">
     <ref name="MetaDataTitleOptional"/>
     <zeroOrMore>
@@ -1217,6 +1204,16 @@
           <ref name="Console"/>
         </choice>
       </element>
+      <element name="list">
+        <ref name="MetaDataCaption"/>
+        <optional>
+          <ref name="IntroductionText"/>
+        </optional>
+        <ref name="List"/>
+        <optional>
+          <ref name="ConclusionText"/>
+        </optional>
+      </element>
     </choice>
   </define>
   <define name="SideBySide">
@@ -1239,7 +1236,6 @@
       <oneOrMore>
         <choice>
           <ref name="Figure"/>
-          <ref name="NamedList"/>
           <ref name="Poem"/>
           <ref name="Tabular"/>
           <ref name="Image"/>

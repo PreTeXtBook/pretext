@@ -492,7 +492,6 @@
     <xs:choice>
       <xs:group ref="BlockText"/>
       <xs:group ref="Figure"/>
-      <xs:element ref="list"/>
       <xs:group ref="Aside"/>
       <xs:group ref="SideBySide"/>
       <xs:element ref="sbsgroup"/>
@@ -895,17 +894,6 @@
       </xs:element>
     </xs:choice>
   </xs:group>
-  <xs:element name="list">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:group ref="MetaDataTitleOptional"/>
-        <xs:group minOccurs="0" ref="IntroductionText"/>
-        <xs:group ref="List"/>
-        <xs:group minOccurs="0" ref="ConclusionText"/>
-      </xs:sequence>
-      <xs:attributeGroup ref="MetaDataTitleOptional"/>
-    </xs:complexType>
-  </xs:element>
   <xs:complexType name="DefinitionLike">
     <xs:sequence>
       <xs:group ref="MetaDataTitleOptional"/>
@@ -1141,6 +1129,7 @@
       <xs:element ref="figure"/>
       <xs:element ref="table"/>
       <xs:element ref="listing"/>
+      <xs:element ref="list"/>
     </xs:choice>
   </xs:group>
   <xs:element name="figure">
@@ -1180,13 +1169,25 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  <xs:element name="list">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="MetaDataCaption">
+          <xs:sequence>
+            <xs:group minOccurs="0" ref="IntroductionText"/>
+            <xs:group ref="List"/>
+            <xs:group minOccurs="0" ref="ConclusionText"/>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:group name="SideBySide">
     <xs:sequence>
       <xs:element name="sidebyside">
         <xs:complexType>
           <xs:choice maxOccurs="unbounded">
             <xs:group ref="Figure"/>
-            <xs:element ref="list"/>
             <xs:element ref="poem"/>
             <xs:group ref="Tabular"/>
             <xs:group ref="Image"/>
