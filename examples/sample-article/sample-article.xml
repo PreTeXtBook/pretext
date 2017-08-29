@@ -2727,7 +2727,7 @@ the xsltproc executable.
                 <p>A list can be wrapped with a <c>&lt;list&gt;</c> element, so that it earns a number, can be given a title and have an introduction and conclusion.  Cross-references to individual list items get a bit absurd as they are prefixed with the number of the list and then the number of the item, so conceivably you could get a number like <c>4.5.3:2.a.ii</c>.</p>
 
                 <list xml:id="list-colors-rainbow">
-                    <title>Colors of the Rainbow</title>
+                    <caption>Colors of the Rainbow</caption>
 
                     <introduction>
                         <p>Because the colors are always in the same order, an ordered list is natural here.  The colors change continuously, but are often divided up into large ranges that human perception can easily distinguish.</p>
@@ -5516,7 +5516,7 @@ the xsltproc executable.
                     <caption>Two named lists</caption>
                     <sidebyside widths="30% 60%" valign="top">
                         <list>
-                            <title>Sea Life</title>
+                            <caption>Sea Life</caption>
                             <introduction>
                                 <p>Dr. Seuss again.</p>
                             </introduction>
@@ -5528,7 +5528,7 @@ the xsltproc executable.
                             </ul>
                         </list>
                         <list xml:id="color-list-as-panel">
-                            <title>Color Shades</title>
+                            <caption>Color Shades</caption>
                             <idx><h>colors</h><h>shades</h></idx>
                             <ol>
                                 <li><p>Blue<ol>
@@ -6231,7 +6231,7 @@ the xsltproc executable.
                         </program>
                     </listing>
                     <list>
-                        <title>Colors Again</title>
+                        <caption>Colors Again</caption>
                         <introduction>
                             <p>We have named list of colors.</p>
                         </introduction>
