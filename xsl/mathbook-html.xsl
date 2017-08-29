@@ -7669,8 +7669,8 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- JSXGraph -->
 <xsl:template name="jsxgraph">
     <xsl:if test="$b-has-jsxgraph">
-        <link rel="stylesheet" type="text/css" href="http://jsxgraph.uni-bayreuth.de/distrib/jsxgraph.css" />
-        <script type="text/javascript" src="http://jsxgraph.uni-bayreuth.de/distrib/jsxgraphcore.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraph.css" />
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/latest/jsxgraphcore.js"></script>
     </xsl:if>
 </xsl:template>
 
