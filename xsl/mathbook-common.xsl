@@ -429,6 +429,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- the presence of certain elements -->
 <xsl:variable name="b-has-jsxgraph" select="boolean($document-root//jsxgraph)" />
 
+<!-- Some groups of elements are counted distinct -->
+<!-- from other blocks.  A configuration element  -->
+<!-- in "docinfo" is indicative of this           -->
+<xsl:variable name="b-number-figure-distinct" select="boolean($docinfo/numbering/figures)" />
+<!-- project historical default, switch it -->
+<xsl:variable name="b-number-project-distinct" select="true()" />
+<!-- exercise historical default -->
+<xsl:variable name="b-number-exercise-distinct" select="false()" />
 
 <!-- We read the document language translation -->
 <!-- nodes out of the right file, which relies -->
@@ -2671,54 +2679,281 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:value-of select="$raw-subtree-level + $root-level" />
 </xsl:template>
 
-<!-- Note on tables and figures:                      -->
-<!-- If these live in "sidebyside", which is in       -->
-<!-- turn contained in a "figure", then they will     -->
-<!-- earn a subcaption with a subnumber, so we ignore -->
-<!-- them in these counts of top-level numbered items -->
-<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise|&FIGURE-LIKE;" mode="serial-number">
+<!-- "Blocks" can be counted "all together," or some types may be "split out." -->
+<!--                                                                           -->
+<!-- Definitions, theorems, axioms, remarks, and examples always go together.  -->
+<!-- Projects, figures, and inline exercises may be split out individually.    -->
+<!--                                                                           -->
+<!-- For each of these items, we count the predecessors within each of the     -->
+<!-- four subgroups.  So every item has four "atomic" numbers.  The "block"    -->
+<!-- count may, or may not, contain the three other counts as determined by    -->
+<!-- options selected through the "docinfo/numbering" configuration.           -->
+
+
+<!-- Serial Numbers: Fundamental Blocks (Theorems, Etc.) -->
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;" mode="serial-number">
+    <xsl:apply-templates select="." mode="overall-blocks-serial-number" />
+</xsl:template>
+
+<!-- Serial Numbers: Projects -->
+<xsl:template match="&PROJECT-LIKE;" mode="serial-number">
+    <xsl:choose>
+        <xsl:when test="$b-number-project-distinct">
+            <xsl:apply-templates select="." mode="atomic-project-serial-number" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="overall-blocks-serial-number" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Serial Numbers: Figures -->
+<xsl:template match="&FIGURE-LIKE;|list" mode="serial-number">
+    <xsl:choose>
+        <xsl:when test="$b-number-figure-distinct">
+            <xsl:apply-templates select="." mode="atomic-figure-serial-number" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="overall-blocks-serial-number" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Serial Numbers: Inline Exercises -->
+<xsl:template match="exercise" mode="serial-number">
+    <xsl:choose>
+        <xsl:when test="$b-number-exercise-distinct">
+            <xsl:apply-templates select="." mode="atomic-exercise-serial-number" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="overall-blocks-serial-number" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- We accumulate counts for any elements     -->
+<!-- included in the grand, overall block      -->
+<!-- count, while excluding those not included -->
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|exercise" mode="overall-blocks-serial-number">
+    <!-- always count fundamental blocks -->
+    <xsl:variable name="atomic-block">
+        <xsl:apply-templates select="." mode="atomic-block-serial-number" />
+    </xsl:variable>
+    <!-- include project count? -->
+    <xsl:variable name="atomic-project">
+        <xsl:choose>
+            <xsl:when test="$b-number-project-distinct">
+                <xsl:value-of select="0" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="atomic-project-serial-number" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- include figure count? -->
+    <xsl:variable name="atomic-figure">
+        <xsl:choose>
+            <xsl:when test="$b-number-figure-distinct">
+                <xsl:value-of select="0" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="atomic-figure-serial-number" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- include exercise count? -->
+    <xsl:variable name="atomic-exercise">
+        <xsl:choose>
+            <xsl:when test="$b-number-exercise-distinct">
+                <xsl:value-of select="0" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="atomic-exercise-serial-number" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Add four groups and report -->
+    <xsl:value-of select="$atomic-block + $atomic-project + $atomic-figure + $atomic-exercise" />
+</xsl:template>
+
+<!-- Atomic block serial number -->
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|exercise" mode="atomic-block-serial-number">
     <xsl:variable name="subtree-level">
         <xsl:apply-templates select="." mode="absolute-subtree-level">
             <xsl:with-param name="numbering-items" select="$numbering-theorems" />
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" /></xsl:when>
-        <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" /></xsl:when>
-        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/backmatter/appendix" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" /></xsl:when>
-        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/backmatter/appendix" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" /></xsl:when>
-        <xsl:when test="$subtree-level=3"><xsl:number from="subsection" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" /></xsl:when>
-        <xsl:when test="$subtree-level=4"><xsl:number from="subsubsection" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|exercise[not(ancestor::exercises)]|figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" /></xsl:when>
+        <xsl:when test="$subtree-level=-1">
+            <xsl:number from="book|article|letter|memo" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=0">
+            <xsl:number from="part" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=1">
+            <xsl:number from="chapter|book/backmatter/appendix" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=2">
+            <xsl:number from="section|article/backmatter/appendix" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=3">
+            <xsl:number from="subsection" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=4">
+            <xsl:number from="subsubsection" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;" />
+        </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Subtree level for theorem number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
+            <xsl:message>MBX:ERROR: Subtree level for atomic block number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
-<!-- Proofs may be numbered (for cross-reference knowls) -->
-<xsl:template match="proof" mode="serial-number">
-    <xsl:number />
-</xsl:template>
 
-<!-- Serial Numbers: Projects -->
-<!-- Category that gets their own numbering scheme -->
-<xsl:template match="&PROJECT-LIKE;" mode="serial-number">
+<!-- Atomic project serial number -->
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|exercise" mode="atomic-project-serial-number">
     <xsl:variable name="subtree-level">
         <xsl:apply-templates select="." mode="absolute-subtree-level">
             <xsl:with-param name="numbering-items" select="$numbering-projects" />
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="&PROJECT-LIKE;" /></xsl:when>
-        <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="&PROJECT-LIKE;" /></xsl:when>
-        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/backmatter/appendix" level="any" count="&PROJECT-LIKE;" /></xsl:when>
-        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/backmatter/appendix" level="any" count="&PROJECT-LIKE;" /></xsl:when>
-        <xsl:when test="$subtree-level=3"><xsl:number from="subsection" level="any" count="&PROJECT-LIKE;" /></xsl:when>
-        <xsl:when test="$subtree-level=4"><xsl:number from="subsubsection" level="any" count="&PROJECT-LIKE;" /></xsl:when>
+        <xsl:when test="$subtree-level=-1">
+            <xsl:number from="book|article|letter|memo" level="any" count="&PROJECT-LIKE;" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=0">
+            <xsl:number from="part" level="any" count="&PROJECT-LIKE;" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=1">
+            <xsl:number from="chapter|book/backmatter/appendix" level="any" count="&PROJECT-LIKE;" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=2">
+            <xsl:number from="section|article/backmatter/appendix" level="any" count="&PROJECT-LIKE;" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=3">
+            <xsl:number from="subsection" level="any" count="&PROJECT-LIKE;" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=4">
+            <xsl:number from="subsubsection" level="any" count="&PROJECT-LIKE;" />
+        </xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for project number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- Atomic figure serial number -->
+<!-- Note that since these are captioned items:       -->
+<!-- If these live in "sidebyside", which is in       -->
+<!-- turn contained in a "figure", then they will     -->
+<!-- earn a subcaption with a subnumber, so we ignore -->
+<!-- them in these counts of top-level numbered items -->
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|exercise" mode="atomic-figure-serial-number">
+    <xsl:variable name="subtree-level">
+        <xsl:choose>
+            <xsl:when test="$b-number-figure-distinct">
+                <xsl:apply-templates select="." mode="absolute-subtree-level">
+                    <xsl:with-param name="numbering-items" select="$docinfo/numbering/figures/@level" />
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="absolute-subtree-level">
+                    <xsl:with-param name="numbering-items" select="$numbering-theorems" />
+                </xsl:apply-templates>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$subtree-level=-1">
+            <xsl:number from="book|article|letter|memo" level="any"
+                count="figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
+                table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
+                listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
+                list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=0">
+            <xsl:number from="part" level="any"
+                count="figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
+                table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
+                listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
+                list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=1">
+            <xsl:number from="chapter|book/backmatter/appendix" level="any"
+                count="figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
+                table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
+                listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
+                list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=2">
+            <xsl:number from="section|article/backmatter/appendix" level="any"
+                count="figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
+                table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
+                listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
+                list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=3">
+            <xsl:number from="subsection" level="any"
+                count="figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
+                table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
+                listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
+                list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=4">
+            <xsl:number from="subsubsection" level="any"
+                count="figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
+                table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
+                listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
+                list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: Subtree level for atomic figure number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Atomic inline exercise serial number -->
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise|&FIGURE-LIKE;" mode="atomic-exercise-serial-number">
+    <xsl:variable name="subtree-level">
+        <xsl:apply-templates select="." mode="absolute-subtree-level">
+            <xsl:with-param name="numbering-items" select="$numbering-theorems" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$subtree-level=-1">
+            <xsl:number from="book|article|letter|memo" level="any"
+                count="exercise[not(ancestor::exercises)]" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=0">
+            <xsl:number from="part" level="any"
+                count="exercise[not(ancestor::exercises)]" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=1">
+            <xsl:number from="chapter|book/backmatter/appendix" level="any"
+                count="exercise[not(ancestor::exercises)]" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=2">
+            <xsl:number from="section|article/backmatter/appendix" level="any"
+                count="exercise[not(ancestor::exercises)]" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=3">
+            <xsl:number from="subsection" level="any"
+                count="exercise[not(ancestor::exercises)]" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=4">
+            <xsl:number from="subsubsection" level="any"
+                count="exercise[not(ancestor::exercises)]" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR: Subtree level for atomic exercise number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
+<!-- Proofs may be numbered (for cross-reference knowls) -->
+<xsl:template match="proof" mode="serial-number">
+    <xsl:number />
+</xsl:template>
+
 
 <!-- Serial Numbers: Equations -->
 <!-- We determine the appropriate subtree to count within  -->
@@ -2806,9 +3041,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- when inside a sbsgroup, subcaptions range across entire group -->
-<xsl:template match="figure/sbsgroup/sidebyside/figure | figure/sbsgroup/sidebyside/table | figure/sbsgroup/sidebyside/listing" mode="serial-number">
+<xsl:template match="figure/sbsgroup/sidebyside/figure | figure/sbsgroup/sidebyside/table | figure/sbsgroup/sidebyside/listing | figure/sbsgroup/sidebyside/list" mode="serial-number">
     <xsl:text>(</xsl:text>
-    <xsl:number format="a" count="figure|table|listing" level="any" from="sbsgroup"/>
+    <xsl:number format="a" count="figure|table|listing|list" level="any" from="sbsgroup"/>
     <xsl:text>)</xsl:text>
 </xsl:template>
 
@@ -3031,7 +3266,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Structure Numbers: Theorems, Examples, Projects, Inline Exercises, Figures -->
-<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise|&FIGURE-LIKE;" mode="structure-number">
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|exercise" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-theorems" />
         <xsl:with-param name="pad" select="'yes'" />
@@ -3041,6 +3276,24 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="&PROJECT-LIKE;"  mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-projects" />
+        <xsl:with-param name="pad" select="'yes'" />
+    </xsl:apply-templates>
+</xsl:template>
+<!-- FIGURE-LIKE get a structure number from default $numbering-theorems -->
+<!-- or from "docinfo" independent numbering configuration               -->
+<xsl:template match="&FIGURE-LIKE;|list"  mode="structure-number">
+    <xsl:variable name="figure-levels">
+        <xsl:choose>
+            <xsl:when test="$b-number-figure-distinct">
+                <xsl:value-of select="$docinfo/numbering/figures/@level" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$numbering-theorems" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:apply-templates select="." mode="multi-number">
+        <xsl:with-param name="levels" select="$figure-levels" />
         <xsl:with-param name="pad" select="'yes'" />
     </xsl:apply-templates>
 </xsl:template>
