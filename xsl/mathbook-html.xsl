@@ -1409,7 +1409,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- build xref-knowl, and optionally a hidden-knowl duplicate -->
-<xsl:template match="fn|li|men|md|mdn|p|blockquote|&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|list|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|&FIGURE-LIKE;|paragraphs|exercise|exercisegroup|webwork[*|@*]|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|biblio|biblio/note|contributor" mode="xref-knowl">
+<xsl:template match="fn|li|men|md|mdn|p|blockquote|&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|&FIGURE-LIKE;|paragraphs|exercise|exercisegroup|webwork[*|@*]|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|biblio|biblio/note|contributor" mode="xref-knowl">
     <!-- a generally available cross-reference knowl file, of duplicated content -->
     <xsl:apply-templates select="." mode="manufacture-knowl">
         <xsl:with-param name="knowl-type" select="'xref'" />
@@ -1721,7 +1721,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (7) TODO: "wrapped-content" called by "body" to separate code. -->
 
-<xsl:template match="li|me|men|md|mdn|fn|biblio|p|blockquote|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|list|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|webwork[*|@*]|paragraphs|exercise|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|biblio/note|contributor">
+<xsl:template match="li|me|men|md|mdn|fn|biblio|p|blockquote|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|assemblage|objectives|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|exercisegroup|webwork[*|@*]|paragraphs|exercise|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|biblio/note|contributor">
     <xsl:param name="b-original" select="true()" />
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
@@ -2183,7 +2183,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>article</xsl:text>
 </xsl:template>
 
-<xsl:template match="&FIGURE-LIKE;|list" mode="body-element">
+<xsl:template match="&FIGURE-LIKE;" mode="body-element">
     <xsl:text>figure</xsl:text>
 </xsl:template>
 
@@ -2265,7 +2265,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>theorem-like</xsl:text>
 </xsl:template>
 
-<xsl:template match="&FIGURE-LIKE;|list" mode="body-css-class">
+<xsl:template match="&FIGURE-LIKE;" mode="body-css-class">
     <xsl:text>figure-like</xsl:text>
 </xsl:template>
 
@@ -2321,7 +2321,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|&FIGURE-LIKE;|list" mode="birth-element">
+<xsl:template match="&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|&FIGURE-LIKE;" mode="birth-element">
     <xsl:text>div</xsl:text>
 </xsl:template>
 
@@ -2474,7 +2474,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="fn|blockquote|&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|case|proof|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|&FIGURE-LIKE;|list|paragraphs|exercisegroup|exercise|hint|answer|solution|biblio|biblio/note|contributor" mode="body">
+<xsl:template match="fn|blockquote|&DEFINITION-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|case|proof|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|objectives|&THEOREM-LIKE;|&AXIOM-LIKE;|&FIGURE-LIKE;|paragraphs|exercisegroup|exercise|hint|answer|solution|biblio|biblio/note|contributor" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
     <!-- prelude beforehand, when original -->
@@ -2549,7 +2549,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
             </xsl:when>
-            <xsl:when test="&FIGURE-FILTER;">
+            <!-- the two following could best be -->
+            <!-- combined as test="&FIGURE-FILTER;" -->
+            <xsl:when test="self::figure or self::table or self::listing">
                 <!-- do we just kill captions as metadata? -->
                 <xsl:apply-templates select="*[not(self::caption)]">
                     <xsl:with-param name="b-original" select="$b-original" />
@@ -2809,7 +2811,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- no heading, since captioned -->
-<xsl:template match="&FIGURE-LIKE;|list" mode="heading-xref-knowl" />
+<xsl:template match="&FIGURE-LIKE;" mode="heading-xref-knowl" />
 
 <xsl:template match="hint|answer|solution|biblio/note" mode="heading-xref-knowl">
     <xsl:apply-templates select="." mode="heading-full" />
@@ -5099,7 +5101,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Override to turn off cross-references as knowls          -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|list|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|paragraphs|objectives|exercise|webwork|hint|answer|solution|exercisegroup|me|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|blockquote|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|paragraphs|objectives|exercise|webwork|hint|answer|solution|exercisegroup|me|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">

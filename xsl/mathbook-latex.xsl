@@ -5992,6 +5992,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- xml:id, so we just pawn off the contents        -->
 <!-- (one only!) to the other routines               -->
 <!-- NB: sync with "panel-id" hack below             -->
+<!-- NB: "list" is handled with \parbox above        -->
 <xsl:template match="figure|table|listing" mode="panel-latex-box">
     <xsl:param name="width" />
     <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-latex-box">

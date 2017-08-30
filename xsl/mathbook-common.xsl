@@ -1939,7 +1939,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- descended introduction or conclusion .                          -->
 <!-- Also, list items are considered blocks.                         -->
 <!-- NB: we don't point to a sidebyside, so not included here        -->
-<xsl:template match="md|mdn|ul|ol|dl|blockquote|pre|sage|&FIGURE-LIKE;|poem|program|image|tabular|paragraphs|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|exercise|li" mode="is-block">
+<xsl:template match="md|mdn|ul|ol|dl|blockquote|pre|sage|&FIGURE-LIKE;|poem|program|image|tabular|paragraphs|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise|li" mode="is-block">
     <xsl:value-of select="true()" />
 </xsl:template>
 
@@ -2708,7 +2708,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Serial Numbers: Figures -->
-<xsl:template match="&FIGURE-LIKE;|list" mode="serial-number">
+<xsl:template match="&FIGURE-LIKE;" mode="serial-number">
     <xsl:choose>
         <xsl:when test="$b-number-figure-distinct">
             <xsl:apply-templates select="." mode="atomic-figure-serial-number" />
@@ -2734,7 +2734,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- We accumulate counts for any elements     -->
 <!-- included in the grand, overall block      -->
 <!-- count, while excluding those not included -->
-<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|exercise" mode="overall-blocks-serial-number">
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|exercise" mode="overall-blocks-serial-number">
     <!-- always count fundamental blocks -->
     <xsl:variable name="atomic-block">
         <xsl:apply-templates select="." mode="atomic-block-serial-number" />
@@ -2777,7 +2777,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Atomic block serial number -->
-<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|exercise" mode="atomic-block-serial-number">
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|exercise" mode="atomic-block-serial-number">
     <xsl:variable name="subtree-level">
         <xsl:apply-templates select="." mode="absolute-subtree-level">
             <xsl:with-param name="numbering-items" select="$numbering-theorems" />
@@ -2809,7 +2809,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Atomic project serial number -->
-<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|exercise" mode="atomic-project-serial-number">
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|exercise" mode="atomic-project-serial-number">
     <xsl:variable name="subtree-level">
         <xsl:apply-templates select="." mode="absolute-subtree-level">
             <xsl:with-param name="numbering-items" select="$numbering-projects" />
@@ -2846,7 +2846,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- turn contained in a "figure", then they will     -->
 <!-- earn a subcaption with a subnumber, so we ignore -->
 <!-- them in these counts of top-level numbered items -->
-<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|exercise" mode="atomic-figure-serial-number">
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|exercise" mode="atomic-figure-serial-number">
     <xsl:variable name="subtree-level">
         <xsl:choose>
             <xsl:when test="$b-number-figure-distinct">
@@ -2911,7 +2911,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Atomic inline exercise serial number -->
-<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|list|exercise|&FIGURE-LIKE;" mode="atomic-exercise-serial-number">
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|exercise|&FIGURE-LIKE;" mode="atomic-exercise-serial-number">
     <xsl:variable name="subtree-level">
         <xsl:apply-templates select="." mode="absolute-subtree-level">
             <xsl:with-param name="numbering-items" select="$numbering-theorems" />
@@ -3281,7 +3281,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 <!-- FIGURE-LIKE get a structure number from default $numbering-theorems -->
 <!-- or from "docinfo" independent numbering configuration               -->
-<xsl:template match="&FIGURE-LIKE;|list"  mode="structure-number">
+<xsl:template match="&FIGURE-LIKE;"  mode="structure-number">
     <xsl:variable name="figure-levels">
         <xsl:choose>
             <xsl:when test="$b-number-figure-distinct">
