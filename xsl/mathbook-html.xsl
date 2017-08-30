@@ -3794,8 +3794,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- of the remaining space.                                      -->
 <xsl:template name="relative-width">
     <xsl:param name="width" />
-    <xsl:param name="margins" />
-    <xsl:value-of select="(100 * substring-before($width, '%')) div (100 - 2 * substring-before($margins, '%'))" />
+    <xsl:param name="left-margin" />
+    <xsl:param name="right-margin" />
+    <xsl:value-of select="(100 * substring-before($width, '%')) div (100 - substring-before($left-margin, '%') - substring-before($right-margin, '%'))" />
     <xsl:text>%</xsl:text>
 </xsl:template>
 
@@ -3807,7 +3808,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- else we write an empty div to occupy the space -->
 <xsl:template match="*" mode="panel-heading">
     <xsl:param name="width" />
-    <xsl:param name="margins" />
+    <xsl:param name="left-margin" />
+    <xsl:param name="right-margin" />
     <xsl:element name="h5">
         <xsl:attribute name="class">
             <xsl:text>sbsheader</xsl:text>
@@ -3816,7 +3818,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>width:</xsl:text>
             <xsl:call-template name="relative-width">
                 <xsl:with-param name="width" select="$width" />
-                <xsl:with-param name="margins" select="$margins" />
+                <xsl:with-param name="left-margin"  select="$left-margin" />
+                <xsl:with-param name="right-margin" select="$right-margin" />
             </xsl:call-template>
             <xsl:text>;</xsl:text>
             <xsl:if test="$sbsdebug">
@@ -3840,7 +3843,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
 
     <xsl:param name="width" />
-    <xsl:param name="margins" />
+    <xsl:param name="left-margin" />
+    <xsl:param name="right-margin" />
     <xsl:param name="valign" />
     <xsl:element name="div">
         <xsl:attribute name="class">
@@ -3860,7 +3864,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>width:</xsl:text>
             <xsl:call-template name="relative-width">
                 <xsl:with-param name="width" select="$width" />
-                <xsl:with-param name="margins" select="$margins" />
+                <xsl:with-param name="left-margin"  select="$left-margin" />
+                <xsl:with-param name="right-margin" select="$right-margin" />
             </xsl:call-template>
             <xsl:text>;</xsl:text>
             <!-- assumes "sbspanel" class set vertical direction -->
@@ -3897,7 +3902,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See more at utility template immediately following  -->
 <xsl:template match="*" mode="panel-caption">
     <xsl:param name="width" />
-    <xsl:param name="margins" />
+    <xsl:param name="left-margin" />
+    <xsl:param name="right-margin" />
 
     <xsl:choose>
         <!-- interior to a figure'd sidebyside        -->
@@ -3905,7 +3911,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="caption and (parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)">
             <xsl:apply-templates select="caption" mode="subcaption">
                 <xsl:with-param name="width" select="$width" />
-                <xsl:with-param name="margins" select="$margins" />
+                <xsl:with-param name="left-margin" select="$left-margin" />
+                <xsl:with-param name="right-margin" select="$right-margin" />
             </xsl:apply-templates>
         </xsl:when>
         <!-- a caption'ed item, normal numbering      -->
@@ -3913,7 +3920,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="caption">
             <xsl:apply-templates select="caption" >
                 <xsl:with-param name="width" select="$width" />
-                <xsl:with-param name="margins" select="$margins" />
+                <xsl:with-param name="left-margin" select="$left-margin" />
+                <xsl:with-param name="right-margin" select="$right-margin" />
             </xsl:apply-templates>
         </xsl:when>
         <!-- fill the space (properly) -->
@@ -3921,7 +3929,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <figcaption>
                 <xsl:call-template name="sbs-caption-attributes">
                     <xsl:with-param name="width" select="$width" />
-                    <xsl:with-param name="margins" select="$margins" />
+                    <xsl:with-param name="left-margin" select="$left-margin" />
+                    <xsl:with-param name="right-margin" select="$right-margin" />
                 </xsl:call-template>
             </figcaption>
         </xsl:otherwise>
@@ -3935,7 +3944,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- two modal templates for a caption when signaled     -->
 <xsl:template name="sbs-caption-attributes">
     <xsl:param name="width" />
-    <xsl:param name="margins" />
+    <xsl:param name="left-margin" />
+    <xsl:param name="right-margin" />
     <xsl:attribute name="class">
         <xsl:text>sbscaption</xsl:text>
     </xsl:attribute>
@@ -3943,7 +3953,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>width:</xsl:text>
         <xsl:call-template name="relative-width">
             <xsl:with-param name="width" select="$width" />
-            <xsl:with-param name="margins" select="$margins" />
+            <xsl:with-param name="left-margin"  select="$left-margin" />
+            <xsl:with-param name="right-margin" select="$right-margin" />
         </xsl:call-template>
         <xsl:text>;</xsl:text>
         <xsl:if test="$sbsdebug">
@@ -3968,7 +3979,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="panels" />
     <xsl:param name="captions" />
 
-    <xsl:variable name="margins" select="$layout/margins" />
+    <xsl:variable name="left-margin"  select="$layout/left-margin" />
+    <xsl:variable name="right-margin" select="$layout/right-margin" />
 
     <!-- A "sidebyside" div, to contain headings,  -->
     <!-- panels, captions rows as "sbsrow" divs -->
@@ -4001,10 +4013,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- margins are custom from source -->
                 <xsl:attribute name="style">
                     <xsl:text>margin-left:</xsl:text>
-                    <xsl:value-of select="$margins" />
+                    <xsl:value-of select="$left-margin" />
                     <xsl:text>;</xsl:text>
                     <xsl:text>margin-right:</xsl:text>
-                    <xsl:value-of select="$margins" />
+                    <xsl:value-of select="$right-margin" />
                     <xsl:text>;</xsl:text>
                     <xsl:if test="$sbsdebug">
                         <xsl:text>box-sizing: border-box;</xsl:text>
@@ -4025,10 +4037,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- margins are custom from source -->
             <xsl:attribute name="style">
                 <xsl:text>margin-left:</xsl:text>
-                <xsl:value-of select="$margins" />
+                <xsl:value-of select="$left-margin" />
                 <xsl:text>;</xsl:text>
                 <xsl:text>margin-right:</xsl:text>
-                <xsl:value-of select="$margins" />
+                <xsl:value-of select="$right-margin" />
                 <xsl:text>;</xsl:text>
                 <xsl:if test="$sbsdebug">
                     <xsl:text>box-sizing: border-box;</xsl:text>
@@ -4051,10 +4063,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- margins are custom from source -->
                 <xsl:attribute name="style">
                     <xsl:text>margin-left:</xsl:text>
-                    <xsl:value-of select="$margins" />
+                    <xsl:value-of select="$left-margin" />
                     <xsl:text>;</xsl:text>
                     <xsl:text>margin-right:</xsl:text>
-                    <xsl:value-of select="$margins" />
+                    <xsl:value-of select="$right-margin" />
                     <xsl:text>;</xsl:text>
                     <xsl:if test="$sbsdebug">
                         <xsl:text>box-sizing: border-box;</xsl:text>
@@ -5029,14 +5041,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- All the relevant information is in the parent  -->
 <xsl:template match="caption">
     <xsl:param name="width" />
-    <xsl:param name="margins" />
+    <xsl:param name="left-margin" />
+    <xsl:param name="right-margin" />
     <figcaption>
-        <!-- $width and $margins are sentinels for -->
-        <!-- sidebyside width control attributes   -->
-        <xsl:if test="$width or $margins">
+        <!-- $width, $left-margin, $right-margin are sentinels -->
+        <!-- for sidebyside width control attributes           -->
+        <xsl:if test="$width or $left-margin or $right-margin">
             <xsl:call-template name="sbs-caption-attributes">
                 <xsl:with-param name="width" select="$width" />
-                <xsl:with-param name="margins" select="$margins" />
+                <xsl:with-param name="left-margin" select="$left-margin" />
+                <xsl:with-param name="right-margin" select="$right-margin" />
             </xsl:call-template>
         </xsl:if>
         <span class="heading">
@@ -5053,14 +5067,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- which is a formatted  (a), (b), (c),...      -->
 <xsl:template match="caption" mode="subcaption">
     <xsl:param name="width" />
-    <xsl:param name="margins" />
+    <xsl:param name="left-margin" />
+    <xsl:param name="right-margin" />
     <figcaption>
         <!-- $width and $margins are sentinels for -->
         <!-- sidebyside width control attributes   -->
         <xsl:if test="$width or $margins">
             <xsl:call-template name="sbs-caption-attributes">
                 <xsl:with-param name="width" select="$width" />
-                <xsl:with-param name="margins" select="$margins" />
+                <xsl:with-param name="left-margin" select="$left-margin" />
+                <xsl:with-param name="right-margin" select="$right-margin" />
             </xsl:call-template>
         </xsl:if>
         <!-- no heading info in subcaption -->

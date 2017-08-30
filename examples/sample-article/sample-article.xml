@@ -5011,6 +5011,26 @@ the xsltproc executable.
                 <sidebyside width="10%" margins="25%">
                     <image source="images/cross-square.png"/>
                 </sidebyside>
+
+                <p>You might wish to place a single image flush-left, or flush-right.  You can specify the <c>margins</c> attribute as a pair of percentages for different left and right margins.  The following are laid out with two margins, with a 0<percent /> left margin and right margin (respectively). </p>
+
+                <sidebyside width="10%" margins="0% 90%">
+                    <image source="images/cross-square.png"/>
+                </sidebyside>
+
+                <sidebyside width="10%" margins="90% 0%">
+                    <image source="images/cross-square.png"/>
+                </sidebyside>
+
+                <p>Results will be incorrect for the latter if the widths of the left margin and the panel do not add to 100<percent />.</p>
+
+                <p>Of course, asymmetric margins may be used with several panels.  The following is designed to leave a 25<percent /> gap between the two panels.</p>
+
+                <sidebyside width="10%" margins="45% 10%">
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
+                </sidebyside>
+
             </subsection>
             
             <subsection>

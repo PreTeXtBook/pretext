@@ -5797,7 +5797,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="captions" />
 
     <xsl:variable name="number-panels" select="$layout/number-panels" />
-    <xsl:variable name="margins" select="$layout/margins" />
+    <xsl:variable name="left-margin" select="$layout/left-margin" />
     <xsl:variable name="space-width" select="$layout/space-width" />
 
     <!-- protect a single side-by-side -->
@@ -5820,9 +5820,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(parent::figure) or not(parent::sbsgroup and preceding-sibling::sidebyside)">
         <xsl:text>\par\medskip\noindent&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="not($margins = '0%')">
+    <xsl:if test="not($left-margin = '0%')">
         <xsl:text>\hspace*{</xsl:text>
-        <xsl:value-of select="substring-before($margins, '%') div 100" />
+        <xsl:value-of select="substring-before($left-margin, '%') div 100" />
         <xsl:text>\linewidth}%&#xa;</xsl:text>
     </xsl:if>
     <!-- @{} strips extreme left, right colsep and -->

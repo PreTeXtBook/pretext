@@ -3616,6 +3616,29 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:choose>
     </xsl:variable>
 
+    <!-- construct left and right margins, possibly identical      -->
+    <!-- these may be 'auto' and get updated later (hence "early") -->
+    <xsl:variable name="left-margin-early">
+        <xsl:choose>
+            <xsl:when test="contains($normalized-margins, ' ')">
+                <xsl:value-of select="substring-before($normalized-margins, ' ')" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$normalized-margins" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="right-margin-early">
+        <xsl:choose>
+            <xsl:when test="contains($normalized-margins, ' ')">
+                <xsl:value-of select="substring-after($normalized-margins, ' ')" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$normalized-margins" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
     <!-- total widths used/available    -->
     <!-- no attributes, use 100         -->
     <!-- no width, subtract two margins -->
@@ -3628,7 +3651,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:text>100</xsl:text>
             </xsl:when>
             <xsl:when test="$normalized-widths = ' '">
-                <xsl:value-of select="100 - 2 * substring-before($normalized-margins, '%')" />
+                <xsl:value-of select="100 - substring-before($left-margin-early, '%') - substring-before($right-margin-early, '%')" />
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="sum-percentages">
@@ -3639,13 +3662,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:choose>
     </xsl:variable>
 
-    <!-- have width totals, determine margin         -->
+    <!-- have width totals, determine margins         -->
     <!-- automatic creates margins that will be half -->
     <!-- of the subsequent space-width computation   -->
     <!-- Input assumes % present (unless 'auto')     -->
     <!-- Output preserves % on result                -->
-    <!-- TODO: test margin is in [0%, 50%] -->
-    <xsl:variable name="margin">
+    <xsl:variable name="left-margin">
         <xsl:choose>
             <xsl:when test="$number-panels = 0">
                 <xsl:text>0%</xsl:text>
@@ -3656,24 +3678,44 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             </xsl:when>
             <!-- TODO: condition on % present, let otherwise report failure -->
             <xsl:otherwise>
-                <xsl:value-of select="$normalized-margins" />
+                <xsl:value-of select="$left-margin-early" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="right-margin">
+        <xsl:choose>
+            <xsl:when test="$number-panels = 0">
+                <xsl:text>0%</xsl:text>
+            </xsl:when>
+            <xsl:when test="$normalized-margins = 'auto'">
+                <xsl:value-of select="(100 - $sum-widths) div (2 * $number-panels)" />
+                <xsl:text>%</xsl:text>
+            </xsl:when>
+            <!-- TODO: condition on % present, let otherwise report failure -->
+            <xsl:otherwise>
+                <xsl:value-of select="$right-margin-early" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
     <xsl:if test="$sbsdebug">
-        <xsl:message>M:<xsl:value-of select="$margin" />:M</xsl:message>
+        <xsl:message>M:<xsl:value-of select="$left-margin" />:<xsl:value-of select="$right-margin" />:M</xsl:message>
     </xsl:if>
     <!-- error check for reasonable values -->
-    <xsl:if test="(substring-before($margin, '%') &lt; 0) or (substring-before($margin, '%') &gt; 50)">
-        <xsl:message>MBX:ERROR:   margins of a &lt;sidebyside&gt; ("<xsl:value-of select="$margin" />") is outside the interval [0%, 50%], (this may be computed, check consistency of "@margins" and "@widths")</xsl:message>
+    <xsl:if test="(substring-before($left-margin, '%') &lt; 0) or (substring-before($left-margin, '%') &gt; 100)">
+        <xsl:message>MBX:ERROR:   left margin of a &lt;sidebyside&gt; ("<xsl:value-of select="$left-margin" />") is outside the interval [0%, 100%], (this may be computed, check consistency of "@margins" and "@widths")</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+    <xsl:if test="(substring-before($right-margin, '%') &lt; 0) or (substring-before($right-margin, '%') &gt; 100)">
+        <xsl:message>MBX:ERROR:   right margin of a &lt;sidebyside&gt; ("<xsl:value-of select="$right-margin" />") is outside the interval [0%, 100%], (this may be computed, check consistency of "@margins" and "@widths")</xsl:message>
         <xsl:apply-templates select="." mode="location-report" />
     </xsl:if>
     <!-- Add to RTF -->
-    <!-- TODO: someday make a "left-margin" and put -->
-    <!-- "right-margin" as "gap" after last panel   -->
-    <margins>
-        <xsl:value-of select="$margin" />
-    </margins>
+    <left-margin>
+        <xsl:value-of select="$left-margin" />
+    </left-margin>
+    <right-margin>
+        <xsl:value-of select="$right-margin" />
+    </right-margin>
 
     <!-- if no widths given, distribute excess beyond margins -->
     <!-- NB: with percent signs, blank at end always          -->
@@ -3681,7 +3723,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="widths">
         <xsl:choose>
             <xsl:when test="$normalized-widths = ' '">
-                <xsl:variable name="common-width" select="(100 - 2 * substring-before($margin, '%')) div $number-panels" />
+                <xsl:variable name="common-width" select="(100 - substring-before($left-margin, '%') - substring-before($right-margin, '%')) div $number-panels" />
                 <!-- transfer as percentages (abstract), with blank at end -->
                 <xsl:call-template name="duplicate-string">
                      <xsl:with-param name="text" select="concat($common-width, '% ')" />
@@ -3727,7 +3769,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:text>0</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="(100 - $sum-widths - 2 * substring-before($margin, '%')) div ($number-panels - 1)" />
+                <xsl:value-of select="(100 - $sum-widths  - substring-before($left-margin, '%') - substring-before($right-margin, '%')) div ($number-panels - 1)" />
             </xsl:otherwise>
         </xsl:choose>
         <xsl:text>%</xsl:text>
@@ -3742,7 +3784,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:when>
         <xsl:when test="substring-before($space-width, '%') = 'NaN'">
-            <xsl:message>MBX:ERROR:   computed space between panels of a &lt;sidebyside&gt; is not a number (this value is computed, check that margins ("<xsl:value-of select="$margin" />") and widths ("<xsl:value-of select="$widths" />") are percentages of the form "nn%")</xsl:message>
+            <xsl:message>MBX:ERROR:   computed space between panels of a &lt;sidebyside&gt; is not a number (this value is computed, check that margins ("<xsl:value-of select="$left-margin" />, <xsl:value-of select="$right-margin" />") and widths ("<xsl:value-of select="$widths" />") are percentages of the form "nn%")</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:when>
     </xsl:choose>
@@ -3920,7 +3962,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:variable name="panel-number" select="count(preceding-sibling::*) + 1" />
                 <xsl:apply-templates select="." mode="panel-heading">
                     <xsl:with-param name="width" select="$layout/width[$panel-number]" />
-                    <xsl:with-param name="margins" select="$layout/margins" />
+                    <xsl:with-param name="left-margin" select="$layout/left-margin" />
+                    <xsl:with-param name="right-margin" select="$layout/right-margin" />
                 </xsl:apply-templates>
         </xsl:for-each>
     </xsl:variable>
@@ -3932,7 +3975,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:apply-templates select="." mode="panel-panel">
                 <xsl:with-param name="b-original" select="$b-original" />
                 <xsl:with-param name="width" select="$layout/width[$panel-number]" />
-                <xsl:with-param name="margins" select="$layout/margins" />
+                <xsl:with-param name="left-margin" select="$layout/left-margin" />
+                <xsl:with-param name="right-margin" select="$layout/right-margin" />
                 <xsl:with-param name="valign" select="$layout/valign[$panel-number]" />
             </xsl:apply-templates>
         </xsl:for-each>
@@ -3944,7 +3988,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:variable name="panel-number" select="count(preceding-sibling::*) + 1" />
             <xsl:apply-templates select="." mode="panel-caption">
                 <xsl:with-param name="width" select="$layout/width[$panel-number]" />
-                <xsl:with-param name="margins" select="$layout/margins" />
+                <xsl:with-param name="left-margin" select="$layout/left-margin" />
+                <xsl:with-param name="right-margin" select="$layout/right-margin" />
             </xsl:apply-templates>
         </xsl:for-each>
     </xsl:variable>
