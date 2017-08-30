@@ -1020,94 +1020,115 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Figures, Tables, Listings, Named Lists, Floats&#xa;</xsl:text>
         <xsl:text>%% The [H]ere option of the float package fixes floats in-place,&#xa;</xsl:text>
         <xsl:text>%% in deference to web usage, where floats are totally irrelevant&#xa;</xsl:text>
-        <xsl:text>%% We re/define the figure, table and listing environments, if used&#xa;</xsl:text>
-        <xsl:text>%%   1) New mbxfigure and/or mbxtable environments are defined with float package&#xa;</xsl:text>
-        <xsl:text>%%   2) Standard LaTeX environments redefined to use new environments&#xa;</xsl:text>
-        <xsl:text>%%   3) Standard LaTeX environments redefined to step theorem counter&#xa;</xsl:text>
-        <xsl:text>%%   4) Counter for new environments is set to the theorem counter before caption&#xa;</xsl:text>
-        <xsl:text>%% You can remove all this figure/table setup, to restore standard LaTeX behavior&#xa;</xsl:text>
+        <xsl:text>%% You can remove some of this setup, to restore standard LaTeX behavior&#xa;</xsl:text>
         <xsl:text>%% HOWEVER, numbering of figures/tables AND theorems/examples/remarks, etc&#xa;</xsl:text>
-        <xsl:text>%% WILL ALL de-synchronize with the numbering in the HTML version&#xa;</xsl:text>
-        <xsl:text>%% You can remove the [H] argument of the \newfloat command, to allow flotation and &#xa;</xsl:text>
+        <xsl:text>%% may de-synchronize with the numbering in the HTML version&#xa;</xsl:text>
+        <xsl:text>%% You can remove the "placement={H}" option to allow flotation and&#xa;</xsl:text>
         <xsl:text>%% preserve numbering, BUT the numbering may then appear "out-of-order"&#xa;</xsl:text>
+        <xsl:text>%% Floating environments: http://tex.stackexchange.com/questions/95631/&#xa;</xsl:text>
+        <!-- Float package defines the "H" specifier -->
         <xsl:text>\usepackage{float}&#xa;</xsl:text>
-        <xsl:text>\usepackage[bf]{caption} % http://tex.stackexchange.com/questions/95631/defining-a-new-type-of-floating-environment &#xa;</xsl:text>
         <xsl:text>\usepackage{newfloat}&#xa;</xsl:text>
+        <xsl:text>\usepackage[bf]{caption}&#xa;</xsl:text>
         <!-- captioned items subsidiary to a captioned figure -->
-        <xsl:if test="//figure/sidebyside/*[caption]">
+        <xsl:if test="$document-root//figure/sidebyside/*[caption]">
             <xsl:text>\usepackage{subcaption}&#xa;</xsl:text>
             <xsl:text>\captionsetup[subfigure]{labelformat=simple}&#xa;</xsl:text>
-            <xsl:text>\captionsetup[subtable]{labelformat=simple}&#xa;</xsl:text>
             <xsl:text>\renewcommand\thesubfigure{(\alph{subfigure})}&#xa;</xsl:text>
-            <xsl:text>\makeatletter&#xa;</xsl:text>
-            <xsl:text>% we plan to use subtables within figure environments, so they need to reset accordingly&#xa;</xsl:text>
-            <xsl:text>\@addtoreset{subtable}{figure}&#xa;</xsl:text>
-            <xsl:text>\makeatother&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="//figure">
-            <xsl:text>% Figure environment setup so that it no longer floats&#xa;</xsl:text>
+        <!-- if figures are numbered distinct from theorems, -->
+        <!-- then we need to inquire about its level         -->
+        <!-- $numbering-theorems from mathbook-common.xsl    -->
+        <xsl:variable name="figure-levels">
+            <xsl:choose>
+                <xsl:when test="$b-number-figure-distinct">
+                    <xsl:value-of select="$docinfo/numbering/figures/@level" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$numbering-theorems" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <!-- The "figure" counter is the lead for captioned items, -->
+        <!-- so if these are distinct, we make this environment    -->
+        <!-- just to make the counter, even if not explicitly used -->
+        <xsl:if test="$document-root//figure or $b-number-figure-distinct">
+            <xsl:text>%% Adjust figure environment so that it no longer floats&#xa;</xsl:text>
             <xsl:text>\SetupFloatingEnvironment{figure}{fileext=lof,placement={H},within=</xsl:text>
-            <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
             <xsl:choose>
-                <xsl:when test="$numbering-theorems = 0">
+                <xsl:when test="$figure-levels = 0">
                     <xsl:text>none</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:call-template name="level-number-to-latex-name">
-                        <xsl:with-param name="level" select="$numbering-theorems + $root-level" />
+                        <xsl:with-param name="level" select="$figure-levels + $root-level" />
                     </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:text>,name=</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'figure'" /></xsl:call-template>
+            <xsl:call-template name="type-name">
+                    <xsl:with-param name="string-id" select="'figure'" />
+            </xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
-            <xsl:text>% figures have the same number as theorems: http://tex.stackexchange.com/questions/16195/how-to-make-equations-figures-and-theorems-use-the-same-numbering-scheme &#xa;</xsl:text>
-            <xsl:text>\makeatletter&#xa;</xsl:text>
-            <xsl:text>\let\c@figure\c@theorem&#xa;</xsl:text>
-            <xsl:text>\makeatother&#xa;</xsl:text>
+            <xsl:if test="not($b-number-figure-distinct)">
+                <xsl:text>%% http://tex.stackexchange.com/questions/16195&#xa;</xsl:text>
+                <xsl:text>\makeatletter&#xa;</xsl:text>
+                <xsl:text>\let\c@figure\c@theorem&#xa;</xsl:text>
+                <xsl:text>\makeatother&#xa;</xsl:text>
+            </xsl:if>
         </xsl:if>
-        <xsl:if test="//table">
-            <xsl:text>% Table environment setup so that it no longer floats&#xa;</xsl:text>
+        <xsl:if test="$document-root//table">
+            <xsl:text>%% Adjust table environment so that it no longer floats&#xa;</xsl:text>
             <xsl:text>\SetupFloatingEnvironment{table}{fileext=lot,placement={H},within=</xsl:text>
-            <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
             <xsl:choose>
-                <xsl:when test="$numbering-theorems = 0">
+                <xsl:when test="$figure-levels = 0">
                     <xsl:text>none</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:call-template name="level-number-to-latex-name">
-                        <xsl:with-param name="level" select="$numbering-theorems + $root-level" />
+                        <xsl:with-param name="level" select="$figure-levels + $root-level" />
                     </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:text>,name=</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'table'" /></xsl:call-template>
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'table'" />
+            </xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
-            <xsl:text>% tables have the same number as theorems: http://tex.stackexchange.com/questions/16195/how-to-make-equations-figures-and-theorems-use-the-same-numbering-scheme &#xa;</xsl:text>
+            <!-- associate counter                  -->
+            <!--   if independent, then with figure -->
+            <!--   if grouped, then with theorem    -->
+            <xsl:text>%% http://tex.stackexchange.com/questions/16195&#xa;</xsl:text>
             <xsl:text>\makeatletter&#xa;</xsl:text>
-            <xsl:text>\let\c@table\c@theorem&#xa;</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-number-figure-distinct">
+                    <xsl:text>\let\c@table\c@figure&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>\let\c@table\c@theorem&#xa;</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:text>\makeatother&#xa;</xsl:text>
         </xsl:if>
         <!-- Listings do not float yet have semantic captions -->
-        <!-- New environment, new captiontype: -->
-        <!-- http://tex.stackexchange.com/questions/7210/label-and-caption-without-float -->
-        <!-- Within numbering argument: -->
-        <!-- http://tex.stackexchange.com/questions/115193/continuous-numbering-of-custom-float-with-caption-package -->
-        <!-- Caption formatting/style possibilities: -->
-        <!-- http://tex.stackexchange.com/questions/117531/styling-a-lstlisting-caption-using-caption-package -->
-        <xsl:if test="//listing">
-            <xsl:text>% Listing environment declared as new environment&#xa;</xsl:text>
+        <!-- New environment, new captiontype:                -->
+        <!-- http://tex.stackexchange.com/questions/7210      -->
+        <!-- Within numbering argument:                       -->
+        <!-- http://tex.stackexchange.com/questions/115193    -->
+        <!-- Caption formatting/style possibilities:          -->
+        <!-- http://tex.stackexchange.com/questions/117531    -->
+        <xsl:if test="$document-root//listing">
+            <xsl:text>%% Create "listing" environment&#xa;</xsl:text>
             <xsl:text>\newenvironment{listing}{\par\bigskip\noindent}{}&#xa;</xsl:text>
-            <xsl:text>% New caption type for numbering, style, etc.&#xa;</xsl:text>
+            <xsl:text>%% New caption type for numbering, style, etc.&#xa;</xsl:text>
             <xsl:text>\DeclareCaptionType[within=</xsl:text>
-            <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
             <xsl:choose>
-                <xsl:when test="$numbering-theorems = 0">
+                <xsl:when test="$figure-levels = 0">
                     <xsl:text>none</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:call-template name="level-number-to-latex-name">
-                        <xsl:with-param name="level" select="$numbering-theorems + $root-level" />
+                        <xsl:with-param name="level" select="$figure-levels + $root-level" />
                     </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
@@ -1117,33 +1138,53 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
             <xsl:text>]&#xa;</xsl:text>
             <xsl:text>\captionsetup[listingcaption]{aboveskip=1.0ex,belowskip=\baselineskip}&#xa;</xsl:text>
-            <xsl:text>%% listings have the same number as theorems:&#xa;</xsl:text>
-            <xsl:text>%% http://tex.stackexchange.com/questions/16195/how-to-make-equations-figures-and-theorems-use-the-same-numbering-scheme &#xa;</xsl:text>
+            <!-- associate counter                  -->
+            <!--   if independent, then with figure -->
+            <!--   if grouped, then with theorem    -->
+            <xsl:text>%% http://tex.stackexchange.com/questions/16195&#xa;</xsl:text>
             <xsl:text>\makeatletter&#xa;</xsl:text>
-            <xsl:text>\let\c@listingcaption\c@theorem&#xa;</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-number-figure-distinct">
+                    <xsl:text>\let\c@listingcaption\c@figure&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>\let\c@listingcaption\c@theorem&#xa;</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:text>\makeatother&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="$document-root//list">
-            <xsl:text>% List environment setup&#xa;</xsl:text>
+            <xsl:text>%% Create "named list" environment, non-floating&#xa;</xsl:text>
             <xsl:text>\DeclareFloatingEnvironment{namedlist}&#xa;</xsl:text>
             <xsl:text>\SetupFloatingEnvironment{namedlist}{fileext=lol,placement={H},within=</xsl:text>
-            <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
             <xsl:choose>
-                <xsl:when test="$numbering-theorems = 0">
+                <xsl:when test="$figure-levels = 0">
                     <xsl:text>none</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:call-template name="level-number-to-latex-name">
-                        <xsl:with-param name="level" select="$numbering-theorems + $root-level" />
+                        <xsl:with-param name="level" select="$figure-levels + $root-level" />
                     </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:text>,name=</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'list'" /></xsl:call-template>
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'list'" />
+            </xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
-            <xsl:text>% tables have the same number as theorems: http://tex.stackexchange.com/questions/16195/how-to-make-equations-figures-and-theorems-use-the-same-numbering-scheme &#xa;</xsl:text>
+            <!-- associate counter                  -->
+            <!--   if independent, then with figure -->
+            <!--   if grouped, then with theorem    -->
+            <xsl:text>%% http://tex.stackexchange.com/questions/16195&#xa;</xsl:text>
             <xsl:text>\makeatletter&#xa;</xsl:text>
-            <xsl:text>\let\c@namedlist\c@theorem&#xa;</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-number-figure-distinct">
+                    <xsl:text>\let\c@namedlist\c@figure&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>\let\c@namedlist\c@theorem&#xa;</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:text>\makeatother&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
