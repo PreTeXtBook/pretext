@@ -366,7 +366,11 @@
     <xs:complexType>
       <xs:sequence>
         <xs:group ref="MetaDataTitleOptional"/>
-        <xs:group maxOccurs="unbounded" ref="BlockText"/>
+        <xs:choice maxOccurs="unbounded">
+          <xs:group ref="BlockText"/>
+          <xs:group ref="SideBySideNoCaption"/>
+          <xs:group ref="SideBySideGroupNoCaption"/>
+        </xs:choice>
       </xs:sequence>
       <xs:attributeGroup ref="MetaDataTitleOptional"/>
     </xs:complexType>
@@ -387,7 +391,11 @@
     <xs:complexType>
       <xs:sequence>
         <xs:group ref="MetaDataTitleOptional"/>
-        <xs:group maxOccurs="unbounded" ref="BlockText"/>
+        <xs:choice maxOccurs="unbounded">
+          <xs:group ref="BlockText"/>
+          <xs:group ref="SideBySideNoCaption"/>
+          <xs:group ref="SideBySideGroupNoCaption"/>
+        </xs:choice>
       </xs:sequence>
       <xs:attributeGroup ref="MetaDataTitleOptional"/>
     </xs:complexType>
@@ -400,19 +408,22 @@
           <xs:sequence>
             <xs:choice maxOccurs="unbounded">
               <xs:group ref="BlockText"/>
-              <xs:group ref="SideBySideNoNumber"/>
+              <xs:group ref="SideBySideNoCaption"/>
+              <xs:group ref="SideBySideGroupNoCaption"/>
             </xs:choice>
             <xs:element minOccurs="0" maxOccurs="unbounded" ref="attribution"/>
           </xs:sequence>
           <xs:sequence>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
               <xs:group ref="BlockText"/>
-              <xs:group ref="SideBySideNoNumber"/>
+              <xs:group ref="SideBySideNoCaption"/>
+              <xs:group ref="SideBySideGroupNoCaption"/>
             </xs:choice>
             <xs:element ref="contributors"/>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
               <xs:group ref="BlockText"/>
-              <xs:group ref="SideBySideNoNumber"/>
+              <xs:group ref="SideBySideNoCaption"/>
+              <xs:group ref="SideBySideGroupNoCaption"/>
             </xs:choice>
           </xs:sequence>
         </xs:choice>
@@ -438,7 +449,8 @@
         <xs:complexType>
           <xs:choice maxOccurs="unbounded">
             <xs:group ref="BlockText"/>
-            <xs:group ref="SideBySideNoNumber"/>
+            <xs:group ref="SideBySideNoCaption"/>
+            <xs:group ref="SideBySideGroupNoCaption"/>
           </xs:choice>
         </xs:complexType>
       </xs:element>
@@ -494,7 +506,7 @@
       <xs:group ref="Figure"/>
       <xs:group ref="Aside"/>
       <xs:group ref="SideBySide"/>
-      <xs:element ref="sbsgroup"/>
+      <xs:group ref="SideBySideGroup"/>
       <xs:element ref="sage"/>
     </xs:choice>
   </xs:group>
@@ -1139,7 +1151,7 @@
           <xs:choice>
             <xs:group ref="Image"/>
             <xs:group ref="SideBySide"/>
-            <xs:element ref="sbsgroup"/>
+            <xs:group ref="SideBySideGroup"/>
             <xs:element ref="video"/>
             <xs:element ref="jsxgraph"/>
             <xs:element ref="score"/>
@@ -1182,6 +1194,21 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  <xs:attributeGroup name="SidebySideAttributes">
+    <xs:attribute name="margins"/>
+    <xs:attribute name="width"/>
+    <xs:attribute name="widths"/>
+    <xs:attribute name="valign">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="top"/>
+          <xs:enumeration value="middle"/>
+          <xs:enumeration value="bottom"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="valigns"/>
+  </xs:attributeGroup>
   <xs:group name="SideBySide">
     <xs:sequence>
       <xs:element name="sidebyside">
@@ -1199,24 +1226,12 @@
             <xs:element ref="paragraphs"/>
             <xs:group ref="List"/>
           </xs:choice>
-          <xs:attribute name="margins"/>
-          <xs:attribute name="width"/>
-          <xs:attribute name="widths"/>
-          <xs:attribute name="valign">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="top"/>
-                <xs:enumeration value="middle"/>
-                <xs:enumeration value="bottom"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="valigns"/>
+          <xs:attributeGroup ref="SidebySideAttributes"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
   </xs:group>
-  <xs:group name="SideBySideNoNumber">
+  <xs:group name="SideBySideNoCaption">
     <xs:sequence>
       <xs:element name="sidebyside">
         <xs:complexType>
@@ -1232,33 +1247,31 @@
             <xs:element ref="paragraphs"/>
             <xs:group ref="List"/>
           </xs:choice>
-          <xs:attribute name="margins"/>
-          <xs:attribute name="width"/>
-          <xs:attribute name="widths"/>
-          <xs:attribute name="valign">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="top"/>
-                <xs:enumeration value="middle"/>
-                <xs:enumeration value="bottom"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="valigns"/>
+          <xs:attributeGroup ref="SidebySideAttributes"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
   </xs:group>
-  <xs:element name="sbsgroup">
-    <xs:complexType>
-      <xs:group maxOccurs="unbounded" ref="SideBySide"/>
-      <xs:attribute name="margins"/>
-      <xs:attribute name="width"/>
-      <xs:attribute name="widths"/>
-      <xs:attribute name="valign"/>
-      <xs:attribute name="valigns"/>
-    </xs:complexType>
-  </xs:element>
+  <xs:group name="SideBySideGroup">
+    <xs:sequence>
+      <xs:element name="sbsgroup">
+        <xs:complexType>
+          <xs:group maxOccurs="unbounded" ref="SideBySide"/>
+          <xs:attributeGroup ref="SidebySideAttributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="SideBySideGroupNoCaption">
+    <xs:sequence>
+      <xs:element name="sbsgroup">
+        <xs:complexType>
+          <xs:group maxOccurs="unbounded" ref="SideBySideNoCaption"/>
+          <xs:attributeGroup ref="SidebySideAttributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
   <xs:group name="SideBySideWW">
     <xs:sequence>
       <xs:element name="sidebyside">
@@ -1267,11 +1280,7 @@
             <xs:group ref="TabularWW"/>
             <xs:group ref="ImageWW"/>
           </xs:choice>
-          <xs:attribute name="margins"/>
-          <xs:attribute name="width"/>
-          <xs:attribute name="widths"/>
-          <xs:attribute name="valign"/>
-          <xs:attribute name="valigns"/>
+          <xs:attributeGroup ref="SidebySideAttributes"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>

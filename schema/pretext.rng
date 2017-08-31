@@ -368,7 +368,11 @@
     <element name="biography">
       <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
-        <ref name="BlockText"/>
+        <choice>
+          <ref name="BlockText"/>
+          <ref name="SideBySideNoCaption"/>
+          <ref name="SideBySideGroupNoCaption"/>
+        </choice>
       </oneOrMore>
     </element>
   </define>
@@ -387,7 +391,11 @@
     <element name="acknowledgement">
       <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
-        <ref name="BlockText"/>
+        <choice>
+          <ref name="BlockText"/>
+          <ref name="SideBySideNoCaption"/>
+          <ref name="SideBySideGroupNoCaption"/>
+        </choice>
       </oneOrMore>
     </element>
   </define>
@@ -399,7 +407,8 @@
           <oneOrMore>
             <choice>
               <ref name="BlockText"/>
-              <ref name="SideBySideNoNumber"/>
+              <ref name="SideBySideNoCaption"/>
+              <ref name="SideBySideGroupNoCaption"/>
             </choice>
           </oneOrMore>
           <zeroOrMore>
@@ -410,14 +419,16 @@
           <zeroOrMore>
             <choice>
               <ref name="BlockText"/>
-              <ref name="SideBySideNoNumber"/>
+              <ref name="SideBySideNoCaption"/>
+              <ref name="SideBySideGroupNoCaption"/>
             </choice>
           </zeroOrMore>
           <ref name="Contributors"/>
           <zeroOrMore>
             <choice>
               <ref name="BlockText"/>
-              <ref name="SideBySideNoNumber"/>
+              <ref name="SideBySideNoCaption"/>
+              <ref name="SideBySideGroupNoCaption"/>
             </choice>
           </zeroOrMore>
         </group>
@@ -446,7 +457,8 @@
       <oneOrMore>
         <choice>
           <ref name="BlockText"/>
-          <ref name="SideBySideNoNumber"/>
+          <ref name="SideBySideNoCaption"/>
+          <ref name="SideBySideGroupNoCaption"/>
         </choice>
       </oneOrMore>
     </element>
@@ -1216,23 +1228,26 @@
       </element>
     </choice>
   </define>
+  <define name="SidebySideAttributes">
+    <optional>
+      <attribute name="margins"/>
+    </optional>
+    <optional>
+      <choice>
+        <attribute name="width"/>
+        <attribute name="widths"/>
+      </choice>
+    </optional>
+    <optional>
+      <choice>
+        <ref name="AlignmentVertical"/>
+        <attribute name="valigns"/>
+      </choice>
+    </optional>
+  </define>
   <define name="SideBySide">
     <element name="sidebyside">
-      <optional>
-        <attribute name="margins"/>
-      </optional>
-      <optional>
-        <choice>
-          <attribute name="width"/>
-          <attribute name="widths"/>
-        </choice>
-      </optional>
-      <optional>
-        <choice>
-          <ref name="AlignmentVertical"/>
-          <attribute name="valigns"/>
-        </choice>
-      </optional>
+      <ref name="SidebySideAttributes"/>
       <oneOrMore>
         <choice>
           <ref name="Figure"/>
@@ -1250,23 +1265,9 @@
       </oneOrMore>
     </element>
   </define>
-  <define name="SideBySideNoNumber">
+  <define name="SideBySideNoCaption">
     <element name="sidebyside">
-      <optional>
-        <attribute name="margins"/>
-      </optional>
-      <optional>
-        <choice>
-          <attribute name="width"/>
-          <attribute name="widths"/>
-        </choice>
-      </optional>
-      <optional>
-        <choice>
-          <ref name="AlignmentVertical"/>
-          <attribute name="valigns"/>
-        </choice>
-      </optional>
+      <ref name="SidebySideAttributes"/>
       <oneOrMore>
         <choice>
           <ref name="Poem"/>
@@ -1285,43 +1286,23 @@
   </define>
   <define name="SideBySideGroup">
     <element name="sbsgroup">
-      <optional>
-        <attribute name="margins"/>
-      </optional>
-      <optional>
-        <choice>
-          <attribute name="width"/>
-          <attribute name="widths"/>
-        </choice>
-      </optional>
-      <optional>
-        <choice>
-          <attribute name="valign"/>
-          <attribute name="valigns"/>
-        </choice>
-      </optional>
+      <ref name="SidebySideAttributes"/>
       <oneOrMore>
         <ref name="SideBySide"/>
       </oneOrMore>
     </element>
   </define>
+  <define name="SideBySideGroupNoCaption">
+    <element name="sbsgroup">
+      <ref name="SidebySideAttributes"/>
+      <oneOrMore>
+        <ref name="SideBySideNoCaption"/>
+      </oneOrMore>
+    </element>
+  </define>
   <define name="SideBySideWW">
     <element name="sidebyside">
-      <optional>
-        <attribute name="margins"/>
-      </optional>
-      <optional>
-        <choice>
-          <attribute name="width"/>
-          <attribute name="widths"/>
-        </choice>
-      </optional>
-      <optional>
-        <choice>
-          <attribute name="valign"/>
-          <attribute name="valigns"/>
-        </choice>
-      </optional>
+      <ref name="SidebySideAttributes"/>
       <oneOrMore>
         <choice>
           <ref name="TabularWW"/>

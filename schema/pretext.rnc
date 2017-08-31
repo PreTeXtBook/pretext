@@ -176,7 +176,7 @@
         Biography = 
             element biography {
                 MetaDataTitleOptional,
-                BlockText+
+                (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
             }
         Dedication = 
             element dedication {
@@ -186,14 +186,14 @@
         Acknowledgement = 
             element acknowledgement {
                 MetaDataTitleOptional,
-                BlockText+
+                (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
             }
         Preface =
             element preface {
                 MetaDataTitleOptional,
                 (
-                    ((BlockText | SideBySideNoNumber)+, Attribution*) |
-                    ((BlockText | SideBySideNoNumber)*, Contributors, (BlockText | SideBySideNoNumber)*)
+                    ((BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+, Attribution*) |
+                    ((BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)*, Contributors, (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)*)
                 )
             }
         
@@ -207,7 +207,7 @@
                 ColophonBack?
             }
         ColophonBack = 
-            element colophon {(BlockText | SideBySideNoNumber)+}
+            element colophon {(BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+}
         
         
         Paragraphs = 
@@ -562,11 +562,13 @@
             }
         
         
+        SidebySideAttributes =
+            attribute margins {text}?,
+            (attribute width {text} | attribute widths {text})?,
+            (AlignmentVertical | attribute valigns {text})?
         SideBySide =
             element sidebyside {
-                attribute margins {text}?,
-                (attribute width {text} | attribute widths {text})?,
-                (AlignmentVertical | attribute valigns {text})?,
+                SidebySideAttributes,
                 (
                     Figure |
                     Poem |
@@ -581,11 +583,9 @@
                     List
                 )+
             }
-        SideBySideNoNumber =
+        SideBySideNoCaption =
             element sidebyside {
-                attribute margins {text}?,
-                (attribute width {text} | attribute widths {text})?,
-                (AlignmentVertical | attribute valigns {text})?,
+                SidebySideAttributes,
                 (
                     Poem |
                     Tabular |
@@ -601,16 +601,17 @@
             }
         SideBySideGroup =
             element sbsgroup {
-                attribute margins {text}?,
-                (attribute width {text} | attribute widths {text})?,
-                (attribute valign {text} | attribute valigns {text})?,
+                SidebySideAttributes,
                 SideBySide+
             }
-        SideBySideWW = 
+        SideBySideGroupNoCaption =
+            element sbsgroup {
+                SidebySideAttributes,
+                SideBySideNoCaption+
+            }
+        SideBySideWW =
             element sidebyside {
-                attribute margins {text}?,
-                (attribute width {text} | attribute widths {text})?,
-                (attribute valign {text} | attribute valigns {text})?,
+                SidebySideAttributes,
                 (
                     TabularWW |
                     ImageWW
