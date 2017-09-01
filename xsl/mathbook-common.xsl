@@ -438,6 +438,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- exercise historical default -->
 <xsl:variable name="b-number-exercise-distinct" select="false()" />
 
+<!-- TEMPORARY: exercise numbering cutover -->
+<xsl:param name="new.exercises" select="'no'" />
+<xsl:variable name="newexercises" select="boolean($new.exercises = 'yes')" />
+
+
 <!-- We read the document language translation -->
 <!-- nodes out of the right file, which relies -->
 <!-- on filenames with country codes           -->
@@ -2604,11 +2609,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- otherwise we call for a serial number relative to peers      -->
 <!-- via particular modal templates.  These may include Exercises -->
 <!-- and References sections, which can occur at multiple levels  -->
+<!-- NB: newexercises: hack to kill "exercises" division numbering, later move to "the unnumbered" -->
 <xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|references" mode="serial-number">
     <xsl:variable name="relative-level">
         <xsl:apply-templates select="." mode="level" />
     </xsl:variable>
     <xsl:choose>
+        <xsl:when test="self::exercises and $newexercises" />
         <xsl:when test="$relative-level > $numbering-maxlevel">
             <xsl:text></xsl:text>
         </xsl:when>
@@ -2982,7 +2989,23 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- N.B. Same priority as above, so needs to come in this order, -->
 <!-- as we wish hard-coded to have higher priority                -->
 <xsl:template match="exercises/exercise|exercises/exercisegroup/exercise" mode="serial-number">
-    <xsl:number from="exercises" level="any" count="exercise" />
+    <xsl:variable name="base">
+        <xsl:variable name="parent-exercises" select="parent::exercises|parent::exercisegroup/parent::exercises" />
+        <xsl:choose>
+            <xsl:when test="$parent-exercises/preceding-sibling::exercises and $newexercises">
+                <!-- <xsl:value-of select="count($parent-exercises/preceding-sibling::exercises/exercise)" /> -->
+                <xsl:apply-templates select="$parent-exercises/preceding-sibling::exercises/exercise[last()]" mode="serial-number"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>0</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- NB: newexercises:  offset is the original definition here -->
+    <xsl:variable name="offset">
+        <xsl:number from="exercises" level="any" count="exercise" />
+    </xsl:variable>
+    <xsl:value-of select="$base + $offset" />
 </xsl:template>
 <xsl:template match="exercises/exercise[@number]|exercisegroup/exercise[@number]" mode="serial-number">
     <xsl:apply-templates select="@number" />
@@ -3258,15 +3281,17 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Structure Numbers: Divisions -->
 <!-- NB: this is number of the *container* of the division,   -->
 <!-- a serial number for the division itself will be appended -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|references" mode="structure-number">
+<!-- NB:  newexercises: removed "exercises" here, duplicated below -->
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|references" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-maxlevel - 1" />
         <xsl:with-param name="pad" select="'no'" />
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Structure Numbers: Theorems, Examples, Projects, Inline Exercises, Figures -->
-<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;|exercise" mode="structure-number">
+<!-- Structure Numbers: Theorems, Examples, Projects, Figures -->
+<!-- NB: newexercises: inline copied out below                -->
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&EXAMPLE-LIKE;" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-theorems" />
         <xsl:with-param name="pad" select="'yes'" />
@@ -3319,16 +3344,63 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- NB: newexercises: consolidated "exercises/exercise" structure numbering here -->
+
+<!-- Structure Numbers: Exercises Division -->
+<!-- NB:  newexercises = true : then no effect here, should not ever called -->
+<xsl:template match="exercises" mode="structure-number">
+    <xsl:apply-templates select="." mode="multi-number">
+        <xsl:with-param name="levels" select="$numbering-maxlevel - 1" />
+        <xsl:with-param name="pad" select="'no'" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- Structure Numbers: Inline Exercises -->
+<!-- NB: newexercises: preserve behavior, copied out of above -->
+<!-- Eventually breakout (optionally) into its own scheme     -->
+<xsl:template match="exercise[not(ancestor::exercises)]" mode="structure-number">
+    <xsl:apply-templates select="." mode="multi-number">
+        <xsl:with-param name="levels" select="$numbering-theorems" />
+        <xsl:with-param name="pad" select="'yes'" />
+    </xsl:apply-templates>
+</xsl:template>
+
 <!-- Structure Numbers: Sectional Exercises -->
 <!-- If we set a level for sectional exercises, and pad,        -->
 <!-- then we could mimic the AMSMath scheme.  But we control    -->
 <!-- these numbers universally, so we do not copy this behavior -->
-<xsl:template match="exercises/exercise|exercises/exercisegroup/exercise|exercises/exercise[@number]|exercisegroup/exercise[@number]" mode="structure-number">
-    <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$numbering-maxlevel" />
-        <xsl:with-param name="pad" select="'no'" />
-    </xsl:apply-templates>
+<!-- NB: newexercises: simplified match from before -->
+<xsl:template match="exercises/exercise|exercises/exercisegroup/exercise" mode="structure-number">
+    <xsl:choose>
+        <xsl:when test="$newexercises">
+            <!-- hop exercisegroup (perhaps explicitly?) -->
+            <xsl:apply-templates select="ancestor::exercises[1]/parent::*" mode="number" />
+            <xsl:text>.</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="multi-number">
+                <xsl:with-param name="levels" select="$numbering-maxlevel" />
+                <xsl:with-param name="pad" select="'no'" />
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
+
+<!-- Structure Numbers: Exercise Groups -->
+<!-- An exercisegroup gets it structure number from the parent exercises -->
+<!-- NB: newexercises: step up one more parent -->
+<xsl:template match="exercisegroup" mode="structure-number">
+    <xsl:choose>
+        <xsl:when test="$newexercises">
+            <xsl:apply-templates select="parent::exercises/parent::*" mode="number" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="parent::*" mode="number" />
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>.</xsl:text>
+</xsl:template>
+
 <!-- Hints, answers, solutions get structure number from parent      -->
 <!-- exercise's number. Identical for inline and sectional exercises -->
 <xsl:template match="hint|answer|solution" mode="structure-number">
@@ -3380,13 +3452,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- NB: these templates have equal priority, so order matters -->
 <xsl:template match="exercise//ol/li" mode="structure-number">
     <xsl:apply-templates select="ancestor::exercise[1]" mode="number" />
-    <xsl:text>.</xsl:text>
-</xsl:template>
-
-<!-- Structure Numbers: Exercise Groups -->
-<!-- An exercisegroup gets it structure number from the parent exercises -->
-<xsl:template match="exercisegroup" mode="structure-number">
-    <xsl:apply-templates select="parent::*" mode="number" />
     <xsl:text>.</xsl:text>
 </xsl:template>
 
