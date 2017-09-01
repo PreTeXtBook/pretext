@@ -3306,7 +3306,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- then inside a captioned figure, earn a serial -->
 <!-- number that is a letter.  So their structure  -->
 <!-- number comes from their grandparent figure    -->
-<xsl:template match="figure/sidebyside/figure | figure/sidebyside/table | figure/sidebyside/listing" mode="structure-number">
+<xsl:template match="figure/sidebyside/figure | figure/sidebyside/table | figure/sidebyside/listing | figure/sidebyside/list" mode="structure-number">
     <xsl:apply-templates select="parent::sidebyside/parent::figure" mode="number" />
     <xsl:text>.</xsl:text>
 </xsl:template>

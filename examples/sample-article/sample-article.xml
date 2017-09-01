@@ -4180,6 +4180,7 @@ the xsltproc executable.
                 <li><p>An interactive program inside a program listing, to test if the Javascript will execute properly within a knowl: <xref ref="program-interactive" /></p></li>
                 <li><p>A cross-reference to a block quotation (which is never numbered): <xref ref="blockquote-seuss" text="title">Quote by Dr Seuss</xref></p></li>
                 <li><p>A <c>type-global</c> cross-reference to a second-level <c>task</c> within a project: <xref ref="project-task-level-two" text="type-global" />, the encompassing <c>project</c>: <xref ref="project-structured" />, and a <c>local</c> reference <xref ref="project-task-level-two" text="local" />.</p></li>
+                <li><p>A subcaptioned named list: <xref ref="color-list-as-panel" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul></p>
 
