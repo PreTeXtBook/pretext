@@ -777,14 +777,16 @@ class MathBookXMLtoSWS(object):
 def _verbose(msg):
     """Write a message to the console on program progress"""
     global args
-    if args.verbose >= 1:
+    # None if not set at all
+    if args.verbose and args.verbose >= 1:
         print('MBX: {}'.format(msg))
 
 
 def _debug(msg):
     """Write a message to the console with some raw information"""
     global args
-    if args.verbose >= 2:
+    # None if not set at all
+    if args.verbose and args.verbose >= 2:
         print('MBX-DEBUG: {}'.format(msg))
 
 
