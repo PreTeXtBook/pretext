@@ -17,23 +17,23 @@
     <section xml:id="overview-structure">
         <title>Structure</title>
 
-        <p>A MathBook XML document is a nested sequence of <term>structural subdivisions</term>.  For a book, these would go <tag>part</tag>, <tag>chapter</tag>, <tag>section</tag>, <tag>subsection</tag>, and <tag>subsubsection</tag>.  Using <tag>part</tag> is optional (and not yet fully implemented), but a book must always use <tag>chapter</tag> (or else it is not a book!).  No skipping over subdivisions.  For example, you cannot subdivide a <tag>section</tag> directly into several <tag>subsubsection</tag>s without an intervening <tag>subsection</tag>.</p>
+        <p>A MathBook XML document is a nested sequence of <term>structural divisions</term>.  For a book, these would go <tag>part</tag>, <tag>chapter</tag>, <tag>section</tag>, <tag>subsection</tag>, and <tag>subsubsection</tag>.  Using <tag>part</tag> is optional (and not yet fully implemented), but a book must always use <tag>chapter</tag> (or else it is not a book!).  No skipping over divisions.  For example, you cannot divide a <tag>section</tag> directly into several <tag>subsubsection</tag>s without an intervening <tag>subsection</tag>.</p>
 
-        <p>An <tag>article</tag> starts subdivisions from <tag>section</tag>, though it may choose to have no subdivisions at all.  <tag>paragraphs</tag> are exceptional.  They lack a full set of features, but can be used to subdivide anything, in books or in articles, though they are always terminal since you cannot subdivide them further.  You will have noticed that we prefer the generic term <term>subdivision</term> (rather than <q>section</q>) since a <tag>section</tag> is a very particular subdivision.</p>
+        <p>An <tag>article</tag> starts divisions from <tag>section</tag>, though it may choose to have no divisions at all.  <tag>paragraphs</tag> are exceptional.  They lack a full set of features, but can be used to divide anything, in books or in articles, though they are always terminal since you cannot divide them further.  You will have noticed that we prefer the generic term <term>division</term> (rather than <q>section</q>) since a <tag>section</tag> is a very particular division.</p>
 
-        <p>A subdivision may be unstructured, in which case you fill it with paragraphs and lists and figures and theorems and so on.  But if you choose to structure a subdivision it must look like an optional <tag>introduction</tag>, followed by multiple subdivisions of the next finer granularity, with an optional <tag>conclusion</tag>.</p>
+        <p>A division may be unstructured, in which case you fill it with paragraphs and lists and figures and theorems and so on.  But if you choose to structure a division it must look like an optional <tag>introduction</tag>, followed by multiple divisions of the next finer granularity, with an optional <tag>conclusion</tag>.</p>
 
-        <p>Every subdivision tag can carry an <attribute>xml:id</attribute> attribute, and it is a good practice to (a) provide one, (b) use a very short list of words describing the content, and (c) adopt a consistent pattern of your choosing.  Do not use numbers, you may later regret it.  These are optional, and with practice you will learn how best to use them. See <xref ref="overview-cross-references" /> just below for more on this.</p>
+        <p>Every division tag can carry an <attribute>xml:id</attribute> attribute, and it is a good practice to (a) provide one, (b) use a very short list of words describing the content, and (c) adopt a consistent pattern of your choosing.  Do not use numbers, you may later regret it.  These are optional, and with practice you will learn how best to use them. See <xref ref="overview-cross-references" /> just below for more on this.</p>
 
-        <p>The <tag>exercises</tag> and <tag>references</tag> tags are special subdivisions, see <xref ref="topic-exercises" /> and <xref ref="topic-references" />.</p>
+        <p>The <tag>exercises</tag> and <tag>references</tag> tags are special divisions, see <xref ref="topic-exercises" /> and <xref ref="topic-references" />.</p>
 
-        <p>This explanation is expanded and reiterated at <xref ref="topic-subdivisions" /> and is worth reading earlier rather than later.</p>
+        <p>This explanation is expanded and reiterated at <xref ref="topic-divisions" /> and is worth reading earlier rather than later.</p>
     </section>
 
     <section xml:id="overview-paragraphs">
         <title>Paragraphs</title>
 
-        <p>Once you have subdivisions, what do you put into them?  Most likely, paragraphs.  We use long, exact names for tags that are used infrequently, like <tag>subsubsection</tag>.  But for frequently used elements, we use abbreviated tags, often identical to names used in <init>HTML</init>.  So a paragraph is delimited by simply the <tag>p</tag> tag.</p>
+        <p>Once you have divisions, what do you put into them?  Most likely, paragraphs.  We use long, exact names for tags that are used infrequently, like <tag>subsubsection</tag>.  But for frequently used elements, we use abbreviated tags, often identical to names used in <init>HTML</init>.  So a paragraph is delimited by simply the <tag>p</tag> tag.</p>
 
         <p>Lots of things can happen in paragraphs, some things can <em>only</em> happen in a paragraph, and some things are <em>banned</em> in paragraphs.  Inside a paragraph, you can emphasize some text (<tag>em</tag>), you can quote some text (<tag>q</tag>), you can mark a phrase as being from another language (<tag>foreign</tag>), and much more.  You can use special characters like an ampersand (<ampersand />, <tage>ampersand</tage>) or an octothorpe, aka <q>hash tag</q> (<hash />, <tage>hash</tage>).  You must put a list inside a paragraph, and all mathematics (<xref ref="overview-math" />) will occur inside a paragraph.  You cannot put a <tag>table</tag> or a <tag>figure</tag> in a paragraph, and many other structured components are prohibited in paragraphs.</p>
 
@@ -45,7 +45,7 @@
 
         <p>Cross-references in a <pretext /> document are easy, powerful and flexible.  So it is worth familiarizing yourselves with them early, here and then ahead in <xref ref="topic-cross-referencing" />.</p>
 
-        <p>Any element that you place a <attribute>xml:id</attribute> on can become the target of a cross-reference.  This could be a subdivision, a remark, a bibliographic entry, or a figure.  So for example, suppose your source had <c>&lt;subsection xml:id="subsection-flowers"&gt;</c> and someplace else you wrote <c>&lt;xref ref="subsection-flowers" /&gt;</c>.  Then at the latter location you would get a reference to the Subsection that discusses flowers.  In print this might just be the number for the subsection, but in various electronic output formats, these cross-references can be very powerful interactive ways to explore the content.  And the mechanism is always the same, pair up an <attribute>xml:id</attribute> on a target with a <attribute>ref</attribute> on an <tag>xref</tag> cross-reference.</p>
+        <p>Any element that you place a <attribute>xml:id</attribute> on can become the target of a cross-reference.  This could be a division, a remark, a bibliographic entry, or a figure.  So for example, suppose your source had <c>&lt;subsection xml:id="subsection-flowers"&gt;</c> and someplace else you wrote <c>&lt;xref ref="subsection-flowers" /&gt;</c>.  Then at the latter location you would get a reference to the Subsection that discusses flowers.  In print this might just be the number for the subsection, but in various electronic output formats, these cross-references can be very powerful interactive ways to explore the content.  And the mechanism is always the same, pair up an <attribute>xml:id</attribute> on a target with a <attribute>ref</attribute> on an <tag>xref</tag> cross-reference.</p>
 
         <p>Since the value of an <attribute>xml:id</attribute> is also used in a variety of ways, such as to construct some file names, some care should be taken in how you author them.  We limit the possible characters to letters and numbers (<c>a-z</c>, <c>A-Z</c>, <c>0-9</c>), with hyphens and underscores (<c>-_</c>) available as word-separators.  Our advice is to stick to lowercase letters, though we are not yet aware of any problems with case-insensitivity.  So in short, use <term>kebab-case</term> or <term>snake-case</term> for your <attribute>xml:id</attribute> values.</p>
 
@@ -55,7 +55,7 @@
     <section xml:id="overview-title">
         <title>Titles</title>
 
-        <p>Subdivisions always need titles, you accomplish this with a <tag>title</tag> tag first thing.  Almost everything that you can use in a paragraph can be used in a title, but a few constructions are banned, such as a displayed mathematical equation (for good reason).  Try to avoid using footnotes in titles, even if we have tried to make them possible.</p>
+        <p>Divisions always need titles, you accomplish this with a <tag>title</tag> tag first thing.  Almost everything that you can use in a paragraph can be used in a title, but a few constructions are banned, such as a displayed mathematical equation (for good reason).  Try to avoid using footnotes in titles, even if we have tried to make them possible.</p>
 
         <p>Lots of other structures admit titles.  Experiment, or look at specific descriptions of the structure you are interested in.  Titles are very integral to MathBook XML, much like cross-references.  Titles migrate to the Table of Contents, get used in page headers for print output, can be used in lists (such as a List of Figures), and can be used as the text of a cross-reference, instead of a number.  You might not be inclined to give a <tag>remark</tag> a title, but it would be good practice to do so.  Your electronic outputs will be much more useful to your readers if you routinely title every structure that allows.</p>
     </section>
@@ -97,7 +97,7 @@
     <section xml:id="overview-exercises">
         <title>Exercises</title>
 
-        <p>An exercise can appear in the narrative as an <term>inline exercise</term> or in a special <tag>exercises</tag> subdivision and is then known as a <term>sectional exercise</term>.  The syntax is the same in both cases, there are just some minor differences in their use and treatment.  The <tag>exercises</tag> subdivision can be used at any level.  In other words, it can be a peer of any other subdivision.</p>
+        <p>An exercise can appear in the narrative as an <term>inline exercise</term> or in a special <tag>exercises</tag> division and is then known as a <term>sectional exercise</term>.  The syntax is the same in both cases, there are just some minor differences in their use and treatment.  The <tag>exercises</tag> division can be used at any level.  In other words, it can be a peer of any other division.</p>
 
         <p>An <tag>exercise</tag> is a mandatory <tag>statement</tag> followed by possibly several optional <tag>hint</tag>, <tag>answer</tag> and/or <tag>solution</tag>.  Conceptually, an <tag>answer</tag> is a short final result, while a <tag>solution</tag> provides details about the route to the answer.  Each of these four components is structured further, with paragraph-like elements, and the exercise itself may have a <tag>title</tag>.</p>
 
@@ -111,7 +111,7 @@
     <section xml:id="overview-references">
         <title>References</title>
 
-        <p>Like <tag>exercises</tag>, a <tag>references</tag> subdivision may go anywhere a more typical subdivision could go.  This allows for things like a <q>Further Reading</q> list at the end of every chapter of a book.  These are populated with <tag>biblio</tag> items that are individual bibliographic entries.  Support is presently very minimal, but is planned to improve.</p>
+        <p>Like <tag>exercises</tag>, a <tag>references</tag> division may go anywhere a more typical division could go.  This allows for things like a <q>Further Reading</q> list at the end of every chapter of a book.  These are populated with <tag>biblio</tag> items that are individual bibliographic entries.  Support is presently very minimal, but is planned to improve.</p>
     </section>
 
     <section xml:id="overview-figures-tables">

@@ -209,13 +209,13 @@
                 <p>There are only a few features implemented so far.</p>
                 <ol>
                     <li>
-                        <p>If you have some sectioning in your MBX file, hit <c>Ctrl+R</c> (<c>Cmd+R</c> on <init>OS X</init>) to run the Go To Symbol command. You should see a panel showing all the subdivisions' <c>@xml:id</c> names.</p>
+                        <p>If you have some sectioning in your MBX file, hit <c>Ctrl+R</c> (<c>Cmd+R</c> on <init>OS X</init>) to run the Go To Symbol command. You should see a panel showing all the divisions' <c>@xml:id</c> names.</p>
                     </li>
                     <li>
                         <p>If you have been using <c>@xml:id</c> to label your stuff, try typing <c>&lt;xref ref="</c> (the beginning of a cross-reference). Sublime Text should show you a panel containing all <c>@xml:id</c> values along with the elements they go with. Choose one to insert it at the caret and close the <c>xref</c> tag. Alternatively, type <c>ref</c> and hit <c>Tab</c> to activate the <c>xref</c> snippet. Then hit <c>Ctrl+l</c> followed by <c>x</c> or <c>Ctrl+l</c> followed by <c>Ctrl+Space</c> to bring up the completions menu. There are several variants of the <c>ref</c> snippet, namely <c>refa</c>, <c>refp</c>, and <c>refpa</c>.</p>
                     </li>
                     <li>
-                        <p>Type <c>chp</c>, <c>sec</c>, <c>ssec</c>, or <c>sssec</c> and hit <c>Tab</c> to activate the subdivision snippets. A blank <c>title</c> element is provided and the cursor positioned within it. As you type, the <c>@xml:id</c> field for the subdivision is filled with similar text mirroring the title you are entering.</p>
+                        <p>Type <c>chp</c>, <c>sec</c>, <c>ssec</c>, or <c>sssec</c> and hit <c>Tab</c> to activate the division snippets. A blank <c>title</c> element is provided and the cursor positioned within it. As you type, the <c>@xml:id</c> field for the division is filled with similar text mirroring the title you are entering.</p>
                     </li>
                 </ol>
             </subsubsection>

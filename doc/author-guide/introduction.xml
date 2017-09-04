@@ -39,7 +39,7 @@
         </mathbook>]]>
         </pre>
 
-        <p>The article can have a title, and so can each section.  Many of the subdivisions of your document can be given titles, always in the same way.</p>
+        <p>The article can have a title, and so can each section.  Many of the divisions of your document can be given titles, always in the same way.</p>
 
         <pre>
         <![CDATA[<mathbook>
@@ -56,7 +56,7 @@
         </mathbook>]]>
         </pre>
 
-        <p>Notice that as we add more structure to our document, a few additional blank lines helps us see the subdivisions.  You should now be able to write a full article, with multiple titled sections, each containing multiple paragraphs.</p>
+        <p>Notice that as we add more structure to our document, a few additional blank lines helps us see the divisions.  You should now be able to write a full article, with multiple titled sections, each containing multiple paragraphs.</p>
     </section>
 
     <section>

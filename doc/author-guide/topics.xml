@@ -63,7 +63,7 @@
         <subsection xml:id="block-verbatim-text">
             <title>Blocks of Verbatim Text</title>
 
-            <p>If you want to isolate large chunks of verbatim text outside of paragraphs, the <tag>pre</tag> tag is the one to use.  It can be used as a peer of paragraphs (and other structures) as a child of a subdivision, or it can be placed into a <tag>listing</tag> to receive a caption, title and number.</p>
+            <p>If you want to isolate large chunks of verbatim text outside of paragraphs, the <tag>pre</tag> tag is the one to use.  It can be used as a peer of paragraphs (and other structures) as a child of a division, or it can be placed into a <tag>listing</tag> to receive a caption, title and number.</p>
 
             <p>You can structure the contents with <tag>cline</tag> in exactly the same manner as for <tag>cd</tag>.  But you may find this tedious.  Instead, you can make the content of <tag>pre</tag> a sequence of lines separated by newlines.  So that you can preserve the indentation of your source, the line closest to the left margin is taken to actually be the left margin, and a corresponding amount of leading whitespace will be removed from every line.  This will work well if you recognize two caveats.  First, results will be unpredictable if you mix spaces and tabs for indentation.  Sticking with spaces is best.  Second, if your first characters of content immediately follow the <tag>pre</tag> tag then there is no leading whitespace and it is as if that line is already at the left margin.  Then subsequent indentation may seem too severe to you.</p>
 
@@ -97,64 +97,64 @@
                 <row>
                     <cell><c>type-local</c></cell>
                     <cell><xref ref="overview-title"     text="type-local" /></cell>
-                    <cell><xref ref="topic-subdivisions" text="type-local" /></cell>
-                    <cell><xref ref="topic-subdivisions" text="type-local">Extra</xref></cell>
+                    <cell><xref ref="topic-divisions" text="type-local" /></cell>
+                    <cell><xref ref="topic-divisions" text="type-local">Extra</xref></cell>
                 </row>
 
                 <row>
                     <cell><c>type-global</c></cell>
                     <cell><xref ref="overview-title"     text="type-global" /></cell>
-                    <cell><xref ref="topic-subdivisions" text="type-global" /></cell>
-                    <cell><xref ref="topic-subdivisions" text="type-global">Extra</xref></cell>
+                    <cell><xref ref="topic-divisions" text="type-global" /></cell>
+                    <cell><xref ref="topic-divisions" text="type-global">Extra</xref></cell>
                 </row>
 
                 <row>
                     <cell><c>type-hybrid</c></cell>
                     <cell><xref ref="overview-title"     text="type-hybrid" /></cell>
-                    <cell><xref ref="topic-subdivisions" text="type-hybrid" /></cell>
-                    <cell><xref ref="topic-subdivisions" text="type-hybrid">Extra</xref></cell>
+                    <cell><xref ref="topic-divisions" text="type-hybrid" /></cell>
+                    <cell><xref ref="topic-divisions" text="type-hybrid">Extra</xref></cell>
                 </row>
 
                 <row>
                     <cell><c>local</c></cell>
                     <cell><xref ref="overview-title"     text="local" /></cell>
-                    <cell><xref ref="topic-subdivisions" text="local" /></cell>
-                    <cell><xref ref="topic-subdivisions" text="local">Extra</xref></cell>
+                    <cell><xref ref="topic-divisions" text="local" /></cell>
+                    <cell><xref ref="topic-divisions" text="local">Extra</xref></cell>
                 </row>
 
                 <row>
                     <cell><c>global</c></cell>
                     <cell><xref ref="overview-title"     text="global" /></cell>
-                    <cell><xref ref="topic-subdivisions" text="global" /></cell>
-                    <cell><xref ref="topic-subdivisions" text="global">Extra</xref></cell>
+                    <cell><xref ref="topic-divisions" text="global" /></cell>
+                    <cell><xref ref="topic-divisions" text="global">Extra</xref></cell>
                 </row>
 
                 <row>
                     <cell><c>hybrid</c></cell>
                     <cell><xref ref="overview-title"     text="hybrid" /></cell>
-                    <cell><xref ref="topic-subdivisions" text="hybrid" /></cell>
-                    <cell><xref ref="topic-subdivisions" text="hybrid">Extra</xref></cell>
+                    <cell><xref ref="topic-divisions" text="hybrid" /></cell>
+                    <cell><xref ref="topic-divisions" text="hybrid">Extra</xref></cell>
                 </row>
 
                 <row>
                     <cell><c>phrase-global</c></cell>
                     <cell><xref ref="overview-title"     text="phrase-global" /></cell>
-                    <cell><xref ref="topic-subdivisions" text="phrase-global" /></cell>
+                    <cell><xref ref="topic-divisions" text="phrase-global" /></cell>
                     <cell>Warning</cell>
                 </row>
 
                 <row>
                     <cell><c>phrase-hybrid</c></cell>
                     <cell><xref ref="overview-title"     text="phrase-hybrid" /></cell>
-                    <cell><xref ref="topic-subdivisions" text="phrase-hybrid" /></cell>
+                    <cell><xref ref="topic-divisions" text="phrase-hybrid" /></cell>
                     <cell>Warning</cell>
                 </row>
 
                 <row>
                     <cell><c>title</c></cell>
                     <cell><xref ref="overview-title"     text="title" /></cell>
-                    <cell><xref ref="topic-subdivisions" text="title" /></cell>
-                    <cell><xref ref="topic-subdivisions" text="title">Extra</xref></cell>
+                    <cell><xref ref="topic-divisions" text="title" /></cell>
+                    <cell><xref ref="topic-divisions" text="title">Extra</xref></cell>
                 </row>
             </tabular>
         </table>
@@ -213,24 +213,24 @@
     </section>
 
 
-    <section xml:id="topic-subdivisions">
-        <title>Subdivisions</title>
+    <section xml:id="topic-divisions">
+        <title>Divisions</title>
 
-        <p>A <term>subdivision</term> is a structured component of a book or article that would be recognized by most any reader.  They are essential to the organization of a MathBook XML project.  Notice that we use the generic term subdivision, since a <tag>section</tag> is just one example of a subdivision.</p>
+        <p>A <term>division</term> is a structured component of a book or article that would be recognized by most any reader.  They are essential to the organization of a MathBook XML project.  Notice that we use the generic term division, since a <tag>section</tag> is just one example of a division.</p>
 
-        <p>Subdivisions are <tag>book</tag>, <tag>article</tag>, <tag>part</tag>, <tag>chapter</tag>, <tag>section</tag>, <tag>subsection</tag>, <tag>subsubsection</tag>, and <tag>paragraphs</tag>.  Their use is fairly intuitive, though there are some restrictions, so please read on.</p>
+        <p>divisions are <tag>book</tag>, <tag>article</tag>, <tag>part</tag>, <tag>chapter</tag>, <tag>section</tag>, <tag>subsection</tag>, <tag>subsubsection</tag>, and <tag>paragraphs</tag>.  Their use is fairly intuitive, though there are some restrictions, so please read on.</p>
 
         <p>A <tag>book</tag> must contain at least one <tag>chapter</tag>, which may contain <tag>section</tag>, <tag>subsection</tag>, and <tag>subsubsection</tag>.  The tag <tag>part</tag> is planned for books, between <tag>book</tag> and <tag>chapter</tag>.  It will function in two user-selectable ways: structural (<eg /> numbering will reset), or decorative (merely inserting a decorative page between two chapters and sectioning the Table of Contents).</p>
 
-        <p>An <tag>article</tag> is simpler and shorter than a book.  It might be really simple and have no subdivisions at all, or it may have <tag>section</tag>s.  It cannot have <tag>chapter</tag>s, as that would be a <tag>book</tag>.  Within a <tag>section</tag>, <tag>subsection</tag>s and <tag>subsubsection</tag>s may follow.</p>
+        <p>An <tag>article</tag> is simpler and shorter than a book.  It might be really simple and have no divisions at all, or it may have <tag>section</tag>s.  It cannot have <tag>chapter</tag>s, as that would be a <tag>book</tag>.  Within a <tag>section</tag>, <tag>subsection</tag>s and <tag>subsubsection</tag>s may follow.</p>
 
-        <p>Subdivisions must nest properly and may not be skipped.  So a <tag>section</tag> cannot contain a <tag>chapter</tag> and a <tag>subsection</tag> may not be contained in a <tag>chapter</tag> without an intervening <tag>section</tag>.</p>
+        <p>Divisions must nest properly and may not be skipped.  So a <tag>section</tag> cannot contain a <tag>chapter</tag> and a <tag>subsection</tag> may not be contained in a <tag>chapter</tag> without an intervening <tag>section</tag>.</p>
 
-        <p>A subdivision <em>must</em> contain a <tag>title</tag>, and may contain one or more index entries (see <xref provisional="topic-index" />), which should appear before anything else.  Any subdivision may be unstructured, with just a sequence of <term>top-level content</term> such as paragraphs, figures, lists, theorems, <etc />  Or a subdivision may be structured, and in this case it must follow a prescribed pattern.  There may be a single, optional <tag>introduction</tag>, filled with top-level content, followed by a sequence of at least one of the appropriate subdivisions, ending with a single, optional <tag>conclusion</tag>, filled with top-level content.  It is an error to begin with a run of top-level content inside a subdivision and then begin to use subdivisions.  (The solution is to make the initial content an <tag>introduction</tag> and/or one or several subdivisions.)</p>
+        <p>A division <em>must</em> contain a <tag>title</tag>, and may contain one or more index entries (see <xref provisional="topic-index" />), which should appear before anything else.  Any division may be unstructured, with just a sequence of <term>top-level content</term> such as paragraphs, figures, lists, theorems, <etc />  Or a division may be structured, and in this case it must follow a prescribed pattern.  There may be a single, optional <tag>introduction</tag>, filled with top-level content, followed by a sequence of at least one of the appropriate divisions, ending with a single, optional <tag>conclusion</tag>, filled with top-level content.  It is an error to begin with a run of top-level content inside a division and then begin to use divisions.  (The solution is to make the initial content an <tag>introduction</tag> and/or one or several divisions.)</p>
 
-        <p>There are exceptions to the above.  For one, <tag>paragraphs</tag> is an anomalous subdivision, as a sort of lightweight sectioning command.  It may appear in any subdivision, at any location within a subdivision, it may not be subdivided further (it is a leaf of the document tree), it never gets a number, and its title is formatted in a subsidiary way.  I especially like to use this in a two- or three-page <tag>article</tag> that has no other subdivisions at all.  Typical presentation has the title in bold, without much change in font size (if at all), inline with the first paragraph, and perhaps a bit of vertical space as it begins and ends.  Despite the name, it may contain more than just paragaphs, so may contain any top-level-content that would go in any other subdivision.</p>
+        <p>There are exceptions to the above.  For one, <tag>paragraphs</tag> is an anomalous division, as a sort of lightweight sectioning command.  It may appear in any division, at any location within a division, it may not be divided further (it is a leaf of the document tree), it never gets a number, and its title is formatted in a subsidiary way.  I especially like to use this in a two- or three-page <tag>article</tag> that has no other divisions at all.  Typical presentation has the title in bold, without much change in font size (if at all), inline with the first paragraph, and perhaps a bit of vertical space as it begins and ends.  Despite the name, it may contain more than just paragaphs, so may contain any top-level-content that would go in any other division.</p>
 
-        <p>Two other anomalous subdivisions are <tag>exercises</tag> and <tag>references</tag>.  These can function as a further subdivision of any other subdivision.  So for example, an <tag>exercises</tag> could be a peer of several <tag>section</tag>s, contained within a structured <tag>chapter</tag>, and in this case would behave like the other <tag>section</tag>s with regard to numbering and presentation.  Detail on allowed content and its behavior are in <xref ref="topic-exercises" /> and <xref ref="topic-references" />, respectively.</p>
+        <p>Two other anomalous divisions are <tag>exercises</tag> and <tag>references</tag>.  These can function as a further division of any other division.  So for example, an <tag>exercises</tag> could be a peer of several <tag>section</tag>s, contained within a structured <tag>chapter</tag>, and in this case would behave like the other <tag>section</tag>s with regard to numbering and presentation.  Detail on allowed content and its behavior are in <xref ref="topic-exercises" /> and <xref ref="topic-references" />, respectively.</p>
     </section>
 
     <section xml:id="topic-mathematics">
