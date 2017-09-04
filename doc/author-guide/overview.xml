@@ -63,6 +63,8 @@
     <section xml:id="overview-math">
         <title>Mathematics</title>
 
+        <p>With experience, you may realize that <pretext /> utilizes three principal languages.  One is the narrative of everyday sentences and paragraphs.  Most of what you write in a paragraph, or a table cell, or a title, or a caption, or an index heading, is in this language.  Then there is the structural language, which is the majority of the elements in <pretext />, such as <tag>chapter</tag>, <tag>theorem</tag>, or <tag>figure</tag>.  Then finally, there is the language of mathematical symbols and notation.</p>
+
         <p>A key design decision is that mathematical symbols, expressions and equations are authored using <latex /> syntax.  More precisely, we support the symbols and constructions provided by <url href="https://www.mathjax.org/">MathJax</url>, which quite closely follows the <c>amsmath</c> package maintained by the American Mathematical Society.  Neither you nor I want to write <url href="https://en.wikipedia.org/wiki/MathML">MathML</url> by hand!</p>
 
         <p>For <term>inline</term> mathematics, use the short <tag>m</tag> tag within a <tag>p</tag> (or within a <tag>title</tag> or <tag>caption</tag>).  For example, <c>&lt;m&gt;\alpha^2 + \beta^4&lt;/m&gt;</c> will do what you expect, in print and in electronic outputs.  To get a single equation, centered, with some vertical separation before and after, use the <tag>me</tag> tag (<q>math equation</q>) in the same way within a <tag>p</tag>, but do not try using it within a <tag>title</tag>.  For example, <c>&lt;me&gt;\rho = \alpha^2 + \beta^4&lt;/me&gt;</c>.  If you want your equation numbered, switch to the <tag>men</tag> tag (<c>n</c> = <q>numbered</q>).</p>

@@ -166,7 +166,7 @@
         <p>Here are careful examples, where we have provided the content <q>Division</q> in the live examples.  The list is not exhaustive.  Note that overriding a title provides a way to provide any text you would like.</p>
 
         <!-- expand and add links to the Preface to demo default titles -->
-        <table>
+        <table xml:id="txo">
             <caption>Cross-reference text overrides</caption>
             <tabular>
                 <row bottom="major">
@@ -234,11 +234,104 @@
     </section>
 
     <section xml:id="topic-mathematics">
-        <title>(*) Mathematics</title>
+        <title>Mathematics</title>
 
-        <p>This section is incomplete, newer features are being discussed as they are introduced.</p>
+        <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subsset of <latex /> supported by the very capable <url href="https://www.mathjax.org/">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c> package maintained by the American Mathematical Society at their <url href="http://www.ams.org/publications/authors/tex/amslatex">AMS-LaTeX page</url>.  For a complete and precise list of what MathJax supports, see the <url href="http://docs.mathjax.org/en/latest/tex.html#supported-latex-commands">MathJax Supported LaTeX commands</url> page.</p>
 
-        <paragraphs>
+        <subsection>
+            <title>Inline Mathematics</title>
+
+            <p>Use the <tag>m</tag> to place variables or very short expressions within a sentence of a paragraph, the content of a <tag>title</tag>, a <tag>cell</tag> of a table, a footnote, or other similar locations of sentence-like text.  You can't cross-reference this text, nor make a knowl with it.  Though you can typically cross-reference a containing element.</p>
+
+            <p>Do not use <latex />-isms like <c>\displaystyle</c> to try to end-run the inline nature.  It will just lead to poor results.</p>
+        </subsection>
+
+        <subsection>
+            <title>One-Line Display Mathematics</title>
+
+            <p>The <tag>me</tag> element can be used for longer expressions or a single equation.  Typically you will get vertical separation above and below, and the contents will be centered.  See below about concluding periods (and other punctuation), and alignment.  The <tag>men</tag> variant will produce a numbered equation, and therefore with a provided <attribute>xml:id</attribute> attribute, can be the target of a cross-reference (<tag>xref</tag>).</p>
+        </subsection>
+
+        <subsection>
+            <title>Multi-line Display Mathematics</title>
+
+            <p>We begin with a pure container, either <tag>md</tag> or <tag>mdn</tag>.  The former numbers no lines, the latter numbers every line.  Within the container, content, on a per-line basis, goes into a <tag>mrow</tag> element.  You can think of <tag>mrow</tag> as being very similar to <tag>me</tag>.  If you are tempted to put a <latex /> <c>\\</c> into an <tag>mrow</tag>, think twice.</p>
+
+            <p>On any given <tag>mrow</tag> you can place the <attribute>number</attribute> attribute, with allowable values of <c>yes</c> and <c>no</c>.  These will typically be used to override the behavior inherited by the container, but there is no harm if they are redundant.  A given line of the display may be the target of a cross-reference, though the numbering flexibility means you can try (and fail) to target an unnumbered equation.</p>
+        </subsection>
+
+        <subsection>
+            <title>Special Characters</title>
+
+            <p>The <latex /> macros, <c>\amp</c>, <c>\lt</c>, and <c>\gt</c> are always available within these mathematics elements, so that you can avoid the special XML characters <c>&amp;</c>, <c>&lt;</c> and <c>&gt;</c>.  See <xref ref="overview-special-characters" /> for this same information, but in the broader context of your entire document.</p>
+        </subsection>
+
+        <subsection>
+            <title>Text in Mathematics</title>
+
+            <p>Once in a while, you need a little bit of <q>regular</q> text within an expression and you do not want it to look like a product of a bunch of one-letter variables.  Use the <c>\text{}</c> macro for these.<ul>
+                <li>Do place surrounding spaces inside the <c>\text{}</c> macro.</li>
+                <li>Do not place any mathematics inside the  <c>\text{}</c> macro.</li>
+                <li>Do not use the <c>\mbox{}</c> macro as a substitute.</li>
+            </ul></p>
+
+            <p>For example,<cd>
+                <cline>&lt;me&gt;f(x) = \begin{cases} x^2 \amp \text{if } x\gt 0\\</cline>
+                <cline>           -7 \amp \text{otherwise} \end{cases}&lt;/me&gt;</cline>
+            </cd>produces
+            <me>f(x) = \begin{cases}x^2\amp\text{if }x\gt 0\\-7\amp\text{otherwise}\end{cases}</me>.  This example amply illustrates the use of macros for XML special characters (twice), appropriate use of the <c>\text{}</c> macro (twice), spaces in the <c>\text{}</c> macro (once), sentence-ending punctuation (see the source, the period is <em>not</em> inside the <tag>me</tag> element) and yes, we did think twice about the <c>\\</c> (an exception to the rule).</p>
+        </subsection>
+
+        <subsection>
+            <title>Cross-References in Display Mathematics</title>
+
+            <p>A cross-reference is achieved with the <tag>xref</tag> element, see <xref ref="overview-cross-references" />.  You can place an <tag>xref</tag> inside a <tag>mrow</tag>, and remarkably, it will do the right thing.  This is one of only two <init>XML</init> elements you can mix-in with <latex /> syntax.  A typical use is to provide a justification or explanation for a step in a proof, derivation, or simplification.  And it works best with alignment, see below.</p>
+        </subsection>
+
+        <subsection>
+            <title>Alignment in Display Mathematics</title>
+
+            <p>Displayed mathematics is implemented with the AMS-<latex /> <c>align</c> environment.  Ampersands are used to control this, so use the <c>\amp</c> macro for these.  The first ampersand in a line or row is an alignment point, typically a symbol, like an equality.  The next ampersand is a column separator, then the next is an alignment point, then a column separator, then<ellipsis />  The moral of the story is you should have <m>n</m> alignment points, with <m>n-1</m> column separators, for a total of <m>2n-1</m> ampersands<mdash />always an odd number.</p>
+
+            <p>For example,<cd>
+                <cline>&lt;md&gt;</cline>
+                <cline>  &lt;mrow&gt;A \amp = B \amp D \amp = E \amp \amp \text{Because}&lt;/mrow&gt;</cline>
+                <cline>  &lt;mrow&gt;  \amp = C \amp   \amp = F \amp \amp &lt;xref ref="txo" /&gt;&lt;/mrow&gt;</cline>
+                <cline>&lt;/md&gt;</cline>
+            </cd>produces
+            <md>
+                <mrow>A \amp = B \amp D \amp = E \amp \amp\text{Because}</mrow>
+                <mrow>  \amp = C \amp   \amp = F \amp \amp<xref ref="txo" /></mrow>
+            </md>.</p>
+
+            <p>Sometimes you want several short equations on one line.  Do not use <tag>me</tag>.  Instead use a single <tag>mrow</tag> inside an <tag>md</tag>, and use alignment to spread them out evenly.</p>
+
+            <p>For multi-line display mathematics with no ampersands present, each line will be centered.  This is implemented with the AMS-<latex /> <c>gather</c> environment.</p>
+
+            <p>You can fool the alignment behavior by hiding all your ampersands in macro definitions, so there is the optional <attribute>alignment</attribute> attribute for the <tag>md</tag> or <tag>mdn</tag> element, in order to force the right kind of alignment.  Allowable values are <c>gather</c>, <c>align</c>, and <c>alignat</c>.  The latter is similar to <c>align</c>, but no space is automatically provided between columns.  You can leave it that way, or explicitly add your own.  For example, this allows you to precisely arrange individual terms of a system of linear equations, especially when terms with zero coefficients are omitted.  When using the <c>alignat</c> option <pretext /> tries to count ampersands to see how many columns you intend, since <latex /> needs this number (we are not sure why).  This detection can be fooled too, especially if you have something like a matrix with lots of ampersands for other purposes.  So set the <attribute>alignat-columns</attribute> attribute to the <em>number of intended columns</em>, if necessary.</p>
+        </subsection>
+
+        <subsection>
+            <title>Fill-In Blanks in Mathematics</title>
+
+            <p>The other mix-in <init>XML</init> element is <tag>fillin</tag> with an optional <attribute>characters</attribute> attribute that takes an integer value.  You will get a thin horizontal line, on the baseline, which can suggest to a reader that they should supply something within the surrounding mathematics.  The attribute suggests the length of the line<mdash />experiment a bit, since it is not super-precise.</p>
+        </subsection>
+
+        <subsection>
+            <title>Page Breaks for Tall Display Mathematics</title>
+
+            <p>For print output, do nothing additional and <latex /> will do its best to break your display between lines.  You can turn this behavior off by setting the <attribute>break</attribute> attribute on the <tag>md</tag> or <tag>mdn</tag> to the value <c>no</c>.  Once you do this, you can then selectively allow a page break after a given <tag>mrow</tag> by setting the <attribute>break</attribute> attribute on the <tag>mrow</tag> to the value <c>yes</c>.</p>
+        </subsection>
+
+        <subsection>
+            <title>Your Macros</title>
+
+            <p>These go in the <tag>docinfo</tag> section, wrapped in a <tag>macros</tag> element.  Keep them simple<mdash />one or two arguments, and one-line definitions.  This is not the place to be fancy, and not the place to try to end-run the structural aspects of <pretext />.  The idea is to define something like <c>\adjoint{A}</c> for the matrix <c>A</c> to be a superscript asterisk, and later you can change your mind and use a superscript dagger instead.  Keep in the spirit of <pretext /> and use readable, semantic macros.  For example, do not use <c>\a{A}</c> for the adjoint of <c>A</c>.</p>
+
+            <p><pretext /> will use your macros correctly for print and for <init>HTML</init>, after erasing whitespace from the left margin, and stripping <latex /> comments.</p>
+        </subsection>
+
+        <subsection>
             <title>Punctuation After Display Math</title>
 
             <p>If a chunk of displayed math concludes a sentence, then the sentence-ending punctuation should appear at the conclusion of the display.  (And certainly not at the start of the first line after the display!)  But do not author the punctuation within the mathematics element, put it afterwards, where it logically belongs.</p>
@@ -252,8 +345,21 @@
             </md>.  Now<ellipsis /></p>
 
             <p>Take notice of the requirement that the punctuation must be <em>immediately</em> after the closing tag of the math element, otherwise it will not migrate properly.</p>
-        </paragraphs>
+        </subsection>
 
+        <subsection>
+            <title>Additional Packages</title>
+
+            <p>Generally, you cannot add additional packages for use within mathematics.  The exception is a package with support available optionally within MathJax.  And it must have the same name as its normal <latex /> version.  Then set a <c>docinfo/latex-preamble/package</c> element to be the common name of the package.   (The <c>cancel</c> package is one such example.)</p>
+
+            <p>Then the supported macros of the package will be available with your mathematics elements, and you can use them within other macro definitions.  We do not guarantee the absence of conflicts with other packages in use, even if employed by <pretext />.  Nor do we support debugging such conflicts.</p>
+        </subsection>
+
+        <subsection>
+            <title>Extras</title>
+
+            <p>There are two existing additional options, which we might want to remove some day for technical reasons.  Macros from the <c>extpfeil</c> extensible arrows package are availble by default, and an <c>\sfrac{}{}</c> macro is available for appealing inline <q>slanted fractions.</q></p>
+        </subsection>
     </section>
 
     <section xml:id="topic-lists-and-labels">
