@@ -7809,6 +7809,21 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 <xsl:comment>End: Google code</xsl:comment>
 </xsl:template>
 
+<xsl:template match="google-universal">
+    <xsl:comment>Start: Google Universal code</xsl:comment>
+    <script>
+        <xsl:text>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){&#xa;</xsl:text>
+        <xsl:text>(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),&#xa;</xsl:text>
+        <xsl:text>m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)&#xa;</xsl:text>
+        <xsl:text>})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');&#xa;</xsl:text>
+        <xsl:text>ga('create', '</xsl:text>
+            <xsl:value-of select="@tracking" />
+        <xsl:text>', 'auto');&#xa;</xsl:text>
+        <xsl:text>ga('send', 'pageview');&#xa;</xsl:text>
+    </script>
+    <xsl:comment>End: Google Universal code</xsl:comment>
+</xsl:template>
+
 <!-- StatCounter                                -->
 <!-- Set sc_invisible to 1                      -->
 <!-- In noscript URL, final 1 is an edit from 0 -->
