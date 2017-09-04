@@ -85,6 +85,13 @@
         </li>
 
         <li>
+            <title>I have great output, but validation produces hundreds of errors.</title>
+            <p>Success with a tool like <c>xsltproc</c>, in terms of no errors and great-looking output, does not mean your source is correct.  <init>XSLT</init> processing can be forgiving, and many invalid constructions just work, and look great.  But that is no guaranteee this situation will continue, or the same happy accidents occur for a conversion to a different output format.</p>
+
+            <p>We do raise some errors during processing with <c>xsltproc</c>, but error-checking your input is a job for a validator, so in theory we should not ever produce any errors during a conversion.  So strive for having 100<percent /> valid <pretext /> source, not simply great-looking results.  See <xref ref="schema" /> and <xref ref="schema-install" />.</p>
+        </li>
+
+        <li>
             <title>I'd like to make one small adjustment in my output.</title>
             <p>There are no plans to make it easy to change one thing in the layout (such as changing the title of all sub-sub-sections from flush-left to centered).  If you know enough, then you can hack such things yourself.  But doing so is inadvisable, except in the case where you are the rare person who has done a lot of studying and put a lot of effort into learning book design.  If that is the case, then it would be better to make a completely new layout and then share it so it is an option for other people to use.  See <xref ref="principle-output-styles" text="type-local">Principle</xref>.</p>
         </li>
