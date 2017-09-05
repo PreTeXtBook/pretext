@@ -6219,11 +6219,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Bits of Javascript for the top and bottom of the web page -->
 <xsl:template name="pytutor-header">
-    <script type="text/javascript" src="http://pythontutor.com/build/pytutor-embed.bundle.js?cc25af72af" charset="utf-8"></script>
+    <xsl:if test="$document-root//program[@interactive='pythontutor']">
+        <script type="text/javascript" src="http://pythontutor.com/build/pytutor-embed.bundle.js?cc25af72af" charset="utf-8"></script>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template name="pytutor-footer">
-    <script type="text/javascript">createAllVisualizersFromHtmlAttrs();</script>
+    <xsl:if test="$document-root//program[@interactive='pythontutor']">
+        <script type="text/javascript">createAllVisualizersFromHtmlAttrs();</script>
+    </xsl:if>
 </xsl:template>
 
 <!-- Console Session -->
