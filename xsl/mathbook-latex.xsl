@@ -138,15 +138,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<!-- LaTeX always puts sections at level "1"            -->
-<!-- MBX has sections at level "2", so off by one       -->
-<!-- Furthermore, param's are relative to document root -->
-<!-- So we translate MBX-speak to LaTeX-speak (twice)   -->
+<!-- LaTeX always puts sections at level "1", while PTX         -->
+<!-- has sections at level "2", so we provide adjusted,         -->
+<!-- LaTeX-only variables for packages/macros that crudely      -->
+<!-- expect these kinds of numbers (rather than division names) -->
 <xsl:variable name="latex-toc-level">
-    <xsl:value-of select="$root-level + $toc-level - 1" />
+    <xsl:call-template name="level-to-latex-level">
+        <xsl:with-param name="level" select="$toc-level" />
+    </xsl:call-template>
 </xsl:variable>
 <xsl:variable name="latex-numbering-maxlevel">
-    <xsl:value-of select="$root-level + $numbering-maxlevel - 1" />
+    <xsl:call-template name="level-to-latex-level">
+        <xsl:with-param name="level" select="$numbering-maxlevel" />
+    </xsl:call-template>
 </xsl:variable>
 
 <!-- We override the default ToC structure    -->
@@ -673,8 +677,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
     <xsl:if test="not($numbering-theorems = 0)">
         <xsl:text>[</xsl:text>
-        <xsl:call-template name="level-number-to-latex-name">
-            <xsl:with-param name="level" select="$numbering-theorems + $root-level" />
+        <xsl:call-template name="level-to-name">
+            <xsl:with-param name="level" select="$numbering-theorems" />
         </xsl:call-template>
         <xsl:text>]&#xa;</xsl:text>
     </xsl:if>
@@ -840,8 +844,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
         <xsl:if test="not($numbering-projects = 0)">
             <xsl:text>[</xsl:text>
-            <xsl:call-template name="level-number-to-latex-name">
-                <xsl:with-param name="level" select="$numbering-projects + $root-level" />
+            <xsl:call-template name="level-to-name">
+                <xsl:with-param name="level" select="$numbering-projects" />
             </xsl:call-template>
             <xsl:text>]&#xa;</xsl:text>
         </xsl:if>
@@ -951,8 +955,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Equation Numbering&#xa;</xsl:text>
         <xsl:text>%% Controlled by  numbering.equations.level  processing parameter&#xa;</xsl:text>
         <xsl:text>\numberwithin{equation}{</xsl:text>
-        <xsl:call-template name="level-number-to-latex-name">
-            <xsl:with-param name="level" select="$numbering-equations + $root-level" />
+        <xsl:call-template name="level-to-name">
+            <xsl:with-param name="level" select="$numbering-equations" />
         </xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
@@ -1060,8 +1064,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>none</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:call-template name="level-number-to-latex-name">
-                        <xsl:with-param name="level" select="$figure-levels + $root-level" />
+                    <xsl:call-template name="level-to-name">
+                        <xsl:with-param name="level" select="$figure-levels" />
                     </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
@@ -1085,8 +1089,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>none</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:call-template name="level-number-to-latex-name">
-                        <xsl:with-param name="level" select="$figure-levels + $root-level" />
+                    <xsl:call-template name="level-to-name">
+                        <xsl:with-param name="level" select="$figure-levels" />
                     </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
@@ -1127,8 +1131,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>none</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:call-template name="level-number-to-latex-name">
-                        <xsl:with-param name="level" select="$figure-levels + $root-level" />
+                    <xsl:call-template name="level-to-name">
+                        <xsl:with-param name="level" select="$figure-levels" />
                     </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
@@ -1162,8 +1166,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>none</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:call-template name="level-number-to-latex-name">
-                        <xsl:with-param name="level" select="$figure-levels + $root-level" />
+                    <xsl:call-template name="level-to-name">
+                        <xsl:with-param name="level" select="$figure-levels" />
                     </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
@@ -1193,8 +1197,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Footnote Numbering&#xa;</xsl:text>
         <xsl:text>%% We reset the footnote counter, as given by numbering.footnotes.level&#xa;</xsl:text>
         <xsl:text>\makeatletter\@addtoreset{footnote}{</xsl:text>
-        <xsl:call-template name="level-number-to-latex-name">
-            <xsl:with-param name="level" select="$numbering-footnotes + $root-level" />
+        <xsl:call-template name="level-to-name">
+            <xsl:with-param name="level" select="$numbering-footnotes" />
         </xsl:call-template>
         <xsl:text>}\makeatother&#xa;</xsl:text>
     </xsl:if>
@@ -2783,7 +2787,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="begin-language" />
     <!-- Construct the header of the subdivision -->
     <xsl:text>\</xsl:text>
-    <xsl:apply-templates select="." mode="subdivision-name" />
+    <xsl:apply-templates select="." mode="division-name" />
     <!-- Handle section titles carefully.  Sanitized versions    -->
     <!-- as optional argument to table of contents, headers.     -->
     <!-- http://www.tex.ac.uk/cgi-bin/texfaq2html?label=ftnsect  -->
@@ -2824,7 +2828,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- TODO: maybe colophon should not be in ToC for book either (need to star it?)    -->
     <xsl:if test="ancestor::article and parent::backmatter and self::references">
         <xsl:text>\addcontentsline{toc}{</xsl:text>
-        <xsl:apply-templates select="." mode="subdivision-name" />
+        <xsl:apply-templates select="." mode="division-name" />
         <xsl:text>}{</xsl:text>
         <xsl:apply-templates select="." mode="title-simple" />
         <xsl:text>}&#xa;</xsl:text>
@@ -2866,7 +2870,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="console-typeout" />
     </xsl:if>
     <xsl:text>\</xsl:text>
-    <xsl:apply-templates select="." mode="subdivision-name" />
+    <xsl:apply-templates select="." mode="division-name" />
     <xsl:text>*{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}&#xa;</xsl:text>
@@ -3188,7 +3192,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="nonempty" select="(.//hint and $exercise.backmatter.hint='yes') or (.//answer and $exercise.backmatter.answer='yes') or (.//solution and $exercise.backmatter.solution='yes')" />
     <xsl:if test="$nonempty='true'">
         <xsl:text>\</xsl:text>
-        <xsl:apply-templates select="." mode="subdivision-name" />
+        <xsl:apply-templates select="." mode="division-name" />
         <xsl:text>*{</xsl:text>
         <xsl:apply-templates select="." mode="number" />
         <xsl:text> </xsl:text>

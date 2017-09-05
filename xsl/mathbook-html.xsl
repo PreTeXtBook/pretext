@@ -557,7 +557,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="type">
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id">
-                <xsl:apply-templates select="." mode="subdivision-name" />
+                <xsl:apply-templates select="." mode="division-name" />
             </xsl:with-param>
         </xsl:call-template>
     </span>

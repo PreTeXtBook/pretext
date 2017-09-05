@@ -574,33 +574,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "chunking" templates defined below.                    -->
 
 
-<!--        -->
+<!-- ###### -->
 <!-- Levels -->
-<!--        -->
+<!-- ###### -->
+
+<!-- Certain characteristics of the output can be configured    -->
+<!-- based on how deep they are in the hierachy of a structured -->
+<!-- document.  Authors specify these characteristics relative  -->
+<!-- to their own project, more specifically relative to the    -->
+<!-- logical top-level element, such as "book" or "article".    -->
+<!-- These are "Level 0". We normalize these numbers internally -->
+<!-- so that level 0 is the first possible division in any      -->
+<!-- document, which would be a "part"                          -->
+
 
 <!-- (Relative) Levels -->
-<!-- Chase any element up full XML tree,      -->
-<!-- but adjust for actual document root      -->
-<!-- XML document root is always -2           -->
-<!-- mathbook element is always -1            -->
-<!-- book, article, letter, memo, etc is 0    -->
-<!-- sectioning works its way down from there -->
-<!-- http://bytes.com/topic/net/answers/572365-how-compute-nodes-depth-xslt -->
-<!-- NB: a * instead of node() seems to break things, unsure why            -->
+<!-- Input: an element that is a division of some kind -->
+<!-- Output: its relative level, eg "book" is 0        -->
+<!-- Front and back matter are faux divisions, so we   -->
+<!-- filter them out.  The overarching XML root (not   -->
+<!-- the special root node) is simply subtracted from  -->
+<!-- the count.                                        -->
+<!-- NB: -or-self, and subtract 2, changes HTML output, -->
+<!-- suggesting something is a bit off somewhere        -->
 <xsl:template match="*" mode="level">
-    <xsl:choose>
-        <xsl:when test="ancestor::backmatter or ancestor::frontmatter">
-            <xsl:value-of select="count(ancestor::node())-3" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="count(ancestor::node())-2" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:variable name="hierarchy" select="ancestor::*[not(self::backmatter or self::frontmatter)]" />
+    <xsl:value-of select="count($hierarchy) - 1" />
 </xsl:template>
 
 <!-- Enclosing Level -->
 <!-- For any element, work up the tree to a structural -->
 <!-- node and then compute level as above              -->
+<!-- NB: to meld with previous would require a better     -->
+<!-- definition of structural, and care with introduction -->
 <xsl:template match="*" mode="enclosing-level">
     <xsl:variable name="structural">
         <xsl:apply-templates select="." mode="is-structural" />
@@ -616,10 +622,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Relative level offset -->
-<!-- Document root on absolute level scale (not XML root)            -->
-<!-- See "absolute" scale in use just below                          -->
-<!-- For example, article with sections has document root at level 1 -->
-<!-- So:  absolute-level = (relative-)level + root-level             -->
+<!-- This is the adjustment to move a relative       -->
+<!-- level onto the absolute scale                   -->
+<!--     part: 0                                     -->
+<!--     chapter, appendix: 1                        -->
+<!--     section: 2                                  -->
+<!--     subsection: 3                               -->
+<!--     subsubsection: 4                            -->
+<!-- It can be defined as the value on this absolute -->
+<!-- scale that the $document-root (book, article,   -->
+<!-- memo, etc.) would have, depending on options    -->
+<!-- for structure beneath it.  So for all divisions -->
+<!--                                                 -->
+<!-- absolute-level = (relative-)level + root-level  -->
+<!--                                                 -->
+<!-- NB: 2017-09-05, three places, keep as variable  -->
 <xsl:variable name="root-level">
     <xsl:choose>
         <xsl:when test="/mathbook/book/part">-1</xsl:when>
@@ -636,40 +653,59 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 <!-- Names for Levels -->
-<!-- Levels (ie depths in the tree) translate to MBX element           -->
-<!-- names and LaTeX sections, which are generally the same            -->
-<!-- This is useful for "new" sections (like exercises and references) -->
-<!-- used with standard LaTeX sectioning and numbering                 -->
+<!-- Levels (ie depths in the tree) translate to MBX element -->
+<!-- names and LaTeX divisions, which are generally the same -->
+<!-- This is useful for "new" sections (eg exercises) when   -->
+<!-- used with standard LaTeX sectioning and numbering       -->
 
-<!-- These are are the "absolute" level numbers        -->
-<!-- We convert a level to a LaTeX/MBX sectioning name -->
-<xsl:template name="level-number-to-latex-name">
+<!-- Input:  a relative level, ie counted from document root -->
+<!-- Output:  the LaTeX name (or close), HTML element        -->
+<!-- NB:  this is a named template, independent of context   -->
+<xsl:template name="level-to-name">
     <xsl:param name="level" />
+    <xsl:variable name="normalized-level" select="$level + $root-level" />
     <xsl:choose>
-        <xsl:when test="$level=0">part</xsl:when>
-        <xsl:when test="$level=1">chapter</xsl:when>
-        <xsl:when test="$level=2">section</xsl:when>
-        <xsl:when test="$level=3">subsection</xsl:when>
-        <xsl:when test="$level=4">subsubsection</xsl:when>
+        <xsl:when test="$normalized-level=0">part</xsl:when>
+        <xsl:when test="$normalized-level=1">chapter</xsl:when>
+        <xsl:when test="$normalized-level=2">section</xsl:when>
+        <xsl:when test="$normalized-level=3">subsection</xsl:when>
+        <xsl:when test="$normalized-level=4">subsubsection</xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:ERROR: Level computation is out-of-bounds (<xsl:value-of select="$level" />)</xsl:message>
+            <xsl:message>MBX:ERROR: Level computation is out-of-bounds (input as <xsl:value-of select="$level" />, normalized to <xsl:value-of select="$normalized-level" />)</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
+<!-- This is the context-sensitive version of the previous -->
+<!-- named template, with protection against mis-use       -->
 <!-- Nodes to Subdivision Names -->
 <!-- Compute relative level of a node, adjust to absolute -->
 <!-- Subdivision name comes from named template above     -->
 <!-- Note: frontmatter and backmatter are structural, so  -->
 <!-- get considered in level computation.  However, they  -->
 <!-- are just containers, so we subtract them away        -->
-<xsl:template match="*" mode="subdivision-name">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|references|introduction|conclusion" mode="division-name">
     <xsl:variable name="relative-level">
         <xsl:apply-templates select="." mode="level" />
     </xsl:variable>
-    <xsl:call-template name="level-number-to-latex-name">
-        <xsl:with-param name="level" select="$relative-level + $root-level" />
+    <xsl:call-template name="level-to-name">
+        <xsl:with-param name="level" select="$relative-level" />
     </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="*" mode="division-name">
+    <xsl:message>MBX:BUG: Asking for the name of an element (<xsl:value-of select="local-name(.)" />) that is not a division</xsl:message>
+</xsl:template>
+
+<!-- LaTex Native Levels -->
+<!-- LaTeX has its own internal absolute numbering scheme, -->
+<!-- where sections are always level 1, while PTX uses     -->
+<!-- level 2. So while a LaTeX-specific computation, we do -->
+<!-- the translation here, so as to isolate the use of the -->
+<!-- root-level variable in this -common file.             -->
+<xsl:template name="level-to-latex-level">
+    <xsl:param name="level" />
+    <xsl:value-of select="$level + $root-level -1" />
 </xsl:template>
 
 <!-- ########### -->
@@ -2638,7 +2674,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- element that is at the maximum level                                        -->
 <!-- This template returns the absolute level necessary based on                 -->
 <!-- the particular scheme as a parameter: theorems, equations and footnotes.    -->
-<!-- Exercises (in sets) and bibliographic items (in references) will always     -->
+<!-- Sectional exercises and bibliographic items (in references) will always     -->
 <!-- get their serial numbers from within their immediately enclosing structure. -->
 <xsl:template match="*" mode="absolute-subtree-level">
     <xsl:param name="numbering-items" />
@@ -2943,7 +2979,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- given the document root and the configured depth      -->
 <!-- Note: numbered/unnumbered accounted for here          -->
 <xsl:template match="mrow|men" mode="serial-number">
-    <xsl:variable name="subtree-level" select="$numbering-equations + $root-level" />
+    <xsl:variable name="subtree-level">
+        <xsl:apply-templates select="." mode="absolute-subtree-level">
+            <xsl:with-param name="numbering-items" select="$numbering-equations" />
+        </xsl:apply-templates>
+    </xsl:variable>
     <xsl:choose>
         <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
         <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
@@ -3006,7 +3046,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- We determine the appropriate subtree to count within -->
 <!-- given the document root and the configured depth     -->
 <xsl:template match="fn" mode="serial-number">
-    <xsl:variable name="subtree-level" select="$numbering-footnotes + $root-level" />
+    <xsl:variable name="subtree-level">
+        <xsl:apply-templates select="." mode="absolute-subtree-level">
+            <xsl:with-param name="numbering-items" select="$numbering-footnotes" />
+        </xsl:apply-templates>
+    </xsl:variable>
     <xsl:choose>
         <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="fn" /></xsl:when>
         <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="fn" /></xsl:when>
