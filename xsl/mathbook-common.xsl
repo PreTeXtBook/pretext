@@ -2526,21 +2526,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
-<!--                                -->
-<!-- Label (cross-reference target) -->
-<!--                                -->
-
-<!-- LaTeX labels get used on MathJax content in HTML, so we -->
-<!-- put this template in the common file for universal use  -->
-<!-- Insert an identifier as a LaTeX label on anything       -->
-<!-- Calls to this template need come from where LaTeX likes -->
-<!-- a \label, generally someplace that can be numbered      -->
-<xsl:template match="*" mode="label">
-    <xsl:text>\label{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>}</xsl:text>
-</xsl:template>
-
 <!--            -->
 <!-- Long Names -->
 <!--            -->

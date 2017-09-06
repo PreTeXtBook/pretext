@@ -6985,6 +6985,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Cross-References -->
 <!-- ################ -->
 
+<!-- Labels  (cross-reference target)-->
+
+<!-- Insert an identifier as a LaTeX label on anything       -->
+<!-- Calls to this template need come from where LaTeX likes -->
+<!-- a \label, generally someplace that can be numbered      -->
+<xsl:template match="*" mode="label">
+    <xsl:text>\label{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- We hard-code some numbers (sectional exercises) and          -->
+<!-- we institute some numberings that LaTeX does not do          -->
+<!-- naturally (references in extra sections, proofs,             -->
+<!-- items in ordered lists (alone or in an exercise),            -->
+<!-- hints, answers, solutions).  For a "label"                   -->
+<!-- hyperref's hypertarget mechanism fits the bill.              -->
+<!-- \null target text was unnecessary and visible (2015-12-12)   -->
+<!-- (See also modal templates for "xref-link" and "xref-number") -->
+<xsl:template match="paragraphs|blockquote|exercises//exercise|biblio|biblio/note|proof|exercisegroup|case|ol/li|dl/li|hint|answer|solution|contributor" mode="label">
+    <xsl:text>\hypertarget{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}{}</xsl:text>
+</xsl:template>
+
 <!-- Much of the cross-reference mechanism is -->
 <!-- implemented in the common routines,      -->
 <!-- here we implement two abstract templates -->
@@ -7079,7 +7104,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-
 <!-- We hard-code some numbers (sectional exercises) and      -->
 <!-- we institute some numberings that LaTeX does not do      -->
 <!-- naturally - references in extra sections, proofs,        -->
@@ -7110,27 +7134,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}{</xsl:text>
     <xsl:value-of select="personname" />
     <xsl:text>}</xsl:text>
-</xsl:template>
-
-<!-- Labels -->
-<!-- The template to supply a LaTeX "\label{}" is provided -->
-<!-- in the common file since it is employed in MathJax's  -->
-<!-- equation labeling scheme, so find that there.         -->
-
-<!-- We hard-code some numbers (sectional exercises) and          -->
-<!-- we institute some numberings that LaTeX does not do          -->
-<!-- naturally (references in extra sections, proofs,             -->
-<!-- items in ordered lists (alone or in an exercise),            -->
-<!-- hints, answers, solutions).  For a "label"                   -->
-<!-- hyperref's hypertarget mechanism fits the bill.              -->
-<!-- Removed the \null target text, as it was introducing         -->
-<!-- vertical space when used in list items and it seems          -->
-<!-- to now behave well without it  (2015-12-12)                  -->
-<!-- (See also modal templates for "xref-link" and "xref-number") -->
-<xsl:template match="paragraphs|blockquote|exercises//exercise|biblio|biblio/note|proof|exercisegroup|case|ol/li|dl/li|hint|answer|solution|contributor" mode="label">
-    <xsl:text>\hypertarget{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>}{}</xsl:text>
 </xsl:template>
 
 <!-- ################## -->
