@@ -3781,7 +3781,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="title and not(caption)">
         <xsl:text>\captionof{namedlist}{</xsl:text>
         <xsl:apply-templates select="." mode="title-full" />
-        <xsl:apply-templates select="parent::*" mode="label" />
+        <xsl:apply-templates select="." mode="label" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="caption" />
