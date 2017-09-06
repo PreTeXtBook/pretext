@@ -2608,9 +2608,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Parameters of the form "numbering.<scheme>.level" -->
 <!-- control the number of components in these numbers -->
 
-<!--                -->
+<!-- ############## -->
 <!-- Serial Numbers -->
-<!--                -->
+<!-- ############## -->
 
 <!-- These count the occurence of the item, within it's  -->
 <!-- scheme and within a natural, or configured, subtree -->
@@ -2622,42 +2622,33 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- via particular modal templates.  These may include Exercises -->
 <!-- and References sections, which can occur at multiple levels  -->
 <!-- NB: newexercises: hack to kill "exercises" division numbering, later move to "the unnumbered" -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|references" mode="serial-number">
-    <xsl:variable name="relative-level">
-        <xsl:apply-templates select="." mode="level" />
-    </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="self::exercises and $newexercises" />
-        <xsl:when test="$relative-level > $numbering-maxlevel">
-            <xsl:text></xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="." mode="raw-serial-number" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<xsl:template match="part" mode="raw-serial-number">
+<xsl:template match="part" mode="serial-number">
     <xsl:number format="I" />
 </xsl:template>
 <!-- TODO: condition on part/chapter style to use  level='any'; from="book/part"  to cross part boundaries -->
-<xsl:template match="chapter" mode="raw-serial-number">
+<xsl:template match="chapter" mode="serial-number">
     <xsl:number count="chapter|references|exercises" format="1" />
 </xsl:template>
-<xsl:template match="appendix" mode="raw-serial-number">
+<xsl:template match="appendix" mode="serial-number">
     <xsl:number format="A" />
 </xsl:template>
-<xsl:template match="section" mode="raw-serial-number">
+<xsl:template match="section" mode="serial-number">
     <xsl:number count="section|references|exercises" format="1" />
 </xsl:template>
-<xsl:template match="subsection" mode="raw-serial-number">
+<xsl:template match="subsection" mode="serial-number">
     <xsl:number count="subsection|references|exercises" format="1" />
 </xsl:template>
-<xsl:template match="subsubsection" mode="raw-serial-number">
+<xsl:template match="subsubsection" mode="serial-number">
     <xsl:number count="subsubsection|references|exercises" format="1" />
 </xsl:template>
-<xsl:template match="exercises|references" mode="raw-serial-number">
-    <xsl:number count="part|chapter|appendix|section|subsection|subsubsection|references|exercises" format="1" />
+<!-- Convert references and exercises to the unnumbered once cutover -->
+<xsl:template match="exercises|references" mode="serial-number">
+    <xsl:choose>
+        <xsl:when test="$newexercises" />
+        <xsl:otherwise>
+            <xsl:number count="part|chapter|appendix|section|subsection|subsubsection|references|exercises" format="1" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Serial Numbers: Theorems, Examples, Inline Exercise, Figures, Etc. -->
