@@ -3345,7 +3345,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Proofs get structure number from parent theorem -->
 <xsl:template match="proof" mode="structure-number">
     <xsl:apply-templates select="parent::*" mode="number" />
-    <xsl:text>.</xsl:text>
 </xsl:template>
 <!-- Captioned items, arranged in a side-by-side,  -->
 <!-- then inside a captioned figure, earn a serial -->
@@ -3353,7 +3352,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- number comes from their grandparent figure    -->
 <xsl:template match="figure/sidebyside/figure | figure/sidebyside/table | figure/sidebyside/listing | figure/sidebyside/list" mode="structure-number">
     <xsl:apply-templates select="parent::sidebyside/parent::figure" mode="number" />
-    <xsl:text>.</xsl:text>
 </xsl:template>
 
 <!-- Structure Numbers: Equations -->
@@ -3418,14 +3416,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:apply-templates select="parent::*" mode="number" />
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>.</xsl:text>
 </xsl:template>
 
 <!-- Hints, answers, solutions get structure number from parent      -->
 <!-- exercise's number. Identical for inline and sectional exercises -->
 <xsl:template match="hint|answer|solution" mode="structure-number">
     <xsl:apply-templates select="parent::*" mode="number" />
-    <xsl:text>.</xsl:text>
 </xsl:template>
 
 <!-- Structure Numbers: Bibliographic Items -->
@@ -3445,7 +3441,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Notes get structure number from parent biblio's number -->
 <xsl:template match="biblio/note" mode="structure-number">
     <xsl:apply-templates select="parent::*" mode="number" />
-    <xsl:text>.</xsl:text>
 </xsl:template>
 
 <!-- Structure Numbers: Footnotes -->
@@ -3472,7 +3467,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- NB: these templates have equal priority, so order matters -->
 <xsl:template match="exercise//ol/li" mode="structure-number">
     <xsl:apply-templates select="ancestor::exercise[1]" mode="number" />
-    <xsl:text>.</xsl:text>
 </xsl:template>
 
 <!-- Structure Numbers: Tasks (in projects) -->
@@ -3480,7 +3474,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="task" mode="structure-number">
     <!-- ancestors, strip tasks, get number of next enclosure -->
     <xsl:apply-templates select="ancestor::*[not(self::task)][1]" mode="number" />
-    <xsl:text>.</xsl:text>
 </xsl:template>
 
 <!-- Structure Numbers: Objectives -->
@@ -3495,7 +3488,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- in an objectives environment       -->
 <xsl:template match="objectives/ol/li" mode="structure-number">
     <xsl:apply-templates select="ancestor::*[&STRUCTURAL-FILTER;][1]" mode="number" />
-    <xsl:text>.</xsl:text>
 </xsl:template>
 
 <!--              -->
@@ -3505,12 +3497,19 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Now trivial, container structure plus serial -->
 <!-- We condition on empty serial number in       -->
 <!-- order to create empty full numbers           -->
+<!-- This is where we add separator, a period     -->
 <xsl:template match="*" mode="number">
     <xsl:variable name="serial">
         <xsl:apply-templates select="." mode="serial-number" />
     </xsl:variable>
-    <xsl:if test="not($serial = '')">
+    <xsl:variable name="structure">
         <xsl:apply-templates select="." mode="structure-number" />
+    </xsl:variable>
+    <xsl:if test="not($serial = '')">
+        <xsl:if test="not($structure='')">
+            <xsl:value-of select="$structure" />
+            <xsl:text>.</xsl:text>
+        </xsl:if>
         <xsl:value-of select="$serial" />
     </xsl:if>
 </xsl:template>
@@ -5690,7 +5689,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:message>MBX:BUG:     Looks like a [<xsl:value-of select="local-name($parent)" />] element has an ambiguous number, found while making cross-reference text</xsl:message>
         </xsl:when>
         <!-- no match, just recurse, and preserve $highest-match -->
-        <xsl:when test="not(concat($parent-number, '.') = $target-structure-number)">
+        <xsl:when test="not($parent-number = $target-structure-number)">
             <xsl:apply-templates select="$parent" mode="smart-xref-text">
                 <xsl:with-param name="text-style" select="$text-style" />
                 <xsl:with-param name="xref" select="$xref" />
@@ -5700,7 +5699,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             </xsl:apply-templates>
         </xsl:when>
         <!-- a match, record in updated $highest-match -->
-        <xsl:when test="concat($parent-number, '.') = $target-structure-number">
+        <xsl:when test="$parent-number = $target-structure-number">
             <xsl:apply-templates select="$parent" mode="smart-xref-text">
                 <xsl:with-param name="text-style" select="$text-style" />
                 <xsl:with-param name="xref" select="$xref" />
