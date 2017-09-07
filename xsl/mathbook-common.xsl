@@ -3374,15 +3374,29 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- then we could mimic the AMSMath scheme.  But we control    -->
 <!-- these numbers universally, so we do not copy this behavior -->
 <!-- NB: newexercises: simplified match from before -->
-<xsl:template match="exercises/exercise|exercises/exercisegroup/exercise" mode="structure-number">
+<xsl:template match="exercises/exercise" mode="structure-number">
     <xsl:choose>
         <xsl:when test="$newexercises">
             <!-- hop exercisegroup (perhaps explicitly?) -->
-            <xsl:apply-templates select="ancestor::exercises[1]/parent::*" mode="number" />
-            <xsl:text>.</xsl:text>
+            <xsl:apply-templates select="parent::exercises/parent::*" mode="number" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="." mode="multi-number">
+                <xsl:with-param name="levels" select="$numbering-maxlevel" />
+                <xsl:with-param name="pad" select="'no'" />
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="exercises/exercisegroup/exercise" mode="structure-number">
+    <xsl:choose>
+        <xsl:when test="$newexercises">
+            <!-- hop exercisegroup (perhaps explicitly?) -->
+            <xsl:apply-templates select="ancestor::exercises/parent::*" mode="number" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="parent::exercisegroup" mode="multi-number">
                 <xsl:with-param name="levels" select="$numbering-maxlevel" />
                 <xsl:with-param name="pad" select="'no'" />
             </xsl:apply-templates>
