@@ -3209,82 +3209,68 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Multi-Numbers Utility -->
 <!--                       -->
 
-<!-- The X.Y.Z part of the containing structural element of any item -->
-<!-- The "levels" parameter controls how many parts there are        -->
-<!-- Note: this employs the serial numbers of each division          -->
-<xsl:template match="*" mode="multi-number">
-    <xsl:param name="levels" />
-    <xsl:param name="pad" />
-    <!-- when ancestor axis is saved as a variable "mathbook" -->
-    <!-- occurs in first slot so on initialization we scrub   -->
-    <!-- two elements: mathbook and MBX document root         -->
-    <!-- frontmatter and backmatter are irrelevant here,      -->
-    <!-- so we scrub three elements in that case              -->
-    <!-- NB: when parts become "decorative" or "structural"   -->
-    <!--     then this might be a place to slide by, or not   -->
-    <xsl:variable name="hierarchy" select="ancestor::*" />
-    <xsl:variable name="nodes-scrubbed">
-        <xsl:choose>
-            <xsl:when test="ancestor::frontmatter or ancestor::backmatter">
-                <xsl:text>3</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>2</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:call-template name="one-multi-number">
-        <xsl:with-param name="nodes" select="$hierarchy[position() > $nodes-scrubbed]" />
-        <xsl:with-param name="levels" select="$levels" />
-        <xsl:with-param name="pad" select="$pad" />
-    </xsl:call-template>
-</xsl:template>
+<!-- We concatenate serial numbers of divisions to form the       -->
+<!-- "structure number" of a division or element.                 -->
+<!-- NOTE: this is not the number of a division (or element),     -->
+<!-- it is everything but the "serial number".  Later, the        -->
+<!-- serial number is appended to form the "number".              -->
+<!-- So if the context is a division element we look at strict    -->
+<!-- *ancestors* to accumulate serial numbers into a structure    -->
+<!-- number.  For example, an implication of this is that the     -->
+<!-- structure number of a chapter in a part-less book will be    -->
+<!-- empty - its number is just its serial-number.                -->
+<!-- NB: the structure number never ends in a separator (period). -->
+<!--                                                              -->
+<!-- We initialize the recursion with exactly the ancestors       -->
+<!-- that contributes to a structure number.  This is the only    -->
+<!-- time the context is employed.  The level is                  -->
+<!--   (a) $pad = 'no',  the maximum number of levels, which      -->
+<!--   may not be reached if the $nodes get depleted              -->
+<!--   (b) $pad = 'yes', the exact number of serial numbers       -->
+<!--   accumulated, and hence the number of separators            -->
+<!--   in the final number (after the serial number is appended)  -->
+<!-- NB: decorative parts may mean we need                        -->
+<!-- to exclude "part" from the ancestors?                        -->
 
-<!-- We recursively compute serial numbers of structural elements               -->
-<!-- A period is the separator, and if not empty, there is a terminating period -->
-<!-- We halt when                      -->
-<!--   (a) there are no more nodes,    -->
-<!--   (b) we have enough levels, or   -->
-<!--   (c) we hit non-structural stuff -->
-<xsl:template name="one-multi-number">
-    <xsl:param name="nodes" />
+<xsl:template match="*" mode="multi-number">
+    <xsl:param name="nodes" select="ancestor::*[self::part or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection or self::exercises or self::references]"/>
     <xsl:param name="levels" />
     <xsl:param name="pad" />
-    <xsl:variable name="the-node" select="$nodes[1]" />
-    <xsl:variable name="structural">
-        <xsl:apply-templates select="$the-node" mode="is-structural" />
-    </xsl:variable>
+
     <xsl:choose>
-        <!-- done, always get numbering.maximum.level -->
+        <!-- always halt when levels met -->
         <xsl:when test="$levels = 0" />
-        <!-- pad when we run out of nodes, or out of structural nodes -->
-        <!-- recycle node list unchanged, so this continues           -->
-        <!-- but decrement the levels to get right amount of padding  -->
-        <xsl:when test="not($nodes) or $structural != 'true'">
+        <!-- not padding, halt if $nodes exhausted -->
+        <xsl:when test="($pad = 'no') and not($nodes)" />
+        <xsl:otherwise>
             <xsl:choose>
-                <xsl:when test="$pad='no'" />
+                <xsl:when test="$nodes">
+                    <xsl:apply-templates select="$nodes[1]" mode="serial-number"/>
+                </xsl:when>
+                <!-- no nodes, so must be padding -->
                 <xsl:otherwise>
-                    <xsl:text>0.</xsl:text>
-                    <xsl:call-template name="one-multi-number">
-                        <xsl:with-param name="nodes" select="$nodes" />
-                        <xsl:with-param name="levels" select="$levels - 1" />
-                        <xsl:with-param name="pad" select="$pad" />
-                    </xsl:call-template>
+                    <xsl:text>0</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="$the-node" mode="serial-number"/>
-            <xsl:text>.</xsl:text>
-            <xsl:call-template name="one-multi-number">
+            <!-- mutuially exclusive conditions, just for clarity           -->
+            <!-- (a) if halting next pass, no separator, no-padding version -->
+            <xsl:if test="($pad = 'no') and not(count($nodes) = 1) and not($levels = 1)">
+                <xsl:text>.</xsl:text>
+            </xsl:if>
+            <!-- (b) if halting next pass, no separator, padding version -->
+            <xsl:if test="($pad = 'yes') and not($levels = 1)">
+                <xsl:text>.</xsl:text>
+            </xsl:if>
+            <!-- decrease $nodes and $levels             -->
+            <!-- padding: empty $nodes can't get emptier -->
+            <xsl:apply-templates select="." mode="multi-number">
                 <xsl:with-param name="nodes" select="$nodes[position() > 1]" />
                 <xsl:with-param name="levels" select="$levels - 1" />
                 <xsl:with-param name="pad" select="$pad" />
-            </xsl:call-template>
+            </xsl:apply-templates>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
-
 
 <!--                         -->
 <!-- Structure Numbers       -->
