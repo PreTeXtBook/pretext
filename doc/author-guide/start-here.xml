@@ -49,7 +49,7 @@
 
                     <li xml:id="principle-output-styles"><p><init>MBX</init> output is styled by selecting from a list of available templates, relieving the author of the burden involved in micromanaging the output format.</p></li>
 
-                    <li><p><init>MBX</init> is free: the software is available at no cost, with an open license. The use of <init>MBX</init> does not impose any constraints on documents prepared with the system.</p></li>
+                    <li xml:id="principle-open-software"><p><init>MBX</init> is free: the software is available at no cost, with an open license. The use of <init>MBX</init> does not impose any constraints on documents prepared with the system.</p></li>
 
                     <li><p><init>MBX</init> is not a closed system: documents can be converted to <latex /> and then developed using standard <latex /> tools.</p></li>
                 </ol>
