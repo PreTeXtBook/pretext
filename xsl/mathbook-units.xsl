@@ -163,6 +163,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <base full='milepergallon'     short='mpg'      siunitx='none' />
     <base full='kilometerpergallon'     short='kpg'      siunitx='none' />
 
+    <!-- Frequency and Catalytic Activity                                     -->
+    <base full='revolution'             short='rev'   siunitx='none' />
+    <base full='revolutionperminute'    short='rpm'   siunitx='none' />
+    <base full='cycle'                  short='cycle' siunitx='none' />
+
 </xsl:variable>
 
 
