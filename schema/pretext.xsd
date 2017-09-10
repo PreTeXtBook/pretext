@@ -2188,6 +2188,7 @@
       <xs:element name="p">
         <xs:complexType mixed="true">
           <xs:group ref="TextParagraph"/>
+          <xs:attribute ref="xml:id"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -2232,6 +2233,7 @@
               </xs:complexType>
             </xs:element>
           </xs:sequence>
+          <xs:attribute ref="xml:id"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>

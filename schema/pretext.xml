@@ -240,8 +240,7 @@
             WWVariableUse)* }
         </fragment>
 
-        <p>A paragraph is a key bottleneck between structure and prose.  You can use a variety of constructs in a paragraph, and you may use a paragraph in many places.  So the name of the element is very simple, just a <c>p</c>.  Now you can include footnotes, display mathematics, display verbatim text, and lists.  Note that a list can <em>only</em> occur in a paragraph, so to make nested lists you must structure a list item of the exterior list with a paragraph to contain the interior list.  A paragraph can contain some metadata, like index entries and mathematical notation.  It does not have a title.</p>
-
+        <p>A paragraph is a key bottleneck between structure and prose.  You can use a variety of constructs in a paragraph, and you may use a paragraph in many places.  So the name of the element is very simple, just a <c>p</c>.  Now you can include footnotes, display mathematics, display verbatim text, and lists.  Note that a list can <em>only</em> occur in a paragraph, so to make nested lists you must structure a list item of the exterior list with a paragraph to contain the interior list.  A paragraph can contain some metadata, like index entries and mathematical notation.  It does not have a title, not is it ever numbered.  It can be the target of a cross-reference, but only with some care.</p>
 
         <p>A <term>lined paragraph</term> is a variant, for use when the line-by-line structure is necessary.  The <webwork /> variant of a <c>p</c> element allows for using the <c>var</c> element as an answer blank or generated content, possibly inside mathematics, and possibly inside lists.</p>
 
@@ -262,6 +261,7 @@
             Index)* }
         Paragraph = 
             element p {
+                UniqueID?,
                 TextParagraph
             }
         TextParagraphWW = mixed { (
@@ -285,6 +285,7 @@
             }
         ParagraphLined =
             element p {
+                UniqueID?,
                 element line {TextShort}+
             }
         </fragment>

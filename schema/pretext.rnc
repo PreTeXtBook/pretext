@@ -1039,6 +1039,7 @@
             Index)* }
         Paragraph = 
             element p {
+                UniqueID?,
                 TextParagraph
             }
         TextParagraphWW = mixed { (
@@ -1062,6 +1063,7 @@
             }
         ParagraphLined =
             element p {
+                UniqueID?,
                 element line {TextShort}+
             }
         

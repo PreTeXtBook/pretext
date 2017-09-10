@@ -2297,6 +2297,9 @@
   </define>
   <define name="Paragraph">
     <element name="p">
+      <optional>
+        <ref name="UniqueID"/>
+      </optional>
       <ref name="TextParagraph"/>
     </element>
   </define>
@@ -2329,6 +2332,9 @@
   </define>
   <define name="ParagraphLined">
     <element name="p">
+      <optional>
+        <ref name="UniqueID"/>
+      </optional>
       <oneOrMore>
         <element name="line">
           <ref name="TextShort"/>
