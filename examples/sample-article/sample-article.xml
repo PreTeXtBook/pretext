@@ -2335,6 +2335,11 @@ the xsltproc executable.
 
                     <introduction>
                         <p>In the next two problems compute the indicated derivative.</p>
+                        <p>Use a <c>sidebyside</c> element to insert a relevant <c>image</c>, or <c>tabular</c>, or other un-numbered item tht does not fit in a sentence.</p>
+                        <sidebyside width="30%">
+                            <image source="images/cubic-function.png" />
+                        </sidebyside>
+                        <p>You could <q>connect</q> the image above with the exercises following as part of this <c>introduction</c> for the <c>exercisegroup</c>.</p>
                     </introduction>
 
                     <exercise>
