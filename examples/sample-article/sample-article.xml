@@ -954,9 +954,8 @@ the xsltproc executable.
                 </paragraphs>
 
                 <paragraphs>
-                    <p>You do not have to provide a title for the <c>paragraphs</c> element, as it is optional.  Then this element functions only as a grouping without much more structure than that.</p>
-
-                    <p>This is the second paragraph of a title-less <c>paragraphs</c> grouping, so it should seem related to the previous paragraph, and these two paragraphs should look distinct from the two paragraphs in the grouping with the title <q>Structure</q> immediately prior.</p>
+                    <title>A Second Paragraphs</title>
+                    <p>This is a second consecutive <c>paragraphs</c> element, so should seem related to its title, but distinct from the two paragraphs in the grouping with the title <q>Structure</q> immediately prior.</p>
                 </paragraphs>
 
 
@@ -5076,6 +5075,8 @@ the xsltproc executable.
                 <p>Text can be put next to other blocks of text using either the <c>paragraphs</c> element, which can contain multiple paragraphs using the <c>p</c> element.</p>
 
                 <p>If only one paragraph is required, simply use the <c>p</c> element on its own.  In addtion to captions, elements which allow titles will have those displayed above the panel.  So <c>paragraphs</c> can carry a <c>title</c>, but a single paragraph, <c>p</c>, will not.</p>
+
+                <p>Note: The <c>paragraphs</c> element, used as a container for several <c>p</c> in a panel, and without a <c>title</c>, will be replaced by some sort of stacking mechanism.  A single <c>p</c> may be used now as the contents of a panel, without a title.</p>
 
                 <sidebyside widths="20% 20% 20% 20%" valigns="middle top middle top">
                     <paragraphs>

@@ -6626,6 +6626,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2017-08-25'" />
         <xsl:with-param name="message" select="'the &quot;list&quot; element now requires a &quot;caption&quot; and the &quot;title&quot; is optional'" />
     </xsl:call-template>
+    <!--  -->
+    <!-- 2017-09-10  deprecate title-less paragraphs, outside of sidebyside -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurences" select="$document-root//paragraphs[not(title) and not(parent::sidebyside)]" />
+        <xsl:with-param name="date-string" select="'2017-09-10'" />
+        <xsl:with-param name="message" select="'the &quot;paragraphs&quot; element (outside of a &quot;sidebyside&quot;) now requires a &quot;title&quot; (but you can xref individual &quot;p&quot; now, if that is your purpose)'" />
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->
