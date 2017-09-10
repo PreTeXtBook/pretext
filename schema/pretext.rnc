@@ -210,7 +210,13 @@
             element colophon {(BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+}
         
         
-        Paragraphs = 
+        Paragraphs =
+            element paragraphs {
+                MetaDataTitle,
+                Index*,
+                BlockDivision+
+            }
+        ParagraphsTitleOptional =
             element paragraphs {
                 MetaDataTitleOptional,
                 Index*,
@@ -587,6 +593,7 @@
                     Paragraph |
                     Preformatted |
                     Paragraphs |
+                    ParagraphsTitleOptional |
                     List
                 )+
             }
@@ -603,6 +610,7 @@
                     Paragraph |
                     Preformatted |
                     Paragraphs |
+                    ParagraphsTitleOptional |
                     List
                 )+
             }

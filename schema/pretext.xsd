@@ -69,7 +69,7 @@
             <xs:choice>
               <xs:choice maxOccurs="unbounded">
                 <xs:group ref="BlockDivision"/>
-                <xs:element ref="paragraphs"/>
+                <xs:group ref="Paragraphs"/>
               </xs:choice>
               <xs:sequence>
                 <xs:group minOccurs="0" ref="IntroductionDivision"/>
@@ -96,7 +96,7 @@
             <xs:choice>
               <xs:choice maxOccurs="unbounded">
                 <xs:group ref="BlockDivision"/>
-                <xs:element ref="paragraphs"/>
+                <xs:group ref="Paragraphs"/>
               </xs:choice>
               <xs:sequence>
                 <xs:group minOccurs="0" ref="IntroductionDivision"/>
@@ -123,7 +123,7 @@
             <xs:choice>
               <xs:choice maxOccurs="unbounded">
                 <xs:group ref="BlockDivision"/>
-                <xs:element ref="paragraphs"/>
+                <xs:group ref="Paragraphs"/>
               </xs:choice>
               <xs:sequence>
                 <xs:group minOccurs="0" ref="IntroductionDivision"/>
@@ -149,7 +149,7 @@
             <xs:element minOccurs="0" ref="objectives"/>
             <xs:choice maxOccurs="unbounded">
               <xs:group ref="BlockDivision"/>
-              <xs:element ref="paragraphs"/>
+              <xs:group ref="Paragraphs"/>
             </xs:choice>
           </xs:sequence>
         </xs:extension>
@@ -163,7 +163,7 @@
           <xs:choice>
             <xs:choice maxOccurs="unbounded">
               <xs:group ref="BlockDivision"/>
-              <xs:element ref="paragraphs"/>
+              <xs:group ref="Paragraphs"/>
               <xs:element ref="notation-list"/>
               <xs:element ref="solution-list"/>
             </xs:choice>
@@ -456,16 +456,36 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
-  <xs:element name="paragraphs">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:group ref="MetaDataTitleOptional"/>
-        <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
-        <xs:group maxOccurs="unbounded" ref="BlockDivision"/>
-      </xs:sequence>
-      <xs:attributeGroup ref="MetaDataTitleOptional"/>
-    </xs:complexType>
-  </xs:element>
+  <xs:group name="Paragraphs">
+    <xs:sequence>
+      <xs:element name="paragraphs">
+        <xs:complexType>
+          <xs:complexContent>
+            <xs:extension base="MetaDataTitle">
+              <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
+                <xs:group maxOccurs="unbounded" ref="BlockDivision"/>
+              </xs:sequence>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="ParagraphsTitleOptional">
+    <xs:sequence>
+      <xs:element name="paragraphs">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="MetaDataTitleOptional"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
+            <xs:group maxOccurs="unbounded" ref="BlockDivision"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="MetaDataTitleOptional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
   <xs:element name="exercises">
     <xs:complexType>
       <xs:sequence>
@@ -1249,7 +1269,8 @@
             <xs:element ref="console"/>
             <xs:group ref="Paragraph"/>
             <xs:element ref="pre"/>
-            <xs:element ref="paragraphs"/>
+            <xs:group ref="Paragraphs"/>
+            <xs:group ref="ParagraphsTitleOptional"/>
             <xs:group ref="List"/>
           </xs:choice>
           <xs:attributeGroup ref="SidebySideAttributes"/>
@@ -1270,7 +1291,8 @@
             <xs:element ref="console"/>
             <xs:group ref="Paragraph"/>
             <xs:element ref="pre"/>
-            <xs:element ref="paragraphs"/>
+            <xs:group ref="Paragraphs"/>
+            <xs:group ref="ParagraphsTitleOptional"/>
             <xs:group ref="List"/>
           </xs:choice>
           <xs:attributeGroup ref="SidebySideAttributes"/>

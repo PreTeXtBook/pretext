@@ -162,12 +162,20 @@
     <section>
         <title>Lightweight Divisions</title>
 
-        <p>The <c>paragraphs</c> element, which is not to be confused with a <em>real</em> paragraph as implemented by the <c>p</c> element, is an exceptional type of division (both in design and utility).  It can have an optional <c>title</c>, can appear anywhere within any of the divisions, cannot be further subdivided, and is not ever numbered.  Its contents are conceptually a run of paragraphs, but as described here allow much more than that.</p>
+        <p>The <c>paragraphs</c> element, which is not to be confused with a <em>real</em> paragraph as implemented by the <c>p</c> element, is an exceptional type of division (both in design and utility).  It must have a <c>title</c>, can appear anywhere within any of the divisions, cannot be further subdivided, and is not ever numbered.  Its contents are conceptually a run of paragraphs, but as described here allow much more than that.</p>
 
         <p>It is especially useful in a short document (like a class handout, letter, memorandum, or short proposal) where numbered divisions might feel like overkill.</p>
 
+        <p>The <c>TitleOptional</c> variant is only for use in <c>sidebyside</c> and will be removed once <c>p</c> can be stacked in a panel of a <c>sidebyside</c>.</p>
+
         <fragment xml:id="paragraphs">
-        Paragraphs = 
+        Paragraphs =
+            element paragraphs {
+                MetaDataTitle,
+                Index*,
+                BlockDivision+
+            }
+        ParagraphsTitleOptional =
             element paragraphs {
                 MetaDataTitleOptional,
                 Index*,
@@ -1222,7 +1230,7 @@
 
         <p>A group of side-by-sides is designed to stack vertically with common controls on widths, etc.  Its implementation is entirely experimental right now, even if we are relatively confident of the markup.</p>
 
-        <p>The <webwork /> variant allows only a single tabular or image.  The <q>NoCaption</q> variants prohibits captioned or numbered items as panels.</p>
+        <p>The <webwork /> variant allows only a single tabular or image.  The <q>NoCaption</q> variants prohibits captioned or numbered items as panels.  The <c>ParagraphsTitleOptional</c> will be removed once <c>p</c> can stack in a panel.</p>
 
         <fragment xml:id="sidebyside">
         SidebySideAttributes =
@@ -1243,6 +1251,7 @@
                     Paragraph |
                     Preformatted |
                     Paragraphs |
+                    ParagraphsTitleOptional |
                     List
                 )+
             }
@@ -1259,6 +1268,7 @@
                     Paragraph |
                     Preformatted |
                     Paragraphs |
+                    ParagraphsTitleOptional |
                     List
                 )+
             }

@@ -465,6 +465,17 @@
   </define>
   <define name="Paragraphs">
     <element name="paragraphs">
+      <ref name="MetaDataTitle"/>
+      <zeroOrMore>
+        <ref name="Index"/>
+      </zeroOrMore>
+      <oneOrMore>
+        <ref name="BlockDivision"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="ParagraphsTitleOptional">
+    <element name="paragraphs">
       <ref name="MetaDataTitleOptional"/>
       <zeroOrMore>
         <ref name="Index"/>
@@ -1282,6 +1293,7 @@
           <ref name="Paragraph"/>
           <ref name="Preformatted"/>
           <ref name="Paragraphs"/>
+          <ref name="ParagraphsTitleOptional"/>
           <ref name="List"/>
         </choice>
       </oneOrMore>
@@ -1301,6 +1313,7 @@
           <ref name="Paragraph"/>
           <ref name="Preformatted"/>
           <ref name="Paragraphs"/>
+          <ref name="ParagraphsTitleOptional"/>
           <ref name="List"/>
         </choice>
       </oneOrMore>
