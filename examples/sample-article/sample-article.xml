@@ -2344,7 +2344,7 @@ the xsltproc executable.
 
                     <exercise>
                         <statement>
-                            <p><m>f(x)=x^3</m>, <m>\frac{df}{dx}</m>.  This sentence is just a bunch of gibberish to check where the second line of the problem begins relative to the first line.</p>
+                            <p xml:id="paragraph-in-exercise"><m>f(x)=x^3</m>, <m>\frac{df}{dx}</m>.  This sentence is just a bunch of gibberish to check where the second line of the problem begins relative to the first line.</p>
                             <p>We cross-reference the next problem in this exercise group.  For the <c>phrase-global</c> form, the common element of the cross-reference and the target should be the <c>exercises</c> division, and not the enclosing <c>exercisegroup</c>:  <xref ref="exercises-cosine-derivative" text="phrase-global" />.</p>
                         </statement>
                     </exercise>
@@ -4186,6 +4186,7 @@ the xsltproc executable.
                 <li><p>A cross-reference to a block quotation (which is never numbered): <xref ref="blockquote-seuss" text="title">Quote by Dr Seuss</xref></p></li>
                 <li><p>A <c>type-global</c> cross-reference to a second-level <c>task</c> within a project: <xref ref="project-task-level-two" text="type-global" />, the encompassing <c>project</c>: <xref ref="project-structured" />, and a <c>local</c> reference <xref ref="project-task-level-two" text="local" />.</p></li>
                 <li><p>A subcaptioned named list: <xref ref="color-list-as-panel" /></p></li>
+                <li><p>A cross-reference to a paragraph (<c>p</c>) in the <c>statement</c> of an <c>exercise</c>: <xref ref="paragraph-in-exercise" text="title">paragraph</xref>.  Notice that such a paragraph has no number and no title, so you need to (a) use <c>text='title'</c>, and (b) provide custom text for the title, as an override that becomes the content of the link.  You may wish to provide very explicit location information for hardcopy print.  Notice that this is not a cross-reference to the <c>exercise</c>, just a small portion of it.</p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul></p>
 

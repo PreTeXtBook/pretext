@@ -3811,6 +3811,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)][1][self::p or self::paragraphs or self::sidebyside]">
         <xsl:text>\par&#xa;</xsl:text>
     </xsl:if>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
@@ -3820,6 +3822,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: maybe memo header should set this up          -->
 <xsl:template match="memo/p[1]">
     <xsl:text>\noindent{}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
@@ -7004,11 +7008,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- we institute some numberings that LaTeX does not do          -->
 <!-- naturally (references in extra sections, proofs,             -->
 <!-- items in ordered lists (alone or in an exercise),            -->
-<!-- hints, answers, solutions).  For a "label"                   -->
+<!-- hints, answers, solutions).  We also point to                -->
+<!-- items without numbers, like a "p". For a "label"             -->
 <!-- hyperref's hypertarget mechanism fits the bill.              -->
 <!-- \null target text was unnecessary and visible (2015-12-12)   -->
 <!-- (See also modal templates for "xref-link" and "xref-number") -->
-<xsl:template match="paragraphs|blockquote|exercises//exercise|biblio|biblio/note|proof|exercisegroup|case|ol/li|dl/li|hint|answer|solution|contributor" mode="label">
+<xsl:template match="p|paragraphs|blockquote|exercises//exercise|biblio|biblio/note|proof|exercisegroup|case|ol/li|dl/li|hint|answer|solution|contributor" mode="label">
     <xsl:text>\hypertarget{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}{}</xsl:text>
@@ -7119,7 +7124,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- anchors/labels below and then we must point to           -->
 <!-- them with \hyperlink{}{} (nee hyperref[]{}).             -->
 <!-- (See also modal templates for "label" and "xref-number") -->
-<xsl:template match="paragraphs|blockquote|exercises//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|book|article" mode="xref-link">
+<xsl:template match="p|paragraphs|blockquote|exercises//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|book|article" mode="xref-link">
     <xsl:param name="content" />
     <xsl:text>\hyperlink{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
