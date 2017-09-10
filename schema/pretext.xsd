@@ -500,6 +500,14 @@
       <xs:element ref="todo"/>
     </xs:choice>
   </xs:group>
+  <xs:group name="BlockStatementNoCaption">
+    <xs:choice>
+      <xs:group ref="BlockText"/>
+      <xs:group ref="Aside"/>
+      <xs:group ref="SideBySideNoCaption"/>
+      <xs:group ref="SideBySideGroupNoCaption"/>
+    </xs:choice>
+  </xs:group>
   <xs:group name="BlockStatement">
     <xs:choice>
       <xs:group ref="BlockText"/>
@@ -601,6 +609,24 @@
       <xs:element name="conclusion">
         <xs:complexType>
           <xs:group maxOccurs="unbounded" ref="BlockText"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="IntroductionStatementNoCaption">
+    <xs:sequence>
+      <xs:element name="introduction">
+        <xs:complexType>
+          <xs:group maxOccurs="unbounded" ref="BlockStatementNoCaption"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="ConclusionStatementNoCaption">
+    <xs:sequence>
+      <xs:element name="conclusion">
+        <xs:complexType>
+          <xs:group maxOccurs="unbounded" ref="BlockStatementNoCaption"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -1732,9 +1758,9 @@
     <xs:complexType>
       <xs:sequence>
         <xs:group ref="MetaDataTarget"/>
-        <xs:group minOccurs="0" ref="IntroductionText"/>
+        <xs:group minOccurs="0" ref="IntroductionStatementNoCaption"/>
         <xs:element maxOccurs="unbounded" ref="exercise"/>
-        <xs:group minOccurs="0" ref="ConclusionText"/>
+        <xs:group minOccurs="0" ref="ConclusionStatementNoCaption"/>
       </xs:sequence>
       <xs:attributeGroup ref="MetaDataTarget"/>
       <xs:attribute name="cols">

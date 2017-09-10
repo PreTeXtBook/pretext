@@ -514,6 +514,14 @@
       <ref name="ToDo"/>
     </choice>
   </define>
+  <define name="BlockStatementNoCaption">
+    <choice>
+      <ref name="BlockText"/>
+      <ref name="Aside"/>
+      <ref name="SideBySideNoCaption"/>
+      <ref name="SideBySideGroupNoCaption"/>
+    </choice>
+  </define>
   <define name="BlockStatement">
     <choice>
       <ref name="BlockText"/>
@@ -605,6 +613,20 @@
     <element name="conclusion">
       <oneOrMore>
         <ref name="BlockText"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="IntroductionStatementNoCaption">
+    <element name="introduction">
+      <oneOrMore>
+        <ref name="BlockStatementNoCaption"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="ConclusionStatementNoCaption">
+    <element name="conclusion">
+      <oneOrMore>
+        <ref name="BlockStatementNoCaption"/>
       </oneOrMore>
     </element>
   </define>
@@ -1789,13 +1811,13 @@
         </attribute>
       </optional>
       <optional>
-        <ref name="IntroductionText"/>
+        <ref name="IntroductionStatementNoCaption"/>
       </optional>
       <oneOrMore>
         <ref name="Exercise"/>
       </oneOrMore>
       <optional>
-        <ref name="ConclusionText"/>
+        <ref name="ConclusionStatementNoCaption"/>
       </optional>
     </element>
   </define>

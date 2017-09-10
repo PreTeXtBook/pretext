@@ -607,7 +607,7 @@
 
         <p>A <term>text block</term> is very similar to a paragraph.  It can be an actual paragraph, a sequence of paragraphs enclosed as a block quote (with attribution, perhaps), or a large chunk of unformatted text presented typically in a monospace font.  A <c>todo</c> is text that is never printed in your output, unless you explicitly request that it be printed or inventoried.  You can put it anywhere you might put a paragraph, as a peer, but do not use it within a paragraph (or other places where you are authoring text, it can gum up processing).</p>
 
-        <p>A <term>statement block</term> is used in statements.  What are those?  Theorems have statements, exercises have statements, questions have statements.  Some of these blocks with statements also have proofs, hints, and solutions.  In statements, and their peers, we include text blocks, captioned items, asides, side-by-side layouts, and Sage computations, but exclude many of the numbered and titled division blocks.</p>
+        <p>A <term>statement block</term> is used in statements.  What are those?  Theorems have statements, exercises have statements, questions have statements.  Some of these blocks with statements also have proofs, hints, and solutions.  In statements, and their peers, we include text blocks, captioned items, asides, side-by-side layouts, and Sage computations, but exclude many of the numbered and titled division blocks.  The <c>NoCaption</c> variant prohibits all numbered items, but allows placement of items like <c>image</c>.  It also does not include <c>Sage</c>.</p>
 
         <p>A <term>division block</term> includes text blocks, statement blocks, plus topical chunks of text that can have numbered headings or numbered captions, with optional titles, and are set apart slightly from the surrounding narrative.  These are placed mostly as children of divisions, and so one cannot contain another.  They certainly contain paragraphs, and all that goes into them, such as mathematics (inline and display) and figures (and other captioned items).  The <c>sidebyside</c> element can be used to illustrate a division block with a variety of images and displayed text in flexible layouts.</p>
 
@@ -618,6 +618,9 @@
         <fragment xml:id="block">
         BlockText =
             Paragraph | BlockQuote | Preformatted | ToDo
+        BlockStatementNoCaption =
+            BlockText | Aside |
+            SideBySideNoCaption | SideBySideGroupNoCaption
         BlockStatement =
             BlockText |
             Figure | Aside |
@@ -673,6 +676,10 @@
             element introduction {BlockText+}
         ConclusionText =
             element conclusion {BlockText+}
+        IntroductionStatementNoCaption =
+            element introduction {BlockStatementNoCaption+}
+        ConclusionStatementNoCaption =
+            element conclusion {BlockStatementNoCaption+}
         IntroductionStatement =
             element introduction {BlockStatement+}
         ConclusionStatement =
@@ -1446,9 +1453,9 @@
             element exercisegroup {
                 MetaDataTarget,
                 attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                IntroductionText?,
+                IntroductionStatementNoCaption?,
                 Exercise+,
-                ConclusionText?
+                ConclusionStatementNoCaption?
             }
         </fragment>
     </section>

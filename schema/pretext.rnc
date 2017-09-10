@@ -236,6 +236,9 @@
         
         BlockText =
             Paragraph | BlockQuote | Preformatted | ToDo
+        BlockStatementNoCaption =
+            BlockText | Aside |
+            SideBySideNoCaption | SideBySideGroupNoCaption
         BlockStatement =
             BlockText |
             Figure | Aside |
@@ -279,6 +282,10 @@
             element introduction {BlockText+}
         ConclusionText =
             element conclusion {BlockText+}
+        IntroductionStatementNoCaption =
+            element introduction {BlockStatementNoCaption+}
+        ConclusionStatementNoCaption =
+            element conclusion {BlockStatementNoCaption+}
         IntroductionStatement =
             element introduction {BlockStatement+}
         ConclusionStatement =
@@ -810,9 +817,9 @@
             element exercisegroup {
                 MetaDataTarget,
                 attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                IntroductionText?,
+                IntroductionStatementNoCaption?,
                 Exercise+,
-                ConclusionText?
+                ConclusionStatementNoCaption?
             }
         
         
