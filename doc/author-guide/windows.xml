@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
-<!-- This file is part of the documentation of MathBook XML   -->
+<!--   This file is part of the documentation of PreTeXt      -->
 <!--                                                          -->
-<!--    MathBook XML Author's Guide                           -->
+<!--      PreTeXt Author's Guide                              -->
 <!--                                                          -->
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
@@ -14,7 +14,7 @@
   </author>
 
   <introduction>
-    <p>This appendix explains the best known way to install the MathBook XML toolchain in a Windows environment, rather than a Unix-flavored operating system (such as Linux and Apple's <init>OS X</init>). It has been tested on Windows 7, 8, and 10. We assume that none of the listed tools or equivalents have been previously installed. That may complicate matters. This is especially true if you use Cygwin, or if you have already installed Python on your machine. MathBook XML compatibility with existing Python installations is addressed elsewhere in this document (<xref provisional="python-mbx-compatibility" />).</p>
+    <p>This appendix explains the best known way to install the <pretext /> toolchain in a Windows environment, rather than a Unix-flavored operating system (such as Linux and Apple's <init>OS X</init>). It has been tested on Windows 7, 8, and 10. We assume that none of the listed tools or equivalents have been previously installed. That may complicate matters. This is especially true if you use Cygwin, or if you have already installed Python on your machine. <pretext /> compatibility with existing Python installations is addressed elsewhere in this document (<xref provisional="python-mbx-compatibility" />).</p>
 
     <p>If you have Windows 10, be sure to read about <init>WSL</init> in <xref ref="windows-subsystem-linux" />, which could be a whole lot easier to setup and maintain.</p>
   </introduction>
@@ -94,7 +94,7 @@
     </subsection>
 
     <conclusion>
-      <p>Now you are ready to begin installing the various pieces of the MathBook XML puzzle. The first one, <c>xsltproc</c> (<xref ref="installing-xsltproc" />), is the most annoying. You might want to go get a snack or another cup of coffee.</p>
+      <p>Now you are ready to begin installing the various pieces of the <pretext /> puzzle. The first one, <c>xsltproc</c> (<xref ref="installing-xsltproc" />), is the most annoying. You might want to go get a snack or another cup of coffee.</p>
     </conclusion>
   </section>
 
@@ -187,7 +187,7 @@
 
     <conclusion>
       <p>Congratulations, you have successfully installed <c>xsltproc</c>.</p>
-      <p>Note that you have installed the <c>xmllint</c> utility as part of this procedure. This utility will allow some text editors to <term>lint</term> your MathBook XML files, that is, to automatically detect and highlight errors, and perhaps even to explain them.</p>
+      <p>Note that you have installed the <c>xmllint</c> utility as part of this procedure. This utility will allow some text editors to <term>lint</term> your <pretext /> files, that is, to automatically detect and highlight errors, and perhaps even to explain them.</p>
     </conclusion>
   </section>
 
@@ -195,7 +195,7 @@
     <title>Installing git</title>
     <introduction>
       <p>In this section we install the <c>git</c> version control system and some tools to interact with it, including a fairly full-featured emulation of the <c>bash</c> command line shell. I strongly recommend you use the Git Bash shell or another <c>bash</c> emulation, so that you can use Linux commands referenced elsewhere.</p>
-      <p>One feature in particular, <c>pdfcrop</c>, has not been made to work in the normal Windows <c>cmd</c> shell, although the rest of MathBook XML has. To generate images using the <c>mbx</c> script <xref ref="section-mbx-on-windows" />, you will need the Git Bash shell or something like it.</p>
+      <p>One feature in particular, <c>pdfcrop</c>, has not been made to work in the normal Windows <c>cmd</c> shell, although the rest of <pretext /> has. To generate images using the <c>mbx</c> script <xref ref="section-mbx-on-windows" />, you will need the Git Bash shell or something like it.</p>
     </introduction>
     <subsection xml:id="install-git">
       <title>Steps to install git</title>
@@ -356,7 +356,7 @@
   </section>
 
   <conclusion>
-    <p>If you find any problems or bugs, please let us know at the MathBook XML Support group in Google Groups, or email <c>drosoff</c> AT <c>collegeofidaho</c> DOT <c>edu</c>.</p>
+    <p>If you find any problems or bugs, please let us know at the <pretext /> Support group in Google Groups, or email <c>drosoff</c> AT <c>collegeofidaho</c> DOT <c>edu</c>.</p>
   </conclusion>
 
 </appendix>

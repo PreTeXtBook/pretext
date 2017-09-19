@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<!-- This file is part of the documentation of MathBook XML   -->
+<!--   This file is part of the documentation of PreTeXt      -->
 <!--                                                          -->
-<!--    MathBook XML User's Guide                             -->
+<!--    <pretext /> User's Guide                             -->
 <!--                                                          -->
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
@@ -19,8 +19,8 @@
         </search>
     </docinfo>
 
-    <book xml:id="mathbook-author-guide">
-        <title>MathBook XML Author's Guide</title>
+    <book xml:id="pretext-author-guide">
+        <title><pretext /> Author's Guide</title>
 
         <xi:include href="frontmatter.xml" />
         <xi:include href="start-here.xml" />

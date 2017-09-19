@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- This file is part of the documentation of MathBook XML   -->
+<!--   This file is part of the documentation of PreTeXt      -->
 <!--                                                          -->
-<!--    MathBook XML Author's Guide                           -->
+<!--      PreTeXt Author's Guide                              -->
 <!--                                                          -->
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
@@ -11,13 +11,13 @@
     <title>Overview of Features</title>
 
     <introduction>
-        <p>This chapter is a high-level view of the important concepts, features and design decisions that go into the creation of MathBook XML.  For careful exact descriptions of details, we will direct you to one of the many sections in the <xref ref="topics" text="title" /> chapter.  So this chapter should make you aware of what is possible and expand on the philosophy described earlier in <xref ref="philosophy" />, while also giving you examples of many basic constructions you can use to get started quickly.</p>
+        <p>This chapter is a high-level view of the important concepts, features and design decisions that go into the creation of <pretext />.  For careful exact descriptions of details, we will direct you to one of the many sections in the <xref ref="topics" text="title" /> chapter.  So this chapter should make you aware of what is possible and expand on the philosophy described earlier in <xref ref="philosophy" />, while also giving you examples of many basic constructions you can use to get started quickly.</p>
     </introduction>
 
     <section xml:id="overview-structure">
         <title>Structure</title>
 
-        <p>A MathBook XML document is a nested sequence of <term>structural divisions</term>.  For a book, these would go <tag>part</tag>, <tag>chapter</tag>, <tag>section</tag>, <tag>subsection</tag>, and <tag>subsubsection</tag>.  Using <tag>part</tag> is optional (and not yet fully implemented), but a book must always use <tag>chapter</tag> (or else it is not a book!).  No skipping over divisions.  For example, you cannot divide a <tag>section</tag> directly into several <tag>subsubsection</tag>s without an intervening <tag>subsection</tag>.</p>
+        <p>A <pretext /> document is a nested sequence of <term>structural divisions</term>.  For a book, these would go <tag>part</tag>, <tag>chapter</tag>, <tag>section</tag>, <tag>subsection</tag>, and <tag>subsubsection</tag>.  Using <tag>part</tag> is optional (and not yet fully implemented), but a book must always use <tag>chapter</tag> (or else it is not a book!).  No skipping over divisions.  For example, you cannot divide a <tag>section</tag> directly into several <tag>subsubsection</tag>s without an intervening <tag>subsection</tag>.</p>
 
         <p>An <tag>article</tag> starts divisions from <tag>section</tag>, though it may choose to have no divisions at all.  <tag>paragraphs</tag> are exceptional.  They lack a full set of features, but can be used to divide anything, in books or in articles, though they are always terminal since you cannot divide them further.  You will have noticed that we prefer the generic term <term>division</term> (rather than <q>section</q>) since a <tag>section</tag> is a very particular division.</p>
 
@@ -37,7 +37,7 @@
 
         <p>Lots of things can happen in paragraphs, some things can <em>only</em> happen in a paragraph, and some things are <em>banned</em> in paragraphs.  Inside a paragraph, you can emphasize some text (<tag>em</tag>), you can quote some text (<tag>q</tag>), you can mark a phrase as being from another language (<tag>foreign</tag>), and much more.  You can use special characters like an ampersand (<ampersand />, <tage>ampersand</tage>) or an octothorpe, aka <q>hash tag</q> (<hash />, <tage>hash</tage>).  You must put a list inside a paragraph, and all mathematics (<xref ref="overview-math" />) will occur inside a paragraph.  You cannot put a <tag>table</tag> or a <tag>figure</tag> in a paragraph, and many other structured components are prohibited in paragraphs.</p>
 
-        <p>Paragraphs are also used as part of the structure of other parts of your document.  For example, a <tag>remark</tag> could be composed of several <tag>p</tag>.  As you get started with MathBook XML, remember that much of your actual writing will occur inside of a <tag>p</tag> and you will have a collection of tags you can use there to express your meaning to your readers.</p>
+        <p>Paragraphs are also used as part of the structure of other parts of your document.  For example, a <tag>remark</tag> could be composed of several <tag>p</tag>.  As you get started with <pretext />, remember that much of your actual writing will occur inside of a <tag>p</tag> and you will have a collection of tags you can use there to express your meaning to your readers.</p>
     </section>
 
     <section xml:id="overview-cross-references">
@@ -57,7 +57,7 @@
 
         <p>Divisions always need titles, you accomplish this with a <tag>title</tag> tag first thing.  Almost everything that you can use in a paragraph can be used in a title, but a few constructions are banned, such as a displayed mathematical equation (for good reason).  Try to avoid using footnotes in titles, even if we have tried to make them possible.</p>
 
-        <p>Lots of other structures admit titles.  Experiment, or look at specific descriptions of the structure you are interested in.  Titles are very integral to MathBook XML, much like cross-references.  Titles migrate to the Table of Contents, get used in page headers for print output, can be used in lists (such as a List of Figures), and can be used as the text of a cross-reference, instead of a number.  You might not be inclined to give a <tag>remark</tag> a title, but it would be good practice to do so.  Your electronic outputs will be much more useful to your readers if you routinely title every structure that allows.</p>
+        <p>Lots of other structures admit titles.  Experiment, or look at specific descriptions of the structure you are interested in.  Titles are very integral to <pretext />, much like cross-references.  Titles migrate to the Table of Contents, get used in page headers for print output, can be used in lists (such as a List of Figures), and can be used as the text of a cross-reference, instead of a number.  You might not be inclined to give a <tag>remark</tag> a title, but it would be good practice to do so.  Your electronic outputs will be much more useful to your readers if you routinely title every structure that allows.</p>
     </section>
 
     <section xml:id="overview-math">
@@ -81,7 +81,7 @@
 
         <p>If you want to place an anonymous image (no caption, no number), then you must wrap it in a <tag>sidebyside</tag>.  Note also that the <tag>sidebyside</tag> tag provides some very flexible options for placing several images (<xref ref="overview-sidebyside" />) together, or combining figures with subcaptions.</p>
 
-        <p>If you wish to construct technical diagrams, with editable source, and perhaps including the use of <latex /> macros, MathBook XML provides support for graphics languages like PGF, TikZ, and Asymptote, in addition to using Sage code to describe a plot or image.  In most cases output can be obtained as smoothly-scalable SVG images, in addition to other formats like PDF or PNG.  Making all this happen is one of the more technical aspects of MathBook XML, so we save the discussion for one of the topics, <xref provisional="topic-image-languages" />.</p>
+        <p>If you wish to construct technical diagrams, with editable source, and perhaps including the use of <latex /> macros, <pretext /> provides support for graphics languages like PGF, TikZ, and Asymptote, in addition to using Sage code to describe a plot or image.  In most cases output can be obtained as smoothly-scalable SVG images, in addition to other formats like PDF or PNG.  Making all this happen is one of the more technical aspects of <pretext />, so we save the discussion for one of the topics, <xref provisional="topic-image-languages" />.</p>
     </section>
 
     <section xml:id="overview-lists">
@@ -185,7 +185,7 @@
     <section xml:id="overview-sage">
         <title>Sage</title>
 
-        <p><url href="http://www.sagemath.org/">Sage</url> is an open source library of computational routines for symbolic, exact and numerical mathematics.  It is designed to be a <q>viable free open source alternative to Magma, Maple, Mathematica, and Matlab.</q>  MathBook XML contains extensive support for including example Sage into your document.</p>
+        <p><url href="http://www.sagemath.org/">Sage</url> is an open source library of computational routines for symbolic, exact and numerical mathematics.  It is designed to be a <q>viable free open source alternative to Magma, Maple, Mathematica, and Matlab.</q>  <pretext /> contains extensive support for including example Sage into your document.</p>
 
         <p>A typical use of the <tag>sage</tag> tag is to include an <tag>input</tag> element, followed by an <tag>output</tag> element.  The content of the <tag>input</tag> element may be presented statically in PDF output, or dynamically as a Sage Cell in an output format based on HTML.  Of course, for output as a CoCalc worksheet, the Sage code is presented in the worksheet's native format.</p>
 

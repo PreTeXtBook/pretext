@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- This file is part of the documentation of MathBook XML   -->
+<!--   This file is part of the documentation of PreTeXt      -->
 <!--                                                          -->
-<!--    MathBook XML Author's Guide                           -->
+<!--      PreTeXt Author's Guide                              -->
 <!--                                                          -->
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
@@ -216,7 +216,7 @@
     <section xml:id="topic-divisions">
         <title>Divisions</title>
 
-        <p>A <term>division</term> is a structured component of a book or article that would be recognized by most any reader.  They are essential to the organization of a MathBook XML project.  Notice that we use the generic term division, since a <tag>section</tag> is just one example of a division.</p>
+        <p>A <term>division</term> is a structured component of a book or article that would be recognized by most any reader.  They are essential to the organization of a <pretext /> project.  Notice that we use the generic term division, since a <tag>section</tag> is just one example of a division.</p>
 
         <p>divisions are <tag>book</tag>, <tag>article</tag>, <tag>part</tag>, <tag>chapter</tag>, <tag>section</tag>, <tag>subsection</tag>, <tag>subsubsection</tag>, and <tag>paragraphs</tag>.  Their use is fairly intuitive, though there are some restrictions, so please read on.</p>
 
@@ -336,7 +336,7 @@
 
             <p>If a chunk of displayed math concludes a sentence, then the sentence-ending punctuation should appear at the conclusion of the display.  (And certainly not at the start of the first line after the display!)  But do not author the punctuation within the mathematics element, put it afterwards, where it logically belongs.</p>
 
-            <p>More specifically, place a sentence-ending period (say) <em>immediately</em> after the closing of an <tag>me</tag>, <tag>men</tag>, <tag>md</tag>, or <tag>mdn</tag> element. MathBook XML will place the period in your output in the right place and in the right way.  (By using <latex />'s <c>\text{}</c> macro, if you are curious to know the details.)  Here is an example.  The <init>XML</init> source<cd>
+            <p>More specifically, place a sentence-ending period (say) <em>immediately</em> after the closing of an <tag>me</tag>, <tag>men</tag>, <tag>md</tag>, or <tag>mdn</tag> element. <pretext /> will place the period in your output in the right place and in the right way.  (By using <latex />'s <c>\text{}</c> macro, if you are curious to know the details.)  Here is an example.  The <init>XML</init> source<cd>
                 <cline>&lt;md&gt;</cline>
                 <cline>    &lt;mrow&gt;(a+b)^2&lt;/mrow&gt;</cline>
                 <cline>&lt;/md&gt;.  Now...</cline>
@@ -386,7 +386,7 @@
             <![CDATA[<image source="images/crocodiles.png" width="50%" />]]>
             </pre>
 
-            <p>Typically you would wrap this in a <tag>figure</tag> that might have an <attribute>xml:id</attribute> attribute for cross-references, with or without a caption.  There is no <attribute>height</attribute> attribute, so the aspect ratio of your image is your responsibility outside of MathBook XML.  The <attribute>width</attribute> attribute is a percentage of the available width of the text (outside of a <tag>sidebyside</tag> panel).  Default width is typically 90<percent />.</p>
+            <p>Typically you would wrap this in a <tag>figure</tag> that might have an <attribute>xml:id</attribute> attribute for cross-references, with or without a caption.  There is no <attribute>height</attribute> attribute, so the aspect ratio of your image is your responsibility outside of <pretext />.  The <attribute>width</attribute> attribute is a percentage of the available width of the text (outside of a <tag>sidebyside</tag> panel).  Default width is typically 90<percent />.</p>
 
             <p>You may also provide a <tag>description</tag> which will aid accessibility for electronic formats.  Keep such readers in mind and provide as much description as possible.  Keep the markup simple, since this will typically migrate to an HTML attribute that cannot contain any structure.  Be careful to avoid double-quotes.  For example,</p>
 
@@ -592,7 +592,7 @@
 
         <introduction>
 
-            <p>MathBook XML supports (and encourages) the use of Unicode characters.  Here are some relevant comments.<ul>
+            <p><pretext /> supports (and encourages) the use of Unicode characters.  Here are some relevant comments.<ul>
                 <li><p>Unicode characters will migrate well to any output format based on <init>HTML</init>.  Most browsers will have a variety of fonts with glyphs to realize these characters.</p></li>
 
                 <li><p><latex /> will not always behave as smoothly.  For openers, you definitely will want to use the <c>xelatex</c> engine to build a <init>PDF</init>.  Then you need to be sure your system has a font with the necessary characters and you make the font known to <c>xelatex</c>.  We are working out the details of the best way to accomplish this.</p></li>

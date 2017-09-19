@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- This file is part of the documentation of MathBook XML   -->
+<!--   This file is part of the documentation of PreTeXt      -->
 <!--                                                          -->
-<!--    MathBook XML Author's Guide                           -->
+<!--      PreTeXt Author's Guide                              -->
 <!--                                                          -->
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
@@ -25,7 +25,7 @@
         <![CDATA[<?xml version="1.0" encoding="UTF-8"?>]]>
         </pre>
 
-        <p>Every MathBook XML document is enclosed inside <tag>mathbook</tag> tags and we will be writing an <tag>article</tag>.  So extend your source to the following.</p>
+        <p>Every <pretext /> document is enclosed inside <tag>mathbook</tag> tags and we will be writing an <tag>article</tag>.  So extend your source to the following.</p>
 
         <pre>
         <![CDATA[
@@ -50,20 +50,20 @@
         ]]>
         </pre>
 
-        <p>That's it.  You now have a complete, properly-formed MathBook XML document.  You are ready to organize the two tools necessary to process your source into different formats.</p>
+        <p>That's it.  You now have a complete, properly-formed <pretext /> document.  You are ready to organize the two tools necessary to process your source into different formats.</p>
     </section>
 
     <section>
         <title>Setup</title>
 
-        <p>There are two components to processing your document, the MathBook XML stylesheets and the <c>xsltproc</c> program.  We work at the <term>command-line</term> inside of a <term>terminal</term> or <term>console</term>.  If you do not know what this is, it will seem very primitive at first.  Sometimes the old ways are the best ways.  This will be called a <q>Command Prompt</q> in Windows or a <q>Terminal</q> on a Mac.  In Linux it may be known as a <q>console</q> or a <q>shell</q>.  A tutorial, which is Linux-specific, can be found at <url href="http://ryanstutorials.net/linuxtutorial/">Ryan's Tutorials</url> and certainly others exist.</p>
+        <p>There are two components to processing your document, the <pretext /> stylesheets and the <c>xsltproc</c> program.  We work at the <term>command-line</term> inside of a <term>terminal</term> or <term>console</term>.  If you do not know what this is, it will seem very primitive at first.  Sometimes the old ways are the best ways.  This will be called a <q>Command Prompt</q> in Windows or a <q>Terminal</q> on a Mac.  In Linux it may be known as a <q>console</q> or a <q>shell</q>.  A tutorial, which is Linux-specific, can be found at <url href="http://ryanstutorials.net/linuxtutorial/">Ryan's Tutorials</url> and certainly others exist.</p>
 
         <p>The operating system on a Mac is built on Unix, which is very similar to Linux, so most of the directions here will be little changed between the two.  Procedures can be very different in Windows (<xref ref="windows-install-notes" />, <xref ref="windows-subsystem-linux" />).  One alternative is <url href="https://cocalc.com/">CoCalc</url> which provides a full Linux computer for free in your web browser, so that may be an excellent place for initial experiments (<xref ref="topic-build-in-cocalc" />).</p>
 
         <paragraphs>
-            <title>Step 1: MathBook XML</title>
+            <title>Step 1: <pretext /></title>
 
-            <p>You need to obtain the MathBook XML stylesheets, which are the main part of MathBook XML.  Since you are reading this, it may be possible that you have this already.  You can use <c>git</c> to <term>clone</term> the MathBook XML from the GitHub repository, and then be sure to checkout the <c>dev</c> branch to have the latest version.  This is the best way to go, and you should only download the repository as a zip file once for an initial experiment, and then switch to using a clone instead.</p>
+            <p>You need to obtain the <pretext /> stylesheets, which are the main part of <pretext />.  Since you are reading this, it may be possible that you have this already.  You can use <c>git</c> to <term>clone</term> the <pretext /> from the GitHub repository, and then be sure to checkout the <c>dev</c> branch to have the latest version.  This is the best way to go, and you should only download the repository as a zip file once for an initial experiment, and then switch to using a clone instead.</p>
 
             <p>Once you have a clone of the repository, you can issue <c>git pull</c>, and git will update your local copy with any recent changes.  You should do this <em>regularly</em><mdash />meaning on the order of <em>daily</em>.  See the <xref ref="faq-pull-regularly" text="title">FAQ entry</xref> for more about why we <em>expect</em> you to do this.</p>
 
@@ -73,7 +73,7 @@
         <paragraphs>
             <title>Step 2: <c>xsltproc</c></title>
 
-            <p>This is the command-line program which takes your document and a MathBook XML stylesheet to together produce output.  On Linux or a Mac you probably already have it installed as part of system software.  On Windows it is not so simple.</p>
+            <p>This is the command-line program which takes your document and a <pretext /> stylesheet to together produce output.  On Linux or a Mac you probably already have it installed as part of system software.  On Windows it is not so simple.</p>
 
             <p>In either case see the website for details abut verifying you have this, or how to install it.</p>
         </paragraphs>
@@ -95,7 +95,7 @@
             <cline>pdflatex article-1.tex</cline>
         </cd>In the current working directory you should now find the file <c>article-1.pdf</c> which you can view or print with standard PDF viewing software.  You could even send it to a print-on-demand service to get nice hardback books, though I suspect sales will not be great.</p>
 
-        <p>That's it.  You now know all the basics of authoring with MathBook XML, since you have produced two radically different output formats with identical content from the exact same structured input, via two different command lines.  Everything you need to author a complete article or textbook, and produce it in many different formats, is just an extension or variation on what you just did.  Let us look at a few simple extensions right away before being more methodical.</p>
+        <p>That's it.  You now know all the basics of authoring with <pretext />, since you have produced two radically different output formats with identical content from the exact same structured input, via two different command lines.  Everything you need to author a complete article or textbook, and produce it in many different formats, is just an extension or variation on what you just did.  Let us look at a few simple extensions right away before being more methodical.</p>
     </section>
 
     <section>
@@ -103,7 +103,7 @@
 
         <p>We will not keep reproducing the entire example but instead suggest a series of modifications.  After each edit, process the file again to make sure your syntax is correct (before you get too far along) and to see the changes.</p>
 
-        <p>The generic name of the resulting files is pretty bland, and it would be nice to have a title for our article.  We will add an <term>attribute</term> to the <tag>article</tag> tag, specifically <attribute>xml:id</attribute>, which is a very important part of MathBook XML and used frequently.  For now, it will be used to generate the names of the output files.  (The <q>at</q> symbol is a way of reminding you that it is an attribute, it is not part of what you author.)</p>
+        <p>The generic name of the resulting files is pretty bland, and it would be nice to have a title for our article.  We will add an <term>attribute</term> to the <tag>article</tag> tag, specifically <attribute>xml:id</attribute>, which is a very important part of <pretext /> and used frequently.  For now, it will be used to generate the names of the output files.  (The <q>at</q> symbol is a way of reminding you that it is an attribute, it is not part of what you author.)</p>
 
         <p>So make the following modifications:</p>
 

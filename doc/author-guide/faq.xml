@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- This file is part of the documentation of MathBook XML   -->
+<!--   This file is part of the documentation of PreTeXt      -->
 <!--                                                          -->
-<!--    MathBook XML Author's Guide                           -->
+<!--      PreTeXt Author's Guide                              -->
 <!--                                                          -->
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
@@ -58,7 +58,7 @@
 
             <p>For another point, perhaps you have read a math book in the past and have seen something like <q>and according to 2.4.7<ellipsis /></q>.  What if the book has Theorem 2.4.7 and also Example 2.4.7? Which one is the author talking about? If you are lucky, you are conscious that there are multiple possibilities. If you are unlucky, you flip to Example 2.4.7 but the author meant Theorem 2.4.7, and you go a bit mad trying to make Example 2.4.7 logically relevant to the reference.</p>
 
-            <p>MathBook XML makes it easy to avoid this particular annoyance, because cross references can identify their <q>type</q>, especially through the use of the global <q>autonaming</q> feature. But even when the text explicitly says <q>and according to Theorem 2.4.7<ellipsis /></q>, with humans being human, some readers will still focus on the <q>2.4.7</q> and begin a search for that number rather than the theorem with that number. With common counters, once 2.4.7 is a Theorem, there will never be an Example 2.4.7.</p>
+            <p><pretext /> makes it easy to avoid this particular annoyance, because cross references can identify their <q>type</q>, especially through the use of the global <q>autonaming</q> feature. But even when the text explicitly says <q>and according to Theorem 2.4.7<ellipsis /></q>, with humans being human, some readers will still focus on the <q>2.4.7</q> and begin a search for that number rather than the theorem with that number. With common counters, once 2.4.7 is a Theorem, there will never be an Example 2.4.7.</p>
 
             <p>One counterargument is that it feels <q>wrong</q> to allow for an Example 2.4.9 and an Example 2.4.11 with no Example 2.4.10 existing in between. This violates our instinct to categorize and order objects. And perhaps the <q>missing</q> Example 2.4.10 will indeed cause some confusion to some readers. However, we suggest that such idealized views should be subservient to our goal of producing textbooks that provide a useful resource for the vast majority of our students.</p>
 

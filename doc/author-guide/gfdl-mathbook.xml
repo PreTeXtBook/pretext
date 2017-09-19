@@ -3,26 +3,26 @@
 <!--********************************************************************
 Copyright 2015-2016 Robert A. Beezer
 
-This file is part of MathBook XML.
+This file is part of <pretext />.
 
-MathBook XML is free software: you can redistribute it and/or modify
+<pretext /> is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 or version 3 of the
 License (at your option).
 
-MathBook XML is distributed in the hope that it will be useful,
+<pretext /> is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+along with <pretext />.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
 <!-- This is a faithful copy of Version 1.3 of the GFDL. -->
 <!-- The copyright assertion above only refers to the    -->
-<!-- addition of the MathBook XML elements employed to   -->
-<!-- render the license within a MathBook XML document   -->
+<!-- addition of the <pretext /> elements employed to   -->
+<!-- render the license within a <pretext /> document   -->
 
 <appendix xml:id="appendix-gfdl">
     <title>GNU Free Documentation License</title>

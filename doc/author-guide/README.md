@@ -1,5 +1,5 @@
-MathBook XML Author's Guide
-===========================
+PreTeXt Author's Guide
+======================
 
 PDF and HTML versions of this guide are available at the [MathBook XML](http://mathbook.pugetsound.edu) site in the Documentation area.
 

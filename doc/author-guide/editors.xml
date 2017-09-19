@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- This file is part of the documentation of MathBook XML   -->
+<!--   This file is part of the documentation of PreTeXt      -->
 <!--                                                          -->
-<!--    MathBook XML Author's Guide                           -->
+<!--      PreTeXt Author's Guide                              -->
 <!--                                                          -->
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
@@ -261,7 +261,7 @@
     <section xml:id="emacs">
         <title>emacs</title>
 
-        <p>Jason Underdown reports on 2016-05-12 that emacs' <url href="https://www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html">nXML mode</url> (<c>www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html</c>) works well with a <acro>RELAX-NG</acro> schema.  While we work on building a hand-crafted <acro>RELAX-NG</acro> schema, you can use the <url href="http://www.thaiopensource.com/relaxng/trang.html">trang</url> (<c>www.thaiopensource.com/relaxng/trang.html</c>) tool to convert the MathBook XML <init>DTD</init> to a <acro>RELAX-NG</acro> schema.</p>
+        <p>Jason Underdown reports on 2016-05-12 that emacs' <url href="https://www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html">nXML mode</url> (<c>www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html</c>) works well with a <acro>RELAX-NG</acro> schema.  While we work on building a hand-crafted <acro>RELAX-NG</acro> schema, you can use the <url href="http://www.thaiopensource.com/relaxng/trang.html">trang</url> (<c>www.thaiopensource.com/relaxng/trang.html</c>) tool to convert the <pretext /> <init>DTD</init> to a <acro>RELAX-NG</acro> schema.</p>
 
         <blockquote>
             <p>You simply put your cursor at any point in the document, start a new tag with <c>&lt;</c> and then call the <c>completion-at-point</c> function (I bound it to the key-chord: <c>C-&lt;return&gt;</c>) to get a list of possible completions. Or you can start typing a few characters to narrow the list of possibilities. It will also let you know if the element you are trying to insert is invalid.</p>
