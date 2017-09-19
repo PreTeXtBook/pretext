@@ -3493,16 +3493,19 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="serial">
         <xsl:apply-templates select="." mode="serial-number" />
     </xsl:variable>
-    <xsl:variable name="structure">
-        <xsl:apply-templates select="." mode="structure-number" />
-    </xsl:variable>
-    <xsl:if test="not($serial = '')">
-        <xsl:if test="not($structure='')">
-            <xsl:value-of select="$structure" />
-            <xsl:text>.</xsl:text>
-        </xsl:if>
-        <xsl:value-of select="$serial" />
-    </xsl:if>
+    <xsl:choose>
+        <xsl:when test="$serial = ''" />
+        <xsl:otherwise>
+            <xsl:variable name="structure">
+                <xsl:apply-templates select="." mode="structure-number" />
+            </xsl:variable>
+            <xsl:if test="not($structure='')">
+                <xsl:value-of select="$structure" />
+                <xsl:text>.</xsl:text>
+            </xsl:if>
+            <xsl:value-of select="$serial" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 
