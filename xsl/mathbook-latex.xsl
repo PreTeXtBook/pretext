@@ -5600,8 +5600,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Unique (element + count), all letters for LaTeX -->
 <!-- Alphabetic numbers are like base 26 notation    -->
 <xsl:template match="*" mode="panel-id">
+    <!-- with no "count", will only count same element name -->
+    <!-- with count="*" even cells of a table contribute    -->
+    <!-- level="single" will not account for figure hack    -->
     <!-- sanitize any dashes in local names? -->
-    <xsl:number level="any" format="A" />
+    <xsl:number from="sidebyside" level="any" format="A" />
     <xsl:value-of select="local-name(.)" />
 </xsl:template>
 
@@ -5616,9 +5619,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- http://tex.stackexchange.com/questions/11943/         -->
 <xsl:template match="*" mode="panel-setup">
     <xsl:param name="width" />
+    <xsl:text>\ifdefined\panelbox</xsl:text>
+    <xsl:apply-templates select="." mode="panel-id" />
+    <xsl:text>\else</xsl:text>
     <xsl:text>\newsavebox{\panelbox</xsl:text>
     <xsl:apply-templates select="." mode="panel-id" />
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>}\fi%&#xa;</xsl:text>
     <!-- If the "panel-latex-box" creates something actually  -->
     <!-- in a box of predictable overall width (such as a     -->
     <!-- BVerbatim, or an \includegraphics), then an "lrbox"  -->
@@ -5650,9 +5656,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>&#xa;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
+    <xsl:text>\ifdefined\ph</xsl:text>
+    <xsl:apply-templates select="." mode="panel-id" />
+    <xsl:text>\else</xsl:text>
     <xsl:text>\newlength{\ph</xsl:text>
     <xsl:apply-templates select="." mode="panel-id" />
-    <xsl:text>}</xsl:text>
+    <xsl:text>}\fi%&#xa;</xsl:text>
     <xsl:text>\setlength{\ph</xsl:text>
     <xsl:apply-templates select="." mode="panel-id" />
     <xsl:text>}{\ht\panelbox</xsl:text>

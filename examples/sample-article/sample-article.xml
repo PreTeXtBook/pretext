@@ -912,6 +912,13 @@ the xsltproc executable.
 
                             <p>The subsubsection has no title in the source, so one is provided automatically, and will adjust according to the language of the document.</p>
                         </statement>
+                        <solution>
+                            <p>This solution will migrate to a list of solutions in the backmatter.  We include a <c>sidebyside</c> as a test.</p>
+                            <sidebyside width="30%">
+                                <p>This is a skinny paragraph which should be just 30<percent /> of the width.</p>
+                                <p>And another skinny paragraph which should also be just 30<percent /> of the width.</p>
+                            </sidebyside>
+                        </solution>
                     </exercise>
                 </exercises>
 
