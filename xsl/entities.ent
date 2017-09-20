@@ -90,3 +90,7 @@
 <!-- displays with captions -->
 <!ENTITY FIGURE-LIKE "figure|table|listing|list">
 <!ENTITY FIGURE-FILTER "self::figure or self::table or self::listing or self::list">
+
+<!-- appendages of examples, exercises, tasks -->
+<!ENTITY SOLUTION-LIKE "hint|answer|solution">
+<!ENTITY SOLUTION-FILTER "self::hint or self::answer or self::solution">
