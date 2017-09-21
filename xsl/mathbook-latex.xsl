@@ -1950,6 +1950,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- ISBN, Cover Design, Publisher -->
     <xsl:text>%% begin: copyright-page&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
+    <!-- This is the most obvious place for   -->
+    <!-- a target to the front colophon       -->
+    <!-- NB: only a book has a front colophon -->
+    <xsl:apply-templates select="frontmatter/colophon" mode="label" />
     <xsl:if test="not(../docinfo/author-biographies/@length = 'long')">
         <xsl:apply-templates select="frontmatter/biography" mode="copyright-page" />
     </xsl:if>
@@ -2461,17 +2465,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- The back colophon goes on a recto page all by itself       -->
+<!-- The back colophon of a book goes on its own recto page     -->
 <!-- the centering is on the assumption it is a simple sentence -->
 <!-- Maybe a parbox, centered, etc is necessary                 -->
 <xsl:template match="book/backmatter/colophon">
     <xsl:text>\cleardoublepage&#xa;</xsl:text>
     <xsl:text>\pagestyle{empty}&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
     <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
     <xsl:text>\centerline{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}&#xa;</xsl:text>
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- The back colophon of an article is an -->
+<!-- unnumbered section, not centered, etc -->
+<!-- but it is titled (not to ToC, though) -->
+<xsl:template match="article/backmatter/colophon">
+    <xsl:text>\section*{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'colophon'" />
+    </xsl:call-template>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:apply-templates />
 </xsl:template>
 
 <!-- Appendices are handled in the general subdivision template -->
@@ -7022,7 +7040,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- hyperref's hypertarget mechanism fits the bill.              -->
 <!-- \null target text was unnecessary and visible (2015-12-12)   -->
 <!-- (See also modal templates for "xref-link" and "xref-number") -->
-<xsl:template match="p|paragraphs|blockquote|exercises//exercise|biblio|biblio/note|proof|exercisegroup|case|ol/li|dl/li|hint|answer|solution|contributor" mode="label">
+<xsl:template match="p|paragraphs|blockquote|exercises//exercise|biblio|biblio/note|proof|exercisegroup|case|ol/li|dl/li|hint|answer|solution|contributor|colophon" mode="label">
     <xsl:text>\hypertarget{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}{}</xsl:text>

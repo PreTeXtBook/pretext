@@ -49,7 +49,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <index-list />
     </index>
 
-    <colophon>
+    <colophon xml:id="back-colophon">
         <p>This book was authored in MathBook XML.</p>
     </colophon>
 
