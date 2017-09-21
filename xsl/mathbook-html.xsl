@@ -514,6 +514,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
             <xsl:apply-templates select="." mode="header-content" />
         </xsl:element>
+        <xsl:apply-templates select="." mode="permalink" />
         <xsl:if test="author">
             <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
         </xsl:if>
@@ -548,7 +549,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="title">
         <xsl:apply-templates select="." mode="title-full" />
     </span>
-    <xsl:apply-templates select="." mode="permalink" />
 </xsl:template>
 
 <!-- References and Exercises are universal subdivisions       -->
@@ -567,7 +567,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="title">
         <xsl:apply-templates select="." mode="title-full" />
     </span>
-    <xsl:apply-templates select="." mode="permalink" />
 </xsl:template>
 
 <!-- Permalinks on section headings are configurable              -->
