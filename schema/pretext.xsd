@@ -322,6 +322,7 @@
               </xs:complexType>
             </xs:element>
           </xs:sequence>
+          <xs:attribute ref="xml:id"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -452,6 +453,7 @@
             <xs:group ref="SideBySideNoCaption"/>
             <xs:group ref="SideBySideGroupNoCaption"/>
           </xs:choice>
+          <xs:attribute ref="xml:id"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>

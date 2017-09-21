@@ -1734,7 +1734,7 @@
     <section>
         <title>Front Matter</title>
 
-        <p>Articles and books have material at the start, which gets organized in interesting ways. <c>minilicense</c> is very restrictive, <c>shortlicense</c> allows references (<eg /> <init>URL</init>s).</p>
+        <p>Articles and books have material at the start, which gets organized in interesting ways. <c>minilicense</c> is very restrictive, <c>shortlicense</c> allows references (<eg /> <init>URL</init>s).  <c>titlepage</c> is like a very small database<mdash />for HTML it migrates to the top of the page for the <c>frontmatter</c>, and for <latex /> it migrates to the half-title and title pages.  Since it generally makes no sense as the target of a cross-reference, <c>titlepagfe</c> does not allow an <c>@xml:id</c> attribute.</p>
 
         <fragment xml:id="frontmatter">
         ArticleFrontMatter = 
@@ -1781,6 +1781,7 @@
             }
         ColophonFront =
             element colophon {
+                UniqueID?,
                 element credit {
                     element role {TextShort},
                     element entity {TextLong}
@@ -1860,8 +1861,11 @@
                 IndexDivision?,
                 ColophonBack?
             }
-        ColophonBack = 
-            element colophon {(BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+}
+        ColophonBack =
+            element colophon {
+                UniqueID?,
+                (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
+            }
         </fragment>
     </section>
 

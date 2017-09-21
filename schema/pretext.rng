@@ -317,6 +317,9 @@
   </define>
   <define name="ColophonFront">
     <element name="colophon">
+      <optional>
+        <ref name="UniqueID"/>
+      </optional>
       <zeroOrMore>
         <element name="credit">
           <element name="role">
@@ -454,6 +457,9 @@
   </define>
   <define name="ColophonBack">
     <element name="colophon">
+      <optional>
+        <ref name="UniqueID"/>
+      </optional>
       <oneOrMore>
         <choice>
           <ref name="BlockText"/>

@@ -157,6 +157,7 @@
             }
         ColophonFront =
             element colophon {
+                UniqueID?,
                 element credit {
                     element role {TextShort},
                     element entity {TextLong}
@@ -206,8 +207,11 @@
                 IndexDivision?,
                 ColophonBack?
             }
-        ColophonBack = 
-            element colophon {(BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+}
+        ColophonBack =
+            element colophon {
+                UniqueID?,
+                (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
+            }
         
         
         Paragraphs =
