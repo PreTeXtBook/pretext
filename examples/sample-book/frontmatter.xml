@@ -80,13 +80,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A section of its own in HTML, migrates to copyright-page in LaTeX -->
     <!-- Titles are optional, presumably none for single author,           -->
     <!-- or for every author, even if we test a mix here                   -->
-    <biography>
+    <biography xml:id="author-bio-TWJ">
         <p>Thomas W. Judson did his undergraduate work in Illinois, his graduate work in Oregon and presently teaches in Texas.</p>
 
          <p>He likes to ride his bicycle in France, especially in the high Alps and Pyrenees on the roads of the Tour de France.</p>
     </biography>
 
-    <biography>
+    <biography xml:id="author-bio-RAB">
         <title>About Robert A. Beezer</title>
         <p>Rob Beezer designed, wrote, and tested the Sage exercises as a contribution to this open source project.</p>
 
@@ -99,7 +99,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- Each paragraph gets centered and has some vertical separatation -->
     <!-- A line element may be used here with a single paragraph   -->
-    <dedication>
+    <dedication xml:id="dedication">
         <p>
             <line>To students of algebra everywhere</line>
             <line>they are the reason</line>
@@ -107,7 +107,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>And to those who teach them</p>
     </dedication>
 
-    <acknowledgement>
+    <acknowledgement xml:id="acknowledgement">
 
         <p>I would like to acknowledge the following reviewers for their helpful comments and suggestions.<ul>
             <li><p>David Anderson, University of Tennessee, Knoxville</p></li>
@@ -129,7 +129,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     </acknowledgement>
 
-    <preface>
+    <preface xml:id="preface">
 
         <p>This text is intended for a one or two-semester undergraduate course in  abstract algebra. Traditionally, these courses have covered the theoretical aspects of groups, rings, and fields.  However, with the development of computing in the last several decades, applications that involve abstract algebra and discrete mathematics have become increasingly important, and many science, engineering, and computer science students are now electing to minor in mathematics. Though theory still occupies a central role in the subject of abstract algebra and no student should go through such a course without a good notion of what a proof is, the importance of applications such as coding theory and cryptography has grown significantly.</p>
 
@@ -244,7 +244,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     </preface>
 
-    <preface>
+    <preface xml:id="contributors">
         <title>Contributors to the 4<m>^\mathrm{th}</m> Edition</title>
 
         <p>Many individuals have made this book possible.  We will try to thank a few of them here, and hope we have not forgotten anybody really important.</p>
