@@ -494,11 +494,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Subdivisions have titles, or not            -->
 <!-- and other parts have default titles         -->
 <xsl:template match="*" mode="section-header">
+    <!-- The "division-name" template accomodates non-standard -->
+    <!-- divisions like "exercises", "references", divisional  -->
+    <!-- "introduction" and "conclusion", and "appendix".      -->
+    <!-- Result is strict part -> subsubsection hierachy.      -->
+    <!-- Find it in mathbook-common.xsl                        -->
+    <xsl:variable name="normalized-division-name">
+        <xsl:apply-templates select="." mode="division-name" />
+    </xsl:variable>
+    <xsl:variable name="heading-level">
+        <xsl:choose>
+            <xsl:when test="$normalized-division-name = 'part'">
+                <xsl:text>h1</xsl:text>
+            </xsl:when>
+            <xsl:when test="$normalized-division-name = 'chapter'">
+                <xsl:text>h1</xsl:text>
+            </xsl:when>
+            <xsl:when test="$normalized-division-name = 'section'">
+                <xsl:text>h2</xsl:text>
+            </xsl:when>
+            <xsl:when test="$normalized-division-name = 'subsection'">
+                <xsl:text>h3</xsl:text>
+            </xsl:when>
+            <xsl:when test="$normalized-division-name = 'subsubsection'">
+                <xsl:text>h4</xsl:text>
+            </xsl:when>
+            <!-- any bug will be exposed by "division-name" template -->
+            <xsl:otherwise />
+        </xsl:choose>
+    </xsl:variable>
     <xsl:element name="header">
          <xsl:attribute name="title">
             <xsl:apply-templates select="." mode="tooltip-text" />
         </xsl:attribute>
-        <xsl:element name="h1">
+        <xsl:element name="{$heading-level}">
             <xsl:attribute name="class">
                 <xsl:choose>
                     <xsl:when test="self::chapter">
