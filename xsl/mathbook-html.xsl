@@ -4438,8 +4438,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="latex-macros" />
                  <header id="masthead" class="smallbuttons">
                     <div class="banner">
-                        <!-- Seems to help clean up navigation some         -->
-                        <!-- <xsl:call-template name="google-search-box" /> -->
                         <div class="container">
                             <xsl:call-template name="brand-logo" />
                             <div class="title-container">
@@ -6477,8 +6475,8 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:call-template name="latex-macros" />
              <header id="masthead" class="smallbuttons">
                 <div class="banner">
-                    <xsl:call-template name="google-search-box" />
                     <div class="container">
+                        <xsl:call-template name="google-search-box" />
                         <xsl:call-template name="brand-logo" />
                         <div class="title-container">
                             <h1 class="heading">
