@@ -684,7 +684,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Note: frontmatter and backmatter are structural, so  -->
 <!-- get considered in level computation.  However, they  -->
 <!-- are just containers, so we subtract them away        -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|references|introduction|conclusion" mode="division-name">
+<!-- The frontmatter is divided for books in HTML,        -->
+<!-- and the backmatter is divided for articles and books -->
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|references|introduction|conclusion|colophon|biography|dedication|acknowledgement|preface|index" mode="division-name">
     <xsl:variable name="relative-level">
         <xsl:apply-templates select="." mode="level" />
     </xsl:variable>

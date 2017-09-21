@@ -521,8 +521,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- The front matter has its own style -->
-<xsl:template match="frontmatter" mode="section-header" />
+<!-- The front and back matter have their own style -->
+<xsl:template match="frontmatter|backmatter" mode="section-header" />
 
 <!-- A book or article is the top level, so the   -->
 <!-- masthead might suffice, else an author can   -->
