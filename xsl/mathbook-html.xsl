@@ -3169,17 +3169,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="men|md|mdn" mode="body-css-class" />
 
 <!-- No title; type and number obvious from content -->
-<xsl:template match="me|men|md|mdn" mode="heading-xref-knowl" />
+<xsl:template match="men|md|mdn" mode="heading-xref-knowl" />
 
 <!-- Displayed Single-Line Math, Unnumbered ("me") -->
-<!-- Never numbered, so never knowled              -->
-<xsl:template match="me" mode="body">
-    <!-- block-type parameter is ignored, since the           -->
-    <!-- representation never varies, no heading, no wrapper  -->
-    <!-- Never numbered, so no xref knowl, so always original -->
-    <!-- top-level flag is critical for dropping punctuation  -->
-    <!-- TODO: Included in same scheme as "men" for later consolidation -->
-    <xsl:param name="block-type" />
+<!-- Never numbered, so never a xref-knowl         -->
+<!-- TODO: move up by template for "m" -->
+<xsl:template match="me">
+    <!-- Never numbered, so no xref knowl, so always original   -->
+    <!-- But it could be part of a larger item being duplicated -->
+    <!-- In either case, we need to preserve punctuation        -->
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="b-top-level" select="false()" />
     <!-- build and save for later manipulation                      -->
@@ -3187,12 +3185,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="raw-latex">
         <xsl:apply-templates select="." mode="alignat-columns" />
         <xsl:apply-templates select="text()|var|fillin" />
-        <!-- look ahead to absorb immediate clause-ending punctuation      -->
-        <!-- for original versions, and as a child of a duplicated element -->
-        <!-- but not in a duplicate that is entirely the display math      -->
-        <xsl:if test="$b-original or not($b-top-level)">
-            <xsl:apply-templates select="." mode="get-clause-punctuation" />
-        </xsl:if>
+        <!-- look ahead to absorb immediate clause-ending punctuation -->
+        <xsl:apply-templates select="." mode="get-clause-punctuation" />
     </xsl:variable>
     <!-- we provide a newline for visual appeal -->
     <xsl:text>&#xa;</xsl:text>
