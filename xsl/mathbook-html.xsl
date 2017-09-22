@@ -1654,12 +1654,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Title only -->
 <!-- ASIDE-LIKE, assemblage, paragraphs -->
+<!-- No title, then nothing happens     -->
 <xsl:template match="*" mode="heading-title">
-    <h5 class="heading">
-        <span class="title">
-            <xsl:apply-templates select="." mode="title-full" />
-        </span>
-    </h5>
+    <xsl:if test="title/*|title/text()">
+        <h5 class="heading">
+            <span class="title">
+                <xsl:apply-templates select="." mode="title-full" />
+            </span>
+        </h5>
+    </xsl:if>
 </xsl:template>
 
 <!-- A type, with maybe a serial number to disambiguate, no h5 -->
