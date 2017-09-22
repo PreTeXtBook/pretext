@@ -788,10 +788,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
         </xsl:if>
         <xsl:if test="title">
-            <h5 class="heading">
+            <h6 class="heading">
                 <xsl:apply-templates select="." mode="title-full" />
                 <span> </span>
-            </h5>
+            </h6>
         </xsl:if>
         <xsl:apply-templates  select="*">
             <xsl:with-param name="b-original" select="$b-original" />
@@ -857,13 +857,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="internal-id" />
         </xsl:variable>
         <article class="exercise-like" id="{$xref}">
-            <h5 class="heading hidden-type">
+            <h6 class="heading hidden-type">
             <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
             <span class="codenumber"><xsl:apply-templates select="." mode="serial-number" /></span>
             <xsl:if test="title">
                 <span class="title"><xsl:apply-templates select="." mode="title-full" /></span>
             </xsl:if>
-            </h5>
+            </h6>
             <xsl:if test="$exercise.backmatter.statement='yes'">
                 <xsl:apply-templates select="statement" />
             </xsl:if>
@@ -1559,10 +1559,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- These are convenience methods for frequently-used headings -->
 
-<!-- h5, type name, number (if exists), title (if exists) -->
+<!-- h6, type name, number (if exists), title (if exists) -->
 <!-- REMARK-LIKE, COMPUTATION-LIKE, DEFINITION-LIKE, SOLUTION-LIKE, objectives (xref-content), EXAMPLE-LIKE, PROJECT-LIKE, exercise (inline), task (xref-content), fn (xref-content), biblio/note (xref-content)-->
 <xsl:template match="*" mode="heading-full">
-    <h5 class="heading">
+    <h6 class="heading">
         <span class="type">
             <xsl:apply-templates select="." mode="type-name" />
         </span>
@@ -1579,13 +1579,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
         </xsl:if>
-    </h5>
+    </h6>
 </xsl:template>
 
-<!-- h5, no type name, serial number, title (if exists) -->
+<!-- h6, no type name, serial number, title (if exists) -->
 <!-- exercise (sectional, as born) -->
 <xsl:template match="*" mode="heading-sectional-exercise">
-    <h5 class="heading">
+    <h6 class="heading">
         <span class="codenumber">
             <xsl:apply-templates select="." mode="serial-number" />
         </span>
@@ -1594,13 +1594,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
         </xsl:if>
-    </h5>
+    </h6>
 </xsl:template>
 
-<!-- h5, type name, serial number, title (if exists) -->
+<!-- h6, type name, serial number, title (if exists) -->
 <!-- exercise (sectional, xref-content)      -->
 <xsl:template match="*" mode="heading-sectional-exercise-typed">
-    <h5 class="heading">
+    <h6 class="heading">
         <span class="type">
             <xsl:apply-templates select="." mode="type-name" />
         </span>
@@ -1612,26 +1612,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
         </xsl:if>
-    </h5>
+    </h6>
 </xsl:template>
 
-<!-- h5, no type name, just simple list number, no title -->
+<!-- h6, no type name, just simple list number, no title -->
 <!-- task (when born) -->
 <xsl:template match="*" mode="heading-list-number">
-    <h5 class="heading">
+    <h6 class="heading">
         <span class="codenumber">
             <xsl:text>(</xsl:text>
             <xsl:apply-templates select="." mode="list-number" />
             <xsl:text>)</xsl:text>
         </span>
-    </h5>
+    </h6>
 </xsl:template>
 
-<!-- h5, type name, no number (even if exists), title (if exists)              -->
+<!-- h6, type name, no number (even if exists), title (if exists)              -->
 <!-- eg, objectives is one-per-subdivison, max, so no need to display at birth -->
 <!-- objectives (when born) -->
 <xsl:template match="*" mode="heading-full-implicit-number">
-    <h5 class="heading">
+    <h6 class="heading">
         <span class="type">
             <xsl:apply-templates select="." mode="type-name" />
         </span>
@@ -1641,23 +1641,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
         </xsl:if>
-    </h5>
+    </h6>
 </xsl:template>
 
 <!-- Not normally titled, but knowl content gives some indication -->
 <!-- blockquote, exercisegroup, proof -->
 <xsl:template match="*" mode="heading-type">
-    <h5 class="heading">
+    <h6 class="heading">
         <span class="type">
             <xsl:apply-templates select="." mode="type-name" />
         </span>
-    </h5>
+    </h6>
 </xsl:template>
 
 <!-- Title only -->
-<!-- ASIDE-LIKE, assemblage, paragraphs -->
+<!-- ASIDE-LIKE, paragraphs -->
 <!-- No title, then nothing happens     -->
 <xsl:template match="*" mode="heading-title">
+    <xsl:if test="title/*|title/text()">
+        <h6 class="heading">
+            <span class="title">
+                <xsl:apply-templates select="." mode="title-full" />
+            </span>
+        </h6>
+    </xsl:if>
+</xsl:template>
+
+<!-- Title only, paragraphs -->
+<!-- h5 for paragraphs, lowest of the low -->
+<!-- No title, then nothing happens       -->
+<!-- TODO: titles will be mandatory sometime -->
+<xsl:template match="*" mode="heading-title-paragraphs">
     <xsl:if test="title/*|title/text()">
         <h5 class="heading">
             <span class="title">
@@ -1667,7 +1681,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- A type, with maybe a serial number to disambiguate, no h5 -->
+<!-- A type, with maybe a serial number to disambiguate, no h6 -->
 <!-- SOLUTION-LIKE (xref-text), biblio/note (xref-text) -->
 <xsl:template match="*" mode="heading-simple">
     <!-- the name of the object, its "type" -->
@@ -2498,12 +2512,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading -->
 <xsl:template match="paragraphs" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-title" />
+    <xsl:apply-templates select="." mode="heading-title-paragraphs" />
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="paragraphs" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-title" />
+    <xsl:apply-templates select="." mode="heading-title-paragraphs" />
 </xsl:template>
 
 <!-- Primary content of generic "body" template   -->
@@ -4150,10 +4164,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
         </xsl:if>
         <xsl:if test="title">
-            <h5 class="heading">
+            <h6 class="heading">
                 <xsl:apply-templates select="." mode="title-full" />
                 <span> </span>
-            </h5>
+            </h6>
         </xsl:if>
         <xsl:apply-templates select="*">
             <xsl:with-param name="b-original" select="$b-original" />
@@ -4575,7 +4589,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="width" />
     <xsl:param name="left-margin" />
     <xsl:param name="right-margin" />
-    <xsl:element name="h5">
+    <xsl:element name="h6">
         <xsl:attribute name="class">
             <xsl:text>sbsheader</xsl:text>
         </xsl:attribute>
