@@ -4193,6 +4193,7 @@ the xsltproc executable.
                 <li><p>A <c>type-global</c> cross-reference to a second-level <c>task</c> within a project: <xref ref="project-task-level-two" text="type-global" />, the encompassing <c>project</c>: <xref ref="project-structured" />, and a <c>local</c> reference <xref ref="project-task-level-two" text="local" />.</p></li>
                 <li><p>A subcaptioned named list: <xref ref="color-list-as-panel" /></p></li>
                 <li><p>A cross-reference to a paragraph (<c>p</c>) in the <c>statement</c> of an <c>exercise</c>: <xref ref="paragraph-in-exercise" text="title">paragraph</xref>.  Notice that such a paragraph has no number and no title, so you need to (a) use <c>text='title'</c>, and (b) provide custom text for the title, as an override that becomes the content of the link.  You may wish to provide very explicit location information for hardcopy print.  Notice that this is not a cross-reference to the <c>exercise</c>, just a small portion of it.</p></li>
+                <li><p>This opens a knowl for an <c>example</c>.  It has a solution, which is orginally presented as a hidden knowl.  But since this version is a duplicate, the knowl for the solution is a file version, not an embedded version, and hence free from duplicating any unique identifaction like an <init>HTML</init> id.  So we test its styling and function here: <xref ref="example-structured" text="type-global" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul></p>
 
