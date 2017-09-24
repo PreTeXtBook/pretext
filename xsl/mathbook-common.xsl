@@ -595,11 +595,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- filter them out.  The overarching XML root (not   -->
 <!-- the special root node) is simply subtracted from  -->
 <!-- the count.                                        -->
-<!-- NB: -or-self, and subtract 2, changes HTML output, -->
-<!-- suggesting something is a bit off somewhere        -->
 <xsl:template match="*" mode="level">
-    <xsl:variable name="hierarchy" select="ancestor::*[not(self::backmatter or self::frontmatter)]" />
-    <xsl:value-of select="count($hierarchy) - 1" />
+    <xsl:variable name="hierarchy" select="ancestor-or-self::*[not(self::backmatter or self::frontmatter)]" />
+    <xsl:value-of select="count($hierarchy) - 2" />
 </xsl:template>
 
 <!-- Enclosing Level -->
