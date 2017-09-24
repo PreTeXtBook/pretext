@@ -2742,28 +2742,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
             </xsl:if>
-            <xsl:if test="$task.text.hint='yes'">
-                <xsl:for-each select="hint">
-                    <xsl:apply-templates select=".">
-                        <xsl:with-param name="b-original" select="$b-original" />
-                    </xsl:apply-templates>
-                </xsl:for-each>
-            </xsl:if>
-            <xsl:if test="$task.text.answer='yes'">
-                <xsl:for-each select="answer">
-                    <xsl:apply-templates select=".">
-                        <xsl:with-param name="b-original" select="$b-original" />
-                    </xsl:apply-templates>
-                    <xsl:text> </xsl:text>
-                </xsl:for-each>
-            </xsl:if>
-            <xsl:if test="$task.text.solution='yes'">
-                <xsl:for-each select="solution">
-                    <xsl:apply-templates select=".">
-                        <xsl:with-param name="b-original" select="$b-original" />
-                    </xsl:apply-templates>
-                    <xsl:text> </xsl:text>
-                </xsl:for-each>
+            <!-- this could be a useful three-parameter template -->
+            <xsl:if test="(hint and $project.text.hint='yes') or (answer and $project.text.answer='yes') or (solution and $project.text.solution='yes')">
+                <!-- then can populate div full of solution -->
+                <div class="hidden-knowl-wrapper solutions">
+                    <xsl:if test="$project.text.hint='yes'">
+                        <xsl:apply-templates select="hint">
+                            <xsl:with-param name="b-original" select="$b-original" />
+                        </xsl:apply-templates>
+                    </xsl:if>
+                    <xsl:if test="$project.text.answer='yes'">
+                        <xsl:apply-templates select="answer">
+                            <xsl:with-param name="b-original" select="$b-original" />
+                        </xsl:apply-templates>
+                    </xsl:if>
+                    <xsl:if test="$project.text.solution='yes'">
+                        <xsl:apply-templates select="solution">
+                            <xsl:with-param name="b-original" select="$b-original" />
+                        </xsl:apply-templates>
+                    </xsl:if>
+                </div>
             </xsl:if>
         </xsl:when>
         <!-- Potential common mistake: no statement, or no task, but other structure -->
