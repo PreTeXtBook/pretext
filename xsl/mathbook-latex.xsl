@@ -5927,7 +5927,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- like main "poem" template, but sans title -->
         <xsl:when test="self::poem">
-            <xsl:text>\begin{poem}&#xa;</xsl:text>
+            <xsl:text>\begin{poem}</xsl:text>
+            <xsl:apply-templates select="." mode="label" />
+            <xsl:text>&#xa;</xsl:text>
             <xsl:apply-templates select="stanza"/>
             <xsl:apply-templates select="author" />
             <xsl:text>\end{poem}&#xa;</xsl:text>
@@ -7236,7 +7238,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--        -->
 
 <xsl:template match="poem">
-    <xsl:text>\begin{poem}&#xa;</xsl:text>
+    <xsl:text>\begin{poem}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>\poemTitle{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}&#xa;</xsl:text>
