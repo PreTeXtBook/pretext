@@ -20,7 +20,7 @@
       <xs:complexContent>
         <xs:extension base="MetaDataSubtitle">
           <xs:sequence>
-            <xs:group ref="ArticleFrontMatter"/>
+            <xs:group minOccurs="0" ref="ArticleFrontMatter"/>
             <xs:element ref="section"/>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
               <xs:element ref="section"/>
@@ -41,7 +41,7 @@
       <xs:complexContent>
         <xs:extension base="MetaDataSubtitle">
           <xs:sequence>
-            <xs:group ref="BookFrontMatter"/>
+            <xs:group minOccurs="0" ref="BookFrontMatter"/>
             <xs:element ref="chapter"/>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
               <xs:element ref="chapter"/>
@@ -733,6 +733,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="cline"/>
       </xs:sequence>
+      <xs:attribute name="latexsep"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="pre">
@@ -3156,7 +3157,11 @@
   </xs:element>
   <xs:element name="alteration">
     <xs:complexType mixed="true">
-      <xs:group ref="TextSimple"/>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="TextSimple"/>
+        <xs:element ref="sharp"/>
+        <xs:element ref="flat"/>
+      </xs:choice>
     </xs:complexType>
   </xs:element>
   <xs:element name="list-of">

@@ -19,7 +19,9 @@
   <define name="Article">
     <element name="article">
       <ref name="MetaDataSubtitle"/>
-      <ref name="ArticleFrontMatter"/>
+      <optional>
+        <ref name="ArticleFrontMatter"/>
+      </optional>
       <ref name="Section"/>
       <zeroOrMore>
         <choice>
@@ -37,7 +39,9 @@
     <element name="book">
       <a:documentation>Here is what a book looks like.</a:documentation>
       <ref name="MetaDataSubtitle"/>
-      <ref name="BookFrontMatter"/>
+      <optional>
+        <ref name="BookFrontMatter"/>
+      </optional>
       <ref name="Chapter"/>
       <zeroOrMore>
         <choice>
@@ -714,6 +718,9 @@
   </define>
   <define name="CodeDisplay">
     <element name="cd">
+      <optional>
+        <attribute name="latexsep"/>
+      </optional>
       <choice>
         <text/>
         <oneOrMore>
@@ -3192,7 +3199,17 @@
         </optional>
         <zeroOrMore>
           <element name="alteration">
-            <ref name="TextSimple"/>
+            <zeroOrMore>
+              <choice>
+                <ref name="TextSimple"/>
+                <element name="sharp">
+                  <empty/>
+                </element>
+                <element name="flat">
+                  <empty/>
+                </element>
+              </choice>
+            </zeroOrMore>
           </element>
         </zeroOrMore>
       </element>

@@ -12,7 +12,7 @@
         Article =
             element article {
                 MetaDataSubtitle,
-                ArticleFrontMatter,
+                ArticleFrontMatter?,
                 Section,
                 (Section | Exercises | References)*,
                 BackMatter?
@@ -21,7 +21,7 @@
             ## Here is what a book looks like.
             element book {
                 MetaDataSubtitle,
-                BookFrontMatter,
+                BookFrontMatter?,
                 Chapter,
                 (Chapter | Exercises | References)*,
                 BackMatter?
@@ -335,7 +335,8 @@
             element cline {text}
         CodeDisplay =
             element cd {
-                text | CodeLine+
+                attribute latexsep {text}?,
+                (text | CodeLine+)
             }
         Preformatted =
             element pre {
@@ -1400,7 +1401,11 @@
                 attribute bass {text}?,
                 attribute suspended {"yes"|"no"}?,
                 attribute parentheses {"yes"|"no"}?,
-                element alteration {TextSimple}*
+                element alteration {
+                    (TextSimple |
+                    element sharp {empty} |
+                    element flat {empty})*
+                }*
             }
         
         

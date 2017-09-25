@@ -405,7 +405,11 @@
                 attribute bass {text}?,
                 attribute suspended {"yes"|"no"}?,
                 attribute parentheses {"yes"|"no"}?,
-                element alteration {TextSimple}*
+                element alteration {
+                    (TextSimple |
+                    element sharp {empty} |
+                    element flat {empty})*
+                }*
             }
         </fragment>
 
@@ -828,7 +832,8 @@
             element cline {text}
         CodeDisplay =
             element cd {
-                text | CodeLine+
+                attribute latexsep {text}?,
+                (text | CodeLine+)
             }
         Preformatted =
             element pre {
