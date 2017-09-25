@@ -4194,6 +4194,7 @@ the xsltproc executable.
                 <li><p>A subcaptioned named list: <xref ref="color-list-as-panel" /></p></li>
                 <li><p>A cross-reference to a paragraph (<c>p</c>) in the <c>statement</c> of an <c>exercise</c>: <xref ref="paragraph-in-exercise" text="title">paragraph</xref>.  Notice that such a paragraph has no number and no title, so you need to (a) use <c>text='title'</c>, and (b) provide custom text for the title, as an override that becomes the content of the link.  You may wish to provide very explicit location information for hardcopy print.  Notice that this is not a cross-reference to the <c>exercise</c>, just a small portion of it.</p></li>
                 <li><p>This opens a knowl for an <c>example</c>.  It has a solution, which is orginally presented as a hidden knowl.  But since this version is a duplicate, the knowl for the solution is a file version, not an embedded version, and hence free from duplicating any unique identifaction like an <init>HTML</init> id.  So we test its styling and function here: <xref ref="example-structured" text="type-global" /></p></li>
+                <li><p>A cross-reference to a poem, where we need to use a title for the link text, since a <c>poem</c> is not numbered: <xref ref="poem-light-brigade" text="title" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul></p>
 
@@ -6317,7 +6318,7 @@ the xsltproc executable.
 
             <p>There is support for poems via the <c>poem</c> tag, which can contain a <c>title</c>, <c>author</c> and multiple <c>stanza</c>, each containing multiple <c>line</c>.  See the source of the following poem for an example of the exact arrangement.  Note how the first quote crosses two <c>line</c> elements and how this is handled in the source.  There are many very flexible options for horizontal alignment and indentation.  Further extensive examples, constructed by Jahrme Risner, are available in the example Humanities document.</p>
 
-            <poem>
+            <poem xml:id="poem-light-brigade">
                 <title>The Charge of the Light Brigade</title>
                 <author>Alfred Lord Tennyson</author>
 
