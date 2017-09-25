@@ -45,7 +45,7 @@
         Article =
             element article {
                 MetaDataSubtitle,
-                ArticleFrontMatter,
+                ArticleFrontMatter?,
                 Section,
                 (Section | Exercises | References)*,
                 BackMatter?
@@ -54,7 +54,7 @@
             ## Here is what a book looks like.
             element book {
                 MetaDataSubtitle,
-                BookFrontMatter,
+                BookFrontMatter?,
                 Chapter,
                 (Chapter | Exercises | References)*,
                 BackMatter?
