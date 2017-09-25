@@ -4154,7 +4154,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- As components of blocks.      -->
 <xsl:template match="introduction[not(parent::*[&STRUCTURAL-FILTER;])]|conclusion[not(parent::*[&STRUCTURAL-FILTER;])]">
     <xsl:param name="b-original" select="true()" />
-    <xsl:element name="article">
+    <xsl:element name="div">
         <xsl:attribute name="class">
             <xsl:value-of select="local-name(.)" />
         </xsl:attribute>
