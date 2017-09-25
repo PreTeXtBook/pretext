@@ -1018,7 +1018,7 @@
                 (
                     BlockStatement+ |
                     (Statement, Hint*, Answer*, Solution*) |
-                    (IntroductionText?, Task+, ConclusionText?)
+                    (IntroductionStatement?, Task+, ConclusionStatement?)
                 )
             }
         </fragment>

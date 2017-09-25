@@ -1115,9 +1115,9 @@
             <xs:group minOccurs="0" maxOccurs="unbounded" ref="Solution"/>
           </xs:sequence>
           <xs:sequence>
-            <xs:group minOccurs="0" ref="IntroductionText"/>
+            <xs:group minOccurs="0" ref="IntroductionStatement"/>
             <xs:element maxOccurs="unbounded" ref="task"/>
-            <xs:group minOccurs="0" ref="ConclusionText"/>
+            <xs:group minOccurs="0" ref="ConclusionStatement"/>
           </xs:sequence>
         </xs:choice>
       </xs:sequence>

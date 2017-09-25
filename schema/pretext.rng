@@ -1150,13 +1150,13 @@
         </group>
         <group>
           <optional>
-            <ref name="IntroductionText"/>
+            <ref name="IntroductionStatement"/>
           </optional>
           <oneOrMore>
             <ref name="Task"/>
           </oneOrMore>
           <optional>
-            <ref name="ConclusionText"/>
+            <ref name="ConclusionStatement"/>
           </optional>
         </group>
       </choice>
