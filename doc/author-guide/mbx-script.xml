@@ -30,10 +30,12 @@
 
         <p>An example:</p>
 
-        <console>
-            <prompt>$ </prompt>
-            <input>~/mathbook/script/mbx -vv -c sageplot -f svg -d images ~/mathbook/examples/sample-article/sample-article.xml</input>
-        </console>
+        <sidebyside>
+            <console>
+                <prompt>$ </prompt>
+                <input>~/mathbook/script/mbx -vv -c sageplot -f svg -d images ~/mathbook/examples/sample-article/sample-article.xml</input>
+            </console>
+        </sidebyside>
 
         <p>This will extract every image described in <c>sample-article</c> by a <tag>sageplot</tag> element and produce output as SVG files (if possible), which will be deposited in the <c>images</c> subdirectory of the current working directory.</p>
 

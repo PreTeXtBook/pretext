@@ -27,7 +27,7 @@
         <p>Besides being useful for search facilities, setting up a search engine might be a good way to alert Google of something newly available, and initiate your book's rise up the search results rankings.</p>
 
         <list>
-            <title>Configuring Google Custom Search</title>
+            <caption>Configuring Google Custom Search</caption>
 
             <ol>
                 <li><p>Create an account with Google (GMail, YouTube, <etc />) and make sure you are signed in.</p></li>
@@ -51,7 +51,7 @@
         </list>
 
         <list>
-            <title>Configuring <pretext /> for Google Search</title>
+            <caption>Configuring <pretext /> for Google Search</caption>
 
             <ol>
                 <li><p>The <c>Search engine ID</c> you saved from above is referenced in Google's code as a <c>cx</c> number.  Add an element in your MBX source as <c>docinfo/search/google/cx</c> with the value of your book's ID as the content.  See the sample article for a working example to mimic.</p></li>
