@@ -43,13 +43,13 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
 
             <p>This is a sample MathBook XML document to demonstrate and test different fonts used for different languages.  For PDF output, and best results, process with <c>xelatex</c> (or <c>lualatex</c>, unsupported).  If processed with <c>pdflatex</c>,  be prepared for errors, and maybe try running with the command-line option <c>-interaction batchmode</c> or <c>-interaction nonstopmode</c>.  Commentary here, and in the original source file, should help you track down what might be missing in your system if the <c>xelatex</c> results are not satisfactory.  You can also compare PDF output with the HTML output, which should work well for many different characters tested here.</p>
 
-            <ol>
+            <p><ol>
                 <li>Your source XML file should always have <cd latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</cd> as the first line of the file to specify that your file contains Unicode characters.</li>
 
                 <li>You will need to determine how to make your operating system, keyboard and editor cooperate to create the Unicode characters you need.  The <url href="http://www.cs.tut.fi/~jkorpela/fui.html8">Full Unicode Input utility</url> can be useful for generating short snippets or you can copy/paste from the source of this document.</li>
 
                 <li>Generating variants of HTML for web browsers should work smoothly.  You can test your system and browser for font support by viewing samples at Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url>.</li>
-            </ol>
+            </ol></p>
 
             <p>Not finding what you are looking for?  Send us a request.  Even better, send us a snippet of text that I can use as a sample.  If you know of any subleties in the use of <latex /> for your desired font, please include those hints.</p>
         </section>
@@ -61,7 +61,7 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
             <p>This next sections contain examples from various languages.  The characters should render in HTML, but without any special support for subtle variations of how a language is used (<eg /> date formats).  For <latex /> output, the <c>polyglossia</c> package may handle details like hyphenation.  Here we mostly test characters and fonts.  Improvements from those knowledgeable about the use of particular languages within  <latex /> are especially welcome, as are requests for particular languages.</p>
 
             <list>
-                <title>Supported Languages</title>
+                <caption>Supported Languages</caption>
                 <ol>
                     <li>Greek (modern), 2016-07-25</li>
                     <li>Korean, 2016-12-08</li>
@@ -219,7 +219,7 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
                 <p>Other elements have language support.  We are starting with <c>foreign</c>, which also italicizes the content.</p>
 
                 <list>
-                    <title>I Can Eat Glass</title>
+                    <caption>I Can Eat Glass</caption>
 
                     <introduction>
                         <p>From the <url href="http://kermitproject.org/">Kermit Project</url> a <url href="http://kermitproject.org/utf8.html#notes">startling phrase</url> in many languages.</p>
