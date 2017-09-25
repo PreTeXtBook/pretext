@@ -1438,7 +1438,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- build xref-knowl, and optionally a hidden-knowl duplicate -->
 <!-- &SOLUTION-LIKE; is replaced by WW-avoiding versions        -->
-<xsl:template match="&REMARK-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|objectives|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|p|li|webwork[*|@*]|men|md|mdn" mode="xref-knowl">
+<xsl:template match="&REMARK-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|objectives|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|p|li|webwork[*|@*]|men|md|mdn" mode="xref-knowl">
     <!-- a generally available cross-reference knowl file, of duplicated content -->
     <xsl:apply-templates select="." mode="manufacture-knowl">
         <xsl:with-param name="knowl-type" select="'xref'" />
@@ -1710,6 +1710,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </h6>
 </xsl:template>
 
+<!-- Heading (title) of a "poem" -->
+<!-- This is a hack, which should go away whence there -->
+<!-- is CSS for the class .poem which will surround    -->
+<!-- this.  Likely replace use of this template        -->
+<!-- by the template "heading-title" above             -->
+<xsl:template match="poem" mode="heading-poem">
+    <div class="poemtitle" style="font-weight: bold; text-align: center; font-size: 120%">
+        <xsl:apply-templates select="." mode="title-full"/>
+    </div>
+</xsl:template>
+
 
 <!-- ######################## -->
 <!-- Block Production, Knowls -->
@@ -1762,7 +1773,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (7) TODO: "wrapped-content" called by "body" to separate code. -->
 
 <!-- &SOLUTION-LIKE; is replaced by WW-avoiding versions -->
-<xsl:template match="&REMARK-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|objectives|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|p|li|webwork[*|@*]|men|md|mdn">
+<xsl:template match="&REMARK-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|objectives|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|p|li|webwork[*|@*]|men|md|mdn">
     <xsl:param name="b-original" select="true()" />
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
@@ -1943,6 +1954,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="class">
             <xsl:apply-templates select="." mode="body-css-class" />
         </xsl:attribute>
+        <!-- this horrible hack should go away once better CSS is in place -->
+        <!-- likely this particular version never gets used                -->
+        <xsl:if test="self::poem">
+            <xsl:attribute name="style">
+                <xsl:text>display: table; width: auto; max-width: 90%; margin: 0 auto;</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:apply-templates select="." mode="heading-birth" />
     </xsl:element>
 </xsl:template>
@@ -2091,6 +2109,134 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" >
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
+</xsl:template>
+
+
+<!-- Poem -->
+<!-- Titled, not numbered, but with an author's name. -->
+<!-- Knowled as a cross-reference target, but never born  -->
+<!-- hidden (for now particular reason).  A complicated  -->
+<!-- implementation, which should rely more on CSS. -->
+
+<!-- Never born-hidden, other devices partially hide -->
+<xsl:template match="poem" mode="is-hidden">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
+<!-- Overall enclosing element -->
+<!-- TODO: consider this being an article? -->
+<xsl:template match="poem" mode="body-element">
+    <xsl:text>div</xsl:text>
+</xsl:template>
+
+<!-- And its CSS class -->
+<xsl:template match="poem" mode="body-css-class">
+    <xsl:text>poem</xsl:text>
+</xsl:template>
+
+<!-- When born hidden, block-level -->
+<xsl:template match="poem" mode="birth-element">
+    <xsl:text>div</xsl:text>
+</xsl:template>
+
+<!-- When born use this heading -->
+<xsl:template match="poem" mode="heading-birth">
+    <xsl:apply-templates select="." mode="heading-poem" />
+</xsl:template>
+
+<!-- Heading for interior of xref-knowl content -->
+<xsl:template match="poem" mode="heading-xref-knowl">
+    <xsl:apply-templates select="." mode="heading-poem" />
+</xsl:template>
+
+<!-- Primary content of generic "body" template   -->
+<!-- Pass along b-original flag                   -->
+<!-- Simply process contents, could restrict here -->
+<xsl:template match="poem" mode="wrapped-content">
+    <xsl:param name="b-original" select="true()" />
+    <xsl:apply-templates select="stanza" >
+        <xsl:with-param name="b-original" select="$b-original" />
+    </xsl:apply-templates>
+    <!-- author comes early in schema, but is rendered below -->
+    <xsl:apply-templates select="author" >
+        <xsl:with-param name="b-original" select="$b-original" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- TODO: Address GitHub issues regarding poetry output:   -->
+<!-- https://github.com/BooksHTML/mathbook-assets/issues/65 -->
+
+<xsl:template match="poem/author">
+    <xsl:variable name="alignment">
+        <xsl:apply-templates select="." mode="poem-halign"/>
+    </xsl:variable>
+    <xsl:element name="div">
+        <xsl:attribute name="class">
+            <xsl:text>poemauthor</xsl:text>
+            <xsl:value-of select="$alignment" />
+        </xsl:attribute>
+        <xsl:attribute name="style">
+            <xsl:text>font-style: italic; padding-bottom: 20px; text-align: </xsl:text>
+            <xsl:value-of select="$alignment" />
+        </xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+
+<xsl:template match="stanza">
+    <div class="stanza" style="padding-bottom: 20px">
+        <xsl:if test="title">
+            <div class="stanzatitle" style="font-weight: bold; text-align: center">
+                <xsl:apply-templates select="." mode="title-full"/>
+            </div>
+        </xsl:if>
+        <xsl:apply-templates select="line"/>
+    </div>
+</xsl:template>
+
+<xsl:template match="stanza/line">
+    <xsl:variable name="alignment">
+        <xsl:apply-templates select="." mode="poem-halign"/>
+    </xsl:variable>
+    <xsl:variable name="indentation">
+        <xsl:apply-templates select="." mode="poem-indent"/>
+    </xsl:variable>
+    <xsl:element name="div">
+        <xsl:attribute name="class">
+            <xsl:text>poemline</xsl:text>
+            <xsl:value-of select="$alignment" />
+        </xsl:attribute>
+        <xsl:attribute name="style">
+            <!-- Hanging indentation for overly long lines -->
+            <xsl:text>margin-left: 4em; text-indent: -4em; </xsl:text>
+            <xsl:text>text-align: </xsl:text>
+            <xsl:value-of select="$alignment" />
+        </xsl:attribute>
+        <xsl:if test="$alignment='left'"><!-- Left Alignment: Indent from Left -->
+            <xsl:call-template name="poem-line-indenting">
+                <xsl:with-param name="count"><xsl:value-of select="$indentation"/></xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:apply-templates/><!-- Center Alignment: Ignore Indentation -->
+        <xsl:if test="$alignment='right'"><!-- Right Alignment: Indent from Right -->
+            <xsl:call-template name="poem-line-indenting">
+                <xsl:with-param name="count"><xsl:value-of select="$indentation"/></xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:element>
+</xsl:template>
+
+<xsl:template name="poem-line-indenting">
+    <xsl:param name="count"/>
+    <xsl:choose>
+        <xsl:when test="(0 >= $count)"/>
+        <xsl:otherwise>
+            <span class="tab" style="margin-left: 2em"></span>
+            <xsl:call-template name="poem-line-indenting">
+                <xsl:with-param name="count" select="$count - 1"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 
@@ -3208,7 +3354,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and top-down when components are also knowled.  -->
 
 
-<xsl:template match="&REMARK-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|objectives|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note" mode="body">
+<xsl:template match="&REMARK-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|objectives|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
     <!-- prelude beforehand, when original -->
@@ -3229,6 +3375,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-original and not($block-type = 'embed')">
             <xsl:attribute name="id">
                 <xsl:apply-templates select="." mode="internal-id" />
+            </xsl:attribute>
+        </xsl:if>
+        <!-- this horrible hack should go away once better CSS is in place -->
+        <xsl:if test="self::poem">
+            <xsl:attribute name="style">
+                <xsl:text>display: table; width: auto; max-width: 90%; margin: 0 auto;</xsl:text>
             </xsl:attribute>
         </xsl:if>
         <!-- If visible, heading interior to article -->
@@ -5682,7 +5834,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Override to turn off cross-references as knowls          -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|assemblage|paragraphs|objectives|exercise|webwork|hint|answer|solution|exercisegroup|me|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|blockquote|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|objectives|exercise|webwork|hint|answer|solution|exercisegroup|me|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">
@@ -6477,95 +6629,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#8212;</xsl:text>
 </xsl:template>
 
-<!--        -->
-<!-- Poetry -->
-<!--        -->
 
-<!-- TODO: Address GitHub issues regarding poetry output:   -->
-<!-- https://github.com/BooksHTML/mathbook-assets/issues/65 -->
-
-<xsl:template match="poem">
-    <div class="poem" style="display: table; width: auto; max-width: 90%; margin: 0 auto;">
-        <div class="poemtitle" style="font-weight: bold; text-align: center; font-size: 120%">
-            <xsl:apply-templates select="." mode="title-full"/>
-        </div>
-        <xsl:apply-templates select="stanza"/>
-        <xsl:apply-templates select="author"/>
-    </div>
-</xsl:template>
-
-<xsl:template match="poem/author">
-    <xsl:variable name="alignment">
-        <xsl:apply-templates select="." mode="poem-halign"/>
-    </xsl:variable>
-    <xsl:element name="div">
-        <xsl:attribute name="class">
-            <xsl:text>poemauthor</xsl:text>
-            <xsl:value-of select="$alignment" />
-        </xsl:attribute>
-        <xsl:attribute name="style">
-            <xsl:text>font-style: italic; padding-bottom: 20px; text-align: </xsl:text>
-            <xsl:value-of select="$alignment" />
-        </xsl:attribute>
-        <xsl:apply-templates/>
-    </xsl:element>
-</xsl:template>
-
-<xsl:template match="stanza">
-    <div class="stanza" style="padding-bottom: 20px">
-        <xsl:if test="title">
-            <div class="stanzatitle" style="font-weight: bold; text-align: center">
-                <xsl:apply-templates select="." mode="title-full"/>
-            </div>
-        </xsl:if>
-        <xsl:apply-templates select="line"/>
-    </div>
-</xsl:template>
-
-<xsl:template match="stanza/line">
-    <xsl:variable name="alignment">
-        <xsl:apply-templates select="." mode="poem-halign"/>
-    </xsl:variable>
-    <xsl:variable name="indentation">
-        <xsl:apply-templates select="." mode="poem-indent"/>
-    </xsl:variable>
-    <xsl:element name="div">
-        <xsl:attribute name="class">
-            <xsl:text>poemline</xsl:text>
-            <xsl:value-of select="$alignment" />
-        </xsl:attribute>
-        <xsl:attribute name="style">
-            <!-- Hanging indentation for overly long lines -->
-            <xsl:text>margin-left: 4em; text-indent: -4em; </xsl:text>
-            <xsl:text>text-align: </xsl:text>
-            <xsl:value-of select="$alignment" />
-        </xsl:attribute>
-        <xsl:if test="$alignment='left'"><!-- Left Alignment: Indent from Left -->
-            <xsl:call-template name="poem-line-indenting">
-                <xsl:with-param name="count"><xsl:value-of select="$indentation"/></xsl:with-param>
-            </xsl:call-template>
-        </xsl:if>
-        <xsl:apply-templates/><!-- Center Alignment: Ignore Indentation -->
-        <xsl:if test="$alignment='right'"><!-- Right Alignment: Indent from Right -->
-            <xsl:call-template name="poem-line-indenting">
-                <xsl:with-param name="count"><xsl:value-of select="$indentation"/></xsl:with-param>
-            </xsl:call-template>
-        </xsl:if>
-    </xsl:element>
-</xsl:template>
-
-<xsl:template name="poem-line-indenting">
-    <xsl:param name="count"/>
-    <xsl:choose>
-        <xsl:when test="(0 >= $count)"/>
-        <xsl:otherwise>
-            <span class="tab" style="margin-left: 2em"></span>
-            <xsl:call-template name="poem-line-indenting">
-                <xsl:with-param name="count" select="$count - 1"/>
-            </xsl:call-template>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
 
 <!--       -->
 <!-- Music -->
