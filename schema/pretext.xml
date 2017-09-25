@@ -1050,13 +1050,24 @@
             element warning {RemarkLike}
         |
             element insight {RemarkLike}
-        |
-            element computation {RemarkLike}
-        |
-            element technology {RemarkLike}
         </fragment>
     </section>
 
+    <section>
+        <title>Computations and Technology</title>
+
+        <p>Somewhat simple blocks, they do not have much structure, but can hold more than a Remark.</p>
+
+        <fragment xml:id="computation-like">
+        ComputationLike =
+            MetaDataTitleOptional,
+            BlockStatement+
+        Computation =
+            element computation {ComputationLike}
+        |
+            element technology {ComputationLike}
+        </fragment>
+    </section>
 
     <section>
         <title>Asides</title>
@@ -2042,6 +2053,7 @@
         <fragment ref="example-like" />
         <fragment ref="project-like" />
         <fragment ref="remark-like" />
+        <fragment ref="computation-like" />
         <fragment ref="aside" />
         <fragment ref="assemblage" />
         <fragment ref="table-figure" />

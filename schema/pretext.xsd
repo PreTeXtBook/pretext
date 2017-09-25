@@ -1140,8 +1140,6 @@
       <xs:element ref="observation"/>
       <xs:element ref="warning"/>
       <xs:element ref="insight"/>
-      <xs:element ref="computation"/>
-      <xs:element ref="technology"/>
     </xs:choice>
   </xs:group>
   <xs:element name="remark" type="RemarkLike"/>
@@ -1149,8 +1147,21 @@
   <xs:element name="observation" type="RemarkLike"/>
   <xs:element name="warning" type="RemarkLike"/>
   <xs:element name="insight" type="RemarkLike"/>
-  <xs:element name="computation" type="RemarkLike"/>
-  <xs:element name="technology" type="RemarkLike"/>
+  <xs:complexType name="ComputationLike">
+    <xs:sequence>
+      <xs:group ref="MetaDataTitleOptional"/>
+      <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="MetaDataTitleOptional"/>
+  </xs:complexType>
+  <xs:group name="Computation">
+    <xs:choice>
+      <xs:element ref="computation"/>
+      <xs:element ref="technology"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="computation" type="ComputationLike"/>
+  <xs:element name="technology" type="ComputationLike"/>
   <xs:complexType name="AsideLike">
     <xs:sequence>
       <xs:group ref="MetaDataTitleOptional"/>

@@ -520,10 +520,15 @@
             element warning {RemarkLike}
         |
             element insight {RemarkLike}
+        
+        
+        ComputationLike =
+            MetaDataTitleOptional,
+            BlockStatement+
+        Computation =
+            element computation {ComputationLike}
         |
-            element computation {RemarkLike}
-        |
-            element technology {RemarkLike}
+            element technology {ComputationLike}
         
         
         AsideLike =

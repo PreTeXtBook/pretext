@@ -1195,11 +1195,21 @@
       <element name="insight">
         <ref name="RemarkLike"/>
       </element>
+    </choice>
+  </define>
+  <define name="ComputationLike">
+    <ref name="MetaDataTitleOptional"/>
+    <oneOrMore>
+      <ref name="BlockStatement"/>
+    </oneOrMore>
+  </define>
+  <define name="Computation">
+    <choice>
       <element name="computation">
-        <ref name="RemarkLike"/>
+        <ref name="ComputationLike"/>
       </element>
       <element name="technology">
-        <ref name="RemarkLike"/>
+        <ref name="ComputationLike"/>
       </element>
     </choice>
   </define>
