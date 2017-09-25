@@ -1672,15 +1672,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="type">
         <xsl:apply-templates select="." mode="type-name" />
     </span>
-    <!-- A simple number, this should be in -common perhaps? -->
-    <!-- The work here is to see if the count exceeds 1      -->
-    <!-- xsl:number, w/out "count" will stick to element type -->
+    <!-- We are not computing the number here, that is in -common   -->
+    <!-- We are checking if there is more than one of the same type -->
+    <!-- If one, then we do not need the number "1" to disambiguate -->
+    <!-- We go to the parent, get all children, then filter by name -->
     <xsl:variable name="elt-name" select="local-name(.)" />
-    <xsl:variable name="siblings" select="parent::*/child::*[local-name(.) = $elt-name]" />
+    <xsl:variable name="siblings" select="parent::*/*[local-name(.) = $elt-name]" />
     <xsl:if test="count($siblings) > 1">
-        <xsl:text> </xsl:text>
         <span class="codenumber">
-            <xsl:number />
+            <xsl:apply-templates select="." mode="serial-number" />
         </span>
     </xsl:if>
 </xsl:template>
