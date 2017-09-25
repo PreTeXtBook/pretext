@@ -704,7 +704,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A template manages the date      -->
 <!-- Until we have better CSS for it  -->
 <xsl:template match="titlepage/date">
-    <!-- <p style="text-align:center"> -->
     <address class="contributors">
         <xsl:apply-templates />
     </address>
@@ -4707,14 +4706,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="class">
             <xsl:text>sidebyside</xsl:text>
         </xsl:attribute>
-        <xsl:attribute name="style">
-            <xsl:if test="$sbsdebug">
+        <xsl:if test="$sbsdebug">
+            <xsl:attribute name="style">
                 <xsl:text>box-sizing: border-box;</xsl:text>
                 <xsl:text>-moz-box-sizing: border-box;</xsl:text>
                 <xsl:text>-webkit-box-sizing: border-box;</xsl:text>
                 <xsl:text>border: 2px solid purple;</xsl:text>
-            </xsl:if>
-        </xsl:attribute>
+            </xsl:attribute>
+        </xsl:if>
 
         <!-- this will need work to differentiate sbs from sbsrow -->
         <xsl:if test="self::sidebyside and $b-original">
@@ -5219,7 +5218,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="height" select="$height" />
         </xsl:call-template>
     </div>
-    <div style="display:none">
+    <div class="hidden-content">
         <!-- Hidden content in here -->
         <xsl:apply-templates select="." mode="video-embed">
             <xsl:with-param name="width"  select="$width" />
@@ -8397,7 +8396,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- sneaking in packages, which load first, in       -->
 <!-- case authors want to build on these macros       -->
 <xsl:template name="latex-macros">
-    <div style="display:none;">
+    <div class="hidden-content">
     <xsl:text>\(</xsl:text>
     <xsl:value-of select="$latex-packages-mathjax" />
     <xsl:value-of select="$latex-macros" />
