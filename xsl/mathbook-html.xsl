@@ -856,7 +856,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="statement" />
             </xsl:if>
             <!-- default templates will produce hidden knowls -->
-            <div class="hidden-knowl-wrapper solutions">
+            <div class="solutions">
                 <xsl:if test="hint and $exercise.backmatter.hint='yes'">
                     <xsl:apply-templates select="hint" />
                 </xsl:if>
@@ -1799,6 +1799,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
     <xsl:choose>
+        <!-- born-hidden case -->
         <xsl:when test="$hidden = 'true'">
             <xsl:choose>
                 <!-- primary occurrence, born hidden as embedded knowl     -->
@@ -1811,35 +1812,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- duplicating, so just make a xref-knowl in same style, -->
                 <!-- but therefore clean of id's or other identification   -->
                 <xsl:otherwise>
-                    <!-- perhaps we should use the "body-element" and "body-css-class" here? -->
-                    <xsl:variable name="birth-elt">
-                        <xsl:apply-templates select="." mode="birth-element" />
-                    </xsl:variable>
-                    <xsl:element name="{$birth-elt}">
-                        <!-- copied from "xref-link" template,  -->
-                        <!-- maybe build a 2-parameter template -->
-                        <xsl:element name="a">
-                            <xsl:attribute name="knowl">
-                                <xsl:apply-templates select="." mode="hidden-knowl-filename" />
-                            </xsl:attribute>
-                            <!-- TODO: check if this "knowl-id" is needed, knowl.js implies it is -->
-                            <xsl:attribute name="knowl-id">
-                                <xsl:text>hidden-</xsl:text>
-                                <xsl:apply-templates select="." mode="internal-id" />
-                            </xsl:attribute>
-                            <!-- add HTML title and alt attributes to the link -->
-                            <xsl:attribute name="alt">
-                                <xsl:apply-templates select="." mode="tooltip-text" />
-                            </xsl:attribute>
-                            <xsl:attribute name="title">
-                                <xsl:apply-templates select="." mode="tooltip-text" />
-                            </xsl:attribute>
-                            <xsl:apply-templates select="." mode="hidden-knowl-text" />
-                         </xsl:element>
-                    </xsl:element>
+                    <xsl:apply-templates select="." mode="duplicate-born-hidden">
+                        <xsl:with-param name="b-original" select="$b-original" />
+                    </xsl:apply-templates>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
+        <!-- born-visible case -->
         <xsl:otherwise>
             <!-- pass-thru of b-original mandatory -->
             <xsl:apply-templates select="." mode="born-visible">
@@ -1863,29 +1842,69 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="birth-element" />
     </xsl:variable>
     <!-- First: the link that is visible on the page         -->
-    <!-- Wrapped at the div level, not wrapped if span level -->
-    <xsl:choose>
-        <xsl:when test="$birth-elt = 'div'">
-            <xsl:element name="{$birth-elt}">
-                <xsl:attribute name="class">
-                    <xsl:text>hidden-knowl-wrapper</xsl:text>
-                </xsl:attribute>
-                <xsl:apply-templates select="." mode="hidden-knowl-link" />
-            </xsl:element>
-        </xsl:when>
-        <xsl:when test="$birth-elt = 'span'">
-            <xsl:apply-templates select="." mode="hidden-knowl-link" />
-        </xsl:when>
-    </xsl:choose>
+    <xsl:variable name="body-elt">
+        <xsl:apply-templates select="." mode="body-element" />
+    </xsl:variable>
+    <!-- If body-element is a span, that is an indicator that the   -->
+    <!-- bare "a" link is sufficient and it needs no more wrapping. -->
+    <!-- Presently: hint, answer, solution, footnote, biblio        -->
+    <!-- TODO: use a better indicator, perhaps an empty body-element -->
+    <xsl:element name="{$body-elt}">
+        <xsl:attribute name="class">
+            <xsl:apply-templates select="." mode="body-css-class" />
+        </xsl:attribute>
+        <!-- this horrible hack should go away once better CSS is in place -->
+        <!-- likely this particular version never gets used                -->
+        <xsl:if test="self::poem">
+            <xsl:attribute name="style">
+                <xsl:text>display: table; width: auto; max-width: 90%; margin: 0 auto;</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates select="." mode="hidden-knowl-link" />
+    </xsl:element>
     <!-- Second: the content of the knowl, to be revealed/parsed later -->
     <xsl:apply-templates select="." mode="hidden-knowl-content">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- An external file knowl, impersonating a hidden knowl -->
+<xsl:template match="*" mode="duplicate-born-hidden">
+    <xsl:param name="b-original" select="false()" />
+    <xsl:variable name="birth-elt">
+        <xsl:apply-templates select="." mode="birth-element" />
+    </xsl:variable>
+    <xsl:variable name="body-elt">
+        <xsl:apply-templates select="." mode="body-element" />
+    </xsl:variable>
+    <xsl:element name="{$body-elt}">
+        <xsl:attribute name="class">
+            <xsl:apply-templates select="." mode="body-css-class" />
+        </xsl:attribute>
+        <!-- this horrible hack should go away once better CSS is in place -->
+        <!-- likely this particular version never gets used                -->
+        <xsl:if test="self::poem">
+            <xsl:attribute name="style">
+                <xsl:text>display: table; width: auto; max-width: 90%; margin: 0 auto;</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates select="." mode="duplicate-hidden-knowl-link" />
+    </xsl:element>
+</xsl:template>
 
-<!-- a hidden-knowl version of a clickable -->
+<!-- Hidden knowls are in two pieces.  This template -->
+<!-- ensures consistency of the common, linking id.  -->
+<xsl:template match="*" mode="hidden-knowl-id">
+    <xsl:text>hk-</xsl:text>  <!-- "hidden-knowl" -->
+    <xsl:apply-templates select="." mode="internal-id" />
+</xsl:template>
+
+<!-- The link portion of a hidden-knowl -->
 <xsl:template match="*" mode="hidden-knowl-link">
+    <!-- TODO: only being used here as block/inline signal -->
+    <xsl:variable name="birth-elt">
+        <xsl:apply-templates select="." mode="birth-element" />
+    </xsl:variable>
     <xsl:element name="a">
         <xsl:choose>
             <!-- Hack: WW not working from embedded knowls,     -->
@@ -1909,17 +1928,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="title">
                     <xsl:apply-templates select="." mode="tooltip-text" />
                 </xsl:attribute>
-                <xsl:apply-templates select="." mode="hidden-knowl-text" />
+                <xsl:apply-templates select="." mode="heading-birth" />
             </xsl:when>
             <!-- this is the "real" code, bust out once WW fixed -->
             <xsl:otherwise>
-                <!-- Point to the file version, which is ineffective -->
-                <xsl:attribute name="knowl">
-                    <xsl:apply-templates select="." mode="xref-knowl-filename" />
-                </xsl:attribute>
                 <!-- empty, indicates content *not* in a file -->
                 <xsl:attribute name="knowl" />
-                <!-- class indicates content is in div referenced by id -->
+                <!-- id-ref class means content is in div referenced by id -->
                 <xsl:attribute name="class">
                     <xsl:text>id-ref</xsl:text>
                 </xsl:attribute>
@@ -1934,21 +1949,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:attribute>
                 <!-- marked-up knowl text link *inside* of knowl anchor to be effective -->
                 <!-- heading in an HTML container -->
-                <xsl:apply-templates select="." mode="hidden-knowl-text" />
+                <xsl:apply-templates select="." mode="heading-birth" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:element>
 </xsl:template>
 
-
-<!-- create the hidden/embedded content  -->
-<!-- Should this just *always* be a div? -->
+<!-- The content portion of a hidden knowl -->
+<!-- *Always* as div.hidden-content"       -->
+<!-- TODO: exception is a footnote until we  -->
+<!-- move out of the interior of a paragraph -->
 <xsl:template match="*" mode="hidden-knowl-content">
     <xsl:param name="b-original" select="true()" />
-    <xsl:variable name="birth-elt">
-        <xsl:apply-templates select="." mode="birth-element" />
+    <xsl:variable name="hidden-content-type">
+        <xsl:choose>
+            <xsl:when test="self::fn">
+                <xsl:text>span</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>div</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
-    <xsl:element name="{$birth-elt}">
+    <xsl:element name="{$hidden-content-type}">
         <!-- different id, for use by the knowl mechanism -->
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="hidden-knowl-id" />
@@ -1966,30 +1989,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<xsl:template match="*" mode="hidden-knowl-text">
-    <xsl:variable name="body-elt">
-        <xsl:apply-templates select="." mode="body-element" />
+<!-- The link for a duplicate hidden knowl -->
+<xsl:template match="*" mode="duplicate-hidden-knowl-link">
+    <xsl:variable name="birth-elt">
+        <xsl:apply-templates select="." mode="birth-element" />
     </xsl:variable>
-    <xsl:element name="{$body-elt}">
-        <xsl:attribute name="class">
-            <xsl:apply-templates select="." mode="body-css-class" />
+    <xsl:element name="a">
+        <xsl:attribute name="knowl">
+            <xsl:apply-templates select="." mode="hidden-knowl-filename" />
         </xsl:attribute>
-        <!-- this horrible hack should go away once better CSS is in place -->
-        <!-- likely this particular version never gets used                -->
-        <xsl:if test="self::poem">
-            <xsl:attribute name="style">
-                <xsl:text>display: table; width: auto; max-width: 90%; margin: 0 auto;</xsl:text>
-            </xsl:attribute>
-        </xsl:if>
+        <!-- TODO: check if this "knowl-id" is needed, knowl.js implies it is -->
+        <xsl:attribute name="knowl-id">
+            <xsl:text>hidden-</xsl:text>
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:attribute>
+        <!-- add HTML title and alt attributes to the link -->
+        <xsl:attribute name="alt">
+            <xsl:apply-templates select="." mode="tooltip-text" />
+        </xsl:attribute>
+        <xsl:attribute name="title">
+            <xsl:apply-templates select="." mode="tooltip-text" />
+        </xsl:attribute>
         <xsl:apply-templates select="." mode="heading-birth" />
     </xsl:element>
-</xsl:template>
-
-<!-- Hidden knowls are embedded in a div that MathJax ignores.   -->
-<!-- That div needs an id for the knowl to be able to locate it  -->
-<xsl:template match="*" mode="hidden-knowl-id">
-    <xsl:text>hk-</xsl:text>  <!-- "hidden-knowl" -->
-    <xsl:apply-templates select="." mode="internal-id" />
 </xsl:template>
 
 
@@ -2634,7 +2656,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
             <xsl:if test="hint|answer|solution">
-                <div class="hidden-knowl-wrapper solutions">
+                <div class="solutions">
                     <xsl:apply-templates select="hint|answer|solution">
                         <xsl:with-param name="b-original" select="$b-original" />
                     </xsl:apply-templates>
@@ -2782,7 +2804,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
             <!-- after statement, div of hidden knowls -->
             <xsl:if test="(hint and $exercise.text.hint='yes') or (answer and $exercise.text.answer='yes') or (solution and $exercise.text.solution='yes')">
-                <div class="hidden-knowl-wrapper solutions">
+                <div class="solutions">
                     <xsl:if test="$exercise.text.hint='yes'">
                         <xsl:apply-templates select="hint">
                             <xsl:with-param name="b-original" select="$b-original" />
@@ -2868,7 +2890,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- this could be a useful three-parameter template -->
             <xsl:if test="(hint and $project.text.hint='yes') or (answer and $project.text.answer='yes') or (solution and $project.text.solution='yes')">
                 <!-- then can populate div full of solution -->
-                <div class="hidden-knowl-wrapper solutions">
+                <div class="solutions">
                     <xsl:if test="$project.text.hint='yes'">
                         <xsl:apply-templates select="hint">
                             <xsl:with-param name="b-original" select="$b-original" />
@@ -2957,7 +2979,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- this could be a useful three-parameter template -->
             <xsl:if test="(hint and $project.text.hint='yes') or (answer and $project.text.answer='yes') or (solution and $project.text.solution='yes')">
                 <!-- then can populate div full of solution -->
-                <div class="hidden-knowl-wrapper solutions">
+                <div class="solutions">
                     <xsl:if test="$project.text.hint='yes'">
                         <xsl:apply-templates select="hint">
                             <xsl:with-param name="b-original" select="$b-original" />
@@ -3357,7 +3379,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:apply-templates>
     </div>
     <xsl:if test="note">
-        <div class="hidden-knowl-wrapper solutions">
+        <div class="knowl-container">
             <xsl:apply-templates select="note">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
