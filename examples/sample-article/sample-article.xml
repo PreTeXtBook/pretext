@@ -6346,6 +6346,20 @@ the xsltproc executable.
                 </stanza>
             </poem>
 
+            <p>Ken Levasseur, who teaches at UMass-Lowell, has limericks in his Applied Discrete Structures textbook.  When he reported that they were unable to be the target of a cross-reference, Karl-Dieter Crisman penned the following limerick.</p>
+
+            <poem>
+                <author>Karl-Dieter Crisman</author>
+
+                <stanza>
+                    <line>CS students studying in Lowell</line>
+                    <line>Required their books to have soul.</line>
+                    <line>Along came their teacher</line>
+                    <line>Who asked for this feature:</line>
+                    <line>A poem that lives in a knowl.</line>
+                </stanza>
+            </poem>
+
         </section>
 
         <section xml:id="advanced-numbering">
