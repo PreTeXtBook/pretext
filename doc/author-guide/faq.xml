@@ -95,6 +95,21 @@
             <title>I'd like to make one small adjustment in my output.</title>
             <p>There are no plans to make it easy to change one thing in the layout (such as changing the title of all sub-sub-sections from flush-left to centered).  If you know enough, then you can hack such things yourself.  But doing so is inadvisable, except in the case where you are the rare person who has done a lot of studying and put a lot of effort into learning book design.  If that is the case, then it would be better to make a completely new layout and then share it so it is an option for other people to use.  See <xref ref="principle-output-styles" text="type-local">Principle</xref>.</p>
         </li>
+
+        <li>
+            <title>Why does the HTML output load so many external resources?</title>
+            <p>The subtext perhaps being, <q>Why shouldn't I host these on my own server?</q>  A main goal for <pretext /> is to spare authors the headaches of learning new technologies just so they can get their content in front of readers.  That knowledge should be built into software, so an author can work at a higher level, explaining the intricacies of their discipline.  So we only assume an author can place locally-built HTML output onto some public server they have permission to use.  Any extra enabling techology we do not want to create ourselves gets pulled from other public servers.  MathJax, both code and fonts, is a good example, as one of the enabling projects.  Perhaps it is <em>the</em> enabling project.</p>
+
+            <p>This way,<ul>
+                <li>Authors can concentrate on their writing, not updating services on their server.</li>
+                <li>Servers that are hostile to ad-hoc configurations (think <q>learning management systems</q>) are not an impediment to hosting projects.</li>
+                <li>For the most part, updates to external resources happen automatically.  This allows authors and <pretext /> developers to concentrate on other aspects of their work.</li>
+            </ul></p>
+
+            <p>We get MathJax from a <term>content delivery network</term> (CDN).  Once we have that dependency, then fonts and search from Google, CSS and Javascript from the American Institute of Mathematics, and other components, all have the same dependency: a decent internet connection.  Our experience over several years is that these resources have good uptimes and good bandwidth, and so are not a source of problems.  A good offline version, with resources packaged via a script, would be a good long-term project.</p>
+
+            <p>Finally, we do not load minor resources indiscriminately.  Something in your source should suggest they are necessary and we perform those checks, document-wide.  However, since a cross-reference is usually implemented as a knowl, and we cannot be sure what a knowl might contain, we do tend to load resources on <em>every</em> page, even if only needed once.  We hope to improve this situation.  And you are enouraged to help if you have technical skills in these areas.</p>
+        </li>
     </dl>
 </appendix>
 
