@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!-- ********************************************************************* -->
-<!-- Copyright 2015                                                        -->
+<!-- Copyright 2015-7                                                      -->
 <!-- Robert A. Beezer, Michael Gage, Geoff Goehle, Alex Jordan             -->
 <!--                                                                       -->
-<!-- This file is part of MathBook XML.                                    -->
+<!-- This file is part of PreTeXt.                                         -->
 <!--                                                                       -->
-<!-- MathBook XML is free software: you can redistribute it and/or modify  -->
+<!-- PreTeXt is free software: you can redistribute it and/or modify       -->
 <!-- it under the terms of the GNU General Public License as published by  -->
 <!-- the Free Software Foundation, either version 2 or version 3 of the    -->
 <!-- License (at your option).                                             -->
 <!--                                                                       -->
-<!-- MathBook XML is distributed in the hope that it will be useful,       -->
+<!-- PreTeXt is distributed in the hope that it will be useful,            -->
 <!-- but WITHOUT ANY WARRANTY; without even the implied warranty of        -->
 <!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         -->
 <!-- GNU General Public License for more details.                          -->
 <!--                                                                       -->
 <!-- You should have received a copy of the GNU General Public License     -->
-<!-- along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>. -->
+<!-- along with PreTeXt. If not, see <http://www.gnu.org/licenses/>.       -->
 <!-- ********************************************************************* -->
 
-<!-- This is a MathBook XML "article" designed to look      -->
+<!-- This is a PreTeXt "article" designed to look           -->
 <!-- like a chapter of a book.  So it has several sections, -->
 <!-- each with mathematical content and WeBWorK problems.   -->
 
@@ -108,10 +108,10 @@
 
 
             <abstract>
-                <p>This is a sample article to demonstrate integrating <webwork /> homework problems into content authored with MathBook XML.  While technically an example of MathBook's <c>article</c> format, it is intended to closely resemble a chapter of a MathBook <c>book</c> that is divided into sections.</p>
+                <p>This is a sample article to demonstrate integrating <webwork /> homework problems into content authored with <pretext />.  While technically an example of <pretext />'s <c>article</c> format, it is intended to closely resemble a chapter of a <pretext /> <c>book</c> that is divided into sections.</p>
                 <p>This work was funded with grants from <url href="http://openoregon.org/">OpenOregon</url> and the <url href="http://pugetsound.edu">University of Puget Sound</url>.</p>
-                <p>Rob and Alex worked on the MathBook XML enhancements that make this possible. Mike Gage (Univeristy of Rochester) and Geoff Goehle (Western Carolina University) made this possible by enhancing the WeBWorK end, and generally maintaining WeBWorK software.</p>
-                <p>This article assumes a mild familiarity with both <url href="http://mathbook.pugetsound.edu/">MathBook XML</url> and <url href="http://webwork.maa.org/wiki/Main_Page">WeBWorK</url>. For more information about either project, follow the links.</p>
+                <p>Rob Beezer (University of Puget Sound) and Alex Jordan (Portland Community College) worked on the <pretext /> enhancements that make this possible. Mike Gage (Univeristy of Rochester), Geoff Goehle (Western Carolina University), and Alex Jordan made this possible by enhancing the <webwork /> end, and generally maintaining <webwork /> software.</p>
+                <p>This article assumes a mild familiarity with both <url href="http://mathbook.pugetsound.edu/"><pretext /></url> and <url href="http://webwork.maa.org/wiki/Main_Page"><webwork /></url>. For more information about either project, follow the links.</p>
             </abstract>
 
         </frontmatter>
@@ -209,7 +209,7 @@
                 <title>Controlling Randomness</title>
 
                 <introduction>
-                    <p>You can code your problem with randomization, but then use a specific <c>seed</c> and <webwork />'s <c>$envir{problemSeed}</c>to override that randomization for the purposes of the version that will appear in HTML and print putput.</p>
+                    <p>You can code your problem with randomization, but then use a specific <c>seed</c> and <webwork />'s <c>$envir{problemSeed}</c> to override that randomization for the purposes of the version that will appear in HTML and print putput.</p>
                 </introduction>
 
                 <webwork xml:id="integer-addition-with-control-seed" seed="1">
@@ -252,8 +252,8 @@
                 <introduction>
                     <p>One of the strengths of <webwork /> is its ability to give intelligent feedback for incorrect answers.</p>
                     <p><ul>
-                        <li><p>There is general feedback for when the student's answer is in an entirely different ballpark from the correct answer. Try entering something like <q>y</q>.</p></li>
-                        <li><p>There is general feedback for when the student's answer is not in the right form. Try entering <q>x<circumflex />2*x<circumflex />3</q>, which, right or wrong, is unsimplified.</p></li>
+                        <li><p>There is general feedback for when the student's answer is in an entirely different ballpark from the correct answer. Try entering something like <q><c>y</c></q>.</p></li>
+                        <li><p>There is general feedback for when the student's answer is not in the right form. Try entering <q><c>x^2*x^3</c></q>, which, right or wrong, is unsimplified.</p></li>
                         <li><p>And problems can be written to detect and respond to common mistakes. Try entering an answer where you multiply the two exponents (instead of adding them, which would be correct.)</p></li>
                     </ul></p>
                 </introduction>
@@ -321,7 +321,7 @@
             <exercise>
                 <title>Using Hints</title>
                 <introduction>
-                    <p>Hints can be inserted into exercises. Whether a hint is visible in the HTML depends on the value of <c>$showHint</c> in <c>PGcourse.pl</c> in the <webwork /> course that is hosting these exercises. How the hint is displayed in the pdf output is controlled in the usual way that an MBX hint is controlled.</p>
+                    <p>Hints can be inserted into exercises. Whether a hint is visible in the HTML depends on the value of <c>$showHint</c> in <c>PGcourse.pl</c> in the <webwork /> course that is hosting these exercises. How the hint is displayed in the pdf output is controlled in the usual way that an PTX hint is controlled.</p>
                 </introduction>
 
                 <webwork>
@@ -357,8 +357,7 @@
 
                     <statement>
                         <p>Simplify the expression <m><var name="$expression"/></m>.</p>
-
-                        <p halign="center"><m><var name="$expression"/>=</m><var name="$answer" width="10"/></p>
+                        <p><m><var name="$expression"/>=</m><var name="$answer" width="10"/></p>
                     </statement>
 
                     <hint>
@@ -382,7 +381,7 @@
                     </statement>
                 </webwork>
                 <conclusion>
-                    <p>For more about problems that do not require any randomization, see the MBX Author Guide.</p>
+                    <p>For more about problems that do not require any randomization, see the <url href="http://mathbook.pugetsound.edu/documentation.html">PTX Author Guide</url>.</p>
                 </conclusion>
             </exercise>
 
@@ -391,9 +390,9 @@
         <section>
             <title>The Quadratic Formula</title>
 
-            <p>In the previous section, we saw relatively simple <webwork /> questions. This section demonstrates how even very complicated <webwork /> problems still behave well.</p>
+            <p>In the previous section, we saw relatively simple <webwork /> questions. This section demonstrates how even very complicated <webwork /> problems can still behave well.</p>
 
-            <p>Here is a theorem that gives us a formula for the solutions of a second-degree polynomial equation. Note later how the <webwork /> problem references the theorem by its number. This seemingly minor detail demonstartes the degree to which <webwork /> and MathBook XML have been integrated.</p>
+            <p>Here is a theorem that gives us a formula for the solutions of a second-degree polynomial equation. Note later how the <webwork /> problem references the theorem by its number. This seemingly minor detail demonstrates the degree to which <webwork /> and <pretext /> have been integrated.</p>
 
             <theorem xml:id="theorem-quadratic-formula">
                 <title>Quadratic Formula</title>
@@ -503,9 +502,9 @@
                         <title>Part 1: Identify the coefficients</title>
 
                         <statement>
-                            <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" /></p>
+                            <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" />.</p>
 
-                            <p halign='center'><m>a=</m> <var name="$a" width="4" evaluator="$evaluatorfora"/>, <m>b=</m> <var name="$b" width="4" evaluator="$evaluatorforb"/>, <m>c=</m> <var name="$c" width="4" evaluator="$evaluatorforc"/></p>
+                            <p><m>a=</m> <var name="$a" width="4" evaluator="$evaluatorfora"/>, <m>b=</m> <var name="$b" width="4" evaluator="$evaluatorforb"/>, <m>c=</m> <var name="$c" width="4" evaluator="$evaluatorforc"/></p>
                         </statement>
 
                         <solution>
@@ -518,7 +517,7 @@
 
                         <statement>
                             <p>Using the quadratic formula, solve <m><var name="$quadratic"/>=0</m>.</p>
-                            <p halign='center'><m>x=</m> <var name="$multians1" width="15"/> or <m>x=</m> <var name="$multians1" width="15"/></p>
+                            <p><m>x=</m> <var name="$multians1" width="15"/> or <m>x=</m> <var name="$multians1" width="15"/></p>
                         </statement>
 
                         <solution>
@@ -538,7 +537,7 @@
 
                 <p>The <url href="http://webwork.maa.org/wiki/Open_Problem_Library">Open Problem Library</url> (OPL) is a repository of curated <webwork /> problems. At last count it had something like 30,000 problems, searchable by topic.</p>
 
-                <p>Most of the problems in this sample chapter have their source authored within the same document as the narrative.  However the problems in this section are from the OPL and elsewhere on the server that is hosting the <webwork /> caclulations.  For HTML output we can connect to the server and render the problem here in an interactive fashion.  For print/PDF we use the <c>mbx</c> script to connect to the server to produce the LaTeX code for the problem.  We can use the <c>exercise.text.*</c> switches to control which parts of the problem (statements, solutions, hints) are incorporated.</p>
+                <p>Most of the problems in this sample chapter have their source authored within the same document as the narrative.  However the problems in this section are from the OPL and elsewhere on the server that is hosting the <webwork /> caclulations.  For HTML output we can connect to the server and render the problem here in an interactive fashion.  For print/PDF we use the <c>mbx</c> script to connect to the server to produce <pretext /> code for the problem.  We can use the <c>exercise.text.*</c> switches to control which parts of the problem (statements, solutions, hints) are incorporated.</p>
 
                 <p>Problems do not have to be in the OPL to reside on a server; any problem that is accessbile from the <webwork /> course which is hosting the <webwork /> computation may be used this way.</p>
 
@@ -552,16 +551,13 @@
                 <webwork source="BasicAlgebra/Geometry/CylinderVolume10.pg" seed="8435"/>
             </exercise>
 
-            <exercise xml:id="two-variable-inequality">
-                <title>Grandpa's Cat: a Cautionary Tale</title>
+            <warning>
+                <title>Incompatible Problems</title>
 
-                <introduction>
-                    <p>Not all problems that come from the OPL were written with MBX in mind, and they don't all fit into MBX space. This example illustrates that this should be taken into consideration when using OPL problems. Some of the graphs here are not fully visible in the web version of the article.</p>
-                </introduction>
+                <p>Not all problems that come from the OPL are compatible with <pretext />. The reasons vary. Perhaps the problem uses older <webwork /> macros that cannot be augmented to provide <pretext /> output. Perhaps the problem nests a table within a table, which <pretext /> will not support. Perhaps there are graphics in the problem that are not sized appropriately for <pretext /> output and there's nothing you can do about it. And there are many more reasons.</p>
 
-                <webwork source="BasicAlgebra/EquationsAndInequalitiesInTwoVariables/GraphTwoVariableInequality110.pg" />
-            </exercise>
-
+                <p>Unfortunately the variety of reasons for which a problem may be incompatible means that at present, there is no way to validate a problem automatically. Using an incompatible problem might not raise any errors at any stage of the <pretext /> processing, but large chunks of the problem may be missing, especially in print output. So we recommend that you review all output modes when using an OPL problem. Chances are that if it is behaving in print, it will behave elsewhere. But that is an unproven theory at this point.</p>
+            </warning>
         </section>
 
         <section>
@@ -597,14 +593,12 @@
 
                 <p>We state an equivalent version of the FTC, which is less-suited for computation, but which perhaps is a more interesting theoretical statement.</p>
 
-                <todo>Should equation references come with parentheses?</todo>
-
                 <corollary xml:id="corollary-FTC-derivative">
                     <statement>
                         <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men></p>
                     </statement>
                     <proof xml:id="proof-FTC-corollary">
-                        <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.<mdn>
+                        <p>We simply take the indicated derivative, applying <xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.<mdn>
                             <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
                             <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
                             <mrow>&amp;=f(x)-0 = f(x)</mrow>
@@ -617,7 +611,7 @@
                 <title><webwork /> Exercises</title>
 
                 <introduction>
-                    <p>This first problem in this list is coming from the <webwork /> Open problem Library. One implication of this is that we might want to provide some commentary that connects the problem to the text.  The other two ask for essay answers, which would be graded by an instructor, so there is no opportunity to provide answer.</p>
+                    <p>The first problem in this list is coming from the <webwork /> Open Problem Library. One implication of this is that we might want to provide some commentary that connects the problem to the text.  The other two ask for essay answers, which would be graded by an instructor, so there is no opportunity to provide answer.</p>
                 </introduction>
 
                 <exercise xml:id="ww-graphical-antiderivatives">
@@ -627,7 +621,7 @@
                         <p>Consult <xref ref="definition-antiderivative" /> and the <xref ref="theorem-FTC" text="title" /> to assist you with the following problem.</p>
                     </introduction>
 
-                    <webwork source="Library/Rochester/setIntegrals4FTC/S05.03.FundThmCalc.PTP01.pg" />
+                    <webwork source="Library/ma122DB/set12/s5_4_26.pg" />
                 </exercise>
 
                 <exercise xml:id="ww-discuss-always-antiderivative">
@@ -703,7 +697,7 @@
             <p>While free-response questions are generally preferred, sometimes the nature of a question lends itself to multiple choice.</p>
 
             <exercise>
-                <title>Drop down (aka Popup)</title>
+                <title>Drop-down/Popup</title>
 
                 <introduction>
                     <p>Note also that the solution to this problem uses an external link.</p>
@@ -795,7 +789,7 @@
                         <pg-code>
                             $expressions = new_checkbox_multiple_choice();
                             $expressions -> qa (
-                            "A question can go here, but MBX ignores this",
+                            "A question can go here, but PTX ignores this",
                             "\( e^{x^2} e^{1/x} \)$BR",
                             "\( e^{x^2} e^{x^{-1}} \)$BR",
                             "\( e^{ (x^3+1) / x } \)$BR",
@@ -825,7 +819,7 @@
         <section>
             <title>Tables</title>
 
-            <p>Tables can be made using the existing syntax and options that MBX offers for table making, with a few exceptions. As of summer 2015, the exceptions are that individual cells cannot have <c>bottom</c> border attributes and individual columns cannot have <c>top</c> border attributes. Also, while MBX table borders are generally <c>minor</c>, <c>medium</c>, or <c>major</c>, when these borders are used in a <webwork /> problem that is rendered as a hard copy problem from within <webwork />, the only thickness option corresponds to <c>minor</c>.</p>
+            <p>Although a <webwork /> problem written in <pretext /> source can't have a <q>table</q> (which would be captioned and cause trouble with free-standing PG output), they can have a <q>tabular</q> (which must be a child of a <q>sidebyside</q>). Tabulars can be made using the existing syntax and options that PTX offers for table-making, with some exceptions. As of summer 2017, the exceptions are that individual cells cannot have <c>bottom</c> border attributes and individual columns cannot have <c>top</c> border attributes. Also, while PTX table borders are generally <c>minor</c>, <c>medium</c>, or <c>major</c>, when these borders are used in a <webwork /> problem that is rendered as a hard copy problem from within <webwork />, the only thickness option corresponds to <c>minor</c>. Several more features (like rules in general) do not carry through to static output (print or HTML-preview). However we hope this is only temporary.</p>
 
             <exercise>
                 <title>Complete this Table</title>
@@ -925,7 +919,7 @@
         <section>
             <title>Graphics in Exercises</title>
             <p>It is natural to want to write exercises that rely on graphics. For example, an exericse might produce a chart of some kind, and ask the reader to extract some information from that chart.</p>
-            <p>At present, this can be done using the same mechanism one would use to insert a graphic into a <webwork /> problem when writing regular <webwork /> problems. (And this is what is done below.) In the future, there will be a nicer option that will be able to make use of MBX's <c>latex-image-code</c>. This requires some <webwork /> development first, which is underway.</p>
+            <p>At present, this can be done using the same mechanism one would use to insert a graphic into a <webwork /> problem when writing regular <webwork /> problems. (And this is what is done below.) In the future, there will be a nicer option that will be able to make use of PTX's <c>latex-image-code</c>. This requires some <webwork /> development first, which is underway.</p>
 
             <exercise>
                 <title>Solve using a graph</title>
@@ -995,7 +989,7 @@
         <section>
             <title>Subject Area Templates</title>
 
-            <p>This section samples the subject area template problems found on the WeBWorK wiki at <url href="http://webwork.maa.org/wiki/SubjectAreaTemplates"/>.</p>
+            <p>This section samples the subject area template problems found on the <webwork /> wiki at <url href="http://webwork.maa.org/wiki/SubjectAreaTemplates"/>.</p>
 
             <exercise>
             <title>Answer is a number or a function</title>
@@ -1146,7 +1140,7 @@
                      <!-- include below in pg-code once checkboxes implemented
                             $mc = new_checkbox_multiple_choice();
                             $mc -> qa (
-                            "A question can go here, but MBX ignores this",
+                            "A question can go here, but PTX ignores this",
                             "\( e^{x^2} e^{1/x} \)$BR",
                             "\( e^{x^2} e^{x^{-1}} \)$BR",
                             "\( e^{ (x^3+1) / x } \)$BR",
@@ -1217,8 +1211,7 @@
                         </sidebyside>
                         <p>Finish this table.</p>
 
-                        <table>
-                            <caption>Some integers</caption>
+                        <sidebyside>
                             <tabular top="major" left="major" bottom="major" right="minor" halign="center">
                                 <col halign="right" top="minor"/>
                                 <col right="medium"/>
@@ -1238,7 +1231,7 @@
                                     <cell colspan="2" halign="center">VIII</cell>
                                 </row>
                             </tabular>
-                        </table>
+                        </sidebyside>
                     </statement>
 
                     <solution>
@@ -1255,7 +1248,7 @@
             <title>Stress Tests</title>
 
             <exercise>
-                <title>MBX problem source with server-generated images</title>
+                <title>PTX problem source with server-generated images</title>
                 <webwork>
                     <setup>
                         <pg-code>
@@ -1272,26 +1265,42 @@
                     </setup>
                     <stage>
                         <statement>
-                            <sidebyside><image pg-name="$gr[0]" width="150" height="150" tex-size="150"/></sidebyside>
-                            <sidebyside><image pg-name="$gr[1]" width="150" height="150" tex-size="150"/></sidebyside>
+                            <sidebyside>
+                                <image pg-name="$gr[0]" width="150" height="150" tex-size="150"/>
+                            </sidebyside>
+                            <sidebyside>
+                                <image pg-name="$gr[1]" width="150" height="150" tex-size="150"/>
+                            </sidebyside>
                         </statement>
                         <solution>
-                            <sidebyside><image pg-name="$gr[2]" width="150" height="150" tex-size="150"/></sidebyside>
+                            <sidebyside>
+                                <image pg-name="$gr[2]" width="150" height="150" tex-size="150"/>
+                            </sidebyside>
                         </solution>
                     </stage>
                     <stage>
                         <statement>
-                            <sidebyside><image pg-name="$gr[3]" width="150" height="150" tex-size="150"/></sidebyside>
-                            <sidebyside><image pg-name="$gr[4]" width="150" height="150" tex-size="150"/></sidebyside>
-                            <sidebyside><image pg-name="$gr[5]" width="150" height="150" tex-size="150"/></sidebyside>
+                            <sidebyside>
+                                <image pg-name="$gr[3]" width="150" height="150" tex-size="150"/>
+                            </sidebyside>
+                            <sidebyside>
+                                <image pg-name="$gr[4]" width="150" height="150" tex-size="150"/>
+                            </sidebyside>
+                            <sidebyside>
+                                <image pg-name="$gr[5]" width="150" height="150" tex-size="150"/>
+                            </sidebyside>
                         </statement>
                         <!-- No hints for now because with displayMode=tex, the anonymous problem rendering is not -->
                         <!--generating a hints section at all. Will have to work with Mike to investigate this.    -->
                         <!--<hint>
-                            <figure><image pg-name="$gr[6]" width="150" height="150" tex-size="150"/></figure>
+                            <sidebyside>
+                                <image pg-name="$gr[6]" width="150" height="150" tex-size="150"/>
+                            </sidebyside>
                         </hint>-->
                         <solution>
-                            <sidebyside><image pg-name="$gr[7]" width="150" height="150" tex-size="150"/></sidebyside>
+                            <sidebyside>
+                                <image pg-name="$gr[7]" width="150" height="150" tex-size="150"/>
+                            </sidebyside>
                         </solution>
                   </stage>
                 </webwork>
@@ -1566,22 +1575,28 @@
                 <webwork>
                     <setup>
                         <pg-code>
-                            $g=init_graph(0,0,1,1);
+                            $g=init_graph(-1,-1,1,1,axes=>[0,0]);
                         </pg-code>
                     </setup>
                     <statement>
                         <p><ol>
                             <li>
                                 <p>Structured item</p>
-                                <image pg-name="$g" width="100" height="100"/>
+                                <sidebyside>
+                                    <image pg-name="$g" width="100" height="100"/>
+                                </sidebyside>
                             </li>
                             <li>
-                                <image pg-name="$g" width="100" height="100"/>
+                                <sidebyside>
+                                    <image pg-name="$g" width="100" height="100"/>
+                                </sidebyside>
                                 <p>Structured item</p>
                             </li>
                             <li>
                                 <p>Structured item</p>
-                                <image pg-name="$g" width="100" height="100"/>
+                                <sidebyside>
+                                    <image pg-name="$g" width="100" height="100"/>
+                                </sidebyside>
                                 <p>Second paragraph</p>
                             </li>
                             <li>
@@ -1592,51 +1607,57 @@
                         <p><ol>
                             <li>
                                 <p>Structured item</p>
-                                <tabular>
-                                    <row>
-                                        <cell>a</cell>
-                                        <cell>b</cell>
-                                    </row>
-                                    <row>
-                                        <cell>c</cell>
-                                        <cell>d</cell>
-                                    </row>
-                                </tabular>
+                                <sidebyside>
+                                    <tabular>
+                                        <row>
+                                            <cell>a</cell>
+                                            <cell>b</cell>
+                                        </row>
+                                        <row>
+                                            <cell>c</cell>
+                                            <cell>d</cell>
+                                        </row>
+                                    </tabular>
+                                </sidebyside>
                             </li>
                             <li>
-                                <tabular top="major" left="major" bottom="major" right="minor" halign="center">
-                                    <col halign="right" top="minor"/>
-                                    <col right="medium"/>
-                                    <col halign="left"/>
-                                    <row bottom="none" left="none">
-                                    <cell right="minor">1</cell>
-                                        <cell>two</cell>
-                                        <cell><m>\lfloor\pi\rfloor</m></cell>
-                                    </row>
-                                    <row valign="bottom">
-                                        <cell bottom="minor"><line><m>\text{I}+\text{I}</m></line><line><m>{}+\text{I}+\text{I}</m></line></cell>
-                                        <cell><m>5</m></cell>
-                                        <cell>six</cell>
-                                    </row>
-                                    <row halign="right">
-                                        <cell><m>2^3-1</m></cell>
-                                        <cell colspan="2" halign="center">VIII</cell>
-                                    </row>
-                                </tabular>
+                                <sidebyside>
+                                    <tabular top="major" left="major" bottom="major" right="minor" halign="center">
+                                        <col halign="right" top="minor"/>
+                                        <col right="medium"/>
+                                        <col halign="left"/>
+                                        <row bottom="none" left="none">
+                                        <cell right="minor">1</cell>
+                                            <cell>two</cell>
+                                            <cell><m>\lfloor\pi\rfloor</m></cell>
+                                        </row>
+                                        <row valign="bottom">
+                                            <cell bottom="minor"><line><m>\text{I}+\text{I}</m></line><line><m>{}+\text{I}+\text{I}</m></line></cell>
+                                            <cell><m>5</m></cell>
+                                            <cell>six</cell>
+                                        </row>
+                                        <row halign="right">
+                                            <cell><m>2^3-1</m></cell>
+                                            <cell colspan="2" halign="center">VIII</cell>
+                                        </row>
+                                    </tabular>
+                                </sidebyside>
                                 <p>Structured item</p>
                             </li>
                             <li>
                                 <p>Structured item</p>
-                                <tabular>
-                                    <row>
-                                        <cell>a</cell>
-                                        <cell>b</cell>
-                                    </row>
-                                    <row>
-                                        <cell>c</cell>
-                                        <cell>d</cell>
-                                    </row>
-                                </tabular>
+                                <sidebyside>
+                                    <tabular>
+                                        <row>
+                                            <cell>a</cell>
+                                            <cell>b</cell>
+                                        </row>
+                                        <row>
+                                            <cell>c</cell>
+                                            <cell>d</cell>
+                                        </row>
+                                    </tabular>
+                                </sidebyside>
                                 <p>Second paragraph</p>
                             </li>
                             <li>
