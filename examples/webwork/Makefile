@@ -1,21 +1,21 @@
 ## ********************************************************************* ##
-## Copyright 2015                                                        ##
+## Copyright 2015-7                                                      ##
 ## Robert A. Beezer, Michael Gage, Geoff Goehle, Alex Jordan             ##
 ##                                                                       ##
-## This file is part of MathBook XML.                                    ##
+## This file is part of PreTeXt.                                         ##
 ##                                                                       ##
-## MathBook XML is free software: you can redistribute it and/or modify  ##
+## PreTeXt is free software: you can redistribute it and/or modify       ##
 ## it under the terms of the GNU General Public License as published by  ##
 ## the Free Software Foundation, either version 2 or version 3 of the    ##
 ## License (at your option).                                             ##
 ##                                                                       ##
-## MathBook XML is distributed in the hope that it will be useful,       ##
+## PreTeXt is distributed in the hope that it will be useful,            ##
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of        ##
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         ##
 ## GNU General Public License for more details.                          ##
 ##                                                                       ##
 ## You should have received a copy of the GNU General Public License     ##
-## along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>. ##
+## along with PreTeXt. If not, see <http://www.gnu.org/licenses/>.       ##
 ## ********************************************************************* ##
 
 #######################
@@ -67,6 +67,10 @@ MBXSL = $(MB)/xsl
 MBUSR = $(MB)/user
 WWEXAMPLE = $(MB)/examples/webwork
 DTD = $(MB)/schema/dtd
+
+# XML to apply templates to
+SMPCHP = $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
+MIN = $(WWEXAMPLE)/minimal/mini.xml
 
 # These paths are subdirectories of
 # the scratch directory
@@ -142,21 +146,16 @@ webwork-mini-html:
 ###########
 
 # Verify Source integrity
-#   Leaves "dtderrors.txt" in SCRATCH
-#   can then grep on, e.g.
-#     "element XXX:"
-#     "does not follow"
-#     "Element XXXX content does not follow"
-#     "No declaration for"
+#   Leaves "jingreport.txt" in SCRATCH
 #   Automatically invokes the "less" pager, could configure as $(PAGER)
 sample-chapter-check:
 	install -d $(SCRATCH)
-	-rm $(SCRATCH)/dtderrors.*
-	-xmllint --xinclude --postvalid --noout --dtdvalid $(DTD)/mathbook.dtd $(WWEXAMPLE)/sample-chapter/sample-chapter.xml 2> $(SCRATCH)/dtderrors.txt
-	less $(SCRATCH)/dtderrors.txt
+	-rm $(SCRATCH)/jingreport.txt
+	-java -classpath $(JINGTRANG) -Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration -jar $(JINGTRANG)/jing.jar $(MB)/schema/pretext.rng $(SMPCHP) > $(SCRATCH)/jingreport.txt
+	less $(SCRATCH)/jingreport.txt
 
 webwork-mini-check:
 	install -d $(SCRATCH)
-	-rm $(SCRATCH)/dtderrors.*
-	-xmllint --xinclude --postvalid --noout --dtdvalid $(DTD)/mathbook.dtd $(WWEXAMPLE)/minimal/mini.xml 2> $(SCRATCH)/dtderrors.txt
-	less $(SCRATCH)/dtderrors.txt
+	-rm $(SCRATCH)/jingreport.txt
+	-java -classpath $(JINGTRANG) -Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration -jar $(JINGTRANG)/jing.jar $(MB)/schema/pretext.rng $(MINI) > $(SCRATCH)/jingreport.txt
+	less $(SCRATCH)/jingreport.txt
