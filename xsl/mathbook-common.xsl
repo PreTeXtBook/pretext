@@ -6213,6 +6213,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- 26 Latin letters (upper, lower case),  -->
 <!-- 10 digits, hyphen/dash, underscore     -->
 <!-- TODO: Added 2016-10-29, make into a fatal error later -->
+<!-- Unique UI id's added 2017-09-25 as fatal error -->
 <xsl:template match="mathbook" mode="xmlid-warning">
     <xsl:variable name="xmlid-characters" select="concat('-_', &SIMPLECHAR;)" />
     <xsl:for-each select="//@xml:id">
@@ -6222,6 +6223,21 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
                 <xsl:text>The @xml:id "</xsl:text>
                 <xsl:value-of select="." />
                 <xsl:text>" is invalid.  Use only letters, numbers, hyphens and underscores.</xsl:text>
+            </xsl:message>
+        </xsl:if>
+        <!-- unique HTML id's in use for PreTeXt-provided UI -->
+        <xsl:if test="(. = 'masthead') or
+                      (. = 'content') or
+                      (. = 'primary-navbar') or
+                      (. = 'sidebar-left') or
+                      (. = 'sidebar-right') or
+                      (. = 'toc') or
+                      (. = 'logo-link')">
+            <xsl:message terminate='yes'>
+                <xsl:text>MBX:ERROR:      </xsl:text>
+                <xsl:text>The @xml:id "</xsl:text>
+                <xsl:value-of select="." />
+                <xsl:text>" is invalid since it will conflict with a unique HTML id in use by the user interface.  Please use a different string.  Quitting...</xsl:text>
             </xsl:message>
         </xsl:if>
     </xsl:for-each>
