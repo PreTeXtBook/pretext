@@ -557,6 +557,7 @@
     <choice>
       <ref name="BlockStatement"/>
       <ref name="Remark"/>
+      <ref name="Computation"/>
       <ref name="Theorem"/>
       <ref name="Proof"/>
       <ref name="Definition"/>

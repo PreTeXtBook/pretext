@@ -544,6 +544,7 @@
     <xs:choice>
       <xs:group ref="BlockStatement"/>
       <xs:group ref="Remark"/>
+      <xs:group ref="Computation"/>
       <xs:group ref="Theorem"/>
       <xs:element ref="proof"/>
       <xs:element ref="definition"/>

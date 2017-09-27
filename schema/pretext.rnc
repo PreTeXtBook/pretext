@@ -255,7 +255,7 @@
             SideBySide | SideBySideGroup | Sage
         BlockDivision =
             BlockStatement |
-            Remark | Theorem | Proof | Definition |
+            Remark | Computation | Theorem | Proof | Definition |
             Axiom | Example | Exercise | Project |
             Poem | Assemblage | ListGenerator |
             GGB | Demonstration
