@@ -2409,8 +2409,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{\setlength{\tabcolsep}{1ex}%&#xa;</xsl:text>
     <!-- Second column at textwidth is slightly too much -->
     <xsl:text>\begin{tabular}{rp{0.97\textwidth}}&#xa;</xsl:text>
-    <xsl:text>\textsf{To:}&amp;</xsl:text>
-    <xsl:apply-templates select="to" /><xsl:text>\\&#xa;</xsl:text>
+    <xsl:text>\textsf{To:}</xsl:text>
+    <xsl:choose>
+        <!-- multiline structured -->
+        <xsl:when test="to/line">
+            <xsl:apply-templates select="to/line" />
+        </xsl:when>
+        <!-- always a newline, even if blank -->
+        <xsl:otherwise>
+            <xsl:text>&amp;</xsl:text>
+            <xsl:apply-templates select="to" />
+            <xsl:text>\\&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>\textsf{From:}</xsl:text>
     <xsl:choose>
         <!-- multiline structured -->
