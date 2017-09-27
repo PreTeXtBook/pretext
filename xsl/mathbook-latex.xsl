@@ -3549,22 +3549,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- default for tex-size                                  -->
 
 <xsl:template match="webwork//image[@pg-name]">
+    <xsl:variable name="width">
+        <xsl:apply-templates select="." mode="get-width-percentage" />
+    </xsl:variable>
     <xsl:text>\includegraphics[width=</xsl:text>
-    <xsl:choose>
-        <xsl:when test="@tex-size">
-            <xsl:value-of select="@tex-size*0.001"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>0.667</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>\linewidth]{</xsl:text>
-        <!-- assumes path has trailing slash -->
-        <xsl:value-of select="$webwork.server.latex" />
-        <xsl:apply-templates select="ancestor::webwork" mode="internal-id" />
-        <xsl:text>-image-</xsl:text>
-        <xsl:number count="image[@pg-name]" from="webwork" level="any" />
-        <xsl:text>.png</xsl:text>
+    <xsl:value-of select="substring-before($width,'%') div 100" />
+    <xsl:text>\linewidth]</xsl:text>
+    <xsl:text>{</xsl:text>
+    <!-- assumes path has trailing slash -->
+    <xsl:value-of select="$webwork.server.latex" />
+    <xsl:apply-templates select="ancestor::webwork" mode="internal-id" />
+    <xsl:text>-image-</xsl:text>
+    <xsl:number count="image[@pg-name]" from="webwork" level="any" />
+    <xsl:text>.png</xsl:text>
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
@@ -5920,36 +5917,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]}</xsl:text>
 </xsl:template>
 
-
-<!-- ############################# -->
-<!-- Widths of Images, Videos, Etc -->
-<!-- ############################# -->
-
-<!-- For LaTeX, we need a fixed fraction of the linewidth,             -->
-<!-- so we need to get the right entry from the sidebyside layout.     -->
-<!-- This is complicated slightly by two possibilities for the element -->
-<!-- of the sidebyside, a naked image, or a figure holding an image    -->
-<!-- See xsl/mathbook-common.xsl for more information                  -->
-<xsl:template match="image[ancestor::sidebyside]" mode="get-width-percentage">
-    <!-- in a side-by-side, get layout, locate in layout -->
-    <!-- and get width.  The layout-parameters template  -->
-    <!-- will analyze an enclosing sbsgroup              -->
-    <xsl:variable name="enclosing-sbs" select="ancestor::sidebyside" />
-    <xsl:variable name="rtf-layout">
-        <xsl:apply-templates select="$enclosing-sbs" mode="layout-parameters" />
-    </xsl:variable>
-    <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
-    <xsl:choose>
-        <xsl:when test="parent::figure">
-            <xsl:variable name="panel-number" select="count(parent::figure/preceding-sibling::*) + 1" />
-            <xsl:value-of select="$layout/width[$panel-number]" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:variable name="panel-number" select="count(preceding-sibling::*) + 1" />
-            <xsl:value-of select="$layout/width[$panel-number]" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
 
 <!-- ###### -->
 <!-- Images -->
