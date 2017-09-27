@@ -939,7 +939,7 @@
                             $gr = init_graph(-1,-1,4,4,
                             axes=>[0,0],
                             grid=>[5,5],
-                            size=>[400,400]
+                            size=>[300,300]
                             );
                             add_functions($gr, "x^3/$answer^3 for x in &lt;-1,4&gt; using color:blue and weight:2");
                             $second_x = Real($answer*2**(1/3));
@@ -947,7 +947,7 @@
                             $solgr = init_graph(-1,-1,4,4,
                             axes=>[0,0],
                             grid=>[5,5],
-                            size=>[400,400]
+                            size=>[300,300]
                             );
                             add_functions($solgr, "x^3/$answer^3 for x in &lt;-1,4&gt; using color:blue and weight:2");
                             $solgr->moveTo(0,1);
@@ -960,7 +960,7 @@
                     <statement>
                         <p>The graph below is a graph of <m>y=f(x)</m>. Use the graph to solve the equation <m>f(x)=1</m>.</p>
 
-                        <sidebyside>
+                        <sidebyside widths="50%">
                             <image pg-name="$gr">
                                 <description>a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$answer"/>,1) and (<var name="$second_x"/>,2) before leaving the graph moving more and more upward and to the right.</description>
                             </image>
@@ -973,7 +973,7 @@
 
                         <p>The graph reveals that the only solution to <m>f(x)=1</m> is <m>x=<var name="$answer"/></m>.</p>
 
-                        <sidebyside>
+                        <sidebyside widths="50%">
                             <image pg-name="$solgr">
                                 <description>a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points ($answer,1) and ($second_x,2) before leaving the graph moving more and more upward and to the right; a horizontal line segment moves rightward from y=1 on the y-axis until it reaches a point on the curve; a vertical line segment moves down from this point to x=$answer on the x-axis.</description>
                             </image>
@@ -1265,41 +1265,41 @@
                     </setup>
                     <stage>
                         <statement>
-                            <sidebyside>
-                                <image pg-name="$gr[0]" width="150" height="150" tex-size="150"/>
+                            <sidebyside widths="25%">
+                                <image pg-name="$gr[0]" />
                             </sidebyside>
-                            <sidebyside>
-                                <image pg-name="$gr[1]" width="150" height="150" tex-size="150"/>
+                            <sidebyside widths="25%">
+                                <image pg-name="$gr[1]" />
                             </sidebyside>
                         </statement>
                         <solution>
-                            <sidebyside>
-                                <image pg-name="$gr[2]" width="150" height="150" tex-size="150"/>
+                            <sidebyside widths="25%">
+                                <image pg-name="$gr[2]" />
                             </sidebyside>
                         </solution>
                     </stage>
                     <stage>
                         <statement>
-                            <sidebyside>
-                                <image pg-name="$gr[3]" width="150" height="150" tex-size="150"/>
+                            <sidebyside widths="25%">
+                                <image pg-name="$gr[3]" />
                             </sidebyside>
-                            <sidebyside>
-                                <image pg-name="$gr[4]" width="150" height="150" tex-size="150"/>
+                            <sidebyside widths="25%">
+                                <image pg-name="$gr[4]" />
                             </sidebyside>
-                            <sidebyside>
-                                <image pg-name="$gr[5]" width="150" height="150" tex-size="150"/>
+                            <sidebyside widths="25%">
+                                <image pg-name="$gr[5]" />
                             </sidebyside>
                         </statement>
                         <!-- No hints for now because with displayMode=tex, the anonymous problem rendering is not -->
                         <!--generating a hints section at all. Will have to work with Mike to investigate this.    -->
                         <!--<hint>
-                            <sidebyside>
-                                <image pg-name="$gr[6]" width="150" height="150" tex-size="150"/>
+                            <sidebyside widths="25%">
+                                <image pg-name="$gr[6]" />
                             </sidebyside>
                         </hint>-->
                         <solution>
-                            <sidebyside>
-                                <image pg-name="$gr[7]" width="150" height="150" tex-size="150"/>
+                            <sidebyside widths="25%">
+                                <image pg-name="$gr[7]" />
                             </sidebyside>
                         </solution>
                   </stage>
@@ -1582,20 +1582,20 @@
                         <p><ol>
                             <li>
                                 <p>Structured item</p>
-                                <sidebyside>
-                                    <image pg-name="$g" width="100" height="100"/>
+                                <sidebyside widths="17%">
+                                    <image pg-name="$g" />
                                 </sidebyside>
                             </li>
                             <li>
-                                <sidebyside>
-                                    <image pg-name="$g" width="100" height="100"/>
+                                <sidebyside widths="17%">
+                                    <image pg-name="$g" />
                                 </sidebyside>
                                 <p>Structured item</p>
                             </li>
                             <li>
                                 <p>Structured item</p>
-                                <sidebyside>
-                                    <image pg-name="$g" width="100" height="100"/>
+                                <sidebyside widths="17%">
+                                    <image pg-name="$g" />
                                 </sidebyside>
                                 <p>Second paragraph</p>
                             </li>
