@@ -6151,8 +6151,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Emphasis -->
 <xsl:template match="em">
-    <xsl:comment>Style me with CSS</xsl:comment>
-    <em><xsl:apply-templates /></em>
+    <em class="emphasis">
+        <xsl:apply-templates />
+    </em>
 </xsl:template>
 
 <!-- Alert -->
