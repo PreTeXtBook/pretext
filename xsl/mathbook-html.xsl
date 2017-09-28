@@ -1329,31 +1329,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="knowl-list">
     <xsl:param name="heading-group" />
     <!-- range through node-list, making cross-references -->
+    <!-- Use a comma after the heading, then prefix each  -->
+    <!-- cross-reference with a space as separators       -->
     <span class="indexknowl">
-        <xsl:text>, </xsl:text>
+        <xsl:text>,</xsl:text>
         <xsl:for-each select="$heading-group">
             <xsl:choose>
                 <xsl:when test="see">
-                    <i>
+                    <xsl:text> </xsl:text>
+                    <em class="see">
                         <xsl:call-template name="type-name">
                             <xsl:with-param name="string-id" select="'see'" />
                         </xsl:call-template>
-                    </i>
-                    <xsl:text> </xsl:text>
+                    </em>
                     <xsl:copy-of select="see/node()" />
                 </xsl:when>
                 <xsl:when test="seealso">
-                    <i>
+                    <xsl:text> </xsl:text>
+                    <em class="see">
                         <xsl:call-template name="type-name">
                             <xsl:with-param name="string-id" select="'also'" />
                         </xsl:call-template>
-                    </i>
-                    <xsl:text> </xsl:text>
+                    </em>
                     <xsl:copy-of select="seealso/node()" />
                 </xsl:when>
                 <!-- else a real content reference, knowl or hyperlink -->
                 <!-- TODO: split into two more when, otherwise as error? -->
                 <xsl:otherwise>
+                    <xsl:text> </xsl:text>
                     <xsl:element name="a">
                         <!-- knowl or traditional hyperlink     -->
                         <!-- mutually exclusive by construction -->
