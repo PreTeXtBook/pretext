@@ -1944,15 +1944,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Structural Leaves -->
-<!-- Some structural elements of the document tree    -->
-<!-- are the leaves of that tree, meaning they do     -->
-<!-- not contain any structural nodes themselves      -->
-<!-- frontmatter and backmatter are always structured -->
-<!-- otherwise, we look for definitive markers        -->
-<!-- Note: references and exercises are not markers   -->
+<!-- Some structural elements of the document tree     -->
+<!-- are the leaves of that tree, meaning they do      -->
+<!-- not contain any structural nodes themselves       -->
+<!-- backmatter is always structured, else no purpose  -->
+<!-- frontmatter is anomalous:  "titlepage" (and       -->
+<!-- for an "article", "abstract") are not treated     -->
+<!-- as divisions, they just get mined as part of the  -->
+<!-- frontmatter itself.  So an article/frontmatter    -->
+<!-- is always a leaf, and a book/frontmatter is not   -->
+<!-- a leaf if it has a child other than a "titlepage" -->
+<!-- Generaly, we look for definitive markers          -->
+<!-- Note: references and exercises are not markers    -->
 <xsl:template match="&STRUCTURAL;" mode="is-leaf">
     <xsl:choose>
-        <xsl:when test="self::frontmatter or self::backmatter or child::part or child::chapter or child::section or child::subsection or child::subsubsection">
+        <xsl:when test="self::frontmatter">
+            <xsl:choose>
+                <xsl:when test="parent::article">
+                    <xsl:value-of select="true()" />
+                </xsl:when>
+                <xsl:when test="parent::book">
+                    <xsl:value-of select="not(*[not(self::titlepage)])" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>MBX:BUG:     asking if a "frontmatter" is a leaf, for a document that is not a "book" nor an "article"</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="self::backmatter">
+            <xsl:value-of select="false()" />
+        </xsl:when>
+        <xsl:when test="part or chapter or section or subsection or subsubsection">
             <xsl:value-of select="false()" />
         </xsl:when>
         <xsl:otherwise>
@@ -1961,8 +1983,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- This once just returned false,      -->
+<!-- but should maybe not even be called -->
 <xsl:template match="*" mode="is-leaf">
     <xsl:value-of select="false()" />
+    <!-- <xsl:message>MBX:BUG:     asking if a non-structural division is a leaf</xsl:message> -->
 </xsl:template>
 
 <!-- We also want to identify smaller pieces of a document,          -->
