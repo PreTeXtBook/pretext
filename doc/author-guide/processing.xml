@@ -279,7 +279,7 @@
 
         <p>We have many years' experience testing hundreds of non-trivial Sage examples from textbooks, for linear algebra and abstract algebra.  Roughly every six months, we discover ten to twenty examples that fail.  Frequently the failures are trivial (usually output gets re-ordered), but some are significant changes in behavior that leads us to re-word surrounding guidance in the text, and in a few cases the failures have exposed bugs introduced into Sage.  It has been relatively easy to do this maintenance on a regular basis, and if it had not been done, the accumulated errors would be enough to greatly degrade confidence in the accuracy of the examples.</p>
 
-        <p>Exact details for this process can be found in <xref ref="topic-doctest-sage" />.  Note that Sage is really just a huge Python library, so it might be possible to test pure Python code with this facility, but we have not tested this at all.  Similar support for other languages can be considered if requested for use in serious project.</p>
+        <p>Exact details for this process can be found in <xref ref="topic-doctest-sage" />.  Note that Sage is really just a huge Python library, so it might be possible to test pure Python code with this facility, but we have not tested this at all.  Similar support for other languages can be considered if requested for use in a serious project.</p>
     </section>
 
     <section xml:id="processing-author-tools">
