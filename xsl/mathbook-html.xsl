@@ -6986,30 +6986,6 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <script type="text/javascript" src="{$webwork-server}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
 </xsl:template>
 
-<!-- The request for a "knowl-clickable" of webwork problem comes  -->
-<!-- from within the environment/knowl scheme of an exercise       -->
-<!-- It assumes the xref-knowl has been built already              -->
-<!-- TODO: make WW problem a proper hidden knowl? -->
-<xsl:template match="webwork" mode="knowl-clickable">
-    <!-- Cribbed from "environment-hidden-factory" template -->
-    <xsl:element name="div">
-        <xsl:attribute name="class">
-            <xsl:text>hidden-knowl-wrapper</xsl:text>
-        </xsl:attribute>
-        <xsl:element name="a">
-            <xsl:attribute name="knowl">
-                <xsl:apply-templates select="." mode="xref-knowl-filename" />
-            </xsl:attribute>
-            <!-- make the anchor a target, eg of an in-context link -->
-            <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="internal-id" />
-            </xsl:attribute>
-            <!-- generally the "hidden-knowl-text", but generic here -->
-            <xsl:text>WeBWorK Exercise</xsl:text>
-        </xsl:element>
-    </xsl:element>
-</xsl:template>
-
 <!--                         -->
 <!-- Web Page Infrastructure -->
 <!--                         -->
