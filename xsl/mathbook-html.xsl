@@ -626,12 +626,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:variable name="url">
             <xsl:apply-templates select="." mode="url" />
         </xsl:variable>
-        <!-- pilchrow plus internationalized string  -->
+        <!-- pilchrow only  -->
         <a href="{$url}" class="permalink">
-            <xsl:text>&#xb6; </xsl:text>
-            <xsl:call-template name="type-name">
-                <xsl:with-param name="string-id" select="'permalink'" />
-            </xsl:call-template>
+            <xsl:text>&#xb6;</xsl:text>
         </a>
     </xsl:if>
 </xsl:template>
