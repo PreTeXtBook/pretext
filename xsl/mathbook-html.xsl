@@ -6145,21 +6145,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Would a screen reader know the difference?                     -->
 <xsl:template match="abbr">
     <abbr class="abbreviation">
-        <xsl:comment>Style me</xsl:comment>
         <xsl:apply-templates />
     </abbr>
 </xsl:template>
 
 <xsl:template match="acro">
     <abbr class="acronym">
-        <xsl:comment>Style me</xsl:comment>
         <xsl:apply-templates />
     </abbr>
 </xsl:template>
 
 <xsl:template match="init">
     <abbr class="initialism">
-        <xsl:comment>Style me</xsl:comment>
         <xsl:apply-templates />
     </abbr>
 </xsl:template>
@@ -6173,7 +6170,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Alert -->
 <xsl:template match="alert">
-    <b><i><xsl:apply-templates /></i></b>
+    <b>
+        <i>
+            <xsl:apply-templates />
+        </i>
+    </b>
 </xsl:template>
 
 <!-- CSS for ins, del, s -->
@@ -6182,32 +6183,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Insert (an edit) -->
 <xsl:template match="insert">
-    <xsl:element name="ins">
-        <xsl:attribute name="class">
-            <xsl:text>insert</xsl:text>
-        </xsl:attribute>
+    <ins class="insert">
         <xsl:apply-templates />
-    </xsl:element>
+    </ins>
 </xsl:template>
 
 <!-- Delete (an edit) -->
 <xsl:template match="delete">
-    <xsl:element name="del">
-        <xsl:attribute name="class">
-            <xsl:text>delete</xsl:text>
-        </xsl:attribute>
+    <del class="delete">
         <xsl:apply-templates />
-    </xsl:element>
+    </del>
 </xsl:template>
 
 <!-- Stale (no longer relevant) -->
 <xsl:template match="stale">
-    <xsl:element name="s">
-        <xsl:attribute name="class">
-            <xsl:text>stale</xsl:text>
-        </xsl:attribute>
+    <s class="stale">
         <xsl:apply-templates />
-    </xsl:element>
+    </s>
 </xsl:template>
 
 <!-- Copyright symbol -->
