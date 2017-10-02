@@ -6130,10 +6130,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-
 <!-- Defined terms (bold) -->
 <xsl:template match="term">
-    <em class="terminology"><xsl:apply-templates /></em>
+    <b class="terminology">
+        <xsl:apply-templates />
+    </b>
 </xsl:template>
 
 <!-- Acronyms, Initialisms, Abbreviations -->
