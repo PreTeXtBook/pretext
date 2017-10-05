@@ -346,6 +346,7 @@ the xsltproc executable.
             -->
 
             <definition xml:id="definition-indefinite-integral">
+                <idx>indefinite integral</idx><idx><h>integral</h><h>indefinite integral</h></idx>
                 <notation>
                     <usage>\int\,f(x)\,dx</usage>
                     <description>indefinite integral of <m>f(x)</m></description>
@@ -1667,10 +1668,12 @@ the xsltproc executable.
 
             <subsection>
                 <title>Biological Names</title>
+                <idx>biological names</idx>
+                <idx><h>scientific names</h><see>biological names</see></idx>
 
-                <p>The <c>taxon</c> element can be used all by itself to get an italicized scientific name, as in <taxon>Escherichia coli</taxon>.  It can also be structured with the elements <c>genus</c> and <c>species</c>, as in using both together in <taxon><genus>Cyclops</genus><species>kolensis</species></taxon>.  Or the subelements can be used individually.  Rules for capitalization are presently your responsibility as an author.  Possible improvements include new subelements, attributes for database identifiers, and checks on capitalization.  Also, we might automatically abbreviate the genus after first use.</p>
+                <p>The <c>taxon</c><idx>taxon</idx><idx><h>biological names</h><h>taxon</h></idx> element can be used all by itself to get an italicized scientific name, as in <taxon>Escherichia coli</taxon>.  It can also be structured with the elements <c>genus</c><idx>genus</idx><idx><h>biological names</h><h>genus</h></idx> and <c>species</c>,<idx>species</idx><idx><h>biological names</h><h>species</h></idx> as in using both together in <taxon><genus>Cyclops</genus><species>kolensis</species></taxon>.  Or the subelements can be used individually.  Rules for capitalization are presently your responsibility as an author.  Possible improvements include new subelements, attributes for database identifiers, and checks on capitalization.  Also, we might automatically abbreviate the genus after first use.</p>
 
-                <p>There is an attribute, <c>@ncbi</c> that you can use on the <c>taxon</c> element to precisely identify the organism you are discussing using an identification number from the <url href="https://www.ncbi.nlm.nih.gov/">National Center for Biotechnology Information</url>.  Their <url href="https://www.ncbi.nlm.nih.gov/taxonomy">taxonomy</url> is at <c>www.ncbi.nlm.nih.gov/taxonomy</c>.  Right now, we do not do anything with this attribute, but things like links are certainly possible.  See the source of this document to see it in use with <taxon ncbi="7229"><genus>Drosophila</genus><species>miranda</species></taxon> which could be used to construct a link to <url href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=7229">further information via id number</url> or even <url href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Drosophila+miranda">further information via just the name</url>.</p>
+                <p>There is an attribute, <c>@ncbi</c><idx>ncbi attribute</idx><idx><h>biological names</h><h>ncbi attribute</h></idx> that you can use on the <c>taxon</c> element to precisely identify the organism you are discussing using an identification number from the <url href="https://www.ncbi.nlm.nih.gov/">National Center for Biotechnology Information</url>.  Their <url href="https://www.ncbi.nlm.nih.gov/taxonomy">taxonomy</url> is at <c>www.ncbi.nlm.nih.gov/taxonomy</c>.  Right now, we do not do anything with this attribute, but things like links are certainly possible.  See the source of this document to see it in use with <taxon ncbi="7229"><genus>Drosophila</genus><species>miranda</species></taxon> which could be used to construct a link to <url href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=7229">further information via id number</url> or even <url href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Drosophila+miranda">further information via just the name</url>.</p>
             </subsection>
 
             <subsection>
