@@ -301,7 +301,7 @@ the xsltproc executable.
             -->
             <theorem xml:id="theorem-FTC">
                 <title>The Fundamental Theorem of Calculus</title>
-                <idx><h>Fundamental Theorem of Calculus</h></idx>
+                <idx><h>Fundamental Theorem of Calculus</h><h>Theorem</h></idx>
 
                 <statement>
                     <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me><idx><h>test: buried in theorem/statement/p</h></idx></p>
@@ -346,6 +346,7 @@ the xsltproc executable.
             -->
 
             <definition xml:id="definition-indefinite-integral">
+                <idx>indefinite integral</idx><idx><h>integral</h><h>indefinite integral</h></idx>
                 <notation>
                     <usage>\int\,f(x)\,dx</usage>
                     <description>indefinite integral of <m>f(x)</m></description>
@@ -430,7 +431,7 @@ the xsltproc executable.
                 <output>-1/2*I*sqrt(pi)*erf(I*x)</output>
             </sage>
 
-            <p>You can give a Sage element a <c>doctest</c> attribute, whose value mirrors the optional hash tags used in Sage doctests.  Possible values are <c>random</c>, <c>long time</c>, <c>not implemented</c>, <c>not tested</c>, <c>known bug</c>, <c>absolute</c>, <c>relative</c>, and <c>optional</c>.  The values <c>absolute</c> and <c>relative</c> refer to floating-point tolerances for equality and require a second attribute <c>tolerance</c> to specify a floating point value.  The value <c>optional</c> refers to the test requiring that an optional Sage package be present.  The name of that package should be provided in the <c>package</c> attribute.</p>
+            <p>You can give a Sage element a <c>doctest</c><idx>doctest</idx><idx><h>attributes</h><h>doctest</h></idx> attribute, whose value mirrors the optional hash tags used in Sage doctests.  Possible values are <c>random</c>, <c>long time</c>, <c>not implemented</c>, <c>not tested</c>, <c>known bug</c>, <c>absolute</c>, <c>relative</c>, and <c>optional</c>.  The values <c>absolute</c> and <c>relative</c> refer to floating-point tolerances for equality and require a second attribute <c>tolerance</c> to specify a floating point value.  The value <c>optional</c> refers to the test requiring that an optional Sage package be present.  The name of that package should be provided in the <c>package</c> attribute.</p>
 
             <p>The next cell is marked in the source as <c>doctest="random"</c>, and so is specified as unpredictable and not tested.  But there is some <q>sample</q> output which will appear in the <latex /> version (and always be the same).</p>
 
@@ -583,6 +584,7 @@ the xsltproc executable.
                 <todo>Should equation references come with parentheses?</todo>
 
                 <corollary xml:id="corollary-FTC-derivative">
+                    <idx><h>Fundamental Theorem of Calculus</h><h>Corollary</h></idx>
                     <statement>
                         <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men>.</p>
                     </statement>
@@ -746,7 +748,7 @@ the xsltproc executable.
 
                     <exploration>
                         <title>Exploring Explorations</title>
-
+                        <idx>test</idx>
                         <statement>
                             <p>This is an <c>&lt;exploration&gt;</c>.<idx><h>exploration</h></idx>  Other similar possibilities are <c>&lt;project&gt;</c><idx><h>project</h></idx>, <c>&lt;activity&gt;</c><idx><h>activity</h></idx>, <c>&lt;task&gt;</c><idx><h>task</h></idx>, and <c>&lt;investigation&gt;</c><idx><h>investigation</h></idx>.</p>
 
@@ -959,7 +961,7 @@ the xsltproc executable.
                 <title>Linking Sage Cells</title>
                 <idx><h>Sage cells</h><h>linking</h></idx>
 
-                <p>Sage cells share their results on a per-webpage basis, so if you move to a new chapter, section, or subsection that happens to be on another webpage, your Sage computations are gone and you start fresh.  But maybe you need some results from elsewhere.  As an author, you can make an exact copy of a cell in another location.  As a reader you are suggested to <q>replay</q> the cell.  You have seen the next cell before.  More typically such a cell might define a function or set some values of a variable.</p>
+                <p>Sage cells share their results on a per-webpage basis, so if you move to a new chapter, section, or subsection that happens to be on another webpage, your Sage computations are gone and you start fresh.  But maybe you need some results from elsewhere.  As an author, you can make an exact copy of a cell in another location.  As a reader you are suggested to <q>replay</q> the cell.  You have seen the next cell before.  More typically such a cell might define a function or set some values of a variable.<idx>test5</idx></p>
 
                 <sage copy="sage-numerical-integral" />
             </subsection>
@@ -982,6 +984,7 @@ the xsltproc executable.
 
 
                 <assemblage xml:id="assemblage-basics">
+                    <idx>test2</idx>
                     <title>Assemblages: Collections and Summaries</title>
 
                     <p>An <c>&lt;assemblage&gt;</c> is a collection, or summary, that does not have much structure to it.  So you are limited to paragraphs (<c>p</c>) and side-by-sides.  The intent is that these do not have captions, so are not numbered, so cannot be cross-referenced and so do not become knowls (inside of the knowled assemblage).  You may place <c>&lt;image&gt;</c>, <c>&lt;tabular&gt;</c>, and <c>&lt;program&gt;</c> inside a <c>&lt;sidebyside&gt;</c>, in addition to other objects that do not have captions.  Note that <c>p</c> may by extension contain lists (<c>ol</c>, <c>ul</c>, <c>dl</c>).  Despite limited structure, the presentation should draw attention to it, because the contents should be seen as more important in some way.  It should be <q>highlighted</q> in some manner.  If you need to connect the assemblage with material elsewhere, you can do that with the usual <c>xref/xml:id</c> mechanism.<idx><h>assemblage</h></idx></p>
@@ -995,6 +998,7 @@ the xsltproc executable.
                     <p>A sample table, with no caption, follows.</p>
 
                     <sidebyside>
+                        <idx>test7</idx>
                         <tabular>
                             <row><cell>A</cell><cell>B</cell><cell>C</cell></row>
                             <row><cell>Uno</cell><cell>Dos</cell><cell>Tres</cell></row>
@@ -1004,6 +1008,7 @@ the xsltproc executable.
 
                 <assemblage>
                     <p>This is a small <c>assemblage</c> with no title, simply to make sure the surrounding box behaves properly, especially for <latex /> output.</p>
+                    <idx>test6</idx>
                 </assemblage>
             </subsection>
 
@@ -1246,6 +1251,7 @@ the xsltproc executable.
                 <p>The following is from the MathJax <url href="http://www.mathjax.org/demos/tex-samples/">demonstration page</url>, an identity due to Ramanujan:<me>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</me></p>
 
                 <p>And again, from the MathJax demonstration page, Maxwell's equations:<md>
+                    <idx>Maxwell's equations</idx>
                     <mrow>\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &amp; = \frac{4\pi}{c}\vec{\mathbf{j}}</mrow>
                     <mrow>\nabla \cdot \vec{\mathbf{E}} &amp; = 4 \pi \rho</mrow>
                     <mrow>\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}}</mrow>
@@ -1579,7 +1585,7 @@ the xsltproc executable.
                 <slash /><nbsp /><nbsp />
                 <solidus /></p>
 
-                <p>We also distinguish between abbreviations (<abbr>vs.</abbr>), acronyms (<acro>SCUBA</acro>) and initialisms (<init>XML</init>).  This is a test of the text verion of a multiplication symbol: 2<nbsp /><times /><nbsp />4.</p>
+                <p>We also distinguish between abbreviations (<abbr>vs.</abbr>), acronyms (<acro>SCUBA</acro>) and initialisms (<init>XML</init>).  This is a test of the text version of a multiplication symbol: 2<nbsp /><times /><nbsp />4.</p>
             </subsection>
 
             <subsection xml:id="section-urls">
@@ -1667,10 +1673,12 @@ the xsltproc executable.
 
             <subsection>
                 <title>Biological Names</title>
+                <idx>biological names</idx>
+                <idx><h>scientific names</h><see>biological names</see></idx>
 
-                <p>The <c>taxon</c> element can be used all by itself to get an italicized scientific name, as in <taxon>Escherichia coli</taxon>.  It can also be structured with the elements <c>genus</c> and <c>species</c>, as in using both together in <taxon><genus>Cyclops</genus><species>kolensis</species></taxon>.  Or the subelements can be used individually.  Rules for capitalization are presently your responsibility as an author.  Possible improvements include new subelements, attributes for database identifiers, and checks on capitalization.  Also, we might automatically abbreviate the genus after first use.</p>
+                <p>The <c>taxon</c><idx>taxon</idx><idx><h>biological names</h><h>taxon</h></idx> element can be used all by itself to get an italicized scientific name, as in <taxon>Escherichia coli</taxon>.  It can also be structured with the elements <c>genus</c><idx>genus</idx><idx><h>biological names</h><h>genus</h></idx> and <c>species</c>,<idx>species</idx><idx><h>biological names</h><h>species</h></idx> as in using both together in <taxon><genus>Cyclops</genus><species>kolensis</species></taxon>.  Or the subelements can be used individually.  Rules for capitalization are presently your responsibility as an author.  Possible improvements include new subelements, attributes for database identifiers, and checks on capitalization.  Also, we might automatically abbreviate the genus after first use.</p>
 
-                <p>There is an attribute, <c>@ncbi</c> that you can use on the <c>taxon</c> element to precisely identify the organism you are discussing using an identification number from the <url href="https://www.ncbi.nlm.nih.gov/">National Center for Biotechnology Information</url>.  Their <url href="https://www.ncbi.nlm.nih.gov/taxonomy">taxonomy</url> is at <c>www.ncbi.nlm.nih.gov/taxonomy</c>.  Right now, we do not do anything with this attribute, but things like links are certainly possible.  See the source of this document to see it in use with <taxon ncbi="7229"><genus>Drosophila</genus><species>miranda</species></taxon> which could be used to construct a link to <url href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=7229">further information via id number</url> or even <url href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Drosophila+miranda">further information via just the name</url>.</p>
+                <p>There is an attribute, <c>@ncbi</c><idx>ncbi attribute</idx><idx><h>attributes</h><h>ncbi attribute</h></idx><idx><h>biological names</h><h>ncbi attribute</h></idx> that you can use on the <c>taxon</c> element to precisely identify the organism you are discussing using an identification number from the <url href="https://www.ncbi.nlm.nih.gov/">National Center for Biotechnology Information</url>.  Their <url href="https://www.ncbi.nlm.nih.gov/taxonomy">taxonomy</url> is at <c>www.ncbi.nlm.nih.gov/taxonomy</c>.  Right now, we do not do anything with this attribute, but things like links are certainly possible.  See the source of this document to see it in use with <taxon ncbi="7229"><genus>Drosophila</genus><species>miranda</species></taxon> which could be used to construct a link to <url href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=7229">further information via id number</url> or even <url href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Drosophila+miranda">further information via just the name</url>.</p>
             </subsection>
 
             <subsection>
@@ -1681,7 +1689,7 @@ the xsltproc executable.
 
         </section>
 
-
+        <idx><h>biological names</h><h>taxon</h></idx>
         <section xml:id="graphics">
             <title>Graphics</title>
 
@@ -1691,6 +1699,7 @@ the xsltproc executable.
 
             <subsection>
                 <title><latex /> images</title>
+                <idx><latex /> images</idx>
 
                 <p>There are several graphics engine packages that a <latex /> document can employ. Code from these packages renders diagrams automatically as part of normal processing of <latex /> files.  For HTML output the <c>mbx</c> script produces SVG versions of the pictures.  The script can also produce standalone TEX source files, PDFs, PNGs, and EPSs. The packages should be loaded in <c>docinfo/latex-image-preamble</c>, which is also where global package settings should be made. As mentioned in Subsection <xref ref="subsection-reserved-characters"/>, if any ampersands occur in your <latex /> code you should use the <c>\amp</c> macro. These first examples are from the <url href="http://www.texample.net/tikz/examples/">TeXample.net</url> site.</p>
 
@@ -2609,6 +2618,7 @@ the xsltproc executable.
 
                 <definition>
                     <title>Group</title>
+                    <idx>Group</idx>
                     <statement>
                         <p><ol label="a)">
                             <li>There is a binary operation, denoted <q><m>\cdot</m></q>.</li>
@@ -2749,6 +2759,7 @@ the xsltproc executable.
 
             <subsection>
                 <title>Named Lists</title>
+                <idx>named list</idx><idx><h>list</h><h>named</h></idx>
 
                 <p>A list can be wrapped with a <c>&lt;list&gt;</c> element, so that it earns a number, can be given a title and have an introduction and conclusion.  Cross-references to individual list items get a bit absurd as they are prefixed with the number of the list and then the number of the item, so conceivably you could get a number like <c>4.5.3:2.a.ii</c>.</p>
 
@@ -3053,7 +3064,9 @@ the xsltproc executable.
             </table>
 
             <paragraphs>
+                <idx>test3</idx>
                 <title>Bully Pulpit: Vertical Rules in Tables</title>
+                <idx>test4</idx>
 
                 <p>One of the goals of <pretext /> is to gently guide authors towards good choices in the design of their documents, even if we do not claim to know it all ourselves.  Take a close look at that table about tables.  What's missing?  No vertical rules.  Try living without them, you will not really miss them.  If you think you need to divide a table into two halves, maybe you really need two tables (and then see the <q>side-by-side</q> capabilities, Section <xref ref="section-side-by-side" />).</p>
 
@@ -3594,10 +3607,12 @@ the xsltproc executable.
 
             <subsection>
                 <title>JSXGraph</title>
+                <idx>JSXGraph</idx>
 
                 <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is contrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">example</url> is taken from the JSXGraph <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>.  Width is 75<percent /> and aspect ratio is 4:3.</p>
 
                 <figure>
+                    <idx>Archimedian Spiral</idx>
                     <caption>The Archimedian Spiral <m>r = a + b\theta</m>, <m>0\leq\theta\leq 8\pi</m></caption>
                     <jsxgraph xml:id="jsxgraph-archimedian-spiral" width="75%" aspect="4:3">
                         <!-- http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral -->
