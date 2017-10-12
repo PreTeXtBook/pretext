@@ -748,7 +748,6 @@ the xsltproc executable.
 
                     <exploration>
                         <title>Exploring Explorations</title>
-                        <idx>test</idx>
                         <statement>
                             <p>This is an <c>&lt;exploration&gt;</c>.<idx><h>exploration</h></idx>  Other similar possibilities are <c>&lt;project&gt;</c><idx><h>project</h></idx>, <c>&lt;activity&gt;</c><idx><h>activity</h></idx>, <c>&lt;task&gt;</c><idx><h>task</h></idx>, and <c>&lt;investigation&gt;</c><idx><h>investigation</h></idx>.</p>
 
@@ -961,7 +960,7 @@ the xsltproc executable.
                 <title>Linking Sage Cells</title>
                 <idx><h>Sage cells</h><h>linking</h></idx>
 
-                <p>Sage cells share their results on a per-webpage basis, so if you move to a new chapter, section, or subsection that happens to be on another webpage, your Sage computations are gone and you start fresh.  But maybe you need some results from elsewhere.  As an author, you can make an exact copy of a cell in another location.  As a reader you are suggested to <q>replay</q> the cell.  You have seen the next cell before.  More typically such a cell might define a function or set some values of a variable.<idx>test5</idx></p>
+                <p>Sage cells share their results on a per-webpage basis, so if you move to a new chapter, section, or subsection that happens to be on another webpage, your Sage computations are gone and you start fresh.  But maybe you need some results from elsewhere.  As an author, you can make an exact copy of a cell in another location.  As a reader you are suggested to <q>replay</q> the cell.  You have seen the next cell before.  More typically such a cell might define a function or set some values of a variable.</p>
 
                 <sage copy="sage-numerical-integral" />
             </subsection>
@@ -984,7 +983,6 @@ the xsltproc executable.
 
 
                 <assemblage xml:id="assemblage-basics">
-                    <idx>test2</idx>
                     <title>Assemblages: Collections and Summaries</title>
 
                     <p>An <c>&lt;assemblage&gt;</c> is a collection, or summary, that does not have much structure to it.  So you are limited to paragraphs (<c>p</c>) and side-by-sides.  The intent is that these do not have captions, so are not numbered, so cannot be cross-referenced and so do not become knowls (inside of the knowled assemblage).  You may place <c>&lt;image&gt;</c>, <c>&lt;tabular&gt;</c>, and <c>&lt;program&gt;</c> inside a <c>&lt;sidebyside&gt;</c>, in addition to other objects that do not have captions.  Note that <c>p</c> may by extension contain lists (<c>ol</c>, <c>ul</c>, <c>dl</c>).  Despite limited structure, the presentation should draw attention to it, because the contents should be seen as more important in some way.  It should be <q>highlighted</q> in some manner.  If you need to connect the assemblage with material elsewhere, you can do that with the usual <c>xref/xml:id</c> mechanism.<idx><h>assemblage</h></idx></p>
@@ -998,7 +996,6 @@ the xsltproc executable.
                     <p>A sample table, with no caption, follows.</p>
 
                     <sidebyside>
-                        <idx>test7</idx>
                         <tabular>
                             <row><cell>A</cell><cell>B</cell><cell>C</cell></row>
                             <row><cell>Uno</cell><cell>Dos</cell><cell>Tres</cell></row>
@@ -1008,7 +1005,6 @@ the xsltproc executable.
 
                 <assemblage>
                     <p>This is a small <c>assemblage</c> with no title, simply to make sure the surrounding box behaves properly, especially for <latex /> output.</p>
-                    <idx>test6</idx>
                 </assemblage>
             </subsection>
 
@@ -1119,7 +1115,7 @@ the xsltproc executable.
                 </image>
             </figure>
 
-            <p>Lists can have multiple columns.  With <init>HTML</init> items displayed in row-major order (horizontally first) and with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items <mdash /> derivatives and integrals <mdash /> where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.<idx xml:id="index-start-multicolumn" finish="index-finish-multicolumn"><h>Lists</h><h>multicolumn</h></idx><ol cols="5">
+            <p>Lists can have multiple columns.  With <init>HTML</init> items displayed in row-major order (horizontally first) and with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items <mdash /> derivatives and integrals <mdash /> where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.<idx xml:id="index-start-multicolumn" finish="index-finish-multicolumn"><h>list</h><h>multicolumn</h></idx><ol cols="5">
                 <li><p>Red</p></li>
                 <li><p>Blue</p></li>
                 <li><p>Green</p></li>
@@ -2715,6 +2711,7 @@ the xsltproc executable.
             <subsection>
                 <title>Description Lists</title>
 
+                <p>Use <c>dl</c> to make a description list<idx><h>description list</h></idx><idx><h>list</h><h>description</h></idx>. Inside of those tags, use <c>li</c> for each entry. Then, use <c>title</c> to specify the term being described and <c>p</c> to specify the description.</p>
                 <p>A <q>description</q><idx><h>description list</h></idx><idx><h>list</h><h>description</h></idx> list has a short term or phrase that is prominent, followed by a short description.  It is modeled on the lists of similar structure in both <latex /> and HTML.  It makes for a nice medium-weight way to define terms, somewhere in-between the <c>term</c> tag which just makes a term prominent in a sentence, and a <c>definition</c>, which is set off, has a heading, a number, and a title.  This example is from Bob Plantz.<dl>
                     <li>
                         <title>Central Processing Unit (CPU)</title>
@@ -3064,9 +3061,7 @@ the xsltproc executable.
             </table>
 
             <paragraphs>
-                <idx>test3</idx>
                 <title>Bully Pulpit: Vertical Rules in Tables</title>
-                <idx>test4</idx>
 
                 <p>One of the goals of <pretext /> is to gently guide authors towards good choices in the design of their documents, even if we do not claim to know it all ourselves.  Take a close look at that table about tables.  What's missing?  No vertical rules.  Try living without them, you will not really miss them.  If you think you need to divide a table into two halves, maybe you really need two tables (and then see the <q>side-by-side</q> capabilities, Section <xref ref="section-side-by-side" />).</p>
 
