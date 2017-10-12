@@ -1119,7 +1119,7 @@ the xsltproc executable.
                 </image>
             </figure>
 
-            <p>Lists can have multiple columns.  With <init>HTML</init> items displayed in row-major order (horizontally first) and with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items <mdash /> derivatives and integrals <mdash /> where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.<idx xml:id="index-start-multicolumn" finish="index-finish-multicolumn"><h>Lists</h><h>multicolumn</h></idx><ol cols="5">
+            <p>Lists can have multiple columns.  With <init>HTML</init> items displayed in row-major order (horizontally first) and with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items <mdash /> derivatives and integrals <mdash /> where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.<idx xml:id="index-start-multicolumn" finish="index-finish-multicolumn"><h>list</h><h>multicolumn</h></idx><ol cols="5">
                 <li><p>Red</p></li>
                 <li><p>Blue</p></li>
                 <li><p>Green</p></li>
@@ -2484,6 +2484,17 @@ the xsltproc executable.
                 <idx><h>list</h><h>ordered</h></idx>
                 <idx><h>unordered list</h></idx>
                 <idx><h>list</h><h>unordered</h></idx>
+
+                <p>
+                   Use <c>ol</c> to make an ordered list,<idx><h>ordered list</h></idx>
+                   and <c>ul</c> to make an unordered (bulleted) list.
+                   In both cases, use <c>li</c> for each entry.  If an entry contains
+                   more than one paragraph, then each must be wrapped in <c>p</c>.
+                   <idx><h>unordered list</h></idx>
+                   <idx><h>list</h><h>ordered</h></idx>
+                   <idx><h>list</h><h>unordered</h></idx>
+                </p>
+
 
                 <p>This section contains nested lists, to demonstrate how they get assigned labels (numbering, symbols).  But we begin with two simple lists, demonstrating an ordered list and an unordered list.  See the end of section for an example of a description list.  Since Jupyter notebooks use markdown syntax, their lists are less flexible.  So some assertions here may be wrong when viewed as a Jupyter notebook.  Note in the source the optional use of a paragraph (<c>p</c>) for the list items.</p>
 
