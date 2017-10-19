@@ -213,7 +213,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Kill some templates temporarily -->
 <xsl:template name="inline-warning" />
 <xsl:template name="margin-warning" />
-<xsl:template match="index" />
+<xsl:template match="idx" />
 
 <!-- File Structure -->
 <!-- Gross structure of a Jupyter notebook -->
