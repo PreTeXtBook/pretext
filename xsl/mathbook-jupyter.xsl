@@ -224,8 +224,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="containing-filename" />
     </xsl:variable>
     <xsl:variable name="cell-list">
-        <!-- load LaTeX macros for MathJax -->
+        <!-- a code cell for reader to load CSS -->
+        <!-- First, so already with focus       -->
+        <xsl:call-template name="load-css" />
+        <!-- load LaTeX macros for MathJax   -->
+        <!-- Empty, also provides separation -->
         <xsl:call-template name="load-macros" />
+        <!-- the real content of the page -->
         <xsl:copy-of select="$content" />
     </xsl:variable>
     <exsl:document href="{$filename}" method="text">
@@ -289,6 +294,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- end outermost group -->
         <xsl:text>}&#xa;</xsl:text>
     </exsl:document>
+</xsl:template>
+
+<!-- a code cell with HTML magic         -->
+<!-- allows reader to activate styling   -->
+<!-- Code first, so it begins with focus -->
+<xsl:template name="load-css">
+    <!-- HTML as one-off code cell   -->
+    <!-- Serialize HTML by hand here -->
+    <xsl:call-template name="code-cell">
+        <xsl:with-param name="content">
+            <xsl:call-template name="begin-string" />
+            <xsl:text>%%html[CR]</xsl:text>
+            <xsl:call-template name="end-string" />
+            <xsl:call-template name="begin-string" />
+            <xsl:text>&lt;link href="http://mathbook.pugetsound.edu/beta/mathbook-content.css" rel="stylesheet" type="text/css" /&gt;</xsl:text>
+            <xsl:call-template name="end-string" />
+        </xsl:with-param>
+    </xsl:call-template>
+    <!-- instructions as Markdown cell        -->
+    <!-- Use markdown, since no CSS yet (duh) -->
+    <xsl:call-template name="markdown-cell">
+        <xsl:with-param name="content">
+            <xsl:call-template name="begin-string" />
+            <xsl:text>**Important:** to view this notebook properly you will need to execute the cell above, which assumes you have an Internet connection.  It should already be selected, or place your cursor anywhere above to select.  Then press the "Run" button in the menu bar above (the right-pointing arrowhead), or press Shift-Enter on your keyboard.</xsl:text>
+            <xsl:call-template name="end-string" />
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Macros, escape backslashes, join lines, -->
