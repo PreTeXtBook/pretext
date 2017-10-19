@@ -301,7 +301,7 @@ the xsltproc executable.
             -->
             <theorem xml:id="theorem-FTC">
                 <title>The Fundamental Theorem of Calculus</title>
-                <idx><h>Fundamental Theorem of Calculus</h><h>Theorem</h></idx>
+                <idx><h>Fundamental Theorem of Calculus</h></idx>
 
                 <statement>
                     <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me><idx><h>test: buried in theorem/statement/p</h></idx></p>
