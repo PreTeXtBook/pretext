@@ -17,9 +17,9 @@
     <section xml:id="overview-structure">
         <title>Structure</title>
 
-        <p>A <pretext /> document is a nested sequence of <term>structural divisions</term>.  For a book, these would go <tag>part</tag>, <tag>chapter</tag>, <tag>section</tag>, <tag>subsection</tag>, and <tag>subsubsection</tag>.  Using <tag>part</tag> is optional (and not yet fully implemented), but a book must always use <tag>chapter</tag> (or else it is not a book!).  No skipping over divisions.  For example, you cannot divide a <tag>section</tag> directly into several <tag>subsubsection</tag>s without an intervening <tag>subsection</tag>.</p>
+        <p>A <pretext /> document is a nested sequence of <term>structural divisions</term><idx>structural divisions</idx>.  For a book, these would go <tag>part</tag>, <tag>chapter</tag>, <tag>section</tag>, <tag>subsection</tag>, and <tag>subsubsection</tag>.  Using <tag>part</tag> is optional (and not yet fully implemented), but a book must always use <tag>chapter</tag> (or else it is not a book!).  No skipping over divisions.  For example, you cannot divide a <tag>section</tag> directly into several <tag>subsubsection</tag>s without an intervening <tag>subsection</tag>.</p>
 
-        <p>An <tag>article</tag> starts divisions from <tag>section</tag>, though it may choose to have no divisions at all.  <tag>paragraphs</tag> are exceptional.  They lack a full set of features, but can be used to divide anything, in books or in articles, though they are always terminal since you cannot divide them further.  You will have noticed that we prefer the generic term <term>division</term> (rather than <q>section</q>) since a <tag>section</tag> is a very particular division.</p>
+        <p>An <tag>article</tag> starts divisions from <tag>section</tag>, though it may choose to have no divisions at all.  <tag>paragraphs</tag> are exceptional.  They lack a full set of features, but can be used to divide anything, in books or in articles, though they are always terminal since you cannot divide them further.  You will have noticed that we prefer the generic term <term>division</term><idx><h>division</h><see>structural divisions</see></idx> (rather than <q>section</q>) since a <tag>section</tag> is a very particular division.</p>
 
         <p>A division may be unstructured, in which case you fill it with paragraphs and lists and figures and theorems and so on.  But if you choose to structure a division it must look like an optional <tag>introduction</tag>, followed by multiple divisions of the next finer granularity, with an optional <tag>conclusion</tag>.</p>
 
@@ -32,6 +32,7 @@
 
     <section xml:id="overview-paragraphs">
         <title>Paragraphs</title>
+        <idx>paragraphs</idx>
 
         <p>Once you have divisions, what do you put into them?  Most likely, paragraphs.  We use long, exact names for tags that are used infrequently, like <tag>subsubsection</tag>.  But for frequently used elements, we use abbreviated tags, often identical to names used in <init>HTML</init>.  So a paragraph is delimited by simply the <tag>p</tag> tag.</p>
 
@@ -42,6 +43,7 @@
 
     <section xml:id="overview-cross-references">
         <title>Cross-References</title>
+        <idx>cross-references</idx>
 
         <p>Cross-references in a <pretext /> document are easy, powerful and flexible.  So it is worth familiarizing yourselves with them early, here and then ahead in <xref ref="topic-cross-referencing" />.</p>
 
@@ -54,6 +56,7 @@
 
     <section xml:id="overview-title">
         <title>Titles</title>
+        <idx>titles</idx>
 
         <p>Divisions always need titles, you accomplish this with a <tag>title</tag> tag first thing.  Almost everything that you can use in a paragraph can be used in a title, but a few constructions are banned, such as a displayed mathematical equation (for good reason).  Try to avoid using footnotes in titles, even if we have tried to make them possible.</p>
 
@@ -67,15 +70,16 @@
 
         <p>A key design decision is that mathematical symbols, expressions and equations are authored using <latex /> syntax.  More precisely, we support the symbols and constructions provided by <url href="https://www.mathjax.org/">MathJax</url>, which quite closely follows the <c>amsmath</c> package maintained by the American Mathematical Society.  Neither you nor I want to write <url href="https://en.wikipedia.org/wiki/MathML">MathML</url> by hand!</p>
 
-        <p>For <term>inline</term> mathematics, use the short <tag>m</tag> tag within a <tag>p</tag> (or within a <tag>title</tag> or <tag>caption</tag>).  For example, <c>&lt;m&gt;\alpha^2 + \beta^4&lt;/m&gt;</c> will do what you expect, in print and in electronic outputs.  To get a single equation, centered, with some vertical separation before and after, use the <tag>me</tag> tag (<q>math equation</q>) in the same way within a <tag>p</tag>, but do not try using it within a <tag>title</tag>.  For example, <c>&lt;me&gt;\rho = \alpha^2 + \beta^4&lt;/me&gt;</c>.  If you want your equation numbered, switch to the <tag>men</tag> tag (<c>n</c> = <q>numbered</q>).</p>
+        <p>For <term>inline</term> mathematics<idx><h>mathematics</h><h>inline mathematics</h></idx>, use the short <tag>m</tag> tag within a <tag>p</tag> (or within a <tag>title</tag> or <tag>caption</tag>).  For example, <c>&lt;m&gt;\alpha^2 + \beta^4&lt;/m&gt;</c> will do what you expect, in print and in electronic outputs.  To get a single equation, centered, with some vertical separation before and after, use the <tag>me</tag> tag (<q>math equation</q>) in the same way within a <tag>p</tag>, but do not try using it within a <tag>title</tag>.  For example, <c>&lt;me&gt;\rho = \alpha^2 + \beta^4&lt;/me&gt;</c>.  If you want your equation numbered, switch to the <tag>men</tag> tag (<c>n</c> = <q>numbered</q>).</p>
 
-        <p>There is a way to incorporate your own (simple) custom <latex /> macros within mathematics (only).  They will be effective in your print and electronic outputs, and can be employed in graphics languages like <c>tikz</c> and Asymptote.  You can also author multi-line <term>display mathematics</term> using the <tag>md</tag> tag surrounding a sequence of <tag>mrow</tag> elements (or the <tag>mdn</tag> variant for numbered equations).  We defer the details to <xref ref="topic-mathematics" />.</p>
+        <p>There is a way to incorporate your own (simple) custom <latex /> macros within mathematics (only).  They will be effective in your print and electronic outputs, and can be employed in graphics languages like <c>tikz</c> and Asymptote.  You can also author multi-line <term>display mathematics</term><idx><h>mathematics</h><h>display mathematics</h></idx> using the <tag>md</tag> tag surrounding a sequence of <tag>mrow</tag> elements (or the <tag>mdn</tag> variant for numbered equations).  We defer the details to <xref ref="topic-mathematics" />.</p>
     </section>
 
     <section xml:id="overview-images">
         <title>Images</title>
+        <idx>images</idx>
 
-        <p>You can include an image via the <tag>image</tag> tag.  You can use the <attribute>source</attribute> attribute to provide a filename, likely prefixed by a relative path, that points at an image file.  It is your responsibility to locate that file properly relative to your output, and that the file format is compatible.  So, for example, suppose your source contained <c>&lt;image source="images/butterflies.jpg" /&gt;</c>.  Then you would want to have a directory named <c>images</c> below wherever you process your <latex /> output, or wherever you place your HTML output on a web server.  The <attribute>width</attribute> attribute can be used to control the size of the image.   Widths are expressed as a percentage of the available width, such as <c>width="60%"</c>.</p>
+        <p>You can include an image via the <tag>image</tag><idx>images</idx> tag.  You can use the <attribute>source</attribute> attribute to provide a filename, likely prefixed by a relative path, that points at an image file.  It is your responsibility to locate that file properly relative to your output, and that the file format is compatible.  So, for example, suppose your source contained <c>&lt;image source="images/butterflies.jpg" /&gt;</c>.  Then you would want to have a directory named <c>images</c> below wherever you process your <latex /> output, or wherever you place your HTML output on a web server.  The <attribute>width</attribute> attribute can be used to control the size of the image.   Widths are expressed as a percentage of the available width, such as <c>width="60%"</c>.</p>
 
         <p>You may want to wrap your image in a <tag>figure</tag> to have it centered, and to have some vertical separation above and below.  A <tag>figure</tag> must also have a <tag>caption</tag>, and the figure will be numbered.</p>
 
@@ -86,8 +90,9 @@
 
     <section xml:id="overview-lists">
         <title>Lists</title>
+        <idx>lists</idx>
 
-        <p>Ordered lists (numbered), unordered lists (bullets) and description lists (defined terms) are all supported, and syntax generally follows HTML.  Lists always live within a paragraph (<tag>p</tag>).  Their structure is given by the <tag>ol</tag>, <tag>ul</tag>, <tag>dl</tag> tags (respectively).  These can specify a variety of options for the labels via attributes, as described in <xref ref="topic-lists-and-labels" />.  Because a paragraph has mixed-content, you want to place these list-initiating tags immediately after the character preceding it, with no intervening whitespace, and specifically not with an intervening newline.</p>
+        <p>Ordered lists (numbered)<idx><h>lists</h><h>ordered list</h></idx>, unordered lists (bullets)<idx><h>lists</h><h>unordered list</h></idx> and description lists (defined terms)<idx><h>lists</h><h>description list</h></idx> are all supported, and syntax generally follows HTML.  Lists always live within a paragraph (<tag>p</tag>).  Their structure is given by the <tag>ol</tag>, <tag>ul</tag>, <tag>dl</tag> tags (respectively).  These can specify a variety of options for the labels via attributes, as described in <xref ref="topic-lists-and-labels" />.  Because a paragraph has mixed-content, you want to place these list-initiating tags immediately after the character preceding it, with no intervening whitespace, and specifically not with an intervening newline.</p>
 
         <p>Once inside a list, you may use as much whitespace as you choose between the list items.  Typically you would indent one level, start each list item on its own line, and perhaps use blank lines between list items of a complicated list.</p>
 
@@ -96,8 +101,9 @@
 
     <section xml:id="overview-exercises">
         <title>Exercises</title>
+        <idx>exercises</idx>
 
-        <p>An exercise can appear in the narrative as an <term>inline exercise</term> or in a special <tag>exercises</tag> division and is then known as a <term>sectional exercise</term>.  The syntax is the same in both cases, there are just some minor differences in their use and treatment.  The <tag>exercises</tag> division can be used at any level.  In other words, it can be a peer of any other division.</p>
+        <p>An exercise can appear in the narrative as an <term>inline exercise</term><idx><h>exercises</h><h>inline exercise</h></idx> or in a special <tag>exercises</tag><idx><h>exercises</h><h>sectional exercise</h></idx> division and is then known as a <term>sectional exercise</term>.  The syntax is the same in both cases, there are just some minor differences in their use and treatment.  The <tag>exercises</tag> division can be used at any level.  In other words, it can be a peer of any other division.</p>
 
         <p>An <tag>exercise</tag> is a mandatory <tag>statement</tag> followed by possibly several optional <tag>hint</tag>, <tag>answer</tag> and/or <tag>solution</tag>.  Conceptually, an <tag>answer</tag> is a short final result, while a <tag>solution</tag> provides details about the route to the answer.  Each of these four components is structured further, with paragraph-like elements, and the exercise itself may have a <tag>title</tag>.</p>
 
@@ -110,12 +116,15 @@
 
     <section xml:id="overview-references">
         <title>References</title>
+        <idx>references</idx>
 
         <p>Like <tag>exercises</tag>, a <tag>references</tag> division may go anywhere a more typical division could go.  This allows for things like a <q>Further Reading</q> list at the end of every chapter of a book.  These are populated with <tag>biblio</tag> items that are individual bibliographic entries.  Support is presently very minimal, but is planned to improve.</p>
     </section>
 
     <section xml:id="overview-figures-tables">
         <title>Figures and Tables</title>
+        <idx>figures</idx>
+        <idx>tables</idx>
 
         <p>Figures and tables have outer structures, <tag>figure</tag> and <tag>table</tag> which can contain a <tag>title</tag> (for cross-references, such as in a list of figures) and a <tag>caption</tag>.  The presence of a <tag>caption</tag> generates a number for the figure or table.  These outer structures also generate some vertical separation between surrounding elements.</p>
 
@@ -126,6 +135,8 @@
 
     <section xml:id="overview-programs">
         <title>Programs and Consoles</title>
+        <idx>programs</idx>
+        <idx>console</idx>
 
         <p>If you are writing about scientific or engineering topics, you may wish to include sample computer programs, or command-line sessions.</p>
 
@@ -140,6 +151,7 @@
 
     <section xml:id="overview-special-characters">
         <title>Special Characters</title>
+        <idx>special characters</idx>
 
         <p>An advantage of XML syntax is that very few characters are reserved for the language's use, and thus very few characters need to be escaped.  Of course, there is always the need to escape the escape character.</p>
 
@@ -153,6 +165,7 @@
 
         <table>
             <!-- <title><latex />'s Reserved Characters</title> -->
+            <idx>reserved characters</idx>
             <caption><latex />'s reserved characters and their elements</caption>
 
             <tabular>
@@ -174,6 +187,8 @@
 
     <section xml:id="overview-verbatim-literal">
         <title>Verbatim and Literal Text</title>
+        <idx>verbatim text</idx>
+        <idx>literal text</idx>
 
         <p>Typesetting literal text, usually in a monospace font, can sometimes be tricky.  For short bits of such text, as part of a sentence in a paragraph, use the <tag>c</tag> tag, which is short for <q>code.</q>  For much longer blocks of literal text, with line breaks that are to be preserved, use the <tag>pre</tag> tag, which is short for <q>pre-formatted</q>.</p>
 
@@ -185,9 +200,9 @@
     <section xml:id="overview-sage">
         <title>Sage</title>
 
-        <p><url href="http://www.sagemath.org/">Sage</url> is an open source library of computational routines for symbolic, exact and numerical mathematics.  It is designed to be a <q>viable free open source alternative to Magma, Maple, Mathematica, and Matlab.</q>  <pretext /> contains extensive support for including example Sage into your document.</p>
+        <p><url href="http://www.sagemath.org/">Sage</url><idx>Sage</idx> is an open source library of computational routines for symbolic, exact and numerical mathematics.  It is designed to be a <q>viable free open source alternative to Magma, Maple, Mathematica, and Matlab.</q>  <pretext /> contains extensive support for including example Sage into your document.</p>
 
-        <p>A typical use of the <tag>sage</tag> tag is to include an <tag>input</tag> element, followed by an <tag>output</tag> element.  The content of the <tag>input</tag> element may be presented statically in PDF output, or dynamically as a Sage Cell in an output format based on HTML.  Of course, for output as a CoCalc worksheet, the Sage code is presented in the worksheet's native format.</p>
+        <p>A typical use of the <tag>sage</tag> tag is to include an <tag>input</tag> element, followed by an <tag>output</tag> element.  The content of the <tag>input</tag> element may be presented statically in PDF output, or dynamically as a Sage Cell<idx>Sage cell</idx> in an output format based on HTML.  Of course, for output as a CoCalc worksheet, the Sage code is presented in the worksheet's native format.</p>
 
         <p>The content of the <tag>output</tag> element is included in PDF output, but not in dynamic instances, since it can be re-computed.  Notably, there is a conversion which pairs input and output into a single file in the format used by Sage's <c>doctest</c> framework.  So if expected output is provided, it becomes automatic to identify when Sage has diverged from your expectations, and you can adjust your examples accordingly.</p>
 
@@ -198,12 +213,14 @@
 
     <section xml:id="overview-sidebyside">
         <title>Side-by-Side Panels</title>
+        <idx>side-by-side panels</idx>
 
-        <p>A <tag>sidebyside</tag> is a useful organization of elements in a horizontal layout, and so begins to blur the line between content and presentation.  While we default to organizing information in a vertical sequence, it is often desirable to organize smaller elements adjacent to each other horizontally.  Specifically, images, tabular, figures, tables, paragraphs, and more, may all be combined and there is good control over vertical and horizontal alignment.  Captioning, both overall and individually, is especially flexible.  An <tag>sbsgroup</tag>  (<q>side-by-side group</q>) collects multiple <tag>sidebyside</tag> to stack vertically, which allows for displays in grids.  See <xref ref="topic-sidebyside" /> for details.</p>
+        <p>A <tag>sidebyside</tag><idx>side-by-side panels</idx> is a useful organization of elements in a horizontal layout, and so begins to blur the line between content and presentation.  While we default to organizing information in a vertical sequence, it is often desirable to organize smaller elements adjacent to each other horizontally.  Specifically, images, tabular, figures, tables, paragraphs, and more, may all be combined and there is good control over vertical and horizontal alignment.  Captioning, both overall and individually, is especially flexible.  An <tag>sbsgroup</tag>  (<q>side-by-side group</q><idx>side-by-side group</idx>) collects multiple <tag>sidebyside</tag> to stack vertically, which allows for displays in grids.  See <xref ref="topic-sidebyside" /> for details.</p>
     </section>
 
     <section xml:id="overview-math-results">
         <title>Mathematical Results</title>
+        <idx><h>mathematics</h><h>mathematical results</h></idx>
 
         <p>Definitions, theorems, corollaries, <etc /> are supported by the tags:  <tag>theorem</tag>, <tag>corollary</tag>, <tag>lemma</tag>, <tag>algorithm</tag>, <tag>proposition</tag>, <tag>claim</tag>, <tag>fact</tag>, <tag>definition</tag>, <tag>conjecture</tag>, <tag>axiom</tag>, and <tag>principle</tag>.  Each may have a <tag>title</tag> (strongly encouraged), and then contains a <tag>statement</tag> which is a sequence of paragraphs and other elements.  As appropriate, some of these elements (such as a <tag>lemma</tag>) may contain an optional <tag>proof</tag> (or several), while other elements may not have a <tag>proof</tag> (such as a <tag>conjecture</tag>).</p>
 
@@ -214,37 +231,45 @@
 
     <section xml:id="overview-frontmatter">
         <title>Front Matter</title>
+        <idx>front matter</idx>
 
-        <p>In the beginning of your <tag>book</tag> or <tag>article</tag> you can have a <tag>frontmatter</tag> element that contains various items that would precede your first <tag>chapter</tag> or <tag>section</tag> (respectively).  Possibilities include <tag>titlepage</tag>, <tag>colophon</tag>, <tag>biography</tag>, <tag>abstract</tag>, <tag>dedication</tag>, <tag>acknowledgement</tag>, <tag>foreword</tag>, and <tag>preface</tag>.  Some of these may be duplicated (<eg /> several prefaces for multiple editions), many of these items are restricted to books (<eg /> a foreword), and some items are restricted to articles (<eg /> an abstract).  The DTD (<xref provisional="dtd-info" />) will help you place them in the right order in your source.  See <xref ref="topic-front-back-matter" /> for details.</p>
+        <p>In the beginning of your <tag>book</tag> or <tag>article</tag> you can have a <tag>frontmatter</tag><idx>front matter</idx> element that contains various items that would precede your first <tag>chapter</tag> or <tag>section</tag> (respectively).  Possibilities include <tag>titlepage</tag>, <tag>colophon</tag>, <tag>biography</tag>, <tag>abstract</tag>, <tag>dedication</tag>, <tag>acknowledgement</tag>, <tag>foreword</tag>, and <tag>preface</tag>.  Some of these may be duplicated (<eg /> several prefaces for multiple editions), many of these items are restricted to books (<eg /> a foreword), and some items are restricted to articles (<eg /> an abstract).  The DTD (<xref provisional="dtd-info" />) will help you place them in the right order in your source.  See <xref ref="topic-front-back-matter" /> for details.</p>
 
     </section>
 
     <section xml:id="overview-backmatter">
         <title>Back Matter</title>
+        <idx>back matter</idx>
 
-        <p>Similar to front matter, there is material you might wish to include after your book's final <tag>chapter</tag> or your article's final <tag>section</tag>.  Possibilities to place in a <tag>backmatter</tag> include <tag>appendix</tag>, <tag>references</tag>, <tag>index-part</tag>, and <tag>colophon</tag>.  There are empty tags you can place into an appendix to generate lists of notation, or lists of particular elements of your choice, such as a list of figures.  A similar empty element actually generates the index, <tage>index-list</tage>.  See <xref ref="topic-front-back-matter" /> for details on the back matter generally, and <xref ref="topic-automatic-lists" /> for more on automatic lists.</p>
+        <p>Similar to front matter, there is material you might wish to include after your book's final <tag>chapter</tag> or your article's final <tag>section</tag>.  Possibilities to place in a <tag>backmatter</tag><idx>back matter</idx> include <tag>appendix</tag>, <tag>references</tag>, <tag>index-part</tag>, and <tag>colophon</tag>.  There are empty tags you can place into an appendix to generate lists of notation, or lists of particular elements of your choice, such as a list of figures.  A similar empty element actually generates the index, <tage>index-list</tage>.  See <xref ref="topic-front-back-matter" /> for details on the back matter generally, and <xref ref="topic-automatic-lists" /> for more on automatic lists.</p>
     </section>
 
     <section xml:id="overview-index-notation">
         <title>Index and Notation Entries</title>
+        <idx>index</idx>
+        <idx>list of notation</idx>
+        <idx><h>notation list</h><see>list of notation</see></idx>
 
-        <p>Construction of an index and a list of notation is accomplished by placing information into your text in the appropriate places in the right way.</p>
+        <p>Construction of an index<idx>index</idx> and a list of notation is accomplished by placing information into your text in the appropriate places in the right way.</p>
 
-        <p>The tags for an index entry will change soon, so we defer describing this precisely.  These should be placed within the element that they describe.  By this we mean that an <tag>index</tag> element can be placed within a <tag>theorem</tag> to refer to just that theorem, or it might be placed within a <tag>subsection</tag> to refer to that subsection.  In this way, electronic versions of your work can have an index that is more informative than a traditional index that uses just page numbers.</p>
+        <p>The <tag>idx</tag> tags denote an index entry<idx><h>index</h><h>index entry</h></idx>.  These should be placed within the element that they describe.  By this we mean that an <tag>idx</tag> element can be placed within a <tag>theorem</tag> to refer to just that theorem, or it might be placed within a <tag>subsection</tag> to refer to that subsection.  In this way, electronic versions of your work can have an index that is more informative than a traditional index that uses just page numbers. Note that the text contained within the <tag>idx</tag> tags does not actually appear in the article - it only serves as a marker to show where the index entry will link to. You can list multiple entries under one heading by using sets of <tag>h</tag> tags within the index entry. First, use a set of tags to denote the main index entry. Then, inside of a new set of tags (within the same index entry), include the term that you with to be placed under the main term. You can continue to include deeper levels of subheadings through repeated use of the <tag>h</tag> tag. Alternatively, after the first use of <tag>h</tag>, you can use <tag>see</tag> or <tag>seealso</tag> to denote a <q>see</q> or <q>see also</q> in the index entry, respectively.</p>
 
-        <p>A similar device is used to create a list of notation for a technical (mathematical) work.  Place a <tag>notation</tag> element as close as possible to the place where notation is first introduced.  If you use the <tag>definition</tag> tag for your definitions, then this is a very natural place to also introduce notation.  Inside of <tag>notation</tag> use the <tag>usage</tag> tag to include a short example of the notation in use.  This will be treated as mathematics, so imagine that it will be wrapped in an <tag>m</tag> tag and use <latex /> syntax.  The <tag>description</tag> tag should contain a very short description in words of what the notation is for.  So <q>center of a group</q> would be a good description to accompany the usage <q><m>Z(G)</m>.</q></p>
+        <p>A similar device is used to create a list of notation<idx>list of notation</idx> for a technical (mathematical) work.  Place a <tag>notation</tag> element as close as possible to the place where notation is first introduced.  If you use the <tag>definition</tag> tag for your definitions, then this is a very natural place to also introduce notation.  Inside of <tag>notation</tag> use the <tag>usage</tag> tag to include a short example of the notation in use.  This will be treated as mathematics, so imagine that it will be wrapped in an <tag>m</tag> tag and use <latex /> syntax.  The <tag>description</tag> tag should contain a very short description in words of what the notation is for.  So <q>center of a group</q> would be a good description to accompany the usage <q><m>Z(G)</m>.</q></p>
     </section>
 
     <section xml:id="overview-webwork">
         <title><webwork /> Exercises</title>
+        <idx><webwork /> exercises</idx>
 
-        <p>It is possible to author <webwork /> automated homework problems directly within your source.  A static version will be rendered in your <latex />/PDF/print output, and a <q>live</q> version will be rendered into HTML output (though a student is not able to authenticate against a course).  However, you can also extract <em>all</em> of the <webwork /> questions from a textbook into a single archive suitable for uploading into a traditional <webwork /> server.  This is a big topic, so see the dedicated <xref ref="webwork" /> for details.</p>
+        <p>It is possible to author <webwork /> automated homework problems<idx><webwork /> exercises</idx> directly within your source.  A static version will be rendered in your <latex />/PDF/print output, and a <q>live</q> version will be rendered into HTML output (though a student is not able to authenticate against a course).  However, you can also extract <em>all</em> of the <webwork /> questions from a textbook into a single archive suitable for uploading into a traditional <webwork /> server.  This is a big topic, so see the dedicated <xref ref="webwork" /> for details.</p>
     </section>
 
     <section xml:id="overview-url">
         <title><init>URL</init>s and External References</title>
+        <idx>URLs</idx>
+        <idx>external references</idx>
 
-        <p>The <tag>url</tag> tag always requires an <attribute>href</attribute> attribute.  Usually this will be some external web page, or other resource.  If the <tag>url</tag> is empty, then the value of the <attribute>href</attribute> attribute will be the link text, typically in a monospace font.  You can also provide your own content, using elements much like any other piece of text that would occur in a paragraph.  Of course, there is no need to anticipate any problems with <latex /> output and special characters like a tilde.  Use the character itself in the <attribute>href</attribute>, and use the <tag>tilde</tag> element in the content (or wrap the content in the <tag>c</tag> element and use the literal character).</p>
+        <p>The <tag>url</tag><idx>URLs</idx> tag always requires an <attribute>href</attribute> attribute.  Usually this will be some external web page, or other resource.  If the <tag>url</tag> is empty, then the value of the <attribute>href</attribute> attribute will be the link text, typically in a monospace font.  You can also provide your own content, using elements much like any other piece of text that would occur in a paragraph.  Of course, there is no need to anticipate any problems with <latex /> output and special characters like a tilde.  Use the character itself in the <attribute>href</attribute>, and use the <tag>tilde</tag> element in the content (or wrap the content in the <tag>c</tag> element and use the literal character).</p>
 
         <p>This element may also be used to link to external data files.  See <xref ref="topic-url" /> for details.</p>
 
@@ -252,14 +277,17 @@
 
     <section xml:id="overview-video">
         <title>Video</title>
+        <idx>videos</idx>
 
-        <p>Videos, either author-hosted or hosted on YouTube, may be embedded in a <pretext /> document using <init>HTML</init>, or may be <q>popped-out</q> to view on another page.  For a YouTube video, an author need only supply the identification string, and all the details of the embedding are handled by <pretext />.  See <xref ref="topic-video" /> for details.</p>
+        <p>Videos<idx>videos</idx>, either author-hosted or hosted on YouTube, may be embedded in a <pretext /> document using <init>HTML</init>, or may be <q>popped-out</q> to view on another page.  For a YouTube video, an author need only supply the identification string, and all the details of the embedding are handled by <pretext />.  See <xref ref="topic-video" /> for details.</p>
     </section>
 
     <section xml:id="overview-si-units">
         <title>Scientific Units</title>
+        <idx>scientific units</idx>
+        <idx><h>units</h><see>scientific units</see></idx>
 
-        <p>If you are writing about science or engineering, or even if you are not, there is extensive support for scientific units.  So, for example, you could author a force in metric units as</p>
+        <p>If you are writing about science or engineering, or even if you are not, there is extensive support for scientific units<idx>scientific units</idx>.  So, for example, you could author a force in metric units as</p>
 
         <pre>
         &lt;quantity&gt;
