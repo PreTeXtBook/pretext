@@ -1055,19 +1055,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Cell Construction -->
 <!-- ################# -->
 
-<!-- These should be phased out in lieu of their two respective convenience templates -->
-
+<!-- A Jupyter markdown cell intended  -->
+<!-- to hold markdown or unstyled HTML -->
 <xsl:template name="markdown-cell">
     <xsl:param name="content" />
-    <!--  -->
     <xsl:call-template name="begin-markdown-cell" />
     <xsl:value-of select="$content" />
     <xsl:call-template name="end-markdown-cell" />
 </xsl:template>
 
+<!-- A Jupyter markdown cell intended -->
+<!-- to hold PreTeXt styled HTML      -->
+<xsl:template name="pretext-cell">
+    <xsl:param name="content" />
+    <xsl:call-template name="begin-markdown-cell" />
+    <xsl:call-template name="begin-string" />
+    <xsl:text>&lt;div class="mathbook-content"&gt;</xsl:text>
+    <xsl:call-template name="end-string" />
+    <xsl:value-of select="$content" />
+    <xsl:call-template name="begin-string" />
+    <xsl:text>&lt;/div&gt;</xsl:text>
+    <xsl:call-template name="end-string" />
+    <xsl:call-template name="end-markdown-cell" />
+</xsl:template>
+
+<!-- A Jupyter code cell intended -->
+<!-- to hold raw text             -->
 <xsl:template name="code-cell">
     <xsl:param name="content" />
-    <!--  -->
     <xsl:call-template name="begin-code-cell" />
     <xsl:value-of select="$content" />
     <xsl:call-template name="end-code-cell" />
