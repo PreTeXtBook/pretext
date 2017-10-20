@@ -234,8 +234,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>{&#xa;</xsl:text>
         <!-- cell list first, majority of notebook, metadata to finish -->
         <xsl:text>"cells": [&#xa;</xsl:text>
+        <!-- Escape backslashes -->
+        <xsl:variable name="escape-backslash" select="str:replace($cell-list, '\','\\')" />
+        <!-- Escape quote marks -->
+        <xsl:variable name="escape-quote" select="str:replace($escape-backslash, '&quot;','\&quot;')" />
+        <!-- Replace newline markers -->
+        <xsl:variable name="replace-newline" select="str:replace($escape-quote, '[CR]','\n')" />
         <!-- Massage string delimiters, separators -->
-        <xsl:variable name="split-strings" select="str:replace($cell-list, $ESBS, '&quot;,&#xa;&quot;')" />
+        <xsl:variable name="split-strings" select="str:replace($replace-newline, $ESBS, '&quot;,&#xa;&quot;')" />
         <xsl:variable name="finalize-strings" select="str:replace(str:replace($split-strings, $ES, '&quot;'), $BS, '&quot;')" />
         <!-- Massage cell delimiters, separators -->
         <!-- first, square inline headings to cell separators -->
@@ -292,7 +298,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />
             <xsl:text>$</xsl:text>
-            <xsl:value-of select="str:replace(str:replace($latex-macros, '\', '\\'), '&#xa;', '')" />
+            <xsl:value-of select="str:replace($latex-macros, '&#xa;', '')" />
             <xsl:text>$</xsl:text>
             <xsl:call-template name="end-string" />
         </xsl:with-param>
@@ -321,7 +327,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Add blank line prior to each to effect a newline visually-->
 <xsl:template match="titlepage/author/personname|titlepage/author/institution|titlepage/event|titlepage/date">
     <xsl:call-template name="begin-string" />
-        <xsl:text>\n\n</xsl:text>
+        <xsl:text>[CR][CR]</xsl:text>
         <xsl:apply-templates />
     <xsl:call-template name="end-string" />
 </xsl:template>
@@ -527,7 +533,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="li/p">
     <xsl:call-template name="begin-string" />
         <xsl:apply-templates />
-        <xsl:text>\n\n</xsl:text>
+        <xsl:text>[CR][CR]</xsl:text>
     <xsl:call-template name="end-string" />
 </xsl:template>
 
@@ -552,8 +558,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="loc">
         <xsl:call-template name="sanitize-text">
             <xsl:with-param name="text">
-                <!-- use text() macro to fix backslashes, quotes -->
-                <xsl:apply-templates select="input" />
+                <xsl:value-of select="input" />
             </xsl:with-param>
         </xsl:call-template>
     </xsl:variable>
@@ -562,13 +567,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- the code, content with string markers -->
     <xsl:variable name="the-code">
         <xsl:call-template name="begin-string" /> <!-- start first string -->
-        <xsl:value-of select="str:replace($loc-trim, '&#xa;', concat('\n', $ESBS))" />
+        <xsl:value-of select="str:replace($loc-trim, '&#xa;', concat('[CR]', $ESBS))" />
         <xsl:call-template name="end-string" /> <!-- end last string -->
     </xsl:variable>
     <xsl:call-template name="code-cell">
         <xsl:with-param name="content">
-            <xsl:variable name="split" select="str:replace($the-code, $ESBS, '&quot;,&#xa;&quot;')" />
-            <xsl:value-of select="str:replace(str:replace($split, $ES, '&quot;'), $BS, '&quot;')" />
+            <xsl:value-of select="$the-code" />
         </xsl:with-param>
     </xsl:call-template>
 </xsl:template>
@@ -609,13 +613,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Calls to this template need come from where LaTeX likes -->
 <!-- a \label, generally someplace that can be numbered      -->
 <xsl:template match="*" mode="label">
-    <xsl:text>\\label{</xsl:text>
+    <xsl:text>\label{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
 <xsl:template match="men|mrow" mode="tag">
-    <xsl:text>\\tag{</xsl:text>
+    <xsl:text>\tag{</xsl:text>
     <xsl:apply-templates select="." mode="number" />
     <xsl:text>}</xsl:text>
 </xsl:template>
@@ -631,13 +635,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="image-html-wrap">
     <xsl:param name="filename" />
     <xsl:param name="width" select="''" />
-    <xsl:text disable-output-escaping="yes">&lt;img src=\"</xsl:text>
+    <xsl:text disable-output-escaping="yes">&lt;img src="</xsl:text>
     <xsl:value-of select="$filename" />
-    <xsl:text>\"</xsl:text>
+    <xsl:text>"</xsl:text>
     <xsl:if test="not($width='')">
-        <xsl:text> width=\"</xsl:text>
+        <xsl:text> width="</xsl:text>
         <xsl:apply-templates select="$width" />
-        <xsl:text>\"</xsl:text>
+        <xsl:text>"</xsl:text>
     </xsl:if>
     <xsl:text disable-output-escaping="yes"> /&gt;</xsl:text>
 </xsl:template>
@@ -713,26 +717,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Single Displayed Equations      -->
 <!-- Write escaped TeX backslashes   -->
 <xsl:template match="me">
-    <xsl:text>\\begin{</xsl:text>
+    <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="alignat-columns" />
     <xsl:apply-templates />
-    <xsl:text>\\end{</xsl:text>
+    <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- Now numbered   -->
 <xsl:template match="men">
-    <xsl:text>\\begin{</xsl:text>
+    <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="alignat-columns" />
     <xsl:apply-templates />
     <xsl:apply-templates select="." mode="label" />
     <xsl:apply-templates select="." mode="tag"/>
-    <xsl:text>\\end{</xsl:text>
+    <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
 </xsl:template>
@@ -745,13 +749,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- align environment if ampersands are present, gather environment otherwise   -->
 <!-- Output follows source line breaks                                           -->
 <xsl:template match="md|mdn">
-    <xsl:text>\\begin{</xsl:text>
+    <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="alignat-columns" />
-    <xsl:text>\n</xsl:text>
+    <xsl:text>[CR]</xsl:text>
     <xsl:apply-templates select="mrow|intertext" />
-    <xsl:text>\\end{</xsl:text>
+    <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
 </xsl:template>
@@ -769,7 +773,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
     <!-- write newline for markdown source formatting -->
     <xsl:if test="following-sibling::mrow">
-       <xsl:text>\\\\\n</xsl:text>
+       <xsl:text>\\[CR]</xsl:text>
     </xsl:if>
 </xsl:template>
 
@@ -777,7 +781,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
     <xsl:choose>
         <xsl:when test="@number='no'">
-            <xsl:text>\\notag</xsl:text>
+            <xsl:text>\notag</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="." mode="label" />
@@ -786,7 +790,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
     <!-- write newline for markdown source formatting -->
     <xsl:if test="following-sibling::mrow">
-       <xsl:text>\\\\\n</xsl:text>
+       <xsl:text>\\[CR]</xsl:text>
     </xsl:if>
 </xsl:template>
 
@@ -794,27 +798,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An <mrow> will provide trailing newline, so do the same here -->
 <!-- Added double slash for jupyter                               -->
 <xsl:template match="md/intertext|mdn/intertext">
-    <xsl:text>\\intertext{</xsl:text>
+    <xsl:text>\intertext{</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\n</xsl:text>
+    <xsl:text>[CR]</xsl:text>
 </xsl:template>
 
 <xsl:template match="latex">
-    <xsl:text>$\\mathrm{LaTeX}$</xsl:text>
+    <xsl:text>$\mathrm{LaTeX}$</xsl:text>
 </xsl:template>
 
 
 <!-- " in JSON is touchy -->
 <xsl:template match="q">
-    <xsl:text>\"</xsl:text>
+    <xsl:text>"</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>\"</xsl:text>
+    <xsl:text>"</xsl:text>
 </xsl:template>
 
 <!-- Line break in Markdown is a carriage return (hex A) -->
 <!-- Strings in JSON like a split better                 -->
 <xsl:template match="br">
-    <xsl:text>\n", "</xsl:text>
+    <xsl:message>ILLEGAL "br" tag</xsl:message>
 </xsl:template>
 
 <!-- ################### -->
@@ -827,64 +831,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Number Sign, Hash, Octothorpe -->
 <xsl:template match="hash">
-    <xsl:text>\\#</xsl:text>
+    <xsl:text>#</xsl:text>
 </xsl:template>
 
-<!-- http://stackoverflow.com/questions/3067113/xslt-string-replace -->
-<xsl:template name="string-replace-all">
-    <xsl:param name="text" />
-    <xsl:param name="replace" />
-    <xsl:param name="by" />
-    <xsl:choose>
-        <xsl:when test="contains($text, $replace)">
-            <xsl:value-of select="substring-before($text,$replace)" />
-            <xsl:value-of select="$by" />
-            <xsl:call-template name="string-replace-all">
-                <xsl:with-param name="text" select="substring-after($text,$replace)" />
-                <xsl:with-param name="replace" select="$replace" />
-                <xsl:with-param name="by" select="$by" />
-            </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$text" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
 
 <!-- space          &#x20; -->
 <!-- tab             &#x9; -->
 <!-- carriage return &#xd; -->
 <!-- new line        &#xa; -->
-
-<!-- Escape backslash first, then escape any textual quotations -->
-<!-- These latex constructions may have matrices, etc           -->
-<!-- with newlines and tabs in the margins.  Newlines           -->
-<!-- become \n, and tabs become single spaces                  -->
-<xsl:template match="m/text()|me/text()|men/text()|mrow/text()">
-    <xsl:value-of select="str:replace(str:replace(str:replace(str:replace(., '\', '\\'), '&quot;', '\&quot;'), '&#xa;', '\n'), '&#x9;', '&#x20;')" />
-</xsl:template>
-
-<!-- Sanitize Sage code - newlines are addressed elsewhere -->
-<xsl:template match="sage/input/text()|sage/output/text()">
-    <xsl:value-of select="str:replace(str:replace(., '\', '\\'), '&quot;', '\&quot;')" />
-</xsl:template>
-
-<!-- Sanitize inline code - no newlines should be present -->
-<xsl:template match="c/text()">
-    <xsl:value-of select="str:replace(str:replace(., '\', '\\'), '&quot;', '\&quot;')" />
-</xsl:template>
-
-<!-- Sanitize everything else -->
-<xsl:template match="text()">
-    <!-- long-term: remove variable for clean sources -->
-    <xsl:variable name="escaped-string">
-        <xsl:value-of select="str:replace(str:replace(., '\', '\\'), '&quot;', '\&quot;')" />
-    </xsl:variable>
-    <!-- newlines to spaces  -->
-    <!-- tabs to empty string-->
-    <xsl:variable name="CR-sub" select="' '" />  <!-- use [CR] to make a point -->
-    <xsl:value-of select="str:replace(str:replace($escaped-string, '&#xa;', $CR-sub), '&#x9;', '')" />
-</xsl:template>
 
 <!-- A Jupyter notebook is a flat sequence of cells, either             -->
 <!-- "markdown" or "code."  The content is primarily a list of strings. -->
