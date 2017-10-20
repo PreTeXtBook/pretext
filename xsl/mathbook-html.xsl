@@ -8551,6 +8551,47 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
 <xsl:comment>End: StatCounter code</xsl:comment>
 </xsl:template>
 
+<!-- ############# -->
+<!-- Serialization -->
+<!-- ############# -->
+
+<!-- Convert a node (perhaps the root of a node-set       -->
+<!-- built from an RTF) into its string representation.   -->
+<!-- Used initially for conversion of PreTeXt markup to   -->
+<!-- the JSON format of a Jupyter notebook.  Identical to -->
+<!-- https://stackoverflow.com/questions/6696382 at       -->
+<!-- comment https://stackoverflow.com/a/15783514         -->
+
+<xsl:template match="*" mode="serialize">
+    <xsl:text>&lt;</xsl:text>
+    <xsl:value-of select="name()"/>
+    <xsl:apply-templates select="@*" mode="serialize" />
+    <xsl:choose>
+        <xsl:when test="node()">
+            <xsl:text>&gt;</xsl:text>
+            <xsl:apply-templates mode="serialize" />
+            <xsl:text>&lt;/</xsl:text>
+            <xsl:value-of select="name()"/>
+            <xsl:text>&gt;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text> /&gt;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="@*" mode="serialize">
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="name()"/>
+    <xsl:text>="</xsl:text>
+    <xsl:value-of select="."/>
+    <xsl:text>"</xsl:text>
+</xsl:template>
+
+<xsl:template match="text()" mode="serialize">
+    <xsl:value-of select="."/>
+</xsl:template>
+
 <!-- Miscellaneous -->
 
 <!-- Inline warnings go into text, no matter what -->
