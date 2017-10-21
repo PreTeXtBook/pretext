@@ -5427,11 +5427,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="autoplay" select="$autoplay" />
         </xsl:apply-templates>
     </xsl:variable>
+    <!-- allowfullscreen is an iframe parameter, -->
+    <!-- not a YouTube embed parameter, but it's -->
+    <!-- use enables the "full screen" button    -->
+    <!-- http://w3c.github.io/test-results/html51/implementation-report.html -->
     <iframe id="{$int-id}"
             type="text/html"
             width="{$width}"
             height="{$height}"
             frameborder="0"
+            allowfullscreen=""
             src="{$source-url}" />
 </xsl:template>
 
