@@ -5415,6 +5415,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             width="{$width}"
             height="{$height}"
             frameborder="0"
+            allowfullscreen=""
             src="{$source-url}" />
 </xsl:template>
 
