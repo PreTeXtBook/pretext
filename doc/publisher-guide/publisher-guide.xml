@@ -25,6 +25,7 @@
         <title><pretext /> Publisher's Guide</title>
 
         <xi:include href="frontmatter.xml" />
+        <xi:include href="production.xml" />
         <xi:include href="backmatter.xml" />
 
     </book>

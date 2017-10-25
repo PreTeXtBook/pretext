@@ -33,7 +33,6 @@
         <xi:include href="add-ons.xml" />
         <xi:include href="mbx-script.xml" />
         <xi:include href="webwork.xml" />
-        <xi:include href="production.xml" />
         <xi:include href="backmatter.xml" />
 
     </book>
