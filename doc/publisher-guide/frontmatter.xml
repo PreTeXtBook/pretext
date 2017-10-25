@@ -33,4 +33,8 @@
         </copyright>
     </colophon>
 
+    <preface>
+        <p>Once you have <em>authored</em> your document, then it becomes time to <em>publish</em> it.  You could engage a publisher to help you, likely at some cost, such as surrendering your copyright.  Or perhaps you intend to retain ownership of your copyright and use it to provide an open license.  Then you are likely both the author and the publisher.  In this case, conversions from <pretext /> to various output formats will help you with many of the tasks a publisher might help you with.  But there is still more to know and do.  This guide will help you.</p>
+    </preface>
+
 </frontmatter>
