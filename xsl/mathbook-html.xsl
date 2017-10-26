@@ -921,9 +921,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="notation" mode="backmatter">
     <tr>
         <td style="text-align:left; vertical-align:top;">
-            <xsl:text>\(</xsl:text>
+            <xsl:call-template name="begin-inline-math" />
             <xsl:value-of select="usage" />
-            <xsl:text>\)</xsl:text>
+            <xsl:call-template name="end-inline-math" />
         </td>
         <td style="text-align:left; vertical-align:top;">
             <xsl:apply-templates select="description" />
@@ -3890,8 +3890,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- look ahead to absorb immediate clause-ending punctuation -->
         <xsl:apply-templates select="." mode="get-clause-punctuation" />
     </xsl:variable>
-    <!-- wrap tightly in math delimiters -->
-    <xsl:text>\(</xsl:text>
+    <!-- wrap tightly in inline-math delimiters -->
+    <xsl:call-template name="begin-inline-math" />
     <!-- we clean whitespace that is irrelevant      -->
     <!-- MathJax is more tolerant than Latex, but    -->
     <!-- we choose to treat math bits identically    -->
@@ -3901,6 +3901,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="sanitize-latex">
         <xsl:with-param name="text" select="$raw-latex" />
     </xsl:call-template>
+    <xsl:call-template name="end-inline-math" />
+</xsl:template>
+
+<!-- These two templates provide the delimiters for -->
+<!-- inline math, so we can adjust with overides.   -->
+<xsl:template name="begin-inline-math">
+    <xsl:text>\(</xsl:text>
+</xsl:template>
+
+<xsl:template name="end-inline-math">
     <xsl:text>\)</xsl:text>
 </xsl:template>
 
@@ -6029,7 +6039,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="mag">
         <xsl:apply-templates />
     </xsl:variable>
-    <xsl:value-of select="str:replace($mag,'\pi','\(\pi\)')"/>
+    <xsl:variable name="math-pi">
+        <xsl:call-template name="begin-inline-math" />
+        <xsl:text>\pi</xsl:text>
+        <xsl:call-template name="end-inline-math" />
+    </xsl:variable>
+    <xsl:value-of select="str:replace($mag,'\pi',$math-pi)"/>
 </xsl:template>
 
 <!-- unit and per children of a quantity element    -->
@@ -8449,10 +8464,10 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- case authors want to build on these macros       -->
 <xsl:template name="latex-macros">
     <div class="hidden-content">
-    <xsl:text>\(</xsl:text>
+    <xsl:call-template name="begin-inline-math" />
     <xsl:value-of select="$latex-packages-mathjax" />
     <xsl:value-of select="$latex-macros" />
-    <xsl:text>\)</xsl:text>
+    <xsl:call-template name="end-inline-math" />
     </div>
 </xsl:template>
 
