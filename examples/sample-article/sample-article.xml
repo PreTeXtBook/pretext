@@ -5052,7 +5052,7 @@ the xsltproc executable.
                     <image source="images/cross-square.png"/>
                 </sidebyside>
 
-                <p>Results will be incorrect for the latter if the widths of the left margin and the panel do not add to 100<percent />.</p>
+                <p>Results will be incorrect for the latter if the widths of the left margin and the panel do not add to 100<percent />.  In general, in the case of a single panel, the left margin, right margin, and panel width should all add up to 100<percent />.</p>
 
                 <p>Of course, asymmetric margins may be used with several panels.  The following is designed to leave a 25<percent /> gap between the two panels.</p>
 
