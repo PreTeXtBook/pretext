@@ -346,6 +346,7 @@ the xsltproc executable.
             -->
 
             <definition xml:id="definition-indefinite-integral">
+                <idx>indefinite integral</idx><idx><h>integral</h><h>indefinite integral</h></idx>
                 <notation>
                     <usage>\int\,f(x)\,dx</usage>
                     <description>indefinite integral of <m>f(x)</m></description>
@@ -430,7 +431,7 @@ the xsltproc executable.
                 <output>-1/2*I*sqrt(pi)*erf(I*x)</output>
             </sage>
 
-            <p>You can give a Sage element a <c>doctest</c> attribute, whose value mirrors the optional hash tags used in Sage doctests.  Possible values are <c>random</c>, <c>long time</c>, <c>not implemented</c>, <c>not tested</c>, <c>known bug</c>, <c>absolute</c>, <c>relative</c>, and <c>optional</c>.  The values <c>absolute</c> and <c>relative</c> refer to floating-point tolerances for equality and require a second attribute <c>tolerance</c> to specify a floating point value.  The value <c>optional</c> refers to the test requiring that an optional Sage package be present.  The name of that package should be provided in the <c>package</c> attribute.</p>
+            <p>You can give a Sage element a <c>doctest</c><idx>doctest</idx><idx><h>attributes</h><h>doctest</h></idx> attribute, whose value mirrors the optional hash tags used in Sage doctests.  Possible values are <c>random</c>, <c>long time</c>, <c>not implemented</c>, <c>not tested</c>, <c>known bug</c>, <c>absolute</c>, <c>relative</c>, and <c>optional</c>.  The values <c>absolute</c> and <c>relative</c> refer to floating-point tolerances for equality and require a second attribute <c>tolerance</c> to specify a floating point value.  The value <c>optional</c> refers to the test requiring that an optional Sage package be present.  The name of that package should be provided in the <c>package</c> attribute.</p>
 
             <p>The next cell is marked in the source as <c>doctest="random"</c>, and so is specified as unpredictable and not tested.  But there is some <q>sample</q> output which will appear in the <latex /> version (and always be the same).</p>
 
@@ -583,6 +584,7 @@ the xsltproc executable.
                 <todo>Should equation references come with parentheses?</todo>
 
                 <corollary xml:id="corollary-FTC-derivative">
+                    <idx><h>Fundamental Theorem of Calculus</h><h>Corollary</h></idx>
                     <statement>
                         <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men>.</p>
                     </statement>
@@ -746,7 +748,6 @@ the xsltproc executable.
 
                     <exploration>
                         <title>Exploring Explorations</title>
-
                         <statement>
                             <p>This is an <c>&lt;exploration&gt;</c>.<idx><h>exploration</h></idx>  Other similar possibilities are <c>&lt;project&gt;</c><idx><h>project</h></idx>, <c>&lt;activity&gt;</c><idx><h>activity</h></idx>, <c>&lt;task&gt;</c><idx><h>task</h></idx>, and <c>&lt;investigation&gt;</c><idx><h>investigation</h></idx>.</p>
 
@@ -1114,7 +1115,7 @@ the xsltproc executable.
                 </image>
             </figure>
 
-            <p>Lists can have multiple columns.  With <init>HTML</init> items displayed in row-major order (horizontally first) and with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items <mdash /> derivatives and integrals <mdash /> where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.<idx xml:id="index-start-multicolumn" finish="index-finish-multicolumn"><h>Lists</h><h>multicolumn</h></idx><ol cols="5">
+            <p>Lists can have multiple columns.  With <init>HTML</init> items displayed in row-major order (horizontally first) and with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items <mdash /> derivatives and integrals <mdash /> where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.<idx xml:id="index-start-multicolumn" finish="index-finish-multicolumn"><h>list</h><h>multicolumn</h></idx><ol cols="5">
                 <li><p>Red</p></li>
                 <li><p>Blue</p></li>
                 <li><p>Green</p></li>
@@ -1246,6 +1247,7 @@ the xsltproc executable.
                 <p>The following is from the MathJax <url href="http://www.mathjax.org/demos/tex-samples/">demonstration page</url>, an identity due to Ramanujan:<me>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</me></p>
 
                 <p>And again, from the MathJax demonstration page, Maxwell's equations:<md>
+                    <idx>Maxwell's equations</idx>
                     <mrow>\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &amp; = \frac{4\pi}{c}\vec{\mathbf{j}}</mrow>
                     <mrow>\nabla \cdot \vec{\mathbf{E}} &amp; = 4 \pi \rho</mrow>
                     <mrow>\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}}</mrow>
@@ -1579,7 +1581,7 @@ the xsltproc executable.
                 <slash /><nbsp /><nbsp />
                 <solidus /></p>
 
-                <p>We also distinguish between abbreviations (<abbr>vs.</abbr>), acronyms (<acro>SCUBA</acro>) and initialisms (<init>XML</init>).  This is a test of the text verion of a multiplication symbol: 2<nbsp /><times /><nbsp />4.</p>
+                <p>We also distinguish between abbreviations (<abbr>vs.</abbr>), acronyms (<acro>SCUBA</acro>) and initialisms (<init>XML</init>).  This is a test of the text version of a multiplication symbol: 2<nbsp /><times /><nbsp />4.</p>
             </subsection>
 
             <subsection xml:id="section-urls">
@@ -1667,10 +1669,12 @@ the xsltproc executable.
 
             <subsection>
                 <title>Biological Names</title>
+                <idx>biological names</idx>
+                <idx><h>scientific names</h><see>biological names</see></idx>
 
-                <p>The <c>taxon</c> element can be used all by itself to get an italicized scientific name, as in <taxon>Escherichia coli</taxon>.  It can also be structured with the elements <c>genus</c> and <c>species</c>, as in using both together in <taxon><genus>Cyclops</genus><species>kolensis</species></taxon>.  Or the subelements can be used individually.  Rules for capitalization are presently your responsibility as an author.  Possible improvements include new subelements, attributes for database identifiers, and checks on capitalization.  Also, we might automatically abbreviate the genus after first use.</p>
+                <p>The <c>taxon</c><idx>taxon</idx><idx><h>biological names</h><h>taxon</h></idx> element can be used all by itself to get an italicized scientific name, as in <taxon>Escherichia coli</taxon>.  It can also be structured with the elements <c>genus</c><idx>genus</idx><idx><h>biological names</h><h>genus</h></idx> and <c>species</c>,<idx>species</idx><idx><h>biological names</h><h>species</h></idx> as in using both together in <taxon><genus>Cyclops</genus><species>kolensis</species></taxon>.  Or the subelements can be used individually.  Rules for capitalization are presently your responsibility as an author.  Possible improvements include new subelements, attributes for database identifiers, and checks on capitalization.  Also, we might automatically abbreviate the genus after first use.</p>
 
-                <p>There is an attribute, <c>@ncbi</c> that you can use on the <c>taxon</c> element to precisely identify the organism you are discussing using an identification number from the <url href="https://www.ncbi.nlm.nih.gov/">National Center for Biotechnology Information</url>.  Their <url href="https://www.ncbi.nlm.nih.gov/taxonomy">taxonomy</url> is at <c>www.ncbi.nlm.nih.gov/taxonomy</c>.  Right now, we do not do anything with this attribute, but things like links are certainly possible.  See the source of this document to see it in use with <taxon ncbi="7229"><genus>Drosophila</genus><species>miranda</species></taxon> which could be used to construct a link to <url href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=7229">further information via id number</url> or even <url href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Drosophila+miranda">further information via just the name</url>.</p>
+                <p>There is an attribute, <c>@ncbi</c><idx>ncbi attribute</idx><idx><h>attributes</h><h>ncbi attribute</h></idx><idx><h>biological names</h><h>ncbi attribute</h></idx> that you can use on the <c>taxon</c> element to precisely identify the organism you are discussing using an identification number from the <url href="https://www.ncbi.nlm.nih.gov/">National Center for Biotechnology Information</url>.  Their <url href="https://www.ncbi.nlm.nih.gov/taxonomy">taxonomy</url> is at <c>www.ncbi.nlm.nih.gov/taxonomy</c>.  Right now, we do not do anything with this attribute, but things like links are certainly possible.  See the source of this document to see it in use with <taxon ncbi="7229"><genus>Drosophila</genus><species>miranda</species></taxon> which could be used to construct a link to <url href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=7229">further information via id number</url> or even <url href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?name=Drosophila+miranda">further information via just the name</url>.</p>
             </subsection>
 
             <subsection>
@@ -1681,7 +1685,7 @@ the xsltproc executable.
 
         </section>
 
-
+        <idx><h>biological names</h><h>taxon</h></idx>
         <section xml:id="graphics">
             <title>Graphics</title>
 
@@ -1691,6 +1695,8 @@ the xsltproc executable.
 
             <subsection>
                 <title><latex /> images</title>
+                <idx><latex /> image</idx>
+                <idx><h>image</h><h><latex /> image</h></idx>
 
                 <p>There are several graphics engine packages that a <latex /> document can employ. Code from these packages renders diagrams automatically as part of normal processing of <latex /> files.  For HTML output the <c>mbx</c> script produces SVG versions of the pictures.  The script can also produce standalone TEX source files, PDFs, PNGs, and EPSs. The packages should be loaded in <c>docinfo/latex-image-preamble</c>, which is also where global package settings should be made. As mentioned in Subsection <xref ref="subsection-reserved-characters"/>, if any ampersands occur in your <latex /> code you should use the <c>\amp</c> macro. These first examples are from the <url href="http://www.texample.net/tikz/examples/">TeXample.net</url> site.</p>
 
@@ -2476,6 +2482,17 @@ the xsltproc executable.
                 <idx><h>unordered list</h></idx>
                 <idx><h>list</h><h>unordered</h></idx>
 
+                <p>
+                   Use <c>ol</c> to make an ordered list,<idx><h>ordered list</h></idx>
+                   and <c>ul</c> to make an unordered (bulleted) list.
+                   In both cases, use <c>li</c> for each entry.  If an entry contains
+                   more than one paragraph, then each must be wrapped in <c>p</c>.
+                   <idx><h>unordered list</h></idx>
+                   <idx><h>list</h><h>ordered</h></idx>
+                   <idx><h>list</h><h>unordered</h></idx>
+                </p>
+
+
                 <p>This section contains nested lists, to demonstrate how they get assigned labels (numbering, symbols).  But we begin with two simple lists, demonstrating an ordered list and an unordered list.  See the end of section for an example of a description list.  Since Jupyter notebooks use markdown syntax, their lists are less flexible.  So some assertions here may be wrong when viewed as a Jupyter notebook.  Note in the source the optional use of a paragraph (<c>p</c>) for the list items.</p>
 
                 <p><ol>
@@ -2609,6 +2626,7 @@ the xsltproc executable.
 
                 <definition>
                     <title>Group</title>
+                    <idx>Group</idx>
                     <statement>
                         <p><ol label="a)">
                             <li>There is a binary operation, denoted <q><m>\cdot</m></q>.</li>
@@ -2705,6 +2723,7 @@ the xsltproc executable.
             <subsection>
                 <title>Description Lists</title>
 
+                <p>Use <c>dl</c> to make a description list<idx><h>description list</h></idx><idx><h>list</h><h>description</h></idx>. Inside of those tags, use <c>li</c> for each entry. Then, use <c>title</c> to specify the term being described and <c>p</c> to specify the description.</p>
                 <p>A <q>description</q><idx><h>description list</h></idx><idx><h>list</h><h>description</h></idx> list has a short term or phrase that is prominent, followed by a short description.  It is modeled on the lists of similar structure in both <latex /> and HTML.  It makes for a nice medium-weight way to define terms, somewhere in-between the <c>term</c> tag which just makes a term prominent in a sentence, and a <c>definition</c>, which is set off, has a heading, a number, and a title.  This example is from Bob Plantz.<dl>
                     <li>
                         <title>Central Processing Unit (CPU)</title>
@@ -2749,6 +2768,7 @@ the xsltproc executable.
 
             <subsection>
                 <title>Named Lists</title>
+                <idx>named list</idx><idx><h>list</h><h>named</h></idx>
 
                 <p>A list can be wrapped with a <c>&lt;list&gt;</c> element, so that it earns a number, can be given a title and have an introduction and conclusion.  Cross-references to individual list items get a bit absurd as they are prefixed with the number of the list and then the number of the item, so conceivably you could get a number like <c>4.5.3:2.a.ii</c>.</p>
 
@@ -3594,10 +3614,12 @@ the xsltproc executable.
 
             <subsection>
                 <title>JSXGraph</title>
+                <idx>JSXGraph</idx>
 
                 <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is contrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">example</url> is taken from the JSXGraph <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>.  Width is 75<percent /> and aspect ratio is 4:3.</p>
 
                 <figure>
+                    <idx>Archimedian Spiral</idx>
                     <caption>The Archimedian Spiral <m>r = a + b\theta</m>, <m>0\leq\theta\leq 8\pi</m></caption>
                     <jsxgraph xml:id="jsxgraph-archimedian-spiral" width="75%" aspect="4:3">
                         <!-- http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral -->
@@ -4074,7 +4096,7 @@ the xsltproc executable.
             <title>Exercises</title>
 
             <introduction>
-                <p>Exercises in an <q>exercises</q> section are numbered automatically.  However, what if you have a busted problem and remove it?  Then a bunch of problem numbers change and your list of homework for your students changes as well.  What a mess.  Use auto-numbering while writing and refining.  Once stable, go ahead and hard-code problem numbers as you delete/add.  Notice the oddly numbered problem below.  Once you go down this road, you can't stop.  But instructors will thank you for it.</p>
+                <p>Exercises in an <q>exercises</q><idx>exercise</idx> section are numbered automatically.  However, what if you have a busted problem and remove it?  Then a bunch of problem numbers change and your list of homework for your students changes as well.  What a mess.  Use auto-numbering while writing and refining.  Once stable, go ahead and hard-code problem numbers as you delete/add.  Notice the oddly numbered problem below.  Once you go down this road, you can't stop.  But instructors will thank you for it.</p>
 
                 <p>More precisely, once you hard-code a number for a problem, you will likely need to hard-code every subsequent problem number in that section of exercises.  This is because the automatic numbering is unlikely to be what you really want, or what you had before.</p>
             </introduction>
@@ -4143,7 +4165,7 @@ the xsltproc executable.
         <section xml:id="section-cross-referencing">
             <title>Cross-Referencing</title>
 
-            <p>Cross-references are easy, since that is a key reason for having a highly structured document.  Here is a useful feature if you elect to use it.  Any <c>&lt;xref&gt;</c> will <q>know</q> what it points to, so you can let it provide the <q>naming</q> part of the cross-reference text.  You can turn this on globally with the command-line parameter <c>autoname</c><idx><h>autoname</h></idx> set to <c>'yes'</c>.  If you do that, you will see most of the names in this document doubled, since the names are written into the source already in most places outside of this section.  Try it and see: use <c>--stringparam autoname 'yes'</c> as an argument to <c>xsltproc</c>.</p>
+            <p>Cross-references<idx>cross-reference</idx> are easy, since that is a key reason for having a highly structured document.  Here is a useful feature if you elect to use it.  Any <c>&lt;xref&gt;</c> will <q>know</q> what it points to, so you can let it provide the <q>naming</q> part of the cross-reference text.  You can turn this on globally with the command-line parameter <c>autoname</c><idx><h>autoname</h></idx> set to <c>'yes'</c>.  If you do that, you will see most of the names in this document doubled, since the names are written into the source already in most places outside of this section.  Try it and see: use <c>--stringparam autoname 'yes'</c> as an argument to <c>xsltproc</c>.</p>
 
             <p>Moreover, the names themselves will change with the use of the one language dependent file.  And another bonus is that with an autoname, you automatically get a <em>non-breaking</em> space between the name and the reference.  The autoname switch makes no sense for <q>provisional</q> cross-references, since there is no information about what they point to.</p>
 
@@ -4238,7 +4260,7 @@ the xsltproc executable.
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul></p>
 
-            <p>The <c>url</c> element may be used to link to a data file, either externally, or internally, if you want to make such an object available to a reader.  A good example use case is a spreadsheet that might be part of an exercise, or contain data relevant to some discussion.  First let us suppose the data resides somewhere on the Internet, then just use the complete address.  Here is one from Microsoft: <url href="http://go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</url>.</p>
+            <p>The <c>url</c><idx>url</idx> element may be used to link to a data file, either externally, or internally, if you want to make such an object available to a reader.  A good example use case is a spreadsheet that might be part of an exercise, or contain data relevant to some discussion.  First let us suppose the data resides somewhere on the Internet, then just use the complete address.  Here is one from Microsoft: <url href="http://go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</url>.</p>
 
             <p>For a link like the previous one, you might want to provide advice appropriate for your audience about using a context menu to download a file, or how to configure helper/viewer applications.</p>
 
@@ -4250,13 +4272,14 @@ the xsltproc executable.
 
         <section xml:id="section-internationalization">
             <title>Internationalization</title>
+            <idx>internationalization</idx>
 
             <p>Supporting a multitude of possible characters, across many languages and across many output formats can be a challenge.  One of our goals is to make this easier for authors.  Fortunately, the Unicode standard has led to improvements from the 7-bit ASCII standard of old.</p>
 
             <paragraphs>
                 <title>Unicode Characters for HTML Output</title>
 
-                <p>First, we discuss HTML output.  If you include Unicode characters in your <pretext /> source, they should survive just fine <foreign>en route</foreign> to a web browser or e-reader.  Here are the caveats for HTML output:<ul>
+                <p>First, we discuss HTML output.  If you include Unicode<idx>Unicode</idx> characters in your <pretext /> source, they should survive just fine <foreign>en route</foreign> to a web browser or e-reader.  Here are the caveats for HTML output:<ul>
                     <li><p>So that you can continue to get the best results with print and PDF output, use available empty elements for special characters, even if targeting HTML output, before resorting to a Unicode character.  For example, use <c>&lt;times /&gt;</c> for a small <q>multiplication sign</q> in text before resorting to the Unicode character <c>U+00D7</c>.</p></li>
 
                     <li><p>How you actually enter Unicode characters into your source file is dependent on your editor and operating system, and is therefore outside the scope of our documentation.  You can cut/paste characters and text from the source of our examples for initial testing and experimentation.</p></li>
@@ -4487,7 +4510,7 @@ the xsltproc executable.
         <section>
             <title>Pre-Formatted Text</title>
 
-            <p>In Sage, if you wanted to build a matrix, then you would use the <c>matrix()</c> constructor.  Here is the matrix of second partials of <m>f(x,y)=x^3+8x^2y^3 + y^4</m>, as you would enter it in Sage.  Notice that <c>SR</c> is the ring of symbolic expressions, <c>Symbolic Ring</c>.</p>
+            <p>In Sage, if you wanted to build a matrix<idx>matrix</idx>, then you would use the <c>matrix()</c> constructor.  Here is the matrix of second partials of <m>f(x,y)=x^3+8x^2y^3 + y^4</m>, as you would enter it in Sage.  Notice that <c>SR</c> is the ring of symbolic expressions, <c>Symbolic Ring</c>.</p>
 
             <pre>
             var('x', 'y')
@@ -4881,7 +4904,7 @@ the xsltproc executable.
             <introduction>
                 <title>Introduction</title>
 
-                <p>The flow of a page is almost universally top-to-bottom.  But at times you would like to go <em>across</em> a page, perhaps to compare items (identical content in two different languages), or to make good use of a page real estate by grouping several small items together (<eg /> images).  So the <c>&lt;sidebyside&gt;</c> tag is strictly a layout device, though it does convey some meaning by grouping certain objects together. A variety of different objects can be put side-by-side using the <c>sidebyside</c> element.  Specifically, <c>figure</c>, <c>table</c>, <c>listing</c>, <c>paragraphs</c>, <c>image</c>, <c>tabular</c>, <c>p</c>, <c>ol</c>, <c>ul</c>, <c>dl</c>, <c>pre</c>, <c>poem</c>, and more.  The individual components of a <c>&lt;sidebyside&gt;</c> are generically called <term>panels</term>.</p>
+                <p>The flow of a page is almost universally top-to-bottom.  But at times you would like to go <em>across</em> a page, perhaps to compare items (identical content in two different languages), or to make good use of a page real estate by grouping several small items together (<eg /> images).  So the <c>&lt;sidebyside&gt;</c> tag is strictly a layout device, though it does convey some meaning by grouping certain objects together. A variety of different objects can be put side-by-side using the <c>sidebyside</c> element.  Specifically, <c>figure</c>, <c>table</c>, <c>listing</c>, <c>paragraphs</c>, <c>image</c>, <c>tabular</c>, <c>p</c>, <c>ol</c>, <c>ul</c>, <c>dl</c>, <c>pre</c>, <c>poem</c>, and more.  The individual components of a <c>&lt;sidebyside&gt;</c> are generically called <term>panels</term><idx>panels</idx>.</p>
 
                 <p>As a layout device, the <c>&lt;sidebyside&gt;</c> does not allow a <c>&lt;caption&gt;</c>, is never numbered, and therefore cannot be cross-referenced.  You may cross-reference whatever element holds the <c>&lt;sidebyside&gt;</c>, and many of the panels may be cross-referenced individually.</p>
 
@@ -4972,7 +4995,7 @@ the xsltproc executable.
             <subsection>
                 <title>Images</title>
 
-                <p>We can use the <c>sidebyside</c> element to put <c>images</c> next to each other.  These will illustrate a text, but with no captions or numbers, cannot be cross-referenced.  This next example has <c>10%</c> margins, and the panels have widths <c>25%</c> and <c>40%</c>, leaving <c>15%</c> computed as the one inter-panel space.</p>
+                <p>We can use the <c>sidebyside</c> element to put <c>images</c><idx>image</idx> next to each other.  These will illustrate a text, but with no captions or numbers, cannot be cross-referenced.  This next example has <c>10%</c> margins, and the panels have widths <c>25%</c> and <c>40%</c>, leaving <c>15%</c> computed as the one inter-panel space.</p>
 
                 <sidebyside widths="25% 40%" margins="10%">
                     <image source="images/cross-square.png"/>
@@ -5199,7 +5222,7 @@ the xsltproc executable.
             <subsection>
                 <title>Tables Side-By-Side</title>
 
-                <p>Tables can also be put side-by-side, as demonstrated below in <xref ref="table-sidebyside-global" text="type-global"/>; naturally, subtables can be referenced as in <xref ref="table-sidebyside-subtable" text="type-global"/>.</p>
+                <p>Tables<idx>table</idx> can also be put side-by-side, as demonstrated below in <xref ref="table-sidebyside-global" text="type-global"/>; naturally, subtables can be referenced as in <xref ref="table-sidebyside-subtable" text="type-global"/>.</p>
 
                 <figure xml:id="table-sidebyside-global">
                     <caption>Side-by-Side, with tables as children</caption>
@@ -5708,11 +5731,12 @@ the xsltproc executable.
                 <title>Poems as Side-By-Side Panels</title>
 
 
-                <p>Poems may be panels of a side-by-side layout.  Here we place some commentary alongside.  See <xref ref="poetry" text="type-global" /> for general information about poetry.</p>
+                <p>Poems<idx>poem</idx> may be panels of a side-by-side layout.  Here we place some commentary alongside.  See <xref ref="poetry" text="type-global" /> for general information about poetry.</p>
 
                 <sidebyside widths="50% 50%">
                     <poem>
                         <title>Fire and Ice</title>
+                        <idx>Fire and Ice, Frost</idx>
                         <author>Robert Frost</author>
                         <stanza>
                             <line>Some say the world will end in fire,</line>
@@ -5738,6 +5762,7 @@ the xsltproc executable.
                 <sidebyside widths="68% 30%">
                     <poem>
                         <title>Sonnet to Liberty</title>
+                        <idx>Sonnet to Liberty, Wilde</idx>
                         <author>Oscar Wilde</author>
                         <stanza>
                             <line>Not that I love thy children, whose dull eyes</line>
@@ -5798,6 +5823,7 @@ the xsltproc executable.
                     <sidebyside>
                         <poem>
                             <title>The Stolen Child</title>
+                            <idx>Stolen Child, The, Yeats</idx>
                             <stanza>
                                 <line>Where dips the rocky highland</line>
                                 <line>Of Sleuth Wood in the lake,</line>
@@ -6331,10 +6357,11 @@ the xsltproc executable.
         <section xml:id="poetry">
             <title>Poetry</title>
 
-            <p>There is support for poems via the <c>poem</c> tag, which can contain a <c>title</c>, <c>author</c> and multiple <c>stanza</c>, each containing multiple <c>line</c>.  See the source of the following poem for an example of the exact arrangement.  Note how the first quote crosses two <c>line</c> elements and how this is handled in the source.  There are many very flexible options for horizontal alignment and indentation.  Further extensive examples, constructed by Jahrme Risner, are available in the example Humanities document.</p>
+            <p>There is support for poems via the <c>poem</c><idx>poem</idx> tag, which can contain a <c>title</c>, <c>author</c> and multiple <c>stanza</c>, each containing multiple <c>line</c>.  See the source of the following poem for an example of the exact arrangement.  Note how the first quote crosses two <c>line</c> elements and how this is handled in the source.  There are many very flexible options for horizontal alignment and indentation.  Further extensive examples, constructed by Jahrme Risner, are available in the example Humanities document.</p>
 
             <poem xml:id="poem-light-brigade">
                 <title>The Charge of the Light Brigade</title>
+                <idx>Charge of the Light Brigade, The, Tennyson</idx>
                 <author>Alfred Lord Tennyson</author>
 
                 <stanza>
@@ -6381,7 +6408,7 @@ the xsltproc executable.
             <title>Advanced Numbering</title>
 
             <introduction>
-                <p>This section demonstrates the numbering patterns used throughout <pretext />.  There are five subsections.  Two intermediate subsections each have two subsubsections.  This creates a total of seven divisions that are leaves of the document tree.  In each leaf we have placed two numbered theorems, for a total of fourteen.  There is no real content, this is just a demonstration.</p>
+                <p>This section demonstrates the numbering<idx>numbering</idx> patterns used throughout <pretext />.  There are five subsections.  Two intermediate subsections each have two subsubsections.  This creates a total of seven divisions that are leaves of the document tree.  In each leaf we have placed two numbered theorems, for a total of fourteen.  There is no real content, this is just a demonstration.</p>
 
                 <p>Use values of <c>0</c> through <c>3</c> for the <c>numbering.theorems.level</c> parameter to see how these numbers change accordingly.  It is easiest to compare if you use <c>chunk.level &lt; 2</c> so the theorems all land on the same page if you are previewing in HTML.</p>
             </introduction>
@@ -6567,7 +6594,7 @@ the xsltproc executable.
             <subsection xml:id="rename-facility">
                 <title>Renaming Document Parts</title>
 
-                <p><q>Names</q> for various parts of a document are determined exactly once for each language, ensuring consistency and saving you the bother of always typing them in.</p>
+                <p><q>Names</q><idx>name</idx> for various parts of a document are determined exactly once for each language, ensuring consistency and saving you the bother of always typing them in.</p>
 
                 <p>However, you may want to have <q>Conundrum</q>s<idx><h>conundrum</h><h>repurposed from proposition</h></idx> in your document and you have no use for any <q>Proposition</q>s.  So you can repurpose the <c>proposition</c> tag to render a different name.  Or you might have a Lab Manual and want to rename <c>subsection</c> as <q>Activity</q>.  See the <c>docinfo</c> portion of this sample article to see how this is done, in concert with the example below.</p>
 
@@ -6616,7 +6643,7 @@ the xsltproc executable.
             <appendix>
                 <title>Index</title>
 
-                <p>There is an index manufactured at the end of the back matter.  So we are talking about it here, rather than within the index, which is an impossibility.  It contains some sample entries, and is not meant to be comprehensive.  Look at the source of this XML file, searching on <c>&lt;index&gt;</c>, to see how they are written.  They may be placed inside of a a variety of structures, and their location greatly influences the cross-references produced in the HTML version of the index.</p>
+                <p>There is an index manufactured at the end of the back matter.  So we are talking about it here, rather than within the index, which is an impossibility.  It contains some sample entries, and is not meant to be comprehensive.  Look at the source of this XML file, searching on <c>&lt;idx&gt;</c>, to see how they are written.  They may be placed inside of a a variety of structures, and their location greatly influences the cross-references produced in the HTML version of the index.</p>
 
                 <p>The <latex /> version of the index is more traditional, using page numbers to reference locations.  A newer package is used to create the index, and so there is no extra intermediate step required to process the index.  The one downside of this convenience is that index entries may not be placed in the back colophon (which is the only subdivision that may follow the index).</p>
 
