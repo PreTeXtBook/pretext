@@ -6337,7 +6337,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="email">
     <xsl:element name="a">
         <xsl:attribute name="href">
-            mailto:<xsl:value-of select="." />
+            <xsl:text>mailto:</xsl:text>
+            <xsl:value-of select="." />
         </xsl:attribute>
         <xsl:value-of select="." />
     </xsl:element>
