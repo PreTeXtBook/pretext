@@ -713,50 +713,51 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: edition, publisher, production notes, cover design, etc -->
 <!-- TODO: revision control commit hash -->
 <xsl:template match="frontmatter/colophon/credit">
-    <p>
-        <b>
+    <p class="credit">
+        <b class="title">
             <xsl:apply-templates select="role" />
         </b>
-        <xsl:text>: </xsl:text>
+        <xsl:text> </xsl:text>
         <xsl:apply-templates select="entity"/>
     </p>
 </xsl:template>
 
 <xsl:template match="frontmatter/colophon/edition">
-    <xsl:element name="p">
-        <xsl:element name="b">
+    <p class="credit">
+        <b class="title">
             <xsl:apply-templates select="." mode="type-name" />
-        </xsl:element>
-        <xsl:text>: </xsl:text>
+        </b>
+        <xsl:text> </xsl:text>
         <xsl:apply-templates />
-    </xsl:element>
+    </p>
 </xsl:template>
 
 <!-- website for the book -->
 <xsl:template match="frontmatter/colophon/website">
-    <xsl:element name="p">
-        <xsl:element name="b">
+    <p class="credit">
+        <b class="title">
             <xsl:apply-templates select="." mode="type-name" />
-        </xsl:element>
-        <xsl:text>: </xsl:text>
-        <xsl:element name="a">
-            <xsl:attribute name="href">
-                <xsl:apply-templates select="address" />
-            </xsl:attribute>
+        </b>
+        <xsl:text> </xsl:text>
+        <xsl:variable name="web-address">
+            <xsl:apply-templates select="address" />
+        </xsl:variable>
+        <a href="{$web-address}">
             <xsl:apply-templates select="name" />
-        </xsl:element>
-    </xsl:element>
+        </a>
+    </p>
 </xsl:template>
 
 <xsl:template match="frontmatter/colophon/copyright">
-    <p>
+    <p class="copyright">
+        <!-- Unicode copyright symbol -->
         <xsl:text>&#xa9;</xsl:text>
         <xsl:apply-templates select="year" />
-        <xsl:text>&#xa0;&#xa0;</xsl:text>
+        <xsl:text> </xsl:text>
         <xsl:apply-templates select="holder" />
     </p>
     <xsl:if test="shortlicense">
-        <p>
+        <p class="license">
             <xsl:apply-templates select="shortlicense" />
         </p>
     </xsl:if>
