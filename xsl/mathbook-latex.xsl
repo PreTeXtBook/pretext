@@ -3719,17 +3719,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{objectives}&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="solution[parent::*[&EXAMPLE-FILTER;]]">
+<!-- Examples can have hints, answers or solutions, -->
+<!-- but as examples we don't turn them on or off   -->
+<xsl:template match="hint[parent::*[&EXAMPLE-FILTER;]]|answer[parent::*[&EXAMPLE-FILTER;]]|solution[parent::*[&EXAMPLE-FILTER;]]|">
     <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
     <xsl:text>\textbf{</xsl:text>
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="'solution'" />
-    </xsl:call-template>
+    <xsl:apply-templates select="." mode="type-name" />
     <xsl:text>.}\quad </xsl:text>
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- A project may have a hint -->
+<!-- TODO: consolidate three tests twice,      -->
+<!-- and use modal template (ala EXAMPLE-LIKE) -->
+
+<!-- A project may have a hint, with switch control -->
 <xsl:template match="hint[parent::*[&PROJECT-FILTER;]]">
     <xsl:if test="$project.text.hint = 'yes'">
         <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
@@ -3742,7 +3745,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- A project may have an answer -->
+<!-- A project may have an answer, with switch control-->
 <xsl:template match="answer[parent::*[&PROJECT-FILTER;]]">
     <xsl:if test="$project.text.answer = 'yes'">
         <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
@@ -3755,7 +3758,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- A project may have a solution -->
+<!-- A project may have a solution, with switch control -->
 <xsl:template match="solution[parent::*[&PROJECT-FILTER;]]">
     <xsl:if test="$project.text.solution = 'yes'">
         <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
@@ -3768,7 +3771,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- A task may have a hint -->
+<!-- A task may have a hint, with switch control -->
 <xsl:template match="hint[parent::task]">
     <xsl:if test="$task.text.hint = 'yes'">
         <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
@@ -3781,7 +3784,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- A project may have an answer -->
+<!-- A task may have an answer, with switch control -->
 <xsl:template match="answer[parent::task]">
     <xsl:if test="$task.text.answer = 'yes'">
         <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
@@ -3794,7 +3797,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- A project may have a solution -->
+<!-- A task may have a solution, with switch control -->
 <xsl:template match="solution[parent::task]">
     <xsl:if test="$task.text.solution = 'yes'">
         <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
