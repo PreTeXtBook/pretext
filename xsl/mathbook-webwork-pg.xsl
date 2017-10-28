@@ -63,6 +63,10 @@
 <xsl:param name="static" select="'no'" />
 <xsl:variable name="b-static" select="$static = 'yes'" />
 
+<xsl:variable name="document-root" select="/mathbook/*[not(self::docinfo)]|/pretext/*[not(self::docinfo)]" />
+
+
+
 <!-- ################# -->
 <!-- File Organization -->
 <!-- ################# -->
@@ -200,36 +204,21 @@
     <xsl:text>## KEYWORDS(</xsl:text>
     <xsl:text>)&#xa;</xsl:text>
     <xsl:text>## TitleText1(</xsl:text>
-        <xsl:choose>
-            <xsl:when test="/mathbook/book">
-                <xsl:apply-templates select="/mathbook/book" mode="title-full" />
-            </xsl:when>
-            <xsl:when test="/mathbook/article">
-                <xsl:apply-templates select="/mathbook/article" mode="title-full" />
-            </xsl:when>
-        </xsl:choose>
+    <xsl:message>T<xsl:value-of select="local-name($document-root)"/></xsl:message>
+    <xsl:if test="$document-root/title">
+        <xsl:message>HERE</xsl:message>
+        <xsl:apply-templates select="$document-root" mode="title-full" />
+    </xsl:if>
     <xsl:text>)&#xa;</xsl:text>
     <xsl:text>## EditionText1(</xsl:text>
     <xsl:text>)&#xa;</xsl:text>
     <xsl:text>## AuthorText1(</xsl:text>
-        <xsl:choose>
-            <xsl:when test="/mathbook/book">
-                <xsl:for-each select="/mathbook/book/frontmatter/titlepage/author">
-                    <xsl:value-of select="personname"/>
-                    <xsl:if test="not(position()=last())">
-                        <xsl:text>, </xsl:text>
-                    </xsl:if>
-                </xsl:for-each>
-            </xsl:when>
-            <xsl:when test="/mathbook/article">
-                <xsl:for-each select="/mathbook/article/frontmatter/titlepage/author">
-                    <xsl:value-of select="personname"/>
-                    <xsl:if test="not(position()=last())">
-                        <xsl:text>, </xsl:text>
-                    </xsl:if>
-                </xsl:for-each>
-            </xsl:when>
-        </xsl:choose>
+    <xsl:for-each select="$document-root/frontmatter/titlepage/author">
+        <xsl:value-of select="personname"/>
+        <xsl:if test="following::personname">
+            <xsl:text>, </xsl:text>
+        </xsl:if>
+    </xsl:for-each>
     <xsl:text>)&#xa;</xsl:text>
     <!-- needs structural enclosure inline v. sectional          -->
     <!-- do not use structure number, makes overrides impossible -->
@@ -258,7 +247,7 @@
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'authored'" />
     </xsl:call-template>
-    <xsl:text> MathBook XML');&#xa;</xsl:text>
+    <xsl:text> PreTeXt');&#xa;</xsl:text>
     <xsl:text>TEXT(beginproblem());&#xa;</xsl:text>
 </xsl:template>
 

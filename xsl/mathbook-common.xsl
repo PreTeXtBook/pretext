@@ -185,7 +185,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Improve source readability with whitespace control in text output mode   -->
 <!-- Newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
 <!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
-<xsl:strip-space elements="mathbook book article memo letter" />
+<xsl:strip-space elements="mathbook pretext book article memo letter" />
 <xsl:strip-space elements="frontmatter chapter appendix index-part index section subsection subsubsection exercises references introduction conclusion paragraphs subparagraph backmatter" />
 <xsl:strip-space elements="docinfo author abstract" />
 <xsl:strip-space elements="titlepage preface acknowledgement biography foreword dedication colophon" />
@@ -267,11 +267,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$toc.level != ''">
             <xsl:value-of select="$toc.level" />
         </xsl:when>
-        <xsl:when test="/mathbook/book">2</xsl:when>
-        <xsl:when test="/mathbook/article/section">1</xsl:when>
-        <xsl:when test="/mathbook/article">0</xsl:when>
-        <xsl:when test="/mathbook/letter">0</xsl:when>
-        <xsl:when test="/mathbook/memo">0</xsl:when>
+        <xsl:when test="$root/book">2</xsl:when>
+        <xsl:when test="$root/article/section">1</xsl:when>
+        <xsl:when test="$root/article">0</xsl:when>
+        <xsl:when test="$root/letter">0</xsl:when>
+        <xsl:when test="$root/memo">0</xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Table of Contents level not determined</xsl:message>
         </xsl:otherwise>
@@ -285,12 +285,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$numbering.theorems.level != ''">
             <xsl:value-of select="$numbering.theorems.level" />
         </xsl:when>
-        <xsl:when test="/mathbook/book/part">3</xsl:when>
-        <xsl:when test="/mathbook/book">2</xsl:when>
-        <xsl:when test="/mathbook/article/section">1</xsl:when>
-        <xsl:when test="/mathbook/article">0</xsl:when>
-        <xsl:when test="/mathbook/letter">0</xsl:when>
-        <xsl:when test="/mathbook/memo">0</xsl:when>
+        <xsl:when test="$root/book/part">3</xsl:when>
+        <xsl:when test="$root/book">2</xsl:when>
+        <xsl:when test="$root/article/section">1</xsl:when>
+        <xsl:when test="$root/article">0</xsl:when>
+        <xsl:when test="$root/letter">0</xsl:when>
+        <xsl:when test="$root/memo">0</xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Theorem numbering level not determined</xsl:message>
         </xsl:otherwise>
@@ -305,12 +305,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$numbering.projects.level != ''">
             <xsl:value-of select="$numbering.projects.level" />
         </xsl:when>
-        <xsl:when test="/mathbook/book/part">3</xsl:when>
-        <xsl:when test="/mathbook/book">2</xsl:when>
-        <xsl:when test="/mathbook/article/section">1</xsl:when>
-        <xsl:when test="/mathbook/article">0</xsl:when>
-        <xsl:when test="/mathbook/letter">0</xsl:when>
-        <xsl:when test="/mathbook/memo">0</xsl:when>
+        <xsl:when test="$root/book/part">3</xsl:when>
+        <xsl:when test="$root/book">2</xsl:when>
+        <xsl:when test="$root/article/section">1</xsl:when>
+        <xsl:when test="$root/article">0</xsl:when>
+        <xsl:when test="$root/letter">0</xsl:when>
+        <xsl:when test="$root/memo">0</xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Theorem numbering level not determined</xsl:message>
         </xsl:otherwise>
@@ -324,12 +324,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$numbering.equations.level != ''">
             <xsl:value-of select="$numbering.equations.level" />
         </xsl:when>
-        <xsl:when test="/mathbook/book/part">3</xsl:when>
-        <xsl:when test="/mathbook/book">2</xsl:when>
-        <xsl:when test="/mathbook/article/section">1</xsl:when>
-        <xsl:when test="/mathbook/article">0</xsl:when>
-        <xsl:when test="/mathbook/letter">0</xsl:when>
-        <xsl:when test="/mathbook/memo">0</xsl:when>
+        <xsl:when test="$root/book/part">3</xsl:when>
+        <xsl:when test="$root/book">2</xsl:when>
+        <xsl:when test="$root/article/section">1</xsl:when>
+        <xsl:when test="$root/article">0</xsl:when>
+        <xsl:when test="$root/letter">0</xsl:when>
+        <xsl:when test="$root/memo">0</xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Equation numbering level not determined</xsl:message>
         </xsl:otherwise>
@@ -343,12 +343,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$numbering.footnotes.level != ''">
             <xsl:value-of select="$numbering.footnotes.level" />
         </xsl:when>
-        <xsl:when test="/mathbook/book/part">3</xsl:when>
-        <xsl:when test="/mathbook/book">2</xsl:when>
-        <xsl:when test="/mathbook/article/section">1</xsl:when>
-        <xsl:when test="/mathbook/article">0</xsl:when>
-        <xsl:when test="/mathbook/letter">0</xsl:when>
-        <xsl:when test="/mathbook/memo">0</xsl:when>
+        <xsl:when test="$root/book/part">3</xsl:when>
+        <xsl:when test="$root/book">2</xsl:when>
+        <xsl:when test="$root/article/section">1</xsl:when>
+        <xsl:when test="$root/article">0</xsl:when>
+        <xsl:when test="$root/letter">0</xsl:when>
+        <xsl:when test="$root/memo">0</xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Footnote numbering level not determined</xsl:message>
         </xsl:otherwise>
@@ -360,12 +360,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="numbering-maxlevel">
     <xsl:variable name="max-feasible">
         <xsl:choose>
-            <xsl:when test="/mathbook/book/part">5</xsl:when>
-            <xsl:when test="/mathbook/book">4</xsl:when>
-            <xsl:when test="/mathbook/article/section">3</xsl:when>
-            <xsl:when test="/mathbook/article">0</xsl:when>
-            <xsl:when test="/mathbook/letter">0</xsl:when>
-            <xsl:when test="/mathbook/memo">0</xsl:when>
+            <xsl:when test="$root/book/part">5</xsl:when>
+            <xsl:when test="$root/book">4</xsl:when>
+            <xsl:when test="$root/article/section">3</xsl:when>
+            <xsl:when test="$root/article">0</xsl:when>
+            <xsl:when test="$root/letter">0</xsl:when>
+            <xsl:when test="$root/memo">0</xsl:when>
             <xsl:otherwise>
                 <xsl:message>MBX:BUG: New document type for maximum level defaults</xsl:message>
             </xsl:otherwise>
@@ -410,8 +410,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- or defaults to US English if not present          -->
 <xsl:variable name="document-language">
     <xsl:choose>
-        <xsl:when test="/mathbook/@xml:lang">
-            <xsl:value-of select="/mathbook/@xml:lang" />
+        <xsl:when test="$root/@xml:lang">
+            <xsl:value-of select="$root/@xml:lang" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:value-of select="'en-US'" />
@@ -420,12 +420,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 <!-- The main "mathbook" element only has two possible children     -->
+<!-- Or the main element could be "pretext" after name change       -->
 <!-- One is "docinfo", the other is "book", "article", etc.         -->
 <!-- This is of interest by itself, or the root of content searches -->
 <!-- And docinfo is the other child                                 -->
 <!-- These help prevent searching the wrong half                    -->
-<xsl:variable name="document-root" select="/mathbook/*[not(self::docinfo)]" />
-<xsl:variable name="docinfo" select="/mathbook/docinfo" />
+<xsl:variable name="root" select="/mathbook|/pretext" />
+<xsl:variable name="docinfo" select="$root/docinfo" />
+<xsl:variable name="document-root" select="$root/*[not(self::docinfo)]" />
 
 <!-- Source Analysis -->
 <!-- Some boolean variables ("b-*") for -->
@@ -467,7 +469,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$address.html" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="/mathbook/docinfo/address/html" />
+            <xsl:value-of select="$docinfo/address/html" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -478,7 +480,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$address.pdf" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="/mathbook/docinfo/address/pdf" />
+            <xsl:value-of select="$docinfo/address/pdf" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -640,13 +642,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: 2017-09-05, three places, keep as variable  -->
 <xsl:variable name="root-level">
     <xsl:choose>
-        <xsl:when test="/mathbook/book/part">-1</xsl:when>
-        <xsl:when test="/mathbook/book/chapter">0</xsl:when>
+        <xsl:when test="$root/book/part">-1</xsl:when>
+        <xsl:when test="$root/book/chapter">0</xsl:when>
         <!-- An article is rooted just above sections, -->
         <!-- on par with chapters of a book            -->
-        <xsl:when test="/mathbook/article">1</xsl:when>
-        <xsl:when test="/mathbook/letter">1</xsl:when>
-        <xsl:when test="/mathbook/memo">1</xsl:when>
+        <xsl:when test="$root/article">1</xsl:when>
+        <xsl:when test="$root/letter">1</xsl:when>
+        <xsl:when test="$root/memo">1</xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:BUG: Level offset undefined for this document type</xsl:message>
         </xsl:otherwise>
@@ -1175,7 +1177,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a big string, in LaTeX syntax.  It will need  -->
 <!-- manipulation to be usable on the MathJax side -->
 <xsl:variable name="latex-packages">
-    <xsl:for-each select="/mathbook/docinfo/latex-preamble/package">
+    <xsl:for-each select="$docinfo/latex-preamble/package">
         <xsl:text>\usepackage{</xsl:text>
         <xsl:apply-templates />
         <xsl:text>}</xsl:text>
@@ -1204,7 +1206,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="latex-left-justified">
         <xsl:call-template name="sanitize-text">
             <xsl:with-param name="text">
-                <xsl:value-of select="/mathbook/docinfo/macros" />
+                <xsl:value-of select="$docinfo/macros" />
             </xsl:with-param>
         </xsl:call-template>
     </xsl:variable>
@@ -2780,8 +2782,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="translation">
         <xsl:choose>
             <!-- First look in docinfo for document-specific rename -->
-            <xsl:when test="/mathbook/docinfo/rename[@element=$string-id and @lang=$document-language]">
-                <xsl:apply-templates select="/mathbook/docinfo/rename[@element=$string-id and @lang=$document-language]" />
+            <xsl:when test="$docinfo/rename[@element=$string-id and @lang=$document-language]">
+                <xsl:apply-templates select="$docinfo/rename[@element=$string-id and @lang=$document-language]" />
             </xsl:when>
             <!-- default to a lookup from the localization file's nodes -->
             <xsl:otherwise>
@@ -2847,7 +2849,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Override for document root node,          -->
 <!-- slide in "index" as preferential default, -->
 <!-- presuming it is not in use anywhere else  -->
-<xsl:template match="/mathbook/*[not(self::docinfo)]" mode="internal-id">
+<xsl:template match="/mathbook/*[not(self::docinfo)]|/pretext/*[not(self::docinfo)]" mode="internal-id">
     <xsl:choose>
         <xsl:when test="@xml:id">
             <xsl:value-of select="@xml:id" />
@@ -3492,7 +3494,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Lists live in paragraphs, exercises, objectives, so       -->
 <!-- should be referenced as part of some enclosing element.   -->
 <!-- "mathbook" helps some tree-climbing routines halt -->
-<xsl:template match="mathbook|introduction|conclusion|frontmatter|backmatter|sidebyside|ol|ul|dl|statement" mode="serial-number" />
+<xsl:template match="mathbook|pretext|introduction|conclusion|frontmatter|backmatter|sidebyside|ol|ul|dl|statement" mode="serial-number" />
 
 <!-- Poems go by their titles, not numbers -->
 <xsl:template match="poem" mode="serial-number" />
@@ -4697,10 +4699,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:choose>
             <xsl:when test="not(@scope)">
                 <xsl:choose>
-                    <xsl:when test="//mathbook/book"><xsl:text>book</xsl:text></xsl:when>
-                    <xsl:when test="//mathbook/article"><xsl:text>article</xsl:text></xsl:when>
-                    <xsl:when test="//mathbook/letter"><xsl:text>letter</xsl:text></xsl:when>
-                    <xsl:when test="//mathbook/memo"><xsl:text>memo</xsl:text></xsl:when>
+                    <xsl:when test="$root/book"><xsl:text>book</xsl:text></xsl:when>
+                    <xsl:when test="$root/article"><xsl:text>article</xsl:text></xsl:when>
+                    <xsl:when test="$root/letter"><xsl:text>letter</xsl:text></xsl:when>
+                    <xsl:when test="$root/memo"><xsl:text>memo</xsl:text></xsl:when>
                 </xsl:choose>
             </xsl:when>
             <xsl:otherwise>
@@ -5967,7 +5969,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:choose>
         <!-- quit at the top, and examine highest-match,    -->
         <!-- and for phrase-hybrid, we do a membership test -->
-        <xsl:when test="$parent/self::mathbook">
+        <xsl:when test="$parent/self::mathbook|$parent/self::pretext">
             <xsl:variable name="requires-global">
                 <xsl:choose>
                     <!-- no match, already high up tree, so no  -->
@@ -6074,8 +6076,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Common Constructions -->
 <!-- #################### -->
 
-<!-- With no special formatting  -->
-<!-- "PreTeXt" can be in -common -->
+<!-- With no special formatting, "PreTeXt" can be in -common -->
+<!-- Use of "pretext" as a root container should get higher  -->
+<!-- priority when used with /, or as a variable             -->
 <xsl:template match="pretext">
     <xsl:text>PreTeXt</xsl:text>
 </xsl:template>
@@ -6454,7 +6457,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
                 </xsl:if>
             </xsl:message>
         </xsl:when>
-        <xsl:when test="mathbook">
+        <xsl:when test="mathbook|pretext">
             <!-- at root, fail with no action -->
         </xsl:when>
         <xsl:otherwise>
@@ -6498,7 +6501,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Checks for errors that would be time-consuming -->
 <!-- if done repeatedly, so a pre-processing step   -->
 <!-- Calling context should be "mathbook" element   -->
-<xsl:template match="mathbook" mode="generic-warnings">
+<xsl:template match="mathbook|pretext" mode="generic-warnings">
     <xsl:apply-templates select="." mode="literate-programming-warning" />
     <xsl:apply-templates select="." mode="xinclude-warnings" />
     <xsl:apply-templates select="." mode="xmlid-warning" />
@@ -6508,7 +6511,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 </xsl:template>
 
 <!-- Literate Programming support is half-baked, 2017-07-21 -->
-<xsl:template match="mathbook" mode="literate-programming-warning">
+<xsl:template match="mathbook|pretext" mode="literate-programming-warning">
     <xsl:if test="$document-root//fragment">
         <xsl:call-template name="banner-warning">
             <xsl:with-param name="warning">
@@ -6525,7 +6528,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Using the modular  xinclude  scheme at the top level,      -->
 <!-- and forgetting the command-line switch is a common mistake -->
 <!-- The following is not perfect, but reasonably effective     -->
-<xsl:template match="mathbook" mode="xinclude-warnings">
+<xsl:template match="mathbook|pretext" mode="xinclude-warnings">
     <xsl:if test="book and not(book/chapter or book/part/chapter)">
         <xsl:message>
             <xsl:text>MBX:WARNING:    </xsl:text>
@@ -6545,7 +6548,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- 10 digits, hyphen/dash, underscore     -->
 <!-- TODO: Added 2016-10-29, make into a fatal error later -->
 <!-- Unique UI id's added 2017-09-25 as fatal error -->
-<xsl:template match="mathbook" mode="xmlid-warning">
+<xsl:template match="mathbook|pretext" mode="xmlid-warning">
     <xsl:variable name="xmlid-characters" select="concat('-_', &SIMPLECHAR;)" />
     <xsl:for-each select="//@xml:id">
         <xsl:if test="not(translate(., $xmlid-characters, '') = '')">
@@ -6577,7 +6580,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- We warn about WeBWorK table details that ultimately may not be respected -->
 <!-- if a problem is archived to .pg, and then that file is used on a WeBWorK -->
 <!-- server, and then WeBWorK's print copy mechanism is used to make a pdf    -->
-<xsl:template match="mathbook" mode="webwork-warnings">
+<xsl:template match="mathbook|pretext" mode="webwork-warnings">
     <xsl:variable name="coltop" select="//webwork//tabular/col/@top" />
     <xsl:variable name="cellbottom" select="//webwork//tabular/cell/@bottom" />
     <xsl:variable name="medium-major" select="//webwork//tabular//*[@top='medium' or @top='major' or @bottom='medium' or @bottom='major' or @left='medium' or @left='major' or @right='medium' or @right='major']" />
@@ -6626,7 +6629,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- templates in the places where elements are banned -->
 <!-- c, cline; unstructured cd, pre                    -->
 <!-- prompt, input, output for sage, console, program  -->
-<xsl:template match="mathbook" mode="text-element-warning">
+<xsl:template match="mathbook|pretext" mode="text-element-warning">
     <xsl:variable name="bad-elements" select="$document-root//c/*|$document-root//cline/*|$document-root//cd[not(cline)]/*|$document-root//pre[not(cline)]/*|$document-root//prompt/*|$document-root//input/*|$document-root//output/*" />
     <xsl:if test="$bad-elements">
         <xsl:message>
@@ -6653,7 +6656,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- then begin a run of further subdivisions.  This preliminary   -->
 <!-- material belongs in an introduction (or is for a conclusion). -->
 <!-- This test is not exhaustive, but will catch most cases.       -->
-<xsl:template match="mathbook" mode="subdivision-structure-warning">
+<xsl:template match="mathbook|pretext" mode="subdivision-structure-warning">
     <xsl:for-each select=".//chapter">
         <xsl:if test="p and section">
             <xsl:message>

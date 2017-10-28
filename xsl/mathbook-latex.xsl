@@ -160,10 +160,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$toc.level != ''">
             <xsl:value-of select="$toc.level" />
         </xsl:when>
-        <xsl:when test="/mathbook/book">2</xsl:when>
-        <xsl:when test="/mathbook/article">0</xsl:when>
-        <xsl:when test="/mathbook/letter">0</xsl:when>
-        <xsl:when test="/mathbook/memo">0</xsl:when>
+        <xsl:when test="$root/book">2</xsl:when>
+        <xsl:when test="$root/article">0</xsl:when>
+        <xsl:when test="$root/letter">0</xsl:when>
+        <xsl:when test="$root/memo">0</xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Table of Contents level not determined</xsl:message>
         </xsl:otherwise>
@@ -225,14 +225,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and we process it with the chunking template called below              -->
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
-    <xsl:apply-templates select="mathbook" mode="generic-warnings" />
-    <xsl:apply-templates select="mathbook" mode="deprecation-warnings" />
+    <xsl:apply-templates select="mathbook|pretext" mode="generic-warnings" />
+    <xsl:apply-templates select="mathbook|pretext" mode="deprecation-warnings" />
     <xsl:apply-templates />
 </xsl:template>
 
 <!-- We will have just one of the following -->
 <!-- and totally ignore docinfo             -->
-<xsl:template match="mathbook">
+<xsl:template match="/mathbook|/pretext">
     <xsl:variable name="filename">
         <xsl:apply-templates select="article|book|letter|memo" mode="internal-id" />
         <xsl:text>.tex</xsl:text>
@@ -421,14 +421,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\setotherlanguage{english}&#xa;</xsl:text>
     </xsl:if>
     <!--  -->
-    <xsl:if test="/mathbook/*[not(self::docinfo)]//@xml:lang='el'">
+    <xsl:if test="$document-root//@xml:lang='el'">
         <xsl:text>%% Greek (Modern) specified by 'el' language tag&#xa;</xsl:text>
         <xsl:text>%% Font families: CMU Serif, Linux Libertine O, GFS Artemisia&#xa;</xsl:text>
         <!-- <xsl:text>\setotherlanguage[variant=ancient,numerals=greek]{greek}&#xa;</xsl:text> -->
         <xsl:text>\setotherlanguage{greek}&#xa;</xsl:text>
         <xsl:text>\newfontfamily\greekfont[Script=Greek]{CMU Serif}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="/mathbook/*[not(self::docinfo)]//@xml:lang='ko-KR'">
+    <xsl:if test="$document-root//@xml:lang='ko-KR'">
         <xsl:text>%% Korean specified by 'ko-KR' language tag&#xa;</xsl:text>
         <xsl:text>\setotherlanguage{korean}&#xa;</xsl:text>
         <xsl:text>\newfontfamily\koreanfont{NanumMyeongjo}&#xa;</xsl:text>
@@ -445,7 +445,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\setotherlanguage{magyar}&#xa;</xsl:text>
     </xsl:if>
     <!--  -->
-    <xsl:if test="/mathbook/*[not(self::docinfo)]//@xml:lang='ru-RU'">
+    <xsl:if test="$document-root//@xml:lang='ru-RU'">
         <xsl:text>%% Russian specified by 'ru-RU' language tag&#xa;</xsl:text>
         <xsl:text>%% Font families: CMU Serif, Linux Libertine O&#xa;</xsl:text>
         <xsl:text>\setotherlanguage{russian}&#xa;</xsl:text>
@@ -531,24 +531,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Semantic Macros&#xa;</xsl:text>
     <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
     <xsl:text>%% Only defined here if required in this document&#xa;</xsl:text>
-    <xsl:if test="/mathbook//alert">
+    <xsl:if test="$document-root//alert">
         <xsl:text>%% Used for warnings, typically bold and italic&#xa;</xsl:text>
         <xsl:text>\newcommand{\alert}[1]{\textbf{\textit{#1}}}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="/mathbook//term">
+    <xsl:if test="$document-root//term">
         <xsl:text>%% Used for inline definitions of terms&#xa;</xsl:text>
         <xsl:text>\newcommand{\terminology}[1]{\textbf{#1}}&#xa;</xsl:text>
     </xsl:if>
     <!-- http://tex.stackexchange.com/questions/23711/strikethrough-text -->
     <!-- http://tex.stackexchange.com/questions/287599/thickness-for-sout-strikethrough-command-from-ulem-package -->
-    <xsl:if test="/mathbook//insert or /mathbook//delete or /mathbook//stale">
+    <xsl:if test="$document-root//insert or $document-root//delete or $document-root//stale">
         <xsl:text>%% Edits (insert, delete), stale (irrelevant, obsolete)&#xa;</xsl:text>
         <xsl:text>%% Package: underlines and strikethroughs, no change to \emph{}&#xa;</xsl:text>
         <xsl:text>\usepackage[normalem]{ulem}&#xa;</xsl:text>
         <xsl:text>%% Rules in this package reset proportional to fontsize&#xa;</xsl:text>
         <xsl:text>%% NB: *never* reset to package default (0.4pt?) after use&#xa;</xsl:text>
         <xsl:text>%% Macros will use colors if  latex.print='no'  (the default)&#xa;</xsl:text>
-        <xsl:if test="/mathbook//insert">
+        <xsl:if test="$document-root//insert">
             <xsl:text>%% Used for an edit that is an addition&#xa;</xsl:text>
             <xsl:text>\newcommand{\insertthick}{.1ex}&#xa;</xsl:text>
             <xsl:choose>
@@ -560,7 +560,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:if>
-        <xsl:if test="/mathbook//delete">
+        <xsl:if test="$document-root//delete">
             <xsl:text>%% Used for an edit that is a deletion&#xa;</xsl:text>
             <xsl:text>\newcommand{\deletethick}{.25ex}&#xa;</xsl:text>
             <xsl:choose>
@@ -572,13 +572,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:if>
-        <xsl:if test="/mathbook//stale">
+        <xsl:if test="$document-root//stale">
             <xsl:text>%% Used for inline irrelevant or obsolete text&#xa;</xsl:text>
             <xsl:text>\newcommand{\stalethick}{.1ex}&#xa;</xsl:text>
             <xsl:text>\newcommand{\stale}[1]{\renewcommand{\ULthickness}{\stalethick}\sout{#1}}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="/mathbook//fillin">
+    <xsl:if test="$document-root//fillin">
         <xsl:text>%% Used for fillin answer blank&#xa;</xsl:text>
         <xsl:text>%% Argument is length in em&#xa;</xsl:text>
         <xsl:text>\newcommand{\fillin}[1]{\underline{\hspace{#1em}}}&#xa;</xsl:text>
@@ -592,21 +592,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- ToC, PDF navigation panel, text heading all correct    -->
     <!-- Obstacle is that sc shape does not come in bold,       -->
     <!-- http://tex.stackexchange.com/questions/17830/using-textsc-within-section -->
-    <xsl:if test="/mathbook//abbr">
+    <xsl:if test="$document-root//abbr">
         <xsl:text>%% Used to markup abbreviations, text or titles&#xa;</xsl:text>
         <xsl:text>%% default is small caps (Bringhurst, 4e, 3.2.2, p. 48)&#xa;</xsl:text>
         <xsl:text>%% Titles are no-ops now, see comments in XSL source&#xa;</xsl:text>
         <xsl:text>\newcommand{\abbreviation}[1]{\textsc{\MakeLowercase{#1}}}&#xa;</xsl:text>
         <xsl:text>\DeclareRobustCommand{\abbreviationintitle}[1]{\texorpdfstring{#1}{#1}}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="/mathbook//acro">
+    <xsl:if test="$document-root//acro">
         <xsl:text>%% Used to markup acronyms, text or titles&#xa;</xsl:text>
         <xsl:text>%% default is small caps (Bringhurst, 4e, 3.2.2, p. 48)&#xa;</xsl:text>
         <xsl:text>%% Titles are no-ops now, see comments in XSL source&#xa;</xsl:text>
         <xsl:text>\newcommand{\acronym}[1]{\textsc{\MakeLowercase{#1}}}&#xa;</xsl:text>
         <xsl:text>\DeclareRobustCommand{\acronymintitle}[1]{\texorpdfstring{#1}{#1}}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="/mathbook//init">
+    <xsl:if test="$document-root//init">
         <xsl:text>%% Used to markup initialisms, text or titles&#xa;</xsl:text>
         <xsl:text>%% default is small caps (Bringhurst, 4e, 3.2.2, p. 48)&#xa;</xsl:text>
         <xsl:text>%% Titles are no-ops now, see comments in XSL source&#xa;</xsl:text>
@@ -614,11 +614,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\DeclareRobustCommand{\initialismintitle}[1]{\texorpdfstring{#1}{#1}}&#xa;</xsl:text>
     </xsl:if>
     <!-- http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/ -->
-    <xsl:if test="/mathbook//swungdash">
+    <xsl:if test="$document-root//swungdash">
         <xsl:text>%% A character like a tilde, but different&#xa;</xsl:text>
         <xsl:text>\newcommand{\swungdash}{\raisebox{-2.25ex}{\scalebox{2}{\~{}}}}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//quantity">
+    <xsl:if test="$document-root//quantity">
         <xsl:text>%% Used for units and number formatting&#xa;</xsl:text>
         <xsl:text>\usepackage[per-mode=fraction]{siunitx}&#xa;</xsl:text>
         <xsl:text>\ifxetex\sisetup{math-micro=\text{µ},text-micro=µ}\fi</xsl:text>
@@ -639,7 +639,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}&#xa;</xsl:text>
         </xsl:for-each>
     </xsl:if>
-    <xsl:if test="/mathbook//case[@direction]">
+    <xsl:if test="$document-root//case[@direction]">
         <xsl:text>%% Arrows for iff proofs, with trailing space&#xa;</xsl:text>
         <xsl:text>\newcommand{\forwardimplication}{($\Rightarrow$)\space\space}&#xa;</xsl:text>
         <xsl:text>\newcommand{\backwardimplication}{($\Leftarrow$)\space\space}&#xa;</xsl:text>
@@ -656,7 +656,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$document-root//assemblage | $document-root//aside | $document-root//biographical | $document-root//historical | $document-root//list">
         <xsl:text>%% mdframed environments use a tikz frame method&#xa;</xsl:text>
         <xsl:text>\usepackage{tikz}</xsl:text>
-        <xsl:if test="//aside or //biographical or //historical">
+        <xsl:if test="$document-root//aside or $document-root//biographical or $document-root//historical">
             <xsl:text>%% mdframed environments use drop shadows&#xa;</xsl:text>
             <xsl:text>\usetikzlibrary{shadows}</xsl:text>
         </xsl:if>
@@ -934,7 +934,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'appendix'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="/mathbook/book">
+    <xsl:if test="$root/book">
         <xsl:if test="//part">
             <xsl:text>\renewcommand*{\partname}{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'part'" /></xsl:call-template>
@@ -946,7 +946,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="/mathbook/article">
+    <xsl:if test="$root/article">
         <xsl:if test="//abstract">
             <xsl:text>\renewcommand*{\abstractname}{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'abstract'" /></xsl:call-template>
@@ -1536,7 +1536,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="/mathbook/*/backmatter/index-part | $document-root//index-list">
+    <xsl:if test="$document-root/backmatter/index-part | $document-root//index-list">
         <!-- See http://tex.blogoverflow.com/2012/09/dont-forget-to-run-makeindex/ for "imakeidx" usage -->
         <xsl:text>%% Support for index creation&#xa;</xsl:text>
         <xsl:if test="$author-tools='no'">
@@ -1623,10 +1623,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usepackage{showkeys}&#xa;</xsl:text>
         <xsl:text>\usepackage[letter,cam,center,pdflatex]{crop}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="/mathbook/docinfo/latex-image-preamble">
+    <xsl:if test="$docinfo/latex-image-preamble">
         <xsl:text>%% Graphics Preamble Entries&#xa;</xsl:text>
         <xsl:call-template name="sanitize-text">
-            <xsl:with-param name="text" select="/mathbook/docinfo/latex-image-preamble" />
+            <xsl:with-param name="text" select="$docinfo/latex-image-preamble" />
         </xsl:call-template>
     </xsl:if>
     <xsl:text>%% If tikz has been loaded, replace ampersand with \amp macro&#xa;</xsl:text>
@@ -1823,11 +1823,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="subtitle" />
         <xsl:text>}</xsl:text>
     </xsl:if>
-    <xsl:if test="/mathbook/docinfo/event">
+    <xsl:if test="$docinfo/event">
         <xsl:if test="title">
             <xsl:text>\\</xsl:text>
         </xsl:if>
-        <xsl:apply-templates select="/mathbook/docinfo/event" />
+        <xsl:apply-templates select="$docinfo/event" />
     </xsl:if>
     <xsl:text>}&#xa;</xsl:text>
     <xsl:if test="frontmatter/titlepage/author or frontmatter/titlepage/editor">
@@ -1847,12 +1847,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{\centering&#xa;</xsl:text>
     <xsl:text>\vspace*{0.28\textheight}&#xa;</xsl:text>
     <xsl:text>{\Huge </xsl:text>
-    <xsl:apply-templates select="/mathbook/book" mode="title-full"/>
+    <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}\\</xsl:text> <!-- always end line inside centering -->
-    <xsl:if test="/mathbook/book/subtitle">
+    <xsl:if test="subtitle">
         <xsl:text>[2\baselineskip]&#xa;</xsl:text> <!-- extend line break if subtitle -->
         <xsl:text>{\LARGE </xsl:text>
-        <xsl:apply-templates select="/mathbook/book" mode="subtitle"/>
+        <xsl:apply-templates select="." mode="subtitle"/>
         <xsl:text>}\\&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>}&#xa;</xsl:text> <!-- finish centering -->
@@ -2209,17 +2209,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Includes items from the colophon                   -->
 <xsl:template match="book/frontmatter/titlepage">
     <!-- first page, title only -->
-    <xsl:apply-templates select="/mathbook/book" mode="half-title" />
+    <xsl:apply-templates select="../.." mode="half-title" />
     <!-- Obverse of half-title is adcard -->
-    <xsl:apply-templates select="/mathbook/book" mode="ad-card" />
+    <xsl:apply-templates select="../.." mode="ad-card" />
     <!-- title page -->
-    <xsl:apply-templates select="/mathbook/book" mode="title-page" />
+    <xsl:apply-templates select="../.." mode="title-page" />
     <!-- title page obverse is copyright, possibly empty -->
-    <xsl:apply-templates select="/mathbook/book" mode="copyright-page" />
+    <xsl:apply-templates select="../.." mode="copyright-page" />
     <!-- long biographies come earliest, since normally on copyright page -->
     <!-- short biographies are part of the copyright-page template        -->
-    <xsl:if test="/mathbook/docinfo/author-biographies/@length = 'long' and ../biography">
-        <xsl:apply-templates select="/mathbook/book" mode="author-biography-subdivision" />
+    <xsl:if test="$docinfo/author-biographies/@length = 'long' and ../biography">
+        <xsl:apply-templates select="../.." mode="author-biography-subdivision" />
     </xsl:if>
 </xsl:template>
 
@@ -2352,7 +2352,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="letter/frontmatter">
     <!-- Logos (letterhead images) immediately -->
-    <xsl:apply-templates select="/mathbook/docinfo/logo" />
+    <xsl:apply-templates select="$docinfo/logo" />
     <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <!-- Push down some on first page to accomodate letterhead -->
@@ -2416,7 +2416,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="memo/frontmatter">
     <xsl:text>\thispagestyle{empty}&#xa;%&#xa;</xsl:text>
     <!-- Logos (letterhead images) to first page -->
-    <xsl:apply-templates select="/mathbook/docinfo/logo" />
+    <xsl:apply-templates select="$docinfo/logo" />
     <!-- Get width of widest out-dented text -->
     <xsl:text>\newlength{\subjectwidth}&#xa;</xsl:text>
     <xsl:text>\settowidth{\subjectwidth}{\textsf{Subject:}}&#xa;</xsl:text>
@@ -6847,7 +6847,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="mathbook//cell/line">
+<xsl:template match="cell/line">
     <xsl:apply-templates />
     <!-- is there a next line to separate? -->
     <xsl:if test="following-sibling::*">

@@ -189,11 +189,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$html.chunk.level != ''">
             <xsl:value-of select="$html.chunk.level" />
         </xsl:when>
-        <xsl:when test="/mathbook/book">2</xsl:when>
-        <xsl:when test="/mathbook/article/section">1</xsl:when>
-        <xsl:when test="/mathbook/article">0</xsl:when>
-        <xsl:when test="/mathbook/letter">0</xsl:when>
-        <xsl:when test="/mathbook/memo">0</xsl:when>
+        <xsl:when test="$root/book">2</xsl:when>
+        <xsl:when test="$root/article/section">1</xsl:when>
+        <xsl:when test="$root/article">0</xsl:when>
+        <xsl:when test="$root/letter">0</xsl:when>
+        <xsl:when test="$root/memo">0</xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: HTML chunk level not determined</xsl:message>
         </xsl:otherwise>
@@ -276,7 +276,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="file-extension" select="'.html'" />
 
 <!-- A boolean variable for Google Custom Search Engine add-on -->
-<xsl:variable name="b-google-cse" select="boolean(/mathbook/docinfo/search/google)" />
+<xsl:variable name="b-google-cse" select="boolean($docinfo/search/google)" />
 
 <!-- "presentation" mode is experimental, target        -->
 <!-- is in-class presentation of a textbook             -->
@@ -301,15 +301,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
     </xsl:if>
     <!--  -->
-    <xsl:apply-templates select="mathbook" mode="generic-warnings" />
-    <xsl:apply-templates select="mathbook" mode="deprecation-warnings" />
+    <xsl:apply-templates select="mathbook|pretext" mode="generic-warnings" />
+    <xsl:apply-templates select="mathbook|pretext" mode="deprecation-warnings" />
     <xsl:apply-templates />
 </xsl:template>
 
 <!-- We process structural nodes via chunking routine in   xsl/mathbook-common.html -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file     -->
 <!-- The xref-knowl templates run independently on content node of document tree    -->
-<xsl:template match="mathbook">
+<xsl:template match="/mathbook|/pretext">
     <xsl:apply-templates mode="chunking" />
     <xsl:apply-templates select="*[not(self::docinfo)]" mode="xref-knowl" />
 </xsl:template>
@@ -660,11 +660,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="titlepage">
     <h1 class="heading">
         <span class="title">
-            <xsl:apply-templates select="/mathbook/*" mode="title-full" />
+            <xsl:apply-templates select="parent::frontmatter/parent::*" mode="title-full" />
         </span>
-        <xsl:if test="/mathbook/*/subtitle">
+        <xsl:if test="parent::frontmatter/parent::*/subtitle">
             <span class="subtitle">
-                <xsl:apply-templates select="/mathbook/*" mode="subtitle" />
+                <xsl:apply-templates select="parent::frontmatter/parent::*" mode="subtitle" />
             </span>
         </xsl:if>
     </h1>
@@ -4319,7 +4319,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- last in list that contains the image wins             -->
             <!-- Documented heavily as first "mid-range" specification -->
             <!-- A single @from puts us in mid-range mode              -->
-            <xsl:when test="/mathbook/docinfo/images/archive[@from]">
+            <xsl:when test="$docinfo/images/archive[@from]">
                 <!-- context of next "select" filters is "archive" -->
                 <!-- so save off the present context, the "image"  -->
                 <xsl:variable name="the-image" select="." />
@@ -4331,7 +4331,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- The pipe forms a union of the nodes in the subtrees    -->
                 <!-- "image" is on the subtree @from iff union is no larger -->
                 <xsl:variable name="containing-archives"
-                    select="/mathbook/docinfo/images/archive[@from][count($the-image/descendant-or-self::node()|id(@from)/descendant-or-self::node())=count(id(@from)/descendant-or-self::node())]" />
+                    select="$docinfo/images/archive[@from][count($the-image/descendant-or-self::node()|id(@from)/descendant-or-self::node())=count(id(@from)/descendant-or-self::node())]" />
                 <!-- We mimic XSL and the last applicable "archive" is effective -->
                 <!-- This way, big subtrees go first, included subtrees refine   -->
                 <!-- @from can be an empty string and turn off the behavior      -->
@@ -4339,8 +4339,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="$containing-archives[last()]/." />
             </xsl:when>
             <!-- global, presumes one only, ignores subtree versions -->
-            <xsl:when test="/mathbook/docinfo/images/archive[not(@from)]">
-                <xsl:value-of select="normalize-space(/mathbook/docinfo/images/archive)" />
+            <xsl:when test="$docinfo/images/archive[not(@from)]">
+                <xsl:value-of select="normalize-space($docinfo/images/archive)" />
             </xsl:when>
             <!-- nothing begets nothing -->
             <xsl:otherwise />
@@ -5043,8 +5043,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- the first class controls the default icon -->
                 <xsl:attribute name="class">
                     <xsl:choose>
-                        <xsl:when test="/mathbook/book">mathbook-book</xsl:when>
-                        <xsl:when test="/mathbook/article">mathbook-article</xsl:when>
+                        <xsl:when test="$root/book">mathbook-book</xsl:when>
+                        <xsl:when test="$root/article">mathbook-article</xsl:when>
                     </xsl:choose>
                     <!-- ################################################# -->
                     <!-- This is how the left sidebar goes away            -->
@@ -5065,14 +5065,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 <h1 class="heading">
                                     <xsl:element name="a">
                                         <xsl:attribute name="href">
-                                            <xsl:apply-templates select="/mathbook/*[not(self::docinfo)]" mode="containing-filename" />
+                                            <xsl:apply-templates select="$document-root" mode="containing-filename" />
                                         </xsl:attribute>
                                         <span class="title">
-                                            <xsl:apply-templates select="/mathbook/book|/mathbook/article" mode="title-simple" />
+                                            <xsl:apply-templates select="$document-root" mode="title-simple" />
                                         </span>
-                                        <xsl:if test="normalize-space(/mathbook/book/subtitle|/mathbook/article/subtitle)">
+                                        <xsl:if test="normalize-space($document-root/subtitle)">
                                             <span class="subtitle">
-                                                <xsl:apply-templates select="/mathbook/book|/mathbook/article" mode="subtitle" />
+                                                <xsl:apply-templates select="$document-root" mode="subtitle" />
                                             </span>
                                         </xsl:if>
                                     </xsl:element>
@@ -5098,7 +5098,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                           </div>
                     </main>
                 </div>
-                <xsl:apply-templates select="/mathbook/docinfo/analytics" />
+                <xsl:apply-templates select="$docinfo/analytics" />
                 <!-- <xsl:call-template name="pytutor-footer" /> -->
             </xsl:element>
         </html>
@@ -5633,7 +5633,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- we bail out of recursion with no action taken -->
 </xsl:template>
 
-<xsl:template match="mathbook//tabular//line">
+<xsl:template match="tabular//line">
     <xsl:apply-templates />
     <!-- is there a next line to separate? -->
     <xsl:if test="following-sibling::line">
@@ -6980,11 +6980,11 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <xsl:call-template name="jquery-sagecell" />
             <xsl:call-template name="mathjax" />
             <!-- webwork's iframeResizer needs to come before sage -->
-            <xsl:if test="//webwork[@*|node()]">
+            <xsl:if test="$document-root//webwork[@*|node()]">
                 <xsl:call-template name="webwork" />
             </xsl:if>
             <xsl:apply-templates select="." mode="sagecell" />
-            <xsl:if test="/mathbook//program">
+            <xsl:if test="$document-root//program">
                 <xsl:call-template name="goggle-code-prettifier" />
             </xsl:if>
             <xsl:call-template name="google-search-box-js" />
@@ -7000,8 +7000,8 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             <!-- the first class controls the default icon -->
             <xsl:attribute name="class">
                 <xsl:choose>
-                    <xsl:when test="/mathbook/book">mathbook-book</xsl:when>
-                    <xsl:when test="/mathbook/article">mathbook-article</xsl:when>
+                    <xsl:when test="$root/book">mathbook-book</xsl:when>
+                    <xsl:when test="$root/article">mathbook-article</xsl:when>
                 </xsl:choose>
                 <xsl:if test="$b-has-toc">
                     <xsl:text> has-toc has-sidebar-left</xsl:text> <!-- note space, later add right -->
@@ -7020,22 +7020,22 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                             <h1 class="heading">
                                 <xsl:element name="a">
                                     <xsl:attribute name="href">
-                                        <xsl:apply-templates select="/mathbook/*[not(self::docinfo)]" mode="containing-filename" />
+                                        <xsl:apply-templates select="$document-root" mode="containing-filename" />
                                     </xsl:attribute>
                                     <span class="title">
-                                        <xsl:apply-templates select="/mathbook/book|/mathbook/article" mode="title-simple" />
+                                        <xsl:apply-templates select="$document-root" mode="title-simple" />
                                     </span>
-                                    <xsl:if test="normalize-space(/mathbook/book/subtitle|/mathbook/article/subtitle)">
+                                    <xsl:if test="normalize-space($document-root/subtitle)">
                                         <span class="subtitle">
-                                            <xsl:apply-templates select="/mathbook/book|/mathbook/article" mode="subtitle" />
+                                            <xsl:apply-templates select="$document-root" mode="subtitle" />
                                         </span>
                                     </xsl:if>
                                 </xsl:element>
                             </h1>
                             <!-- Serial list of authors/editors -->
                             <p class="byline">
-                                <xsl:apply-templates select="//frontmatter/titlepage/author" mode="name-list"/>
-                                <xsl:apply-templates select="//frontmatter/titlepage/editor" mode="name-list"/>
+                                <xsl:apply-templates select="$document-root/frontmatter/titlepage/author" mode="name-list"/>
+                                <xsl:apply-templates select="$document-root/frontmatter/titlepage/editor" mode="name-list"/>
                             </p>
                         </div>  <!-- title-container -->
                     </div>  <!-- container -->
@@ -7050,7 +7050,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                     </div>
                 </main>
             </div>
-            <xsl:apply-templates select="/mathbook/docinfo/analytics" />
+            <xsl:apply-templates select="$docinfo/analytics" />
             <xsl:call-template name="pytutor-footer" />
         </xsl:element>
     </html>
@@ -7093,7 +7093,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <!-- TODO: needs some padding etc -->
         <body>
             <xsl:copy-of select="$content" />
-            <xsl:apply-templates select="/mathbook/docinfo/analytics" />
+            <xsl:apply-templates select="$docinfo/analytics" />
         </body>
     </html>
     </exsl:document>
@@ -7723,7 +7723,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
             </nav>
             <div class="extras">
                 <nav>
-                    <xsl:if test="/mathbook/docinfo/feedback">
+                    <xsl:if test="$docinfo/feedback">
                         <xsl:call-template name="feedback-link" />
                     </xsl:if>
                     <xsl:call-template name="mathbook-link" />
@@ -7748,7 +7748,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <xsl:if test="$b-has-toc">
         <!-- Subtree for page this sidebar will adorn -->
         <xsl:variable name="this-page-node" select="descendant-or-self::*" />
-        <xsl:for-each select="/mathbook/book/*|/mathbook/article/*">
+        <xsl:for-each select="$document-root/*">
             <xsl:variable name="structural">
                 <xsl:apply-templates select="." mode="is-structural" />
             </xsl:variable>
@@ -8160,7 +8160,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <xsl:element name="script">
             <xsl:text>(function() {&#xa;</xsl:text>
             <xsl:text>  var cx = '</xsl:text>
-            <xsl:value-of select="/mathbook/docinfo/search/google/cx" />
+            <xsl:value-of select="$docinfo/search/google/cx" />
             <xsl:text>';&#xa;</xsl:text>
             <xsl:text>  var gcse = document.createElement('script');&#xa;</xsl:text>
             <xsl:text>  gcse.type = 'text/javascript';&#xa;</xsl:text>
@@ -8318,9 +8318,9 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- should allow specifying just URL and get default image -->
 <xsl:template name="brand-logo">
     <xsl:choose>
-        <xsl:when test="/mathbook/docinfo/brandlogo">
-            <a id="logo-link" href="{/mathbook/docinfo/brandlogo/@url}" target="_blank" >
-                <img src="{/mathbook/docinfo/brandlogo/@source}" alt="Logo image for document"/>
+        <xsl:when test="$docinfo/brandlogo">
+            <a id="logo-link" href="{$docinfo/brandlogo/@url}" target="_blank" >
+                <img src="{$docinfo/brandlogo/@source}" alt="Logo image for document"/>
             </a>
         </xsl:when>
         <xsl:otherwise>

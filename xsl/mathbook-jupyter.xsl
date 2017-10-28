@@ -66,7 +66,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- We process structural nodes via chunking routine in  xsl/mathbook-common.html -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file    -->
-<xsl:template match="mathbook">
+<xsl:template match="/mathbook|/pretext">
     <xsl:call-template name="banner-warning">
         <xsl:with-param name="warning">Jupyter notebook conversion is experimental and incomplete&#xa;Requests to fix/implement specific constructions welcome</xsl:with-param>
     </xsl:call-template>
