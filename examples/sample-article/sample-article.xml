@@ -1198,10 +1198,10 @@ the xsltproc executable.
                 <mrow>{\mathcal L}(y'')(s)^{5} &amp;= s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
             </mdn></p>
 
-            <p>Now with no numbers and no alignment.<md>
+            <p>Now with no numbers and no alignment.  We include two cross-references in the <c>intertext</c> portion for testing.<md>
                 <mrow>{\mathcal L}(y')(s)  = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
-                <intertext>And so it follows that,</intertext>
+                <intertext>First an external reference to <url href="http://example.com" /> and internal cross-reference to <xref ref="corollary-FTC-derivative" text="type-global" />. And so it follows that,</intertext>
                 <mrow>{\mathcal L}(y')(s)^{++} = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s)^{5} = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0)</mrow>
             </md>.</p>

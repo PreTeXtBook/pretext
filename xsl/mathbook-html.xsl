@@ -4130,7 +4130,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Intertext -->
 <!-- A LaTeX construct really, we just jump out/in of    -->
 <!-- the align/gather environment and process the text   -->
-<!-- "md" and "mdn" can only occur in a "p" so no wrap   -->
+<!-- "md" and "mdn" can only occur in a "p" and          -->
+<!-- we break a logical PreTeXt "p" into multiple HTML   -->
+<!-- "p" at places where displays occur, such as math    -->
+<!-- and lists.  So we can wrap the "intertext" in a     -->
+<!-- p.intertext, giving xref knowls a place to open.    -->
 <!-- This breaks the alignment, but MathJax has no good  -->
 <!-- solution for this.                                  -->
 <!-- NB: we check the *parent* for alignment information -->
@@ -4139,7 +4143,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="parent::*" mode="displaymath-alignment" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates />
+    <p class="intertext">
+        <xsl:apply-templates />
+    </p>
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="parent::*" mode="displaymath-alignment" />
