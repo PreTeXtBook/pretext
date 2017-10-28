@@ -2582,7 +2582,7 @@
   </define>
   <define name="MathIntertext">
     <element name="intertext">
-      <ref name="TextShort"/>
+      <ref name="TextLong"/>
     </element>
   </define>
   <define name="MathDisplay">
