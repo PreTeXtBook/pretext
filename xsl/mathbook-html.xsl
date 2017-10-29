@@ -1679,7 +1679,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- A type, with maybe a serial number to disambiguate, no h6 -->
+<!-- A type, with maybe a serial number to disambiguate -->
+<!-- No h6, optional title                              -->
 <!-- SOLUTION-LIKE (xref-text), biblio/note (xref-text) -->
 <xsl:template match="*" mode="heading-simple">
     <!-- the name of the object, its "type" -->
@@ -1694,6 +1695,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not($the-number = '')">
         <span class="codenumber">
             <xsl:apply-templates select="." mode="serial-number" />
+        </span>
+    </xsl:if>
+    <xsl:if test="title">
+        <span class="title">
+            <xsl:apply-templates select="." mode="title-full" />
         </span>
     </xsl:if>
 </xsl:template>

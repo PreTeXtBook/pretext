@@ -3790,6 +3790,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text> </xsl:text>
         <xsl:apply-templates select="." mode="serial-number" />
     </xsl:if>
+    <xsl:if test="title">
+        <xsl:text> (</xsl:text>
+        <xsl:apply-templates select="." mode="title-full" />
+        <xsl:text>)</xsl:text>
+    </xsl:if>
     <xsl:text>.}</xsl:text>
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>\quad%&#xa;</xsl:text>

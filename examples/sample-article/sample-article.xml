@@ -4131,14 +4131,17 @@ the xsltproc executable.
                 </statement>
                 <!-- A hint is a push in the right direction -->
                 <hint>
+                    <title>MVT</title>
                     <p>Consider the definite integral as an area function and employ the Mean Value Theorem.</p>
                 </hint>
                 <!-- You can provide several -->
                 <hint xml:id="exercise-complicated-second-hint">
+                    <title>Motivator</title>
                     <p>Think harder!</p>
                 </hint>
                 <!-- The answer is just the end product -->
                 <answer xml:id="exercise-complicated-first-answer">
+                    <title>Helpful</title>
                     <p><ol>
                         <li><p>It follows easily.</p></li>
                         <li><p>Yes.</p></li>
