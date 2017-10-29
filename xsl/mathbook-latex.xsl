@@ -3083,7 +3083,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######### -->
 
 <!-- Free-range exercises go into environments -->
-<!-- TODO: Be more careful about notation, todo; include answer -->
+<!-- TODO: Be more careful about notation, todo -->
 <xsl:template match="exercise">
     <xsl:text>\begin{exercise}</xsl:text>
     <xsl:apply-templates select="title" mode="environment-option" />
@@ -3091,6 +3091,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="statement"/>
     <xsl:apply-templates select="hint"/>
+    <xsl:apply-templates select="answer"/>
     <xsl:apply-templates select="solution"/>
     <xsl:text>\end{exercise}&#xa;</xsl:text>
 </xsl:template>
