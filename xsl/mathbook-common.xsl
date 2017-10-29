@@ -3046,6 +3046,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="exercises/exercise[@number]|exercisegroup/exercise[@number]" mode="serial-number">
     <xsl:apply-templates select="@number" />
 </xsl:template>
+
+<!-- Serial Numbers: Solutions -->
 <!-- Hints, answers, solutions may be numbered (for cross-reference knowls) -->
 <xsl:template match="hint|answer|solution" mode="serial-number">
     <xsl:number />
@@ -3061,6 +3063,34 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:number />
 </xsl:template>
 
+<!-- Hints, answers, solutions, notes are often singletons.     -->
+<!-- This utility returns the serial number, or if a singleton, -->
+<!-- returns an empty string.  Employing templates will need    -->
+<!-- to check if they want to react accordingly, or they should -->
+<!-- just ask for the serial number itself if they don't care.  -->
+<xsl:template match="hint|answer|solution|biblio/note" mode="non-singleton-number">
+    <xsl:variable name="the-number">
+        <xsl:apply-templates select="." mode="serial-number" />
+    </xsl:variable>
+    <xsl:choose>
+        <!-- non-singletons always of interest/use -->
+        <xsl:when test="not($the-number = 1)">
+            <xsl:value-of select="$the-number" />
+        </xsl:when>
+        <!-- now being careful with "1" -->
+        <xsl:otherwise>
+            <xsl:variable name="elt-name" select="local-name(.)" />
+            <!-- We go to the parent, get all like children, then     -->
+            <!-- filter by name, since hints and answers, etc all mix -->
+            <xsl:variable name="siblings-and-self" select="parent::*/*[local-name(.) = $elt-name]" />
+            <!-- maybe "1" is interesting too -->
+            <!-- if not, no result whatsoever -->
+            <xsl:if test="count($siblings-and-self) > 1">
+                <xsl:value-of select="$the-number" />
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- Serial Numbers: Footnotes -->
 <!-- We determine the appropriate subtree to count within -->

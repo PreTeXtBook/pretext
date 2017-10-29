@@ -1686,13 +1686,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="type">
         <xsl:apply-templates select="." mode="type-name" />
     </span>
-    <!-- We are not computing the number here, that is in -common   -->
-    <!-- We are checking if there is more than one of the same type -->
-    <!-- If one, then we do not need the number "1" to disambiguate -->
-    <!-- We go to the parent, get all children, then filter by name -->
-    <xsl:variable name="elt-name" select="local-name(.)" />
-    <xsl:variable name="siblings" select="parent::*/*[local-name(.) = $elt-name]" />
-    <xsl:if test="count($siblings) > 1">
+    <xsl:variable name="the-number">
+        <xsl:apply-templates select="." mode="non-singleton-number" />
+    </xsl:variable>
+    <!-- An empty value means element is a singleton -->
+    <!-- else the serial number comes through        -->
+    <xsl:if test="not($the-number = '')">
         <span class="codenumber">
             <xsl:apply-templates select="." mode="serial-number" />
         </span>
