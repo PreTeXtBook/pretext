@@ -3204,12 +3204,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Assume various solution-types with non-blank line and newline -->
+<!-- Heading template is elsewhere and should come closer on a reorganization -->
 <xsl:template match="exercise/hint|exercise/answer|exercise/solution">
-    <xsl:text>\par\smallskip&#xa;\noindent\textbf{</xsl:text>
-    <xsl:apply-templates select="." mode="type-name" />
-    <xsl:text>.}</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
-    <xsl:text>\quad&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="solution-heading" />
     <xsl:apply-templates />
 </xsl:template>
 
@@ -3723,25 +3720,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Examples can have hints, answers or solutions, -->
 <!-- but as examples we don't turn them on or off   -->
 <xsl:template match="hint[parent::*[&EXAMPLE-FILTER;]]|answer[parent::*[&EXAMPLE-FILTER;]]|solution[parent::*[&EXAMPLE-FILTER;]]|">
-    <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
-    <xsl:text>\textbf{</xsl:text>
-    <xsl:apply-templates select="." mode="type-name" />
-    <xsl:text>.}\quad </xsl:text>
+    <xsl:apply-templates select="." mode="solution-heading" />
     <xsl:apply-templates />
 </xsl:template>
 
 <!-- TODO: consolidate three tests twice,      -->
 <!-- and use modal template (ala EXAMPLE-LIKE) -->
+<!-- and/or make a template to check if visible or not -->
 
 <!-- A project may have a hint, with switch control -->
 <xsl:template match="hint[parent::*[&PROJECT-FILTER;]]">
     <xsl:if test="$project.text.hint = 'yes'">
-        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
-        <xsl:text>\textbf{</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'hint'" />
-        </xsl:call-template>
-        <xsl:text>.}\quad </xsl:text>
+        <xsl:apply-templates select="." mode="solution-heading" />
         <xsl:apply-templates />
     </xsl:if>
 </xsl:template>
@@ -3749,12 +3739,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A project may have an answer, with switch control-->
 <xsl:template match="answer[parent::*[&PROJECT-FILTER;]]">
     <xsl:if test="$project.text.answer = 'yes'">
-        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
-        <xsl:text>\textbf{</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'answer'" />
-        </xsl:call-template>
-        <xsl:text>.}\quad </xsl:text>
+        <xsl:apply-templates select="." mode="solution-heading" />
         <xsl:apply-templates />
     </xsl:if>
 </xsl:template>
@@ -3762,12 +3747,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A project may have a solution, with switch control -->
 <xsl:template match="solution[parent::*[&PROJECT-FILTER;]]">
     <xsl:if test="$project.text.solution = 'yes'">
-        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
-        <xsl:text>\textbf{</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'solution'" />
-        </xsl:call-template>
-        <xsl:text>.}\quad </xsl:text>
+        <xsl:apply-templates select="." mode="solution-heading" />
         <xsl:apply-templates />
     </xsl:if>
 </xsl:template>
@@ -3775,12 +3755,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A task may have a hint, with switch control -->
 <xsl:template match="hint[parent::task]">
     <xsl:if test="$task.text.hint = 'yes'">
-        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
-        <xsl:text>\textbf{</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'hint'" />
-        </xsl:call-template>
-        <xsl:text>.}\quad </xsl:text>
+        <xsl:apply-templates select="." mode="solution-heading" />
         <xsl:apply-templates />
     </xsl:if>
 </xsl:template>
@@ -3788,12 +3763,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A task may have an answer, with switch control -->
 <xsl:template match="answer[parent::task]">
     <xsl:if test="$task.text.answer = 'yes'">
-        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
-        <xsl:text>\textbf{</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'answer'" />
-        </xsl:call-template>
-        <xsl:text>.}\quad </xsl:text>
+        <xsl:apply-templates select="." mode="solution-heading" />
         <xsl:apply-templates />
     </xsl:if>
 </xsl:template>
@@ -3801,14 +3771,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A task may have a solution, with switch control -->
 <xsl:template match="solution[parent::task]">
     <xsl:if test="$task.text.solution = 'yes'">
-        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
-        <xsl:text>\textbf{</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'solution'" />
-        </xsl:call-template>
-        <xsl:text>.}\quad </xsl:text>
+        <xsl:apply-templates select="." mode="solution-heading" />
         <xsl:apply-templates />
     </xsl:if>
+</xsl:template>
+
+<!-- move this someplace where exercise routines are consolidated -->
+<xsl:template match="hint|answer|solution" mode="solution-heading">
+    <xsl:text>\par\smallskip%&#xa;</xsl:text>
+    <xsl:text>\noindent\textbf{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name" />
+    <!-- An empty value means element is a singleton -->
+    <!-- else the serial number comes through        -->
+    <xsl:variable name="the-number">
+        <xsl:apply-templates select="." mode="non-singleton-number" />
+    </xsl:variable>
+    <xsl:if test="not($the-number = '')">
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="serial-number" />
+    </xsl:if>
+    <xsl:text>.}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>\quad%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Named Lists -->
