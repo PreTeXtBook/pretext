@@ -588,10 +588,10 @@
       <xs:element name="hint">
         <xs:complexType>
           <xs:sequence>
-            <xs:group ref="MetaDataTarget"/>
+            <xs:group ref="MetaDataTitleOptional"/>
             <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
           </xs:sequence>
-          <xs:attributeGroup ref="MetaDataTarget"/>
+          <xs:attributeGroup ref="MetaDataTitleOptional"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -599,10 +599,10 @@
   <xs:element name="answer">
     <xs:complexType>
       <xs:sequence>
-        <xs:group ref="MetaDataTarget"/>
+        <xs:group ref="MetaDataTitleOptional"/>
         <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
       </xs:sequence>
-      <xs:attributeGroup ref="MetaDataTarget"/>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
     </xs:complexType>
   </xs:element>
   <xs:group name="Solution">
@@ -610,10 +610,10 @@
       <xs:element name="solution">
         <xs:complexType>
           <xs:sequence>
-            <xs:group ref="MetaDataTarget"/>
+            <xs:group ref="MetaDataTitleOptional"/>
             <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
           </xs:sequence>
-          <xs:attributeGroup ref="MetaDataTarget"/>
+          <xs:attributeGroup ref="MetaDataTitleOptional"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>

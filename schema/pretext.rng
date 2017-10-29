@@ -602,7 +602,7 @@
   </define>
   <define name="Hint">
     <element name="hint">
-      <ref name="MetaDataTarget"/>
+      <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
         <ref name="BlockStatement"/>
       </oneOrMore>
@@ -610,7 +610,7 @@
   </define>
   <define name="Answer">
     <element name="answer">
-      <ref name="MetaDataTarget"/>
+      <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
         <ref name="BlockStatement"/>
       </oneOrMore>
@@ -618,7 +618,7 @@
   </define>
   <define name="Solution">
     <element name="solution">
-      <ref name="MetaDataTarget"/>
+      <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
         <ref name="BlockStatement"/>
       </oneOrMore>

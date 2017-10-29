@@ -273,17 +273,17 @@
             }
         Hint = 
             element hint {
-                MetaDataTarget,
+                MetaDataTitleOptional,
                 BlockStatement+
             }
         Answer = 
             element answer {
-                MetaDataTarget,
+                MetaDataTitleOptional,
                 BlockStatement+
             }
         Solution = 
             element solution {
-                MetaDataTarget,
+                MetaDataTitleOptional,
                 BlockStatement+
             }
         
