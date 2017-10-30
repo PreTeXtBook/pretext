@@ -26,6 +26,7 @@
 
         <xi:include href="frontmatter.xml" />
         <xi:include href="production.xml" />
+        <xi:include href="cover-design.xml" />
         <xi:include href="backmatter.xml" />
 
     </book>
