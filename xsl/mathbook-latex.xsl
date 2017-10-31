@@ -3896,6 +3896,71 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="m" mode="get-clause-punctuation" />
 
 
+<!-- Displayed Single-Line Math ("me", "men") -->
+<!-- The default template just calls the modal "body"      -->
+<!-- template needed for the HTML knowl production scheme. -->
+<!-- The variables in the "body" template have the right   -->
+<!-- defaults for this application                         -->
+
+<xsl:template match="me|men">
+    <xsl:apply-templates select="." mode="body" />
+</xsl:template>
+
+<xsl:template name="display-math-visual-blank-line">
+    <xsl:text>%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- "me" is not numbered, not a cross-reference target -->
+<xsl:template match="me" mode="tag" />
+
+<!-- Identical to the modal "label" template,  -->
+<!-- but a different name as abstract template -->
+<!-- related to equation numbering             -->
+<xsl:template match="men|mrow" mode="tag">
+    <xsl:text>\label{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- QED Here -->
+<!-- Analyze a final "mrow" or any "me"                            -->
+<!-- Strictly LaTeX/amsthm, not a MathJax feature (yet? ever?)     -->
+<!--   (1) Locate enclosing proof, quit if no such thing           -->
+<!--   (2) Check an mrow for being numbered, do not clobber that   -->
+<!--   (3) Locate all trailing element, text nodes                 -->
+<!--       strip-space: between "mrow" and "md" or "mdn"           -->
+<!--       strip-space: between final "p" and "proof"              -->
+<!--   (4) Form nodes interior to proof, and trailing ("remnants") -->
+<!--   (5) At very end of proof                                    -->
+<!--      (a) if no more nodes, or                                 -->
+<!--      (b) one node, totally whitespace and punctuation         -->
+<!--          (we don't differentiate whitespace policy here)      -->
+<!--   (6) Having survived all this write a \qedhere               -->
+<!-- TODO: \qedhere also functions at the end of a list            -->
+<xsl:template match="men" mode="qed-here" />
+
+<xsl:template match="mrow|me" mode="qed-here">
+    <!-- <xsl:message>here</xsl:message> -->
+    <xsl:variable name="enclosing-proof" select="ancestor::proof" />
+    <xsl:if test="$enclosing-proof and not(self::mrow and parent::md and @number='yes') and not(self::mrow and parent::mdn and not(@number='no'))">
+        <xsl:variable name="proof-nodes" select="$enclosing-proof/descendant-or-self::node()[self::* or self::text()]" />
+        <xsl:variable name="trailing-nodes" select="./following::node()[self::* or self::text()]" />
+        <xsl:variable name="proof-remnants" select="$proof-nodes[count(.|$trailing-nodes) = count($trailing-nodes)]" />
+        <xsl:choose>
+            <xsl:when test="count($proof-remnants) = 0">
+                <xsl:text>\qedhere</xsl:text>
+            </xsl:when>
+            <xsl:when test="(count($proof-remnants) = 1) and (translate(normalize-space($proof-remnants), $clause-ending-marks, '') = '')">
+                <xsl:text>\qedhere</xsl:text>
+            </xsl:when>
+            <xsl:otherwise />
+        </xsl:choose>
+    </xsl:if>
+</xsl:template>
+
+
+
+
 <!-- Numbering -->
 <!-- We do not tag equations with numbers in LaTeX output,   -->
 <!-- but instead let the LaTeX preamble's configuration      -->
@@ -3911,66 +3976,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- Displayed Single-Line Math ("me", "men") -->
-<!-- Single displayed equation, me (unnumbered), men (numbered)    -->
-<!-- Output follows source line breaks                             -->
-<!-- See: http://tex.stackexchange.com/questions/40492/            -->
-<xsl:template match="me|men">
-    <!-- build and save for later manipulation                      -->
-    <!-- Note: template for text nodes passes through mrow children -->
-    <xsl:variable name="raw-latex">
-        <xsl:choose>
-            <xsl:when test="ancestor::webwork">
-                <xsl:apply-templates select="text()|var" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="text()|fillin" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- Build container begin -->
-    <!-- We must be in a paragraph, so we can  -->
-    <!-- cautiously add a protected newline    -->
-    <xsl:text>%&#xa;</xsl:text>
-    <xsl:text>\begin{</xsl:text>
-    <xsl:apply-templates select="." mode="displaymath-alignment" />
-    <xsl:text>}</xsl:text>
-    <!-- TODO: next not necessary in me?, not present in HTML version -->
-    <xsl:apply-templates select="." mode="alignat-columns" />
-    <!-- leading whitespace not present, or stripped -->
-    <xsl:text>&#xa;</xsl:text>
-    <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
-    <!--   (1) avoid LaTeX compilation errors                       -->
-    <!--   (2) avoid spurious blank lines leading to new paragraphs -->
-    <!--   (3) provide human-readable source of high quality        -->
-    <!-- sanitize-latex template does not provide a final newline   -->
-    <!-- so we add one later for visual appeal                      -->
-    <xsl:call-template name="sanitize-latex">
-        <xsl:with-param name="text" select="$raw-latex" />
-    </xsl:call-template>
-    <!-- look ahead to absorb immediate clause-ending punctuation -->
-    <xsl:apply-templates select="." mode="get-clause-punctuation" />
-    <!-- finish LaTeX environment, optionally labeled -->
-    <xsl:if test="self::men">
-        <xsl:apply-templates select="." mode="label" />
-    </xsl:if>
-    <!-- check to see if this is very end of entire proof -->
-    <!-- and sneak in a \qedhere from the amsthm package  -->
-    <!-- Inappropriate if numbers exist to the right      -->
-    <xsl:if test="self::me">
-        <xsl:apply-templates select="." mode="qed-here" />
-    </xsl:if>
-    <!-- Build container end                            -->
-    <!-- We add a newline for visually appealing source -->
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>\end{</xsl:text>
-    <xsl:apply-templates select="." mode="displaymath-alignment" />
-    <xsl:text>}</xsl:text>
-    <!-- We must return to a paragraph, so                     -->
-    <!-- we can add an unprotected newline                     -->
-    <!-- Note: clause-ending punctuation has been absorbed,    -->
-    <!-- so is not left orphaned at the start of the next line -->
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
+
 
 <!-- We sniff around for ampersands, to decide between "align"     -->
 <!-- and "gather", plus an asterisk for the unnumbered version     -->

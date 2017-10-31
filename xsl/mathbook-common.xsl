@@ -724,6 +724,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- NB: we are partway through changing to above claim -->
 <!-- 2017-10-30:  "m" is consolidated here              -->
+<!-- 2017-10-31:  "me", "men" is consolidated here      -->
 
 <!-- Certain options and variants are common in both     -->
 <!-- cases, so we provide templates for those decisions  -->
@@ -784,15 +785,110 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- Displayed Single-Line Math ("me", "men") -->
+<!-- Single equations ("math equation"), contained within paragraphs -->
+<!-- or captions, but not in titles, or other places a 2-D layout    -->
+<!-- would be a problem.  Some vertical spacing above and below,     -->
+<!-- and centered.  "men" is the numbered variant, which suggests    -->
+<!-- it is the target of a cross-reference, which means it needs     -->
+<!-- unique identification in its original appearand, and not in     -->
+<!-- a duplicate copy.  There is enough in common between these      -->
+<!-- variants, but note that "me" could stand alone and be much      -->
+<!-- simpler, since it is not numbered.                              -->
+<!--                                                                 -->
+<!-- Abstract Templates                                              -->
+<!--                                                                 -->
+<!-- (1) display-math-visual-blank-line                              -->
+<!--       Just a line in source to help visually (% for LaTeX)      -->
+<!--                                                                 -->
+<!-- (2) tag                                                         -->
+<!--       Equation-numbering, per equation                          -->
+<!--       Never for "men", always for "me"                          -->
+<!--                                                                 -->
+<!-- (2) qed-here                                                    -->
+<!--       Slick device, LaTeX only                                  -->
+<!--       But avoid clobbering numbers on right                     -->
+<!--                                                                 -->
+<!-- This is the HTML "body" template, which other conversions       -->
+<!-- can just call trivially with some implementations of the        -->
+<!-- abstract templates                                              -->
 
+<xsl:template match="me|men" mode="body">
+    <!-- block-type parameter is ignored, since the          -->
+    <!-- representation never varies, no heading, no wrapper -->
+    <xsl:param name="block-type" />
+    <!-- If original content, or a duplication -->
+    <xsl:param name="b-original" select="true()" />
+    <!-- If the only content of a knowl ("men") then we  -->
+    <!-- do not include adjacent (trailing) punctuation, -->
+    <!-- since it is meaningless                         -->
+    <xsl:param name="b-top-level" select="false()" />
+    <!-- Build a textual version of the latex,       -->
+    <!-- applying the rare templates allowed,        -->
+    <!-- save for minor manipulation later.          -->
+    <!-- Note: generic text() template here in       -->
+    <!-- -common should always pass through the text -->
+    <!-- nodes within "me" and "men" with no changes -->
+    <xsl:variable name="raw-latex">
+        <xsl:choose>
+            <xsl:when test="ancestor::webwork">
+                <xsl:apply-templates select="text()|var" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="text()|fillin" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- we provide a newline for visual appeal -->
+    <xsl:call-template name="display-math-visual-blank-line" />
+    <xsl:text>\begin{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="alignat-columns" />
+    <!-- leading whitespace not present, or stripped -->
+    <xsl:text>&#xa;</xsl:text>
+    <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
+    <!--   (1) avoid LaTeX compilation errors                       -->
+    <!--   (2) avoid spurious blank lines leading to new paragraphs -->
+    <!--   (3) provide human-readable source of high quality        -->
+    <!-- sanitize-latex template does not provide a final newline   -->
+    <!-- and we do not add one here either, since it is inline math -->
+    <!-- MathJax is more tolerant, but readability is still useful  -->
+    <xsl:call-template name="sanitize-latex">
+        <xsl:with-param name="text" select="$raw-latex" />
+    </xsl:call-template>
+    <!-- look ahead to absorb immediate clause-ending punctuation      -->
+    <!-- for original versions, and as a child of a duplicated element -->
+    <!-- but not in a duplicate that is entirely the display math      -->
+    <xsl:if test="$b-original or not($b-top-level)">
+        <xsl:apply-templates select="." mode="get-clause-punctuation" />
+    </xsl:if>
+    <!-- For "men" in LaTeX we supply a \label{},      -->
+    <!-- and for HTML we hard-code the equation number -->
+    <!-- This is a no-op for "me"                      -->
+    <xsl:apply-templates select="." mode="tag" />
+    <!-- For "me" and LaTeX output we perhaps sneak  -->
+    <!-- in a \qedhere for tombstone placement       -->
+    <!-- Inappropriate if numbers exist to the right -->
+    <xsl:apply-templates select="." mode="qed-here" />
+    <!-- We add a newline for visually appealing source -->
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>\end{</xsl:text>
+    <xsl:apply-templates select="." mode="displaymath-alignment" />
+    <xsl:text>}</xsl:text>
+    <!-- We must return to a paragraph, so                     -->
+    <!-- we can add an unprotected newline                     -->
+    <!-- Note: clause-ending punctuation has been absorbed,    -->
+    <!-- so is not left orphaned at the start of the next line -->
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
 
+<!-- Always an "equation" for an "me"              -->
+<!-- The equation* is AMS-Math-specific,           -->
+<!-- "displaymath" is base-LaTeX equivalent        -->
+<!-- *Extensive* discussion at                     -->
+<!-- http://tex.stackexchange.com/questions/40492/ -->
 
-
-
-
-<!-- Always an "equation" for an me-variant -->
-<!-- The equation* is AMS-Math-specific,    -->
-<!-- "displaymath" is base-LaTeX equivalent -->
 <xsl:template match="me" mode="displaymath-alignment">
     <xsl:text>equation*</xsl:text>
 </xsl:template>
@@ -800,6 +896,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="men" mode="displaymath-alignment">
     <xsl:text>equation</xsl:text>
 </xsl:template>
+
 
 <!-- We sniff around for ampersands, to decide between "align"    -->
 <!-- and "gather", plus an asterisk for the unnumbered version    -->
@@ -1790,39 +1887,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- QED Here -->
-<!-- Analyze a final "mrow" or any "me"                            -->
-<!-- Strictly LaTeX/amsthm, not a MathJax feature (yet? ever?)     -->
-<!--   (1) Locate enclosing proof, quit if no such thing           -->
-<!--   (2) Check an mrow for being numbered, do not clobber that   -->
-<!--   (3) Locate all trailing element, text nodes                 -->
-<!--       strip-space: between "mrow" and "md" or "mdn"           -->
-<!--       strip-space: between final "p" and "proof"              -->
-<!--   (4) Form nodes interior to proof, and trailing ("remnants") -->
-<!--   (5) At very end of proof                                    -->
-<!--      (a) if no more nodes, or                                 -->
-<!--      (b) one node, totally whitespace and punctuation         -->
-<!--          (we don't differentiate whitespace policy here)      -->
-<!--   (6) Having survived all this write a \qedhere               -->
-<!-- TODO: \qedhere also functions at the end of a list            -->
-<xsl:template match="mrow|me" mode="qed-here">
-    <!-- <xsl:message>here</xsl:message> -->
-    <xsl:variable name="enclosing-proof" select="ancestor::proof" />
-    <xsl:if test="$enclosing-proof and not(self::mrow and parent::md and @number='yes') and not(self::mrow and parent::mdn and not(@number='no'))">
-        <xsl:variable name="proof-nodes" select="$enclosing-proof/descendant-or-self::node()[self::* or self::text()]" />
-        <xsl:variable name="trailing-nodes" select="./following::node()[self::* or self::text()]" />
-        <xsl:variable name="proof-remnants" select="$proof-nodes[count(.|$trailing-nodes) = count($trailing-nodes)]" />
-        <xsl:choose>
-            <xsl:when test="count($proof-remnants) = 0">
-                <xsl:text>\qedhere</xsl:text>
-            </xsl:when>
-            <xsl:when test="(count($proof-remnants) = 1) and (translate(normalize-space($proof-remnants), $clause-ending-marks, '') = '')">
-                <xsl:text>\qedhere</xsl:text>
-            </xsl:when>
-            <xsl:otherwise />
-        </xsl:choose>
-    </xsl:if>
-</xsl:template>
+
 
 <!-- ################################## -->
 <!-- General Text Handling and Clean-Up -->

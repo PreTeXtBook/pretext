@@ -1436,8 +1436,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" mode="xref-knowl" />
 </xsl:template>
 
-<!-- build xref-knowl, and optionally a hidden-knowl duplicate -->
-<!-- &SOLUTION-LIKE; is replaced by WW-avoiding versions        -->
+<!-- build xref-knowl, and optionally a hidden-knowl duplicate       -->
+<!-- &SOLUTION-LIKE; is replaced by WW-avoiding versions             -->
+<!-- NB: "me" has all the necessary templates, but is never a target -->
 <xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|objectives|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|p|li|webwork[*|@*]|men|md|mdn" mode="xref-knowl">
     <!-- a generally available cross-reference knowl file, of duplicated content -->
     <xsl:apply-templates select="." mode="manufacture-knowl">
@@ -1792,7 +1793,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (7) TODO: "wrapped-content" called by "body" to separate code. -->
 
 <!-- &SOLUTION-LIKE; is replaced by WW-avoiding versions -->
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|objectives|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|p|li|webwork[*|@*]|men|md|mdn">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|objectives|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|p|li|webwork[*|@*]|me|men|md|mdn">
     <xsl:param name="b-original" select="true()" />
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
@@ -3881,6 +3882,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- in HTML/MathJax rendering, so there is no override       -->
 
 
+<!-- Displayed Single-Line Math ("me", "men") -->
+<!-- "men" needs to be handled in the knowl production          -->
+<!-- scheme (but just barely), since it can be duplicated,      -->
+<!-- and there are minor details with trailing punctuation.     -->
+<!-- Then we just add "me" in as well, since it is so similar.  -->
+<!-- The necessary modal "body" template is in -common, and     -->
+<!-- is called by other conversions with the default variables. -->
+
+<!-- We need a few templates for knowl production, -->
+<!-- but generally they do nothing                 -->
+
+<!-- TODO: perhaps move "md*" versions below -->
+
+<!-- always visible -->
+<xsl:template match="me|men|md|mdn" mode="is-hidden">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
+<xsl:template match="me|men|md|mdn" mode="body-element" />
+<xsl:template match="me|men|md|mdn" mode="body-css-class" />
+
+<!-- No title; type and number obvious from content -->
+<xsl:template match="me|men|md|mdn" mode="heading-xref-knowl" />
+
+<!-- We need this so a % is used only on the LaTeX side -->
+<xsl:template name="display-math-visual-blank-line">
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- \qedhere device is LaTeX only -->
+<xsl:template match="me|men|mrow" mode="qed-here" />
 
 <!-- Numbering -->
 <!-- We manually "tag" numbered equations in HTML output,    -->
@@ -3889,116 +3921,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- we handle cross-references with knowls.  So no need to  -->
 <!-- \label{} equations even, and indeed it once was a real  -->
 <!-- problem: https://github.com/rbeezer/mathbook/issues/143 -->
-
-
-<!-- NOTE -->
-<!-- The remainder should look very similar to that   -->
-<!-- of the LaTeX/MathJax version in terms of result. -->
-<!-- Notably, "intertext" elements are implemented    -->
-<!-- differently.                                     -->
-
-<!-- Minimal templates for general environments       -->
-<!-- These are necessary since we can cross-reference -->
-<!-- numbered equations within a math display         -->
-
-<!-- always visible -->
-<xsl:template match="men|md|mdn" mode="is-hidden">
-    <xsl:text>false</xsl:text>
-</xsl:template>
-
-<xsl:template match="men|md|mdn" mode="body-element" />
-<xsl:template match="men|md|mdn" mode="body-css-class" />
-
-<!-- No title; type and number obvious from content -->
-<xsl:template match="men|md|mdn" mode="heading-xref-knowl" />
-
-<!-- Displayed Single-Line Math, Unnumbered ("me") -->
-<!-- Never numbered, so never a xref-knowl         -->
-<!-- TODO: move up by template for "m" -->
-<xsl:template match="me">
-    <!-- Never numbered, so no xref knowl, so always original   -->
-    <!-- But it could be part of a larger item being duplicated -->
-    <!-- In either case, we need to preserve punctuation        -->
-    <xsl:param name="b-original" select="true()" />
-    <xsl:param name="b-top-level" select="false()" />
-    <!-- build and save for later manipulation                      -->
-    <!-- Note: template for text nodes passes through mrow children -->
-    <xsl:variable name="raw-latex">
-        <xsl:apply-templates select="." mode="alignat-columns" />
-        <xsl:apply-templates select="text()|var|fillin" />
-        <!-- look ahead to absorb immediate clause-ending punctuation -->
-        <xsl:apply-templates select="." mode="get-clause-punctuation" />
-    </xsl:variable>
-    <!-- we provide a newline for visual appeal -->
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>\begin{</xsl:text>
-    <xsl:apply-templates select="." mode="displaymath-alignment" />
-    <xsl:text>}</xsl:text>
-    <!-- leading whitespace not present, or stripped -->
-    <xsl:text>&#xa;</xsl:text>
-    <!-- we clean whitespace that is irrelevant    -->
-    <!-- MathJax is more tolerant than Latex, but  -->
-    <!-- we choose to treat math bits identically  -->
-    <!-- sanitize-latex template does not provide  -->
-    <!-- a final newline so we add one here        -->
-    <xsl:call-template name="sanitize-latex">
-        <xsl:with-param name="text" select="$raw-latex" />
-    </xsl:call-template>
-    <!-- We add a newline for visually appealing source -->
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>\end{</xsl:text>
-    <xsl:apply-templates select="." mode="displaymath-alignment" />
-    <xsl:text>}</xsl:text>
-    <!-- we provide a newline for visual appeal -->
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Displayed Single-Line Math, Numbered ("men") -->
-<!-- MathJax: out-of-the-box support              -->
-<!-- Requires a manual tag for visual number      -->
-<xsl:template match="men" mode="body">
-    <!-- block-type parameter is ignored, since the          -->
-    <!-- representation never varies, no heading, no wrapper -->
-    <!-- top-level flag is critical for dropping punctuation -->
-    <xsl:param name="block-type" />
-    <xsl:param name="b-original" select="true()" />
-    <xsl:param name="b-top-level" select="false()" />
-    <!-- build and save for later manipulation                      -->
-    <!-- Note: template for text nodes passes through mrow children -->
-    <xsl:variable name="raw-latex">
-        <xsl:apply-templates select="." mode="alignat-columns" />
-        <xsl:apply-templates select="text()|var|fillin" />
-        <!-- look ahead to absorb immediate clause-ending punctuation      -->
-        <!-- for original versions, and as a child of a duplicated element -->
-        <!-- but not in a duplicate that is entirely the display math      -->
-        <xsl:if test="$b-original or not($b-top-level)">
-            <xsl:apply-templates select="." mode="get-clause-punctuation" />
-        </xsl:if>
-        <xsl:apply-templates select="." mode="tag" />
-    </xsl:variable>
-    <!-- we provide a newline for visual appeal -->
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>\begin{</xsl:text>
-    <xsl:apply-templates select="." mode="displaymath-alignment" />
-    <xsl:text>}</xsl:text>
-    <!-- leading whitespace not present, or stripped -->
-    <xsl:text>&#xa;</xsl:text>
-    <!-- we clean whitespace that is irrelevant    -->
-    <!-- MathJax is more tolerant than Latex, but  -->
-    <!-- we choose to treat math bits identically  -->
-    <!-- sanitize-latex template does not provide  -->
-    <!-- a final newline so we add one here        -->
-    <xsl:call-template name="sanitize-latex">
-        <xsl:with-param name="text" select="$raw-latex" />
-    </xsl:call-template>
-    <!-- We add a newline for visually appealing source -->
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>\end{</xsl:text>
-    <xsl:apply-templates select="." mode="displaymath-alignment" />
-    <xsl:text>}</xsl:text>
-    <!-- we provide a newline for visual appeal -->
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
 
 <!-- Displayed Multi-Line Math ("md", "mdn") -->
 <!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
@@ -4103,11 +4025,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We do "tag" numbered equations in MathJax output, -->
 <!-- because we want to control and duplicate the way  -->
 <!-- numbers are generated and assigned by LaTeX       -->
+<!-- "me" is never numbered/tagged, "men" always is    -->
+<xsl:template match="me" mode="tag" />
+
 <xsl:template match="men|mrow" mode="tag">
     <xsl:text>\tag{</xsl:text>
     <xsl:apply-templates select="." mode="number" />
     <xsl:text>}</xsl:text>
 </xsl:template>
+
 
 <!-- Intertext -->
 <!-- A LaTeX construct really, we just jump out/in of    -->
@@ -5895,7 +5821,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Override to turn off cross-references as knowls          -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|objectives|exercise|webwork|hint|answer|solution|exercisegroup|me|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|blockquote|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|objectives|exercise|webwork|hint|answer|solution|exercisegroup|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">
