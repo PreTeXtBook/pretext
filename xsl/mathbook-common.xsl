@@ -715,17 +715,80 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Mathematics -->
 <!-- ########### -->
 
-<!-- Mathematics authored in LaTeX syntax will be        -->
-<!-- independent of output format.  Despite MathJax's    -->
-<!-- broad array of capabilities, there are enough       -->
-<!-- differences that it is easier to maintain separate  -->
-<!-- routines for different outputs.  Still, we try to   -->
-<!-- isolate some routines in "xsl/mathbook-common.xsl". -->
+<!-- Mathematics authored in LaTeX syntax should be       -->
+<!-- independent of output format.  Despite MathJax's     -->
+<!-- broad array of capabilities, there are still some    -->
+<!-- differences which we need to accomodate via abstract -->
+<!-- templates.  Those abstractions are documented here   -->
+<!-- and also where implemented                           -->
+
+<!-- NB: we are partway through changing to above claim -->
+<!-- 2017-10-30:  "m" is consolidated here              -->
 
 <!-- Certain options and variants are common in both     -->
 <!-- cases, so we provide templates for those decisions  -->
 <!-- Elsewhere are low-level manipulation of whitespace  -->
 <!-- in processed version of  LaTeX output               -->
+
+
+<!-- Inline Mathematics ("m") -->
+<!--                                                     -->
+<!-- This is fairly simple.  Differences are             -->
+<!--   (1) Some conversions require different delimiters -->
+<!--   (2) We adjust punctuation for HTML, but not Latex -->
+<!--                                                     -->
+<!-- Abstract Templates                                  -->
+<!--                                                     -->
+<!-- (1) begin-inline-math, end-inline-math              -->
+<!--       The delimiters for inline mathematics         -->
+<!-- (2) get-clause-punctuation                          -->
+<!--       Look at next node, and if a text node,        -->
+<!--       then look for leading punctuation, and        -->
+<!--       bring into math with \text() wrapper          -->
+
+<xsl:template match= "m">
+    <!-- Build a textual version of the latex,  -->
+    <!-- applying the rare templates allowed,   -->
+    <!-- save for minor manipulation later.     -->
+    <!-- Note: generic text() template here in  -->
+    <!-- -common should always pass through the -->
+    <!-- text nodes within "m" with no changes  -->
+    <xsl:variable name="raw-latex">
+        <xsl:choose>
+            <xsl:when test="ancestor::webwork">
+                <xsl:apply-templates select="text()|var" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="text()|fillin" />
+            </xsl:otherwise>
+        </xsl:choose>
+        <!-- look ahead to absorb immediate clause-ending punctuation   -->
+        <!-- this is useful for HTML/MathJax to prevent bad line breaks -->
+        <!-- The template here in -common is generally useful, but      -->
+        <!-- for LaTeX we override to be a no-op, since not necessary   -->
+        <xsl:apply-templates select="." mode="get-clause-punctuation" />
+    </xsl:variable>
+    <!-- wrap tightly in math delimiters -->
+    <xsl:call-template name="begin-inline-math" />
+    <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
+    <!--   (1) avoid LaTeX compilation errors                       -->
+    <!--   (2) avoid spurious blank lines leading to new paragraphs -->
+    <!--   (3) provide human-readable source of high quality        -->
+    <!-- sanitize-latex template does not provide a final newline   -->
+    <!-- and we do not add one here either, since it is inline math -->
+    <!-- MathJax is more tolerant, but readability is still useful  -->
+    <xsl:call-template name="sanitize-latex">
+        <xsl:with-param name="text" select="$raw-latex" />
+    </xsl:call-template>
+    <xsl:call-template name="end-inline-math" />
+</xsl:template>
+
+
+
+
+
+
+
 
 <!-- Always an "equation" for an me-variant -->
 <!-- The equation* is AMS-Math-specific,    -->

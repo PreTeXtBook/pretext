@@ -3860,12 +3860,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Mathematics -->
 <!-- ########### -->
 
-<!-- Mathematics authored in LaTeX syntax will be        -->
-<!-- independent of output format.  Despite MathJax's    -->
-<!-- broad array of capabilities, there are enough       -->
-<!-- differences that it is easier to maintain separate  -->
-<!-- routines for different outputs.  Still, we try to   -->
-<!-- isolate some routines in "xsl/mathbook-common.xsl". -->
+<!-- Mathematics authored in LaTeX syntax should be       -->
+<!-- independent of output format.  Despite MathJax's     -->
+<!-- broad array of capabilities, there are still some    -->
+<!-- differences which we need to accomodate via abstract -->
+<!-- templates.                                           -->
+
+<!-- Inline Mathematics ("m") -->
+<!-- We use the asymmetric LaTeX delimiters \( and \).     -->
+<!-- For LaTeX these are not "robust", hence break moving  -->
+<!-- items (titles, index), so use the "fixltx2e" package, -->
+<!-- which declares \MakeRobust\( and \MakeRobust\)        -->
+<!-- Note: LaTeX, unlike HTML, needs no help with          -->
+<!-- clause-ending punctuation trailing inline math,       -->
+<!-- it always does the right thing.  So when the general  -->
+<!-- template for text nodes in -common goes to drop this  -->
+<!-- punctuation, it also checks the $latex-processing     -->
+<!-- global variable                                       -->
+<!-- NB: we should be able to use templates to make this   -->
+<!-- happen without the global variable                    -->
+
+<!-- These two templates provide the delimiters for -->
+<!-- inline math, implementing abstract templates.  -->
+<xsl:template name="begin-inline-math">
+    <xsl:text>\(</xsl:text>
+</xsl:template>
+
+<xsl:template name="end-inline-math">
+    <xsl:text>\)</xsl:text>
+</xsl:template>
+
+<!-- This is the override for LaTeX processing,        -->
+<!-- since punctuation following inline math is        -->
+<!-- not a problem for traditional TeX's line-breaking -->
+<xsl:template match="m" mode="get-clause-punctuation" />
+
 
 <!-- Numbering -->
 <!-- We do not tag equations with numbers in LaTeX output,   -->
@@ -3880,43 +3909,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- \intertext needs a very different stategy for HTML      -->
 <!-- \label needs to not occur in duplicated content in HTML -->
 
-<!-- Inline Math ("m") -->
-<!-- We use the asymmetric LaTeX delimiters \( and \).     -->
-<!-- For LaTeX these are not "robust", hence break moving  -->
-<!-- items (titles, index), so use the "fixltx2e" package, -->
-<!-- which declares \MakeRobust\( and \MakeRobust\)        -->
-<!-- Note: LaTeX, unlike HTML, needs no help with          -->
-<!-- clause-ending punctuation trailing inline math        -->
-<!-- it always does the right thing.  So when the general  -->
-<!-- template for text nodes in mathbook-common goes to    -->
-<!-- drop this punctuation, it also checks the             -->
-<!-- $latex-processing global variable                     -->
-<xsl:template match= "m">
-    <xsl:variable name="raw-latex">
-        <!-- build and save for later manipulation        -->
-        <!-- Note: generic text() template passes through -->
-        <xsl:choose>
-            <xsl:when test="ancestor::webwork">
-                <xsl:apply-templates select="text()|var" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="text()|fillin" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- wrap tightly in math delimiters -->
-    <xsl:text>\(</xsl:text>
-    <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
-    <!--   (1) avoid LaTeX compilation errors                       -->
-    <!--   (2) avoid spurious blank lines leading to new paragraphs -->
-    <!--   (3) provide human-readable source of high quality        -->
-    <!-- sanitize-latex template does not provide a final newline   -->
-    <!-- and we do not add one here either for inline math          -->
-    <xsl:call-template name="sanitize-latex">
-        <xsl:with-param name="text" select="$raw-latex" />
-    </xsl:call-template>
-    <xsl:text>\)</xsl:text>
-</xsl:template>
 
 <!-- Displayed Single-Line Math ("me", "men") -->
 <!-- Single displayed equation, me (unnumbered), men (numbered)    -->

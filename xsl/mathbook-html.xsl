@@ -3852,12 +3852,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Mathematics -->
 <!-- ########### -->
 
-<!-- Mathematics authored in LaTeX syntax will be        -->
-<!-- independent of output format.  Despite MathJax's    -->
-<!-- broad array of capabilities, there are enough       -->
-<!-- differences that it is easier to maintain separate  -->
-<!-- routines for different outputs.  Still, we try to   -->
-<!-- isolate some routines in "xsl/mathbook-common.xsl". -->
+<!-- Mathematics authored in LaTeX syntax should be       -->
+<!-- independent of output format.  Despite MathJax's     -->
+<!-- broad array of capabilities, there are still some    -->
+<!-- differences which we need to accomodate via abstract -->
+<!-- templates.                                           -->
+
+<!-- Inline Mathematics ("m") -->
+
+<!-- Never labeled, so not ever knowled,        -->
+<!-- and so no need for a duplicate template    -->
+<!-- Asymmetric LaTeX delimiters \( and \) need -->
+<!-- to be part of MathJax configuration, but   -->
+<!-- also free up the dollar sign               -->
+
+<!-- These two templates provide the delimiters for -->
+<!-- inline math, so we can adjust with overides.   -->
+<xsl:template name="begin-inline-math">
+    <xsl:text>\(</xsl:text>
+</xsl:template>
+
+<xsl:template name="end-inline-math">
+    <xsl:text>\)</xsl:text>
+</xsl:template>
+
+<!-- The general modal template "get-clause-punctuation"      -->
+<!-- does exactly what we need here to fix up bad line-breaks -->
+<!-- in HTML/MathJax rendering, so there is no override       -->
+
+
 
 <!-- Numbering -->
 <!-- We manually "tag" numbered equations in HTML output,    -->
@@ -3873,52 +3896,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- of the LaTeX/MathJax version in terms of result. -->
 <!-- Notably, "intertext" elements are implemented    -->
 <!-- differently.                                     -->
-
-<!-- Inline Math ("m") -->
-<!-- Never labeled, so not ever knowled,        -->
-<!-- and so no need for a duplicate template    -->
-<!-- Asymmetric LaTeX delimiters \( and \) need -->
-<!-- to be part of MathJax configuration, but   -->
-<!-- also free up the dollar sign               -->
-<!-- TODO: absorb punctuation, bad HTML line breaks -->
-<xsl:template match= "m">
-    <xsl:variable name="raw-latex">
-        <!-- build and save for possible manipulation     -->
-        <!-- Note: generic text() template passes through -->
-        <xsl:choose>
-            <xsl:when test="ancestor::webwork">
-                <xsl:apply-templates select="text()|var" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="text()|fillin" />
-            </xsl:otherwise>
-        </xsl:choose>
-        <!-- look ahead to absorb immediate clause-ending punctuation -->
-        <xsl:apply-templates select="." mode="get-clause-punctuation" />
-    </xsl:variable>
-    <!-- wrap tightly in inline-math delimiters -->
-    <xsl:call-template name="begin-inline-math" />
-    <!-- we clean whitespace that is irrelevant      -->
-    <!-- MathJax is more tolerant than Latex, but    -->
-    <!-- we choose to treat math bits identically    -->
-    <!-- sanitize-latex template does not provide    -->
-    <!-- a final newline and we do not add one here  -->
-    <!-- either for inline math                      -->
-    <xsl:call-template name="sanitize-latex">
-        <xsl:with-param name="text" select="$raw-latex" />
-    </xsl:call-template>
-    <xsl:call-template name="end-inline-math" />
-</xsl:template>
-
-<!-- These two templates provide the delimiters for -->
-<!-- inline math, so we can adjust with overides.   -->
-<xsl:template name="begin-inline-math">
-    <xsl:text>\(</xsl:text>
-</xsl:template>
-
-<xsl:template name="end-inline-math">
-    <xsl:text>\)</xsl:text>
-</xsl:template>
 
 <!-- Minimal templates for general environments       -->
 <!-- These are necessary since we can cross-reference -->
