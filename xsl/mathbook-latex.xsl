@@ -3959,201 +3959,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- Displayed Multi-Line Math ("md", "mdn") -->
 
+<!-- The default template for the "md" and "mdn" containers   -->
+<!-- just calls the modal "body" template needed for the HTML -->
+<!-- knowl production scheme. The variables in the "body"     -->
+<!-- template have the right defaults for this application    -->
 
-<!-- Numbering -->
-<!-- We do not tag equations with numbers in LaTeX output,   -->
-<!-- but instead let the LaTeX preamble's configuration      -->
-<!-- options control the way numbers are generated and       -->
-<!-- assigned. The combination of starred/un-starred LaTeX   -->
-<!-- environments, and the presence of "\label{}", "\notag", -->
-<!-- or no such command, control the numbering in response   -->
-<!-- to the number of levels specified.                      -->
+<xsl:template match="md|mdn">
+    <xsl:apply-templates select="." mode="body" />
+</xsl:template>
 
-<!-- Other differences -->
-<!-- \intertext needs a very different stategy for HTML      -->
-<!-- \label needs to not occur in duplicated content in HTML -->
+<!-- Rows of Displayed Multi-Line Math ("mrow") -->
+<!-- Template in -common is sufficient with abstract templates -->
+<!--                                                           -->
+<!-- (1) "display-page-break"                                  -->
+<!-- (2) "qed-here"                                            -->
 
+<!-- Page Breaks within Display Math -->
+<!-- \allowdisplaybreaks is on globally always          -->
+<!-- If parent has  break="no"  then surpress with a *  -->
+<!-- Unless "mrow" has  break="yes" then leave alone    -->
+<!-- no-op for the HTML version, where it is irrelevant -->
 
-<!-- Displayed Single-Line Math ("me", "men") -->
-
-
-<!-- We sniff around for ampersands, to decide between "align"     -->
-<!-- and "gather", plus an asterisk for the unnumbered version     -->
-<!-- NOTE: this is "md|mdn" override from the -common version,     -->
-<!-- since AMSmath has no easy way to make a one-off number within -->
-<!-- the *-form, so we lean toward always using the un-starred     -->
-<!-- versions, except when we flag 100% no numbers inside an "md"  -->
-<!-- NOTE: this consolidates two templates from -common            -->
-<!-- ie the [@alignment] forms are mixed in here                   -->
-<xsl:template match="md|mdn" mode="displaymath-alignment">
-    <xsl:param name="b-nonumbers" select="false()" />
-    <xsl:choose>
-        <!-- look for @alignment override, possibly bad -->
-        <xsl:when test="@alignment='gather'">
-            <xsl:text>gather</xsl:text>
-        </xsl:when>
-        <xsl:when test="@alignment='alignat'">
-            <xsl:text>alignat</xsl:text>
-        </xsl:when>
-        <xsl:when test="@alignment='align'">
-            <xsl:text>align</xsl:text>
-        </xsl:when>
-        <xsl:when test="@alignment">
-            <xsl:message>MBX:ERROR: display math @alignment attribute "<xsl:value-of select="@alignment" />" is not recognized (should be "align", "gather", "alignat")</xsl:message>
-            <xsl:apply-templates select="." mode="location-report" />
-        </xsl:when>
-        <!-- sniff for alignment specifications    -->
-        <!-- this can be easily fooled, eg matrices-->
-        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
-            <xsl:text>align</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>gather</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <!-- if absolutely no numbers, we'll economize -->
-    <!-- in favor of human-readability             -->
-    <xsl:if test="$b-nonumbers">
+<xsl:template match="mrow" mode="display-page-break">
+    <xsl:if test="parent::*/@break='no' and not(@break='yes')">
         <xsl:text>*</xsl:text>
     </xsl:if>
-</xsl:template>
-
-<!-- Displayed Multi-Line Math ("md", "mdn") -->
-<!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
-<!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
-<!-- align environment if ampersands are present, gather environment otherwise   -->
-<!-- Output follows source line breaks, but may be sanitized for quality output  -->
-<xsl:template match="md|mdn">
-    <!-- Look for 100% no-number mrows -->
-    <xsl:variable name="b-nonumbers" select="self::md and not(child::mrow[@number='yes'])" />
-    <!-- build and save for later manipulation                      -->
-    <!-- Note: template for text nodes passes through mrow children -->
-    <xsl:variable name="raw-latex">
-        <xsl:apply-templates select="mrow|intertext">
-            <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
-        </xsl:apply-templates>
-    </xsl:variable>
-    <!-- Build container begin -->
-    <!-- We must be in a paragraph, so we can  -->
-    <!-- cautiously add a protected newline    -->
-    <!-- TODO: save alignment in a variable, use twice -->
-    <xsl:text>%&#xa;</xsl:text>
-    <xsl:text>\begin{</xsl:text>
-    <xsl:apply-templates select="." mode="displaymath-alignment">
-        <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
-    </xsl:apply-templates>
-    <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="." mode="alignat-columns" />
-    <!-- leading whitespace not present, or stripped -->
-    <xsl:text>&#xa;</xsl:text>
-    <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
-    <!--   (1) avoid LaTeX compilation errors                       -->
-    <!--   (2) avoid spurious blank lines leading to new paragraphs -->
-    <!--   (3) provide human-readable source of high quality        -->
-    <!-- sanitize-latex template does not provide a final newline   -->
-    <!-- so we add one later for visual appeal                      -->
-    <xsl:call-template name="sanitize-latex">
-        <xsl:with-param name="text" select="$raw-latex" />
-    </xsl:call-template>
-    <!-- We add a newline for visually appealing source -->
-    <xsl:text>&#xa;</xsl:text>
-    <!-- Build container end -->
-    <xsl:text>\end{</xsl:text>
-    <xsl:apply-templates select="." mode="displaymath-alignment">
-        <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
-    </xsl:apply-templates>
-    <xsl:text>}</xsl:text>
-    <!-- We must return to a paragraph, so -->
-    <!-- we can add an unprotected newline -->
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Rows of displayed Multi-Line Math ("mrow") -->
-<!-- Numbering controlled here with \label{}, \notag, or nothing -->
-<!-- Last row different, has no line-break marker                -->
-<!-- Each mrow finishes with a newline, for visual output        -->
-<!-- LaTeX sanitization observes newlines, but strips final one  -->
-<!-- Limited exceptions to raw text only:                        -->
-<!--     xref's allow for "reasons" in proofs                    -->
-<!--     var is part of WeBWorK problems only                    -->
-<xsl:template match="mrow">
-    <xsl:param name="b-nonumbers" />
-    <xsl:choose>
-        <xsl:when test="ancestor::webwork">
-            <xsl:apply-templates select="text()|xref|var" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="text()|xref|fillin" />
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
-        <!-- look ahead to absorb immediate clause-ending punctuation -->
-        <!-- pass the context as enclosing environment (md, mdn)      -->
-        <xsl:apply-templates select="parent::*" mode="get-clause-punctuation" />
-    </xsl:if>
-    <!-- If we built a pure no-number environment, then we add nothing   -->
-    <!-- Otherwise, we are in a non-starred environment and get a number -->
-    <!-- unless we "\notag" it, which is the better choice under AMSmath -->
-    <!-- http://tex.stackexchange.com/questions/48965                    -->
-    <xsl:choose>
-        <xsl:when test="$b-nonumbers" />
-        <xsl:when test="parent::md">
-            <xsl:choose>
-                <xsl:when test="@number='yes'">
-                    <xsl:apply-templates select="." mode="label" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>\notag</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:when test="parent::mdn">
-            <xsl:choose>
-                <xsl:when test="@number='no'">
-                    <xsl:text>\notag</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="label" />
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-    </xsl:choose>
-    <!-- intertext does not need line-ending on prior row -->
-    <!-- nor does final mrow of the whole display         -->
-    <!-- \allowdisplaybreaks is on globally always        -->
-    <!-- but may need to override with a modal template   -->
-    <xsl:if test="following-sibling::mrow">
-       <xsl:text>\\</xsl:text>
-       <xsl:apply-templates select="." mode="dislay-page-break" />
-    </xsl:if>
-    <!-- check last row as very end of entire proof      -->
-    <!-- and sneak in a \qedhere from the amsthm package -->
-    <xsl:if test="not(following-sibling::*)">
-        <xsl:apply-templates select="." mode="qed-here" />
-    </xsl:if>
-    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Intertext -->
 <!-- An <mrow> will provide trailing newline, -->
-<!-- so do the same here for visual source    -->
-<xsl:template match="md/intertext|mdn/intertext">
+<!-- so we do the same here for visual source -->
+<!-- We need to do this very differently for  -->
+<!-- HTML (we fake it), so there is no        -->
+<!-- implementation in the -common scheme     -->
+<xsl:template match="intertext">
     <xsl:text>\intertext{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Page Breaks within Display Math -->
-<!-- If parent has  break="no"  then surpress with a * -->
-<!-- Unless mrow has  break="yes" then leave alone     -->
-<!-- NB: if mrow goes to common, just make a null      -->
-<!-- version of this template for the HTML version,    -->
-<!-- where it is irrelevant                            -->
-<xsl:template match="mrow" mode="dislay-page-break">
-    <xsl:if test="parent::*/@break='no' and not(@break='yes')">
-        <xsl:text>*</xsl:text>
-    </xsl:if>
 </xsl:template>
 
 

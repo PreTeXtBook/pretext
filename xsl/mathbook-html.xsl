@@ -3893,131 +3893,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We need a few templates for knowl production, -->
 <!-- but generally they do nothing                 -->
 
-<!-- TODO: perhaps move "md*" versions below -->
-
 <!-- always visible -->
-<xsl:template match="me|men|md|mdn" mode="is-hidden">
+<xsl:template match="me|men" mode="is-hidden">
     <xsl:text>false</xsl:text>
 </xsl:template>
 
-<xsl:template match="me|men|md|mdn" mode="body-element" />
-<xsl:template match="me|men|md|mdn" mode="body-css-class" />
+<xsl:template match="me|men" mode="body-element" />
+<xsl:template match="me|men" mode="body-css-class" />
 
 <!-- No title; type and number obvious from content -->
-<xsl:template match="me|men|md|mdn" mode="heading-xref-knowl" />
+<xsl:template match="me|men" mode="heading-xref-knowl" />
 
 <!-- We need this so a % is used only on the LaTeX side -->
 <xsl:template name="display-math-visual-blank-line">
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
-<!-- \qedhere device is LaTeX only -->
-<xsl:template match="me|men|mrow" mode="qed-here" />
-
-<!-- Numbering -->
-<!-- We manually "tag" numbered equations in HTML output,    -->
-<!-- with the exact same numbers that LaTeX would provide    -->
-<!-- automatically.  MathJax allows for custom labels, but   -->
-<!-- we handle cross-references with knowls.  So no need to  -->
-<!-- \label{} equations even, and indeed it once was a real  -->
-<!-- problem: https://github.com/rbeezer/mathbook/issues/143 -->
-
-<!-- Displayed Multi-Line Math ("md", "mdn") -->
-<!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
-<!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
-<!-- align environment if ampersands are present, gather environment otherwise   -->
-<!-- LaTeX environment from "displaymath-alignment" template in -common.xsl      -->
-<!-- NB: *identical* to LaTeX version, but need "duplicate" version              -->
-<xsl:template match="md|mdn" mode="body">
-    <!-- block-type parameter is ignored, since the          -->
-    <!-- representation never varies, no heading, no wrapper -->
-    <!-- top-level flag is critical for dropping punctuation -->
-    <!-- and gets passed through to mrow "helper" templates  -->
-    <xsl:param name="block-type" />
-    <xsl:param name="b-original" select="true()" />
-    <xsl:param name="b-top-level" select="false()" />
-    <!-- We add a newline for visually appealing source -->
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>\begin{</xsl:text>
-    <xsl:apply-templates select="." mode="displaymath-alignment" />
-    <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="." mode="alignat-columns" />
-    <!-- We add a newline for visually appealing source -->
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="mrow|intertext">
-        <xsl:with-param name="b-original" select="$b-original" />
-        <xsl:with-param name="b-top-level" select="$b-top-level" />
-    </xsl:apply-templates>
-    <xsl:text>\end{</xsl:text>
-    <xsl:apply-templates select="." mode="displaymath-alignment" />
-    <xsl:text>}</xsl:text>
-    <!-- We add a newline for visually appealing source -->
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Rows of displayed Multi-Line Math ("mrow") -->
-<!-- (1) MathJax config above turns off all numbering -->
-<!-- (2) Numbering supplied by \tag{}                 -->
-<!-- (3) MathJax config makes span id's predictable   -->
-<!-- (4) Last row special, has no line-break marker   -->
-<!-- Unlike for LaTeX output, we perform LaTeX        -->
-<!-- sanitization on each "mrow" since interleaved    -->
-<!-- "intertext" will have HTML output that might get -->
-<!-- stripped out in generic text processing.         -->
-<xsl:template match="md/mrow">
-    <xsl:param name="b-original" select="true()" />
-    <xsl:param name="b-top-level" select="false()" />
-    <xsl:call-template name="sanitize-latex">
-        <xsl:with-param name="text">
-            <xsl:apply-templates select="text()|xref|var|fillin" />
-        </xsl:with-param>
-    </xsl:call-template>
-    <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
-        <!-- look ahead to absorb immediate clause-ending punctuation      -->
-        <!-- for original versions, and as a child of a duplicated element -->
-        <!-- but not in a duplicate that is entirely the display math      -->
-        <!-- pass the context as enclosing environment (md)                -->
-        <xsl:if test="$b-original or not($b-top-level)">
-            <xsl:apply-templates select="parent::md" mode="get-clause-punctuation" />
-        </xsl:if>
-    </xsl:if>
-    <xsl:if test="@number='yes'">
-        <xsl:apply-templates select="." mode="tag"/>
-    </xsl:if>
-    <xsl:if test="following-sibling::mrow">
-       <xsl:text>\\</xsl:text>
-    </xsl:if>
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="mdn/mrow">
-    <xsl:param name="b-original" select="true()" />
-    <xsl:param name="b-top-level" select="false()" />
-    <xsl:call-template name="sanitize-latex">
-        <xsl:with-param name="text">
-            <xsl:apply-templates select="text()|xref|var|fillin" />
-        </xsl:with-param>
-    </xsl:call-template>
-    <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
-        <!-- look ahead to absorb immediate clause-ending punctuation      -->
-        <!-- for original versions, and as a child of a duplicated element -->
-        <!-- but not in a duplicate that is entirely the display math      -->
-        <!-- pass the context as enclosing environment (mdn)               -->
-        <xsl:if test="$b-original or not($b-top-level)">
-            <xsl:apply-templates select="parent::mdn" mode="get-clause-punctuation" />
-        </xsl:if>
-    </xsl:if>
-    <xsl:choose>
-        <xsl:when test="@number='no'">
-            <xsl:text>\notag</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="." mode="tag"/>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:if test="following-sibling::mrow">
-       <xsl:text>\\</xsl:text>
-    </xsl:if>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
@@ -4026,6 +3914,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- because we want to control and duplicate the way  -->
 <!-- numbers are generated and assigned by LaTeX       -->
 <!-- "me" is never numbered/tagged, "men" always is    -->
+<!-- This is the MathJax hard-coded technique          -->
+
 <xsl:template match="me" mode="tag" />
 
 <xsl:template match="men|mrow" mode="tag">
@@ -4034,10 +3924,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
+<!-- \qedhere device is LaTeX only -->
+<xsl:template match="me|men|mrow" mode="qed-here" />
+
+
+<!-- Displayed Multi-Line Math ("md", "mdn") -->
+
+<!-- The default template for the "md" and "mdn" containers   -->
+<!-- just calls the modal "body" template needed for the HTML -->
+<!-- knowl production scheme.                                 -->
+
+<!-- We need a few templates for knowl production, -->
+<!-- but generally they do nothing                 -->
+
+<!-- always visible -->
+<xsl:template match="md|mdn" mode="is-hidden">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
+<xsl:template match="md|mdn" mode="body-element" />
+<xsl:template match="md|mdn" mode="body-css-class" />
+
+<!-- No title; type and number obvious from content -->
+<xsl:template match="md|mdn" mode="heading-xref-knowl" />
+
+<!-- Rows of Displayed Multi-Line Math ("mrow") -->
+<!-- Template in -common is sufficient with abstract templates -->
+<!--                                                           -->
+<!-- (1) "display-page-break"                                  -->
+<!-- (2) "qed-here"                                            -->
+
+<xsl:template match="mrow" mode="display-page-break" />
 
 <!-- Intertext -->
 <!-- A LaTeX construct really, we just jump out/in of    -->
-<!-- the align/gather environment and process the text   -->
+<!-- the align/gather environment and process the text.  -->
 <!-- "md" and "mdn" can only occur in a "p" and          -->
 <!-- we break a logical PreTeXt "p" into multiple HTML   -->
 <!-- "p" at places where displays occur, such as math    -->
@@ -4045,18 +3966,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- p.intertext, giving xref knowls a place to open.    -->
 <!-- This breaks the alignment, but MathJax has no good  -->
 <!-- solution for this.                                  -->
+<!-- NB: "displaymath-alignment" needs to be just right  -->
 <!-- NB: we check the *parent* for alignment information -->
 <!-- TODO: pass duplication flag, reaction unnecessary? -->
-<xsl:template match="md/intertext|mdn/intertext">
+<xsl:template match="intertext">
+    <xsl:param name="b-nonumbers" select="false()" />
     <xsl:text>\end{</xsl:text>
-    <xsl:apply-templates select="parent::*" mode="displaymath-alignment" />
+    <xsl:apply-templates select="parent::*" mode="displaymath-alignment">
+        <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
+    </xsl:apply-templates>
     <xsl:text>}&#xa;</xsl:text>
     <p class="intertext">
         <xsl:apply-templates />
     </p>
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>\begin{</xsl:text>
-    <xsl:apply-templates select="parent::*" mode="displaymath-alignment" />
+    <xsl:apply-templates select="parent::*" mode="displaymath-alignment">
+        <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
+    </xsl:apply-templates>
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="parent::*" mode="alignat-columns" />
     <xsl:text>&#xa;</xsl:text>
