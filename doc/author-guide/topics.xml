@@ -40,12 +40,14 @@
 
         <subsection xml:id="short-verbatim-text">
             <title>Short, Inline, Verbatim Text</title>
+            <idx>verbatim text</idx>
+            <idx>literal text</idx>
 
-            <p>The <tag>c</tag> is a mnemonic for <q>code</q>, but is really meant to be any chunk of literal characters that you want to emphasise that way.  It is meant for use within a sentence or caption (<q>inline</q>) so its use is limited to those situations, and others that are similar, such as a title or a cell of a table.  Typically these pieces of text do not break across lines, so can bleed into right margins, or cause very short lines.  So keep the content short, and/or use early in the first sentence of a paragraph where you know it will not affect a line break.  For longer chunks, see options following.</p>
+            <p>The is a mnemonic for <q>code</q>, but is really meant to be any chunk of literal characters that you want to emphasise that way.  It is meant for use within a sentence or caption (<q>inline</q>) so its use is limited to those situations, and others that are similar, such as a title or a cell of a table.  Typically these pieces of text do not break across lines, so can bleed into right margins, or cause very short lines.  So keep the content short, and/or use early in the first sentence of a paragraph where you know it will not affect a line break.  For longer chunks, see options following.</p>
 
             <p>Typical presentation is a monospace font, perhaps of a slightly heavier weight.</p>
 
-            <p>There is two caveats for use when creating <latex /> output.  We have chosen to use the <c>?</c> character as a delimiter for the start and end of a run of verbatim text.  Unfortunately, such a choice is necessary.  But if your run of characters includes a question mark, then the run will end prematurely.  So we have an attribute, <attribute>latexsep</attribute> that can be set to some other character, such as <c>!</c> or <c>|</c>, that does not appear in your content.  This choice has no effect on other output formats.</p>
+            <p>There are two caveats for use when creating <latex /> output.  We have chosen to use the <c>?</c> character as a delimiter for the start and end of a run of verbatim text.  Unfortunately, such a choice is necessary.  But if your run of characters includes a question mark, then the run will end prematurely.  So we have an attribute, <attribute>latexsep</attribute> that can be set to some other character, such as <c>!</c> or <c>|</c>, that does not appear in your content.  This choice has no effect on other output formats.</p>
 
             <p>The other caveat for <latex /> output is that you may use the <tag>c</tag> tag within a <tag>title</tag>, but you should avoid <latex />'s special characters (such as <c>\</c>, <c>#</c>, etc.).  Regular characters should migrate to titles as verbatim text just fine, but we do not guarantee all possibilities.</p>
         </subsection>
@@ -73,11 +75,13 @@
 
     <section xml:id="topic-cross-referencing">
         <title>Cross-References and Citations</title>
+        <idx>cross-reference</idx>
+        <idx>citation</idx>
 
         <p>When you read a novel, you would likely read it cover-to-cover (in one sitting?) and then put it away and never read it again.  But for a textbook, you may read cover-to-cover, but you may also frequently skip around, especially at exam time.  And once read, it might become a reference work for you, since you know it so well.  So years later you might come back looking for something.  Cross-references help with all this, so use them liberally.  Recognize that an index is really just a specialized way to provide an abundance of cross-references.</p>
 
         <p>It is a two-step process to make a cross-reference.<ol>
-            <li>Put an <attribute>xml:id</attribute> attribute on any element you think you might want to reference later.  Be organized about the values of these attributes, and in particular do not number them, as this has no place in your source, and you do not want to maintain the changing numbers over the life of your project.  See the advice in <xref ref="overview-cross-references" /> about banned characters.  Some elements do not accept this attribute because the element has nothing to identify it (no number, no title).  Typically these are <term>containers</term> like <tag>sidebyside</tag> or <tag>statement</tag>.  In these cases, put the attribute on the closest enclosing element.</li>
+            <li>Put an <attribute>xml:id</attribute> attribute on any element you think you might want to reference later.  Be organized about the values of these attributes, and in particular do not number them, as this has no place in your source, and you do not want to maintain the changing numbers over the life of your project.  See the advice in <xref ref="overview-cross-references" /> about banned characters.  Some elements do not accept this attribute because the element has nothing to identify it (no number, no title).  Typically these are <term>containers</term><idx>container</idx> like <tag>sidebyside</tag> or <tag>statement</tag>.  In these cases, put the attribute on the closest enclosing element.</li>
 
             <li>To make a cross reference, you create an <tage>xref</tage> element with a <attribute>ref</attribute> attribute with the same value as <attribute>xml:id</attribute> attribute on the element you want to reference.</li>
         </ol>Simple.  It is meant to be, so you can use it liberally.  But we also know authors want some flexibility.</p>
@@ -216,7 +220,7 @@
     <section xml:id="topic-divisions">
         <title>Divisions</title>
 
-        <p>A <term>division</term> is a structured component of a book or article that would be recognized by most any reader.  They are essential to the organization of a <pretext /> project.  Notice that we use the generic term division, since a <tag>section</tag> is just one example of a division.</p>
+        <p>A <term>division</term><idx>division</idx> is a structured component of a book or article that would be recognized by most any reader.  They are essential to the organization of a <pretext /> project.  Notice that we use the generic term division, since a <tag>section</tag> is just one example of a division.</p>
 
         <p>divisions are <tag>book</tag>, <tag>article</tag>, <tag>part</tag>, <tag>chapter</tag>, <tag>section</tag>, <tag>subsection</tag>, <tag>subsubsection</tag>, and <tag>paragraphs</tag>.  Their use is fairly intuitive, though there are some restrictions, so please read on.</p>
 
@@ -226,7 +230,7 @@
 
         <p>Divisions must nest properly and may not be skipped.  So a <tag>section</tag> cannot contain a <tag>chapter</tag> and a <tag>subsection</tag> may not be contained in a <tag>chapter</tag> without an intervening <tag>section</tag>.</p>
 
-        <p>A division <em>must</em> contain a <tag>title</tag>, and may contain one or more index entries (see <xref provisional="topic-index" />), which should appear before anything else.  Any division may be unstructured, with just a sequence of <term>top-level content</term> such as paragraphs, figures, lists, theorems, <etc />  Or a division may be structured, and in this case it must follow a prescribed pattern.  There may be a single, optional <tag>introduction</tag>, filled with top-level content, followed by a sequence of at least one of the appropriate divisions, ending with a single, optional <tag>conclusion</tag>, filled with top-level content.  It is an error to begin with a run of top-level content inside a division and then begin to use divisions.  (The solution is to make the initial content an <tag>introduction</tag> and/or one or several divisions.)</p>
+        <p>A division <em>must</em> contain a <tag>title</tag>, and may contain one or more index entries (see <xref provisional="topic-index" />), which should appear before anything else.  Any division may be unstructured, with just a sequence of <term>top-level content</term><idx>top-level content</idx> such as paragraphs, figures, lists, theorems, <etc />  Or a division may be structured, and in this case it must follow a prescribed pattern.  There may be a single, optional <tag>introduction</tag>, filled with top-level content, followed by a sequence of at least one of the appropriate divisions, ending with a single, optional <tag>conclusion</tag>, filled with top-level content.  It is an error to begin with a run of top-level content inside a division and then begin to use divisions.  (The solution is to make the initial content an <tag>introduction</tag> and/or one or several divisions.)</p>
 
         <p>There are exceptions to the above.  For one, <tag>paragraphs</tag> is an anomalous division, as a sort of lightweight sectioning command.  It may appear in any division, at any location within a division, it may not be divided further (it is a leaf of the document tree), it never gets a number, and its title is formatted in a subsidiary way.  I especially like to use this in a two- or three-page <tag>article</tag> that has no other divisions at all.  Typical presentation has the title in bold, without much change in font size (if at all), inline with the first paragraph, and perhaps a bit of vertical space as it begins and ends.  Despite the name, it may contain more than just paragaphs, so may contain any top-level-content that would go in any other division.</p>
 
@@ -235,9 +239,10 @@
 
     <section xml:id="topic-mathematics">
         <title>Mathematics</title>
+        <idx>mathematics</idx>
 
         <introduction>
-            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subsset of <latex /> supported by the very capable <url href="https://www.mathjax.org/">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c> package maintained by the American Mathematical Society at their <url href="http://www.ams.org/publications/authors/tex/amslatex">AMS-LaTeX page</url>.  For a complete and precise list of what MathJax supports, see the <url href="http://docs.mathjax.org/en/latest/tex.html#supported-latex-commands">MathJax Supported LaTeX commands</url> page.</p>
+            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subsset of <latex /> supported by the very capable <url href="https://www.mathjax.org/">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="http://www.ams.org/publications/authors/tex/amslatex">AMS-LaTeX page</url>.  For a complete and precise list of what MathJax supports, see the <url href="http://docs.mathjax.org/en/latest/tex.html#supported-latex-commands">MathJax Supported LaTeX commands</url> page.</p>
         </introduction>
 
         <subsection>
@@ -328,7 +333,7 @@
         <subsection>
             <title>Your Macros</title>
 
-            <p>These go in the <tag>docinfo</tag> section, wrapped in a <tag>macros</tag> element.  Keep them simple<mdash />one or two arguments, and one-line definitions.  This is not the place to be fancy, and not the place to try to end-run the structural aspects of <pretext />.  The idea is to define something like <c>\adjoint{A}</c> for the matrix <c>A</c> to be a superscript asterisk, and later you can change your mind and use a superscript dagger instead.  Keep in the spirit of <pretext /> and use readable, semantic macros.  For example, do not use <c>\a{A}</c> for the adjoint of <c>A</c>.</p>
+            <p>These go in the <tag>docinfo</tag> section, wrapped in a <tag>macros</tag><idx>macro</idx> element.  Keep them simple<mdash />one or two arguments, and one-line definitions.  This is not the place to be fancy, and not the place to try to end-run the structural aspects of <pretext />.  The idea is to define something like <c>\adjoint{A}</c> for the matrix <c>A</c> to be a superscript asterisk, and later you can change your mind and use a superscript dagger instead.  Keep in the spirit of <pretext /> and use readable, semantic macros.  For example, do not use <c>\a{A}</c> for the adjoint of <c>A</c>.</p>
 
             <p><pretext /> will use your macros correctly for print and for <init>HTML</init>, after erasing whitespace from the left margin, and stripping <latex /> comments.</p>
         </subsection>
@@ -376,11 +381,12 @@
 
     <section xml:id="topic-images">
         <title>Images</title>
+        <idx>image</idx>
 
         <subsection xml:id="topic-images-raster">
             <title>Raster Images</title>
 
-            <p>A <term>raster image</term> is an image described pixel-by-pixel, with different colors and intensities.  Photographs are good examples.  Common formats are Portable Network Graphics (PNG) and Joint Photographic Experts Group (JPEG, JPG), which will both work with <c>pdflatex</c> and modern browsers.  JPEG are a good choice for photographics since they are compressed on the assumption they will be viewed by a human, while PNG is a lossless format and good for line art, diagrams and similar images (if you do not have vector graphics versions, see below).</p>
+            <p>A <term>raster image</term><idx>raster image</idx><idx><h>image</h><h>raster image</h></idx> is an image described pixel-by-pixel, with different colors and intensities.  Photographs are good examples.  Common formats are Portable Network Graphics (PNG) and Joint Photographic Experts Group (JPEG, JPG), which will both work with <c>pdflatex</c> and modern browsers.  JPEG are a good choice for photographics since they are compressed on the assumption they will be viewed by a human, while PNG is a lossless format and good for line art, diagrams and similar images (if you do not have vector graphics versions, see below).</p>
 
             <p>To use these images, you simply provide the filename, with a relative path.  A subdirectory such as <c>images</c> is a good choice for a place to put them.  It is your responsibility to place these images where the <latex /> output will find them or where the HTML output will find them.  The XML would look like:</p>
 
@@ -404,7 +410,7 @@
         <subsection xml:id="topic-images-vector">
             <title>Vector Graphics</title>
 
-            <p>An image is a <term>vector graphic</term> if the file describes the geometric shapes that constitute the image.  So a simple diagram would be a good candidate, but a photograph would not.  Popular formats are Portable Document Format (PDF) and Scalable Vector Graphics (SVG).  You will get the best results with PDF images in <latex /> output and SVG images for HTML.  The principal advantage of these formats is that they scale (big or small) smoothly, along with fonts.  This is critical when you cannot predict the screen size for a reader of an electronic version.</p>
+            <p>An image is a <term>vector graphic</term><idx>vector graphic</idx><idx><h>image</h><h>vector graphic</h></idx> if the file describes the geometric shapes that constitute the image.  So a simple diagram would be a good candidate, but a photograph would not.  Popular formats are Portable Document Format (PDF) and Scalable Vector Graphics (SVG).  You will get the best results with PDF images in <latex /> output and SVG images for HTML.  The principal advantage of these formats is that they scale (big or small) smoothly, along with fonts.  This is critical when you cannot predict the screen size for a reader of an electronic version.</p>
 
             <p>Unless you describe these images with a language (see next subsection), you are responsible for providing the PDF and SVG versions.  The <c>pdf2svg</c> utility is very useful if you have PDF images only.  To use these images, you simply follow the instructions above, but do not include a file extension.  This alerts the conversion to use the best possible choice.  So presuming we had files <c>images/toad-life-cycle.pdf</c> and <c>images/toad-life-cycle.svg</c>, an example would be:</p>
 
@@ -466,8 +472,9 @@
 
     <section xml:id="topic-sidebyside">
         <title>Side-by-Side Panels</title>
+        <idx>side-by-side panel</idx>
 
-        <p>Documents, pages, and screens tend to run vertically from top to bottom.  But sometimes you want to control elements laid out horizontally.  A <tag>sidebyside</tag> is designed to play this role.  It is best thought of as a container, enclosing <term>panels</term>, and specifying their layout.  Examples include three images, all the same size and equally spaced.  Or a poem occupying two-thirds of the available width, with commentary adjacent in the remaining third.  Or an image next to a table.  But the most common use may be a single image (with no caption, and hence no number), whose width and horizontal placement are controlled by the layout.</p>
+        <p>Documents, pages, and screens tend to run vertically from top to bottom.  But sometimes you want to control elements laid out horizontally.  A <tag>sidebyside</tag> is designed to play this role.  It is best thought of as a container, enclosing <term>panels</term><idx><h>panel</h><see>side-by-side panel</see></idx><idx><h>side-by-side panel</h><h>panel</h></idx>, and specifying their layout.  Examples include three images, all the same size and equally spaced.  Or a poem occupying two-thirds of the available width, with commentary adjacent in the remaining third.  Or an image next to a table.  But the most common use may be a single image (with no caption, and hence no number), whose width and horizontal placement are controlled by the layout.</p>
 
         <p>See the schema for the exact items that are allowed in a <tag>sidebyside</tag>.  To author, just place these items within <tag>sidebyside</tag> in the order they should appear, left to right.  Then you add attributes to the <tag>sidebyside</tag> element to affect placement.</p>
 
@@ -485,7 +492,7 @@
 
         <p>For a single panel with no attributes, the panel will occupy 100<percent /> of the width.  A single panel with a specified width will get equal (auto) margins, resulting in a centered panel.</p>
 
-        <p>Captioned items as panels deserve special mention.  These will continue to be numbered consecutively, with one exception.  If you place a <tag>sidebyside</tag> inside of a <tag>figure</tag>, then the <tag>figure</tag> will be numbered, and the captioned items inside the <tag>sidebyside</tag> will be <term>sub-captioned</term>.  In other words, the second captioned panel of a <tag>sidebyside</tag> inside Figure 5.2 would be referenced as Figure 5.2.b.</p>
+        <p>Captioned items<idx><h>side-by-side panel</h><h>panel</h><h>captioned item</h></idx> as panels deserve special mention.  These will continue to be numbered consecutively, with one exception.  If you place a <tag>sidebyside</tag> inside of a <tag>figure</tag>, then the <tag>figure</tag> will be numbered, and the captioned items inside the <tag>sidebyside</tag> will be <term>sub-captioned</term><idx><h>side-by-side panel</h><h>panel</h><h>sub-captioned item</h></idx>.  In other words, the second captioned panel of a <tag>sidebyside</tag> inside Figure 5.2 would be referenced as Figure 5.2.b.</p>
 
         <p>An <tag>sbsgroup</tag> (<q>side-by-side group</q>) contains only <tag>sidebyside</tag>, which are displayed in order.  However, all of the layout parameters allowed on a <tag>sidebyside</tag> may be used on an <tag>sbsgroup</tag>.  This might allow a collection of fifteen images to be laid out in three rows of five images each, with widths and spacing identical for each row because the parameters are specified on the <tag>sbsgroup</tag> element.  In this way, simple grids can be constructed.  Note that any layout parameters given on an enclosed <tag>sidebyside</tag> will take priority over those given on the <tag>sbsgroup</tag>.  Captioning behavior extends to an entire <tag>sbsgroup</tag>.</p>
 
@@ -508,12 +515,14 @@
 
     <section xml:id="topic-url">
         <title><init>URL</init>s and External References</title>
+        <idx>URL</idx>
+        <idx>external reference</idx>
 
         <subsection>
             <title><init>URL</init>s to External Web Pages</title>
 
-            <p>The <tag>url</tag> tag can be used to point to external items (as distinct from other portions of your current document, which is accomplished with the <tage>xref</tage> element, <xref ref="overview-cross-references" />).  It always needs a value for the <attribute>href</attribute> attribute, most likely a <init>URL</init>.  Most of this time, this will point to some resource available on the Internet but it could be a file on the system hosting your document, perhaps using a relative address (but see the rest of this section for some cautions).  Here are three scenarios:<ul>
-                <li><p>The <tag>url</tag> element is empty.  Then the value of the <attribute>href</attribute> is also used for the visible text of the link, verbatim, and usually in a monospace font.  Use <term>percent-encoding</term> (aka <term>URL encoding</term>) for the <attribute>href</attribute> attribute to include special characters, such as spaces.</p></li>
+            <p>The <tag>url</tag><idx>URL</idx> tag can be used to point to external items (as distinct from other portions of your current document, which is accomplished with the <tage>xref</tage> element, <xref ref="overview-cross-references" />).  It always needs a value for the <attribute>href</attribute> attribute, most likely a <init>URL</init>.  Most of this time, this will point to some resource available on the Internet but it could be a file on the system hosting your document, perhaps using a relative address (but see the rest of this section for some cautions).  Here are three scenarios:<ul>
+                <li><p>The <tag>url</tag> element is empty.  Then the value of the <attribute>href</attribute> is also used for the visible text of the link, verbatim, and usually in a monospace font.  Use <term>percent-encoding</term><idx>percent encoding</idx><idx><h>percent encoding</h><seealso>URL encoding</seealso></idx> (aka <term>URL encoding</term><idx><h>URL</h><h>URL encoding</h></idx>) for the <attribute>href</attribute> attribute to include special characters, such as spaces.</p></li>
 
                 <li><p>The <tag>url</tag> element has content.  Now the content should be authored as you would any other text in a sentence.  Potentially problematic characters, such as a tilde should be authored with provided empty elements, but authored literally in the <attribute>href</attribute> attribute.</p></li>
 
@@ -540,10 +549,11 @@
 
     <section xml:id="topic-video">
         <title>Video</title>
+        <idx>video</idx>
 
-        <p>The <tag>video</tag> element is used to embed a video in output formed from <init>HTML</init>.  It may be placed inside a <tag>figure</tag> or can be a panel of a <tag>sidebyside</tag>.  The former will have a caption, be numbered, and hence can be the target of a cross-reference (<tag>xref</tag>).  The latter is anonymous, but allows for horizontal layout, and combinations with other panels.</p>
+        <p>The <tag>video</tag><idx>video</idx> element is used to embed a video in output formed from <init>HTML</init>.  It may be placed inside a <tag>figure</tag> or can be a panel of a <tag>sidebyside</tag>.  The former will have a caption, be numbered, and hence can be the target of a cross-reference (<tag>xref</tag>).  The latter is anonymous, but allows for horizontal layout, and combinations with other panels.</p>
 
-        <p>Size is controlled by a <attribute>width</attribute> attribute expressed as a percentage (on the <tag>video</tag> element when used in a figure, or as part of the <tag>sidebyside</tag> layout parameters).  Height is controlled by giving the <term>aspect ratio</term> with the <attribute>aspect</attribute> attribute on the <tag>video</tag> element.  The value can be a ratio expressed like <c>4:3</c> or a decimal number computed from the width divided by the height, such as <c>1.333</c>.  The default for videos is a 16:9 aspect ratio, which is very common.</p>
+        <p>Size is controlled by a <attribute>width</attribute> attribute expressed as a percentage (on the <tag>video</tag> element when used in a figure, or as part of the <tag>sidebyside</tag> layout parameters).  Height is controlled by giving the <term>aspect ratio</term><idx>aspect ratio</idx><idx><h>aspect ratio</h><seealso>video</seealso></idx><idx><h>video</h><h>aspect ratio</h></idx> with the <attribute>aspect</attribute> attribute on the <tag>video</tag> element.  The value can be a ratio expressed like <c>4:3</c> or a decimal number computed from the width divided by the height, such as <c>1.333</c>.  The default for videos is a 16:9 aspect ratio, which is very common.</p>
 
         <p>If you host the video content as part of your output, then the <attribute>source</attribute> should be a relative file name that points to the file containing the video, but <em>without an extension</em>.  The supported formats are MP4, Ogg, and WebM.  Browser capabilities and provided files are searched preferentially in that order.  In other words, you can provide files in more than one format and increase the likelihood that a reader's browser will find a format it can playback.</p>
 
@@ -591,6 +601,7 @@
 
     <section xml:id="topic-unicode">
         <title>Unicode Characters</title>
+        <idx>Unicode characters</idx>
 
         <introduction>
 
@@ -644,7 +655,7 @@
     <section xml:id="topic-xinclude">
         <title>Xinclude Modularization</title>
 
-        <p>The <c>xinclude</c> mechanism is not part of <pretext />, <foreign>per se</foreign>.  It is of some use for organizing your work, so you do not have mammoth files open in your editor.  As discussed in <xref ref="processing-modular" /> there is very little value in modularizing so much that you have many very small files, and also almost no benefit whatsoever to using directory structure to duplicate the inherent tree-like structure of <init>XML</init>.</p>
+        <p>The <c>xinclude</c><idx><c>xinclude</c></idx> mechanism is not part of <pretext />, <foreign>per se</foreign>.  It is of some use for organizing your work, so you do not have mammoth files open in your editor.  As discussed in <xref ref="processing-modular" /> there is very little value in modularizing so much that you have many very small files, and also almost no benefit whatsoever to using directory structure to duplicate the inherent tree-like structure of <init>XML</init>.</p>
 
         <p>The <c>xinclude</c> mechanism automatically introduces a <attribute>xml:base</attribute> attribute, which we need to account for in the RELAX-NG schema (<xref ref="schema" />).  So we limit which <pretext /> elements may be the root element of an included file.  The rough, general rule is that if an element <em>can</em> have a title, then it can be the root element of an included file.  So in particular all the divisions (<tag>chapter</tag>, <tag>section</tag>, <etc />) are all candidates.</p>
 
