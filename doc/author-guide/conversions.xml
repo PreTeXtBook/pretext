@@ -23,7 +23,7 @@
         <p>Many of the options for different conversions are accomplished by command-line options, which are fed to <c>xsltproc</c> by what that program calls <term>string parameters</term>.  Here are two examples:<cd>
             <cline>xsltproc -stringparam html.knowl.example no mathbook-html.xsl fauna.xml</cline>
             <cline>xsltproc -stringparam latex.font.size 14pt mathbook-latex.xsl fauna.xml</cline>
-        </cd>The first will make <tag>element</tag> content render on a page, rather than hidden in a knowl, which is the default for a conversion to <init>HTML</init>.  And the second will use a larger overall font size, while trying to preserve the same number of characters per line (with consequent smaller margins).</p>
+        </cd>The first will make <tag>example</tag> content render on a page, rather than hidden in a knowl, which is the default for a conversion to <init>HTML</init>.  And the second will use a larger overall font size, while trying to preserve the same number of characters per line (with consequent smaller margins).</p>
 
         <p>Notice that these two examples do nothing to change the <em>words</em> that a conversion produces, which is why you do not specify them in your source.  They are conversion options that do not affect your content in significant ways, and are related to the particular output format.</p>
     </section>
