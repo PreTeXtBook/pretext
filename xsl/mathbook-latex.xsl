@@ -1164,9 +1164,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\makeatother&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="$document-root//list">
-            <xsl:text>%% Create "named list" environment, non-floating&#xa;</xsl:text>
-            <xsl:text>\DeclareFloatingEnvironment{namedlist}&#xa;</xsl:text>
-            <xsl:text>\SetupFloatingEnvironment{namedlist}{fileext=lol,placement={H},within=</xsl:text>
+            <xsl:text>%% Create "named list" environment to hold lists with captions&#xa;</xsl:text>
+            <xsl:text>%% We do not use a floating environment, so list can page-break&#xa;</xsl:text>
+            <xsl:text>\newenvironment{namedlist}{\par\bigskip\noindent}{}&#xa;</xsl:text>
+            <xsl:text>%% New caption type for numbering, style, etc.&#xa;</xsl:text>
+            <xsl:text>\DeclareCaptionType[within=</xsl:text>
             <xsl:choose>
                 <xsl:when test="$figure-levels = 0">
                     <xsl:text>none</xsl:text>
@@ -1177,11 +1179,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
-            <xsl:text>,name=</xsl:text>
+            <xsl:text>]{namedlistcap}[</xsl:text>
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'list'" />
             </xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
+            <xsl:text>]&#xa;</xsl:text>
+            <xsl:text>\captionsetup[namedlistcap]{aboveskip=1.0ex,belowskip=\baselineskip}&#xa;</xsl:text>
             <!-- associate counter                  -->
             <!--   if independent, then with figure -->
             <!--   if grouped, then with theorem    -->
@@ -1189,10 +1192,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\makeatletter&#xa;</xsl:text>
             <xsl:choose>
                 <xsl:when test="$b-number-figure-distinct">
-                    <xsl:text>\let\c@namedlist\c@figure&#xa;</xsl:text>
+                    <xsl:text>\let\c@namedlistcap\c@figure&#xa;</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:text>\let\c@namedlist\c@theorem&#xa;</xsl:text>
+                    <xsl:text>\let\c@namedlistcap\c@theorem&#xa;</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:text>\makeatother&#xa;</xsl:text>
@@ -3811,7 +3814,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Schema requires a caption, so this is OK long-term -->
     <!-- (There is a template for all captions elsewhere)   -->
     <xsl:if test="title and not(caption)">
-        <xsl:text>\captionof{namedlist}{</xsl:text>
+        <xsl:text>\captionof{namedlistcap}{</xsl:text>
         <xsl:apply-templates select="." mode="title-full" />
         <xsl:apply-templates select="." mode="label" />
         <xsl:text>}&#xa;</xsl:text>
@@ -5384,7 +5387,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\captionof{listingcaption}{</xsl:text>
         </xsl:when>
       <xsl:when test="parent::list">
-            <xsl:text>\captionof{namedlist}{</xsl:text>
+            <xsl:text>\captionof{namedlistcap}{</xsl:text>
         </xsl:when>
       <xsl:otherwise>
           <xsl:text>\caption{</xsl:text>
