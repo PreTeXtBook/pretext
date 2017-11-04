@@ -1036,12 +1036,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% You can remove the "placement={H}" option to allow flotation and&#xa;</xsl:text>
         <xsl:text>%% preserve numbering, BUT the numbering may then appear "out-of-order"&#xa;</xsl:text>
         <xsl:text>%% Floating environments: http://tex.stackexchange.com/questions/95631/&#xa;</xsl:text>
-        <!-- Float package defines the "H" specifier -->
+        <!-- Float package defines the "H" specifier                       -->
+        <!-- TODO: could conditionally load  float  for tables and figures -->
         <xsl:text>\usepackage{float}&#xa;</xsl:text>
+        <!-- newfloat  package has \SetupFloatingEnvironment                -->
+        <!-- \DeclareCaptionType is an undocumented command,                -->
+        <!-- available in the  caption  package, by the same author         -->
+        <!-- and also in the  subcaption  package, again by the same author -->
+        <!-- See comment by this author, Axel Sommerfeldt in                -->
+        <!-- https://tex.stackexchange.com/questions/115193/                -->
+        <!-- (continuous-numbering-of-custom-float-with-caption-package)    -->
+        <!-- capt-of  sounds appealing, but then can't bold-face labels (?) -->
         <xsl:text>\usepackage{newfloat}&#xa;</xsl:text>
-        <xsl:text>\usepackage[bf]{caption}&#xa;</xsl:text>
-        <!-- captioned items subsidiary to a captioned figure -->
+        <xsl:text>\usepackage{caption}</xsl:text>
+        <!-- First, captioned items subsidiary to a captioned figure -->
+        <!-- Seem to be bold face without extra effort               -->
         <xsl:if test="$document-root//figure/sidebyside/*[caption]">
+            <xsl:text>%% Captioned items inside side-by-side within captioned figure&#xa;</xsl:text>
             <xsl:text>\usepackage{subcaption}&#xa;</xsl:text>
             <xsl:text>\captionsetup[subfigure]{labelformat=simple}&#xa;</xsl:text>
             <xsl:text>\renewcommand\thesubfigure{(\alph{subfigure})}&#xa;</xsl:text>
@@ -1063,7 +1074,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- so if these are distinct, we make this environment    -->
         <!-- just to make the counter, even if not explicitly used -->
         <xsl:if test="$document-root//figure or $b-number-figure-distinct">
-            <xsl:text>%% Adjust figure environment so that it no longer floats&#xa;</xsl:text>
+            <xsl:text>%% Adjust stock figure environment so that it no longer floats&#xa;</xsl:text>
             <xsl:text>\SetupFloatingEnvironment{figure}{fileext=lof,placement={H},within=</xsl:text>
             <xsl:choose>
                 <xsl:when test="$figure-levels = 0">
@@ -1080,6 +1091,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="string-id" select="'figure'" />
             </xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
+            <xsl:text>\captionsetup[figure]{labelfont=bf}&#xa;</xsl:text>
             <xsl:if test="not($b-number-figure-distinct)">
                 <xsl:text>%% http://tex.stackexchange.com/questions/16195&#xa;</xsl:text>
                 <xsl:text>\makeatletter&#xa;</xsl:text>
@@ -1088,7 +1100,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:if>
         <xsl:if test="$document-root//table">
-            <xsl:text>%% Adjust table environment so that it no longer floats&#xa;</xsl:text>
+            <xsl:text>%% Adjust stock table environment so that it no longer floats&#xa;</xsl:text>
             <xsl:text>\SetupFloatingEnvironment{table}{fileext=lot,placement={H},within=</xsl:text>
             <xsl:choose>
                 <xsl:when test="$figure-levels = 0">
@@ -1105,6 +1117,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="string-id" select="'table'" />
             </xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
+            <xsl:text>\captionsetup[table]{labelfont=bf}&#xa;</xsl:text>
             <!-- associate counter                  -->
             <!--   if independent, then with figure -->
             <!--   if grouped, then with theorem    -->
@@ -1128,7 +1141,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Caption formatting/style possibilities:          -->
         <!-- http://tex.stackexchange.com/questions/117531    -->
         <xsl:if test="$document-root//listing">
-            <xsl:text>%% Create "listing" environment&#xa;</xsl:text>
+            <xsl:text>%% Create "listing" environment to hold program listings&#xa;</xsl:text>
+            <xsl:text>%% The "lstlisting" environment defaults to allowing page-breaking,&#xa;</xsl:text>
+            <xsl:text>%% so we do not use a floating environment, which would break this&#xa;</xsl:text>
+            <!-- TODO: optionally force no-page-break with [float] on lstlisting? -->
             <xsl:text>\newenvironment{listing}{\par\bigskip\noindent}{}&#xa;</xsl:text>
             <xsl:text>%% New caption type for numbering, style, etc.&#xa;</xsl:text>
             <xsl:text>\DeclareCaptionType[within=</xsl:text>
@@ -1142,12 +1158,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
-            <xsl:text>]{listingcaption}[</xsl:text>
+            <xsl:text>]{listingcap}[</xsl:text>
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'listing'" />
             </xsl:call-template>
             <xsl:text>]&#xa;</xsl:text>
-            <xsl:text>\captionsetup[listingcaption]{aboveskip=1.0ex,belowskip=\baselineskip}&#xa;</xsl:text>
+            <xsl:text>\captionsetup[listingcap]{labelfont=bf,aboveskip=1.0ex,belowskip=\baselineskip}&#xa;</xsl:text>
             <!-- associate counter                  -->
             <!--   if independent, then with figure -->
             <!--   if grouped, then with theorem    -->
@@ -1155,10 +1171,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\makeatletter&#xa;</xsl:text>
             <xsl:choose>
                 <xsl:when test="$b-number-figure-distinct">
-                    <xsl:text>\let\c@listingcaption\c@figure&#xa;</xsl:text>
+                    <xsl:text>\let\c@listingcap\c@figure&#xa;</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:text>\let\c@listingcaption\c@theorem&#xa;</xsl:text>
+                    <xsl:text>\let\c@listingcap\c@theorem&#xa;</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:text>\makeatother&#xa;</xsl:text>
@@ -1184,7 +1200,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="string-id" select="'list'" />
             </xsl:call-template>
             <xsl:text>]&#xa;</xsl:text>
-            <xsl:text>\captionsetup[namedlistcap]{aboveskip=1.0ex,belowskip=\baselineskip}&#xa;</xsl:text>
+            <xsl:text>\captionsetup[namedlistcap]{labelfont=bf,aboveskip=1.0ex,belowskip=\baselineskip}&#xa;</xsl:text>
             <!-- associate counter                  -->
             <!--   if independent, then with figure -->
             <!--   if grouped, then with theorem    -->
@@ -5384,7 +5400,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\captionof{figure}{</xsl:text>
       </xsl:when>
       <xsl:when test="parent::listing">
-            <xsl:text>\captionof{listingcaption}{</xsl:text>
+            <xsl:text>\captionof{listingcap}{</xsl:text>
         </xsl:when>
       <xsl:when test="parent::list">
             <xsl:text>\captionof{namedlistcap}{</xsl:text>
