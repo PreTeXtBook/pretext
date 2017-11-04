@@ -4,7 +4,7 @@
 <!--                                                          -->
 <!--      PreTeXt Author's Guide                              -->
 <!--                                                          -->
-<!-- Copyright (C) 2013-2017  Robert A. Beezer                -->
+<!-- Copyright (C) 2013-2017  Robert A. Beezer, David Farmer  -->
 <!-- See the file COPYING for copying conditions.             -->
 
 <chapter xml:id="production">
@@ -17,7 +17,7 @@
 
         <aside>
             <title>Open Source</title>
-            <p><pretext /> is open source <em>software</em>, but that places no restrictions on how you use output that <pretext /> creates (see <xref ref="principle-open-software" />).  You are welcome to sell your copyright to a commercial publisher or university press.  But just once, here and now, we will encourage you to consider an open license (see <xref ref="section-open-licenses" />) as a way of paying it forward.</p>
+            <p><pretext /> is open source <em>software</em>, but that places no restrictions on how you use output that <pretext /> creates (see <xref ref="principle-open-software" />).  You are welcome to sell your copyright to a commercial publisher or university press.  But just once, here and now, we will encourage you to consider an open license (see <xref ref="open-licenses" />) as a way of paying it forward.</p>
         </aside>
     </introduction>
 
@@ -52,23 +52,15 @@
                     <li>Mitch Keller likes the <q>Swift</q> plan at <url href="https://www.a2hosting.com/web-hosting">A2 Hosting</url> (<c>a2hosting.com</c>) at about <dollar />60 annually.  (2017-07-05)</li>
                 </ul></p>
             </li>
-        </ol>Now you are set, and control distribution of your scholarly publication.  If you are bothered by the thought of having expenses while you make your work freely available to the world, then consider generating some modest income.  For example, sell Google ads against your pages.  (Why should <em>this</em> disturb anybody?  I don't get it.)  Or roll a small royalty into the print-on-demand version, see <xref ref="production-pod" />.</p>
+        </ol>Now you are set, and control distribution of your scholarly publication.  If you are bothered by the thought of having expenses while you make your work freely available to the world, then consider generating some modest income.  For example, sell Google ads against your pages.  (Why should <em>this</em> disturb anybody?  I don't get it.)  Or roll a small royalty into the print-on-demand version, see <xref ref="print-on-demand" />.</p>
     </section>
 
     <section>
         <title>(*) Landing Page</title>
     </section>
 
-    <section xml:id="production-pod">
-        <title>(*) Print-On-Demand</title>
-    </section>
-
     <section>
         <title>(*) Source</title>
-    </section>
-
-    <section xml:id="section-open-licenses">
-        <title>(*) Open Licenses</title>
     </section>
 
     <section>
