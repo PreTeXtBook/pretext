@@ -382,16 +382,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="str:replace($line-broken-math, '&#xa;', $NL)" />
 </xsl:template>
 
-<!-- Dollar sign -->
-<!-- The Jupyter notebook allows markdown cells to      -->
-<!-- use dollar signs to delimit LaTeX, if you have     -->
-<!-- two used for financial reasons, they will be       -->
-<!-- interpreted incorrectly.  But they can be escaped. -->
-<!-- So authors should use the "dollar" element.        -->
-<xsl:template match="dollar">
-    <xsl:text>\$</xsl:text>
-</xsl:template>
-
 <!-- Displayed Equations -->
 <!-- Break out of enclosing paragraph, new -->
 <!-- JSON string, combine lines as one big -->
@@ -440,8 +430,107 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- ################### -->
+<!-- Markdown Protection -->
+<!-- ################### -->
+
+<!-- XML with LaTeX, to HTML, to JSON.  Its hard to keep track. -->
+<!-- And the HTML is really spiced up with Markdown.  Or is it  -->
+<!-- the other way around?  No matter, a first defense is to    -->
+<!-- convert common simple characters employed by Markdown and  -->
+<!-- make them escaped versions.  Here is the list of escapable -->
+<!-- characters from the Markdown documentation on 2017-11-06.  -->
+<!-- daringfireball.net/projects/markdown/syntax#backslash      -->
+<!--                                                            -->
+<!--         \   backslash                                      -->
+<!--         `   backtick                                       -->
+<!--         *   asterisk                                       -->
+<!--         _   underscore                                     -->
+<!--         {}  curly braces                                   -->
+<!--         []  square brackets                                -->
+<!--         ()  parentheses                                    -->
+<!--         #   hash mark                                      -->
+<!--         +   plus sign                                      -->
+<!--         -   minus sign (hyphen)                            -->
+<!--         .   dot                                            -->
+<!--         !   exclamation mark                               -->
+
+
+<!-- Dollar sign -->
+<!-- The Jupyter notebook allows markdown cells to        -->
+<!-- use dollar signs to delimit LaTeX, if you have       -->
+<!-- two used for financial reasons, they will be         -->
+<!-- interpreted incorrectly.  But they can be escaped.   -->
+<!-- Not a Markdown element, but critical so here anyway. -->
+<!-- So authors should use the "dollar" element.          -->
+<xsl:template match="dollar">
+    <xsl:text>\$</xsl:text>
+</xsl:template>
+
+<!-- Other than the dollar sign, these are from the -html  -->
+<!-- code.  We escape ASCII versions, and leave just comments  -->
+<!-- for those whose HTML definitions suffice, either as HTML  -->
+<!-- entities (&, <, >) or as fancier, non-ASCII, Unicode versions. -->
+
+<!-- Number Sign, Hash, Octothorpe -->
+<xsl:template match="hash">
+    <xsl:text>\#</xsl:text>
+</xsl:template>
+
+<!-- Underscore -->
+<xsl:template match="underscore">
+    <xsl:text>\_</xsl:text>
+</xsl:template>
+
+<!-- Left Brace -->
+<xsl:template match="lbrace">
+    <xsl:text>\{</xsl:text>
+</xsl:template>
+
+<!-- Right  Brace -->
+<xsl:template match="rbrace">
+    <xsl:text>\}</xsl:text>
+</xsl:template>
+
+<!-- Backslash -->
+<xsl:template match="backslash">
+    <xsl:text>\\</xsl:text>
+</xsl:template>
+
+<!-- Asterisk, implemented as Unicode  -->
+
+<!-- Left Bracket -->
+<xsl:template match="lbracket">
+    <xsl:text>\[</xsl:text>
+</xsl:template>
+
+<!-- Right Bracket -->
+<xsl:template match="rbracket">
+    <xsl:text>\]</xsl:text>
+</xsl:template>
+
+<!-- TODO: (markdown protection)-->
+<!-- backtick - not a single left quote, perhaps needs definition -->
+
+<!-- Markdown protection remaining unimplemented?            -->
+<!-- These are symbols we would not want to need to          -->
+<!-- replace by PreTeXt empty elements, since they           -->
+<!-- are in heavy use.  Some require placement in            -->
+<!-- column 1, which may never happen as a text              -->
+<!-- (Markdown) cell will always have lots of HTML           -->
+<!-- around without any newlines at all.  If square          -->
+<!-- brackets are escaped, the link and image                -->
+<!-- constructions will break, so exclamation marks          -->
+<!-- and parentheses will render correctly.                  -->
+<!--                                                         -->
+<!-- 1.  parentheses - only an issue following []            -->
+<!-- 2.  plus, minus/hyphen - list items if in column 1      -->
+<!-- 3.  hyphens - three in a row is an hrule.  Breakup?     -->
+<!-- 4.  dot - numbered list construction, in column 1       -->
+<!-- 4.  exclamation - part of image construction, before [] -->
+
 <!--
-TODO:
+TODO: (overall)
 
 1.  Interfere with left-angle bracket to make elements not evaporate in serialization.
 2.  DONE: Escape $ so that pairs do not go MathJax on us.
