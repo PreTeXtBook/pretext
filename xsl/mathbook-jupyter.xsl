@@ -352,14 +352,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Math -->
 <!-- #### -->
 
-<!-- These two templates provide the delimiters for inline math. -->
-<!-- The Jupyter notebook appears to support AMS-style inline.   -->
+<!-- These two templates provide the delimiters for inline math.       -->
+<!-- The Jupyter notebook appears to support the AMS-style for         -->
+<!-- inline math ( \(, \) ).  But in doing so, it fails to prevent     -->
+<!-- Markdown syntax from mucking up the math.  For example, two       -->
+<!-- underscores in a Markdown cell will look like underlining         -->
+<!-- and override the LaTeX meaning for subscripts.  They can          -->
+<!-- be escaped, but easier to just deal with "plain text"             -->
+<!-- dollar signs as a possibility.  There is no issue for display     -->
+<!-- mathematics, presumably because we use environments, exclusively. -->
 <xsl:template name="begin-inline-math">
-    <xsl:text>\\(</xsl:text>
+    <xsl:text>$</xsl:text>
 </xsl:template>
 
 <xsl:template name="end-inline-math">
-    <xsl:text>\\)</xsl:text>
+    <xsl:text>$</xsl:text>
+</xsl:template>
+
+<!-- Inline Mathematics -->
+<!-- Our sanitization procedures will preserve author's   -->
+<!-- line breaks within mathematics.  Even inline math    -->
+<!-- might be a complicated construction, like a column   -->
+<!-- vector, with line breaks.  So we need to avoid       -->
+<!-- putting multi-line strings into the JSON containers. -->
+<xsl:template match="m">
+    <xsl:variable name="line-broken-math">
+        <xsl:apply-imports />
+    </xsl:variable>
+    <xsl:value-of select="str:replace($line-broken-math, '&#xa;', $NL)" />
 </xsl:template>
 
 <!-- Dollar sign -->
