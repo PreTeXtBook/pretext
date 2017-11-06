@@ -139,8 +139,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- or link to subsidiary content, all from HTML -->
 <!-- template with same mode, as one big cell     -->
 <xsl:template match="&STRUCTURAL;" mode="summary">
+    <xsl:apply-templates select="objectives|introduction" />
     <xsl:variable name="html-rtf">
-        <xsl:apply-imports />
+        <nav class="summary-links">
+            <xsl:apply-templates select="*" mode="summary-nav" />
+        </nav>
     </xsl:variable>
     <xsl:variable name="html-node-set" select="exsl:node-set($html-rtf)" />
     <xsl:call-template name="pretext-cell">
@@ -150,6 +153,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="end-string" />
         </xsl:with-param>
     </xsl:call-template>
+    <xsl:apply-templates select="conclusion" />
 </xsl:template>
 
 <!-- File Structure -->
