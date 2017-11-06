@@ -425,10 +425,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </section>
 </xsl:template>
 
-<!-- Modal template for content of a summary page             -->
-<!-- The necessity of the <nav> section creates a difficulty  -->
-<!-- so we implement a 3-pass hack which requires identifying -->
-<!-- the early, middle and late parts                         -->
+<!-- Modal template for content of a summary page   -->
+<!-- Introduction (etc.) and conclusion realized as -->
+<!-- normal, then links to subsidiary divisions     -->
+<!-- occur between, as a group of button/hyperlinks -->
 <xsl:template match="&STRUCTURAL;" mode="summary">
     <!-- location info for debugging efforts -->
     <xsl:apply-templates select="." mode="debug-location" />
@@ -438,48 +438,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <section class="{local-name(.)}" id="{$ident}">
         <xsl:apply-templates select="." mode="section-header" />
-        <xsl:apply-templates select="*" mode="summary-prenav" />
+        <xsl:apply-templates select="author|objectives|introduction|titlepage|abstract" />
         <nav class="summary-links">
             <xsl:apply-templates select="*" mode="summary-nav" />
         </nav>
-        <xsl:apply-templates select="*" mode="summary-postnav"/>
+        <xsl:apply-templates select="conclusion"/>
     </section>
 </xsl:template>
 
-<!-- A 3-pass hack to create presentations and summaries of  -->
-<!-- an intermediate node.  It is the <nav> section wrapping -->
-<!-- the summaries/links that makes this necessary.          -->
-
-<!-- Pre-Navigation -->
-<xsl:template match="author|objectives|introduction|titlepage|abstract" mode="summary-prenav">
-    <xsl:apply-templates select="."/>
-</xsl:template>
-
-<xsl:template match="*" mode="summary-prenav" />
-
-<!-- Post-Navigation -->
-<xsl:template match="conclusion" mode="summary-postnav">
-    <xsl:apply-templates select="."/>
-</xsl:template>
-
-<xsl:template match="*" mode="summary-postnav" />
-
 <!-- Navigation -->
-<!-- Any structural node becomes a hyperlink        -->
+<!-- Structural nodes on a summary page  -->
+<!-- become attractive button/hyperlinks -->
 <xsl:template match="&STRUCTURAL;" mode="summary-nav">
-    <xsl:variable name="num"><xsl:apply-templates select="." mode="number" /></xsl:variable>
-    <xsl:variable name="url"><xsl:apply-templates select="." mode="url" /></xsl:variable>
+    <xsl:variable name="num">
+        <xsl:apply-templates select="." mode="number" />
+    </xsl:variable>
+    <xsl:variable name="url">
+        <xsl:apply-templates select="." mode="url" />
+    </xsl:variable>
     <a href="{$url}">
         <!-- important not include codenumber span -->
         <xsl:if test="$num!=''">
-            <span class="codenumber"><xsl:value-of select="$num" /></span>
+            <span class="codenumber">
+                <xsl:value-of select="$num" />
+            </span>
         </xsl:if>
+        <!-- title is required on structural elements -->
         <span class="title">
             <xsl:apply-templates select="." mode="title-simple" />
         </span>
     </a>
 </xsl:template>
 
+<!-- introduction (etc.) and conclusion get dropped -->
 <xsl:template match="*" mode="summary-nav" />
 
 <!-- ############### -->
