@@ -105,6 +105,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Some structural nodes do not need their title,                -->
 <!-- (or subtitle) so we don't put a section heading there         -->
 <!-- Title(s) for an article are forced by a frontmatter/titlepage -->
+<!-- TODO: incorporate in above by implementing null heading template? -->
 <xsl:template match="article|frontmatter">
     <xsl:apply-templates />
 </xsl:template>
@@ -181,8 +182,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- a code cell for reader to load CSS -->
         <!-- First, so already with focus       -->
         <xsl:call-template name="load-css" />
-        <!-- load LaTeX macros for MathJax   -->
-        <!-- Empty, also provides separation -->
+        <!-- load LaTeX macros for MathJax               -->
+        <!-- Empty visually, so also provides separation -->
         <xsl:call-template name="latex-macros" />
         <!-- the real content of the page -->
         <xsl:copy-of select="$content" />
@@ -193,24 +194,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>{&#xa;</xsl:text>
         <!-- cell list first, majority of notebook, metadata to finish -->
         <xsl:text>"cells": [&#xa;</xsl:text>
-        <!-- <xsl:message>CL:<xsl:value-of select="$cell-list" /></xsl:message> -->
-        <!-- Escape backslashes -->
+        <!-- Escape backslashes first, because more are coming -->
         <xsl:variable name="escape-backslash" select="str:replace($cell-list, '\','\\')" />
         <!-- Escape quote marks -->
         <xsl:variable name="escape-quote" select="str:replace($escape-backslash, '&quot;','\&quot;')" />
         <!-- Replace all newlines -->
         <xsl:variable name="replace-newline" select="str:replace($escape-quote, '&#xa;','\n')" />
-        <!-- Massage string delimiters, separators -->
+        <!-- Multiple strings in a cell are merged into one by    -->
+        <!-- combining adjoining end/begin pairs, leaving only    -->
+        <!-- leading and trailing delimiters (next substitution). -->
+        <!-- This is one solution of the problem of $n-1$         -->
+        <!-- separators for $n$ items.                            -->
         <xsl:variable name="split-strings" select="str:replace($replace-newline, $ESBS, '')" />
         <xsl:variable name="finalize-strings" select="str:replace(str:replace($split-strings, $ES, '&quot;'), $BS, '&quot;')" />
-        <!-- Massage cell delimiters, separators -->
-        <!-- Split cell separators -->
+        <!-- The only pseudo-markup left is that of the two types -->
+        <!-- of cells possible in a Jupyter notebook.  We split   -->
+        <!-- just the adjacent brackets with comma-newline, so    -->
+        <!-- source has each cell entirely on its own line.  This -->
+        <!-- is the other solution of the problem of $n-1$        -->
+        <!-- separators for $n$ items.                            -->
         <xsl:variable name="split-cells" select="str:replace($finalize-strings, $RBLB, $RBLB-comma)" />
-        <!-- now replace cell markers with actual wrappers -->
+        <!-- Now we consider the actual markers and replace   -->
+        <!-- with the JSON that Jupyter expects as source.    -->
+        <!-- We are done, so "value-of" is good enough,       -->
+        <!-- rather than having a final $code-cells.  The     -->
+        <!-- four *-wrap variables here are just conveniences -->
         <xsl:variable name="markdown-cells" select="str:replace(str:replace($split-cells, $BM, $begin-markdown-wrap), $EM, $end-markdown-wrap)" />
-        <xsl:variable name="code-cells" select="str:replace(str:replace($markdown-cells, $BC, $begin-code-wrap), $EC, $end-code-wrap)" />
-        <!-- remove next line by making previous a value-of, once stable -->
-        <xsl:value-of select="$code-cells" />
+        <xsl:value-of select="str:replace(str:replace($markdown-cells, $BC, $begin-code-wrap), $EC, $end-code-wrap)" />
         <!-- end cell list -->
         <xsl:text>&#xa;],&#xa;</xsl:text>
         <!-- version identifiers -->
@@ -446,10 +456,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\$</xsl:text>
 </xsl:template>
 
-<!-- Other than the dollar sign, these are from the -html  -->
-<!-- code.  We escape ASCII versions, and leave just comments  -->
-<!-- for those whose HTML definitions suffice, either as HTML  -->
-<!-- entities (&, <, >) or as fancier, non-ASCII, Unicode versions. -->
+<!-- Other than the dollar sign, these are from the -html code.    -->
+<!-- We escape ASCII versions, and leave just comments for         -->
+<!-- those whose HTML definitions suffice, either as HTML entities -->
+<!-- (&, <, >) or as fancier, non-ASCII, Unicode versions.         -->
 
 <!-- Number Sign, Hash, Octothorpe -->
 <xsl:template match="hash">
@@ -497,10 +507,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- are in heavy use.  Some require placement in            -->
 <!-- column 1, which may never happen as a text              -->
 <!-- (Markdown) cell will always have lots of HTML           -->
-<!-- around without any newlines at all.  If square          -->
+<!-- around without many newlines at all.  If square         -->
 <!-- brackets are escaped, the link and image                -->
 <!-- constructions will break, so exclamation marks          -->
-<!-- and parentheses will render correctly.                  -->
+<!-- and parentheses will render correctly, even if          -->
+<!-- accidentally forming the Markdown constructions         -->
+<!-- for links or images.                                    -->
 <!--                                                         -->
 <!-- 1.  parentheses - only an issue following []            -->
 <!-- 2.  plus, minus/hyphen - list items if in column 1      -->
@@ -512,12 +524,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 TODO: (overall)
 
 1.  Interfere with left-angle bracket to make elements not evaporate in serialization.
+    For verbatim items, apply-imports into a variable, then search/replace to escaped versions
 2.  DONE: Escape $ so that pairs do not go MathJax on us.
-3.  Do we need to protect a hash?  So not interpreted as a title?  Underscores, too.
+3.  DONE: Do we need to protect a hash?  So not interpreted as a title?  Underscores, too.
 4.  Update CSS, use add-on, make an output version to parse as text.
-5.  Markup enclosed Sage cells (non-top-level) to allow dropout, dropin.
+5.  ABANDON: Markup enclosed Sage cells (non-top-level) to allow dropout, dropin.
+    Bad idea, breaks CSS begin/end across multiple cells
 6.  Remove empty strings, empty anything, with search/replace step on null constructions.
 7.  Maybe replace tabs (good for Sage code and/or JSON fidelity)?
+8.  Hyperlinks within a file work better if not prefixed with file name.
+    (General improvement, but not so important with knowls available.)
 -->
 
 <!-- ########################## -->
@@ -562,14 +578,17 @@ TODO: (overall)
 <!-- salt in, and grep final output for this "bad" string  -->
 <!-- that should not survive.                              -->
 
-<!-- Random-ish output from  mkpasswd  utility, -->
-<!-- 2017-10-24 at AMS airport, Starbucks by gate D1 -->
+<!-- Random-ish output from  mkpasswd  utility,           -->
+<!-- 2017-10-24 at AMS airport, Starbucks by faux gate D1 -->
 <xsl:variable name="salt" select="'x9rNtyUydoz3o'" />
 
-<xsl:variable name="LB" select="'[[['" />
+<xsl:variable name="LB">
+    <xsl:text>[[[</xsl:text>
+    <xsl:value-of select="$salt" />
+</xsl:variable>
 
 <xsl:variable name="RB">
-    <!-- <xsl:value-of select="$salt" /> -->
+    <xsl:value-of select="$salt" />
     <xsl:text>]]]</xsl:text>
 </xsl:variable>
 
@@ -594,7 +613,6 @@ TODO: (overall)
     <xsl:text>BM</xsl:text>
     <xsl:value-of select="$RB" />
 </xsl:variable>
-
 <xsl:variable name="EM">
     <xsl:value-of select="$LB" />
     <xsl:text>EM</xsl:text>
@@ -607,18 +625,14 @@ TODO: (overall)
     <xsl:text>BC</xsl:text>
     <xsl:value-of select="$RB" />
 </xsl:variable>
-
 <xsl:variable name="EC">
     <xsl:value-of select="$LB" />
     <xsl:text>EC</xsl:text>
     <xsl:value-of select="$RB" />
 </xsl:variable>
 
-<!-- Combinations -->
-
-<!-- These variables describe adjacent pseudo-markup   -->
-<!-- that will be converted to JSON equivalents,       -->
-<!-- or in the last case, an intermediate combination. -->
+<!-- These variables describe adjacent pseudo-markup -->
+<!-- that will be converted to JSON equivalents.     -->
 
 <xsl:variable name="ESBS">
     <xsl:value-of select="$ES" />
@@ -630,6 +644,8 @@ TODO: (overall)
     <xsl:value-of select="$LB" />
 </xsl:variable>
 
+<!-- This is a convenience for the replacement that -->
+<!-- splits cells into lines within JSON file       -->
 <xsl:variable name="RBLB-comma">
     <xsl:value-of select="$RB" />
     <xsl:text>,&#xa;</xsl:text>
@@ -637,11 +653,9 @@ TODO: (overall)
 </xsl:variable>
 
 <!-- Convenience templates -->
-<!-- These are primary interface to our creation           -->
-<!-- of pseudo-markup above, but are not the whole         -->
-<!-- story since we convert markup based oon the variables -->
-
-<!-- TODO: global search/replace to make more unique names -->
+<!-- These are primary interface to our creation          -->
+<!-- of pseudo-markup above, but are not the whole        -->
+<!-- story since we convert markup based on the variables -->
 
 <xsl:template name="begin-string">
     <xsl:value-of select="$BS" />
@@ -649,15 +663,6 @@ TODO: (overall)
 
 <xsl:template name="end-string">
     <xsl:value-of select="$ES" />
-</xsl:template>
-
-<!-- Will be a start of a markdown cell eventually -->
-<xsl:template name="begin-inline">
-    <xsl:value-of select="$BM" />
-</xsl:template>
-
-<xsl:template name="end-inline">
-    <xsl:value-of select="$EI" />
 </xsl:template>
 
 <xsl:template name="begin-markdown-cell">
