@@ -3494,6 +3494,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- "mathbook" helps some tree-climbing routines halt -->
 <xsl:template match="mathbook|introduction|conclusion|frontmatter|backmatter|sidebyside|ol|ul|dl|statement" mode="serial-number" />
 
+<!-- Poems go by their titles, not numbers -->
+<xsl:template match="poem" mode="serial-number" />
+
 <!-- If a list item has any ancestor that is not  -->
 <!-- an ordered list, then it gets no number      -->
 <xsl:template match="ul//li|dl//li" mode="serial-number" />
