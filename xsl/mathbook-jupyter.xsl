@@ -74,6 +74,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates mode="chunking" />
 </xsl:template>
 
+<!-- ########### -->
+<!-- Compromises -->
+<!-- ########### -->
+
+<!-- Knowls are not yet functional in Jupyter notebooks    -->
+<!-- See:  https://github.com/jupyter/notebook/pull/2947   -->
+<!-- So we kill them while we wait and get hyperlinks only -->
+<xsl:template match="*" mode="xref-as-knowl">
+    <xsl:value-of select="false()" />
+</xsl:template>
+
+
 <!-- ################ -->
 <!-- Structural Nodes -->
 <!-- ################ -->
