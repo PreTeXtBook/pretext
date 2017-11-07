@@ -198,8 +198,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:variable name="escape-backslash" select="str:replace($cell-list, '\','\\')" />
         <!-- Escape quote marks -->
         <xsl:variable name="escape-quote" select="str:replace($escape-backslash, '&quot;','\&quot;')" />
-        <!-- Replace newline markers -->
-        <xsl:variable name="replace-newline" select="str:replace($escape-quote, $NL,'\n')" />
+        <!-- Replace all newlines -->
+        <xsl:variable name="replace-newline" select="str:replace($escape-quote, '&#xa;','\n')" />
         <!-- Massage string delimiters, separators -->
         <xsl:variable name="split-strings" select="str:replace($replace-newline, $ESBS, '&quot;,&#xa;&quot;')" />
         <xsl:variable name="finalize-strings" select="str:replace(str:replace($split-strings, $ES, '&quot;'), $BS, '&quot;')" />
@@ -258,18 +258,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="code-cell">
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />
-            <xsl:text>%%html</xsl:text>
-            <xsl:call-template name="newline" />
-            <xsl:call-template name="end-string" />
-            <xsl:call-template name="begin-string" />
-            <!-- TEMPORARY TEMPORARY for AIR TRAVEL testing -->
-            <!-- <xsl:text>&lt;link href="./mathbook-content.css" rel="stylesheet" type="text/css" /&gt;</xsl:text> -->
-            <xsl:text>&lt;link href="http://mathbook.pugetsound.edu/beta/mathbook-content.css" rel="stylesheet" type="text/css" /&gt;</xsl:text>
-            <xsl:call-template name="newline" />
-            <xsl:text>&lt;link href="https://aimath.org/mathbook/mathbook-add-on.css" rel="stylesheet" type="text/css" /&gt;</xsl:text>
-            <xsl:call-template name="newline" />
-            <xsl:text>&lt;link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic" rel="stylesheet" type="text/css" /&gt;</xsl:text>
-            <xsl:call-template name="newline" />
+            <xsl:text>%%html&#xa;</xsl:text>
+            <!-- for offline testing -->
+            <!-- <xsl:text>&lt;link href="./mathbook-content.css" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text> -->
+            <xsl:text>&lt;link href="http://mathbook.pugetsound.edu/beta/mathbook-content.css" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text>
+            <xsl:text>&lt;link href="https://aimath.org/mathbook/mathbook-add-on.css" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text>
+            <xsl:text>&lt;link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text>
             <xsl:text>&lt;link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css" /&gt;</xsl:text>
             <xsl:call-template name="end-string" />
         </xsl:with-param>
@@ -285,17 +279,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
-<!-- This will override the HTML version, but is patterned       -->
-<!-- after same.  Adjustments are: different overall delimiters, -->
-<!-- translation of newlines, and no enclosing div to hide       -->
-<!-- content (thereby avoiding the need for serialization).      -->
+<!-- This will override the HTML version, but is patterned -->
+<!-- after same.  Adjustments are: different overall       -->
+<!-- delimiters, and no enclosing div to hide content      -->
+<!-- (thereby avoiding the need for serialization).        -->
 <xsl:template name="latex-macros">
     <xsl:call-template name="markdown-cell">
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />
             <xsl:call-template name="begin-inline-math" />
-            <xsl:value-of select="str:replace($latex-packages-mathjax, '&#xa;', $NL)" />
-            <xsl:value-of select="str:replace($latex-macros,           '&#xa;', $NL)" />
+            <xsl:value-of select="$latex-packages-mathjax" />
+            <xsl:value-of select="$latex-macros" />
             <xsl:call-template name="end-inline-math" />
             <xsl:call-template name="end-string" />
         </xsl:with-param>
@@ -347,16 +341,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
     </xsl:variable>
     <!-- we trim a final trailing newline -->
-    <xsl:variable name="loc-trim" select="substring($loc, 1, string-length($loc)-1)" />
-    <!-- the code, content with string markers -->
-    <xsl:variable name="the-code">
-        <xsl:call-template name="begin-string" /> <!-- start first string -->
-        <xsl:value-of select="str:replace($loc-trim, '&#xa;', concat($NL, $ESBS))" />
-        <xsl:call-template name="end-string" /> <!-- end last string -->
-    </xsl:variable>
+    <!-- as we wrap into a single string  -->
     <xsl:call-template name="code-cell">
         <xsl:with-param name="content">
-            <xsl:value-of select="$the-code" />
+            <xsl:call-template name="begin-string" />
+                <xsl:value-of select="substring($loc, 1, string-length($loc)-1)" />
+            <xsl:call-template name="end-string" />
         </xsl:with-param>
     </xsl:call-template>
 </xsl:template>
@@ -365,15 +355,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Math -->
 <!-- #### -->
 
-<!-- These two templates provide the delimiters for inline math.       -->
-<!-- The Jupyter notebook appears to support the AMS-style for         -->
-<!-- inline math ( \(, \) ).  But in doing so, it fails to prevent     -->
-<!-- Markdown syntax from mucking up the math.  For example, two       -->
-<!-- underscores in a Markdown cell will look like underlining         -->
-<!-- and override the LaTeX meaning for subscripts.  They can          -->
-<!-- be escaped, but easier to just deal with "plain text"             -->
-<!-- dollar signs as a possibility.  There is no issue for display     -->
-<!-- mathematics, presumably because we use environments, exclusively. -->
+<!-- Our sanitization procedures will preserve author's line   -->
+<!-- breaks within mathematics.  Even inline math might be a   -->
+<!-- complicated construction, like a column vector, with line -->
+<!-- breaks.  Replacements late in the conversion will make    -->
+<!-- these the "\n" acceptable in JSON.                        -->
+
+<!-- These two templates provide the delimiters for inline math.     -->
+<!-- The Jupyter notebook appears to support the AMS-style for       -->
+<!-- inline math ( \(, \) ).  But in doing so, it fails to prevent   -->
+<!-- Markdown syntax from mucking up the math.  For example, two     -->
+<!-- underscores in a Markdown cell will look like underlining       -->
+<!-- and override the LaTeX meaning for subscripts.  They can        -->
+<!-- be escaped, but easier to just deal with "plain text" dollar    -->
+<!-- signs as a possibility.  There is no issue for display          -->
+<!-- mathematics, presumably since we use environments, exclusively. -->
 <xsl:template name="begin-inline-math">
     <xsl:text>$</xsl:text>
 </xsl:template>
@@ -382,35 +378,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>$</xsl:text>
 </xsl:template>
 
-<!-- Inline Mathematics -->
-<!-- Our sanitization procedures will preserve author's   -->
-<!-- line breaks within mathematics.  Even inline math    -->
-<!-- might be a complicated construction, like a column   -->
-<!-- vector, with line breaks.  So we need to avoid       -->
-<!-- putting multi-line strings into the JSON containers. -->
-<xsl:template match="m">
-    <xsl:variable name="line-broken-math">
-        <xsl:apply-imports />
-    </xsl:variable>
-    <xsl:value-of select="str:replace($line-broken-math, '&#xa;', $NL)" />
-</xsl:template>
-
-<!-- Displayed Equations -->
-<!-- Break out of enclosing paragraph, new -->
-<!-- JSON string, combine lines as one big -->
-<!-- string with newline separators        -->
-<xsl:template match="me|men|md|mdn">
-    <xsl:variable name="line-broken-math">
-        <xsl:apply-imports />
-    </xsl:variable>
-    <!-- check to see if first element in paragraph? -->
-    <xsl:call-template name="end-string" />
-    <xsl:call-template name="begin-string" />
-    <xsl:value-of select="str:replace($line-broken-math, '&#xa;', $NL)" />
-    <xsl:call-template name="end-string" />
-    <!-- check to see if last element in paragraph? -->
-    <xsl:call-template name="begin-string" />
-</xsl:template>
 
 <!-- Images -->
 
@@ -583,8 +550,6 @@ TODO: (overall)
 <!-- BS, ES: begin and end string                                       -->
 <!--                                                                    -->
 <!-- BM, EM, BC, EC: begin and end, markdown and code, cells            -->
-<!--                                                                    -->
-<!-- NL: newline                                                        -->
 
 
 <!-- ####### -->
@@ -650,15 +615,6 @@ TODO: (overall)
     <xsl:value-of select="$RB" />
 </xsl:variable>
 
-<!-- Destined to be a newline in JSON output        -->
-<!-- We often need to be very careful with newlines -->
-<!-- This is like an empty, or self-closing tag     -->
-<xsl:variable name="NL">
-    <xsl:value-of select="$LB" />
-    <xsl:text>NL</xsl:text>
-    <xsl:value-of select="$RB" />
-</xsl:variable>
-
 <!-- Combinations -->
 
 <!-- These variables describe adjacent pseudo-markup   -->
@@ -719,10 +675,6 @@ TODO: (overall)
 
 <xsl:template name="end-code-cell">
     <xsl:value-of select="$EC" />
-</xsl:template>
-
-<xsl:template name="newline">
-    <xsl:value-of select="$NL" />
 </xsl:template>
 
 
