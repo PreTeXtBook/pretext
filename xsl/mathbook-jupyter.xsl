@@ -201,7 +201,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Replace all newlines -->
         <xsl:variable name="replace-newline" select="str:replace($escape-quote, '&#xa;','\n')" />
         <!-- Massage string delimiters, separators -->
-        <xsl:variable name="split-strings" select="str:replace($replace-newline, $ESBS, '&quot;,&#xa;&quot;')" />
+        <xsl:variable name="split-strings" select="str:replace($replace-newline, $ESBS, '')" />
         <xsl:variable name="finalize-strings" select="str:replace(str:replace($split-strings, $ES, '&quot;'), $BS, '&quot;')" />
         <!-- Massage cell delimiters, separators -->
         <!-- Split cell separators -->
@@ -212,40 +212,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- remove next line by making previous a value-of, once stable -->
         <xsl:value-of select="$code-cells" />
         <!-- end cell list -->
-        <xsl:text>],&#xa;</xsl:text>
+        <xsl:text>&#xa;],&#xa;</xsl:text>
         <!-- version identifiers -->
-        <xsl:text>"nbformat": 4,&#xa;</xsl:text>
-        <xsl:text>"nbformat_minor": 0,&#xa;</xsl:text>
+        <xsl:text>"nbformat": 4, "nbformat_minor": 0, </xsl:text>
         <!-- metadata copied from blank SMC notebook -->
-        <xsl:text>"metadata": {&#xa;</xsl:text>
-        <xsl:text>  "kernelspec": {&#xa;</xsl:text>
+        <xsl:text>"metadata": {</xsl:text>
+        <xsl:text>"kernelspec": {</xsl:text>
         <!-- TODO: configure kernel in "docinfo" -->
         <!-- "display_name" seems ineffective, but is required -->
-        <xsl:text>    "display_name": "",&#xa;</xsl:text>
+        <xsl:text>"display_name": "", </xsl:text>
         <!-- TODO: language not needed? -->
-        <!-- <xsl:text>    "language": "python",&#xa;</xsl:text> -->
+        <!-- <xsl:text>"language": "python", </xsl:text> -->
         <!-- "sagemath" as  "name" will be latest kernel on CoCalc -->
-        <xsl:text>    "name": "python2"&#xa;</xsl:text>
+        <xsl:text>"name": "python2"</xsl:text>
         <!-- TODO: how much of the following is necessary before loading? -->
-        <xsl:text>  },&#xa;</xsl:text>
-        <xsl:text>  "language_info": {&#xa;</xsl:text>
-        <xsl:text>    "codemirror_mode": {&#xa;</xsl:text>
-        <xsl:text>      "name": "ipython",&#xa;</xsl:text>
-        <xsl:text>      "version": 2&#xa;</xsl:text>
-        <xsl:text>    },&#xa;</xsl:text>
-        <xsl:text>    "file_extension": ".py",&#xa;</xsl:text>
-        <xsl:text>    "mimetype": "text/x-python",&#xa;</xsl:text>
-        <xsl:text>    "name": "python",&#xa;</xsl:text>
-        <xsl:text>    "nbconvert_exporter": "python",&#xa;</xsl:text>
-        <xsl:text>    "pygments_lexer": "ipython2",&#xa;</xsl:text>
-        <xsl:text>    "version": "2.7.8"&#xa;</xsl:text>
-        <xsl:text>  },&#xa;</xsl:text>
-        <xsl:text>  "name": "</xsl:text>
+        <xsl:text>}, </xsl:text>
+        <xsl:text>"language_info": {</xsl:text>
+        <xsl:text>"codemirror_mode": {</xsl:text>
+        <xsl:text>"name": "ipython", </xsl:text>
+        <xsl:text>"version": 2</xsl:text>
+        <xsl:text>}, </xsl:text>
+        <xsl:text>"file_extension": ".py", </xsl:text>
+        <xsl:text>"mimetype": "text/x-python", </xsl:text>
+        <xsl:text>"name": "python", </xsl:text>
+        <xsl:text>"nbconvert_exporter": "python", </xsl:text>
+        <xsl:text>"pygments_lexer": "ipython2", </xsl:text>
+        <xsl:text>"version": "2.7.8"</xsl:text>
+        <xsl:text>}, </xsl:text>
+        <xsl:text>"name": "</xsl:text>
         <xsl:value-of select="$filename" />
-        <xsl:text>"&#xa;</xsl:text>
-        <xsl:text>  }&#xa;</xsl:text>
-        <!-- end outermost group -->
+        <xsl:text>"</xsl:text>
         <xsl:text>}&#xa;</xsl:text>
+        <!-- end outermost group -->
+        <xsl:text>}</xsl:text>
     </exsl:document>
 </xsl:template>
 
@@ -683,7 +682,7 @@ TODO: (overall)
 <!-- ################# -->
 
 <xsl:variable name="begin-markdown-wrap">
-    <xsl:text>{"cell_type": "markdown", "metadata": {}, "source": [&#xa;</xsl:text>
+    <xsl:text>{"cell_type":"markdown", "metadata":{}, "source":[</xsl:text>
 </xsl:variable>
 
 <xsl:variable name="end-markdown-wrap">
@@ -691,11 +690,11 @@ TODO: (overall)
 </xsl:variable>
 
 <xsl:variable name="begin-code-wrap">
-    <xsl:text>{"cell_type" : "code", "execution_count" : null, "metadata" : {}, "source": [&#xa;</xsl:text>
+    <xsl:text>{"cell_type":    "code", "execution_count":null, "metadata":{}, "source":[</xsl:text>
 </xsl:variable>
 
 <xsl:variable name="end-code-wrap">
-    <xsl:text>],"outputs" : []}</xsl:text>
+    <xsl:text>], "outputs":[]}</xsl:text>
 </xsl:variable>
 
 <!-- A Jupyter markdown cell intended  -->
