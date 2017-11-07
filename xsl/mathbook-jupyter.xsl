@@ -311,7 +311,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and pseudo-divisions.  Normally they would get a high -->
 <!-- priority, but we want them to have the same low       -->
 <!-- priority as a generic (default) wilcard match         -->
-<xsl:template match="*[parent::*[&STRUCTURAL-FILTER; or self::paragraphs or self::introduction[parent::*[&STRUCTURAL-FILTER;]] or self::conclusion[parent::*[&STRUCTURAL-FILTER;]]]]" priority="-0.5">
+<!-- TODO: remove filter on paragraphs once we add stack for sidebyside -->
+<xsl:template match="*[parent::*[&STRUCTURAL-FILTER; or self::paragraphs[not(ancestor::sidebyside)] or self::introduction[parent::*[&STRUCTURAL-FILTER;]] or self::conclusion[parent::*[&STRUCTURAL-FILTER;]]]]" priority="-0.5">
     <!-- <xsl:message>G:<xsl:value-of select="local-name(.)" />:G</xsl:message> -->
     <xsl:variable name="html-rtf">
         <xsl:apply-imports />
