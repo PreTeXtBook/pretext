@@ -2796,7 +2796,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:otherwise>
             <xsl:text>[</xsl:text>
             <xsl:value-of select="$string-id" />
-            <xsl:text>]&#xa;</xsl:text>
+            <xsl:text>]</xsl:text>
             <xsl:message>MBX:WARNING: could not translate string with id "<xsl:value-of select="$string-id" />" into language for code "<xsl:value-of select="$document-language" />"</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
