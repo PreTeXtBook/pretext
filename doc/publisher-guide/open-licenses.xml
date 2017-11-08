@@ -153,13 +153,19 @@
     <section>
         <title>Remixing and License Compatibility</title>
 
-        <p>It is popular to describe the potential of remixing parts of open educational resources.  For example, an literature professor might collect a variety of openly licensed poems into a reader for students in a course.  When the licenses are viral, and different, there arises the problem of what license to put on the collection.  Worse, one license might prohibit commercial uses, and another allow it, meaning the licenses are incompatible.</p>
+        <p>It is popular to describe the potential of remixing parts of open educational resources.  For example, a literature professor might collect a variety of openly licensed poems into a reader for students in a course.  When the licenses are viral, and different, there arises the problem of what license to put on the collection.  Worse, one license might prohibit commercial uses, and another allow it, meaning the licenses are incompatible.</p>
 
         <p>So some thought should go into the choice of a license when the work has the very real potential to be included in another, such as would be the case with a photograph.  One solution is to provide more than one license (nothing about copyright prohibits this).  Another solution is to avoid licenses with overly restrictive terms, such as restricting commercial use or derivative works.</p>
+
+        <p>Remember too, that in addition to multiple licenses, as the copyright holder you may offer your work to another project on different terms.  So another author might ask if a chapter of your work may be included in their project, which might use a different license than yours (more or less restrictive), and yu can grant permission for that use under that license.  Now there are two versions of your chapter, which could diverge over time if derivatives are allowed, available to others on different terms.</p>
 
         <p>For mathematics books, we do not concern ourselves too much with the potential for remixing.  Notation and dependencies make it hard to collect parts of various textbooks and assemble them into something new (and coherent).</p>
 
         <p>Creative Commons maintains a matrix showing compatibility between their own licenses at their <init>FAQ</init> question, <url href="https://creativecommons.org/faq/#can-i-combine-material-under-different-creative-commons-licenses-in-my-work">Can I combine material under different Creative Commons licenses in my work?</url>, illustrating just how complicated this can become.</p>
+
+        <p>Finally, recognize that you can begin with a restrictive license and as you become more comfortable with the idea, change it to a more liberal license that applies to the work at the time of the change.  Further, you can always change your license to a more restrictive version, but invariably, you cannot revoke an open license once granted.  You could even stop offering an open license all together, and return to traditional copyright as you continue to improve your document.  But the version that existed when you made that decision is still available for anyone to use, and possibly improve, independent of your own closed version.</p>
+
+        <p>After a while, you realize that openly licensing your writing project gives it an independence and freedom all of its own.  It seems to be owned by everybody, and by nobody<mdash />at the same time.</p>
     </section>
 
     <section>
