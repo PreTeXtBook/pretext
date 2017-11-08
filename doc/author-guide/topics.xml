@@ -480,9 +480,9 @@
 
         <p>Instead of placing a <attribute>width</attribute> attribute on each item, instead place this on the <tag>sidebyside</tag> element.  A single <attribute>width</attribute> will use the same value for each panel.  For different widths, use the plural form <attribute>widths</attribute> and provide a space-separated list of percentages.  The default is to give each panel the same width, and as large as possible, which will result in no gap between panels.</p>
 
-        <p>The margins can be specified with the <attribute>margins</attribute> attribute, which if given as a single percentage will be used for both the left and right sides.  You may also specify asymmetric left and right margins with two percentages, separated by a space, in the same attribute.  An additional option is to use the value <c>auto</c> which will set each margin to half of the (common) space between panels.  This is also the default.</p>
+        <p>The margins can be specified with the <attribute>margins</attribute> attribute, which if given as a single percentage will be used for both the left and right sides.  You may also specify asymmetric left and right margins with two percentages, separated by a space, in the same attribute.  An additional option is to use the value <c>auto</c> which will set each margin to half of the (common) space between panels.  This is also the default.  In the case of a single panel, the left margin, right margin, and panel width should all add up to 100<percent />.</p>
 
-        <p>Once the widths and margins are known, any additional available width is used to create a common distance separating panels.</p>
+        <p>Once the widths and margins are known, any additional available width is used to create a common distance separating panels.  (Which is not possible when there is just a single panel.)</p>
 
         <p>Independent of horizontal positioning, individual panels may be aligned vertically.  The attribute is <attribute>valigns</attribute> and its value is a space-separated list of <c>top</c>, <c>middle</c>, and <c>bottom</c>.  The singular version, <attribute>valign</attribute>, is used to give every panel the same alignment, using the same keywords.  The default is to have every panel at the <c>top</c>.</p>
 

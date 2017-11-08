@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2017  Robert A. Beezer, David Farmer  -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="production">
+    <title>(*) Producing a Book</title>
+
+    <introduction>
+        <p>You have finished using <pretext /> to write a textbook, research monograph, laboratory manual, writer's handbook, or some other scholarly work, and you want to share it openly with students and other readers.  Good!  That's why we created <pretext />, and why we include this chapter.  There is more to do.</p>
+
+        <p>This chapter will try to distill our personal experience, along with many conversations with other authors confronting these same decisions.  But recognize there is a lot of <em>advice</em> here, and a bit of an attitude, simply for your consideration.  The decisions are yours.</p>
+
+        <aside>
+            <title>Open Source</title>
+            <p><pretext /> is open source <em>software</em>, but that places no restrictions on how you use output that <pretext /> creates (see <xref ref="principle-open-software" />).  You are welcome to sell your copyright to a commercial publisher or university press.  But just once, here and now, we will encourage you to consider an open license (see <xref ref="open-licenses" />) as a way of paying it forward.</p>
+        </aside>
+    </introduction>
+
+    <section>
+        <title>(*) Front Matter</title>
+    </section>
+
+    <section>
+        <title>(*) Landing Page</title>
+    </section>
+
+    <section>
+        <title>(*) Source</title>
+    </section>
+
+    <section>
+        <title>(*) Marketing</title>
+
+        <introduction>
+            <p>Didn't think about that one?  Write it, and they will come?  Not necessarily.  I have seen nice projects where authors make little extra effort to get the word out, and it shows.  With the Internet, effective promotion can be accomplished without much effort or expense.  And very soon your project can rise very high in search engine rankings.</p>
+        </introduction>
+
+        <subsection>
+            <title>(*) Social Media</title>
+
+        </subsection>
+
+        <subsection>
+            <title>(*) Reference Sites</title>
+
+        </subsection>
+
+        <subsection>
+            <title>(*) Analytics</title>
+
+        </subsection>
+
+        <subsection>
+            <title>(*) Discussion Groups</title>
+
+        </subsection>
+    </section>
+
+</chapter>

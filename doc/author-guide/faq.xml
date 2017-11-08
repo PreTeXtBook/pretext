@@ -110,7 +110,15 @@
 
             <p>Finally, we do not load minor resources indiscriminately.  Something in your source should suggest they are necessary and we perform those checks, document-wide.  However, since a cross-reference is usually implemented as a knowl, and we cannot be sure what a knowl might contain, we do tend to load resources on <em>every</em> page, even if only needed once.  We hope to improve this situation.  And you are enouraged to help if you have technical skills in these areas.</p>
         </li>
+
+        <li>
+            <title>Searching my <init>PDF</init> output is broken.</title>
+            <p><pretext /> goes to great lengths to make a high-quality <init>PDF</init>, but if you manipulate it by adding in new pages, or adjust the intermediate <latex /> to use other fonts, you run the risk of breaking some of the features.</p>
+
+            <p>A ligature is a combination of two characters into one, like a lower-case <q>f</q> followed closely by a lower-case <f>i</f> without a dot.  These can confuse a search.  Verbatim text sometimes ends up with <q>smart</q> quotes, where left and right versions are inverted.  This frustrates copying source code into an actual program.  And so on.  If you see problems like this with un-customized <init>PDF</init> output, we would like to hear about it.</p>
+        </li>
     </dl>
+
 </appendix>
 
 

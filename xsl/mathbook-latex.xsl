@@ -1036,12 +1036,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% You can remove the "placement={H}" option to allow flotation and&#xa;</xsl:text>
         <xsl:text>%% preserve numbering, BUT the numbering may then appear "out-of-order"&#xa;</xsl:text>
         <xsl:text>%% Floating environments: http://tex.stackexchange.com/questions/95631/&#xa;</xsl:text>
-        <!-- Float package defines the "H" specifier -->
+        <!-- Float package defines the "H" specifier                       -->
+        <!-- TODO: could conditionally load  float  for tables and figures -->
         <xsl:text>\usepackage{float}&#xa;</xsl:text>
+        <!-- newfloat  package has \SetupFloatingEnvironment                -->
+        <!-- \DeclareCaptionType is an undocumented command,                -->
+        <!-- available in the  caption  package, by the same author         -->
+        <!-- and also in the  subcaption  package, again by the same author -->
+        <!-- See comment by this author, Axel Sommerfeldt in                -->
+        <!-- https://tex.stackexchange.com/questions/115193/                -->
+        <!-- (continuous-numbering-of-custom-float-with-caption-package)    -->
+        <!-- capt-of  sounds appealing, but then can't bold-face labels (?) -->
         <xsl:text>\usepackage{newfloat}&#xa;</xsl:text>
-        <xsl:text>\usepackage[bf]{caption}&#xa;</xsl:text>
-        <!-- captioned items subsidiary to a captioned figure -->
+        <xsl:text>\usepackage{caption}</xsl:text>
+        <!-- First, captioned items subsidiary to a captioned figure -->
+        <!-- Seem to be bold face without extra effort               -->
         <xsl:if test="$document-root//figure/sidebyside/*[caption]">
+            <xsl:text>%% Captioned items inside side-by-side within captioned figure&#xa;</xsl:text>
             <xsl:text>\usepackage{subcaption}&#xa;</xsl:text>
             <xsl:text>\captionsetup[subfigure]{labelformat=simple}&#xa;</xsl:text>
             <xsl:text>\renewcommand\thesubfigure{(\alph{subfigure})}&#xa;</xsl:text>
@@ -1063,7 +1074,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- so if these are distinct, we make this environment    -->
         <!-- just to make the counter, even if not explicitly used -->
         <xsl:if test="$document-root//figure or $b-number-figure-distinct">
-            <xsl:text>%% Adjust figure environment so that it no longer floats&#xa;</xsl:text>
+            <xsl:text>%% Adjust stock figure environment so that it no longer floats&#xa;</xsl:text>
             <xsl:text>\SetupFloatingEnvironment{figure}{fileext=lof,placement={H},within=</xsl:text>
             <xsl:choose>
                 <xsl:when test="$figure-levels = 0">
@@ -1080,6 +1091,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="string-id" select="'figure'" />
             </xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
+            <xsl:text>\captionsetup[figure]{labelfont=bf}&#xa;</xsl:text>
             <xsl:if test="not($b-number-figure-distinct)">
                 <xsl:text>%% http://tex.stackexchange.com/questions/16195&#xa;</xsl:text>
                 <xsl:text>\makeatletter&#xa;</xsl:text>
@@ -1088,7 +1100,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:if>
         <xsl:if test="$document-root//table">
-            <xsl:text>%% Adjust table environment so that it no longer floats&#xa;</xsl:text>
+            <xsl:text>%% Adjust stock table environment so that it no longer floats&#xa;</xsl:text>
             <xsl:text>\SetupFloatingEnvironment{table}{fileext=lot,placement={H},within=</xsl:text>
             <xsl:choose>
                 <xsl:when test="$figure-levels = 0">
@@ -1105,6 +1117,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="string-id" select="'table'" />
             </xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
+            <xsl:text>\captionsetup[table]{labelfont=bf}&#xa;</xsl:text>
             <!-- associate counter                  -->
             <!--   if independent, then with figure -->
             <!--   if grouped, then with theorem    -->
@@ -1128,7 +1141,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Caption formatting/style possibilities:          -->
         <!-- http://tex.stackexchange.com/questions/117531    -->
         <xsl:if test="$document-root//listing">
-            <xsl:text>%% Create "listing" environment&#xa;</xsl:text>
+            <xsl:text>%% Create "listing" environment to hold program listings&#xa;</xsl:text>
+            <xsl:text>%% The "lstlisting" environment defaults to allowing page-breaking,&#xa;</xsl:text>
+            <xsl:text>%% so we do not use a floating environment, which would break this&#xa;</xsl:text>
+            <!-- TODO: optionally force no-page-break with [float] on lstlisting? -->
             <xsl:text>\newenvironment{listing}{\par\bigskip\noindent}{}&#xa;</xsl:text>
             <xsl:text>%% New caption type for numbering, style, etc.&#xa;</xsl:text>
             <xsl:text>\DeclareCaptionType[within=</xsl:text>
@@ -1142,12 +1158,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
-            <xsl:text>]{listingcaption}[</xsl:text>
+            <xsl:text>]{listingcap}[</xsl:text>
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'listing'" />
             </xsl:call-template>
             <xsl:text>]&#xa;</xsl:text>
-            <xsl:text>\captionsetup[listingcaption]{aboveskip=1.0ex,belowskip=\baselineskip}&#xa;</xsl:text>
+            <xsl:text>\captionsetup[listingcap]{labelfont=bf,aboveskip=1.0ex,belowskip=\baselineskip}&#xa;</xsl:text>
             <!-- associate counter                  -->
             <!--   if independent, then with figure -->
             <!--   if grouped, then with theorem    -->
@@ -1155,18 +1171,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\makeatletter&#xa;</xsl:text>
             <xsl:choose>
                 <xsl:when test="$b-number-figure-distinct">
-                    <xsl:text>\let\c@listingcaption\c@figure&#xa;</xsl:text>
+                    <xsl:text>\let\c@listingcap\c@figure&#xa;</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:text>\let\c@listingcaption\c@theorem&#xa;</xsl:text>
+                    <xsl:text>\let\c@listingcap\c@theorem&#xa;</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:text>\makeatother&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="$document-root//list">
-            <xsl:text>%% Create "named list" environment, non-floating&#xa;</xsl:text>
-            <xsl:text>\DeclareFloatingEnvironment{namedlist}&#xa;</xsl:text>
-            <xsl:text>\SetupFloatingEnvironment{namedlist}{fileext=lol,placement={H},within=</xsl:text>
+            <xsl:text>%% Create "named list" environment to hold lists with captions&#xa;</xsl:text>
+            <xsl:text>%% We do not use a floating environment, so list can page-break&#xa;</xsl:text>
+            <xsl:text>\newenvironment{namedlist}{\par\bigskip\noindent}{}&#xa;</xsl:text>
+            <xsl:text>%% New caption type for numbering, style, etc.&#xa;</xsl:text>
+            <xsl:text>\DeclareCaptionType[within=</xsl:text>
             <xsl:choose>
                 <xsl:when test="$figure-levels = 0">
                     <xsl:text>none</xsl:text>
@@ -1177,11 +1195,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
-            <xsl:text>,name=</xsl:text>
+            <xsl:text>]{namedlistcap}[</xsl:text>
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'list'" />
             </xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
+            <xsl:text>]&#xa;</xsl:text>
+            <xsl:text>\captionsetup[namedlistcap]{labelfont=bf,aboveskip=1.0ex,belowskip=\baselineskip}&#xa;</xsl:text>
             <!-- associate counter                  -->
             <!--   if independent, then with figure -->
             <!--   if grouped, then with theorem    -->
@@ -1189,10 +1208,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\makeatletter&#xa;</xsl:text>
             <xsl:choose>
                 <xsl:when test="$b-number-figure-distinct">
-                    <xsl:text>\let\c@namedlist\c@figure&#xa;</xsl:text>
+                    <xsl:text>\let\c@namedlistcap\c@figure&#xa;</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:text>\let\c@namedlist\c@theorem&#xa;</xsl:text>
+                    <xsl:text>\let\c@namedlistcap\c@theorem&#xa;</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:text>\makeatother&#xa;</xsl:text>
@@ -3083,7 +3102,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######### -->
 
 <!-- Free-range exercises go into environments -->
-<!-- TODO: Be more careful about notation, todo; include answer -->
+<!-- TODO: Be more careful about notation, todo -->
 <xsl:template match="exercise">
     <xsl:text>\begin{exercise}</xsl:text>
     <xsl:apply-templates select="title" mode="environment-option" />
@@ -3091,6 +3110,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="statement"/>
     <xsl:apply-templates select="hint"/>
+    <xsl:apply-templates select="answer"/>
     <xsl:apply-templates select="solution"/>
     <xsl:text>\end{exercise}&#xa;</xsl:text>
 </xsl:template>
@@ -3203,12 +3223,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Assume various solution-types with non-blank line and newline -->
+<!-- Heading template is elsewhere and should come closer on a reorganization -->
 <xsl:template match="exercise/hint|exercise/answer|exercise/solution">
-    <xsl:text>\par\smallskip&#xa;\noindent\textbf{</xsl:text>
-    <xsl:apply-templates select="." mode="type-name" />
-    <xsl:text>.}</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
-    <xsl:text>\quad&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="solution-heading" />
     <xsl:apply-templates />
 </xsl:template>
 
@@ -3719,92 +3736,87 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{objectives}&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="solution[parent::*[&EXAMPLE-FILTER;]]">
-    <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
-    <xsl:text>\textbf{</xsl:text>
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="'solution'" />
-    </xsl:call-template>
-    <xsl:text>.}\quad </xsl:text>
+<!-- Examples can have hints, answers or solutions, -->
+<!-- but as examples we don't turn them on or off   -->
+<xsl:template match="hint[parent::*[&EXAMPLE-FILTER;]]|answer[parent::*[&EXAMPLE-FILTER;]]|solution[parent::*[&EXAMPLE-FILTER;]]|">
+    <xsl:apply-templates select="." mode="solution-heading" />
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- A project may have a hint -->
+<!-- TODO: consolidate three tests twice,      -->
+<!-- and use modal template (ala EXAMPLE-LIKE) -->
+<!-- and/or make a template to check if visible or not -->
+
+<!-- A project may have a hint, with switch control -->
 <xsl:template match="hint[parent::*[&PROJECT-FILTER;]]">
     <xsl:if test="$project.text.hint = 'yes'">
-        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
-        <xsl:text>\textbf{</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'hint'" />
-        </xsl:call-template>
-        <xsl:text>.}\quad </xsl:text>
+        <xsl:apply-templates select="." mode="solution-heading" />
         <xsl:apply-templates />
     </xsl:if>
 </xsl:template>
 
-<!-- A project may have an answer -->
+<!-- A project may have an answer, with switch control-->
 <xsl:template match="answer[parent::*[&PROJECT-FILTER;]]">
     <xsl:if test="$project.text.answer = 'yes'">
-        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
-        <xsl:text>\textbf{</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'answer'" />
-        </xsl:call-template>
-        <xsl:text>.}\quad </xsl:text>
+        <xsl:apply-templates select="." mode="solution-heading" />
         <xsl:apply-templates />
     </xsl:if>
 </xsl:template>
 
-<!-- A project may have a solution -->
+<!-- A project may have a solution, with switch control -->
 <xsl:template match="solution[parent::*[&PROJECT-FILTER;]]">
     <xsl:if test="$project.text.solution = 'yes'">
-        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
-        <xsl:text>\textbf{</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'solution'" />
-        </xsl:call-template>
-        <xsl:text>.}\quad </xsl:text>
+        <xsl:apply-templates select="." mode="solution-heading" />
         <xsl:apply-templates />
     </xsl:if>
 </xsl:template>
 
-<!-- A task may have a hint -->
+<!-- A task may have a hint, with switch control -->
 <xsl:template match="hint[parent::task]">
     <xsl:if test="$task.text.hint = 'yes'">
-        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
-        <xsl:text>\textbf{</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'hint'" />
-        </xsl:call-template>
-        <xsl:text>.}\quad </xsl:text>
+        <xsl:apply-templates select="." mode="solution-heading" />
         <xsl:apply-templates />
     </xsl:if>
 </xsl:template>
 
-<!-- A project may have an answer -->
+<!-- A task may have an answer, with switch control -->
 <xsl:template match="answer[parent::task]">
     <xsl:if test="$task.text.answer = 'yes'">
-        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
-        <xsl:text>\textbf{</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'answer'" />
-        </xsl:call-template>
-        <xsl:text>.}\quad </xsl:text>
+        <xsl:apply-templates select="." mode="solution-heading" />
         <xsl:apply-templates />
     </xsl:if>
 </xsl:template>
 
-<!-- A project may have a solution -->
+<!-- A task may have a solution, with switch control -->
 <xsl:template match="solution[parent::task]">
     <xsl:if test="$task.text.solution = 'yes'">
-        <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
-        <xsl:text>\textbf{</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'solution'" />
-        </xsl:call-template>
-        <xsl:text>.}\quad </xsl:text>
+        <xsl:apply-templates select="." mode="solution-heading" />
         <xsl:apply-templates />
     </xsl:if>
+</xsl:template>
+
+<!-- move this someplace where exercise routines are consolidated -->
+<xsl:template match="hint|answer|solution" mode="solution-heading">
+    <xsl:text>\par\smallskip%&#xa;</xsl:text>
+    <xsl:text>\noindent\textbf{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name" />
+    <!-- An empty value means element is a singleton -->
+    <!-- else the serial number comes through        -->
+    <xsl:variable name="the-number">
+        <xsl:apply-templates select="." mode="non-singleton-number" />
+    </xsl:variable>
+    <xsl:if test="not($the-number = '')">
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="serial-number" />
+    </xsl:if>
+    <xsl:if test="title">
+        <xsl:text> (</xsl:text>
+        <xsl:apply-templates select="." mode="title-full" />
+        <xsl:text>)</xsl:text>
+    </xsl:if>
+    <xsl:text>.}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>\quad%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Named Lists -->
@@ -3818,7 +3830,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Schema requires a caption, so this is OK long-term -->
     <!-- (There is a template for all captions elsewhere)   -->
     <xsl:if test="title and not(caption)">
-        <xsl:text>\captionof{namedlist}{</xsl:text>
+        <xsl:text>\captionof{namedlistcap}{</xsl:text>
         <xsl:apply-templates select="." mode="title-full" />
         <xsl:apply-templates select="." mode="label" />
         <xsl:text>}&#xa;</xsl:text>
@@ -3867,302 +3879,144 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Mathematics -->
 <!-- ########### -->
 
-<!-- Mathematics authored in LaTeX syntax will be        -->
-<!-- independent of output format.  Despite MathJax's    -->
-<!-- broad array of capabilities, there are enough       -->
-<!-- differences that it is easier to maintain separate  -->
-<!-- routines for different outputs.  Still, we try to   -->
-<!-- isolate some routines in "xsl/mathbook-common.xsl". -->
+<!-- Mathematics authored in LaTeX syntax should be       -->
+<!-- independent of output format.  Despite MathJax's     -->
+<!-- broad array of capabilities, there are still some    -->
+<!-- differences which we need to accomodate via abstract -->
+<!-- templates.                                           -->
 
-<!-- Numbering -->
-<!-- We do not tag equations with numbers in LaTeX output,   -->
-<!-- but instead let the LaTeX preamble's configuration      -->
-<!-- options control the way numbers are generated and       -->
-<!-- assigned. The combination of starred/un-starred LaTeX   -->
-<!-- environments, and the presence of "\label{}", "\notag", -->
-<!-- or no such command, control the numbering in response   -->
-<!-- to the number of levels specified.                      -->
-
-<!-- Other differences -->
-<!-- \intertext needs a very different stategy for HTML      -->
-<!-- \label needs to not occur in duplicated content in HTML -->
-
-<!-- Inline Math ("m") -->
+<!-- Inline Mathematics ("m") -->
 <!-- We use the asymmetric LaTeX delimiters \( and \).     -->
 <!-- For LaTeX these are not "robust", hence break moving  -->
 <!-- items (titles, index), so use the "fixltx2e" package, -->
 <!-- which declares \MakeRobust\( and \MakeRobust\)        -->
 <!-- Note: LaTeX, unlike HTML, needs no help with          -->
-<!-- clause-ending punctuation trailing inline math        -->
+<!-- clause-ending punctuation trailing inline math,       -->
 <!-- it always does the right thing.  So when the general  -->
-<!-- template for text nodes in mathbook-common goes to    -->
-<!-- drop this punctuation, it also checks the             -->
-<!-- $latex-processing global variable                     -->
-<xsl:template match= "m">
-    <xsl:variable name="raw-latex">
-        <!-- build and save for later manipulation        -->
-        <!-- Note: generic text() template passes through -->
-        <xsl:choose>
-            <xsl:when test="ancestor::webwork">
-                <xsl:apply-templates select="text()|var" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="text()|fillin" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- wrap tightly in math delimiters -->
+<!-- template for text nodes in -common goes to drop this  -->
+<!-- punctuation, it also checks the $latex-processing     -->
+<!-- global variable                                       -->
+<!-- NB: we should be able to use templates to make this   -->
+<!-- happen without the global variable                    -->
+
+<!-- These two templates provide the delimiters for -->
+<!-- inline math, implementing abstract templates.  -->
+<xsl:template name="begin-inline-math">
     <xsl:text>\(</xsl:text>
-    <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
-    <!--   (1) avoid LaTeX compilation errors                       -->
-    <!--   (2) avoid spurious blank lines leading to new paragraphs -->
-    <!--   (3) provide human-readable source of high quality        -->
-    <!-- sanitize-latex template does not provide a final newline   -->
-    <!-- and we do not add one here either for inline math          -->
-    <xsl:call-template name="sanitize-latex">
-        <xsl:with-param name="text" select="$raw-latex" />
-    </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="end-inline-math">
     <xsl:text>\)</xsl:text>
 </xsl:template>
 
+<!-- This is the override for LaTeX processing,        -->
+<!-- since punctuation following inline math is        -->
+<!-- not a problem for traditional TeX's line-breaking -->
+<xsl:template match="m" mode="get-clause-punctuation" />
+
+
 <!-- Displayed Single-Line Math ("me", "men") -->
-<!-- Single displayed equation, me (unnumbered), men (numbered)    -->
-<!-- Output follows source line breaks                             -->
-<!-- See: http://tex.stackexchange.com/questions/40492/            -->
+<!-- The default template just calls the modal "body"      -->
+<!-- template needed for the HTML knowl production scheme. -->
+<!-- The variables in the "body" template have the right   -->
+<!-- defaults for this application                         -->
+
 <xsl:template match="me|men">
-    <!-- build and save for later manipulation                      -->
-    <!-- Note: template for text nodes passes through mrow children -->
-    <xsl:variable name="raw-latex">
-        <xsl:choose>
-            <xsl:when test="ancestor::webwork">
-                <xsl:apply-templates select="text()|var" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="text()|fillin" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- Build container begin -->
-    <!-- We must be in a paragraph, so we can  -->
-    <!-- cautiously add a protected newline    -->
-    <xsl:text>%&#xa;</xsl:text>
-    <xsl:text>\begin{</xsl:text>
-    <xsl:apply-templates select="." mode="displaymath-alignment" />
-    <xsl:text>}</xsl:text>
-    <!-- TODO: next not necessary in me?, not present in HTML version -->
-    <xsl:apply-templates select="." mode="alignat-columns" />
-    <!-- leading whitespace not present, or stripped -->
-    <xsl:text>&#xa;</xsl:text>
-    <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
-    <!--   (1) avoid LaTeX compilation errors                       -->
-    <!--   (2) avoid spurious blank lines leading to new paragraphs -->
-    <!--   (3) provide human-readable source of high quality        -->
-    <!-- sanitize-latex template does not provide a final newline   -->
-    <!-- so we add one later for visual appeal                      -->
-    <xsl:call-template name="sanitize-latex">
-        <xsl:with-param name="text" select="$raw-latex" />
-    </xsl:call-template>
-    <!-- look ahead to absorb immediate clause-ending punctuation -->
-    <xsl:apply-templates select="." mode="get-clause-punctuation" />
-    <!-- finish LaTeX environment, optionally labeled -->
-    <xsl:if test="self::men">
-        <xsl:apply-templates select="." mode="label" />
-    </xsl:if>
-    <!-- check to see if this is very end of entire proof -->
-    <!-- and sneak in a \qedhere from the amsthm package  -->
-    <!-- Inappropriate if numbers exist to the right      -->
-    <xsl:if test="self::me">
-        <xsl:apply-templates select="." mode="qed-here" />
-    </xsl:if>
-    <!-- Build container end                            -->
-    <!-- We add a newline for visually appealing source -->
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>\end{</xsl:text>
-    <xsl:apply-templates select="." mode="displaymath-alignment" />
-    <xsl:text>}</xsl:text>
-    <!-- We must return to a paragraph, so                     -->
-    <!-- we can add an unprotected newline                     -->
-    <!-- Note: clause-ending punctuation has been absorbed,    -->
-    <!-- so is not left orphaned at the start of the next line -->
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="body" />
 </xsl:template>
 
-<!-- We sniff around for ampersands, to decide between "align"     -->
-<!-- and "gather", plus an asterisk for the unnumbered version     -->
-<!-- NOTE: this is "md|mdn" override from the -common version,     -->
-<!-- since AMSmath has no easy way to make a one-off number within -->
-<!-- the *-form, so we lean toward always using the un-starred     -->
-<!-- versions, except when we flag 100% no numbers inside an "md"  -->
-<!-- NOTE: this consolidates two templates from -common            -->
-<!-- ie the [@alignment] forms are mixed in here                   -->
-<xsl:template match="md|mdn" mode="displaymath-alignment">
-    <xsl:param name="b-nonumbers" select="false()" />
-    <xsl:choose>
-        <!-- look for @alignment override, possibly bad -->
-        <xsl:when test="@alignment='gather'">
-            <xsl:text>gather</xsl:text>
-        </xsl:when>
-        <xsl:when test="@alignment='alignat'">
-            <xsl:text>alignat</xsl:text>
-        </xsl:when>
-        <xsl:when test="@alignment='align'">
-            <xsl:text>align</xsl:text>
-        </xsl:when>
-        <xsl:when test="@alignment">
-            <xsl:message>MBX:ERROR: display math @alignment attribute "<xsl:value-of select="@alignment" />" is not recognized (should be "align", "gather", "alignat")</xsl:message>
-            <xsl:apply-templates select="." mode="location-report" />
-        </xsl:when>
-        <!-- sniff for alignment specifications    -->
-        <!-- this can be easily fooled, eg matrices-->
-        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
-            <xsl:text>align</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>gather</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <!-- if absolutely no numbers, we'll economize -->
-    <!-- in favor of human-readability             -->
-    <xsl:if test="$b-nonumbers">
-        <xsl:text>*</xsl:text>
+<xsl:template name="display-math-visual-blank-line">
+    <xsl:text>%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- "me" is not numbered, not a cross-reference target -->
+<xsl:template match="me" mode="tag" />
+
+<!-- Identical to the modal "label" template,  -->
+<!-- but a different name as abstract template -->
+<!-- related to equation numbering             -->
+<xsl:template match="men|mrow" mode="tag">
+    <xsl:text>\label{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- QED Here -->
+<!-- Analyze a final "mrow" or any "me"                            -->
+<!-- Strictly LaTeX/amsthm, not a MathJax feature (yet? ever?)     -->
+<!--   (1) Locate enclosing proof, quit if no such thing           -->
+<!--   (2) Check an mrow for being numbered, do not clobber that   -->
+<!--   (3) Locate all trailing element, text nodes                 -->
+<!--       strip-space: between "mrow" and "md" or "mdn"           -->
+<!--       strip-space: between final "p" and "proof"              -->
+<!--   (4) Form nodes interior to proof, and trailing ("remnants") -->
+<!--   (5) At very end of proof                                    -->
+<!--      (a) if no more nodes, or                                 -->
+<!--      (b) one node, totally whitespace and punctuation         -->
+<!--          (we don't differentiate whitespace policy here)      -->
+<!--   (6) Having survived all this write a \qedhere               -->
+<!-- TODO: \qedhere also functions at the end of a list            -->
+<xsl:template match="men" mode="qed-here" />
+
+<xsl:template match="mrow|me" mode="qed-here">
+    <!-- <xsl:message>here</xsl:message> -->
+    <xsl:variable name="enclosing-proof" select="ancestor::proof" />
+    <xsl:if test="$enclosing-proof and not(self::mrow and parent::md and @number='yes') and not(self::mrow and parent::mdn and not(@number='no'))">
+        <xsl:variable name="proof-nodes" select="$enclosing-proof/descendant-or-self::node()[self::* or self::text()]" />
+        <xsl:variable name="trailing-nodes" select="./following::node()[self::* or self::text()]" />
+        <xsl:variable name="proof-remnants" select="$proof-nodes[count(.|$trailing-nodes) = count($trailing-nodes)]" />
+        <xsl:choose>
+            <xsl:when test="count($proof-remnants) = 0">
+                <xsl:text>\qedhere</xsl:text>
+            </xsl:when>
+            <xsl:when test="(count($proof-remnants) = 1) and (translate(normalize-space($proof-remnants), $clause-ending-marks, '') = '')">
+                <xsl:text>\qedhere</xsl:text>
+            </xsl:when>
+            <xsl:otherwise />
+        </xsl:choose>
     </xsl:if>
 </xsl:template>
+
 
 <!-- Displayed Multi-Line Math ("md", "mdn") -->
-<!-- Multi-line displayed equations container, globally unnumbered or numbered   -->
-<!-- mrow logic controls numbering, based on variant here, and per-row overrides -->
-<!-- align environment if ampersands are present, gather environment otherwise   -->
-<!-- Output follows source line breaks, but may be sanitized for quality output  -->
+
+<!-- The default template for the "md" and "mdn" containers   -->
+<!-- just calls the modal "body" template needed for the HTML -->
+<!-- knowl production scheme. The variables in the "body"     -->
+<!-- template have the right defaults for this application    -->
+
 <xsl:template match="md|mdn">
-    <!-- Look for 100% no-number mrows -->
-    <xsl:variable name="b-nonumbers" select="self::md and not(child::mrow[@number='yes'])" />
-    <!-- build and save for later manipulation                      -->
-    <!-- Note: template for text nodes passes through mrow children -->
-    <xsl:variable name="raw-latex">
-        <xsl:apply-templates select="mrow|intertext">
-            <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
-        </xsl:apply-templates>
-    </xsl:variable>
-    <!-- Build container begin -->
-    <!-- We must be in a paragraph, so we can  -->
-    <!-- cautiously add a protected newline    -->
-    <!-- TODO: save alignment in a variable, use twice -->
-    <xsl:text>%&#xa;</xsl:text>
-    <xsl:text>\begin{</xsl:text>
-    <xsl:apply-templates select="." mode="displaymath-alignment">
-        <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
-    </xsl:apply-templates>
-    <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="." mode="alignat-columns" />
-    <!-- leading whitespace not present, or stripped -->
-    <xsl:text>&#xa;</xsl:text>
-    <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
-    <!--   (1) avoid LaTeX compilation errors                       -->
-    <!--   (2) avoid spurious blank lines leading to new paragraphs -->
-    <!--   (3) provide human-readable source of high quality        -->
-    <!-- sanitize-latex template does not provide a final newline   -->
-    <!-- so we add one later for visual appeal                      -->
-    <xsl:call-template name="sanitize-latex">
-        <xsl:with-param name="text" select="$raw-latex" />
-    </xsl:call-template>
-    <!-- We add a newline for visually appealing source -->
-    <xsl:text>&#xa;</xsl:text>
-    <!-- Build container end -->
-    <xsl:text>\end{</xsl:text>
-    <xsl:apply-templates select="." mode="displaymath-alignment">
-        <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
-    </xsl:apply-templates>
-    <xsl:text>}</xsl:text>
-    <!-- We must return to a paragraph, so -->
-    <!-- we can add an unprotected newline -->
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="body" />
 </xsl:template>
 
-<!-- Rows of displayed Multi-Line Math ("mrow") -->
-<!-- Numbering controlled here with \label{}, \notag, or nothing -->
-<!-- Last row different, has no line-break marker                -->
-<!-- Each mrow finishes with a newline, for visual output        -->
-<!-- LaTeX sanitization observes newlines, but strips final one  -->
-<!-- Limited exceptions to raw text only:                        -->
-<!--     xref's allow for "reasons" in proofs                    -->
-<!--     var is part of WeBWorK problems only                    -->
-<xsl:template match="mrow">
-    <xsl:param name="b-nonumbers" />
-    <xsl:choose>
-        <xsl:when test="ancestor::webwork">
-            <xsl:apply-templates select="text()|xref|var" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="text()|xref|fillin" />
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
-        <!-- look ahead to absorb immediate clause-ending punctuation -->
-        <!-- pass the context as enclosing environment (md, mdn)      -->
-        <xsl:apply-templates select="parent::*" mode="get-clause-punctuation" />
+<!-- Rows of Displayed Multi-Line Math ("mrow") -->
+<!-- Template in -common is sufficient with abstract templates -->
+<!--                                                           -->
+<!-- (1) "display-page-break"                                  -->
+<!-- (2) "qed-here"                                            -->
+
+<!-- Page Breaks within Display Math -->
+<!-- \allowdisplaybreaks is on globally always          -->
+<!-- If parent has  break="no"  then surpress with a *  -->
+<!-- Unless "mrow" has  break="yes" then leave alone    -->
+<!-- no-op for the HTML version, where it is irrelevant -->
+
+<xsl:template match="mrow" mode="display-page-break">
+    <xsl:if test="parent::*/@break='no' and not(@break='yes')">
+        <xsl:text>*</xsl:text>
     </xsl:if>
-    <!-- If we built a pure no-number environment, then we add nothing   -->
-    <!-- Otherwise, we are in a non-starred environment and get a number -->
-    <!-- unless we "\notag" it, which is the better choice under AMSmath -->
-    <!-- http://tex.stackexchange.com/questions/48965                    -->
-    <xsl:choose>
-        <xsl:when test="$b-nonumbers" />
-        <xsl:when test="parent::md">
-            <xsl:choose>
-                <xsl:when test="@number='yes'">
-                    <xsl:apply-templates select="." mode="label" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>\notag</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:when test="parent::mdn">
-            <xsl:choose>
-                <xsl:when test="@number='no'">
-                    <xsl:text>\notag</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="label" />
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-    </xsl:choose>
-    <!-- intertext does not need line-ending on prior row -->
-    <!-- nor does final mrow of the whole display         -->
-    <!-- \allowdisplaybreaks is on globally always        -->
-    <!-- but may need to override with a modal template   -->
-    <xsl:if test="following-sibling::mrow">
-       <xsl:text>\\</xsl:text>
-       <xsl:apply-templates select="." mode="dislay-page-break" />
-    </xsl:if>
-    <!-- check last row as very end of entire proof      -->
-    <!-- and sneak in a \qedhere from the amsthm package -->
-    <xsl:if test="not(following-sibling::*)">
-        <xsl:apply-templates select="." mode="qed-here" />
-    </xsl:if>
-    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Intertext -->
 <!-- An <mrow> will provide trailing newline, -->
-<!-- so do the same here for visual source    -->
-<xsl:template match="md/intertext|mdn/intertext">
+<!-- so we do the same here for visual source -->
+<!-- We need to do this very differently for  -->
+<!-- HTML (we fake it), so there is no        -->
+<!-- implementation in the -common scheme     -->
+<xsl:template match="intertext">
     <xsl:text>\intertext{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Page Breaks within Display Math -->
-<!-- If parent has  break="no"  then surpress with a * -->
-<!-- Unless mrow has  break="yes" then leave alone     -->
-<!-- NB: if mrow goes to common, just make a null      -->
-<!-- version of this template for the HTML version,    -->
-<!-- where it is irrelevant                            -->
-<xsl:template match="mrow" mode="dislay-page-break">
-    <xsl:if test="parent::*/@break='no' and not(@break='yes')">
-        <xsl:text>*</xsl:text>
-    </xsl:if>
 </xsl:template>
 
 
@@ -5546,10 +5400,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\captionof{figure}{</xsl:text>
       </xsl:when>
       <xsl:when test="parent::listing">
-            <xsl:text>\captionof{listingcaption}{</xsl:text>
+            <xsl:text>\captionof{listingcap}{</xsl:text>
         </xsl:when>
       <xsl:when test="parent::list">
-            <xsl:text>\captionof{namedlist}{</xsl:text>
+            <xsl:text>\captionof{namedlistcap}{</xsl:text>
         </xsl:when>
       <xsl:otherwise>
           <xsl:text>\caption{</xsl:text>

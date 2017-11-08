@@ -273,17 +273,17 @@
             }
         Hint = 
             element hint {
-                MetaDataTarget,
+                MetaDataTitleOptional,
                 BlockStatement+
             }
         Answer = 
             element answer {
-                MetaDataTarget,
+                MetaDataTitleOptional,
                 BlockStatement+
             }
         Solution = 
             element solution {
-                MetaDataTarget,
+                MetaDataTitleOptional,
                 BlockStatement+
             }
         
@@ -1186,7 +1186,7 @@
                 attribute break {"yes" | "no"}?,
                 mixed {(Xref | FillIn)*}
             }
-        MathIntertext = element intertext {TextShort}
+        MathIntertext = element intertext {TextLong}
         MathDisplay =
             element me {
                 mixed {FillIn*}

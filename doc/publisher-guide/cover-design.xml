@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2017  Robert A. Beezer, David Farmer  -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="cover-design">
+    <title>(*) Cover Design</title>
+
+    <p>Rationale (promotion).  Procedures for print-on-demand (generally).  Tools (Illustrator, GIMP, Inkscape).  <pretext /> support.  ISBN placement.  Capable students can do design for you.</p>
+</chapter>

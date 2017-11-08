@@ -50,6 +50,16 @@
         </ul></p>
     </section>
 
+    <section xml:id="debugging-mbx-image-generation">
+        <title>Debugging Image Generation</title>
+
+        <p>A principal use of the <c>mbx</c> script is to isolate source code from <c>latex-image-code</c> sections, package them up as proper <c>*.tex</c> files, run <latex /> to make cropped <init>PDF</init> versions, and then convert these to other formats such as <init>SVG</init> or <init>PNG</init>.</p>
+
+        <p>Much of this activity happens in a temporary directory.  If you use the <c>-vv</c> switch described above, then one of the messages early in the output describing the initialization will be the name of this directory.  Looking to see what files end up there, and what those files contain, is often useful in determining the step where this toolchain fails, and maybe even why.</p>
+
+        <p>Another option is to ask for the actual <c>*.tex</c> files as the result of a run.  This is accomplished with the <c>-f source</c> flag when invoking <c>mbx</c>.  If the right packages or macros are not being employed in these files, this is an easy way to get at the source files for inspection and analysis.</p>
+    </section>
+
     <section xml:id="restrict-mbx-scope">
         <title>Restricting the Scope</title>
 

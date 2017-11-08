@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--    <pretext /> Publisher's Guide                         -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2017  Robert A. Beezer, David Farmer  -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<mathbook xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <docinfo>
+        <!-- this is the default, but supresses a warning -->
+        <cross-references text="type-global" />
+<!--        
+        <search>
+            <google>
+                <cx>008832104071767086392:woji51c1uko</cx>
+            </google>
+        </search>
+ -->    
+</docinfo>
+
+    <book xml:id="pretext-publisher-guide">
+        <title><pretext /> Publisher's Guide</title>
+
+        <xi:include href="frontmatter.xml" />
+        <xi:include href="production.xml" />
+        <xi:include href="open-licenses.xml" />
+        <xi:include href="conversions.xml" />
+        <xi:include href="electronic-pdf.xml" />
+        <xi:include href="online-html.xml" />
+        <xi:include href="print-pdf.xml" />
+        <xi:include href="epub.xml" />
+        <xi:include href="jupyter-notebook.xml" />
+        <xi:include href="web-hosting.xml" />
+        <xi:include href="cover-design.xml" />
+        <xi:include href="print-on-demand.xml" />
+        <xi:include href="backmatter.xml" />
+
+    </book>
+
+</mathbook>

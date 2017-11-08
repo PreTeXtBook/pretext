@@ -11,8 +11,35 @@
 <xsl:import href="../xsl/mathbook-html.xsl" />
 
 <xsl:output method="html" />
+
 <xsl:param name="html.css.file" select="'mathbook-ups.css'"/>
 <xsl:param name="html.knowl.example" select="'no'"/>
+
+<xsl:param name="chunk.level" select="'3'" />
+
+<!-- Make marked <p>s hanging indented for citiation chapter. -->
+<xsl:template match="p[@indent='hanging']" mode="body">
+    <xsl:param name="block-type" />
+    <xsl:param name="b-original" select="true()" />
+    <xsl:if test="$block-type = 'xref'">
+        <xsl:apply-templates select="." mode="heading-xref-knowl" />
+    </xsl:if>
+    <xsl:element name="p">
+        <!-- Beginning of customization -->
+        <xsl:attribute name="style">
+            <xsl:text>padding-left: 2em; text-indent: -2em;</xsl:text>
+        </xsl:attribute>
+        <!-- End of customization -->
+        <xsl:if test="$b-original">
+            <xsl:attribute name="id">
+                <xsl:apply-templates select="." mode="internal-id" />
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates select="*|text()">
+            <xsl:with-param name="b-original" select="$b-original" />
+        </xsl:apply-templates>
+    </xsl:element>
+</xsl:template>
 
 <xsl:template match="un[@s='1']">
     <xsl:element name="span">
