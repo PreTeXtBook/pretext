@@ -2878,17 +2878,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- See http://tex.stackexchange.com/questions/99495             -->
     <!-- LaTeX3e with the xparse package might make this unnecessary  -->
     <xsl:choose>
-        <!-- starred for for no numbering -->
+        <!-- No numbering of article/backmatter/references-->
         <xsl:when test="ancestor::article and parent::backmatter and self::references">
             <xsl:text>*</xsl:text>
         </xsl:when>
-        <!-- else ToC version -->
-        <xsl:otherwise>
-            <xsl:text>[{</xsl:text>
-            <xsl:apply-templates select="." mode="title-simple"/>
-            <xsl:text>}]</xsl:text>
-        </xsl:otherwise>
     </xsl:choose>
+    <!-- Short versions of titles get used in ToC (unless starred just above) -->
+    <xsl:text>[{</xsl:text>
+    <xsl:apply-templates select="." mode="title-simple"/>
+    <xsl:text>}]</xsl:text>
+    <!-- The real title and a label -->
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}</xsl:text>
