@@ -29,7 +29,6 @@
         <xi:include href="processing.xml" />
         <xi:include href="schema.xml" />
         <xi:include href="topics.xml" />
-        <xi:include href="conversions.xml" />
         <xi:include href="add-ons.xml" />
         <xi:include href="mbx-script.xml" />
         <xi:include href="webwork.xml" />
