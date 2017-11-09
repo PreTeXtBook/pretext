@@ -70,7 +70,7 @@ DTD = $(MB)/schema/dtd
 
 # XML to apply templates to
 SMPCHP = $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
-MIN = $(WWEXAMPLE)/minimal/mini.xml
+MINI = $(WWEXAMPLE)/minimal/mini.xml
 
 # These paths are subdirectories of
 # the scratch directory
@@ -78,12 +78,35 @@ PGOUT      = $(SCRATCH)/pg
 HTMLOUT    = $(SCRATCH)/html
 PDFOUT     = $(SCRATCH)/pdf
 EPUBOUT    = $(SCRATCH)/epub
+WWOUT      = $(SCRATCH)/webwork-extraction
 
 # Some aspects of producing these examples require a WeBWorK server.
 # For all but trivial testing or examples, please look into setting
 # up your own WeBWorK server, or consult Alex Jordan about the use
 # of PCC's server in a nontrivial capacity.    <alex.jordan@pcc.edu>
-SERVER = https://webwork.pcc.edu
+# Either specify only the protocol and domain (like https://webwork.yourschool.edu)
+# or specify a 5-tuple with quotes exactly as in this example
+# SERVER = "(https://webwork.pcc.edu,courseID,userID,password,course_password)"
+SERVER = http://localhost
+
+
+################
+#Targets for make
+################
+
+#  Extract webwork problems into a single XML file called
+#  webwork-extraction.xml which holds multiple versions of each problem.
+#  Also locally store images from the WeBWorK server.
+
+sample-chapter-extraction:
+	install -d $(WWOUT)
+	-rm $(WWOUT)/webwork-extraction.xml
+	$(MB)/script/mbx -v -c webwork -d $(WWOUT) -s $(SERVER) $(SMPCHP)
+
+mini-extraction:
+	install -d $(WWOUT)
+	-rm $(WWOUT)/webwork-extraction.xml
+	$(MB)/script/mbx -v -c webwork -d $(WWOUT) -s $(SERVER) $(MINI)
 
 #  Write out each WW problem of the "sample-chapter" as a
 #  standalone problem in PGML ready for use on a WW server.
@@ -110,6 +133,7 @@ sample-chapter-html:
 	cp -a $(WWEXAMPLE)/sample-chapter/images $(HTMLOUT)
 	cd $(HTMLOUT); \
 	xsltproc --stringparam webwork.server $(SERVER) --stringparam html.knowl.exercise.inline no $(MBXSL)/mathbook-html.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
+
 
 # a one-time prerequisite for LaTeX conversion
 # problems living on a server, and image construction at server

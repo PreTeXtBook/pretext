@@ -176,6 +176,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- This is cribbed from the CSS "max-width"-->
 <!-- Design width, measured in pixels        -->
+<!-- NB: the exact same value, for similar,  -->
+<!-- but not identical, reasons is used in   -->
+<!-- the formation of WeBWorK problems       -->
 <xsl:variable name="design-width" select="'600'" />
 
 <!-- We generally want to chunk longer HTML output -->
