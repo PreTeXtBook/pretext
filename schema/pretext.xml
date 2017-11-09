@@ -1096,7 +1096,7 @@
         Assemblage =
             element assemblage {
                 MetaDataTitleOptional,
-                (BlockStatement | List)+
+                (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
             }
         </fragment>
     </section>

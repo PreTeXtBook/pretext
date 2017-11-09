@@ -1238,8 +1238,9 @@
       <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
         <choice>
-          <ref name="BlockStatement"/>
-          <ref name="List"/>
+          <ref name="BlockText"/>
+          <ref name="SideBySideNoCaption"/>
+          <ref name="SideBySideGroupNoCaption"/>
         </choice>
       </oneOrMore>
     </element>

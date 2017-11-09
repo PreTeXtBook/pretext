@@ -1185,8 +1185,9 @@
       <xs:sequence>
         <xs:group ref="MetaDataTitleOptional"/>
         <xs:choice maxOccurs="unbounded">
-          <xs:group ref="BlockStatement"/>
-          <xs:group ref="List"/>
+          <xs:group ref="BlockText"/>
+          <xs:group ref="SideBySideNoCaption"/>
+          <xs:group ref="SideBySideGroupNoCaption"/>
         </xs:choice>
       </xs:sequence>
       <xs:attributeGroup ref="MetaDataTitleOptional"/>

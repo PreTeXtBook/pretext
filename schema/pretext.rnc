@@ -545,7 +545,7 @@
         Assemblage =
             element assemblage {
                 MetaDataTitleOptional,
-                (BlockStatement | List)+
+                (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
             }
         
         
