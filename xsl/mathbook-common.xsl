@@ -6739,8 +6739,8 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 </xsl:template>
 
 <xsl:template match="*" mode="deprecation-warnings">
-    <!-- older deprecations at the bottom of this list,  -->
-    <!-- so author will see new at the tail end          -->
+    <!-- older deprecations at the top of this list, -->
+    <!-- so author will see new at the tail end      -->
     <!--  -->
     <!-- 2014-05-04  @filebase has been replaced in function by @xml:id -->
     <xsl:call-template name="deprecation-message">
@@ -6986,6 +6986,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurences" select="$document-root//paragraphs[not(title) and not(parent::sidebyside)]" />
         <xsl:with-param name="date-string" select="'2017-09-10'" />
         <xsl:with-param name="message" select="'the &quot;paragraphs&quot; element (outside of a &quot;sidebyside&quot;) now requires a &quot;title&quot; (but you can xref individual &quot;p&quot; now, if that is your purpose)'" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2017-11-09  WeBWorK images now with widths as percentages, only on an enclosing sidebyside -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurences" select="$document-root//webwork//image[@width or @height or @tex-size]" />
+        <xsl:with-param name="date-string" select="'2017-11-09'" />
+        <xsl:with-param name="message" select="'an &quot;image&quot; within a &quot;webwork&quot; now has its size given by just a &quot;width&quot; attribute expressed as a percentage, including the percent sign (so in particular do not use &quot;height&quot; or &quot;tex-size&quot;).  Within &quot;webwork&quot;, the &quot;width&quot; needs to be given on an enclosing &quot;sidebyside&quot;'" />
     </xsl:call-template>
 </xsl:template>
 
