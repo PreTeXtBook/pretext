@@ -476,6 +476,335 @@ def webwork_to_tex(origin, xslt_exec, mbx_xsl_dir, xml_source, server_url, dest_
             raise ValueError(msg.format(include_file_name) + root_cause)
 
 
+################################
+#
+#  WeBWorK Extraction Processing
+#
+################################
+
+def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
+    import subprocess, os.path, xml.dom.minidom
+
+    # base64 and url encoding depends on Python version; make Boolean here
+    PY3 = sys.version_info[0] >= 3
+
+    if PY3:
+        import urllib.parse
+    else:
+        import urllib
+
+    # at least on Mac installations, requests module is not standard
+    try:
+        import requests
+    except ImportError:
+        msg = 'failed to import requests module, is it installed?'
+        raise ValueError(msg)
+
+    import re     # regular expressions for parsing
+    from xml.sax.saxutils import escape    # sanitize string
+
+    # execute XSL extraction to get back four dictionaries
+    # where the keys are the internal-ids for the problems
+    # origin, seed, source, pg
+    xsl_transform = 'extract-pg.xsl'
+    extraction_xslt = os.path.join(ptx_xsl_dir, xsl_transform)
+    cmd = [xslt_exec, '--xinclude', extraction_xslt, xml_source]
+    try:
+        problem_dictionaries = subprocess.check_output(cmd)
+    except subprocess.CalledProcessError as e:
+        root_cause = str(e)
+        msg = 'xsltproc command failed, tried: "{}"\n'.format(' '.join(cmd))
+        raise ValueError(msg + root_cause)
+
+    # execute XSL extraction to get back the dictionary
+    # where the keys are the internal-ids for the problems
+    # pgptx
+    xsl_transform_pgptx = 'extract-pg-ptx.xsl'
+    extraction_xslt_pgptx = os.path.join(ptx_xsl_dir, xsl_transform_pgptx)
+    cmd = [xslt_exec, '--xinclude', extraction_xslt_pgptx, xml_source]
+    try:
+        problem_dictionary_pgptx = subprocess.check_output(cmd)
+    except subprocess.CalledProcessError as e:
+        root_cause = str(e)
+        msg = 'xsltproc command failed, tried: "{}"\n'.format(' '.join(cmd))
+        raise ValueError(msg + root_cause)
+
+    # "run" the dictionaries
+    # protect backslashes in LaTeX code
+    # globals() necessary for success in both Python 2 and 3
+    exec(problem_dictionaries.decode('utf-8').replace('\\','\\\\'), globals())
+    exec(problem_dictionary_pgptx.decode('utf-8').replace('\\','\\\\'), globals())
+
+    # initialize more dictionaries
+    pgbase64 = {}
+    pgbase64['hint_yes_solution_yes'] = {}
+    pgbase64['hint_yes_solution_no'] = {}
+    pgbase64['hint_no_solution_yes'] = {}
+    pgbase64['hint_no_solution_no'] = {}
+    static = {}
+
+    # verify destination exists
+    sanitize_directory(dest_dir)
+    if plat == "Windows":
+        dest_dir = break_windows_path(dest_dir)
+
+    # verify, construct problem format requestor
+    # remove any surrounding white space
+    server_params = server_params.strip()
+    if (server_params.startswith("(") and server_params.endswith(")")):
+        server_params=server_params.strip('()')
+        split_server_params = server_params.split(',')
+        server_url = sanitize_url(split_server_params[0])
+        courseID = sanitize_alpha_num_underscore(split_server_params[1])
+        userID = sanitize_alpha_num_underscore(split_server_params[2])
+        password = sanitize_alpha_num_underscore(split_server_params[3])
+        course_password = sanitize_alpha_num_underscore(split_server_params[4])
+    else:
+        server_url = sanitize_url(server_params)
+        courseID = 'anonymous'
+        userID = 'anonymous'
+        password = 'anonymous'
+        course_password = 'anonymous'
+
+    wwurl = server_url + "webwork2/html2xml"
+
+    # Begin preparation for getting static versions
+
+    # using a "Session()" will pool connection information
+    # since we always hit the same server, this should increase performance
+    session = requests.Session()
+
+    # XML content comes back
+    # these delimit what we want
+    start_marker = re.compile('<!--BEGIN PROBLEM-->')
+    end_marker = re.compile('<!--END PROBLEM-->')
+
+    # End preparation for getting static versions
+
+    # begin writing single .xml file with all webwork representations
+    include_file_name = os.path.join(dest_dir, "webwork-extraction.xml")
+    try:
+        include_file = open(include_file_name, 'w')
+        include_file.write('<?xml version="1.0" encoding="UTF-8" ?>\n<webwork-extraction>\n')
+        include_file.close()
+    except Exception as e:
+        root_cause = str(e)
+        msg = "There was a problem writing a problem to the file: {}\n"
+        raise ValueError(msg.format(include_file_name) + root_cause)
+
+    # Choose one of the dictionaries to take its keys as what to loop through
+    for problem in sorted(origin):
+
+        #remove outer webwork tag (and attributes) from authored source
+        if origin[problem] == 'ptx':
+            source[problem] = re.sub(r"<webwork.*?>",'',source[problem]).replace('</webwork>','')
+
+        #use "webwork-reps" as parent tag for the various representations of a problem
+        try:
+            include_file = open(include_file_name, 'a')
+            webwork_reps = '  <webwork-reps xml:id="extracted-{}" ww-id="{}">\n'
+            include_file.write(webwork_reps.format(problem,problem))
+            include_file.close()
+        except Exception as e:
+            root_cause = str(e)
+            msg = "There was a problem writing a problem to the file: {}\n"
+            raise ValueError(msg.format(include_file_name) + root_cause)
+
+        if origin[problem] == 'server':
+            msg = 'writing representations of server-based WeBWorK problem'
+        elif origin[problem] == 'ptx':
+            msg = 'writing representations of PTX-authored WeBWorK problem'
+        else:
+            raise ValueError("problem origin should be 'server' or 'ptx', not '{}'".format(origin[problem]))
+        _verbose(msg)
+
+        # make base64 for PTX problems
+        if origin[problem] == 'ptx':
+            for hint_sol in ['hint_yes_solution_yes','hint_yes_solution_no','hint_no_solution_yes','hint_no_solution_no']:
+                if PY3:
+                    import base64
+                    pgbase64[hint_sol][problem] = base64.b64encode(bytes(pgptx[hint_sol][problem], 'utf-8'))
+                else:
+                    pgbase64[hint_sol][problem] = pgptx[hint_sol][problem].encode('base64').replace('\n', '')
+
+        # First write authored and pg
+        if origin[problem] == 'ptx':
+            try:
+                include_file = open(include_file_name, 'a')
+                authored_tag = '    <authored>\n{}\n    </authored>\n\n'
+                include_file.write(authored_tag.format(re.sub(re.compile('^', re.MULTILINE),'      ',source[problem])))
+                pg_tag = '    <pg>\n{}\n    </pg>\n\n'
+                formatted_pg = re.sub(re.compile('^', re.MULTILINE),'      ',pg[problem])
+                # opportunity to cut out extra blank lines
+                formatted_pg = re.sub(re.compile(r"(\n *\n)( *\n)*", re.MULTILINE),r"\1",formatted_pg)
+                include_file.write(pg_tag.format(formatted_pg))
+                include_file.close()
+            except Exception as e:
+                root_cause = str(e)
+                msg = "There was a problem writing a problem to the file: {}\n"
+                raise ValueError(msg.format(include_file_name) + root_cause)
+        elif origin[problem] == 'server':
+            try:
+                include_file = open(include_file_name, 'a')
+                pg_tag = '    <pg source="{}" />\n\n'
+                include_file.write(pg_tag.format(source[problem]))
+                include_file.close()
+            except Exception as e:
+                root_cause = str(e)
+                msg = "There was a problem writing a problem to the file: {}\n"
+                raise ValueError(msg.format(include_file_name) + root_cause)
+
+        # Now begin getting static version from server
+
+        # WW server can react to a
+        #   URL of a problem stored there already
+        #   or a base64 encoding of a problem
+        # server_params is tuple rather than dictionary to enforce consistent order in url parameters
+        server_params = (('answersSubmitted','0'),
+                         ('displayMode','PTX'),
+                         ('courseID',courseID),
+                         ('userID',userID),
+                         ('password',password),
+                         ('course_password',course_password),
+                         ('outputformat','ptx'),
+                         ('sourceFilePath',source[problem]) if origin[problem] == 'server' else ('problemSource',pgbase64['hint_yes_solution_yes'][problem]),
+                         ('problemSeed',seed[problem]))
+
+        msg = "sending {} to server to save in {}: origin is '{}'"
+        _verbose(msg.format(problem, dest_dir, origin[problem]))
+        if origin[problem] == 'server':
+            _debug('server-to-ptx: {} {} {} {}'.format(source[problem], wwurl, dest_dir, problem))
+        elif origin[problem] == 'ptx':
+            _debug('server-to-ptx: {} {} {} {}'.format(pgptx['hint_yes_solution_yes'][problem], wwurl, dest_dir, problem))
+
+        # Ready, go out on the wire
+        try:
+            response = session.get(wwurl, params=server_params, verify=True)
+        except requests.exceptions.RequestException as e:
+            root_cause = str(e)
+            msg = "There was a problem collecting a problem,\n Server: {}\nRequest Parameters: {}\n"
+            raise ValueError(msg.format(wwurl, server_params) + root_cause)
+
+        # Obtained static, add to dictionary
+        static[problem] = response.text
+        # strip out actual PTX code between markers
+        start = start_marker.split(static[problem], maxsplit=1)
+        static[problem] = start[1]
+        end = end_marker.split(static[problem], maxsplit=1)
+        static[problem] = end[0]
+
+        # change element from webwork to static and indent
+        static[problem] = static[problem].replace('<webwork>', '<static>')
+        static[problem] = static[problem].replace('</webwork>', '</static>')
+
+        # if authored has a title, copy it here
+        if origin[problem] == 'ptx':
+            title_pattern = re.compile(r'(<title>.*<\/title>)')
+            title = None
+            title = re.search(title_pattern, source[problem])
+            if title:
+                title = title.group(1)
+                static[problem] = static[problem].replace('<static>\n','<static>\n' + title + '\n\n')
+
+        # nice to know what seed was used
+        static[problem] = static[problem].replace('<static>', '<static seed="' + seed[problem] + '">')
+
+        # nice to know sourceFilePath for server problems
+        if origin[problem] == 'server':
+            static[problem] = static[problem].replace('<static ', '<static source="' + source[problem] + '" ')
+
+        # adjust indentation
+        static[problem] = re.sub(re.compile('^', re.MULTILINE),'      ',static[problem]).replace('  <static','<static').replace('  </static','</static')
+
+        # need to loop through content looking for images with pattern:
+        #
+        #   <image source="relative-path-to-temporary-image-on-server"
+        #
+        graphics_pattern = re.compile(r'<image.*?source="([^\.]*)\.([^"]*)"')
+
+        # replace filenames, download images with new filenames
+        count = 0
+        for match in re.finditer(graphics_pattern, static[problem]):
+            count += 1
+            ww_basename = match.group(1)
+            file_extension = '.' + match.group(2)
+            ww_filename = ww_basename + file_extension
+            # rename, eg, webwork-extraction/webwork-5-image-3.png
+            ptx_basename =  problem + '-image-' + str(count)
+            ptx_filename = ptx_basename + file_extension
+            # URL of image on server starts two steps down
+            image_url = server_url + ww_filename
+            # modify PTX problem source to include local versions
+            static[problem] = static[problem].replace(ww_filename, 'images/' + ptx_filename)
+            # download actual image files
+            # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests
+            try:
+                response = session.get(image_url, verify=False)
+            except requests.exceptions.RequestException as e:
+                root_cause = str(e)
+                msg = "There was a problem downloading an image file,\n URL: {}\n"
+                raise ValueError(msg.format(image_url) + root_cause)
+            # and save the image itself
+            try:
+                image_file = open(os.path.join(dest_dir, ptx_filename), 'wb')
+                image_file.write(response.content)
+                image_file.close()
+            except Exception as e:
+                root_cause = str(e)
+                msg = "There was a problem saving an image file,\n Filename: {}\n"
+                raise ValueError(os.path.join(dest_dir, ptx_filename) + root_cause)
+
+        # place static content
+        try:
+            include_file = open(include_file_name, 'a')
+            include_file.write(static[problem] + '\n')
+            include_file.close()
+        except Exception as e:
+            root_cause = str(e)
+            msg = "There was a problem writing a problem to the file: {}\n"
+            raise ValueError(msg.format(include_file_name) + root_cause)
+
+        # Write urls for interactive version
+        for hint in ['yes','no']:
+            for solution in ['yes','no']:
+                try:
+                    include_file = open(include_file_name, 'a')
+                    url_tag = '    <server-url hint="{}" solution="{}">{}?courseID={}&amp;userID={}&amp;password={}&amp;course_password={}&amp;answersSubmitted=0&amp;displayMode=MathJax&amp;outputformat=simple&amp;problemSeed={}&amp;{}</server-url>\n\n'
+                    hintsol = 'hint_' + hint + '_solution_' + solution
+                    if PY3:
+                        source_value = urllib.parse.quote_plus(pgbase64[hintsol][problem]) if (origin[problem]=='ptx') else source[problem]
+                    else:
+                        source_value = urllib.quote_plus(pgbase64[hintsol][problem]) if (origin[problem]=='ptx') else source[problem]
+                    source_selector = 'problemSource=' if (origin[problem]=='ptx') else 'sourceFilePath='
+                    source_query = source_selector + source_value
+                    include_file.write(url_tag.format(hint,solution,wwurl,courseID,userID,password,course_password,seed[problem],source_query))
+                    include_file.close()
+                except Exception as e:
+                    root_cause = str(e)
+                    msg = "There was a problem writing a problem to the file: {}\n"
+                    raise ValueError(msg.format(include_file_name) + root_cause)
+
+        # close webwork-reps tag
+        try:
+            include_file = open(include_file_name, 'a')
+            include_file.write('  </webwork-reps>\n\n')
+            include_file.close()
+        except Exception as e:
+            root_cause = str(e)
+            msg = "There was a problem writing a problem to the file: {}\n"
+            raise ValueError(msg.format(include_file_name) + root_cause)
+
+    # close webwork-extraction tag and finish
+    try:
+        include_file = open(include_file_name, 'a')
+        include_file.write('</webwork-extraction>')
+        include_file.close()
+    except Exception as e:
+        root_cause = str(e)
+        msg = "There was a problem writing a problem to the file: {}\n"
+        raise ValueError(msg.format(include_file_name) + root_cause)
+
+
 ##############################
 #
 #  You Tube thumbnail scraping
@@ -855,6 +1184,7 @@ def get_cli_arguments():
         ('sageplot', 'Sage graphics'),
         ('latex-image', 'LaTeX pictures'),
         ('webwork-tex', 'WeBWorK server problems as LaTeX'),
+        ('webwork', 'WeBWorK problems in authored, PG, url, and static representations'),
         ('youtube', 'Thumbnails for YouTube videos (JPEG only)'),
         ('all', 'Complete document (only SageNB format)'),
         ('tikz', 'tikz pictures (obsolete)'),
@@ -880,7 +1210,7 @@ def get_cli_arguments():
     parser.add_argument('-r', '--restrict', help='restrict to subtree rooted at element with specified xml:id',
                          action="store", dest='xmlid', default='')
 
-    parser.add_argument('-s', '--server', help='base URL for server (webwork-tex only)', action="store", dest='server')
+    parser.add_argument('-s', '--server', help='base URL for server (webwork-tex and webwork only)', action="store", dest='server')
 
     parser.add_argument('-i', '--include', help='external data directory, relative to source, latex-image only', action="store", dest='data_dir')
     parser.add_argument('-o', '--output', help='file for output', action="store", dest='out')
@@ -918,6 +1248,15 @@ def sanitize_url(url):
     if url[-1] != "/":
         url = url + "/"
     return url
+
+def sanitize_alpha_num_underscore(param):
+    """Verify parameter is a string containing only alphanumeric and undescores"""
+    import string
+    allowed = set(string.ascii_lowercase + string.ascii_uppercase + '_')
+    _verbose('verifying parameter: {}'.format(param))
+    if not(set(param) <= allowed):
+        raise ValueError('param {} contains characters other than a-zA-Z0-9_ '.format(param))
+    return param
 
 def get_config_info(script_dir, user_dir):
     """Return configuation in object for querying"""
@@ -1049,6 +1388,10 @@ elif args.component == 'webwork-tex':
     _debug("xslt executable command: {}".format(xslt_executable))
     webwork_to_tex('server', xslt_executable, mbx_xsl_dir, args.xml_file, args.server, output_dir)
     webwork_to_tex('mbx',    xslt_executable, mbx_xsl_dir, args.xml_file, args.server, output_dir)
+elif args.component == 'webwork':
+    xslt_executable = get_executable(config,  'xslt')
+    _debug("xslt executable command: {}".format(xslt_executable))
+    webwork_to_xml(xslt_executable, mbx_xsl_dir, args.xml_file, args.server, output_dir)
 elif args.component == 'youtube':
     youtube_thumbnail(args.xml_file, args.xmlid, output_dir)
 elif args.component == 'all':

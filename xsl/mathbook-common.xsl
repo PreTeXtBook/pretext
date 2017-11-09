@@ -238,6 +238,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Variables -->
 <!-- ######### -->
 
+<!-- This is cribbed from the CSS "max-width"-->
+<!-- Design width, measured in pixels        -->
+<xsl:variable name="design-width" select="'600'" />
+
 <!-- The latex processing model is overridden in       -->
 <!-- imported files, per output format. Any stylesheet -->
 <!-- importing this one, should define this            -->

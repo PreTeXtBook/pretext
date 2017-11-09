@@ -174,10 +174,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- inline mathematics.  So we need to do half of the -->
 <!-- job here, absorbing punctuation into mathematics  -->
 
-<!-- This is cribbed from the CSS "max-width"-->
-<!-- Design width, measured in pixels        -->
-<xsl:variable name="design-width" select="'600'" />
-
 <!-- We generally want to chunk longer HTML output -->
 <xsl:variable name="chunk-level">
     <xsl:choose>
