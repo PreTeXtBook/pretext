@@ -204,9 +204,7 @@
     <xsl:text>## KEYWORDS(</xsl:text>
     <xsl:text>)&#xa;</xsl:text>
     <xsl:text>## TitleText1(</xsl:text>
-    <xsl:message>T<xsl:value-of select="local-name($document-root)"/></xsl:message>
     <xsl:if test="$document-root/title">
-        <xsl:message>HERE</xsl:message>
         <xsl:apply-templates select="$document-root" mode="title-full" />
     </xsl:if>
     <xsl:text>)&#xa;</xsl:text>
