@@ -22,6 +22,7 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:exsl="http://exslt.org/common"
 >
 
 <!-- This file is a library of routines to convert parts of      -->
@@ -689,13 +690,24 @@
     </xsl:choose>
 </xsl:template>
 
-<!-- Sidebyside in a WeBWorK expects only one child        -->
-<!-- It should be in the captionless family                -->
-<!-- Just applies its templates                            -->
-<!-- NB: this may need improvements, such as positioning   -->
-<!-- NB: a Schematron rule should enforce the single child -->
+<!-- Sidebyside in a WeBWorK expects only one child: image or tabular.    -->
+<!-- Just applies templates to its child                                  -->
+<!-- NB: this may need improvements, such as positioning                  -->
+<!-- NB: a Schematron rule should enforce the single child                -->
+
 <xsl:template match="webwork//sidebyside">
-    <xsl:apply-templates />
+    <xsl:if test="preceding-sibling::p|preceding-sibling::sidebyside">
+        <xsl:call-template name="potential-list-indent" />
+    </xsl:if>
+    <xsl:if test="not(ancestor::li)">
+        <xsl:text>&gt;&gt; </xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="image|tabular" />
+    <xsl:if test="not(ancestor::li)">
+        <xsl:text> &lt;&lt;</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ####################### -->
@@ -703,46 +715,43 @@
 <!-- ####################### -->
 
 <xsl:template match="webwork//image[@pg-name]">
-    <xsl:if test="preceding-sibling::p|preceding-sibling::image|preceding-sibling::tabular">
-        <xsl:call-template name="potential-list-indent" />
-    </xsl:if>
-    <xsl:text>[@ image(insertGraph(</xsl:text>
+    <xsl:variable name="width">
+        <xsl:apply-templates select="." mode="get-width-percentage" />
+    </xsl:variable>
+    <xsl:text>[@image(insertGraph(</xsl:text>
     <xsl:value-of select="@pg-name"/>
     <xsl:text>), width=&gt;</xsl:text>
-    <xsl:choose>
-        <xsl:when test="@width">
-            <xsl:value-of select="@width"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>400</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>, height=&gt;</xsl:text>
-    <xsl:choose>
-        <xsl:when test="@height">
-            <xsl:value-of select="@height"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>400</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>, tex_size=&gt;</xsl:text>
-    <xsl:choose>
-        <xsl:when test="@tex-size">
-            <xsl:value-of select="@tex-size"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>800</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:value-of select="substring-before($width, '%') div 100 * 600"/>
     <xsl:if test="description">
         <xsl:text>, extra_html_tags=&gt;qq!alt="</xsl:text>
         <xsl:apply-templates select="description" mode="pg" />
         <xsl:text>"!</xsl:text>
     </xsl:if>
     <xsl:text>)@]* </xsl:text>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Copied from common, since it's needed but this style sheet does not itself import common. -->
+<!-- Forthcoming extract-pg.xsl and extract-pg-ptx.xsl will replace this style sheet, and they -->
+<!-- do import common, so there is no need for this duplication there.                         -->
+<xsl:template match="image[ancestor::sidebyside]|video[ancestor::sidebyside]|jsxgraph[ancestor::sidebyside]" mode="get-width-percentage">
+    <!-- in a side-by-side, get layout, locate in layout -->
+    <!-- and get width.  The layout-parameters template  -->
+    <!-- will analyze an enclosing sbsgroup              -->
+    <xsl:variable name="enclosing-sbs" select="ancestor::sidebyside" />
+    <xsl:variable name="rtf-layout">
+        <xsl:apply-templates select="$enclosing-sbs" mode="layout-parameters" />
+    </xsl:variable>
+    <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
+    <xsl:choose>
+        <xsl:when test="parent::figure">
+            <xsl:variable name="panel-number" select="count(parent::figure/preceding-sibling::*) + 1" />
+            <xsl:value-of select="$layout/width[$panel-number]" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:variable name="panel-number" select="count(preceding-sibling::*) + 1" />
+            <xsl:value-of select="$layout/width[$panel-number]" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- We need to override the HTML template that  -->
@@ -1302,9 +1311,6 @@
 </xsl:template>
 
 <xsl:template match="webwork//tabular">
-    <xsl:if test="preceding-sibling::p|preceding-sibling::image|preceding-sibling::tabular">
-        <xsl:call-template name="potential-list-indent" />
-    </xsl:if>
     <!-- MBX tabular attributes top, bottom, left, right, halign are essentially passed -->
     <!-- down to cells, rather than used at the tabular level.                          -->
     <xsl:text>[@DataTable(&#xa;</xsl:text>
@@ -1459,14 +1465,14 @@
         <xsl:text>,&#xa;</xsl:text>
     </xsl:if>
     <!-- column specification done -->
-    <xsl:if test="not(parent::table)">
+    <xsl:if test="ancestor::li">
         <xsl:call-template name="potential-list-indent" />
         <xsl:text>  center => 0,&#xa;</xsl:text>
     </xsl:if>
     <!-- remains to apply tabular/@top and tabular/@bottom -->
     <!-- will handle these at cell level -->
     <xsl:call-template name="potential-list-indent" />
-    <xsl:text>);@]*&#xa;&#xa;</xsl:text>
+    <xsl:text>);@]*</xsl:text>
 </xsl:template>
 
 <xsl:template match="webwork//tabular/row">
