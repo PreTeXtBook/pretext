@@ -2427,12 +2427,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="heading-title" />
 </xsl:template>
 
-<!-- Primary content of generic "body" template   -->
-<!-- Pass along b-original flag                   -->
-<!-- Simply process contents, could restrict here -->
+<!-- Primary content of generic "body" template    -->
+<!-- Pass along b-original flag                    -->
+<!-- Simply process contents, restrictions match   -->
+<!-- schema, except schema says no captioned items -->
+<!-- in the side-by-side                           -->
 <xsl:template match="assemblage" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="*" >
+    <xsl:apply-templates select="p|blockquote|pre|sidebyside|sbsgroup" >
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>

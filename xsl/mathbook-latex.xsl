@@ -3699,7 +3699,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{assemblage-untitled}</xsl:text>
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="p|&FIGURE-LIKE;|sidebyside" />
+    <xsl:apply-templates select="p|blockquote|pre|sidebyside|sbsgroup" />
     <xsl:text>\end{assemblage-untitled}&#xa;</xsl:text>
 </xsl:template>
 
@@ -3710,7 +3710,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="p|&FIGURE-LIKE;|sidebyside" />
+    <xsl:apply-templates select="p|blockquote|pre|sidebyside|sbsgroup" />
     <xsl:text>\end{assemblage}&#xa;</xsl:text>
 </xsl:template>
 

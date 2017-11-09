@@ -986,7 +986,7 @@ the xsltproc executable.
                 <assemblage xml:id="assemblage-basics">
                     <title>Assemblages: Collections and Summaries</title>
 
-                    <p>An <c>&lt;assemblage&gt;</c> is a collection, or summary, that does not have much structure to it.  So you are limited to paragraphs (<c>p</c>) and side-by-sides.  The intent is that these do not have captions, so are not numbered, so cannot be cross-referenced and so do not become knowls (inside of the knowled assemblage).  You may place <c>&lt;image&gt;</c>, <c>&lt;tabular&gt;</c>, and <c>&lt;program&gt;</c> inside a <c>&lt;sidebyside&gt;</c>, in addition to other objects that do not have captions.  Note that <c>p</c> may by extension contain lists (<c>ol</c>, <c>ul</c>, <c>dl</c>).  Despite limited structure, the presentation should draw attention to it, because the contents should be seen as more important in some way.  It should be <q>highlighted</q> in some manner.  If you need to connect the assemblage with material elsewhere, you can do that with the usual <c>xref/xml:id</c> mechanism.<idx><h>assemblage</h></idx></p>
+                    <p>An <c>&lt;assemblage&gt;</c> is a collection, or summary, that does not have much structure to it.  So you are limited to paragraphs and friends (<c>p</c>, <c>blockquote</c>, <c>pre</c>) and side-by-sides that do not contain captioned items (<c>sidebyside</c>, <c>sbsgroup</c>).  The intent is that contents are not numbered, so cannot be cross-referenced individually, and so also do not become knowls.  You may place <c>&lt;image&gt;</c>, <c>&lt;tabular&gt;</c>, and <c>&lt;program&gt;</c> inside a <c>&lt;sidebyside&gt;</c>, in addition to other objects that do not have captions.  Note that <c>p</c> may by extension contain lists (<c>ol</c>, <c>ul</c>, <c>dl</c>).  Despite limited structure, the presentation should draw attention to it, because the contents should be seen as more important in some way.  It should be <q>highlighted</q> in some manner.  If you need to connect the entire assemblage with material elsewhere, you can do that with the usual <c>xref/xml:id</c> mechanism.<idx><h>assemblage</h></idx></p>
 
                     <p>What have we seen so far in this (disorganized) sample?<ul>
                         <li><p>Theorems, definitions and corollaries. (<xref ref="section-fundamental-theorem" text="type-global" />)</p></li>
@@ -994,7 +994,7 @@ the xsltproc executable.
                         <li><p>Lots of document structure, like introductions and conclusions (next). (<xref ref="interesting-corollary" text="type-global" />)</p></li>
                     </ul></p>
 
-                    <p>A sample table, with no caption, follows.</p>
+                    <p>A sample table, as a <c>tabular</c> inside a <c>sidebyside</c> with no caption, follows.</p>
 
                     <sidebyside>
                         <tabular>
