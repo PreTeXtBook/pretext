@@ -673,9 +673,6 @@
         ImageWW = 
             element image {
                 attribute pg-name {text}?,
-                attribute width {xsd:integer}?,
-                attribute height {xsd:integer}?,
-                attribute tex-size {xsd:integer}?,
                 element description {(TextShort | WWVariableUse)*}?
             }
         
@@ -930,9 +927,7 @@
                     ParagraphWW |
                     WWInstruction |
                     Preformatted |
-                    SideBySideWW |
-                    ImageWW |
-                    TabularWW
+                    SideBySideWW
                 )+
             }
         WWMacros = 
@@ -972,9 +967,7 @@
                 (
                     ParagraphWW |
                     Preformatted |
-                    SideBySideWW |
-                    ImageWW |
-                    TabularWW
+                    SideBySideWW
                 )+
             }
         SolutionWW =
@@ -982,9 +975,7 @@
                 (
                     ParagraphWW |
                     Preformatted |
-                    SideBySideWW |
-                    ImageWW |
-                    TabularWW
+                    SideBySideWW
                 )+
             }
         

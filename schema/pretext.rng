@@ -1439,21 +1439,6 @@
         <attribute name="pg-name"/>
       </optional>
       <optional>
-        <attribute name="width">
-          <data type="integer"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="height">
-          <data type="integer"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="tex-size">
-          <data type="integer"/>
-        </attribute>
-      </optional>
-      <optional>
         <element name="description">
           <zeroOrMore>
             <choice>
@@ -2075,8 +2060,6 @@
           <ref name="WWInstruction"/>
           <ref name="Preformatted"/>
           <ref name="SideBySideWW"/>
-          <ref name="ImageWW"/>
-          <ref name="TabularWW"/>
         </choice>
       </oneOrMore>
     </element>
@@ -2182,8 +2165,6 @@
           <ref name="ParagraphWW"/>
           <ref name="Preformatted"/>
           <ref name="SideBySideWW"/>
-          <ref name="ImageWW"/>
-          <ref name="TabularWW"/>
         </choice>
       </oneOrMore>
     </element>
@@ -2195,8 +2176,6 @@
           <ref name="ParagraphWW"/>
           <ref name="Preformatted"/>
           <ref name="SideBySideWW"/>
-          <ref name="ImageWW"/>
-          <ref name="TabularWW"/>
         </choice>
       </oneOrMore>
     </element>

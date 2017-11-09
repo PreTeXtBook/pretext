@@ -1425,9 +1425,6 @@
             </xs:element>
           </xs:sequence>
           <xs:attribute name="pg-name"/>
-          <xs:attribute name="width" type="xs:integer"/>
-          <xs:attribute name="height" type="xs:integer"/>
-          <xs:attribute name="tex-size" type="xs:integer"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -2008,8 +2005,6 @@
             <xs:element ref="instruction"/>
             <xs:element ref="pre"/>
             <xs:group ref="SideBySideWW"/>
-            <xs:group ref="ImageWW"/>
-            <xs:group ref="TabularWW"/>
           </xs:choice>
         </xs:complexType>
       </xs:element>
@@ -2108,8 +2103,6 @@
             <xs:group ref="ParagraphWW"/>
             <xs:element ref="pre"/>
             <xs:group ref="SideBySideWW"/>
-            <xs:group ref="ImageWW"/>
-            <xs:group ref="TabularWW"/>
           </xs:choice>
         </xs:complexType>
       </xs:element>
@@ -2123,8 +2116,6 @@
             <xs:group ref="ParagraphWW"/>
             <xs:element ref="pre"/>
             <xs:group ref="SideBySideWW"/>
-            <xs:group ref="ImageWW"/>
-            <xs:group ref="TabularWW"/>
           </xs:choice>
         </xs:complexType>
       </xs:element>
