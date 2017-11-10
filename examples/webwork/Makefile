@@ -108,6 +108,18 @@ mini-extraction:
 	-rm $(WWOUT)/webwork-extraction.xml
 	$(MB)/script/mbx -v -c webwork -d $(WWOUT) -s $(SERVER) $(MINI)
 
+#  Make a new PTX file from the source tree, with webwork elements replaced
+#  by the webwork-reps from webwork-extraction.xml. (So run the above at
+#  least once first.) Subsequent templates are applied to the result here.
+
+sample-chapter-merge:
+	cd $(SCRATCH); \
+	xsltproc --stringparam webwork.extraction $(WWOUT)/webwork-extraction.xml $(MBXSL)/pretext-merge.xsl $(SMPCHP) > sample-chapter-merge.ptx
+
+mini-merge:
+	cd $(SCRATCH); \
+	xsltproc --stringparam webwork.extraction $(WWOUT)/webwork-extraction.xml $(MBXSL)/pretext-merge.xsl $(MINI) > mini-merge.ptx
+
 #  Write out each WW problem of the "sample-chapter" as a
 #  standalone problem in PGML ready for use on a WW server.
 #  "def" files and "header" files are produced. Directories
