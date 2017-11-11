@@ -120,6 +120,23 @@ mini-merge:
 	cd $(SCRATCH); \
 	xsltproc --stringparam webwork.extraction $(WWOUT)/webwork-extraction.xml $(MBXSL)/pretext-merge.xsl $(MINI) > mini-merge.ptx
 
+#  Make an archive of webwork problem sets for each "section" (as specified
+#  by chunk level) with set definition files, set  header files, and problem
+#  files in a file tree. Separate problem sets for inline and sectional
+#  problems. Requires the merged PTX file from above.
+
+sample-chapter-problem-sets:
+	install -d $(PGOUT)
+	cd $(PGOUT); \
+	rm -r Integrating_WeBWorK_into_Textbooks; \
+	xsltproc --stringparam chunk.level 1 $(MBXSL)/pretext-ww-problem-sets.xsl $(SCRATCH)/sample-chapter-merge.ptx
+
+mini-problem-sets:
+	install -d $(PGOUT)
+	cd $(PGOUT); \
+	rm -r WeBWorK_Minimal_Example; \
+	xsltproc --stringparam chunk.level 1 $(MBXSL)/pretext-ww-problem-sets.xsl $(SCRATCH)/mini-merge.ptx
+
 #  Write out each WW problem of the "sample-chapter" as a
 #  standalone problem in PGML ready for use on a WW server.
 #  "def" files and "header" files are produced. Directories
