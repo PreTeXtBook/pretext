@@ -6930,16 +6930,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the &quot;xref/autoname&quot; attribute is deprecated, replace  autoname=&quot;title&quot;  by functional equivalent  text=&quot;title&quot;'" />
     </xsl:call-template>
     <!--  -->
-    <!-- 2017-07-25  deprecate null autoname, and warn about switch of default -->
-    <!-- We include the existence of "docinfo" as a marker of a mature, non-beginner project -->
-    <xsl:if test="($autoname = '') and $docinfo and not(//docinfo/cross-references)">
-    <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2017-07-25'" />
-        <xsl:with-param name="message" select="'the default version of text for cross-references has changed.  Rather than simply numbers, they will be prefixed by type-names as well.  So you could see duplicates like &quot;Theorem Theorem 5.2&quot;.  Set  &quot;docinfo/cross-references/@text&quot;  to  &quot;global&quot;  to restore old behavior'" />
-            <xsl:with-param name="incorrect-use" select="($autoname = '') and $docinfo and not(//docinfo/cross-references)" />
-        </xsl:call-template>
-    </xsl:if>
-    <!--  -->
     <!-- 2017-07-25  deprecate intentional autoname without new setting -->
     <xsl:if test="not($autoname = '') and not(//docinfo/cross-references)">
         <xsl:call-template name="parameter-deprecation-message">
