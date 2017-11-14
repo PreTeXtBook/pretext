@@ -5887,7 +5887,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\pi</xsl:text>
         <xsl:call-template name="end-inline-math" />
     </xsl:variable>
-    <xsl:value-of select="str:replace($mag,'\pi',$math-pi)"/>
+    <xsl:value-of select="str:replace($mag,'\pi',string($math-pi))"/>
 </xsl:template>
 
 <!-- unit and per children of a quantity element    -->
