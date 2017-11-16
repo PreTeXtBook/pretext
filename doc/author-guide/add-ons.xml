@@ -22,7 +22,7 @@
     <section xml:id="add-on-search">
         <title>Search</title>
 
-        <p>Search facilities are enabled through <url href="https://cse.google.com/cse">Google Custom Search Engine</url>.  Please, please report any discrepancies in the following instructions as the setup interface at Google changes out from underneath us.  These instructions are accurate as of 2016-12-12.</p>
+        <p>Search facilities are enabled through <url href="https://cse.google.com/cse">Google Custom Search Engine</url><idx>Google Custom Search Engine</idx>.  Please, please report any discrepancies in the following instructions as the setup interface at Google changes out from underneath us.  These instructions are accurate as of 2016-12-12.</p>
 
         <p>Besides being useful for search facilities, setting up a search engine might be a good way to alert Google of something newly available, and initiate your book's rise up the search results rankings.</p>
 
