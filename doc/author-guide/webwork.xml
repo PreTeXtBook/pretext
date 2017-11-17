@@ -12,7 +12,7 @@
     <author>Alex Jordan</author>
 
     <introduction>
-        <p>With a <webwork /> server (version 2.12 or higher, limited support with 2.11) and a little setup work, you can embed <webwork /> exercises in your MBX project. HTML output will have interactive problem cells. PDF output will contain static versions of exercises. And all such exercises can be archived by the <c>mbx</c> script into a file tree to be uploaded onto the <webwork /> server for use in the <q>traditional</q> way.</p>
+        <p>With a <webwork /> server (version 2.12 or higher, limited support with 2.11) and a little setup work, you can embed <webwork /> exercises<idx><h><webwork /></h><h><webwork /> exercise</h></idx> in your MBX project. HTML output will have interactive problem cells. PDF output will contain static versions of exercises. And all such exercises can be archived by the <c>mbx</c> script into a file tree to be uploaded onto the <webwork /> server for use in the <q>traditional</q> way.</p>
     </introduction>
 
     <section>
@@ -59,7 +59,7 @@
         <title><webwork /> Problems in Source</title>
 
         <introduction>
-            <p>A <tag>webwork</tag> tag must be inside an <tag>exercise</tag>, optionally preceded by an <tag>introduction</tag>, and optionally followed by a <tag>conclusion</tag>.</p>
+            <p>A <tag>webwork</tag><idx><webwork /></idx> tag must be inside an <tag>exercise</tag>, optionally preceded by an <tag>introduction</tag>, and optionally followed by a <tag>conclusion</tag>.</p>
             <pre>
             <![CDATA[
             <exercise>
@@ -240,7 +240,7 @@
 
         <subsection>
             <title><c>xsltproc</c></title>
-            <p>If your project has <tag>webwork</tag> tags, then when you execute <c>xsltproc</c>, pass a <c>webwork.server</c> string parameter to it specifying where the server is that will do your processing. Example:</p>
+            <p>If your project has <tag>webwork</tag><idx><webwork /></idx> tags, then when you execute <c>xsltproc</c><idx><c>xsltproc</c></idx>, pass a <c>webwork.server</c> string parameter to it specifying where the server is that will do your processing. Example:</p>
             <sidebyside>
                 <console>
                     <prompt>$ </prompt>

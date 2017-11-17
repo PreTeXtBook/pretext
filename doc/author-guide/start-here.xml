@@ -17,13 +17,13 @@
     <section xml:id="philosophy">
         <title>Philosophy</title>
 
-        <p><pretext /> is a <term index="yes">markup language</term>, which means that you explicitly specify the logical parts of your document and not how these parts should be displayed.  This is very liberating for an author, since it frees you to concentrate on capturing your ideas to share with others, leaving the construction of the visual presentation to the software.  As an example, you might specify the content of the title of a chapter to be <c>Further Experiments</c>, but you will not be concerned if a 36 point sans-serif font in black will be used for this title in the print version of your book, or a CSS class specifying 18 pixel height in blue is used for a title in an online web version of your book.  You can just trust that a reasonable choice has been made for displaying a title of a chapter in a way that a reader will recognize it as a name for a chapter.  (And if all that talk of fonts was unfamiliar, all the more reason to trust the design to software.)</p>
+        <p><pretext /> is a <term index="yes">markup language</term><idx>markup language</idx>, which means that you explicitly specify the logical parts of your document and not how these parts should be displayed.  This is very liberating for an author, since it frees you to concentrate on capturing your ideas to share with others, leaving the construction of the visual presentation to the software.  As an example, you might specify the content of the title of a chapter to be <c>Further Experiments</c>, but you will not be concerned if a 36 point sans-serif font in black will be used for this title in the print version of your book, or a CSS class specifying 18 pixel height in blue is used for a title in an online web version of your book.  You can just trust that a reasonable choice has been made for displaying a title of a chapter in a way that a reader will recognize it as a name for a chapter.  (And if all that talk of fonts was unfamiliar, all the more reason to trust the design to software.)</p>
 
         <p>You are also freed from the technical details of presenting your ideas in the plethora of new formats available as a consequence of the advances in computers (including tablets and smartphones) and networks (global and wireless).  Your output <q>just works</q> and the software keeps up with technical advances and the introduction of new formats, while you concentrate on the content of your book (or article, or report, or proposal, or<nbsp /><ellipsis />).</p>
 
         <p>If you have never used a markup language, it can be unfamiliar at first.  Even if you have used a markup language before (such as HTML or basic <latex />) you will need to make a few adjustments.  Most word-processors are WYSIWYG (<q>what you see is what you get</q>).  That approach is likely very helpful if you are designing the front page of a newspaper, but not if you are writing about the life-cycle of a salamander.  In the old days, programs like <url href="https://en.wikipedia.org/wiki/Troff"><c>troff</c></url> and its predecessor, <url href="https://en.wikipedia.org/wiki/TYPSET_and_RUNOFF"><c>RUNOFF</c></url> (1964), implemented simple markup languages to allow early computers to do limited text-formatting.  Sometimes the old ways are the best ways.</p>
 
-        <p><pretext /> is what is called an <term>XML application</term> or an <term>XML vocabulary</term> (I prefer the latter). Authoring in XML might seem cumbersome at first, but you will eventually appreciate the long-run economies, so keep an open mind.  And if you are already familiar with XML, realize we have been very careful to design this vocabulary with human authors foremost in our mind.</p>
+        <p><pretext /> is what is called an <term>XML application</term><idx>XML application</idx><idx><h>XML application</h><seealso>XML vocabulary</seealso></idx> or an <term>XML vocabulary</term><idx>XML vocabulary</idx><idx><h>XML vocabulary</h><seealso>XML application</seealso></idx> (I prefer the latter). Authoring in XML might seem cumbersome at first, but you will eventually appreciate the long-run economies, so keep an open mind.  And if you are already familiar with XML, realize we have been very careful to design this vocabulary with human authors foremost in our mind.</p>
 
         <paragraphs>
             <title>Principles</title>
@@ -60,14 +60,14 @@
     <section xml:id="introduction-to-source-formatting">
         <title>Formatting Your Source</title>
 
-        <p>There are a lot of details related to how you prepare your <term index="yes">source</term>: the actual files that you, and you alone, will create.  At least skim through the following, come back here often, and also consult <xref provisional="exhaustive-chapter-on-source-files" />.</p>
+        <p>There are a lot of details related to how you prepare your <term index="yes">source</term><idx>source</idx>: the actual files that you, and you alone, will create.  At least skim through the following, come back here often, and also consult <xref provisional="exhaustive-chapter-on-source-files" />.</p>
 
         <paragraphs>
             <title>File Format</title>
 
-            <p>Your source should be plain <term index="yes">ASCII files</term> which you will create with a text editor.  In other words, do not create your source with Word, LibreOffice, WordPerfect, AbiWord, Pages or similar programs.  Popular text editors include vi, emacs, Notepad, Notepad++, Atom, TextWrangler, and BBEdit.  I have had a very good experience with Sublime Text, which is cross-platform (Windows, OS X, Linux), and can be used for free, though it has a very liberal license and is well worth the cost.  Sometimes these editors are known as a <term>programmer's editor</term> (though we will be doing no programming).  Support for writing HTML sometimes translates directly to good support for XML.</p>
+            <p>Your source should be plain <term index="yes">ASCII files</term><idx>ASCII file</idx> which you will create with a text editor.  In other words, do not create your source with Word, LibreOffice, WordPerfect, AbiWord, Pages or similar programs.  Popular text editors include vi, emacs, Notepad, Notepad++, Atom, TextWrangler, and BBEdit.  I have had a very good experience with Sublime Text, which is cross-platform (Windows, OS X, Linux), and can be used for free, though it has a very liberal license and is well worth the cost.  Sometimes these editors are known as a <term>programmer's editor</term><idx>programmer's editor</idx> (though we will be doing no programming).  Support for writing HTML sometimes translates directly to good support for XML.</p>
 
-            <p>There are <term>XML editors</term>, which I have generally found too complex for authoring in <pretext />.  They do have some advantages and XML Copy Editor is one that I have found that is possibly useful.</p>
+            <p>There are <term>XML editors</term><idx>XML editor</idx>, which I have generally found too complex for authoring in <pretext />.  They do have some advantages and XML Copy Editor is one that I have found that is possibly useful.</p>
         </paragraphs>
 
         <paragraphs>
@@ -83,13 +83,13 @@
         <paragraphs>
             <title>Revision Control</title>
 
-            <p>If you are writing a book, or if you are collaborating with co-authors, then you owe it to yourself and your co-authors to learn how to use revision control, which works well with <pretext />.  The hands-down favorite is <c>git</c> which has a steep learning curve, and so is beyond the scope of this guide.  But see <xref provisional="topic-git-coexistence" /> which has hints on how to best use <c>git</c> together with a <pretext /> project and look for Beezer and Farmer's <booktitle>Git For Authors</booktitle>.</p>
+            <p>If you are writing a book, or if you are collaborating with co-authors, then you owe it to yourself and your co-authors to learn how to use revision control<idx>revision control</idx>, which works well with <pretext />.  The hands-down favorite is <c>git</c> which has a steep learning curve, and so is beyond the scope of this guide.  But see <xref provisional="topic-git-coexistence" /> which has hints on how to best use <c>git</c> together with a <pretext /> project and look for Beezer and Farmer's <booktitle>Git For Authors</booktitle>.</p>
         </paragraphs>
 
         <paragraphs>
             <title>Whitespace</title>
 
-            <p>The term <term>whitespace</term> refers to characters you type but typically do not see.  For us they are <term>space</term>, <term>non-breaking space</term>, <term>tab</term> and <term>newline</term> (also known as a <q>carriage return</q> and/or <q>line feed</q>).  Unlike some other markup languages, <pretext /> <em>does not ever use whitespace</em> to convey formatting information.</p>
+            <p>The term <term>whitespace</term><idx>whitespace</idx> refers to characters you type but typically do not see.  For us they are <term>space</term>, <term>non-breaking space</term>, <term>tab</term> and <term>newline</term> (also known as a <q>carriage return</q> and/or <q>line feed</q>).  Unlike some other markup languages, <pretext /> <em>does not ever use whitespace</em> to convey formatting information.</p>
 
             <p>In some parts of a <pretext /> document, every single whitespace character is important and will be transmitted to your output, such as in the <tag>input</tag> and <tag>output</tag> portions of a <tag>sage</tag> element.  Since Sage code mostly follows Python syntax, indentation is important and leading spaces must be preserved.  But you can indent all of your code to match your <init>XML</init> indentation and the entire <tag>input</tag> (or <tag>output</tag>) content will be uniformly shifted left to the margin in your final output.</p>
 
