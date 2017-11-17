@@ -1,0 +1,33 @@
+<style>
+<example>
+<preamble>\newtheorem{example}[theorem]{Example}</preamble>
+</example>
+
+<!-- Figure head for stuff before the content + caption, and then figure foot for stuff after caption -->
+<figure>
+<preamble/>
+<head>
+\begin{figure}
+\centering
+</head>
+<foot>
+\end{figure}
+</foot>
+</figure>
+
+<!-- frame around sbsgroup, by default we don't do anything -->
+<!-- frame around sbsgroup -->
+<sbsgroup>
+<preamble/>
+<head/>
+<foot/>
+</sbsgroup>
+
+<!-- frame around sidebyside (but it knows not to do this if part of a sbsgroup -->
+<sidebyside>
+<preamble/>
+<head/>
+<foot/>
+</sidebyside>
+
+</style>
