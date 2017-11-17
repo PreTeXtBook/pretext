@@ -12,7 +12,6 @@
 (0,-0.5)--(0,0)--(\textwidth,0)--(\textwidth,-0.5);
 \node[draw=black, fill=white, rounded corners, right=10pt] at (0.5,0)
 {Example \tmpnumber\ \ifx\empty#1\else$\left(\text{#1}\right)$\fi};
-%%ADR hacked so that brackets around equations were right size.
 \end{tikzpicture}\\[-0.0ex]
 }
 {
@@ -28,6 +27,55 @@
 </preamble>
 </example>
 
+<question>
+<preamble>
+\usepackage{tikz}
+\newenvironment{question}[1][]{%
+\refstepcounter{theorem}%
+\edef\tmpnumber{\thetheorem}% Use this temp counter so that numbers are not messed up by embedded equations.
+\vspace{1ex}\par\noindent\nopagebreak[4]%
+\hspace{-0.05\textwidth}\begin{tikzpicture}[scale=1.1]
+\draw[ diamond-diamond, thick,rounded corners]
+(0,0)--(\textwidth,0);
+\node[draw=black, fill=white, rounded corners, right=10pt] at (0.5,0)
+{Question \tmpnumber\ \ifx\empty#1\else$\left(\text{#1}\right)$\fi};
+\end{tikzpicture}\\[-0.0ex]
+}
+{
+\vspace{-1ex}%
+\par\noindent%
+\hspace{-0.05\textwidth}\begin{tikzpicture}[scale=1.1]
+\draw[ diamond-diamond, thick,rounded corners]
+(0,0)--(\textwidth,0);
+\end{tikzpicture}
+}
+</preamble>
+</question>
+
+<problem>
+<preamble>
+\usepackage{tikz}
+\newenvironment{problem}[1][]{%
+\refstepcounter{theorem}%
+\edef\tmpnumber{\thetheorem}% Use this temp counter so that numbers are not messed up by embedded equations.
+\vspace{1ex}\par\noindent\nopagebreak[4]%
+\hspace{-0.05\textwidth}\begin{tikzpicture}[scale=1.1]
+\draw[ )-(, thick,rounded corners]
+(0,-0.5)--(0,0)--(\textwidth,0)--(\textwidth,-0.5);
+\node[draw=black, fill=white, rounded corners, right=10pt] at (0.5,0)
+{Problem \tmpnumber\ \ifx\empty#1\else$\left(\text{#1}\right)$\fi};
+\end{tikzpicture}\\[-0.0ex]
+}
+{
+\vspace{-1ex}%
+\par\noindent%
+\hspace{-0.05\textwidth}\begin{tikzpicture}[scale=1.1]
+\draw[ )-(, thick,rounded corners]
+(0,0.5)--(0,0)--(\textwidth,0)--(\textwidth,0.5);
+\end{tikzpicture}
+}
+</preamble>
+</problem>
 
 <figure>
 <!-- Figure head for stuff before the content + caption, and then figure foot for stuff after caption -->
@@ -40,6 +88,7 @@
 \begin{mdframed}[style=figstyle]
 \centering
 </head>
+<before-caption/>
 <foot>
 \end{mdframed}
 \end{figure}
@@ -49,8 +98,7 @@
 <!-- frame around sbsgroup -->
 <sbsgroup>
 <preamble>
-\usepackage[framemethod=TikZ]{mdframed}
-\mdfdefinestyle{sbsgstyle}{linecolor=red,roundcorner=2ex}
+\usepackage[framemethod=TikZ]{mdframed}\mdfdefinestyle{sbsgstyle}{linecolor=red,roundcorner=2ex}
 </preamble>
 <head>\begin{mdframed}[style=sbsgstyle]&#xa;</head>
 <foot>\end{mdframed}&#xa;</foot>
@@ -59,8 +107,7 @@
 <!-- frame around sidebyside (but it knows not to do this if part of a sbsgroup -->
 <sidebyside>
 <preamble>
-\usepackage[framemethod=TikZ]{mdframed}
-\mdfdefinestyle{sbsstyle}{linecolor=green,roundcorner=1ex}
+\usepackage[framemethod=TikZ]{mdframed}\mdfdefinestyle{sbsstyle}{linecolor=green,roundcorner=1ex}
 </preamble>
 <head>\begin{mdframed}[style=sbsstyle]&#xa;</head>
 <foot>\end{mdframed}&#xa;</foot>

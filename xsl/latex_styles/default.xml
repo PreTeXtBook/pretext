@@ -1,7 +1,16 @@
 <style>
+
 <example>
-<preamble>\newtheorem{example}[theorem]{Example}</preamble>
+<preamble>\theoremstyle{definition}\newtheorem{example}[theorem]{Example}</preamble>
 </example>
+
+<question>
+<preamble>\theoremstyle{definition}\newtheorem{question}[theorem]{Question}</preamble>
+</question>
+
+<problem>
+<preamble>\theoremstyle{definition}\newtheorem{problem}[theorem]{Problem}</preamble>
+</problem>
 
 <!-- Figure head for stuff before the content + caption, and then figure foot for stuff after caption -->
 <figure>
@@ -10,6 +19,7 @@
 \begin{figure}
 \centering
 </head>
+<before-caption/>
 <foot>
 \end{figure}
 </foot>

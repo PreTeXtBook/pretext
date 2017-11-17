@@ -47,6 +47,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- N.B. This has no effect, and may never.  xelatex and lualatex support is automatic -->
 <xsl:param name="latex.engine" select="'pdflatex'" />
 <!--  -->
+
+<!-- set style name  -->
+<!--<xsl:param name="style.name" select="'default'" />-->
+<xsl:param name="style.name" select="'clp'" />
+<!--  -->
+
 <!-- Standard fontsizes: 10pt, 11pt, or 12pt       -->
 <!-- extsizes package: 8pt, 9pt, 14pt, 17pt, 20pt  -->
 <!-- memoir class offers more, but maybe other changes? -->
@@ -123,6 +129,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Variables that affect LaTeX creation -->
 <!-- More in the common file              -->
+
+<!-- Path for style files -->
+<xsl:variable name="style-file" select="concat(concat('latex_styles/', $style.name),'.xml')"/>
+<xsl:variable name="style" select="document($style-file)" />
 
 <!-- LaTeX is handled natively, so we flip a  -->
 <!-- switch here to signal the general text() -->
@@ -663,6 +673,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\forwardimplication}{($\Rightarrow$)\space\space}&#xa;</xsl:text>
         <xsl:text>\newcommand{\backwardimplication}{($\Leftarrow$)\space\space}&#xa;</xsl:text>
     </xsl:if>
+    <!-- preamble for sidebyside and sbsgroup styles -->
+    <xsl:if test="$document-root//sbsgroup">
+	    <xsl:value-of select="$style/style/sbsgroup/preamble"/>
+    </xsl:if>
+    <xsl:if test="$document-root//sidebyside">
+    	<xsl:value-of select="$style/style/sidebyside/preamble"/>
+    </xsl:if>
+    <!-- is read from style files -->
     <xsl:text>%% Subdivision Numbering, Chapters, Sections, Subsections, etc&#xa;</xsl:text>
     <xsl:text>%% Subdivision numbers may be turned off at some level ("depth")&#xa;</xsl:text>
     <xsl:text>%% A section *always* has depth 1, contrary to us counting from the document root&#xa;</xsl:text>
@@ -839,21 +857,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="//example or //question or //problem">
         <xsl:text>%% Example-like environments, normal text&#xa;</xsl:text>
         <xsl:text>%% Numbering is in sync with theorems, etc&#xa;</xsl:text>
-        <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
         <xsl:if test="//example">
-            <xsl:text>\newtheorem{example}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'example'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
+            <xsl:value-of select="$style/style/example/preamble"/>
         </xsl:if>
         <xsl:if test="//question">
-            <xsl:text>\newtheorem{question}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'question'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
+            <xsl:value-of select="$style/style/question/preamble"/>
         </xsl:if>
         <xsl:if test="//problem">
-            <xsl:text>\newtheorem{problem}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'problem'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
+            <xsl:value-of select="$style/style/problem/preamble"/>
         </xsl:if>
     </xsl:if>
     <!-- PROJECT-LIKE blocks -->
@@ -895,7 +906,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$document-root//assemblage | $document-root//aside | $document-root//biographical | $document-root//historical | $document-root//list">
         <xsl:text>%% Package for breakable highlight boxes&#xa;</xsl:text>
         <!-- TODO: load just once, see webwork -->
-        <xsl:text>\usepackage[framemethod=tikz]{mdframed}&#xa;</xsl:text>
+        <xsl:text>\usepackage[framemethod=TikZ]{mdframed}&#xa;</xsl:text>
         <xsl:if test="$document-root//assemblage">
             <xsl:text>%% begin: assemblage&#xa;</xsl:text>
             <xsl:text>%% minimally structured content, high visibility presentation&#xa;</xsl:text>
@@ -1058,6 +1069,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Float package defines the "H" specifier                       -->
         <!-- TODO: could conditionally load  float  for tables and figures -->
         <xsl:text>\usepackage{float}&#xa;</xsl:text>
+        
+        <!-- Add style-dependent preamble for figures -->
+        <xsl:value-of select="$style/style/figure/preamble"/>
+        
         <!-- newfloat  package has \SetupFloatingEnvironment                -->
         <!-- \DeclareCaptionType is an undocumented command,                -->
         <!-- available in the  caption  package, by the same author         -->
@@ -5428,11 +5443,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)])">
         <xsl:call-template name="leave-vertical-mode" />
     </xsl:if>
-    <xsl:text>\begin{figure}&#xa;</xsl:text>
-    <xsl:text>\centering&#xa;</xsl:text>
+    <!-- at start of figure -->
+    <xsl:value-of select="$style/style/figure/head"/>
+    <!-- body of figure -->
     <xsl:apply-templates select="*[not(self::caption)]"/>
+    <!-- before caption -->
+    <xsl:value-of select="$style/style/figure/before-caption"/>
+    <!-- the caption -->
     <xsl:apply-templates select="caption" />
-    <xsl:text>\end{figure}&#xa;</xsl:text>
+    <!-- at end of figure -->
+    <xsl:value-of select="$style/style/figure/foot"/>
 </xsl:template>
 
 <!-- Listings -->
@@ -5717,6 +5737,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="substring-before($left-margin, '%') div 100" />
         <xsl:text>\linewidth}%&#xa;</xsl:text>
     </xsl:if>
+
+    <!-- style before a sidebyside but not if in a figure or sbsgroup -->
+    <xsl:if test="not(parent::sbsgroup or parent::figure)">
+	    <xsl:value-of select="$style/style/sidebyside/head"/>
+	</xsl:if>
+    
     <!-- @{} strips extreme left, right colsep and -->
     <!-- allows us to get flush left (zero margin) -->
     <xsl:text>\begin{tabular}{@{}*{</xsl:text>
@@ -5738,8 +5764,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- or perhaps a follow-on sidebyside in a sbsgroup -->
     <xsl:text>\end{tabular}\\&#xa;</xsl:text>
     <xsl:text>% end: side-by-side as tabular&#xa;</xsl:text>
+	<!-- style after a sidebyside but not if in a figure or sbsgroup -->
+    <xsl:if test="not(parent::sbsgroup or parent::figure)">
+	    <xsl:value-of select="$style/style/sidebyside/foot"/>
+	</xsl:if>
     <xsl:text>}% end: group for a single side-by-side&#xa;</xsl:text>
+    
+
 </xsl:template>
+<!-- ############################ -->
+<!-- Hacking for head and foot of sbsgroup -->
+<xsl:template name="sbsgroup-head">
+        <xsl:value-of select="$style/style/sbsgroup/head"/>
+</xsl:template>
+<xsl:template name="sbsgroup-foot">
+        <xsl:value-of select="$style/style/sbsgroup/foot"/>
+</xsl:template>
+<!-- ############################ -->
 
 
 <!-- ############################ -->

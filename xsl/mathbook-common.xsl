@@ -4507,9 +4507,20 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- it is the layout template for each sidebyside     -->
 <!-- that goes out to the enclosing group to get them  -->
 
+<!-- Only apply the sbsgroup header if not with a figure. the figure header takes precedence-->
 <xsl:template match="sbsgroup">
+	<xsl:if test="not(parent::figure)">
+		<xsl:call-template name="sbsgroup-head" />
+	</xsl:if>
     <xsl:apply-templates select="sidebyside" />
+    <xsl:if test="not(parent::figure)">
+    	<xsl:call-template name="sbsgroup-foot" />
+    </xsl:if>
 </xsl:template>
+
+<!-- define these to do nothing for the html processor -->
+<xsl:template name="sbsgroup-head"/>
+<xsl:template name="sbsgroup-foot"/>
 
 
 <!-- ############## -->
