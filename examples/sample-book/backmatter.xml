@@ -41,6 +41,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <solution-list />
     </appendix>
 
+    <appendix>
+        <title>A Structured Appendix</title>
+        <introduction><p>A deeply-structured appendix for testing purposes.</p></introduction>
+        <section>
+            <title>A Section in an Appendix</title>
+            <introduction><p>Inside a section.</p></introduction>
+            <subsection>
+                <title>A Subsection in a Section in an Appendix</title>
+                <introduction><p>Inside a subsection.</p></introduction>
+                <subsubsection>
+                    <title>A Subsubsection in a Subsection in a Section in an Appendix</title>
+                    <p>Nearly terminal.</p>
+                    <paragraphs>
+                        <title>Paragraphs in a Subsubsection in a Subsection in a Section in an Appendix</title>
+                        <p>The <c>paragraphs</c> element can go in any division, but does not get a number.</p>
+                    </paragraphs>
+                </subsubsection>
+            </subsection>
+        </section>
+    </appendix>
+
     <xi:include href="./gfdl-mathbook.xml" />           <!-- GFDL License text -->
 
     <!-- Index follows appendices, preceded only colophon -->
