@@ -49,8 +49,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--  -->
 
 <!-- set style name  -->
-<!--<xsl:param name="style.name" select="'default'" />-->
-<xsl:param name="style.name" select="'clp'" />
+<xsl:param name="style.name" select="'default'" />
+<!--<xsl:param name="style.name" select="'clp'" />-->
 <!--  -->
 
 <!-- Standard fontsizes: 10pt, 11pt, or 12pt       -->
@@ -403,6 +403,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.geometry" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
+    <!-- Any footnote style preambles here -->
+    <xsl:value-of select="$style/style/footnote/preamble"/>
+    <!-- -->
     <xsl:text>%% This LaTeX file may be compiled with pdflatex, xelatex, or lualatex&#xa;</xsl:text>
     <xsl:text>%% The following provides engine-specific capabilities&#xa;</xsl:text>
     <xsl:text>%% Generally, xelatex and lualatex will do better languages other than US English&#xa;</xsl:text>
@@ -698,143 +701,99 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\usetikzlibrary{shadows}</xsl:text>
         </xsl:if>
     </xsl:if>
-    <!-- Could condition following on existence of any amsthm environment -->
-    <xsl:text>%% Environments with amsthm package&#xa;</xsl:text>
-    <xsl:text>%% Theorem-like environments in "plain" style, with or without proof&#xa;</xsl:text>
-    <xsl:text>\usepackage{amsthm}&#xa;</xsl:text>
-    <xsl:text>\theoremstyle{plain}&#xa;</xsl:text>
-    <xsl:text>%% Numbering for Theorems, Conjectures, Examples, Figures, etc&#xa;</xsl:text>
-    <xsl:text>%% Controlled by  numbering.theorems.level  processing parameter&#xa;</xsl:text>
-    <xsl:text>%% Always need a theorem environment to set base numbering scheme&#xa;</xsl:text>
-    <xsl:text>%% even if document has no theorems (but has other environments)&#xa;</xsl:text>
-    <!-- http://tex.stackexchange.com/questions/155710/understanding-the-arguments-in-newtheorem-e-g-newtheoremtheoremtheoremsec/155714#155714 -->
-    <xsl:text>\newtheorem{theorem}{</xsl:text>
-    <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'theorem'" /></xsl:call-template>
-    <xsl:text>}</xsl:text>
-    <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
-    <xsl:if test="not($numbering-theorems = 0)">
-        <xsl:text>[</xsl:text>
-        <xsl:call-template name="level-to-name">
-            <xsl:with-param name="level" select="$numbering-theorems" />
-        </xsl:call-template>
-        <xsl:text>]&#xa;</xsl:text>
-    </xsl:if>
+    
+    
+    <!-- Preamble for theorems -->
+	<xsl:value-of select="$style/style/theorem/preamble"/>
+	<!-- Define theorem differently depending on numbering -->
+	<xsl:choose>
+	    <xsl:when test="not($numbering-theorems = 0)">
+	    	<xsl:value-of select="$style/style/theorem/numbered-pre"/>
+			<xsl:call-template name="level-to-name">
+				<xsl:with-param name="level" select="$numbering-theorems" />
+			</xsl:call-template>
+	    	<xsl:value-of select="$style/style/theorem/numbered-post"/>
+	    </xsl:when>
+	    <xsl:otherwise>
+	    	<xsl:value-of select="$style/style/theorem/unnumbered"/>
+	    </xsl:otherwise>
+	</xsl:choose>
+
     <xsl:text>%% Only variants actually used in document appear here&#xa;</xsl:text>
     <xsl:text>%% Style is like a theorem, and for statements without proofs&#xa;</xsl:text>
     <xsl:text>%% Numbering: all theorem-like numbered consecutively&#xa;</xsl:text>
     <xsl:text>%% i.e. Corollary 4.3 follows Theorem 4.2&#xa;</xsl:text>
     <!-- THEOREM-LIKE blocks, environments -->
+    
+	<xsl:value-of select="$style/style/theorem-like/preamble"/>
     <xsl:if test="//corollary">
-        <xsl:text>\newtheorem{corollary}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'corollary'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+		<xsl:value-of select="$style/style/theorem-like/corollary"/>
     </xsl:if>
     <xsl:if test="//lemma">
-        <xsl:text>\newtheorem{lemma}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'lemma'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+		<xsl:value-of select="$style/style/theorem-like/lemma"/>
     </xsl:if>
     <xsl:if test="//algorithm">
-        <xsl:text>\newtheorem{algorithm}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'algorithm'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+		<xsl:value-of select="$style/style/theorem-like/algorithm"/>
     </xsl:if>
     <xsl:if test="//proposition">
-        <xsl:text>\newtheorem{proposition}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'proposition'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+		<xsl:value-of select="$style/style/theorem-like/proposition"/>
     </xsl:if>
     <xsl:if test="//claim">
-        <xsl:text>\newtheorem{claim}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'claim'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+		<xsl:value-of select="$style/style/theorem-like/claim"/>
     </xsl:if>
     <xsl:if test="//fact">
-        <xsl:text>\newtheorem{fact}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'fact'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+		<xsl:value-of select="$style/style/theorem-like/fact"/>
     </xsl:if>
     <xsl:if test="//identity">
-        <xsl:text>\newtheorem{identity}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'identity'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+		<xsl:value-of select="$style/style/theorem-like/identity"/>
     </xsl:if>
     <!-- AXIOM-LIKE blocks, environments -->
+	<xsl:value-of select="$style/style/axiom-like/preamble"/>
     <xsl:if test="//axiom">
-        <xsl:text>\newtheorem{axiom}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'axiom'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+		<xsl:value-of select="$style/style/axiom-like/axiom"/>
     </xsl:if>
     <xsl:if test="//conjecture">
-        <xsl:text>\newtheorem{conjecture}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'conjecture'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+		<xsl:value-of select="$style/style/axiom-like/conjecture"/>
     </xsl:if>
     <xsl:if test="//principle">
-        <xsl:text>\newtheorem{principle}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'principle'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+		<xsl:value-of select="$style/style/axiom-like/principle"/>
     </xsl:if>
     <xsl:if test="//heuristic">
-        <xsl:text>\newtheorem{heuristic}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'heuristic'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+		<xsl:value-of select="$style/style/axiom-like/heuristic"/>
     </xsl:if>
     <xsl:if test="//hypothesis">
-        <xsl:text>\newtheorem{hypothesis}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'hypothesis'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+		<xsl:value-of select="$style/style/axiom-like/hypothesis"/>
     </xsl:if>
     <xsl:if test="//assumption">
-        <xsl:text>\newtheorem{assumption}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'assumption'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+		<xsl:value-of select="$style/style/axiom-like/assumption"/>
     </xsl:if>
     <!-- DEFINITION-LIKE blocks, environments -->
     <xsl:if test="//definition">
-        <xsl:text>%% Definition-like environments, normal text&#xa;</xsl:text>
-        <xsl:text>%% Numbering is in sync with theorems, etc&#xa;</xsl:text>
-        <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
+		<xsl:value-of select="$style/style/definition-like/preamble"/>
         <xsl:if test="//definition">
-            <xsl:text>\newtheorem{definition}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'definition'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
+			<xsl:value-of select="$style/style/definition-like/definition"/>
         </xsl:if>
     </xsl:if>
     <!-- REMARK-LIKE blocks, environments -->
     <xsl:if test="//remark or //convention or //note or //observation or //warning or //insight">
-        <xsl:text>%% Remark-like environments, normal text&#xa;</xsl:text>
-        <xsl:text>%% Numbering is in sync with theorems, etc&#xa;</xsl:text>
-        <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
+		<xsl:value-of select="$style/style/remark-like/preamble"/>
         <xsl:if test="//remark">
-            <xsl:text>\newtheorem{remark}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'remark'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
+			<xsl:value-of select="$style/style/remark-like/remark"/>
         </xsl:if>
         <xsl:if test="//convention">
-            <xsl:text>\newtheorem{convention}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'convention'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
+			<xsl:value-of select="$style/style/remark-like/convention"/>
         </xsl:if>
         <xsl:if test="//note">
-            <xsl:text>\newtheorem{note}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'note'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
+			<xsl:value-of select="$style/style/remark-like/note"/>
         </xsl:if>
         <xsl:if test="//observation">
-            <xsl:text>\newtheorem{observation}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'observation'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
+			<xsl:value-of select="$style/style/remark-like/observation"/>
         </xsl:if>
         <xsl:if test="//warning">
-            <xsl:text>\newtheorem{warning}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'warning'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
+			<xsl:value-of select="$style/style/remark-like/warning"/>
         </xsl:if>
         <xsl:if test="//insight">
-            <xsl:text>\newtheorem{insight}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'insight'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
+			<xsl:value-of select="$style/style/remark-like/insight"/>
         </xsl:if>
     </xsl:if>
     <!-- COMPUTATION-LIKE blocks, environments -->

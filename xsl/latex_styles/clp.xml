@@ -80,37 +80,123 @@
 <figure>
 <!-- Figure head for stuff before the content + caption, and then figure foot for stuff after caption -->
 <preamble>
-\usepackage[framemethod=TikZ]{mdframed}
-\mdfdefinestyle{figstyle}{linecolor=blue,roundcorner=2ex}
+\usepackage{tcolorbox}
+\newtcolorbox{figbox}{colframe=red, colback=white, arc=10pt, sharp corners=northwest, halign=center}
 </preamble>
 <head>
-\begin{figure}
-\begin{mdframed}[style=figstyle]
-\centering
+\begin{figbox}\begin{figure}
 </head>
 <before-caption/>
 <foot>
-\end{mdframed}
-\end{figure}
+\end{figure}\end{figbox}
 </foot>
 </figure>
 
 <!-- frame around sbsgroup -->
 <sbsgroup>
 <preamble>
-\usepackage[framemethod=TikZ]{mdframed}\mdfdefinestyle{sbsgstyle}{linecolor=red,roundcorner=2ex}
+\usepackage{tcolorbox}
+\newtcolorbox{sbsgbox}{colframe=gray, colback=white, arc=10pt, sharp corners=northwest, halign=center}
 </preamble>
-<head>\begin{mdframed}[style=sbsgstyle]&#xa;</head>
-<foot>\end{mdframed}&#xa;</foot>
+<head>
+\begin{sbsgbox}&#xa;</head>
+<foot>\end{sbsgbox}&#xa;</foot>
 </sbsgroup>
 
 <!-- frame around sidebyside (but it knows not to do this if part of a sbsgroup -->
 <sidebyside>
 <preamble>
-\usepackage[framemethod=TikZ]{mdframed}\mdfdefinestyle{sbsstyle}{linecolor=green,roundcorner=1ex}
+\usepackage{tcolorbox}
+\newtcolorbox{sbsbox}{colframe=gray, colback=white, arc=10pt, sharp corners=northwest, halign=center}
 </preamble>
-<head>\begin{mdframed}[style=sbsstyle]&#xa;</head>
-<foot>\end{mdframed}&#xa;</foot>
+<head>\begin{sbsbox}&#xa;</head>
+<foot>\end{sbsbox}&#xa;</foot>
 </sidebyside>
+
+<footnote>
+<preamble>
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% messing with footnotes
+\newcommand{\neghphantom}[1]{\begingroup\sbox0{#1}\hspace*{-\wd0}\endgroup}
+\makeatletter
+\renewcommand\@makefntext[1]{\leftskip=2em\hskip-2em \@thefnmark 
+\neghphantom{\@thefnmark}\hskip2em #1}
+\makeatother
+
+\usepackage{tikz}\usetikzlibrary{arrows}
+\renewcommand{\footnoterule}{
+\noindent\hspace{-2ex}\begin{tikzpicture}[scale=1.05]
+\draw[*-*,thick,rounded corners] (0,0) -- (1.0\textwidth,0) -- (1.0\textwidth,-0.5);
+\end{tikzpicture}\vspace{-1.5ex}
+}
+</preamble>
+</footnote>
+
+<theorem>
+<preamble>
+%% Theorem-like environments in "plain" style, with or without proof
+\usepackage{amsthm}
+\theoremstyle{plain}
+%% Numbering for Theorems, Conjectures, Examples, Figures, etc
+%% Controlled by  numbering.theorems.level  processing parameter
+%% Always need a theorem environment to set base numbering scheme
+%% even if document has no theorems (but has other environments)
+</preamble>
+<unnumbered>\newtheorem{theorem}{Theorem}</unnumbered>
+<numbered-pre>\newtheorem{theorem}{Theorem}[</numbered-pre>
+<numbered-post>]</numbered-post>
+</theorem>
+
+<theorem-like>
+<preamble>
+%% Theorem-like environments
+%% Numbering is in sync with theorems, etc
+\theoremstyle{plain}
+</preamble>
+<corollary>\newtheorem{corollary}[theorem]{Corollary}</corollary>
+<lemma>\newtheorem{lemma}[theorem]{Lemma}</lemma>
+<algorithm>\newtheorem{algorithm}[theorem]{Algorithm}</algorithm>
+<proposition>\newtheorem{proposition}[theorem]{Proposition}</proposition>
+<claim>\newtheorem{claim}[theorem]{Claim}</claim>
+<fact>\newtheorem{fact}[theorem]{Fact}</fact>
+<identity>\newtheorem{identity}[theorem]{Identity}</identity>
+</theorem-like>
+
+<axiom-like>
+<preamble>
+%% Axiom-like environments
+%% Numbering is in sync with theorems, etc
+\theoremstyle{plain}
+</preamble>
+<axiom>\newtheorem{axiom}[theorem]{Axiom}</axiom>
+<conjecture>\newtheorem{conjecture}[theorem]{Conjecture}</conjecture>
+<principle>\newtheorem{principle}[theorem]{Principle}</principle>
+<heuristic>\newtheorem{heuristic}[theorem]{Heuristic}</heuristic>
+<hypothesis>\newtheorem{hypothesis}[theorem]{Hypothesis}</hypothesis>
+<assumption>\newtheorem{assumption}[theorem]{Assumption}</assumption>
+</axiom-like>
+
+<definition-like>
+<preamble>
+%% Definition-like environments, normal text
+%% Numbering is in sync with theorems, etc
+\theoremstyle{definition}
+</preamble>
+<definition>\newtheorem{definition}[theorem]{Definition}</definition>
+</definition-like>
+
+<remark-like>
+<preamble>
+%% Remark-like environments, normal text
+%% Numbering is in sync with theorems, etc
+\theoremstyle{definition}
+</preamble>
+<remark>\newtheorem{remark}[theorem]{Remark}</remark>
+<convention>\newtheorem{convention}[theorem]{Convention}</convention>
+<note>\newtheorem{note}[theorem]{Note}</note>
+<observation>\newtheorem{observation}[theorem]{Observation}</observation>
+<warning>\newtheorem{warning}[theorem]{Warning}</warning>
+<insight>\newtheorem{insight}[theorem]{Insight}</insight>
+</remark-like>
 
 </style>
