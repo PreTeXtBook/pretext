@@ -2673,8 +2673,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Hyperlink with type, number, then a title -->
+<!-- TODO: xref-link's select is a fiction and may lead to  bugs -->
 <xsl:template match="*" mode="list-of-element">
     <xsl:apply-templates select="." mode="xref-link">
+        <xsl:with-param name="target" select="." />
         <xsl:with-param name="content">
             <xsl:apply-templates select="." mode="type-name" />
             <xsl:text> </xsl:text>
@@ -6844,6 +6846,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Cross-References -->
 <!-- ################ -->
 
+<!-- Most cross-references use the traditional LaTeX  -->
+<!-- \label, \ref scheme.  But we use \hyperref to    -->
+<!-- achieve this, so we get active links in an       -->
+<!-- electronic PDF.  We can squelch their electronic -->
+<!-- character (and color) for a print version        -->
+<!-- with a switch. The flexibility of the hyperref   -->
+<!-- package allows us to make our own link text in   -->
+<!-- a variety of different ways, duplicating         -->
+<!-- functionality of a package like  cleverref.      -->
+<!--                                                  -->
+<!-- Some objects LaTeX will not number (ie a         -->
+<!-- \label{} is ineffective), and others we may not  -->
+<!-- want to number.  But we want to cross-reference  -->
+<!-- to them anyway (generally, PreTeXt-wide), so we  -->
+<!-- use the \hypertarget, \hyperref scheme.          -->
+<!--                                                  -->
+<!-- The next modal template encodes this distinction -->
+
+<!-- Unless exceptional, traditional LaTeX -->
+<xsl:template match="*" mode="xref-as-ref">
+    <xsl:value-of select="true()" />
+</xsl:template>
+
+<!-- Exceptions -->
+<!-- We hard-code some numbers (sectional exercises) and      -->
+<!-- we institute some numberings that LaTeX does not do      -->
+<!-- naturally - references in extra sections, proofs,        -->
+<!-- items in ordered lists (alone or in an exercise),        -->
+<!-- hints, answers, solutions. A xref to the very top level  -->
+<!-- will land at the table of contents or at the             -->
+<!-- title/titlepage. For an exercise group we point to       -->
+<!-- the introduction.                                        -->
+<xsl:template match="p|paragraphs|blockquote|exercises//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|book|article|contributor" mode="xref-as-ref">
+    <xsl:value-of select="false()" />
+</xsl:template>
+
 <!-- Labels  (cross-reference target)-->
 
 <!-- Insert an identifier as a LaTeX label on anything       -->
@@ -6956,44 +6994,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- in display mathematics, and so $location is ignored -->
 <!-- See xsl/mathbook-common.xsl for more info           -->
 <xsl:template match="*" mode="xref-link">
+    <xsl:param name="target" select="/.." />
     <xsl:param name="content" select="'MISSING LINK CONTENT'"/>
-    <xsl:param name="xref" select="/.." />
-    <xsl:text>\hyperref[</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>]{</xsl:text>
+    <xsl:variable name="xref-as-ref">
+        <xsl:apply-templates select="$target" mode="xref-as-ref" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$xref-as-ref='true'">
+            <xsl:text>\hyperref[</xsl:text>
+            <xsl:apply-templates select="$target" mode="internal-id" />
+            <xsl:text>]</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\hyperlink{</xsl:text>
+            <xsl:apply-templates select="$target" mode="internal-id" />
+            <xsl:text>}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>{</xsl:text>
     <xsl:value-of select="$content" />
-    <xsl:text>}</xsl:text>
-</xsl:template>
-
-<!-- We hard-code some numbers (sectional exercises) and      -->
-<!-- we institute some numberings that LaTeX does not do      -->
-<!-- naturally - references in extra sections, proofs,        -->
-<!-- items in ordered lists (alone or in an exercise),        -->
-<!-- hints, answers, solutions. A xref to the very top level  -->
-<!-- will land at the table of contents or at the             -->
-<!-- title/titlepage For an exercise group we point to        -->
-<!-- the introduction.  We make custom                        -->
-<!-- anchors/labels below and then we must point to           -->
-<!-- them with \hyperlink{}{} (nee hyperref[]{}).             -->
-<!-- (See also modal templates for "label" and "xref-number") -->
-<xsl:template match="p|paragraphs|blockquote|exercises//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|book|article" mode="xref-link">
-    <xsl:param name="content" />
-    <xsl:text>\hyperlink{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>}{</xsl:text>
-    <xsl:value-of select="$content" />
-    <xsl:text>}</xsl:text>
-</xsl:template>
-
-<!-- We bypass autonaming, numbers and all that -->
-<!-- for cross-references to contributors       -->
-<!-- $content param is just ignored             -->
-<!-- TODO: should this be more integrated somehow? -->
-<xsl:template match="contributor" mode="xref-link">
-    <xsl:text>\hyperlink{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>}{</xsl:text>
-    <xsl:value-of select="personname" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 

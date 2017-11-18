@@ -941,8 +941,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- found a structural or block parent -->
         <!-- we fashion a cross-reference link  -->
+        <!-- TODO: xref-link's select is a fiction, maybe lead to bugs? -->
         <xsl:when test="$structural='true' or $block='true'">
             <xsl:apply-templates select="." mode="xref-link">
+                <xsl:with-param name="target" select="." />
                 <xsl:with-param name="content">
                     <xsl:apply-templates select="." mode="type-name" />
                     <xsl:variable name="enclosure-number">
@@ -1013,8 +1015,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- And spacing should be done with .type, .codenumber, .title                -->
 <xsl:template match="*" mode="list-of-element">
     <!-- Name and number as a knowl/link, div to open against -->
+    <!-- TODO: xref-link's select is a fiction, maybe lead to bugs? -->
     <div>
         <xsl:apply-templates select="." mode="xref-link">
+            <xsl:with-param name="target" select="." />
             <xsl:with-param name="content">
                 <xsl:apply-templates select="." mode="type-name" />
                 <xsl:text> </xsl:text>
@@ -5801,31 +5805,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- actual link, which is sensitive to display   -->
 <!-- math in particular                           -->
 <!-- See xsl/mathbook-common.xsl for more info    -->
+<!-- TODO: could match on "xref" once link routines  -->
+<!-- are broken into two and other uses are rearranged -->
 <xsl:template match="*" mode="xref-link">
+    <xsl:param name="target" select="/.." />
     <xsl:param name="content" select="'MISSING LINK CONTENT'"/>
-    <xsl:param name="xref" select="/.." />
     <xsl:variable name="knowl">
-        <xsl:apply-templates select="." mode="xref-as-knowl" />
+        <xsl:apply-templates select="$target" mode="xref-as-knowl" />
     </xsl:variable>
     <xsl:choose>
         <!-- 1st exceptional case, xref in webwork -->
         <!-- Just parrot the content               -->
-        <xsl:when test="$xref/ancestor::webwork">
+        <xsl:when test="ancestor::webwork">
             <xsl:value-of select="$content" />
         </xsl:when>
         <!-- 2nd exceptional case, xref in mrow of display math  -->
         <!-- Requires http://aimath.org/mathbook/mathjaxknowl.js -->
         <!-- loaded as a MathJax extension for knowls to render  -->
-        <xsl:when test="$xref/parent::mrow">
+        <xsl:when test="parent::mrow">
             <!-- MathJax expects similar constructions, variation is here -->
             <xsl:choose>
                 <xsl:when test="$knowl='true'">
                     <xsl:text>\knowl{</xsl:text>
-                    <xsl:apply-templates select="." mode="xref-knowl-filename" />
+                    <xsl:apply-templates select="$target" mode="xref-knowl-filename" />
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:text>\href{</xsl:text>
-                    <xsl:apply-templates select="." mode="url" />
+                    <xsl:apply-templates select="$target" mode="url" />
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:text>}{</xsl:text>
@@ -5840,39 +5846,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:when test="$knowl='true'">
                         <!-- build a modern knowl -->
                         <xsl:attribute name="knowl">
-                            <xsl:apply-templates select="." mode="xref-knowl-filename" />
+                            <xsl:apply-templates select="$target" mode="xref-knowl-filename" />
                         </xsl:attribute>
                         <!-- TODO: check if this "knowl-id" is needed, knowl.js implies it is -->
                         <xsl:attribute name="knowl-id">
                             <xsl:text>xref-</xsl:text>
-                            <xsl:apply-templates select="." mode="internal-id" />
+                            <xsl:apply-templates select="$target" mode="internal-id" />
                         </xsl:attribute>
                     </xsl:when>
                     <xsl:otherwise>
                         <!-- build traditional hyperlink -->
                         <xsl:attribute name="href">
-                            <xsl:apply-templates select="." mode="url" />
+                            <xsl:apply-templates select="$target" mode="url" />
                         </xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
                 <!-- add HTML title and alt attributes to the link -->
                 <xsl:attribute name="alt">
-                    <xsl:apply-templates select="." mode="tooltip-text" />
+                    <xsl:apply-templates select="$target" mode="tooltip-text" />
                 </xsl:attribute>
                 <xsl:attribute name="title">
-                    <xsl:apply-templates select="." mode="tooltip-text" />
+                    <xsl:apply-templates select="$target" mode="tooltip-text" />
                 </xsl:attribute>
                 <!-- link content from common template -->
-                <!-- For a contributor we bypass autonaming, etc -->
-                <!-- TODO: should this be more integrated? -->
-                <xsl:choose>
-                    <xsl:when test="self::contributor">
-                        <xsl:apply-templates select="personname" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$content" />
-                    </xsl:otherwise>
-                </xsl:choose>
+                <xsl:value-of select="$content" />
             </xsl:element>
         </xsl:otherwise>
     </xsl:choose>

@@ -5464,18 +5464,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:text>}</xsl:text>
         </xsl:if>
     </xsl:variable>
-    <!-- Send the target and text representation for link to a    -->
+    <!-- Send the text representation for link and target to a    -->
     <!-- format-specific and target-specific link manufacture.    -->
-    <!-- This depends primarly on the $target, but we also        -->
-    <!-- send the location of the link.  Example: a link in       -->
+    <!-- This depends primarly on the $target, but the context is -->
+    <!-- holds the location of the link.  Example: a link in      -->
     <!-- display mathematics (rendered by MathJax for HTML)       -->
     <!-- requires radically different constructions as a knowl,   -->
     <!-- or as a hyperlink.  LaTeX barely cares.  We do wrap the  -->
     <!-- xref-text in \text{} for receipt in display mathematics. -->
     <!-- NB: could a xref with title text have math in it and mess-up here? -->
-    <xsl:apply-templates select="$target" mode="xref-link">
+    <xsl:apply-templates select="." mode="xref-link">
+        <xsl:with-param name="target" select="$target" />
         <xsl:with-param name="content" select="$text" />
-        <xsl:with-param name="xref" select="." />
     </xsl:apply-templates>
 </xsl:template>
 
@@ -5565,18 +5565,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:text>}</xsl:text>
         </xsl:if>
     </xsl:variable>
-    <!-- Send the target and text representation for link to a    -->
+    <!-- Send the text representation for link and target to a    -->
     <!-- format-specific and target-specific link manufacture.    -->
-    <!-- This depends primarly on the $target, but we also        -->
-    <!-- send the location of the link.  Example: a link in       -->
+    <!-- This depends primarly on the $target, but the context is -->
+    <!-- holds the location of the link.  Example: a link in      -->
     <!-- display mathematics (rendered by MathJax for HTML)       -->
     <!-- requires radically different constructions as a knowl,   -->
     <!-- or as a hyperlink.  LaTeX barely cares.  We do wrap the  -->
     <!-- xref-text in \text{} for receipt in display mathematics. -->
     <!-- NB: could a xref with title text have math in it and mess-up here? -->
-    <xsl:apply-templates select="$target-one" mode="xref-link">
+    <xsl:apply-templates select="." mode="xref-link">
+        <xsl:with-param name="target" select="$target-one" />
         <xsl:with-param name="content" select="$text" />
-        <xsl:with-param name="xref" select="." />
     </xsl:apply-templates>
 </xsl:template>
 
@@ -5652,18 +5652,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:text>}</xsl:text>
         </xsl:if>
     </xsl:variable>
-    <!-- Send the target and text representation for link to a    -->
+    <!-- Send the text representation for link and target to a    -->
     <!-- format-specific and target-specific link manufacture.    -->
-    <!-- This depends primarly on the $target, but we also        -->
-    <!-- send the location of the link.  Example: a link in       -->
+    <!-- This depends primarly on the $target, but the context is -->
+    <!-- holds the location of the link.  Example: a link in      -->
     <!-- display mathematics (rendered by MathJax for HTML)       -->
     <!-- requires radically different constructions as a knowl,   -->
     <!-- or as a hyperlink.  LaTeX barely cares.  We do wrap the  -->
     <!-- xref-text in \text{} for receipt in display mathematics. -->
     <!-- NB: could a xref with title text have math in it and mess-up here? -->
-    <xsl:apply-templates select="$target" mode="xref-link">
+    <xsl:apply-templates select="." mode="xref-link">
+        <xsl:with-param name="target" select="$target" />
         <xsl:with-param name="content" select="$text" />
-        <xsl:with-param name="xref" select="." />
     </xsl:apply-templates>
     <!-- check if we have exhausted the list, -->
     <!-- so check bibliography wrapping       -->
@@ -5867,6 +5867,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <!-- recognize content s potential override -->
     <xsl:variable name="b-has-content" select="not($custom-text = '')" />
     <xsl:choose>
+        <xsl:when test="$target/self::contributor">
+            <xsl:apply-templates select="$target/personname" />
+        </xsl:when>
         <!-- equation override -->
         <xsl:when test="$b-is-equation-target">
             <xsl:if test="$b-has-content">
@@ -6149,18 +6152,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- template, which just repeats the content, with  -->
 <!-- an indication that this needs to be overridden  -->
 <!--   context -                                     -->
-<!--     the target of the link, so the right        -->
-<!--     identification can be produced              -->
+<!--      an xref usually, typically its parent      -->
+<!--      is inspected to vary link style            -->
 <!--   content -                                     -->
 <!--     an RTF of the visual text,                  -->
 <!--     suitable for location of the link           -->
-<!--   xref -                                        -->
-<!--     the link node itself, typically             -->
-<!--     its parent is inspected to vary             -->
-<!--   implementation based on location              -->
+<!--   target -                                      -->
+<!--     the target of the link, so the right        -->
+<!--     identification can be produced              -->
+<!--  implementation is based on location            -->
 <xsl:template match="*" mode="xref-link">
+    <xsl:param name="target" />
     <xsl:param name="content" />
-    <xsl:param name="xref" />
     <xsl:text>[LINK: </xsl:text>
     <xsl:copy-of select="$content" />
     <xsl:text>]</xsl:text>
