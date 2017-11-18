@@ -6307,8 +6307,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:text>[SOLIDUS]</xsl:text>
 </xsl:template>
 
-
-
+<!-- Backtick -->
+<!-- Accent grave, as a text character -->
+<xsl:template match="backtick">
+    <xsl:text>[BACKTICK]</xsl:text>
+</xsl:template>
 
 <!-- Dots
 http://tex.stackexchange.com/questions/19180/which-dot-character-to-use-in-which-context

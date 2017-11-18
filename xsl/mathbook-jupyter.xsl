@@ -498,8 +498,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\]</xsl:text>
 </xsl:template>
 
-<!-- TODO: (markdown protection)-->
-<!-- backtick - not a single left quote, perhaps needs definition -->
+<!-- Backtick -->
+<!-- This is the rationale for this element. -->
+<!-- We can use it in a text context,        -->
+<!-- and protect it here from Markdown.      -->
+<xsl:template match="backtick">
+    <xsl:text>\`</xsl:text>
+</xsl:template>
 
 <!-- Markdown protection remaining unimplemented?            -->
 <!-- These are symbols we would not want to need to          -->

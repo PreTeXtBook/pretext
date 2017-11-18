@@ -6451,9 +6451,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x2044;</xsl:text>
 </xsl:template>
 
-
-
-
+<!-- Backtick -->
+<!-- This is the "accent grave" character.                 -->
+<!-- Unicode Character 'GRAVE ACCENT' (U+0060)             -->
+<!-- Really it is a modifier.  But as an ASCII character   -->
+<!-- on most keyboards it gets used in computer languages. -->
+<!-- Normally you would use this in verbatim contexts.     -->
+<!-- It is not a left-quote (see <lsq />0, nor is it a     -->
+<!-- modifier.  If you really want this character in a     -->
+<!-- text context use this empty element.  For example,    -->
+<!-- this is a character Markdown uses, so we want to      -->
+<!-- provide this safety valve.                            -->
+<xsl:template match="backtick">
+    <xsl:text>&#x60;</xsl:text>
+</xsl:template>
 
 <!-- Foreign words/idioms        -->
 <!-- Matches HTML5 specification -->
