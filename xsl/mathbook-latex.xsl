@@ -49,8 +49,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--  -->
 
 <!-- set style name  -->
-<xsl:param name="style.name" select="'default'" />
-<!--<xsl:param name="style.name" select="'clp'" />-->
+<!--<xsl:param name="style.name" select="'default'" />-->
+<xsl:param name="style.name" select="'clp'" />
 <!--  -->
 
 <!-- Standard fontsizes: 10pt, 11pt, or 12pt       -->

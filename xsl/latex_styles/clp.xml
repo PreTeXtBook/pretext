@@ -134,6 +134,8 @@
 
 <theorem>
 <preamble>
+\usepackage{pretexttheme-clp}
+
 %% Theorem-like environments in "plain" style, with or without proof
 \usepackage{amsthm}
 \theoremstyle{plain}
@@ -180,9 +182,11 @@
 <preamble>
 %% Definition-like environments, normal text
 %% Numbering is in sync with theorems, etc
-\theoremstyle{definition}
 </preamble>
-<definition>\newtheorem{definition}[theorem]{Definition}</definition>
+<!--<definition>\newtheorem{definition}[theorem]{Definition}</definition>-->
+<definition>
+\newboxedtheorem[boxcolor=_deepgreen, background=_deepgreen!5,  titlebackground=_deepgreen!70, titleboxcolor = black]{definition}{Definition}{theorem}
+</definition>
 </definition-like>
 
 <remark-like>
