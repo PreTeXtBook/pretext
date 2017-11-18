@@ -29,7 +29,7 @@ white,%
 %%ADR WAS HERE
 \usepackage{footnote}
 
-\tikzset{adrbox/.style 2 args={append after command={
+\tikzset{clpbox/.style 2 args={append after command={
    \pgfextra
     \draw[sharp corners, fill=#2, very thick]% 
     (\tikzlastnode.west)% 
@@ -57,7 +57,7 @@ white,%
     \end{lrbox}
     \begin{center}
     \begin{tikzpicture}
-    \node[adrbox={\boxcolor,\background}, 
+    \node[clpbox={\boxcolor,\background}, 
 %       draw=\boxcolor, very thick,
       inner sep=10pt, inner ysep=20pt
     ](b) {\usebox{\boiboite}};
@@ -83,5 +83,61 @@ the#4\endcsname}}\@ifnotempty{##1}{
     }%
     {%
     \end{boite}
+    }
+}
+
+
+\tikzset{eqnbox/.style 2 args={append after command={
+   \pgfextra
+    \draw[sharp corners, fill=#2, very thick]% 
+    (\tikzlastnode.west)% 
+    [rounded corners=0pt] |- (\tikzlastnode.north)% 
+    [rounded corners=5pt] -| (\tikzlastnode.east)% 
+    [rounded corners=5pt] |- (\tikzlastnode.south)% 
+    [rounded corners=5pt] -| (\tikzlastnode.west)%
+    [draw=#1]
+    ;
+   \endpgfextra}}}
+
+
+
+\newenvironment{clpeqbox}[2][]%
+    {%
+    \savenotes
+    \renewcommand{\titre}{#2}
+    \setkeys{boxedtheorem}{#1}
+    \begin{lrbox}{\boiboite}%
+     \begin{minipage}[!h]{\size}
+    }%
+    {%
+     \end{minipage}
+    \end{lrbox}
+    \begin{center}
+    \begin{tikzpicture}
+    \node[eqnbox={\boxcolor,\background}, 
+      inner sep=10pt, %inner ysep=5pt
+    ](b) {\usebox{\boiboite}};
+
+    \node[draw=\titleboxcolor, rounded corners=\titlecornersize, fill=\titlebackground, 
+    text= \titlecolor, left=10pt] at (b.north east) {\titre};
+    \end{tikzpicture}
+    \end{center}
+\spewnotes
+    }
+
+\newcommand{\newboxedeqn}[4][]{%
+    \couleurs[#1]
+    \@ifnotempty{#4}{%
+      \@ifundefined{the#4}{\@ifundefined{\thcounter}{\newcounter{#4}}{%
+      \newcounter{#4}[\thcounter ] } } { }%
+    }
+    \newenvironment{#2}[1][]{%
+    \@ifnotempty{#4}{\refstepcounter{#4}}
+    \begin{clpeqbox}[#1]{\textbf{#3\@ifnotempty{#4}{ \csname 
+the#4\endcsname}}\@ifnotempty{##1}{
+    (##1)}\textbf{.}}
+    }%
+    {%
+    \end{clpeqbox}
     }
 }

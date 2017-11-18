@@ -6961,12 +6961,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="xref-link">
     <xsl:param name="content" select="'MISSING LINK CONTENT'"/>
     <xsl:param name="xref" select="/.." />
-    <xsl:text>\hyperref[</xsl:text>
+    <xsl:text>\texorpdfstring{\hyperref[</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>]{</xsl:text>
     <xsl:value-of select="$content" />
-    <xsl:text>}</xsl:text>
+    <xsl:text>}}{}</xsl:text>
 </xsl:template>
+
 
 <!-- We hard-code some numbers (sectional exercises) and      -->
 <!-- we institute some numberings that LaTeX does not do      -->

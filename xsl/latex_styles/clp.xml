@@ -135,6 +135,7 @@
 <theorem>
 <preamble>
 \usepackage{pretexttheme-clp}
+\usepackage{chngcntr}
 
 %% Theorem-like environments in "plain" style, with or without proof
 \usepackage{amsthm}
@@ -145,8 +146,9 @@
 %% even if document has no theorems (but has other environments)
 </preamble>
 <unnumbered>\newtheorem{theorem}{Theorem}</unnumbered>
-<numbered-pre>\newtheorem{theorem}{Theorem}[</numbered-pre>
-<numbered-post>]</numbered-post>
+<numbered-pre>
+\newboxedtheorem[boxcolor=_deepskyblue, titlebackground=orange!15, titlecolor = black, boxcornersize=0pt, titlecornersize=0pt, titleboxcolor = orange, background=blue!5,]{theorem}{Theorem}{theorem}\counterwithin{theorem}{</numbered-pre>
+<numbered-post>}</numbered-post>
 </theorem>
 
 <theorem-like>
@@ -155,12 +157,18 @@
 %% Numbering is in sync with theorems, etc
 \theoremstyle{plain}
 </preamble>
-<corollary>\newtheorem{corollary}[theorem]{Corollary}</corollary>
-<lemma>\newtheorem{lemma}[theorem]{Lemma}</lemma>
+<corollary>
+\newboxedtheorem[boxcolor=_deepskyblue, titlebackground=orange!15, titlecolor = black, boxcornersize=0pt, titlecornersize=0pt, titleboxcolor = orange, background=blue!5]{corollary}{Corollary}{theorem}
+</corollary>
+<lemma>
+\newboxedtheorem[boxcolor=_deepgreen,titleboxcolor = black]{lemma}{Lemma}{theorem}
+</lemma>
 <algorithm>\newtheorem{algorithm}[theorem]{Algorithm}</algorithm>
 <proposition>\newtheorem{proposition}[theorem]{Proposition}</proposition>
 <claim>\newtheorem{claim}[theorem]{Claim}</claim>
-<fact>\newtheorem{fact}[theorem]{Fact}</fact>
+<fact>
+\newboxedeqn[boxcolor=_deepskyblue, titlebackground=orange!15, titlecolor = black, boxcornersize=0pt, titlecornersize=0pt, titleboxcolor = orange, background=blue!5]{fact}{Equation}{theorem}
+</fact>
 <identity>\newtheorem{identity}[theorem]{Identity}</identity>
 </theorem-like>
 
@@ -183,7 +191,6 @@
 %% Definition-like environments, normal text
 %% Numbering is in sync with theorems, etc
 </preamble>
-<!--<definition>\newtheorem{definition}[theorem]{Definition}</definition>-->
 <definition>
 \newboxedtheorem[boxcolor=_deepgreen, background=_deepgreen!5,  titlebackground=_deepgreen!70, titleboxcolor = black]{definition}{Definition}{theorem}
 </definition>
