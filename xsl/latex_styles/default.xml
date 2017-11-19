@@ -1,4 +1,17 @@
 <style>
+<fonts />
+<pageheadfoot />
+<divisionmarking>
+<preamble />
+<titlepage/>
+<part />
+<chapter />
+<section />
+<subsection />
+<subsubsection />
+
+</divisionmarking>
+
 
 <example>
 <preamble>\theoremstyle{definition}\newtheorem{example}[theorem]{Example}</preamble>

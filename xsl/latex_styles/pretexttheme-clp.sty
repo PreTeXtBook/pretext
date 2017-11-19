@@ -1,3 +1,5 @@
+\ProvidesPackage{pretexttheme-clp}
+
 \usepackage{xkeyval}
 \definecolor{_deepskyblue}{HTML}{007090}
 \definecolor{_deepgreen}{HTML}{006070}
@@ -10,23 +12,18 @@
 \define@key{boxedtheorem}{boxcolor}{\def\boxcolor{#1}}
 \define@key{boxedtheorem}{thcounter}{\def\thcounter{#1}}
 \define@key{boxedtheorem}{size}{\def\size{#1}}
-%% ADR
 \define@key{boxedtheorem}{boxcornersize}{\def\boxcornersize{#1}}
 \define@key{boxedtheorem}{titlecornersize}{\def\titlecornersize{#1}}
 %%
-\presetkeys{boxedtheorem}{titlecolor = black, titlebackground = white, background = 
-white,%
-                         titleboxcolor = black, boxcolor = black, 
-			boxcornersize=10pt, titlecornersize=5pt,
-			thcounter=, size = .9\textwidth}{}
+\presetkeys{boxedtheorem}{titlecolor = black, titlebackground = white, background = white,%
+	titleboxcolor = black, boxcolor = black, 
+	boxcornersize=10pt, titlecornersize=5pt,
+	thcounter=, size = .9\textwidth}{}
 
 \newcommand{\couleurs}[1][]{%
     \setkeys{boxedtheorem}{#1}
 }
 
-
-%Commande générique pour faire un joli encadré
-%%ADR WAS HERE
 \usepackage{footnote}
 
 \tikzset{clpbox/.style 2 args={append after command={
@@ -58,7 +55,7 @@ white,%
     \begin{center}
     \begin{tikzpicture}
     \node[clpbox={\boxcolor,\background}, 
-%       draw=\boxcolor, very thick,
+      draw=\boxcolor, very thick,
       inner sep=10pt, inner ysep=20pt
     ](b) {\usebox{\boiboite}};
 
@@ -72,18 +69,10 @@ white,%
 \newcommand{\newboxedtheorem}[4][]{%
     \couleurs[#1]
     \@ifnotempty{#4}{%
-      \@ifundefined{the#4}{\@ifundefined{\thcounter}{\newcounter{#4}}{%
-      \newcounter{#4}[\thcounter ] } } { }%
-    }
+      \@ifundefined{the#4}{\@ifundefined{\thcounter}{\newcounter{#4}}{\newcounter{#4}[\thcounter ]}}{ }}
     \newenvironment{#2}[1][]{%
     \@ifnotempty{#4}{\refstepcounter{#4}}
-    \begin{boite}[#1]{\textbf{#3\@ifnotempty{#4}{ \csname 
-the#4\endcsname}}\@ifnotempty{##1}{
-    (##1)}\textbf{.}}
-    }%
-    {%
-    \end{boite}
-    }
+    \begin{boite}[#1]{\textbf{#3\@ifnotempty{#4}{ \csname the#4\endcsname}}\@ifnotempty{##1}{(##1)}\textbf{.}}}{\end{boite}}
 }
 
 
@@ -99,45 +88,15 @@ the#4\endcsname}}\@ifnotempty{##1}{
     ;
    \endpgfextra}}}
 
-
-
 \newenvironment{clpeqbox}[2][]%
-    {%
-    \savenotes
-    \renewcommand{\titre}{#2}
-    \setkeys{boxedtheorem}{#1}
-    \begin{lrbox}{\boiboite}%
-     \begin{minipage}[!h]{\size}
-    }%
-    {%
-     \end{minipage}
-    \end{lrbox}
-    \begin{center}
-    \begin{tikzpicture}
-    \node[eqnbox={\boxcolor,\background}, 
-      inner sep=10pt, %inner ysep=5pt
-    ](b) {\usebox{\boiboite}};
-
-    \node[draw=\titleboxcolor, rounded corners=\titlecornersize, fill=\titlebackground, 
-    text= \titlecolor, left=10pt] at (b.north east) {\titre};
-    \end{tikzpicture}
-    \end{center}
-\spewnotes
-    }
+    {\savenotes\renewcommand{\titre}{#2}\setkeys{boxedtheorem}{#1}\begin{lrbox}{\boiboite}%
+     \begin{minipage}[!h]{\size}}{\end{minipage}\end{lrbox}\begin{center}\begin{tikzpicture}
+    \node[eqnbox={\boxcolor,\background},inner sep=10pt](b) {\usebox{\boiboite}};
+    \node[draw=\titleboxcolor, rounded corners=\titlecornersize, fill=\titlebackground,text= \titlecolor, left=10pt] at (b.north east) {\titre};
+    \end{tikzpicture}\end{center}\spewnotes}
 
 \newcommand{\newboxedeqn}[4][]{%
     \couleurs[#1]
-    \@ifnotempty{#4}{%
-      \@ifundefined{the#4}{\@ifundefined{\thcounter}{\newcounter{#4}}{%
-      \newcounter{#4}[\thcounter ] } } { }%
-    }
-    \newenvironment{#2}[1][]{%
-    \@ifnotempty{#4}{\refstepcounter{#4}}
-    \begin{clpeqbox}[#1]{\textbf{#3\@ifnotempty{#4}{ \csname 
-the#4\endcsname}}\@ifnotempty{##1}{
-    (##1)}\textbf{.}}
-    }%
-    {%
-    \end{clpeqbox}
-    }
+    \@ifnotempty{#4}{\@ifundefined{the#4}{\@ifundefined{\thcounter}{\newcounter{#4}}{\newcounter{#4}[\thcounter ] }}{}}
+    \newenvironment{#2}[1][]{\@ifnotempty{#4}{\refstepcounter{#4}}\begin{clpeqbox}[#1]{\textbf{#3\@ifnotempty{#4}{\csname the#4\endcsname}}\@ifnotempty{##1}{(##1)}\textbf{.}}}{\end{clpeqbox}}
 }

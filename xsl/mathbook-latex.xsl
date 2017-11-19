@@ -267,7 +267,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\documentclass[</xsl:text>
     <xsl:value-of select="$font-size" />
     <xsl:text>,</xsl:text>
-    <xsl:if test="$latex.draft='yes'" >
+    <xsl:if test="$latex.draft='yes'" >0
         <xsl:text>draft,</xsl:text>
     </xsl:if>
     <xsl:text>]{</xsl:text>
@@ -369,6 +369,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.preamble.early" />
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
+    
+    <!-- Add any font packages for the style. -->
+    <xsl:value-of select="$style/style/fonts"/>
+    <xsl:text>%% &#xa;</xsl:text>
+    <!-- Add page head and foot changed. -->
+    <xsl:value-of select="$style/style/pageheadfoot"/>
+    <xsl:text>%% &#xa;</xsl:text>
+    <!-- Changes to marking of divisions. -->
+    <xsl:value-of select="$style/style/divisionmarking/preamble"/>
+    <xsl:value-of select="$style/style/divisionmarking/part"/>
+    <xsl:value-of select="$style/style/divisionmarking/chapter"/>
+    <xsl:value-of select="$style/style/divisionmarking/section"/>
+    <xsl:value-of select="$style/style/divisionmarking/subsection"/>
+    <xsl:value-of select="$style/style/divisionmarking/subsubsection"/>
+    <xsl:text>%% &#xa;</xsl:text>
+    
     <xsl:text>%% Inline math delimiters, \(, \), need to be robust&#xa;</xsl:text>
     <xsl:text>%% 2016-01-31:  latexrelease.sty  supersedes  fixltx2e.sty&#xa;</xsl:text>
     <xsl:text>%% If  latexrelease.sty  exists, bugfix is in kernel&#xa;</xsl:text>
