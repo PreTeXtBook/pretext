@@ -94,6 +94,17 @@
 
 </divisionmarking>
 
+
+<aside>
+<preamble>
+%% aside, biographical, historical environments and style&#xa;
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable, skins}
+\newtcolorbox{asidebox}{enhanced jigsaw, sharp corners=downhill, colframe=gray, colback=white, arc=10pt, width=1.1\textwidth, left skip=-0.05\textwidth, breakable}
+\newenvironment{aside}[1]{\begin{asidebox}\textbf{#1}\quad}{\end{asidebox}}
+</preamble>
+</aside>
+
 <example>
 <preamble>
 \usepackage{tikz}
@@ -175,7 +186,7 @@
 <!-- Figure head for stuff before the content + caption, and then figure foot for stuff after caption -->
 <preamble>
 \usepackage{tcolorbox}
-\newtcolorbox{figbox}{colframe=red, colback=white, arc=10pt, sharp corners=northwest, halign=center, width=1.1\textwidth, left skip=-0.05\textwidth}
+\newtcolorbox{figbox}{colframe=red, colback=white, arc=10pt, sharp corners=northwest, halign=center, width=1.08\textwidth, left skip=-0.04\textwidth}
 </preamble>
 <head>
 \begin{figbox}\begin{figure}\centering
@@ -190,7 +201,7 @@
 <sbsgroup>
 <preamble>
 \usepackage{tcolorbox}
-\newtcolorbox{sbsgbox}{colframe=gray, colback=white, arc=10pt, sharp corners=northwest, halign=center, width=1.1\textwidth, left skip=-0.05\textwidth}
+\newtcolorbox{sbsgbox}{colframe=gray, colback=white, arc=10pt, sharp corners=northwest, halign=center, width=1.08\textwidth, left skip=-0.04\textwidth}
 </preamble>
 <head>
 \begin{sbsgbox}\centering&#xa;</head>
@@ -201,7 +212,7 @@
 <sidebyside>
 <preamble>
 \usepackage{tcolorbox}
-\newtcolorbox{sbsbox}{colframe=gray, colback=white, arc=10pt, sharp corners=northwest, halign=center, width=1.1\textwidth, left skip=-0.05\textwidth}
+\newtcolorbox{sbsbox}{colframe=gray, colback=white, arc=10pt, sharp corners=northwest, halign=center}
 </preamble>
 <head>\begin{sbsbox}\centering&#xa;</head>
 <foot>\end{sbsbox}&#xa;</foot>

@@ -896,10 +896,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% end: assemblage&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="$document-root//aside or $document-root//historical or $document-root//biographical">
-            <xsl:text>%% aside, biographical, historical environments and style&#xa;</xsl:text>
-            <xsl:text>\newenvironment{aside}[1]{\mdfsetup{shadow=true, shadowsize=1.5ex, rightmargin=1.5ex,%&#xa;</xsl:text>
-            <xsl:text>backgroundcolor=blue!3,%&#xa;</xsl:text>
-            <xsl:text>linecolor=blue!50!black,} \begin{mdframed}\textbf{#1}\quad}{\end{mdframed}}&#xa;</xsl:text>
+        	<xsl:value-of select="$style/style/aside/preamble"/>
         </xsl:if>
         <!-- minimal box around named list contents, no title support yet -->
         <xsl:if test="$document-root//list">
@@ -3294,7 +3291,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- We print hints, answers, solutions with no heading. -->
 <!-- TODO: make heading on solution components configurable -->
-<xsl:template match="exercise/hint|exercise/answer|exercise/solution" mode="backmatter">
+<xsl:template match="exercise/hint" mode="backmatter">
+	<xsl:text>\textbf{Hint.} </xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>\par\smallskip&#xa;</xsl:text>
+</xsl:template>
+<xsl:template match="exercise/answer" mode="backmatter">
+	<xsl:text>\textbf{Answer.} </xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>\par\smallskip&#xa;</xsl:text>
+</xsl:template>
+<xsl:template match="exercise/solution" mode="backmatter">
+	<xsl:text>\textbf{Solution.} </xsl:text>
     <xsl:apply-templates />
     <xsl:text>\par\smallskip&#xa;</xsl:text>
 </xsl:template>
