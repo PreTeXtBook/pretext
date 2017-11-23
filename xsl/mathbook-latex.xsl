@@ -267,7 +267,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\documentclass[</xsl:text>
     <xsl:value-of select="$font-size" />
     <xsl:text>,</xsl:text>
-    <xsl:if test="$latex.draft='yes'" >0
+    <xsl:if test="$latex.draft='yes'" >
         <xsl:text>draft,</xsl:text>
     </xsl:if>
     <xsl:text>]{</xsl:text>
@@ -724,16 +724,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 	<!-- Define theorem differently depending on numbering -->
 	<xsl:choose>
 	    <xsl:when test="not($numbering-theorems = 0)">
-	    	<xsl:value-of select="$style/style/theorem/numbered-pre"/>
+	    	<xsl:value-of select="$style/style/theorem/numbering-pre"/>
 			<xsl:call-template name="level-to-name">
 				<xsl:with-param name="level" select="$numbering-theorems" />
 			</xsl:call-template>
-	    	<xsl:value-of select="$style/style/theorem/numbered-post"/>
+	    	<xsl:value-of select="$style/style/theorem/numbering-post"/>
 	    </xsl:when>
 	    <xsl:otherwise>
-	    	<xsl:value-of select="$style/style/theorem/unnumbered"/>
+	    	<xsl:value-of select="$style/style/theorem/numbering-null"/>
 	    </xsl:otherwise>
 	</xsl:choose>
+	<xsl:value-of select="$style/style/theorem/postamble"/>
 
     <xsl:text>%% Only variants actually used in document appear here&#xa;</xsl:text>
     <xsl:text>%% Style is like a theorem, and for statements without proofs&#xa;</xsl:text>

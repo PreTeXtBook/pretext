@@ -72,10 +72,12 @@
 %% Controlled by  numbering.theorems.level  processing parameter
 %% Always need a theorem environment to set base numbering scheme
 %% even if document has no theorems (but has other environments)
+\newtheorem{theorem}{Theorem}
 </preamble>
-<unnumbered>\newtheorem{theorem}{Theorem}</unnumbered>
-<numbered-pre>\newtheorem{theorem}{Theorem}[</numbered-pre>
-<numbered-post>]</numbered-post>
+<numbering-pre>\numberwithin{theorem}{</numbering-pre>
+<numbering-post>}</numbering-post>
+<numbering-null />
+<postamble />
 </theorem>
 
 <theorem-like>

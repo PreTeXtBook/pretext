@@ -258,15 +258,23 @@
 %% Set up the theorem counter for use with lots of environments.
 \newcounter{theorem}\numberwithin{theorem}{section}
 </preamble>
-<unnumbered>
-\newtcbtheorem[use counter=theorem]{tthm}{Theorem}{breakable, colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}}{}
+<!-- Notice we set up a dummy tcb theorem with the correct numbering within setting. The other tcbtheorems can then inherit the numberinwithin setting from them. Unfortunately this seemed to be the easiest way to set a default number-within parameter in tcolorbox. -->
+<numbering-pre>
+\newtcbtheorem[use counter=theorem, number within=
+</numbering-pre>
+<numbering-post>
+]{dummythm}{Dummythm}{}
+</numbering-post>
+
+<numbering-null>
+\newtcbtheorem[use counter=theorem]{dummythm}{Dummythm}{}
+</numbering-null>
+
+<postamble>
+\newtcbtheorem[use counter from=dummythm]{tthm}{Theorem}{breakable, colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}}{}
 \newenvironment{theorem}[1][\unskip]{\begin{tthm}{#1}{}}{\end{tthm}}
-</unnumbered>
-<numbered-pre>
-\newtcbtheorem[use counter=theorem]{tthm}{Theorem}{breakable, colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}}{}
-\newenvironment{theorem}[1][\unskip]{\begin{tthm}{#1}{}}{\end{tthm}}
-\counterwithin{theorem}{</numbered-pre>
-<numbered-post>}</numbered-post>
+</postamble>
+<!-- Notice we put a wrapper around the tcb theorem - this is so the title is passed in a uniform way between these theorems and those defined using \newtheorem. Tcolorbox wants it passed inside {}, while amsthm wants it passed within []. sigh -->
 </theorem>
 
 <theorem-like>
@@ -277,26 +285,31 @@
 </preamble>
 
 <corollary>
-\newtcbtheorem[use counter=theorem]{tcorollary}{Corollary}{colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}}{}
+\newtcbtheorem[use counter from=dummythm]{tcorollary}{Corollary}{colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}}{}
 \newenvironment{corollary}[1][\unskip]{\begin{tcorollary}{#1}{}}{\end{tcorollary}}
 </corollary>
 
 <lemma>
-\newtcbtheorem[use counter=theorem]{tlemma}{Lemma}{colframe=_deepgreen, colback=blue!5, boxed title style={colframe=black}}{}
+\newtcbtheorem[use counter from=dummythm]{tlemma}{Lemma}{colframe=_deepgreen, colback=blue!5, boxed title style={colframe=black}}{}
 \newenvironment{lemma}[1][\unskip]{\begin{tlemma}{#1}{}}{\end{tlemma}}
 </lemma>
 
 <algorithm>\newtheorem{algorithm}[theorem]{Algorithm}</algorithm>
 
-<proposition>\newtheorem{proposition}[theorem]{Proposition}</proposition>
+<proposition>
+\newtcbtheorem[use counter from=dummythm]{tprop}{Proposition}{colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}}{}
+\newenvironment{proposition}[1][\unskip]{\begin{tprop}{#1}{}}{\end{tprop}}
+
+
+\newtheorem{proposition}[theorem]{Proposition}</proposition>
 
 <claim>
-\newtcbtheorem[use counter=theorem]{tclaim}{Warning}{colframe=red, colback=white, colbacktitle=white, boxed title style={colback=white}}{}
+\newtcbtheorem[use counter from=dummythm]{tclaim}{Warning}{colframe=red, colback=white, colbacktitle=white, boxed title style={colback=white}}{}
 \newenvironment{claim}[1][\unskip]{\begin{tclaim}{#1}{}}{\end{tclaim}}
 </claim>
 
 <fact>
-\newtcbtheorem[use counter=theorem]{teqn}{Equation}{colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}, attach boxed title to top right={xshift=7mm, yshift*=-2ex}}{}
+\newtcbtheorem[use counter from=dummythm]{teqn}{Equation}{colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}, attach boxed title to top right={xshift=7mm, yshift*=-2ex}}{}
 \newenvironment{fact}[1][\unskip]{\begin{teqn}{#1}{}}{\end{teqn}}
 </fact>
 <identity>\newtheorem{identity}[theorem]{Identity}</identity>
@@ -322,7 +335,7 @@
 %% Numbering is in sync with theorems, etc
 </preamble>
 <definition>
-\newtcbtheorem[use counter=theorem]{tdefinition}{Definition}{breakable, colframe=_deepgreen, colback=_deepgreen!5, colbacktitle=_deepgreen!70, coltitle=black, enhanced, attach boxed title to top left={xshift=7mm, yshift*=-2ex},sharp corners=northwest, arc=10pt}{}
+\newtcbtheorem[use counter from=dummythm]{tdefinition}{Definition}{breakable, colframe=_deepgreen, colback=_deepgreen!5, colbacktitle=_deepgreen!70, coltitle=black, enhanced, attach boxed title to top left={xshift=7mm, yshift*=-2ex},sharp corners=northwest, arc=10pt}{}
 \newenvironment{definition}[1][\unskip]{\begin{tdefinition}{#1}{}}{\end{tdefinition}} 
 </definition>
 </definition-like>
