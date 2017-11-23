@@ -119,9 +119,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="webwork.server.latex" select="''" />
 
 
-<!-- specifying the style name which also determines which file to read. -->
-<xsl:param name="style.name" select="'default'" />
-
 
 <!-- ######### -->
 <!-- Variables -->

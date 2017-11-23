@@ -299,9 +299,7 @@
 <proposition>
 \newtcbtheorem[use counter from=dummythm]{tprop}{Proposition}{colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}}{}
 \newenvironment{proposition}[1][\unskip]{\begin{tprop}{#1}{}}{\end{tprop}}
-
-
-\newtheorem{proposition}[theorem]{Proposition}</proposition>
+</proposition>
 
 <claim>
 \newtcbtheorem[use counter from=dummythm]{tclaim}{Warning}{colframe=red, colback=white, colbacktitle=white, boxed title style={colback=white}}{}
