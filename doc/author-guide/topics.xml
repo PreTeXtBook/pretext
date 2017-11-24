@@ -351,7 +351,9 @@
                 <mrow>(a+b)^2</mrow>
             </md>.  Now<ellipsis /></p>
 
-            <p>Take notice of the requirement that the punctuation must be <em>immediately</em> after the closing tag of the math element, otherwise it will not migrate properly.</p>
+            <p>This all applies more generally to clause-ending punctuation, such as a comma.  Take notice of the requirement that the punctuation must be <em>immediately</em> after the closing tag of the math element, otherwise it will not migrate properly.  For example, do not interrupt the flow with whitespace, or an <init>XML</init> comment, or anything else.</p>
+
+            <p>Here is a technical subtlety that will demonstrate some of the inner machinery of <pretext /> and our conversions.  In your work, locate a theorem that has some numbered display mathematics (<c>mdn</c>) which is at the end of a sentence, and which you have authored as described above.  In <init>HTML</init> output, test a cross-reference (<c>xref</c>) to the theorem and you will see the period for the end of the sentence at the end of the display, where it should be.  Now test a cross-reference (<c>xref</c>) to one of the numbered equations.  First, the knowl will contain the entire display, to provide context, but it also will not contain the period, since the rest of the sentence is not in the knowl and so the period is not necessary.</p>
         </subsection>
 
         <subsection>
