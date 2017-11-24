@@ -686,6 +686,59 @@
         </pre>
     </section>
 
+    <section xml:id="topic-accessibility">
+        <title>Accessibility</title>
+        <idx>accessibilty</idx>
+        <idx>web accessibilty</idx>
+
+        <p>Continuing our discussion from <xref ref="overview-accessibility" /> we begin by listing features of our conversion to <init>HTML</init> which happen automatically.<dl width="narrow">
+            <li>
+                <title>CSS</title>
+                <p>Wherever possible we supply <init>HTML</init> elements and class names that will be interpreted sensibly by a screen reader in the absence of styling provided by <init>CSS</init>.</p>
+            </li>
+
+            <li>
+                <title>Mathematics</title>
+                <p>MathJax (<url href="https://www.mathjax.org/"><c>mathjax.org</c></url>) is the JavaScript library we use to render mathematics.  It provides extensive capabilities for screen readers to render the mathematics audibly, and by default your document is configured to take advantage of these features.  We refer the reader to the MathJax documentation of <url href="http://docs.mathjax.org/en/latest/misc/accessibility-features.html">Accessibility Features</url> at <c>docs.mathjax.org</c>.</p>
+            </li>
+
+            <li>
+                <title>Skip to Main Content</title>
+                <p>Repeatedly pressing the <c>Tab</c> key will move a reader from one location to the next in a web document.  Since your Table of Contents in the left sidebar is a series of many links, a reader will need to tab through <em>all</em> of these to eventually reach the interesting content on a page.</p>
+
+                <p>However, we support a common device.  The first link on every page is hidden from all readers, but an initial <c>Tab</c> will present a link labeled <c>Skip to Main Content</c> which when executed will take the reader past the Table of Contents and to the start of the content at the top of the page.</p>
+            </li>
+
+            <li>
+                <title>Colors</title>
+                <p>We are sensitive to the fact that some readers have difficulty distinguishing between certain colors.  So we do our best to distinguish text, or other elements, without relying exclusively on color.  For example, the <tag>delete</tag> and <tag>insert</tag> elements may render text with strike-through and underlining (respectively) to show the distinction.</p>
+            </li>
+        </dl></p>
+
+        <p>Here are features which are provided, but require your participation as the author.<dl width="narrow">
+            <li>
+                <title>Image Description</title>
+                <p>Images you author or supply will be invisible to some readers.  Within every <tag>image</tag> element you can use a <tag>description</tag> element.  The content here will migrate to places like the <init>HTML</init> <attribute>alt</attribute> attribute to be picked up by screen readers.</p>
+
+                <p>Make the content very expressive and detailed, but also do not use any markup whatsoever, just simple characters, and avoid quotation marks.</p>
+            </li>
+
+            <li>
+                <title>Image Formats</title>
+                <p>University offices that provide services for students with disabilities are often interested in the images themselves from a text, as standalone files.  You could use the <c>mbx</c> script to produce a variety of different formats and bundle these up in a single archive file for distribution at your book's website.  Or you can make each image available through adjacent links placed automatically.  We call these <q>image archives.</q>  See <xref ref="topic-images-archive" />.</p>
+            </li>
+
+            <li>
+                <title>Cross-References</title>
+                <p><xref ref="topic-cross-referencing" /> describes a variety of ways to customize the look and content of a cross-reference.  You can create a larger target for clickable items by making the text as long as possible.  So for example an <tag>xref</tag> authored as<cd>
+                    <cline>&lt;xref ref="theorem-FTC" text="type-global" /&gt;</cline>
+                </cd>would cause the clickable portion to be something like <q>Theorem 5.16</q>, whereas<cd>
+                    <cline>&lt;xref ref="theorem-FTC" text="global" /&gt;</cline>
+                </cd>would then cause the clickable portion to be simply the much shorter <q>5.16</q>.  Of course, you can set a default style for your entire document, so it is not necessary to continually provide the <attribute>text</attribute> attribute.</p>
+            </li>
+        </dl></p>
+    </section>
+
     <!--
     <section xml:id="topic-">
         <title></title>
