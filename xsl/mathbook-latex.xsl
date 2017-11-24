@@ -465,6 +465,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% begin: pdflatex-specific configuration&#xa;</xsl:text>
     <xsl:text>%% translate common Unicode to their LaTeX equivalents&#xa;</xsl:text>
     <xsl:text>%% Also, fontenc with T1 makes CM-Super the default font&#xa;</xsl:text>
+    <!-- https://tex.stackexchange.com/questions/664/why-should-i-use-usepackaget1fontenc -->
     <!-- http://tex.stackexchange.com/questions/88368/how-do-i-invoke-cm-super -->
     <xsl:text>%% (\input{ix-utf8enc.dfu} from the "inputenx" package is possible addition (broken?)&#xa;</xsl:text>
     <xsl:text>\usepackage[T1]{fontenc}&#xa;</xsl:text>
@@ -476,6 +477,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Conditional on various verbatim type environments      -->
     <!-- Note: no-content URLs get a monospace font but absent  -->
     <!-- other monospace use, we do not load an extra font      -->
+
+<!-- https://tex.stackexchange.com/questions/2790/when-should-one-use-verb-and-when-texttt/235917 -->
+
+
     <xsl:if test="$document-root//c or $document-root//cd or $document-root//pre or $document-root//program or $document-root//console or $document-root//sage">
         <xsl:text>%% Monospace font: Inconsolata (zi4)&#xa;</xsl:text>
         <xsl:text>%% Sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html&#xa;</xsl:text>
@@ -493,14 +498,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% begin: xelatex and lualatex-specific monospace font&#xa;</xsl:text>
         <xsl:text>\usepackage{zi4}&#xa;</xsl:text>
         <xsl:text>\setmonofont[BoldFont=Inconsolatazi4-Bold.otf,StylisticSet={1,3}]{Inconsolatazi4-Regular.otf}&#xa;</xsl:text>
+        <!-- <xsl:text>%% Mono spacing with \texttt, no extra space after period&#xa;</xsl:text> -->
+        <!-- <xsl:text>\usepackage[mono,extrasp=0em]{zi4}&#xa;</xsl:text> -->
         <!-- TODO: put a xelatex/lualatex monospace font package hook here? -->
         <xsl:text>%% end: xelatex and lualatex-specific monospace font&#xa;</xsl:text>
         <xsl:text>}{%&#xa;</xsl:text>
         <xsl:text>%% begin: pdflatex-specific monospace font&#xa;</xsl:text>
-         <xsl:text>\usepackage[varqu]{zi4}&#xa;</xsl:text>
+        <xsl:text>%% "varqu" option provides textcomp \textquotedbl glyph&#xa;</xsl:text>
+        <xsl:text>%% "varl"  option provides shapely "ell"&#xa;</xsl:text>
+        <xsl:text>\usepackage[varqu,varl]{zi4}&#xa;</xsl:text>
+        <!-- \@ifpackagelater: https://tex.stackexchange.com/questions/33806/is-it-possible-to-abort-loading-a-package-if-its-too-old -->
+        <!-- <xsl:text>%% Mono spacing with \texttt, no extra space after period&#xa;</xsl:text> -->
+        <!-- <xsl:text>\usepackage[mono,extrasp=0em]{zi4}&#xa;</xsl:text> -->
         <xsl:text>%% end: pdflatex-specific monospace font&#xa;</xsl:text>
-        <!-- TODO: put a pdflatex monospace font package hook here? -->
         <xsl:text>}&#xa;</xsl:text>
+        <xsl:if test="$document-root//c">
+            <xsl:text>%% \mono macro for content of "c" element only&#xa;</xsl:text>
+            <xsl:text>\newcommand{\mono}[1]{\texttt{#1}}&#xa;</xsl:text>
+        </xsl:if>
     </xsl:if>
     <xsl:text>%% Symbols, align environment, bracket-matrix&#xa;</xsl:text>
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
@@ -4646,19 +4661,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="url">
     <xsl:text>\url{</xsl:text>
-    <xsl:call-template name="escape-latex">
+    <xsl:call-template name="escape-url-to-latex">
         <xsl:with-param name="text">
             <xsl:value-of select="@href" />
         </xsl:with-param>
     </xsl:call-template>
     <xsl:text>}</xsl:text>
+
 </xsl:template>
 
 <!-- Checking for "content-less" form           -->
 <!-- http://stackoverflow.com/questions/9782021 -->
 <xsl:template match="url[* or normalize-space()]">
     <xsl:text>\href{</xsl:text>
-    <xsl:call-template name="escape-latex">
+    <xsl:call-template name="escape-url-to-latex">
         <xsl:with-param name="text">
             <xsl:value-of select="@href" />
         </xsl:with-param>
@@ -4673,75 +4689,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ############# -->
 
 <!-- Code, inline -->
-<!-- A question mark is invalid Python, so a useful separator    -->
-<!-- The latexsep attribute allows specifying a different symbol -->
-<!-- The lstinline macro is more robust than \verb,              -->
-<!-- for example when used in \multicolumn in a tabular          -->
-<!-- PCDATA only, so drop non-text nodes                         -->
+<!-- We escape every possible problematic character before     -->
+<!-- applying a macro which will presumably apply a typewriter -->
+<!-- font (which is not presumed to get strict mono spacing).  -->
 <xsl:template match="c">
-    <xsl:variable name="separator">
-        <xsl:choose>
-            <xsl:when test="@latexsep">
-                <xsl:value-of select="@latexsep" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>?</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:text>\lstinline</xsl:text>
-    <xsl:value-of select="$separator" />
-    <xsl:value-of select="." />
-    <xsl:value-of select="$separator" />
-</xsl:template>
-
-<!-- We need to be a bit more careful, as a title    -->
-<!-- is a moving argument.  We escape problematic    -->
-<!-- LaTeX characters and wrap in font changer. This -->
-<!-- construct does well when font sizes change.     -->
-<xsl:template match="title//c">
-    <xsl:text>\texttt{</xsl:text>
+    <xsl:text>\mono{</xsl:text>
     <xsl:call-template name="escape-text-to-latex">
         <xsl:with-param name="text" select="." />
     </xsl:call-template>
     <xsl:text>}</xsl:text>
-</xsl:template>
-
-<!-- Certain special characters for LaTeX, when     -->
-<!-- they appear in a verbatim \listinline that is  -->
-<!-- contained in an argument of some other command -->
-<!-- cause problems and need to be escaped          -->
-<!--                                                -->
-<!-- NB: some table entries get wrapped in a        -->
-<!-- \multicolumn, largely to override table-wide   -->
-<!-- defaults. This situation requires escaping the -->
-<!-- LaTeX characters, so in turn we must then      -->
-<!-- wrap any cell that has escaped characters by a -->
-<!-- \multicolumn elsewhere                         -->
-<!--                                                -->
-<!-- Situations                                     -->
-<!--   (1) table entries, especially \multicolumn   -->
-<!--   (2) text portion of an href                  -->
-<!--                                                -->
-<xsl:template match="tabular/row/cell//c|url//c">
-    <xsl:variable name="separator">
-        <xsl:choose>
-            <xsl:when test="@latexsep">
-                <xsl:value-of select="@latexsep" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>?</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:text>\lstinline</xsl:text>
-    <xsl:value-of select="$separator" />
-    <!-- make LaTeX characters into escape sequences -->
-    <xsl:call-template name="escape-latex">
-        <xsl:with-param name="text" select="." />
-    </xsl:call-template>
-    <xsl:value-of select="$separator" />
-    <xsl:text></xsl:text>
 </xsl:template>
 
 <!-- 100% analogue of LaTeX's verbatim            -->
@@ -6521,12 +6477,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!--         conflict with the column specification                  -->
     <!--    -if we have a colspan                                        -->
     <!--    -if there are paragraphs in the cell                         -->
-    <!--    -if the cell contains verbatim text that gets LaTeX-escaped  -->
     <!-- $table-left and $row-left *can* differ on first use,            -->
     <!-- but row-left is subsequently set to $table-left.                -->
     <xsl:if test="$the-cell">
         <xsl:choose>
-            <xsl:when test="not($table-left = $row-left) or not($column-halign = $cell-halign) or not($column-right = $cell-right) or ($column-span > 1) or $the-cell/p or $the-cell//c[contains(., '\') or contains(., '&amp;') or contains(., '#') or contains(., '%') or contains(., '~') or contains(., '{') or contains(., '}') or contains(., '&#x22;')]">
+            <xsl:when test="not($table-left = $row-left) or not($column-halign = $cell-halign) or not($column-right = $cell-right) or ($column-span > 1) or $the-cell/p">
                 <xsl:text>\multicolumn{</xsl:text>
                 <xsl:value-of select="$column-span" />
                 <xsl:text>}{</xsl:text>
@@ -7300,16 +7255,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Utilities -->
 <!-- ######### -->
 
-<!-- Escape Verbatim Text as LaTeX -->
-<!-- THIS SHOULD BE MADE OBSOLETE, SEE JUST BELOW -->
+<!-- Escape URL Text as LaTeX -->
 <!-- Slash first, so don't clobber later additions    -->
 <!-- Double-quote is problematic in LaTeX, and also   -->
 <!-- in strings below, so use &#x22; it's hex Unicode -->
 <!--     \ & # % ~ { } "                              -->
 <!-- no problem yet with math underscore or caret     -->
 <!-- (a text-only template, but LaTeX-specific)       -->
-<xsl:template name="escape-latex">
+<!-- This is a subset of following utility, certain   -->
+<!-- substitutions (such as \textsinglequote) will    -->
+<!-- foul up the applications of this cleaner.        -->
+<xsl:template name="escape-url-to-latex">
     <xsl:param    name="text" />
+
     <xsl:variable name="sans-slash" select="str:replace($text,       '\',      '\\'      )" />
     <xsl:variable name="sans-amp"   select="str:replace($sans-slash, '&amp;',  '\&amp;'  )" />
     <xsl:variable name="sans-hash"  select="str:replace($sans-amp,   '#',      '\#'      )" />
@@ -7321,28 +7279,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$sans-quote" />
 </xsl:template>
 
-<!-- Author's Verbatim Text to Escaped LaTeX -->
-<!-- 10 wicked LaTeX characters:   & % $ # _ { } ~ ^ \       -->
-<!-- \, {, } all need replacement, and also occur in some    -->
-<!-- replacements.  So order, and some care, is necessary.   -->
-<!-- [[TlWvKovNykSRI]] is just an unlikely "mkpasswd" marker -->
-<!-- http://tex.stackexchange.com/questions/34580/           -->
+<!-- Author's Inline Verbatim to Escaped LaTeX -->
+<!-- 10 wicked LaTeX characters:   & % $ # _ { } ~ ^ \.        -->
+<!-- Plus single quote, double quote, and backtick.            -->
+<!-- \, {, } all need replacement, and also occur in some      -->
+<!-- replacements.  So order, and some care, is necessary.     -->
+<!-- In particular, backslash, backtick and groupings can get  -->
+<!-- circular, so we use unlikely markers from "mkpasswd" to   -->
+<!-- manage replacements.  Generally this is a cleaner, prior  -->
+<!-- to wrapping in our \mono macro, implemented with \texttt. -->
+<!-- http://tex.stackexchange.com/questions/34580/             -->
 <xsl:template name="escape-text-to-latex">
     <xsl:param    name="text" />
-    <xsl:variable name="mark-slash" select="str:replace($text,       '\',     '[[TlWvKovNykSRI]]')" />
 
-    <xsl:variable name="sans-open"  select="str:replace($mark-slash, '{',     '\{'      )" />
-    <xsl:variable name="sans-close" select="str:replace($sans-open,  '}',     '\}'      )" />
+    <xsl:variable name="sq">
+        <xsl:text>'</xsl:text>
+    </xsl:variable>
+    <xsl:variable name="dq">
+        <xsl:text>"</xsl:text>
+    </xsl:variable>
+    <xsl:variable name="temp-backslash" select="'[[TlWvKovNykSRI]]'" />
+    <xsl:variable name="temp-backtick"  select="'[[ZKEKcAelcqRpk]]'" />
 
-    <xsl:variable name="sans-amp"   select="str:replace($sans-close, '&amp;', '\&amp;'  )" />
-    <xsl:variable name="sans-hash"  select="str:replace($sans-amp,   '#',     '\#'      )" />
-    <xsl:variable name="sans-per"   select="str:replace($sans-hash,  '%',     '\%'      )" />
-    <xsl:variable name="sans-tilde" select="str:replace($sans-per,   '~',     '\textasciitilde{}')" />
-    <xsl:variable name="sans-dollar" select="str:replace($sans-tilde, '$',    '\$' )" />
-    <xsl:variable name="sans-under" select="str:replace($sans-dollar, '_',    '\_'      )" />
-    <xsl:variable name="sans-caret" select="str:replace($sans-under,  '^',    '\textasciicircum{}')" />
-
-    <xsl:value-of select="str:replace($sans-caret, '[[TlWvKovNykSRI]]', '\textbackslash{}')" />
+    <xsl:variable name="mark-slash" select="str:replace($text,        '\',     $temp-backslash)" />
+    <xsl:variable name="mark-tick"  select="str:replace($mark-slash,  '`',     $temp-backtick)" />
+    <xsl:variable name="sans-open"  select="str:replace($mark-tick,   '{',     '\char`\{'      )" />
+    <xsl:variable name="sans-close" select="str:replace($sans-open,   '}',     '\char`\}'      )" />
+    <xsl:variable name="sans-amp"   select="str:replace($sans-close,  '&amp;', '\&amp;'  )" />
+    <xsl:variable name="sans-hash"  select="str:replace($sans-amp,    '#',     '\#'      )" />
+    <xsl:variable name="sans-per"   select="str:replace($sans-hash,   '%',     '\%'      )" />
+    <xsl:variable name="sans-tilde" select="str:replace($sans-per,    '~',     '\textasciitilde{}')" />
+    <xsl:variable name="sans-dollar" select="str:replace($sans-tilde, '$',     '\$' )" />
+    <xsl:variable name="sans-under" select="str:replace($sans-dollar, '_',     '\_'      )" />
+    <xsl:variable name="sans-caret" select="str:replace($sans-under,  '^',     '\textasciicircum{}')" />
+    <xsl:variable name="sans-quote" select="str:replace($sans-caret,  $sq,     '\textquotesingle{}')" />
+    <xsl:variable name="sans-dblqt" select="str:replace($sans-quote,  $dq,     '\textquotedbl{}')" />
+    <xsl:variable name="sans-tick"  select="str:replace($sans-dblqt,  $temp-backtick,     '\textasciigrave{}')" />
+    <xsl:value-of select="str:replace($sans-tick, $temp-backslash, '\textbackslash{}')" />
 </xsl:template>
 
 <!-- Miscellaneous -->

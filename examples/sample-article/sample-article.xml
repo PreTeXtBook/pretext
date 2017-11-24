@@ -1530,7 +1530,7 @@ the xsltproc executable.
                     </li>
                     <li>
                         <title>Verbatim, Code</title>
-                        <p>Within verbatim text (<c>c</c> and <c>pre</c> elements), Sage code, program listings, and console sessions, use the XML entitites <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c> to get exactly the characters desired.</p>
+                        <p>Within verbatim text (<c>c</c>, <c>cd</c>, and <c>pre</c> elements), Sage code, program listings, and console sessions, use the XML entitites <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c> to get exactly the characters desired.</p>
                     </li>
                 </dl></p>
 
@@ -1594,28 +1594,26 @@ the xsltproc executable.
 
                     <p>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789<percent />-.<underscore /><tilde />:/?<hash />[]@!<dollar /><ampersand />'()*+,;=</p>
 
-                    <p><c latexsep="|">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></p>
+                    <p><c>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></p>
 
                     <p><url href="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789<percent />-.<underscore /><tilde />:/?<hash />[]@!<dollar /><ampersand />'()*+,;=</url></p>
 
-                    <p><url href="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;="><c latexsep="|">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></url></p>
+                    <p><url href="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;="><c>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></url></p>
                 </blockquote>
 
                 <p>The source of the four above examples can be instructive.<ul>
                     <li><p>Four ampersands need to be authored as <c>&amp;amp;</c>: two <c>href</c> attributes and two strings of verbatim text.</p></li>
 
                     <li><p>Two ampersands are authored as <c>&lt;ampersand /&gt;</c>: two strings of normal text.</p></li>
-
-                    <li><p>For <latex /> output, the verbatim <c>c</c> element will be automatically delimited by a character that is not in the string.  The fault is a question mark, which you see here in the string.  So we have twice used the <c>latexsep</c> attribute with the value <c>|</c> (the <term>pipe</term> character) which cannot ever appear in a <init>URL</init>.</p></li>
                 </ul></p>
 
-                <p>When a <c>url</c> has no content, then its <c>href</c> attribute is displayed as the text, automatically in a verbatim font (so no need to consider the <c>latexsep</c> attribute in any way).</p>
+                <p>When a <c>url</c> has no content, then its <c>href</c> attribute is displayed as the text, automatically in a typewriter font.</p>
 
                 <blockquote>
                     <p><url href="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;="></url></p>
                 </blockquote>
 
-                <p>We are not fans of footnotes, they are totally unstructured<fn><url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url></fn>.  A URL in a footnote migrates around, and so care must be taken with special characters, such as the percent and hash<fn><url href="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;="><c latexsep="|">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></url></fn>.  This paragraph has two footnotes, one with a real URL from Jesse Oldroyd, another with a fake URL from the above suite (the fourth one).  For good measure, we repeat the URL found in the first footnote: <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url>.  And we include a no-content version of the same link:  <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" />.</p>
+                <p>We are not fans of footnotes, they are totally unstructured<fn><url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url></fn>.  A URL in a footnote migrates around, and so care must be taken with special characters, such as the percent and hash<fn><url href="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;="><c>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></url></fn>.  This paragraph has two footnotes, one with a real URL from Jesse Oldroyd, another with a fake URL from the above suite (the fourth one).  For good measure, we repeat the URL found in the first footnote: <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url>.  And we include a no-content version of the same link:  <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" />.</p>
             </subsection>
 
             <subsection>
@@ -3507,7 +3505,7 @@ the xsltproc executable.
                 </sidebyside>
             </figure>
 
-            <p>Tables are formed in <latex /> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, we also use them as part of a strategy to accomodate <latex />'s special characters in verbatim text.  So the table below, two items per row, is just designed for <latex /> testing.  But of course, it should still render fine in other formats.  The five test cases are from <xref ref="section-urls" />, but without 50 alphabetic characters and 8 digits, which should not be problems in this context.  The first column's entries are <em>forced</em> to be wrapped in a <c>\multicolumn</c> by specifying their horizontal alignment.  The second column's entries <em>may</em> be wrapped in a <c>\multicolumn</c> depending on their contents (essentially verbatim characters given by escaped versions).</p>
+            <p>Tables are formed in <latex /> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, sometimes <latex />'s special characters have behaved badly in this situation.  So the table below, two items per row, is just designed for <latex /> testing.  But of course, it should still render fine in other formats.  The five test cases are from <xref ref="section-urls" />, but without 50 alphabetic characters and 8 digits, which should not be problems in this context.  The first column's entries are <em>forced</em> to be wrapped in a <c>\multicolumn</c> by specifying their horizontal alignment.  The second column's entries <em>should not</em> be wrapped in a <c>\multicolumn</c>.</p>
 
             <table xml:id="table-latex-problems">
                 <caption>Problematic Cells for <latex /></caption>
@@ -3520,8 +3518,8 @@ the xsltproc executable.
 
                     <row>
                         <cell>2</cell>
-                        <cell halign="left"><c latexsep="|">09az%-._~:/?#[]@!$&amp;'()*+,;=</c></cell>
-                        <cell><c latexsep="|">09az%-._~:/?#[]@!$&amp;'()*+,;=</c></cell>
+                        <cell halign="left"><c>09az%-._~:/?#[]@!$&amp;'()*+,;=</c></cell>
+                        <cell><c>09az%-._~:/?#[]@!$&amp;'()*+,;=</c></cell>
                     </row>
 
                     <row>
@@ -3532,8 +3530,8 @@ the xsltproc executable.
 
                     <row>
                         <cell>4</cell>
-                        <cell halign="left"><url href="09az%-._~:/?#[]@!$&amp;'()*+,;="><c latexsep="|">09az%-._~:/?#[]@!$&amp;'()*+,;=</c></url></cell>
-                        <cell><url href="09az%-._~:/?#[]@!$&amp;'()*+,;="><c latexsep="|">09az%-._~:/?#[]@!$&amp;'()*+,;=</c></url></cell>
+                        <cell halign="left"><url href="09az%-._~:/?#[]@!$&amp;'()*+,;="><c>09az%-._~:/?#[]@!$&amp;'()*+,;=</c></url></cell>
+                        <cell><url href="09az%-._~:/?#[]@!$&amp;'()*+,;="><c>09az%-._~:/?#[]@!$&amp;'()*+,;=</c></url></cell>
                     </row>
 
                     <row>
@@ -4288,7 +4286,7 @@ the xsltproc executable.
 
                     <li><p>How you actually enter Unicode characters into your source file is dependent on your editor and operating system, and is therefore outside the scope of our documentation.  You can cut/paste characters and text from the source of our examples for initial testing and experimentation.</p></li>
 
-                    <li><p>Always, always identify your source as having Unicode characters by including the incantation <c latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c> as the first line of your source file. (You <em>may</em> be able to accurately cut/paste this text here.  But if the copy has non-standard characters in it, go back to the top of this source file for a copy.)</p></li>
+                    <li><p>Always, always identify your source as having Unicode characters by including the incantation <c>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c> as the first line of your source file. (You <em>may</em> be able to accurately cut/paste this text here.  But if the copy has non-standard characters in it, go back to the top of this source file for a copy.)</p></li>
 
                     <li><p>Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url> has a plethora of samples of various groups of Unicode characters.  If you, or your readers, are <q>missing</q> characters in a web browser, this is a good place to start testing the local setup.</p></li>
                 </ul></p>
@@ -4425,7 +4423,7 @@ the xsltproc executable.
                         <row><cell><c>002_</c></cell><cell><c>&#x0020;</c></cell><cell><c>&#x0021;</c></cell><cell><c>&#x0022;</c></cell><cell><c>&#x0023;</c></cell><cell><c>&#x0024;</c></cell><cell><c>&#x0025;</c></cell><cell><c>&#x0026;</c></cell><cell><c>&#x0027;</c></cell>
                                                      <cell><c>&#x0028;</c></cell><cell><c>&#x0029;</c></cell><cell><c>&#x002A;</c></cell><cell><c>&#x002B;</c></cell><cell><c>&#x002C;</c></cell><cell><c>&#x002D;</c></cell><cell><c>&#x002E;</c></cell><cell><c>&#x002F;</c></cell></row>
                         <row><cell><c>003_</c></cell><cell><c>&#x0030;</c></cell><cell><c>&#x0031;</c></cell><cell><c>&#x0032;</c></cell><cell><c>&#x0033;</c></cell><cell><c>&#x0034;</c></cell><cell><c>&#x0035;</c></cell><cell><c>&#x0036;</c></cell><cell><c>&#x0037;</c></cell>
-                                                     <cell><c>&#x0038;</c></cell><cell><c>&#x0039;</c></cell><cell><c>&#x003A;</c></cell><cell><c>&#x003B;</c></cell><cell><c>&#x003C;</c></cell><cell><c>&#x003D;</c></cell><cell><c>&#x003E;</c></cell><cell><c latexsep="|">&#x003F;</c></cell></row>
+                                                     <cell><c>&#x0038;</c></cell><cell><c>&#x0039;</c></cell><cell><c>&#x003A;</c></cell><cell><c>&#x003B;</c></cell><cell><c>&#x003C;</c></cell><cell><c>&#x003D;</c></cell><cell><c>&#x003E;</c></cell><cell><c>&#x003F;</c></cell></row>
                         <row><cell><c>004_</c></cell><cell><c>&#x0040;</c></cell><cell><c>&#x0041;</c></cell><cell><c>&#x0042;</c></cell><cell><c>&#x0043;</c></cell><cell><c>&#x0044;</c></cell><cell><c>&#x0045;</c></cell><cell><c>&#x0046;</c></cell><cell><c>&#x0047;</c></cell>
                                                      <cell><c>&#x0048;</c></cell><cell><c>&#x0049;</c></cell><cell><c>&#x004A;</c></cell><cell><c>&#x004B;</c></cell><cell><c>&#x004C;</c></cell><cell><c>&#x004D;</c></cell><cell><c>&#x004E;</c></cell><cell><c>&#x004F;</c></cell></row>
                         <row><cell><c>005_</c></cell><cell><c>&#x0050;</c></cell><cell><c>&#x0051;</c></cell><cell><c>&#x0052;</c></cell><cell><c>&#x0053;</c></cell><cell><c>&#x0054;</c></cell><cell><c>&#x0055;</c></cell><cell><c>&#x0056;</c></cell><cell><c>&#x0057;</c></cell>
@@ -4437,9 +4435,9 @@ the xsltproc executable.
                     </tabular>
                 </table>
 
-                <p>Note that the single and double quotes are upright and dumb, not curly and smart: <c>" ' " ' " '</c>.  The zero is distinguished from the capital <q>oh</q>: <c>0 O 0 O 0 O</c>.  And the numeral one is slightly different from the lower-case <q>ell</q>: <c>1 l 1 l 1 l</c>.  The hyphen should be short and not expanded into some other kind of dash: <c>- - -</c>.  These characters should all cut/paste out of a PDF into a text editor with no conversion to other characters.</p>
+                <p>Note that the single and double quotes are upright and dumb, not curly and smart: <c>' " ' " ' "</c>.  And a backtick is a backtick: <c>` ` `</c>.  The zero is distinguished from the capital <q>oh</q>: <c>0 O 0 O 0 O</c>.  And the numeral one is slightly different from the lower-case <q>ell</q>: <c>1 l 1 l 1 l</c>.  The hyphen should be short and not expanded into some other kind of dash: <c>- - -</c>.  These characters should all cut/paste out of a PDF into a text editor with no conversion to other characters.</p>
 
-                <p>Now the remaining characters from <c>U+0080</c><ndash /><c>U+00FF</c>.  Inline code (the <c>c</c> tag) and the <c>program</c> tag are implemented in <latex /> via the <c>listing</c> package and these characters require ad-hoc replacements for processing by <c>pdflatex</c>.  (You can see the replacements in the preamble of the <latex /> source for this document.)  The replacement mechanism provided by the <c>listing</c> package will cause the characters below to produce a <latex /> compilation error if processed by <c>pdflatex</c> and in a table cell in certain situations (which we have avoided in the table below).  The only workaround in this case is to switch to <c>xelatex</c>.</p>
+                <p>Now the remaining characters from <c>U+0080</c><ndash /><c>U+00FF</c>.  The <c>program</c> tag is implemented in <latex /> via the <c>listing</c> package and these characters require ad-hoc replacements for processing by <c>pdflatex</c>.  (You can see the replacements in the preamble of the <latex /> source for this document.)  The replacement mechanism provided by the <c>listing</c> package will cause the characters below to produce a <latex /> compilation error if processed by <c>pdflatex</c> and in a table cell in certain situations (which we have avoided in the table below).  The only workaround in this case is to switch to <c>xelatex</c>.</p>
 
                 <!-- ex &#x0080; - &#x009F; controls -->
                 <!-- ex &#x00A0; non-breaking space  -->
@@ -4508,6 +4506,20 @@ the xsltproc executable.
 
             </paragraphs>
 
+            <p>The table below has a single column, and each cell of the table has a string of 10 characters inside a <c>c</c> element.  It is meant to test if the font is monospace in this situation.</p>
+
+            <sidebyside>
+                <table>
+                    <caption>Alignment Test</caption>
+                    <tabular>
+                        <row><cell><c>0123456789</c></cell></row>
+                        <row><cell><c>9876543210</c></cell></row>
+                        <row><cell><c>iiiiiiiiii</c></cell></row>
+                        <row><cell><c>mmmmmmmmmm</c></cell></row>
+                    </tabular>
+                </table>
+            </sidebyside>
+
             <p>Again, more examples and more thorough explanations can be found in the sample: <c>examples/fonts/fonts-and-characters.xml</c>.  Be aware that the nature of the more advanced sample is that it will likely produce many errors when processed with <c>pdflatex</c>.  Adding <c>-interaction batchmode</c> or <c>-interaction nonstopmode</c> to the <c>pdflatex</c> command-line will sometimes be less painless than acknowledging each error.  The more advanced sample will perform well when processed with <c>xelatex</c>.</p>
         </section>
 
@@ -4543,11 +4555,9 @@ the xsltproc executable.
     An outdented line
             </pre>
 
-            <p>The <c>&lt;c&gt;</c> element, for inline code snippets (or anything else in a monospace font) uses the question-mark character to tell <latex /> where the text begins and ends.  This will be a problem if the text has a question mark in it!  So there is the attribute <c>latexsep</c> that allows you to specify another character that does not appear in your text.  For example, XML directives use question-marks now and then, so writing about them in <pretext /> requires specifying a different separation character, as in:  <c latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c>.  The <c>&lt;pre&gt;</c> element does not suffer from this quirk.</p>
-
             <p>Snippets should also be robust for cut/paste operations.  For example, you should not get <q>curly</q> <q>smart</q> quote marks in verbatim text: <c>this should have "dumb" quote marks</c>. Here are a few characters that should migrate through <latex /> to a PDF unmolested:  <c>'"----"'</c></p>
 
-            <p><c>If you write a very long snippet of inline code it can impinge on the right margin, especially if it were to begin close to that margin.  For output in LaTeX we allow line-breaking, but we do not get hyphenation and the font is fixed-width.  So not always perfect.  Consider a display (program listing as above with the pre element) or maybe reorganizing a sentence.  And it looks like a space after that left parenthesis just got ignored in the PDF created from the latex output.</c></p>
+            <p><c>If you write a very long snippet of inline code it can impinge on the right margin, since very long words will not hypenate, unless you have a dash/hypen.  Such as when you use words like pneumonoultramicroscopicsilicovolcanoconiosis, parastratiosphecomyia stratiosphecomyioides, floccinaucinihilipilification, or subdermatoglyphic.  For output in LaTeX we get line-breaking, and perhaps word-spacing, but we do not get hyphenation and the font is fixed-width.  So not always perfect.  Consider other options like &lt;cd&gt; or &lt;pre&gt; below.</c></p>
 
             <p>An intermediate type of verbatim text can be accomplished with the <c>&lt;cd&gt;</c> tag, short for <q>code display.</q>  It allows for larger chunks of verbatim text to show up in the middle of a paragraph, but with some vertical space above and below.  It can be<cd>authored as a single line</cd>or if you wish to have multiple lines<cd>
                 <cline>there is the cline tag</cline>
@@ -4560,14 +4570,17 @@ the xsltproc executable.
             <p>The <c>&lt;pre&gt;</c> tag is meant for use outside of paragraphs, but is otherwise very similar.  The source may also be structured as a sequence of <c>&lt;cline&gt;</c> as in the next example, recycling content from above.</p>
 
             <pre>
-                <cline>If you write a very long snippet of inline </cline>
-                <cline>code it can impinge on the right margin,</cline>
-                <cline>especially if it were to begin close to that</cline>
-                <cline>margin.  For output in LaTeX we allow line-breaking,</cline>
-                <cline>but we do not get hyphenation and the font is</cline>
-                <cline>fixed-width.  So not always perfect.  Consider a</cline>
-                <cline>display (program listing as above with the pre element)</cline>
-                <cline>or maybe reorganizing a sentence.</cline>
+                <cline>If you write a very long snippet of inline code it</cline>
+                <cline>can impinge on the right margin, since very long words</cline>
+                <cline>will not hypenate, unless you have a dash/hypen.  Such</cline>
+                <cline>as when you use words like</cline>
+                <cline>pneumonoultramicroscopicsilicovolcanoconiosis,</cline>
+                <cline>parastratiosphecomyia stratiosphecomyioides,</cline>
+                <cline>floccinaucinihilipilification, or subdermatoglyphic.</cline>
+                <cline>For output in LaTeX we get line-breaking, and perhaps</cline>
+                <cline>word-spacing, but we do not get hyphenation and the</cline>
+                <cline>font is fixed-width.  So not always perfect.  Consider</cline>
+                <cline>other options like &lt;cd&gt; or &lt;pre&gt; below.</cline>
             </pre>
 
         </section>
