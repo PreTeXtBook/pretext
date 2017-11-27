@@ -49,9 +49,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--  -->
 
 <!-- set style name  -->
-<!--<xsl:param name="style.name" select="'default'" />-->
-<xsl:param name="style.name" select="'clp2'" />
-<!--  -->
+<xsl:param name="style.name" select="'default'" />
+<!--<xsl:param name="style.name" select="'clp2'" /> --> 
+
 
 <!-- Standard fontsizes: 10pt, 11pt, or 12pt       -->
 <!-- extsizes package: 8pt, 9pt, 14pt, 17pt, 20pt  -->
@@ -369,6 +369,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     
     <!-- Add any font packages for the style. -->
     <xsl:value-of select="$style/style/fonts"/>
+    <xsl:text>%% &#xa;</xsl:text>
+    <!-- Add any colour packages and define colours for the style. -->
+    <xsl:value-of select="$style/style/colours"/>
     <xsl:text>%% &#xa;</xsl:text>
     <!-- Add page head and foot changed. -->
     <xsl:value-of select="$style/style/pageheadfoot"/>

@@ -1,8 +1,16 @@
 <style>
+
 <fonts>
 \usepackage{palatino, mathpazo}
 \PassOptionsToPackage{warn}{textcomp} %warns about font subs rather than throwing errors
 </fonts>
+
+<colours>
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\definecolor{_deepskyblue}{HTML}{007090}
+\definecolor{_deepgreen}{HTML}{006070}
+\definecolor{_darkred}{HTML}{600000}
+</colours>
 
 <pageheadfoot>
 \usepackage{fancyhdr}
@@ -20,336 +28,354 @@
 </pageheadfoot>
 
 <divisionmarking>
-<preamble>
-\usepackage{tikz}
-\usepackage[geometry]{ifsym} %to get nice triangles.
-\usepackage[explicit]{titlesec}
-%%%% A fix for titlesec section numbering issues - see https://bugs.launchpad.net/ubuntu/+source/texlive-extra/+bug/1574052
-\usepackage{etoolbox}
-\makeatletter
-\patchcmd{\ttlh@hang}{\parindent\z@}{\parindent\z@\leavevmode}{}{}
-\patchcmd{\ttlh@hang}{\noindent}{}{}{}
-\makeatother
-
-\tikzset{weird fill/.style={append after command={
-   \pgfextra
-        \draw[sharp corners, fill=#1]% 
-    (\tikzlastnode.west)% 
-    [rounded corners=0pt] |- (\tikzlastnode.north)% 
-    [rounded corners=5pt] -| (\tikzlastnode.east)% 
-    [rounded corners=0pt] |- (\tikzlastnode.south)% 
-    [rounded corners=5pt] -| (\tikzlastnode.west)%
-    ;
-   \endpgfextra}}}
-</preamble>
+	<preamble>
+	\usepackage{tikz}
+	\usepackage[geometry]{ifsym} %to get nice triangles.
+	\usepackage[explicit]{titlesec}
+	%%%% A fix for titlesec section numbering issues - see https://bugs.launchpad.net/ubuntu/+source/texlive-extra/+bug/1574052
+	\usepackage{etoolbox}
+	\makeatletter
+	\patchcmd{\ttlh@hang}{\parindent\z@}{\parindent\z@\leavevmode}{}{}
+	\patchcmd{\ttlh@hang}{\noindent}{}{}{}
+	\makeatother
+	
+	\tikzset{weird fill/.style={append after command={
+	   \pgfextra
+			\draw[sharp corners, fill=#1]% 
+		(\tikzlastnode.west)% 
+		[rounded corners=0pt] |- (\tikzlastnode.north)% 
+		[rounded corners=5pt] -| (\tikzlastnode.east)% 
+		[rounded corners=0pt] |- (\tikzlastnode.south)% 
+		[rounded corners=5pt] -| (\tikzlastnode.west)%
+		;
+	   \endpgfextra}}}
+	</preamble>
 <titlepage/>
-<part>
-\titleformat{name=\part}
-{\normalfont}
-{}
-{8pt}
-{
-\begin{center}\begin{tikzpicture}
-\draw node[
-    inner sep=10pt, inner ysep=40pt, very thick,
-    weird fill=_deepskyblue, text=white, minimum width={0.9\textwidth},
-    text width={0.9\textwidth}, align=center
-  ](b) {\scshape\huge\filcenter #1};
-\node[right=10pt, rounded corners=0pt, draw, fill=white] at (b.north west) 
-{\partname\ \thepart};
-\end{tikzpicture}\end{center}
-}
-</part>
-<chapter>
-\titleformat{name=\chapter}
-{\normalfont}
-{}
-{8pt}
-{
-\begin{center}\begin{tikzpicture}
-\draw node[
-    inner sep=10pt, inner ysep=20pt, very thick,
-    weird fill=_deepgreen, text=white, minimum width={0.9\textwidth},
-    text width={0.9\textwidth}, align=center
-  ](b) {\scshape\huge\filcenter #1};
-\node[right=10pt, rounded corners=0pt, draw, fill=white] at (b.north west) 
-{\chaptertitlename\ \thechapter};
-\end{tikzpicture}\end{center}
-}
-</chapter>
-<section>
-\titleformat{\section}
-{\titlerule
-\vspace{.8ex}%
-\Large\bfseries}
-{\llap{\thesection}}{0.0em}{{\small\FilledSmallTriangleUp} #1}
-</section>
-<subsection>
-\titleformat{\subsection}{\large\bfseries}
-{\llap{\thesubsection}}{0.0em}{ {\small\FilledSmallTriangleRight\!\!\!\FilledSmallTriangleRight} #1}
-</subsection>
-<subsubsection>
-\titleformat{\subsubsection}{\bfseries}{\llap{\thesubsubsection}}{0.0em}{{\small\FilledSmallTriangleRight\!\!\!\FilledSmallTriangleRight\!\!\!\FilledSmallTriangleRight} #1}
-</subsubsection>
+	<part>
+	\titleformat{name=\part}
+	{\normalfont}
+	{}
+	{8pt}
+	{
+	\begin{center}\begin{tikzpicture}
+	\draw node[
+		inner sep=10pt, inner ysep=40pt, very thick,
+		weird fill=_deepskyblue, text=white, minimum width={0.9\textwidth},
+		text width={0.9\textwidth}, align=center
+	  ](b) {\scshape\huge\filcenter #1};
+	\node[right=10pt, rounded corners=0pt, draw, fill=white] at (b.north west) 
+	{\partname\ \thepart};
+	\end{tikzpicture}\end{center}
+	}
+	</part>
+	<chapter>
+	\titleformat{name=\chapter}
+	{\normalfont}
+	{}
+	{8pt}
+	{
+	\begin{center}\begin{tikzpicture}
+	\draw node[
+		inner sep=10pt, inner ysep=20pt, very thick,
+		weird fill=_deepgreen, text=white, minimum width={0.9\textwidth},
+		text width={0.9\textwidth}, align=center
+	  ](b) {\scshape\huge\filcenter #1};
+	\node[right=10pt, rounded corners=0pt, draw, fill=white] at (b.north west) 
+	{\chaptertitlename\ \thechapter};
+	\end{tikzpicture}\end{center}
+	}
+	</chapter>
+	<section>
+	\titleformat{\section}
+	{\titlerule
+	\vspace{.8ex}%
+	\Large\bfseries}
+	{\llap{\thesection}}{0.0em}{{\small\FilledSmallTriangleUp} #1}
+	</section>
+	<subsection>
+	\titleformat{\subsection}{\large\bfseries}
+	{\llap{\thesubsection}}{0.0em}{ {\small\FilledSmallTriangleRight\!\!\!\FilledSmallTriangleRight} #1}
+	</subsection>
+	<subsubsection>
+	\titleformat{\subsubsection}{\bfseries}{\llap{\thesubsubsection}}{0.0em}{{\small\FilledSmallTriangleRight\!\!\!\FilledSmallTriangleRight\!\!\!\FilledSmallTriangleRight} #1}
+	</subsubsection>
 
 </divisionmarking>
 
 
 <aside>
-<preamble>
-%% aside, biographical, historical environments and style&#xa;
-\usepackage{tcolorbox}
-\tcbuselibrary{breakable, skins}
-\newtcolorbox{asidebox}{enhanced jigsaw, sharp corners=downhill, colframe=gray, colback=white, arc=10pt, width=1.1\textwidth, left skip=-0.05\textwidth, breakable}
-\newenvironment{aside}[1]{\begin{asidebox}\textbf{#1}\quad}{\end{asidebox}}
-</preamble>
+	<preamble>
+	%% aside, biographical, historical environments and style&#xa;
+	\usepackage{tcolorbox}
+	\tcbuselibrary{breakable, skins}
+	\newtcolorbox{asidebox}{enhanced jigsaw, sharp corners=downhill, colframe=gray, colback=white, arc=10pt, width=1.1\textwidth, left skip=-0.05\textwidth, breakable}
+	\newenvironment{aside}[1]{\begin{asidebox}\textbf{#1}\quad}{\end{asidebox}}
+	</preamble>
 </aside>
 
 <example>
-<preamble>
-\usepackage{tikz}
-\newenvironment{example}[1][]{%
-\refstepcounter{theorem}%
-\edef\tmpnumber{\thetheorem}% Use this temp counter so that numbers are not messed up by embedded equations.
-\vspace{1ex}\par\noindent\nopagebreak[4]%
-\hspace{-0.05\textwidth}\begin{tikzpicture}[scale=1.1]
-\draw[ stealth-stealth, very thick,rounded corners]
-(0,-0.5)--(0,0)--(\textwidth,0)--(\textwidth,-0.5);
-\node[draw=black, fill=white, rounded corners, right=10pt] at (0.5,0)
-{Example \tmpnumber\ \ifx\empty#1\else$\left(\text{#1}\right)$\fi};
-\end{tikzpicture}\\[-0.0ex]
-}
-{
-\vspace{-1ex}%
-\par\noindent%
-\hspace{-0.05\textwidth}\begin{tikzpicture}[scale=1.1]
-\draw[ stealth-stealth, very thick,rounded corners]
-(0,0.5)--(0,0)--(\textwidth,0)--(\textwidth,0.5);
-\node[draw=black, fill=white, rounded corners, right=10pt] at (0.5,0)
-{Example \tmpnumber};
-\end{tikzpicture}
-}
-</preamble>
+	<preamble>
+	\usepackage{tikz}
+	\newenvironment{example}[1][]{%
+	\refstepcounter{theorem}%
+	\edef\tmpnumber{\thetheorem}% Use this temp counter so that numbers are not messed up by embedded equations.
+	\vspace{1ex}\par\noindent\nopagebreak[4]%
+	\hspace{-0.05\textwidth}\begin{tikzpicture}[scale=1.1]
+	\draw[ stealth-stealth, very thick,rounded corners]
+	(0,-0.5)--(0,0)--(\textwidth,0)--(\textwidth,-0.5);
+	\node[draw=black, fill=white, rounded corners, right=10pt] at (0.5,0)
+	{Example \tmpnumber\ \ifx\empty#1\else$\left(\text{#1}\right)$\fi};
+	\end{tikzpicture}\\[-0.0ex]
+	}
+	{
+	\vspace{-1ex}%
+	\par\noindent%
+	\hspace{-0.05\textwidth}\begin{tikzpicture}[scale=1.1]
+	\draw[ stealth-stealth, very thick,rounded corners]
+	(0,0.5)--(0,0)--(\textwidth,0)--(\textwidth,0.5);
+	\node[draw=black, fill=white, rounded corners, right=10pt] at (0.5,0)
+	{Example \tmpnumber};
+	\end{tikzpicture}
+	}
+	</preamble>
 </example>
 
 <question>
-<preamble>
-\usepackage{tikz}
-\newenvironment{question}[1][]{%
-\refstepcounter{theorem}%
-\edef\tmpnumber{\thetheorem}% Use this temp counter so that numbers are not messed up by embedded equations.
-\vspace{1ex}\par\noindent\nopagebreak[4]%
-\hspace{-0.05\textwidth}\begin{tikzpicture}[scale=1.1]
-\draw[ diamond-diamond, thick,rounded corners]
-(0,0)--(\textwidth,0);
-\node[draw=black, fill=white, rounded corners, right=10pt] at (0.5,0)
-{Question \tmpnumber\ \ifx\empty#1\else$\left(\text{#1}\right)$\fi};
-\end{tikzpicture}\\[-0.0ex]
-}
-{
-\vspace{-1ex}%
-\par\noindent%
-\hspace{-0.05\textwidth}\begin{tikzpicture}[scale=1.1]
-\draw[ diamond-diamond, thick,rounded corners]
-(0,0)--(\textwidth,0);
-\end{tikzpicture}
-}
-</preamble>
+	<preamble>
+	\usepackage{tikz}
+	\newenvironment{question}[1][]{%
+	\refstepcounter{theorem}%
+	\edef\tmpnumber{\thetheorem}% Use this temp counter so that numbers are not messed up by embedded equations.
+	\vspace{1ex}\par\noindent\nopagebreak[4]%
+	\hspace{-0.05\textwidth}\begin{tikzpicture}[scale=1.1]
+	\draw[ diamond-diamond, thick,rounded corners]
+	(0,0)--(\textwidth,0);
+	\node[draw=black, fill=white, rounded corners, right=10pt] at (0.5,0)
+	{Question \tmpnumber\ \ifx\empty#1\else$\left(\text{#1}\right)$\fi};
+	\end{tikzpicture}\\[-0.0ex]
+	}
+	{
+	\vspace{-1ex}%
+	\par\noindent%
+	\hspace{-0.05\textwidth}\begin{tikzpicture}[scale=1.1]
+	\draw[ diamond-diamond, thick,rounded corners]
+	(0,0)--(\textwidth,0);
+	\end{tikzpicture}
+	}
+	</preamble>
 </question>
 
 <problem>
-<preamble>
-\usepackage{tikz}
-\newenvironment{problem}[1][]{%
-\refstepcounter{theorem}%
-\edef\tmpnumber{\thetheorem}% Use this temp counter so that numbers are not messed up by embedded equations.
-\vspace{1ex}\par\noindent\nopagebreak[4]%
-\hspace{-0.05\textwidth}\begin{tikzpicture}[scale=1.1]
-\draw[ )-(, thick,rounded corners]
-(0,-0.5)--(0,0)--(\textwidth,0)--(\textwidth,-0.5);
-\node[draw=black, fill=white, rounded corners, right=10pt] at (0.5,0)
-{Problem \tmpnumber\ \ifx\empty#1\else$\left(\text{#1}\right)$\fi};
-\end{tikzpicture}\\[-0.0ex]
-}
-{
-\vspace{-1ex}%
-\par\noindent%
-\hspace{-0.05\textwidth}\begin{tikzpicture}[scale=1.1]
-\draw[ )-(, thick,rounded corners]
-(0,0.5)--(0,0)--(\textwidth,0)--(\textwidth,0.5);
-\end{tikzpicture}
-}
-</preamble>
+	<preamble>
+	\usepackage{tikz}
+	\newenvironment{problem}[1][]{%
+	\refstepcounter{theorem}%
+	\edef\tmpnumber{\thetheorem}% Use this temp counter so that numbers are not messed up by embedded equations.
+	\vspace{1ex}\par\noindent\nopagebreak[4]%
+	\hspace{-0.05\textwidth}\begin{tikzpicture}[scale=1.1]
+	\draw[ )-(, thick,rounded corners]
+	(0,-0.5)--(0,0)--(\textwidth,0)--(\textwidth,-0.5);
+	\node[draw=black, fill=white, rounded corners, right=10pt] at (0.5,0)
+	{Problem \tmpnumber\ \ifx\empty#1\else$\left(\text{#1}\right)$\fi};
+	\end{tikzpicture}\\[-0.0ex]
+	}
+	{
+	\vspace{-1ex}%
+	\par\noindent%
+	\hspace{-0.05\textwidth}\begin{tikzpicture}[scale=1.1]
+	\draw[ )-(, thick,rounded corners]
+	(0,0.5)--(0,0)--(\textwidth,0)--(\textwidth,0.5);
+	\end{tikzpicture}
+	}
+	</preamble>
 </problem>
 
 <figure>
 <!-- Figure head for stuff before the content + caption, and then figure foot for stuff after caption -->
-<preamble>
-\usepackage{tcolorbox}
-\newtcolorbox{figbox}{colframe=red, colback=white, arc=10pt, sharp corners=northwest, halign=center, width=1.08\textwidth, left skip=-0.04\textwidth}
-</preamble>
-<head>
-\begin{figbox}\begin{figure}\centering
-</head>
-<before-caption/>
-<foot>
-\end{figure}\end{figbox}
-</foot>
+	<preamble>
+	\usepackage{tcolorbox}
+	\newtcolorbox{figbox}{colframe=red, colback=white, arc=10pt, sharp corners=northwest, halign=center, width=1.05\textwidth, left skip=-0.05\textwidth}
+	</preamble>
+	<head>
+	\begin{figbox}\begin{figure}\centering
+	</head>
+	<before-caption/>
+	<foot>
+	\end{figure}\end{figbox}
+	</foot>
 </figure>
 
 <!-- frame around sbsgroup -->
 <sbsgroup>
-<preamble>
-\usepackage{tcolorbox}
-\newtcolorbox{sbsgbox}{colframe=gray, colback=white, arc=10pt, sharp corners=northwest, halign=center, width=1.08\textwidth, left skip=-0.04\textwidth}
-</preamble>
-<head>
-\begin{sbsgbox}\centering&#xa;</head>
-<foot>\end{sbsgbox}&#xa;</foot>
+	<preamble>
+	\usepackage{tcolorbox}
+	\newtcolorbox{sbsgbox}{colframe=gray, colback=white, arc=10pt, sharp corners=northwest, halign=center, width=1.08\textwidth, left skip=-0.04\textwidth}
+	</preamble>
+	<head>\begin{sbsgbox}\centering&#xa;</head>
+	<foot>\end{sbsgbox}&#xa;</foot>
 </sbsgroup>
 
 <!-- frame around sidebyside (but it knows not to do this if part of a sbsgroup -->
 <sidebyside>
-<preamble>
-\usepackage{tcolorbox}
-\newtcolorbox{sbsbox}{colframe=gray, colback=white, arc=10pt, sharp corners=northwest, halign=center}
-</preamble>
-<head>\begin{sbsbox}\centering&#xa;</head>
-<foot>\end{sbsbox}&#xa;</foot>
+	<preamble>
+	\usepackage{tcolorbox}
+	\newtcolorbox{sbsbox}{colframe=gray, colback=white, arc=10pt, sharp corners=northwest, halign=center}
+	</preamble>
+	<head>\begin{sbsbox}\centering&#xa;</head>
+	<foot>\end{sbsbox}&#xa;</foot>
 </sidebyside>
 
 <footnote>
-<preamble>
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% messing with footnotes
-\newcommand{\neghphantom}[1]{\begingroup\sbox0{#1}\hspace*{-\wd0}\endgroup}
-\makeatletter
-\renewcommand\@makefntext[1]{\leftskip=2em\hskip-2em \@thefnmark 
-\neghphantom{\@thefnmark}\hskip2em #1}
-\makeatother
-
-\usepackage{tikz}\usetikzlibrary{arrows}
-\renewcommand{\footnoterule}{
-\noindent\hspace{-2ex}\begin{tikzpicture}[scale=1.05]
-\draw[*-*,thick,rounded corners] (0,0) -- (1.0\textwidth,0) -- (1.0\textwidth,-0.5);
-\end{tikzpicture}\vspace{-1.5ex}
-}
-</preamble>
+	<preamble>
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% messing with footnotes
+	\newcommand{\neghphantom}[1]{\begingroup\sbox0{#1}\hspace*{-\wd0}\endgroup}
+	\makeatletter
+	\renewcommand\@makefntext[1]{\leftskip=2em\hskip-2em \@thefnmark 
+	\neghphantom{\@thefnmark}\hskip2em #1}
+	\makeatother
+	
+	\usepackage{tikz}\usetikzlibrary{arrows}
+	\renewcommand{\footnoterule}{
+	\noindent\hspace{-2ex}\begin{tikzpicture}[scale=1.05]
+	\draw[*-*,thick,rounded corners] (0,0) -- (1.0\textwidth,0) -- (1.0\textwidth,-0.5);
+	\end{tikzpicture}\vspace{-1.5ex}
+	}
+	</preamble>
 </footnote>
 
 <theorem>
-<preamble>
-%% Numbering for Theorems, Conjectures, Examples, Figures, etc
-%% Controlled by  numbering.theorems.level  processing parameter
-%% Always need a theorem environment to set base numbering scheme
-%% even if document has no theorems (but has other environments)
-\usepackage{pretexttheme-clp}
-\usepackage{chngcntr}
-\usepackage{tcolorbox}
-\tcbuselibrary{theorems, breakable, skins}
-%% Set defaults for tcolorboxes
-\tcbset{breakable, coltitle=black, enhanced, attach boxed title to top left={xshift=7mm, yshift*=-2ex},sharp corners=northwest, arc=10pt}{}
-
-%% Theorem-like environments in "plain" style, with or without proof
-%% Hopefully we can get rid of this eventually.
-\usepackage{amsthm}
-\theoremstyle{plain}
-
-%% Set up the theorem counter for use with lots of environments.
-\newcounter{theorem}\numberwithin{theorem}{section}
-</preamble>
-<!-- Notice we set up a dummy tcb theorem with the correct numbering within setting. The other tcbtheorems can then inherit the numberinwithin setting from them. Unfortunately this seemed to be the easiest way to set a default number-within parameter in tcolorbox. -->
-<numbering-pre>
-\newtcbtheorem[use counter=theorem, number within=
-</numbering-pre>
-<numbering-post>
-]{dummythm}{Dummythm}{}
-</numbering-post>
-
-<numbering-null>
-\newtcbtheorem[use counter=theorem]{dummythm}{Dummythm}{}
-</numbering-null>
-
-<postamble>
-\newtcbtheorem[use counter from=dummythm]{tthm}{Theorem}{breakable, colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}}{}
-\newenvironment{theorem}[1][\unskip]{\begin{tthm}{#1}{}}{\end{tthm}}
-</postamble>
-<!-- Notice we put a wrapper around the tcb theorem - this is so the title is passed in a uniform way between these theorems and those defined using \newtheorem. Tcolorbox wants it passed inside {}, while amsthm wants it passed within []. sigh -->
+	<preamble>
+	%% Numbering for Theorems, Conjectures, Examples, Figures, etc
+	%% Controlled by  numbering.theorems.level  processing parameter
+	%% Always need a theorem environment to set base numbering scheme
+	%% even if document has no theorems (but has other environments)
+	\usepackage{chngcntr}
+	\usepackage{tcolorbox}
+	\tcbuselibrary{theorems, breakable, skins}
+	%% Set defaults for tcolorboxes
+	\tcbset{breakable, coltitle=black, enhanced, attach boxed title to top left={xshift=7mm, yshift*=-2ex},sharp corners=northwest, arc=10pt}{}
+	%% Theorem-like environments in "plain" style, with or without proof
+	\usepackage{amsthm}
+	\theoremstyle{plain}
+	%% Set up the theorem counter for use with lots of environments.
+	\newcounter{theorem}\numberwithin{theorem}{section}
+	</preamble>
+	<!-- Notice we set up a dummy tcb theorem with the correct numbering within setting. The other tcbtheorems can then inherit the numberinwithin setting from them. Unfortunately this seemed to be the easiest way to set a default number-within parameter in tcolorbox. -->
+	<numbering-pre>
+	\newtcbtheorem[use counter=theorem, number within=
+	</numbering-pre>
+	<numbering-post>
+	]{dummythm}{Dummythm}{}
+	</numbering-post>
+	<numbering-null>
+	\newtcbtheorem[use counter=theorem]{dummythm}{Dummythm}{}
+	</numbering-null>
+	<postamble>
+	\newtcbtheorem[use counter from=dummythm]{tthm}{Theorem}{breakable, colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}}{}
+	\newenvironment{theorem}[1][\unskip]{\begin{tthm}{#1}{}}{\end{tthm}}
+	</postamble>
+	<!-- Notice we put a wrapper around the tcb theorem - this is so the title is passed in a uniform way between these theorems and those defined using \newtheorem. Tcolorbox wants it passed inside {}, while amsthm wants it passed within []. sigh -->
 </theorem>
 
 <theorem-like>
-<preamble>
-%% Theorem-like environments
-%% Numbering is in sync with theorems, etc
-\theoremstyle{plain}
-</preamble>
+<!-- Needs to be updated so that env-renaming works. -->
+	<preamble>
+	%% Theorem-like environments
+	%% Numbering is in sync with theorems, etc
+	\theoremstyle{plain}
+	</preamble>
 
-<corollary>
-\newtcbtheorem[use counter from=dummythm]{tcorollary}{Corollary}{colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}}{}
-\newenvironment{corollary}[1][\unskip]{\begin{tcorollary}{#1}{}}{\end{tcorollary}}
-</corollary>
+	<corollary>
+	\newtcbtheorem[use counter from=dummythm]{tcorollary}{Corollary}{colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}}{}
+	\newenvironment{corollary}[1][\unskip]{\begin{tcorollary}{#1}{}}{\end{tcorollary}}
+	</corollary>
 
-<lemma>
-\newtcbtheorem[use counter from=dummythm]{tlemma}{Lemma}{colframe=_deepgreen, colback=blue!5, boxed title style={colframe=black}}{}
-\newenvironment{lemma}[1][\unskip]{\begin{tlemma}{#1}{}}{\end{tlemma}}
-</lemma>
+	<lemma>
+	\newtcbtheorem[use counter from=dummythm]{tlemma}{Lemma}{colframe=_deepgreen, colback=blue!5, boxed title style={colframe=black}}{}
+	\newenvironment{lemma}[1][\unskip]{\begin{tlemma}{#1}{}}{\end{tlemma}}
+	</lemma>
 
-<algorithm>\newtheorem{algorithm}[theorem]{Algorithm}</algorithm>
+	<algorithm>\newtheorem{algorithm}[theorem]{Algorithm}</algorithm>
 
-<proposition>
-\newtcbtheorem[use counter from=dummythm]{tprop}{Proposition}{colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}}{}
-\newenvironment{proposition}[1][\unskip]{\begin{tprop}{#1}{}}{\end{tprop}}
-</proposition>
+	<proposition>
+	\newtcbtheorem[use counter from=dummythm]{tprop}{Proposition}{colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}}{}
+	\newenvironment{proposition}[1][\unskip]{\begin{tprop}{#1}{}}{\end{tprop}}
+	</proposition>
 
-<claim>
-\newtcbtheorem[use counter from=dummythm]{tclaim}{Warning}{colframe=red, colback=white, colbacktitle=white, boxed title style={colback=white}}{}
-\newenvironment{claim}[1][\unskip]{\begin{tclaim}{#1}{}}{\end{tclaim}}
-</claim>
-
-<fact>
-\newtcbtheorem[use counter from=dummythm]{teqn}{Equation}{colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}, attach boxed title to top right={xshift=7mm, yshift*=-2ex}}{}
-\newenvironment{fact}[1][\unskip]{\begin{teqn}{#1}{}}{\end{teqn}}
-</fact>
-<identity>\newtheorem{identity}[theorem]{Identity}</identity>
+	<claim>
+	\newtcbtheorem[use counter from=dummythm]{tclaim}{Warning}{colframe=red, colback=white, colbacktitle=white, boxed title style={colback=white}}{}
+	\newenvironment{claim}[1][\unskip]{\begin{tclaim}{#1}{}}{\end{tclaim}}
+	</claim>
+	<fact>
+	\newtcbtheorem[use counter from=dummythm]{teqn}{Equation}{colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}, attach boxed title to top right={xshift=7mm, yshift*=-2ex}}{}
+	\newenvironment{fact}[1][\unskip]{\begin{teqn}{#1}{}}{\end{teqn}}
+	</fact>
+	<identity>\newtheorem{identity}[theorem]{Identity}</identity>
 </theorem-like>
 
 <axiom-like>
-<preamble>
-%% Axiom-like environments
-%% Numbering is in sync with theorems, etc
-\theoremstyle{plain}
-</preamble>
-<axiom>\newtheorem{axiom}[theorem]{Axiom}</axiom>
-<conjecture>\newtheorem{conjecture}[theorem]{Conjecture}</conjecture>
-<principle>\newtheorem{principle}[theorem]{Principle}</principle>
-<heuristic>\newtheorem{heuristic}[theorem]{Heuristic}</heuristic>
-<hypothesis>\newtheorem{hypothesis}[theorem]{Hypothesis}</hypothesis>
-<assumption>\newtheorem{assumption}[theorem]{Assumption}</assumption>
+	<preamble>
+	%% Axiom-like environments
+	%% Numbering is in sync with theorems, etc
+	\theoremstyle{plain}
+	</preamble>
+	<axiom>\newtheorem{axiom}[theorem]{Axiom}</axiom>
+	<conjecture>\newtheorem{conjecture}[theorem]{Conjecture}</conjecture>
+	<principle>\newtheorem{principle}[theorem]{Principle}</principle>
+	<heuristic>\newtheorem{heuristic}[theorem]{Heuristic}</heuristic>
+	<hypothesis>\newtheorem{hypothesis}[theorem]{Hypothesis}</hypothesis>
+	<assumption>\newtheorem{assumption}[theorem]{Assumption}</assumption>
 </axiom-like>
 
 <definition-like>
-<preamble>
-%% Definition-like environments, normal text
-%% Numbering is in sync with theorems, etc
-</preamble>
-<definition>
-\newtcbtheorem[use counter from=dummythm]{tdefinition}{Definition}{breakable, colframe=_deepgreen, colback=_deepgreen!5, colbacktitle=_deepgreen!70, coltitle=black, enhanced, attach boxed title to top left={xshift=7mm, yshift*=-2ex},sharp corners=northwest, arc=10pt}{}
-\newenvironment{definition}[1][\unskip]{\begin{tdefinition}{#1}{}}{\end{tdefinition}} 
-</definition>
+	<preamble>
+	%% Definition-like environments, normal text
+	%% Numbering is in sync with theorems, etc
+	</preamble>
+	<definition>
+	\newtcbtheorem[use counter from=dummythm]{tdefinition}{Definition}{breakable, colframe=_deepgreen, colback=_deepgreen!5, colbacktitle=_deepgreen!70, coltitle=black, enhanced, attach boxed title to top left={xshift=7mm, yshift*=-2ex},sharp corners=northwest, arc=10pt}{}
+	\newenvironment{definition}[1][\unskip]{\begin{tdefinition}{#1}{}}{\end{tdefinition}} 
+	</definition>
 </definition-like>
 
 <remark-like>
-<preamble>
-%% Remark-like environments, normal text
-%% Numbering is in sync with theorems, etc
-\theoremstyle{definition}
-</preamble>
-<remark>\newtheorem{remark}[theorem]{Remark}</remark>
-<convention>\newtheorem{convention}[theorem]{Convention}</convention>
-<note>\newtheorem{note}[theorem]{Note}</note>
-<observation>\newtheorem{observation}[theorem]{Observation}</observation>
-<warning>\newtheorem{warning}[theorem]{Warning}</warning>
-<insight>\newtheorem{insight}[theorem]{Insight}</insight>
+	<preamble>
+	%% Remark-like environments, normal text
+	%% Numbering is in sync with theorems, etc
+	\theoremstyle{definition}
+	</preamble>
+	<remark>\newtheorem{remark}[theorem]{Remark}</remark>
+	<convention>\newtheorem{convention}[theorem]{Convention}</convention>
+	<note>\newtheorem{note}[theorem]{Note}</note>
+	<observation>\newtheorem{observation}[theorem]{Observation}</observation>
+	<warning>\newtheorem{warning}[theorem]{Warning}</warning>
+	<insight>\newtheorem{insight}[theorem]{Insight}</insight>
 </remark-like>
 
+
+<exercises>
+<preamble>
+%% For multiple columns
+\usepackage{multicol}
+%% More flexible list management, esp. for references and exercises
+%% But also for specifying labels (i.e. custom order) on nested lists
+\usepackage{enumitem}
+%% Lists of references in their own section, maximum depth 1
+\setlist[referencelist]{leftmargin=!,labelwidth=!,labelsep=0ex,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}
+%% Lists of exercises in their own section, maximum depth 4
+\newlist{exerciselist}{description}{4}
+\setlist[exerciselist]{leftmargin=0pt,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}
+%% Indented groups of exercises within an exercise section
+%% Add  debug=true  option to see boxes around contents
+\usepackage{tasks}
+\NewTasks[label-format=\bfseries,item-indent=3.3em,label-offset=0.4em,label-width=1.7em,label-align=right,after-item-skip=\smallskipamount,after-skip=\smallskipamount]{exercisegroup}[\exercise]
+</preamble>
+<exnogroup>
+</exnogroup>
+<exgroup>
+</exgroup>
+<exercise>
+</exercise>
+</exercises>
 </style>
