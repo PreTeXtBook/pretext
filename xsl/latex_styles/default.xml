@@ -144,6 +144,7 @@
 %% But also for specifying labels (i.e. custom order) on nested lists
 \usepackage{enumitem}
 %% Lists of references in their own section, maximum depth 1
+\newlist{referencelist}{description}{4}
 \setlist[referencelist]{leftmargin=!,labelwidth=!,labelsep=0ex,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}
 %% Lists of exercises in their own section, maximum depth 4
 \newlist{exerciselist}{description}{4}
@@ -153,11 +154,17 @@
 \usepackage{tasks}
 \NewTasks[label-format=\bfseries,item-indent=3.3em,label-offset=0.4em,label-width=1.7em,label-align=right,after-item-skip=\smallskipamount,after-skip=\smallskipamount]{exercisegroup}[\exercise]
 </preamble>
-<exnogroup>
-</exnogroup>
-<exgroup>
-</exgroup>
-<exercise>
-</exercise>
+
+<exercisenotingroup>
+</exercisenotingroup>
+
+<exercisegroup>
+	<header></header>
+	<footer></footer>
+</exercisegroup>
+
+<exerciseingroup>
+</exerciseingroup>
+
 </exercises>
 </style>

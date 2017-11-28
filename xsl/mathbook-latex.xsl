@@ -49,8 +49,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--  -->
 
 <!-- set style name  -->
-<xsl:param name="style.name" select="'default'" />
-<!--<xsl:param name="style.name" select="'clp2'" /> --> 
+<!-- <xsl:param name="style.name" select="'default'" /> -->
+<xsl:param name="style.name" select="'clp2'" />  
 
 
 <!-- Standard fontsizes: 10pt, 11pt, or 12pt       -->
@@ -1524,10 +1524,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% But also for specifying labels (i.e. custom order) on nested lists&#xa;</xsl:text>
         <xsl:text>\usepackage{enumitem}&#xa;</xsl:text>
         <xsl:if test="//exercises or //references">
+        	<xsl:value-of select="$style/style/exercises/preamble"/>
+        	<!-- ADR - testing simplification of exercises.
             <xsl:if test="//references">
                 <xsl:text>%% Lists of references in their own section, maximum depth 1&#xa;</xsl:text>
                 <xsl:text>\newlist{referencelist}{description}{4}&#xa;</xsl:text>
-                <!-- labelindent defaults to 0, ! means computed -->
+                <!- - labelindent defaults to 0, ! means computed - ->
                 <xsl:text>\setlist[referencelist]{leftmargin=!,labelwidth=!,labelsep=0ex,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
             </xsl:if>
             <xsl:if test="//exercises">
@@ -1541,6 +1543,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>\usepackage{tasks}&#xa;</xsl:text>
                 <xsl:text>\NewTasks[label-format=\bfseries,item-indent=3.3em,label-offset=0.4em,label-width=1.7em,label-align=right,after-item-skip=\smallskipamount,after-skip=\smallskipamount]{exercisegroup}[\exercise]&#xa;</xsl:text>
             </xsl:if>
+            -->
         </xsl:if>
     </xsl:if>
     <xsl:if test="$document-root/backmatter/index-part | $document-root//index-list">
