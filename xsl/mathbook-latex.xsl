@@ -49,7 +49,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--  -->
 
 <!-- set style name  -->
-<!-- <xsl:param name="style.name" select="'default'" /> -->
+ <!--<xsl:param name="style.name" select="'default'" />--> 
 <xsl:param name="style.name" select="'clp2'" />  
 
 
@@ -3160,35 +3160,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercises/exercise|exercisegroup/exercise">
     <!-- Start a list right before first exercise of subdivision, or of exercise group -->
     <xsl:choose>
-        <xsl:when test="not(preceding-sibling::exercise) and parent::exercisegroup">
-            <xsl:text>\begin{exercisegroup}(</xsl:text>
+    <!-- ADR try to simplify -->
+    <xsl:when test="not(preceding-sibling::exercise) and parent::exercisegroup">
+	    <xsl:value-of select="$style/style/exercises/exercisegroup/header-precol"/>
             <xsl:choose>
                 <xsl:when test="not(../@cols)">
                     <xsl:text>1</xsl:text>
                 </xsl:when>
-                <xsl:when test="../@cols = 1 or ../@cols = 2 or ../@cols = 3 or ../@cols = 4 or ../@cols = 5 or ../@cols = 6">
-                    <xsl:value-of select="../@cols"/>
-                </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message terminate="yes">MBX:ERROR: invalid value <xsl:value-of select="../@cols" /> for cols attribute of exercisegroup</xsl:message>
-                </xsl:otherwise>
+                    <xsl:value-of select="../@cols"/>
+				</xsl:otherwise>
             </xsl:choose>
-            <xsl:text>)&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:when test="not(preceding-sibling::exercise) and parent::exercises">
-            <xsl:text>\begin{exerciselist}&#xa;</xsl:text>
-        </xsl:when>
-    </xsl:choose>
+	    <xsl:value-of select="$style/style/exercises/exercisegroup/header-postcol"/>
+	</xsl:when>
+	<xsl:when test="not(preceding-sibling::exercise) and parent::exercises">
+	    <xsl:value-of select="$style/style/exercises/exerciselist/header"/>
+	</xsl:when>
+	</xsl:choose>
+
     <xsl:choose>
         <xsl:when test="parent::exercises">
-            <xsl:text>\item[</xsl:text>
+	        <xsl:value-of select="$style/style/exercises/exercise/lst-pre"/>
         </xsl:when>
         <xsl:when test="parent::exercisegroup">
-            <xsl:text>\exercise[</xsl:text>
+	        <xsl:value-of select="$style/style/exercises/exercise/grp-pre"/>
         </xsl:when>
-    </xsl:choose>
-    <xsl:apply-templates select="." mode="serial-number" />
-    <xsl:text>.]</xsl:text>
+    </xsl:choose> 
+	<xsl:value-of select="$style/style/exercises/exercise/header-pre"/>
+	<xsl:apply-templates select="." mode="serial-number" />
+    <xsl:choose>
+        <xsl:when test="parent::exercises">
+	        <xsl:value-of select="$style/style/exercises/exercise/lst-post"/>
+        </xsl:when>
+        <xsl:when test="parent::exercisegroup">
+	        <xsl:value-of select="$style/style/exercises/exercise/grp-post"/>
+        </xsl:when>
+    </xsl:choose> 
+
     <xsl:apply-templates select="." mode="label"/>
     <xsl:if test="title">
         <xsl:text>(</xsl:text>
@@ -3221,13 +3229,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
+
+	<xsl:choose>
+        <xsl:when test="parent::exercises">
+	        <xsl:value-of select="$style/style/exercises/exercise/end-lst"/>
+        </xsl:when>
+        <xsl:when test="parent::exercisegroup">
+	        <xsl:value-of select="$style/style/exercises/exercise/end-grp"/>
+        </xsl:when>
+    </xsl:choose> 
+
+    
     <!-- close list if no more exercise in subdivision or in exercise group -->
     <xsl:choose>
         <xsl:when test="not(following-sibling::exercise) and parent::exercisegroup">
-            <xsl:text>\end{exercisegroup}&#xa;</xsl:text>
+		    <xsl:value-of select="$style/style/exercises/exercisegroup/footer"/>
         </xsl:when>
         <xsl:when test="not(following-sibling::exercise) and parent::exercises">
-            <xsl:text>\end{exerciselist}&#xa;</xsl:text>
+		    <xsl:value-of select="$style/style/exercises/exerciselist/footer"/>
         </xsl:when>
     </xsl:choose>
 </xsl:template>

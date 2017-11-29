@@ -148,23 +148,34 @@
 \setlist[referencelist]{leftmargin=!,labelwidth=!,labelsep=0ex,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}
 %% Lists of exercises in their own section, maximum depth 4
 \newlist{exerciselist}{description}{4}
-\setlist[exerciselist]{leftmargin=0pt,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}
+\setlist[exerciselist]{leftmargin=!,labelwidth=!,labelsep=0ex,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}
 %% Indented groups of exercises within an exercise section
 %% Add  debug=true  option to see boxes around contents
 \usepackage{tasks}
 \NewTasks[label-format=\bfseries,item-indent=3.3em,label-offset=0.4em,label-width=1.7em,label-align=right,after-item-skip=\smallskipamount,after-skip=\smallskipamount]{exercisegroup}[\exercise]
 </preamble>
 
-<exercisenotingroup>
-</exercisenotingroup>
+<exercises-head>\begin{exercises}</exercises-head>
+<exercises-foot>\end{exercises}</exercises-foot>
 
 <exercisegroup>
-	<header></header>
-	<footer></footer>
+	<header-precol>\begin{exercisegroup}(</header-precol>
+	<header-postcol>)</header-postcol>
+	<footer>\end{exercisegroup}</footer>
 </exercisegroup>
 
-<exerciseingroup>
-</exerciseingroup>
+<exerciselist>
+	<header>\begin{exerciselist}
+	</header>
+	<footer>\end{exerciselist}</footer>
+</exerciselist>
+
+<exercise>
+	<grp-pre>\exercise[</grp-pre> <grp-post>.]</grp-post>
+	<lst-pre>\item[</lst-pre> <lst-post>.]</lst-post>
+	<end-grp></end-grp>
+	<end-lst></end-lst>
+</exercise>
 
 </exercises>
 </style>
