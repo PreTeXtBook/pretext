@@ -884,17 +884,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- TODO: load just once, see webwork -->
         <xsl:text>\usepackage[framemethod=TikZ]{mdframed}&#xa;</xsl:text>
         <xsl:if test="$document-root//assemblage">
-            <xsl:text>%% begin: assemblage&#xa;</xsl:text>
-            <xsl:text>%% minimally structured content, high visibility presentation&#xa;</xsl:text>
-            <xsl:text>%% environments (untitled, titled), with style&#xa;</xsl:text>
-            <xsl:text>\newenvironment{assemblage-untitled}{\mdfsetup{%&#xa;</xsl:text>
-            <xsl:text>roundcorner=2ex, backgroundcolor=blue!5,linecolor=blue!75!black,}%&#xa;</xsl:text>
-            <xsl:text>\begin{mdframed}}{\end{mdframed}}&#xa;</xsl:text>
-            <xsl:text>\newenvironment{assemblage}[1]{\mdfsetup{frametitle={\colorbox{blue!20}{\space#1\space}},%&#xa;</xsl:text>
-            <xsl:text>frametitlealignment={\hspace*{1ex}}, frametitleaboveskip=-1.5ex, frametitlebelowskip=0pt,%&#xa;</xsl:text>
-            <xsl:text>roundcorner=2ex, backgroundcolor=blue!5,linecolor=blue!75!black,}%&#xa;</xsl:text>
-            <xsl:text>\begin{mdframed}}{\end{mdframed}}&#xa;</xsl:text>
-            <xsl:text>%% end: assemblage&#xa;</xsl:text>
+        	<xsl:value-of select="$style/style/assemblage/preamble"/>
         </xsl:if>
         <xsl:if test="$document-root//aside or $document-root//historical or $document-root//biographical">
         	<xsl:value-of select="$style/style/aside/preamble"/>

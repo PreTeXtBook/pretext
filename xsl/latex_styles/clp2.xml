@@ -103,16 +103,6 @@
 </divisionmarking>
 
 
-<aside>
-	<preamble>
-%% aside, biographical, historical environments and style&#xa;
-\usepackage{tcolorbox}
-\tcbuselibrary{breakable, skins}
-\newtcolorbox{asidebox}{enhanced jigsaw, sharp corners=downhill, colframe=gray, colback=white, arc=10pt, width=1.1\textwidth, left skip=-0.05\textwidth, breakable}
-\newenvironment{aside}[1]{\begin{asidebox}\textbf{#1}\quad}{\end{asidebox}}
-	</preamble>
-</aside>
-
 <example>
 	<preamble>
 \usepackage{tikz}
@@ -194,7 +184,7 @@
 <!-- Figure head for stuff before the content + caption, and then figure foot for stuff after caption -->
 	<preamble>
 \usepackage{tcolorbox}
-\newtcolorbox{figbox}{colframe=red, colback=white, arc=10pt, sharp corners=northwest, halign=center, oversize}
+\newtcolorbox{figbox}[1][]{colframe=red, colback=white, arc=10pt, sharp corners=northwest, halign=center, oversize, #1}
 	</preamble>
 	<head>\begin{figbox}\begin{figure}\centering&#xa;</head>
 	<before-caption/>
@@ -205,7 +195,7 @@
 <sbsgroup>
 	<preamble>
 \usepackage{tcolorbox}
-\newtcolorbox{sbsgbox}{colframe=gray, colback=white, arc=10pt, sharp corners=northwest, halign=center, oversize}
+\newtcolorbox{sbsgbox}[1][]{colframe=gray, colback=white, arc=10pt, sharp corners=northwest, halign=center, oversize, #1}
 	</preamble>
 	<head>\begin{sbsgbox}\centering&#xa;</head>
 	<foot>\end{sbsgbox}&#xa;</foot>
@@ -215,11 +205,12 @@
 <sidebyside>
 	<preamble>
 \usepackage{tcolorbox}
-\newtcolorbox{sbsbox}{colframe=gray, colback=white, arc=10pt, sharp corners=northwest, halign=center, oversize}
+\newtcolorbox{sbsbox}[1][]{colframe=gray, colback=white, arc=10pt, sharp corners=northwest, halign=center, oversize, #1}
 	</preamble>
 <head>\begin{sbsbox}\centering&#xa;</head>
 <foot>\end{sbsbox}&#xa;</foot>
 </sidebyside>
+<!-- Note that figbox, sbsgbox, sbsbox all have optional argument, useful for manually setting width. -->
 
 <footnote>
 	<preamble>
@@ -403,5 +394,29 @@
 </exercise>
 
 </exercises>
+
+<aside>
+	<preamble>
+%% aside, biographical, historical environments and style&#xa;
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable, skins}
+\newtcolorbox{asidebox}{enhanced jigsaw, sharp corners=downhill, colframe=gray, colback=white, arc=10pt, oversize, breakable}
+\newenvironment{aside}[1]{\begin{asidebox}\textbf{#1}\quad}{\end{asidebox}}
+	</preamble>
+</aside>
+
+<assemblage>
+	<preamble>
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable, skins}
+%%
+\newtcolorbox{assemboxnotitle}{enhanced jigsaw, sharp corners=downhill, colframe=blue!20, colback=blue!5, breakable, oversize}
+\newenvironment{assemblage-untitled}[1]{\begin{assemboxnotitle}}{\end{assemboxnotitle}}
+%%
+\newtcolorbox{assembox}[1]{enhanced jigsaw, sharp corners=downhill, colframe=blue!20, colback=blue!5, enhanced, title=#1, attach boxed title to top left={xshift=7mm, yshift*=-2ex}, boxed title style={colback=blue!20}, breakable, oversize}
+\newenvironment{assemblage}[1]{\begin{assembox}{#1}}{\end{assembox}}
+%% end: assemblage
+	</preamble>
+</assemblage>
 
 </style>
