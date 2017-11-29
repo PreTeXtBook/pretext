@@ -3180,10 +3180,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <xsl:choose>
         <xsl:when test="parent::exercises">
-	        <xsl:value-of select="$style/style/exercises/exercise/lst-pre"/>
+        	<xsl:choose>
+				<xsl:when test=".//RQS">
+					<xsl:value-of select="$style/style/exercises/exercise/mlst-pre"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$style/style/exercises/exercise/lst-pre"/>
+				</xsl:otherwise>
+			</xsl:choose>
         </xsl:when>
         <xsl:when test="parent::exercisegroup">
-	        <xsl:value-of select="$style/style/exercises/exercise/grp-pre"/>
+        	<xsl:choose>
+				<xsl:when test=".//RQS">
+					<xsl:value-of select="$style/style/exercises/exercise/mgrp-pre"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$style/style/exercises/exercise/grp-pre"/>
+				</xsl:otherwise>
+			</xsl:choose>
         </xsl:when>
     </xsl:choose> 
 	<xsl:value-of select="$style/style/exercises/exercise/header-pre"/>

@@ -175,6 +175,9 @@
 	<lst-pre>\item[</lst-pre> <lst-post>.]</lst-post>
 	<end-grp></end-grp>
 	<end-lst></end-lst>
+
+	<mgrp-pre>\exer{</mgrp-pre>
+	<mlst-pre>\exer{</mlst-pre>
 </exercise>
 
 </exercises>

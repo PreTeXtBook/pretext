@@ -241,6 +241,7 @@
 </footnote>
 
 <theorem>
+
 	<preamble>
 %% Numbering for Theorems, Conjectures, Examples, Figures, etc
 %% Controlled by  numbering.theorems.level  processing parameter
@@ -258,9 +259,15 @@
 \newcounter{theorem}\numberwithin{theorem}{section}
 	</preamble>
 	<!-- Notice we set up a dummy tcb theorem with the correct numbering within setting. The other tcbtheorems can then inherit the numberinwithin setting from them. Unfortunately this seemed to be the easiest way to set a default number-within parameter in tcolorbox. -->
-	<numbering-pre>\newtcbtheorem[use counter=theorem, number within=</numbering-pre>
-	<numbering-post>]{dummythm}{Dummythm}{}</numbering-post>
-	<numbering-null>\newtcbtheorem[use counter=theorem]{dummythm}{Dummythm}{}</numbering-null>
+	<numbering-pre>
+\newtcbtheorem[use counter=theorem, number within=
+	</numbering-pre>
+	<numbering-post>
+]{dummythm}{Dummythm}{}
+	</numbering-post>
+	<numbering-null>
+\newtcbtheorem[use counter=theorem]{dummythm}{Dummythm}{}
+	</numbering-null>
 	<postamble>
 \newtcbtheorem[use counter from=dummythm]{tthm}{Theorem}{breakable, colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}}{}
 \newenvironment{theorem}[1][\unskip]{\begin{tthm}{#1}{}}{\end{tthm}}
@@ -361,9 +368,11 @@
 
 %% ADR move exercises into tcolorbox
 \usepackage{tcolorbox}\tcbuselibrary{raster}
-\newtcolorbox{clearbox}{colback=white,colframe=black,boxrule=0.5pt}
+\newtcolorbox{clearbox}{colback=white,colframe=white}
+\newtcolorbox{markedbox}{leftrule=1ex, colframe=_deepskyblue!75, colback=_deepskyblue!3, arc=1mm, rounded corners=all}
 \newenvironment{exercisegroup}[1][1]{\begin{tcbraster}[breakable=false, raster columns=#1, raster valign=top]}{\end{tcbraster}}
-\newcommand{\exer}[2]{\begin{clearbox}\noindent~\textbf{#1.} #2\end{clearbox}}%
+\newcommand{\exer}[2]{\begin{clearbox}\noindent~Q#1: #2\end{clearbox}}%
+\newcommand{\markedexer}[2]{\begin{markedbox}\noindent~Q#1: #2\end{markedbox}}%
 </preamble>
 
 <exercises-head>\begin{exercises}</exercises-head>
@@ -385,10 +394,12 @@
 	<grp-pre>\exer{</grp-pre>
 	<grp-post>}{</grp-post>
 	<lst-pre>\exer{</lst-pre>
-	<lst-post>}{</lst-post>
-	
+	<lst-post>}{</lst-post>	
 	<end-grp>}</end-grp>
 	<end-lst>}</end-lst>
+
+	<mgrp-pre>\markedexer{</mgrp-pre>
+	<mlst-pre>\markedexer{</mlst-pre>
 </exercise>
 
 </exercises>
