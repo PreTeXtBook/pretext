@@ -164,11 +164,13 @@
 </exerciselist>
 
 <exercise>
-	<grp-pre>\exercise[</grp-pre> <grp-post>.]</grp-post><end-grp></end-grp>
-	<lst-pre>\item[</lst-pre> <lst-post>.]</lst-post><end-lst></end-lst>
-
+	<grp-pre>\exercise[</grp-pre> <grp-post>.]</grp-post>
 	<mgrp-pre>\exercise[</mgrp-pre><mgrp-post>.](RQS)~</mgrp-post>
+	<end-grp></end-grp>
+	<lst-pre>\item[</lst-pre> <lst-post>.]</lst-post>
 	<mlst-pre>\item[</mlst-pre><mlst-post>.](RQS)~</mlst-post>
+	<end-lst></end-lst>
+
 </exercise>
 
 </exercises>

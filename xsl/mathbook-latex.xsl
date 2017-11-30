@@ -3250,26 +3250,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 	<xsl:choose>
         <xsl:when test="parent::exercises">
-          	<xsl:choose>
-					<xsl:when test="@purpose='RQS'"> 
-						<xsl:value-of select="$style/style/exercises/exercise/end-mlst"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="$style/style/exercises/exercise/end-lst"/>
-					</xsl:otherwise>
-			</xsl:choose>
 	        <xsl:value-of select="$style/style/exercises/exercise/end-lst"/>
         </xsl:when>
         <xsl:when test="parent::exercisegroup">
-          	<xsl:choose>
-					<xsl:when test="@purpose='RQS'"> 
-						<xsl:value-of select="$style/style/exercises/exercise/end-mgrp"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="$style/style/exercises/exercise/end-grp"/>
-					</xsl:otherwise>
-			</xsl:choose>
-        </xsl:when>
+			<xsl:value-of select="$style/style/exercises/exercise/end-grp"/>
+		</xsl:when>
     </xsl:choose> 
 
     
