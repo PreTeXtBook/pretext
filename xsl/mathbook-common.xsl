@@ -262,12 +262,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Flag Table of Contents, or not, with boolean variable -->
 <xsl:variable name="b-has-toc" select="$toc-level != 0" />
 
+<!-- A book must have a chapter         -->
+<!-- An article need not have a section -->
 <xsl:variable name="toc-level">
     <xsl:choose>
         <xsl:when test="$toc.level != ''">
             <xsl:value-of select="$toc.level" />
         </xsl:when>
-        <xsl:when test="$root/book">2</xsl:when>
+        <xsl:when test="$root/book/chapter/section">2</xsl:when>
+        <xsl:when test="$root/book/chapter">1</xsl:when>
+        <xsl:when test="$root/article/section/subsection">2</xsl:when>
         <xsl:when test="$root/article/section">1</xsl:when>
         <xsl:when test="$root/article">0</xsl:when>
         <xsl:when test="$root/letter">0</xsl:when>
