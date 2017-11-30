@@ -1,0 +1,9 @@
+.boxed {
+  padding: 10px;
+  border-left: #4094AC solid 5px;
+  border-right: #4094AC solid 5px;
+  border-top: #4094AC solid 0px;
+  border-bottom: #4094AC solid 0px;
+  border-radius: 2px 20px 2px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
