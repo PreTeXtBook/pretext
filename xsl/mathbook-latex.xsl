@@ -49,9 +49,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--  -->
 
 <!-- set style name  -->
- <!--<xsl:param name="style.name" select="'default'" />--> 
-<xsl:param name="style.name" select="'clp'" />  
-
+ <xsl:param name="style.name" select="'default'" /> 
+<!--<xsl:param name="style.name" select="'clp'" />-->  
+<!--<xsl:param name="style.name" select="'dmoi'" />-->
 
 <!-- Standard fontsizes: 10pt, 11pt, or 12pt       -->
 <!-- extsizes package: 8pt, 9pt, 14pt, 17pt, 20pt  -->
@@ -3171,7 +3171,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="parent::exercises">
         	<xsl:choose>
-				<xsl:when test="@purpose='RPS'"> 
+				<xsl:when test="@purpose='RQS'"> 
 					<xsl:value-of select="$style/style/exercises/exercise/mlst-pre"/>
 				</xsl:when>
 				<xsl:otherwise>
@@ -3250,10 +3250,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 	<xsl:choose>
         <xsl:when test="parent::exercises">
-	        <xsl:value-of select="$style/style/exercises/exercise/end-lst"/>
+          	<xsl:choose>
+					<xsl:when test="@purpose='RQS'"> 
+						<xsl:value-of select="$style/style/exercises/exercise/end-mlst"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$style/style/exercises/exercise/end-lst"/>
+					</xsl:otherwise>
+			</xsl:choose>
+			<!--<xsl:value-of select="$style/style/exercises/exercise/end-lst"/>-->
         </xsl:when>
         <xsl:when test="parent::exercisegroup">
-			<xsl:value-of select="$style/style/exercises/exercise/end-grp"/>
+          	<xsl:choose>
+					<xsl:when test="@purpose='RQS'"> 
+						<xsl:value-of select="$style/style/exercises/exercise/end-mgrp"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$style/style/exercises/exercise/end-grp"/>
+					</xsl:otherwise>
+			</xsl:choose>
+			<!--<xsl:value-of select="$style/style/exercises/exercise/end-grp"/>-->
 		</xsl:when>
     </xsl:choose> 
 

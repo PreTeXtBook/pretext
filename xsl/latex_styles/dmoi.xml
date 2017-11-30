@@ -362,7 +362,6 @@
 \newtcolorbox{clearbox}{colback=white,colframe=white}
 \newtcolorbox{markedbox}{leftrule=1ex, colframe=_deepskyblue!75, colback=_deepskyblue!3, arc=1mm, rounded corners=all}
 
-
 \newenvironment{exercisegroup}[1][1]{\begin{tcbraster}[breakable=false, raster columns=#1, raster valign=top]}{\end{tcbraster}}
 
 \newenvironment{exer}[1]{\begin{clearbox}\noindent~Q#1:}{\end{clearbox}}

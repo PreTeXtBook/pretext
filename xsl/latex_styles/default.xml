@@ -167,9 +167,11 @@
 	<grp-pre>\exercise[</grp-pre> <grp-post>.]</grp-post>
 	<mgrp-pre>\exercise[</mgrp-pre><mgrp-post>.](RQS)~</mgrp-post>
 	<end-grp></end-grp>
+	<end-mgrp></end-mgrp>
 	<lst-pre>\item[</lst-pre> <lst-post>.]</lst-post>
 	<mlst-pre>\item[</mlst-pre><mlst-post>.](RQS)~</mlst-post>
 	<end-lst></end-lst>
+	<end-mlst></end-mlst>
 
 </exercise>
 
