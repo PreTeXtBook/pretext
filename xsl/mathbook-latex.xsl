@@ -50,7 +50,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- set style name  -->
  <!--<xsl:param name="style.name" select="'default'" />--> 
-<xsl:param name="style.name" select="'clp2'" />  
+<xsl:param name="style.name" select="'clp'" />  
 
 
 <!-- Standard fontsizes: 10pt, 11pt, or 12pt       -->
@@ -3171,7 +3171,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="parent::exercises">
         	<xsl:choose>
-				<xsl:when test=".//RQS">
+				<xsl:when test="@purpose='RPS'"> 
 					<xsl:value-of select="$style/style/exercises/exercise/mlst-pre"/>
 				</xsl:when>
 				<xsl:otherwise>
@@ -3181,7 +3181,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="parent::exercisegroup">
         	<xsl:choose>
-				<xsl:when test=".//RQS">
+				<xsl:when test="@purpose='RQS'"> 
 					<xsl:value-of select="$style/style/exercises/exercise/mgrp-pre"/>
 				</xsl:when>
 				<xsl:otherwise>
@@ -3194,10 +3194,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 	<xsl:apply-templates select="." mode="serial-number" />
     <xsl:choose>
         <xsl:when test="parent::exercises">
-	        <xsl:value-of select="$style/style/exercises/exercise/lst-post"/>
+          	<xsl:choose>
+					<xsl:when test="@purpose='RQS'"> 
+						<xsl:value-of select="$style/style/exercises/exercise/mlst-post"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$style/style/exercises/exercise/lst-post"/>
+					</xsl:otherwise>
+			</xsl:choose>
         </xsl:when>
         <xsl:when test="parent::exercisegroup">
-	        <xsl:value-of select="$style/style/exercises/exercise/grp-post"/>
+          	<xsl:choose>
+					<xsl:when test="@purpose='RQS'"> 
+						<xsl:value-of select="$style/style/exercises/exercise/mgrp-post"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$style/style/exercises/exercise/grp-post"/>
+					</xsl:otherwise>
+				</xsl:choose>
         </xsl:when>
     </xsl:choose> 
 
@@ -3236,10 +3250,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 	<xsl:choose>
         <xsl:when test="parent::exercises">
+          	<xsl:choose>
+					<xsl:when test="@purpose='RQS'"> 
+						<xsl:value-of select="$style/style/exercises/exercise/end-mlst"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$style/style/exercises/exercise/end-lst"/>
+					</xsl:otherwise>
+			</xsl:choose>
 	        <xsl:value-of select="$style/style/exercises/exercise/end-lst"/>
         </xsl:when>
         <xsl:when test="parent::exercisegroup">
-	        <xsl:value-of select="$style/style/exercises/exercise/end-grp"/>
+          	<xsl:choose>
+					<xsl:when test="@purpose='RQS'"> 
+						<xsl:value-of select="$style/style/exercises/exercise/end-mgrp"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$style/style/exercises/exercise/end-grp"/>
+					</xsl:otherwise>
+			</xsl:choose>
         </xsl:when>
     </xsl:choose> 
 
