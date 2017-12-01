@@ -49,9 +49,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--  -->
 
 <!-- set style name  -->
- <xsl:param name="style.name" select="'default'" /> 
+ <!--<xsl:param name="style.name" select="'default'" />--> 
 <!--<xsl:param name="style.name" select="'clp'" />-->  
-<!--<xsl:param name="style.name" select="'dmoi'" />-->
+<xsl:param name="style.name" select="'dmoi'" />
 
 <!-- Standard fontsizes: 10pt, 11pt, or 12pt       -->
 <!-- extsizes package: 8pt, 9pt, 14pt, 17pt, 20pt  -->
@@ -366,33 +366,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.preamble.early" />
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
-    
-    <!-- Add any font packages for the style. -->
-    <xsl:value-of select="$style/style/fonts"/>
-    <xsl:text>%% &#xa;</xsl:text>
-    <!-- Add any colour packages and define colours for the style. -->
-    <xsl:value-of select="$style/style/colours"/>
-    <xsl:text>%% &#xa;</xsl:text>
-    <!-- Add page head and foot changed. -->
-    <xsl:value-of select="$style/style/pageheadfoot"/>
-    <xsl:text>%% &#xa;</xsl:text>
-    <!-- Changes to marking of divisions. -->
-    <xsl:value-of select="$style/style/divisionmarking/preamble"/>
-    <xsl:value-of select="$style/style/divisionmarking/part"/>
-    <xsl:value-of select="$style/style/divisionmarking/chapter"/>
-    <xsl:value-of select="$style/style/divisionmarking/section"/>
-    <xsl:value-of select="$style/style/divisionmarking/subsection"/>
-    <xsl:value-of select="$style/style/divisionmarking/subsubsection"/>
-    <xsl:text>%% &#xa;</xsl:text>
-    
-    <xsl:text>%% Inline math delimiters, \(, \), need to be robust&#xa;</xsl:text>
-    <xsl:text>%% 2016-01-31:  latexrelease.sty  supersedes  fixltx2e.sty&#xa;</xsl:text>
-    <xsl:text>%% If  latexrelease.sty  exists, bugfix is in kernel&#xa;</xsl:text>
-    <xsl:text>%% If not, bugfix is in  fixltx2e.sty&#xa;</xsl:text>
-    <xsl:text>%% See:  https://tug.org/TUGboat/tb36-3/tb114ltnews22.pdf&#xa;</xsl:text>
-    <xsl:text>%% and read "Fewer fragile commands" in distribution's  latexchanges.pdf&#xa;</xsl:text>
-    <xsl:text>\IfFileExists{latexrelease.sty}{}{\usepackage{fixltx2e}}&#xa;</xsl:text>
-    <!-- Determine height of text block, assumes US letterpaper (11in height) -->
+
+    <!-- ADR moved this up so that geometry is set early in preamble to avoid problems with styles -->
+	<!-- Determine height of text block, assumes US letterpaper (11in height) -->
     <!-- Could react to document type, paper, margin specs                    -->
     <xsl:variable name="text-height">
         <xsl:text>9.0in</xsl:text>
@@ -419,6 +395,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.geometry" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
+    
+    <!-- Add any font packages for the style. -->
+    <xsl:value-of select="$style/style/fonts"/>
+    <xsl:text>%% &#xa;</xsl:text>
+    <!-- Add any colour packages and define colours for the style. -->
+    <xsl:value-of select="$style/style/colours"/>
+    <xsl:text>%% &#xa;</xsl:text>
+    <!-- Add page head and foot changed. -->
+    <xsl:value-of select="$style/style/pageheadfoot"/>
+    <xsl:text>%% &#xa;</xsl:text>
+    <!-- Changes to marking of divisions. -->
+    <xsl:value-of select="$style/style/divisionmarking/preamble"/>
+    <xsl:value-of select="$style/style/divisionmarking/part"/>
+    <xsl:value-of select="$style/style/divisionmarking/chapter"/>
+    <xsl:value-of select="$style/style/divisionmarking/section"/>
+    <xsl:value-of select="$style/style/divisionmarking/subsection"/>
+    <xsl:value-of select="$style/style/divisionmarking/subsubsection"/>
+    <xsl:text>%% &#xa;</xsl:text>
+    
+    <xsl:text>%% Inline math delimiters, \(, \), need to be robust&#xa;</xsl:text>
+    <xsl:text>%% 2016-01-31:  latexrelease.sty  supersedes  fixltx2e.sty&#xa;</xsl:text>
+    <xsl:text>%% If  latexrelease.sty  exists, bugfix is in kernel&#xa;</xsl:text>
+    <xsl:text>%% If not, bugfix is in  fixltx2e.sty&#xa;</xsl:text>
+    <xsl:text>%% See:  https://tug.org/TUGboat/tb36-3/tb114ltnews22.pdf&#xa;</xsl:text>
+    <xsl:text>%% and read "Fewer fragile commands" in distribution's  latexchanges.pdf&#xa;</xsl:text>
+    <xsl:text>\IfFileExists{latexrelease.sty}{}{\usepackage{fixltx2e}}&#xa;</xsl:text>
+
     <!-- Any footnote style preambles here -->
     <xsl:value-of select="$style/style/footnote/preamble"/>
     <!-- -->
