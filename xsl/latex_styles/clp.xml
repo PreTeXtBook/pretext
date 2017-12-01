@@ -84,6 +84,20 @@ text width={0.9\textwidth}, align=center
 {\chaptertitlename\ \thechapter};
 \end{tikzpicture}\end{center}
 }
+%%
+\titleformat{name=\chapter,numberless}
+{\normalfont}
+{}
+{8pt}
+{
+\begin{center}\begin{tikzpicture}
+\draw node[
+inner sep=10pt, inner ysep=20pt, very thick,
+weird fill=_deepgreen, text=white, minimum width={0.9\textwidth},
+text width={0.9\textwidth}, align=center
+](b) {\scshape\huge\filcenter #1};
+\end{tikzpicture}\end{center}
+}
 </chapter>
 <section>
 \titleformat{\section}
