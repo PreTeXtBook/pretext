@@ -28,7 +28,7 @@
 </pageheadfoot>
 
 <divisionmarking>
-	<preamble>
+<preamble>
 \usepackage{tikz}
 \usepackage[geometry]{ifsym} %to get nice triangles.
 \usepackage[explicit]{titlesec}
@@ -40,18 +40,18 @@
 \makeatother
 
 \tikzset{weird fill/.style={append after command={
-   \pgfextra
-		\draw[sharp corners, fill=#1]% 
-	(\tikzlastnode.west)% 
-	[rounded corners=0pt] |- (\tikzlastnode.north)% 
-	[rounded corners=5pt] -| (\tikzlastnode.east)% 
-	[rounded corners=0pt] |- (\tikzlastnode.south)% 
-	[rounded corners=5pt] -| (\tikzlastnode.west)%
-	;
-   \endpgfextra}}}
-	</preamble>
+\pgfextra
+	\draw[sharp corners, fill=#1]% 
+(\tikzlastnode.west)% 
+[rounded corners=0pt] |- (\tikzlastnode.north)% 
+[rounded corners=5pt] -| (\tikzlastnode.east)% 
+[rounded corners=0pt] |- (\tikzlastnode.south)% 
+[rounded corners=5pt] -| (\tikzlastnode.west)%
+;
+\endpgfextra}}}
+</preamble>
 <titlepage/>
-	<part>
+<part>
 \titleformat{name=\part}
 {\normalfont}
 {}
@@ -59,16 +59,16 @@
 {
 \begin{center}\begin{tikzpicture}
 \draw node[
-	inner sep=10pt, inner ysep=40pt, very thick,
-	weird fill=_deepskyblue, text=white, minimum width={0.9\textwidth},
-	text width={0.9\textwidth}, align=center
-  ](b) {\scshape\huge\filcenter #1};
+inner sep=10pt, inner ysep=40pt, very thick,
+weird fill=_deepskyblue, text=white, minimum width={0.9\textwidth},
+text width={0.9\textwidth}, align=center
+](b) {\scshape\huge\filcenter #1};
 \node[right=10pt, rounded corners=0pt, draw, fill=white] at (b.north west) 
 {\partname\ \thepart};
 \end{tikzpicture}\end{center}
 }
-	</part>
-	<chapter>
+</part>
+<chapter>
 \titleformat{name=\chapter}
 {\normalfont}
 {}
@@ -76,35 +76,35 @@
 {
 \begin{center}\begin{tikzpicture}
 \draw node[
-	inner sep=10pt, inner ysep=20pt, very thick,
-	weird fill=_deepgreen, text=white, minimum width={0.9\textwidth},
-	text width={0.9\textwidth}, align=center
-  ](b) {\scshape\huge\filcenter #1};
+inner sep=10pt, inner ysep=20pt, very thick,
+weird fill=_deepgreen, text=white, minimum width={0.9\textwidth},
+text width={0.9\textwidth}, align=center
+](b) {\scshape\huge\filcenter #1};
 \node[right=10pt, rounded corners=0pt, draw, fill=white] at (b.north west) 
 {\chaptertitlename\ \thechapter};
 \end{tikzpicture}\end{center}
 }
-	</chapter>
-	<section>
+</chapter>
+<section>
 \titleformat{\section}
 {\titlerule
 \vspace{.8ex}%
 \Large\bfseries}
 {\llap{\thesection}}{0.0em}{{\small\FilledSmallTriangleUp} #1}
-	</section>
-	<subsection>
+</section>
+<subsection>
 \titleformat{\subsection}{\large\bfseries}
 {\llap{\thesubsection}}{0.0em}{ {\small\FilledSmallTriangleRight\!\!\!\FilledSmallTriangleRight} #1}
-	</subsection>
-	<subsubsection>
+</subsection>
+<subsubsection>
 \titleformat{\subsubsection}{\bfseries}{\llap{\thesubsubsection}}{0.0em}{{\small\FilledSmallTriangleRight\!\!\!\FilledSmallTriangleRight\!\!\!\FilledSmallTriangleRight} #1}
-	</subsubsection>
+</subsubsection>
 
 </divisionmarking>
 
 
 <example>
-	<preamble>
+<preamble>
 \usepackage{tikz}
 \newenvironment{example}[1][]{%
 \refstepcounter{theorem}%
@@ -127,11 +127,11 @@
 {Example \tmpnumber};
 \end{tikzpicture}
 }
-	</preamble>
+</preamble>
 </example>
 
 <question>
-	<preamble>
+<preamble>
 \usepackage{tikz}
 \newenvironment{question}[1][]{%
 \refstepcounter{theorem}%
@@ -152,11 +152,11 @@
 (0,0)--(\textwidth,0);
 \end{tikzpicture}
 }
-	</preamble>
+</preamble>
 </question>
 
 <problem>
-	<preamble>
+<preamble>
 \usepackage{tikz}
 \newenvironment{problem}[1][]{%
 \refstepcounter{theorem}%
@@ -177,43 +177,43 @@
 (0,0.5)--(0,0)--(\textwidth,0)--(\textwidth,0.5);
 \end{tikzpicture}
 }
-	</preamble>
+</preamble>
 </problem>
 
 <figure>
 <!-- Figure head for stuff before the content + caption, and then figure foot for stuff after caption -->
-	<preamble>
+<preamble>
 \usepackage{tcolorbox}
 \newtcolorbox{figbox}[1][]{colframe=red, colback=white, arc=10pt, sharp corners=northwest, halign=center, oversize, #1}
-	</preamble>
-	<head>\begin{figbox}\begin{figure}\centering&#xa;</head>
-	<before-caption/>
-	<foot>\end{figure}\end{figbox}</foot>
+</preamble>
+<head>\begin{figbox}\begin{figure}\centering&#xa;</head>
+<before-caption/>
+<foot>\end{figure}\end{figbox}</foot>
 </figure>
 
 <!-- frame around sbsgroup -->
 <sbsgroup>
-	<preamble>
+<preamble>
 \usepackage{tcolorbox}
 \newtcolorbox{sbsgbox}[1][]{colframe=gray, colback=white, arc=10pt, sharp corners=northwest, halign=center, oversize, #1}
-	</preamble>
-	<head>\begin{sbsgbox}\centering&#xa;</head>
-	<foot>\end{sbsgbox}&#xa;</foot>
+</preamble>
+<head>\begin{sbsgbox}\centering&#xa;</head>
+<foot>\end{sbsgbox}&#xa;</foot>
 </sbsgroup>
 
 <!-- frame around sidebyside (but it knows not to do this if part of a sbsgroup -->
 <sidebyside>
-	<preamble>
+<preamble>
 \usepackage{tcolorbox}
 \newtcolorbox{sbsbox}[1][]{colframe=gray, colback=white, arc=10pt, sharp corners=northwest, halign=center, oversize, #1}
-	</preamble>
+</preamble>
 <head>\begin{sbsbox}\centering&#xa;</head>
 <foot>\end{sbsbox}&#xa;</foot>
 </sidebyside>
 <!-- Note that figbox, sbsgbox, sbsbox all have optional argument, useful for manually setting width. -->
 
 <footnote>
-	<preamble>
+<preamble>
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % messing with footnotes
 \newcommand{\neghphantom}[1]{\begingroup\sbox0{#1}\hspace*{-\wd0}\endgroup}
@@ -228,12 +228,13 @@
 \draw[*-*,thick,rounded corners] (0,0) -- (1.0\textwidth,0) -- (1.0\textwidth,-0.5);
 \end{tikzpicture}\vspace{-1.5ex}
 }
-	</preamble>
+%%
+</preamble>
 </footnote>
 
 <theorem>
 
-	<preamble>
+<preamble>
 %% Numbering for Theorems, Conjectures, Examples, Figures, etc
 %% Controlled by  numbering.theorems.level  processing parameter
 %% Always need a theorem environment to set base numbering scheme
@@ -246,102 +247,131 @@
 %% Theorem-like environments in "plain" style, with or without proof
 \usepackage{amsthm}
 \theoremstyle{plain}
+%% Handy \emptyortitle command
+\newcommand{\emptyortitle}[1]{\ifx\empty#1\else:~#1\fi}
+%%
 %% Set up the theorem counter for use with lots of environments.
-\newcounter{theorem}\numberwithin{theorem}{section}
-	</preamble>
-	<!-- Notice we set up a dummy tcb theorem with the correct numbering within setting. The other tcbtheorems can then inherit the numberinwithin setting from them. Unfortunately this seemed to be the easiest way to set a default number-within parameter in tcolorbox. -->
-	<numbering-pre>
-\newtcbtheorem[use counter=theorem, number within=
-	</numbering-pre>
-	<numbering-post>
-]{dummythm}{Dummythm}{}
-	</numbering-post>
-	<numbering-null>
-\newtcbtheorem[use counter=theorem]{dummythm}{Dummythm}{}
-	</numbering-null>
-	<postamble>
-\newtcbtheorem[use counter from=dummythm]{tthm}{Theorem}{breakable, colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}}{}
-\newenvironment{theorem}[1][\unskip]{\begin{tthm}{#1}{}}{\end{tthm}}
-	</postamble>
-	<!-- Notice we put a wrapper around the tcb theorem - this is so the title is passed in a uniform way between these theorems and those defined using \newtheorem. Tcolorbox wants it passed inside {}, while amsthm wants it passed within []. sigh -->
+\newcounter{theorem}\numberwithin{theorem}{section} %%start with this as a default.
+%%
+</preamble>
+<!-- If we use tcbtheorem then we have counter issues, so we manually build theoremboxes which can refstep the theorem counter -->
+<numbering-pre>\numberwithin{theorem}{</numbering-pre>
+<numbering-post>}</numbering-post>
+<numbering-null></numbering-null>
+<postamble>
+\newenvironment{theorem}[1][]{%
+\refstepcounter{theorem}%
+\begin{tcolorbox}[breakable, colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}, title={Theorem~\thetheorem\emptyortitle{#1}}]}%
+{\end{tcolorbox}}
+%%
+</postamble>
+<!-- Notice we put a wrapper around the tcb theorem - this is so the title is passed in a uniform way between these theorems and those defined using \newtheorem. Tcolorbox wants it passed inside {}, while amsthm wants it passed within []. sigh -->
 </theorem>
 
 <theorem-like>
 <!-- Needs to be updated so that env-renaming works. -->
-	<preamble>
+<preamble>
 %% Theorem-like environments
 %% Numbering is in sync with theorems, etc
 \theoremstyle{plain}
-	</preamble>
+%%
+</preamble>
 
-	<corollary>
-\newtcbtheorem[use counter from=dummythm]{tcorollary}{Corollary}{colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}}{}
-\newenvironment{corollary}[1][\unskip]{\begin{tcorollary}{#1}{}}{\end{tcorollary}}
-	</corollary>
+<corollary>
+\newenvironment{corollary}[1][]{%
+\refstepcounter{theorem}%
+\begin{tcolorbox}[breakable, colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}, title={Corollary~\thetheorem\emptyortitle{#1}}]}%
+{\end{tcolorbox}}
+%%
+</corollary>
 
-	<lemma>
-\newtcbtheorem[use counter from=dummythm]{tlemma}{Lemma}{colframe=_deepgreen, colback=blue!5, boxed title style={colframe=black}}{}
-\newenvironment{lemma}[1][\unskip]{\begin{tlemma}{#1}{}}{\end{tlemma}}
-	</lemma>
+<lemma>
+\newenvironment{lemma}[1][]{%
+\refstepcounter{theorem}%
+\begin{tcolorbox}[breakable, colframe=_deepgreen, colback=blue!5, boxed title style={colframe=black}, title={Lemma~\thetheorem\emptyortitle{#1}}]}%
+{\end{tcolorbox}}
+%%
+</lemma>
 
-	<algorithm>\newtheorem{algorithm}[theorem]{Algorithm}</algorithm>
+<algorithm>
+\newtheorem{algorithm}[theorem]{Algorithm}
+%%
+</algorithm>
 
-	<proposition>
-\newtcbtheorem[use counter from=dummythm]{tprop}{Proposition}{colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}}{}
-\newenvironment{proposition}[1][\unskip]{\begin{tprop}{#1}{}}{\end{tprop}}
-	</proposition>
+<proposition>
+\newenvironment{proposition}[1][]{%
+\refstepcounter{theorem}%
+\begin{tcolorbox}[breakable, colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}, title={Proposition~\thetheorem\emptyortitle{#1}}]}%
+{\end{tcolorbox}}
+%%
+</proposition>
 
-	<claim>
-\newtcbtheorem[use counter from=dummythm]{tclaim}{Claim}{colframe=red, colback=white, colbacktitle=white, boxed title style={colback=white}}{}
-\newenvironment{claim}[1][\unskip]{\begin{tclaim}{#1}{}}{\end{tclaim}}
-	</claim>
-	<fact>
-\newtcbtheorem[use counter from=dummythm]{teqn}{Equation}{colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}, attach boxed title to top right={xshift=7mm, yshift*=-2ex}}{}
-\newenvironment{fact}[1][\unskip]{\begin{teqn}{#1}{}}{\end{teqn}}
-	</fact>
-	<identity>\newtheorem{identity}[theorem]{Identity}</identity>
+<claim>
+\newenvironment{claim}[1][]{%
+\refstepcounter{theorem}%
+\begin{tcolorbox}[breakable, colframe=red, colback=white, colbacktitle=white, boxed title style={colback=white}, title={Claim~\thetheorem\emptyortitle{#1}}]}%
+{\end{tcolorbox}}
+%%
+</claim>
+<fact>
+\newenvironment{fact}[1][]{%
+\refstepcounter{theorem}%
+\begin{tcolorbox}[breakable, colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}, attach boxed title to top right={xshift=7mm, yshift*=-2ex}, title={\thetheorem\emptyortitle{#1}}]}%
+{\end{tcolorbox}}
+%%
+</fact>
+<identity>
+\newtheorem{identity}[theorem]{Identity}
+%%
+</identity>
 </theorem-like>
 
 <axiom-like>
-	<preamble>
-	%% Axiom-like environments
-	%% Numbering is in sync with theorems, etc
-	\theoremstyle{plain}
-	</preamble>
-	<axiom>\newtheorem{axiom}[theorem]{Axiom}</axiom>
-	<conjecture>\newtheorem{conjecture}[theorem]{Conjecture}</conjecture>
-	<principle>\newtheorem{principle}[theorem]{Principle}</principle>
-	<heuristic>\newtheorem{heuristic}[theorem]{Heuristic}</heuristic>
-	<hypothesis>\newtheorem{hypothesis}[theorem]{Hypothesis}</hypothesis>
-	<assumption>\newtheorem{assumption}[theorem]{Assumption}</assumption>
+<preamble>
+%% Axiom-like environments
+%% Numbering is in sync with theorems, etc
+\theoremstyle{plain}
+</preamble>
+<axiom>\newtheorem{axiom}[theorem]{Axiom}</axiom>
+<conjecture>\newtheorem{conjecture}[theorem]{Conjecture}</conjecture>
+<principle>\newtheorem{principle}[theorem]{Principle}</principle>
+<heuristic>\newtheorem{heuristic}[theorem]{Heuristic}</heuristic>
+<hypothesis>\newtheorem{hypothesis}[theorem]{Hypothesis}</hypothesis>
+<assumption>\newtheorem{assumption}[theorem]{Assumption}</assumption>
 </axiom-like>
 
 <definition-like>
-	<preamble>
-	%% Definition-like environments, normal text
-	%% Numbering is in sync with theorems, etc
-	</preamble>
-	<definition>
-	\newtcbtheorem[use counter from=dummythm]{tdefinition}{Definition}{breakable, colframe=_deepgreen, colback=_deepgreen!5, colbacktitle=_deepgreen!70, coltitle=black, enhanced, attach boxed title to top left={xshift=7mm, yshift*=-2ex},sharp corners=northwest, arc=10pt}{}
-	\newenvironment{definition}[1][\unskip]{\begin{tdefinition}{#1}{}}{\end{tdefinition}} 
-	</definition>
+<preamble>
+%% Definition-like environments, normal text
+%% Numbering is in sync with theorems, etc
+</preamble>
+<definition>
+\newenvironment{definition}[1][]{%
+\refstepcounter{theorem}%
+\begin{tcolorbox}[breakable, colframe=_deepgreen, colback=_deepgreen!5, colbacktitle=_deepgreen!70, coltitle=black, enhanced, attach boxed title to top left={xshift=7mm, yshift*=-2ex},sharp corners=northwest, arc=10pt, title={Definition~\thetheorem\emptyortitle{#1}}]}%
+{\end{tcolorbox}}
+%%
+</definition>
 </definition-like>
 
 <remark-like>
-	<preamble>
-	%% Remark-like environments, normal text
-	%% Numbering is in sync with theorems, etc
-	\theoremstyle{definition}
-	</preamble>
-	<remark>\newtheorem{remark}[theorem]{Remark}</remark>
-	<convention>\newtheorem{convention}[theorem]{Convention}</convention>
-	<note>\newtheorem{note}[theorem]{Note}</note>
-	<observation>\newtheorem{observation}[theorem]{Observation}</observation>
-	<warning>
-\newtcbtheorem[use counter from=dummythm]{twarn}{Warning}{colframe=red, colback=white, colbacktitle=white, boxed title style={colback=white}}{}
-\newenvironment{warning}[1][\unskip]{\begin{twarn}{#1}{}}{\end{twarn}}
-	</warning>
-	<insight>\newtheorem{insight}[theorem]{Insight}</insight>
+<preamble>
+%% Remark-like environments, normal text
+%% Numbering is in sync with theorems, etc
+\theoremstyle{definition}
+</preamble>
+<remark>\newtheorem{remark}[theorem]{Remark}</remark>
+<convention>\newtheorem{convention}[theorem]{Convention}</convention>
+<note>\newtheorem{note}[theorem]{Note}</note>
+<observation>\newtheorem{observation}[theorem]{Observation}</observation>
+<warning>
+\newenvironment{warning}[1][]{%
+\refstepcounter{theorem}%
+\begin{tcolorbox}[breakable, colframe=red, colback=white, colbacktitle=white, boxed title style={colback=white}, title={Warning~\thetheorem\emptyortitle{#1}}]}%
+{\end{tcolorbox}}
+%%
+</warning>
+<insight>\newtheorem{insight}[theorem]{Insight}</insight>
 </remark-like>
 
 
@@ -356,60 +386,63 @@
 %% Lists of references in their own section, maximum depth 1
 \newlist{referencelist}{description}{4}
 \setlist[referencelist]{leftmargin=!,labelwidth=!,labelsep=0ex,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}
-
+%%
+%%
 %% ADR move exercises into tcolorbox
 \usepackage{tcolorbox}\tcbuselibrary{raster}
 \newtcolorbox{clearbox}{colback=white,colframe=white}
 \newtcolorbox{markedbox}{leftrule=1ex, colframe=_deepskyblue!75, colback=_deepskyblue!3, arc=1mm, rounded corners=all}
-
-
+%%
 \newenvironment{exercisegroup}[1][1]{\begin{tcbraster}[breakable=false, raster columns=#1, raster valign=top]}{\end{tcbraster}}
-
+%%
 \newenvironment{exer}[1]{\begin{clearbox}\noindent~Q#1:}{\end{clearbox}}
 \newenvironment{markedexer}[1]{\begin{markedbox}\noindent~Q#1:}{\end{markedbox}}
+%%
+%%
 </preamble>
 
 <exercises-head>\begin{exercises}</exercises-head>
 <exercises-foot>\end{exercises}</exercises-foot>
 
 <exercisegroup>
-	<header-precol>\begin{exercisegroup}[</header-precol>
-	<header-postcol>]</header-postcol>
-	<footer>\end{exercisegroup}</footer>
+<header-precol>\begin{exercisegroup}[</header-precol>
+<header-postcol>]</header-postcol>
+<footer>\end{exercisegroup}</footer>
 </exercisegroup>
 
 <exerciselist>
-	<header>\begin{exercisegroup}[1]
-	</header>
-	<footer>\end{exercisegroup}</footer>
+<header>\begin{exercisegroup}[1]
+</header>
+<footer>\end{exercisegroup}</footer>
 </exerciselist>
 
 <exercise>
-	<grp-pre>\begin{exer}{</grp-pre><grp-post>}&#xa;</grp-post>
-	<mgrp-pre>\begin{markedexer}{</mgrp-pre><mgrp-post>}&#xa;</mgrp-post>
-	<end-grp>\end{exer}</end-grp>
-	<end-mgrp>\end{markedexer}</end-mgrp>
-	
-	<lst-pre>\begin{exer}{</lst-pre><lst-post>}&#xa;</lst-post>
-	<mlst-pre>\begin{markedexer}{</mlst-pre><mlst-post>}&#xa;</mlst-post>
-	<end-lst>\end{exer}</end-lst>
-	<end-mlst>\end{markedexer}</end-mlst>
+<grp-pre>\begin{exer}{</grp-pre><grp-post>}&#xa;</grp-post>
+<mgrp-pre>\begin{markedexer}{</mgrp-pre><mgrp-post>}&#xa;</mgrp-post>
+<end-grp>\end{exer}</end-grp>
+<end-mgrp>\end{markedexer}</end-mgrp>
+
+<lst-pre>\begin{exer}{</lst-pre><lst-post>}&#xa;</lst-post>
+<mlst-pre>\begin{markedexer}{</mlst-pre><mlst-post>}&#xa;</mlst-post>
+<end-lst>\end{exer}</end-lst>
+<end-mlst>\end{markedexer}</end-mlst>
 </exercise>
 
 </exercises>
 
 <aside>
-	<preamble>
+<preamble>
 %% aside, biographical, historical environments and style&#xa;
 \usepackage{tcolorbox}
 \tcbuselibrary{breakable, skins}
 \newtcolorbox{asidebox}{enhanced jigsaw, sharp corners=downhill, colframe=gray, colback=white, arc=10pt, oversize, breakable}
 \newenvironment{aside}[1]{\begin{asidebox}\textbf{#1}\quad}{\end{asidebox}}
-	</preamble>
+%%
+</preamble>
 </aside>
 
 <assemblage>
-	<preamble>
+<preamble>
 \usepackage{tcolorbox}
 \tcbuselibrary{breakable, skins}
 %%
@@ -419,7 +452,7 @@
 \newtcolorbox{assembox}[1]{enhanced jigsaw, sharp corners=downhill, colframe=blue!20, colback=blue!5, enhanced, title=#1, attach boxed title to top left={xshift=7mm, yshift*=-2ex}, boxed title style={colback=blue!20}, breakable, oversize}
 \newenvironment{assemblage}[1]{\begin{assembox}{#1}}{\end{assembox}}
 %% end: assemblage
-	</preamble>
+</preamble>
 </assemblage>
 
 </style>
