@@ -330,7 +330,7 @@ text width={0.9\textwidth}, align=center
 <fact>
 \newenvironment{fact}[1][]{%
 \refstepcounter{theorem}%
-\begin{tcolorbox}[breakable, colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}, attach boxed title to top right={xshift=-7mm, yshift*=-2ex}, title={\thetheorem\emptyortitle{#1}}]}%
+\begin{tcolorbox}[breakable, colframe=_deepskyblue, colback=blue!5, colbacktitle=orange!15, boxed title style={sharp corners}, attach boxed title to top right={xshift=-7mm, yshift*=-2ex}, title={(\thetheorem)\ifx\empty#1\else~#1\fi}]}%
 {\end{tcolorbox}}
 %%
 </fact>
