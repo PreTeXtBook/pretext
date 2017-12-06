@@ -408,7 +408,8 @@ text width={0.9\textwidth}, align=center
 \newtcolorbox{clearbox}{colback=white,colframe=white}
 \newtcolorbox{markedbox}{leftrule=1ex, colframe=_deepskyblue!75, colback=_deepskyblue!3, arc=1mm, rounded corners=all}
 %%
-\newenvironment{exercisegroup}[1][1]{\begin{tcbraster}[breakable=false, raster columns=#1, raster valign=top]}{\end{tcbraster}}
+\newcommand{\columncheck}[1]{\ifnum#1=1 true\else false\fi}
+\newenvironment{exercisegroup}[1][1]{\begin{tcbraster}[breakable=\columncheck{#1}, raster columns=#1, raster valign=top]}{\end{tcbraster}} %% Set to be breakable if only 1 column.
 %%
 \newenvironment{exer}[1]{\begin{savenotes}\begin{clearbox}\noindent~Q#1:}{\end{clearbox}\end{savenotes}}
 \newenvironment{markedexer}[1]{\begin{savenotes}\begin{markedbox}\noindent~Q#1:}{\end{markedbox}\end{savenotes}}
