@@ -7002,6 +7002,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'an &quot;assemblage&quot; should not contain any items with a &quot;caption&quot;.  You can instead place the content in a bare &quot;sidebyside&quot;'" />
     </xsl:call-template>
     <!--  -->
+    <!-- 2017-12-07  "c" content totally escaped for LaTeX -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurences" select="$document-root//c/@latexsep" />
+        <xsl:with-param name="date-string" select="'2017-12-07'" />
+        <xsl:with-param name="message" select="'the &quot;@latexsep&quot; attribute on the &quot;c&quot; element is no longer necessary.  It is being ignored, and can be removed'" />
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->

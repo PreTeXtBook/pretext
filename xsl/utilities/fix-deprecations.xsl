@@ -34,6 +34,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecations that can be fixed with a transformation -->
 <!-- In reverse chronological order, with dates           -->
 
+<!-- 2017-12-07  "c" content totally escaped for LaTeX -->
+<xsl:template match="c/@latexsep">
+    <!-- do nothing, just drop it and report -->
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2017-12-07</xsl:with-param>
+        <xsl:with-param name="message">Removing &lt;@latexsep&gt; from a &lt;c&gt; element</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
 <!-- 2017-08-25  deprecate named lists to be captioned lists -->
 <xsl:template match="list[not(caption)]/title">
     <caption>
