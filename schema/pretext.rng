@@ -2778,9 +2778,6 @@
   <define name="Verbatim">
     <choice>
       <element name="c">
-        <optional>
-          <attribute name="latexsep"/>
-        </optional>
         <text/>
       </element>
       <element name="email">

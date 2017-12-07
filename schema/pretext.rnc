@@ -1246,7 +1246,7 @@
         
         
         Verbatim = 
-            element c {attribute latexsep {text}?, text} |
+            element c {text} |
             element email {text}
         
         

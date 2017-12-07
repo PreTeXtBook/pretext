@@ -2670,11 +2670,7 @@
       <xs:element ref="email"/>
     </xs:choice>
   </xs:group>
-  <xs:element name="c">
-    <xs:complexType mixed="true">
-      <xs:attribute name="latexsep"/>
-    </xs:complexType>
-  </xs:element>
+  <xs:element name="c" type="xs:string"/>
   <xs:group name="Group">
     <xs:choice>
       <xs:choice>
