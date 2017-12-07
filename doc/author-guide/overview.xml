@@ -191,11 +191,11 @@
         <idx>verbatim text</idx>
         <idx>literal text</idx>
 
-        <p>Typesetting literal text, usually in a monospace font, can sometimes be tricky.  For short bits of such text, as part of a sentence in a paragraph, use the <tag>c</tag> tag, which is short for <q>code.</q>  For much longer blocks of literal text, with line breaks that are to be preserved, use the <tag>pre</tag> tag, which is short for <q>pre-formatted</q>.</p>
+        <p>Typesetting literal text, usually in a monospace font, can sometimes be tricky.  For short bits of such text, as part of a sentence in a paragraph, or in a caption or title, use the <tag>c</tag> tag, which is short for <q>code.</q>  For much longer blocks of literal text, with line breaks that are to be preserved, use the <tag>cd</tag> element within a paragraph (<q>code display</q>).  Outside a paragraph, most anywhere you could place a regular paragraph, use the <tag>pre</tag> tag, which is short for <q>pre-formatted</q>.</p>
 
         <p>For the content of a <tag>pre</tag> element, the indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.</p>
 
-        <p>The behavior of these two tags is to preserve characters exactly.  Certainly the ASCII character set will behave as expected, and Unicode characters will migrate successfully to output formats based on HTML.  As mentioned in <xref ref="overview-special-characters" /> the ampersand and left angle bracket will confuse the initial XML processing.  So use the XML entities <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c> to represent these characters to the XML processor, <c>xsltproc</c>.  Now your verbatim text might possibly contain characters that will confuse <latex /> when converted to PDF for print output.  These characters are <q><backslash /></q>, <q><lbrace /></q>, and <q><rbrace /></q>, which are used to begin a macro, begin a group, and end a group (respectively).  (Need to document how these are handled.)</p>
+        <p>The behavior of these two tags is to preserve characters exactly.  Certainly the <acro>ASCII</acro> character set will behave as expected, and Unicode characters will migrate successfully to output formats based on <init>HTML</init>.  As mentioned in <xref ref="overview-special-characters" /> the ampersand and left angle bracket will confuse the initial XML processing.  So use the XML entities <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c> to represent these characters to the XML processor, <c>xsltproc</c>.  See <xref ref="topic-verbatim-literal" /> for further details.</p>
     </section>
 
     <section xml:id="overview-sage">

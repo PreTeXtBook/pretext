@@ -31,7 +31,7 @@
 
             <p>This section expands on parts of <xref ref="overview-verbatim-literal" />.  For descriptions of more involved uses, such as program listings and console sessions, see <xref ref="topic-program-listings" />.</p>
 
-            <p>The tags described here contain <em>only raw characters</em>.  By that we typically mean the first 128 characters of the <acro>ASCII</acro> code.  Unicode characters are likely to migrate to HTML output just fine, but results for <latex /> output will be variable.  The restriction to character data has two consequences.  First, any markup will be silently ignored.  Second, you need to observe the rules on special characters and escaped characters for <init>XML</init>, which are mercifully simple.</p>
+            <p>The tags described here contain <em>only raw characters</em>.  By that we typically mean the first 128 characters of the <acro>ASCII</acro> code.  Unicode characters are likely to migrate to HTML output just fine, but results for <latex /> output will be variable.  The restriction to character data has two consequences.  First, any markup mistakenly included will have its content silently ignored and dropped.  Second, you need to observe the rules on special characters and escaped characters for <init>XML</init> for literal text, which are mercifully simple.</p>
 
             <blockquote>
                 <p>In your source, use <c>&amp;amp;</c> for an <ampersand />, and use <c>&amp;lt;</c> and <c>&amp;gt;</c> for <less /> and <greater />.  Otherwise, every other <acro>ASCII</acro> character will render faithfully across all possible formats.</p>
@@ -43,13 +43,7 @@
             <idx>verbatim text</idx>
             <idx>literal text</idx>
 
-            <p>The is a mnemonic for <q>code</q>, but is really meant to be any chunk of literal characters that you want to emphasise that way.  It is meant for use within a sentence or caption (<q>inline</q>) so its use is limited to those situations, and others that are similar, such as a title or a cell of a table.  Typically these pieces of text do not break across lines, so can bleed into right margins, or cause very short lines.  So keep the content short, and/or use early in the first sentence of a paragraph where you know it will not affect a line break.  For longer chunks, see options following.</p>
-
-            <p>Typical presentation is a monospace font, perhaps of a slightly heavier weight.</p>
-
-            <p>There are two caveats for use when creating <latex /> output.  We have chosen to use the <c>?</c> character as a delimiter for the start and end of a run of verbatim text.  Unfortunately, such a choice is necessary.  But if your run of characters includes a question mark, then the run will end prematurely.  So we have an attribute, <attribute>latexsep</attribute> that can be set to some other character, such as <c>!</c> or <c>|</c>, that does not appear in your content.  This choice has no effect on other output formats.</p>
-
-            <p>The other caveat for <latex /> output is that you may use the <tag>c</tag> tag within a <tag>title</tag>, but you should avoid <latex />'s special characters (such as <c>\</c>, <c>#</c>, etc.).  Regular characters should migrate to titles as verbatim text just fine, but we do not guarantee all possibilities.</p>
+            <p>The is a mnemonic for <q>code</q>, but is really meant to be any chunk of literal characters that you want to emphasise that way.  So a <q>typewriter</q> font of fixed-width characters would be a typical presentation.  It is meant for use within a sentence or caption (<q>inline</q>) so its use is limited to those situations, and others that are similar, such as a title or a cell of a table.  Typically these pieces of text do not hyphenate words, and so can lead to spillover into a right margin.  In these situations, consider options below for longer pieces of text.</p>
         </subsection>
 
         <subsection xml:id="long-verbatim-text">
@@ -59,7 +53,7 @@
 
             <p>You have two options in use.  You may author inline with the rest of a sentence, with no extra newlines or whitespace before, after, or within the content.  The result will be a single displayed line.</p>
 
-            <p>Or you may structure the content using one, or more, of the <tag>cline</tag> tag, which is meant to be similar to the <tag>line</tag> tag used elsewhere.  You should still take care to not place any extra whitespace before or after the <tag>cd</tag> element, but inbetween the <tag>cline</tag> you may use as much visual formatting of your source as you wish, especially if you like your source to mirror your output.  For <latex /> output there is less danger that your content will inadvertenly end the verbatim text prematurely.</p>
+            <p>Or you may structure the content using one, or more, of the <tag>cline</tag> tag, which is meant to be similar to the <tag>line</tag> tag used elsewhere.  You should still take care to not place any extra whitespace before or after the <tag>cd</tag> element, but inbetween the <tag>cline</tag> you may use as much visual formatting of your source as you wish, especially if you like your source to mirror your output.</p>
         </subsection>
 
         <subsection xml:id="block-verbatim-text">
