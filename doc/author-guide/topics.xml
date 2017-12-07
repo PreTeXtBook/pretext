@@ -43,7 +43,7 @@
             <idx>verbatim text</idx>
             <idx>literal text</idx>
 
-            <p>The is a mnemonic for <q>code</q>, but is really meant to be any chunk of literal characters that you want to emphasise that way.  So a <q>typewriter</q> font of fixed-width characters would be a typical presentation.  It is meant for use within a sentence or caption (<q>inline</q>) so its use is limited to those situations, and others that are similar, such as a title or a cell of a table.  Typically these pieces of text do not hyphenate words, and so can lead to spillover into a right margin.  In these situations, consider options below for longer pieces of text.</p>
+            <p>The <tag>c</tag> tag is a mnemonic for <q>code</q>, but is really meant to be any chunk of literal characters that you want to emphasise that way.  So a <q>typewriter</q> font of fixed-width characters would be a typical presentation.  It is meant for use within a sentence or caption (<q>inline</q>) so its use is limited to those situations, and others that are similar, such as a title or a cell of a table.  Typically these pieces of text do not hyphenate words, and so can lead to spillover into a right margin.  In these situations, consider options below for longer pieces of text.</p>
         </subsection>
 
         <subsection xml:id="long-verbatim-text">
