@@ -923,7 +923,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-top-level" select="false()" />
     <!-- Look across all mrow for 100% no-number rows              -->
     <!-- This just allows for slightly nicer human-readable source -->
-    <xsl:variable name="b-nonumbers" select="self::md and not(child::mrow[@number='yes'])" />
+    <xsl:variable name="b-nonumbers" select="self::md and not(mrow[@number='yes' or @tag])" />
     <!-- we provide a newline for visual appeal -->
     <xsl:call-template name="display-math-visual-blank-line" />
     <xsl:text>\begin{</xsl:text>
@@ -1131,8 +1131,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Otherwise, we are in a non-starred environment and get a number -->
     <!-- unless we "\notag" it, which is the better choice under AMSmath -->
     <!-- http://tex.stackexchange.com/questions/48965                    -->
+    <!-- The @tag attribute trumps almost everything                     -->
     <xsl:choose>
         <xsl:when test="$b-nonumbers" />
+        <xsl:when test="@tag">
+            <xsl:apply-templates select="." mode="tag" />
+        </xsl:when>
         <xsl:when test="parent::md">
             <xsl:choose>
                 <xsl:when test="@number='yes'">
@@ -1166,6 +1170,66 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
+
+<!-- We convert a token into the LaTeX for a symbol     -->
+<!-- for use as a local tag. Since we need this to work -->
+<!-- in MathJax, we need symbols that are available in  -->
+<!-- its limited set of supported commands.  Generally, -->
+<!-- AMSMath symbols are the best description.  See     -->
+<!-- http://docs.mathjax.org/en/latest/tex.html         -->
+<!--     #supported-latex-commands                      -->
+<!-- Note: \tag{} expects text mode                     -->
+<!-- More? \checkmark, \bullet?                         -->
+<!-- TODO: if some text symbols are used, perhaps from  -->
+<!-- the textcomp package, then math delimiters will    -->
+<!-- move down into the "when" parts of the "choose"    -->
+<xsl:template match="@tag" mode="tag-symbol">
+    <xsl:call-template name="begin-inline-math" />
+    <xsl:choose>
+        <!-- Stars -->
+        <xsl:when test=". = 'star'">
+            <xsl:text>\star</xsl:text>
+        </xsl:when>
+        <xsl:when test=". = 'dstar'">
+            <xsl:text>\star\star</xsl:text>
+        </xsl:when>
+        <xsl:when test=". = 'tstar'">
+            <xsl:text>\star\star\star</xsl:text>
+        </xsl:when>
+        <!-- Dagger -->
+        <xsl:when test=". = 'dagger'">
+            <xsl:text>\dagger</xsl:text>
+        </xsl:when>
+        <xsl:when test=". = 'ddagger'">
+            <xsl:text>\dagger\dagger</xsl:text>
+        </xsl:when>
+        <xsl:when test=". = 'tdagger'">
+            <xsl:text>\dagger\dagger\dagger</xsl:text>
+        </xsl:when>
+        <!-- Hash -->
+        <xsl:when test=". = 'hash'">
+            <xsl:text>\#</xsl:text>
+        </xsl:when>
+        <xsl:when test=". = 'dhash'">
+            <xsl:text>\#\#</xsl:text>
+        </xsl:when>
+        <xsl:when test=". = 'thash'">
+            <xsl:text>\#\#\#</xsl:text>
+        </xsl:when>
+        <!-- Maltese -->
+        <xsl:when test=". = 'maltese'">
+            <xsl:text>\maltese</xsl:text>
+        </xsl:when>
+        <xsl:when test=". = 'dmaltese'">
+            <xsl:text>\maltese\maltese</xsl:text>
+        </xsl:when>
+        <xsl:when test=". = 'tmaltese'">
+            <xsl:text>\maltese\maltese\maltese</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+    <xsl:call-template name="end-inline-math" />
+</xsl:template>
+
 
 <!-- Intertext -->
 <!-- "intertext" needs wildly different implementations, -->
@@ -3277,6 +3341,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- We determine the appropriate subtree to count within  -->
 <!-- given the document root and the configured depth      -->
 <!-- Note: numbered/unnumbered accounted for here          -->
+<!-- Note: presence of a local tag is like unnumbered      -->
 <xsl:template match="mrow|men" mode="serial-number">
     <xsl:variable name="subtree-level">
         <xsl:apply-templates select="." mode="absolute-subtree-level">
@@ -3284,12 +3349,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
-        <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
-        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/backmatter/appendix" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
-        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/backmatter/appendix" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
-        <xsl:when test="$subtree-level=3"><xsl:number from="subsection" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
-        <xsl:when test="$subtree-level=4"><xsl:number from="subsubsection" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no')]"/></xsl:when>
+        <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/></xsl:when>
+        <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/></xsl:when>
+        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/backmatter/appendix" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/></xsl:when>
+        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/backmatter/appendix" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/></xsl:when>
+        <xsl:when test="$subtree-level=3"><xsl:number from="subsection" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/></xsl:when>
+        <xsl:when test="$subtree-level=4"><xsl:number from="subsubsection" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/></xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for equation number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>

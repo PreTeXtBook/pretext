@@ -3953,6 +3953,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
+<!-- An mrow with a \label{} can be cross-referenced    -->
+<!-- md/mdn and \notag in -common control much of this  -->
+<!-- For a local tag, we need to provide the symbol AND -->
+<!-- also provide a label for the cross-reference       -->
+<xsl:template match="mrow[@tag]" mode="tag">
+    <!-- if mrow has custom tag, we add it here -->
+    <xsl:text>\tag{</xsl:text>
+    <xsl:apply-templates select="@tag" mode="tag-symbol" />
+    <xsl:text>}</xsl:text>
+    <xsl:text>\label{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
 <!-- QED Here -->
 <!-- Analyze a final "mrow" or any "me"                            -->
 <!-- Strictly LaTeX/amsthm, not a MathJax feature (yet? ever?)     -->

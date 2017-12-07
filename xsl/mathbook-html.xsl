@@ -3911,12 +3911,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- numbers are generated and assigned by LaTeX       -->
 <!-- "me" is never numbered/tagged, "men" always is    -->
 <!-- This is the MathJax hard-coded technique          -->
+<!-- Local tag preempts a hard-coded number, and we    -->
+<!-- need to also take care with the numbering         -->
 
 <xsl:template match="me" mode="tag" />
 
 <xsl:template match="men|mrow" mode="tag">
     <xsl:text>\tag{</xsl:text>
     <xsl:apply-templates select="." mode="number" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="mrow[@tag]" mode="tag">
+    <xsl:text>\tag{</xsl:text>
+    <xsl:apply-templates select="@tag" mode="tag-symbol" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -5757,6 +5765,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: we do exactly the same thing in the mathbook-webwork-pg.xsl -->
 <xsl:template match="*" mode="xref-number">
     <xsl:apply-templates select="." mode="number" />
+</xsl:template>
+
+<!-- One exception is a local tag on an mrow -->
+<xsl:template match="mrow[@tag]" mode="xref-number">
+    <xsl:apply-templates select="@tag" mode="tag-symbol" />
 </xsl:template>
 
 <!-- The second abstract template, we condition   -->
