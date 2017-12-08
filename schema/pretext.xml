@@ -541,7 +541,14 @@
         MathRow = 
             element mrow {
                 MetaDataTarget,
-                attribute number {"yes" | "no"}?,
+                (
+                    attribute number {"yes" | "no"}
+                    |
+                    attribute tag {"star" | "dstar" | "tstar" |
+                                   "dagger" | "ddagger" | "tdagger" |
+                                   "hash" | "dhash" | "thash" |
+                                   "maltese" | "dmaltese" | "tmaltese" }
+                )?,
                 attribute break {"yes" | "no"}?,
                 mixed {(Xref | FillIn)*}
             }

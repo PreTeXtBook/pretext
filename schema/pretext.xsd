@@ -2442,6 +2442,24 @@
               </xs:restriction>
             </xs:simpleType>
           </xs:attribute>
+          <xs:attribute name="tag">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="star"/>
+                <xs:enumeration value="dstar"/>
+                <xs:enumeration value="tstar"/>
+                <xs:enumeration value="dagger"/>
+                <xs:enumeration value="ddagger"/>
+                <xs:enumeration value="tdagger"/>
+                <xs:enumeration value="hash"/>
+                <xs:enumeration value="dhash"/>
+                <xs:enumeration value="thash"/>
+                <xs:enumeration value="maltese"/>
+                <xs:enumeration value="dmaltese"/>
+                <xs:enumeration value="tmaltese"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
           <xs:attribute name="break">
             <xs:simpleType>
               <xs:restriction base="xs:token">

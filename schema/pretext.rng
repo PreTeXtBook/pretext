@@ -2535,12 +2535,30 @@
     <element name="mrow">
       <ref name="MetaDataTarget"/>
       <optional>
-        <attribute name="number">
-          <choice>
-            <value>yes</value>
-            <value>no</value>
-          </choice>
-        </attribute>
+        <choice>
+          <attribute name="number">
+            <choice>
+              <value>yes</value>
+              <value>no</value>
+            </choice>
+          </attribute>
+          <attribute name="tag">
+            <choice>
+              <value>star</value>
+              <value>dstar</value>
+              <value>tstar</value>
+              <value>dagger</value>
+              <value>ddagger</value>
+              <value>tdagger</value>
+              <value>hash</value>
+              <value>dhash</value>
+              <value>thash</value>
+              <value>maltese</value>
+              <value>dmaltese</value>
+              <value>tmaltese</value>
+            </choice>
+          </attribute>
+        </choice>
       </optional>
       <optional>
         <attribute name="break">
