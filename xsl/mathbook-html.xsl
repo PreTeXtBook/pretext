@@ -111,7 +111,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.css.server" select="'https://aimath.org'" />
 <xsl:param name="html.css.file"   select="'mathbook-3.css'" />
 <!-- A space-separated list of CSS URLs (points to servers or local files) -->
-<xsl:param name="html.css.extra"  select="''" />
+<xsl:param name="html.css.extra"  select="'adrhack.css'" />
 
 <!-- Annotation -->
 <xsl:param name="html.annotation" select="''" />
@@ -2729,7 +2729,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="exercise" mode="body-css-class">
-    <xsl:text>exercise-like</xsl:text>
+	<xsl:choose>
+		<xsl:when test="@purpose='RQS'">
+			<xsl:text>exercise-like boxed</xsl:text>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:text>exercise-like</xsl:text>
+		</xsl:otherwise>
+	</xsl:choose>
 </xsl:template>
 
 <!-- When born hidden, block-level -->

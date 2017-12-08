@@ -1,0 +1,329 @@
+<style>
+
+<fonts>
+\usepackage{palatino, mathpazo}
+\PassOptionsToPackage{warn}{textcomp} %warns about font subs rather than throwing errors
+</fonts>
+
+<colours>
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\definecolor{_deepskyblue}{HTML}{007090}
+\definecolor{_deepgreen}{HTML}{006070}
+\definecolor{_darkred}{HTML}{600000}
+</colours>
+
+<pageheadfoot>
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% the providecommand is just in case we are in an article - chaptermark only defined for books.
+\providecommand{\chaptermark}{}\renewcommand{\chaptermark}[1]{\markboth{\thechapter.~\textsc{#1}}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection.~\textsc{#1}}{}}
+\fancyhead[LE]{\thepage~~~{\small\leftmark}}
+\fancyhead[RO]{{\small\rightmark}~~~\thepage}
+\fancyhead[LO]{}\fancyhead[RE]{}
+
+
+\lfoot{} \cfoot{} \rfoot{}
+</pageheadfoot>
+
+<divisionmarking>
+	<preamble>
+\usepackage[explicit]{titlesec}
+%%%% A fix for titlesec section numbering issues - see https://bugs.launchpad.net/ubuntu/+source/texlive-extra/+bug/1574052
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\ttlh@hang}{\parindent\z@}{\parindent\z@\leavevmode}{}{}
+\patchcmd{\ttlh@hang}{\noindent}{}{}{}
+\makeatother
+
+	</preamble>
+<titlepage/>
+	<part>
+	</part>
+	<chapter>
+\titleformat{\chapter}[block]
+{\vspace{-12ex}\filcenter}{\scshape \large 
+\rule[0.6ex]{0.3\textwidth}{3pt}\hspace{2ex} Chapter~\thechapter \hspace{2ex} \rule[0.6ex]{0.3\textwidth}{3pt}\\[3ex]
+\titlerule\vspace{2ex}
+\Huge #1\\[0ex]
+}{1em}{\titlerule}
+%
+\titleformat{name=\chapter,numberless}[block]
+{\vspace{-16ex}\filcenter}{\scshape 
+\titlerule\\
+\vspace{1ex}
+\Huge #1\\[0ex]
+}{1em}{\titlerule}
+	</chapter>
+	<section>
+\titleformat{\section}[block]
+{\LARGE \bfseries\filcenter}{\thesection~~~#1}{1em}{}
+\titleformat{numberless, name=\section}[block]
+{\LARGE \bfseries\filcenter}{#1}{1em}{}
+	</section>
+	<subsection>
+\titleformat{\subsection}[block]
+{\large \scshape\bfseries\filcenter}{\thesubsection~~~#1}{1em}{}
+\titleformat{numberless, name=\subsection}[block]
+{\large \scshape\bfseries\filcenter}{#1}{1em}{}	</subsection>
+	<subsubsection>
+\titleformat{\subsubsection}[block]
+{\normalsize \bfseries}{\thesubsubsection~#1}{0.0em}{}
+\titleformat{numberless,name=\subsubsection}[block]
+{\normalsize \bfseries}{#1}{0.0em}{}
+	</subsubsection>
+
+</divisionmarking>
+
+
+<example>
+	<preamble>
+\usepackage{tcolorbox}
+\newenvironment{example}[1][]{
+\refstepcounter{theorem}\vspace{1ex}%
+\begin{tcolorbox}[arc=0pt, breakable,leftrule=1pt,bottomrule=1pt, toprule=0pt, rightrule=0pt,colback=white]
+\noindent\textbf{Example~\thetheorem.}\ifx\empty#1\else~(#1)\fi\\%
+}
+{\end{tcolorbox}\vspace{3ex}}
+	</preamble>
+</example>
+
+<question>
+	<preamble>
+\usepackage{tcolorbox}
+\usepackage{marvosym}
+\newenvironment{question}[1][]{
+\refstepcounter{theorem}\vspace{1ex}%
+\begin{tcolorbox}[arc=10pt, colback=white, colframe=green!50!black, boxed title style={colframe=white, colback=white}, 
+coltitle=black, title=\textit{\textbf{Investigate!}}~(\thetheorem.~#1),
+overlay={ \node[fill=white] at (frame.south) {%
+\quad {\LARGE\textcolor{red}{\Stopsign}}\quad %
+\textbf{Attempt the above activity before proceeding}%
+\quad {\LARGE\textcolor{red}{\Stopsign}}\quad};}
+,bottom=2ex]%
+}
+{\end{tcolorbox}\vspace{2ex}}
+	</preamble>
+</question>
+
+<problem>
+	<preamble>
+\usepackage{tcolorbox}
+\refstepcounter{theorem}\vspace{1ex}%
+\refstepcounter{theorem}%
+\begin{tcolorbox}[arc=0pt, breakable,leftrule=1pt,bottomrule=1pt, toprule=0pt, rightrule=0pt,colback=white]
+\noindent\textbf{Problem~\thetheorem.}\ifx\empty#1\else~(#1)\fi\\%
+}
+{\end{tcolorbox}\vspace{3ex}}
+	</preamble>
+</problem>
+
+<figure>
+<!-- Figure head for stuff before the content + caption, and then figure foot for stuff after caption -->
+	<preamble>
+\usepackage{tcolorbox}
+\newtcolorbox{figbox}[1][]{boxrule=0pt, colframe=white, colback=white, arc=10pt halign=center, oversize, #1}
+	</preamble>
+	<head>\begin{figbox}\begin{figure}\centering&#xa;</head>
+	<before-caption/>
+	<foot>\end{figure}\end{figbox}</foot>
+</figure>
+
+<!-- frame around sbsgroup -->
+<sbsgroup>
+	<preamble>
+\usepackage{tcolorbox}
+\newtcolorbox{sbsgbox}[1][]{enhanced jigsaw, opacityback=0, opacityframe=0, halign=center, oversize, #1}
+	</preamble>
+	<head>\begin{sbsgbox}\centering&#xa;</head>
+	<foot>\end{sbsgbox}&#xa;</foot>
+</sbsgroup>
+
+<!-- frame around sidebyside (but it knows not to do this if part of a sbsgroup -->
+<sidebyside>
+	<preamble>
+\usepackage{tcolorbox}
+\newtcolorbox{sbsbox}[1][]{enhanced jigsaw, opacityback=0, opacityframe=0, halign=center, oversize, #1}
+	</preamble>
+<head>\begin{sbsbox}\centering&#xa;</head>
+<foot>\end{sbsbox}&#xa;</foot>
+</sidebyside>
+<!-- Note that figbox, sbsgbox, sbsbox all have optional argument, useful for manually setting width. -->
+
+<footnote>
+	<preamble/>
+</footnote>
+
+<theorem>
+
+	<preamble>
+%% Numbering for Theorems, Conjectures, Examples, Figures, etc
+%% Controlled by  numbering.theorems.level  processing parameter
+%% Always need a theorem environment to set base numbering scheme
+%% even if document has no theorems (but has other environments)
+\usepackage{chngcntr}
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems, breakable, skins}
+%% Set defaults for tcolorboxes
+\tcbset{breakable, colback=white, colframe=white, enhanced, attach boxed title to top left={xshift=7mm, yshift*=-2ex}, arc=2pt, boxed title style={sharp corners=all}}{}
+%% Theorem-like environments in "plain" style, with or without proof
+\usepackage{amsthm}
+\theoremstyle{plain}
+%% Set up the theorem counter for use with lots of environments.
+\newtheorem{theorem}{Theorem}
+\numberwithin{theorem}{section}
+	</preamble>
+	<!-- Notice we set up a dummy tcb theorem with the correct numbering within setting. The other tcbtheorems can then inherit the numberinwithin setting from them. Unfortunately this seemed to be the easiest way to set a default number-within parameter in tcolorbox. -->
+	<numbering-pre>\numberwithin{theorem}{</numbering-pre>
+	<numbering-post>}</numbering-post>
+	<numbering-null/>
+	<postamble/>
+</theorem>
+
+<theorem-like>
+<!-- Needs to be updated so that env-renaming works. -->
+	<preamble>
+%% Theorem-like environments
+%% Numbering is in sync with theorems, etc
+\theoremstyle{plain}
+	</preamble>
+
+	<corollary>\newtheorem{corollary}[theorem]{Corollary}</corollary>
+
+	<lemma>\newtheorem{lemma}[theorem]{Lemma}</lemma>
+
+	<algorithm>\newtheorem{algorithm}[theorem]{Algorithm}</algorithm>
+
+	<proposition>\newtheorem{proposition}[theorem]{Proposition}</proposition>
+
+	<claim>\newtheorem{claim}[theorem]{Claim}</claim>
+	<fact>\newtheorem{fact}[theorem]{Fact}</fact>
+	<identity>\newtheorem{identity}[theorem]{Identity}</identity>
+</theorem-like>
+
+<axiom-like>
+	<preamble>
+	%% Axiom-like environments
+	%% Numbering is in sync with theorems, etc
+	\theoremstyle{plain}
+	</preamble>
+	<axiom>\newtheorem{axiom}[theorem]{Axiom}</axiom>
+	<conjecture>\newtheorem{conjecture}[theorem]{Conjecture}</conjecture>
+	<principle>\newtheorem{principle}[theorem]{Principle}</principle>
+	<heuristic>\newtheorem{heuristic}[theorem]{Heuristic}</heuristic>
+	<hypothesis>\newtheorem{hypothesis}[theorem]{Hypothesis}</hypothesis>
+	<assumption>\newtheorem{assumption}[theorem]{Assumption}</assumption>
+</axiom-like>
+
+<definition-like>
+	<preamble>
+	%% Definition-like environments, normal text
+	%% Numbering is in sync with theorems, etc
+	\definecolor{defcolorback}{HTML}{F2F2FF}
+	\definecolor{defcolorframe}{HTML}{B2B2FF}
+	</preamble>
+	<definition>
+\newenvironment{definition}[1][\unskip]{%
+\refstepcounter{theorem}\begin{tcolorbox}[breakable, colframe=defcolorframe, colback=defcolorback, 
+colbacktitle=defcolorframe, coltitle=black, enhanced, attach boxed title to top left={xshift=7mm, yshift*=-2ex}, arc=1pt,title=Definition~\thetheorem.\ifx\empty#1\else~#1\fi]}{\end{tcolorbox}}	
+	</definition>
+</definition-like>
+
+<remark-like>
+	<preamble>
+	%% Remark-like environments, normal text
+	%% Numbering is in sync with theorems, etc
+	\theoremstyle{definition}
+	</preamble>
+	<remark>\newtheorem{remark}[theorem]{Remark}</remark>
+	<convention>\newtheorem{convention}[theorem]{Convention}</convention>
+	<note>\newtheorem{note}[theorem]{Note}</note>
+	<observation>\newtheorem{observation}[theorem]{Observation}</observation>
+	<warning>
+\newtcbtheorem[use counter from=theorem]{twarn}{Warning}{colframe=red, colback=white, colbacktitle=white, boxed title style={colback=white}}{}
+\newenvironment{warning}[1][\unskip]{\begin{twarn}{#1}{}}{\end{twarn}}
+	</warning>
+	<insight>\newtheorem{insight}[theorem]{Insight}</insight>
+</remark-like>
+
+
+
+<exercises>
+<preamble>
+%% For multiple columns
+\usepackage{multicol}
+%% More flexible list management, esp. for references and exercises
+%% But also for specifying labels (i.e. custom order) on nested lists
+\usepackage{enumitem}
+%% Lists of references in their own section, maximum depth 1
+\newlist{referencelist}{description}{4}
+\setlist[referencelist]{leftmargin=!,labelwidth=!,labelsep=0ex,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}
+
+%% ADR move exercises into tcolorbox
+\usepackage{tcolorbox}\tcbuselibrary{raster}
+\newtcolorbox{clearbox}{colback=white,colframe=white}
+\newtcolorbox{markedbox}{leftrule=1ex, colframe=_deepskyblue!75, colback=_deepskyblue!3, arc=1mm, rounded corners=all}
+
+\newenvironment{exercisegroup}[1][1]{\begin{tcbraster}[breakable=false, raster columns=#1, raster valign=top]}{\end{tcbraster}}
+
+\newenvironment{exer}[1]{\begin{clearbox}\noindent\textbf{#1.~}}{\end{clearbox}}
+\newenvironment{markedexer}[1]{\begin{markedbox}\textbf{#1.~}}{\end{markedbox}}
+</preamble>
+
+<exercises-head>\begin{exercises}</exercises-head>
+<exercises-foot>\end{exercises}</exercises-foot>
+
+<exercisegroup>
+	<header-precol>\begin{exercisegroup}[</header-precol>
+	<header-postcol>]</header-postcol>
+	<footer>\end{exercisegroup}</footer>
+</exercisegroup>
+
+<exerciselist>
+	<header>\begin{exercisegroup}[1]
+	</header>
+	<footer>\end{exercisegroup}</footer>
+</exerciselist>
+
+<exercise>
+	<grp-pre>\begin{exer}{</grp-pre><grp-post>}&#xa;</grp-post>
+	<mgrp-pre>\begin{markedexer}{</mgrp-pre><mgrp-post>}&#xa;</mgrp-post>
+	<end-grp>\end{exer}</end-grp>
+	<end-mgrp>\end{markedexer}</end-mgrp>
+	
+	<lst-pre>\begin{exer}{</lst-pre><lst-post>}&#xa;</lst-post>
+	<mlst-pre>\begin{markedexer}{</mlst-pre><mlst-post>}&#xa;</mlst-post>
+	<end-lst>\end{exer}</end-lst>
+	<end-mlst>\end{markedexer}</end-mlst>
+</exercise>
+
+</exercises>
+
+<aside>
+	<preamble>
+%% aside, biographical, historical environments and style&#xa;
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable, skins}
+\newtcolorbox{asidebox}{enhanced jigsaw, colframe=gray, colback=white, arc=10pt, oversize, breakable}
+\newenvironment{aside}[1]{\begin{asidebox}\textbf{#1}\quad}{\end{asidebox}}
+	</preamble>
+</aside>
+
+<assemblage>
+	<preamble>
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable, skins}
+%%
+\newtcolorbox{assemboxnotitle}{enhanced jigsaw, colframe=blue!20, colback=blue!5, breakable, oversize}
+\newenvironment{assemblage-untitled}[1]{\begin{assemboxnotitle}}{\end{assemboxnotitle}}
+%%
+\newtcolorbox{assembox}[1]{enhanced jigsaw, colframe=blue!20, colback=blue!5, enhanced, title=#1, attach boxed title to top left={xshift=7mm, yshift*=-2ex}, boxed title style={colback=blue!20},coltitle=black, breakable, oversize}
+\newenvironment{assemblage}[1]{\begin{assembox}{#1}}{\end{assembox}}
+%% end: assemblage
+	</preamble>
+</assemblage>
+
+</style>

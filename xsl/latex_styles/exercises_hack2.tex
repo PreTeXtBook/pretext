@@ -1,0 +1,85 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{blindtext}
+%-- use tcolorbox to build each exercise inside a box.
+%-- use raster library to make a nice array arrangement of the exercises in a uniform way.
+\usepackage{tcolorbox}\tcbuselibrary{raster}
+\definecolor{_deepskyblue}{HTML}{007090}
+\newtcolorbox{clearbox}{colback=white,colframe=white}
+\newtcolorbox{markedbox}{leftrule=1ex, colframe=_deepskyblue!75, colback=_deepskyblue!3}
+\newtcolorbox{impbox}{leftrule=1ex, colframe=red!75, colback=red!3}
+%%%-----
+
+%-- exercise counter. 
+\newcounter{exno}
+%-- exercise env basically just resets the counter
+\newenvironment{exercises}{\setcounter{exno}{0}}{}
+\newenvironment{exercisegroup}[1][1]{\begin{tcbraster}[raster columns=#1, raster valign=top]}{\end{tcbraster}}
+%%%-----
+\newcommand{\exercise}[2][\theexno]{\refstepcounter{exno}\begin{clearbox}\noindent~Q#1: #2\end{clearbox}}%
+\newcommand{\markedexercise}[2][\theexno]{\refstepcounter{exno}\begin{markedbox}\noindent~Q#1: #2\end{markedbox}}%
+\newcommand{\importantexercise}[2][\theexno]{\refstepcounter{exno}\begin{impbox}\noindent~Q#1: #2\end{impbox}}%
+%%%-----
+
+
+\begin{document}
+
+\begin{exercises}
+\begin{exercisegroup}[4]
+\exercise{1a}
+\importantexercise{2b}
+\exercise{3c}
+\markedexercise{4d}
+\exercise{5e}
+\exercise{6f}
+\markedexercise{7g}
+\exercise{8h}
+\exercise{9i}
+\end{exercisegroup}
+
+\blindtext
+
+\begin{exercisegroup}[3]
+\exercise{\blindtext}%
+\exercise{2b}%
+\importantexercise{\blindtext}
+\markedexercise{\blindtext}
+\exercise{5e}
+\exercise{6f}
+\markedexercise{7g}
+\exercise{8h}
+\exercise{9\blindtext}
+\end{exercisegroup}
+
+\blindtext
+
+\begin{exercisegroup}[2]
+\exercise{\blindtext}%
+\exercise{2b}%
+\exercise{\blindtext}
+\markedexercise{\blindtext}
+\exercise{5e}
+\exercise{6f}
+\markedexercise{7g}
+\exercise{8h}
+\exercise{9\blindtext}
+\end{exercisegroup}
+
+\blindtext
+\begin{exercisegroup}
+\exercise{\blindtext}%
+\exercise{2b}%
+\exercise{\blindtext}
+\markedexercise{\blindtext}
+\exercise{5e}
+\exercise{6f}
+\markedexercise{7g}
+\exercise{8h}
+\exercise{9\blindtext}
+\end{exercisegroup}
+
+
+\end{exercises}
+
+
+\end{document}
