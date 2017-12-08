@@ -1467,7 +1467,7 @@ the xsltproc executable.
                 </md></p>
 
                 <p>Generally, you cannot use any <init>XML</init> elements inside of the mathematics elements.  An exception is the <c>xref</c> element which you might want to use to provide justifications for the steps of a derivation.  Here is a visual example that is mathematically meaningless,<md>
-                    <mrow>A&amp;=B+C&amp;&amp;<xref ref="corollary-FTC-derivative" text="type-global" /></mrow>
+                    <mrow xml:id="equation-with-no-number">A&amp;=B+C&amp;&amp;<xref ref="corollary-FTC-derivative" text="type-global" /></mrow>
                     <mrow>&amp;=D+E&amp;&amp;<xref ref="theorem-FTC" text="title" /></mrow>
                 </md>.</p>
             </subsection>
@@ -4223,6 +4223,7 @@ the xsltproc executable.
                 <li><p>Display Mathematics: single, first with no name: <xref ref="equation-alternate-FTC" />.  Then with an autoname: <xref ref="equation-alternate-FTC" text="type-global" />.</p></li>
                 <li><p>Display Mathematics: multi-row, first with no name: <xref ref="equation-use-FTC" />.  Then with an autoname: <xref ref="equation-use-FTC" text="type-global" />.  And two, with a plural form: <xref ref="equation-alternate-FTC">Equations</xref> and <xref ref="equation-use-FTC" text="global" />.</p></li>
                 <li><p>Display mathematics: an equation with  <q>local</q> tag, which should not be used so very far away: <xref ref="equation-local-tag" />.</p></li>
+                <li><p>You can author a cross-reference to a displayed equation with no number, but it will not be very satisfying: <xref ref="equation-with-no-number" />.  Perhaps we should issue a warning?</p></li>
                 <li><p>Exercises (sectional), a range, with plural form provided to override autonaming: <xref first="exercises-null-problem" last="exercises-cosine-derivative">Exercises</xref>.</p></li>
                 <li><p>Exercise (inline): with enclosed hint at <xref ref="exercise-essay" /></p></li>
                 <li><p>A group of two exercises, with introduction, conclusion: <xref ref="exercisegroup-two-problems" text="type-global" /></p></li>
