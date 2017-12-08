@@ -2581,6 +2581,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:apply-templates select="." mode="containing-filename" />
     <xsl:if test="$intermediate='false' and $chunk='false'">
         <xsl:text>#</xsl:text>
+        <!-- the ids on equations are manufactured -->
+        <!-- by MathJax to look this way           -->
+        <xsl:if test="self::men|self::mrow">
+            <xsl:text>mjx-eqn-</xsl:text>
+        </xsl:if>
         <xsl:apply-templates select="." mode="internal-id" />
     </xsl:if>
 </xsl:template>
