@@ -3595,6 +3595,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- should similarly lack a structural number prefix      -->
 <xsl:template match="backmatter/references" mode="serial-number" />
 
+<!-- Various displayed equations are not numbered.     -->
+<!-- We do not consider the local @tag to be a number, -->
+<!-- as it is more a string, formed from symbols       -->
+<xsl:template match="me|md/mrow[not(@number='yes')]|mdn/mrow[@number='no']|mrow[@tag]" mode="serial-number" />
+
+
+
+
 <!-- WeBWorK problems are never numbered, because they live    -->
 <!-- in (numbered) exercises.  But they have identically named -->
 <!-- components of exercises, so we might need to explicitly   -->

@@ -6890,15 +6890,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: see extensive discussion of a parallel numbering system -->
 <!-- with the hyperref package's hypertarget/hyperlink mechanism -->
 
-<!-- This is the implementation of an abstract template, -->
-<!-- using the LaTeX \ref and \label mechanism.          -->
-<!-- We check that the item is numbered before dropping  -->
-<!-- a \ref as part of the cross-reference               -->
+<!-- This is the implementation of an abstract template,  -->
+<!-- using the LaTeX \ref and \label mechanism.           -->
+<!-- We check that the item is numbered or is a displayed -->
+<!-- equation with a local tag, before dropping a \ref as -->
+<!-- part of the cross-reference                          -->
 <xsl:template match="*" mode="xref-number">
     <xsl:variable name="the-number">
         <xsl:apply-templates select="." mode="number" />
     </xsl:variable>
-    <xsl:if test="not($the-number = '')">
+    <xsl:if test="not($the-number = '') or self::mrow[@tag]">
         <xsl:text>\ref{</xsl:text>
         <xsl:apply-templates select="." mode="internal-id" />
         <xsl:text>}</xsl:text>
