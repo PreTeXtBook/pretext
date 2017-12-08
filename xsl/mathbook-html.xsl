@@ -3917,12 +3917,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="me" mode="tag" />
 
 <xsl:template match="men|mrow" mode="tag">
+    <xsl:param name="b-original" />
+    <xsl:if test="$b-original and @xml:id">
+        <xsl:text>\label{</xsl:text>
+        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:text>}</xsl:text>
+    </xsl:if>
     <xsl:text>\tag{</xsl:text>
     <xsl:apply-templates select="." mode="number" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
 <xsl:template match="mrow[@tag]" mode="tag">
+    <xsl:param name="b-original" />
+    <xsl:if test="$b-original and @xml:id">
+        <xsl:text>\label{</xsl:text>
+        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:text>}</xsl:text>
+    </xsl:if>
     <xsl:text>\tag{</xsl:text>
     <xsl:apply-templates select="@tag" mode="tag-symbol" />
     <xsl:text>}</xsl:text>
@@ -7928,6 +7940,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!--   equivalent to the LaTeX package of the same name         -->
 <!-- Autobold extension is critical for captions (bold'ed) that -->
 <!-- have mathematics in them (suggested by P. Krautzberger)    -->
+<!-- "useLabelIDs" makes HTML @id "mjx-eqn-foo" from \label{}   -->
 <xsl:template name="mathjax">
     <!-- mathjax configuration -->
     <xsl:element name="script">
@@ -7945,7 +7958,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <xsl:text>        extensions: ["extpfeil.js", "autobold.js", "https://aimath.org/mathbook/mathjaxknowl.js", ],&#xa;</xsl:text>
         <xsl:text>        // scrolling to fragment identifiers is controlled by other Javascript&#xa;</xsl:text>
         <xsl:text>        positionToHash: false,&#xa;</xsl:text>
-        <xsl:text>        equationNumbers: { autoNumber: "none", },&#xa;</xsl:text>
+        <xsl:text>        equationNumbers: { autoNumber: "none", useLabelIds: true, },&#xa;</xsl:text>
         <xsl:text>        TagSide: "right",&#xa;</xsl:text>
         <xsl:text>        TagIndent: ".8em",&#xa;</xsl:text>
         <xsl:text>    },&#xa;</xsl:text>

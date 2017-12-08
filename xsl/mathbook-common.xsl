@@ -862,10 +862,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-original or not($b-top-level)">
         <xsl:apply-templates select="." mode="get-clause-punctuation" />
     </xsl:if>
-    <!-- For "men" in LaTeX we supply a \label{},      -->
-    <!-- and for HTML we hard-code the equation number -->
-    <!-- This is a no-op for "me"                      -->
-    <xsl:apply-templates select="." mode="tag" />
+    <!-- For "men" in LaTeX we supply a \label{},       -->
+    <!-- and for HTML we hard-code the equation number, -->
+    <!-- plus a label if it has an xml:id               -->
+    <!-- This is a no-op for "me"                       -->
+    <xsl:apply-templates select="." mode="tag">
+        <xsl:with-param name="b-original" select="$b-original" />
+    </xsl:apply-templates>
     <!-- For "me" and LaTeX output we perhaps sneak  -->
     <!-- in a \qedhere for tombstone placement       -->
     <!-- Inappropriate if numbers exist to the right -->
@@ -1130,17 +1133,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- If we built a pure no-number environment, then we add nothing   -->
     <!-- Otherwise, we are in a non-starred environment and get a number -->
     <!-- unless we "\notag" it, which is the better choice under AMSmath -->
+    <!-- The modal "tag" template is more complicated than just forming  -->
+    <!-- a tag, it is everything associated with an equation, like a     -->
+    <!-- \label{} for LaTeX, and also for HTML/MathJax.  It does depend  -->
+    <!-- on if the display is the original version or not                -->
     <!-- http://tex.stackexchange.com/questions/48965                    -->
     <!-- The @tag attribute trumps almost everything                     -->
     <xsl:choose>
         <xsl:when test="$b-nonumbers" />
         <xsl:when test="@tag">
-            <xsl:apply-templates select="." mode="tag" />
+            <xsl:apply-templates select="." mode="tag">
+                <xsl:with-param name="b-original" select="$b-original" />
+            </xsl:apply-templates>
         </xsl:when>
         <xsl:when test="parent::md">
             <xsl:choose>
                 <xsl:when test="@number='yes'">
-                    <xsl:apply-templates select="." mode="tag" />
+                    <xsl:apply-templates select="." mode="tag">
+                <xsl:with-param name="b-original" select="$b-original" />
+            </xsl:apply-templates>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:text>\notag</xsl:text>
@@ -1153,7 +1164,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>\notag</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="tag" />
+                    <xsl:apply-templates select="." mode="tag">
+                    <xsl:with-param name="b-original" select="$b-original" />
+                </xsl:apply-templates>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
