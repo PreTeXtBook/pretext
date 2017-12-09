@@ -7000,20 +7000,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="$target" mode="xref-as-ref" />
     </xsl:variable>
     <xsl:choose>
+        <!-- inactive in titles, just text               -->
+        <!-- With protection against incorrect, sloppy   -->
+        <!-- matches, we sneak in the starred version    -->
+        <!-- of \ref{} so as to get a number for a label -->
+        <!-- in a cross-references, not an active link   -->
+        <xsl:when test="ancestor::title|ancestor::subtitle">
+            <xsl:variable name="active-ref">
+                <xsl:text>\ref{</xsl:text>
+                <xsl:apply-templates select="$target" mode="internal-id" />
+                <xsl:text>}</xsl:text>
+            </xsl:variable>
+            <xsl:variable name="inactive-ref">
+                <xsl:text>\ref*{</xsl:text>
+                <xsl:apply-templates select="$target" mode="internal-id" />
+                <xsl:text>}</xsl:text>
+            </xsl:variable>
+            <xsl:value-of select="str:replace($content, $active-ref, $inactive-ref)" />
+        </xsl:when>
         <xsl:when test="$xref-as-ref='true'">
             <xsl:text>\hyperref[</xsl:text>
             <xsl:apply-templates select="$target" mode="internal-id" />
             <xsl:text>]</xsl:text>
+            <xsl:text>{</xsl:text>
+            <xsl:value-of select="$content" />
+            <xsl:text>}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>\hyperlink{</xsl:text>
             <xsl:apply-templates select="$target" mode="internal-id" />
             <xsl:text>}</xsl:text>
+            <xsl:text>{</xsl:text>
+            <xsl:value-of select="$content" />
+            <xsl:text>}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>{</xsl:text>
-    <xsl:value-of select="$content" />
-    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- ################## -->

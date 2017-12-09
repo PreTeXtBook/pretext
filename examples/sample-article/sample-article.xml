@@ -578,7 +578,7 @@ the xsltproc executable.
                 <p>The Fundamental Theorem comes in two flavors, where usually one is a corollary of the other.</p>
             </introduction>
 
-            <subsection>
+            <subsection xml:id="subsection-second-FTC">
                 <title>Second Version of <acro>FTC</acro></title>
 
                 <todo>Should equation references come with parentheses?</todo>
@@ -664,7 +664,7 @@ the xsltproc executable.
             -->
 
             <subsection>
-                <title>A Pedagogical Note</title>
+                <title>A Pedagogical Note about <xref ref="subsection-second-FTC" text="type-global"/></title>
 
                 <subsubsection xml:id="subsubsection-different-integrals">
                     <title>Symbolic and Numerical Integrals</title>

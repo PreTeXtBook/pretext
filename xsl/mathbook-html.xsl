@@ -5816,7 +5816,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- 1st exceptional case, xref in webwork -->
         <!-- Just parrot the content               -->
-        <xsl:when test="ancestor::webwork">
+        <xsl:when test="ancestor::webwork|ancestor::title|ancestor::subtitle">
             <xsl:value-of select="$content" />
         </xsl:when>
         <!-- 2nd exceptional case, xref in mrow of display math  -->
