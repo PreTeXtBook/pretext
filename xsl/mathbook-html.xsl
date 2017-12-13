@@ -309,7 +309,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- We process structural nodes via chunking routine in   xsl/mathbook-common.html -->
+<!-- We process structural nodes via chunking routine in   xsl/mathbook-common.xsl -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file     -->
 <!-- The xref-knowl templates run independently on content node of document tree    -->
 <xsl:template match="/mathbook|/pretext">
@@ -410,7 +410,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Structural Nodes -->
 <!-- ################ -->
 
-<!-- Read the code and documentation for "chunking" in xsl/mathbook-common.html -->
+<!-- Read the code and documentation for "chunking" in xsl/mathbook-common.xsl -->
 <!-- This will explain document structure (not XML structure) and has the       -->
 <!-- routines which employ the realizations below of two abstract templates.    -->
 
