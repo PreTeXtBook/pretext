@@ -1602,7 +1602,7 @@ the xsltproc executable.
             </subsection>
 
             <subsection xml:id="section-urls">
-                <title>URLs</title>
+                <title>URLs, such as <url href="http://example.com" /></title>
 
                 <p>An internet <init>URL</init><idx><h>URLs</h></idx> can very well contain some of the characters that <latex /> needs to escape.  But the packages we use for embedded links should be smart about this.  So we include a long <init>URL</init> for testing <latex /> output, with one reserved character, though maybe someday it will become stale and we need to change it out:  <url href="http://www.pcc.edu/enroll/registration/dropping.html#withdraw">www.pcc.edu/enroll/registration/dropping.html<hash />withdraw</url>.  Notice in the source that you <em>cannot</em> put a tag inside the <c>href</c> attribute, and do need to use an element within the content (unless you like to wrap the content in a <c>c</c> element).  Here is a totally bogus <init>URL</init>, which contains every possible legal character, so if this fails to convert there is some problematic character.  Four combinations: with the content as normal text versus with the characters as verbatim text, and as a <init>URL</init> versus not.</p>
 

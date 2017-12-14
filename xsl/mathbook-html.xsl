@@ -6188,26 +6188,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- External URLs, Email        -->
-<!-- Open in new windows         -->
-<!-- URL itself, if content-less -->
-<!-- automatically verbatim      -->
+<!-- Open in new window/tab as external reference                        -->
+<!-- If content-less, then automatically formatted like code             -->
+<!-- Within titles, we just produce (formatted) text, but nothing active -->
 <!-- http://stackoverflow.com/questions/9782021/check-for-empty-xml-element-using-xslt -->
 <xsl:template match="url">
-    <a class="external-url" href="{@href}" target="_blank">
+    <!-- visible portion of HTML is the URL itself,   -->
+    <!-- formatted as code, or content of PTX element -->
+    <xsl:variable name="visible-text">
+        <xsl:choose>
+            <xsl:when test="not(*) and not(normalize-space())">
+                <xsl:element name="tt">
+                    <xsl:attribute name="class">
+                        <xsl:text>code-inline tex2jax_ignore</xsl:text>
+                    </xsl:attribute>
+                    <xsl:value-of select="@href" />
+                </xsl:element>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Normally in an active link, except inactive in titles -->
     <xsl:choose>
-        <xsl:when test="not(*) and not(normalize-space())">
-            <xsl:element name="tt">
-                <xsl:attribute name="class">
-                    <xsl:text>code-inline tex2jax_ignore</xsl:text>
-                </xsl:attribute>
-                <xsl:value-of select="@href" />
-            </xsl:element>
+        <xsl:when test="ancestor::title|ancestor::subtitle">
+            <xsl:copy-of select="$visible-text" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates />
+            <a class="external-url" href="{@href}" target="_blank">
+                <xsl:copy-of select="$visible-text" />
+            </a>
         </xsl:otherwise>
     </xsl:choose>
-    </a>
 </xsl:template>
 
 <xsl:template match="email">

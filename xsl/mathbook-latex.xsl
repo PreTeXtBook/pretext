@@ -4674,30 +4674,49 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- when given in the @href attribute, the \url{}   -->
 <!-- and \href{}{} seem to do the right thing        -->
 <!-- and they do better in footnotes and table cells -->
+<!-- Within titles, we just produce (formatted)      -->
+<!-- text, but nothing active                        -->
 
 <xsl:template match="url">
-    <xsl:text>\url{</xsl:text>
+    <!-- choose a macro, font change, or active link -->
+    <xsl:choose>
+        <xsl:when test="ancestor::title|ancestor::subtitle">
+            <xsl:text>\mono{</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\url{</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- sanitize the URL for LaTeX output -->
     <xsl:call-template name="escape-url-to-latex">
         <xsl:with-param name="text">
             <xsl:value-of select="@href" />
         </xsl:with-param>
     </xsl:call-template>
     <xsl:text>}</xsl:text>
-
 </xsl:template>
 
 <!-- Checking for "content-less" form           -->
 <!-- http://stackoverflow.com/questions/9782021 -->
 <xsl:template match="url[* or normalize-space()]">
-    <xsl:text>\href{</xsl:text>
-    <xsl:call-template name="escape-url-to-latex">
-        <xsl:with-param name="text">
-            <xsl:value-of select="@href" />
-        </xsl:with-param>
-    </xsl:call-template>
-    <xsl:text>}{</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>}</xsl:text>
+    <xsl:choose>
+        <!-- just the content, ignore the actual URL -->
+        <xsl:when test="ancestor::title|ancestor::subtitle">
+            <xsl:apply-templates />
+        </xsl:when>
+        <!-- the functional version, usually -->
+        <xsl:otherwise>
+            <xsl:text>\href{</xsl:text>
+            <xsl:call-template name="escape-url-to-latex">
+                <xsl:with-param name="text">
+                    <xsl:value-of select="@href" />
+                </xsl:with-param>
+            </xsl:call-template>
+            <xsl:text>}{</xsl:text>
+            <xsl:apply-templates />
+            <xsl:text>}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- ############# -->
