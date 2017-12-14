@@ -292,7 +292,7 @@
   <define name="Credit">
     <element name="credit">
       <element name="title">
-        <ref name="TextShort"/>
+        <ref name="TextLong"/>
       </element>
       <oneOrMore>
         <ref name="Author"/>
@@ -1946,7 +1946,7 @@
   </define>
   <define name="BibTitle">
     <element name="title">
-      <ref name="TextShort"/>
+      <ref name="TextLong"/>
     </element>
   </define>
   <define name="BibNote">
@@ -2201,12 +2201,12 @@
   </define>
   <define name="Title">
     <element name="title">
-      <ref name="TextShort"/>
+      <ref name="TextLong"/>
     </element>
   </define>
   <define name="Subtitle">
     <element name="subtitle">
-      <ref name="TextShort"/>
+      <ref name="TextLong"/>
     </element>
   </define>
   <define name="XMLBase">

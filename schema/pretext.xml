@@ -1515,7 +1515,7 @@
         BibJournal = element journal {text}
         BibNumber = element number {text}
         BibVolume = element volume {text}
-        BibTitle = element title {TextShort}
+        BibTitle = element title {TextLong}
         BibNote = element note {UniqueID?, Paragraph+}
         </fragment>
     </section>
@@ -1669,15 +1669,16 @@
             <li><c>MetaDataTarget</c> is for items that are targets of cross-references, but without even optional titles.  Since they will be knowled, they can appear in an index.  But without the potential to be titled, we do not set them up as possible root elements of a file to <c>xinclude</c>.</li>
             <li><c>MetaDataSubtitle</c> implicitly has an required title.  We might relax this as it is employed in more places.</li>
             <li><c>MetaDataCaption</c> implicitly has an optional title.</li>
+            <li>Titles may contain external references (<c>url</c>) or internal cross-references (<c>xref</c>), but implementers need not make them active (<ie />, they maybe text only), since titles are prone to migrating to other locations.</li>
         </ul></p>
 
         <fragment xml:id="metadata">
         UniqueID =
             attribute xml:id {text}
         Title =
-            element title {TextShort}
+            element title {TextLong}
         Subtitle =
-            element subtitle {TextShort}
+            element subtitle {TextLong}
         XMLBase = attribute xml:base {text}
         XMLLang = attribute xml:lang {text}
         MetaDataTarget =
@@ -1781,7 +1782,7 @@
             }
         Credit =
             element credit {
-                element title {TextShort},
+                element title {TextLong},
                 Author+
             }
         Date = 

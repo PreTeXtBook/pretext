@@ -143,7 +143,7 @@
             }
         Credit =
             element credit {
-                element title {TextShort},
+                element title {TextLong},
                 Author+
             }
         Date = 
@@ -879,7 +879,7 @@
         BibJournal = element journal {text}
         BibNumber = element number {text}
         BibVolume = element volume {text}
-        BibTitle = element title {TextShort}
+        BibTitle = element title {TextLong}
         BibNote = element note {UniqueID?, Paragraph+}
         
         
@@ -995,9 +995,9 @@
         UniqueID =
             attribute xml:id {text}
         Title =
-            element title {TextShort}
+            element title {TextLong}
         Subtitle =
-            element subtitle {TextShort}
+            element subtitle {TextLong}
         XMLBase = attribute xml:base {text}
         XMLLang = attribute xml:lang {text}
         MetaDataTarget =
