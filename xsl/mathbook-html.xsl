@@ -518,31 +518,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:otherwise />
         </xsl:choose>
     </xsl:variable>
-    <xsl:element name="header">
-         <xsl:attribute name="title">
+    <xsl:element name="{$heading-level}">
+        <xsl:attribute name="class">
+            <xsl:choose>
+                <xsl:when test="self::chapter">
+                    <xsl:text>heading</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>heading hide-type</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:attribute name="alt">
             <xsl:apply-templates select="." mode="tooltip-text" />
         </xsl:attribute>
-        <xsl:element name="{$heading-level}">
-            <xsl:attribute name="class">
-                <xsl:choose>
-                    <xsl:when test="self::chapter">
-                        <xsl:text>heading</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text>heading hide-type</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:attribute>
-            <xsl:attribute name="alt">
-                <xsl:apply-templates select="." mode="tooltip-text" />
-            </xsl:attribute>
-            <xsl:apply-templates select="." mode="header-content" />
-        </xsl:element>
-        <xsl:apply-templates select="." mode="permalink" />
-        <xsl:if test="author">
-            <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
-        </xsl:if>
+        <xsl:apply-templates select="." mode="header-content" />
     </xsl:element>
+    <xsl:apply-templates select="." mode="permalink" />
+    <xsl:if test="author">
+        <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
+    </xsl:if>
 </xsl:template>
 
 <!-- The front and back matter have their own style -->
