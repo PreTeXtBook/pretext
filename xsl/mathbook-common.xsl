@@ -269,6 +269,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$toc.level != ''">
             <xsl:value-of select="$toc.level" />
         </xsl:when>
+        <xsl:when test="$root/book/part/chapter/section">3</xsl:when>
+        <xsl:when test="$root/book/part/chapter">2</xsl:when>
         <xsl:when test="$root/book/chapter/section">2</xsl:when>
         <xsl:when test="$root/book/chapter">1</xsl:when>
         <xsl:when test="$root/article/section/subsection">2</xsl:when>
@@ -451,6 +453,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="new.exercises" select="'no'" />
 <xsl:variable name="newexercises" select="boolean($new.exercises = 'yes')" />
 
+<!-- Status quo, for no-part books and articles is "absent".     -->
+<!-- The "structural" option will change numbers and numbering   -->
+<!-- substantially.  The "decorative" option is the default for  -->
+<!-- books with parts, and it looks just like the LaTeX default. -->
+<xsl:variable name="parts">
+    <xsl:choose>
+        <xsl:when test="not($document-root/part) and $docinfo/numbering/division/@part">
+            <xsl:message>MBX:WARNING: your document is not a book with parts, so docinfo/numbering/division/@part will be ignored</xsl:message>
+            <xsl:text>absent</xsl:text>
+        </xsl:when>
+        <!-- Schema restricts parts to a division of a book -->
+        <!-- So usual no-part book, or article, or ...      -->
+        <xsl:when test="not($document-root/part)">
+            <xsl:text>absent</xsl:text>
+        </xsl:when>
+        <!-- has parts, check docinfo specification        -->
+        <!-- nothing given is default, which is decorative -->
+        <xsl:when test="not($docinfo/numbering/division/@part)">
+            <xsl:text>decorative</xsl:text>
+        </xsl:when>
+        <xsl:when test="$docinfo/numbering/division/@part = 'structural'">
+            <xsl:text>structural</xsl:text>
+        </xsl:when>
+        <xsl:when test="$docinfo/numbering/division/@part = 'decorative'">
+            <xsl:text>decorative</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message terminate='yes'>MBX:WARNING: docinfo/numbering/division/@part should be "decorative" or "structural", not "<xsl:value-of select="$docinfo/numbering/division/@part" />"  Quitting...</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 
 <!-- We read the document language translation -->
 <!-- nodes out of the right file, which relies -->
@@ -604,9 +637,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- filter them out.  The overarching XML root (not   -->
 <!-- the special root node) is simply subtracted from  -->
 <!-- the count.                                        -->
+<!-- Appendices of a part'ed book need an additional   -->
+<!-- level added to become a \chapter in LaTeX and     -->
+<!-- thus realized as an appendix                      -->
 <xsl:template match="*" mode="level">
     <xsl:variable name="hierarchy" select="ancestor-or-self::*[not(self::backmatter or self::frontmatter)]" />
-    <xsl:value-of select="count($hierarchy) - 2" />
+    <xsl:choose>
+        <xsl:when test="ancestor-or-self::appendix and $document-root//part">
+            <xsl:value-of select="count($hierarchy) - 2 + 1" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="count($hierarchy) - 2" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Enclosing Level -->
@@ -3014,9 +3057,20 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="part" mode="serial-number">
     <xsl:number format="I" />
 </xsl:template>
-<!-- TODO: condition on part/chapter style to use  level='any'; from="book/part"  to cross part boundaries -->
+<!-- TODO: ban references and exercises as peers of chapters (overall references can go in backmatter) -->
 <xsl:template match="chapter" mode="serial-number">
-    <xsl:number count="chapter|references|exercises" format="1" />
+    <!-- chapters, in parts or not, do not have "references" -->
+    <!-- or "exercises" divisions as peers, so we just count -->
+    <!-- chapters, varying the subtree considered depending  -->
+    <!-- on the style elected for how parts are numbered     -->
+    <xsl:choose>
+        <xsl:when test="($parts = 'absent') or ($parts = 'decorative')">
+            <xsl:number from="book" level="any" count="chapter" format="1" />
+        </xsl:when>
+        <xsl:when test="$parts = 'structural'">
+            <xsl:number from="part" count="chapter" format="1" />
+        </xsl:when>
+    </xsl:choose>
 </xsl:template>
 <xsl:template match="appendix" mode="serial-number">
     <xsl:number format="A" />
@@ -3661,6 +3715,20 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="pad" />
 
     <xsl:choose>
+        <!-- when the lead node is a part, we just drop it,   -->
+        <!-- and we decrement the level.  We may later devise -->
+        <!-- an option with more part numbers, and we can     -->
+        <!-- condition here to include the part number in the -->
+        <!-- numbering scheme NB: this is *not* the serial    -->
+        <!-- number, so for example, the summary page for     -->
+        <!-- a part *will* have a number, and the right one   -->
+        <xsl:when test="$nodes[1][self::part]">
+            <xsl:apply-templates select="." mode="multi-number">
+                <xsl:with-param name="nodes" select="$nodes[position() > 1]" />
+                <xsl:with-param name="levels" select="$levels - 1" />
+                <xsl:with-param name="pad" select="$pad" />
+            </xsl:apply-templates>
+        </xsl:when>
         <!-- always halt when levels met -->
         <xsl:when test="$levels = 0" />
         <!-- not padding, halt if $nodes exhausted -->
