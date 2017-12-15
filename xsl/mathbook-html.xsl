@@ -192,6 +192,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$html.chunk.level != ''">
             <xsl:value-of select="$html.chunk.level" />
         </xsl:when>
+        <xsl:when test="$root/book/part">3</xsl:when>
         <xsl:when test="$root/book">2</xsl:when>
         <xsl:when test="$root/article/section">1</xsl:when>
         <xsl:when test="$root/article">0</xsl:when>
@@ -7806,13 +7807,28 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- TODO: split out inner link formation, outer link formation? -->
 <xsl:template match="*" mode="toc-items">
     <xsl:if test="$b-has-toc">
+        <!-- Decrement level for books with parts, -->
+        <!-- then 0 is exceptional - parts only    -->
+        <xsl:variable name="adjusted-toc-level">
+            <xsl:choose>
+                <xsl:when test="not($parts = 'absent')">
+                    <xsl:value-of select="$toc-level - 1" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$toc-level" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <!-- Subtree for page this sidebar will adorn -->
         <xsl:variable name="this-page-node" select="descendant-or-self::*" />
-        <xsl:for-each select="$document-root/*">
+        <!-- If a book has parts, we include them as top level -->
+        <!-- Note: these include front matter, back matter     -->
+        <xsl:for-each select="$root/book/*|$root/book/part/*|$root/article/*">
             <xsl:variable name="structural">
                 <xsl:apply-templates select="." mode="is-structural" />
             </xsl:variable>
-            <xsl:if test="$structural='true'">
+            <!-- Bypass chapters for compact ToC for book with parts -->
+            <xsl:if test="$structural='true' and not(($adjusted-toc-level = 0) and self::chapter)">
                 <!-- Subtree represented by this ToC item -->
                 <xsl:variable name="outer-node" select="descendant-or-self::*" />
                 <xsl:variable name="outer-url">
@@ -7851,7 +7867,9 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
                         </span>
                     </xsl:element>
                 </h2>
-                <xsl:if test="$toc-level > 1">
+                <!-- We don't divide parts again, their  -->
+                <!-- chapters will be in $sublist anyway -->
+                <xsl:if test="not(self::part) and $adjusted-toc-level > 1">
                     <!-- a level 1 ToC entry may not have any structural      -->
                     <!-- descendants, so we build a possible sublist in a     -->
                     <!-- variable and do not use it if it ends up being empty -->
