@@ -160,6 +160,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$toc.level != ''">
             <xsl:value-of select="$toc.level" />
         </xsl:when>
+        <xsl:when test="$root/book/article">3</xsl:when>
         <xsl:when test="$root/book">2</xsl:when>
         <xsl:when test="$root/article">0</xsl:when>
         <xsl:when test="$root/letter">0</xsl:when>
@@ -1595,6 +1596,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Package for tables spanning several pages&#xa;</xsl:text>
         <xsl:text>\usepackage{longtable}&#xa;</xsl:text>
     </xsl:if>
+    <!-- This is the place to add part numbers to the numbering, which   -->
+    <!-- is *not* the default LaTeX behavior.  The \p@section scheme     -->
+    <!-- is complicated, leading to about ten constructions like         -->
+    <!--                                                                 -->
+    <!-- \ifdefined\p@namedlist\renewcommand{\p@namedlist}{\thepart.}\fi -->
+    <!--                                                                 -->
+    <!-- Advice is to redefine these *before* loading hyperref           -->
+    <!-- https://tex.stackexchange.com/questions/172962                  -->
+    <!-- (hyperref-include-part-number-for-cross-references-to-chapters) -->
+    <!-- Easier is to just adjust the chapter number, which filters down -->
+    <!-- into anything that uses the chapter, though perhaps per-part    -->
+    <!-- numbering will still need something?                            -->
+    <!--                                                                 -->
+    <!-- \renewcommand{\thechapter}{\thepart.\arabic{chapter}}           -->
+    <!--                                                                 -->
     <!-- http://tex.stackexchange.com/questions/106159/why-i-shouldnt-load-pdftex-option-with-hyperref -->
     <xsl:text>%% hyperref driver does not need to be specified, it will be detected&#xa;</xsl:text>
     <xsl:text>\usepackage{hyperref}&#xa;</xsl:text>
@@ -1617,11 +1633,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- http://tex.stackexchange.com/questions/44088/when-do-i-need-to-invoke-phantomsection -->
     <xsl:text>%% If you manually remove hyperref, leave in this next command&#xa;</xsl:text>
     <xsl:text>\providecommand\phantomsection{}&#xa;</xsl:text>
-    <xsl:if test="//book/part">
-        <xsl:text>%% To match HTML, chapters reset within parts&#xa;</xsl:text>
+    <!-- Later comment advises @addtoreset *after* hyperref -->
+    <!-- https://tex.stackexchange.com/questions/35782      -->
+    <xsl:if test="$parts = 'structural'">  <!-- implies book/part -->
+        <xsl:text>%% Structural chapter numbers reset within parts&#xa;</xsl:text>
         <xsl:text>\makeatletter&#xa;</xsl:text>
         <xsl:text>\@addtoreset{chapter}{part}&#xa;</xsl:text>
-        <xsl:text>\makeatother &#xa;</xsl:text>
+        <xsl:text>\makeatother&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$latex.watermark">
         <xsl:text>\usepackage{draftwatermark}&#xa;</xsl:text>
