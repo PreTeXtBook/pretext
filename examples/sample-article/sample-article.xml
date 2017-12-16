@@ -612,7 +612,7 @@ the xsltproc executable.
                 </sage>
 
                 <example xml:id="example-mysterious">
-                    <title>A Mysterious Derivative</title>
+                    <title>A Mysterious Derivative!</title>
                     <p>So if we define a function with its variable employed as a limit of integration, like so <me>K(z)=\definiteintegral{345}{z}{x^4\sin(x^2)}{x}</me> then we get the derivative of that function so easily it seems like a mystery, <me>\frac{d}{dz}K(z)=z^4\sin(z^2)</me>. That's it.</p>
 
                     <p>For testing purposes, there is a simple Sage Cell here, buried inside an example that should be a knowl (embedded in the page).</p>
