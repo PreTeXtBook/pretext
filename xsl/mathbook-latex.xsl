@@ -356,6 +356,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.preamble.early" />
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
+    <!-- Following need to be mature, robust, powerful, flexible, well-maintained -->
+    <xsl:text>%% Default LaTeX packages&#xa;</xsl:text>
+    <xsl:text>%%   1.  always employed (or nearly so) for some purpose, or&#xa;</xsl:text>
+    <xsl:text>%%   2.  a stylewriter may assume their presence&#xa;</xsl:text>
+    <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
+    <xsl:text>%% some aspects of the preamble are conditional, such as engine&#xa;</xsl:text>
+    <xsl:text>\usepackage{ifthen}&#xa;</xsl:text>
+    <xsl:text>%% Raster graphics inclusion&#xa;</xsl:text>
+    <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
+    <xsl:text>%% Hyperref should be here, but likes to be loaded late&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Inline math delimiters, \(, \), need to be robust&#xa;</xsl:text>
     <xsl:text>%% 2016-01-31:  latexrelease.sty  supersedes  fixltx2e.sty&#xa;</xsl:text>
     <xsl:text>%% If  latexrelease.sty  exists, bugfix is in kernel&#xa;</xsl:text>
@@ -377,8 +388,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% See Bringhurst 2.1.1 on measure for recommendations&#xa;</xsl:text>
     <xsl:text>%% 75 characters per line (count spaces, punctuation) is target&#xa;</xsl:text>
     <xsl:text>%% which is the upper limit of Bringhurst's recommendations&#xa;</xsl:text>
-    <xsl:text>%% Load geometry package to allow page margin adjustments&#xa;</xsl:text>
-    <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
     <xsl:text>\geometry{letterpaper,total={</xsl:text>
     <xsl:value-of select="$text-width" />
     <xsl:text>,</xsl:text>
@@ -394,7 +403,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% The following provides engine-specific capabilities&#xa;</xsl:text>
     <xsl:text>%% Generally, xelatex and lualatex will do better languages other than US English&#xa;</xsl:text>
     <xsl:text>%% You can pick from the conditional if you will only ever use one engine&#xa;</xsl:text>
-    <xsl:text>\usepackage{ifthen}&#xa;</xsl:text>
     <xsl:text>\usepackage{ifxetex,ifluatex}&#xa;</xsl:text>
     <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}{%&#xa;</xsl:text>
     <xsl:text>%% begin: xelatex and lualatex-specific configuration&#xa;</xsl:text>
@@ -1289,10 +1297,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% end: pdflatex-specific configuration&#xa;</xsl:text>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% Raster graphics inclusion, wrapped figures in paragraphs&#xa;</xsl:text>
-    <xsl:text>%% \resizebox sometimes used for images in side-by-side layout&#xa;</xsl:text>
-    <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
-    <xsl:text>%%&#xa;</xsl:text>
     <!-- Inconsolata font, sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html            -->
     <!-- As seen on: http://tex.stackexchange.com/questions/50810/good-monospace-font-for-code-in-latex -->
     <!-- "Fonts for Displaying Program Code in LaTeX":  http://nepsweb.co.uk/docs%/progfonts.pdf        -->
