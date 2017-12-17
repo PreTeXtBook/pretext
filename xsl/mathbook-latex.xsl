@@ -683,7 +683,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\setcounter{secnumdepth}{</xsl:text>
         <xsl:value-of select="$latex-numbering-maxlevel" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:if test="$document-root//assemblage | $document-root//list">
+    <xsl:if test="$document-root//list">
         <xsl:text>%% mdframed environments use a tikz frame method&#xa;</xsl:text>
         <xsl:text>\usepackage{tikz}</xsl:text>
     </xsl:if>
@@ -899,29 +899,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="$document-root//assemblage | $document-root//list">
+    <xsl:if test="$document-root//list">
         <xsl:text>%% Package for breakable highlight boxes&#xa;</xsl:text>
         <!-- TODO: load just once, see webwork -->
         <xsl:text>\usepackage[framemethod=tikz]{mdframed}&#xa;</xsl:text>
-        <xsl:if test="$document-root//assemblage">
-            <xsl:text>%% begin: assemblage&#xa;</xsl:text>
-            <xsl:text>%% minimally structured content, high visibility presentation&#xa;</xsl:text>
-            <xsl:text>%% environments (untitled, titled), with style&#xa;</xsl:text>
-            <xsl:text>\newenvironment{assemblage-untitled}{\mdfsetup{%&#xa;</xsl:text>
-            <xsl:text>roundcorner=2ex, backgroundcolor=blue!5,linecolor=blue!75!black,}%&#xa;</xsl:text>
-            <xsl:text>\begin{mdframed}}{\end{mdframed}}&#xa;</xsl:text>
-            <xsl:text>\newenvironment{assemblage}[1]{\mdfsetup{frametitle={\colorbox{blue!20}{\space#1\space}},%&#xa;</xsl:text>
-            <xsl:text>frametitlealignment={\hspace*{1ex}}, frametitleaboveskip=-1.5ex, frametitlebelowskip=0pt,%&#xa;</xsl:text>
-            <xsl:text>roundcorner=2ex, backgroundcolor=blue!5,linecolor=blue!75!black,}%&#xa;</xsl:text>
-            <xsl:text>\begin{mdframed}}{\end{mdframed}}&#xa;</xsl:text>
-            <xsl:text>%% end: assemblage&#xa;</xsl:text>
-        </xsl:if>
         <!-- minimal box around named list contents, no title support yet -->
         <xsl:if test="$document-root//list">
             <xsl:text>%% named list environment and style&#xa;</xsl:text>
             <xsl:text>\newenvironment{namedlistcontent}{\mdfsetup{leftmargin=3ex,rightmargin=3ex,linecolor=black,}%&#xa;</xsl:text>
             <xsl:text>\begin{mdframed}}{\end{mdframed}}&#xa;</xsl:text>
         </xsl:if>
+    </xsl:if>
+    <xsl:if test="$document-root//assemblage">
+        <xsl:text>%% begin: assemblage&#xa;</xsl:text>
+        <xsl:text>%% minimally structured content, high visibility presentation&#xa;</xsl:text>
+        <xsl:text>%% One optional argument (title) with default value blank&#xa;</xsl:text>
+        <xsl:text>%% 3mm space below dropped title is increase over 2mm default&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox{assemblage}[1][]&#xa;</xsl:text>
+        <xsl:text>  {breakable, skin=enhanced, arc=2ex, colback=blue!5, colframe=blue!75!black,&#xa;</xsl:text>
+        <xsl:text>   colbacktitle=blue!20, coltitle=black, boxed title style={sharp corners, frame hidden},&#xa;</xsl:text>
+        <xsl:text>   fonttitle=\bfseries, attach boxed title to top left={xshift=4mm,yshift=-3mm}, top=3mm, title=#1}&#xa;</xsl:text>
+        <xsl:text>%% end: assemblage&#xa;</xsl:text>
     </xsl:if>
     <!-- Following chould be duplicated as three environments, perhaps with  \tcbset{}   -->
     <!-- See https://tex.stackexchange.com/questions/180898/                             -->
@@ -3738,20 +3736,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Low-structure content, high-visibility presentation -->
 <!-- Title is optional, keep remainders coordinated      -->
 
-<!-- Less specific first, untitled version -->
 <xsl:template match="assemblage">
-    <xsl:text>\begin{assemblage-untitled}</xsl:text>
-    <xsl:apply-templates select="." mode="label"/>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="p|blockquote|pre|sidebyside|sbsgroup" />
-    <xsl:text>\end{assemblage-untitled}&#xa;</xsl:text>
-</xsl:template>
-
-<!-- More-specific next, title as environment parameter -->
-<xsl:template match="assemblage[title]">
-    <xsl:text>\begin{assemblage}{</xsl:text>
-    <xsl:apply-templates select="." mode="title-full" />
-    <xsl:text>}</xsl:text>
+    <xsl:text>\begin{assemblage}</xsl:text>
+    <xsl:if test="title">
+        <xsl:text>[</xsl:text>
+        <xsl:apply-templates select="." mode="title-full" />
+        <xsl:text>]</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="p|blockquote|pre|sidebyside|sbsgroup" />
