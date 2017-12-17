@@ -365,6 +365,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\usepackage{ifthen}&#xa;</xsl:text>
     <xsl:text>%% Raster graphics inclusion&#xa;</xsl:text>
     <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
+    <xsl:text>%% Colored boxes, and much more, though mostly styling&#xa;</xsl:text>
+    <xsl:text>%% skins library provides "enhanced" skin, empoying tikzpicture&#xa;</xsl:text>
+    <xsl:text>%% boxes may be configured as "breakable" or "unbreakable"&#xa;</xsl:text>
+    <xsl:text>\usepackage{tcolorbox}&#xa;</xsl:text>
+    <xsl:text>\tcbuselibrary{skins}&#xa;</xsl:text>
+    <xsl:text>\tcbuselibrary{breakable}&#xa;</xsl:text>
     <xsl:text>%% Hyperref should be here, but likes to be loaded late&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Inline math delimiters, \(, \), need to be robust&#xa;</xsl:text>
@@ -677,13 +683,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\setcounter{secnumdepth}{</xsl:text>
         <xsl:value-of select="$latex-numbering-maxlevel" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:if test="$document-root//assemblage | $document-root//aside | $document-root//biographical | $document-root//historical | $document-root//list">
+    <xsl:if test="$document-root//assemblage | $document-root//list">
         <xsl:text>%% mdframed environments use a tikz frame method&#xa;</xsl:text>
         <xsl:text>\usepackage{tikz}</xsl:text>
-        <xsl:if test="$document-root//aside or $document-root//biographical or $document-root//historical">
-            <xsl:text>%% mdframed environments use drop shadows&#xa;</xsl:text>
-            <xsl:text>\usetikzlibrary{shadows}</xsl:text>
-        </xsl:if>
     </xsl:if>
     <!-- Could condition following on existence of any amsthm environment -->
     <xsl:text>%% Environments with amsthm package&#xa;</xsl:text>
@@ -897,7 +899,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="$document-root//assemblage | $document-root//aside | $document-root//biographical | $document-root//historical | $document-root//list">
+    <xsl:if test="$document-root//assemblage | $document-root//list">
         <xsl:text>%% Package for breakable highlight boxes&#xa;</xsl:text>
         <!-- TODO: load just once, see webwork -->
         <xsl:text>\usepackage[framemethod=tikz]{mdframed}&#xa;</xsl:text>
@@ -914,18 +916,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\begin{mdframed}}{\end{mdframed}}&#xa;</xsl:text>
             <xsl:text>%% end: assemblage&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="$document-root//aside or $document-root//historical or $document-root//biographical">
-            <xsl:text>%% aside, biographical, historical environments and style&#xa;</xsl:text>
-            <xsl:text>\newenvironment{aside}[1]{\mdfsetup{shadow=true, shadowsize=1.5ex, rightmargin=1.5ex,%&#xa;</xsl:text>
-            <xsl:text>backgroundcolor=blue!3,%&#xa;</xsl:text>
-            <xsl:text>linecolor=blue!50!black,} \begin{mdframed}\textbf{#1}\quad}{\end{mdframed}}&#xa;</xsl:text>
-        </xsl:if>
         <!-- minimal box around named list contents, no title support yet -->
         <xsl:if test="$document-root//list">
             <xsl:text>%% named list environment and style&#xa;</xsl:text>
             <xsl:text>\newenvironment{namedlistcontent}{\mdfsetup{leftmargin=3ex,rightmargin=3ex,linecolor=black,}%&#xa;</xsl:text>
             <xsl:text>\begin{mdframed}}{\end{mdframed}}&#xa;</xsl:text>
         </xsl:if>
+    </xsl:if>
+    <!-- Following chould be duplicated as three environments, perhaps with  \tcbset{}   -->
+    <!-- See https://tex.stackexchange.com/questions/180898/                             -->
+    <!-- (is-it-possible-to-reuse-tcolorbox-definitions-in-another-tcolorbox-definition) -->
+    <xsl:if test="$document-root//aside|$document-root//historical|$document-root//biographical">
+        <xsl:text>%% aside, biographical, historical environments and style&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox{aside}[1]&#xa;</xsl:text>
+        <xsl:text>  {breakable, skin=enhanced, sharp corners, colback=blue!3, colframe=blue!50!black,&#xa;</xsl:text>
+        <xsl:text>   add to width=-1ex, shadow={1ex}{-1ex}{0ex}{black!50!white},&#xa;</xsl:text>
+        <xsl:text>   coltitle=black, fonttitle=\bfseries, title=#1, detach title, before upper={\tcbtitle\ \ }}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//objectives">
         <xsl:text>%% objectives: early in a subdivision, introduction/list/conclusion&#xa;</xsl:text>
