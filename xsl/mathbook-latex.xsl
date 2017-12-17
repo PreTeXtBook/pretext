@@ -551,8 +551,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%%&#xa;</xsl:text>
     <!-- load following conditionally if it presents problems -->
     <xsl:text>%% Color support, xcolor package&#xa;</xsl:text>
-    <xsl:text>%% Always loaded.  Used for:&#xa;</xsl:text>
-    <xsl:text>%% mdframed boxes, add/delete text, author tools&#xa;</xsl:text>
+    <xsl:text>%% Always loaded, for: add/delete text, author tools&#xa;</xsl:text>
     <!-- Avoid option conflicts causing errors: -->
     <!-- http://tex.stackexchange.com/questions/57364/option-clash-for-package-xcolor -->
     <xsl:text>\PassOptionsToPackage{usenames,dvipsnames,svgnames,table}{xcolor}&#xa;</xsl:text>
@@ -683,10 +682,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\setcounter{secnumdepth}{</xsl:text>
         <xsl:value-of select="$latex-numbering-maxlevel" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:if test="$document-root//list">
-        <xsl:text>%% mdframed environments use a tikz frame method&#xa;</xsl:text>
-        <xsl:text>\usepackage{tikz}</xsl:text>
-    </xsl:if>
     <!-- Could condition following on existence of any amsthm environment -->
     <xsl:text>%% Environments with amsthm package&#xa;</xsl:text>
     <xsl:text>%% Theorem-like environments in "plain" style, with or without proof&#xa;</xsl:text>
@@ -899,17 +894,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="$document-root//list">
-        <xsl:text>%% Package for breakable highlight boxes&#xa;</xsl:text>
-        <!-- TODO: load just once, see webwork -->
-        <xsl:text>\usepackage[framemethod=tikz]{mdframed}&#xa;</xsl:text>
-        <!-- minimal box around named list contents, no title support yet -->
-        <xsl:if test="$document-root//list">
-            <xsl:text>%% named list environment and style&#xa;</xsl:text>
-            <xsl:text>\newenvironment{namedlistcontent}{\mdfsetup{leftmargin=3ex,rightmargin=3ex,linecolor=black,}%&#xa;</xsl:text>
-            <xsl:text>\begin{mdframed}}{\end{mdframed}}&#xa;</xsl:text>
-        </xsl:if>
-    </xsl:if>
     <xsl:if test="$document-root//assemblage">
         <xsl:text>%% begin: assemblage&#xa;</xsl:text>
         <xsl:text>%% minimally structured content, high visibility presentation&#xa;</xsl:text>
@@ -943,6 +927,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newtheorem{exercise}[theorem]{</xsl:text>
         <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'exercise'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$document-root//list">
+        <xsl:text>%% named list environment and style&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox{namedlistcontent}&#xa;</xsl:text>
+        <xsl:text>  {breakable, skin=enhanced, sharp corners, colback=white, colframe=black,&#xa;</xsl:text>
+        <xsl:text>   boxrule=0.15ex, left skip=3ex, right skip=3ex}&#xa;</xsl:text>
     </xsl:if>
     <!-- Localize various standard names in use         -->
     <!-- Many environments addressed upon creation above -->
