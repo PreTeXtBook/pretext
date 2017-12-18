@@ -361,16 +361,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%%   1.  always employed (or nearly so) for some purpose, or&#xa;</xsl:text>
     <xsl:text>%%   2.  a stylewriter may assume their presence&#xa;</xsl:text>
     <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
-    <xsl:text>%% some aspects of the preamble are conditional, such as engine&#xa;</xsl:text>
+    <xsl:text>%% Some aspects of the preamble are conditional,&#xa;</xsl:text>
+    <xsl:text>%% the LaTeX engine is one example, very early&#xa;</xsl:text>
     <xsl:text>\usepackage{ifthen}&#xa;</xsl:text>
+    <xsl:text>\usepackage{ifxetex,ifluatex}&#xa;</xsl:text>
     <xsl:text>%% Raster graphics inclusion&#xa;</xsl:text>
     <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
     <xsl:text>%% Colored boxes, and much more, though mostly styling&#xa;</xsl:text>
     <xsl:text>%% skins library provides "enhanced" skin, empoying tikzpicture&#xa;</xsl:text>
     <xsl:text>%% boxes may be configured as "breakable" or "unbreakable"&#xa;</xsl:text>
+    <xsl:text>%% the  listings  package will be employed later, but&#xa;</xsl:text>
+    <xsl:text>%% the associated tcolorbox library depends on the engine&#xa;</xsl:text>
     <xsl:text>\usepackage{tcolorbox}&#xa;</xsl:text>
     <xsl:text>\tcbuselibrary{skins}&#xa;</xsl:text>
     <xsl:text>\tcbuselibrary{breakable}&#xa;</xsl:text>
+    <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}%&#xa;</xsl:text>
+    <xsl:text>  {\tcbuselibrary{listings}}&#xa;</xsl:text>
+    <xsl:text>  {\tcbuselibrary{listingsutf8}}&#xa;</xsl:text>
     <xsl:text>%% Hyperref should be here, but likes to be loaded late&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Inline math delimiters, \(, \), need to be robust&#xa;</xsl:text>
@@ -409,7 +416,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% The following provides engine-specific capabilities&#xa;</xsl:text>
     <xsl:text>%% Generally, xelatex and lualatex will do better languages other than US English&#xa;</xsl:text>
     <xsl:text>%% You can pick from the conditional if you will only ever use one engine&#xa;</xsl:text>
-    <xsl:text>\usepackage{ifxetex,ifluatex}&#xa;</xsl:text>
     <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}{%&#xa;</xsl:text>
     <xsl:text>%% begin: xelatex and lualatex-specific configuration&#xa;</xsl:text>
     <xsl:text>%% fontspec package will make Latin Modern (lmodern) the default font&#xa;</xsl:text>
@@ -1457,24 +1463,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\lstdefinestyle{genericinput}{breaklines=true,breakatwhitespace=true,columns=fixed,frame=single,xleftmargin=4ex,xrightmargin=4ex,&#xa;</xsl:text>
             <xsl:text>basicstyle=\small\ttfamily,identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}}&#xa;</xsl:text>
         </xsl:if>
-        <!-- Set "framerule", set "framesep" (latter like CSS padding)            -->
-        <!-- Then set margins on the code to pull box flush with surrounding text -->
-        <!-- "xmargins" = framerule + framesep + epsilon (~0.25pt)                -->
         <xsl:if test="//sage">
-            <xsl:text>%% Sage's blue is 50%, we go way lighter (blue!05 would work)&#xa;</xsl:text>
-            <xsl:text>\definecolor{sageblue}{rgb}{0.95,0.95,1}&#xa;</xsl:text>
-            <xsl:text>%% Sage input, listings package: Python syntax, boxed, colored, line breaking&#xa;</xsl:text>
-            <xsl:text>%% Flush with surrounding text's margins&#xa;</xsl:text>
-            <xsl:text>%% xmargins are sum of framerule, framesep, epsilon&#xa;</xsl:text>
-            <xsl:text>%% space between input/output comes from input style "belowskip",&#xa;</xsl:text>
-            <xsl:text>%% by giving output an aboveskip of zero&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{sageinput}{language=Python,breaklines=true,breakatwhitespace=true,%&#xa;</xsl:text>
-            <xsl:text>basicstyle=\small\ttfamily,columns=fixed,frame=single,backgroundcolor=\color{sageblue},%&#xa;</xsl:text>
-            <xsl:text>framerule=0.5pt,framesep=4pt,xleftmargin=4.75pt,xrightmargin=4.75pt}&#xa;</xsl:text>
-            <!--  -->
-            <xsl:text>%% Sage output, similar, but not boxed, not colored&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{sageoutput}{language=Python,breaklines=true,%&#xa;</xsl:text>
-            <xsl:text>breakatwhitespace=true,basicstyle=\small\ttfamily,columns=fixed,aboveskip=0pt}&#xa;</xsl:text>
+            <xsl:text>%% Sage's blue is 50%, we go way lighter with blue!05&#xa;</xsl:text>
+            <xsl:text>%% Sage code style, listings package: Python syntax, line breaking&#xa;</xsl:text>
+            <xsl:text>\lstdefinestyle{sage}{language=Python,breaklines=true,breakatwhitespace=true,%&#xa;</xsl:text>
+            <xsl:text>basicstyle=\small\ttfamily,columns=fixed}%&#xa;</xsl:text>
+            <xsl:text>%% Now the presentation styles via tcolorbox support&#xa;</xsl:text>
+            <xsl:text>%% 2mm asymmetry in margins is a mystery&#xa;</xsl:text>
+            <!-- Perhaps these two tcb boxes can be combined into upper/lower halves? -->
+            <xsl:text>\newtcblisting{sageinput}&#xa;</xsl:text>
+            <xsl:text>  {breakable, skin=enhanced, listing only, listing style=sage,&#xa;</xsl:text>
+            <xsl:text>   sharp corners, colback=blue!05, boxrule=0.5pt, left=2mm, right=2mm, top=0mm, bottom=0mm, boxsep=0mm}&#xa;</xsl:text>
+            <xsl:text>\newtcblisting{sageoutput}&#xa;</xsl:text>
+            <xsl:text>  {breakable, skin=enhanced, listing only, listing style=sage,&#xa;</xsl:text>
+            <xsl:text>   sharp corners, colback=white, frame hidden, left=0mm, right=0mm, top=-2mm, bottom=-2mm, boxsep=0mm}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
     <xsl:if test="//console or //sidebyside/pre">
@@ -5245,14 +5247,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="leave-vertical-mode" />
     </xsl:if>
     <xsl:if test="$in!=''">
-        <xsl:text>\begin{lstlisting}[style=sageinput]&#xa;</xsl:text>
+        <xsl:text>\begin{sageinput}&#xa;</xsl:text>
         <xsl:value-of select="$in" />
-        <xsl:text>\end{lstlisting}&#xa;</xsl:text>
+        <xsl:text>\end{sageinput}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$out!=''">
-        <xsl:text>\begin{lstlisting}[style=sageoutput]&#xa;</xsl:text>
+        <xsl:text>\begin{sageoutput}&#xa;</xsl:text>
         <xsl:value-of select="$out" />
-        <xsl:text>\end{lstlisting}&#xa;</xsl:text>
+        <xsl:text>\end{sageoutput}&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 
@@ -5261,9 +5263,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="sage-display-markup">
     <xsl:param name="in" />
     <xsl:if test="$in!=''">
-        <xsl:text>\begin{lstlisting}[style=sageinput]&#xa;</xsl:text>
+        <xsl:text>\begin{sageinput}&#xa;</xsl:text>
         <xsl:value-of select="$in" />
-        <xsl:text>\end{lstlisting}&#xa;</xsl:text>
+        <xsl:text>\end{sageinput}&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 
