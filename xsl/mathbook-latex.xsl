@@ -1443,10 +1443,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\lstset{basicstyle=\small\ttfamily,breaklines=true,breakatwhitespace=true,extendedchars=true,inputencoding=latin1}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="//program">
-            <xsl:text>%% Generic input, listings package: boxed, white, line breaking, language per instance&#xa;</xsl:text>
+            <xsl:text>%% Generic input, listings package: line breaking, language per instance&#xa;</xsl:text>
             <xsl:if test="$latex.print='no'" >
                 <xsl:text>%% Colors match a subset of Google prettify "Default" style&#xa;</xsl:text>
-                <xsl:text>%% Set latex.print='yes" to get all black&#xa;</xsl:text>
+                <xsl:text>%% Set latex.print='yes' to get all black&#xa;</xsl:text>
                 <xsl:text>%% http://code.google.com/p/google-code-prettify/source/browse/trunk/src/prettify.css&#xa;</xsl:text>
                 <xsl:text>\definecolor{identifiers}{rgb}{0.375,0,0.375}&#xa;</xsl:text>
                 <xsl:text>\definecolor{comments}{rgb}{0.5,0,0}&#xa;</xsl:text>
@@ -1455,13 +1455,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
             <xsl:if test="$latex.print='yes'" >
                 <xsl:text>%% All-black colors&#xa;</xsl:text>
+                <xsl:text>%% Set latex.print='no' to get colors&#xa;</xsl:text>
                 <xsl:text>\definecolor{identifiers}{rgb}{0,0,0}&#xa;</xsl:text>
                 <xsl:text>\definecolor{comments}{rgb}{0,0,0}&#xa;</xsl:text>
                 <xsl:text>\definecolor{strings}{rgb}{0,0,0}&#xa;</xsl:text>
                 <xsl:text>\definecolor{keywords}{rgb}{0,0,0}&#xa;</xsl:text>
             </xsl:if>
-            <xsl:text>\lstdefinestyle{genericinput}{breaklines=true,breakatwhitespace=true,columns=fixed,frame=single,xleftmargin=4ex,xrightmargin=4ex,&#xa;</xsl:text>
-            <xsl:text>basicstyle=\small\ttfamily,identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}}&#xa;</xsl:text>
+            <xsl:text>\lstdefinestyle{program}{breaklines=true,breakatwhitespace=true,columns=fixed,basicstyle=\small\ttfamily,&#xa;</xsl:text>
+            <xsl:text>identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}}&#xa;</xsl:text>
+            <xsl:text>%% Now the presentation styles via tcolorbox support&#xa;</xsl:text>
+            <xsl:text>%% 2mm asymmetry in margins is a mystery&#xa;</xsl:text>
+            <xsl:text>%% Optional argument is additional listing options&#xa;</xsl:text>
+            <xsl:text>\newtcblisting{program}[1][]&#xa;</xsl:text>
+            <xsl:text>  {breakable, skin=enhanced, listing only, listing options={style=program,#1},&#xa;</xsl:text>
+            <xsl:text>   frame hidden, boxrule=0pt, colback=white, left=2mm, right=2mm, top=0mm, bottom=0mm, boxsep=0mm}&#xa;</xsl:text>
+            <xsl:text>\newtcblisting{programbox}[1][]&#xa;</xsl:text>
+            <xsl:text>  {hbox, skin=enhanced, listing only, listing options={style=program,#1},&#xa;</xsl:text>
+            <xsl:text>   frame hidden, boxrule=0pt, colback=white, left=2mm, right=2mm, top=0mm, bottom=0mm, boxsep=0mm}&#xa;</xsl:text>
+            <!-- bring back frame once sidebyside goes with tcolorbox:  hbox, sharp corners, boxrule=0.5pt-->
         </xsl:if>
         <xsl:if test="//sage">
             <xsl:text>%% Sage's blue is 50%, we go way lighter with blue!05&#xa;</xsl:text>
@@ -5281,21 +5292,46 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="language">
         <xsl:apply-templates select="." mode="listings-language" />
     </xsl:variable>
-    <xsl:text>\begin{lstlisting}[style=genericinput</xsl:text>
-    <xsl:if test="not($language = '')">
-        <xsl:text>, language=</xsl:text>
+    <xsl:variable name="b-has-language" select="not($language = '')" />
+    <xsl:variable name="b-has-width" select="not($width = '')" />
+    <xsl:choose>
+        <xsl:when test="$b-has-width">
+            <xsl:text>\begin{programbox}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\begin{program}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="$b-has-language or $b-has-width">
+        <xsl:text>[</xsl:text>
+    </xsl:if>
+    <!-- inserted into "listing options", after style option -->
+    <xsl:if test="$b-has-language">
+        <xsl:text>language=</xsl:text>
         <xsl:value-of select="$language" />
+        <xsl:text>,</xsl:text>
     </xsl:if>
-    <xsl:if test="not($width = '')">
-        <xsl:text>, linewidth=</xsl:text>
+    <xsl:if test="$b-has-width">
+        <xsl:text>linewidth=</xsl:text>
         <xsl:value-of select="$width" />
+        <xsl:text>,</xsl:text>
     </xsl:if>
-    <xsl:text>]&#xa;</xsl:text>
-    <!-- lstlisting can be captioned: captionpos, title (hard-coded) -->
+    <xsl:if test="$b-has-language or $b-has-width">
+        <xsl:text>]</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
     <xsl:call-template name="sanitize-text">
         <xsl:with-param name="text" select="input" />
     </xsl:call-template>
-    <xsl:text>\end{lstlisting}&#xa;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$b-has-width">
+            <xsl:text>\end{programbox}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\end{program}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Console Session -->
