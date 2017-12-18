@@ -2388,7 +2388,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Exceptional for backward compatibility, 2017-08-25 -->
             <xsl:if test="title and not(caption)">
                 <figcaption>
-                    <span class="heading">
+                    <span class="type">
                         <xsl:apply-templates select="." mode="type-name"/>
                     </span>
                     <span class="codenumber">
@@ -5711,7 +5711,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="right-margin" select="$right-margin" />
             </xsl:call-template>
         </xsl:if>
-        <span class="heading">
+        <span class="type">
             <xsl:apply-templates select="parent::*" mode="type-name"/>
         </span>
         <span class="codenumber">
