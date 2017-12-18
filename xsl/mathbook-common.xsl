@@ -451,7 +451,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- TEMPORARY: exercise numbering cutover -->
 <xsl:param name="new.exercises" select="'no'" />
-<xsl:variable name="newexercises" select="boolean($new.exercises = 'yes')" />
+<xsl:variable name="b-newexercises" select="boolean($new.exercises = 'yes')" />
 
 <!-- Status quo, for no-part books and articles is "absent".     -->
 <!-- The "structural" option will change numbers and numbering   -->
@@ -3076,18 +3076,39 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:number format="A" />
 </xsl:template>
 <xsl:template match="section" mode="serial-number">
-    <xsl:number count="section|references|exercises" format="1" />
+    <xsl:choose>
+        <xsl:when test="$b-newexercises">
+            <xsl:number count="section" format="1" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:number count="section|references|exercises" format="1" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 <xsl:template match="subsection" mode="serial-number">
-    <xsl:number count="subsection|references|exercises" format="1" />
+    <xsl:choose>
+        <xsl:when test="$b-newexercises">
+            <xsl:number count="subsection" format="1" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:number count="subsection|references|exercises" format="1" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 <xsl:template match="subsubsection" mode="serial-number">
-    <xsl:number count="subsubsection|references|exercises" format="1" />
+    <xsl:choose>
+        <xsl:when test="$b-newexercises">
+            <xsl:number count="subsubsection" format="1" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:number count="subsubsection|references|exercises" format="1" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 <!-- Convert references and exercises to the unnumbered once cutover -->
 <xsl:template match="exercises|references" mode="serial-number">
     <xsl:choose>
-        <xsl:when test="$newexercises" />
+        <xsl:when test="$b-newexercises" />
         <xsl:otherwise>
             <xsl:number count="part|chapter|appendix|section|subsection|subsubsection|references|exercises" format="1" />
         </xsl:otherwise>
@@ -3441,15 +3462,31 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- N.B. Same priority as above, so needs to come in this order, -->
 <!-- as we wish hard-coded to have higher priority                -->
 <xsl:template match="exercises/exercise|exercises/exercisegroup/exercise" mode="serial-number">
+    <!-- A sectional exercise is numbered from where the previous "exercises" section leaves off -->
     <xsl:variable name="base">
-        <xsl:variable name="parent-exercises" select="parent::exercises|parent::exercisegroup/parent::exercises" />
         <xsl:choose>
-            <xsl:when test="$parent-exercises/preceding-sibling::exercises and $newexercises">
-                <!-- <xsl:value-of select="count($parent-exercises/preceding-sibling::exercises/exercise)" /> -->
-                <xsl:apply-templates select="$parent-exercises/preceding-sibling::exercises/exercise[last()]" mode="serial-number"/>
+            <!-- status quo from old days -->
+            <xsl:when test="not($b-newexercises)">
+                <xsl:text>0</xsl:text>
+            </xsl:when>
+            <!-- now in  $b-newexercises  true scenario -->
+            <!-- first, respect explicit numbering request -->
+            <!-- do a NaN test?, or restrict in schema? -->
+            <xsl:when test="ancestor::exercises/@first-number">
+                <xsl:value-of select="ancestor::exercises/@first-number - 1" />
+            </xsl:when>
+            <!-- now automatic -->
+            <!-- if first, start at 1 -->
+            <xsl:when test="not(ancestor::exercises/preceding-sibling::exercises)">
+                <xsl:text>0</xsl:text>
+            </xsl:when>
+            <!-- this should be the "otherwise" clause, but presently debugging -->
+            <!-- compute serial number of previous "exercises" last exercise -->
+            <xsl:when test="ancestor::exercises/preceding-sibling::exercises">
+                <xsl:apply-templates select="ancestor::exercises/preceding-sibling::exercises[1]/descendant::exercise[last()]" mode="serial-number"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:text>0</xsl:text>
+                <xsl:message>MBX:DEBUG:   base number for sectional exercises not determined</xsl:message>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -3459,6 +3496,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:variable>
     <xsl:value-of select="$base + $offset" />
 </xsl:template>
+
 <xsl:template match="exercises/exercise[@number]|exercisegroup/exercise[@number]" mode="serial-number">
     <xsl:apply-templates select="@number" />
 </xsl:template>
@@ -3867,7 +3905,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- NB: newexercises: simplified match from before -->
 <xsl:template match="exercises/exercise" mode="structure-number">
     <xsl:choose>
-        <xsl:when test="$newexercises">
+        <xsl:when test="$b-newexercises">
             <!-- hop exercisegroup (perhaps explicitly?) -->
             <xsl:apply-templates select="parent::exercises/parent::*" mode="number" />
         </xsl:when>
@@ -3882,7 +3920,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <xsl:template match="exercises/exercisegroup/exercise" mode="structure-number">
     <xsl:choose>
-        <xsl:when test="$newexercises">
+        <xsl:when test="$b-newexercises">
             <!-- hop exercisegroup (perhaps explicitly?) -->
             <xsl:apply-templates select="ancestor::exercises/parent::*" mode="number" />
         </xsl:when>
@@ -3900,7 +3938,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- NB: newexercises: step up one more parent -->
 <xsl:template match="exercisegroup" mode="structure-number">
     <xsl:choose>
-        <xsl:when test="$newexercises">
+        <xsl:when test="$b-newexercises">
             <xsl:apply-templates select="parent::exercises/parent::*" mode="number" />
         </xsl:when>
         <xsl:otherwise>

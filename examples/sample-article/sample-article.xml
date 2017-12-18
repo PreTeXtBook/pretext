@@ -4180,6 +4180,150 @@ the xsltproc executable.
         A "preview" XSL transform to HTML could be especially useful.
         -->
 
+        <section>
+            <title>Exercises, Redone</title>
+
+            <p>This <c>section</c> of the sample article is provisional, and will eventually replace, or merge with, the previous section, which is actually an <c>exercises</c>.  To view this test section properly, include on the <c>xsltproc</c> command line:<cd>
+                <cline>-stringparam new.exercises yes</cline>
+            </cd>and set the value to <c>no</c> to view the previous section properly.</p>
+
+            <p>Our purpose here is to illustrate an un-structured division, containing inline exercises, plus three subdivisions that are <c>exercises</c> and one subdivision that is a <c>references</c>.  The change is that these divisions are not numbered.  So contained exercises get their structure number from the overall division, and we need to be careful about uniqueness and ambiguity.</p>
+
+            <p>Notice that we have engineered this division (under default settings) to have an <xref ref="exercise-duplicate-inline" text="type-global" />  and an <xref ref="exercise-duplicate-sectional" text="type-global" />.  In print, you will be completely confused by this (that is a problem), while in electronic versions, following these cross-references will take you different places, which may also be confusing.</p>
+
+            <p>How did we end up with the same exercise number?  Inline exercises are mixed in with examples and theorems, so the inline exercises are numbered in concert with those items.  Two inline exercises and one theorem precede <xref ref="exercise-duplicate-inline" text="title" />, so the serial number of this exercises is 4.  Then for the division titled <xref ref="exercises-drill" text="title" /> we purposely set the <c>@first-number</c> attribute to <c>4</c>, causing the numbering to begin with 4 for the sectional exercise <xref ref="exercise-duplicate-sectional" text="title" />.  If we had not set this attribute, the problem would have been worse, as there would be an inline and sectional exercise numbered 1 and an inline and sectional exercise numbered 2 (but not for numbers 3 and 4).  There are various work-arounds to this problem:<ul>
+                <li>Set the <c>@first-number</c> attribute on the first <c>exercises</c> division after an inline exercise to a large enough number to remove any duplication.</li>
+                <li>Use fewer levels for the numbering on inline exercises (and theorems, etc), and place all <c>exercises</c> sections deep enough in the hierarchy to avoid duplication.</li>
+                <li>Never cross-reference an exercise.  Or when you do, cross-reference by title (as in the first part of this paragraph).  The duplicate numbers might still cause confusion for your readers (such as students receiving an assignment).</li>
+            </ul></p>
+
+            <p>Notice that if you only ever use inline exercises, or only ever use sectional exercises, then there is no potential for duplicate numbers (so long as you use the <c>@first-number</c> attribute responsibly).</p>
+
+            <p>Following text is mostly nonsense, just for testing purposes.</p>
+
+            <exercise>
+                <title>Inline One</title>
+                <statement>
+                    <p>Aliquam vitae risus placerat, pellentesque leo vitae, iaculis ante. Praesent ac odio eget mi bibendum eleifend ac eget metus. Morbi in dolor et diam accumsan mattis. Aenean elementum pulvinar efficitur. Etiam viverra ut tellus quis consequat. Phasellus sit amet nisl a ligula pharetra tempus id in elit. Maecenas congue quam eu purus fermentum pretium. Fusce pellentesque ultricies arcu, egestas sollicitudin erat condimentum non. Integer non velit at dolor dictum aliquam et rhoncus mauris. Sed nec nibh id nunc convallis tincidunt ut at ligula. Etiam elementum nisl eu erat dapibus rhoncus.</p>
+                </statement>
+            </exercise>
+
+            <p>Pellentesque nec condimentum ligula, quis interdum mauris. Ut sed urna lacinia, aliquam arcu id, faucibus nisi. Suspendisse potenti. Curabitur in erat ultricies, condimentum mi nec, vehicula mauris. Duis faucibus risus fermentum velit hendrerit, non laoreet massa maximus. Donec bibendum elit ac lectus lobortis luctus. Ut finibus, dolor ut euismod tristique, ligula tortor tempus arcu, finibus semper purus erat ut ligula. Aenean accumsan ut ante vel euismod.</p>
+
+            <exercise>
+                <title>Inline Two</title>
+                <statement>
+                    <p>Ut porttitor neque a pharetra euismod. Vivamus ut metus pretium, placerat massa tempor, condimentum metus. Phasellus vestibulum iaculis turpis non posuere. Vestibulum quis aliquet neque. Donec nec metus iaculis, laoreet massa vitae, suscipit tellus. Etiam et ultrices quam, quis pretium ligula. In ut cursus metus. Aenean volutpat quam odio, quis tempus dolor egestas eget. Nunc fringilla lobortis nunc, ut interdum lorem posuere sed. Sed sodales risus a laoreet venenatis. Nunc sodales tempor mollis. Nam sollicitudin velit sed ex viverra feugiat. Nunc consectetur mi vitae urna sollicitudin malesuada. Fusce eget risus lectus. Mauris augue velit, vestibulum vitae tempus sit amet, porttitor eget turpis.</p>
+                </statement>
+            </exercise>
+
+            <theorem>
+                <title>Major Result</title>
+                <p>Vivamus tortor tortor, lobortis et sem vel, accumsan placerat libero. Sed eget metus non magna accumsan efficitur a non turpis. Curabitur maximus arcu ipsum, eget vestibulum nulla mollis ac. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Duis vel eleifend risus. Morbi hendrerit tellus eget nibh imperdiet, ac mollis nisl sagittis. Ut commodo pharetra leo. Suspendisse consequat velit eget velit condimentum feugiat.</p>
+            </theorem>
+
+            <exercise xml:id="exercise-duplicate-inline">
+                <title>Inline Three</title>
+                <statement>
+                    <p>Suspendisse lacinia mattis risus, eget viverra urna dictum eu. Maecenas ut sem in turpis egestas varius nec at ipsum. Praesent bibendum nisi et turpis congue, a pellentesque felis tempor. Vivamus non dolor in risus interdum mattis. In tempus iaculis velit, sit amet rhoncus tellus aliquam convallis. Sed ut tellus id ipsum blandit convallis sed eget tortor. Nunc leo felis, scelerisque vel ante porta, volutpat rhoncus neque. Mauris convallis, felis at aliquam aliquet, felis ipsum semper mi, vitae auctor purus ante non erat. Ut nec felis mi.</p>
+                </statement>
+            </exercise>
+
+            <exercises first-number="4" xml:id="exercises-drill">
+                <title>Drill Exercises</title>
+
+                <exercise xml:id="exercise-duplicate-sectional">
+                    <title>Drill One</title>
+                    <statement>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue urna nulla. Aliquam eget euismod tellus. Maecenas nibh libero, venenatis a laoreet in, tempor sit amet sem. Morbi sit amet justo tempor velit auctor placerat. Maecenas nec lobortis orci. Aenean dictum enim lacus, ac blandit lacus elementum nec. Mauris porttitor neque volutpat tincidunt sollicitudin. Cras porta lectus ac facilisis tempor. Suspendisse in velit nisl. Sed convallis leo at nunc aliquet fermentum. Pellentesque feugiat at ex sed elementum. In porta vulputate ipsum sit amet consectetur.</p>
+                    </statement>
+                </exercise>
+
+                <exercise>
+                    <title>Drill Two</title>
+                    <statement>
+                        <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
+                    </statement>
+                </exercise>
+
+                <exercise>
+                    <title>Drill Three</title>
+                    <statement>
+                        <p>Nam congue ex nec justo iaculis maximus. Vestibulum lobortis magna sed urna auctor, vel dignissim massa posuere. In sed venenatis elit. Vivamus congue gravida tempus. Nunc quis fermentum nisi. Nullam hendrerit lorem et tellus semper, sit amet scelerisque purus lobortis. Quisque sollicitudin quis neque eu suscipit. Praesent volutpat justo quis magna vehicula molestie.</p>
+                    </statement>
+                </exercise>
+            </exercises>
+
+
+            <exercises first-number="101">
+                <title>Challenging Exercises</title>
+
+                <exercise>
+                    <title>Challenging One</title>
+                    <statement>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue urna nulla. Aliquam eget euismod tellus. Maecenas nibh libero, venenatis a laoreet in, tempor sit amet sem. Morbi sit amet justo tempor velit auctor placerat. Maecenas nec lobortis orci. Aenean dictum enim lacus, ac blandit lacus elementum nec. Mauris porttitor neque volutpat tincidunt sollicitudin. Cras porta lectus ac facilisis tempor. Suspendisse in velit nisl. Sed convallis leo at nunc aliquet fermentum. Pellentesque feugiat at ex sed elementum. In porta vulputate ipsum sit amet consectetur.</p>
+                    </statement>
+                </exercise>
+
+                <exercisegroup>
+                    <introduction>
+                        <p>An introduction to an <c>exercisegroup</c>.  This is here to attempt to interrupt the flow of the counting from this division to the next.</p>
+                    </introduction>
+
+                    <exercise>
+                        <title>Challenging Two</title>
+                        <statement>
+                            <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
+                        </statement>
+                    </exercise>
+
+                    <exercise>
+                        <title>Challenging Three</title>
+                        <statement>
+                            <p>Nam congue ex nec justo iaculis maximus. Vestibulum lobortis magna sed urna auctor, vel dignissim massa posuere. In sed venenatis elit. Vivamus congue gravida tempus. Nunc quis fermentum nisi. Nullam hendrerit lorem et tellus semper, sit amet scelerisque purus lobortis. Quisque sollicitudin quis neque eu suscipit. Praesent volutpat justo quis magna vehicula molestie.</p>
+                        </statement>
+                    </exercise>
+                </exercisegroup>
+            </exercises>
+
+
+            <exercises>
+                <title>Impossible Exercises</title>
+
+                <exercise>
+                    <title>Impossible One</title>
+                    <statement>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue urna nulla. Aliquam eget euismod tellus. Maecenas nibh libero, venenatis a laoreet in, tempor sit amet sem. Morbi sit amet justo tempor velit auctor placerat. Maecenas nec lobortis orci. Aenean dictum enim lacus, ac blandit lacus elementum nec. Mauris porttitor neque volutpat tincidunt sollicitudin. Cras porta lectus ac facilisis tempor. Suspendisse in velit nisl. Sed convallis leo at nunc aliquet fermentum. Pellentesque feugiat at ex sed elementum. In porta vulputate ipsum sit amet consectetur.</p>
+                    </statement>
+                </exercise>
+
+                <exercise>
+                    <title>Impossible Two</title>
+                    <statement>
+                        <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
+                    </statement>
+                </exercise>
+
+                <exercise>
+                    <title>Impossible Three</title>
+                    <statement>
+                        <p>Nam congue ex nec justo iaculis maximus. Vestibulum lobortis magna sed urna auctor, vel dignissim massa posuere. In sed venenatis elit. Vivamus congue gravida tempus. Nunc quis fermentum nisi. Nullam hendrerit lorem et tellus semper, sit amet scelerisque purus lobortis. Quisque sollicitudin quis neque eu suscipit. Praesent volutpat justo quis magna vehicula molestie.</p>
+                    </statement>
+                </exercise>
+            </exercises>
+
+
+            <references>
+                <title>More Reading</title>
+
+                <introduction>
+                    <p>Left intentionally blank.</p>
+                </introduction>
+
+            </references>
+        </section>
+
+
         <section xml:id="section-cross-referencing">
             <title>Cross-Referencing</title>
 
