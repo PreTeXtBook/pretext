@@ -1482,12 +1482,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>   sharp corners, colback=white, frame hidden, left=0mm, right=0mm, top=-2mm, bottom=-2mm, boxsep=0mm}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="//console or //sidebyside/pre">
-        <!-- fancyvrb BVerbatim used for consoles                   -->
-        <!-- fancyvrb BVerbatim used for "pre" as sidebyside panel  -->
-        <!-- perhaps use fancyvrb more widely, eg regular "pre"     -->
-        <xsl:text>%% Fancy Verbatim for consoles and "pre" in sidebyside panels&#xa;</xsl:text>
+    <xsl:if test="//console or //pre or //cd">
+        <xsl:text>%% Fancy Verbatim for consoles, preformatted, code display&#xa;</xsl:text>
         <xsl:text>\usepackage{fancyvrb}&#xa;</xsl:text>
+        <xsl:if test="//pre">
+            <xsl:text>%% Pre-formatted text, a peer of paragraphs&#xa;</xsl:text>
+            <xsl:text>\DefineVerbatimEnvironment{preformatted}{Verbatim}{}&#xa;</xsl:text>
+            <xsl:text>%% Pre-formatted text, as panel of a sidebyside&#xa;</xsl:text>
+            <xsl:text>%% Default alignment is the bottom of the box on the baseline&#xa;</xsl:text>
+            <xsl:text>\DefineVerbatimEnvironment{preformattedbox}{BVerbatim}{}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//cd">
+            <xsl:text>%% code display (cd), by analogy with math display (md)&#xa;</xsl:text>
+            <xsl:text>%% savebox, lrbox, etc to achieve centering&#xa;</xsl:text>
+            <!-- https://tex.stackexchange.com/questions/182476/how-do-i-center-a-boxed-verbatim -->
+            <!-- trying "\centering" here was a disaster -->
+            <xsl:text>\newsavebox{\codedisplaybox}&#xa;</xsl:text>
+            <xsl:text>\newenvironment{codedisplay}&#xa;</xsl:text>
+            <xsl:text>{\VerbatimEnvironment\begin{center}\begin{lrbox}{\codedisplaybox}\begin{BVerbatim}}&#xa;</xsl:text>
+            <xsl:text>{\end{BVerbatim}\end{lrbox}\usebox{\codedisplaybox}\end{center}}&#xa;</xsl:text>
+        </xsl:if>
         <xsl:if test="//console">
             <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
             <xsl:text>%% Make a console environment from fancyvrb BVerbatim environment&#xa;</xsl:text>
@@ -4746,10 +4760,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- drop an empty line                             -->
 <xsl:template match="cd">
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:text>\begin{verbatim}&#xa;</xsl:text>
+    <xsl:text>\begin{codedisplay}&#xa;</xsl:text>
     <xsl:value-of select="." />
     <xsl:text>&#xa;</xsl:text>
-    <xsl:text>\end{verbatim}&#xa;</xsl:text>
+    <xsl:text>\end{codedisplay}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- With a "cline" element present, we assume   -->
@@ -4757,9 +4771,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- template in the mathbook-common.xsl file)   -->
 <xsl:template match="cd[cline]">
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:text>\begin{verbatim}&#xa;</xsl:text>
+    <xsl:text>\begin{codedisplay}&#xa;</xsl:text>
     <xsl:apply-templates select="cline" />
-    <xsl:text>\end{verbatim}&#xa;</xsl:text>
+    <xsl:text>\end{codedisplay}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "pre" is analogous to the HTML tag of the same name -->
@@ -4769,9 +4783,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (See templates in xsl/mathbook-common.xsl file)     -->
 <!-- Then wrap in a  verbatim  environment               -->
 <xsl:template match="pre">
-    <xsl:text>\begin{verbatim}&#xa;</xsl:text>
+    <xsl:text>\begin{preformatted}&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="interior"/>
-    <xsl:text>\end{verbatim}&#xa;</xsl:text>
+    <xsl:text>\end{preformatted}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="email">
@@ -5855,17 +5869,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- is made into a LaTeX box with the  fancyvrb "BVerbatim" -->
 <!-- environment, which is then saved in an LR box above     -->
 <!-- We cannot see an easy way to get the debugging wrapper  -->
+<!-- Default alignment places bottom ont the baseline        -->
 <!-- NOTE: adjust panel-setup to produce an LR box           -->
 <xsl:template match="pre" mode="panel-latex-box">
     <xsl:param name="width" />
     <xsl:variable name="percent" select="substring-before($width,'%') div 100" />
-    <xsl:text>\begin{BVerbatim}</xsl:text>
+    <xsl:text>\begin{preformattedbox}</xsl:text>
     <xsl:text>[boxwidth=</xsl:text>
     <xsl:value-of select="$percent" />
-    <xsl:text>\linewidth,baseline=b]</xsl:text>
+    <xsl:text>\linewidth]</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="interior"/>
-    <xsl:text>\end{BVerbatim}&#xa;</xsl:text>
+    <xsl:text>\end{preformattedbox}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- A "console" is handled differently than a "pre"     -->
