@@ -1500,7 +1500,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% A semantic macro for the user input portion&#xa;</xsl:text>
             <xsl:text>%% We define this in the traditional way,&#xa;</xsl:text>
             <xsl:text>%% but may realize it with different LaTeX escape characters&#xa;</xsl:text>
+            <xsl:text>\newcommand{\consoleprompt}[1]{#1}&#xa;</xsl:text>
             <xsl:text>\newcommand{\consoleinput}[1]{\textbf{#1}}&#xa;</xsl:text>
+            <xsl:text>\newcommand{\consoleoutput}[1]{#1}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
     <xsl:if test="//tikz">
@@ -5331,11 +5333,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- match immediately preceding, only if a prompt:                   -->
 <!-- https://www.oxygenxml.com/archives/xsl-list/199910/msg00541.html -->
 <xsl:template match="console/input">
-    <!-- Assumes prompt does not exceed one line, and do -->
-    <!-- not sanitize through generic text() template    -->
+    <!-- Assumes prompt does not exceed one line -->
+    <!-- Wrap with semantic \consoleprompt macro -->
+    <xsl:text>\consoleprompt{</xsl:text>
     <xsl:call-template name="escape-console-to-latex">
         <xsl:with-param name="text"  select="preceding-sibling::*[1][self::prompt]"/>
     </xsl:call-template>
+    <xsl:text>}</xsl:text>
     <!-- sanitize left-margin, etc                    -->
     <!-- then employ \consoleinput macro on each line -->
     <xsl:call-template name="wrap-console-input">
@@ -5351,8 +5355,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
-<!-- We substitute for the escape characters,    -->
-<!-- consoleinput macro defined in preamble      -->
+<!-- Output code gets massaged to remove a left margin, -->
+<!-- leading blank lines, etc., then wrap as above-->
+<xsl:template match="console/output">
+    <xsl:call-template name="wrap-console-output">
+        <xsl:with-param name="text">
+            <xsl:call-template name="sanitize-text">
+                <xsl:with-param name="text">
+                    <xsl:call-template name="escape-console-to-latex">
+                        <xsl:with-param name="text"  select="."/>
+                    </xsl:call-template>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- TODO: consolidate/generalize next two templates -->
+
+<!-- Line-by-line, apply \consoleinput macro defined in preamble -->
 <xsl:template name="wrap-console-input">
     <xsl:param name="text" />
     <xsl:choose>
@@ -5368,16 +5389,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Output code gets massaged to remove a left margin, -->
-<!-- leading blank lines, etc.                          -->
-<xsl:template match="console/output">
-    <xsl:call-template name="sanitize-text">
-        <xsl:with-param name="text">
-            <xsl:call-template name="escape-console-to-latex">
-                <xsl:with-param name="text"  select="."/>
+<!-- Line-by-line, apply \consoleoutput macro defined in preamble -->
+<xsl:template name="wrap-console-output">
+    <xsl:param name="text" />
+    <xsl:choose>
+        <xsl:when test="$text=''" />
+        <xsl:otherwise>
+            <xsl:text>\consoleoutput{</xsl:text>
+            <xsl:value-of select="substring-before($text, '&#xa;')" />
+            <xsl:text>}&#xa;</xsl:text>
+            <xsl:call-template name="wrap-console-output">
+                <xsl:with-param name="text" select="substring-after($text, '&#xa;')" />
             </xsl:call-template>
-        </xsl:with-param>
-    </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Geogebra                                     -->
