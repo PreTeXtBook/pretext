@@ -4944,6 +4944,33 @@ the xsltproc executable.
 
             <p>Notice in the HTML version of the above example that when you highlight all, or a portion, of the listing for a cut<ampersand />paste that the prompts are not included.</p>
 
+            <p>The next listing is just absurdity, to check special characters from <latex />, and some Latin-1 characters.  We test each in a prompt, input, and output.</p>
+
+            <listing>
+                <caption>Console Session: problematic <latex /> characters</caption>
+                <console>
+                    <prompt>A backslash \ here  </prompt>
+                    <input>A backslash \ here</input>
+                    <output>A backslash \ here</output>
+
+                    <prompt>A begin group { here  </prompt>
+                    <input>A begin group { here</input>
+                    <output>A begin group { here</output>
+
+                    <prompt>An end group { here  </prompt>
+                    <input>An end group } here</input>
+                    <output>An end group } here</output>
+
+                    <prompt>The rest &amp; % $ # _ ~ ^ of LaTeX  </prompt>
+                    <input>The rest &amp; % $ # _ ~ ^ of LaTeX</input>
+                    <output>The rest &amp; % $ # _ ~ ^ of LaTeX</output>
+
+                    <prompt>Latin-1: ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß  </prompt>
+                    <input>Latin-1: ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß</input>
+                    <output>Latin-1: ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß</output>
+                </console>
+            </listing>
+
             <p>There is one subtlety with a <c>console</c> session rendered as <latex /> output.  The user input is made bold by a <latex /> macro, which means that your code cannot contain the special <latex /> characters <q><backslash /></q>, <q><lbrace /></q>, and <q><rbrace /></q>, which are used to begin a macro, begin a group, and end a group (respectively).  You will get an error message if this condition exists, and there are parameters <c>latex.console.macro-char</c>, <c>latex.console.begin-char</c>, and <c>latex.console.end-char</c> that will allow you to specify alternatives (which need to be characters that do not appear in <em>any</em> of your console sessions, document-wide).  The characters <c>&amp; % $ # _ { } ~ ^ \</c> have special meaning in <latex /> but should be available for duty as these alternative characters (though not all have been tested).  The backslash used in pathnames for Windows is a highly likely case where this needs adjustment.</p>
 
             <!-- & % $ # _ { } ~ ^ \ Add @ to this list as it is implemented, but need empty element to render it?-->

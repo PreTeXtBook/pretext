@@ -5376,13 +5376,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="console/input">
     <!-- Assumes prompt does not exceed one line, and do -->
     <!-- not sanitize through generic text() template    -->
-    <xsl:value-of select="preceding-sibling::*[1][self::prompt]" />
+    <xsl:call-template name="escape-console-to-latex">
+        <xsl:with-param name="text"  select="preceding-sibling::*[1][self::prompt]"/>
+    </xsl:call-template>
     <!-- sanitize left-margin, etc                    -->
     <!-- then employ \consoleinput macro on each line -->
     <xsl:call-template name="wrap-console-input">
         <xsl:with-param name="text">
             <xsl:call-template name="sanitize-text">
-                <xsl:with-param name="text" select="." />
+                <xsl:with-param name="text">
+                    <xsl:call-template name="escape-console-to-latex">
+                        <xsl:with-param name="text"  select="."/>
+                    </xsl:call-template>
+                </xsl:with-param>
             </xsl:call-template>
         </xsl:with-param>
     </xsl:call-template>
@@ -5412,7 +5418,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- leading blank lines, etc.                          -->
 <xsl:template match="console/output">
     <xsl:call-template name="sanitize-text">
-        <xsl:with-param name="text" select="." />
+        <xsl:with-param name="text">
+            <xsl:call-template name="escape-console-to-latex">
+                <xsl:with-param name="text"  select="."/>
+            </xsl:call-template>
+        </xsl:with-param>
     </xsl:call-template>
 </xsl:template>
 
@@ -7436,6 +7446,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="sans-dblqt" select="str:replace($sans-quote,  $dq,     '\textquotedbl{}')" />
     <xsl:variable name="sans-tick"  select="str:replace($sans-dblqt,  $temp-backtick,     '\textasciigrave{}')" />
     <xsl:value-of select="str:replace($sans-tick, $temp-backslash, '\textbackslash{}')" />
+</xsl:template>
+
+<!-- Escape Console Text to Latex -->
+<!-- Similar to above, but fancyvrb BVerbatim only needs -->
+<!-- to avoid Latex escape (backslash), begin group ({), -->
+<!-- and end group (}) to permit LaTeX macros, such as   -->
+<!-- \textbf{} for the bolding of user input.            -->
+<xsl:template name="escape-console-to-latex">
+    <xsl:param    name="text" />
+    <xsl:variable name="temp-backslash" select="'[[TlWvKovNykSRI]]'" />
+
+    <xsl:variable name="mark-slash" select="str:replace($text,       '\', $temp-backslash   )" />
+    <xsl:variable name="sans-left"  select="str:replace($mark-slash, '{', '\{'              )" />
+    <xsl:variable name="sans-right" select="str:replace($sans-left,  '}', '\}'              )" />
+    <xsl:value-of select="str:replace($sans-right, $temp-backslash, '\textbackslash{}')" />
 </xsl:template>
 
 <!-- Miscellaneous -->
