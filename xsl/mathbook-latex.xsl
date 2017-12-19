@@ -94,14 +94,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="latex.preamble.early" select="''" />
 <xsl:param name="latex.preamble.late" select="''" />
 <!--  -->
-<!-- Console characters allow customization of how    -->
-<!-- LaTeX macros are recognized in the fancyvrb      -->
-<!-- package's Verbatim clone environment, "console"  -->
-<!-- The defaults are traditional LaTeX, we let any   -->
-<!-- other specification make a document-wide default -->
-<xsl:param name="latex.console.macro-char" select="'\'" />
-<xsl:param name="latex.console.begin-char" select="'{'" />
-<xsl:param name="latex.console.end-char" select="'}'" />
+<!-- DEPRECATED: 2017-12-18, do not use, any value -->
+<!-- besides an empty string will raise a warning  -->
+<xsl:param name="latex.console.macro-char" select="''" />
+<xsl:param name="latex.console.begin-char" select="''" />
+<xsl:param name="latex.console.end-char" select="''" />
 
 <!-- We have to identify snippets of LaTeX from the server,   -->
 <!-- which we have stored in a directory, because XSLT 1.0    -->
@@ -211,12 +208,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<!-- Variables carry document-wide console LaTeX escape characters, -->
-<!-- which an author may override on a per-console basis            -->
-<xsl:variable name="console-macro" select="$latex.console.macro-char" />
-<xsl:variable name="console-begin" select="$latex.console.begin-char" />
-<xsl:variable name="console-end" select="$latex.console.end-char" />
-
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
@@ -228,6 +219,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="/">
     <xsl:apply-templates select="mathbook|pretext" mode="generic-warnings" />
     <xsl:apply-templates select="mathbook|pretext" mode="deprecation-warnings" />
+    <xsl:apply-templates select="mathbook|pretext" mode="deprecation-warnings-latex" />
     <xsl:apply-templates />
 </xsl:template>
 
@@ -1499,28 +1491,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="//console">
             <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
             <xsl:text>%% Make a console environment from fancyvrb BVerbatim environment&#xa;</xsl:text>
-            <xsl:text>%% with three command characters, to allow boldfacing input&#xa;</xsl:text>
-            <xsl:text>%% The command characters may be escaped here when specified&#xa;</xsl:text>
+            <xsl:text>%% Specify usual escape, begin group, end group characters&#xa;</xsl:text>
             <xsl:text>%% (boxed variant is useful for constructing sidebyside panels)&#xa;</xsl:text>
             <xsl:text>%% (BVerbatim environment allows for line numbers, make feature request?)&#xa;</xsl:text>
-            <!-- "box verbatim" since could be used in a sidebyside panel -->
-            <xsl:text>\DefineVerbatimEnvironment{console}{BVerbatim}%&#xa;</xsl:text>
-            <!-- numbers=left, stepnumber=5 trivial (can mimic in HTML with counting recursive routine) -->
-            <xsl:text>{fontsize=\small,commandchars=</xsl:text>
-            <xsl:variable name="latex-escaped" select="'&amp;%$#_{}~^\@'" />
-            <xsl:if test="contains($latex-escaped, $console-macro)">
-                <xsl:text>\</xsl:text>
-            </xsl:if>
-            <xsl:value-of select="$console-macro" />
-            <xsl:if test="contains($latex-escaped, $console-begin)">
-                <xsl:text>\</xsl:text>
-            </xsl:if>
-            <xsl:value-of select="$console-begin" />
-            <xsl:if test="contains($latex-escaped, $console-end)">
-                <xsl:text>\</xsl:text>
-            </xsl:if>
-            <xsl:value-of select="$console-end" />
-            <xsl:text>}&#xa;</xsl:text>
+            <!-- "box verbatim" since could be used in a sidebyside panel, additional options are        -->
+            <!-- trivial: numbers=left, stepnumber=5 (can mimic in HTML with counting recursive routine) -->
+            <xsl:text>\DefineVerbatimEnvironment{console}{BVerbatim}{fontsize=\small,commandchars=\\\{\}}&#xa;</xsl:text>
             <xsl:text>%% A semantic macro for the user input portion&#xa;</xsl:text>
             <xsl:text>%% We define this in the traditional way,&#xa;</xsl:text>
             <xsl:text>%% but may realize it with different LaTeX escape characters&#xa;</xsl:text>
@@ -5339,25 +5315,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The width parameter supports use in a sidebyside panel              -->
 <xsl:template match="console">
     <xsl:param name="width" select="''" />
-    <!-- Grab all the characters, look for problems and warn -->
-    <xsl:variable name="all-console-chars">
-        <xsl:for-each select="prompt|input|output">
-            <xsl:value-of select="." />
-        </xsl:for-each>
-    </xsl:variable>
-    <!-- Look for problems and warn -->
-    <xsl:if test="contains($all-console-chars, $console-macro)">
-        <xsl:message>MBX:ERROR:   a console session contains the LaTeX character in use for starting a macro ("<xsl:value-of select="$console-macro" />") and your LaTeX is unlikely to compile.  So use the "latex.console.macro-char" parameter to set a different character, one not in use in any console session</xsl:message>
-        <xsl:apply-templates select="." mode="location-report" />
-    </xsl:if>
-    <xsl:if test="contains($all-console-chars, $console-begin)">
-        <xsl:message>MBX:ERROR:   a console session contains the LaTeX character in use for starting a group ("<xsl:value-of select="$console-begin" />") and your LaTeX is unlikely to compile.  So use the "latex.console.begin-char" parameter to set a different character, one not in use in any console session</xsl:message>
-        <xsl:apply-templates select="." mode="location-report" />
-    </xsl:if>
-    <xsl:if test="contains($all-console-chars, $console-end)">
-        <xsl:message>MBX:ERROR:   a console session contains the LaTeX character in use for ending a group ("<xsl:value-of select="$console-end" />") and your LaTeX is unlikely to compile.  So use the "latex.console.end-char" parameter to set a different character, one not in use in any console session</xsl:message>
-        <xsl:apply-templates select="." mode="location-report" />
-    </xsl:if>
     <!-- ignore prompt, and pick it up in trailing input  -->
     <!-- optional width override is supported by fancyvrb -->
     <xsl:text>\begin{console}</xsl:text>
@@ -5401,12 +5358,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="$text=''" />
         <xsl:otherwise>
-            <xsl:value-of select="$console-macro" />
-            <xsl:text>consoleinput</xsl:text>
-            <xsl:value-of select="$console-begin" />
+            <xsl:text>\consoleinput{</xsl:text>
             <xsl:value-of select="substring-before($text, '&#xa;')" />
-            <xsl:value-of select="$console-end" />
-            <xsl:text>&#xa;</xsl:text>
+            <xsl:text>}&#xa;</xsl:text>
             <xsl:call-template name="wrap-console-input">
                 <xsl:with-param name="text" select="substring-after($text, '&#xa;')" />
             </xsl:call-template>
@@ -7494,6 +7448,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$warning" />
         <xsl:text>}}</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<!-- Deprecations -->
+<!-- These are global, LaTeX-only warnings which are not source -->
+<!-- related and not possible in a template once executed       -->
+<xsl:template match="mathbook|pretext" mode="deprecation-warnings-latex">
+    <!-- 2017-12-18  deprecate console macro characters -->
+    <xsl:if test="not($latex.console.macro-char = '')">
+        <xsl:call-template name="parameter-deprecation-message">
+            <xsl:with-param name="date-string" select="'2017-12-18'" />
+            <xsl:with-param name="message" select="'the  latex.console.macro-char  parameter is deprecated, and there is no longer a need to be careful about the backslash (\) character in a console'" />
+                <xsl:with-param name="incorrect-use" select="not($latex.console.macro-char = '')" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="not($latex.console.begin-char = '')">
+        <xsl:call-template name="parameter-deprecation-message">
+            <xsl:with-param name="date-string" select="'2017-12-18'" />
+            <xsl:with-param name="message" select="'the  latex.console.begin-char  parameter is deprecated, and there is no longer a need to be careful about the begin group ({) character in a console'" />
+                <xsl:with-param name="incorrect-use" select="not($latex.console.begin-char = '')" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="not($latex.console.end-char = '')">
+        <xsl:call-template name="parameter-deprecation-message">
+            <xsl:with-param name="date-string" select="'2017-12-18'" />
+            <xsl:with-param name="message" select="'the  latex.console.end-char  parameter is deprecated, and there is no longer a need to be careful about the end group (}) character in a console'" />
+                <xsl:with-param name="incorrect-use" select="not($latex.console.end-char = '')" />
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
 </xsl:template>
 
 <!-- Uninteresting Code, aka the Bad Bank                    -->
