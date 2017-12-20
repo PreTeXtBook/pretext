@@ -8224,7 +8224,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- Program Listings from Google -->
 <!--   ?skin=sunburst  on end of src URL gives black terminal look -->
 <xsl:template name="goggle-code-prettifier">
-    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 </xsl:template>
 
 <!-- JS setup for a Google Custom Search Engine box -->
