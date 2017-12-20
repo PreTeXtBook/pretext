@@ -1429,6 +1429,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>\definecolor{strings}{rgb}{0,0,0}&#xa;</xsl:text>
                 <xsl:text>\definecolor{keywords}{rgb}{0,0,0}&#xa;</xsl:text>
             </xsl:if>
+            <xsl:text>%% We define a null language, free of any formatting or style&#xa;</xsl:text>
+            <xsl:text>\lstdefinelanguage{none}{identifierstyle=,commentstyle=,stringstyle=,keywordstyle=}&#xa;</xsl:text>
+            <xsl:text>%% Style for listings, independent of surrounding boxes, etc.&#xa;</xsl:text>
             <xsl:text>\lstdefinestyle{program}{breaklines=true,breakatwhitespace=true,columns=fixed,basicstyle=\small\ttfamily,&#xa;</xsl:text>
             <xsl:text>identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}}&#xa;</xsl:text>
             <xsl:text>%% Now the presentation styles via tcolorbox support&#xa;</xsl:text>
@@ -5270,23 +5273,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\begin{program}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:if test="$b-has-language or $b-has-width">
-        <xsl:text>[</xsl:text>
-    </xsl:if>
+    <xsl:text>[</xsl:text>
     <!-- inserted into "listing options", after style option -->
-    <xsl:if test="$b-has-language">
-        <xsl:text>language=</xsl:text>
-        <xsl:value-of select="$language" />
-        <xsl:text>,</xsl:text>
-    </xsl:if>
+    <xsl:text>language=</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$b-has-language">
+            <xsl:value-of select="$language" />
+        </xsl:when>
+        <!-- null language defined in preamble -->
+        <xsl:otherwise>
+            <xsl:text>none</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:if test="$b-has-width">
-        <xsl:text>linewidth=</xsl:text>
+        <xsl:text>,linewidth=</xsl:text>
         <xsl:value-of select="$width" />
-        <xsl:text>,</xsl:text>
     </xsl:if>
-    <xsl:if test="$b-has-language or $b-has-width">
-        <xsl:text>]</xsl:text>
-    </xsl:if>
+    <xsl:text>]</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:call-template name="sanitize-text">
         <xsl:with-param name="text" select="input" />

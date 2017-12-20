@@ -6761,12 +6761,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See common file for more on language handlers, and "language-prettify" template          -->
 <!-- Coordinate with disabling in Sage Notebook production                                    -->
 <xsl:template match="program">
+    <!-- with language, pre.prettyprint activates styling and Prettifier -->
+    <!-- with no language, pre.plainprint just yields some styling       -->
     <xsl:variable name="classes">
-        <xsl:text>prettyprint</xsl:text>
-        <xsl:if test="@language">
-            <xsl:text> lang-</xsl:text>
-            <xsl:value-of select="@language" />
-        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="@language">
+                <xsl:text>prettyprint</xsl:text>
+                <xsl:text> lang-</xsl:text>
+                <xsl:value-of select="@language" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>plainprint</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
     <pre class="{$classes}" style="font-size:80%">
     <xsl:call-template name="sanitize-text">
