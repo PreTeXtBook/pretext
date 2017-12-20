@@ -3054,11 +3054,27 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- via particular modal templates.  These may include Exercises -->
 <!-- and References sections, which can occur at multiple levels  -->
 <!-- NB: newexercises: hack to kill "exercises" division numbering, later move to "the unnumbered" -->
-<xsl:template match="part" mode="serial-number">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|references" mode="serial-number">
+    <xsl:variable name="relative-level">
+        <xsl:apply-templates select="." mode="level" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$relative-level > $numbering-maxlevel">
+            <xsl:text></xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="division-serial-number" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Each division has different formats or quirks -->
+
+<xsl:template match="part" mode="division-serial-number">
     <xsl:number format="I" />
 </xsl:template>
 <!-- TODO: ban references and exercises as peers of chapters (overall references can go in backmatter) -->
-<xsl:template match="chapter" mode="serial-number">
+<xsl:template match="chapter" mode="division-serial-number">
     <!-- chapters, in parts or not, do not have "references" -->
     <!-- or "exercises" divisions as peers, so we just count -->
     <!-- chapters, varying the subtree considered depending  -->
@@ -3072,10 +3088,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
     </xsl:choose>
 </xsl:template>
-<xsl:template match="appendix" mode="serial-number">
+<xsl:template match="appendix" mode="division-serial-number">
     <xsl:number format="A" />
 </xsl:template>
-<xsl:template match="section" mode="serial-number">
+<xsl:template match="section" mode="division-serial-number">
     <xsl:choose>
         <xsl:when test="$b-newexercises">
             <xsl:number count="section" format="1" />
@@ -3085,7 +3101,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
-<xsl:template match="subsection" mode="serial-number">
+<xsl:template match="subsection" mode="division-serial-number">
     <xsl:choose>
         <xsl:when test="$b-newexercises">
             <xsl:number count="subsection" format="1" />
@@ -3095,7 +3111,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
-<xsl:template match="subsubsection" mode="serial-number">
+<xsl:template match="subsubsection" mode="division-serial-number">
     <xsl:choose>
         <xsl:when test="$b-newexercises">
             <xsl:number count="subsubsection" format="1" />
@@ -3106,7 +3122,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 <!-- Convert references and exercises to the unnumbered once cutover -->
-<xsl:template match="exercises|references" mode="serial-number">
+<xsl:template match="exercises|references" mode="division-serial-number">
     <xsl:choose>
         <xsl:when test="$b-newexercises" />
         <xsl:otherwise>
