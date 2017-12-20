@@ -486,14 +486,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- TODO: put a pdflatex font package hook here? -->
     <xsl:text>%% end: pdflatex-specific configuration&#xa;</xsl:text>
     <xsl:text>}&#xa;</xsl:text>
-    <!-- Two approaches to the same monospace font: Inconsolata -->
-    <!-- Conditional on various verbatim type environments      -->
-    <!-- Note: no-content URLs get a monospace font but absent  -->
-    <!-- other monospace use, we do not load an extra font      -->
-
-<!-- https://tex.stackexchange.com/questions/2790/when-should-one-use-verb-and-when-texttt/235917 -->
-
-
     <xsl:if test="$document-root//c or $document-root//cd or $document-root//pre or $document-root//program or $document-root//console or $document-root//sage">
         <xsl:text>%% Monospace font: Inconsolata (zi4)&#xa;</xsl:text>
         <xsl:text>%% Sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html&#xa;</xsl:text>
@@ -525,6 +517,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- <xsl:text>\usepackage[mono,extrasp=0em]{zi4}&#xa;</xsl:text> -->
         <xsl:text>%% end: pdflatex-specific monospace font&#xa;</xsl:text>
         <xsl:text>}&#xa;</xsl:text>
+        <!-- https://tex.stackexchange.com/questions/2790/when-should-one-use-verb-and-when-texttt/235917 -->
         <xsl:if test="$document-root//c">
             <xsl:text>%% \mono macro for content of "c" element only&#xa;</xsl:text>
             <xsl:text>\newcommand{\mono}[1]{\texttt{#1}}&#xa;</xsl:text>
@@ -1298,15 +1291,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Bitstream Vera Font names within: https://github.com/timfel/texmf/blob/master/fonts/map/vtex/bera.ali -->
     <!-- Coloring listings: http://tex.stackexchange.com/questions/18376/beautiful-listing-for-csharp -->
     <!-- Song and Dance for font changes: http://jevopi.blogspot.com/2010/03/nicely-formatted-listings-in-latex-with.html -->
-    <!-- 
-    <xsl:if test="//c or //pre or //sage or //program or //console">
-        <xsl:text>%% New typewriter font if  c, sage, program, console, pre  tags present&#xa;</xsl:text>
-        <xsl:text>%% If only  email, url  tags, no change from default&#xa;</xsl:text>
-        <xsl:text>%% TODO: move this XSL conditional above&#xa;</xsl:text>
-    </xsl:if>
-    -->
-     <xsl:if test="//c or //sage or //program">
-        <xsl:text>%% Program listing support, for inline code, Sage code&#xa;</xsl:text>
+     <xsl:if test="$document-root//c or $document-root//sage or $document-root//program">
+        <xsl:text>%% Program listing support: for listings, programs, and Sage code&#xa;</xsl:text>
         <xsl:text>\usepackage{listings}&#xa;</xsl:text>
         <xsl:text>%% We define the listings font style to be the default "ttfamily"&#xa;</xsl:text>
         <xsl:text>%% To fix hyphens/dashes rendered in PDF as fancy minus signs by listing&#xa;</xsl:text>
@@ -1424,17 +1410,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% end: pdflatex-specific listings configuration&#xa;</xsl:text>
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>%% End of generic listing adjustments&#xa;</xsl:text>
-        <xsl:if test="//c">
-            <xsl:text>%% Inline code, typically from "c" element&#xa;</xsl:text>
-            <xsl:text>%% Global, document-wide options apply to \lstinline&#xa;</xsl:text>
-            <xsl:text>%% Search/replace \lstinline by \verb to remove this dependency&#xa;</xsl:text>
-            <xsl:text>%% (redefining \lstinline with \verb is unlikely to work)&#xa;</xsl:text>
-            <xsl:text>%% Also see "\renewcommand\UrlFont" below for matching font choice&#xa;</xsl:text>
-            <!-- breakatwhitespace fixes commas moving to new lines, and other bad things       -->
-            <!-- http://tex.stackexchange.com/questions/64750/avoid-line-breaks-after-lstinline -->
-            <xsl:text>\lstset{basicstyle=\small\ttfamily,breaklines=true,breakatwhitespace=true,extendedchars=true,inputencoding=latin1}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="//program">
+        <xsl:if test="$document-root//program">
             <xsl:text>%% Generic input, listings package: line breaking, language per instance&#xa;</xsl:text>
             <xsl:if test="$latex.print='no'" >
                 <xsl:text>%% Colors match a subset of Google prettify "Default" style&#xa;</xsl:text>
@@ -1466,7 +1442,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>   frame hidden, boxrule=0pt, colback=white, left=2mm, right=2mm, top=0mm, bottom=0mm, boxsep=0mm}&#xa;</xsl:text>
             <!-- bring back frame once sidebyside goes with tcolorbox:  hbox, sharp corners, boxrule=0.5pt-->
         </xsl:if>
-        <xsl:if test="//sage">
+        <xsl:if test="$document-root//sage">
             <xsl:text>%% Sage's blue is 50%, we go way lighter with blue!05&#xa;</xsl:text>
             <xsl:text>%% Sage code style, listings package: Python syntax, line breaking&#xa;</xsl:text>
             <xsl:text>\lstdefinestyle{sage}{language=Python,breaklines=true,breakatwhitespace=true,%&#xa;</xsl:text>
@@ -1482,7 +1458,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>   sharp corners, colback=white, frame hidden, left=0mm, right=0mm, top=-2mm, bottom=-2mm, boxsep=0mm}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="//console or //pre or //cd">
+    <xsl:if test="$document-root//console or $document-root//pre or $document-root//cd">
         <xsl:text>%% Fancy Verbatim for consoles, preformatted, code display&#xa;</xsl:text>
         <xsl:text>\usepackage{fancyvrb}&#xa;</xsl:text>
         <xsl:if test="//pre">
@@ -1492,7 +1468,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% Default alignment is the bottom of the box on the baseline&#xa;</xsl:text>
             <xsl:text>\DefineVerbatimEnvironment{preformattedbox}{BVerbatim}{}&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="//cd">
+        <xsl:if test="$document-root//cd">
             <xsl:text>%% code display (cd), by analogy with math display (md)&#xa;</xsl:text>
             <xsl:text>%% savebox, lrbox, etc to achieve centering&#xa;</xsl:text>
             <!-- https://tex.stackexchange.com/questions/182476/how-do-i-center-a-boxed-verbatim -->
@@ -1502,7 +1478,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>{\VerbatimEnvironment\begin{center}\begin{lrbox}{\codedisplaybox}\begin{BVerbatim}}&#xa;</xsl:text>
             <xsl:text>{\end{BVerbatim}\end{lrbox}\usebox{\codedisplaybox}\end{center}}&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="//console">
+        <xsl:if test="$document-root//console">
             <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
             <xsl:text>%% Make a console environment from fancyvrb BVerbatim environment&#xa;</xsl:text>
             <xsl:text>%% Specify usual escape, begin group, end group characters&#xa;</xsl:text>
