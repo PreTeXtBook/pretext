@@ -5999,14 +5999,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:apply-templates select="." mode="nbsp"/>
             </xsl:if>
             <xsl:text>(</xsl:text>
-            <xsl:apply-templates select="$target" mode="xref-number" />
+            <xsl:apply-templates select="$target" mode="xref-number">
+                <xsl:with-param name="xref" select="." />
+            </xsl:apply-templates>
             <xsl:text>)</xsl:text>
         </xsl:when>
         <!-- bibliography override       -->
         <!-- number only, consumer wraps -->
         <!-- warn about useless content override (use as @detail?) -->
         <xsl:when test="$b-is-biblio-target">
-            <xsl:apply-templates select="$target" mode="xref-number" />
+            <xsl:apply-templates select="$target" mode="xref-number">
+                <xsl:with-param name="xref" select="." />
+            </xsl:apply-templates>
         </xsl:when>
         <!-- now not an equation or bibliography target -->
         <!-- custom text is additional, as prefix, with no type -->
@@ -6015,7 +6019,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:copy-of select="$custom-text" />
                 <xsl:apply-templates select="." mode="nbsp"/>
             </xsl:if>
-            <xsl:apply-templates select="$target" mode="xref-number" />
+            <xsl:apply-templates select="$target" mode="xref-number">
+                <xsl:with-param name="xref" select="." />
+            </xsl:apply-templates>
         </xsl:when>
         <!-- custom text is additional, as prefix, with no type -->
         <xsl:when test="$text-style = 'local'">
@@ -6031,13 +6037,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:when test="$b-has-content">
                     <xsl:copy-of select="$custom-text" />
                     <xsl:apply-templates select="." mode="nbsp"/>
-                    <xsl:apply-templates select="$target" mode="xref-number" />
                 </xsl:when>
                 <!-- usual, default case -->
                 <xsl:otherwise>
                     <xsl:apply-templates select="$target" mode="type-name" />
                     <xsl:apply-templates select="." mode="nbsp"/>
-                    <xsl:apply-templates select="$target" mode="xref-number" />
+                    <xsl:apply-templates select="$target" mode="xref-number">
+                        <xsl:with-param name="xref" select="." />
+                    </xsl:apply-templates>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
@@ -6220,13 +6227,17 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                     <xsl:text> of </xsl:text>
                     <xsl:apply-templates select="$highest-match" mode="type-name" />
                     <xsl:apply-templates select="." mode="nbsp" />
-                    <xsl:apply-templates select="$highest-match" mode="xref-number" />
+                    <xsl:apply-templates select="$highest-match" mode="xref-number">
+                        <xsl:with-param name="xref" select="." />
+                    </xsl:apply-templates>
                 </xsl:when>
                 <!-- hybrid styles need number for remainder -->
                 <xsl:when test="($text-style='hybrid') or ($text-style='type-hybrid')">
                     <xsl:choose>
                         <xsl:when test="$requires-global = 'true'">
-                            <xsl:apply-templates select="$target" mode="xref-number" />
+                            <xsl:apply-templates select="$target" mode="xref-number">
+                                <xsl:with-param name="xref" select="." />
+                            </xsl:apply-templates>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:apply-templates select="$target" mode="serial-number" />
