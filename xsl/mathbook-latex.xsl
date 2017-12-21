@@ -7001,7 +7001,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (See also modal templates for "label" and "xref-link") -->
 <!-- Exercises in sets may have hard-coded numbers, -->
 <!-- so we provide a hard-coded number              -->
-<xsl:template match="exercises//exercise|biblio|biblio/note|proof|exercisegroup|ol/li|hint|answer|solution" mode="xref-number">
+<!-- Footnotes print serial-numbers only, but   -->
+<!-- as knowls/references we desire a fully     -->
+<!-- qualified number.  So we just override the -->
+<!-- visual version in a cross-reference,       -->
+<!-- leaving the label/ref mechanism in place.  -->
+<xsl:template match="exercises//exercise|biblio|biblio/note|proof|exercisegroup|ol/li|hint|answer|solution|fn" mode="xref-number">
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 
@@ -7009,15 +7014,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and precede the introduction, so the LaTeX -->
 <!-- \ref{} mechanism assigns the correct       -->
 <!-- number - that of the enclosing subdivision -->
-
-<!-- Footnotes print serial-numbers only, but   -->
-<!-- as knowls/references we desire a fully     -->
-<!-- qualified number.  So we just override the -->
-<!-- visual version in a cross-reference,       -->
-<!-- leaving the label/ref mechanism in place.  -->
-<xsl:template match="fn" mode="xref-number">
-    <xsl:apply-templates select="." mode="number" />
-</xsl:template>
 
 <!-- Tasks have a structure number from the enclosing project   -->
 <!-- and a serial number from the enumitem package on the lists -->
