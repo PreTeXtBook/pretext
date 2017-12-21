@@ -801,6 +801,16 @@
 <!-- This is identical to mathbook-html.xsl                    -->
 
 <xsl:template match="*" mode="xref-number">
+    <xsl:param name="xref" select="/.." />
+    <xsl:variable name="needs-part-prefix">
+        <xsl:apply-templates select="." mode="crosses-part-boundary">
+            <xsl:with-param name="xref" select="$xref" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:if test="$needs-part-prefix = 'true'">
+        <xsl:apply-templates select="ancestor::part" mode="serial-number" />
+        <xsl:text>.</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 

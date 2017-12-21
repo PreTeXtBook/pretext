@@ -6302,6 +6302,40 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:text>]</xsl:text>
 </xsl:template>
 
+<!-- For cross-references in books with parts, we only     -->
+<!-- want a part number in the cross-reference when the    -->
+<!-- "xref" and the "$target" are "far apart," so the part -->
+<!-- number is necessary to disambiguate the result.  This -->
+<!-- utility uses the target as context and the xref as a  -->
+<!-- parameter.  It evaluates to 'true' if and only if the -->
+<!-- two nodes cross a part boundary *and* the target lies -->
+<!-- inside a part.                                        -->
+<!-- NB: "ancestor-or-self" is not used here               -->
+<!--   (a) the $xref is not a part                         -->
+<!--   (b) if the target is a part, its number will be     -->
+<!--       its serial number, and will not need a prefix,  -->
+<!--       so this will return false                       -->
+<xsl:template match="*" mode="crosses-part-boundary">
+    <xsl:param name="xref" select="/.." />
+    <xsl:choose>
+        <!-- if parts are not structural, no need -->
+        <xsl:when test="$parts='absent' or $parts='decorative'">
+            <xsl:value-of select="false()" />
+        </xsl:when>
+        <!-- if target is not in a part, no need -->
+        <xsl:when test="not(ancestor::part)">
+            <xsl:value-of select="false()" />
+        </xsl:when>
+        <!-- xref can't be in target's part, so necessary -->
+        <xsl:when test="not($xref/ancestor::part)">
+            <xsl:value-of select="true()" />
+        </xsl:when>
+        <!-- target and xref both in parts.  Same one? -->
+        <xsl:otherwise>
+            <xsl:value-of select="count(ancestor::part|$xref/ancestor::part) = 2" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- #################### -->
 <!-- Common Constructions -->

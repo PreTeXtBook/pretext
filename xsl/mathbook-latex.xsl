@@ -6982,14 +6982,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- equation with a local tag, before dropping a \ref as -->
 <!-- part of the cross-reference                          -->
 <xsl:template match="*" mode="xref-number">
+    <xsl:param name="xref" select="/.." />
     <xsl:variable name="the-number">
         <xsl:apply-templates select="." mode="number" />
     </xsl:variable>
-    <xsl:if test="not($the-number = '') or self::mrow[@tag]">
+    <xsl:if test="not($the-number = '')">
+        <!-- check if part prefix is needed -->
+        <xsl:variable name="needs-part-prefix">
+            <xsl:apply-templates select="." mode="crosses-part-boundary">
+                <xsl:with-param name="xref" select="$xref" />
+            </xsl:apply-templates>
+        </xsl:variable>
+        <!-- if so, append prefix with separator -->
+        <xsl:if test="$needs-part-prefix = 'true'">
+            <xsl:text>\ref{</xsl:text>
+            <xsl:apply-templates select="ancestor::part" mode="internal-id" />
+            <xsl:text>}</xsl:text>
+            <xsl:text>.</xsl:text>
+        </xsl:if>
+        <!-- and always, a representation for the text of the xref -->
         <xsl:text>\ref{</xsl:text>
         <xsl:apply-templates select="." mode="internal-id" />
         <xsl:text>}</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<!-- Straightforward exception, simple implementation -->
+<xsl:template match="mrow[@tag]" mode="xref-number">
+    <xsl:text>\ref{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- We hard-code some numbers (sectional exercises) and    -->
@@ -7007,6 +7029,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- visual version in a cross-reference,       -->
 <!-- leaving the label/ref mechanism in place.  -->
 <xsl:template match="exercises//exercise|biblio|biblio/note|proof|exercisegroup|ol/li|hint|answer|solution|fn" mode="xref-number">
+    <xsl:param name="xref" select="/.." />
+    <xsl:variable name="needs-part-prefix">
+        <xsl:apply-templates select="." mode="crosses-part-boundary">
+            <xsl:with-param name="xref" select="$xref" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:if test="$needs-part-prefix = 'true'">
+        <xsl:apply-templates select="ancestor::part" mode="serial-number" />
+        <xsl:text>.</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="." mode="number" />
 </xsl:template>
 
