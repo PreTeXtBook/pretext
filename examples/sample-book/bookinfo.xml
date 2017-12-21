@@ -66,6 +66,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     \usetikzlibrary{snakes}
     </latex-image-preamble>
 
+    <!-- more invasive option is "structural" -->
     <numbering>
         <division part="decorative" />
     </numbering>

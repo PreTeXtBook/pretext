@@ -278,14 +278,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>If <m>z =  3 \cis( \pi / 3 )</m> and <m>w = 2 \cis(\pi / 6 )</m>, then <m>zw = 6 \cis( \pi / 2 ) = 6i</m>.</p>
         </example>
 
-        <theorem>
+        <theorem xml:id="theorem-demoivre">
             <title>DeMoivre</title>
             <idx><h>DeMoivre's Theorem</h></idx>
             <statement>
                 <p>Let <m>z = r \cis  \theta</m> be a nonzero complex number. Then <me>[r \cis \theta  ]^n = r^n \cis( n \theta)</me> for <m>n = 1, 2, \ldots</m>.</p>
             </statement>
             <proof>
-                <p>We will use induction on <m>n</m>. For <m>n = 1</m> the theorem is trivial. Assume that the theorem is true for all <m>k</m> such that <m>1  \leq k \leq n</m>. Then<md>
+                <p>We will use induction on <m>n</m> (see <xref ref="section-math-induction" />). For <m>n = 1</m> the theorem is trivial. Assume that the theorem is true for all <m>k</m> such that <m>1  \leq k \leq n</m>. Then<md>
                     <mrow>z^{n+1} &amp; = z^n z</mrow>
                     <mrow>&amp; = r^n( \cos  n \theta + i \sin n \theta ) r( \cos \theta + i\sin \theta )</mrow>
                     <mrow>&amp; = r^{n+1} [( \cos n \theta \cos \theta - \sin n \theta \sin \theta ) + i ( \sin n \theta \cos \theta + \cos n \theta \sin \theta)]</mrow>
@@ -295,7 +295,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </proof>
         </theorem>
 
-        <example xml:id="theorem-demoivre">
+        <example>
             <p>Suppose that <m>z= 1+i</m> and we wish to compute <m>z^{10}</m>. Rather than computing <m>(1 + i)^{10}</m> directly, it is much easier to switch to polar coordinates and calculate <m>z^{10}</m> using DeMoivre's Theorem:<md>
                 <mrow>z^{10} &amp; = (1+i)^{10}</mrow>
                 <mrow>&amp; = \left( \sqrt{2} \cis \left( \frac{\pi }{4} \right) \right)^{10}</mrow>
