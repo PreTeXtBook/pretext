@@ -1322,7 +1322,7 @@
         <p>Raster, and described by languages, plus 100<percent /> duplicates.  The <webwork /> variant is quite different.</p>
 
         <fragment xml:id="image">
-        Image = ImageRaster | ImageCode | ImageCopy
+        Image = ImageRaster | ImageCode
         ImageRaster = 
             element image {
                 UniqueID?,
@@ -1343,11 +1343,6 @@
                     element sageplot {text}
                 )
             }
-        ImageCopy = 
-            element image {
-                UniqueID?,
-                attribute copy {text}
-            }
         ImageWW = 
             element image {
                 attribute pg-name {text}?,
@@ -1364,7 +1359,6 @@
         <fragment xml:id="sage">
         Sage = element sage {
             UniqueID?,
-            attribute copy {text}?,
             attribute doctest {text}?,
             attribute tolerance {text}?,
             attribute language {text}?,

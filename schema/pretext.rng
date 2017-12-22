@@ -1375,7 +1375,6 @@
     <choice>
       <ref name="ImageRaster"/>
       <ref name="ImageCode"/>
-      <ref name="ImageCopy"/>
     </choice>
   </define>
   <define name="ImageRaster">
@@ -1424,14 +1423,6 @@
           <text/>
         </element>
       </choice>
-    </element>
-  </define>
-  <define name="ImageCopy">
-    <element name="image">
-      <optional>
-        <ref name="UniqueID"/>
-      </optional>
-      <attribute name="copy"/>
     </element>
   </define>
   <define name="ImageWW">
@@ -1662,9 +1653,6 @@
     <element name="sage">
       <optional>
         <ref name="UniqueID"/>
-      </optional>
-      <optional>
-        <attribute name="copy"/>
       </optional>
       <optional>
         <attribute name="doctest"/>

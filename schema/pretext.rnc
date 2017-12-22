@@ -644,7 +644,7 @@
             }
         
         
-        Image = ImageRaster | ImageCode | ImageCopy
+        Image = ImageRaster | ImageCode
         ImageRaster = 
             element image {
                 UniqueID?,
@@ -664,11 +664,6 @@
                     element asymptote {text} |
                     element sageplot {text}
                 )
-            }
-        ImageCopy = 
-            element image {
-                UniqueID?,
-                attribute copy {text}
             }
         ImageWW = 
             element image {
@@ -765,7 +760,6 @@
         
         Sage = element sage {
             UniqueID?,
-            attribute copy {text}?,
             attribute doctest {text}?,
             attribute tolerance {text}?,
             attribute language {text}?,

@@ -1353,7 +1353,6 @@
     <xs:choice>
       <xs:group ref="ImageRaster"/>
       <xs:group ref="ImageCode"/>
-      <xs:group ref="ImageCopy"/>
     </xs:choice>
   </xs:group>
   <xs:group name="ImageRaster">
@@ -1401,16 +1400,6 @@
   <xs:element name="latex-image-code" type="xs:string"/>
   <xs:element name="asymptote" type="xs:string"/>
   <xs:element name="sageplot" type="xs:string"/>
-  <xs:group name="ImageCopy">
-    <xs:sequence>
-      <xs:element name="image">
-        <xs:complexType>
-          <xs:attribute ref="xml:id"/>
-          <xs:attribute name="copy" use="required"/>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
   <xs:group name="ImageWW">
     <xs:sequence>
       <xs:element name="image">
@@ -1679,7 +1668,6 @@
         <xs:element minOccurs="0" ref="output"/>
       </xs:sequence>
       <xs:attribute ref="xml:id"/>
-      <xs:attribute name="copy"/>
       <xs:attribute name="doctest"/>
       <xs:attribute name="tolerance"/>
       <xs:attribute name="language"/>
