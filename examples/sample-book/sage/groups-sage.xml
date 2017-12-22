@@ -25,7 +25,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                               -->
 <!-- Copyright (C) 2010-2014  Robert A. Beezer     -->
 
-<section xml:id="groups-sage">
+<section xml:id="groups-sage" xmlns:xi="http://www.w3.org/2001/XInclude">
     <title>Sage</title>
 
     <introduction>
@@ -346,18 +346,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>Elements of the quaternions were represented by certain permutations of the integers 1 through 8.  We can also build the group of <em>all</em> permutations of these eight integers.  It gets pretty big, so do not list it unless you want a lot of output!  (I dare you.)</p>
 
         <sage>
-            <input>
-            S8 = SymmetricGroup(8)
-            a = S8.random_element()
-            [a(x) for x in S8.domain()]     # random
-            </input>
+            <input><xi:include href="../code/symmetric-group-8.sage" parse="text" /></input>
             <output>[5, 2, 6, 4, 1, 8, 3, 7]</output>
+        </sage>
+
+        <p>As a demonstration of reusing chunks of Sage code, we duplicate the previous example.  But in each case the code lives in an external file, just once.  So if you wanted to use setup code in more than one division, you could put it in a file and incorporate it similarly.  Here we do not test the second instance, and so do not include expected output either.  Typically, you would do this copy somewhere further away.</p>
+
+        <sage doctest="not tested">
+            <input><xi:include href="../code/symmetric-group-8.sage" parse="text" /></input>
         </sage>
 
         <sage>
             <input>S8.order()</input>
             <output>40320</output>
         </sage>
+
 
         <p>The quaternions, <c>Q</c>, is a subgroup of the full group of all permutations, the symmetric group <m>S_8</m> or <c>S8</c>, and Sage regards this as a property of <c>Q</c>.</p>
 
