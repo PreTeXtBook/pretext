@@ -981,28 +981,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   (1) No author credit                                -->
 <!--   (2) No permalink                                    -->
 <xsl:template match="*" mode="list-of-header">
-    <header>
-        <xsl:element name="h1">
-            <xsl:attribute name="class">
-                <xsl:text>heading</xsl:text>
-            </xsl:attribute>
-             <xsl:attribute name="alt">
-                <xsl:apply-templates select="." mode="tooltip-text" />
-            </xsl:attribute>
-             <xsl:attribute name="title">
-                <xsl:apply-templates select="." mode="tooltip-text" />
-            </xsl:attribute>
-            <span class="type">
-                <xsl:apply-templates select="." mode="type-name" />
-            </span>
-            <span class="codenumber">
-                <xsl:apply-templates select="." mode="number" />
-            </span>
-            <span class="title">
-                <xsl:apply-templates select="." mode="title-full" />
-            </span>
-        </xsl:element>
-    </header>
+    <xsl:element name="h1">
+        <xsl:attribute name="class">
+            <xsl:text>heading</xsl:text>
+        </xsl:attribute>
+         <xsl:attribute name="alt">
+            <xsl:apply-templates select="." mode="tooltip-text" />
+        </xsl:attribute>
+         <xsl:attribute name="title">
+            <xsl:apply-templates select="." mode="tooltip-text" />
+        </xsl:attribute>
+        <span class="type">
+            <xsl:apply-templates select="." mode="type-name" />
+        </span>
+        <span class="codenumber">
+            <xsl:apply-templates select="." mode="number" />
+        </span>
+        <span class="title">
+            <xsl:apply-templates select="." mode="title-full" />
+        </span>
+    </xsl:element>
 </xsl:template>
 
 <!-- Entries in list-of's -->
