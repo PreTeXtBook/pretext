@@ -1413,7 +1413,7 @@
         </element>
       </optional>
       <choice>
-        <element name="latex-image-code">
+        <element name="latex-image">
           <text/>
         </element>
         <element name="asymptote">

@@ -1338,7 +1338,7 @@
                 attribute archive {text}?,
                 element description {TextShort}?,
                 (
-                    element latex-image-code {text} |
+                    element latex-image {text} |
                     element asymptote {text} |
                     element sageplot {text}
                 )
