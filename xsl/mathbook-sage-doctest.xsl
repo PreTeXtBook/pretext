@@ -83,6 +83,7 @@
     <xsl:text>&#xA;</xsl:text>
 </xsl:template>
 
+<!-- @copy deprecated  2017-12-21 -->
 <!-- Just handle "copy" Sage blocks the same way as others  -->
 <!-- since results may be needed for subsequent tests       -->
 <!-- This needs to come second, since it will fail previous -->
