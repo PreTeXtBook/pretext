@@ -5960,7 +5960,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <!-- a 'unset' will appear here to activate new      -->
         <!-- default this could move later to the "otherwise"-->
         <xsl:when test="$legacy-autoname='unset'">
-            <xsl:text>type-hybrid</xsl:text>
+            <xsl:text>type-global</xsl:text>
         </xsl:when>
         <xsl:when test="$legacy-autoname='no'">
             <xsl:text>global</xsl:text>
