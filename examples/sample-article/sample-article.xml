@@ -1718,7 +1718,7 @@ the xsltproc executable.
                     <caption>TikZ Electronics Diagram</caption>
                     <image xml:id="tikz-electronics">
                         <description>A pile of electronic components wired together</description>
-                        <latex-image-code>
+                        <latex-image>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[\tikzset{%
                           block/.style    = {draw, thick, rectangle, minimum height = 3em,
@@ -1797,7 +1797,7 @@ the xsltproc executable.
                             \draw [color=gray,thick](-0.5,-9) rectangle (12.5,-5);
                             \node at (-0.5,-9) [below=5mm, right=0mm] {\textsc{second-order noise shaper}};
                         \end{tikzpicture}]]>
-                        </latex-image-code>
+                        </latex-image>
                     </image>
                 </figure>
 
@@ -1807,7 +1807,7 @@ the xsltproc executable.
                 <figure xml:id="figure-tikz-cone3D">
                     <caption>TikZ Cone Drawing</caption>
                     <image xml:id="tikz-cone" width="70%">
-                        <latex-image-code>
+                        <latex-image>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[\begin{tikzpicture}[join=round]
                         \tikzstyle{conefill} = [fill=blue!20,fill opacity=0.8]
@@ -1883,7 +1883,7 @@ the xsltproc executable.
                                         (.274,-.5) node [below] {$P_{11}$};
                         \end{scope}
                         \end{tikzpicture}]]>
-                        </latex-image-code>
+                        </latex-image>
                     </image>
                 </figure>
 
@@ -1893,7 +1893,7 @@ the xsltproc executable.
                     <caption>Sample pgfplots plot</caption>
                     <image xml:id="pgfplots-demo">
                         <description>A pgfplots example, with a function, a parametric curve, and some points plotted.</description>
-                        <latex-image-code>
+                        <latex-image>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[\begin{tikzpicture}
                         \matrix{
@@ -1931,8 +1931,7 @@ the xsltproc executable.
                             \end{axis}\\
                         };
                         \end{tikzpicture}]]>
-
-                        </latex-image-code>
+                        </latex-image>
                     </image>
                 </figure>
 
@@ -1944,7 +1943,7 @@ the xsltproc executable.
                     <caption>External data in a pgfplots plot</caption>
                     <image xml:id="pgfplots-data-demo">
                         <description>A pgfplots example, with external data plotted.</description>
-                        <latex-image-code>
+                        <latex-image>
                         <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                         <![CDATA[\tikzset{%
                         }
@@ -1958,7 +1957,7 @@ the xsltproc executable.
                         \addplot[blue] table {data/hodgkin-huxley-data.dat};
                         \end{axis}
                         \end{tikzpicture}]]>
-                        </latex-image-code>
+                        </latex-image>
                     </image>
                 </figure>
 
@@ -3579,7 +3578,7 @@ the xsltproc executable.
                    <figure>
                         <caption>GeoGebra demonstration of the Euler Line</caption>
                         <image xml:id="tikz-geogebra-euler">
-                            <latex-image-code>
+                            <latex-image>
                             \begin{tikzpicture}
                             \definecolor{ffqqqq}{rgb}{1,0,0}
                             \definecolor{uuuuuu}{rgb}{0.27,0.27,0.27}
@@ -3607,7 +3606,7 @@ the xsltproc executable.
                             \draw[color=uuuuuu] (-1.29,1.79) node {$orthocentre$};
                             \draw[color=ffqqqq] (-3.75,6.23) node {$Euler$};
                             \end{tikzpicture}
-                            </latex-image-code>
+                            </latex-image>
                         </image>
                     </figure>
                 </geogebra-applet>
@@ -5393,7 +5392,7 @@ the xsltproc executable.
                     <!-- :Slug: venn                                 -->
                     <!-- PDF blend mode requires TikZ version 3.0 or above. -->
                     <image xml:id="tikz-venn-diagram" archive="pdf svg">
-                        <latex-image-code>
+                        <latex-image>
                         \begin{tikzpicture}[scale=0.75]
                           \begin{scope}[blend group = soft light]
                             \fill[red!30!white]   ( 90:1.2) circle (2);
@@ -5405,7 +5404,7 @@ the xsltproc executable.
                           \node at ( 330:2)   {Coding};
                           \node [font=\Large] {\LaTeX};
                         \end{tikzpicture}
-                        </latex-image-code>
+                        </latex-image>
                     </image>
                     <!--  -->
                     <figure>
@@ -5418,10 +5417,10 @@ the xsltproc executable.
                             <!-- :Slug: smart-circle                                 -->
                             <!-- A diagram showing a TeX workflow using the          -->
                             <!-- clever  smartdiagram  package. (in premable)        -->
-                            <latex-image-code>
+                            <latex-image>
                             \smartdiagram[circular diagram:clockwise]{Edit,
                             pdf\LaTeX, Bib\TeX/ biber, make\-index, pdf\LaTeX}
-                            </latex-image-code>
+                            </latex-image>
                         </image>
                     </figure>
                     <!--  -->
