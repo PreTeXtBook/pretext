@@ -42,11 +42,16 @@
         <xs:extension base="MetaDataSubtitle">
           <xs:sequence>
             <xs:group minOccurs="0" ref="BookFrontMatter"/>
-            <xs:element ref="chapter"/>
-            <xs:choice minOccurs="0" maxOccurs="unbounded">
-              <xs:element ref="chapter"/>
-              <xs:element ref="exercises"/>
-              <xs:element ref="references"/>
+            <xs:choice>
+              <xs:sequence>
+                <xs:element ref="chapter"/>
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                  <xs:element ref="chapter"/>
+                  <xs:element ref="exercises"/>
+                  <xs:element ref="references"/>
+                </xs:choice>
+              </xs:sequence>
+              <xs:element maxOccurs="unbounded" ref="part"/>
             </xs:choice>
             <xs:element minOccurs="0" ref="backmatter"/>
           </xs:sequence>
@@ -59,6 +64,17 @@
   </xs:element>
   <xs:element name="memo">
     <xs:complexType/>
+  </xs:element>
+  <xs:element name="part">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="MetaDataTitle">
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" ref="chapter"/>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:element name="chapter">
     <xs:complexType>
@@ -3232,6 +3248,7 @@
         <xs:element ref="search"/>
         <xs:element ref="analytics"/>
       </xs:choice>
+      <xs:element ref="numbering"/>
     </xs:choice>
   </xs:group>
   <xs:element name="brandlogo">
@@ -3331,4 +3348,23 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="security" type="xs:string"/>
+  <xs:element name="numbering">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="division"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="division">
+    <xs:complexType>
+      <xs:attribute name="part" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="decorative"/>
+            <xs:enumeration value="structural"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

@@ -55,8 +55,10 @@
             element book {
                 MetaDataSubtitle,
                 BookFrontMatter?,
-                Chapter,
-                (Chapter | Exercises | References)*,
+                (
+                    (Chapter, (Chapter | Exercises | References)*) |
+                    Part+
+                ),
                 BackMatter?
             }
         Letter =
@@ -76,6 +78,10 @@
         <p>There are several things to note (expand this): always a title, dead-end with blocks, or subdivide with optional intro and conclusion.</p>
 
         <fragment xml:id="divisions">
+        Part =
+            element part {
+                MetaDataTitle, Chapter+
+            }
         Chapter =
             element chapter {
                 MetaDataTitle,
@@ -1881,7 +1887,7 @@
     <section>
         <title>Document Information</title>
 
-        <p>The <c>docinfo</c> sction is like a small database for the document.</p>
+        <p>The <c>docinfo</c> section is like a small database for the document.</p>
 
         <fragment xml:id="docinfo">
         DocInfo =
@@ -1901,6 +1907,7 @@
         <fragment ref="imagearchive" />
         <fragment ref="authorbiographylength" />
         <fragment ref="addins" />
+        <fragment ref="numbering" />
         </fragment>
 
         <p>A nice icon near the top of an electronic version is a nice touch, and can link back to a project landing page.</p>
@@ -2015,6 +2022,17 @@
                         element security {text}
                     }
                 )+
+            }
+        </fragment>
+
+        <p>Many aspects of numbering are configurable.  These choices affect the numbers printed, and so are an author's decision, and hence run with the source.</p>
+
+        <fragment xml:id="numbering">
+        Configuration |=
+            element numbering {
+                element division {
+                    attribute part {"decorative" | "structural"}
+                }?
             }
         </fragment>
     </section>

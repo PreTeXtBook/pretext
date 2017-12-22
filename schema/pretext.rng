@@ -42,14 +42,21 @@
       <optional>
         <ref name="BookFrontMatter"/>
       </optional>
-      <ref name="Chapter"/>
-      <zeroOrMore>
-        <choice>
+      <choice>
+        <group>
           <ref name="Chapter"/>
-          <ref name="Exercises"/>
-          <ref name="References"/>
-        </choice>
-      </zeroOrMore>
+          <zeroOrMore>
+            <choice>
+              <ref name="Chapter"/>
+              <ref name="Exercises"/>
+              <ref name="References"/>
+            </choice>
+          </zeroOrMore>
+        </group>
+        <oneOrMore>
+          <ref name="Part"/>
+        </oneOrMore>
+      </choice>
       <optional>
         <ref name="BackMatter"/>
       </optional>
@@ -63,6 +70,14 @@
   <define name="Memorandum">
     <element name="memo">
       <empty/>
+    </element>
+  </define>
+  <define name="Part">
+    <element name="part">
+      <ref name="MetaDataTitle"/>
+      <oneOrMore>
+        <ref name="Chapter"/>
+      </oneOrMore>
     </element>
   </define>
   <define name="Chapter">
@@ -3375,5 +3390,19 @@
         </oneOrMore>
       </element>
     </choice>
+  </define>
+  <define name="Configuration" combine="choice">
+    <element name="numbering">
+      <optional>
+        <element name="division">
+          <attribute name="part">
+            <choice>
+              <value>decorative</value>
+              <value>structural</value>
+            </choice>
+          </attribute>
+        </element>
+      </optional>
+    </element>
   </define>
 </grammar>

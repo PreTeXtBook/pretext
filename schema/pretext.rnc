@@ -22,8 +22,10 @@
             element book {
                 MetaDataSubtitle,
                 BookFrontMatter?,
-                Chapter,
-                (Chapter | Exercises | References)*,
+                (
+                    (Chapter, (Chapter | Exercises | References)*) |
+                    Part+
+                ),
                 BackMatter?
             }
         Letter =
@@ -32,6 +34,10 @@
             element memo {empty}
         
         
+        Part =
+            element part {
+                MetaDataTitle, Chapter+
+            }
         Chapter =
             element chapter {
                 MetaDataTitle,
@@ -1519,6 +1525,14 @@
                         element security {text}
                     }
                 )+
+            }
+        
+        
+        Configuration |=
+            element numbering {
+                element division {
+                    attribute part {"decorative" | "structural"}
+                }?
             }
         
         
