@@ -86,7 +86,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <caption>Subgroups of <m>S_3</m></caption>
             <!-- Replaced figure with tikz figure - TWJ 5/6/2010 -->
             <image xml:id="cyclic-s3-subgroups">
-                <latex-image-code><![CDATA[
+                <latex-image><![CDATA[
                     \begin{tikzpicture}[scale=1]
 
                     \draw  (0,0.3) -- (2.6,1.2);
@@ -106,7 +106,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     \node at (3, 1.5) {$S_3$};
                     \node at (3,-1.5) {$\{ \identity \}$};
                     \end{tikzpicture}]]>
-                </latex-image-code>
+                </latex-image>
             </image>
         </figure>
 
@@ -201,7 +201,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <caption>Rectangular coordinates of a complex number</caption>
             <!-- Replaced figure with tikz figure - TWJ 5/6/2010 -->
             <image xml:id="cyclic-complex-rectangular">
-                <latex-image-code><![CDATA[
+                <latex-image><![CDATA[
                     \begin{tikzpicture}[scale=0.5]
 
                     \draw [->]  (0,-5) -- (0,5);
@@ -220,7 +220,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     \node [right] at (1, -2) {$z_2 = 1 -  2i$};
 
                     \end{tikzpicture}]]>
-                </latex-image-code>
+                </latex-image>
             </image>
         </figure>
 
@@ -230,7 +230,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <caption>Polar coordinates of a complex number</caption>
             <!-- Replaced figure with tikz figure - TWJ 5/6/2010 -->
             <image xml:id="cyclic-complex-polar">
-                <latex-image-code><![CDATA[
+                <latex-image><![CDATA[
                     \begin{tikzpicture}[scale=0.5]
 
                     \draw [->]  (0,-5) -- (0,5);
@@ -248,7 +248,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     \node [right] at (17:2) {$\theta$};
 
                     \end{tikzpicture}]]>
-                </latex-image-code>
+                </latex-image>
             </image>
         </figure>
 
@@ -342,7 +342,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <caption>8th roots of unity</caption>
             <!-- Replaced figure with tikz figure - TWJ 5/6/2010 -->
             <image xml:id="cyclic-roots-unity">
-                <latex-image-code><xi:include href="tikz/cyclic-roots-unity.tex" parse="text" /></latex-image-code>
+                <latex-image><xi:include href="tikz/cyclic-roots-unity.tex" parse="text" /></latex-image>
             </image>
         </figure>
 
@@ -351,7 +351,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <figure xml:id="figure-rtsunity-copy">
             <caption>Repeat: 8th roots of unity</caption>
             <image xml:id="cyclic-roots-unity-copy">
-                <latex-image-code><xi:include href="tikz/cyclic-roots-unity.tex" parse="text" /></latex-image-code>
+                <latex-image><xi:include href="tikz/cyclic-roots-unity.tex" parse="text" /></latex-image>
             </image>
         </figure>
     </section>

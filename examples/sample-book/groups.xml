@@ -153,7 +153,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <figure xml:id="figure-groups-rectangle">
                 <caption>Rigid motions of a rectangle</caption>
                 <image xml:id="groups-rectangle">
-                    <latex-image-code><![CDATA[
+                    <latex-image><![CDATA[
                         \begin{tikzpicture}[scale=1.2]
                         \draw (-3,0) -- (-1.25,0) -- (-1.25,1) -- (-3,1) -- cycle;
                         \draw (3,0) -- (1.25,0) -- (1.25,1) -- (3,1) -- cycle;
@@ -211,7 +211,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         \node [below,left] at (1.25,6) {$D$};
 
                         \end{tikzpicture}]]>
-                    </latex-image-code>
+                    </latex-image>
                 </image>
             </figure>
 
@@ -221,7 +221,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <figure xml:id="figure-s3-symmetry">
                 <caption>Symmetries of a triangle</caption>
                 <image xml:id="groups-s3-symmetry">
-                    <latex-image-code><![CDATA[
+                    <latex-image><![CDATA[
                         \begin{tikzpicture}[scale=0.7]
                         \draw (0,0) -- (0:2) -- (60:2) -- cycle;
                         \node [left] at (0,0) {$A$};
@@ -309,7 +309,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         \node [right] at (7,16) {$ id = \begin{pmatrix}A & B & C \\ A & B & C\end{pmatrix}$};
 
                         \end{tikzpicture}]]>
-                    </latex-image-code>
+                    </latex-image>
                 </image>
             </figure>
 

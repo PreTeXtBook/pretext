@@ -144,7 +144,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Replaced figure with tikz figure - TWJ 6/14/2010 -->
 
             <image xml:id="preface-dependencies">
-                <latex-image-code>
+                <latex-image>
                     <![CDATA[
                     \begin{tikzpicture}[scale=0.8]
 
@@ -223,7 +223,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     \draw (1.5,13) -- (1.5,14) -- (3.5,14);
 
                     \end{tikzpicture}]]>
-                </latex-image-code>
+                </latex-image>
             </image>
         </sidebyside>
 

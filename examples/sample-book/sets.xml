@@ -268,7 +268,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
              <!-- Changed the figure to a tikz diagram - TWJ 5/4/2010 -->
             <image xml:id="sets-mappings">
-                <latex-image-code><![CDATA[
+                <latex-image><![CDATA[
                     \begin{tikzpicture}[scale=0.5]
                     \draw (0,0) ellipse (2 and 3);
                     \draw (7,0) ellipse (2 and 3);
@@ -300,7 +300,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     \node at (3.5,3) {$g$};
                     \node at (3.5,10) {$f$};
                     \end{tikzpicture}]]>
-                </latex-image-code>
+                </latex-image>
             </image>
         <!-- Changed the caption to avoid confusion -->
         <!--  Suggested by B. Torrence.  TWJ 10/1/2014 -->
@@ -329,7 +329,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <!-- Changed the figure to a tikz diagram - TWJ 5/4/2010 -->
             <image xml:id="sets-composition">
-                <latex-image-code><![CDATA[
+                <latex-image><![CDATA[
                     \begin{tikzpicture}[scale=0.5]
                     \draw (-6,8) ellipse (2 and 3);
                     \draw (0,8) ellipse (2 and 3);
@@ -376,7 +376,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     \draw [->] (-2.5,-1.5) -- (2.5,-1.5);
 
                     \end{tikzpicture}]]>
-                </latex-image-code>
+                </latex-image>
             </image>
         </figure>
 
