@@ -8276,7 +8276,6 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 
 <!-- Knowl header -->
 <xsl:template name="knowl">
-<link href="https://aimath.org/knowlstyle.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="https://aimath.org/knowl.js"></script>
 </xsl:template>
 
