@@ -619,12 +619,4 @@
     <p>Index intentionally blank, knowls inactive in EPUB</p>
 </xsl:template>
 
-<!-- Code, inline -->
-<!-- Validator does not like <tt> element -->
-<xsl:template match="c">
-    <xsl:element name="code">
-        <xsl:apply-templates select="text()" />
-    </xsl:element>
-</xsl:template>
-
 </xsl:stylesheet>

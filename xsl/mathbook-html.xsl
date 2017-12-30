@@ -6228,12 +6228,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="visible-text">
         <xsl:choose>
             <xsl:when test="not(*) and not(normalize-space())">
-                <xsl:element name="tt">
-                    <xsl:attribute name="class">
-                        <xsl:text>code-inline tex2jax_ignore</xsl:text>
-                    </xsl:attribute>
+                <code class="code-inline tex2jax_ignore">
                     <xsl:value-of select="@href" />
-                </xsl:element>
+                </code>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates />
@@ -6272,12 +6269,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- PCDATA only, so drop non-text nodes -->
 <!-- NB: "code-block" class otherwise -->
 <xsl:template match="c">
-    <xsl:element name="tt">
-        <xsl:attribute name="class">
-            <xsl:text>code-inline tex2jax_ignore</xsl:text>
-        </xsl:attribute>
+    <code class="code-inline tex2jax_ignore">
         <xsl:value-of select="." />
-    </xsl:element>
+    </code>
 </xsl:template>
 
 
