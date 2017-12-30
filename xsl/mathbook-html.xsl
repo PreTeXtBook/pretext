@@ -5889,6 +5889,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:attribute name="href">
                             <xsl:apply-templates select="$target" mode="url" />
                         </xsl:attribute>
+                        <!-- use a class to identify an internal link -->
+                        <xsl:attribute name="class">
+                            <xsl:text>xref</xsl:text>
+                        </xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
                 <!-- add HTML title and alt attributes to the link -->
@@ -6243,7 +6247,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:copy-of select="$visible-text" />
         </xsl:when>
         <xsl:otherwise>
-            <a class="external-url" href="{@href}" target="_blank">
+            <!-- class name identifies an external link -->
+            <a class="url" href="{@href}" target="_blank">
                 <xsl:copy-of select="$visible-text" />
             </a>
         </xsl:otherwise>
