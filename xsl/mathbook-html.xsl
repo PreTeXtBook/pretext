@@ -8410,7 +8410,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <xsl:choose>
         <xsl:when test="$docinfo/brandlogo">
             <a id="logo-link" href="{$docinfo/brandlogo/@url}" target="_blank" >
-                <img src="{$docinfo/brandlogo/@source}" alt="Logo image for document"/>
+                <img src="{$docinfo/brandlogo/@source}" alt="Logo image"/>
             </a>
         </xsl:when>
         <xsl:otherwise>

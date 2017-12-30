@@ -735,6 +735,16 @@ the xsltproc executable.
                         </solution>
                     </exercise>
 
+                    <example xml:id="example-math-title">
+                        <title>An Example of with <m>\frac12</m> math formula <m>\displaystyle{\int e^x \, dx}</m> in the title</title>
+                        <statement>
+                            <p>
+                               Just for testing math in knowls,
+                               and also extra whitespace in a <c>&lt;p&gt;</c>.
+                            </p>
+                        </statement>
+                    </example>
+
                     <p>There are many different blocks you can employ, and they mostly behave the same way.  A <c>&lt;project&gt;</c><idx><h>project</h></idx> is very similar to a <c>&lt;question&gt;</c><idx><h>question</h></idx> or <c>&lt;problem&gt;</c><idx><h>problem</h></idx></p>
 
                     <project>
