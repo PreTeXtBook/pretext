@@ -362,14 +362,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Colored boxes, and much more, though mostly styling&#xa;</xsl:text>
     <xsl:text>%% skins library provides "enhanced" skin, employing tikzpicture&#xa;</xsl:text>
     <xsl:text>%% boxes may be configured as "breakable" or "unbreakable"&#xa;</xsl:text>
-    <xsl:text>%% the  listings  package will be employed later, but&#xa;</xsl:text>
-    <xsl:text>%% the associated tcolorbox library depends on the engine&#xa;</xsl:text>
     <xsl:text>\usepackage{tcolorbox}&#xa;</xsl:text>
     <xsl:text>\tcbuselibrary{skins}&#xa;</xsl:text>
     <xsl:text>\tcbuselibrary{breakable}&#xa;</xsl:text>
-    <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}%&#xa;</xsl:text>
-    <xsl:text>  {\tcbuselibrary{listings}}&#xa;</xsl:text>
-    <xsl:text>  {\tcbuselibrary{listingsutf8}}&#xa;</xsl:text>
     <xsl:text>%% Hyperref should be here, but likes to be loaded late&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Inline math delimiters, \(, \), need to be robust&#xa;</xsl:text>
@@ -1449,19 +1444,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>  {}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="$document-root//sage">
-            <xsl:text>%% Sage's blue is 50%, we go way lighter with blue!05&#xa;</xsl:text>
-            <xsl:text>%% Sage code style, listings package: Python syntax, line breaking&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{sage}{language=Python,breaklines=true,breakatwhitespace=true,%&#xa;</xsl:text>
-            <xsl:text>basicstyle=\small\ttfamily,columns=fixed}%&#xa;</xsl:text>
-            <xsl:text>%% Now the presentation styles via tcolorbox support&#xa;</xsl:text>
-            <xsl:text>%% 2mm asymmetry in margins is a mystery&#xa;</xsl:text>
-            <!-- Perhaps these two tcb boxes can be combined into upper/lower halves? -->
-            <xsl:text>\newtcblisting{sageinput}&#xa;</xsl:text>
-            <xsl:text>  {breakable, skin=enhanced, listing only, listing style=sage,&#xa;</xsl:text>
-            <xsl:text>   sharp corners, colback=blue!05, boxrule=0.5pt, left=2mm, right=2mm, top=0mm, bottom=0mm, boxsep=0mm}&#xa;</xsl:text>
-            <xsl:text>\newtcblisting{sageoutput}&#xa;</xsl:text>
-            <xsl:text>  {breakable, skin=enhanced, listing only, listing style=sage,&#xa;</xsl:text>
-            <xsl:text>   sharp corners, colback=white, frame hidden, left=0mm, right=0mm, top=-2mm, bottom=-2mm, boxsep=0mm}&#xa;</xsl:text>
+            <xsl:text>%% Sage's blue is 50%, we go way lighter (blue!05 would work)&#xa;</xsl:text>
+            <xsl:text>\definecolor{sageblue}{rgb}{0.95,0.95,1}&#xa;</xsl:text>
+            <xsl:text>%% Sage input, listings package: Python syntax, boxed, colored, line breaking&#xa;</xsl:text>
+            <xsl:text>%% To be flush with surrounding text's margins, set&#xa;</xsl:text>
+            <xsl:text>%% xmargins to be sum of framerule, framesep, and epsilon (~0.25pt)&#xa;</xsl:text>
+            <xsl:text>%% space between input/output comes from input style "belowskip",&#xa;</xsl:text>
+            <xsl:text>%% by giving output an aboveskip of zero&#xa;</xsl:text>
+            <xsl:text>\lstdefinestyle{sageinputstyle}{language=Python,breaklines=true,breakatwhitespace=true,%&#xa;</xsl:text>
+            <xsl:text>basicstyle=\small\ttfamily,columns=fixed,frame=single,backgroundcolor=\color{sageblue},%&#xa;</xsl:text>
+            <xsl:text>framerule=0.5pt,framesep=4pt,xleftmargin=4.75pt,xrightmargin=4.75pt}&#xa;</xsl:text>
+            <xsl:text>%% Sage output, similar, but not boxed, not colored&#xa;</xsl:text>
+            <xsl:text>\lstdefinestyle{sageoutputstyle}{language=Python,breaklines=true,%&#xa;</xsl:text>
+            <xsl:text>breakatwhitespace=true,basicstyle=\small\ttfamily,columns=fixed,aboveskip=0pt}&#xa;</xsl:text>
+            <xsl:text>%% The environments manufactured by the listings package&#xa;</xsl:text>
+            <xsl:text>\lstnewenvironment{sageinput}&#xa;</xsl:text>
+            <xsl:text>  {\lstset{style=sageinputstyle}}&#xa;</xsl:text>
+            <xsl:text>  {}&#xa;</xsl:text>
+            <xsl:text>\lstnewenvironment{sageoutput}&#xa;</xsl:text>
+            <xsl:text>  {\lstset{style=sageoutputstyle}}&#xa;</xsl:text>
+            <xsl:text>  {}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
     <xsl:if test="$document-root//console or $document-root//pre or $document-root//cd">
