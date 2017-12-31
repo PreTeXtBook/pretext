@@ -1411,7 +1411,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>%% End of generic listing adjustments&#xa;</xsl:text>
         <xsl:if test="$document-root//program">
-            <xsl:text>%% Generic input, listings package: line breaking, language per instance&#xa;</xsl:text>
+            <xsl:text>%% Program listings via the listings package&#xa;</xsl:text>
+            <xsl:text>%% Line breaking, language per instance, frames, boxes&#xa;</xsl:text>
+            <xsl:text>%% First a universal color scheme for parts of any language&#xa;</xsl:text>
             <xsl:if test="$latex.print='no'" >
                 <xsl:text>%% Colors match a subset of Google prettify "Default" style&#xa;</xsl:text>
                 <xsl:text>%% Set latex.print='yes' to get all black&#xa;</xsl:text>
@@ -1430,20 +1432,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>\definecolor{keywords}{rgb}{0,0,0}&#xa;</xsl:text>
             </xsl:if>
             <xsl:text>%% We define a null language, free of any formatting or style&#xa;</xsl:text>
+            <xsl:text>%% for use when a language is not supported, or pseudo-code&#xa;</xsl:text>
             <xsl:text>\lstdefinelanguage{none}{identifierstyle=,commentstyle=,stringstyle=,keywordstyle=}&#xa;</xsl:text>
-            <xsl:text>%% Style for listings, independent of surrounding boxes, etc.&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{program}{breaklines=true,breakatwhitespace=true,columns=fixed,basicstyle=\small\ttfamily,&#xa;</xsl:text>
-            <xsl:text>identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}}&#xa;</xsl:text>
-            <xsl:text>%% Now the presentation styles via tcolorbox support&#xa;</xsl:text>
-            <xsl:text>%% 2mm asymmetry in margins is a mystery&#xa;</xsl:text>
-            <xsl:text>%% Optional argument is additional listing options&#xa;</xsl:text>
-            <xsl:text>\newtcblisting{program}[1][]&#xa;</xsl:text>
-            <xsl:text>  {breakable, skin=enhanced, listing only, listing options={style=program,#1},&#xa;</xsl:text>
-            <xsl:text>   frame hidden, boxrule=0pt, colback=white, left=2mm, right=2mm, top=0mm, bottom=0mm, boxsep=0mm}&#xa;</xsl:text>
-            <xsl:text>\newtcblisting{programbox}[1][]&#xa;</xsl:text>
-            <xsl:text>  {hbox, skin=enhanced, listing only, listing options={style=program,#1},&#xa;</xsl:text>
-            <xsl:text>   frame hidden, boxrule=0pt, colback=white, left=2mm, right=2mm, top=0mm, bottom=0mm, boxsep=0mm}&#xa;</xsl:text>
-            <!-- bring back frame once sidebyside goes with tcolorbox:  hbox, sharp corners, boxrule=0.5pt-->
+            <xsl:text>%% A style, both text behavior and decorations all at once&#xa;</xsl:text>
+            <xsl:text>\lstdefinestyle{programstyle}{breaklines=true,breakatwhitespace=true,columns=fixed,frame=leftline,framesep=3ex, xleftmargin=3ex,&#xa;</xsl:text>
+            <xsl:text>basicstyle=\small\ttfamily,identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}}&#xa;</xsl:text>
+            <xsl:text>%% The environments manufactured by the listings package&#xa;</xsl:text>
+            <xsl:text>%% Two environments, one full-width, the other boxed for side-by-sides&#xa;</xsl:text>
+            <xsl:text>%% "program" expects a language argument only&#xa;</xsl:text>
+            <xsl:text>%% "programbox" expects a language and a linewidth&#xa;</xsl:text>
+            <xsl:text>\lstnewenvironment{program}[1][]&#xa;</xsl:text>
+            <xsl:text>  {\lstset{style=programstyle,#1}}&#xa;</xsl:text>
+            <xsl:text>  {}&#xa;</xsl:text>
+            <xsl:text>\lstnewenvironment{programbox}[1][]&#xa;</xsl:text>
+            <xsl:text>  {\lstset{style=programstyle,#1}}&#xa;</xsl:text>
+            <xsl:text>  {}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="$document-root//sage">
             <xsl:text>%% Sage's blue is 50%, we go way lighter with blue!05&#xa;</xsl:text>
