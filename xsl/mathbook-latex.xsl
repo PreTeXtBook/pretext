@@ -354,13 +354,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%%   2.  a stylewriter may assume their presence&#xa;</xsl:text>
     <xsl:text>\usepackage{geometry}&#xa;</xsl:text>
     <xsl:text>%% Some aspects of the preamble are conditional,&#xa;</xsl:text>
-    <xsl:text>%% the LaTeX engine is one example, very early&#xa;</xsl:text>
+    <xsl:text>%% the LaTeX engine is one such determinant&#xa;</xsl:text>
     <xsl:text>\usepackage{ifthen}&#xa;</xsl:text>
     <xsl:text>\usepackage{ifxetex,ifluatex}&#xa;</xsl:text>
     <xsl:text>%% Raster graphics inclusion&#xa;</xsl:text>
     <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
     <xsl:text>%% Colored boxes, and much more, though mostly styling&#xa;</xsl:text>
-    <xsl:text>%% skins library provides "enhanced" skin, empoying tikzpicture&#xa;</xsl:text>
+    <xsl:text>%% skins library provides "enhanced" skin, employing tikzpicture&#xa;</xsl:text>
     <xsl:text>%% boxes may be configured as "breakable" or "unbreakable"&#xa;</xsl:text>
     <xsl:text>%% the  listings  package will be employed later, but&#xa;</xsl:text>
     <xsl:text>%% the associated tcolorbox library depends on the engine&#xa;</xsl:text>
