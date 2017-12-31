@@ -1286,7 +1286,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Bitstream Vera Font names within: https://github.com/timfel/texmf/blob/master/fonts/map/vtex/bera.ali -->
     <!-- Coloring listings: http://tex.stackexchange.com/questions/18376/beautiful-listing-for-csharp -->
     <!-- Song and Dance for font changes: http://jevopi.blogspot.com/2010/03/nicely-formatted-listings-in-latex-with.html -->
-     <xsl:if test="$document-root//c or $document-root//sage or $document-root//program">
+     <xsl:if test="$document-root//sage or $document-root//program">
         <xsl:text>%% Program listing support: for listings, programs, and Sage code&#xa;</xsl:text>
         <xsl:text>\usepackage{listings}&#xa;</xsl:text>
         <xsl:text>%% We define the listings font style to be the default "ttfamily"&#xa;</xsl:text>
