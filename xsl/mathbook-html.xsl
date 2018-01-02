@@ -444,7 +444,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="section-header" />
         <xsl:apply-templates select="author|objectives|introduction|titlepage|abstract" />
         <nav class="summary-links">
-            <xsl:apply-templates select="*" mode="summary-nav" />
+            <ul>
+                <xsl:apply-templates select="*" mode="summary-nav" />
+            </ul>
         </nav>
         <xsl:apply-templates select="conclusion"/>
     </section>
@@ -460,18 +462,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="url">
         <xsl:apply-templates select="." mode="url" />
     </xsl:variable>
-    <a href="{$url}">
-        <!-- important not include codenumber span -->
-        <xsl:if test="$num!=''">
-            <span class="codenumber">
-                <xsl:value-of select="$num" />
+    <li>
+        <a href="{$url}">
+            <!-- important not include codenumber span -->
+            <xsl:if test="$num!=''">
+                <span class="codenumber">
+                    <xsl:value-of select="$num" />
+                </span>
+            </xsl:if>
+            <!-- title is required on structural elements -->
+            <span class="title">
+                <xsl:apply-templates select="." mode="title-simple" />
             </span>
-        </xsl:if>
-        <!-- title is required on structural elements -->
-        <span class="title">
-            <xsl:apply-templates select="." mode="title-simple" />
-        </span>
-    </a>
+        </a>
+    </li>
 </xsl:template>
 
 <!-- introduction (etc.) and conclusion get dropped -->
