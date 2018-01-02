@@ -1314,6 +1314,14 @@ the xsltproc executable.
                     <mrow>x  \amp {}+{} \amp 3y \amp {}+{} \amp 2z \amp {}={} \amp 13.</mrow>
                 </md>Beautiful.</p>
 
+                <p>A long equation, to check layout on various screen sizes.  This is Weil's <q>explicit formula</q> for the
+                   Riemann <m>\zeta</m>-function:
+                  <men>
+        \sum_\gamma S_-(\gamma) = \frac{\log Q}{\pi} \hat S_-(0) 
+        + \frac{1}{2\pi} \sum_{j=1}^d \Re\left\{ \int_{-\infty}^\infty \frac{\Gamma'}{\Gamma}\left(\frac{1}{4} + \frac{it}{2} + \mu_j\right)S_-(t) dt\right\}
+        - \frac{d}{2\pi}\hat S_-(0)\log \pi
+                  </men>.
+                </p>
                 <example>
                     <title>Excessive Display Mathematics</title>
 
