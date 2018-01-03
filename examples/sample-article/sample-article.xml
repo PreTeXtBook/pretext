@@ -808,6 +808,7 @@ the xsltproc executable.
 
                     <aside xml:id="an-aside">
                         <title>An Aside</title>
+                        <idx>aside</idx>
 
                         <p>An <c>&lt;aside&gt;</c> is similar to a remark, but is not as critical to the narrative.  It is not numbered, and so requires a title.  It can be the target of a cross-reference.  They are meant to be short, and so are not knowlized at their first appearance.  If the content is appropriate, these can be marked as <c>&lt;historical&gt;</c> or <c>&lt;biographical&gt;</c>, though longer items should use subdivisions (<eg /> sections, subsections) instead.</p>
                     </aside>
@@ -1052,9 +1053,9 @@ the xsltproc executable.
             <subsection xml:id="subsection-paragraph-markup">
                 <title>Some Paragraph-Level Markup</title>
 
-                <p>Text within a paragraph may be <em>emphasized</em> with <c>&lt;em&gt;</c> or if you want to take it to the next level you can identify the text as an <alert>alert</alert> with <c>&lt;alert&gt;</c>.</p>
+                <p>Text within a paragraph may be <em>emphasized</em><idx><h>em</h><h>emphasis</h></idx><idx><h>styling words</h><h>em</h></idx><idx><h>styling words</h><h>emphasis</h></idx> with <c>&lt;em&gt;</c> or if you want to take it to the next level you can identify the text as an <alert>alert</alert><idx>alert</idx><idx><h>styling words</h><h>alert</h></idx> with <c>&lt;alert&gt;</c>.</p>
 
-                <p>Similarly, within a paragraph, you can identify edits between versions as <insert>inserted text that has been added</insert> with <c>&lt;insert&gt;</c> or as <delete>deleted text that has been removed</delete> with <c>&lt;delete&gt;</c>.  Note that these identified edits are slightly different than <stale>stale text that you want to retain, but which is no longer relevant</stale>, which is accomplished with <c>&lt;stale&gt;</c>.  The original request for stale text came from an instructor with an online list of student topics for presentations, and as students claimed topics they were marked as no longer available for other students.</p>
+                <p>Similarly, within a paragraph, you can identify edits between versions as <insert>inserted text that has been added</insert><idx><h>styling words</h><h>insert</h></idx> with <c>&lt;insert&gt;</c> or as <delete>deleted text that has been removed</delete><idx><h>styling words</h><h>delete</h></idx> with <c>&lt;delete&gt;</c>.  Note that these identified edits are slightly different than <stale>stale text that you want to retain, but which is no longer relevant</stale><idx><h>styling words</h><h>stale</h></idx>, which is accomplished with <c>&lt;stale&gt;</c>.  The original request for stale text came from an instructor with an online list of student topics for presentations, and as students claimed topics they were marked as no longer available for other students.</p>
 
                 <p>If you need a <q>fill-in blank</q>, like this<fillin />, it can be obtained with an empty <c>&lt;fillin&gt;</c> element that defaults to roughly a 10-character width.  You can use the <c>&lt;characters&gt;</c> attribute to make the rule longer or shorter, such as a 40-character blank: <fillin characters="40" />.  The character count is approximate, based on typical character widths within a proportional font carrying English language text.  Adjust to suit, or request a language-specific adjustment if it is critical.</p>
             </subsection>
