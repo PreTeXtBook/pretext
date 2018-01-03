@@ -34,12 +34,12 @@
                 </li>
 
                 <li>
-                    <title>1. JDK</title>
+                    <title>JDK</title>
                     <p>It is necesssary to have a version of <c>java</c> on your machine.  Try <c>which java</c> to see if one is already available.  Any output here might help in the next step.  <init>JDK</init> is the Java Development Kit.</p>
                 </li>
 
                 <li>
-                    <title>2. <c>JAVA_HOME</c></title>
+                    <title><c>JAVA_HOME</c></title>
                     <p>You will need to have this environment variable set correctly.  You can see if <c>echo ${JAVA_HOME}</c> on Linux to see if it produces anything sensible and/or consistent with Step 1.  Ken Levasseur notes that on OSX you can go<cd>
                         <cline>echo $(/usr/libexec/java_home)</cline>
                     </cd>and the output is what you set to the <c>JAVA_HOME</c> variable.</p>
@@ -47,12 +47,12 @@
                 </li>
 
                 <li>
-                    <title>3. Root Directory</title>
+                    <title>Root Directory</title>
                     <p>This should not cause any particular difficulties.</p>
                 </li>
 
                 <li>
-                    <title>4. ANT</title>
+                    <title>ANT</title>
                     <p>You may need to install this tool, almost certainly on Windows.  Again, on Windows you may need to set an <c>ANT_HOME</c> environment variable.  On Linux, this may be all set for you already as a system tool.</p>
                     <p>The README suggests changing slashes on Windows.  But you may already be using a shell that gives Unix-like behavior.  So try both directions, if necessary.  Also, the README suggests running <c>./ant test</c> (or <c>.\ant test</c>). Doing this on Windows may yield a <c>BUILD FAILED</c> message, but <c>jing</c> may still work.</p>
                 </li>
