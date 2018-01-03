@@ -33,12 +33,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <me>1^2 + 2^2 + \cdots + n^2 = \frac{n(n + 1)(2n + 1)}{6}</me>
             for <m>n \in {\mathbb N}</m>.</p>
         </statement>
-        <hint>
-            <p>The base case, <m>S(1): [1(1 + 1)(2(1) + 1)]/6 = 1 = 1^2</m> is true. Assume that <m>S(k): 1^2 + 2^2 + \cdots + k^2 = [k(k + 1)(2k + 1)]/6</m> is true. Then<md>
+        <answer>
+            <p>The base case, <m>S(1): [1(1 + 1)(2(1) + 1)]/6 = 1 = 1^2</m> is true.</p>
+            <p>Assume that <m>S(k): 1^2 + 2^2 + \cdots + k^2 = [k(k + 1)(2k + 1)]/6</m> is true. Then<md>
                 <mrow>1^2 + 2^2 + \cdots + k^2 + (k + 1)^2 &amp; = [k(k + 1)(2k + 1)]/6 + (k + 1)^2</mrow>
                 <mrow>&amp; = [(k + 1)((k + 1) + 1)(2(k + 1) + 1)]/6,</mrow>
             </md>and so <m>S(k + 1)</m> is true. Thus, <m>S(n)</m> is true for all positive integers <m>n</m>.</p>
-        </hint>
+        </answer>
 
     </exercise>
 
@@ -55,9 +56,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <statement>
             <p>Prove that <m>n! \gt 2^n</m> for <m>n \geq 4</m>.</p>
         </statement>
-        <hint>
+        <answer>
             <p>The base case, <m>S(4): 4! = 24 \gt 16 =2^4</m> is true. Assume <m>S(k): k! \gt 2^k</m> is true. Then <m>(k + 1)! = k! (k + 1) \gt 2^k \cdot 2 = 2^{k + 1}</m>, so <m>S(k + 1)</m> is true. Thus, <m>S(n)</m> is true for all positive integers <m>n</m>.</p>
-        </hint>
+        </answer>
 
     </exercise>
 
@@ -177,15 +178,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <me>1, 1, 2, 3, 5, 8, 13, 21, \ldots.</me>
             We can define them inductively by <m>f_1 = 1</m>, <m>f_2 = 1</m>, and <m>f_{n + 2} = f_{n + 1} + f_n</m> for <m>n \in {\mathbb N}</m>.</p>
             <ol>
-                <li><p>Prove that <m>f_n \lt 2^n</m>.</p></li>
-                <li><p>Prove that <m>f_{n + 1} f_{n - 1} = f^2_n + (-1)^n</m>, <m>n \geq 2</m>.</p></li>
-                <li><p>Prove that <m>f_n = [(1 + \sqrt{5}\, )^n - (1 - \sqrt{5}\, )^n]/ 2^n \sqrt{5}</m>.</p></li>
-                <li><p>Show that <m>\lim_{n \rightarrow \infty} f_n / f_{n + 1} = (\sqrt{5} - 1)/2</m>.</p></li>
-                <li><p>Prove that <m>f_n</m> and <m>f_{n + 1}</m> are relatively prime.</p></li>
+                <li xml:id="fn_ineq"><p>Prove that <m>f_n \lt 2^n</m>.</p></li>
+                <li xml:id="fn_prod"><p>Prove that <m>f_{n + 1} f_{n - 1} = f^2_n + (-1)^n</m>, <m>n \geq 2</m>.</p></li>
+                <li xml:id="fn_formula"><p>Prove that <m>f_n = [(1 + \sqrt{5}\, )^n - (1 - \sqrt{5}\, )^n]/ 2^n \sqrt{5}</m>.</p></li>
+                <li xml:id="fn_ratio"><p>Show that <m>\lim_{n \rightarrow \infty} f_n / f_{n + 1} = (\sqrt{5} - 1)/2</m>.</p></li>
+                <li xml:id="fn_coprime"><p>Prove that <m>f_n</m> and <m>f_{n + 1}</m> are relatively prime.</p></li>
             </ol>
         </statement>
         <hint>
-            <p>For (a) and (b) use mathematical induction. (c) Show that <m>f_1 = 1</m>, <m>f_2 = 1</m>, and <m>f_{n + 2} = f_{n + 1} + f_n</m>. (d)  Use part (c). (e) Use part (b) and Exercise<nbsp/><xref ref="exercise-integers-gcd-1"/>.</p>
+            <p>For <xref ref="fn_ineq"/> and <xref ref="fn_prod"/> use mathematical induction.
+               <xref ref="fn_formula"/> Show that <m>f_1 = 1</m>, <m>f_2 = 1</m>, and <m>f_{n + 2} = f_{n + 1} + f_n</m>.
+               <xref ref="fn_ratio"/>  Use part <xref ref="fn_formula"/>.
+               <xref ref="fn_coprime"/> Use part <xref ref="fn_prod"/> and Exercise<nbsp/><xref ref="exercise-integers-gcd-1"/>.</p>
         </hint>
     </exercise>
 
