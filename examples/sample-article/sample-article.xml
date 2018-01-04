@@ -1285,7 +1285,7 @@ the xsltproc executable.
                     <mrow>\frac{dy}{dt} = x^3 - y.</mrow>
                 </md></p>
 
-                <p>An ampersand is used, in two ways, to describe positioning several equations per line, organized in columns.  We suggest in <xref ref="subsection-reserved-characters" text="type-global" /> that the pre-defined <latex /> macro <c>\amp</c> is the safest way to specify these.  The second, fourth, sixth, <ellipsis /> ampersands separate columns, and the spacing between columns will be provided automatically.  The first, third, fifth, <ellipsis /> ampersands are alignment points for the equations in each column.  Typically this is placed just prior to a binary operator, such as an equal sign (<c>\amp = </c>), or for a column of explanations or commentary, just prior to the <c>\text{}</c> macro.  Note that this scenario suggests always having an odd number of amersands in each <c>mrow</c>.  In the example below, alignment is on the equals sign in the first two columns, and provides left-justification to the explanations in the third column.  N.B.: the use below of the <c>\text{}</c> macro does not include mathematics within its argument.  Doing so may yield unpredictable results depending on your choice of delimiters for the mathematics (and using an <c>m</c> tag will be ineffective).<md>
+                <p>An ampersand is used, in two ways, to describe positioning several equations per line, organized in columns.  We suggest in <xref ref="subsection-reserved-characters" text="type-global" /> that the pre-defined <latex /> macro <c>\amp</c> is the safest way to specify these.  The second, fourth, sixth, <ellipsis /> ampersands separate columns, and the spacing between columns will be provided automatically.  The first, third, fifth, <ellipsis /> ampersands are alignment points for the equations in each column.  Typically this is placed just prior to a binary operator, such as an equal sign (<c>\amp = </c>), or for a column of explanations or commentary, just prior to the <c>\text{}</c> macro.  Note that this scenario suggests always having an odd number of ampersands in each <c>mrow</c>.  In the example below, alignment is on the equals sign in the first two columns, and provides left-justification to the explanations in the third column.  N.B.: the use below of the <c>\text{}</c> macro does not include mathematics within its argument.  Doing so may yield unpredictable results depending on your choice of delimiters for the mathematics (and using an <c>m</c> tag will be ineffective).<md>
                     <mrow>\frac{dx}{dt} \amp = x^2 - 4x - y + 4 \amp \frac{dy}{dt} \amp = x^3 - y          \amp\amp x, y\text{ version}</mrow>
                     <mrow>\frac{dw}{dt} \amp = z^3 - w          \amp \frac{dz}{dt} \amp = z^2 - 4z - w + 4 \amp\amp z, w\text{ version}</mrow>
                 </md></p>
@@ -4425,7 +4425,7 @@ the xsltproc executable.
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul></p>
 
-            <p>If you have a long list of items (such as homework exercises, not in an <c>exercisegroup</c>, or perhaps several chapters, you can get a cross-reference that prints as a range by using <c>xref</c> with two attributes <c>first</c> and <c>last</c>, which may contain a single <c>xml:id</c> each.  As with multiple references, <c>first</c> will control autonaming and other features.<ul>
+            <p>If you have a long list of items (such as homework exercises, not in an <c>exercisegroup</c>, or perhaps several chapters), you can get a cross-reference that prints as a range by using <c>xref</c> with two attributes <c>first</c> and <c>last</c>, which may contain a single <c>xml:id</c> each.  As with multiple references, <c>first</c> will control autonaming and other features.<ul>
                 <li><p>A range of exercises, autonamed (this range appears <q>out-of-order</q> since the two <c>exercise</c> are numbered under two different schemes): <xref first="exercise-essay" last="exercise-test-number" text="type-global"/></p></li>
                 <li><p>A range of equations: <xref first="equation-use-FTC" last="equation-conclude" /></p></li>
                 <li><p>A system of equations, given as range from first to last: <xref first="equation-system-begin" last="equation-system-end" /></p></li>
@@ -4816,7 +4816,7 @@ the xsltproc executable.
                 </program>
             </sidebyside>
 
-            <p>You can write made-up pseudo-code, but you might explain to a reader what your symbols all mean.  This routine takes the <m>m\times n</m> marix <m>A</m> to reduced row-echelon form.  Note that with no language spefified, there is no special formatting ir use of color.  Note in the source the use of escaped characters for the four angle brackets.</p>
+            <p>You can write made-up pseudo-code, but you might explain to a reader what your symbols all mean.  This routine takes the <m>m\times n</m> marix <m>A</m> to reduced row-echelon form.  Note that with no language specified, there is no special formatting or use of color.  Note in the source the use of escaped characters for the four angle brackets.</p>
 
             <sidebyside margins="5%">
                 <program>
