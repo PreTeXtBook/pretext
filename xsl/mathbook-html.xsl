@@ -6096,11 +6096,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Alert -->
 <xsl:template match="alert">
-    <b>
-        <i>
-            <xsl:apply-templates />
-        </i>
-    </b>
+    <em class="alert">
+        <xsl:apply-templates />
+    </em>
 </xsl:template>
 
 <!-- CSS for ins, del, s -->
