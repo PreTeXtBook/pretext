@@ -4816,7 +4816,7 @@ the xsltproc executable.
                 </program>
             </sidebyside>
 
-            <p>You can write made-up pseudo-code, but you might explain to a reader what your symbols all mean.  This routine takes the <m>m\times n</m> marix <m>A</m> to reduced row-echelon form.  Note that with no language spefified, there is no special formatting ir use of color.  Note in the source the use of escaped characters for the four angle brackets.</p>
+            <p>You can write made-up pseudo-code, but you might explain to a reader what your symbols all mean.  This routine takes the <m>m\times n</m> marix <m>A</m> to reduced row-echelon form.  Note that with no language specified, there is no special formatting or use of color.  Note in the source the use of escaped characters for the four angle brackets.</p>
 
             <sidebyside margins="5%">
                 <program>
