@@ -6040,6 +6040,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:when test="$b-has-content">
                     <xsl:copy-of select="$custom-text" />
                     <xsl:apply-templates select="." mode="nbsp"/>
+                    <xsl:apply-templates select="$target" mode="xref-number">
+                        <xsl:with-param name="xref" select="." />
+                    </xsl:apply-templates>
                 </xsl:when>
                 <!-- usual, default case -->
                 <xsl:otherwise>
