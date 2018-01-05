@@ -2045,6 +2045,8 @@ the xsltproc executable.
                 </figure>
 
                 <p>And a colorful contour plot with logarithmic scale.  Again, from the Asymptote documentation.</p>
+
+                <p>This SVG image includes a PNG image for the gradient.  It needs some work and is temporarily unavailable.</p>
                 <!-- http://asymptote.sourceforge.net/gallery/2D%20graphs/logimage.asy -->
 
                 <figure xml:id="figure-asymptote-contour-plot">
@@ -2108,6 +2110,9 @@ the xsltproc executable.
                 </figure>
 
                 <p>And finally, an example of a 3-D graph (from the documentation again).</p>
+
+                <p>This SVG image includes a PNG image for the gradient.  It needs some work and is temporarily unavailable.</p>
+
                 <!-- http://asymptote.sourceforge.net/gallery/3D%20graphs/filesurface.asy -->
                 <!-- Projection point adjusted by Michael Doob -->
 

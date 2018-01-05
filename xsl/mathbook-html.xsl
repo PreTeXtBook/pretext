@@ -4325,44 +4325,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="png-fallback-filename" select="''" />
     <xsl:param name="image-width" />
     <xsl:param name="image-description" select="''" />
-    <xsl:element name="object">
-        <!-- type attribute for object element -->
-        <xsl:attribute name="type">image/svg+xml</xsl:attribute>
-        <!-- style attribute, should be class + CSS -->
-        <xsl:attribute name="style">
-            <xsl:text>width:</xsl:text>
-            <xsl:value-of select="$image-width" />
-            <xsl:text>; </xsl:text>
-            <xsl:text>margin:auto; display:block;</xsl:text>
-        </xsl:attribute>
-        <!-- data attribute for object element, the SVG image -->
-        <xsl:attribute name="data">
+    <xsl:element name="img">
+        <!-- source file attribute for img element, the SVG image -->
+        <xsl:attribute name="src">
             <xsl:value-of select="$svg-filename" />
+        </xsl:attribute>
+        <!-- fix width, let browser get aspect ration from SVG viewBox -->
+        <!-- attribute (svg/@viewBox) and compute the height           -->
+        <!-- https://css-tricks.com/scale-svg/#article-header-id-7     -->
+        <xsl:attribute name="width">
+            <xsl:value-of select="$image-width" />
+        </xsl:attribute>
+        <!-- center the image, either in some figure (necessary),    -->
+        <!-- or in a side-by-side (redundant).  The 0 is top/bottom, -->
+        <!-- and the auto is left/right in concert with width        -->
+        <xsl:attribute name="style">
+            <xsl:text>display: block; margin: 0 auto;</xsl:text>
         </xsl:attribute>
         <!-- alt attribute for accessibility -->
         <xsl:attribute name="alt">
             <xsl:value-of select="$image-description" />
         </xsl:attribute>
-        <!-- content is PNG fallback, if available, else message -->
-        <xsl:choose>
-            <xsl:when test="$png-fallback-filename = ''">
-                <p style="margin:auto">&lt;&lt;SVG image is unavailable, or your browser cannot render it&gt;&gt;</p>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:element name="img">
-                    <xsl:attribute name="src">
-                        <xsl:value-of select="$png-fallback-filename" />
-                   </xsl:attribute>
-                    <xsl:attribute name="width">
-                        <xsl:value-of select="$image-width" />
-                    </xsl:attribute>
-                    <!-- alt attribute for accessibility -->
-                    <xsl:attribute name="alt">
-                        <xsl:value-of select="$image-description" />
-                    </xsl:attribute>
-                </xsl:element>
-            </xsl:otherwise>
-        </xsl:choose>
+        <!-- PNG fallback, if available                                     -->
+        <!-- https://www.envano.com/2014/04/using-svg-images-in-responsive- -->
+        <!-- websites-with-a-fallback-for-browsers-not-supporting-svg/      -->
+        <xsl:if test="not($png-fallback-filename = '')">
+            <xsl:attribute name="onerror">
+                <xsl:text>this.src='</xsl:text>
+                <xsl:value-of select="$png-fallback-filename" />
+                <xsl:text>';this.onerror=null;</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
     </xsl:element>
 </xsl:template>
 
