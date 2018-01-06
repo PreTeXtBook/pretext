@@ -26,11 +26,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 ]>
 
 <!-- Identify as a stylesheet -->
-    <!-- Adding the next declaration will          -->
-    <!-- (a) close some tags                       -->
-    <!-- (b) remove all whitespace in output       -->
-    <!-- http://stackoverflow.com/questions/476609 -->
-    <!-- xmlns="http://www.w3.org/1999/xhtml"      -->
+<!-- We choose to not include a default namespace       -->
+<!-- (in particular  http://www.w3.org/1999/xhtml),     -->
+<!-- even if this complicates adding namespaces onto    -->
+<!-- derivatives, such as HTML destined for EPUB output -->
+<!-- xmlns="http://www.w3.org/1999/xhtml"               -->
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
@@ -49,8 +49,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Will also read  base64_binarydatamap.xml  -->
 <xsl:include href="./xslt_base64/base64.xsl"/>
 
-<!-- Intend output for rendering by a web browser -->
-<xsl:output method="xml" encoding="utf-8"/>
+
+<!-- We create HTML5 output.  The @doctype-system attribute will    -->
+<!-- create a header in the old style that browsers will recognize  -->
+<!-- as signaling HTML5.  However  xsltproc  does one better and    -->
+<!-- writes the super-simple <!DOCTYPE html> header.  See all of    -->
+<!-- https://stackoverflow.com/questions/3387127/                   -->
+<!-- (set-html5-doctype-with-xslt)                                  -->
+<!--                                                                -->
+<!-- Indentation is weak, it is just strategic newlines.  This is   -->
+<!-- explained late in the thread by Daniel Veillard:               -->
+<!-- http://docbook-apps.oasis-open.narkive.com/tDqyEc91/           -->
+<!-- (two-issues-with-xslt-processors-xsltproc-and-xalan)           -->
+<!--                                                                -->
+<!-- Since we write output into multiple files, likely this         -->
+<!-- declaration is never active, but it serves as a model here for -->
+<!-- subsequent exsl:document elements.                             -->
+
+<xsl:output method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat" />
 
 <!-- Parameters -->
 <!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
@@ -1466,9 +1482,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <!-- write file infrastructure first -->
-    <exsl:document href="{$knowl-file}" method="html">
-        <xsl:text disable-output-escaping="yes">&lt;!doctype html&gt;&#xa;</xsl:text>
-            <html lang="{$document-language}"> <!-- dir="rtl" here -->
+    <exsl:document href="{$knowl-file}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
+        <html lang="{$document-language}"> <!-- dir="rtl" here -->
             <!-- header since separate file -->
             <xsl:text>&#xa;</xsl:text>
             <xsl:call-template name="converter-blurb-html" />
@@ -5074,9 +5089,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="int-id">
         <xsl:apply-templates select="." mode="internal-id" />
     </xsl:variable>
-    <exsl:document href="{$int-id}.html" method="html">
-        <!-- Need to be careful for format of this initial string     -->
-        <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
+    <exsl:document href="{$int-id}.html" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
         <xsl:call-template name="converter-blurb-html" />
         <html lang="{$document-language}"> <!-- dir="rtl" here -->
             <head>
@@ -7035,9 +7048,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
     <xsl:variable name="filename">
         <xsl:apply-templates select="." mode="containing-filename" />
     </xsl:variable>
-    <exsl:document href="{$filename}" method="html">
-    <!-- Need to be careful for format of this initial string     -->
-    <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
+    <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
     <xsl:call-template name="converter-blurb-html" />
     <html lang="{$document-language}"> <!-- dir="rtl" here -->
         <head>
@@ -7143,9 +7154,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
         <xsl:apply-templates select="." mode="internal-id" />
         <text>.html</text>
     </xsl:variable>
-    <exsl:document href="{$filename}" method="html">
-    <!-- Need to be careful for format of this initial string     -->
-    <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>&#xa;</xsl:text>
+    <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
     <xsl:call-template name="converter-blurb-html" />
     <html lang="{$document-language}"> <!-- dir="rtl" here -->
         <head>
