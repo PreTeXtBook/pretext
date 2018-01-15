@@ -233,8 +233,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>"display_name": "", </xsl:text>
         <!-- TODO: language not needed? -->
         <!-- <xsl:text>"language": "python", </xsl:text> -->
-        <!-- "sagemath" as  "name" will be latest kernel on CoCalc -->
-        <xsl:text>"name": "python2"</xsl:text>
+        <!-- TODO: make kernelspec configurable? -->
+        <!-- <xsl:text>"name": "python2"</xsl:text> -->
+        <!-- "sagemath" as  "name" will be latest kernel -->
+        <!-- in Sage distribution Jupyter, and in CoCalc -->
+        <xsl:text>"name": "sagemath"</xsl:text>
         <!-- TODO: how much of the following is necessary before loading? -->
         <xsl:text>}, </xsl:text>
         <xsl:text>"language_info": {</xsl:text>
