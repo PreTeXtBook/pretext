@@ -5,6 +5,7 @@ If you have output that you think might be incorrect or misbehaved, please follo
 
 * Check that your input conforms to the DTD [Author's Guide, DTD Processing](http://mathbook.pugetsound.edu/doc/author-guide/html/processing-dtd.html) [Author's Guide, DTD Explanation](http://mathbook.pugetsound.edu/doc/author-guide/html/schema-dtd.html)
 * Add a small example of your problem to the "minimal" example in the `examples/minimal` directory and test there
+* Use triple back tics (```) to surround sample PreTeXt code blocks.
 * Search the [mathbook-xml-support](https://groups.google.com/forum/#!forum/mathbook-xml-support) Google Group, and the [GitHub issues](https://github.com/rbeezer/mathbook/issues), to see if the problem is known (if so, please add any new information there)
 * Post on the Google Group, and include the source of your adjusted minimal example, along with a copy of the problematic output
 * If your problem involves HTML output, it can often be easier for us to understand if you host a live example and provide a URL in your post
