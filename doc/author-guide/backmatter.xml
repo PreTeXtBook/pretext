@@ -16,6 +16,7 @@
     <xi:include href="git.xml" />
     <xi:include href="windows.xml" />
     <xi:include href="windows-wsl.xml" />
+    <xi:include href="vagrant.xml" />
     <xi:include href="gfdl-mathbook.xml" />
     <index>
     <title>Index</title>

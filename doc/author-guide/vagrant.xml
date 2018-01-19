@@ -1,0 +1,75 @@
+<section xml:id="section-the-pretext-vagrant-box">
+    <title>The <pretext /> Vagrant box</title>
+    <introduction xml:id="introduction">
+        <p>In this section, we describe how to install and use the official
+            <pretext/> <term>Vagrant box</term>. Vagrant is a </p>
+    </introduction>
+    <subsection xml:id="subsection-quick-start-guide">
+        <title>Quick Start Guide</title>
+        <list>
+            <title>Prerequisites</title>
+            <ul>
+                <li>64-bit operating system (directions for determining this)</li>
+                <li>VT-X enabled in your BIOS (Intel processors only)</li>
+                <li>PuTTY or other SSH client (I recommend the portable install for PuTTY)</li>
+            </ul>
+        </list>
+        <p><list><title>Steps to install</title>
+                <ol>
+                    <li><url href="https://www.virtualbox.org/wiki/Downloads">Download</url> and install Virtualbox</li>
+                    <li><url href="https://www.vagrantup.com/downloads.html">Download</url> and install Vagrant</li>
+                    <li>Open a console (Windows: press Windows key, type <c>cmd</c>)</li>
+                    <li>Create a new directory <c>vagrant_quick_start</c> and change into it</li>
+                    <li>
+                        <p>Type the commands
+                        <console><input prompt="$">vagrant init daverosoff/pretext</input>
+                            <input prompt="$">vagrant up</input>
+                        </console>
+                        This step takes about half an hour to complete. There will be some interesting messages,
+                            but once it gets going you don't have to watch.</p>
+                    </li>
+                    <li>Open PuTTY and connect to address 127.0.0.1, port 2222</li>
+                    <li>Answer <q>Yes</q> to the authentication message</li>
+                    <li>Login user/pass: <c>vagrant</c>/<c>vagrant</c></li>
+                    <li>If you see the prompt <c>[vagrant@archlinux ~] <dollar /></c>, congratulations!</li>
+                    <li>Keep the PuTTY window open for use in the next section.</li>
+                </ol></list></p>
+    </subsection>
+    <subsection xml:id="subsection-a-first-example">
+        <title>A first example</title>
+        <p>Presumably, you already have a project underway. Use your usual
+            file browser or command line to move or copy your project into the <c>vagrant_quick_start</c>
+            directory you created earlier.</p>
+        <p>In your PuTTY window, invoke the commands
+            <console>
+                <input prompt="$">cd /vagrant</input>
+                <input prompt="$">ls</input>
+            </console>
+            and observe that your project is there, in your Vagrant box. The <c>/vagrant</c> directory in the
+            Vagrant box is synced to the <c>vagrant_quick_start</c> directory you created earlier.
+        </p>
+        <p>Do your normal compilation dance, including steps to build images, HTML, and PDF output. For me it
+            might look like this:
+            <console>
+                <input prompt="$">cd m101</input>
+                <input prompt="$">mkdir -p output/images</input>
+                <input prompt="$">~/mathbook/script/mbx -c latex-image -d output/images -f all src/index.mbx</input>
+                <input prompt="$">xsltproc --xinclude --output output/ ~/mathbook/xsl/mathbook-html.xsl src/index.mbx</input>
+                <input prompt="$">xsltproc --xinclude --output output/ ~/mathbook/xsl/mathbook-latex.xsl src/index.mbx</input>
+                <input prompt="$">cd output</input>
+                <input prompt="$">xelatex index.tex</input>
+            </console>
+        </p>
+        <p>After compilation is done, use your normal file browser to locate the output tree you created. Find some output and preview it, marveling at the simplicity of what has befallen your project.</p>
+        <note>It would be equally simple to keep source in the <c>/home/vagrant</c> directory in the Vagrant box. Then the source will not
+        be accessible from the Windows host, but you can use <c>git</c> to author in Windows and pull changes to the Vagrant box at compile time.</note>
+    </subsection>
+    <subsection xml:id="subsection-known-issues">
+        <title>Known Issues</title>
+        <p>The current build of the Vagrant box includes Sage and Asymptote, but not <webwork/>. I have had some success installing <webwork/> via Docker as described <url href="https://github.com/openwebwork/webwork2/wiki/Docker-newbie-instructions">at the wiki</url>. Presumably, if your compilation dance requires a <webwork/> server, then you already have access to one and your normal compilation will still work.</p>
+        <p>It seems like many (most?) Intel-powered machines ship with VT-X disabled. You will need to go into the BIOS startup menu to enable it, and every menu is different. So there is no better help I can give here than <q>Go into the BIOS startup menu and look around for something that says <sq>Enable VT-X</sq>. Be very careful not to make any unwanted changes.</q></p>
+    </subsection>
+    <conclusion xml:id="conclusion">
+        <p>Thanks for your interest in the <pretext/> Vagrant box. If you encounter errors, or if you think something is missing, please <url href="https://github.com/daverosoff/pretext-vagrant/issues">open an issue on Github</url>.</p>
+    </conclusion>
+</section>
