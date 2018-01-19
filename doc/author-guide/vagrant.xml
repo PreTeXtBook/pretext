@@ -7,14 +7,14 @@
     <subsection xml:id="subsection-quick-start-guide">
         <title>Quick Start Guide</title>
         <list>
-            <title>Prerequisites</title>
+            <caption>Prerequisites</caption>
             <ul>
                 <li>64-bit operating system (directions for determining this)</li>
                 <li>VT-X enabled in your BIOS (Intel processors only)</li>
                 <li>PuTTY or other SSH client (I recommend the portable install for PuTTY)</li>
             </ul>
         </list>
-        <p><list><title>Steps to install</title>
+        <p><list><caption>Steps to install</caption>
                 <ol>
                     <li><url href="https://www.virtualbox.org/wiki/Downloads">Download</url> and install Virtualbox</li>
                     <li><url href="https://www.vagrantup.com/downloads.html">Download</url> and install Vagrant</li>
@@ -40,16 +40,18 @@
         <p>Presumably, you already have a project underway. Use your usual
             file browser or command line to move or copy your project into the <c>vagrant_quick_start</c>
             directory you created earlier.</p>
-        <p>In your PuTTY window, invoke the commands
+        <p>In your PuTTY window, invoke the commands</p>
+        <sidebyside>
             <console>
                 <input prompt="$">cd /vagrant</input>
                 <input prompt="$">ls</input>
             </console>
-            and observe that your project is there, in your Vagrant box. The <c>/vagrant</c> directory in the
-            Vagrant box is synced to the <c>vagrant_quick_start</c> directory you created earlier.
-        </p>
+        </sidebyside>
+        <p>and observe that your project is there, in your Vagrant box. The <c>/vagrant</c> directory in the
+            Vagrant box is synced to the <c>vagrant_quick_start</c> directory you created earlier.</p>
         <p>Do your normal compilation dance, including steps to build images, HTML, and PDF output. For me it
-            might look like this:
+            might look like this:</p>
+        <sidebyside>
             <console>
                 <input prompt="$">cd m101</input>
                 <input prompt="$">mkdir -p output/images</input>
@@ -59,7 +61,7 @@
                 <input prompt="$">cd output</input>
                 <input prompt="$">xelatex index.tex</input>
             </console>
-        </p>
+        </sidebyside>
         <p>After compilation is done, use your normal file browser to locate the output tree you created. Find some output and preview it, marveling at the simplicity of what has befallen your project.</p>
         <note>It would be equally simple to keep source in the <c>/home/vagrant</c> directory in the Vagrant box. Then the source will not
         be accessible from the Windows host, but you can use <c>git</c> to author in Windows and pull changes to the Vagrant box at compile time.</note>
