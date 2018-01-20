@@ -1,10 +1,10 @@
-<section xml:id="section-the-pretext-vagrant-box">
+<chapter xml:id="chapter-the-pretext-vagrant-box">
     <title>The <pretext /> Vagrant box</title>
     <introduction xml:id="introduction">
         <p>In this section, we describe how to install and use the official
             <pretext/> <term>Vagrant box</term>. Vagrant is a </p>
     </introduction>
-    <subsection xml:id="subsection-quick-start-guide">
+    <section xml:id="section-quick-start-guide">
         <title>Quick Start Guide</title>
         <list>
             <caption>Prerequisites</caption>
@@ -36,8 +36,8 @@
                     <li>If you see the prompt <c>[vagrant@archlinux ~] $</c>, congratulations!</li>
                     <li>Keep the PuTTY window open for use in the next section.</li>
                 </ol></list></p>
-    </subsection>
-    <subsection xml:id="subsection-a-first-example">
+    </section>
+    <section xml:id="section-a-first-example">
         <title>A first example</title>
         <p>Presumably, you already have a project underway. Use your usual
             file browser or command line to move or copy your project into the <c>vagrant_quick_start</c>
@@ -67,13 +67,13 @@
         <p>After compilation is done, use your normal file browser to locate the output tree you created. Find some output and preview it, marveling at the simplicity of what has befallen your project.</p>
         <note>It would be equally simple to keep source in the <c>/home/vagrant</c> directory in the Vagrant box. Then the source will not
         be accessible from the Windows host, but you can use <c>git</c> to author in Windows and pull changes to the Vagrant box at compile time.</note>
-    </subsection>
-    <subsection xml:id="subsection-known-issues">
+    </section>
+    <section xml:id="section-known-issues">
         <title>Known Issues</title>
         <p>The current build of the Vagrant box includes Sage and Asymptote, but not <webwork/>. I have had some success installing <webwork/> via Docker as described <url href="https://github.com/openwebwork/webwork2/wiki/Docker-newbie-instructions">at the wiki</url>. Presumably, if your compilation dance requires a <webwork/> server, then you already have access to one and your normal compilation will still work.</p>
         <p>It seems like many (most?) Intel-powered machines ship with VT-X disabled. You will need to go into the BIOS startup menu to enable it, and every menu is different. So there is no better help I can give here than <q>Go into the BIOS startup menu and look around for something that says <sq>Enable VT-X</sq>. Be very careful not to make any unwanted changes.</q></p>
-    </subsection>
+    </section>
     <conclusion xml:id="conclusion">
         <p>Thanks for your interest in the <pretext/> Vagrant box. If you encounter errors, or if you think something is missing, please <url href="https://github.com/daverosoff/pretext-vagrant/issues">open an issue on Github</url>.</p>
     </conclusion>
-</section>
+</chapter>
