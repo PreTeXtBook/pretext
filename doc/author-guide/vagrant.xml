@@ -21,17 +21,19 @@
                     <li>Open a console (Windows: press Windows key, type <c>cmd</c>)</li>
                     <li>Create a new directory <c>vagrant_quick_start</c> and change into it</li>
                     <li>
-                        <p>Type the commands
-                        <console><input prompt="$">vagrant init daverosoff/pretext</input>
-                            <input prompt="$">vagrant up</input>
-                        </console>
-                        This step takes about half an hour to complete. There will be some interesting messages,
+                        <p>Type the commands</p>
+                        <sidebyside>
+                            <console><input prompt="$">vagrant init daverosoff/pretext</input>
+                                <input prompt="$">vagrant up</input>
+                            </console>
+                        </sidebyside>
+                        <p>This step takes about half an hour to complete. There will be some interesting messages,
                             but once it gets going you don't have to watch.</p>
                     </li>
                     <li>Open PuTTY and connect to address 127.0.0.1, port 2222</li>
                     <li>Answer <q>Yes</q> to the authentication message</li>
                     <li>Login user/pass: <c>vagrant</c>/<c>vagrant</c></li>
-                    <li>If you see the prompt <c>[vagrant@archlinux ~] <dollar /></c>, congratulations!</li>
+                    <li>If you see the prompt <c>[vagrant@archlinux ~] $</c>, congratulations!</li>
                     <li>Keep the PuTTY window open for use in the next section.</li>
                 </ol></list></p>
     </subsection>
