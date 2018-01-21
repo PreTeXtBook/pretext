@@ -275,6 +275,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- <xsl:text>&lt;link href="./mathbook-content.css" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text> -->
             <xsl:text>&lt;link href="http://mathbook.pugetsound.edu/beta/mathbook-content.css" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text>
             <xsl:text>&lt;link href="https://aimath.org/mathbook/mathbook-add-on.css" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text>
+            <!-- A bad hack since "subtitle" is in masthead code, better CSS should take care of this -->
+            <xsl:if test="$document-root/subtitle">
+                <xsl:text>&lt;style&gt;.subtitle {font-size:medium; display:block}&lt;/style&gt;&#xa;</xsl:text>
+            </xsl:if>
             <xsl:text>&lt;link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text>
             <xsl:text>&lt;link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css" /&gt;</xsl:text>
             <xsl:call-template name="end-string" />
