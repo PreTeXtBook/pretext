@@ -6599,8 +6599,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Dashes, Hyphen -->
 <!-- http://www.cs.tut.fi/~jkorpela/dashes.html -->
+<xsl:variable name="emdash-space">
+    <xsl:choose>
+        <xsl:when test="$emdash.space='full'"><xsl:text>&#32;</xsl:text></xsl:when>
+        <xsl:when test="$emdash.space='thin'">&#8201;</xsl:when>
+    </xsl:choose>
+</xsl:variable>
 <xsl:template match="mdash">
-    <xsl:text>&#8212;</xsl:text>
+    <xsl:value-of select="$emdash-space"/><xsl:text>&#8212;</xsl:text><xsl:value-of select="$emdash-space"/>
 </xsl:template>
 <xsl:template match="ndash">
     <xsl:text>&#8211;</xsl:text>
