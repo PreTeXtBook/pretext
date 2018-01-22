@@ -178,7 +178,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Pointers to realizations of the actual document -->
 <xsl:param name="address.html" select="''" />
 <xsl:param name="address.pdf" select="''" />
-
+<!-- Publisher option to surround emdash with thin or full space -->
+<xsl:param name="emdash.space" select="'none'" />
 <!-- Whitespace discussion: http://www.xmlplease.com/whitespace               -->
 <!-- Describes source expectations, DO NOT override in subsequent conversions -->
 <!-- Strip whitespace text nodes from container elements                      -->
