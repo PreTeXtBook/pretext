@@ -11,66 +11,68 @@
     <title>Schema Tools</title>
 
     <introduction>
-        <p>This appendix has technical information about tools that work with the <acro>RELAX-NG</acro> schema.</p>
+        <p>This appendix has technical information about tools that work with the <acro>RELAX-NG</acro> schema.  See <xref ref="schema" /> for more general information.</p>
     </introduction>
 
     <section xml:id="jing-trang">
         <title>Jing and Trang</title>
 
-        <p>These tools come from James Clark, an author of the <acro>RELAX-NG</acro> syntax.  <c>trang</c> is a converter between different formats for schemas.  An author should not need it.  A <pretext /> developer might find it useful, and it is a by-product the <c>jing</c> install described below, and is also packaged for Debian and Ubuntu Linux (which is how we use it).</p>
+        <p>These tools come from James Clark, an author of the <acro>RELAX-NG</acro> syntax.  <c>trang</c> is a converter between different formats for schemas.  An author should not ever need it.  Though a <pretext /> developer might find it useful, and it is a by-product of the <c>jing-trang</c> install described below.</p>
 
-        <p><c>jing</c> is our recommendation for validation by authors, and works very well.  It is also packaged for Debian and Ubuntu Linux.  Reports of other similarly easy installations for other operating systems are especially welcome.  We have only used the installation from source described below, so in particular have not tested <c>xinclude</c> support in the packaged versions.</p>
+        <p><c>jing</c> is our recommendation for validation by authors, and works very well.</p>
 
-        <p>Installation notes for <c>jing</c> and <c>trang</c> follow.
+        <p><c>jing</c> and <c>trang</c> are packaged (separately) for Debian/Ubuntu Linux.  Reports of other similarly easy installations for other operating systems, to be included here, are especially welcome.  We have employed the Debian/Ubuntu versions and also versions built from source (next).</p>
+
+        <p>If you cannot install this tool easily as part of your system, you can still follow the notes below to build from source.  Many authors have done this successfully.  Installation notes for <c>jing</c> and <c>trang</c> follow.
             <dl width="narrow">
                 <li>
                     <title>Clone</title>
-                    <p>Clone the <c>git</c> repository at <url href="https://github.com/relaxng/jing-trang"><c>github.com/relaxng/jing-trang</c></url>.  You will end up with a new <c>jing-trang</c> directory, which we reference below in a relative fashion.</p>
+                    <p>Clone the <c>git</c> repository at <url href="https://github.com/relaxng/jing-trang"><c>github.com/relaxng/jing-trang</c></url> with the command<cd>
+                        <cline>git clone https://github.com/relaxng/jing-trang</cline>
+                    </cd>which assumes you have a command-line version of <c>git</c> installed.  You will end up with a new <c>jing-trang</c> directory, which you will certainly want <em>outside</em> of your <pretext /> files and <em>outside</em> of your project files.</p>
                 </li>
 
                 <li>
                     <title><c>readme.md</c></title>
-                    <p>Follow the instructions in the top-level <c>readme.md</c>, observing the following notes keyed to the four steps.  These helpful notes come courtesy of Jahrme Risner, Mitch Keller, Bruce Yoshiwara, Ken Levasseur, and Jessica Sklar.</p>
-                </li>
+                    <p>Follow the instructions in the <c>readme.md</c> found at the top level of the <c>jing-trang</c> distribution, observing the following notes keyed to the four steps.  These helpful notes come courtesy of the experiences of Jahrme Risner, Mitch Keller, Bruce Yoshiwara, Ken Levasseur, and Jessica Sklar on a variety of operating systems.</p>
+                    <p><ol>
+                        <li>
+                            <p>It is necesssary to have a developer's version of <c>java</c> on your machine.  Try <c>which java</c> to see if one is already available.  Any output here might help in the next step.  References here to the <init>JDK</init> is the Java Development Kit.</p>
+                        </li>
 
-                <li>
-                    <title>1. JDK</title>
-                    <p>It is necesssary to have a version of <c>java</c> on your machine.  Try <c>which java</c> to see if one is already available.  Any output here might help in the next step.  <init>JDK</init> is the Java Development Kit.</p>
-                </li>
+                        <li>
+                            <p>You will need to have the <c>JAVA_HOME</c> environment variable set correctly.  You can try <c>echo ${JAVA_HOME}</c> in a console to see if it produces anything sensible and/or consistent with Step 1.  Ken Levasseur notes that on OSX you can go<cd>
+                                <cline>echo $(/usr/libexec/java_home)</cline>
+                            </cd>and the output is what you set to the <c>JAVA_HOME</c> variable.</p>
+                            <p>On Windows you may need to set Environmental Variables in the Windows System Properties GUI, both here and in Step 4.</p>
+                        </li>
 
-                <li>
-                    <title>2. <c>JAVA_HOME</c></title>
-                    <p>You will need to have this environment variable set correctly.  You can see if <c>echo ${JAVA_HOME}</c> on Linux to see if it produces anything sensible and/or consistent with Step 1.  Ken Levasseur notes that on OSX you can go<cd>
-                        <cline>echo $(/usr/libexec/java_home)</cline>
-                    </cd>and the output is what you set to the <c>JAVA_HOME</c> variable.</p>
-                    <p>On Windows you may need to set Environmental Variables in the Windows System Properties GUI, here and in Step 4.</p>
-                </li>
+                        <li>
+                            <p>Setting your working directory to the root directory of the <c>jing-trang</c> distribution should not cause any particular difficulties.</p>
+                        </li>
 
-                <li>
-                    <title>3. Root Directory</title>
-                    <p>This should not cause any particular difficulties.</p>
-                </li>
-
-                <li>
-                    <title>4. ANT</title>
-                    <p>You may need to install this tool, almost certainly on Windows.  Again, on Windows you may need to set an <c>ANT_HOME</c> environment variable.  On Linux, this may be all set for you already as a system tool.</p>
-                    <p>The README suggests changing slashes on Windows.  But you may already be using a shell that gives Unix-like behavior.  So try both directions, if necessary.  Also, the README suggests running <c>./ant test</c> (or <c>.\ant test</c>). Doing this on Windows may yield a <c>BUILD FAILED</c> message, but <c>jing</c> may still work.</p>
+                        <li>
+                            <p>You may need to install the <c>ANT</c> tool, almost certainly on Windows.  Again, on Windows you may need to set an <c>ANT_HOME</c> environment variable.  On Linux, this may be all set for you already as a system tool.</p>
+                            <p>The README suggests changing slashes on Windows.  But you may already be using a shell that gives Unix-like behavior.  So try both directions, if necessary.  Also, the README suggests running <c>./ant test</c> (or <c>.\ant test</c>). Doing this on Windows may yield a <c>BUILD FAILED</c> message, but <c>jing</c> may still work.</p>
+                        </li>
+                    </ol></p>
                 </li>
 
                 <li>
                     <title>Results</title>
                     <p>Change into the <c>build</c> subdirectory.  You may have more files here, but the two you really want are <c>jing.jar</c> and <c>trang.jar</c>.  So if you have these, you are in good shape.</p>
-                    <p>If you have modularized your source files (<xref ref="processing-modular" />) then you need one more library.  Look in the top-level <c>lib</c> directory (a peer of <c>build</c>) for <c>xercesImpl.jar</c>.  You have two and a half choices now.</p>
-                    <p>Copy <c>lib/xercesImpl.jar</c> into <c>build</c>.</p>
-                    <p>Or make a <q>symbolic link</q> to the third JAR archive.  Be sure you are in <c>build</c> and go<cd>
-                        <cline>ln -s ../lib/xercesImpl.jar</cline>
-                    </cd>which will just make your operating system think this third archive is in the <c>build</c> directory.</p>
-                    <p>A third option would be to adjust/augment some classpath information below and send us a report of success.  We have not tested this.</p>
+                    <p>If you have modularized your source files (<xref ref="processing-modular" />) then you need one more library.  Look in the top-level <c>lib</c> directory (a peer of <c>build</c>) for <c>xercesImpl.jar</c>.  You have two and a half choices now.<ul>
+                        <li>Copy <c>lib/xercesImpl.jar</c> into <c>build</c>.</li>
+                        <li>Or make a <q>symbolic link</q> to the third JAR archive.  Be sure you are in <c>build</c> and go<cd>
+                            <cline>ln -s ../lib/xercesImpl.jar</cline>
+                        </cd>which will just make your operating system think this third archive is in the <c>build</c> directory.</li>
+                        <li>A third option would be to adjust/augment some classpath information below and send us a report of success.  We have not tested this approach.</li>
+                    </ul></p>
                 </li>
             </dl>
         </p>
 
-        <p>Now you are ready to use <c>jing</c> to validate a <pretext /> document.  Note that the commands below require the <init>XML</init> version of the schema, which is the non-compact version.</p>
+        <p>Now you are ready to use <c>jing</c> to validate a <pretext /> document.  Note that the commands below require the <init>XML</init> version of the schema, which is the non-compact version.  Also, these are the commands if you build <c>jing-trang</c> from source.  If you install a system-supplied version, then consult the <c>man</c> pages, or similar, for syntax which is likely much easier and direct.</p>
 
         <p>For a document contained in a single file, run (with suitable working directory and path prefixes).<cd>
             <cline>java -jar jing-trang/build/jing.jar pretext.rng my-book.xml</cline>
@@ -79,7 +81,7 @@
             <cline>-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=</cline>
             <cline>    org.apache.xerces.parsers.XIncludeParserConfiguration</cline>
             <cline>-jar jing-trang/build/jing.jar pretext.rng my-book.xml</cline>
-        </cd>It may go without saying that scripting this task will make you more likely to do it as often as is necessary and you will save yourself much time and a little frustration in the process.</p>
+        </cd>It may go without saying that scripting this task will make you more likely to do it as often as is necessary and you will save yourself much time, and a little frustration, in the process.</p>
 
         <p>Jahrme Risner provides the following setup he uses to make it very convenient to regularly validate his sources.  This is a <q>shell script</q>, which a Linux user might add to their <c>~/.bashrc</c> file.  Note that we have again split the line with the <c>-D</c> option at the equals-sign, without a line-continuation character.  Do not do that in your version.<cd>
             <cline>ptx-check() {</cline>
