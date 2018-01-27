@@ -431,13 +431,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!--  -->
     <xsl:if test="$document-root//@xml:lang='el'">
         <xsl:text>%% Greek (Modern) specified by 'el' language tag&#xa;</xsl:text>
-        <xsl:text>%% Font families: CMU Serif, Linux Libertine O, GFS Artemisia&#xa;</xsl:text>
+        <xsl:text>%% Font families: CMU Serif (fonts-cmu package), Linux Libertine O, GFS Artemisia&#xa;</xsl:text>
         <!-- <xsl:text>\setotherlanguage[variant=ancient,numerals=greek]{greek}&#xa;</xsl:text> -->
         <xsl:text>\setotherlanguage{greek}&#xa;</xsl:text>
         <xsl:text>\newfontfamily\greekfont[Script=Greek]{CMU Serif}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//@xml:lang='ko-KR'">
         <xsl:text>%% Korean specified by 'ko-KR' language tag&#xa;</xsl:text>
+        <xsl:text>%% Debian/Ubuntu "fonts-nanum" package&#xa;</xsl:text>
         <xsl:text>\setotherlanguage{korean}&#xa;</xsl:text>
         <xsl:text>\newfontfamily\koreanfont{NanumMyeongjo}&#xa;</xsl:text>
     </xsl:if>
@@ -1251,6 +1252,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Musical Symbol Support&#xa;</xsl:text>
         <xsl:text>\ifthenelse{\boolean{xetex}}{&#xa;</xsl:text>
         <xsl:text>%% begin: xelatex-specific configuration&#xa;</xsl:text>
+        <xsl:text>%% lilyglyphs.sty in Ubuntu/Debian texlive-music&#xa;</xsl:text>
         <xsl:text>\usepackage{lilyglyphs}&#xa;</xsl:text>
         <xsl:text>\lilyGlobalOptions{scale=0.8}&#xa;</xsl:text>
         <!-- Create alias to lilyglyphs command with common name -->
