@@ -437,9 +437,8 @@
       <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
         <choice>
-          <ref name="BlockText"/>
-          <ref name="SideBySideNoCaption"/>
-          <ref name="SideBySideGroupNoCaption"/>
+          <ref name="BlockStatementNoCaption"/>
+          <ref name="ParagraphsNoNumber"/>
         </choice>
       </oneOrMore>
     </element>
@@ -460,9 +459,8 @@
       <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
         <choice>
-          <ref name="BlockText"/>
-          <ref name="SideBySideNoCaption"/>
-          <ref name="SideBySideGroupNoCaption"/>
+          <ref name="BlockStatementNoCaption"/>
+          <ref name="ParagraphsNoNumber"/>
         </choice>
       </oneOrMore>
     </element>

@@ -418,9 +418,8 @@
       <xs:sequence>
         <xs:group ref="MetaDataTitleOptional"/>
         <xs:choice maxOccurs="unbounded">
-          <xs:group ref="BlockText"/>
-          <xs:group ref="SideBySideNoCaption"/>
-          <xs:group ref="SideBySideGroupNoCaption"/>
+          <xs:group ref="BlockStatementNoCaption"/>
+          <xs:group ref="ParagraphsNoNumber"/>
         </xs:choice>
       </xs:sequence>
       <xs:attributeGroup ref="MetaDataTitleOptional"/>
@@ -443,9 +442,8 @@
       <xs:sequence>
         <xs:group ref="MetaDataTitleOptional"/>
         <xs:choice maxOccurs="unbounded">
-          <xs:group ref="BlockText"/>
-          <xs:group ref="SideBySideNoCaption"/>
-          <xs:group ref="SideBySideGroupNoCaption"/>
+          <xs:group ref="BlockStatementNoCaption"/>
+          <xs:group ref="ParagraphsNoNumber"/>
         </xs:choice>
       </xs:sequence>
       <xs:attributeGroup ref="MetaDataTitleOptional"/>

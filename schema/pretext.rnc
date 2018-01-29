@@ -194,7 +194,7 @@
         Biography = 
             element biography {
                 MetaDataTitleOptional,
-                (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
+                (BlockStatementNoCaption | ParagraphsNoNumber)+
             }
         Dedication = 
             element dedication {
@@ -204,7 +204,7 @@
         Acknowledgement = 
             element acknowledgement {
                 MetaDataTitleOptional,
-                (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
+                (BlockStatementNoCaption | ParagraphsNoNumber)+
             }
         Preface =
             element preface {
