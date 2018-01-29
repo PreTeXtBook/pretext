@@ -474,9 +474,8 @@
         <group>
           <oneOrMore>
             <choice>
-              <ref name="BlockText"/>
-              <ref name="SideBySideNoCaption"/>
-              <ref name="SideBySideGroupNoCaption"/>
+              <ref name="BlockStatementNoCaption"/>
+              <ref name="ParagraphsNoNumber"/>
             </choice>
           </oneOrMore>
           <zeroOrMore>
@@ -486,17 +485,15 @@
         <group>
           <zeroOrMore>
             <choice>
-              <ref name="BlockText"/>
-              <ref name="SideBySideNoCaption"/>
-              <ref name="SideBySideGroupNoCaption"/>
+              <ref name="BlockStatementNoCaption"/>
+              <ref name="ParagraphsNoNumber"/>
             </choice>
           </zeroOrMore>
           <ref name="Contributors"/>
           <zeroOrMore>
             <choice>
-              <ref name="BlockText"/>
-              <ref name="SideBySideNoCaption"/>
-              <ref name="SideBySideGroupNoCaption"/>
+              <ref name="BlockStatementNoCaption"/>
+              <ref name="ParagraphsNoNumber"/>
             </choice>
           </zeroOrMore>
         </group>
@@ -542,6 +539,17 @@
       </zeroOrMore>
       <oneOrMore>
         <ref name="BlockDivision"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="ParagraphsNoNumber">
+    <element name="paragraphs">
+      <ref name="MetaDataTitle"/>
+      <zeroOrMore>
+        <ref name="Index"/>
+      </zeroOrMore>
+      <oneOrMore>
+        <ref name="BlockStatementNoCaption"/>
       </oneOrMore>
     </element>
   </define>

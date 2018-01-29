@@ -458,23 +458,20 @@
         <xs:choice>
           <xs:sequence>
             <xs:choice maxOccurs="unbounded">
-              <xs:group ref="BlockText"/>
-              <xs:group ref="SideBySideNoCaption"/>
-              <xs:group ref="SideBySideGroupNoCaption"/>
+              <xs:group ref="BlockStatementNoCaption"/>
+              <xs:group ref="ParagraphsNoNumber"/>
             </xs:choice>
             <xs:element minOccurs="0" maxOccurs="unbounded" ref="attribution"/>
           </xs:sequence>
           <xs:sequence>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
-              <xs:group ref="BlockText"/>
-              <xs:group ref="SideBySideNoCaption"/>
-              <xs:group ref="SideBySideGroupNoCaption"/>
+              <xs:group ref="BlockStatementNoCaption"/>
+              <xs:group ref="ParagraphsNoNumber"/>
             </xs:choice>
             <xs:element ref="contributors"/>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
-              <xs:group ref="BlockText"/>
-              <xs:group ref="SideBySideNoCaption"/>
-              <xs:group ref="SideBySideGroupNoCaption"/>
+              <xs:group ref="BlockStatementNoCaption"/>
+              <xs:group ref="ParagraphsNoNumber"/>
             </xs:choice>
           </xs:sequence>
         </xs:choice>
@@ -517,6 +514,22 @@
               <xs:sequence>
                 <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
                 <xs:group maxOccurs="unbounded" ref="BlockDivision"/>
+              </xs:sequence>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="ParagraphsNoNumber">
+    <xs:sequence>
+      <xs:element name="paragraphs">
+        <xs:complexType>
+          <xs:complexContent>
+            <xs:extension base="MetaDataTitle">
+              <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
+                <xs:group maxOccurs="unbounded" ref="BlockStatementNoCaption"/>
               </xs:sequence>
             </xs:extension>
           </xs:complexContent>

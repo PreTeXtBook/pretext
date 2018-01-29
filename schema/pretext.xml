@@ -181,6 +181,12 @@
                 Index*,
                 BlockDivision+
             }
+        ParagraphsNoNumber =
+            element paragraphs {
+                MetaDataTitle,
+                Index*,
+                BlockStatementNoCaption+
+            }
         ParagraphsTitleOptional =
             element paragraphs {
                 MetaDataTitleOptional,
@@ -1843,8 +1849,16 @@
             element preface {
                 MetaDataTitleOptional,
                 (
-                    ((BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+, Attribution*) |
-                    ((BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)*, Contributors, (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)*)
+                    (
+                        (BlockStatementNoCaption | ParagraphsNoNumber)+, 
+                        Attribution*
+                    )
+                    |
+                    (
+                        (BlockStatementNoCaption | ParagraphsNoNumber)*, 
+                        Contributors, 
+                        (BlockStatementNoCaption | ParagraphsNoNumber)*
+                    )
                 )
             }
         </fragment>
