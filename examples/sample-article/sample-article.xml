@@ -1616,6 +1616,8 @@ the xsltproc executable.
                 <backtick /></p>
 
                 <p>We also distinguish between abbreviations (<abbr>vs.</abbr>), acronyms (<acro>SCUBA</acro>) and initialisms (<init>XML</init>).  This is a test of the text version of a multiplication symbol: 2<nbsp /><times /><nbsp />4.</p>
+
+                <p>An <term>em dash</term> is the long dash used much like parentheses (not an <term>en dash</term> used to denote a range, such as a range of page numbers).  It should not have spaces around it, but some style guides allow for a <em>thin</em> space, which<mdash />we test right now.  The command line stringparam <c>emdash.space</c> can be set to <c>none</c> or <c>thin</c> to control this.</p>
             </subsection>
 
             <subsection xml:id="section-urls">
