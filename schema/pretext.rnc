@@ -136,12 +136,23 @@
             }
         TitlePage =
             element titlepage {
-                Author+,
+                (
+                    (Author, Author*, Editor*)
+                    |
+                    (Editor, Editor*)
+                ),
                 Credit*,
                 Date?
             }
         Author =
             element author {
+                element personname {TextSimple},
+                element department {TextSimple | Line+}?,
+                element institution {TextSimple | Line+}?,
+                element email {text}?
+            }
+        Editor =
+            element editor {
                 element personname {TextSimple},
                 element department {TextSimple | Line+}?,
                 element institution {TextSimple | Line+}?,

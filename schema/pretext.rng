@@ -261,9 +261,23 @@
   </define>
   <define name="TitlePage">
     <element name="titlepage">
-      <oneOrMore>
-        <ref name="Author"/>
-      </oneOrMore>
+      <choice>
+        <group>
+          <ref name="Author"/>
+          <zeroOrMore>
+            <ref name="Author"/>
+          </zeroOrMore>
+          <zeroOrMore>
+            <ref name="Editor"/>
+          </zeroOrMore>
+        </group>
+        <group>
+          <ref name="Editor"/>
+          <zeroOrMore>
+            <ref name="Editor"/>
+          </zeroOrMore>
+        </group>
+      </choice>
       <zeroOrMore>
         <ref name="Credit"/>
       </zeroOrMore>
@@ -274,6 +288,38 @@
   </define>
   <define name="Author">
     <element name="author">
+      <element name="personname">
+        <ref name="TextSimple"/>
+      </element>
+      <optional>
+        <element name="department">
+          <choice>
+            <ref name="TextSimple"/>
+            <oneOrMore>
+              <ref name="Line"/>
+            </oneOrMore>
+          </choice>
+        </element>
+      </optional>
+      <optional>
+        <element name="institution">
+          <choice>
+            <ref name="TextSimple"/>
+            <oneOrMore>
+              <ref name="Line"/>
+            </oneOrMore>
+          </choice>
+        </element>
+      </optional>
+      <optional>
+        <element name="email">
+          <text/>
+        </element>
+      </optional>
+    </element>
+  </define>
+  <define name="Editor">
+    <element name="editor">
       <element name="personname">
         <ref name="TextSimple"/>
       </element>

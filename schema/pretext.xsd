@@ -242,7 +242,17 @@
   <xs:element name="titlepage">
     <xs:complexType>
       <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="author"/>
+        <xs:choice>
+          <xs:sequence>
+            <xs:element ref="author"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="author"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="editor"/>
+          </xs:sequence>
+          <xs:sequence>
+            <xs:element ref="editor"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="editor"/>
+          </xs:sequence>
+        </xs:choice>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="credit"/>
         <xs:element minOccurs="0" ref="date"/>
       </xs:sequence>
@@ -278,6 +288,30 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="email" type="xs:string"/>
+  <xs:element name="editor">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="personname"/>
+        <xs:element minOccurs="0" name="department">
+          <xs:complexType mixed="true">
+            <xs:choice>
+              <xs:group ref="TextSimple"/>
+              <xs:group maxOccurs="unbounded" ref="Line"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" name="institution">
+          <xs:complexType mixed="true">
+            <xs:choice>
+              <xs:group ref="TextSimple"/>
+              <xs:group maxOccurs="unbounded" ref="Line"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" ref="email"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="credit">
     <xs:complexType>
       <xs:sequence>
