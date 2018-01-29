@@ -7306,9 +7306,9 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!--  -->
     <!-- 2017-12-07  "c" content totally escaped for LaTeX -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//c/@latexsep" />
+        <xsl:with-param name="occurences" select="$document-root//c/@latexsep|$document-root//cd/@latexsep" />
         <xsl:with-param name="date-string" select="'2017-12-07'" />
-        <xsl:with-param name="message" select="'the &quot;@latexsep&quot; attribute on the &quot;c&quot; element is no longer necessary.  It is being ignored, and can be removed'" />
+        <xsl:with-param name="message" select="'the &quot;@latexsep&quot; attribute on the &quot;c&quot; and &quot;cd&quot; elements is no longer necessary.  It is being ignored, and can be removed'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-12-21  remove sage/@copy -->

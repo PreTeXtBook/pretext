@@ -46,11 +46,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- 2017-12-07  "c" content totally escaped for LaTeX -->
-<xsl:template match="c/@latexsep">
+<xsl:template match="c/@latexsep|cd/@latexsep">
     <!-- do nothing, just drop it and report -->
     <xsl:call-template name="deprecation-fix-report">
         <xsl:with-param name="date">2017-12-07</xsl:with-param>
-        <xsl:with-param name="message">Removing &lt;@latexsep&gt; from a &lt;c&gt; element</xsl:with-param>
+        <xsl:with-param name="message">Removing &lt;@latexsep&gt; from a &lt;c&gt; or &lt;cd&gt; element</xsl:with-param>
     </xsl:call-template>
 </xsl:template>
 
