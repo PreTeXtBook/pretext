@@ -178,8 +178,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Pointers to realizations of the actual document -->
 <xsl:param name="address.html" select="''" />
 <xsl:param name="address.pdf" select="''" />
-<!-- Publisher option to surround emdash with thin or full space -->
-<xsl:param name="emdash.space" select="'none'" />
+<!-- Publisher option to surround emdash -->
+<!-- Default is none, option is thin     -->
+<xsl:param name="emdash.space" select="''" />
 <!-- Whitespace discussion: http://www.xmlplease.com/whitespace               -->
 <!-- Describes source expectations, DO NOT override in subsequent conversions -->
 <!-- Strip whitespace text nodes from container elements                      -->
@@ -604,6 +605,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:param name="debug.datedfiles" select="'yes'" />
 <xsl:variable name="b-debug-datedfiles" select="not($debug.datedfiles = 'no')" />
+
+<xsl:variable name="emdash-space">
+    <xsl:choose>
+        <xsl:when test="$emdash.space = ''">
+            <xsl:text>none</xsl:text>
+        </xsl:when>
+        <xsl:when test="$emdash.space = 'thin'">
+            <xsl:text>thin</xsl:text>
+        </xsl:when>
+        <xsl:when test="$emdash.space = 'none'">
+            <xsl:text>none</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:ERROR:   Option for "emdash.space" should be "none" or "thin", not "<xsl:value-of select="$emdash.space" />".  Assuming the default, "none".</xsl:message>
+            <xsl:text>none</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 
 <!-- ############## -->
 <!-- Entry Template -->
