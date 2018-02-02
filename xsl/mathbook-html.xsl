@@ -7743,7 +7743,7 @@ This is a Java Applet created using GeoGebra from www.geogebra.org - it looks li
 <!-- ToC, Prev/Up/Next/Annotation buttons  -->
 <!-- Also organized for small screen modes -->
 <xsl:template match="*" mode="primary-navigation">
-    <nav id="primary-navbar" class="navbar" style="">
+    <nav id="primary-navbar" class="navbar">
         <div class="container">
             <!-- Several buttons across the top -->
             <div class="navbar-top-buttons">
