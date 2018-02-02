@@ -4192,12 +4192,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="ol|ul">
     <xsl:param name="b-original" select="true()" />
     <xsl:element name="{local-name(.)}">
-        <!-- label original -->
-        <xsl:if test="$b-original">
-            <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="internal-id" />
-            </xsl:attribute>
-        </xsl:if>
         <xsl:if test="@cols">
             <xsl:attribute name="class">
                 <!-- HTML-specific, but in mathbook-common.xsl -->
@@ -4221,12 +4215,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="dl">
     <xsl:param name="b-original" select="true()" />
     <xsl:element name="dl">
-        <!-- label original -->
-        <xsl:if test="$b-original">
-            <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="internal-id" />
-            </xsl:attribute>
-        </xsl:if>
         <xsl:attribute name="class">
             <xsl:choose>
                 <xsl:when test="@width = 'narrow'">
