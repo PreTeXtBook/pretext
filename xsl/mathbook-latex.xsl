@@ -3929,11 +3929,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- Displayed Single-Line Math ("me", "men") -->
+
+<!-- All displayed mathematics gets wrapped by  -->
+<!-- an abstract template, a necessity for HTML -->
+<!-- output.  It is unnecessary for LaTeX, and  -->
+<!-- so just a copy machine.                    -->
+<xsl:template match="me|men|md|mdn" mode="display-math-wrapper">
+    <xsl:param name="content" />
+    <xsl:value-of select="$content" />
+</xsl:template>
+
+
 <!-- The default template just calls the modal "body"      -->
 <!-- template needed for the HTML knowl production scheme. -->
 <!-- The variables in the "body" template have the right   -->
 <!-- defaults for this application                         -->
-
 <xsl:template match="me|men">
     <xsl:apply-templates select="." mode="body" />
 </xsl:template>

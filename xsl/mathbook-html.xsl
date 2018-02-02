@@ -3966,6 +3966,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- Displayed Single-Line Math ("me", "men") -->
+
+<!-- All displayed mathematics is wrapped by a div,    -->
+<!-- motivated in part by the need to sometimes put an -->
+<!-- HTML id on the first item of an exploded logical  -->
+<!-- paragraph into several HTML block level items     -->
+<!-- NB: displaymath might have an intertext           -->
+<!-- becoming "p", thus the necessity of "copy-of"     -->
+<xsl:template match="me|men|md|mdn" mode="display-math-wrapper">
+    <xsl:param name="content" />
+    <div class="displaymath">
+        <xsl:copy-of select="$content" />
+    </div>
+</xsl:template>
+
 <!-- "men" needs to be handled in the knowl production          -->
 <!-- scheme (but just barely), since it can be duplicated,      -->
 <!-- and there are minor details with trailing punctuation.     -->
@@ -4076,7 +4090,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- solution for this.                                  -->
 <!-- NB: "displaymath-alignment" needs to be just right  -->
 <!-- NB: we check the *parent* for alignment information -->
-<!-- TODO: pass duplication flag, reaction unnecessary? -->
+<!-- NB: the out-of-order LaTeX begin/end pairs mean     -->
+<!-- the "p" for intertext are contained in the overall  -->
+<!-- "display-math-wrapper".  It might be advisable      -->
+<!-- to unpack the whole md/mdn into math bits and       -->
+<!-- intertext bits, similar to how paragraphs are       -->
+<!-- exploded.  This will make it harder to locate       -->
+<!-- the id of an enclosing paragraph onto the first     -->
+<!-- component (first in exploded paragraph, first in    -->
+<!-- exploded md/intertext).                             -->
+<!-- An abstact "intertext-wrapper" would allow all      -->
+<!-- this to live in -common.                            -->
+<!-- TODO: pass duplication flag, reaction unnecessary?  -->
 <xsl:template match="intertext">
     <xsl:param name="b-nonumbers" select="false()" />
     <xsl:text>\end{</xsl:text>
