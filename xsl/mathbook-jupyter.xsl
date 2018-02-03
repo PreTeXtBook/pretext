@@ -281,6 +281,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
             <xsl:text>&lt;link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text>
             <xsl:text>&lt;link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css" /&gt;</xsl:text>
+            <!-- Cell hider is unwrapped from some notebook display command that injects HTML: -->
+            <!-- https://nbviewer.jupyter.org/github/shashi/ijulia-notebooks/blob/master/funcgeo/Functional%20Geometry.ipynb -->
+            <xsl:text>&lt;!-- Hide this cell. --&gt;&#xa;</xsl:text>
+            <xsl:text>&lt;script&gt;&#xa;</xsl:text>
+            <xsl:text>var cell = $(".container .cell").eq(0), ia = cell.find(".input_area")&#xa;</xsl:text>
+            <xsl:text>if (cell.find(".toggle-button").length == 0) {&#xa;</xsl:text>
+            <xsl:text>ia.after(&#xa;</xsl:text>
+            <xsl:text>    $('&lt;button class="toggle-button"&gt;Toggle hidden code&lt;/button&gt;').click(&#xa;</xsl:text>
+            <xsl:text>        function (){ ia.toggle() }&#xa;</xsl:text>
+            <xsl:text>        )&#xa;</xsl:text>
+            <xsl:text>    )&#xa;</xsl:text>
+            <xsl:text>ia.hide()&#xa;</xsl:text>
+            <xsl:text>}&#xa;</xsl:text>
+            <xsl:text>&lt;/script&gt;&#xa;</xsl:text>
             <xsl:call-template name="end-string" />
         </xsl:with-param>
     </xsl:call-template>
