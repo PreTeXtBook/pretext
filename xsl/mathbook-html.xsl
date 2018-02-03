@@ -3695,6 +3695,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
 </xsl:template>
 
+<!-- We drop an empty "leading paragraph" above.  Whatever     -->
+<!-- display comes next needs to grab the id of the enclosing  -->
+<!-- paragraph and place it on the enclosing HTML element of   -->
+<!-- that item.  So these displays should never have an id     -->
+<!-- anyway.  Said differently, a paragraph should be atomic,  -->
+<!-- and you cannot point to its constituents. The $b-original -->
+<!-- flag is passed in by the enclosing paragraph and is not a -->
+<!-- property of the display, per se, but instead is the       -->
+<!-- paragraph's status.                                       -->
+<xsl:template match="ul|ol|dl|me|men|md|mdn|cd" mode="insert-paragraph-id">
+    <xsl:param name="b-original" select="true()" />
+    <xsl:if test="parent::p and $b-original">
+        <xsl:variable name="leading" select="preceding-sibling::*|preceding-sibling::text()" />
+        <xsl:variable name="leading-content">
+            <xsl:apply-templates select="$leading">
+                <xsl:with-param name="b-original" select="$b-original" />
+            </xsl:apply-templates>
+        </xsl:variable>
+        <xsl:if test="$leading-content = ''">
+            <xsl:attribute name="id">
+                <xsl:apply-templates select="parent::p" mode="internal-id" />
+            </xsl:attribute>
+        </xsl:if>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- List Items -->
 <!-- A list item can be the target of a        -->
@@ -3979,8 +4005,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: displaymath might have an intertext           -->
 <!-- becoming "p", thus the necessity of "copy-of"     -->
 <xsl:template match="me|men|md|mdn" mode="display-math-wrapper">
+    <xsl:param name="b-original" select="true()" />
     <xsl:param name="content" />
     <div class="displaymath">
+        <xsl:apply-templates select="." mode="insert-paragraph-id" >
+            <xsl:with-param name="b-original" select="$b-original" />
+        </xsl:apply-templates>
         <xsl:copy-of select="$content" />
     </div>
 </xsl:template>
@@ -4222,6 +4252,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="ol|ul">
     <xsl:param name="b-original" select="true()" />
     <xsl:element name="{local-name(.)}">
+        <xsl:apply-templates select="." mode="insert-paragraph-id" >
+            <xsl:with-param name="b-original" select="$b-original" />
+        </xsl:apply-templates>
         <xsl:if test="@cols">
             <xsl:attribute name="class">
                 <!-- HTML-specific, but in mathbook-common.xsl -->
@@ -4245,6 +4278,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="dl">
     <xsl:param name="b-original" select="true()" />
     <xsl:element name="dl">
+        <xsl:apply-templates select="." mode="insert-paragraph-id" >
+            <xsl:with-param name="b-original" select="$b-original" />
+        </xsl:apply-templates>
         <xsl:attribute name="class">
             <xsl:choose>
                 <xsl:when test="@width = 'narrow'">
@@ -6352,20 +6388,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- cd is for use in paragraphs, inline -->
 <!-- Unstructured is pure text           -->
 <xsl:template match="cd">
+    <xsl:param name="b-original" select="true()" />
     <xsl:element name="pre">
         <xsl:attribute name="class">
             <xsl:text>code-block tex2jax_ignore</xsl:text>
         </xsl:attribute>
+        <xsl:apply-templates select="." mode="insert-paragraph-id" >
+            <xsl:with-param name="b-original" select="$b-original" />
+        </xsl:apply-templates>
         <xsl:value-of select="." />
     </xsl:element>
 </xsl:template>
 
 <!-- cline template is in xsl/mathbook-common.xsl -->
 <xsl:template match="cd[cline]">
+    <xsl:param name="b-original" select="true()" />
     <xsl:element name="pre">
         <xsl:attribute name="class">
             <xsl:text>code-block tex2jax_ignore</xsl:text>
         </xsl:attribute>
+        <xsl:apply-templates select="." mode="insert-paragraph-id" >
+            <xsl:with-param name="b-original" select="$b-original" />
+        </xsl:apply-templates>
         <xsl:apply-templates select="cline" />
     </xsl:element>
 </xsl:template>

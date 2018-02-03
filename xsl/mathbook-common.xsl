@@ -953,6 +953,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>&#xa;</xsl:text>
     </xsl:variable>
     <xsl:apply-templates select="." mode="display-math-wrapper">
+        <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="content" select="$complete-latex" />
     </xsl:apply-templates>
 </xsl:template>
@@ -1036,6 +1037,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>&#xa;</xsl:text>
     </xsl:variable>
     <xsl:apply-templates select="." mode="display-math-wrapper">
+        <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="content" select="$complete-latex" />
     </xsl:apply-templates>
 </xsl:template>
