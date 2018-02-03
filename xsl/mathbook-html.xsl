@@ -3595,7 +3595,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$block-type = 'xref'">
         <xsl:apply-templates select="." mode="heading-xref-knowl" />
     </xsl:if>
-    <xsl:element name="p">
+    <p>
         <!-- label original -->
         <xsl:if test="$b-original">
             <xsl:attribute name="id">
@@ -3605,7 +3605,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="*|text()">
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
-    </xsl:element>
+    </p>
 </xsl:template>
 
 <!-- Paragraphs, with displays within                   -->
@@ -3622,23 +3622,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- will later loop over displays within paragraph -->
     <xsl:variable name="displays" select="ul|ol|dl|me|men|md|mdn|cd" />
-    <!-- all interesting nodes of paragraph, before first display -->
-    <xsl:variable name="initial" select="$displays[1]/preceding-sibling::node()[self::* or self::text()]" />
-    <!-- content prior to first display is exceptional  -->
-    <!-- first HTML paragraph gets id, even if empty    -->
-    <!-- otherwise, empty paragraphs are never produced -->
-    <xsl:if test="(count($initial) > 0) or $b-original">
-        <xsl:element name="p">
+    <!-- content prior to first display is exceptional, but if empty,   -->
+    <!-- as indicated by $initial, we do not produce an empty paragraph -->
+    <!-- NB: this means first display must check for no predecessor,    -->
+    <!-- and react accordingly to employ the real paragraph's id.  See  -->
+    <!-- the modal "insert-paragraph-id" jsut below, and its employment -->
+    <!--                                                                -->
+    <!-- all interesting nodes of paragraph, before first display       -->
+    <xsl:variable name="initial" select="$displays[1]/preceding-sibling::*|$displays[1]/preceding-sibling::text()" />
+    <xsl:variable name="initial-content">
+        <xsl:apply-templates select="$initial">
+            <xsl:with-param name="b-original" select="$b-original" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:if test="not($initial-content='')">
+        <p>
             <xsl:if test="$b-original">
-                <!-- alternative for placing id, when empty? -->
                 <xsl:attribute name="id">
                     <xsl:apply-templates select="." mode="internal-id" />
                 </xsl:attribute>
             </xsl:if>
-            <xsl:apply-templates select="$initial">
-                <xsl:with-param name="b-original" select="$b-original" />
-            </xsl:apply-templates>
-        </xsl:element>
+            <xsl:copy-of select="$initial-content" />
+        </p>
     </xsl:if>
     <!-- for each display, output the display, plus trailing content -->
     <xsl:for-each select="$displays">
@@ -3647,11 +3652,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
         <!-- look through remainder, all element and text nodes, and the next display -->
-        <xsl:variable name="rightward" select="following-sibling::node()[self::* or self::text()]" />
+        <xsl:variable name="rightward" select="following-sibling::*|following-sibling::text()" />
         <xsl:variable name="next-display" select="following-sibling::*[self::ul or self::ol or self::dl or self::me or self::men or self::md or self::mdn or self::cd][1]" />
         <xsl:choose>
             <xsl:when test="$next-display">
-                <xsl:variable name="leftward" select="$next-display/preceding-sibling::node()[self::* or self::text()]" />
+                <xsl:variable name="leftward" select="$next-display/preceding-sibling::*|$next-display/preceding-sibling::text()" />
                 <!-- device below forms set intersection -->
                 <xsl:variable name="common" select="$rightward[count(. | $leftward) = count($leftward)]" />
                 <!-- No id on these, as the first "p" got that    -->
