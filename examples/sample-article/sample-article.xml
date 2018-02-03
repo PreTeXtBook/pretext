@@ -2661,7 +2661,7 @@ the xsltproc executable.
                     <title>Group</title>
                     <idx>Group</idx>
                     <statement>
-                        <p><ol label="a)">
+                        <p><idx><h>group</h><h>definition</h></idx><idx><h>paragraph</h><h>initial list</h></idx><ol label="a)">
                             <li>There is a binary operation, denoted <q><m>\cdot</m></q>.</li>
                             <li>The operation is associative.</li>
                             <li>There is an identity element, <m>e</m>.</li>
